@@ -1,5 +1,7 @@
 # 40kdc-data
 
+> **Looking for 10th edition data?** The 10e dataset is preserved on branch [`10e-archive`](https://github.com/Tabletop-Developer-Consortium/40kdc-data/tree/10e-archive) and tagged [`10th/2025-q3`](https://github.com/Tabletop-Developer-Consortium/40kdc-data/releases/tag/10th/2025-q3). The `main` branch is migrating to **11th edition** — see [`11e-migration.md`](11e-migration.md) for status and the work plan.
+
 Community-owned data schemas for Warhammer 40,000 developer tooling.
 
 ## What This Is
