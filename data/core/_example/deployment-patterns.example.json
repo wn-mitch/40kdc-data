@@ -1,0 +1,51 @@
+[
+  {
+    "id": "example-pincer",
+    "name": "Example Pincer",
+    "source": "example-pack",
+    "description": "Fabricated example deployment pattern for schema illustration. Not real game data.",
+    "zones": [
+      {
+        "player": "attacker",
+        "name": "Attacker Deployment",
+        "shape": { "type": "rectangle", "width": 60, "height": 12 },
+        "position": { "x": 0, "y": 0 },
+        "color": "#ef4444"
+      },
+      {
+        "player": "defender",
+        "name": "Defender Deployment",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 0, "y": 0 },
+            { "x": 60, "y": 0 },
+            { "x": 60, "y": 12 },
+            { "x": 0, "y": 12 }
+          ]
+        },
+        "position": { "x": 0, "y": 32 },
+        "color": "#3b82f6"
+      }
+    ],
+    "territories": [
+      {
+        "player": "attacker",
+        "shape": { "type": "rectangle", "width": 60, "height": 22 },
+        "position": { "x": 0, "y": 0 }
+      },
+      {
+        "player": "defender",
+        "shape": { "type": "rectangle", "width": 60, "height": 22 },
+        "position": { "x": 0, "y": 22 }
+      }
+    ],
+    "objectives": [
+      { "x": 30, "y": 22 },
+      { "x": 15, "y": 15 },
+      { "x": 45, "y": 29 }
+    ],
+    "recommended_terrain_layout_ids": ["example-layout-alpha"],
+    "game_version": { "edition": "10th", "dataslate": "2025-q3" }
+  }
+]

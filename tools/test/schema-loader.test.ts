@@ -22,6 +22,7 @@ describe("schema-loader", () => {
     expect(ids).toContain("https://40kdc.dev/schemas/core/leader-attachment.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/core/unit-composition.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/core/force-disposition.schema.json");
+    expect(ids).toContain("https://40kdc.dev/schemas/core/deployment-pattern.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/enrichment/phase-mapping.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/enrichment/timing-flag.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/enrichment/interaction-flag.schema.json");

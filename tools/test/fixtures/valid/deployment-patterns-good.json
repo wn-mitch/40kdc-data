@@ -1,0 +1,56 @@
+[
+  {
+    "id": "good-full-pattern",
+    "name": "Good Full Pattern",
+    "source": "example-pack",
+    "description": "Exercises every optional field.",
+    "zones": [
+      {
+        "player": "attacker",
+        "name": "Attacker Deployment",
+        "shape": { "type": "rectangle", "width": 44, "height": 12 },
+        "position": { "x": 0, "y": 0 },
+        "color": "#ef4444"
+      },
+      {
+        "player": "defender",
+        "name": "Defender Deployment",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 0, "y": 0 },
+            { "x": 44, "y": 0 },
+            { "x": 44, "y": 12 }
+          ]
+        },
+        "position": { "x": 0, "y": 32 },
+        "color": "#3b82f6"
+      }
+    ],
+    "territories": [
+      {
+        "player": "attacker",
+        "shape": { "type": "rectangle", "width": 44, "height": 22 },
+        "position": { "x": 0, "y": 0 }
+      }
+    ],
+    "objectives": [
+      { "x": 22, "y": 22 },
+      { "x": 11, "y": 11 }
+    ],
+    "recommended_terrain_layout_ids": ["layout-one", "layout-two"],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "good-minimal-pattern",
+    "name": "Good Minimal Pattern",
+    "zones": [
+      {
+        "player": "defender",
+        "shape": { "type": "rectangle", "width": 30, "height": 10 },
+        "position": { "x": 0, "y": 0 }
+      }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

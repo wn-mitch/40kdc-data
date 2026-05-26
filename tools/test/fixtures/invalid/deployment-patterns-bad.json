@@ -1,0 +1,69 @@
+[
+  {
+    "id": "bad-missing-zones",
+    "name": "Missing Zones",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-player-enum",
+    "name": "Bad Player Enum",
+    "zones": [
+      {
+        "player": "neutral",
+        "shape": { "type": "rectangle", "width": 30, "height": 10 },
+        "position": { "x": 0, "y": 0 }
+      }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-shape-type",
+    "name": "Bad Shape Type",
+    "zones": [
+      {
+        "player": "attacker",
+        "shape": { "type": "triangle", "width": 30, "height": 10 },
+        "position": { "x": 0, "y": 0 }
+      }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-polygon-too-few-points",
+    "name": "Polygon Too Few Points",
+    "zones": [
+      {
+        "player": "attacker",
+        "shape": { "type": "polygon", "points": [{ "x": 0, "y": 0 }, { "x": 1, "y": 1 }] },
+        "position": { "x": 0, "y": 0 }
+      }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-color-format",
+    "name": "Bad Color",
+    "zones": [
+      {
+        "player": "attacker",
+        "shape": { "type": "rectangle", "width": 30, "height": 10 },
+        "position": { "x": 0, "y": 0 },
+        "color": "red"
+      }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-extra-property",
+    "name": "Extra Property",
+    "zones": [
+      {
+        "player": "attacker",
+        "shape": { "type": "rectangle", "width": 30, "height": 10 },
+        "position": { "x": 0, "y": 0 }
+      }
+    ],
+    "unexpected_field": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

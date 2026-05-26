@@ -44,6 +44,10 @@ data/enrichment/
 
 A new dataslate creates a new subdirectory. Previous dataslate data can be copied forward and diff-edited.
 
+## Game Phases Across Editions
+
+The five game phases (`command`, `movement`, `shooting`, `charge`, `fight`) are **shared between 10th and 11th edition** — the `phase` enum in `schemas/$defs/common.schema.json` is not edition-versioned. 11e's combat changes (the Pile In timing reorder, "Overrun Fight") happen *within* the Fight phase and do not introduce a new top-level phase, so no enum extension or per-edition split is required. If a future edition adds or removes a top-level phase, split `phase` into edition-scoped `$defs` at that point.
+
 ## Schema Versioning
 
 Schemas are versioned via git tags. Breaking schema changes bump the version in the `$id` URL (e.g., `v2/core/faction.schema.json`). Non-breaking additions maintain the same `$id`.

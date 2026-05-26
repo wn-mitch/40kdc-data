@@ -44,7 +44,7 @@
     "phase": {
       "type": "string",
       "enum": ["command", "movement", "shooting", "charge", "fight"],
-      "description": "Official 10th edition game phases"
+      "description": "The five official game phases. Unchanged between 10th and 11th edition — 11e reorders Pile In timing within the Fight phase but adds no top-level phase."
     },
     "phase-list": {
       "type": "array",
@@ -61,6 +61,21 @@
       "type": "string",
       "enum": ["your-turn", "opponent-turn", "either"],
       "description": "Which player's turn this applies during"
+    },
+    "battle-size": {
+      "type": "string",
+      "enum": ["incursion", "strike-force"],
+      "description": "11e battle size, which sets the army's points limit and detachment-point budget: 'incursion' = 1000 pts / 2 detachment points; 'strike-force' = 2000 pts / 3 detachment points."
+    },
+    "vec2": {
+      "type": "object",
+      "description": "A 2D point in board inches. Origin at a board corner; JSON uses y-down (downstream renderers may flip to y-up).",
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" }
+      },
+      "required": ["x", "y"],
+      "additionalProperties": false
     }
   }
 }
