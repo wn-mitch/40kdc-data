@@ -1,0 +1,25 @@
+[
+  {
+    "ability_id": "benefit-of-cover",
+    "name": "Benefit of Cover",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "ability_type": "core",
+    "behavior": "passive",
+    "effect": {
+      "type": "bs-modifier",
+      "target": "attacker",
+      "modifier": {
+        "operation": "subtract",
+        "value": 1
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    }
+  }
+]
