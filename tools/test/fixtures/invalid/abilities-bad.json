@@ -1,0 +1,42 @@
+[
+  {
+    "ability_id": "bad-bs-modifier-typo",
+    "name": "Misspelled bs-modifier",
+    "authored_by": "40kdc-community",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "effect": { "type": "bs-modifer", "target": "attacker", "modifier": { "operation": "subtract", "value": 1 } },
+    "scope": { "range": "unit", "duration": "phase" }
+  },
+  {
+    "ability_id": "bad-fight-first-as-condition",
+    "name": "Effect-only fight-first used as a condition type",
+    "authored_by": "40kdc-community",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "effect": {
+      "type": "conditional",
+      "condition": { "type": "fight-first" },
+      "effect": { "type": "stat-modifier", "target": "unit", "modifier": { "stat": "A", "operation": "add", "value": 1 } }
+    },
+    "scope": { "range": "unit", "duration": "phase" }
+  },
+  {
+    "ability_id": "bad-effect-missing-target",
+    "name": "bs-modifier missing required target",
+    "authored_by": "40kdc-community",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "effect": { "type": "bs-modifier", "modifier": { "operation": "subtract", "value": 1 } },
+    "scope": { "range": "unit", "duration": "phase" }
+  },
+  {
+    "ability_id": "bad-unknown-condition-type",
+    "name": "Conditional with unknown condition type",
+    "authored_by": "40kdc-community",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "effect": {
+      "type": "conditional",
+      "condition": { "type": "controls-terrain", "parameters": { "footprint_ref": "ruins-central" } },
+      "effect": { "type": "objective-control-modifier", "target": "unit", "modifier": { "operation": "add", "value": 1 } }
+    },
+    "scope": { "range": "unit", "duration": "phase" }
+  }
+]

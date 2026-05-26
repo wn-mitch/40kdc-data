@@ -122,20 +122,20 @@ Cover now confers **−1 BS to attackers**, not +1 save to defenders. Any 10e Ab
 
 Additive — these extend type enums without breaking existing abilities.
 
-- [ ] `schemas/enrichment/ability-dsl/condition.schema.json` `$defs/simple-condition/type` — add:
+- [x] `schemas/enrichment/ability-dsl/condition.schema.json` `$defs/simple-condition/type` — add:
   - `terrain-area-control` (per-model count for a terrain footprint).
   - `engagement-state` (`engaged | within-engagement-range | unengaged`; 11e engagement range is 2").
   - `territory-control` (predicate over territory polygons).
   - `fights-first` (boolean predicate).
   - `disposition-matches` (predicate for asymmetric-primary mission resolution).
-- [ ] `schemas/enrichment/ability-dsl/effect.schema.json` `$defs/single-effect/type` — add:
+- [x] `schemas/enrichment/ability-dsl/effect.schema.json` `$defs/single-effect/type` — add:
   - `charge-roll-modifier`.
   - `terrain-area-tag` (sets transient state on a terrain piece, cleared on turn rollover).
-  - `bs-modifier` (cover and the new terrain keywords all work through BS modification).
+  - `bs-modifier` (cover and the new terrain keywords all work through BS modification — applied to the *attacker's* BS via `target: "attacker"`, i.e. −1 to the incoming shot's hit roll, not a defender bonus).
   - `engagement-passthrough` (units can move through enemy engagement ranges in 11e movement).
-- [ ] `schemas/enrichment/ability-dsl/scope.schema.json` — evaluate whether scope range needs a `terrain-within-range` variant once terrain becomes ability-bearing. Hold until a real 11e ability requires it.
+- [x] `schemas/enrichment/ability-dsl/scope.schema.json` — added `terrain-within-range` to the `range` enum (pairs with the existing `range_inches`). **Decision**: landed now rather than held — the terrain-bearing condition/effect primitives in this same change (`terrain-area-control`, `terrain-area-tag`) are its natural consumers.
 - [ ] **Cover audit**: when 10e enrichment is ported forward to 11e, any ability that modeled cover as `save-modifier +1` must be re-targeted to `bs-modifier −1`. The 10e archive remains untouched; the rewrite happens during 11e enrichment authoring.
-- [ ] Add valid + invalid test fixtures for each new primitive in `tools/test/fixtures/`.
+- [x] Add valid + invalid test fixtures for each new primitive in `tools/test/fixtures/` — `valid/abilities-good.json` (one entry per primitive; `bs-modifier` uses the cover shape `target: "attacker"` / `−1`) and `invalid/abilities-bad.json` (misspelled enums, missing `target`, unknown condition type). First abilities fixtures in the repo; picked up automatically by the glob-driven `validate.test.ts`.
 
 ## Section 4 — Tools / pipeline
 
@@ -250,10 +250,10 @@ Orks is the canary for the mechanical port. (The Bannernob is *not* in the 10e a
 
 ## Next steps (forward queue)
 
-Section 6 is functionally complete (port green, registry baked in). The remaining work, in rough dependency order:
+Section 6 (port) and Section 3 (DSL primitives) are both complete. The remaining work, in rough dependency order:
 
-1. **Section 3 — Ability DSL primitives**: add `bs-modifier`, `engagement-state`, `terrain-area-control`, `terrain-area-tag`, `charge-roll-modifier`, `fights-first`, `disposition-matches`, `engagement-passthrough`. The cover-rewrite item in 6.6 unblocks once `bs-modifier` lands.
-2. **Section 6.6 audit-driven follow-ups** (gated on §3):
+1. ~~**Section 3 — Ability DSL primitives**~~ ✅ done — added `bs-modifier`, `engagement-state`, `terrain-area-control`, `terrain-area-tag`, `charge-roll-modifier`, `fights-first`, `disposition-matches`, `engagement-passthrough` (+ scope `terrain-within-range`). The cover-rewrite item in 6.6 is now unblocked.
+2. **Section 6.6 audit-driven follow-ups** (now unblocked by §3):
    - Cover rewrite: 51 abilities granting `benefit-of-cover` — re-model the `benefit-of-cover` ability's effect from `+1 Sv` to `-1 BS`.
    - Charge-timing review: 35 abilities — prune any that become redundant under 11e's "charging units gain Fights First by default".
    - Detachment DP + Force Disposition assignment: 190 detachments — gated on GW publishing the mapping.
@@ -262,7 +262,7 @@ Section 6 is functionally complete (port green, registry baked in). The remainin
 4. **Section 4 — tooling / publish**: npm + Rust crate publish, CI extensions (block on DSL parse errors, auto-publish on tag), extend `SCHEMA_MAP` for the new entity prefixes.
 5. **Section 5 — docs**: `VERSIONING.md`, `CONTRIBUTING.md` (secondary-card text workflow), `README.md` consumption snippets.
 
-The current PR (#6) lands Section 6. Each numbered item above is a natural next PR.
+Each numbered item above is a natural next PR.
 
 ## Out of scope
 

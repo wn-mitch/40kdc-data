@@ -28,7 +28,9 @@
             "damage-reduction", "attack-restriction",
             "ability-grant", "cp-gain", "cp-refund",
             "model-destruction", "resurrection",
-            "resource-gain", "resource-spend"
+            "resource-gain", "resource-spend",
+            "charge-roll-modifier", "terrain-area-tag",
+            "bs-modifier", "engagement-passthrough"
           ]
         },
         "target": {

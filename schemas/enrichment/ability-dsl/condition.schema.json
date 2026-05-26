@@ -23,7 +23,9 @@
             "is-battle-shocked", "has-lost-wounds",
             "opponent-unit-within-range", "within-range-of-objective",
             "attack-is-type", "has-fought-this-phase",
-            "destroyed-by-attack-type", "controls-objective", "is-attached"
+            "destroyed-by-attack-type", "controls-objective", "is-attached",
+            "terrain-area-control", "engagement-state", "territory-control",
+            "fights-first", "disposition-matches"
           ]
         },
         "parameters": { "type": "object", "additionalProperties": true },

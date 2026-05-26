@@ -1,0 +1,110 @@
+[
+  {
+    "ability_id": "cond-terrain-area-control",
+    "name": "Terrain Area Control condition",
+    "authored_by": "40kdc-community",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "terrain-area-control",
+        "parameters": { "footprint_ref": "ruins-central", "min_models": 3 }
+      },
+      "effect": { "type": "objective-control-modifier", "target": "unit", "modifier": { "operation": "add", "value": 1 } }
+    },
+    "scope": { "range": "unit", "duration": "phase" }
+  },
+  {
+    "ability_id": "cond-engagement-state",
+    "name": "Engagement State condition",
+    "authored_by": "40kdc-community",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "engagement-state",
+        "parameters": { "state": "within-engagement-range" }
+      },
+      "effect": { "type": "fight-first", "target": "unit" }
+    },
+    "scope": { "range": "unit", "duration": "turn" }
+  },
+  {
+    "ability_id": "cond-territory-control",
+    "name": "Territory Control condition",
+    "authored_by": "40kdc-community",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "territory-control",
+        "parameters": { "territory_ref": "attacker-territory" }
+      },
+      "effect": { "type": "cp-gain", "target": "self", "modifier": { "count": 1 } }
+    },
+    "scope": { "range": "any-on-battlefield", "duration": "battle-round" }
+  },
+  {
+    "ability_id": "cond-fights-first",
+    "name": "Fights First predicate condition",
+    "authored_by": "40kdc-community",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "effect": {
+      "type": "conditional",
+      "condition": { "type": "fights-first", "negated": true },
+      "effect": { "type": "stat-modifier", "target": "unit", "modifier": { "stat": "A", "operation": "add", "value": 1 } }
+    },
+    "scope": { "range": "unit", "duration": "phase" }
+  },
+  {
+    "ability_id": "cond-disposition-matches",
+    "name": "Disposition Matches condition",
+    "authored_by": "40kdc-community",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "disposition-matches",
+        "parameters": { "disposition_id": "take-and-hold" }
+      },
+      "effect": { "type": "ability-grant", "target": "all-friendly", "modifier": { "ability": "scout-6" } }
+    },
+    "scope": { "range": "any-on-battlefield", "duration": "battle" }
+  },
+  {
+    "ability_id": "effect-charge-roll-modifier",
+    "name": "Charge Roll Modifier effect",
+    "authored_by": "40kdc-community",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "effect": { "type": "charge-roll-modifier", "target": "unit", "modifier": { "operation": "add", "value": 1 } },
+    "scope": { "range": "unit", "duration": "phase" }
+  },
+  {
+    "ability_id": "effect-terrain-area-tag",
+    "name": "Terrain Area Tag effect",
+    "authored_by": "40kdc-community",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "effect": {
+      "type": "terrain-area-tag",
+      "target": "self",
+      "modifier": { "footprint_ref": "ruins-central", "tag": "smoke-screen", "duration": "turn" }
+    },
+    "scope": { "range": "terrain-within-range", "duration": "turn", "range_inches": 6 }
+  },
+  {
+    "ability_id": "effect-bs-modifier-cover",
+    "name": "BS Modifier effect (cover shape)",
+    "authored_by": "40kdc-community",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "effect": { "type": "bs-modifier", "target": "attacker", "modifier": { "operation": "subtract", "value": 1 } },
+    "scope": { "range": "unit", "duration": "phase" }
+  },
+  {
+    "ability_id": "effect-engagement-passthrough",
+    "name": "Engagement Passthrough effect",
+    "authored_by": "40kdc-community",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "effect": { "type": "engagement-passthrough", "target": "unit" },
+    "scope": { "range": "unit", "duration": "phase" }
+  }
+]
