@@ -13,6 +13,13 @@
       "enum": ["character", "battleline", "dedicated-transport", "fortification", "allied", "epic-hero"],
       "description": "Battlefield role from the datasheet header. Unit types (Infantry, Vehicle, etc.) belong in keywords."
     },
+    "attachment_role": {
+      "oneOf": [
+        { "enum": ["leader", "support"] },
+        { "type": "null" }
+      ],
+      "description": "Character attachment role (11e). 'support' implies the unit is only legal when attached to a host unit (cannot be taken solo); 'leader' is valid as a standalone list entry. null/absent for non-attaching units."
+    },
     "profiles": {
       "type": "array",
       "items": {
@@ -46,6 +53,11 @@
         },
         "required": ["models", "cost"]
       }
+    },
+    "points_provisional": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when point costs are carried over provisionally (e.g. seeded from a prior edition during migration) and not yet confirmed against the current dataslate."
     },
     "keywords": { "$ref": "../defs/common.schema.json#/$defs/keyword-list" },
     "faction_keywords": { "$ref": "../defs/common.schema.json#/$defs/keyword-list" },

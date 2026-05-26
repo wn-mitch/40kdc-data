@@ -1,0 +1,12 @@
+[
+  {
+    "id": "tag-enhancement",
+    "name": "Tag Enhancement",
+    "detachment_id": "test-detachment",
+    "cost": 10,
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

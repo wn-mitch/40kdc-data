@@ -1,0 +1,9 @@
+[
+  {
+    "id": "bad-detachment-points",
+    "name": "Bad Detachment Points",
+    "faction_id": "test-faction",
+    "detachment_points": 4,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

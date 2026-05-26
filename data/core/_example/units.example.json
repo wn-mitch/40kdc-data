@@ -92,5 +92,35 @@
     "weapon_ids": ["reaper-maw", "void-tendrils"],
     "game_version": { "edition": "10th", "dataslate": "2025-q3" },
     "is_legend": false
+  },
+  {
+    "id": "warden-standard-bearer",
+    "name": "Warden Standard Bearer",
+    "faction_id": "stellar-wardens",
+    "role": "character",
+    "attachment_role": "support",
+    "profiles": [
+      {
+        "name": "Warden Standard Bearer",
+        "M": 6,
+        "T": 4,
+        "W": 4,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 1
+      }
+    ],
+    "points": [
+      { "models": 1, "cost": 55 }
+    ],
+    "points_provisional": true,
+    "keywords": ["Infantry", "Character", "Imperium", "Stellar Wardens"],
+    "faction_keywords": ["Stellar Wardens"],
+    "base_size_mm": { "shape": "round", "diameter": 32 },
+    "model_count": { "min": 1, "max": 1 },
+    "weapon_ids": ["bolt-carbine"],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "is_legend": false
   }
 ]

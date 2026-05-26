@@ -1,0 +1,8 @@
+[
+  {
+    "leader_id": "warden-sergeant",
+    "eligible_bodyguard_ids": ["ironclad-sentinels"],
+    "max_leaders_per_unit": 2,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

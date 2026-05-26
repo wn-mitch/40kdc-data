@@ -17,8 +17,8 @@
     },
     "dataslate-version": {
       "type": "string",
-      "pattern": "^\\d{4}-q[1-4]$",
-      "description": "Quarterly dataslate version, e.g. '2025-q3'"
+      "pattern": "^(\\d{4}-q[1-4]|[a-z0-9][a-z0-9-]*[a-z0-9])$",
+      "description": "Dataslate version: a quarterly tag (e.g. '2025-q3') or a named kebab-case slug for non-quarterly slates (e.g. 'pre-launch-provisional')"
     },
     "keyword": {
       "type": "string",

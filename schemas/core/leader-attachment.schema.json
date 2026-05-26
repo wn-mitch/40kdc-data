@@ -11,7 +11,6 @@
       "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
       "minItems": 1
     },
-    "max_leaders_per_unit": { "type": "integer", "minimum": 1, "default": 1 },
     "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
   },
   "required": ["leader_id", "eligible_bodyguard_ids", "game_version"],

@@ -35,6 +35,7 @@ const SCHEMA_MAP: Record<string, string> = {
   "wargear-options": "https://40kdc.dev/schemas/core/wargear-option.schema.json",
   "leader-attachments": "https://40kdc.dev/schemas/core/leader-attachment.schema.json",
   "unit-compositions": "https://40kdc.dev/schemas/core/unit-composition.schema.json",
+  "force-dispositions": "https://40kdc.dev/schemas/core/force-disposition.schema.json",
   "phase-mappings": "https://40kdc.dev/schemas/enrichment/phase-mapping.schema.json",
   "timing-flags": "https://40kdc.dev/schemas/enrichment/timing-flag.schema.json",
   "interaction-flags": "https://40kdc.dev/schemas/enrichment/interaction-flag.schema.json",

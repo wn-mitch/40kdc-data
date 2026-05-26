@@ -1,0 +1,7 @@
+[
+  {
+    "id": "not-a-real-disposition",
+    "name": "Bad Disposition",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

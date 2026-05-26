@@ -20,5 +20,19 @@
     "ability_id": null,
     "is_unique": true,
     "game_version": { "edition": "10th", "dataslate": "2025-q3" }
+  },
+  {
+    "id": "vanguard-honors",
+    "name": "Vanguard Honors",
+    "detachment_id": "ironclad-vanguard",
+    "cost": 10,
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": ["Stellar Wardens"],
+    "exclusion_keywords": ["Character"],
+    "ability_id": null,
+    "is_unique": false,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   }
 ]
