@@ -1,0 +1,10 @@
+[
+  {
+    "id": "dp-detachment",
+    "name": "DP Detachment",
+    "faction_id": "test-faction",
+    "detachment_points": 2,
+    "force_dispositions": ["take-and-hold", "disruption"],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

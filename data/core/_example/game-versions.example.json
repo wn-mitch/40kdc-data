@@ -12,5 +12,12 @@
     "effective_date": "2025-07-07",
     "label": "Summer 2025 Balance Dataslate",
     "supersedes": "2025-q2"
+  },
+  {
+    "edition": "11th",
+    "dataslate": "pre-launch-provisional",
+    "effective_date": "2026-05-01",
+    "label": "Pre-launch provisional seed (ported from 10e archive)",
+    "supersedes": "2025-q3"
   }
 ]

@@ -21,5 +21,17 @@
       "notes": "All units must have the Void Reapers keyword"
     },
     "game_version": { "edition": "10th", "dataslate": "2025-q3" }
+  },
+  {
+    "id": "ironclad-vanguard",
+    "name": "Ironclad Vanguard",
+    "faction_id": "stellar-wardens",
+    "detachment_points": 2,
+    "force_dispositions": ["take-and-hold", "priority-assets"],
+    "detachment_rule_id": null,
+    "enhancement_ids": ["vanguard-honors"],
+    "stratagem_ids": [],
+    "restrictions": null,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   }
 ]

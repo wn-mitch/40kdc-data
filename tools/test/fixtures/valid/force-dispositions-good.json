@@ -1,0 +1,8 @@
+[
+  {
+    "id": "take-and-hold",
+    "name": "Take and Hold",
+    "text": "An army oriented toward seizing and controlling ground.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

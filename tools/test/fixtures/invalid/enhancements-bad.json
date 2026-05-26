@@ -1,0 +1,11 @@
+[
+  {
+    "id": "bad-max-targets",
+    "name": "Bad Max Targets",
+    "detachment_id": "test-detachment",
+    "cost": 10,
+    "upgrade_tag": true,
+    "max_targets": 0,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]
