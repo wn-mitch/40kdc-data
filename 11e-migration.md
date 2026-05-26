@@ -1,6 +1,9 @@
 # 11th Edition Migration — TODO
 
-The shared schema layer for the [Tabletop Developer Consortium](https://tabletop-developer-consortium.github.io) is migrating to Warhammer 40K 11th edition. This document is the durable, citable tracker for that migration. Cross-repo strategic context lives in the consortium's parent migration doc; this file scopes the work to `40kdc-data` specifically.
+The shared schema layer for the [Tabletop Developer Consortium](https://tabletop-developer-consortium.github.io) is migrating to Warhammer 40K 11th edition. This document is the durable, citable tracker for that migration. This file scopes the work to `40kdc-data` specifically; cross-repo strategic context (captured 11e intel, disposition matrix, sequencing) lives in the consortium's parent migration doc.
+
+- **Parent (cross-repo)**: [`tabletop-developer-consortium.github.io/11e-migration.md`](https://github.com/Tabletop-Developer-Consortium/tabletop-developer-consortium.github.io/blob/main/11e-migration.md)
+- **Sister trackers**: [`shadowboxing`](https://github.com/wn-mitch/shadowboxing/blob/main/11e-migration.md), [`army-assist`](https://github.com/wn-mitch/army-assist/blob/main/11e-migration.md)
 
 ## Positioning
 
@@ -8,7 +11,7 @@ The shared schema layer for the [Tabletop Developer Consortium](https://tabletop
 
 ## Status
 
-- **10e archive**: branch [`10e-archive`](https://github.com/Tabletop-Developer-Consortium/40kdc-data/tree/10e-archive), tag [`10th/2025-q3`](https://github.com/Tabletop-Developer-Consortium/40kdc-data/releases/tag/10th/2025-q3) — frozen snapshot of the 10th edition dataset.
+- **10e archive**: branch [`10e-archive`](https://github.com/Tabletop-Developer-Consortium/40kdc-data/tree/10e-archive), tags [`10th/2025-q3`](https://github.com/Tabletop-Developer-Consortium/40kdc-data/releases/tag/10th/2025-q3) and [`10e-final`](https://github.com/Tabletop-Developer-Consortium/40kdc-data/releases/tag/10e-final) — frozen snapshot of the 10th edition dataset. `10e-final` is the uniform cross-repo marker for the 10e freeze point; `10th/2025-q3` is the dataslate-style native tag (both point at the same commit).
 - **`main`**: 11th edition development. The schema layer carries forward; `data/core/` is being repopulated faction-by-faction as 11e datasheets land.
 
 ## Confirmed 11e mechanics (from WCommunity previews, May 2026)
@@ -71,7 +74,7 @@ Cover now confers **−1 BS to attackers**, not +1 save to defenders. Any 10e Ab
 ### Units / characters
 
 - **Datasheet stat profile is unchanged** in 11e (M/T/W/Sv/invuln_sv/Ld/OC carry forward).
-- Characters attach as **Leader** or **Support** — a unit can have one of each. Selection at list-build, not at game start.
+- Characters attach as **Leader** or **Support** — a unit can have one of each. Selection at list-build, not at game start. The **Support** role generalizes what were army-specific exceptions in 10e (e.g. Kroot characters allowed to attach alongside a regular Leader, currently encoded as `max_leaders_per_unit > 1` on `leader-attachment.schema.json`). 11e standardizes this as a first-class ability — the Ork **Bannernob** is the canonical preview example. Asymmetry: **Support characters cannot be taken solo** — they are only legal in an army list when attached to a host unit. Leaders remain valid as standalone entries. List-build validation needs an `attachment_required` invariant for Support (or a documented rule that `attachment_role == "support"` implies it). Migration implication: drop the per-attachment `max_leaders_per_unit` escape hatch in favor of `attachment_role` on the character's unit entry, and rewrite the existing 10e Kroot/etc. entries during 11e enrichment authoring.
 - **Battleline units have doubled unit limits** in army-list construction.
 - **Enhancements** can have an `upgrade_tag` flag that lets the enhancement apply to up to 3 non-character units while counting as one Enhancement choice.
 
@@ -91,7 +94,7 @@ Cover now confers **−1 BS to attackers**, not +1 save to defenders. Any 10e Ab
 
 - [ ] `schemas/$defs/common.schema.json` (phase enum, lines 44–48) — decide: extend with 11e additions, or split into edition-versioned `$defs`. Document resolution in `VERSIONING.md`. Previews don't show new top-level phases, but Pile In timing reshuffles within Fight.
 - [ ] `schemas/core/stratagem.schema.json` `type` enum (`battle-tactic | strategic-ploy | epic-deed | wargear`) — confirm 11e card categories before bumping; allow free-form fallback if GW reshuffles.
-- [ ] `schemas/core/unit.schema.json` — add `attachment_role: "leader" | "support"` for character units that join other units.
+- [ ] `schemas/core/unit.schema.json` — add `attachment_role: "leader" | "support"` for character units that join other units. Support implies an attachment-required invariant (a Support character is not a legal standalone list entry); decide whether to encode this as a separate `attachment_required: boolean` or as an implicit rule on the enum value, and document the choice.
 - [ ] `schemas/core/weapon.schema.json` — audit free-form ability list against 11e additions; no enum lock to break. Specific 11e keywords TBD on dataslate publish.
 - [ ] `schemas/core/enhancement.schema.json` — add `upgrade_tag: boolean` and `max_targets: integer` (default 1).
 - [ ] `schemas/core/detachment.schema.json` — add `detachment_points: integer` (1–3) and `force_dispositions: array of $ref` to force-disposition entities.
@@ -171,3 +174,4 @@ Additive — these extend type enums without breaking existing abilities.
 - How Your Army Affects Your Mission: https://www.warhammer-community.com/en-gb/articles/oefzq9fg/new40k-how-your-army-affects-your-mission/
 - Updated Terrain Rules: https://www.warhammer-community.com/en-gb/articles/xlppkx5s/new40k-take-cover-with-updated-terrain-rules/
 - Combat Changes: https://www.warhammer-community.com/en-gb/articles/m3son4il/new40k-combat-changes-shake-up-fighting-in-the-new-edition/
+- Support ability preview (Ork Bannernob): https://www.warhammer-community.com/en-gb/articles/uwdimgen/new40k-rules-da-biggest-and-best-orks-in-da-box/
