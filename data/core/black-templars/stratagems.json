@@ -1,0 +1,355 @@
+[
+  {
+    "id": "devout-push",
+    "name": "DEVOUT PUSH",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "companions-of-vehemence",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "for-the-emperors-honour",
+    "name": "FOR THE EMPEROR’S HONOUR!",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "companions-of-vehemence",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "pious-enmity",
+    "name": "PIOUS ENMITY",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "companions-of-vehemence",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "litanies-of-purgation",
+    "name": "LITANIES OF PURGATION",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "vindication-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "spoor-of-the-unholy",
+    "name": "SPOOR OF THE UNHOLY",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "vindication-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "brute-fervour",
+    "name": "BRUTE FERVOUR",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "wrathful-procession",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "fuelled-by-wrath",
+    "name": "FUELLED BY WRATH",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "wrathful-procession",
+    "cp_cost": 1,
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "armour-of-contempt",
+    "name": "ARMOUR OF CONTEMPT",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "wrathful-procession",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "castigate-the-demagogues",
+    "name": "CASTIGATE THE DEMAGOGUES",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "wrathful-procession",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "refusal-to-yield",
+    "name": "REFUSAL TO YIELD",
+    "category": "detachment",
+    "type": "epic-deed",
+    "detachment_id": "vindication-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "hearts-hardened-to-duty",
+    "name": "HEARTS HARDENED TO DUTY",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "companions-of-vehemence",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "heresy-begets-retribution",
+    "name": "HERESY BEGETS RETRIBUTION",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "companions-of-vehemence",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "dread-crusaders",
+    "name": "DREAD CRUSADERS",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "companions-of-vehemence",
+    "cp_cost": 1,
+    "phases": [
+      "charge"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "reclaim-our-honour",
+    "name": "RECLAIM OUR HONOUR!",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "vindication-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "recitation-of-the-revered",
+    "name": "RECITATION OF THE REVERED",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "vindication-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "relentless-momentum",
+    "name": "RELENTLESS MOMENTUM",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "wrathful-procession",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "voice-of-devotion",
+    "name": "VOICE OF DEVOTION",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "wrathful-procession",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "perfervid-intervention",
+    "name": "PERFERVID INTERVENTION",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "vindication-task-force",
+    "cp_cost": 2,
+    "phases": [
+      "charge"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

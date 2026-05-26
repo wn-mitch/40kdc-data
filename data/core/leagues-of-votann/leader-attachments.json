@@ -1,0 +1,76 @@
+[
+  {
+    "leader_id": "memnyr-strategist",
+    "eligible_bodyguard_ids": [
+      "ironkin-steeljacks-with-heavy-volkanite-disintegrators",
+      "ironkin-steeljacks-with-melee-weapons"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "grimnyr",
+    "eligible_bodyguard_ids": [
+      "hearthkyn-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "brokhyr-iron-master",
+    "eligible_bodyguard_ids": [
+      "brokhyr-thunderkyn",
+      "hearthkyn-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "berehk-stornbrow",
+    "eligible_bodyguard_ids": [
+      "cthonian-beserks"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "uthar-the-destined",
+    "eligible_bodyguard_ids": [
+      "einhyr-hearthguard",
+      "hearthkyn-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "einhyr-champion",
+    "eligible_bodyguard_ids": [
+      "einhyr-hearthguard"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "kahl",
+    "eligible_bodyguard_ids": [
+      "einhyr-hearthguard",
+      "hearthkyn-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

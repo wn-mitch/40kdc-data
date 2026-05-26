@@ -1,0 +1,109 @@
+{
+  "faction": "necrons",
+  "ported_from_ref": "89ede59c4743d0b43de231857ead0aa391a1ae5a",
+  "summary": {
+    "support-assigned": 7,
+    "charge-timing": 3,
+    "cover-ability": 4
+  },
+  "items": [
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "chronomancer",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "cryptothralls",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "geomancer",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "orikan-the-diviner",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "plasmancer",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "psychomancer",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "technomancer",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "whirling-onslaught",
+      "detail": "Uses charged-this-turn; 11e charging grants Fights First by default — check for redundancy."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "ancient-cover",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "targeting-relay",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "fights-first",
+      "detail": "Uses fight-first; 11e charging grants Fights First by default — check for redundancy."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "phased-cover",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "phase-shifted-cover",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "ghostwalk-mantle",
+      "detail": "Uses fight-first; 11e charging grants Fights First by default — check for redundancy."
+    }
+  ],
+  "bulk_review": {
+    "detachment-disposition": [
+      "cryptek-conclave",
+      "starshatter-arsenal",
+      "cursed-legion",
+      "annihilation-legion",
+      "hypercrypt-legion",
+      "pantheon-of-woe",
+      "obeisance-phalanx",
+      "canoptek-court",
+      "awakened-dynasty"
+    ],
+    "stratagem-type": 54
+  }
+}

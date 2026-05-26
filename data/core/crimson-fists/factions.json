@@ -1,0 +1,18 @@
+[
+  {
+    "id": "crimson-fists",
+    "name": "Crimson Fists",
+    "parent_faction_id": "adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "keywords": [
+      "Imperium",
+      "Adeptus Astartes",
+      "Crimson Fists"
+    ],
+    "aliases": [],
+    "faction_rule_id": "oath-of-moment"
+  }
+]

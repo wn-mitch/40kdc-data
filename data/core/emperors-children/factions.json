@@ -1,0 +1,18 @@
+[
+  {
+    "id": "emperors-children",
+    "name": "Emperor’s Children",
+    "parent_faction_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "keywords": [
+      "Chaos",
+      "Slaanesh",
+      "Emperor’s Children"
+    ],
+    "aliases": [],
+    "faction_rule_id": "thrill-seekers"
+  }
+]

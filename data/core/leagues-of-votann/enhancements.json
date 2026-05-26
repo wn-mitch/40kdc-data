@@ -1,0 +1,506 @@
+[
+  {
+    "id": "oathbound-speculator",
+    "name": "Oathbound Speculator",
+    "detachment_id": "needgaard-oathband",
+    "cost": 30,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "dead-reckoning",
+    "name": "Dead Reckoning",
+    "detachment_id": "needgaard-oathband",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "iron-ambassador",
+    "name": "Iron Ambassador",
+    "detachment_id": "needgaard-oathband",
+    "cost": 5,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "ancestral-crest",
+    "name": "Ancestral Crest",
+    "detachment_id": "needgaard-oathband",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "bastion-shield",
+    "name": "Bastion Shield",
+    "detachment_id": "hearthband",
+    "cost": 25,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "quake-multigenerator",
+    "name": "Quake Multigenerator",
+    "detachment_id": "hearthband",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "ironskein",
+    "name": "Ironskein",
+    "detachment_id": "hearthband",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "high-kahl",
+    "name": "High Kâhl",
+    "detachment_id": "hearthband",
+    "cost": 30,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "eye-for-weakness",
+    "name": "Eye for Weakness",
+    "detachment_id": "persecution-prospect",
+    "cost": 25,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "writ-of-acquisition",
+    "name": "Writ of Acquisition",
+    "detachment_id": "persecution-prospect",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "surgical-saboteur",
+    "name": "Surgical Saboteur",
+    "detachment_id": "persecution-prospect",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "nomad-strategist",
+    "name": "Nomad Strategist",
+    "detachment_id": "persecution-prospect",
+    "cost": 20,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "delvewerke-navigator",
+    "name": "Dêlvewerke Navigator",
+    "detachment_id": "delve-assault-shift",
+    "cost": 25,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "multiwave-system-jammer",
+    "name": "Multiwave System Jammer",
+    "detachment_id": "delve-assault-shift",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "quake-supervisor",
+    "name": "Quake Supervisor",
+    "detachment_id": "delve-assault-shift",
+    "cost": 20,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "piledriver",
+    "name": "Piledriver",
+    "detachment_id": "delve-assault-shift",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "tactical-alchemy",
+    "name": "Tactical Alchemy",
+    "detachment_id": "brandfast-oathband",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "trivarg-cyber-implant",
+    "name": "Trivärg Cyber Implant",
+    "detachment_id": "brandfast-oathband",
+    "cost": 40,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "precursive-judgement",
+    "name": "Precursive Judgement",
+    "detachment_id": "brandfast-oathband",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "signature-restoration",
+    "name": "Signature Restoration",
+    "detachment_id": "brandfast-oathband",
+    "cost": 5,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "farstryder-node",
+    "name": "Fârstryder Node",
+    "detachment_id": "hearthfyre-arsenal",
+    "cost": 20,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "calculated-tenacity",
+    "name": "Calculated Tenacity",
+    "detachment_id": "hearthfyre-arsenal",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "mantle-of-elders",
+    "name": "Mantle of Elders",
+    "detachment_id": "hearthfyre-arsenal",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "graviton-vault",
+    "name": "Graviton Vault",
+    "detachment_id": "hearthfyre-arsenal",
+    "cost": 5,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "mercenary-prospector",
+    "name": "Mercenary Prospector",
+    "detachment_id": "mercenary-oathband",
+    "cost": 20,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "metaphysical-brokerage",
+    "name": "Metaphysical Brokerage",
+    "detachment_id": "mercenary-oathband",
+    "cost": 20,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "etacarn-sb9-targeting-implant",
+    "name": "Etacarn SB9 Targeting Implant",
+    "detachment_id": "mercenary-oathband",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "asset-manipulator",
+    "name": "Asset Manipulator",
+    "detachment_id": "mercenary-oathband",
+    "cost": 25,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  }
+]

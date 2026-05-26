@@ -1,0 +1,35 @@
+{
+  "faction": "orks",
+  "ported_from_ref": "89ede59c4743d0b43de231857ead0aa391a1ae5a",
+  "summary": {
+    "cover-ability": 2
+  },
+  "items": [
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "red-skull-kommandos",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "rolling-fortress",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    }
+  ],
+  "bulk_review": {
+    "detachment-disposition": [
+      "kult-of-speed",
+      "da-big-hunt",
+      "dread-mob",
+      "war-horde",
+      "bully-boyz",
+      "green-tide",
+      "taktikal-brigade",
+      "more-dakka",
+      "freebooter-krew"
+    ],
+    "stratagem-type": 54
+  }
+}

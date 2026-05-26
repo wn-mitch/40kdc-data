@@ -1,0 +1,18 @@
+[
+  {
+    "id": "thousand-sons",
+    "name": "Thousand Sons",
+    "parent_faction_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "keywords": [
+      "Chaos",
+      "Tzeentch",
+      "Thousand Sons"
+    ],
+    "aliases": [],
+    "faction_rule_id": "cabal-of-sorcerers"
+  }
+]

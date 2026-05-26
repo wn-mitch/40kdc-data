@@ -1,0 +1,51 @@
+{
+  "faction": "chaos-daemons",
+  "ported_from_ref": "89ede59c4743d0b43de231857ead0aa391a1ae5a",
+  "summary": {
+    "charge-timing": 2,
+    "cover-ability": 3
+  },
+  "items": [
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "fights-first",
+      "detail": "Uses fight-first; 11e charging grants Fights First by default — check for redundancy."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "eldritch-flames-psychic",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "diseased-cover",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "cutting-down-the-foe",
+      "detail": "Uses charged-this-turn; 11e charging grants Fights First by default — check for redundancy."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "cover",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    }
+  ],
+  "bulk_review": {
+    "detachment-disposition": [
+      "blood-legion",
+      "daemonic-incursion",
+      "plague-legion",
+      "shadow-legion",
+      "scintillating-legion",
+      "legion-of-excess"
+    ],
+    "stratagem-type": 36
+  }
+}

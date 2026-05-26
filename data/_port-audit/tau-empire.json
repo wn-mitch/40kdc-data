@@ -1,0 +1,51 @@
+{
+  "faction": "tau-empire",
+  "ported_from_ref": "89ede59c4743d0b43de231857ead0aa391a1ae5a",
+  "summary": {
+    "support-assigned": 3,
+    "cover-ability": 2
+  },
+  "items": [
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "kroot-flesh-shaper",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "kroot-trail-shaper",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "kroot-war-shaper",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "tidewall-cover",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "reinforced-cover",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    }
+  ],
+  "bulk_review": {
+    "detachment-disposition": [
+      "retaliation-cadre",
+      "montka",
+      "kroot-hunting-pack",
+      "experimental-prototype-cadre",
+      "kauyon",
+      "auxiliary-cadre"
+    ],
+    "stratagem-type": 36
+  }
+}

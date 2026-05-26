@@ -1,0 +1,16 @@
+[
+  {
+    "id": "genestealer-cults",
+    "name": "Genestealer Cults",
+    "parent_faction_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "keywords": [
+      "Genestealer Cults"
+    ],
+    "aliases": [],
+    "faction_rule_id": "cult-ambush"
+  }
+]

@@ -1,0 +1,28 @@
+[
+  {
+    "id": "liberator-assault-group",
+    "name": "Liberator Assault Group",
+    "faction_id": "crimson-fists",
+    "detachment_rule_id": null,
+    "enhancement_ids": [
+      "speed-of-the-primarch",
+      "rage-fuelled-warrior",
+      "icon-of-the-angel",
+      "gift-of-foresight"
+    ],
+    "stratagem_ids": [
+      "armour-of-contempt",
+      "savage-echoes",
+      "red-rampage",
+      "angelic-grace",
+      "aggressive-onslaught",
+      "relentless-assault"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": null,
+    "force_dispositions": []
+  }
+]

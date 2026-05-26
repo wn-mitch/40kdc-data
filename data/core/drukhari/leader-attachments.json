@@ -1,0 +1,66 @@
+[
+  {
+    "leader_id": "succubus",
+    "eligible_bodyguard_ids": [
+      "wyches"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "lelith-hesperax",
+    "eligible_bodyguard_ids": [
+      "wyches"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "haemonculus",
+    "eligible_bodyguard_ids": [
+      "wracks"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "archon",
+    "eligible_bodyguard_ids": [
+      "hand-of-the-archon",
+      "incubi",
+      "kabalite-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "lady-malys",
+    "eligible_bodyguard_ids": [
+      "hand-of-the-archon",
+      "incubi",
+      "kabalite-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "drazhar",
+    "eligible_bodyguard_ids": [
+      "incubi"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

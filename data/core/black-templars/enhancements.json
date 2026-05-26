@@ -1,0 +1,218 @@
+[
+  {
+    "id": "incendiary-animus",
+    "name": "Incendiary Animus",
+    "detachment_id": "companions-of-vehemence",
+    "cost": 25,
+    "keyword_restrictions": [
+      "Black Templars"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "oathbound-examplar",
+    "name": "Oathbound Examplar",
+    "detachment_id": "companions-of-vehemence",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Black Templars"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "merciless-denunciation",
+    "name": "Merciless Denunciation",
+    "detachment_id": "companions-of-vehemence",
+    "cost": 25,
+    "keyword_restrictions": [
+      "Black Templars"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "zealous-vanguard",
+    "name": "Zealous Vanguard",
+    "detachment_id": "companions-of-vehemence",
+    "cost": 20,
+    "keyword_restrictions": [
+      "Black Templars"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "pyrebrand",
+    "name": "Pyrebrand",
+    "detachment_id": "wrathful-procession",
+    "cost": 25,
+    "keyword_restrictions": [
+      "Black Templars"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "sacred-rage",
+    "name": "Sacred Rage",
+    "detachment_id": "wrathful-procession",
+    "cost": 30,
+    "keyword_restrictions": [
+      "Black Templars"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "taramonds-censer",
+    "name": "Taramond’s Censer",
+    "detachment_id": "wrathful-procession",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Black Templars"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "benediction-of-fury",
+    "name": "Benediction of Fury",
+    "detachment_id": "wrathful-procession",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Black Templars"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "imperialis-of-the-eternal-crusade",
+    "name": "Imperialis of the Eternal Crusade",
+    "detachment_id": "vindication-task-force",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Black Templars"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "consecrating-aura",
+    "name": "Consecrating Aura",
+    "detachment_id": "vindication-task-force",
+    "cost": 25,
+    "keyword_restrictions": [
+      "Black Templars"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "orb-of-the-emperors-aegis",
+    "name": "Orb of the Emperor’s Aegis",
+    "detachment_id": "vindication-task-force",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Black Templars"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "warden-of-honour",
+    "name": "Warden of Honour",
+    "detachment_id": "vindication-task-force",
+    "cost": 20,
+    "keyword_restrictions": [
+      "Black Templars"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  }
+]

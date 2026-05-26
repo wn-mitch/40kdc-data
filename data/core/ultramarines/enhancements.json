@@ -1,0 +1,74 @@
+[
+  {
+    "id": "armour-of-antoninus",
+    "name": "Armour of Antoninus",
+    "detachment_id": "blade-of-ultramar",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Ultramarines"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "oath-of-macragge",
+    "name": "Oath of Macragge",
+    "detachment_id": "blade-of-ultramar",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Ultramarines"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "student-of-the-codex",
+    "name": "Student of the Codex",
+    "detachment_id": "blade-of-ultramar",
+    "cost": 20,
+    "keyword_restrictions": [
+      "Ultramarines"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "veteran-of-behemoth",
+    "name": "Veteran of Behemoth",
+    "detachment_id": "blade-of-ultramar",
+    "cost": 25,
+    "keyword_restrictions": [
+      "Ultramarines"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  }
+]

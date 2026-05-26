@@ -1,0 +1,217 @@
+[
+  {
+    "leader_id": "weirdboy",
+    "eligible_bodyguard_ids": [
+      "boyz"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "painboy",
+    "eligible_bodyguard_ids": [
+      "boyz",
+      "burna-boyz",
+      "lootas",
+      "nobz",
+      "tankbustas"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "big-mek",
+    "eligible_bodyguard_ids": [
+      "boyz",
+      "lootas",
+      "mek-gunz",
+      "nobz"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "warboss-in-mega-armour",
+    "eligible_bodyguard_ids": [
+      "meganobz"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "boss-snikrot",
+    "eligible_bodyguard_ids": [
+      "kommandos"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "ghazghkull-thraka",
+    "eligible_bodyguard_ids": [
+      "boyz",
+      "meganobz"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "painboss",
+    "eligible_bodyguard_ids": [
+      "beast-snagga-boyz"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "wurrboy",
+    "eligible_bodyguard_ids": [
+      "beast-snagga-boyz"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "beastboss",
+    "eligible_bodyguard_ids": [
+      "beast-snagga-boyz"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "big-mek-in-mega-armour",
+    "eligible_bodyguard_ids": [
+      "meganobz"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "deffkilla-wartrike",
+    "eligible_bodyguard_ids": [
+      "warbikers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "mek",
+    "eligible_bodyguard_ids": [
+      "boyz",
+      "lootas",
+      "mek-gunz",
+      "nobz",
+      "tankbustas"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "mozrog-skragbad",
+    "eligible_bodyguard_ids": [
+      "squighog-boyz"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "zodgrod-wortsnagga",
+    "eligible_bodyguard_ids": [
+      "gretchin"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "big-mek-with-shokk-attack-gun",
+    "eligible_bodyguard_ids": [
+      "boyz",
+      "mek-gunz",
+      "nobz"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "beastboss-on-squigosaur",
+    "eligible_bodyguard_ids": [
+      "squighog-boyz"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "warboss",
+    "eligible_bodyguard_ids": [
+      "boyz",
+      "nobz"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "da-red-gobbo",
+    "eligible_bodyguard_ids": [
+      "gretchin"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "big-mek-on-warbike",
+    "eligible_bodyguard_ids": [
+      "warbikers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "painboy-on-warbike",
+    "eligible_bodyguard_ids": [
+      "warbikers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

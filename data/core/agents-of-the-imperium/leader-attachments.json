@@ -1,0 +1,151 @@
+[
+  {
+    "leader_id": "watch-captain-artemis",
+    "eligible_bodyguard_ids": [
+      "deathwatch-kill-team"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "inquisitor-greyfax",
+    "eligible_bodyguard_ids": [
+      "exaction-squad",
+      "imperial-navy-breachers",
+      "inquisitorial-agents",
+      "sisters-of-battle-squad",
+      "subductor-squad",
+      "vigilant-squad"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "inquisitor",
+    "eligible_bodyguard_ids": [
+      "exaction-squad",
+      "grey-knights-terminator-squad",
+      "imperial-navy-breachers",
+      "inquisitorial-agents",
+      "sisters-of-battle-squad",
+      "subductor-squad",
+      "vigilant-squad"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "navigator",
+    "eligible_bodyguard_ids": [
+      "imperial-navy-breachers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "inquisitor-draxus",
+    "eligible_bodyguard_ids": [
+      "exaction-squad",
+      "imperial-navy-breachers",
+      "inquisitorial-agents",
+      "subductor-squad",
+      "vigilant-squad"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "watch-master",
+    "eligible_bodyguard_ids": [
+      "deathwatch-kill-team"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "inquisitor-coteaz",
+    "eligible_bodyguard_ids": [
+      "exaction-squad",
+      "grey-knights-terminator-squad",
+      "imperial-navy-breachers",
+      "inquisitorial-agents",
+      "subductor-squad",
+      "vigilant-squad"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "ministorum-priest",
+    "eligible_bodyguard_ids": [
+      "exaction-squad",
+      "imperial-navy-breachers",
+      "inquisitorial-agents",
+      "sisters-of-battle-squad",
+      "subductor-squad",
+      "vigilant-squad"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "rogue-trader-entourage",
+    "eligible_bodyguard_ids": [
+      "imperial-navy-breachers",
+      "voidsmen-at-arms"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "janus-draik",
+    "eligible_bodyguard_ids": [
+      "imperial-navy-breachers",
+      "voidsmen-at-arms"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "neyam-shai-murad",
+    "eligible_bodyguard_ids": [
+      "imperial-navy-breachers",
+      "voidsmen-at-arms"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "espern-locarno",
+    "eligible_bodyguard_ids": [
+      "imperial-navy-breachers",
+      "voidsmen-at-arms"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

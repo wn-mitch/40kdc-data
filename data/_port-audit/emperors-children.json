@@ -1,0 +1,46 @@
+{
+  "faction": "emperors-children",
+  "ported_from_ref": "89ede59c4743d0b43de231857ead0aa391a1ae5a",
+  "summary": {
+    "cover-ability": 2,
+    "charge-timing": 2
+  },
+  "items": [
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "warped-interference-psychic",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "excessive-vigour-aura",
+      "detail": "Uses charged-this-turn; 11e charging grants Fights First by default — check for redundancy."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "duellist-s-hubris",
+      "detail": "Uses fight-first; 11e charging grants Fights First by default — check for redundancy."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "flame-wreathed",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    }
+  ],
+  "bulk_review": {
+    "detachment-disposition": [
+      "slaaneshs-chosen",
+      "carnival-of-excess",
+      "peerless-bladesmen",
+      "rapid-evisceration",
+      "mercurial-host",
+      "court-of-the-phoenician",
+      "coterie-of-the-conceited"
+    ],
+    "stratagem-type": 42
+  }
+}

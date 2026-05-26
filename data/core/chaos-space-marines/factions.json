@@ -1,0 +1,17 @@
+[
+  {
+    "id": "chaos-space-marines",
+    "name": "Chaos Space Marines",
+    "parent_faction_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "keywords": [
+      "Chaos",
+      "Heretic Astartes"
+    ],
+    "aliases": [],
+    "faction_rule_id": "dark-pacts"
+  }
+]

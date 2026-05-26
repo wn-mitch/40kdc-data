@@ -1,0 +1,45 @@
+{
+  "faction": "world-eaters",
+  "ported_from_ref": "89ede59c4743d0b43de231857ead0aa391a1ae5a",
+  "summary": {
+    "support-assigned": 1,
+    "charge-timing": 3
+  },
+  "items": [
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "master-of-executions",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "devastating-assault",
+      "detail": "Uses charged-this-turn; 11e charging grants Fights First by default — check for redundancy."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "bloody-stampede",
+      "detail": "Uses charged-this-turn; 11e charging grants Fights First by default — check for redundancy."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "relentless-rage",
+      "detail": "Uses charged-this-turn; 11e charging grants Fights First by default — check for redundancy."
+    }
+  ],
+  "bulk_review": {
+    "detachment-disposition": [
+      "berzerker-warband",
+      "possessed-slaughterband",
+      "vessels-of-wrath",
+      "khorne-daemonkin",
+      "cult-of-blood",
+      "goretrack-onslaught"
+    ],
+    "stratagem-type": 36
+  }
+}

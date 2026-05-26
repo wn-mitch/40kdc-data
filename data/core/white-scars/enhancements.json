@@ -1,0 +1,74 @@
+[
+  {
+    "id": "seals-of-reconquest",
+    "name": "Seals of Reconquest",
+    "detachment_id": "reclamation-force",
+    "cost": 20,
+    "keyword_restrictions": [
+      "White Scars"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "avenging-avatar-aura",
+    "name": "Avenging Avatar (Aura)",
+    "detachment_id": "reclamation-force",
+    "cost": 10,
+    "keyword_restrictions": [
+      "White Scars"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "scroll-of-proclamation",
+    "name": "Scroll of Proclamation",
+    "detachment_id": "reclamation-force",
+    "cost": 15,
+    "keyword_restrictions": [
+      "White Scars"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "liberatum",
+    "name": "Liberatum",
+    "detachment_id": "reclamation-force",
+    "cost": 25,
+    "keyword_restrictions": [
+      "White Scars"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  }
+]

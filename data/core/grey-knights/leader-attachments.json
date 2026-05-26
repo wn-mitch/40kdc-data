@@ -1,0 +1,90 @@
+[
+  {
+    "leader_id": "grand-master",
+    "eligible_bodyguard_ids": [
+      "brotherhood-terminator-squad",
+      "paladin-squad"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "brother-captain",
+    "eligible_bodyguard_ids": [
+      "brotherhood-terminator-squad",
+      "paladin-squad"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "castellan-crowe",
+    "eligible_bodyguard_ids": [
+      "purifier-squad"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "brotherhood-techmarine",
+    "eligible_bodyguard_ids": [
+      "purgation-squad",
+      "purifier-squad",
+      "strike-squad"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "brotherhood-librarian",
+    "eligible_bodyguard_ids": [
+      "brotherhood-terminator-squad",
+      "paladin-squad"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "brotherhood-champion",
+    "eligible_bodyguard_ids": [
+      "purgation-squad",
+      "strike-squad"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "brotherhood-chaplain",
+    "eligible_bodyguard_ids": [
+      "brotherhood-terminator-squad",
+      "paladin-squad"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "grand-master-voldus",
+    "eligible_bodyguard_ids": [
+      "brotherhood-terminator-squad",
+      "paladin-squad"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

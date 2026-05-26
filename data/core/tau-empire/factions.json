@@ -1,0 +1,16 @@
+[
+  {
+    "id": "tau-empire",
+    "name": "T’au Empire",
+    "parent_faction_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "keywords": [
+      "T’au Empire"
+    ],
+    "aliases": [],
+    "faction_rule_id": "for-the-greater-good"
+  }
+]

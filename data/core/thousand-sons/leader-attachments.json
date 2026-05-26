@@ -1,0 +1,75 @@
+[
+  {
+    "leader_id": "tzaangor-shaman",
+    "eligible_bodyguard_ids": [
+      "tzaangor-enlightened",
+      "tzaangors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "sorcerer",
+    "eligible_bodyguard_ids": [
+      "rubric-marines"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "ahriman",
+    "eligible_bodyguard_ids": [
+      "rubric-marines",
+      "tzaangor-enlightened"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "infernal-master",
+    "eligible_bodyguard_ids": [
+      "rubric-marines"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "exalted-sorcerer-on-disc-of-tzeentch",
+    "eligible_bodyguard_ids": [
+      "rubric-marines",
+      "tzaangor-enlightened"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "exalted-sorcerer",
+    "eligible_bodyguard_ids": [
+      "rubric-marines"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "sorcerer-in-terminator-armour",
+    "eligible_bodyguard_ids": [
+      "scarab-occult-terminators"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

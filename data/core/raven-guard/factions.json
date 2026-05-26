@@ -1,0 +1,18 @@
+[
+  {
+    "id": "raven-guard",
+    "name": "Raven Guard",
+    "parent_faction_id": "adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "keywords": [
+      "Imperium",
+      "Adeptus Astartes",
+      "Raven Guard"
+    ],
+    "aliases": [],
+    "faction_rule_id": "oath-of-moment"
+  }
+]

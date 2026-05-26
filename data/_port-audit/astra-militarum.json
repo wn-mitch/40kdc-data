@@ -1,0 +1,83 @@
+{
+  "faction": "astra-militarum",
+  "ported_from_ref": "89ede59c4743d0b43de231857ead0aa391a1ae5a",
+  "summary": {
+    "support-assigned": 2,
+    "cover-ability": 7,
+    "charge-timing": 1
+  },
+  "items": [
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "death-rider-commissar",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "ministorum-priest",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "reinforced-cover",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "defence-line",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "cadia-stands",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "flush-them-out",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "jungle-fighters",
+      "detail": "Uses charged-this-turn; 11e charging grants Fights First by default — check for redundancy."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "rolling-fortress",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "auspex-surveyor",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "defence-searchlight",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    }
+  ],
+  "bulk_review": {
+    "detachment-disposition": [
+      "recon-element",
+      "hammer-of-the-emperor",
+      "combined-arms",
+      "grizzled-company",
+      "bridgehead-strike",
+      "mechanised-assault",
+      "siege-regiment"
+    ],
+    "stratagem-type": 42
+  }
+}

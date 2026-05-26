@@ -1,0 +1,18 @@
+[
+  {
+    "id": "world-eaters",
+    "name": "World Eaters",
+    "parent_faction_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "keywords": [
+      "Chaos",
+      "Khorne",
+      "World Eaters"
+    ],
+    "aliases": [],
+    "faction_rule_id": "blessings-of-khorne"
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "faction": "grey-knights",
+  "ported_from_ref": "89ede59c4743d0b43de231857ead0aa391a1ae5a",
+  "summary": {},
+  "items": [],
+  "bulk_review": {
+    "detachment-disposition": [
+      "augurium-task-force",
+      "banishers",
+      "warpbane-task-force",
+      "brotherhood-strike",
+      "hallowed-conclave",
+      "sanctic-spearhead"
+    ],
+    "stratagem-type": 36
+  }
+}

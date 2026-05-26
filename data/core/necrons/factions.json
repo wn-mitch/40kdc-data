@@ -1,0 +1,16 @@
+[
+  {
+    "id": "necrons",
+    "name": "Necrons",
+    "parent_faction_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "keywords": [
+      "Necrons"
+    ],
+    "aliases": [],
+    "faction_rule_id": "reanimation-protocols"
+  }
+]

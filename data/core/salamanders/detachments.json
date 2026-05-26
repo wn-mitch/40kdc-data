@@ -1,0 +1,28 @@
+[
+  {
+    "id": "forgefathers-seekers",
+    "name": "Forgefather’s Seekers",
+    "faction_id": "salamanders",
+    "detachment_rule_id": null,
+    "enhancement_ids": [
+      "immolator",
+      "war-tempered-artifice",
+      "forged-in-battle",
+      "adamantine-mantle"
+    ],
+    "stratagem_ids": [
+      "armour-of-contempt",
+      "crucible-of-battle",
+      "burning-vengeance",
+      "immolation-protocols",
+      "wrathful-inferno",
+      "blazing-earth"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": null,
+    "force_dispositions": []
+  }
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "id": "master-crafted-weapon",
+    "name": "Master-crafted Weapon",
+    "detachment_id": "company-of-hunters",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Raven Guard"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "mounted-strategist",
+    "name": "Mounted Strategist",
+    "detachment_id": "company-of-hunters",
+    "cost": 30,
+    "keyword_restrictions": [
+      "Raven Guard"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "master-of-manoeuvre",
+    "name": "Master of Manoeuvre",
+    "detachment_id": "company-of-hunters",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Raven Guard"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "recon-hunter",
+    "name": "Recon Hunter",
+    "detachment_id": "company-of-hunters",
+    "cost": 20,
+    "keyword_restrictions": [
+      "Raven Guard"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  }
+]

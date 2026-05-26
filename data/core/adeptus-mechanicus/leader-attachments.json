@@ -1,0 +1,83 @@
+[
+  {
+    "leader_id": "cybernetica-datasmith",
+    "eligible_bodyguard_ids": [
+      "kastelan-robots"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "tech-priest-manipulus",
+    "eligible_bodyguard_ids": [
+      "corpuscarii-electro-priests",
+      "fulgurite-electro-priests",
+      "kataphron-breachers",
+      "kataphron-destroyers",
+      "skitarii-rangers",
+      "skitarii-vanguard"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "tech-priest-dominus",
+    "eligible_bodyguard_ids": [
+      "corpuscarii-electro-priests",
+      "fulgurite-electro-priests",
+      "kataphron-breachers",
+      "kataphron-destroyers",
+      "skitarii-rangers",
+      "skitarii-vanguard"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "technoarcheologist",
+    "eligible_bodyguard_ids": [
+      "corpuscarii-electro-priests",
+      "fulgurite-electro-priests",
+      "kataphron-breachers",
+      "kataphron-destroyers",
+      "skitarii-rangers",
+      "skitarii-vanguard"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "tech-priest-enginseer",
+    "eligible_bodyguard_ids": [
+      "corpuscarii-electro-priests",
+      "fulgurite-electro-priests",
+      "kataphron-breachers",
+      "kataphron-destroyers",
+      "skitarii-rangers",
+      "skitarii-vanguard"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "skitarii-marshal",
+    "eligible_bodyguard_ids": [
+      "skitarii-rangers",
+      "skitarii-vanguard"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

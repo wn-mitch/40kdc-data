@@ -1,0 +1,18 @@
+[
+  {
+    "id": "white-scars",
+    "name": "White Scars",
+    "parent_faction_id": "adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "keywords": [
+      "Imperium",
+      "Adeptus Astartes",
+      "White Scars"
+    ],
+    "aliases": [],
+    "faction_rule_id": "oath-of-moment"
+  }
+]

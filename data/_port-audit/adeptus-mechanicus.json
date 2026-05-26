@@ -1,0 +1,26 @@
+{
+  "faction": "adeptus-mechanicus",
+  "ported_from_ref": "89ede59c4743d0b43de231857ead0aa391a1ae5a",
+  "summary": {
+    "support-assigned": 1
+  },
+  "items": [
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "cybernetica-datasmith",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    }
+  ],
+  "bulk_review": {
+    "detachment-disposition": [
+      "haloscreed-battle-clade",
+      "cohort-cybernetica",
+      "skitarii-hunter-cohort",
+      "data-psalm-conclave",
+      "explorator-maniple",
+      "rad-zone-corps"
+    ],
+    "stratagem-type": 36
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "faction": "adeptus-astartes",
+  "ported_from_ref": "89ede59c4743d0b43de231857ead0aa391a1ae5a",
+  "summary": {
+    "support-assigned": 13,
+    "charge-timing": 7,
+    "cover-ability": 4
+  },
+  "items": [
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "ancient",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "ancient-in-terminator-armour",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "apothecary",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "apothecary-biologis",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "bladeguard-ancient",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "castellan",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "cato-sicarius",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "crusade-ancient",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "imperial-space-marine",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "lieutenant",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "lieutenant-in-phobos-armour",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "lieutenant-in-reiver-armour",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "sanguinary-priest",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "fights-first",
+      "detail": "Uses fight-first; 11e charging grants Fights First by default — check for redundancy."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "miraculous-saviour",
+      "detail": "Uses charged-this-turn; 11e charging grants Fights First by default — check for redundancy."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "icon-of-old-caliban-aura",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "knights-of-caliban",
+      "detail": "Uses charged-this-turn; 11e charging grants Fights First by default — check for redundancy."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "indomitor-doctrines",
+      "detail": "Uses charged-this-turn; 11e charging grants Fights First by default — check for redundancy."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "hammerstrike",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "tempormortis",
+      "detail": "Uses fight-first; 11e charging grants Fights First by default — check for redundancy."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "ceramite-cover",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "thunderous-impact",
+      "detail": "Uses charged-this-turn; 11e charging grants Fights First by default — check for redundancy."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "rolling-fortress",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "thunderous-charge",
+      "detail": "Uses charged-this-turn; 11e charging grants Fights First by default — check for redundancy."
+    }
+  ],
+  "bulk_review": {
+    "detachment-disposition": [
+      "godhammer-assault-force",
+      "1st-company-task-force",
+      "gladius-task-force",
+      "stormlance-task-force",
+      "spearpoint-task-force",
+      "librarius-conclave",
+      "vanguard-spearhead",
+      "orbital-assault-force",
+      "anvil-siege-force",
+      "firestorm-assault-force",
+      "ironstorm-spearhead"
+    ],
+    "stratagem-type": 66
+  }
+}

@@ -1,0 +1,944 @@
+[
+  {
+    "id": "synaptic-channelling",
+    "name": "SYNAPTIC CHANNELLING",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "synaptic-nexus",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "irresistible-will",
+    "name": "IRRESISTIBLE WILL",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "synaptic-nexus",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "reinforced-hive-node",
+    "name": "REINFORCED HIVE NODE",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "synaptic-nexus",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "swarm-guided-salvoes",
+    "name": "SWARM-GUIDED SALVOES",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "crusher-stampede",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "rampaging-monstrosities",
+    "name": "RAMPAGING MONSTROSITIES",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "crusher-stampede",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "savage-roar",
+    "name": "SAVAGE ROAR",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "crusher-stampede",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "teeming-masses",
+    "name": "TEEMING MASSES",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "unending-swarm",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "swarming-masses",
+    "name": "SWARMING MASSES",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "unending-swarm",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "bounding-advance",
+    "name": "BOUNDING ADVANCE",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "unending-swarm",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "surprise-assault",
+    "name": "SURPRISE ASSAULT",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "vanguard-onslaught",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "assassin-beasts",
+    "name": "ASSASSIN BEASTS",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "vanguard-onslaught",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "rapid-regeneration",
+    "name": "RAPID REGENERATION",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "invasion-fleet",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "rapacious-hunger",
+    "name": "RAPACIOUS HUNGER",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "assimilation-swarm",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "adrenal-surge",
+    "name": "ADRENAL SURGE",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "invasion-fleet",
+    "cp_cost": 2,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "massive-impact",
+    "name": "MASSIVE IMPACT",
+    "category": "detachment",
+    "type": "epic-deed",
+    "detachment_id": "crusher-stampede",
+    "cp_cost": 1,
+    "phases": [
+      "charge"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "broodguard-impulse",
+    "name": "BROODGUARD IMPULSE",
+    "category": "detachment",
+    "type": "epic-deed",
+    "detachment_id": "assimilation-swarm",
+    "cp_cost": 1,
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "ablative-carapace",
+    "name": "ABLATIVE CARAPACE",
+    "category": "detachment",
+    "type": "epic-deed",
+    "detachment_id": "assimilation-swarm",
+    "cp_cost": 2,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "the-smothering-shadow",
+    "name": "THE SMOTHERING SHADOW",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "synaptic-nexus",
+    "cp_cost": 1,
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "imperative-dominance",
+    "name": "IMPERATIVE DOMINANCE",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "synaptic-nexus",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "override-instincts",
+    "name": "OVERRIDE INSTINCTS",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "synaptic-nexus",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "enfilading-emergence",
+    "name": "ENFILADING EMERGENCE",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "subterranean-assault",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "tunnel-network",
+    "name": "TUNNEL NETWORK",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "subterranean-assault",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "swarming-assault",
+    "name": "SWARMING ASSAULT",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "subterranean-assault",
+    "cp_cost": 1,
+    "phases": [
+      "charge"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "retreat-below",
+    "name": "RETREAT BELOW",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "subterranean-assault",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "synaptic-amplification",
+    "name": "SYNAPTIC AMPLIFICATION",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "warrior-bioform-onslaught",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "restorative-impulse",
+    "name": "RESTORATIVE IMPULSE",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "warrior-bioform-onslaught",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "synaptic-micronodes",
+    "name": "SYNAPTIC MICRONODES",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "warrior-bioform-onslaught",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "parasitic-payload",
+    "name": "PARASITIC PAYLOAD",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "warrior-bioform-onslaught",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "synaptic-shield",
+    "name": "SYNAPTIC SHIELD",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "warrior-bioform-onslaught",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "untrammelled-ferocity",
+    "name": "UNTRAMMELLED FEROCITY",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "crusher-stampede",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "corrosive-viscera",
+    "name": "CORROSIVE VISCERA",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "crusher-stampede",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "synaptic-goading",
+    "name": "SYNAPTIC GOADING",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "unending-swarm",
+    "cp_cost": 1,
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "preservation-imperative",
+    "name": "PRESERVATION IMPERATIVE",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "unending-swarm",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "seeded-broods",
+    "name": "SEEDED BROODS",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "vanguard-onslaught",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "unseen-lurkers",
+    "name": "UNSEEN LURKERS",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "vanguard-onslaught",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "invisible-hunter",
+    "name": "INVISIBLE HUNTER",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "vanguard-onslaught",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "death-frenzy",
+    "name": "DEATH FRENZY",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "invasion-fleet",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "overrun",
+    "name": "OVERRUN",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "invasion-fleet",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "predatory-imperative",
+    "name": "PREDATORY IMPERATIVE",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "invasion-fleet",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "endless-swarm",
+    "name": "ENDLESS SWARM",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "invasion-fleet",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "reclaim-biomass",
+    "name": "RECLAIM BIOMASS",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "assimilation-swarm",
+    "cp_cost": 1,
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "tyrannoformed",
+    "name": "TYRANNOFORMED",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "assimilation-swarm",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "secure-biomass",
+    "name": "SECURE BIOMASS",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "assimilation-swarm",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "unending-waves",
+    "name": "UNENDING WAVES",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "unending-swarm",
+    "cp_cost": 2,
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "hypersensory-scillia",
+    "name": "HYPERSENSORY SCILLIA",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "vanguard-onslaught",
+    "cp_cost": 2,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "adaptive-optimisation",
+    "name": "ADAPTIVE OPTIMISATION",
+    "category": "detachment",
+    "type": "wargear",
+    "detachment_id": "subterranean-assault",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "replenishing-swarms",
+    "name": "REPLENISHING SWARMS",
+    "category": "detachment",
+    "type": "wargear",
+    "detachment_id": "subterranean-assault",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "spontaneous-hypercorrosion",
+    "name": "SPONTANEOUS HYPERCORROSION",
+    "category": "detachment",
+    "type": "wargear",
+    "detachment_id": "warrior-bioform-onslaught",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

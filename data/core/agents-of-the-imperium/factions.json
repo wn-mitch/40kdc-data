@@ -1,0 +1,17 @@
+[
+  {
+    "id": "agents-of-the-imperium",
+    "name": "Agents of the Imperium",
+    "parent_faction_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "keywords": [
+      "Imperium",
+      "Agents of the Imperium"
+    ],
+    "aliases": [],
+    "faction_rule_id": "assigned-agents"
+  }
+]

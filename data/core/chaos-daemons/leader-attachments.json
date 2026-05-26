@@ -1,0 +1,194 @@
+[
+  {
+    "leader_id": "bloodmaster",
+    "eligible_bodyguard_ids": [
+      "bloodletters"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "tranceweaver",
+    "eligible_bodyguard_ids": [
+      "daemonettes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "infernal-enrapturess",
+    "eligible_bodyguard_ids": [
+      "daemonettes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "syllesske",
+    "eligible_bodyguard_ids": [
+      "daemonettes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "changecaster",
+    "eligible_bodyguard_ids": [
+      "blue-horrors",
+      "pink-horrors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "horticulous-slimux",
+    "eligible_bodyguard_ids": [
+      "beasts-of-nurgle"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "contorted-epitome",
+    "eligible_bodyguard_ids": [
+      "daemonettes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "poxbringer",
+    "eligible_bodyguard_ids": [
+      "plaguebearers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "fateskimmer",
+    "eligible_bodyguard_ids": [
+      "screamers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "exalted-flamer",
+    "eligible_bodyguard_ids": [
+      "flamers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "skullmaster",
+    "eligible_bodyguard_ids": [
+      "bloodcrushers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "epidemius",
+    "eligible_bodyguard_ids": [
+      "plaguebearers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "karanak",
+    "eligible_bodyguard_ids": [
+      "flesh-hounds"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "spoilpox-scrivener",
+    "eligible_bodyguard_ids": [
+      "plaguebearers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "tormentbringer",
+    "eligible_bodyguard_ids": [
+      "hellflayers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "skulltaker",
+    "eligible_bodyguard_ids": [
+      "bloodletters"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "sloppity-bilepiper",
+    "eligible_bodyguard_ids": [
+      "plaguebearers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "fluxmaster",
+    "eligible_bodyguard_ids": [
+      "blue-horrors",
+      "pink-horrors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "herald-of-slaanesh-on-steed-of-slaanesh",
+    "eligible_bodyguard_ids": [
+      "seekers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

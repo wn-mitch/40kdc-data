@@ -1,0 +1,27 @@
+{
+  "faction": "leagues-of-votann",
+  "ported_from_ref": "89ede59c4743d0b43de231857ead0aa391a1ae5a",
+  "summary": {
+    "cover-ability": 1
+  },
+  "items": [
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "breaching-fire",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    }
+  ],
+  "bulk_review": {
+    "detachment-disposition": [
+      "hearthfyre-arsenal",
+      "persecution-prospect",
+      "needgaard-oathband",
+      "delve-assault-shift",
+      "hearthband",
+      "mercenary-oathband",
+      "brandfast-oathband"
+    ],
+    "stratagem-type": 42
+  }
+}

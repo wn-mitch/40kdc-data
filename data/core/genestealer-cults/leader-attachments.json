@@ -1,0 +1,121 @@
+[
+  {
+    "leader_id": "clamavus",
+    "eligible_bodyguard_ids": [
+      "hybrid-metamorphs",
+      "neophyte-hybrids"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "patriarch",
+    "eligible_bodyguard_ids": [
+      "purestrain-genestealers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "biophagus",
+    "eligible_bodyguard_ids": [
+      "aberrants",
+      "hybrid-metamorphs",
+      "neophyte-hybrids"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "acolyte-iconward",
+    "eligible_bodyguard_ids": [
+      "hybrid-metamorphs",
+      "neophyte-hybrids"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "primus",
+    "eligible_bodyguard_ids": [
+      "hybrid-metamorphs",
+      "neophyte-hybrids"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "abominant",
+    "eligible_bodyguard_ids": [
+      "aberrants"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "nexos",
+    "eligible_bodyguard_ids": [
+      "hybrid-metamorphs",
+      "neophyte-hybrids"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "jackal-alphus",
+    "eligible_bodyguard_ids": [
+      "atalan-jackals"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "locus",
+    "eligible_bodyguard_ids": [
+      "hybrid-metamorphs",
+      "neophyte-hybrids"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "benefictus",
+    "eligible_bodyguard_ids": [
+      "hybrid-metamorphs",
+      "neophyte-hybrids"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "magus",
+    "eligible_bodyguard_ids": [
+      "hybrid-metamorphs",
+      "neophyte-hybrids"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "chaos-daemons",
+    "name": "Chaos Daemons",
+    "parent_faction_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "keywords": [
+      "Chaos",
+      "Daemons"
+    ],
+    "aliases": [],
+    "faction_rule_id": "the-shadow-of-chaos"
+  }
+]

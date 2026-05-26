@@ -1,0 +1,18 @@
+[
+  {
+    "id": "blood-angels",
+    "name": "Blood Angels",
+    "parent_faction_id": "adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "keywords": [
+      "Imperium",
+      "Adeptus Astartes",
+      "Blood Angels"
+    ],
+    "aliases": [],
+    "faction_rule_id": "the-red-thirst"
+  }
+]

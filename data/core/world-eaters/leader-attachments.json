@@ -1,0 +1,57 @@
+[
+  {
+    "leader_id": "kharn-the-betrayer",
+    "eligible_bodyguard_ids": [
+      "khorne-berzerkers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "master-of-executions",
+    "eligible_bodyguard_ids": [
+      "khorne-berzerkers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "lord-on-juggernaut",
+    "eligible_bodyguard_ids": [
+      "eightbound",
+      "exalted-eightbound",
+      "khorne-berzerkers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "slaughterbound",
+    "eligible_bodyguard_ids": [
+      "eightbound",
+      "exalted-eightbound"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "lord-invocatus",
+    "eligible_bodyguard_ids": [
+      "eightbound",
+      "exalted-eightbound",
+      "khorne-berzerkers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

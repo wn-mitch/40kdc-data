@@ -1,0 +1,12 @@
+{
+  "faction": "crimson-fists",
+  "ported_from_ref": "89ede59c4743d0b43de231857ead0aa391a1ae5a",
+  "summary": {},
+  "items": [],
+  "bulk_review": {
+    "detachment-disposition": [
+      "liberator-assault-group"
+    ],
+    "stratagem-type": 6
+  }
+}

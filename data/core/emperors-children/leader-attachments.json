@@ -1,0 +1,45 @@
+[
+  {
+    "leader_id": "sorcerer",
+    "eligible_bodyguard_ids": [
+      "infractors",
+      "noise-marines",
+      "tormentors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "lord-exultant",
+    "eligible_bodyguard_ids": [
+      "infractors",
+      "tormentors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "lord-kakophonist",
+    "eligible_bodyguard_ids": [
+      "noise-marines"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "lucius-the-eternal",
+    "eligible_bodyguard_ids": [
+      "flawless-blades"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

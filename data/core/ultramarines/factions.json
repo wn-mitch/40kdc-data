@@ -1,0 +1,18 @@
+[
+  {
+    "id": "ultramarines",
+    "name": "Ultramarines",
+    "parent_faction_id": "adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "keywords": [
+      "Imperium",
+      "Adeptus Astartes",
+      "Ultramarines"
+    ],
+    "aliases": [],
+    "faction_rule_id": "oath-of-moment"
+  }
+]

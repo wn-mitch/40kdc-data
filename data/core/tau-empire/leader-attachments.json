@@ -1,0 +1,113 @@
+[
+  {
+    "leader_id": "ethereal",
+    "eligible_bodyguard_ids": [
+      "breacher-team",
+      "strike-team"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "commander-farsight",
+    "eligible_bodyguard_ids": [
+      "crisis-fireknife-battlesuits",
+      "crisis-starscythe-battlesuits",
+      "crisis-sunforge-battlesuits"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "commander-in-coldstar-battlesuit",
+    "eligible_bodyguard_ids": [
+      "crisis-fireknife-battlesuits",
+      "crisis-starscythe-battlesuits",
+      "crisis-sunforge-battlesuits"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "kroot-trail-shaper",
+    "eligible_bodyguard_ids": [
+      "kroot-carnivores",
+      "kroot-farstalkers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "commander-in-enforcer-battlesuit",
+    "eligible_bodyguard_ids": [
+      "crisis-fireknife-battlesuits",
+      "crisis-starscythe-battlesuits",
+      "crisis-sunforge-battlesuits"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "cadre-fireblade",
+    "eligible_bodyguard_ids": [
+      "breacher-team",
+      "strike-team"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "darkstrider",
+    "eligible_bodyguard_ids": [
+      "pathfinder-team"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "kroot-war-shaper",
+    "eligible_bodyguard_ids": [
+      "kroot-carnivores",
+      "kroot-farstalkers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "kroot-flesh-shaper",
+    "eligible_bodyguard_ids": [
+      "kroot-carnivores",
+      "kroot-farstalkers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "shaso-ralai",
+    "eligible_bodyguard_ids": [
+      "xv9-hazard-battlesuits"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

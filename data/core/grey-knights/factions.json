@@ -1,0 +1,18 @@
+[
+  {
+    "id": "grey-knights",
+    "name": "Grey Knights",
+    "parent_faction_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "keywords": [
+      "Imperium",
+      "Adeptus Astartes",
+      "Grey Knights"
+    ],
+    "aliases": [],
+    "faction_rule_id": "gate-of-infinity"
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "imperial-fists",
+    "name": "Imperial Fists",
+    "parent_faction_id": "adeptus-astartes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "keywords": [
+      "Imperium",
+      "Adeptus Astartes",
+      "Imperial Fists"
+    ],
+    "aliases": [],
+    "faction_rule_id": "oath-of-moment"
+  }
+]

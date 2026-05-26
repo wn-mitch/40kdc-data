@@ -1,0 +1,118 @@
+[
+  {
+    "leader_id": "lord-of-poxes",
+    "eligible_bodyguard_ids": [
+      "plague-marines"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "tallyman",
+    "eligible_bodyguard_ids": [
+      "plague-marines"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "lord-of-contagion",
+    "eligible_bodyguard_ids": [
+      "blightlord-terminators",
+      "deathshroud-terminators"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "biologus-putrifier",
+    "eligible_bodyguard_ids": [
+      "plague-marines"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "plague-surgeon",
+    "eligible_bodyguard_ids": [
+      "plague-marines"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "lord-of-virulence",
+    "eligible_bodyguard_ids": [
+      "blightlord-terminators",
+      "deathshroud-terminators"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "noxious-blightbringer",
+    "eligible_bodyguard_ids": [
+      "plague-marines",
+      "poxwalkers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "malignant-plaguecaster",
+    "eligible_bodyguard_ids": [
+      "plague-marines",
+      "poxwalkers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "foul-blightspawn",
+    "eligible_bodyguard_ids": [
+      "plague-marines"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "icon-bearer",
+    "eligible_bodyguard_ids": [
+      "plague-marines"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "typhus",
+    "eligible_bodyguard_ids": [
+      "blightlord-terminators",
+      "deathshroud-terminators",
+      "poxwalkers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

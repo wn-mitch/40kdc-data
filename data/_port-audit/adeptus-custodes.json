@@ -1,0 +1,32 @@
+{
+  "faction": "adeptus-custodes",
+  "ported_from_ref": "89ede59c4743d0b43de231857ead0aa391a1ae5a",
+  "summary": {
+    "charge-timing": 2
+  },
+  "items": [
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "dread-foe",
+      "detail": "Uses charged-this-turn; 11e charging grants Fights First by default — check for redundancy."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "tactical-perception",
+      "detail": "Uses fight-first; 11e charging grants Fights First by default — check for redundancy."
+    }
+  ],
+  "bulk_review": {
+    "detachment-disposition": [
+      "lions-of-the-emperor",
+      "auric-champions",
+      "solar-spearhead",
+      "shield-host",
+      "null-maiden-vigil",
+      "talons-of-the-emperor"
+    ],
+    "stratagem-type": 36
+  }
+}

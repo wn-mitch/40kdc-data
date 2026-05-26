@@ -1,0 +1,196 @@
+[
+  {
+    "leader_id": "technomancer",
+    "eligible_bodyguard_ids": [
+      "canoptek-wraiths",
+      "immortals",
+      "necron-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "overlord",
+    "eligible_bodyguard_ids": [
+      "immortals",
+      "lychguard",
+      "necron-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "royal-warden",
+    "eligible_bodyguard_ids": [
+      "immortals",
+      "necron-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "orikan-the-diviner",
+    "eligible_bodyguard_ids": [
+      "immortals",
+      "necron-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "psychomancer",
+    "eligible_bodyguard_ids": [
+      "immortals",
+      "necron-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "skorpekh-lord",
+    "eligible_bodyguard_ids": [
+      "skorpekh-destroyers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "imotekh-the-stormlord",
+    "eligible_bodyguard_ids": [
+      "immortals",
+      "lychguard",
+      "necron-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "overlord-with-translocation-shroud",
+    "eligible_bodyguard_ids": [
+      "immortals",
+      "lychguard",
+      "necron-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "trazyn-the-infinite",
+    "eligible_bodyguard_ids": [
+      "immortals",
+      "lychguard",
+      "necron-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "lokhust-lord",
+    "eligible_bodyguard_ids": [
+      "lokhust-destroyers",
+      "lokhust-heavy-destroyers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "plasmancer",
+    "eligible_bodyguard_ids": [
+      "immortals",
+      "necron-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "geomancer",
+    "eligible_bodyguard_ids": [
+      "canoptek-macrocytes",
+      "immortals",
+      "necron-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "chronomancer",
+    "eligible_bodyguard_ids": [
+      "immortals",
+      "necron-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "anrakyr-the-traveller",
+    "eligible_bodyguard_ids": [
+      "immortals"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "vargard-obyron",
+    "eligible_bodyguard_ids": [
+      "immortals",
+      "lychguard",
+      "necron-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "lord",
+    "eligible_bodyguard_ids": [
+      "immortals",
+      "lychguard",
+      "necron-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "nemesor-zahndrekh",
+    "eligible_bodyguard_ids": [
+      "immortals",
+      "lychguard",
+      "necron-warriors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

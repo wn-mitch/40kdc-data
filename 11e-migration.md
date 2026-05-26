@@ -74,13 +74,13 @@ Cover now confers **−1 BS to attackers**, not +1 save to defenders. Any 10e Ab
 ### Units / characters
 
 - **Datasheet stat profile is unchanged** in 11e (M/T/W/Sv/invuln_sv/Ld/OC carry forward).
-- Characters attach as **Leader** or **Support** — a unit can have one of each. Selection at list-build, not at game start. The **Support** role generalizes what were army-specific exceptions in 10e (e.g. Kroot characters allowed to attach alongside a regular Leader, currently encoded as `max_leaders_per_unit > 1` on `leader-attachment.schema.json`). 11e standardizes this as a first-class ability — the Ork **Bannernob** is the canonical preview example. Asymmetry: **Support characters cannot be taken solo** — they are only legal in an army list when attached to a host unit. Leaders remain valid as standalone entries. List-build validation needs an `attachment_required` invariant for Support (or a documented rule that `attachment_role == "support"` implies it). Migration implication: drop the per-attachment `max_leaders_per_unit` escape hatch in favor of `attachment_role` on the character's unit entry, and rewrite the existing 10e Kroot/etc. entries during 11e enrichment authoring.
+- Characters attach as **Leader** or **Support** — a unit can have one of each. Selection at list-build, not at game start. The **Support** role generalizes what were army-specific exceptions in 10e ("additional leader" attachments like Apothecaries, Ancients, Lieutenants, Plague Surgeons, Kroot Shapers, etc.). 11e standardizes this as a first-class ability — the Ork **Bannernob** is the canonical preview example. Asymmetry: **Support characters cannot be taken solo** — they are only legal in an army list when attached to a host unit. Leaders remain valid as standalone entries. List-build validation needs an `attachment_required` invariant for Support (or a documented rule that `attachment_role == "support"` implies it). Schema-side: `attachment_role` on the unit replaces the per-attachment `max_leaders_per_unit` escape hatch. Data-side: the port (Section 6) writes `attachment_role: "support"` directly from a curated registry — see `tools/src/known-support-10e.ts`.
 - **Battleline units have doubled unit limits** in army-list construction.
 - **Enhancements** can have an `upgrade_tag` flag that lets the enhancement apply to up to 3 non-character units while counting as one Enhancement choice.
 
 ---
 
-## Section 1 — Branch + data hygiene (in progress)
+## Section 1 — Branch + data hygiene
 
 - [x] Cut `10e-archive` branch from `main` and push to origin.
 - [x] Tag `10th/2025-q3` at the archive commit and push.
@@ -99,7 +99,7 @@ Cover now confers **−1 BS to attackers**, not +1 save to defenders. Any 10e Ab
 - [x] `schemas/core/enhancement.schema.json` — added `upgrade_tag: boolean` and `max_targets: integer` (default 1) (#5).
 - [x] `schemas/core/detachment.schema.json` — added `detachment_points: integer | null` (1–3) and `force_dispositions: array of entity-id` referencing force-disposition entities (#5).
 - [x] `schemas/core/leader-attachment.schema.json` — removed `max_leaders_per_unit` (#5). The 10e Support workaround is superseded by `attachment_role` on the character unit; the data-side companion transform is Section 6.2.
-- [ ] `schemas/core/game-version.schema.json` — already accepts `11th` via the existing pattern. **Done in #5**: widened `$defs/dataslate-version` to accept named kebab-case slugs (e.g. `pre-launch-provisional`) alongside quarterly tags — the prior `^\d{4}-q[1-4]$` rejected the provisional seed name; added the dataslate to `data/core/_example/game-versions.example.json`. **Still open**: create the real `data/core/game-versions.json` entry once the port runs.
+- [x] `schemas/core/game-version.schema.json` — already accepts `11th` via the existing pattern. Widened `$defs/dataslate-version` (#5) to accept named kebab-case slugs (e.g. `pre-launch-provisional`) alongside quarterly tags; added the dataslate to `data/core/_example/game-versions.example.json`. The real `data/core/game-versions.json` registry entry now exists alongside the port (PR #6).
 - [ ] New `$defs/battle-size` — `incursion` (1000 pts / 2 DP), `strike-force` (2000 pts / 3 DP).
 - [x] Added `points_provisional: boolean` (default `false`) sibling on the points-bearing schemas `unit` and `enhancement` (#5). **Correction**: `unit-composition` was listed here but carries no `points` field (per-composition costs live in `unit.points`), so it gets no flag. Set `true` during the 10e→11e port (Section 6); flipped to `false` when real 11e points land.
 
@@ -159,95 +159,110 @@ Additive — these extend type enums without breaking existing abilities.
 
 GW previews indicate datasheet stat profiles (M/T/W/Sv/invuln/Ld/OC) and most ability mechanics carry forward into 11e. The `10e-archive` branch is therefore viable as a *seed* for 11e: port it forward tagged provisional, let real 11e datasheets overwrite as they publish. This front-loads downstream tooling integration, exercises Section 2's schema deltas against realistic data, and surfaces the per-entity audit categories as concrete migration work.
 
-**Prerequisite**: Section 2 schema bumps for `attachment_role`, `upgrade_tag`/`max_targets`, `detachment_points`/`force_dispositions`, and `points_provisional` must land before the bulk sweep (6.5) runs. The Orks canary (6.4) can run against a schema-feature branch.
+**Prerequisite** (satisfied): Section 2 schema bumps for `attachment_role`, `upgrade_tag`/`max_targets`, `detachment_points`/`force_dispositions`, and `points_provisional` landed on `main` (PR #5). The port validates against them.
 
 ### 6.0 Strategy
 
-- **Source**: `10e-archive` branch — `data/core/` (281 files across 34 factions) and `data/enrichment/` (23 factions with abilities + phase-mappings; `world-eaters` additionally has `resource-pools.json` and `timing-flags.json`).
+- **Source**: `10e-archive` branch — `data/core/` (232 files across 35 factions) and `data/enrichment/` (23 factions with abilities + phase-mappings; `world-eaters` additionally has `resource-pools.json` and `timing-flags.json`).
 - **Target dataslate**: `11th / pre-launch-provisional` (added in Section 2 alongside the `game-versions.json` entry). The dataslate name itself signals provisional status to consumers; real numbered dataslates overwrite as 11e datasheets publish.
 - **Provisional points**: every entity carrying `points` gets `points_provisional: true` during the port (schema delta tracked in Section 2). Flipped to `false` per-entity when real 11e values land.
 - **IP stance unchanged**: stat lines and points are numerical facts (permitted); ability DSL entries remain community-authored. The port does not introduce any original prose.
 
 ### 6.1 Tooling
 
-- [ ] Build `tools/src/port-10e-faction.ts <faction-id>`:
-  - Reads `data/{core,enrichment}/<faction-id>/*.json` from the `10e-archive` ref (via `git show` or a fixture helper).
+- [x] Build `tools/src/port-10e-faction.ts <faction-id>` (and `--all`):
+  - Reads `data/{core,enrichment}/<faction-id>/*.json` from the `10e-archive` ref via `git show`; discovers files with `git ls-tree`, porting only the files that exist (preserves SM-successor inheritance, see 6.5).
   - Rewrites every `game_version` to `{ edition: "11th", dataslate: "pre-launch-provisional" }`.
-  - On every entity carrying `points`, sets `points_provisional: true`.
+  - Sets `points_provisional: true` on the points-bearing schemas (`units`, `enhancements`).
   - Default-fills new schema fields where unambiguous: `enhancement.upgrade_tag = false`, `enhancement.max_targets = 1`, `detachment.detachment_points = null`, `detachment.force_dispositions = []`.
-  - Emits `data/core/<faction>/_port-audit.json` listing every entry needing manual review (see 6.6).
-- [ ] Distinct from `tools/src/convert-faction.ts` (army-assist bootstrap). Both stay available; new script is purpose-built for archive→11e.
-- [ ] Exit non-zero if the resulting tree fails `npm run validate` against the bumped schemas.
+  - Emits `data/_port-audit/<faction>.json` (outside the `core/**` / `enrichment/**` validation globs) listing every entry needing manual review, plus a rolled-up `data/_port-audit/summary.md` (see 6.6).
+- [x] Distinct from `tools/src/convert-faction.ts` (army-assist bootstrap). Both stay available; new script is purpose-built for archive→11e.
+- [x] Exit non-zero if the resulting tree fails validation against the bumped schemas.
 
 ### 6.2 Per-entity transformations — `data/core/`
 
-Items marked **audit** are flagged in `_port-audit.json`, not auto-rewritten.
+Items marked **audit** are flagged in `data/_port-audit/<faction>.json`, not auto-rewritten.
+
+> **Correction (post-inspection).** The original plan keyed the Support migration on `max_leaders_per_unit > 1` in the 10e data. That signal **does not exist anywhere in the archive** (scanned all 35 factions; every `leader-attachments` entry is `max_leaders_per_unit: 1`), and no other structured field captures the 10e "additional leader" rule — it lived only in the (IP-restricted) datasheet text. Support is therefore sourced from `tools/src/known-support-10e.ts`, a two-layer registry: (1) `FROM_UPSTREAM_SCRAPE` derived deterministically from army-assist `Datasheets.json` `leader_head` text, and (2) `MANUAL_OVERLAY` for units the community scrapes missed (the three Kroot Shapers were dropped by both army-assist and shadowboxing) plus non-character special cases (Cryptothralls). The port writes `attachment_role: "support"` directly from the registry. The Ork Bannernob and any future Support entries that aren't in the 10e archive are net-new 11e authoring, not a port outcome.
 
 - **`factions.json`** — bump `game_version`. No other changes.
-- **`units.json`** — bump `game_version`; statlines carry verbatim; mark `points` provisional. **Audit**: character units whose 10e attachment used `max_leaders_per_unit > 1` need `attachment_role: "support"` (see leader-attachments). Other character units appearing in a leader-attachment entry default to `attachment_role: "leader"`; non-attaching characters get no role.
+- **`units.json`** — bump `game_version`; statlines carry verbatim; mark `points_provisional: true`. Attachment role is set with the registry taking precedence over the leader-attachment table: a unit listed in `tools/src/known-support-10e.ts` becomes `attachment_role: "support"` (even if it isn't a `leader_id` — the Cryptothralls case); otherwise a `leader_id` becomes `"leader"`; non-attaching units get no role. The port warns if a registry entry doesn't match an archive unit, and records each assignment in the audit as `support-assigned` so summary.md surfaces the roster.
 - **`weapons.json`** — bump `game_version`; the `abilities` list is free-form and carries forward. **Audit**: flag weapons whose ability strings reference cover or engagement semantics for re-check once 11e weapon keywords publish.
-- **`enhancements.json`** — bump `game_version`; mark `points` provisional; default-fill `upgrade_tag: false`, `max_targets: 1`.
+- **`enhancements.json`** — bump `game_version`; mark `points_provisional: true` (the points field is `cost`; the flag is a sibling boolean); default-fill `upgrade_tag: false`, `max_targets: 1`.
 - **`detachments.json`** — bump `game_version`; carry forward (10e detachments remain valid in 11e per the confirmed mechanics); default-fill `detachment_points: null` and `force_dispositions: []`. **Audit**: every detachment needs human-assigned DP cost (1–3) and Force Disposition list once GW publishes the mapping.
-- **`stratagems.json`** — **hold** until Section 2's `type`-enum decision lands. The 10e enum (`battle-tactic | strategic-ploy | epic-deed | wargear`) may shift in 11e; porting now risks a rewrite.
-- **`unit-compositions.json`** — bump `game_version`; mark `points` provisional. Battleline-doubling is army-list construction, not entity state — no schema impact.
-- **`leader-attachments.json`** — transform, don't just relabel:
-  - If `max_leaders_per_unit > 1`: this is the 10e Support workaround (Kroot exception). Drop the `max_leaders_per_unit` field; the leader unit gets `attachment_role: "support"` (handled in units.json transform).
-  - Otherwise: drop `max_leaders_per_unit` if present (now defaults to 1); the leader unit gets `attachment_role: "leader"`.
-  - The leader-attachment schema itself loses `max_leaders_per_unit` in Section 2; this transform is the data-side companion.
+- **`stratagems.json`** — bump `game_version` only. (Originally held pending Section 2's `type`-enum decision; the 10e enum `battle-tactic | strategic-ploy | epic-deed | wargear` is unchanged on `main`, so the data validates as-is. Porting now keeps detachment→stratagem refs intact; **audit (stratagem-type)** flags every stratagem for 11e reconciliation if GW reshuffles categories.)
+- **`unit-compositions.json`** — bump `game_version` only. Compositions carry no `points`/`cost` (per-composition costs live in `unit.points`), so no `points_provisional`. Battleline-doubling is army-list construction, not entity state — no schema impact.
+- **`leader-attachments.json`** — drop the retired `max_leaders_per_unit` field from every entry (all are `1`), then bump `game_version`. The schema lost `max_leaders_per_unit` in Section 2 (`additionalProperties: false` would reject it otherwise); this is the data-side companion. No `"support"` cases arise here — see the correction above.
 
 ### 6.3 Per-entity transformations — `data/enrichment/`
 
-- **`abilities.json`** — bump `game_version`. Three audit passes:
-  1. **Cover audit**: scan effects for `save-modifier` with cover-scoped conditions → rewrite to `bs-modifier` with sign inverted. Script can detect candidates; rewrite is human-reviewed because not every `save-modifier` is cover-derived. (Section 3 owns the DSL primitive; Section 6 owns the data rewrite.)
-  2. **Engagement-range audit**: scan conditions for hard-coded `1"` or implicit "engaged" semantics → flag for 2" review.
-  3. **Charge-timing & Fights First audit**: any ability triggering on charge-target selection, or granting Fights First on charge, needs review. 11e charging units gain Fights First by default — some 10e abilities are now redundant.
-- **`phase-mappings.json`** — bump `game_version`. **Audit**: Pile In timing reorders within Fight phase (all active-player Pile Ins, then opponent's, before fighting). Any phase-mapping that interleaves Pile In with fighting needs review.
+- **`abilities.json`** — bump `game_version`. Three audit passes (flag only, no rewrite):
+  1. **Cover audit**: the DSL has **no `save-modifier` effect type** — cover is encoded as `ability-grant` of `benefit-of-cover` (51 instances across the archive). The audit flags abilities granting `benefit-of-cover`; what changes in 11e is the *definition* of `benefit-of-cover` (was +1 Sv, becomes −1 BS), so the granted ability is the rewrite target, not the granting ability. (Section 3 owns the DSL primitive; Section 6 owns surfacing the data.)
+  2. **Engagement-range audit**: flag abilities whose string values reference the 10e `1"` engagement constant → 2" review.
+  3. **Charge-timing & Fights First audit**: flag abilities whose effect tree uses `fight-first` or `charged-this-turn`. 11e charging units gain Fights First by default — some 10e abilities are now redundant.
+- **`phase-mappings.json`** — bump `game_version`. (No audit: phase-mappings are flat phase lists keyed by source id; the 11e Pile In reorder is a rules-level change not encoded per-entry, so there is nothing to detect.)
 - **`resource-pools.json`** / **`timing-flags.json`** (world-eaters only) — bump `game_version`. Carry forward.
 
 ### 6.4 Canary: Orks end-to-end
 
-Orks selected because the Bannernob Support-character preview makes it the determinative correctness test for the `attachment_role` migration path.
+Orks is the canary for the mechanical port. (The Bannernob is *not* in the 10e archive — it's net-new 11e content — so the canary verifies the `"leader"` default and the audit surfacing of support candidates, not a Bannernob→`"support"` transform.)
 
-- [ ] Port Orks: `npx tsx tools/src/port-10e-faction.ts orks`.
-- [ ] Hand-review the resulting tree against `10e-archive:data/core/orks/` and `data/enrichment/orks/` — confirm every transformation in 6.2 and 6.3 applied correctly.
-- [ ] Verify Bannernob migration: identify the Ork character unit that 11e encodes as Support per the preview, confirm `attachment_role: "support"` lands on it.
-- [ ] `cd tools && npm test && npm run validate` against the schema-feature branch with Section 2 deltas merged.
-- [ ] Inspect `data/core/orks/_port-audit.json` — confirm it surfaces cover, charge-timing, engagement-range, and detachment-DP review items.
-- [ ] Spot-check 5 random unit statlines round-trip identical to the 10e archive.
+- [x] Port Orks: `npx tsx tools/src/port-10e-faction.ts orks`.
+- [x] Hand-reviewed the resulting tree against `10e-archive:data/core/orks/` and `data/enrichment/orks/` — every transformation in 6.2/6.3 confirmed (game_version, points_provisional, leader role, default-fills, max_leaders dropped, statlines/points identical).
+- [x] Verified support detection (initial pass): the FNP heuristic flagged Painboy and Big Mek in Mega Armour. That heuristic was later replaced — see 6.6 — once it became clear it both over-flagged (Tech-Priest Dominus, Overlord) and under-flagged (Apothecary, Ancient line) the real "additional leader" cohort.
+- [x] `cd tools && npm test && npm run validate` green.
+- [x] Inspected `data/_port-audit/orks.json` — surfaces cover-ability and the detachment-DP / stratagem-type bulk-review lists. (Orks has no Support assignments; no Ork character carries the 10e additional-leader rule per the registry.)
+- [x] Spot-checked unit statlines round-trip identical to the 10e archive (all 69 units' profiles + points arrays match).
 
-**Gate**: 6.5 does not start until the Orks canary is green and any script bugs are fixed.
+**Gate**: 6.5 does not start until the Orks canary is green and any script bugs are fixed. ✅ passed.
 
-### 6.5 Bulk sweep — remaining 33 factions
+### 6.5 Bulk sweep — remaining 34 factions
 
-- [ ] Run the port script across the remaining factions (tick as each lands and validates):
-  - [ ] `adepta-sororitas`, `adeptus-astartes`, `adeptus-custodes`, `adeptus-mechanicus`, `aeldari`, `agents-of-the-imperium`, `astra-militarum`
-  - [ ] `black-templars`, `blood-angels`, `chaos-daemons`, `chaos-knights`, `chaos-space-marines`, `crimson-fists`, `dark-angels`, `death-guard`, `deathwatch`, `drukhari`
-  - [ ] `emperors-children`, `genestealer-cults`, `grey-knights`, `imperial-fists`, `imperial-knights`, `iron-hands`, `leagues-of-votann`
-  - [ ] `necrons`, `raven-guard`, `salamanders`, `space-wolves`, `tau-empire`, `thousand-sons`, `tyranids`, `ultramarines`, `white-scars`, `world-eaters`
-- [ ] After each faction: `npm run validate`.
-- [ ] **Parent-faction inheritance**: Space Marine successor chapters (black-templars, blood-angels, crimson-fists, dark-angels, deathwatch, imperial-fists, iron-hands, raven-guard, salamanders, space-wolves, ultramarines, white-scars) lack their own `leader-attachments`/`unit-compositions`/`units`/`weapons` in the archive — they inherit from `adeptus-astartes` via `parent_faction_id`. Port script must preserve the inheritance; successors carry only the faction/detachment/enhancement/stratagem files.
+- [x] Ran `npx tsx tools/src/port-10e-faction.ts --all` across all factions; each validates:
+  - [x] `adepta-sororitas`, `adeptus-astartes`, `adeptus-custodes`, `adeptus-mechanicus`, `aeldari`, `agents-of-the-imperium`, `astra-militarum`
+  - [x] `black-templars`, `blood-angels`, `chaos-daemons`, `chaos-knights`, `chaos-space-marines`, `crimson-fists`, `dark-angels`, `death-guard`, `deathwatch`, `drukhari`
+  - [x] `emperors-children`, `genestealer-cults`, `grey-knights`, `imperial-fists`, `imperial-knights`, `iron-hands`, `leagues-of-votann`
+  - [x] `necrons`, `raven-guard`, `salamanders`, `space-wolves`, `tau-empire`, `thousand-sons`, `tyranids`, `ultramarines`, `white-scars`, `world-eaters`
+- [x] Per-faction validation gate inside the script; full `npm run validate` green afterward.
+- [x] **Parent-faction inheritance**: Space Marine successor chapters (black-templars, blood-angels, crimson-fists, dark-angels, deathwatch, imperial-fists, iron-hands, raven-guard, salamanders, space-wolves, ultramarines, white-scars) lack their own `leader-attachments`/`unit-compositions`/`units`/`weapons` in the archive — they inherit from `adeptus-astartes` via `parent_faction_id`. Verified preserved: porting only the files that exist means successors carry only faction/detachment/enhancement/stratagem (e.g. `ultramarines` = 4 files).
 
 ### 6.6 Audit-driven human-review tasks
 
-Each `_port-audit.json` enumerates entries needing manual work. Fill in counts as the sweep completes:
+`data/_port-audit/<faction>.json` enumerates entries needing manual work; `data/_port-audit/summary.md` rolls them up. Counts from the completed sweep (35 factions):
 
-- [ ] **Support character migration** — units flagged from `max_leaders_per_unit > 1` source rows. Known: `tau-empire` Kroot.
-- [ ] **Cover → BS modifier rewrites** — ability effects flagged.
-- [ ] **Charge-timing / Fights First redundancy** — abilities flagged.
-- [ ] **Engagement-range references** — conditions flagged.
-- [ ] **Detachment DP + Force Disposition assignment** — every ported detachment needs human-assigned values once GW publishes the mapping.
-- [ ] **Stratagem type-enum reconciliation** — held; unblocks when Section 2's stratagem decision lands.
+- [x] **Support character migration** — 47 units assigned `attachment_role: "support"` directly by the port from `tools/src/known-support-10e.ts`. The registry is a two-layer source: a deterministic scrape of army-assist `Datasheets.json` `leader_head` text (43 units), plus a hand-maintained overlay for entries the upstream community sources missed (the three Kroot Shapers — confirmed missing in both army-assist and shadowboxing) and non-character special cases (Cryptothralls). The port is the durable source of truth — to revert any entry, remove it from the registry and re-run the port. (Net-new 11e Support units like the Ork Bannernob remain separate hand-authoring.)
+- [ ] **Cover → BS modifier rewrites** — 51 abilities grant `benefit-of-cover`; the `benefit-of-cover` definition needs re-modelling for 11e (−1 BS, not +1 Sv).
+- [ ] **Charge-timing / Fights First redundancy** — 35 abilities flagged.
+- [ ] **Engagement-range references** — 0 flagged (no archive ability hard-codes `1"`).
+- [ ] **Detachment DP + Force Disposition assignment** — 190 detachments need human-assigned values once GW publishes the mapping.
+- [ ] **Stratagem type-enum reconciliation** — 1140 stratagems flagged; revisit if 11e reshuffles the `type` enum.
 
 ### 6.7 Verification
 
-- [ ] `cd tools && npm test && npm run validate` green with all 34 factions present.
-- [ ] CI green on the PR introducing the port.
-- [ ] Every entity under `data/core/` and `data/enrichment/` carries `game_version.edition == "11th"` (grep check).
-- [ ] Every points-bearing entity carries `points_provisional: true` (grep check; flips to `false` per-entity as real 11e values land).
-- [ ] No leader-attachment entry retains `max_leaders_per_unit` (grep check).
-- [ ] Audit reports committed (per-faction `_port-audit.json` or a single `data/_port-audit-summary.md`) so the human-review queue is visible.
+- [x] `cd tools && npm test && npm run validate` green with all 35 factions present (13,849 items, 0 failures).
+- [x] CI green on the PR introducing the port (PR #6).
+- [x] Every ported entity under `data/core/` and `data/enrichment/` carries `game_version.edition == "11th"` (grep check; only the kept `_example/` fixtures retain 10th).
+- [x] Every points-bearing entity (`units`, `enhancements`) carries `points_provisional: true` (grep check; flips to `false` per-entity as real 11e values land).
+- [x] No leader-attachment entry retains `max_leaders_per_unit` (grep check).
+- [x] Audit reports committed under `data/_port-audit/` (per-faction json + `summary.md`) so the human-review queue is visible.
 
 ---
+
+## Next steps (forward queue)
+
+Section 6 is functionally complete (port green, registry baked in). The remaining work, in rough dependency order:
+
+1. **Section 3 — Ability DSL primitives**: add `bs-modifier`, `engagement-state`, `terrain-area-control`, `terrain-area-tag`, `charge-roll-modifier`, `fights-first`, `disposition-matches`, `engagement-passthrough`. The cover-rewrite item in 6.6 unblocks once `bs-modifier` lands.
+2. **Section 6.6 audit-driven follow-ups** (gated on §3):
+   - Cover rewrite: 51 abilities granting `benefit-of-cover` — re-model the `benefit-of-cover` ability's effect from `+1 Sv` to `-1 BS`.
+   - Charge-timing review: 35 abilities — prune any that become redundant under 11e's "charging units gain Fights First by default".
+   - Detachment DP + Force Disposition assignment: 190 detachments — gated on GW publishing the mapping.
+   - Stratagem type-enum reconciliation: 1140 stratagems — gated on the 11e card categories being confirmed (Section 2's open stratagem item).
+3. **Section 2 — remaining schema work**: phase-enum decision (`common.schema.json`), weapon-abilities audit, `$defs/battle-size`, and the four new schemas (`terrain-layout`, `mission`, `deployment-pattern`, `secondary-card`).
+4. **Section 4 — tooling / publish**: npm + Rust crate publish, CI extensions (block on DSL parse errors, auto-publish on tag), extend `SCHEMA_MAP` for the new entity prefixes.
+5. **Section 5 — docs**: `VERSIONING.md`, `CONTRIBUTING.md` (secondary-card text workflow), `README.md` consumption snippets.
+
+The current PR (#6) lands Section 6. Each numbered item above is a natural next PR.
 
 ## Out of scope
 

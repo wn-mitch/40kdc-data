@@ -1,0 +1,83 @@
+{
+  "faction": "death-guard",
+  "ported_from_ref": "89ede59c4743d0b43de231857ead0aa391a1ae5a",
+  "summary": {
+    "support-assigned": 6,
+    "cover-ability": 3,
+    "charge-timing": 1
+  },
+  "items": [
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "biologus-putrifier",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "foul-blightspawn",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "icon-bearer",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "noxious-blightbringer",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "plague-surgeon",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "support-assigned",
+      "entity_type": "unit",
+      "entity_id": "tallyman",
+      "detail": "Assigned attachment_role: \"support\" from the curated registry. To revert, remove from tools/src/known-support-10e.ts and re-run the port."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "barrage-of-filth",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "miasma-of-pestilence-aura",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "diseased-cover",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "charge-timing",
+      "entity_type": "ability",
+      "entity_id": "blinding-spray",
+      "detail": "Uses fight-first; 11e charging grants Fights First by default — check for redundancy."
+    }
+  ],
+  "bulk_review": {
+    "detachment-disposition": [
+      "virulent-vectorium",
+      "flyblown-host",
+      "tallyband-summoners",
+      "champions-of-contagion",
+      "mortarions-hammer",
+      "shamblerot-vectorium",
+      "death-lords-chosen"
+    ],
+    "stratagem-type": 42
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "faction": "imperial-knights",
+  "ported_from_ref": "89ede59c4743d0b43de231857ead0aa391a1ae5a",
+  "summary": {
+    "cover-ability": 3
+  },
+  "items": [
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "selfless-protector",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "searing-flames",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    },
+    {
+      "category": "cover-ability",
+      "entity_type": "ability",
+      "entity_id": "ion-aegis-aura",
+      "detail": "Grants benefit-of-cover; 11e cover is −1 BS (not +1 Sv) — re-check the granted ability's definition."
+    }
+  ],
+  "bulk_review": {
+    "detachment-disposition": [
+      "valourstrike-lance",
+      "questor-forgepact",
+      "gate-warden-lance",
+      "spearhead-at-arms",
+      "questoris-companions"
+    ],
+    "stratagem-type": 30
+  }
+}

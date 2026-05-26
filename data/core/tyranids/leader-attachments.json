@@ -1,0 +1,87 @@
+[
+  {
+    "leader_id": "winged-tyranid-prime",
+    "eligible_bodyguard_ids": [
+      "gargoyles",
+      "tyranid-warriors-with-melee-bio-weapons",
+      "tyranid-warriors-with-ranged-bio-weapons"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "the-swarmlord",
+    "eligible_bodyguard_ids": [
+      "tyrant-guard"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "broodlord",
+    "eligible_bodyguard_ids": [
+      "genestealers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "neurotyrant",
+    "eligible_bodyguard_ids": [
+      "neurogaunts",
+      "tyrant-guard",
+      "zoanthropes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "tyranid-prime-with-lash-whip",
+    "eligible_bodyguard_ids": [
+      "hormagaunts",
+      "termagants"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "old-one-eye",
+    "eligible_bodyguard_ids": [
+      "carnifexes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "hive-tyrant",
+    "eligible_bodyguard_ids": [
+      "tyrant-guard"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "malanthrope",
+    "eligible_bodyguard_ids": [
+      "venomthropes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

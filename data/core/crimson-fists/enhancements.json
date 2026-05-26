@@ -1,0 +1,74 @@
+[
+  {
+    "id": "speed-of-the-primarch",
+    "name": "Speed of the Primarch",
+    "detachment_id": "liberator-assault-group",
+    "cost": 25,
+    "keyword_restrictions": [
+      "Crimson Fists"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "rage-fuelled-warrior",
+    "name": "Rage-fuelled Warrior",
+    "detachment_id": "liberator-assault-group",
+    "cost": 35,
+    "keyword_restrictions": [
+      "Crimson Fists"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "icon-of-the-angel",
+    "name": "Icon of the Angel",
+    "detachment_id": "liberator-assault-group",
+    "cost": 20,
+    "keyword_restrictions": [
+      "Crimson Fists"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "gift-of-foresight",
+    "name": "Gift of Foresight",
+    "detachment_id": "liberator-assault-group",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Crimson Fists"
+    ],
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  }
+]

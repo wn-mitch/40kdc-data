@@ -1,0 +1,16 @@
+[
+  {
+    "id": "leagues-of-votann",
+    "name": "Leagues of Votann",
+    "parent_faction_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "keywords": [
+      "Leagues of Votann"
+    ],
+    "aliases": [],
+    "faction_rule_id": "prioritised-efficiency"
+  }
+]

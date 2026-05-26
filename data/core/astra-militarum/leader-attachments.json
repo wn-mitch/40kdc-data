@@ -1,0 +1,160 @@
+[
+  {
+    "leader_id": "cadian-castellan",
+    "eligible_bodyguard_ids": [
+      "cadian-shock-troops",
+      "kasrkin"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "militarum-tempestus-command-squad",
+    "eligible_bodyguard_ids": [
+      "tempestus-scions"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "lord-solar-leontus",
+    "eligible_bodyguard_ids": [
+      "attilan-rough-riders",
+      "cadian-shock-troops",
+      "catachan-jungle-fighters",
+      "death-korps-of-krieg",
+      "death-riders",
+      "kasrkin",
+      "krieg-combat-engineers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "primaris-psyker",
+    "eligible_bodyguard_ids": [
+      "cadian-shock-troops",
+      "catachan-jungle-fighters",
+      "death-korps-of-krieg",
+      "kasrkin",
+      "krieg-combat-engineers",
+      "tempestus-scions"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "commissar",
+    "eligible_bodyguard_ids": [
+      "cadian-shock-troops",
+      "catachan-jungle-fighters",
+      "death-korps-of-krieg",
+      "kasrkin",
+      "krieg-combat-engineers",
+      "tempestus-scions"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "cadian-command-squad",
+    "eligible_bodyguard_ids": [
+      "cadian-shock-troops"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "catachan-command-squad",
+    "eligible_bodyguard_ids": [
+      "catachan-jungle-fighters"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "ministorum-priest",
+    "eligible_bodyguard_ids": [
+      "cadian-shock-troops",
+      "catachan-jungle-fighters",
+      "death-korps-of-krieg",
+      "kasrkin",
+      "krieg-combat-engineers",
+      "tempestus-scions"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "krieg-command-squad",
+    "eligible_bodyguard_ids": [
+      "death-korps-of-krieg",
+      "krieg-combat-engineers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "lord-marshal-dreir",
+    "eligible_bodyguard_ids": [
+      "death-riders"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "tech-priest-enginseer",
+    "eligible_bodyguard_ids": [
+      "cadian-shock-troops",
+      "catachan-jungle-fighters",
+      "death-korps-of-krieg",
+      "kasrkin",
+      "krieg-combat-engineers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "ursula-creed",
+    "eligible_bodyguard_ids": [
+      "cadian-shock-troops",
+      "kasrkin"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "quartermaster-cadre-squad",
+    "eligible_bodyguard_ids": [
+      "death-korps-of-krieg"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

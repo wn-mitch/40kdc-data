@@ -1,0 +1,17 @@
+[
+  {
+    "id": "adepta-sororitas",
+    "name": "Adepta Sororitas",
+    "parent_faction_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "keywords": [
+      "Imperium",
+      "Adepta Sororitas"
+    ],
+    "aliases": [],
+    "faction_rule_id": "acts-of-faith"
+  }
+]

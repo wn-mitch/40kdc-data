@@ -1,0 +1,90 @@
+[
+  {
+    "leader_id": "blade-champion",
+    "eligible_bodyguard_ids": [
+      "custodian-guard",
+      "custodian-wardens"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "shield-captain-on-dawneagle-jetbike",
+    "eligible_bodyguard_ids": [
+      "vertus-praetors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "knight-centura",
+    "eligible_bodyguard_ids": [
+      "prosecutors",
+      "vigilators",
+      "witchseekers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "aleya",
+    "eligible_bodyguard_ids": [
+      "prosecutors",
+      "vigilators",
+      "witchseekers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "valerian",
+    "eligible_bodyguard_ids": [
+      "custodian-guard",
+      "custodian-wardens"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "shield-captain-in-allarus-terminator-armour",
+    "eligible_bodyguard_ids": [
+      "allarus-custodians"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "shield-captain",
+    "eligible_bodyguard_ids": [
+      "custodian-guard",
+      "custodian-wardens"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "leader_id": "trajann-valoris",
+    "eligible_bodyguard_ids": [
+      "custodian-guard",
+      "custodian-wardens"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

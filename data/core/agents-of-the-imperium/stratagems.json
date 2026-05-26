@@ -1,0 +1,586 @@
+[
+  {
+    "id": "close-quarters-barrage",
+    "name": "CLOSE-QUARTERS BARRAGE",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "imperialis-fleet",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "dispense-justice",
+    "name": "DISPENSE JUSTICE",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "ordo-hereticus-purgation-force",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "prime-target",
+    "name": "PRIME TARGET",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "veiled-blade-elimination-force",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "armour-of-contempt",
+    "name": "ARMOUR OF CONTEMPT",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "ordo-xenos-alien-hunters",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "hyperstimms",
+    "name": "HYPERSTIMMS",
+    "category": "detachment",
+    "type": "battle-tactic",
+    "detachment_id": "veiled-blade-elimination-force",
+    "cp_cost": 2,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "masters-of-the-void",
+    "name": "MASTERS OF THE VOID",
+    "category": "detachment",
+    "type": "epic-deed",
+    "detachment_id": "imperialis-fleet",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "selfless-bodyguard",
+    "name": "SELFLESS BODYGUARD",
+    "category": "detachment",
+    "type": "epic-deed",
+    "detachment_id": "imperialis-fleet",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "execution-order",
+    "name": "EXECUTION ORDER",
+    "category": "detachment",
+    "type": "epic-deed",
+    "detachment_id": "ordo-hereticus-purgation-force",
+    "cp_cost": 2,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "emperors-will",
+    "name": "EMPEROR’S WILL",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "imperialis-fleet",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "line-of-fire",
+    "name": "LINE OF FIRE",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "ordo-hereticus-purgation-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "exact-punishment",
+    "name": "EXACT PUNISHMENT",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "ordo-hereticus-purgation-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "inviolate-jurisdiction",
+    "name": "INVIOLATE JURISDICTION",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "ordo-hereticus-purgation-force",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "will-sapping-salvo",
+    "name": "WILL-SAPPING SALVO",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "veiled-blade-elimination-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "orbital-oversight",
+    "name": "ORBITAL OVERSIGHT",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "veiled-blade-elimination-force",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "blind-grenades",
+    "name": "BLIND GRENADES",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "veiled-blade-elimination-force",
+    "cp_cost": 1,
+    "phases": [
+      "charge"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "ensnaring-trap",
+    "name": "ENSNARING TRAP",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "veiled-blade-elimination-force",
+    "cp_cost": 1,
+    "phases": [
+      "charge"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "adaptive-tactics",
+    "name": "ADAPTIVE TACTICS",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "ordo-xenos-alien-hunters",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "rapid-tactical-relocation",
+    "name": "RAPID TACTICAL RELOCATION",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "ordo-xenos-alien-hunters",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "ritual-of-warding",
+    "name": "RITUAL OF WARDING",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "ordo-malleus-daemon-hunters",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "rites-of-exorcism",
+    "name": "RITES OF EXORCISM",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "ordo-malleus-daemon-hunters",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "steel-heart",
+    "name": "STEEL HEART",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "ordo-malleus-daemon-hunters",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "violent-acquisition",
+    "name": "VIOLENT ACQUISITION",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "imperialis-fleet",
+    "cp_cost": 2,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "displacer-field",
+    "name": "DISPLACER FIELD",
+    "category": "detachment",
+    "type": "wargear",
+    "detachment_id": "imperialis-fleet",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "stun-grenades",
+    "name": "STUN GRENADES",
+    "category": "detachment",
+    "type": "wargear",
+    "detachment_id": "ordo-hereticus-purgation-force",
+    "cp_cost": 1,
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "hellfire-rounds",
+    "name": "HELLFIRE ROUNDS",
+    "category": "detachment",
+    "type": "wargear",
+    "detachment_id": "ordo-xenos-alien-hunters",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "dragonfire-rounds",
+    "name": "DRAGONFIRE ROUNDS",
+    "category": "detachment",
+    "type": "wargear",
+    "detachment_id": "ordo-xenos-alien-hunters",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "kraken-rounds",
+    "name": "KRAKEN ROUNDS",
+    "category": "detachment",
+    "type": "wargear",
+    "detachment_id": "ordo-xenos-alien-hunters",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "truesilver-armour",
+    "name": "TRUESILVER ARMOUR",
+    "category": "detachment",
+    "type": "wargear",
+    "detachment_id": "ordo-malleus-daemon-hunters",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "hexagrammic-wards",
+    "name": "HEXAGRAMMIC WARDS",
+    "category": "detachment",
+    "type": "wargear",
+    "detachment_id": "ordo-malleus-daemon-hunters",
+    "cp_cost": 1,
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "psybolt-ammunition",
+    "name": "PSYBOLT AMMUNITION",
+    "category": "detachment",
+    "type": "wargear",
+    "detachment_id": "ordo-malleus-daemon-hunters",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]
