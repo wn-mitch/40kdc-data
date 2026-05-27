@@ -1,0 +1,474 @@
+[
+  {
+    "id": "tipping-point",
+    "name": "Tipping Point",
+    "source": "leviathan",
+    "description": "Short edge deployment with L-shaped zones",
+    "zones": [
+      {
+        "player": "defender",
+        "name": "Defender Deployment",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 0, "y": 0 },
+            { "x": 12, "y": 0 },
+            { "x": 12, "y": 22 },
+            { "x": 20, "y": 22 },
+            { "x": 20, "y": 44 },
+            { "x": 0, "y": 44 }
+          ]
+        },
+        "position": { "x": 0, "y": 0 },
+        "color": "#3b82f6"
+      },
+      {
+        "player": "attacker",
+        "name": "Attacker Deployment",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 20, "y": 44 },
+            { "x": 8, "y": 44 },
+            { "x": 8, "y": 22 },
+            { "x": 0, "y": 22 },
+            { "x": 0, "y": 0 },
+            { "x": 20, "y": 0 }
+          ]
+        },
+        "position": { "x": 40, "y": 0 },
+        "color": "#ef4444"
+      }
+    ],
+    "territories": [
+      {
+        "player": "defender",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 0, "y": 0 },
+            { "x": 26, "y": 0 },
+            { "x": 26, "y": 22 },
+            { "x": 34, "y": 22 },
+            { "x": 34, "y": 44 },
+            { "x": 0, "y": 44 }
+          ]
+        },
+        "position": { "x": 0, "y": 0 }
+      },
+      {
+        "player": "attacker",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 26, "y": 0 },
+            { "x": 60, "y": 0 },
+            { "x": 60, "y": 44 },
+            { "x": 34, "y": 44 },
+            { "x": 34, "y": 22 },
+            { "x": 26, "y": 22 }
+          ]
+        },
+        "position": { "x": 0, "y": 0 }
+      }
+    ],
+    "objectives": [
+      { "x": 30, "y": 22 },
+      { "x": 22, "y": 8 },
+      { "x": 14, "y": 34 },
+      { "x": 38, "y": 36 },
+      { "x": 46, "y": 10 }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "hammer-and-anvil",
+    "name": "Hammer and Anvil",
+    "source": "leviathan",
+    "description": "Short edge deployment with vertical strips",
+    "zones": [
+      {
+        "player": "defender",
+        "name": "Defender Deployment",
+        "shape": { "type": "rectangle", "width": 18, "height": 44 },
+        "position": { "x": 0, "y": 0 },
+        "color": "#3b82f6"
+      },
+      {
+        "player": "attacker",
+        "name": "Attacker Deployment",
+        "shape": { "type": "rectangle", "width": 18, "height": 44 },
+        "position": { "x": 42, "y": 0 },
+        "color": "#ef4444"
+      }
+    ],
+    "territories": [
+      {
+        "player": "defender",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 0, "y": 0 },
+            { "x": 30, "y": 0 },
+            { "x": 30, "y": 44 },
+            { "x": 0, "y": 44 }
+          ]
+        },
+        "position": { "x": 0, "y": 0 }
+      },
+      {
+        "player": "attacker",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 30, "y": 0 },
+            { "x": 60, "y": 0 },
+            { "x": 60, "y": 44 },
+            { "x": 30, "y": 44 }
+          ]
+        },
+        "position": { "x": 0, "y": 0 }
+      }
+    ],
+    "objectives": [
+      { "x": 30, "y": 22 },
+      { "x": 10, "y": 22 },
+      { "x": 30, "y": 6 },
+      { "x": 30, "y": 38 },
+      { "x": 50, "y": 22 }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "sweeping-engagement",
+    "name": "Sweeping Engagement",
+    "source": "leviathan",
+    "description": "Long edge deployment with staggered zones",
+    "zones": [
+      {
+        "player": "defender",
+        "name": "Defender Deployment",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 0, "y": 0 },
+            { "x": 60, "y": 0 },
+            { "x": 60, "y": 14 },
+            { "x": 30, "y": 14 },
+            { "x": 30, "y": 8 },
+            { "x": 0, "y": 8 }
+          ]
+        },
+        "position": { "x": 0, "y": 0 },
+        "color": "#3b82f6"
+      },
+      {
+        "player": "attacker",
+        "name": "Attacker Deployment",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 0, "y": 0 },
+            { "x": 60, "y": 0 },
+            { "x": 60, "y": -8 },
+            { "x": 30, "y": -8 },
+            { "x": 30, "y": -14 },
+            { "x": 0, "y": -14 }
+          ]
+        },
+        "position": { "x": 0, "y": 44 },
+        "color": "#ef4444"
+      }
+    ],
+    "territories": [
+      {
+        "player": "defender",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 0, "y": 0 },
+            { "x": 60, "y": 0 },
+            { "x": 60, "y": 25 },
+            { "x": 30, "y": 25 },
+            { "x": 30, "y": 19 },
+            { "x": 0, "y": 19 }
+          ]
+        },
+        "position": { "x": 0, "y": 0 }
+      },
+      {
+        "player": "attacker",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 0, "y": 19 },
+            { "x": 30, "y": 19 },
+            { "x": 30, "y": 25 },
+            { "x": 60, "y": 25 },
+            { "x": 60, "y": 44 },
+            { "x": 0, "y": 44 }
+          ]
+        },
+        "position": { "x": 0, "y": 0 }
+      }
+    ],
+    "objectives": [
+      { "x": 30, "y": 22 },
+      { "x": 18, "y": 38 },
+      { "x": 10, "y": 18 },
+      { "x": 42, "y": 6 },
+      { "x": 50, "y": 26 }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "dawn-of-war",
+    "name": "Dawn of War",
+    "source": "leviathan",
+    "description": "Long edge deployment with horizontal strips",
+    "zones": [
+      {
+        "player": "defender",
+        "name": "Defender Deployment",
+        "shape": { "type": "rectangle", "width": 60, "height": 12 },
+        "position": { "x": 0, "y": 0 },
+        "color": "#3b82f6"
+      },
+      {
+        "player": "attacker",
+        "name": "Attacker Deployment",
+        "shape": { "type": "rectangle", "width": 60, "height": 12 },
+        "position": { "x": 0, "y": 32 },
+        "color": "#ef4444"
+      }
+    ],
+    "territories": [
+      {
+        "player": "defender",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 0, "y": 0 },
+            { "x": 60, "y": 0 },
+            { "x": 60, "y": 22 },
+            { "x": 0, "y": 22 }
+          ]
+        },
+        "position": { "x": 0, "y": 0 }
+      },
+      {
+        "player": "attacker",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 0, "y": 22 },
+            { "x": 60, "y": 22 },
+            { "x": 60, "y": 44 },
+            { "x": 0, "y": 44 }
+          ]
+        },
+        "position": { "x": 0, "y": 0 }
+      }
+    ],
+    "objectives": [
+      { "x": 30, "y": 22 },
+      { "x": 30, "y": 38 },
+      { "x": 10, "y": 22 },
+      { "x": 30, "y": 6 },
+      { "x": 50, "y": 22 }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "crucible-of-battle",
+    "name": "Crucible of Battle",
+    "source": "leviathan",
+    "description": "Short edge deployment with triangular zones",
+    "zones": [
+      {
+        "player": "defender",
+        "name": "Defender Deployment",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 0, "y": 0 },
+            { "x": 30, "y": 44 },
+            { "x": 0, "y": 44 }
+          ]
+        },
+        "position": { "x": 0, "y": 0 },
+        "color": "#3b82f6"
+      },
+      {
+        "player": "attacker",
+        "name": "Attacker Deployment",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 30, "y": 44 },
+            { "x": 0, "y": 0 },
+            { "x": 30, "y": 0 }
+          ]
+        },
+        "position": { "x": 30, "y": 0 },
+        "color": "#ef4444"
+      }
+    ],
+    "territories": [
+      {
+        "player": "defender",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 0, "y": 0 },
+            { "x": 15, "y": 0 },
+            { "x": 45, "y": 44 },
+            { "x": 0, "y": 44 }
+          ]
+        },
+        "position": { "x": 0, "y": 0 }
+      },
+      {
+        "player": "attacker",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 15, "y": 0 },
+            { "x": 60, "y": 0 },
+            { "x": 60, "y": 44 },
+            { "x": 45, "y": 44 }
+          ]
+        },
+        "position": { "x": 0, "y": 0 }
+      }
+    ],
+    "objectives": [
+      { "x": 30, "y": 22 },
+      { "x": 14, "y": 32 },
+      { "x": 20, "y": 8 },
+      { "x": 40, "y": 36 },
+      { "x": 46, "y": 12 }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "search-and-destroy",
+    "name": "Search and Destroy",
+    "source": "leviathan",
+    "description": "Corner deployment with center exclusion",
+    "zones": [
+      {
+        "player": "defender",
+        "name": "Defender Deployment",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 0, "y": 22 },
+            { "x": 21.0, "y": 22.0 },
+            { "x": 21.02, "y": 22.59 },
+            { "x": 21.08, "y": 23.17 },
+            { "x": 21.17, "y": 23.76 },
+            { "x": 21.31, "y": 24.33 },
+            { "x": 21.48, "y": 24.89 },
+            { "x": 21.69, "y": 25.44 },
+            { "x": 21.93, "y": 25.98 },
+            { "x": 22.21, "y": 26.5 },
+            { "x": 22.52, "y": 27.0 },
+            { "x": 22.86, "y": 27.48 },
+            { "x": 23.23, "y": 27.93 },
+            { "x": 23.64, "y": 28.36 },
+            { "x": 24.07, "y": 28.77 },
+            { "x": 24.52, "y": 29.14 },
+            { "x": 25.0, "y": 29.48 },
+            { "x": 25.5, "y": 29.79 },
+            { "x": 26.02, "y": 30.07 },
+            { "x": 26.56, "y": 30.31 },
+            { "x": 27.11, "y": 30.52 },
+            { "x": 27.67, "y": 30.69 },
+            { "x": 28.24, "y": 30.83 },
+            { "x": 28.83, "y": 30.92 },
+            { "x": 29.41, "y": 30.98 },
+            { "x": 30.0, "y": 31.0 },
+            { "x": 30, "y": 44 },
+            { "x": 0, "y": 44 }
+          ]
+        },
+        "position": { "x": 0, "y": 0 },
+        "color": "#3b82f6"
+      },
+      {
+        "player": "attacker",
+        "name": "Attacker Deployment",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 30, "y": 22 },
+            { "x": 9.0, "y": 22.0 },
+            { "x": 8.98, "y": 21.41 },
+            { "x": 8.92, "y": 20.83 },
+            { "x": 8.83, "y": 20.24 },
+            { "x": 8.69, "y": 19.67 },
+            { "x": 8.52, "y": 19.11 },
+            { "x": 8.31, "y": 18.56 },
+            { "x": 8.07, "y": 18.02 },
+            { "x": 7.79, "y": 17.5 },
+            { "x": 7.48, "y": 17.0 },
+            { "x": 7.14, "y": 16.52 },
+            { "x": 6.77, "y": 16.07 },
+            { "x": 6.36, "y": 15.64 },
+            { "x": 5.93, "y": 15.23 },
+            { "x": 5.48, "y": 14.86 },
+            { "x": 5.0, "y": 14.52 },
+            { "x": 4.5, "y": 14.21 },
+            { "x": 3.98, "y": 13.93 },
+            { "x": 3.44, "y": 13.69 },
+            { "x": 2.89, "y": 13.48 },
+            { "x": 2.33, "y": 13.31 },
+            { "x": 1.76, "y": 13.17 },
+            { "x": 1.17, "y": 13.08 },
+            { "x": 0.59, "y": 13.02 },
+            { "x": 0.0, "y": 13.0 },
+            { "x": 0, "y": 0 },
+            { "x": 30, "y": 0 }
+          ]
+        },
+        "position": { "x": 30, "y": 0 },
+        "color": "#ef4444"
+      }
+    ],
+    "territories": [
+      {
+        "player": "defender",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 0, "y": 0 },
+            { "x": 0, "y": 44 },
+            { "x": 60, "y": 44 }
+          ]
+        },
+        "position": { "x": 0, "y": 0 }
+      },
+      {
+        "player": "attacker",
+        "shape": {
+          "type": "polygon",
+          "points": [
+            { "x": 0, "y": 0 },
+            { "x": 60, "y": 0 },
+            { "x": 60, "y": 44 }
+          ]
+        },
+        "position": { "x": 0, "y": 0 }
+      }
+    ],
+    "objectives": [
+      { "x": 30, "y": 22 },
+      { "x": 14, "y": 32 },
+      { "x": 14, "y": 10 },
+      { "x": 46, "y": 34 },
+      { "x": 46, "y": 12 }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]
