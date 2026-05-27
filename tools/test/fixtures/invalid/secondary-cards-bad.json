@@ -1,0 +1,66 @@
+[
+  {
+    "id": "bad-missing-name",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-card-type",
+    "name": "Bad Card Type",
+    "card_type": "gambit",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-when-drawn-operation",
+    "name": "Bad When Drawn Operation",
+    "when_drawn": { "operation": "shuffle-everything" },
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-when-drawn-condition-quantifier",
+    "name": "Bad When Drawn Condition Quantifier",
+    "when_drawn": {
+      "operation": "redraw",
+      "condition": { "subject": "opponent", "quantifier": "most", "unit_filter": { "model_count_min": 14 } }
+    },
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-when-drawn-empty-filter",
+    "name": "Bad When Drawn Empty Filter",
+    "when_drawn": {
+      "operation": "redraw",
+      "condition": { "subject": "opponent", "quantifier": "none", "unit_filter": {} }
+    },
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-award-missing-vp",
+    "name": "Award Missing VP",
+    "awards": [{ "trigger": { "phase": "command" } }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-award-phase-enum",
+    "name": "Award Bad Phase",
+    "awards": [{ "trigger": { "phase": "psychic" }, "vp": 5 }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-effect-missing-target",
+    "name": "Effect Missing Target",
+    "action": { "effect": { "type": "terrain-area-tag" } },
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-negative-vp",
+    "name": "Negative VP",
+    "awards": [{ "trigger": { "phase": "command" }, "vp": -1 }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-extra-property",
+    "name": "Extra Property",
+    "unexpected_field": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

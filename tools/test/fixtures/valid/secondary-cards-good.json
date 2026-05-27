@@ -1,0 +1,64 @@
+[
+  {
+    "id": "good-full-secondary",
+    "name": "Good Full Secondary",
+    "card_type": "secondary",
+    "subtype": "tactical",
+    "action": {
+      "starts": "shooting",
+      "player_turn": "your-turn",
+      "units": { "type": "unit-has-keyword", "parameters": { "keyword": "infantry" } },
+      "use_limit": 1,
+      "completes": { "type": "within-range-of-objective" },
+      "effect": { "type": "terrain-area-tag", "target": "unit", "modifier": { "tag": "cleansed" } }
+    },
+    "awards": [
+      {
+        "trigger": { "phase": "command", "player_turn": "your-turn" },
+        "when": { "type": "controls-objective" },
+        "vp": 5
+      }
+    ],
+    "text": "Community-authored description of the action and how it scores.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "good-when-drawn-card",
+    "name": "Good When-Drawn Card",
+    "when_drawn": {
+      "operation": "redraw",
+      "condition": {
+        "subject": "opponent",
+        "quantifier": "none",
+        "unit_filter": { "model_count_min": 14 }
+      }
+    },
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "good-when-drawn-keyword-filter",
+    "name": "Good When-Drawn Keyword Filter",
+    "when_drawn": {
+      "operation": "replace",
+      "card_ids": ["some-other-card"],
+      "condition": {
+        "subject": "self",
+        "quantifier": "any",
+        "unit_filter": { "keywords": ["psyker"], "wounds_min": 5 }
+      }
+    },
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "good-primary-card",
+    "name": "Good Primary Card",
+    "card_type": "primary",
+    "awards": [{ "trigger": { "phase": "command" }, "vp": 5 }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "good-minimal-card",
+    "name": "Good Minimal Card",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

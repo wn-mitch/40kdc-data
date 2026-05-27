@@ -1,0 +1,82 @@
+[
+  {
+    "id": "secure-asset",
+    "name": "Secure Asset",
+    "vp_per_game_cap": 45,
+    "vp_per_round_cap": 15,
+    "deployment_pattern_ids": [],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "vital-link",
+    "name": "Vital Link",
+    "vp_per_game_cap": 45,
+    "vp_per_round_cap": 15,
+    "deployment_pattern_ids": [],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "extract-relic",
+    "name": "Extract Relic",
+    "vp_per_game_cap": 45,
+    "vp_per_round_cap": 15,
+    "deployment_pattern_ids": [],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "vanguard-operation",
+    "name": "Vanguard Operation",
+    "vp_per_game_cap": 45,
+    "vp_per_round_cap": 15,
+    "deployment_pattern_ids": [],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "sabotage",
+    "name": "Sabotage",
+    "vp_per_game_cap": 45,
+    "vp_per_round_cap": 15,
+    "deployment_pattern_ids": [],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "reconnaissance-sweep",
+    "name": "Reconnaissance Sweep",
+    "vp_per_game_cap": 45,
+    "vp_per_round_cap": 15,
+    "deployment_pattern_ids": [],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "triangulation",
+    "name": "Triangulation",
+    "vp_per_game_cap": 45,
+    "vp_per_round_cap": 15,
+    "deployment_pattern_ids": [],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "surveil-the-foe",
+    "name": "Surveil the Foe",
+    "vp_per_game_cap": 45,
+    "vp_per_round_cap": 15,
+    "deployment_pattern_ids": [],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "gather-intel",
+    "name": "Gather Intel",
+    "vp_per_game_cap": 45,
+    "vp_per_round_cap": 15,
+    "deployment_pattern_ids": [],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "search-and-scour",
+    "name": "Search and Scour",
+    "vp_per_game_cap": 45,
+    "vp_per_round_cap": 15,
+    "deployment_pattern_ids": [],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

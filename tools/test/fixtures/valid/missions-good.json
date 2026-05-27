@@ -1,0 +1,24 @@
+[
+  {
+    "id": "good-full-mission",
+    "name": "Good Full Mission",
+    "source": "example-pack",
+    "description": "Exercises every optional field with community-authored prose.",
+    "vp_per_game_cap": 45,
+    "vp_per_round_cap": 15,
+    "deployment_pattern_ids": ["dawn-of-war", "hammer-and-anvil"],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "good-minimal-mission",
+    "name": "Good Minimal Mission",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "good-zero-caps",
+    "name": "Good Zero Caps",
+    "vp_per_game_cap": 0,
+    "vp_per_round_cap": 0,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

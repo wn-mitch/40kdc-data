@@ -35,14 +35,35 @@ Five values, exhaustive at launch — strategic-intent tags, not unit-category c
 - `priority-assets`
 - `reconnaissance`
 
-Each Force Disposition has community-authored description text (IP stance: original prose only). Drives mission selection — players compare dispositions at game start to determine which mission both play; asymmetric primary objectives result.
+Each Force Disposition has community-authored description text (IP stance: original prose only). Drives mission selection — players compare dispositions at game start to determine which mission each plays; asymmetric primary objectives result.
+
+**Card structure (confirmed from card photos, "New Edition Live — Championship Rematch").** A Force Disposition is a physical card carrying a **5-row matchup table**: `PLAYER disposition × OPPONENT disposition → the mission that player plays`. Five dispositions ⇒ a **5×5 = 25 ordered-cell matrix**. Each side reads its own card, finds the opponent's column, and gets its (usually different) mission — so asymmetric primaries fall out of the two players reading different cards. Disposition icons (from the Force Dispositions legend card): green shield+skull = `take-and-hold`, blue hexagon+X = `disruption`, red inverted-triangle+sword = `purge-the-foe`, gold compass/diamond = `priority-assets`, teal eye = `reconnaissance`. All five identified.
 
 ### Missions / scoring
 
-- **VP caps**: 45 VP per game per Primary, 15 VP per battle round per Primary; same caps for Secondaries.
-- **Asymmetric primaries**: when sides pick different dispositions, they get different primary objectives.
-- **Launch deployment patterns**: Dawn of War, Hammer and Anvil, Tipping Point.
+- **VP caps**: 45 VP per game per Primary, 15 VP per battle round per Primary; same caps for Secondaries. *(Unconfirmed: stream commentary suggested a single 15/round cap combined across primary + secondary; schema keeps 45-game / 15-round defaults pending the printed pack.)*
+- **Asymmetric primaries**: when sides pick different dispositions, they get different primary objectives — each reads their own disposition card.
+- **Missions are per-cell, not five global primaries.** Each cell of the matrix names its own mission. The two cards photographed so far yield **10 confirmed mission names**:
+  - Priority Assets card: `secure-asset`, `vital-link`, `extract-relic`, `vanguard-operation`, `sabotage`.
+  - Reconnaissance card: `reconnaissance-sweep`, `triangulation`, `surveil-the-foe`, `gather-intel`, `search-and-scour`.
+- **Encoding (landed).** Two normalized entities, linked by id (the cell→mission relationship is 1:1): `mission` (the objective — name, VP caps, deployment maps, scoring) and `mission-matchup` (one selector row — `disposition`, `opponent_disposition`, `mission_id`). The matchup is the thin lookup; mission-intrinsic detail lives once on the mission.
+- **Launch deployment patterns**: Dawn of War, Hammer and Anvil, Tipping Point (the wider `deployment-pattern` reference set has 6). Stream framing implies ~3 maps per mission, tying deployment to the mission (carried via `mission.deployment_pattern_ids`).
 - Three recommended terrain layouts ship at launch.
+
+**Force Disposition matchup matrix (current state, 10/25 cells confirmed).** Rows = the player's own disposition, columns = the opponent's; each cell is the mission that player plays. All ✅ cells are written to `data/core/mission-matchups.json`.
+
+| Player ↓ \ Opponent → | take-and-hold | disruption | purge-the-foe | priority-assets | reconnaissance |
+|---|---|---|---|---|---|
+| **take-and-hold** | ? | ? | ? | ? | ? |
+| **disruption** | ? | ? | ? | ? | ? |
+| **purge-the-foe** | ? | ? | ? | ? | ? |
+| **priority-assets** | `secure-asset` ✅ | `extract-relic` ✅ | `vital-link` ✅ | `sabotage` ✅ | `vanguard-operation` ✅ |
+| **reconnaissance** | `reconnaissance-sweep` ✅ | `surveil-the-foe` ✅ | `triangulation` ✅ | `search-and-scour` ✅ | `gather-intel` ✅ |
+
+- **✅** — confirmed and written in `data/core/mission-matchups.json`. The two photographed cards (`priority-assets`, `reconnaissance` players) are now complete: all five opponent icons resolved via the Force Dispositions legend card.
+- **?** — the `take-and-hold` / `disruption` / `purge-the-foe` player cards were not photographed; those 15 missions are unknown.
+
+The three unphotographed player cards fill the remaining 15 cells.
 
 ### Secondaries
 
@@ -106,16 +127,17 @@ Cover now confers **−1 BS to attackers**, not +1 save to defenders. Any 10e Ab
 **New schemas:**
 
 - [ ] `schemas/core/terrain-layout.schema.json` — pieces, footprints, `link_group` (linked terrain = single objective), `is_objective` flag with marker metadata, `terrain_area_keywords` enum (`obscuring | hidden | plunging-fire`, extensible), `height_inches` (gates Plunging Fire), footprint template enum aligned to GW's published shapes.
-- [ ] `schemas/core/mission.schema.json` — primary mission entries with `vp_per_game_cap` (default 45), `vp_per_round_cap` (default 15), reference to deployment-pattern, force-disposition matchups → primary objective bindings.
+- [x] `schemas/core/mission.schema.json` — added. The mission entity (the objective): `id`, `name`, `source?`, community-authored `description?`, `vp_per_game_cap` (default 45), `vp_per_round_cap` (default 15), `deployment_pattern_ids[]` (the mission's maps), `game_version`. **Decision**: the force-disposition matchup matrix does *not* live on the mission. Card photos showed each Force Disposition is itself a 5-row `(player disp × opponent disp) → mission` table, so the matrix is normalized into a separate `mission-matchup` entity (below) that references the mission by id; the mission stays a pure objective record. No scoring prose (IP).
+- [x] `schemas/core/mission-matchup.schema.json` — added. One cell of the 5×5 disposition matrix: `id`, `disposition`, `opponent_disposition` (both `$defs/force-disposition-id`), `mission_id` (→ mission), `game_version`. Mirrors a single physical card row. Compound `(disposition, opponent_disposition)` uniqueness is a data convention (not pure-schema enforceable). Added the shared `$defs/force-disposition-id` enum to `common.schema.json` and re-pointed `force-disposition.schema.json`'s `id` at it (one source of truth for the five values). Added both `$id`s to `schema-loader.test.ts`, the `missions` + `mission-matchups` prefixes to `validate.ts` SCHEMA_MAP, and valid/invalid fixtures.
 - [x] `schemas/core/deployment-pattern.schema.json` — added. Aligned to the bevy-deploy-helper (`~/bevy-deploy-helper`, GitHub `wn-mitch/shadowboxing`) `DeploymentPattern` encoding, since patterns carry forward **unchanged from 10e**: `zones[]` (per-side, `shape` = `rectangle | polygon` tagged union, `position`, `color`), top-level `objectives[]`, plus the new **`territories[]`** (per-side polygons, which bevy-deploy-helper consumes from us) and `recommended_terrain_layout_ids[]`. Pattern ids are **not** enum-locked — the reference data has 6 patterns (`tipping-point`, `hammer-and-anvil`, `sweeping-engagement`, `dawn-of-war`, `crucible-of-battle`, `search-and-destroy`), not the 3 originally guessed here. Added `$defs/vec2` (2D board-inch point) to `common.schema.json`, the `deployment-patterns` prefix to `validate.ts` SCHEMA_MAP, the `$id` to `schema-loader.test.ts`, a fabricated `_example` file, and valid/invalid fixtures. **Follow-up**: author the real 6-pattern data (polygons are geometric facts; lives in real data dirs, not `_example`).
-- [ ] `schemas/core/secondary-card.schema.json` — multi-block card structure (deck-level "draw 2 / keep unscored" rule separate from per-card shape):
-  - `id` (stable; referenced by other cards by id)
-  - `name`, `subtype`
-  - `when_drawn`: optional Ability DSL block (reshuffle / replace / alt-draw, may reference other cards by id)
-  - `action`: `starts` (phase trigger), `units` (eligibility predicate), `use_limit`, `completes`, `effect` (DSL effect, may mark transient state on terrain pieces)
-  - `awards`: list of VP-award blocks, each with `trigger`, `when` (DSL condition), `vp` value
-  - `text`: original consortium-authored prose, single-author → maintainer review
-  - Primary mission cards reuse this shape.
+- [x] `schemas/core/secondary-card.schema.json` — added. Multi-block card structure (the deck-level "draw 2 / keep unscored" rule is separate and **not** modelled here):
+  - `id`, `name`, `game_version` (required); `text` (community-authored prose, optional).
+  - `card_type`: `secondary | primary` (default `secondary`) — the discriminator that lets primary mission cards reuse this shape (the tracker's "primary cards reuse this shape" note). **Added beyond the original field list** so a mixed deck is queryable.
+  - `subtype`: free-form string (not enum-locked until 11e categories are confirmed).
+  - `action`: `starts` (phase), `player_turn`, `units` (eligibility predicate → DSL `condition`), `use_limit`, `completes` (DSL `condition`), `effect` (DSL `effect` — e.g. `terrain-area-tag` to mark transient terrain state). Reuses the Ability DSL via cross-`$ref` from `core/` → `enrichment/ability-dsl/`.
+  - `awards`: VP-award blocks, each `{ trigger: { phase, player_turn? }, when?: DSL condition, vp: integer ≥0 }`.
+  - `when_drawn`: **bespoke** deck-operation block `{ operation: reshuffle|replace|redraw|draw-extra|swap, card_ids?, condition? }`. **Decision**: deck operations are *not* modelled via the Ability DSL `effect` language — the DSL's `single-effect` requires a combat `target` (attacker/defender/unit…) that a deck manipulation has none of. Likewise `when_drawn.condition` is a **bespoke army-composition predicate** `{ subject: self|opponent, quantifier: any|none, unit_filter: { model_count_min/max, wounds_min, keywords } }`, **not** the DSL `condition`: redraw validity is a draw-time check over the *list*, not runtime board state (e.g. 10e 'Cull the Horde' redrew when the opponent fielded no 14+-model unit). Clean split: runtime predicates (`action.units`/`completes`, `awards[].when`) use the DSL condition; the draw-time predicate is bespoke.
+  - Wiring: `secondary-cards` prefix added to `validate.ts` SCHEMA_MAP, `$id` to `schema-loader.test.ts`, valid/invalid fixtures (the valid fixture exercises the core→enrichment DSL refs). No real card data yet — the deck contents need a leak/the printed pack.
 - [x] `schemas/core/force-disposition.schema.json` — `id`: enum of the 5 confirmed values; `name`: display string; `text`: community-authored description (#5).
 
 ## Section 3 — Ability DSL primitives
@@ -142,7 +164,7 @@ Additive — these extend type enums without breaking existing abilities.
 - [ ] **Authoring path**: hand-authored JSON validated against schemas is the primary workflow. `tools/src/convert-faction.ts` (the army-assist bootstrap) stays available for jump-starting a faction file but is not the long-term workflow. Document this in `CONTRIBUTING.md`.
 - [ ] **Publish as npm package**: add `publishConfig` and version policy to `tools/package.json`. Embed schemas + generated TypeScript types in the package payload. CI auto-publish on tagged release.
 - [ ] **Publish as Rust crate**: greenfield — no existing scaffold. Create `crates/40kdc-data/` with `schemars`/`typify`-generated structs from schemas. CI auto-publish to crates.io on tag.
-- [ ] **Extend `tools/src/validate.ts` SCHEMA_MAP** (lines 27–43) with prefixes for new entities: `terrain-layouts`, `missions`, `deployment-patterns`, `secondary-cards`, `force-dispositions`.
+- [ ] **Extend `tools/src/validate.ts` SCHEMA_MAP** with prefixes for new entities. Done so far: `force-dispositions`, `deployment-patterns`, `missions`, `mission-matchups`, `secondary-cards`. Remaining: `terrain-layouts`.
 - [ ] **CI extensions** (`.github/workflows/validate.yml`):
   - Block PRs on Ability DSL parse errors.
   - Block PRs on missing required 11e fields once schemas bump.
@@ -258,7 +280,13 @@ Section 6 (port) and Section 3 (DSL primitives) are both complete. The remaining
    - ~~Charge-timing review~~ ✅ done — all 35 reviewed, zero redundant (charge→Fights First is edition-stable, not new in 11e; flag was a coarse keyword scan).
    - Detachment DP + Force Disposition assignment: 190 detachments — gated on GW publishing the mapping.
    - Stratagem type-enum reconciliation: 1140 stratagems — gated on the 11e card categories being confirmed (Section 2's open stratagem item).
-3. **Section 2 — remaining schema work**: ~~phase-enum decision~~ ✅ (no change — phases identical to 10e) and ~~`$defs/battle-size`~~ ✅ both done. Remaining: weapon-abilities audit (gated on 11e weapon keywords publishing), stratagem `type`-enum confirmation, and three new schemas — `mission` (force-disposition matrix), `secondary-card`, and `terrain-layout` (schema-only; footprint permutations are unknowable until a deck leaks, so build with open footprints and no data yet). `deployment-pattern` ✅ done.
+3. **Section 2 — remaining schema work**: ~~phase-enum decision~~ ✅ (no change — phases identical to 10e) and ~~`$defs/battle-size`~~ ✅ both done. Remaining: weapon-abilities audit (gated on 11e weapon keywords publishing), stratagem `type`-enum confirmation, and the new schemas. ✅ done: `deployment-pattern`, `mission` (the objective entity), `mission-matchup` (the 5×5 disposition→mission matrix, normalized out of the mission per the card photos), and `secondary-card` (per-card shape; reuses the Ability DSL for action/awards, bespoke `when_drawn` deck-op block; `card_type` lets primary cards reuse it). Remaining: `terrain-layout` (schema-only; footprint permutations are unknowable until a deck leaks, so build with open footprints and no data yet).
+   - **Mission data follow-ups** (gated on more card photos / the printed pack):
+     - ~~Identify the 3 unmapped disposition icons~~ ✅ done — Force Dispositions legend card: green shield+skull = `take-and-hold`, blue hexagon+X = `disruption`, red inverted-triangle+sword = `purge-the-foe` (gold diamond = `priority-assets`, teal eye = `reconnaissance`).
+     - ~~6 known-mission cells held~~ ✅ done — with the icons resolved, the two photographed cards are fully written: **10/25 matchups** now in `data/core/mission-matchups.json` (the `priority-assets` and `reconnaissance` player rows complete). All 10 mission entities are in `data/core/missions.json`.
+     - **15 cells from the 3 unphotographed cards** (`take-and-hold` / `disruption` / `purge-the-foe` players) — missions unknown; need those three cards.
+     - **Per-mission deployment maps** — populate `mission.deployment_pattern_ids` (~3 each) once the mission↔map pairings are confirmed.
+     - **VP cap reconciliation** — confirm 45-game / 15-round-per-primary vs the stream's combined-15/round reading.
 4. **Section 4 — tooling / publish**: npm + Rust crate publish, CI extensions (block on DSL parse errors, auto-publish on tag), extend `SCHEMA_MAP` for the new entity prefixes.
 5. **Section 5 — docs**: `VERSIONING.md`, `CONTRIBUTING.md` (secondary-card text workflow), `README.md` consumption snippets.
 
@@ -284,3 +312,5 @@ Each numbered item above is a natural next PR.
 - Updated Terrain Rules: https://www.warhammer-community.com/en-gb/articles/xlppkx5s/new40k-take-cover-with-updated-terrain-rules/
 - Combat Changes: https://www.warhammer-community.com/en-gb/articles/m3son4il/new40k-combat-changes-shake-up-fighting-in-the-new-edition/
 - Support ability preview (Ork Bannernob): https://www.warhammer-community.com/en-gb/articles/uwdimgen/new40k-rules-da-biggest-and-best-orks-in-da-box/
+- Force Disposition card structure + mission matrix: photos of the Priority Assets and Reconnaissance cards from the "Warhammer 40,000 New Edition Live — Championship Rematch" stream (source of the confirmed mission names and the 5×5 matchup model).
+- Force Dispositions legend card: photo mapping each of the five dispositions to its icon (green shield+skull = take-and-hold, blue hexagon+X = disruption, red inverted-triangle+sword = purge-the-foe, gold diamond = priority-assets, teal eye = reconnaissance) — resolved the two photographed cards' opponent columns.

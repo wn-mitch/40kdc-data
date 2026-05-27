@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/secondary-card.schema.json",
+  "title": "Secondary Card",
+  "description": "An 11e mission card. The deck-level rule (draw 2 per turn, keep unscored cards) is separate and not modelled here. This is the per-card shape: an optional on-draw deck operation, an optional player action, and zero or more VP-award blocks. Primary mission cards reuse this shape via card_type. Mechanic blocks reference the Ability DSL; prose is community-authored (no reproduced rules text).",
+  "type": "object",
+  "$defs": {
+    "scoring-trigger": {
+      "type": "object",
+      "description": "When a VP award is evaluated.",
+      "properties": {
+        "phase": { "$ref": "../defs/common.schema.json#/$defs/phase" },
+        "player_turn": { "$ref": "../defs/common.schema.json#/$defs/player-turn" }
+      },
+      "required": ["phase"],
+      "additionalProperties": false
+    },
+    "army-composition-predicate": {
+      "type": "object",
+      "description": "A draw-time predicate over an army list (not runtime board state, so deliberately NOT the Ability DSL condition). Used to gate when_drawn operations such as redraws. Example: a card that is void unless the opponent fields a large unit (10e 'Cull the Horde' redrew when the opponent had no unit of 14+ models) is { subject: 'opponent', quantifier: 'none', unit_filter: { model_count_min: 14 } } with operation 'redraw'.",
+      "properties": {
+        "subject": {
+          "type": "string",
+          "enum": ["self", "opponent"],
+          "description": "Whose army list the predicate inspects."
+        },
+        "quantifier": {
+          "type": "string",
+          "enum": ["any", "none"],
+          "description": "Whether the army must contain ('any') or lack ('none') a unit matching unit_filter for the predicate to hold."
+        },
+        "unit_filter": {
+          "type": "object",
+          "description": "Criteria a unit in the army must satisfy to match. All present criteria must hold (logical AND).",
+          "properties": {
+            "model_count_min": { "type": "integer", "minimum": 1 },
+            "model_count_max": { "type": "integer", "minimum": 1 },
+            "wounds_min": { "type": "integer", "minimum": 1 },
+            "keywords": { "$ref": "../defs/common.schema.json#/$defs/keyword-list" }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
+        }
+      },
+      "required": ["subject", "quantifier", "unit_filter"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "card_type": {
+      "type": "string",
+      "enum": ["secondary", "primary"],
+      "default": "secondary",
+      "description": "Whether this is a secondary card or a primary mission card (which reuses this shape)."
+    },
+    "subtype": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "description": "Finer classification within the deck (e.g. a category or tactical/fixed split). Free-form — not enum-locked until 11e categories are confirmed."
+    },
+    "when_drawn": {
+      "type": "object",
+      "description": "Optional deck operation performed when this card is drawn (e.g. redraw, swap). Distinct from combat effects — deck operations have no combat target, so they are not modelled via the Ability DSL effect language. If `condition` is present, the operation fires only when the predicate holds.",
+      "properties": {
+        "operation": {
+          "type": "string",
+          "enum": ["reshuffle", "replace", "redraw", "draw-extra", "swap"],
+          "description": "The deck manipulation this card triggers on draw."
+        },
+        "card_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "description": "Other cards this operation references, by id.",
+          "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" }
+        },
+        "condition": {
+          "$ref": "#/$defs/army-composition-predicate",
+          "description": "Draw-time army-composition predicate gating the operation (e.g. redraw when the opponent lacks a qualifying unit)."
+        }
+      },
+      "required": ["operation"],
+      "additionalProperties": false
+    },
+    "action": {
+      "type": "object",
+      "description": "Optional player action the card enables.",
+      "properties": {
+        "starts": {
+          "$ref": "../defs/common.schema.json#/$defs/phase",
+          "description": "Phase in which the action can be started."
+        },
+        "player_turn": { "$ref": "../defs/common.schema.json#/$defs/player-turn" },
+        "units": {
+          "$ref": "../enrichment/ability-dsl/condition.schema.json",
+          "description": "Eligibility predicate for which units may perform the action."
+        },
+        "use_limit": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum number of times the action may be performed."
+        },
+        "completes": {
+          "$ref": "../enrichment/ability-dsl/condition.schema.json",
+          "description": "Predicate for when the action is considered complete."
+        },
+        "effect": {
+          "$ref": "../enrichment/ability-dsl/effect.schema.json",
+          "description": "Effect applied when the action completes (e.g. terrain-area-tag to mark transient state on a terrain piece)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "awards": {
+      "type": "array",
+      "minItems": 1,
+      "description": "VP-award blocks: each scores `vp` when `trigger` fires and the optional `when` condition holds.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "trigger": { "$ref": "#/$defs/scoring-trigger" },
+          "when": { "$ref": "../enrichment/ability-dsl/condition.schema.json" },
+          "vp": { "type": "integer", "minimum": 0 }
+        },
+        "required": ["trigger", "vp"],
+        "additionalProperties": false
+      }
+    },
+    "text": {
+      "type": "string",
+      "description": "Community-authored card description (original prose only — no reproduced rules text)."
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
+  },
+  "required": ["id", "name", "game_version"],
+  "additionalProperties": false
+}

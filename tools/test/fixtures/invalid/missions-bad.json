@@ -1,0 +1,28 @@
+[
+  {
+    "id": "bad-missing-name",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-negative-cap",
+    "name": "Negative Cap",
+    "vp_per_game_cap": -5,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-noninteger-cap",
+    "name": "Non-integer Cap",
+    "vp_per_round_cap": 7.5,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-extra-property",
+    "name": "Extra Property",
+    "unexpected_field": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-missing-game-version",
+    "name": "Missing Game Version"
+  }
+]

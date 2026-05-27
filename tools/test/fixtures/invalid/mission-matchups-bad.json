@@ -1,0 +1,29 @@
+[
+  {
+    "id": "bad-disposition-enum",
+    "disposition": "take-and-hold",
+    "opponent_disposition": "recon",
+    "mission_id": "vanguard-operation",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-missing-mission-id",
+    "disposition": "priority-assets",
+    "opponent_disposition": "reconnaissance",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-missing-opponent",
+    "disposition": "priority-assets",
+    "mission_id": "sabotage",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-extra-property",
+    "disposition": "reconnaissance",
+    "opponent_disposition": "priority-assets",
+    "mission_id": "search-and-scour",
+    "unexpected_field": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

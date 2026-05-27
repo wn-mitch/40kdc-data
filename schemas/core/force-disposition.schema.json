@@ -6,8 +6,7 @@
   "type": "object",
   "properties": {
     "id": {
-      "type": "string",
-      "enum": ["take-and-hold", "disruption", "purge-the-foe", "priority-assets", "reconnaissance"],
+      "$ref": "../defs/common.schema.json#/$defs/force-disposition-id",
       "description": "One of the five confirmed launch Force Dispositions."
     },
     "name": { "type": "string", "minLength": 1, "maxLength": 128 },

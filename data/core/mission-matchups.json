@@ -1,0 +1,72 @@
+[
+  {
+    "id": "priority-assets-vs-take-and-hold",
+    "disposition": "priority-assets",
+    "opponent_disposition": "take-and-hold",
+    "mission_id": "secure-asset",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "priority-assets-vs-disruption",
+    "disposition": "priority-assets",
+    "opponent_disposition": "disruption",
+    "mission_id": "extract-relic",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "priority-assets-vs-purge-the-foe",
+    "disposition": "priority-assets",
+    "opponent_disposition": "purge-the-foe",
+    "mission_id": "vital-link",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "priority-assets-vs-priority-assets",
+    "disposition": "priority-assets",
+    "opponent_disposition": "priority-assets",
+    "mission_id": "sabotage",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "priority-assets-vs-reconnaissance",
+    "disposition": "priority-assets",
+    "opponent_disposition": "reconnaissance",
+    "mission_id": "vanguard-operation",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "reconnaissance-vs-take-and-hold",
+    "disposition": "reconnaissance",
+    "opponent_disposition": "take-and-hold",
+    "mission_id": "reconnaissance-sweep",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "reconnaissance-vs-disruption",
+    "disposition": "reconnaissance",
+    "opponent_disposition": "disruption",
+    "mission_id": "surveil-the-foe",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "reconnaissance-vs-purge-the-foe",
+    "disposition": "reconnaissance",
+    "opponent_disposition": "purge-the-foe",
+    "mission_id": "triangulation",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "reconnaissance-vs-priority-assets",
+    "disposition": "reconnaissance",
+    "opponent_disposition": "priority-assets",
+    "mission_id": "search-and-scour",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "reconnaissance-vs-reconnaissance",
+    "disposition": "reconnaissance",
+    "opponent_disposition": "reconnaissance",
+    "mission_id": "gather-intel",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

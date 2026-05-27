@@ -67,6 +67,11 @@
       "enum": ["incursion", "strike-force"],
       "description": "11e battle size, which sets the army's points limit and detachment-point budget: 'incursion' = 1000 pts / 2 detachment points; 'strike-force' = 2000 pts / 3 detachment points."
     },
+    "force-disposition-id": {
+      "type": "string",
+      "enum": ["take-and-hold", "disruption", "purge-the-foe", "priority-assets", "reconnaissance"],
+      "description": "One of the five confirmed 11e launch Force Dispositions. Shared by force-disposition entities and the mission-matchup matrix."
+    },
     "vec2": {
       "type": "object",
       "description": "A 2D point in board inches. Origin at a board corner; JSON uses y-down (downstream renderers may flip to y-up).",
