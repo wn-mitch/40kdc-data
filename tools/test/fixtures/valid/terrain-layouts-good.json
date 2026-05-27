@@ -1,0 +1,41 @@
+[
+  {
+    "id": "good-full-layout",
+    "name": "Good Full Layout",
+    "source": "fabricated-pack",
+    "description": "Fabricated layout exercising every footprint type and piece field.",
+    "pieces": [
+      {
+        "name": "Central Ruin",
+        "footprint": { "type": "rectangle", "width": 7, "height": 11.5 },
+        "position": { "x": 30, "y": 22 },
+        "rotation_degrees": 0,
+        "template": "large-ruin",
+        "height_inches": 5,
+        "terrain_area_keywords": ["obscuring", "hidden"],
+        "link_group": "centre",
+        "is_objective": true,
+        "objective": { "position": { "x": 30, "y": 24 }, "control_range_inches": 3 }
+      },
+      {
+        "name": "Corner Wedge",
+        "footprint": { "type": "right-triangle", "width": 8, "height": 11.5 },
+        "position": { "x": 6, "y": 6 },
+        "rotation_degrees": 90,
+        "height_inches": 2,
+        "terrain_area_keywords": ["plunging-fire"]
+      },
+      {
+        "name": "Irregular Outcrop",
+        "footprint": { "type": "polygon", "points": [{ "x": 0, "y": 0 }, { "x": 4, "y": 0 }, { "x": 2, "y": 5 }] },
+        "position": { "x": 50, "y": 40 }
+      }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "good-name-only-stub",
+    "name": "Good Name Only Stub",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

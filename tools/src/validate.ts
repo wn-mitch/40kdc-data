@@ -40,6 +40,7 @@ const SCHEMA_MAP: Record<string, string> = {
   "mission-matchups": "https://40kdc.dev/schemas/core/mission-matchup.schema.json",
   missions: "https://40kdc.dev/schemas/core/mission.schema.json",
   "secondary-cards": "https://40kdc.dev/schemas/core/secondary-card.schema.json",
+  "terrain-layouts": "https://40kdc.dev/schemas/core/terrain-layout.schema.json",
   "phase-mappings": "https://40kdc.dev/schemas/enrichment/phase-mapping.schema.json",
   "timing-flags": "https://40kdc.dev/schemas/enrichment/timing-flag.schema.json",
   "interaction-flags": "https://40kdc.dev/schemas/enrichment/interaction-flag.schema.json",

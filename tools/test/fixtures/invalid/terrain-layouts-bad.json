@@ -1,0 +1,64 @@
+[
+  {
+    "id": "bad-missing-name",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "name": "Bad Missing Id",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-piece-missing-footprint",
+    "name": "Piece Missing Footprint",
+    "pieces": [{ "position": { "x": 10, "y": 10 } }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-piece-missing-position",
+    "name": "Piece Missing Position",
+    "pieces": [{ "footprint": { "type": "rectangle", "width": 7, "height": 11.5 } }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-footprint-type",
+    "name": "Bad Footprint Type",
+    "pieces": [{ "footprint": { "type": "circle", "radius": 3 }, "position": { "x": 1, "y": 1 } }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-polygon-too-few-points",
+    "name": "Polygon Too Few Points",
+    "pieces": [{ "footprint": { "type": "polygon", "points": [{ "x": 0, "y": 0 }, { "x": 4, "y": 0 }] }, "position": { "x": 1, "y": 1 } }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-terrain-area-keyword",
+    "name": "Bad Terrain Area Keyword",
+    "pieces": [{ "footprint": { "type": "rectangle", "width": 6, "height": 4 }, "position": { "x": 1, "y": 1 }, "terrain_area_keywords": ["difficult"] }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-rotation-out-of-range",
+    "name": "Rotation Out Of Range",
+    "pieces": [{ "footprint": { "type": "rectangle", "width": 6, "height": 4 }, "position": { "x": 1, "y": 1 }, "rotation_degrees": 360 }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-piece-extra-property",
+    "name": "Piece Extra Property",
+    "pieces": [{ "footprint": { "type": "rectangle", "width": 6, "height": 4 }, "position": { "x": 1, "y": 1 }, "unexpected": true }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-top-level-extra-property",
+    "name": "Top Level Extra Property",
+    "unexpected_field": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-negative-height",
+    "name": "Negative Height",
+    "pieces": [{ "footprint": { "type": "rectangle", "width": 6, "height": 4 }, "position": { "x": 1, "y": 1 }, "height_inches": -2 }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

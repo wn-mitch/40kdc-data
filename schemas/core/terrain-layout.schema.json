@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/terrain-layout.schema.json",
+  "title": "Terrain Layout",
+  "description": "A recommended arrangement of terrain pieces on the board, independent of the deployment map (a deployment-pattern references the layouts it recommends via recommended_terrain_layout_ids). Geometry is the source of truth; the GW standard piece templates are expressed as explicit footprints, with an optional descriptive `template` label. Footprints are deliberately open (not enum-locked) — the launch catalog and its size are unconfirmed, so this models any shape rather than a fixed set. No layout data is authored yet.",
+  "type": "object",
+  "$defs": {
+    "footprint": {
+      "description": "A terrain piece's 2D footprint, relative to the piece's `position`. Axis-aligned rectangle, right triangle (right angle at the local origin, legs along +x/+y), or an explicit polygon. GW's standard templates (e.g. 7\"×11.5\" rectangles, 8\"×11.5\" right triangles, 6\"×4\" rectangles, 10\"×2.5\" and 6\"×2\" lines) are all expressible here; lines are thin rectangles.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "rectangle" },
+            "width": { "type": "number", "exclusiveMinimum": 0 },
+            "height": { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "required": ["type", "width", "height"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "right-triangle" },
+            "width": { "type": "number", "exclusiveMinimum": 0 },
+            "height": { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "required": ["type", "width", "height"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "polygon" },
+            "points": {
+              "type": "array",
+              "items": { "$ref": "../defs/common.schema.json#/$defs/vec2" },
+              "minItems": 3
+            }
+          },
+          "required": ["type", "points"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "terrain-area-keyword": {
+      "type": "string",
+      "enum": ["obscuring", "hidden", "plunging-fire"],
+      "description": "An 11e terrain-area keyword. Confirmed launch set; extend as further keywords publish on dataslate."
+    },
+    "piece": {
+      "type": "object",
+      "description": "One terrain feature placed on the board.",
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "footprint": { "$ref": "#/$defs/footprint" },
+        "position": {
+          "$ref": "../defs/common.schema.json#/$defs/vec2",
+          "description": "Board-inch placement of the footprint's local origin."
+        },
+        "rotation_degrees": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 360,
+          "description": "Clockwise rotation of the footprint about `position`. Absent or 0 means axis-aligned."
+        },
+        "template": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "description": "Optional descriptive label for the GW standard template this piece uses (e.g. 'large-ruin', 'long-wall'). Free-form, not enum-locked — the geometry in `footprint` is authoritative."
+        },
+        "height_inches": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Height of the piece in inches. Gates Plunging Fire (a piece 3\" or taller confers +1 BS on ground-level targets)."
+        },
+        "terrain_area_keywords": {
+          "type": "array",
+          "uniqueItems": true,
+          "description": "Terrain-area keywords this piece's area carries.",
+          "items": { "$ref": "#/$defs/terrain-area-keyword" }
+        },
+        "link_group": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "description": "Pieces sharing a `link_group` value are linked terrain — treated as a single terrain feature (and, where an objective sits among them, a single objective)."
+        },
+        "is_objective": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this piece carries an objective marker."
+        },
+        "objective": {
+          "type": "object",
+          "description": "Objective-marker metadata. Only meaningful when `is_objective` is true.",
+          "properties": {
+            "position": {
+              "$ref": "../defs/common.schema.json#/$defs/vec2",
+              "description": "Board-inch position of the marker. Absent means the piece's `position`."
+            },
+            "control_range_inches": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Range from the marker within which models contribute to control."
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["footprint", "position"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "source": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "description": "Mission pack or source the layout originates from."
+    },
+    "description": { "type": "string" },
+    "pieces": {
+      "type": "array",
+      "description": "Terrain pieces composing the layout. May be empty while a layout is registered by name ahead of its confirmed geometry.",
+      "items": { "$ref": "#/$defs/piece" }
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
+  },
+  "required": ["id", "name", "game_version"],
+  "additionalProperties": false
+}
