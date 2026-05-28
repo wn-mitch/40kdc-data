@@ -6,6 +6,20 @@
     ds.units.all.slice().sort((a, b) => a.name.localeCompare(b.name)),
   );
 
+  // Disambiguate shared chassis (e.g. Hellbrute under multiple factions) by
+  // appending faction context only when the same name appears more than once.
+  const sharedDatasetNames = $derived.by(() => {
+    const counts = new Map<string, number>();
+    for (const u of datasetUnits) {
+      counts.set(u.name, (counts.get(u.name) ?? 0) + 1);
+    }
+    return new Set(
+      Array.from(counts.entries())
+        .filter(([, n]) => n > 1)
+        .map(([name]) => name),
+    );
+  });
+
   const rosterPicks = $derived(
     (salvo.targetRoster?.units ?? [])
       .map((ru, i) => ({ ru, i, view: resolveRosterUnit(ru, ds) }))
@@ -77,7 +91,11 @@
     >
       <option value="">— pick a target unit —</option>
       {#each datasetUnits as u (`${u.raw.faction_id}/${u.id}`)}
-        <option value={u.id}>{u.name}</option>
+        <option value={u.id}>
+          {u.name}{sharedDatasetNames.has(u.name)
+            ? ` · ${u.faction?.name ?? u.raw.faction_id}`
+            : ""}
+        </option>
       {/each}
     </select>
   </div>

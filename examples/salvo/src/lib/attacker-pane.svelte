@@ -29,6 +29,34 @@
     ds.factions.all.slice().sort((a, b) => a.name.localeCompare(b.name)),
   );
 
+  // Build sets of unit names that appear more than once in the current
+  // dropdown options. Only those need a faction-suffix to disambiguate —
+  // adding the suffix to every unit would just be noise.
+  const sharedRosterNames = $derived.by(() => {
+    const counts = new Map<string, number>();
+    for (const { view } of rosterUnits) {
+      if (!view) continue;
+      counts.set(view.name, (counts.get(view.name) ?? 0) + 1);
+    }
+    return new Set(
+      Array.from(counts.entries())
+        .filter(([, n]) => n > 1)
+        .map(([name]) => name),
+    );
+  });
+
+  const sharedDatasetNames = $derived.by(() => {
+    const counts = new Map<string, number>();
+    for (const u of datasetUnits) {
+      counts.set(u.name, (counts.get(u.name) ?? 0) + 1);
+    }
+    return new Set(
+      Array.from(counts.entries())
+        .filter(([, n]) => n > 1)
+        .map(([name]) => name),
+    );
+  });
+
   const detachments = $derived(
     salvo.selectedFactionId
       ? ds.detachments.all.filter((d) => d.faction_id === salvo.selectedFactionId)
@@ -88,7 +116,11 @@
     >
       <option value="">— pick a unit —</option>
       {#each rosterUnits as { ru, view, index } (index)}
-        <option value={view!.id}>{view!.name} ({ru.model_count} models)</option>
+        <option value={view!.id}>
+          {view!.name}{sharedRosterNames.has(view!.name) && view!.faction
+            ? ` · ${view!.faction.name}`
+            : ""} ({ru.model_count} models)
+        </option>
       {/each}
     </select>
   </div>
@@ -120,7 +152,11 @@
   >
     <option value="">— pick a unit —</option>
     {#each datasetUnits as u (`${u.raw.faction_id}/${u.id}`)}
-      <option value={u.id}>{u.name}</option>
+      <option value={u.id}>
+        {u.name}{sharedDatasetNames.has(u.name)
+          ? ` · ${u.faction?.name ?? u.raw.faction_id}`
+          : ""}
+      </option>
     {/each}
   </select>
 </div>
