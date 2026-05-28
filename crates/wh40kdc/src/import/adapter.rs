@@ -12,12 +12,18 @@
 
 use serde_json::Value;
 
-use super::types::ParsedRoster;
+use super::types::{ParsedRoster, RosterFormat};
 
 /// Recognises and parses one source list-export format.
+///
+/// A `decoded` payload is either a parsed JSON tree (NewRecruit JSON,
+/// ListForge) or a `Value::String` wrapping raw text (the three NewRecruit
+/// WTC / simple text formats). Adapters that only handle one shape can
+/// short-circuit in [`detect`](FormatAdapter::detect).
 pub trait FormatAdapter {
-    /// Stable identifier for the format (e.g. `"listforge"`).
-    fn format(&self) -> &'static str;
+    /// Stable identifier for the format. Carries through to
+    /// [`Roster.source.format`](super::types::Roster).
+    fn format(&self) -> RosterFormat;
 
     /// Whether this adapter can parse the given decoded payload. Should be a
     /// cheap structural sniff, not a full parse.
@@ -50,7 +56,10 @@ pub fn select_adapter<'a>(
         .map(AsRef::as_ref)
         .find(|a| a.detect(decoded))
         .ok_or_else(|| {
-            let tried: Vec<&str> = adapters.iter().map(|a| a.format()).collect();
+            let tried: Vec<String> = adapters
+                .iter()
+                .map(|a| format_id(a.format()).to_string())
+                .collect();
             let tried = if tried.is_empty() {
                 "none".to_string()
             } else {
@@ -60,4 +69,16 @@ pub fn select_adapter<'a>(
                 "no registered import adapter recognises this payload (tried: {tried})"
             ))
         })
+}
+
+/// Stable kebab-case identifier for a [`RosterFormat`] — matches the schema's
+/// `source.format` enum members and the TS `RosterFormat` union strings.
+pub fn format_id(fmt: RosterFormat) -> &'static str {
+    match fmt {
+        RosterFormat::Listforge => "listforge",
+        RosterFormat::NewrecruitJson => "newrecruit-json",
+        RosterFormat::NewrecruitWtcCompact => "newrecruit-wtc-compact",
+        RosterFormat::NewrecruitWtcFull => "newrecruit-wtc-full",
+        RosterFormat::NewrecruitSimple => "newrecruit-simple",
+    }
 }

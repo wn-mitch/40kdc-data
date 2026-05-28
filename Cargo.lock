@@ -1401,6 +1401,7 @@ version = "1.0.150"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e8014e44b4736ed0538adeecded0fce2a272f22dc9578a7eb6b2d9993c74cfb9"
 dependencies = [
+ "indexmap",
  "itoa",
  "memchr",
  "serde",
@@ -1889,12 +1890,14 @@ dependencies = [
 
 [[package]]
 name = "wh40kdc"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "base64",
  "chrono",
  "flate2",
  "jsonschema",
+ "once_cell",
+ "regex",
  "regress 0.10.5",
  "serde",
  "serde_json",

@@ -17,6 +17,7 @@
 //! its weapons, abilities, phases, and faction:
 //!
 //! ```
+//! # #[cfg(feature = "bundled-data")] {
 //! use wh40kdc::{Dataset, Phase};
 //!
 //! let ds = Dataset::embedded();
@@ -28,6 +29,7 @@
 //!     .map(|a| a.ability_id.as_str())
 //!     .collect();
 //! assert_eq!(shooting, ["berzerker-frenzy"]);
+//! # }
 //! ```
 
 // generated.rs is prettyplease-formatted by the codegen (see xtask); skip rustfmt
@@ -44,10 +46,20 @@ pub mod data;
 #[cfg(feature = "bundled-data")]
 pub use data::{normalize_name, Collection, Dataset, RawData};
 
-/// Army-list importer: ListForge share payload → resolved 40kdc roster
-/// (default `import`).
-#[cfg(feature = "import")]
+/// Army-list importer: ListForge share payload + NewRecruit (JSON / wtc /
+/// simple) → resolved 40kdc roster (default `import`). The same module
+/// hosts the [`Roster`](import::Roster) domain types, which are also reused
+/// by the exporter — so it stays available whenever either `import` or
+/// `export` is enabled.
+#[cfg(any(feature = "import", feature = "export"))]
 pub mod import;
+
+/// Roster exporter: resolved [`Roster`](import::Roster) → NewRecruit JSON /
+/// wtc-compact / wtc-full / simple / canonical Roster JSON (default
+/// `export`). Dataset-free — outputs depend only on the Roster shape, which
+/// keeps Rust and TS byte-identical for export goldens.
+#[cfg(feature = "export")]
+pub mod export;
 
 /// The bundled, self-contained JSON Schema (draft 2020-12) these types were
 /// generated from. Consumers can feed this to a JSON Schema validator to check

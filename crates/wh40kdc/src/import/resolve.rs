@@ -17,8 +17,8 @@ use crate::data::{normalize_name, Dataset};
 
 use super::types::{
     BattleSize, Candidate, Diagnostics, ParsedRoster, ParsedUnit, ResolvedRef, Roster,
-    RosterLeaderAttachment, RosterPoints, RosterSource, RosterUnit, RosterWargear, Warning,
-    WarningCode,
+    RosterFormat, RosterLeaderAttachment, RosterPoints, RosterSource, RosterUnit, RosterWargear,
+    Warning, WarningCode,
 };
 
 /// The dataset edition/dataslate stamped onto an imported roster.
@@ -93,16 +93,16 @@ fn map_battle_size(raw: Option<&str>) -> Option<BattleSize> {
 ///
 /// ```
 /// use wh40kdc::Dataset;
-/// use wh40kdc::import::{import_roster, decode_listforge};
+/// use wh40kdc::import::{import_roster, decode_listforge, RosterFormat};
 ///
 /// let payload = decode_listforge(r#"{
 ///     "name": "Demo",
 ///     "roster": { "name": "Demo", "forces": [] }
 /// }"#).unwrap();
 /// let roster = import_roster(&payload, Dataset::embedded()).unwrap();
-/// assert_eq!(roster.source.format, "listforge");
+/// assert_eq!(roster.source.format, RosterFormat::Listforge);
 /// ```
-pub fn resolve(parsed: &ParsedRoster, ds: &Dataset, format: &str) -> Roster {
+pub fn resolve(parsed: &ParsedRoster, ds: &Dataset, format: RosterFormat) -> Roster {
     let mut diag = DiagnosticsBuilder::default();
 
     if parsed.multi_force {
@@ -194,7 +194,7 @@ pub fn resolve(parsed: &ParsedRoster, ds: &Dataset, format: &str) -> Roster {
     Roster {
         name: parsed.name.clone(),
         source: RosterSource {
-            format: format.to_string(),
+            format,
             generated_by: parsed.generated_by.clone(),
         },
         faction_id,

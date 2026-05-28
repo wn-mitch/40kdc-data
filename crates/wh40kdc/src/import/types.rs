@@ -24,6 +24,19 @@ pub enum BattleSize {
     StrikeForce,
 }
 
+/// The source format an army list was imported from. Mirrors the
+/// `source.format` enum on `schemas/core/roster.schema.json` and the
+/// `RosterFormat` union on the TS side.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum RosterFormat {
+    Listforge,
+    NewrecruitJson,
+    NewrecruitWtcCompact,
+    NewrecruitWtcFull,
+    NewrecruitSimple,
+}
+
 /// Diagnostic warning codes emitted during an import.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
@@ -103,13 +116,12 @@ pub struct RosterUnit {
 
 /// Provenance of the imported list.
 ///
-/// `format` is the stable id of the adapter that produced this roster — one of
-/// `"listforge"`, `"newrecruit-json"`, `"newrecruit-wtc-compact"`,
-/// `"newrecruit-wtc-full"`, `"newrecruit-simple"`. The canonical enum lives in
-/// `schemas/core/roster.schema.json`; new adapters extend it there first.
+/// `format` is the stable id of the adapter that produced this roster. The
+/// canonical enum lives in `schemas/core/roster.schema.json`; new adapters
+/// extend [`RosterFormat`] there first.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RosterSource {
-    pub format: String,
+    pub format: RosterFormat,
     pub generated_by: Option<String>,
 }
 

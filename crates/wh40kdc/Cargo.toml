@@ -1,7 +1,7 @@
 [package]
 name = "wh40kdc"
-version = "0.1.1"
-description = "Warhammer 40K dataset for the 40kdc-data schema layer: generated types, an embedded dataset behind a linked typed API, and a ListForge army-list importer."
+version = "0.1.2"
+description = "Warhammer 40K dataset for the 40kdc-data schema layer: generated types, an embedded dataset behind a linked typed API, plus ListForge + NewRecruit roster importers and exporters."
 readme = "README.md"
 keywords = ["warhammer", "40k", "wargaming", "schema", "serde"]
 categories = ["data-structures", "game-development"]
@@ -10,17 +10,25 @@ license.workspace = true
 repository.workspace = true
 
 [features]
-default = ["bundled-data", "import"]
+default = ["bundled-data", "import", "export"]
 # The embedded dataset + the linked, typed data API (Dataset/Collection/
 # normalize_name). default-features = false drops both for a types-only crate.
 bundled-data = ["dep:unicode-normalization"]
-# The army-list importer (ListForge -> resolved Roster). Resolves against the
-# data API, so it pulls in bundled-data, plus the share-payload decode deps.
-import = ["bundled-data", "dep:base64", "dep:flate2"]
+# The army-list importer (ListForge / NewRecruit JSON+text → resolved Roster).
+# Resolves against the data API, so it pulls in bundled-data, plus the
+# ListForge share-payload decode deps and the regex deps the text adapters
+# share with the WTC + simple parsers.
+import = ["bundled-data", "dep:base64", "dep:flate2", "dep:once_cell", "dep:regex"]
+# The roster exporter (resolved Roster → NewRecruit JSON / wtc-compact /
+# wtc-full / simple / canonical Roster JSON). Dataset-free — needs only the
+# Roster domain types and serde, so it doesn't drag in base64/flate2/regex.
+export = []
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
-serde_json = "1"
+# preserve_order keeps emitted object keys in insertion order — required for
+# byte-identical export goldens (the TS oracle relies on object-literal order).
+serde_json = { version = "1", features = ["preserve_order"] }
 # Used by typify-generated code: chrono for `format: date` fields, regress for
 # the runtime pattern checks on validated string newtypes (e.g. entity ids).
 chrono = { version = "0.4", features = ["serde"] }
@@ -30,6 +38,10 @@ unicode-normalization = { version = "0.1", optional = true }
 # ListForge share-payload decode (feature `import`).
 base64 = { version = "0.22", optional = true }
 flate2 = { version = "1", optional = true }
+# Text-format adapters (NewRecruit WTC + simple) — header/body line regexes
+# compiled once per process via `once_cell::sync::Lazy`.
+once_cell = { version = "1", optional = true }
+regex = { version = "1", optional = true, default-features = false, features = ["std", "unicode-perl"] }
 
 [dev-dependencies]
 # Validate serialized Roster output against schemas/core/roster.schema.json

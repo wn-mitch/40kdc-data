@@ -1,23 +1,19 @@
-//! ListForge adapter: lower a decoded ListForge "share JSON" payload (a
-//! BattleScribe-derived roster tree) to a [`ParsedRoster`].
+//! NewRecruit JSON adapter: lower a decoded NewRecruit roster export
+//! (BattleScribe-derived tree, same outer shape as ListForge) to a
+//! [`ParsedRoster`].
 //!
-//! The walk reads an ALLOWLIST of fields only — `name`, `number`, `type`,
-//! `categories[].name`, `group`, and `costs` point values — and never touches
-//! `rules[].description` or ability `profiles[].characteristics[].$text`, which
-//! carry reproduced rules text. This keeps the importer's output free of
-//! copyrighted prose **by construction**; the `import_ip_safety` integration
-//! test is the regression guard.
+//! NewRecruit-specific detection: `generatedBy` is `"https://newrecruit…"`
+//! and/or `roster.xmlns` is the BattleScribe rosterSchema namespace.
 //!
-//! Selection-tree shape (recursive `selections`):
-//! - Configuration nodes (`type: "upgrade"`) named "Detachment" / "Battle Size"
-//!   carry the chosen value as their first child selection.
-//! - Unit nodes (`type: "model" | "unit"`) carry role categories, a points
-//!   cost, and — nested anywhere beneath them — their wargear (weapon-category
-//!   selections), enhancement (a selection whose `group` starts "Enhancements"),
-//!   the "Warlord" marker, and model sub-selections.
-//! - Every unit carries a `"Faction: <Name>"` category.
+//! The primary faction surfaces in `forces[].catalogueName`
+//! (e.g. "Chaos - Chaos Knights") — we take the segment after the final
+//! `" - "`. Falls back to the first `"Faction: X"` category.
 //!
-//! Rust mirror of `tools/src/import/listforge.ts`.
+//! The walk reads the same allowlist as the ListForge adapter — `name`,
+//! `number`, `type`, `categories[].name`, `group`, `costs` point values, and
+//! `catalogueName`. `rules`/`profiles`/`description` are never touched.
+//!
+//! Rust mirror of `tools/src/import/newrecruit-json.ts`.
 
 use serde_json::Value;
 
@@ -26,12 +22,10 @@ use super::types::{ParsedRoster, ParsedUnit, ParsedWargear, RosterFormat};
 
 const PTS_COST_NAME: &str = "pts";
 const ENHANCEMENT_GROUP_PREFIX: &str = "Enhancements";
-const WEAPON_CATEGORY_SUFFIX: &str = " Weapon"; // "Ranged Weapon", "Melee Weapon", …
 const CHARACTER_CATEGORIES: [&str; 2] = ["Character", "Epic Hero"];
-
-// --- Allowlisted field accessors (the IP-safety boundary). ------------------
-// Only these fields of a selection are ever read. Adding an accessor here is the
-// only way to widen what the importer touches, so the allowlist stays auditable.
+const WEAPON_CATEGORY_SUFFIX: &str = " Weapon";
+const NEWRECRUIT_XMLNS: &str = "http://www.battlescribe.net/schema/rosterSchema";
+const NEWRECRUIT_HOST_PREFIX: &str = "https://newrecruit";
 
 fn as_array(value: &Value) -> &[Value] {
     value.as_array().map(Vec::as_slice).unwrap_or(&[])
@@ -49,7 +43,6 @@ fn selection_type(sel: &Value) -> &str {
     as_string(&sel["type"]).unwrap_or("")
 }
 
-/// A selection's multiplicity (`number`), defaulting to 1.
 fn selection_count(sel: &Value) -> u64 {
     match sel["number"].as_u64() {
         Some(n) if n > 0 => n,
@@ -57,12 +50,9 @@ fn selection_count(sel: &Value) -> u64 {
     }
 }
 
-/// Point value from a selection's cost block, or `None` when absent.
 fn points_of(sel: &Value) -> Option<u64> {
     for cost in as_array(&sel["costs"]) {
         if as_string(&cost["name"]) == Some(PTS_COST_NAME) {
-            // ListForge encodes points as a (sometimes fractional) number; the
-            // 40kdc model uses whole points, so truncate toward zero.
             if let Some(v) = cost["value"].as_f64() {
                 return Some(v as u64);
             }
@@ -82,7 +72,6 @@ fn child_selections(sel: &Value) -> &[Value] {
     as_array(&sel["selections"])
 }
 
-/// Depth-first visit of a selection and everything beneath it.
 fn walk(sel: &Value, visit: &mut impl FnMut(&Value)) {
     visit(sel);
     for child in child_selections(sel) {
@@ -110,7 +99,6 @@ fn is_enhancement_selection(sel: &Value) -> bool {
     as_string(&sel["group"]).is_some_and(|g| g.starts_with(ENHANCEMENT_GROUP_PREFIX))
 }
 
-/// Sum the model count of a unit from its nested model selections.
 fn model_count(unit: &Value) -> u64 {
     let mut total = 0;
     walk(unit, &mut |s| {
@@ -125,7 +113,6 @@ fn model_count(unit: &Value) -> u64 {
     }
 }
 
-/// Build a parsed unit from a top-level unit selection.
 fn parse_unit(unit: &Value) -> ParsedUnit {
     let mut wargear: Vec<ParsedWargear> = Vec::new();
     let mut enhancement_raw_name: Option<String> = None;
@@ -166,7 +153,6 @@ fn parse_unit(unit: &Value) -> ParsedUnit {
     }
 }
 
-/// Value carried as the first child of a named configuration selection.
 fn config_value(selections: &[Value], config_name: &str) -> Option<String> {
     let node = selections
         .iter()
@@ -175,11 +161,8 @@ fn config_value(selections: &[Value], config_name: &str) -> Option<String> {
     Some(selection_name(child).to_string())
 }
 
-/// Parse the points ceiling out of a battle-size label like
-/// "2. Strike Force (2000 Point limit)".
 fn parse_limit(label: Option<&str>) -> Option<u64> {
     let label = label?;
-    // Find a digit run immediately followed (allowing spaces) by "Point".
     let bytes = label.as_bytes();
     let lower = label.to_ascii_lowercase();
     let mut i = 0;
@@ -189,7 +172,6 @@ fn parse_limit(label: Option<&str>) -> Option<u64> {
             while i < bytes.len() && (bytes[i].is_ascii_digit() || bytes[i] == b',') {
                 i += 1;
             }
-            // Skip whitespace then check for "point".
             let mut j = i;
             while j < bytes.len() && bytes[j] == b' ' {
                 j += 1;
@@ -205,7 +187,6 @@ fn parse_limit(label: Option<&str>) -> Option<u64> {
     None
 }
 
-/// All distinct `"Faction: X"` category names found anywhere in the forces.
 fn collect_factions(forces: &[Value]) -> Vec<String> {
     let mut seen: Vec<String> = Vec::new();
     for force in forces {
@@ -225,7 +206,19 @@ fn collect_factions(forces: &[Value]) -> Vec<String> {
     seen
 }
 
-/// The roster object (with a `forces` array), if the payload carries one.
+/// Primary faction from a force's `catalogueName` (e.g.
+/// "Chaos - Chaos Knights" → "Chaos Knights").
+fn primary_faction_from_catalogue(forces: &[Value]) -> Option<String> {
+    for force in forces {
+        let name = as_string(&force["catalogueName"])?;
+        let last = name.rsplit(" - ").next()?.trim();
+        if !last.is_empty() {
+            return Some(last.to_string());
+        }
+    }
+    None
+}
+
 fn roster_of(decoded: &Value) -> Option<&Value> {
     let roster = decoded.get("roster")?;
     if !roster.is_object() {
@@ -237,25 +230,39 @@ fn roster_of(decoded: &Value) -> Option<&Value> {
     Some(roster)
 }
 
-/// The ListForge "share JSON" adapter — the first concrete
-/// [`FormatAdapter`](super::FormatAdapter).
-pub struct ListForgeAdapter;
+fn has_newrecruit_signature(decoded: &Value, roster: &Value) -> bool {
+    if as_string(&roster["xmlns"]) == Some(NEWRECRUIT_XMLNS) {
+        return true;
+    }
+    let gen_by = as_string(&decoded["generatedBy"]).or_else(|| as_string(&roster["generatedBy"]));
+    if let Some(g) = gen_by {
+        if g.to_ascii_lowercase().starts_with(NEWRECRUIT_HOST_PREFIX) {
+            return true;
+        }
+    }
+    false
+}
 
-impl FormatAdapter for ListForgeAdapter {
+pub struct NewRecruitJsonAdapter;
+
+impl FormatAdapter for NewRecruitJsonAdapter {
     fn format(&self) -> RosterFormat {
-        RosterFormat::Listforge
+        RosterFormat::NewrecruitJson
     }
 
     fn detect(&self, decoded: &Value) -> bool {
-        roster_of(decoded).is_some()
+        match roster_of(decoded) {
+            Some(roster) => has_newrecruit_signature(decoded, roster),
+            None => false,
+        }
     }
 
     fn parse(&self, decoded: &Value) -> Result<ParsedRoster, ParseError> {
-        let roster = roster_of(decoded)
-            .ok_or_else(|| ParseError("listforge: payload has no roster.forces array".into()))?;
+        let roster = roster_of(decoded).ok_or_else(|| {
+            ParseError("newrecruit-json: payload has no roster.forces array".into())
+        })?;
         let forces = as_array(&roster["forces"]);
 
-        // Configuration lives among each force's top-level selections.
         let mut detachment_raw_name: Option<String> = None;
         let mut battle_size_raw: Option<String> = None;
         let mut units: Vec<ParsedUnit> = Vec::new();
@@ -275,12 +282,10 @@ impl FormatAdapter for ListForgeAdapter {
         }
 
         let factions = collect_factions(forces);
+        let primary_faction =
+            primary_faction_from_catalogue(forces).or_else(|| factions.first().cloned());
         let total_reported = points_of(roster);
 
-        // Honest computed total: sum every cost line in the tree. A unit's own
-        // cost and its nested enhancement's cost are distinct lines that together
-        // make up the unit's army contribution, so a full walk reproduces the
-        // army total.
         let mut total_computed = 0;
         for force in forces {
             for sel in child_selections(force) {
@@ -292,6 +297,10 @@ impl FormatAdapter for ListForgeAdapter {
             }
         }
 
+        let generated_by = as_string(&decoded["generatedBy"])
+            .or_else(|| as_string(&roster["generatedBy"]))
+            .map(str::to_string);
+
         let name = as_string(&decoded["name"])
             .or_else(|| as_string(&roster["name"]))
             .unwrap_or("Imported roster")
@@ -299,8 +308,8 @@ impl FormatAdapter for ListForgeAdapter {
 
         Ok(ParsedRoster {
             name,
-            generated_by: as_string(&decoded["generatedBy"]).map(str::to_string),
-            faction_raw_name: factions.first().cloned(),
+            generated_by,
+            faction_raw_name: primary_faction,
             detachment_raw_name,
             battle_size_raw: battle_size_raw.clone(),
             declared_limit: parse_limit(battle_size_raw.as_deref()),

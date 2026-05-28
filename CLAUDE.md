@@ -100,13 +100,18 @@ CI runs on every push and PR via `.github/workflows/validate.yml`.
 
 Tools can consume this repo via:
 - npm dependency on `@alpaca-software/40kdc-data` (embedded dataset + linked
-  typed API + ListForge importer + generated types + validator) — the primary
-  path for JS/TS tools
-- the `wh40kdc` Rust crate (`crates/wh40kdc`) — the Rust counterpart: generated
-  types, the same embedded dataset behind a `Dataset` linked API, and the
-  ListForge importer (default `bundled-data`/`import` features;
-  `default-features = false` for types only). The Rust and TS implementations
-  are pinned together by the shared `conformance/` corpus.
+  typed API + ListForge and NewRecruit importers + roster exporters for the
+  same five formats + generated types + validator) — the primary path for
+  JS/TS tools
+- the `wh40kdc` Rust crate (`crates/wh40kdc`) — the Rust counterpart:
+  generated types, the same embedded dataset behind a `Dataset` linked API,
+  the ListForge + NewRecruit (JSON / wtc-compact / wtc-full / simple)
+  importers, and the matching roster exporters. Default features
+  `bundled-data`/`import`/`export`; `default-features = false` drops to
+  types-only, and `--features export` alone is decode-free (no
+  `base64`/`flate2`/`regex`) for embedded targets. The Rust and TS
+  implementations are pinned together by the shared `conformance/` corpus,
+  including byte-identical export goldens.
 - Git submodule pointed at a tagged release (raw schemas + data)
 - Direct `$id` URL references for JSON Schema validators
 
