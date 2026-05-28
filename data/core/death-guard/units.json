@@ -41,7 +41,11 @@
       "great-plague-blade",
       "plasma-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "gift-of-poxes",
+      "leader",
+      "shroud-of-disease"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -100,7 +104,15 @@
       "twin-heavy-flamer",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "barrage-of-filth",
+      "daemonforge",
+      "deadly-demise-d3",
+      "destroyer-of-futures",
+      "feel-no-pain-6",
+      "scuttling-walker",
+      "unleash-wrath"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -146,7 +158,17 @@
     "weapon_ids": [
       "hideous-mutations"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-1",
+      "feel-no-pain-5",
+      "lethal-ichor",
+      "mind-breaking-mutations-aura",
+      "regenerating-monstrosities",
+      "scouts-6",
+      "scouts-8",
+      "scuttling-horrors",
+      "to-slake-its-rage"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -195,7 +217,11 @@
       "close-combat-weapon",
       "plasma-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "malicious-calculations",
+      "sevenfold-chant"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -246,7 +272,10 @@
     "weapon_ids": [
       "improvised-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "curse-of-the-walking-pox",
+      "infiltrators"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -296,7 +325,12 @@
     "weapon_ids": [
       "manreaper"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deep-strike",
+      "leader",
+      "unholy-resilience",
+      "vector-of-disease"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -350,7 +384,12 @@
       "lascannon",
       "predator-twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "annihilator",
+      "blood-hungry-annihilator",
+      "ensorcelled-annihilation",
+      "metalophagic-infection"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -403,7 +442,12 @@
       "lascannon",
       "predator-autocannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "destructor",
+      "ensorcelled-destruction",
+      "hail-of-corrosive-disease",
+      "punishing-suppression"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -452,7 +496,9 @@
       "heavy-blight-launcher",
       "plague-probe"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "explosive-blight"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -504,7 +550,9 @@
       "plaguespitter",
       "rothail-volley-gun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "spore-laced-shock-waves"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -555,7 +603,11 @@
       "injector-pistol",
       "plague-knives"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "extraction-of-fresh-disease",
+      "foul-infusion",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -624,7 +676,10 @@
       "plasma-pistol",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "icon-of-despair-aura",
+      "infused-with-the-blessings-of-nurgle"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -673,7 +728,11 @@
       "balesword",
       "bolt-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "inflamed-infections",
+      "leader",
+      "tainted-narthecium"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -724,7 +783,11 @@
       "hellforged-weapons",
       "infernal-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "death-guard-defenders",
+      "fevered-strategist",
+      "miasma-of-pestilence-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -776,7 +839,10 @@
       "manreaper",
       "plaguespurt-gauntlet"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "death-approaches",
+      "silent-bodyguard"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -826,7 +892,11 @@
       "power-fist",
       "twin-plague-spewer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blight-bombardment",
+      "leader",
+      "virulent-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -877,7 +947,9 @@
       "plague-probe",
       "plaguespitter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hovering-death"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -926,7 +998,11 @@
       "cursed-plague-bell",
       "plasma-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "sickening-vitality",
+      "tocsin-of-misery-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -978,7 +1054,10 @@
       "hellforged-weapons",
       "infernal-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "enfeebling-miasma",
+      "horrifying-visage"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1024,7 +1103,11 @@
     "weapon_ids": [
       "miasmic-gouts"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "diseased-cover",
+      "fortification",
+      "putrescent-fog"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1082,7 +1165,15 @@
       "twin-heavy-bolter",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dark-ascension-aura",
+      "deadly-demise-1",
+      "devoted-to-destruction",
+      "diseased-malice",
+      "frenzy",
+      "froth-spattered-frenzy",
+      "terrifying-assault"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1137,7 +1228,9 @@
       "missile-launcher",
       "multi-melta"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "tank-hunters"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1193,7 +1286,12 @@
       "rotwind",
       "silence"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6",
+      "host-of-plagues",
+      "lord-of-the-death-guard",
+      "supreme-commander"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1244,7 +1342,11 @@
       "corrupted-staff",
       "plague-wind"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "gift-of-contagion-psychic",
+      "leader",
+      "pestilent-fallout-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1298,7 +1400,14 @@
       "combi-weapon",
       "havoc-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "assault-vehicle",
+      "fire-support",
+      "firing-deck-2",
+      "meet-any-challenge",
+      "self-repair",
+      "sorcerous-support"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -1354,7 +1463,10 @@
       "soulshatter-lascannon",
       "twin-heavy-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "assault-ramp",
+      "deadly-demise-d6"
+    ],
     "transport_capacity": {
       "capacity": 14
     },
@@ -1407,7 +1519,11 @@
       "close-combat-weapon",
       "plague-sprayer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blinding-spray",
+      "leader",
+      "putrefying-stink"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1458,7 +1574,11 @@
       "boltgun",
       "plague-knife"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blessed-icon-of-disease",
+      "leader",
+      "unclean-icon"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1510,7 +1630,11 @@
     "weapon_ids": [
       "lakrimae"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "destroyer-hive",
+      "eater-plague-psychic",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1573,7 +1697,9 @@
       "plague-spewer",
       "reaper-autocannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blistering-fusillade"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1614,7 +1740,11 @@
     "weapon_ids": [
       "hideous-mutations"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "diseased-icon",
+      "infectious-bloodshed",
+      "possessed"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

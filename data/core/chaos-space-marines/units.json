@@ -40,7 +40,13 @@
       "hellforged-weapons",
       "infernal-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ascended-daemon",
+      "daemonic-allegiance",
+      "dark-blessing-aura",
+      "deadly-demise-d3",
+      "lord-of-chaos"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -90,7 +96,11 @@
       "hellforged-weapons",
       "infernal-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "daemonic-destruction",
+      "deep-strike",
+      "flying-horror"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -145,7 +155,14 @@
       "force-weapon",
       "infernal-gaze"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "chaos-familiar",
+      "death-hex-psychic",
+      "empyric-guidance-psychic",
+      "leader",
+      "marked-by-fate-psychic",
+      "warptime-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -211,7 +228,12 @@
       "plasma-pistol",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "attached-unit",
+      "stealth",
+      "visions-of-suffering-psychic",
+      "voice-eater"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -266,7 +288,15 @@
       "force-weapon",
       "infernal-gaze"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "empyric-guidance-psychic",
+      "gift-of-chaos-psychic",
+      "leader",
+      "prescience-psychic",
+      "twisted-sorceries-psychic",
+      "warped-interference-psychic",
+      "wracking-agonies-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -331,7 +361,12 @@
       "commune-stave",
       "warp-curse"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "chaos-icon",
+      "dark-ritual",
+      "faithful-flock",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -382,7 +417,11 @@
       "rite-of-possession",
       "staff-of-possession"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "daemonkin-psychic",
+      "leader",
+      "sacrificial-dagger"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -430,7 +469,9 @@
       "crushing-fists",
       "fleshmetal-guns"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "warp-rift-firepower"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -484,7 +525,10 @@
       "magma-cutter",
       "techno-virus-injector"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "corrupt-machine-spirits",
+      "spirit-thief"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -541,7 +585,9 @@
       "power-fist",
       "reaper-autocannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "despoilers"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -591,7 +637,11 @@
       "balefire-pike",
       "close-combat-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cursed-flames",
+      "fiery-faith",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -652,7 +702,10 @@
       "soulshatter-lascannon",
       "twin-heavy-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "assault-ramp",
+      "deadly-demise-d6"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -705,7 +758,9 @@
     "weapon_ids": [
       "hideous-mutations"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "unholy-bloodshed"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -766,7 +821,11 @@
       "ogryn-weapons",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "brutal-example",
+      "leader",
+      "mutated-bodyguard"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -827,7 +886,12 @@
       "bolt-pistol",
       "close-combat-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dark-zealotry",
+      "demagogue",
+      "leader",
+      "malign-sacrifice"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -883,7 +947,17 @@
     "weapon_ids": [
       "hideous-mutations"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-1",
+      "feel-no-pain-5",
+      "lethal-ichor",
+      "mind-breaking-mutations-aura",
+      "regenerating-monstrosities",
+      "scouts-6",
+      "scouts-8",
+      "scuttling-horrors",
+      "to-slake-its-rage"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -941,7 +1015,12 @@
       "lascannon",
       "predator-twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "annihilator",
+      "blood-hungry-annihilator",
+      "ensorcelled-annihilation",
+      "metalophagic-infection"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -989,7 +1068,9 @@
       "excruciator-cannon",
       "soulflayer-tendrils-and-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "soul-eater"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1047,7 +1128,9 @@
       "plasma-pistol",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "stabilisation-talons"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1092,7 +1175,11 @@
     "weapon_ids": [
       "lashing-warp-energies"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fortification",
+      "malevolent-locus-aura",
+      "malign-cover"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1153,7 +1240,10 @@
       "plasma-gun",
       "plasma-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fearsome-aura",
+      "terrifying-assault"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1216,7 +1306,15 @@
       "twin-heavy-flamer",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "barrage-of-filth",
+      "daemonforge",
+      "deadly-demise-d3",
+      "destroyer-of-futures",
+      "feel-no-pain-6",
+      "scuttling-walker",
+      "unleash-wrath"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1274,7 +1372,12 @@
       "lascannon",
       "predator-autocannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "destructor",
+      "ensorcelled-destruction",
+      "hail-of-corrosive-disease",
+      "punishing-suppression"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1330,7 +1433,9 @@
       "plasma-pistol",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "chosen-marauders"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1387,7 +1492,9 @@
       "plasma-gun",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "twisted-defence-force"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1443,7 +1550,11 @@
       "hades-autocannon",
       "heldrake-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "airborne-predator",
+      "flame-wreathed",
+      "hover"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1495,7 +1606,10 @@
       "demolisher-cannon",
       "havoc-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d3",
+      "siege-shield"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1549,7 +1663,11 @@
       "forgefiend-jaws",
       "hades-autocannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blazing-salvoes",
+      "daemonic-ordnance",
+      "furious-onslaught"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1600,7 +1718,12 @@
       "melta-tendril",
       "plasma-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "enrage-machine-spirits",
+      "leader",
+      "master-of-mechanisms",
+      "warpsmith"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1655,7 +1778,10 @@
       "paired-accursed-weapons",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "formidably-resilient",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1711,7 +1837,10 @@
       "power-fist",
       "reavers-blade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "infiltrators",
+      "trophy-takers"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1762,7 +1891,13 @@
       "axe-of-dismemberment",
       "bolt-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "a-worthy-skull",
+      "forwards-for-blood",
+      "leader",
+      "trophy-taker",
+      "warp-sighted-butcher"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1824,7 +1959,9 @@
       "blasphemous-appendages",
       "hideous-mutations"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "howling-horde"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1887,7 +2024,15 @@
       "twin-heavy-bolter",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dark-ascension-aura",
+      "deadly-demise-1",
+      "devoted-to-destruction",
+      "diseased-malice",
+      "frenzy",
+      "froth-spattered-frenzy",
+      "terrifying-assault"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1941,7 +2086,10 @@
       "power-fist",
       "twin-lightning-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cruel-hunter",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1997,7 +2145,9 @@
       "bolt-pistol",
       "brutal-assault-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "for-the-dark-gods"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2049,7 +2199,10 @@
       "plasma-pistol",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "chance-for-glory",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2110,7 +2263,9 @@
       "plasma-pistol",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "rapid-assault"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2163,7 +2318,9 @@
     "weapon_ids": [
       "warp-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "warp-strike"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2216,7 +2373,9 @@
       "great-weapon",
       "plasma-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bestial-raiders"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2271,7 +2430,13 @@
       "magma-cutters",
       "maulerfiend-fists"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "glutton-for-punishment",
+      "savage-exaltation",
+      "siege-crawler",
+      "snarling-protector",
+      "the-scent-of-blood"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2331,7 +2496,14 @@
       "combi-weapon",
       "havoc-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "assault-vehicle",
+      "fire-support",
+      "firing-deck-2",
+      "meet-any-challenge",
+      "self-repair",
+      "sorcerous-support"
+    ],
     "transport_capacity": {
       "capacity": 12,
       "exclusion_keywords": [
@@ -2404,7 +2576,9 @@
       "plasma-pistol",
       "reaper-chaincannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "veterans-of-the-long-war"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2454,7 +2628,11 @@
       "power-maul",
       "power-sword"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "brutal-raider",
+      "leader",
+      "raider-s-due"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2523,7 +2701,12 @@
       "power-sabre",
       "reductor-array"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "choice-samples",
+      "fleet-command",
+      "masters-of-the-maelstrom",
+      "plunder"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2574,7 +2757,11 @@
       "vashtorrs-claw",
       "vashtorrs-hammer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "indentured-daemon-engines",
+      "reorder-reality",
+      "unholy-mechanisms-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2624,7 +2811,11 @@
       "ranged",
       "tyrants-claw-and-exalted-power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hamadrya-s-knowledge-psychic",
+      "leader",
+      "lord-of-badab-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2677,7 +2868,11 @@
       "helspear",
       "heralds-talon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "head-taker",
+      "herald-of-the-apocalypse-aura",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2729,7 +2924,12 @@
       "drachnyen",
       "talon-of-horus"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dark-destiny",
+      "leader",
+      "supreme-commander",
+      "warmaster"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2792,7 +2992,12 @@
       "surgeon-acolytes-tools",
       "xyclos-needler"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "chirurgeon",
+      "enhanced-warriors",
+      "leader",
+      "surgeon-acolyte"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2843,7 +3048,11 @@
       "cyphers-bolt-pistol",
       "cyphers-plasma-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "agent-of-discord-aura",
+      "guns-blazing",
+      "lone-operative"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2898,7 +3107,12 @@
       "ichor-cannon",
       "skullhurler"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6-2",
+      "idol-of-blessed-blood",
+      "plough-through-the-enemy",
+      "super-heavy-war-engine"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2940,7 +3154,9 @@
     "weapon_ids": [
       "blade-struts"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dreadclaw-assault"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -2988,7 +3204,9 @@
       "blightreaper-cannon",
       "greater-plague-probe"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hovering-death"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3032,7 +3250,9 @@
       "twin-autocannon",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "interceptor"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3077,7 +3297,9 @@
       "slaughter-blade",
       "twin-slaughter-blade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "scuttling-gait"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3126,7 +3348,9 @@
       "magna-melta-cannon",
       "plasma-destroyer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "armoured-spearhead"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3174,7 +3398,9 @@
       "storm-laser",
       "twin-decimator-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "infernal-regeneration"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3219,7 +3445,9 @@
       "havoc-launcher",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bomb-rack"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3264,7 +3492,9 @@
       "kharybdis-storm-launcher",
       "melta-array"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "kharybdis-assault"
+    ],
     "transport_capacity": {
       "capacity": 22
     },
@@ -3316,7 +3546,10 @@
       "turbo-laser-destructor",
       "twin-heavy-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aerial-assault",
+      "thunderhawk-cluster-bombs"
+    ],
     "transport_capacity": {
       "capacity": 30
     },
@@ -3364,7 +3597,10 @@
       "kytan-cleaver",
       "kytan-gatling-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bloodlust",
+      "super-heavy-walker"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3411,7 +3647,9 @@
       "hellmaw-flame-cannons",
       "scorpion-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "runes-of-the-blood-god"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3452,7 +3690,10 @@
     "weapon_ids": [
       "fleshmetal-weapons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cult-of-destruction",
+      "death-frenzy"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3545,7 +3786,10 @@
     "weapon_ids": [
       "electro-goads"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "servants-of-the-abyss",
+      "voltagheist-field"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3586,7 +3830,10 @@
     "weapon_ids": [
       "ogryn-plague-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ogryns",
+      "wall-of-muscle"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3627,7 +3874,9 @@
     "weapon_ids": [
       "diseased-claws-and-fangs"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "mischief-makers-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3672,7 +3921,11 @@
       "laspistol",
       "psychic-strike"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cursed-wardings-psychic",
+      "leader",
+      "psychic-barrier-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3725,7 +3978,10 @@
       "plasma-pistol",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "unholy-power"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3781,7 +4037,11 @@
       "plasma-pistol",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "altered-reality-psychic",
+      "flames-of-change-psychic",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3837,7 +4097,11 @@
       "plasma-pistol",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "feculent-despair-aura-psychic",
+      "gift-of-poxes-psychic",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3892,7 +4156,11 @@
       "plasma-pistol",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dark-favour-psychic",
+      "infernal-speed",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3947,7 +4215,10 @@
       "plasma-pistol",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "revolting-regeneration"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4002,7 +4273,10 @@
       "plasma-pistol",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cut-off-their-escape",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4057,7 +4331,10 @@
       "plasma-pistol",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bloody-stampede",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4112,7 +4389,10 @@
       "plasma-pistol",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "lord-of-fate"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4164,7 +4444,10 @@
       "plasma-pistol",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "swift-assault"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4214,7 +4497,10 @@
       "power-weapon",
       "shotgun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "enforcer",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4256,7 +4542,9 @@
       "ogryn-power-drill",
       "ogryn-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ogryn-combat-stimms"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4304,7 +4592,10 @@
       "mortar",
       "renegade-firearm"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "covering-fire",
+      "heavy-weapons-team"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4355,7 +4646,9 @@
       "befouled-claws-and-fangs",
       "mauler-goad-and-ripper-claw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "beastmaster"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

@@ -45,7 +45,10 @@
       "storm-bolter",
       "twin-assault-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "assault-ramp",
+      "deadly-demise-d6"
+    ],
     "transport_capacity": {
       "capacity": 14
     },
@@ -106,7 +109,12 @@
       "nemesis-mace",
       "sublimator"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d3",
+      "deep-strike",
+      "surge-of-wrath-psychic",
+      "warrior-strategist"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -160,7 +168,11 @@
       "storm-bolter",
       "twin-assault-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "assault-ramp",
+      "deadly-demise-d6",
+      "legacy-of-jerulas"
+    ],
     "transport_capacity": {
       "capacity": 16
     },
@@ -217,7 +229,10 @@
       "psycannon",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "might-of-titan-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -271,7 +286,10 @@
       "twin-heavy-bolter",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fire-focus",
+      "fire-support"
+    ],
     "transport_capacity": {
       "capacity": 6
     },
@@ -331,7 +349,9 @@
       "purifying-flame",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "sanctity-of-purpose"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -383,7 +403,9 @@
       "nemesis-daemon-greathammer",
       "nemesis-greatsword"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "indomitable-spirit-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -437,7 +459,12 @@
       "turbo-laser-destructor",
       "twin-heavy-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aerial-assault",
+      "deadly-demise-d6-2",
+      "hover",
+      "thunderhawk-cluster-bombs"
+    ],
     "transport_capacity": {
       "capacity": 30
     },
@@ -491,7 +518,11 @@
       "hunter-killer-missile",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "firing-deck-2",
+      "self-repair",
+      "truesilver-aegis-aura"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -548,7 +579,11 @@
       "psycannon",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "eye-of-judgement-psychic",
+      "hammerhand-psychic",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -604,7 +639,13 @@
       "storm-bolter",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blizzard-shield",
+      "deadly-demise-1",
+      "fervour-of-the-ancients-aura",
+      "guidance-of-the-ancients-psychic",
+      "wisdom-of-the-ancients-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -656,7 +697,11 @@
       "purifying-flame",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "champion-of-the-order-of-purifiers-psychic",
+      "foesight-psychic",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -715,7 +760,10 @@
       "psycannon",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "sanctifying-ritual-psychic",
+      "scouts-6"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -767,7 +815,12 @@
       "omnissiah-power-axe",
       "servo-arm"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blessing-of-the-omnissiah",
+      "guardians-of-the-machine",
+      "leader",
+      "techmarine"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -820,7 +873,11 @@
       "storm-bolter",
       "vortex-of-doom"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "haloed-in-soulfire-psychic",
+      "leader",
+      "sanctic-hood"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -871,7 +928,11 @@
       "nemesis-force-weapon",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "clarion-of-haste-psychic",
+      "inspiring-exemplar",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -928,7 +989,9 @@
       "psycannon",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "righteous-persecution"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -980,7 +1043,9 @@
       "twin-lascannon",
       "typhoon-missile-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "strafing-run"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1037,7 +1102,9 @@
       "psycannon",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "personal-teleporters"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1087,7 +1154,11 @@
       "crozius-arcanum",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "litanies-of-sanctity",
+      "zealous-path"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1152,7 +1223,11 @@
       "psycannon",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ancient-s-banner",
+      "apothecary-s-narthecium",
+      "attuned-onslaught-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1259,7 +1334,11 @@
       "searing-purity",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hammer-aflame-psychic",
+      "leader",
+      "sanctuary-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1326,7 +1405,9 @@
       "psycannon",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "force-edge-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1380,7 +1461,9 @@
       "twin-heavy-bolter",
       "typhoon-missile-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "interceptor"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1436,7 +1519,9 @@
       "twin-multi-melta",
       "typhoon-missile-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "armoured-resilience"
+    ],
     "transport_capacity": {
       "capacity": 12
     },

@@ -43,7 +43,10 @@
       "kroot-pistol-and-hunting-javelins",
       "rampager-fists"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "kroot-linebreakers",
+      "scouts-7"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -97,7 +100,12 @@
       "missile-pod",
       "seeker-missile"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aggressive-deployment",
+      "air-caste-colossus",
+      "deadly-demise-3d6",
+      "hover"
+    ],
     "transport_capacity": {
       "capacity": 200
     },
@@ -150,7 +158,14 @@
       "missile-pod",
       "plasma-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deep-strike",
+      "fireknife",
+      "gun-drone",
+      "marker-drone",
+      "shield-drone",
+      "weapon-support-systems"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -207,7 +222,11 @@
       "seeker-missile",
       "twin-pulse-carbine"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-1",
+      "drone-harassment-tactics",
+      "scouts-9"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -258,7 +277,12 @@
       "fusion-blaster",
       "pulse-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "forward-observers",
+      "homing-beacon",
+      "infiltrators",
+      "stealth"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -308,7 +332,10 @@
       "twin-ion-rifle",
       "twin-missile-pod"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d3",
+      "pulse-bombs"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -371,7 +398,10 @@
       "ritual-blade",
       "tau-tech-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bounty-hunters",
+      "pech-ra"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -477,7 +507,12 @@
       "rail-rifle",
       "semi-automatic-grenade-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "grav-inhibitor-drone",
+      "pulse-accelerator-drone",
+      "recon-drone",
+      "target-uploaded"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -530,7 +565,11 @@
       "pulse-rifle",
       "support-turret"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ds8-support-turret",
+      "guardian-drone",
+      "suppression-volley"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -583,7 +622,13 @@
       "shardstorm-burst-system",
       "xv-pulse-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "exemplars-of-mont-ka",
+      "mv15-gun-drone",
+      "neocapacitor-shields",
+      "retro-thrusters",
+      "scouts-8"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -633,7 +678,10 @@
       "burst-cannon",
       "tau-flamer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "battlesuit-support-systems",
+      "starscythe"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -687,7 +735,11 @@
       "swiftstrike-burst-cannon",
       "swiftstrike-railgun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6-2",
+      "strafing-run",
+      "transport-bay"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -739,7 +791,9 @@
       "pulse-pistol",
       "support-turret"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "breach-and-clear"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -794,7 +848,11 @@
       "twin-smart-missile-system",
       "twin-tau-flamer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "heavy-walker",
+      "support-system",
+      "titan-killer"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -841,7 +899,11 @@
     "weapon_ids": [
       "supremacy-railgun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "firing-deck-11",
+      "fortification",
+      "tidewall-cover"
+    ],
     "transport_capacity": {
       "capacity": 11
     },
@@ -893,7 +955,10 @@
     "weapon_ids": [
       "ripping-fangs"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hunting-hounds",
+      "loping-pounce"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -939,7 +1004,12 @@
     "weapon_ids": [
       "honour-stave"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "coordinated-leadership",
+      "failure-is-not-an-option",
+      "hover-drone",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -992,7 +1062,13 @@
       "twin-plasma-rifle",
       "twin-smart-missile-system"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "battlesuit-support-system",
+      "deadly-demise-d6",
+      "missile-drone",
+      "nova-charge",
+      "weapon-support-system"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1043,7 +1119,12 @@
       "dawn-blade",
       "high-intensity-plasma-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "independent-power",
+      "leader",
+      "puretide-s-teachings",
+      "way-of-the-short-blade"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1101,7 +1182,9 @@
       "repeater-cannon",
       "tanglecannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "kroot-packmates"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1154,7 +1237,14 @@
       "light-missile-pod",
       "pulse-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "advanced-guardian-drone",
+      "agile-combatant",
+      "command-link-drone-aura",
+      "hero-of-the-empire-aura",
+      "lone-operative",
+      "supreme-commander"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1207,7 +1297,9 @@
       "twin-fusion-blaster",
       "twin-tau-flamer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "stealth-drones"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1258,7 +1350,9 @@
       "seeker-missile",
       "twin-heavy-rail-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "titan-hunter"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1308,7 +1402,10 @@
       "smart-missile-system",
       "twin-pulse-carbine"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "targeting-array",
+      "velocity-tracker"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1361,7 +1458,10 @@
       "stingwing-claws",
       "tau-flamer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "airborne-agility",
+      "oversight-drone"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1418,7 +1518,11 @@
       "plasma-rifle",
       "tau-flamer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "coldstar-commander",
+      "leader",
+      "shield-generator"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1468,7 +1572,11 @@
       "kroot-rifle",
       "shapers-blade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "kroot-ambush",
+      "leader",
+      "trail-finding"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1518,7 +1626,10 @@
       "max": 2
     },
     "weapon_ids": [],
-    "ability_ids": [],
+    "ability_ids": [
+      "firing-deck-20",
+      "tidewall-defence-platform"
+    ],
     "transport_capacity": {
       "capacity": 11
     },
@@ -1580,7 +1691,9 @@
       "twin-plasma-rifle",
       "twin-smart-missile-system"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "advanced-armour"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1636,7 +1749,10 @@
       "plasma-rifle",
       "tau-flamer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "enforcer-commander",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1685,7 +1801,11 @@
       "close-combat-weapon",
       "fireblade-pulse-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "crack-shot",
+      "leader",
+      "volley-fire"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1736,7 +1856,9 @@
       "quad-ion-turret",
       "seeker-missile"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ground-strike-fighter"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1788,7 +1910,9 @@
       "smart-missile-system",
       "twin-pulse-carbine"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "rapid-deployment"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -1840,7 +1964,11 @@
       "close-combat-weapon",
       "shade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "jammer-array",
+      "leader",
+      "structural-analyser"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1892,7 +2020,9 @@
       "smart-missile-system",
       "twin-pulse-carbine"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "armour-hunter"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1939,7 +2069,9 @@
     "weapon_ids": [
       "drone-defenders"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "droneport"
+    ],
     "transport_capacity": {
       "capacity": 11
     },
@@ -1991,7 +2123,9 @@
       "battlesuit-fists",
       "fusion-blaster"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "sunforge"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2040,7 +2174,9 @@
       "longshot-pulse-rifles",
       "pulse-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "precise-targeting"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2094,7 +2230,10 @@
       "kroot-rifle",
       "tanglebomb-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bodyguard",
+      "fieldcraft"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2145,7 +2284,11 @@
       "kroot-pistol",
       "shapers-blade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "root-of-honour",
+      "war-leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2197,7 +2340,10 @@
       "kalamandras-bite",
       "kroot-long-gun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "advanced-scouting",
+      "fire-and-fade"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2246,7 +2392,11 @@
       "kroot-scattergun",
       "twin-ritualistic-blades"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "rites-of-feasting",
+      "ritual-butchery"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2291,7 +2441,9 @@
       "plasma-rifle",
       "rail-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "outflank"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2336,7 +2488,9 @@
       "long-barrelled-burst-cannon",
       "missile-pod"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "jet-pack-insertion"
+    ],
     "transport_capacity": {
       "capacity": 48
     },
@@ -2386,7 +2540,9 @@
       "battlesuit-fists",
       "experimental-pulse-submunitions-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2432,7 +2588,9 @@
       "phased-ion-gun",
       "twin-hazard-burst-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "photon-casters"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2473,7 +2631,9 @@
       "knarloc-beak-and-talons",
       "kroot-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "thunderous-pounce"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2516,7 +2676,10 @@
       "kroot-rifle",
       "twin-kroot-gun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "baggage-harness-aura",
+      "loping-stride"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2559,7 +2722,10 @@
       "twin-missile-pod",
       "twin-plasma-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "reinforced-cover",
+      "sentinel-protocols"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2596,7 +2762,9 @@
       "max": 1
     },
     "weapon_ids": [],
-    "ability_ids": [],
+    "ability_ids": [
+      "orbital-comms-array-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2638,7 +2806,10 @@
       "close-combat-weapon",
       "twin-burst-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "drone-escort",
+      "markerlight"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

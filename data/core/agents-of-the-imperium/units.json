@@ -86,7 +86,15 @@
       "plasma-gun",
       "sanctifier-melee-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "attached-unit",
+      "atttached-unit",
+      "cherub",
+      "ministorum-sermon",
+      "salvationist-medikit",
+      "scouts-6",
+      "simulacrum-imperialis"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -138,7 +146,12 @@
       "hellfire-extremis",
       "master-crafted-power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "feel-no-pain-6",
+      "leader",
+      "tactical-instinct",
+      "unstoppable-champion"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -199,7 +212,11 @@
       "multi-laser",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d3",
+      "firing-deck-2",
+      "rapid-deployment"
+    ],
     "transport_capacity": {
       "capacity": 13
     },
@@ -260,7 +277,15 @@
       "neural-shredder",
       "phase-sword-and-poison-blades"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "acrobatic-escape",
+      "deep-strike",
+      "fights-first",
+      "infiltrators",
+      "lone-operative",
+      "lord-of-deceit-aura",
+      "shadow-assignment"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -318,7 +343,12 @@
       "condemnor-stake",
       "master-crafted-power-sword"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "authority-of-the-inquisition",
+      "leader",
+      "no-mercy",
+      "psyoculum"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -378,7 +408,9 @@
       "twin-heavy-bolter",
       "twin-multi-melta"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "purge-and-cleanse"
+    ],
     "transport_capacity": {
       "capacity": 6
     },
@@ -455,7 +487,11 @@
       "plasma-cannon",
       "plasma-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "inquisitorial-henchmen",
+      "loyal-henchmen",
+      "tome-skull"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -511,7 +547,12 @@
       "inquisitorial-melee-weapon",
       "psychic-shock-wave"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blessed-wardings",
+      "leader",
+      "power-of-the-rosette",
+      "psychic-gifts"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -570,7 +611,12 @@
       "psycannon",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ancient-s-banner",
+      "hammerhand-psychic",
+      "narthecium",
+      "rites-of-teleportation"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -627,7 +673,10 @@
       "vicious-bite",
       "voidsman-rotor-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "masters-of-close-confines",
+      "navy-bodyguard"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -710,7 +759,10 @@
       "stalker-pattern-boltgun",
       "xenophase-blade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "astartes-shield",
+      "death-to-the-alien"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -769,7 +821,11 @@
       "executioner-pistol",
       "power-sword-and-neuro-gauntlet"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "frenzon",
+      "overkill",
+      "scouts-9"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -824,7 +880,9 @@
       "hunter-killer-missile",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "self-repair"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -908,7 +966,9 @@
       "stalker-bolt-rifle",
       "xenophase-blade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "kill-team"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -968,7 +1028,11 @@
       "exitus-rifle",
       "vindicare-combat-knife"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dead-shot",
+      "shieldbreaker",
+      "stealth"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1028,7 +1092,12 @@
       "mechanical-bite",
       "webber"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "arbites-medi-kit",
+      "imperial-law",
+      "nuncio-acquila",
+      "soulguilt-scanner"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1094,7 +1163,12 @@
       "plasma-gun",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "breaching-team",
+      "cat-unit",
+      "endurant-shield",
+      "gheistskull"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1153,7 +1227,11 @@
       "animus-speculum",
       "life-draining-touch"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "abomination",
+      "etheric-emergence",
+      "soulless-horror-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1214,7 +1292,9 @@
       "mechanical-bite",
       "webber"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "merciless-judgement"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1268,7 +1348,9 @@
       "mechanical-bite",
       "shock-maul"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dedication-to-duty"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1322,7 +1404,11 @@
       "force-orb-cane",
       "laspistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "gaze-into-the-empyrean-psychic",
+      "leader",
+      "third-eye-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1381,7 +1467,11 @@
       "power-fist",
       "psychic-tempest"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "psychic-veil-psychic",
+      "xenos-hunter"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1432,7 +1522,12 @@
     "weapon_ids": [
       "vigil-spear"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "rites-of-battle",
+      "strategic-knowledge",
+      "watch-master"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1490,7 +1585,12 @@
       "nemesis-daemon-hammer",
       "psychic-blast"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "glovodan-psyber-eagle",
+      "leader",
+      "malefic-wardings-psychic",
+      "spy-network"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1558,7 +1658,10 @@
       "plasma-pistol",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "defenders-of-the-faith",
+      "incensor-cherub"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1614,7 +1717,14 @@
       "twin-assault-cannon",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "auspex-array",
+      "blackstar-cluster-launcher",
+      "deadly-demise-d6",
+      "hover",
+      "infernum-halo-launcher",
+      "stealth"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -1667,7 +1777,15 @@
       "power-weapon",
       "zealots-vindictor"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "holy-hatred",
+      "holy-mission",
+      "holy-piety",
+      "leader",
+      "righteous-smiting",
+      "war-hymns",
+      "zealot"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1737,7 +1855,12 @@
       "monomolecular-cane-rapier",
       "voltaic-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "backroom-deals",
+      "healing-serum",
+      "leader",
+      "warrant-of-trade"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1840,7 +1963,9 @@
       "plasma-pistol",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "grim-spectres"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1886,7 +2011,10 @@
       "heirloom-pistol",
       "monomolecular-rapier"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "that-redeploy-units-roll-off"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1933,7 +2061,9 @@
       "close-combat-weapon",
       "negotiator-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1980,7 +2110,11 @@
       "force-orb-cane",
       "laspistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "gaze-into-the-immaterium-psychic",
+      "leader",
+      "the-third-eye-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2025,7 +2159,9 @@
       "mk-1-assault-weapon",
       "power-claw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "evade-and-survive"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

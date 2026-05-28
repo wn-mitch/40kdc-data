@@ -40,7 +40,10 @@
       "armoured-bulk",
       "gauss-flayer-array"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d3",
+      "repair-barge"
+    ],
     "transport_capacity": {
       "capacity": 10
     },
@@ -93,7 +96,11 @@
       "titanic-forelimbs",
       "transdimensional-projector"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6-2",
+      "terrifying-monstrosity",
+      "titanic-walker"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -145,7 +152,10 @@
       "rod-of-covenant",
       "voidblade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deep-strike",
+      "relentless-combatants"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -197,7 +207,9 @@
       "gauss-flayer",
       "gauss-reaper"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "their-number-is-legion"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -246,7 +258,12 @@
       "gauss-scalpel",
       "tesla-caster"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "accelerator-mandible",
+      "harassment-swarm-aura",
+      "nanoscarab-projector",
+      "scouts-8"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -294,7 +311,11 @@
     "weapon_ids": [
       "staff-of-light"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "rites-of-reanimation",
+      "technomancer"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -343,7 +364,10 @@
       "armoured-bulk",
       "twin-tesla-destructor"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "invasion-beams",
+      "quantum-invader"
+    ],
     "transport_capacity": {
       "capacity": 1
     },
@@ -396,7 +420,12 @@
       "tachyon-arrow",
       "voidscythe"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "implacable-resilience",
+      "leader",
+      "my-will-be-done",
+      "resurrection-orb"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -444,7 +473,11 @@
       "close-combat-weapon",
       "relic-gauss-blaster"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "adaptive-strategy",
+      "engrammatic-logic",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -493,7 +526,9 @@
       "doomstalker-limbs",
       "twin-gauss-flayer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "sentinel-construct"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -545,7 +580,9 @@
       "gauss-blaster",
       "tesla-carbine"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "implacable-eradication"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -590,7 +627,11 @@
       "scouring-eye",
       "scythed-limbs"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bound-creation",
+      "cryptek-retinue",
+      "systematic-vigour"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -640,7 +681,11 @@
     "weapon_ids": [
       "staff-of-tomorrow"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "master-chronomancer",
+      "the-stars-are-right"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -689,7 +734,10 @@
       "armoured-bulk",
       "tesla-spheres"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6-3",
+      "powers-of-the-c-tan"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -741,7 +789,13 @@
       "twin-gauss-blaster",
       "twin-tesla-carbine"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "evasion-engrams",
+      "nebuloscope",
+      "scouts-9",
+      "shadowloom",
+      "shieldvanes"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -788,7 +842,11 @@
     "weapon_ids": [
       "abyssal-lance"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "harbinger-of-despair",
+      "leader",
+      "nightmare-shroud-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -845,7 +903,9 @@
       "enmitic-exterminator",
       "gauss-destructor"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "optimised-for-slaughter"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -894,7 +954,10 @@
     "weapon_ids": [
       "skorpekh-hyperphase-weapons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "plasmacyte",
+      "whirling-onslaught"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -947,7 +1010,12 @@
     "weapon_ids": [
       "transdimensional-abductor"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ancient-cover",
+      "deployment",
+      "fortification",
+      "reanimation-nodes-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -996,7 +1064,11 @@
       "flensing-claw",
       "hyperphase-harvester"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "crimson-harvest",
+      "leader",
+      "united-in-destruction"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1046,7 +1118,9 @@
       "close-combat-weapon",
       "synaptic-disintegrator"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hyperspace-hunters"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1095,7 +1169,9 @@
       "particle-shredder",
       "stalkers-forelimbs"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "targeting-relay"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1144,7 +1220,11 @@
       "gauntlet-of-fire",
       "staff-of-the-destroyer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "grand-strategist",
+      "leader",
+      "lord-of-the-storm"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1193,7 +1273,10 @@
       "armoured-bulk",
       "tesla-sphere"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6",
+      "gravitic-pulse"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1240,7 +1323,10 @@
       "atomiser-beam",
       "reanimators-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "feel-no-pain-4",
+      "nanoscarab-reanimation-beam-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1290,7 +1376,11 @@
       "staff-of-light",
       "tesla-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "advanced-quantum-shielding",
+      "carrier-wave-aura",
+      "deadly-demise-1"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1349,7 +1439,9 @@
       "close-combat-weapon",
       "gauss-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hard-wired-for-destruction"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1398,7 +1490,10 @@
       "hyperphase-sword",
       "warscythe"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dispersion-shield",
+      "guardian-protocols"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1448,7 +1543,9 @@
       "particle-whip",
       "portal-of-exile"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "eternity-gate"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1496,7 +1593,10 @@
     "weapon_ids": [
       "overlords-blade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "translocation-shroud"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1547,7 +1647,10 @@
     "weapon_ids": [
       "feeder-mandibles"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "chittering-swarm",
+      "self-destruction"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1600,7 +1703,9 @@
       "vicious-claws",
       "whip-coils"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "wraith-form"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1648,7 +1753,11 @@
     "weapon_ids": [
       "empathic-obliterator"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ancient-collector",
+      "leader",
+      "surrogate-hosts"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1698,7 +1807,12 @@
       "lords-blade",
       "staff-of-light"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "destroyer-cult",
+      "driven-by-hatred",
+      "leader",
+      "nanoscarab-amulet"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1800,7 +1914,11 @@
     "weapon_ids": [
       "flayer-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "flesh-hunger",
+      "infiltrators",
+      "stealth"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1848,7 +1966,9 @@
       "tesla-cannon",
       "twin-tesla-destructor"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "malevolent-arcing"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1897,7 +2017,11 @@
       "eldritch-lance",
       "impaling-legs"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "atomic-energy-manipulator",
+      "illuminor",
+      "mechanical-augmentation-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1947,7 +2071,13 @@
       "enmitic-disintegrators",
       "unmaker-gauntlet"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fights-first",
+      "infectious-murder-madness-aura",
+      "nullstone-field-generator-aura",
+      "prophet-of-destruction",
+      "protective-disciples"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1994,7 +2124,10 @@
       "transdimensional-isolator",
       "twin-gauss-reaper"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "canoptek-retinue",
+      "weapon-sentinels"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2043,7 +2176,9 @@
     "weapon_ids": [
       "ophydian-hyperphase-weapons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "tunnelling-horrors"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2090,7 +2225,11 @@
     "weapon_ids": [
       "plasmic-lance"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "harbinger-of-destruction",
+      "leader",
+      "living-lightning"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2138,7 +2277,9 @@
       "doomsday-cannon",
       "gauss-flayer-array"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "overwhelming-obliteration"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2186,7 +2327,11 @@
       "close-combat-weapon",
       "enmitic-disintegrator-pistols"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "inescapable-death",
+      "lone-operative",
+      "multi-threat-eliminator"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2341,7 +2486,9 @@
       "heavy-death-ray",
       "twin-tesla-destructor"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "atavistic-instigation"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2388,7 +2535,12 @@
     "weapon_ids": [
       "tremorglaive"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "obelisk-node-control",
+      "tectonic-reverberations",
+      "vanguard-protocols"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2451,7 +2603,13 @@
       "scythe-of-dust",
       "staff-of-stars"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6-3-szarekh-model-only",
+      "supreme-commander",
+      "the-silent-king",
+      "triarch-abilities",
+      "triarchal-menhirs"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2498,7 +2656,11 @@
     "weapon_ids": [
       "chronomancers-stave"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "chronometron",
+      "leader",
+      "timesplinter-mantle"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2602,7 +2764,11 @@
       "automaton-claws",
       "particle-beamer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "canoptek-swarm",
+      "fabricator-claw-array-aura",
+      "gloom-prism-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2644,7 +2810,11 @@
       "gauss-exterminator",
       "twin-tesla-destructor"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-3d6",
+      "phased-cover",
+      "ziggurat-dock"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2686,7 +2856,10 @@
       "gauss-exterminator",
       "heat-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "phase-shifted-cover",
+      "teleportation-matrix"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2728,7 +2901,9 @@
       "armoured-bulk",
       "twin-tesla-destructor"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "death-sphere-bombardment"
+    ],
     "transport_capacity": {
       "capacity": 1
     },
@@ -2774,7 +2949,9 @@
       "gauss-annihilator",
       "tesla-arc"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "phase-shift-generator-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2818,7 +2995,11 @@
       "tachyon-arrow",
       "warscythe"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "lord-of-the-pyrrhian-eternals",
+      "mind-in-the-machine"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2861,7 +3042,11 @@
     "weapon_ids": [
       "warscythe"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ghostwalk-mantle",
+      "leader",
+      "the-vargard-s-duty"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2905,7 +3090,11 @@
       "lords-blade",
       "staff-of-light"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "relentless-march",
+      "the-lord-s-will"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2949,7 +3138,11 @@
     "weapon_ids": [
       "staff-of-light"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "counter-tactics",
+      "leader",
+      "transient-madness"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

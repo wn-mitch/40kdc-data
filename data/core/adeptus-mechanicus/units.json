@@ -42,7 +42,13 @@
       "heavy-phosphor-blaster",
       "twin-cognis-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "chaff-launcher",
+      "command-uplink",
+      "deadly-demise-d3",
+      "hover",
+      "strafing-run"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -96,7 +102,11 @@
       "neutron-laser",
       "twin-onager-heavy-phosphor-blaster"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "broad-spectrum-data-tether",
+      "emanatus-force-field-aura",
+      "scuttling-walker"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -151,7 +161,9 @@
       "kataphron-plasma-culverin",
       "phosphor-blaster"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "sentinel-directives"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -201,7 +213,10 @@
       "mechanicus-pistol",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "battle-protocols",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -260,7 +275,10 @@
       "twin-cognis-autocannon",
       "twin-cognis-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-1",
+      "elevated-strider"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -311,7 +329,11 @@
       "omnissian-staff",
       "transonic-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "defend-the-divine-work",
+      "galvanic-field",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -371,7 +393,10 @@
       "phosphor-serpenta",
       "radium-jezzail"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "focused-hunters",
+      "stealth"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -424,7 +449,12 @@
       "mechadendrite-hive",
       "solar-atomiser"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "canticles-of-the-omnissiah",
+      "mechanicus-bodyguard",
+      "self-repair-mechanisms",
+      "supreme-commander"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -488,7 +518,10 @@
       "phosphor-blaster",
       "servo-claw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "attached-unit",
+      "network-override"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -539,7 +572,10 @@
     "weapon_ids": [
       "electroleech-stave"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "electro-infusion",
+      "feel-no-pain-5"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -590,7 +626,9 @@
       "disruptor-missile-launcher",
       "ferrumite-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blistering-salvoes"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -642,7 +680,12 @@
       "skatros-transuranic-arquebus",
       "sydonian-feet"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "achillan-eye",
+      "dread-snipers",
+      "lone-operative",
+      "sydonian-sentinel"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -696,7 +739,11 @@
       "stubcarbine",
       "taser-goad"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "infiltrators",
+      "neurostatic-interference-aura",
+      "voices-in-the-code"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -746,7 +793,10 @@
       "armoured-hull",
       "cognis-heavy-stubber-array"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aerial-deployment",
+      "deep-strike"
+    ],
     "transport_capacity": {
       "capacity": 11,
       "exclusion_keywords": [
@@ -806,7 +856,11 @@
       "radium-carbine",
       "transuranic-arquebus"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "enhanced-data-tether",
+      "omnispex",
+      "rad-saturation-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -859,7 +913,11 @@
       "phosphor-serpenta",
       "volkite-blaster"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dataspike",
+      "leader",
+      "lord-of-the-machine-cult"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -917,7 +975,9 @@
       "flechette-carbine",
       "taser-goad"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ride-the-thermals"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -971,7 +1031,9 @@
       "hydraulic-claw",
       "torsion-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "breaching-command"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1024,7 +1086,9 @@
       "transonic-blades-and-chordclaw",
       "transonic-razor-and-chordclaw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "optimised-gait"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1074,7 +1138,11 @@
       "mechanicus-pistol",
       "servo-arc-claw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cogitative-instincts",
+      "leader",
+      "seekers-of-divine-arcana"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1126,7 +1194,9 @@
     "weapon_ids": [
       "electrostatic-gauntlets"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "electro-shock"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1178,7 +1248,10 @@
       "galvanic-carbine",
       "mechanicus-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "scouts-9",
+      "tactica-obliqua"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1236,7 +1309,9 @@
       "phosphor-serpenta",
       "taser-lance"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dynamic-efficiency"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1291,7 +1366,9 @@
       "phosphor-pistol",
       "sulphur-breath"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "line-breakers"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1342,7 +1419,12 @@
       "omnissian-axe",
       "servo-arm"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "enginseer",
+      "leader",
+      "omnissiah-s-blessing",
+      "vengeance-for-the-omnissiah"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1392,7 +1474,11 @@
       "control-stave",
       "mechanicus-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "control-edict",
+      "leader",
+      "servo-skull-uplink"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1444,7 +1530,10 @@
       "armoured-hull",
       "cognis-heavy-stubber-array"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fire-support",
+      "firing-deck-2"
+    ],
     "transport_capacity": {
       "capacity": 12,
       "exclusion_keywords": [
@@ -1507,7 +1596,10 @@
       "twin-kastelan-fist",
       "twin-kastelan-phosphor-blaster"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "repulsor-grid",
+      "robotic-bodyguard"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1563,7 +1655,9 @@
       "pteraxii-talons",
       "taser-goad"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "searing-conflagration"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1612,7 +1706,9 @@
       "armoured-hull",
       "cognis-heavy-stubber-array"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bomb-rack"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1666,7 +1762,10 @@
       "plasma-caliver",
       "transuranic-arquebus"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "objective-scouted",
+      "scouts-6"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1713,7 +1812,9 @@
       "terrax-melta-cutter",
       "twin-volkite-charger"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "termite-assault"
+    ],
     "transport_capacity": {
       "capacity": 12,
       "exclusion_keywords": [
@@ -1763,7 +1864,11 @@
       "grav-gun",
       "hydraulic-claw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bound-creation",
+      "mindlock",
+      "servitor-bodyguard"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1806,7 +1911,10 @@
       "arc-lance",
       "archeotech-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "secutarii",
+      "titan-guard"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1850,7 +1958,9 @@
       "close-combat-weapon",
       "galvanic-caster"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blind-barrage"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

@@ -47,7 +47,9 @@
       "plasma-pistol",
       "spear-of-the-faithful"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "sworn-protectors"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -103,7 +105,12 @@
       "twin-penitent-buzz-blades",
       "twin-penitent-flails"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "anchorite-sarcophagus",
+      "anguish-of-the-unredeemed",
+      "deadly-demise-1",
+      "feel-no-pain-5"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -156,7 +163,12 @@
       "ministorum-hand-flamer",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deep-strike",
+      "divine-deliverance",
+      "leader",
+      "sacred-command"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -207,7 +219,11 @@
       "palatine-blade",
       "plasma-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fury-of-the-righteous",
+      "leader",
+      "rapturous-blows"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -302,7 +318,15 @@
       "plasma-gun",
       "sanctifier-melee-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "attached-unit",
+      "atttached-unit",
+      "cherub",
+      "ministorum-sermon",
+      "salvationist-medikit",
+      "scouts-6",
+      "simulacrum-imperialis"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -352,7 +376,9 @@
     "weapon_ids": [
       "arco-flails"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "extremis-trigger-word"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -403,7 +429,11 @@
       "null-mace",
       "virge-of-admonition"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "denuncia-oratory",
+      "rituale-nullificatus",
+      "virtue-of-intolerance"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -453,7 +483,11 @@
       "boltgun",
       "close-combat-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "litany-of-deeds",
+      "stanchion-of-holy-martyrs"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -504,7 +538,11 @@
       "bolt-pistols",
       "relic-weapons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "relics-of-the-matriarchs",
+      "solemn-procession"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -563,7 +601,9 @@
       "plasma-pistol",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "angelic-ascent"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -626,7 +666,9 @@
       "neural-whips",
       "penitent-eviscerator"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "overseer-of-redemption"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -674,7 +716,11 @@
       "bolt-pistol",
       "dialogus-staff"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "laud-hailer",
+      "leader",
+      "stirring-rhetoric"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -724,7 +770,11 @@
       "bolt-pistol",
       "mace-of-the-righteous"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "executioner-of-heretics-aura",
+      "leader",
+      "unflinching-determination"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -779,7 +829,10 @@
       "twin-heavy-bolter",
       "twin-multi-melta"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d3",
+      "purge-and-cleanse"
+    ],
     "transport_capacity": {
       "capacity": 6,
       "exclusion_keywords": [
@@ -833,7 +886,11 @@
       "bolt-pistol",
       "chirurgeons-tools"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "medicus-ministorum",
+      "sacred-healing"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -885,7 +942,12 @@
       "lance-of-illumination",
       "paragon-missile-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "abbess-sanctorum",
+      "leader",
+      "righteous-repugnance",
+      "supreme-commander"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -944,7 +1006,10 @@
       "plasma-pistol",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cherubs",
+      "storm-of-retribution"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1008,7 +1073,11 @@
       "plasma-pistol",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "impetuous-fervour",
+      "infiltrators",
+      "sacred-banner"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1069,7 +1138,12 @@
       "sanctity",
       "the-outcasts-weapons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fights-first",
+      "holy-judgement",
+      "lone-operative",
+      "mysterious-saviours"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1120,7 +1194,10 @@
       "hunter-killer-missile",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "firing-deck-2",
+      "self-repair"
+    ],
     "transport_capacity": {
       "capacity": 12,
       "exclusion_keywords": [
@@ -1180,7 +1257,9 @@
       "paragon-war-blade",
       "paragon-war-mace"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "righteous-paragons"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1231,7 +1310,9 @@
       "hunter-killer-missile",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "rites-of-castigation"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1281,7 +1362,9 @@
       "heavy-bolter",
       "hunter-killer-missile"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "devastating-refrain"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1336,7 +1419,9 @@
       "twin-penitent-buzz-blades",
       "twin-penitent-flail"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "endless-suffering"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1386,7 +1471,11 @@
       "mace-of-castigation",
       "twin-ministorum-heavy-flamer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fiery-conviction",
+      "leader",
+      "the-pulpit-of-saint-holline-s-basilica"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1437,7 +1526,15 @@
       "power-weapon",
       "zealots-vindictor"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "holy-hatred",
+      "holy-mission",
+      "holy-piety",
+      "leader",
+      "righteous-smiting",
+      "war-hymns",
+      "zealot"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1492,7 +1589,9 @@
       "plasma-pistol",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "embodied-prophecy"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1550,7 +1649,10 @@
       "plasma-pistol",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "holy-vanguard",
+      "righteous-awareness"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1613,7 +1715,12 @@
       "power-weapon",
       "the-ardent-blade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "healing-tears",
+      "leader",
+      "lifewards",
+      "miraculous-intervention"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1677,7 +1784,9 @@
       "plasma-pistol",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "defenders-of-the-faith"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1732,7 +1841,12 @@
       "plasma-pistol",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "null-rod",
+      "rod-of-office",
+      "the-emperor-s-grace"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1795,7 +1909,11 @@
       "bolt-pistol",
       "scribes-staff"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "auto-tapestry-of-the-emperor-s-judgement",
+      "leader",
+      "recount-the-deeds-of-the-saints"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1844,7 +1962,10 @@
       "repressor-twin-heavy-flamer",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "emergency-combat-embarkation",
+      "firing-deck-6"
+    ],
     "transport_capacity": {
       "capacity": 12,
       "exclusion_keywords": [
@@ -1889,7 +2010,11 @@
       "max": 1
     },
     "weapon_ids": [],
-    "ability_ids": [],
+    "ability_ids": [
+      "consecrated-ground",
+      "deadly-demise-d6",
+      "holy-cover"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

@@ -61,7 +61,12 @@
       "heavy-stubber",
       "mining-laser"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "demolition-run",
+      "outrider-gangs",
+      "scouts-9",
+      "stealth"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -109,7 +114,12 @@
       "close-combat-weapon",
       "liberator-autostubs"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deep-strike",
+      "heroic-fusillade",
+      "hypersensory-abilities",
+      "lone-operative"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -172,7 +182,10 @@
       "seismic-cannon",
       "webber"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "a-plan-generations-in-the-making",
+      "cult-icon"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -220,7 +233,11 @@
       "autopistol",
       "close-combat-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "scrambler-array",
+      "voice-of-new-truths"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -272,7 +289,11 @@
       "demolition-charges",
       "remote-explosives"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "infiltrators",
+      "planted-explosives",
+      "primed-and-ready"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -320,7 +341,13 @@
     "weapon_ids": [
       "patriarchs-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cosmic-horror-psychic",
+      "leader",
+      "might-from-beyond",
+      "psychic-familiar",
+      "supreme-commander"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -372,7 +399,11 @@
       "heavy-stubber",
       "twin-autocannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d3",
+      "fire-support",
+      "firing-deck-6"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -424,7 +455,12 @@
       "chemical-vials",
       "injector-goad"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "alchemicus-familiar",
+      "biological-warfare",
+      "leader",
+      "twisted-science"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -474,7 +510,12 @@
       "autopistol",
       "cult-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "nexus-of-devotion",
+      "scouts-6",
+      "summon-the-cult"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -528,7 +569,13 @@
       "heavy-mortar",
       "twin-heavy-stubber"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "crossfire",
+      "deadly-demise-1",
+      "flare-launcher",
+      "spotter",
+      "survey-augur"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -577,7 +624,11 @@
       "scoped-needle-pistol",
       "toxin-injector-claw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cult-demagogue",
+      "decoys-and-misdirection",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -625,7 +676,12 @@
     "weapon_ids": [
       "power-sledgehammer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "feel-no-pain-5",
+      "leader",
+      "regenerating-gene-mass",
+      "the-chosen-one"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -674,7 +730,11 @@
       "autopistol",
       "close-combat-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "battlefield-analysis",
+      "cult-infiltration",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -724,7 +784,11 @@
       "cult-sniper-rifle",
       "sanctus-bio-dagger"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cloaked-assassin",
+      "creeping-shadow",
+      "psychic-spoor"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -774,7 +838,11 @@
       "close-combat-weapon",
       "cult-sniper-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "master-outrider",
+      "priority-target"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -824,7 +892,9 @@
     "weapon_ids": [
       "aberrant-weapons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hulking-bodyguards"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -880,7 +950,9 @@
       "heavy-mining-tool",
       "leaders-cult-weapons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "claimed-for-the-cult"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -933,7 +1005,9 @@
       "leaders-cult-weapons",
       "metamorph-mutations"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "brood-surge"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -989,7 +1063,9 @@
       "hand-flamer",
       "leaders-cult-weapons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "industrialised-destruction"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1036,7 +1112,12 @@
     "weapon_ids": [
       "locus-blades"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bodyguard",
+      "fights-first",
+      "leader",
+      "sudden-assault"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1088,7 +1169,9 @@
       "heavy-seismic-cannon",
       "heavy-stubber"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "grinding-line-breaker"
+    ],
     "transport_capacity": {
       "capacity": 6
     },
@@ -1140,7 +1223,11 @@
       "close-combat-weapon",
       "psionic-cascade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bio-horror-disruption-psychic",
+      "leader",
+      "psionic-shield-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1190,7 +1277,9 @@
     "weapon_ids": [
       "cult-claws-and-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "swift-and-deadly"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1239,7 +1328,11 @@
       "autopistol",
       "force-stave"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "mind-control-psychic",
+      "spiritual-leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1280,7 +1373,11 @@
     "weapon_ids": [
       "fragdrill"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "manufactorum-cover",
+      "tectonic-fragdrill",
+      "underground-egress"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

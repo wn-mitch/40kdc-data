@@ -41,7 +41,10 @@
       "diabolus-heavy-stubber",
       "reaper-chaintalon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d3",
+      "huntsman"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -92,7 +95,9 @@
       "diabolus-heavy-stubber",
       "havoc-multi-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "brigand"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -142,7 +147,9 @@
       "diabolus-heavy-stubber",
       "war-dog-autocannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "executioner"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -194,7 +201,10 @@
       "reaper-chaintalon",
       "slaughterclaw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "scouts-6",
+      "stalker"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -247,7 +257,9 @@
       "siege-claw",
       "volkite-veuglaire"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "protection-protocols"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -297,7 +309,9 @@
       "reaper-chaintalon",
       "slaughterclaw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "karnivore"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -359,7 +373,11 @@
       "titanic-feet",
       "warpstrike-claw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6",
+      "dread-dominion-aura",
+      "seething-hatred"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -412,7 +430,11 @@
       "reaper-chainfist",
       "twin-heavy-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6-2",
+      "searing-flames",
+      "unrestrained-terror-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -465,7 +487,10 @@
       "fellbore",
       "terrorpulse-missiles"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "close-range-killers-aura",
+      "methodical-destruction"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -519,7 +544,10 @@
       "reaper-chainsword",
       "warpstrike-claw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "obsessive-ruthlessness",
+      "taskmaster-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -573,7 +601,10 @@
       "titanic-feet",
       "twin-magna-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bastion-of-firepower",
+      "deadly-demise-2d6"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -625,7 +656,10 @@
       "atrapos-lascutter",
       "graviton-singularity-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "consumed-with-hunger-aura",
+      "macro-extinction-protocols"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -677,7 +711,9 @@
       "titanic-feet",
       "twin-conversion-beam-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "sunderer-of-fortresses"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -729,7 +765,10 @@
       "castigator-bolt-cannon",
       "tempest-warblade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "offerings-for-the-dark-gods-aura",
+      "storm-of-bolts"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -780,7 +819,10 @@
     "weapon_ids": [
       "cerastus-shock-lance"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dark-fervour-aura",
+      "shock-charge"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -833,7 +875,10 @@
       "reaper-chainsword",
       "warpstrike-claw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bloodlust",
+      "frenzied-rampage-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -888,7 +933,10 @@
       "reaper-chainsword",
       "twin-rad-cleanser"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "huntmaster-aura",
+      "repair-auto-simulacra"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -945,7 +993,10 @@
       "twin-desecrator-cannon",
       "warpshock-harpoon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bastion-of-corruption",
+      "infernal-aegis-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1000,7 +1051,10 @@
       "electroscourge",
       "volkite-combustor"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "vortex-terrors-psychic",
+      "warp-storms-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1055,7 +1109,10 @@
       "twin-rad-cleanser",
       "volkite-chierovile"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "grav-pinned",
+      "preysight-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

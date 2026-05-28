@@ -49,7 +49,15 @@
       "twin-inferno-heavy-bolter",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dark-ascension-aura",
+      "deadly-demise-1",
+      "devoted-to-destruction",
+      "diseased-malice",
+      "frenzy",
+      "froth-spattered-frenzy",
+      "terrifying-assault"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -98,7 +106,12 @@
       "mutalith-claws",
       "warp-vortex"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6",
+      "feel-no-pain-5",
+      "immaterial-flare-aura",
+      "mutating-vortex-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -151,7 +164,10 @@
       "soulshatter-lascannon",
       "twin-inferno-heavy-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "assault-ramp",
+      "deadly-demise-d6"
+    ],
     "transport_capacity": {
       "capacity": 14
     },
@@ -207,7 +223,11 @@
       "baleful-devolution",
       "force-stave"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bestial-prophet",
+      "leader",
+      "sacrificial-blessing"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -255,7 +275,17 @@
     "weapon_ids": [
       "hideous-mutations"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-1",
+      "feel-no-pain-5",
+      "lethal-ichor",
+      "mind-breaking-mutations-aura",
+      "regenerating-monstrosities",
+      "scouts-6",
+      "scouts-8",
+      "scuttling-horrors",
+      "to-slake-its-rage"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -308,7 +338,15 @@
       "pandaemonic-delusion",
       "prosperine-khopesh"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "empyric-guidance-psychic",
+      "gift-of-chaos-psychic",
+      "leader",
+      "prescience-psychic",
+      "twisted-sorceries-psychic",
+      "warped-interference-psychic",
+      "wracking-agonies-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -360,7 +398,10 @@
       "inferno-combi-bolter",
       "inferno-combi-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d3",
+      "siege-shield"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -413,7 +454,14 @@
       "inferno-combi-bolter",
       "inferno-combi-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "assault-vehicle",
+      "fire-support",
+      "firing-deck-2",
+      "meet-any-challenge",
+      "self-repair",
+      "sorcerous-support"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -470,7 +518,11 @@
       "inferno-bolt-pistol",
       "transmogrifying-blast"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "arch-sorcerer-of-tzeentch-psychic",
+      "leader",
+      "scryer-of-fates-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -542,7 +594,10 @@
       "warpflame-pistol",
       "warpflamer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bringers-of-change",
+      "icon-of-flame"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -594,7 +649,11 @@
       "force-weapon",
       "inferno-bolt-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "glimpse-of-eternity-psychic",
+      "leader",
+      "malefic-maelstrom-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -649,7 +708,9 @@
       "chainsword",
       "divining-spear"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "prophesied-doom"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -703,7 +764,9 @@
       "close-combat-weapon",
       "fatecaster-greatbow"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "malign-trickery"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -772,7 +835,10 @@
       "prosperine-khopesh",
       "soulreaper-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deep-strike",
+      "rites-of-coalescence"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -827,7 +893,11 @@
       "gaze-of-magnus",
       "tzeentchs-firestorm"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "lord-of-the-planet-of-the-sorcerers-psychic",
+      "supreme-commander",
+      "unearthly-power"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -880,7 +950,12 @@
       "lascannon",
       "predator-autocannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "destructor",
+      "ensorcelled-destruction",
+      "hail-of-corrosive-disease",
+      "punishing-suppression"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -937,7 +1012,15 @@
       "twin-inferno-heavy-bolter",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "barrage-of-filth",
+      "daemonforge",
+      "deadly-demise-d3",
+      "destroyer-of-futures",
+      "feel-no-pain-6",
+      "scuttling-walker",
+      "unleash-wrath"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -990,7 +1073,10 @@
       "hellforged-weapons",
       "infernal-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aetherstride-psychic",
+      "hunter-of-souls"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1043,7 +1129,11 @@
       "chainsword",
       "tzaangor-blades"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ambushing-hunters",
+      "brayhorn",
+      "herd-banner"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1099,7 +1189,11 @@
       "pyreflux-meltagun",
       "warpflame-projector"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "infiltrators",
+      "prophetic-sentinels",
+      "stealth"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1154,7 +1248,11 @@
       "inferno-bolt-pistol",
       "prosperine-khopesh"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "binding-tendrils-psychic",
+      "illusions-of-tzeentch-psychic",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1205,7 +1303,13 @@
       "magma-cutter",
       "maulerfiend-fists"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "glutton-for-punishment",
+      "savage-exaltation",
+      "siege-crawler",
+      "snarling-protector",
+      "the-scent-of-blood"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1258,7 +1362,11 @@
       "inferno-bolt-pistol",
       "prosperine-khopesh"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "arcane-shield-psychic",
+      "leader",
+      "rebind-rubricae-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1312,7 +1420,14 @@
       "inferno-combi-bolter",
       "inferno-combi-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "chaos-familiar",
+      "death-hex-psychic",
+      "empyric-guidance-psychic",
+      "leader",
+      "marked-by-fate-psychic",
+      "warptime-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1366,7 +1481,12 @@
       "lascannon",
       "predator-twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "annihilator",
+      "blood-hungry-annihilator",
+      "ensorcelled-annihilation",
+      "metalophagic-infection"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1417,7 +1537,11 @@
       "forgefiend-jaws",
       "hades-autocannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blazing-salvoes",
+      "daemonic-ordnance",
+      "furious-onslaught"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1468,7 +1592,11 @@
       "hades-autocannon",
       "heldrake-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "airborne-predator",
+      "flame-wreathed",
+      "hover"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1520,7 +1648,11 @@
       "hellforged-weapons",
       "infernal-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "glamour-of-tzeentch-aura-psychic",
+      "servile-pawns",
+      "spirit-snare"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

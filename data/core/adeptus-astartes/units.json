@@ -44,7 +44,11 @@
       "ferocity",
       "sword-of-the-high-marshals"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "crusade-of-wrath",
+      "high-marshal",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -97,7 +101,10 @@
       "lancer-laser-destroyer",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aquilon-optics",
+      "deadly-demise-d3"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -154,7 +161,12 @@
       "power-weapon",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deep-strike",
+      "fury-of-the-first",
+      "judgement-of-the-weak",
+      "teleport-homer"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -207,7 +219,11 @@
       "master-crafted-power-weapon",
       "plasma-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "inspirational-exemplar",
+      "leader",
+      "pious-fervour"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -274,7 +290,10 @@
       "thunder-hammer",
       "twin-lightning-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "attached-unit",
+      "exploit-their-cowardice"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -347,7 +366,9 @@
       "pyre-pistol",
       "pyreblaster"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "righteous-zeal"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -401,7 +422,11 @@
       "master-crafted-power-weapon",
       "pyre-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "condemnatory-annihilation",
+      "leader",
+      "remorseless-persecution"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -462,7 +487,10 @@
       "sternguard-bolt-rifle",
       "sternguard-heavy-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "sternguard-focus",
+      "virtuous-onslaught"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -517,7 +545,11 @@
       "storm-bolter",
       "twin-assault-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "assault-ramp",
+      "deadly-demise-d6",
+      "legacy-of-jerulas"
+    ],
     "transport_capacity": {
       "capacity": 16
     },
@@ -584,7 +616,12 @@
       "close-combat-weapon",
       "plasma-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "feel-no-pain-5",
+      "leader",
+      "litanies-of-the-devout",
+      "temple-relics"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -639,7 +676,11 @@
       "heavy-bolt-pistol",
       "master-crafted-power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "prioritised-eradication",
+      "vehement-aggression"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -691,7 +732,9 @@
       "black-sword",
       "bolt-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -746,7 +789,12 @@
       "ironhail-skytalon-array",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "assault-vehicle",
+      "firing-deck-6",
+      "orbital-comms-array-aura",
+      "shield-dome"
+    ],
     "transport_capacity": {
       "capacity": 7,
       "exclusion_keywords": [
@@ -808,7 +856,10 @@
       "twin-heavy-bolter",
       "twin-icarus-ironhail-heavy-stubber"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "executioner",
+      "interception-strike"
+    ],
     "transport_capacity": {
       "capacity": 7
     },
@@ -862,7 +913,9 @@
       "multi-melta",
       "twin-las-talon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "priority-target-acquisition"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -914,7 +967,11 @@
       "bolt-pistol",
       "master-crafted-power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "martial-honour",
+      "vengeful-exhortation"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -969,7 +1026,10 @@
       "twin-heavy-bolter",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "emergency-combat-embarkation",
+      "stabilised-disembarkation"
+    ],
     "transport_capacity": {
       "capacity": 14
     },
@@ -1023,7 +1083,9 @@
       "tempest-bolter",
       "twin-heavy-onslaught-gatling-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "reaping-tally"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1077,7 +1139,11 @@
       "twin-icarus-ironhail-heavy-stubber",
       "twin-multi-melta"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "black-rage",
+      "driven-by-fury",
+      "feel-no-pain-6"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1128,7 +1194,11 @@
       "absolver-bolt-pistol",
       "astartes-chainsword"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blood-chalice",
+      "leader",
+      "sanguinary-priest"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1187,7 +1257,11 @@
       "power-fist",
       "relic-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "death-vision-of-sanguinius",
+      "leader",
+      "lost-to-fury"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1249,7 +1323,9 @@
       "power-weapon",
       "thunder-hammer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "an-honourable-death-in-combat"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1302,7 +1378,11 @@
     "weapon_ids": [
       "the-executioners-axe"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "mass-of-doom",
+      "redeemer-of-the-lost"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1357,7 +1437,11 @@
       "power-fist",
       "relic-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "finest-hour",
+      "leader",
+      "rites-of-battle"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1412,7 +1496,13 @@
       "plasma-pistol",
       "vitarus"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "feel-no-pain-4",
+      "fights-first",
+      "lone-operative",
+      "the-quickening-psychic",
+      "transfixing-gaze-aura-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1467,7 +1557,11 @@
       "absolvor-bolt-pistol",
       "the-blood-crozius"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fury-unbound",
+      "guardian-of-the-lost",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1523,7 +1617,11 @@
       "perdition-pistol",
       "the-axe-mortalis"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "death-mask-of-sanguinius",
+      "leader",
+      "warden-of-the-imperium-nihilus"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1588,7 +1686,9 @@
       "power-weapon",
       "thunder-hammer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "visions-of-heresy"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1640,7 +1740,10 @@
     "weapon_ids": [
       "encarmine-broadsword"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aura-of-fervour-aura",
+      "miraculous-saviour"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1697,7 +1800,11 @@
       "encarmine-spear",
       "inferno-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "angelic-visage",
+      "heirs-of-azkaellon",
+      "sanguinary-banner"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1750,7 +1857,9 @@
       "storm-bolter",
       "twin-assault-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "overcharged-engines"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1812,7 +1921,9 @@
       "power-fist",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "savage-fury"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1867,7 +1978,10 @@
       "power-fist",
       "relic-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "forlorn-hero",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1924,7 +2038,9 @@
       "thunder-hammer",
       "twin-boltgun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1975,7 +2091,9 @@
       "close-combat-weapon",
       "heavy-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "icon-of-old-caliban-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2030,7 +2148,9 @@
       "bolt-pistol",
       "plasma-talon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "knights-of-caliban"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2085,7 +2205,12 @@
       "the-deliverer",
       "traitors-bane"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "book-of-salvation",
+      "engulfing-fear-psychic",
+      "leader",
+      "psychic-hood"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2145,7 +2270,10 @@
       "power-weapon",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deathwing",
+      "watcher-in-the-dark"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2198,7 +2326,10 @@
       "calibanite-greatsword",
       "heavy-bolt-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "braziers-of-judgement",
+      "enmity-for-the-unworthy"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2252,7 +2383,12 @@
       "lions-wrath",
       "the-sword-of-secrets"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "masterful-tactician",
+      "supreme-grand-master",
+      "the-lion-helm"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2304,7 +2440,9 @@
       "heavy-bolter",
       "plasma-storm-battery"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "storm-of-vengeance"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2357,7 +2495,10 @@
       "nephilim-lascannons",
       "twin-heavy-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hover",
+      "lightning-fast-manoeuvres"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2411,7 +2552,11 @@
       "crozius-arcanum-and-power-weapon",
       "heavy-bolt-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "exemplar-of-hate",
+      "feared-interrogator",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2463,7 +2608,9 @@
       "power-weapon",
       "relic-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "inner-circle"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2516,7 +2663,11 @@
       "master-crafted-storm-bolter",
       "the-sword-of-silence"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "grand-master-of-the-deathwing",
+      "leader",
+      "strikes-of-retribution"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2622,7 +2773,12 @@
       "master-crafted-power-weapon",
       "plasma-talon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "astartes-banner",
+      "honour-or-death",
+      "leader",
+      "narthecium"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2677,7 +2833,11 @@
       "bolt-pistol",
       "enmitys-edge"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "intractable-will",
+      "leader",
+      "the-spiritshield-helm"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2729,7 +2889,9 @@
       "hurricane-bolter",
       "rift-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "stasis-bomb"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2785,7 +2947,11 @@
       "the-raven-sword",
       "twin-storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cut-off-their-escape",
+      "grand-master-of-the-ravenwing",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2838,7 +3004,12 @@
       "hellfire-extremis",
       "master-crafted-power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "feel-no-pain-6",
+      "leader",
+      "tactical-instinct",
+      "unstoppable-champion"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2897,7 +3068,9 @@
       "multi-melta",
       "twin-power-fists"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "indomitor-doctrines"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2967,7 +3140,10 @@
       "stalker-pattern-boltgun",
       "xenophase-blade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "astartes-shield",
+      "death-to-the-alien"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3111,7 +3287,9 @@
       "power-fist",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "talonstrike-doctrines"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3161,7 +3339,12 @@
     "weapon_ids": [
       "vigil-spear"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "rites-of-battle",
+      "strategic-knowledge",
+      "watch-master"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3216,7 +3399,14 @@
       "twin-assault-cannon",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "auspex-array",
+      "blackstar-cluster-launcher",
+      "deadly-demise-d6",
+      "hover",
+      "infernum-halo-launcher",
+      "stealth"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -3276,7 +3466,10 @@
       "thunder-hammer",
       "twin-lightning-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "storm-shield",
+      "terminatus-assault"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3341,7 +3534,9 @@
       "thunder-hammer",
       "vengor-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fortis-doctrines"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3400,7 +3595,14 @@
       "paired-combat-blades",
       "special-issue-bolt-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "helix-gauntlet",
+      "infiltrator-comms-array",
+      "infiltrators",
+      "instigator-bolt-carbine",
+      "scouts-6",
+      "spectrus-doctrines"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3455,7 +3657,10 @@
       "relic-chainsword",
       "relic-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "refuse-to-yield"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3508,7 +3713,11 @@
       "drakkis",
       "malleus-noctum"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "lord-of-the-pyroclasts",
+      "unto-the-anvil"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3568,7 +3777,9 @@
       "power-weapon",
       "thunder-hammer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "targeted-intercession"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3622,7 +3833,9 @@
       "close-combat-weapon",
       "plasma-exterminators"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "meteoric-descent"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3676,7 +3889,11 @@
       "thunder-hammer",
       "twin-lightning-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "keep-the-banner-high",
+      "leader",
+      "terminator-storm-shield"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3726,7 +3943,9 @@
       "onslaught-gatling-cannon",
       "twin-ironhail-heavy-stubber"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hailstrike"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3778,7 +3997,12 @@
       "omnissiah-power-axe",
       "servo-arm"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blessing-of-the-omnissiah",
+      "leader",
+      "techmarine",
+      "vengeance-of-the-omnissiah"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3831,7 +4055,9 @@
       "bolt-pistol",
       "moonfang"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3886,7 +4112,11 @@
       "power-sword",
       "stormtooth"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "skilled-riders",
+      "spear-of-chogoris"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3941,7 +4171,11 @@
       "claws-of-severax",
       "heavy-bolt-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blackwing-mantle",
+      "chapter-master-of-the-raven-guard",
+      "master-of-shadows"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3995,7 +4229,9 @@
       "melta-rifle",
       "multi-melta"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "total-obliteration"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4047,7 +4283,10 @@
       "force-weapon",
       "smite"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "mental-fortress-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4100,7 +4339,12 @@
       "hellfire-extremis",
       "master-crafted-power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "feel-no-pain-6",
+      "leader",
+      "tactical-instinct",
+      "unstoppable-champion"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4152,7 +4396,12 @@
     "weapon_ids": [
       "fist-of-dorn"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "icon-of-obstinacy",
+      "inspiring-commander",
+      "leader",
+      "rampart"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4208,7 +4457,10 @@
       "storm-bolter",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-1",
+      "wisdom-of-the-ancients-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4310,7 +4562,9 @@
       "predator-autocannon",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "destructor"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4364,7 +4618,9 @@
       "neo-volkite-pistol",
       "plasma-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bladeguard"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4416,7 +4672,9 @@
       "twin-firestrike-autocannon",
       "twin-firestrike-las-talon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "sentinel-protocols"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4470,7 +4728,12 @@
       "ironhail-skytalon-array",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "assault-vehicle",
+      "firing-deck-6",
+      "orbital-comms-array-aura",
+      "shield-dome"
+    ],
     "transport_capacity": {
       "capacity": 7,
       "exclusion_keywords": [
@@ -4525,7 +4788,9 @@
       "krakstorm-grenade-launcher",
       "melta-destroyer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hammerstrike"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4577,7 +4842,11 @@
       "artificer-grav-gun",
       "hand-of-defiance"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "siege-captain",
+      "signum-array"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4627,7 +4896,11 @@
       "absolver-bolt-pistol",
       "executioner-relic-blade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "silent-fury",
+      "tempormortis"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4681,7 +4954,11 @@
       "master-crafted-bolt-carbine",
       "master-crafted-power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "banner-of-macragge",
+      "glory-of-ultramar",
+      "ultramarines-honour-guard"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4733,7 +5010,10 @@
       "lancer-laser-destroyer",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aquilon-optics",
+      "deadly-demise-d3"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4784,7 +5064,10 @@
       "relic-weapon",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "unstoppable-valour"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4836,7 +5119,12 @@
       "emperors-sword",
       "hand-of-dominion"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "armour-of-fate",
+      "author-of-the-codex",
+      "supreme-commander",
+      "ultramarines-bodyguard"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4882,7 +5170,12 @@
       "max": 1
     },
     "weapon_ids": [],
-    "ability_ids": [],
+    "ability_ids": [
+      "combat-disembarkation",
+      "deployment-complete",
+      "designer-s-note",
+      "drop-pod-assault"
+    ],
     "transport_capacity": {
       "capacity": 12,
       "exclusion_keywords": [
@@ -4945,7 +5238,11 @@
       "relic-weapon",
       "thunder-hammer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "angel-s-wrath",
+      "leader",
+      "relic-shield"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4995,7 +5292,9 @@
       "thunderstrike-las-talon",
       "twin-icarus-rocket-pod"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "thunderstrike"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -5049,7 +5348,10 @@
       "twin-heavy-bolter",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "emergency-combat-embarkation",
+      "stabilised-disembarkation"
+    ],
     "transport_capacity": {
       "capacity": 14
     },
@@ -5100,7 +5402,11 @@
       "hammerfall-heavy-flamer-array",
       "hammerfall-missile-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ceramite-cover",
+      "defensive-array",
+      "fortification"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -5151,7 +5457,9 @@
       "bolt-pistol",
       "close-combat-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "suppression-fire"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -5203,7 +5511,10 @@
       "smite",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "veil-of-time-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -5270,7 +5581,10 @@
       "storm-bolter",
       "thunder-hammer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "armorium-cherub",
+      "signum"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -5328,7 +5642,9 @@
       "multi-melta",
       "twin-power-fists"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "indomitor-doctrines"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -5398,7 +5714,10 @@
       "stalker-pattern-boltgun",
       "xenophase-blade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "astartes-shield",
+      "death-to-the-alien"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -5452,7 +5771,9 @@
       "gauntlet-of-the-forge",
       "spear-of-vulkan"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -5508,7 +5829,9 @@
       "twin-heavy-bolter",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "decimator-protocols"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -5564,7 +5887,10 @@
       "twin-heavy-bolter",
       "twin-icarus-ironhail-heavy-stubber"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "executioner",
+      "interception-strike"
+    ],
     "transport_capacity": {
       "capacity": 7
     },
@@ -5621,7 +5947,9 @@
       "plasma-incinerator",
       "plasma-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "for-the-chapter"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -5677,7 +6005,9 @@
       "heavy-bolt-rifle",
       "heavy-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "unyielding-in-the-face-of-the-foe"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -5730,7 +6060,12 @@
       "harrowhand",
       "medusan-manipuli"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "iron-father",
+      "leader",
+      "master-of-the-forge",
+      "rites-of-tempering"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -5866,7 +6201,9 @@
       "missile-launcher",
       "scout-sniper-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "guerrilla-tactics"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -5917,7 +6254,12 @@
     "weapon_ids": [
       "gauntlets-of-ultramar"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "inspiring-leader",
+      "leader",
+      "lord-calgar",
+      "master-tactician"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -5968,7 +6310,11 @@
       "absolver-bolt-pistol",
       "close-combat-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "surgical-precision",
+      "vivispectrum"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -6021,7 +6367,9 @@
       "twin-icarus-ironhail-heavy-stubber",
       "twin-multi-melta"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "brutalis-charge"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -6073,7 +6421,10 @@
       "force-weapon",
       "smite"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "shrouding-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -6125,7 +6476,10 @@
       "close-combat-weapon",
       "reductor-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "gene-seed-recovery",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -6237,7 +6591,11 @@
       "plasma-pistol",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "tactical-precision",
+      "target-priority"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -6291,7 +6649,11 @@
       "rod-of-tigurius",
       "storm-of-the-emperors-wrath"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hood-of-hellfire",
+      "leader",
+      "master-of-prescience-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -6344,7 +6706,9 @@
       "twin-lascannon",
       "typhoon-missile-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "strafing-run"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -6398,7 +6762,11 @@
       "master-crafted-bolter",
       "master-crafted-chainsword"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "demetrian-titus",
+      "honour-of-ultramar",
+      "press-the-attack"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -6451,7 +6819,10 @@
       "twin-heavy-bolter",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fire-focus",
+      "fire-support"
+    ],
     "transport_capacity": {
       "capacity": 6,
       "exclusion_keywords": [
@@ -6508,7 +6879,10 @@
       "instigator-bolt-carbine",
       "las-fusil"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "mark-the-target",
+      "reposition-under-covering-fire"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -6582,7 +6956,9 @@
       "onslaught-gatling-cannon",
       "twin-bolt-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "thunderous-impact"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -6634,7 +7010,9 @@
       "superkrak-rocket-launcher",
       "vengor-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "targeter-optics"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -6687,7 +7065,10 @@
       "twin-flamer",
       "twin-meltagun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "annihilator-protocols",
+      "centurion-assault-launcher"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -6736,7 +7117,9 @@
       "hunter-killer-missile",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "siege-shield"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -6805,7 +7188,9 @@
       "thunder-hammer",
       "twin-lightning-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "combat-squads"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -6854,7 +7239,9 @@
       "storm-bolter",
       "whirlwind-vengeance-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "pinning-bombardment"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -6907,7 +7294,11 @@
       "artisan-plasma-pistol",
       "talassarian-tempest-blade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "captain-of-the-honour-guard",
+      "knight-champion-of-macragge",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -6975,7 +7366,12 @@
       "master-crafted-power-weapon",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "heroes-of-ultramar",
+      "refractor-field",
+      "second-company-banner",
+      "strategium-command"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -7029,7 +7425,9 @@
       "twin-fragstorm-grenade-launcher",
       "twin-storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "duty-eternal"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -7081,7 +7479,10 @@
       "close-combat-weapon",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "unbreakable-duty"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -7135,7 +7536,12 @@
       "dorns-arrow",
       "fist-of-retribution"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "crimson-fists",
+      "leader",
+      "oath-of-rynn",
+      "to-the-last"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -7185,7 +7591,11 @@
       "crozius-arcanum",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "litany-of-hate",
+      "recitation-of-faith"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -7237,7 +7647,11 @@
       "combi-weapon",
       "paired-combat-blades"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "evade-and-survive",
+      "last-survivor",
+      "priority-objective-identified"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -7291,7 +7705,10 @@
       "occulus-bolt-carbine",
       "paired-combat-blades"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "haywire-mine",
+      "multi-spectrum-array"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -7349,7 +7766,9 @@
       "power-fist",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hammer-of-wrath"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -7417,7 +7836,9 @@
       "power-fist",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "talonstrike-doctrines"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -7469,7 +7890,11 @@
       "axiom",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cerebrex-logic-engine",
+      "cold-and-calculating",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -7528,7 +7953,9 @@
       "plasma-pistol",
       "vanguard-veteran-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "vanguard-assault"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -7580,7 +8007,10 @@
       "master-crafted-heavy-bolter",
       "master-crafted-power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "command-squad",
+      "company-heroes"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -7633,7 +8063,9 @@
       "fragstorm-grenade-launcher",
       "twin-power-fists"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "close-quarters-firepower"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -7687,7 +8119,9 @@
       "twin-heavy-bolter",
       "typhoon-missile-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "interceptor"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -7743,7 +8177,9 @@
       "plasma-pistol",
       "power-fist"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -7795,7 +8231,9 @@
       "predator-twin-lascannon",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "annihilator"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -7845,7 +8283,10 @@
       "crozius-arcanum",
       "twin-bolt-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "catechism-of-fire",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -7902,7 +8343,9 @@
       "twin-multi-melta",
       "typhoon-missile-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "armoured-resilience"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -7957,7 +8400,10 @@
       "combat-knife",
       "master-crafted-special-issue-bolt-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-terror",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -8009,7 +8455,10 @@
       "combat-knife",
       "instigator-bolt-carbine"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "master-of-deceit"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -8060,7 +8509,12 @@
     "weapon_ids": [
       "vigil-spear"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "rites-of-battle",
+      "strategic-knowledge",
+      "watch-master"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -8119,7 +8573,10 @@
       "power-fist",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "exhortation-of-rage",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -8182,7 +8639,10 @@
       "power-weapon",
       "thunder-hammer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "objective-secured",
+      "target-elimination"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -8235,7 +8695,9 @@
       "twin-lascannon",
       "twin-macro-accelerator-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6-2"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -8289,7 +8751,10 @@
       "storm-bolter",
       "twin-assault-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "assault-ramp",
+      "deadly-demise-d6"
+    ],
     "transport_capacity": {
       "capacity": 14
     },
@@ -8349,7 +8814,12 @@
       "power-weapon",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deep-strike",
+      "fury-of-the-first",
+      "judgement-of-the-weak",
+      "teleport-homer"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -8403,7 +8873,11 @@
       "turbo-laser-destructor",
       "twin-heavy-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aerial-assault",
+      "thunderhawk",
+      "thunderhawk-cluster-bombs"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -8454,7 +8928,9 @@
       "tempest-bolter",
       "twin-heavy-onslaught-gatling-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "reaping-tally"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -8508,7 +8984,14 @@
       "twin-assault-cannon",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "auspex-array",
+      "blackstar-cluster-launcher",
+      "deadly-demise-d6",
+      "hover",
+      "infernum-halo-launcher",
+      "stealth"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -8562,7 +9045,11 @@
       "hunter-killer-missile",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "firing-deck-2",
+      "self-repair",
+      "truesilver-aegis-aura"
+    ],
     "transport_capacity": {
       "capacity": 12,
       "exclusion_keywords": [
@@ -8618,7 +9105,9 @@
       "onslaught-gatling-cannon",
       "twin-bolt-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "outrider-escort"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -8672,7 +9161,9 @@
       "close-combat-weapon",
       "marksman-bolt-carbine"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "omni-scramblers"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -8722,7 +9213,9 @@
       "ballistus-missile-launcher",
       "twin-storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ballistus-strike"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -8779,7 +9272,10 @@
       "thunder-hammer",
       "twin-lightning-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "storm-shield",
+      "terminatus-assault"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -8832,7 +9328,9 @@
       "close-combat-weapon",
       "pyreblaster"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "incendiary-terror"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -8892,7 +9390,10 @@
       "sternguard-bolt-rifle",
       "sternguard-heavy-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "sternguard-focus",
+      "virtuous-onslaught"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -8943,7 +9444,9 @@
       "multi-melta",
       "twin-las-talon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "priority-target-acquisition"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -8997,7 +9500,11 @@
       "blackout",
       "the-ravens-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "echo-of-the-ravenspire",
+      "leader",
+      "trifold-path-of-shadow"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -9051,7 +9558,11 @@
       "invictus",
       "sword-of-idaeus"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "master-of-the-fleet",
+      "unorthodox-strategist"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -9103,7 +9614,10 @@
       "master-crafted-bolt-carbine",
       "paired-combat-blades"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "strategic-dispersal"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -9159,7 +9673,11 @@
       "storm-bolter",
       "twin-assault-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "assault-ramp",
+      "deadly-demise-d6",
+      "legacy-of-jerulas"
+    ],
     "transport_capacity": {
       "capacity": 16
     },
@@ -9217,7 +9735,12 @@
       "combat-knife",
       "special-issue-bolt-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fearsome-assault",
+      "grapnel-launcher",
+      "reiver-grav-chute",
+      "terror-troops-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -9282,7 +9805,9 @@
       "thunder-hammer",
       "vengor-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fortis-doctrines"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -9332,7 +9857,10 @@
       "absolver-bolt-pistol",
       "crozius-arcanum"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "spiritual-leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -9385,7 +9913,10 @@
       "twin-ironhail-autocannon",
       "twin-ironhail-heavy-stubber"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "scouts-8",
+      "vanguard-support"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -9436,7 +9967,10 @@
       "close-combat-weapon",
       "heavy-bolt-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deeds-of-heroism",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -9496,7 +10030,14 @@
       "paired-combat-blades",
       "special-issue-bolt-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "helix-gauntlet",
+      "infiltrator-comms-array",
+      "infiltrators",
+      "instigator-bolt-carbine",
+      "scouts-6",
+      "spectrus-doctrines"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -9539,7 +10080,9 @@
       "assault-cannon",
       "tempest-salvo-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "isolate-and-destroy"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -9585,7 +10128,9 @@
       "lascannon",
       "multi-melta"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fire-and-redeploy"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -9626,7 +10171,9 @@
       "deathstorm-cannon-array",
       "deathstorm-missile-array"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deathstorm-assault"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -9718,7 +10265,9 @@
       "twin-heavy-bolter",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "mortis-strike"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -9776,7 +10325,13 @@
       "twin-heavy-flamer",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blizzard-shield",
+      "deadly-demise-1",
+      "fervour-of-the-ancients-aura",
+      "guidance-of-the-ancients-psychic",
+      "wisdom-of-the-ancients-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -9877,7 +10432,9 @@
       "kheres-pattern-assault-cannon",
       "twin-volkite-culverin"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "even-in-death-i-serve"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -9918,7 +10475,9 @@
       "armoured-hull",
       "tarantula-air-defence-missiles"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "sentry-programming"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -9965,7 +10524,9 @@
       "twin-heavy-bolter",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-2d6"
+    ],
     "transport_capacity": {
       "capacity": 55
     },
@@ -10017,7 +10578,9 @@
       "skyreaper-battery",
       "volkite-culverin"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "inviolable-transport"
+    ],
     "transport_capacity": {
       "capacity": 45
     },
@@ -10067,7 +10630,9 @@
       "terrax-melta-cutter",
       "twin-volkite-charger"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "termite-assault"
+    ],
     "transport_capacity": {
       "capacity": 12,
       "exclusion_keywords": [
@@ -10316,7 +10881,9 @@
       "plasma-destroyer",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "armoured-spearhead"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -10463,7 +11030,9 @@
       "twin-heavy-flamer",
       "volkite-falconet-battery"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deredeo-strike"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -10513,7 +11082,9 @@
       "tarsus-scorpii",
       "twin-assault-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "death-hold"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -10559,7 +11130,9 @@
       "storm-bolter",
       "venator-neutron-laser"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ferocious-assault"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -10651,7 +11224,9 @@
       "omega-plasma-array",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "overwhelming-short-range-firepower"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -10697,7 +11272,9 @@
       "lascannon",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "specialised-weapon-system"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -10743,7 +11320,9 @@
       "punisher-rotary-cannon",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "rotating-death"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -10887,7 +11466,9 @@
       "firefury-missile-batteries",
       "twin-magna-melta"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "into-the-foe"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -11087,7 +11668,9 @@
       "twin-heavy-flamer",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "explorator-augury-web"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -11289,7 +11872,9 @@
       "multi-melta",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "sunderer-of-fortresses"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -11336,7 +11921,9 @@
       "multi-melta",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "atomantic-arc-reactor"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -11386,7 +11973,9 @@
       "volkite-cardanelle",
       "volkite-culverin"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "line-breaker"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -11432,7 +12021,9 @@
       "hellstrike-missile-battery",
       "twin-heavy-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aerial-deployment"
+    ],
     "transport_capacity": {
       "capacity": 15
     },
@@ -11487,7 +12078,9 @@
       "twin-heavy-bolter",
       "twin-heavy-flamer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "rolling-fortress"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -11538,7 +12131,9 @@
       "twin-heavy-bolter",
       "twin-heavy-flamer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "titan-killer"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -11593,7 +12188,9 @@
       "thunder-hammer",
       "twin-boltgun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -11639,7 +12236,9 @@
       "bolt-pistol",
       "twin-boltgun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -11693,7 +12292,9 @@
       "thunder-hammer",
       "twin-boltgun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -11746,7 +12347,9 @@
       "storm-bolter",
       "twin-boltgun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -11792,7 +12395,10 @@
       "disintegration-combi-gun",
       "disintegration-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "swift-assault"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -11838,7 +12444,10 @@
       "master-crafted-power-weapon",
       "twin-boltgun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "martial-superiority"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -11885,7 +12494,9 @@
       "quad-heavy-bolter",
       "quad-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "powerful-volley"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -11938,7 +12549,9 @@
       "thunder-hammer",
       "twin-boltgun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "command-squad-bodyguard"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -12025,7 +12638,10 @@
       "boltgun",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "honour-guard",
+      "honour-guard-of-macragge"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -12078,7 +12694,11 @@
       "bolt-pistol",
       "frostfang"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "battle-lust",
+      "leader",
+      "war-howl"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -12134,7 +12754,9 @@
       "teeth-and-claws",
       "wolf-guard-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "thunderous-charge"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -12189,7 +12811,9 @@
       "power-fist",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cunning-hunters"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -12239,7 +12863,10 @@
     "weapon_ids": [
       "teeth-and-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hunting-hounds",
+      "predatory-instinct"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -12289,7 +12916,9 @@
       "absolvor-bolt-pistol",
       "crozius-arcanum"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "healing-balms"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -12364,7 +12993,10 @@
       "paired-master-crafted-power-weapons",
       "teeth-and-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "headhunters",
+      "let-loose-the-wolves"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -12414,7 +13046,12 @@
       "helfrost-pistol",
       "tempest-hammer-and-servo-arm"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "gift-of-the-iron-wolf",
+      "iron-priest",
+      "judgement-of-the-omnissiah",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -12468,7 +13105,11 @@
       "living-lightning",
       "staff-of-the-stormcaller"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "tempest-s-wrath-psychic",
+      "wind-walker-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -12526,7 +13167,9 @@
       "plasma-pistol",
       "power-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "berserk-charge"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -12578,7 +13221,11 @@
       "artificer-crozius-arcanum",
       "plasma-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "oathbound",
+      "slayer-s-oath"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -12632,7 +13279,12 @@
       "storm-bolter",
       "tyrnak-and-fenrir"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "embarking-within-transports",
+      "guile-of-the-wolf-aura",
+      "high-king-of-fenris",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -12690,7 +13342,9 @@
       "storm-bolter",
       "twin-lightning-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "rugged-resilience"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -12748,7 +13402,13 @@
       "twin-heavy-flamer",
       "twin-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blizzard-shield",
+      "deadly-demise-1",
+      "fervour-of-the-ancients-aura",
+      "guidance-of-the-ancients-psychic",
+      "wisdom-of-the-ancients-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -12799,7 +13459,10 @@
       "heavy-flamer",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bestial-rage",
+      "violent-fury"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -12851,7 +13514,10 @@
       "stormfrag-auto-launcher",
       "thunder-hammer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "death-totem",
+      "hammer-blow"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -12907,7 +13573,10 @@
       "multi-melta",
       "trueclaw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ancient-tactician",
+      "legendary-tenacity"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -12957,7 +13626,11 @@
     "weapon_ids": [
       "foehammer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "anvil-of-endurance",
+      "champion-of-the-kingsguard",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -13012,7 +13685,11 @@
       "plasma-pistol",
       "thunder-hammer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "heroic-last-stand",
+      "leader",
+      "tempered-ferocity"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -13084,7 +13761,10 @@
       "teeth-and-claws",
       "thunderclap"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-stalkers",
+      "scouts-7"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -13135,7 +13815,9 @@
       "stormfrag-auto-launcher",
       "wulfen-weapons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "savage-frenzy"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -13189,7 +13871,11 @@
       "murderclaws",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bestial-fury",
+      "force-of-untamed-destruction",
+      "murder-maker"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -13238,7 +13924,9 @@
       "iron-priest-hammer",
       "servo-arm"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

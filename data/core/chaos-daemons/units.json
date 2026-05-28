@@ -45,7 +45,12 @@
       "warpclaw",
       "warpsword"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "daemonic-allegiance",
+      "deadly-demise-d3",
+      "deep-strike",
+      "scuttling-walker"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -95,7 +100,10 @@
       "hellforged-weapons",
       "infernal-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "harbinger-of-death",
+      "malefic-destruction"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -144,7 +152,11 @@
       "hellforged-weapons",
       "infernal-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "daemonic-lord",
+      "prince-of-darkness-aura",
+      "unholy-vigour"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -196,7 +208,13 @@
       "gnarlrod",
       "streams-of-brackish-filth"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6",
+      "deluge-of-nurgle-aura",
+      "feel-no-pain-6",
+      "greater-daemon-of-nurgle-aura",
+      "virulent-blessing-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -247,7 +265,12 @@
     "weapon_ids": [
       "serrated-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dazzling-acrobatics",
+      "fights-first",
+      "lone-operative",
+      "the-eternal-dance"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -296,7 +319,11 @@
     "weapon_ids": [
       "slashing-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "daemonic-icon",
+      "horrifying-beauty",
+      "instrument-of-chaos"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -349,7 +376,10 @@
     "weapon_ids": [
       "diseased-claws-and-teeth"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "infiltrators",
+      "mischief-makers"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -398,7 +428,11 @@
     "weapon_ids": [
       "blade-of-blood"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "a-gory-path",
+      "bloodmaster",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -449,7 +483,11 @@
     "weapon_ids": [
       "ravaging-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "symphony-of-pain-psychic",
+      "tranceweaver"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -500,7 +538,9 @@
       "flamer-mouths",
       "screamer-bites"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "eldritch-flames-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -566,7 +606,10 @@
       "pink-claws",
       "yellow-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two",
+      "split"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -616,7 +659,11 @@
       "heartstring-lyre",
       "ravaging-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "discordant-disruption-aura",
+      "harmonic-alignment",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -666,7 +713,9 @@
     "weapon_ids": [
       "plaguesword"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "infected-outbreak"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -720,7 +769,12 @@
       "snapping-claws",
       "witstealer-sword"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "daemon-lord-of-slaanesh-aura",
+      "greater-daemon-of-slaanesh-aura",
+      "mesmerising-form",
+      "shining-aegis"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -774,7 +828,10 @@
       "snapping-claws",
       "soulpiercer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "monarch-of-the-hunt",
+      "no-prey-can-evade"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -826,7 +883,10 @@
       "lashing-tongue",
       "slashing-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "scouts-9",
+      "unholy-speed"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -879,7 +939,9 @@
       "cacophonic-choir",
       "scourging-whip"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -932,7 +994,9 @@
     "weapon_ids": [
       "lamprey-bite"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "slashing-dive"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -981,7 +1045,9 @@
     "weapon_ids": [
       "hellblade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bane-of-cowards"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1035,7 +1101,11 @@
       "rod-of-sorcery",
       "staff-of-tzeentch"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "daemon-lord-of-tzeentch-aura",
+      "greater-daemon-of-tzeentch-aura",
+      "master-of-magicks-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1086,7 +1156,11 @@
       "arcane-fireball",
       "herald-combat-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "changecaster",
+      "leader",
+      "storm-of-mutating-sorcery-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1132,7 +1206,11 @@
       "max": 1
     },
     "weapon_ids": [],
-    "ability_ids": [],
+    "ability_ids": [
+      "diseased-cover",
+      "fortification",
+      "shroud-of-flies-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1186,7 +1264,10 @@
       "plague-flail",
       "putrid-vomit"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "daemon-lord-of-nurgle-aura",
+      "nurgle-s-rot-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1238,7 +1319,9 @@
       "hellblade",
       "juggernauts-bladed-horn"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "brass-stampede"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1289,7 +1372,9 @@
     "weapon_ids": [
       "barbed-tail-and-dissecting-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "soporific-musk"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1340,7 +1425,11 @@
       "bellow-of-endless-fury",
       "slaughter-and-carnage"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "greater-daemon-of-khorne-aura",
+      "murderlust",
+      "rage-embodied-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1443,7 +1532,11 @@
       "acidic-maw",
       "lopping-shears"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "beast-handler",
+      "leader",
+      "seed-the-garden-of-nurgle"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1494,7 +1587,11 @@
       "coiled-tentacles",
       "ravaging-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "horrible-fascination-psychic",
+      "leader",
+      "swallow-energy-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1545,7 +1642,12 @@
     "weapon_ids": [
       "foul-balesword"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "feculent-despair-aura-psychic",
+      "feel-no-pain-5",
+      "leader",
+      "poxbringer"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1599,7 +1701,11 @@
       "herald-combat-weapon",
       "screamer-bites"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fateskimmer",
+      "leader",
+      "rider-of-the-immaterial-winds"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1653,7 +1759,9 @@
       "seeker-tongues",
       "slashing-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cutting-down-the-foe"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1707,7 +1815,9 @@
       "foul-mouthparts",
       "plaguesword"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "death-s-heads"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1761,7 +1871,10 @@
       "hellfire-breath",
       "lash-of-khorne"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "daemon-lord-of-khorne-aura",
+      "relentless-carnage"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1812,7 +1925,12 @@
       "fire-of-tzeentch",
       "flamer-mouths"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blazing-warpfire-psychic",
+      "flames-of-change-psychic",
+      "leader",
+      "manifestation-of-destruction"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1863,7 +1981,11 @@
       "blade-of-blood",
       "juggernauts-bladed-horn"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "devastating-charge",
+      "leader",
+      "skullmaster-s-fury"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1914,7 +2036,11 @@
     "weapon_ids": [
       "balesword-and-nurgling-attendants"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blessed-by-the-plague-god",
+      "leader",
+      "tally-of-pestilence"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1966,7 +2092,12 @@
       "scalding-roar",
       "soul-rending-fangs"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "brass-collar-of-bloody-vengeance",
+      "leader",
+      "pack-leader",
+      "prey-of-the-blood-god"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2017,7 +2148,11 @@
       "disgusting-sneezes",
       "plaguesword-and-distended-maw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "keep-counting",
+      "leader",
+      "meet-your-quota"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2070,7 +2205,11 @@
       "seeker-tongues",
       "slashing-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hysterical-frenzy",
+      "leader",
+      "tormentbringer-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2121,7 +2260,11 @@
     "weapon_ids": [
       "the-slayer-sword"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "lord-of-decapitations",
+      "skulls-for-khorne"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2172,7 +2315,10 @@
       "attendants-hellblades",
       "blade-of-blood"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blood-throne",
+      "champion-slayer"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2217,7 +2363,10 @@
       "max": 1
     },
     "weapon_ids": [],
-    "ability_ids": [],
+    "ability_ids": [
+      "cover",
+      "shadow-of-khorne-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2266,7 +2415,11 @@
     "weapon_ids": [
       "marotter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "disease-of-mirth-aura",
+      "jolly-gutpipes",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2320,7 +2473,10 @@
       "infernal-gateway",
       "staff-of-tomorrow"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "one-head-looks-back-aura",
+      "one-head-looks-forward"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2373,7 +2529,10 @@
       "coruscating-yellow-flames",
       "yellow-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "exploding-horrors",
+      "sullen-malevolence-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2424,7 +2583,10 @@
     "weapon_ids": [
       "sharp-quills"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "p-tarix-s-sorcerous-syphon-aura",
+      "xirat-p-s-sorcerous-barrages-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2476,7 +2638,11 @@
       "infernal-flames",
       "the-tricksters-staff"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "formless-horror",
+      "mischief-and-confusion",
+      "stealth"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2528,7 +2694,11 @@
       "arcane-fireball",
       "herald-combat-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "altered-reality-psychic",
+      "fluxmaster",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2582,7 +2752,9 @@
       "flamer-mouths",
       "flickering-flames"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bounding-leaps"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2633,7 +2805,11 @@
     "weapon_ids": [
       "putrid-appendages"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-1",
+      "grotesque-regeneration",
+      "scouts-6"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2685,7 +2861,10 @@
       "burning-roar",
       "gore-drenched-fangs"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "collar-of-khorne",
+      "hunters-from-the-warp"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2734,7 +2913,9 @@
       "biting-maw",
       "skull-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "skulls-of-the-fallen"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2781,7 +2962,9 @@
       "blade-of-decay",
       "putrid-vomit"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "emissary-of-the-plague-god-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2829,7 +3012,9 @@
       "snapping-claws",
       "souleater-blade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "emissary-of-the-prince-of-excess-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2968,7 +3153,9 @@
     "weapon_ids": [
       "churning-fangs-and-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "regenerating-monstrosity"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3014,7 +3201,10 @@
       "lashing-tongue",
       "ravaging-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "lethal-caress"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3057,7 +3247,9 @@
     "weapon_ids": [
       "daemonic-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "prey-on-the-weak"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3101,7 +3293,10 @@
       "pox-rider-plaguesword",
       "yawning-maw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bounding-assault",
+      "grandfather-s-blessing"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3144,7 +3339,9 @@
       "grasping-tongue",
       "yawning-maw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "pouncing-leap"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3184,7 +3381,9 @@
     "weapon_ids": [
       "jagged-claws-and-tusked-maw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "warp-spines"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

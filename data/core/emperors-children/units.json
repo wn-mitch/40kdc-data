@@ -44,7 +44,10 @@
       "soulshatter-lascannon",
       "twin-heavy-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "assault-ramp",
+      "deadly-demise-d6"
+    ],
     "transport_capacity": {
       "capacity": 14
     },
@@ -105,7 +108,11 @@
       "power-fist",
       "reaper-autocannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bloody-fury",
+      "deep-strike",
+      "lethal-obsession"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -157,7 +164,15 @@
       "bolt-pistol",
       "force-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "empyric-guidance-psychic",
+      "gift-of-chaos-psychic",
+      "leader",
+      "prescience-psychic",
+      "twisted-sorceries-psychic",
+      "warped-interference-psychic",
+      "wracking-agonies-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -214,7 +229,12 @@
       "rapture-lash",
       "screamer-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "euphoric-strikes",
+      "leader",
+      "lord-of-the-host",
+      "perfectionists"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -266,7 +286,11 @@
       "power-sword",
       "screamer-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "doom-siren",
+      "leader",
+      "obsessive-annunciation"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -313,7 +337,17 @@
     "weapon_ids": [
       "hideous-mutations"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-1",
+      "feel-no-pain-5",
+      "lethal-ichor",
+      "mind-breaking-mutations-aura",
+      "regenerating-monstrosities",
+      "scouts-6",
+      "scouts-8",
+      "scuttling-horrors",
+      "to-slake-its-rage"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -363,7 +397,12 @@
       "hellforged-weapons",
       "infernal-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d3",
+      "ecstatic-death",
+      "excessive-vigour-aura",
+      "lord-of-excess"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -413,7 +452,9 @@
       "screamer-pistol",
       "sonic-blaster"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "terrifying-crescendo"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -473,7 +514,11 @@
       "power-sword",
       "rapture-lash"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "icon-of-excess",
+      "infiltrators",
+      "objective-defiled"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -526,7 +571,14 @@
       "combi-weapon",
       "havoc-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "assault-vehicle",
+      "fire-support",
+      "firing-deck-2",
+      "meet-any-challenge",
+      "self-repair",
+      "sorcerous-support"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -580,7 +632,10 @@
       "hellforged-weapons",
       "infernal-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "daemonic-destruction",
+      "stimulated-by-pain"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -634,7 +689,12 @@
       "malefic-lash",
       "serpentine-tail"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "daemon-primarch-of-slaanesh",
+      "daemonic-poisons",
+      "serpentine",
+      "supreme-commander"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -684,7 +744,12 @@
       "blade-of-the-laer",
       "lash-of-torment"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "a-challenge-worthy-of-skill",
+      "duellist-s-hubris",
+      "leader",
+      "lone-operative"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -736,7 +801,11 @@
       "hades-autocannon",
       "heldrake-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "airborne-predator",
+      "flame-wreathed",
+      "hover"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -793,7 +862,9 @@
       "power-sword",
       "rapture-lash"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "excessive-assault"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -843,7 +914,13 @@
       "magma-cutters",
       "maulerfiend-fists"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "glutton-for-punishment",
+      "savage-exaltation",
+      "siege-crawler",
+      "snarling-protector",
+      "the-scent-of-blood"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -895,7 +972,9 @@
       "blissblade",
       "bolt-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "daemonic-patrons"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

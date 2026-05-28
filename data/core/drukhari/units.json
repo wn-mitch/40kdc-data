@@ -46,7 +46,12 @@
       "splinter-pistol",
       "splinter-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cluster-caltrops",
+      "eviscerating-fly-by",
+      "grav-talon",
+      "matchless-swiftness"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -99,7 +104,12 @@
       "spirit-syphon",
       "spirit-vortex"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-1",
+      "feel-no-pain-5",
+      "pain-engine-aura",
+      "pain-parasite"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -147,7 +157,12 @@
     "weapon_ids": [
       "archite-glaive-and-agoniser"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bloody-spectacle",
+      "leader",
+      "lithe-agility",
+      "storm-of-blades"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -203,7 +218,12 @@
       "splinter-pods",
       "stunclaw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "battlefield-butchery",
+      "deep-strike",
+      "phantasm-grenade-launcher",
+      "skyboard-evasion"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -254,7 +274,12 @@
       "splinter-cannon",
       "twin-splinter-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aerialists",
+      "firing-deck-6",
+      "rapid-deployment",
+      "stealth"
+    ],
     "transport_capacity": {
       "capacity": 6
     },
@@ -313,7 +338,10 @@
       "shredder",
       "splinter-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "murderous-crossfire",
+      "swooping-descent"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -369,7 +397,11 @@
       "splinter-pistol",
       "splinter-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cruel-enforcers",
+      "kabalite-icon",
+      "sadistic-raiders"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -420,7 +452,12 @@
       "dark-lance",
       "disintegrator-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d3",
+      "firing-deck-11",
+      "splinter-racks",
+      "vanguard-of-the-dark-city"
+    ],
     "transport_capacity": {
       "capacity": 11
     },
@@ -473,7 +510,13 @@
     "weapon_ids": [
       "leliths-blades"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blur-of-blades",
+      "brides-of-death",
+      "fights-first",
+      "leader",
+      "thrilling-spectacle"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -526,7 +569,10 @@
       "splinter-cannon",
       "twin-splinter-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ground-attack-craft",
+      "nowhere-to-run"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -586,7 +632,10 @@
       "splinter-cannon",
       "splinter-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "airborne-evasion",
+      "winged-strike"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -645,7 +694,11 @@
       "twin-liquifier-gun",
       "twin-splinter-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "devoted-to-pain",
+      "mindless-killing-machines",
+      "torture-device"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -707,7 +760,10 @@
       "torturers-tool",
       "twin-torturers-tools"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "experimental-enhancements",
+      "torturer-s-craft"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -756,7 +812,12 @@
       "haemonculus-tools-and-scissorhands",
       "stinger-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fear-incarnate-aura",
+      "fleshcraft",
+      "leader",
+      "pain-adept"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -809,7 +870,14 @@
       "master-crafted-power-weapon",
       "splinter-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "devious-mastermind",
+      "hatred-eternal",
+      "leader",
+      "overlord",
+      "shadowfield",
+      "soul-trap"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -861,7 +929,12 @@
       "ladys-blade",
       "razor-fan"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "archon-of-the-poisoned-tongue",
+      "leader",
+      "mind-like-a-steel-trap-aura",
+      "precognisant"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -911,7 +984,10 @@
       "dark-lance",
       "disintegrator-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "agonising-suppression",
+      "eradicate-the-foe"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -964,7 +1040,10 @@
       "power-weapon",
       "splinter-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "acrobatic-gladiators",
+      "no-escape"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1023,7 +1102,13 @@
       "splinter-rifle",
       "stinger-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "archon-s-retinue",
+      "archon-s-will",
+      "assassins-poisons",
+      "scouts-7",
+      "stimm-needler"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1073,7 +1158,10 @@
       "void-lance",
       "voidraven-missiles"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "nowhere-to-hide",
+      "void-mine"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1122,7 +1210,12 @@
     "weapon_ids": [
       "executioners-demiklaives"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "master-of-blades",
+      "onslaught",
+      "silent-executioner"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1184,7 +1277,11 @@
       "demiklaives",
       "klaive"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "decapitating-strikes",
+      "incubi-shrine-token",
+      "tormentors"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1235,7 +1332,11 @@
       "baleblast",
       "glimmersteel-blade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fade-away",
+      "infiltrators",
+      "shade-weavers"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1323,7 +1424,9 @@
       "dark-lance",
       "splinterstorm-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "strafing-run"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

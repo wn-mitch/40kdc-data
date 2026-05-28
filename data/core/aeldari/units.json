@@ -44,7 +44,12 @@
       "revenant-pulsar",
       "sonic-lance"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-2d6",
+      "revenant-jet-pack",
+      "titanic-advance",
+      "towering-wraith-construct"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -92,7 +97,11 @@
       "shadow-weaver",
       "shuriken-catapult"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "monofilament-snare",
+      "support-artillery",
+      "support-weapon"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -156,7 +165,13 @@
       "scorpion-chainsword",
       "shuriken-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aspect-shrine-token",
+      "infiltrators",
+      "mandiblasters",
+      "scouts-7",
+      "stealth"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -208,7 +223,11 @@
       "shuriken-pistol",
       "the-staff-of-ulthamar-and-witchblade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "diviner-of-futures",
+      "doom-psychic",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -264,7 +283,11 @@
       "starcannon",
       "wraithbone-fists"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-1",
+      "fated-hero",
+      "psychic-guidance"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -320,7 +343,10 @@
       "twin-starcannon",
       "wraithbone-hull"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d3",
+      "wave-serpent-shield"
+    ],
     "transport_capacity": {
       "capacity": 12,
       "exclusion_keywords": [
@@ -376,7 +402,12 @@
       "kha-vir-the-sword-of-sorrows",
       "storm-of-whispers"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "herald-of-ynnead",
+      "leader",
+      "servant-of-the-whispering-god",
+      "word-of-the-phoenix-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -454,7 +485,12 @@
       "witch-staff",
       "wraithcannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "channeller-stones",
+      "faolchu",
+      "mistshield",
+      "piratical-raiders"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -503,7 +539,9 @@
       "twin-shuriken-catapult",
       "wraithbone-hull"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "crystal-matrix"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -558,7 +596,12 @@
       "shuriken-pistol",
       "star-glaive"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aspect-training",
+      "leader",
+      "path-of-command",
+      "superlative-strategist"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -619,7 +662,9 @@
       "demiklaives",
       "klaive"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "tormentors"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -686,7 +731,10 @@
       "exarchs-dragon-fusion-gun",
       "firepike"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aspect-shrine-token",
+      "assured-destruction"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -738,7 +786,11 @@
       "bloody-twins",
       "sword-of-asur"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hand-of-asuryan",
+      "leader",
+      "tactical-acumen"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -802,7 +854,11 @@
       "power-sword",
       "shuriken-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "crewed-platform",
+      "serpent-shield",
+      "stormblades"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -850,7 +906,9 @@
       "d-cannon",
       "shuriken-catapult"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "structural-collapse"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -907,7 +965,10 @@
       "twin-shuriken-catapult",
       "witchblade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "psychic-communion-psychic",
+      "runes-of-battle-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -961,7 +1022,12 @@
       "spiders-fangs",
       "weaverender"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deep-strike",
+      "empyric-ambush",
+      "leader",
+      "whispering-web"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1010,7 +1076,13 @@
       "jesters-blade",
       "shrieker-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cruel-amusement",
+      "death-is-not-enough",
+      "flip-belt",
+      "lone-operative",
+      "travelling-players"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1061,7 +1133,11 @@
       "shuriken-pistol",
       "spear-of-twilight"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "piratical-hero",
+      "prince-of-corsairs"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1114,7 +1190,11 @@
       "swirling-soul-energy",
       "vilith-zhar"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "avatar-of-the-whispering-god",
+      "ethereal-form",
+      "inevitable-death"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1168,7 +1248,11 @@
       "twin-shuriken-catapult",
       "witchblade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "branching-fates-psychic",
+      "leader",
+      "misfortune-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1217,7 +1301,12 @@
     "weapon_ids": [
       "solitaire-weapons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blitz",
+      "blur-of-movement",
+      "fights-first",
+      "path-of-damnation"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1267,7 +1356,11 @@
     "weapon_ids": [
       "maugetar"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "face-of-death",
+      "harvester-of-souls",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1329,7 +1422,9 @@
       "shredder",
       "shuriken-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "raid-and-run"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1394,7 +1489,9 @@
       "shuriken-catapult",
       "starcannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fleet-of-foot"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1449,7 +1546,10 @@
       "voidstorm-missile-launcher",
       "wraith-glaive"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6-6",
+      "flawless-poise"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1498,7 +1598,10 @@
     "weapon_ids": [
       "the-wailing-doom"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "molten-form",
+      "the-bloody-handed-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1553,7 +1656,10 @@
       "starcannon",
       "war-walker-feet"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "crystalline-targeting",
+      "scouts-9"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1604,7 +1710,11 @@
       "dread-of-the-deep-void",
       "waystave"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aethersense-psychic",
+      "fury-of-the-void-psychic",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1655,7 +1765,9 @@
       "heavy-d-scythe",
       "wraithbone-hull"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "mindshock-pod-aura-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1709,7 +1821,12 @@
       "suncannon",
       "titanic-feet"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6",
+      "point-blank-devastation",
+      "scattershield",
+      "titanic-strides"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1764,7 +1881,11 @@
       "splinter-pistol",
       "splinter-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cluster-caltrops",
+      "eviscerating-fly-by",
+      "grav-talon"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1833,7 +1954,10 @@
       "scatter-laser",
       "sunpistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aspect-shrine-token",
+      "grenade-pack-flyover"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1881,7 +2005,9 @@
       "d-scythe",
       "wraithcannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "war-construct"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1933,7 +2059,11 @@
       "searsong",
       "the-fire-axe"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "burning-lance",
+      "leader",
+      "unquenchable-resolve"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1983,7 +2113,11 @@
       "splinter-pistol",
       "succubus-weapons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "empowered-by-death",
+      "leader",
+      "storm-of-blades"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2049,7 +2183,10 @@
       "star-lance",
       "twin-shuriken-catapult"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "extreme-mobility",
+      "shimmershield"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2097,7 +2234,11 @@
     "weapon_ids": [
       "asu-var"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "way-of-the-blade",
+      "yvraine-s-champion"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2159,7 +2300,9 @@
       "shuriken-rifle",
       "wraithcannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "reavers-of-the-void"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2207,7 +2350,9 @@
       "shuriken-catapult",
       "vibro-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "sonic-destruction"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2258,7 +2403,11 @@
       "neuro-disruptor",
       "shuriken-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fog-of-dreams-psychic",
+      "leader",
+      "treacherous-illusion-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2310,7 +2459,11 @@
       "silent-death",
       "strike"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "storm-of-silence",
+      "whirling-death"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2379,7 +2532,10 @@
       "powerblades",
       "spinneret-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aspect-shrine-token",
+      "flickerjump"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2443,7 +2599,10 @@
       "shuriken-cannon",
       "tempest-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aspect-shrine-token",
+      "inescapable-accuracy"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2498,7 +2657,10 @@
       "splinter-rifle",
       "sybarite-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "phantasm-grenade-launcher",
+      "sadistic-raiders"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2547,7 +2709,9 @@
       "shuriken-cannon",
       "voidweaver-haywire-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "polychromatic-camouflage"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2600,7 +2764,9 @@
       "scatter-laser",
       "shuriken-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "target-acquisition"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2651,7 +2817,10 @@
       "singing-spear",
       "witchblade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "runes-of-fortune-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2705,7 +2874,9 @@
       "starcannon",
       "titanic-ghostglaive"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "titanic-agility"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2755,7 +2926,9 @@
       "hekatarii-blade",
       "splinter-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "no-escape"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2810,7 +2983,9 @@
       "singing-spear",
       "witchblade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "protect-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2861,7 +3036,10 @@
       "singing-spear",
       "witchblade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "guide-psychic",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2911,7 +3089,9 @@
       "twin-shuriken-catapult",
       "wraithbone-hull"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "monofilament-web"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2968,7 +3148,10 @@
       "shuriken-pistol",
       "star-glaive"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "indomitable-strength-of-will",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3034,7 +3217,10 @@
       "power-glaive",
       "shuriken-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aspect-shrine-token",
+      "bladestorm"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3098,7 +3284,10 @@
       "shuriken-pistol",
       "triskele"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "acrobatic",
+      "aspect-shrine-token"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3152,7 +3341,9 @@
       "twin-shuriken-catapult",
       "wraithbone-hull"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fire-support"
+    ],
     "transport_capacity": {
       "capacity": 6,
       "exclusion_keywords": [
@@ -3211,7 +3402,9 @@
       "shuriken-cannon",
       "twin-shuriken-catapult"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "swift-demise"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3263,7 +3456,11 @@
       "shuriken-pistol",
       "troupe-masters-blade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cegorach-s-favour",
+      "choreographer-of-war",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3315,7 +3512,9 @@
       "long-rifle",
       "shuriken-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "path-of-the-outcast"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3366,7 +3565,9 @@
       "starcannon",
       "wraithbone-hull"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "skyhunter"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3417,7 +3618,10 @@
       "dark-lance",
       "disintegrator-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aethersails",
+      "firing-deck-11"
+    ],
     "transport_capacity": {
       "capacity": 11
     },
@@ -3475,7 +3679,9 @@
       "starfang-grenade-launcher",
       "wraithbone-hull"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hallucinogen-grenades"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3530,7 +3736,9 @@
       "star-bolas",
       "zephyrglaive"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "acrobatic-grace"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3579,7 +3787,12 @@
       "huskblade",
       "splinter-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "overlord",
+      "reborn-mastermind",
+      "shadow-field"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3634,7 +3847,11 @@
       "fury-of-the-tempest",
       "shining-blade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cloudstrider",
+      "cry-of-the-wind",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3682,7 +3899,10 @@
       "ghostaxe",
       "ghostswords"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "forceshield",
+      "malevolent-souls"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3745,7 +3965,9 @@
       "power-sword",
       "shuriken-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dance-of-death"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3796,7 +4018,10 @@
       "splinter-cannon",
       "twin-splinter-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "firing-deck-6",
+      "lithe-embarkation"
+    ],
     "transport_capacity": {
       "capacity": 6
     },
@@ -3854,7 +4079,9 @@
       "starcannon",
       "wraithbone-hull"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "harassment-fire"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3903,7 +4130,11 @@
       "shuriken-pistol",
       "witch-staff"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "spirit-mark",
+      "spiritseer",
+      "tears-of-isha-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3954,7 +4185,9 @@
       "close-combat-weapon",
       "shuriken-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "rapid-embarkation"
+    ],
     "transport_capacity": {
       "capacity": 6
     },
@@ -4000,7 +4233,9 @@
       "twin-shuriken-catapult",
       "wraithbone-hull"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "skyfire"
+    ],
     "transport_capacity": {
       "capacity": 6,
       "exclusion_keywords": [
@@ -4050,7 +4285,9 @@
       "twin-shuriken-cannon",
       "wraithbone-hull"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "strafing-run"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4095,7 +4332,11 @@
       "twin-vampire-pulsar",
       "wraithbone-hull"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6-2",
+      "hover",
+      "titan-hunter"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4140,7 +4381,9 @@
       "twin-pulse-laser",
       "wraithbone-hull"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "into-the-foe"
+    ],
     "transport_capacity": {
       "capacity": 30,
       "exclusion_keywords": [
@@ -4192,7 +4435,9 @@
       "starcannon",
       "wasp-feet"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cloudbreakers"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4247,7 +4492,9 @@
       "splinter-cannon",
       "void-sabre"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "skyleap"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4291,7 +4538,9 @@
       "power-blade",
       "ranger-long-rifle"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "the-path-least-travelled"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4333,7 +4582,12 @@
     "weapon_ids": [
       "psytronome-shaper"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bonesinger",
+      "leader",
+      "psytronome-shaper",
+      "way-of-the-shaper-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4384,7 +4638,9 @@
       "twin-shuriken-catapult",
       "void-sabre"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "reckless-abandon"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -4437,7 +4693,9 @@
       "splinter-cannon",
       "void-sabre"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "reaver-band"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

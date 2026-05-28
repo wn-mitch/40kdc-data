@@ -51,6 +51,7 @@
     "codegen:data": "tsx src/codegen-data.ts",
     "gen:conformance": "tsx src/gen-conformance.ts",
     "docs:api": "typedoc",
+    "link:abilities": "tsx src/link-abilities.ts",
     "validate": "tsx src/cli.ts validate-all",
     "validate:core": "tsx src/cli.ts validate-core",
     "validate:enrichment": "tsx src/cli.ts validate-enrichment",

@@ -46,6 +46,8 @@
       "hades-autocannon"
     ],
     "ability_ids": [
+      "blazing-salvoes",
+      "daemonic-ordnance",
       "deadly-demise-d3",
       "furious-onslaught"
     ],
@@ -159,7 +161,9 @@
     "ability_ids": [
       "a-worthy-skull",
       "forwards-for-blood",
-      "leader"
+      "leader",
+      "trophy-taker",
+      "warp-sighted-butcher"
     ],
     "game_version": {
       "edition": "11th",
@@ -512,7 +516,10 @@
     ],
     "ability_ids": [
       "deadly-demise-d3",
+      "glutton-for-punishment",
       "savage-exaltation",
+      "siege-crawler",
+      "snarling-protector",
       "the-scent-of-blood"
     ],
     "game_version": {
@@ -578,7 +585,11 @@
       "twin-lascannon"
     ],
     "ability_ids": [
+      "barrage-of-filth",
+      "daemonforge",
       "deadly-demise-d3",
+      "destroyer-of-futures",
+      "feel-no-pain-6",
       "scuttling-walker",
       "unleash-wrath"
     ],
@@ -640,6 +651,7 @@
     "ability_ids": [
       "airborne-predator",
       "deadly-demise-d3",
+      "flame-wreathed",
       "hover"
     ],
     "game_version": {
@@ -982,9 +994,13 @@
       "havoc-launcher"
     ],
     "ability_ids": [
+      "assault-vehicle",
       "deadly-demise-d3",
+      "fire-support",
       "firing-deck-2",
-      "meet-any-challenge"
+      "meet-any-challenge",
+      "self-repair",
+      "sorcerous-support"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -1052,9 +1068,13 @@
       "twin-lascannon"
     ],
     "ability_ids": [
+      "dark-ascension-aura",
       "deadly-demise-1",
       "devoted-to-destruction",
-      "frenzy"
+      "diseased-malice",
+      "frenzy",
+      "froth-spattered-frenzy",
+      "terrifying-assault"
     ],
     "game_version": {
       "edition": "11th",
@@ -1115,6 +1135,9 @@
     ],
     "ability_ids": [
       "deadly-demise-d3",
+      "destructor",
+      "ensorcelled-destruction",
+      "hail-of-corrosive-disease",
       "punishing-suppression"
     ],
     "game_version": {
@@ -1233,8 +1256,11 @@
       "predator-twin-lascannon"
     ],
     "ability_ids": [
+      "annihilator",
       "blood-hungry-annihilator",
-      "deadly-demise-d3"
+      "deadly-demise-d3",
+      "ensorcelled-annihilation",
+      "metalophagic-infection"
     ],
     "game_version": {
       "edition": "11th",
@@ -1293,7 +1319,8 @@
     ],
     "ability_ids": [
       "bloody-fury",
-      "deep-strike"
+      "deep-strike",
+      "lethal-obsession"
     ],
     "game_version": {
       "edition": "11th",
@@ -1350,8 +1377,10 @@
       "skullhurler"
     ],
     "ability_ids": [
+      "deadly-demise-d6-2",
       "deadly-demise-d6-plus-2",
       "idol-of-blessed-blood",
+      "plough-through-the-enemy",
       "super-heavy-war-engine"
     ],
     "game_version": {
@@ -1409,8 +1438,15 @@
       "hideous-mutations"
     ],
     "ability_ids": [
+      "deadly-demise-1",
+      "feel-no-pain-5",
       "feel-no-pain-5-plus",
+      "lethal-ichor",
+      "mind-breaking-mutations-aura",
+      "regenerating-monstrosities",
+      "scouts-6",
       "scouts-8",
+      "scuttling-horrors",
       "to-slake-its-rage"
     ],
     "game_version": {

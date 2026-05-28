@@ -42,7 +42,11 @@
       "telemon-caestus",
       "twin-plasma-projector"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d3",
+      "devoted-to-destruction",
+      "guardian-eternal"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -91,7 +95,10 @@
       "lastrum-storm-bolter",
       "twin-adrathic-destructor"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-1",
+      "dread-foe"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -137,7 +144,9 @@
     "weapon_ids": [
       "galatus-warblade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "galatus-shield"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -186,7 +195,9 @@
       "kheres-pattern-assault-cannon",
       "multi-melta"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "unyielding-ancient"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -233,7 +244,12 @@
     "weapon_ids": [
       "vaultswords"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deep-strike",
+      "leader",
+      "martial-inspiration",
+      "swift-onslaught"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -283,7 +299,9 @@
       "twin-iliastus-accelerator-cannon",
       "twin-lastrum-bolt-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "advanced-firepower"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -344,7 +362,11 @@
       "guardian-spear",
       "misericordia"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "from-golden-light",
+      "slayers-of-tyrants",
+      "vexilla"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -395,7 +417,11 @@
       "salvo-launcher",
       "vertus-hurricane-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "strategic-mastery",
+      "sweeping-advance"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -454,7 +480,10 @@
     "weapon_ids": [
       "executioner-greatblade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "daughters-of-the-abyss",
+      "deft-parry"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -500,7 +529,11 @@
       "adrastus-bolt-caliver",
       "misericordia"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "custodian-guard",
+      "disintegration-beams",
+      "saturation-volleys"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -559,7 +592,10 @@
       "close-combat-weapon",
       "witchseeker-flamer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "sanctified-flames",
+      "scouts-6"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -608,7 +644,11 @@
       "arachnus-magna-blaze-cannon",
       "armoured-hull"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6",
+      "hover",
+      "infernus-firebombs"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -661,7 +701,11 @@
       "misericordia",
       "sentinel-blade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "praesidium-shield",
+      "sentinel-storm",
+      "stand-vigil"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -712,7 +756,9 @@
       "spiculus-heavy-bolt-launcher",
       "twin-lastrum-bolt-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "assault-dropship"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -766,7 +812,12 @@
       "master-crafted-boltgun",
       "witchseeker-flamer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "corner-the-quarry",
+      "daughter-of-the-abyss",
+      "leader",
+      "seeker-s-instincts"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -819,7 +870,10 @@
       "hunter-killer-missile",
       "storm-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "firing-deck-2",
+      "self-repair"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -871,7 +925,12 @@
     "weapon_ids": [
       "somnus"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "feel-no-pain-5",
+      "leader",
+      "tactical-perception",
+      "tenacious-spirit"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -925,7 +984,11 @@
       "lastrum-bolt-cannon",
       "twin-las-pulsar"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "implacable-vanguard",
+      "jetbike-outriders",
+      "turbo-boost"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -976,7 +1039,9 @@
       "storm-bolter",
       "twin-heavy-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "assault-ramp"
+    ],
     "transport_capacity": {
       "capacity": 6
     },
@@ -1029,7 +1094,10 @@
       "castellan-axe",
       "guardian-spear"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "living-fortress",
+      "resolute-will"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1076,7 +1144,9 @@
       "armoured-hull",
       "twin-arachnus-blaze-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "merciless-hunter"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1128,7 +1198,9 @@
       "salvo-launcher",
       "vertus-hurricane-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "quicksilver-execution"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1177,7 +1249,12 @@
     "weapon_ids": [
       "gnosis"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "feel-no-pain-6",
+      "golden-laurels",
+      "hero-of-lion-s-gate",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1230,7 +1307,12 @@
       "kinetic-destroyer",
       "venatari-lance"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "jump-packs",
+      "strike-from-the-skies",
+      "swooping-dive",
+      "tarsis-buckler"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1280,7 +1362,10 @@
       "castellan-axe",
       "guardian-spear"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "auramite-and-adamantine",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1335,7 +1420,10 @@
       "solerite-power-talon",
       "twin-adrathic-destructor"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "heavy-assault-infantry",
+      "lions-of-the-emperor"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1381,7 +1469,9 @@
       "adrasite-spear",
       "pyrithite-spear"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "no-foe-shall-stand"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1430,7 +1520,9 @@
       "twin-arachnus-blaze-cannon",
       "twin-lastrum-bolt-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fire-support"
+    ],
     "transport_capacity": {
       "capacity": 8
     },
@@ -1492,7 +1584,9 @@
       "boltgun",
       "close-combat-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "purity-of-execution"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1542,7 +1636,10 @@
       "pyrithite-spear",
       "sentinel-blade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "master-of-the-stances"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1592,7 +1689,12 @@
       "eagles-scream",
       "watchers-axe"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "captain-general",
+      "leader",
+      "moment-shackle",
+      "supreme-commander"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

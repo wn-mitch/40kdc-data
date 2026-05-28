@@ -43,7 +43,10 @@
       "titanic-feet",
       "twin-conversion-beam-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-2d6",
+      "sunderer-of-fortresses"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -98,7 +101,11 @@
       "titanic-feet",
       "twin-incendine-combustor"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6",
+      "defender-s-duty-bondsman",
+      "selfless-protector"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -151,7 +158,11 @@
       "reaper-chainfist",
       "twin-heavy-bolter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "acheron-s-duty-bondsman",
+      "deadly-demise-d6-2",
+      "searing-flames"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -205,7 +216,9 @@
       "titanic-feet",
       "twin-magna-lascannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bastion-of-firepower"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -257,7 +270,10 @@
       "castigator-bolt-cannon",
       "tempest-warblade"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "castigator-s-duty-bondsman",
+      "storm-of-bolts"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -315,7 +331,10 @@
       "thunderstrike-gauntlet",
       "twin-icarus-autocannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "paladin-s-duty-bondsman",
+      "seasoned-noble"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -373,7 +392,10 @@
       "thunderstrike-gauntlet",
       "twin-icarus-autocannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aggressive-assault",
+      "errant-s-duty-bondsman"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -433,7 +455,10 @@
       "titanic-feet",
       "twin-icarus-autocannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "crusader-s-duty-bondsman",
+      "punishing-salvoes"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -492,7 +517,10 @@
       "thunderstrike-gauntlet",
       "twin-icarus-autocannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "thin-their-ranks",
+      "warden-s-duty-bondsman"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -551,7 +579,10 @@
       "thunderstrike-gauntlet",
       "twin-icarus-autocannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "exemplar-of-the-code",
+      "mentor-bondsman"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -602,7 +633,10 @@
     "weapon_ids": [
       "cerastus-shock-lance"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "lancer-s-duty-bondsman",
+      "shock-charge"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -655,7 +689,10 @@
       "siege-claw",
       "volkite-veuglaire"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d3",
+      "protection-protocols"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -712,7 +749,10 @@
       "thunderstrike-gauntlet",
       "twin-icarus-autocannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "gallant-s-duty-bondsman",
+      "martial-pride"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -762,7 +802,9 @@
       "reaper-chain-cleaver",
       "thermal-spear"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "impetuous-glory"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -818,7 +860,10 @@
       "twin-meltagun",
       "twin-siegebreaker-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ion-aegis-aura",
+      "thundershock"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -862,7 +907,10 @@
       "close-combat-weapon",
       "hekhturs-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "lone-operative",
+      "using-sir-hekhtur"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -916,7 +964,10 @@
       "freedoms-hand",
       "las-impulsor"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "chainbreaker",
+      "legendary-freeblade"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -972,7 +1023,9 @@
       "twin-siegebreaker-cannon",
       "volcano-lance"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "titan-hunter"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1022,7 +1075,9 @@
       "meltagun",
       "questoris-heavy-stubber"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "suppression-protocols"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1077,7 +1132,10 @@
       "reaper-chainsword",
       "twin-rad-cleanser"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "magaera-s-duty-bondsman",
+      "repair-auto-simulacra"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1132,7 +1190,10 @@
       "twin-rad-cleanser",
       "volkite-chierovile"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "grav-pinned",
+      "styrix-s-duty-bondsman"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1184,7 +1245,10 @@
       "atrapos-lascutter",
       "graviton-singularity-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "atrapos-duty-bondsman",
+      "macro-extinction-protocols"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

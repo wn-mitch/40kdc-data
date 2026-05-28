@@ -39,7 +39,12 @@
       "eadbanger",
       "weirdboy-staff"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "da-jump-psychic",
+      "deadly-demise-d3",
+      "leader",
+      "waaagh-energy"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -88,7 +93,10 @@
       "twin-big-shoota",
       "wing-missiles"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-1",
+      "drill-through"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -153,7 +161,9 @@
       "slugga",
       "twin-dakkagun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "drive-by-dakka"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -207,7 +217,10 @@
       "slugga",
       "spinnin-blades"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deep-strike",
+      "deff-from-above"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -256,7 +269,9 @@
       "rivet-kannon",
       "spiked-ram"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "rivetin-dakka"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -303,7 +318,12 @@
       "power-klaw",
       "urty-syringe"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dok-s-toolz",
+      "grot-orderly",
+      "hold-still-and-say-aargh",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -358,7 +378,9 @@
       "rokkit-launcha",
       "skorcha"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "shooty-power-trip"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -410,7 +432,9 @@
       "kustom-mega-blasta",
       "rokkit-launcha"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dat-s-our-loot"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -461,7 +485,11 @@
       "power-klaw",
       "traktor-blasta"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "more-dakka",
+      "shokk-boosta"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -526,7 +554,11 @@
       "squig-jaws",
       "stikka"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bomb-squig",
+      "feel-no-pain-5",
+      "wild-ride"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -575,7 +607,11 @@
       "big-shoota",
       "uge-choppa"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dead-brutal",
+      "leader",
+      "might-is-right"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -628,7 +664,10 @@
       "twin-tellyport-mega-blasta",
       "twin-wazbom-mega-kannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blastajet-attack-run",
+      "blastajet-force-field"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -681,7 +720,12 @@
       "wreckin-ball",
       "zzap-gun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ard-case",
+      "deadly-demise-d6",
+      "firing-deck-11",
+      "ramshackle-but-rugged"
+    ],
     "transport_capacity": {
       "capacity": 22
     },
@@ -734,7 +778,14 @@
       "morks-teeth",
       "slugga"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "infiltrators",
+      "kunnin-infiltrator",
+      "leader",
+      "lone-operative",
+      "red-skull-kommandos",
+      "stealth"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -787,7 +838,10 @@
       "rokkit-launcha",
       "twin-big-shoota"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "big-an-shooty",
+      "clankin-forward"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -850,7 +904,12 @@
       "makaris-stabba",
       "morks-roar"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ghazghkull-s-waaagh-banner-aura",
+      "leader",
+      "prophet-of-da-great-waaagh",
+      "supreme-commander"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -900,7 +959,11 @@
       "smash-hammer",
       "tankhammer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "attached-unit",
+      "bomb-squigs",
+      "trophy-hunters"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -954,7 +1017,11 @@
       "supa-rokkits",
       "twin-big-shoota"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-2d6",
+      "stompin-forward",
+      "waaagh-effigy-aura"
+    ],
     "transport_capacity": {
       "capacity": 22
     },
@@ -1066,7 +1133,10 @@
       "rokkit-pistol",
       "smash-hammer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "pulsa-rokkit",
+      "tank-hunters"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1130,7 +1200,11 @@
       "rokkit-launcha",
       "slugga"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "distraction-grot",
+      "patrol-squad",
+      "sneaky-gitz"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1200,7 +1274,10 @@
       "shoota",
       "slugga"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bodyguard",
+      "get-da-good-bitz"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1249,7 +1326,10 @@
       "spiked-wheels",
       "wreckin-ball"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "firing-deck-12",
+      "grot-riggers"
+    ],
     "transport_capacity": {
       "capacity": 12,
       "exclusion_keywords": [
@@ -1302,7 +1382,10 @@
     "weapon_ids": [
       "beast-snagga-klaw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "sawbonez"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1355,7 +1438,9 @@
       "skorcha",
       "twin-big-shoota"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "big-an-stompy"
+    ],
     "transport_capacity": {
       "capacity": 12,
       "exclusion_keywords": [
@@ -1418,7 +1503,9 @@
       "smasha-gun",
       "traktor-kannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "splat"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1481,7 +1568,9 @@
       "power-klaw",
       "slugga"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "full-throttle"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1531,7 +1620,10 @@
       "choppa",
       "snazzgun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ammo-runt",
+      "gun-crazy-show-offs"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1580,7 +1672,9 @@
       "big-shoota",
       "twin-supa-shoota"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "boom-bomb"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1630,7 +1724,9 @@
       "skorcha",
       "stompy-feet"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "piston-driven-brutality"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1679,7 +1775,12 @@
       "close-combat-weapon",
       "eyez-of-mork"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "feel-no-pain-6",
+      "leader",
+      "roar-of-mork-psychic",
+      "unstable-oracle"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1730,7 +1831,11 @@
       "beastchoppa",
       "shoota"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "beastboss",
+      "ferocious-rage",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1779,7 +1884,9 @@
       "armoured-hull",
       "twin-supa-shoota"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "dakkastorm"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1832,7 +1939,12 @@
       "power-klaw",
       "tellyport-blasta"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fix-dat-armour-up",
+      "grot-oiler",
+      "kustom-force-field",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1880,7 +1992,10 @@
       "sawn-off-shotgun",
       "squig-launchas"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "buzzer-squigs",
+      "squig-mine"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1946,7 +2061,9 @@
       "slugga",
       "thump-gun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "monster-hunters"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1996,7 +2113,11 @@
       "killa-jet",
       "snagga-klaw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fuel-mixa-grot",
+      "leader",
+      "speedboss"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2045,7 +2166,11 @@
       "killsaw",
       "kustom-mega-slugga"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "know-wotz",
+      "leader",
+      "mekaniak"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2093,7 +2218,9 @@
       "rokkits",
       "saw-blades"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "shokk-tunnel"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2144,7 +2271,11 @@
       "gutrippa",
       "thump-gun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "da-bigger-dey-iz",
+      "leader",
+      "one-last-kill"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2193,7 +2324,11 @@
       "da-grabzappa",
       "squigstoppa"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "special-dose",
+      "super-runts"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2256,7 +2391,10 @@
       "runtherd-tools",
       "slugga"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "runtherd",
+      "thievin-scavengers"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2305,7 +2443,11 @@
       "close-combat-weapon",
       "shokk-attack-gun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deranged-snotling-assault",
+      "grot-assistant",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2358,7 +2500,9 @@
       "stikka-kannon",
       "wurrtower"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "spirit-of-gork-psychic"
+    ],
     "transport_capacity": {
       "capacity": 11
     },
@@ -2414,7 +2558,9 @@
       "kustom-mega-blasta",
       "rokkit-launcha"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "pyromaniaks"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2467,7 +2613,9 @@
       "power-klaw",
       "slugga"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "da-boss-ladz"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2518,7 +2666,11 @@
       "squigosaurs-jaws",
       "thump-gun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "single-minded-predator",
+      "thundering-stampede"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2581,7 +2733,9 @@
       "power-klaw",
       "twin-killsaw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "krumpin-time"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2630,7 +2784,9 @@
       "mek-speshul",
       "spiked-wheels"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "billowing-fumes-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2679,7 +2835,11 @@
       "kannon",
       "supa-kannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "firing-deck-20",
+      "gargantuan",
+      "walking-bastion"
+    ],
     "transport_capacity": {
       "capacity": 20
     },
@@ -2732,7 +2892,9 @@
       "twin-big-shoota",
       "twin-supa-shoota"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "burna-bomb"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2782,7 +2944,9 @@
       "saw-blades",
       "stikka-kannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "on-da-hunt"
+    ],
     "transport_capacity": {
       "capacity": 21
     },
@@ -2836,7 +3000,10 @@
       "power-klaw",
       "twin-sluggas"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "da-biggest-and-da-best",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2884,7 +3051,10 @@
       "rokkit-launcha",
       "skorcha"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aerial-deployment",
+      "big-bomms"
+    ],
     "transport_capacity": {
       "capacity": 12,
       "exclusion_keywords": [
@@ -2933,7 +3103,10 @@
       "twin-big-shoota",
       "wing-missiles"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "interceptor",
+      "small-bomms"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2977,7 +3150,9 @@
       "twin-big-shoota",
       "wing-missiles"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "strafing-run"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3019,7 +3194,10 @@
       "spiked-ram",
       "supa-kannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "big-booms",
+      "firing-deck-6"
+    ],
     "transport_capacity": {
       "capacity": 6,
       "exclusion_keywords": [
@@ -3070,7 +3248,9 @@
       "tracks-and-wheels",
       "wreckin-ball"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "da-bigger-dey-are-da-better-dey-drop"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3115,7 +3295,10 @@
       "tracks-and-wheels",
       "twin-big-shoota"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "da-biggest-booms",
+      "deadly-demise-d6-2"
+    ],
     "transport_capacity": {
       "capacity": 12
     },
@@ -3166,7 +3349,10 @@
       "twin-big-shoota",
       "zzap-gun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "firing-deck-22",
+      "rolling-fortress"
+    ],
     "transport_capacity": {
       "capacity": 22
     },
@@ -3259,7 +3445,11 @@
       "icon-of-da-revolushun",
       "kustom-grot-blasta"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "da-revolushun",
+      "has-yoo-been-a-good-little-grot-this-year",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3314,7 +3504,9 @@
       "slugga",
       "twin-dakkagun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3360,7 +3552,9 @@
       "twin-dakkagun",
       "urty-syringe"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3404,7 +3598,9 @@
       "lobba",
       "zzap-gun"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "big-gunz"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3446,7 +3642,9 @@
       "spiked-wheel",
       "twin-big-shoota"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "speed-freeks"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3528,7 +3726,9 @@
       "grot-guided-bomms",
       "spiked-wheel"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "furious-barrage"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -3570,7 +3770,9 @@
       "spiked-wheels",
       "twin-big-shoota"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "outflank"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

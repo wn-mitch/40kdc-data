@@ -38,7 +38,11 @@
       "autoch-pattern-bolt-pistol",
       "close-combat-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "computational-mastermind",
+      "leader",
+      "predictive-guidance"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -93,7 +97,11 @@
       "plasma-blade-gauntlet",
       "volkanite-disintegrator"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "decisive-destruction",
+      "teleport-crest",
+      "weavefield-crest"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -153,7 +161,11 @@
       "autoch-pattern-bolter",
       "close-combat-weapon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fortify-psychic",
+      "grimnyr-s-regard",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -210,7 +222,13 @@
       "magna-coil-autocannon",
       "plasma-knife"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "multiwave-comms-array",
+      "outflanking-mag-riders",
+      "panspectral-scanner",
+      "rollbar-searchlight",
+      "scouts-9"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -259,7 +277,10 @@
       "plasma-picks",
       "tremor-shells"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "destabilising-quakes",
+      "geomantic-hunters"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -311,7 +332,12 @@
       "magna-coil-autocannon",
       "twin-magna-coil-autocannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-1",
+      "firing-deck-5",
+      "scanner-uplinks",
+      "smoke-launcher"
+    ],
     "transport_capacity": {
       "capacity": 5
     },
@@ -366,7 +392,10 @@
       "plasma-knife",
       "plasma-sword"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "preymark-crest",
+      "purge-response"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -418,7 +447,10 @@
       "twin-bolt-cannon",
       "twin-ion-beamer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6",
+      "multicog-targeting"
+    ],
     "transport_capacity": {
       "capacity": 14
     },
@@ -469,7 +501,12 @@
       "autoch-pattern-bolt-pistol",
       "bane"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "grudge-fuelled-fortitude",
+      "lone-operative",
+      "stealth",
+      "unhinged-vengeance"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -542,7 +579,12 @@
       "manipulator-arms",
       "plasma-torch"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "brokhyr-guild-support",
+      "forgewrought-expertise",
+      "leader",
+      "multispectral-visor"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -592,7 +634,12 @@
       "kromloks-revenge",
       "warforge-gauntlets"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "break-the-foe",
+      "feel-no-pain-4",
+      "leader",
+      "relentless-avalanche"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -644,7 +691,9 @@
       "concussion-gauntlet",
       "plasma-sword"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "merciless-eradication"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -693,7 +742,12 @@
       "blade-of-the-ancestors",
       "volkanite-disintegrator"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "ancestral-fortune",
+      "grim-efficiency",
+      "leader",
+      "rampart-crest"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -745,7 +799,10 @@
       "magna-coil-rifle",
       "plasma-knife"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "infiltrators",
+      "pragmatic-hunters"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -794,7 +851,11 @@
       "darkstar-axe",
       "mass-hammer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "exemplar-of-the-einhyr",
+      "leader",
+      "mass-driver-accelerators"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -848,7 +909,9 @@
       "graviton-blast-cannon",
       "sp-conversion-beamer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "breaching-fire"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -895,7 +958,10 @@
       "close-combat-weapon",
       "transmatter-inverter"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "resource-transmutation",
+      "science-guild-support"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -949,7 +1015,9 @@
       "magna-rail-cannon",
       "twin-magna-coil-autocannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "opportunistic-manoeuvre"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1001,7 +1069,10 @@
       "mole-grenade-launcher",
       "twin-concussion-gauntlet"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "cyberstimms",
+      "subterranean-explosives"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1053,7 +1124,9 @@
       "sagitaur-missile-launcher",
       "twin-bolt-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blistering-advance"
+    ],
     "transport_capacity": {
       "capacity": 6
     },
@@ -1105,7 +1178,11 @@
       "mass-gauntlet",
       "volkanite-disintegrator"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "kindred-hero",
+      "leader",
+      "seized-opportunity"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1164,7 +1241,11 @@
       "theyns-melee-weapon",
       "theyns-pistol"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "feel-no-pain-6",
+      "luck-has-need-keeps-toil-earns",
+      "panspectral-scanning"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

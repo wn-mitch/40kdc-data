@@ -14,6 +14,7 @@
     { "kind": "army", "abilityId": "kill-teams" },
     { "kind": "army", "abilityId": "curse-of-the-wulfen" },
     { "kind": "army", "abilityId": "sagas" },
-    { "kind": "army", "abilityId": "sons-of-russ" }
+    { "kind": "army", "abilityId": "sons-of-russ" },
+    { "kind": "unit", "abilityId": "target-elimination" }
   ]
 }

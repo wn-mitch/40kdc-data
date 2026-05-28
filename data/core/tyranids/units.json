@@ -38,7 +38,10 @@
       "bio-electric-pulse",
       "trygon-scything-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deep-strike",
+      "subterranean-tunnels"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -85,7 +88,9 @@
       "distensible-jaw",
       "mawloc-scything-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "terror-from-the-deep"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -140,7 +145,9 @@
       "tyranid-warrior-claws-and-talons",
       "venom-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "adaptable-predators"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -196,7 +203,11 @@
       "stranglethorn-cannon",
       "tyrant-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d3",
+      "paroxysm-psychic",
+      "will-of-the-hive-mind"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -246,7 +257,11 @@
       "dire-bio-cannon",
       "gargantuan-scything-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-2d6",
+      "frenzied-metabolism",
+      "hover"
+    ],
     "transport_capacity": {
       "capacity": 20
     },
@@ -298,7 +313,11 @@
       "monstrous-scything-talons",
       "psychic-tendril"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-d6",
+      "singular-purpose",
+      "unnatural-resilience"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -348,7 +367,11 @@
     "weapon_ids": [
       "prime-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "alpha-warrior",
+      "death-blow",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -450,7 +473,10 @@
       "lashwhip-pods",
       "titanic-scything-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "apex-beast",
+      "stalking-forward"
+    ],
     "transport_capacity": {
       "capacity": 20
     },
@@ -505,7 +531,12 @@
       "bone-sabres",
       "synaptic-pulse"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "domination-of-the-hive-mind-aura",
+      "hive-commander",
+      "leader",
+      "malign-presence-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -552,7 +583,9 @@
       "bio-plasmic-cannon",
       "powerful-limbs"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "symbiotic-targeting"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -602,7 +635,10 @@
     "weapon_ids": [
       "toxic-lashes"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "foul-spores-aura",
+      "stealth"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -652,7 +688,9 @@
     "weapon_ids": [
       "tyranid-warrior-claws-and-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "adaptive-instincts"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -700,7 +738,10 @@
       "max": 6
     },
     "weapon_ids": [],
-    "ability_ids": [],
+    "ability_ids": [
+      "bio-minefield",
+      "floating-death"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -751,7 +792,9 @@
       "flensing-whips",
       "tyrannocyte-bio-weapons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aerial-seeding"
+    ],
     "transport_capacity": {
       "capacity": 20
     },
@@ -809,7 +852,9 @@
       "chitinous-claws-and-teeth",
       "spinemaws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "chitinous-horrors-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -863,7 +908,10 @@
       "chitin-barbed-limbs",
       "spore-mine-launcher"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "deadly-demise-1",
+      "seed-spore-mines"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -912,7 +960,14 @@
     "weapon_ids": [
       "lictor-claws-and-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "fear-of-the-unseen-aura",
+      "feeder-tendrils",
+      "fights-first",
+      "hunter-organism",
+      "infiltrators",
+      "lone-operative"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -974,7 +1029,10 @@
       "ravener-heavy-claws-and-talons",
       "venom-bolt"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "alpha-invader",
+      "hypersensory-array"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1022,7 +1080,9 @@
       "monstrous-scything-talons",
       "toxinjector-harpoon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "harpoon-barbs"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1068,7 +1128,10 @@
       "flensing-whips",
       "sporocyst-bio-weapons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hive-defences",
+      "seed-mucolids"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1117,7 +1180,9 @@
       "rupture-cannon",
       "stinger-salvoes"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "resilient-organism"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1164,7 +1229,10 @@
     "weapon_ids": [
       "piercing-claws-and-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "neural-disruption",
+      "psychological-saboteur-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1212,7 +1280,11 @@
       "psychoclastic-torrent",
       "talons-and-betentacled-maw"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bio-stimulus-aura",
+      "feeding-frenzy",
+      "feel-no-pain-5"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1265,7 +1337,10 @@
       "chitinous-claws-and-teeth",
       "warp-blast"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "spirit-leech-aura-psychic",
+      "warp-field-aura-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1315,7 +1390,12 @@
     "weapon_ids": [
       "broodlord-claws-and-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "hypnotic-gaze-psychic",
+      "leader",
+      "scouts-8",
+      "vicious-insight"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1367,7 +1447,9 @@
       "twin-heavy-venom-cannon",
       "twin-stranglethorn-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "spore-mine-cysts"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1418,7 +1500,10 @@
       "barbed-ovipositor",
       "clawed-limbs"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "it-itches",
+      "parasitic-infection"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1469,7 +1554,9 @@
       "crushing-claws-and-rending-claws",
       "scything-talons-and-rending-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "guardian-organism"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1515,7 +1602,9 @@
       "bio-plasmic-scream",
       "scream-killer-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "death-scream"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1615,7 +1704,9 @@
     "weapon_ids": [
       "hormagaunt-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "bounding-leap"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1665,7 +1756,9 @@
     "weapon_ids": [
       "genestealers-claws-and-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "vanguard-predator"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1710,7 +1803,10 @@
     "weapon_ids": [
       "massive-toxic-lashes"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "grasping-tendrils",
+      "hypertoxic-miasma-aura"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1765,7 +1861,9 @@
       "chitin-barbed-limbs",
       "flamespurt"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "burning-spray"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1816,7 +1914,12 @@
       "neurotyrant-claws-and-lashes",
       "psychic-scream"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "neuroloids",
+      "node-lash-psychic",
+      "psychic-terror-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1875,7 +1978,9 @@
       "termagant-devourer",
       "termagant-spinefists"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "skulking-horrors"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1925,7 +2030,10 @@
       "rending-claw",
       "scything-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "aggressive-leader-beast",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1977,7 +2085,9 @@
       "impaler-cannon",
       "shockcannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "defensive-stance"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2027,7 +2137,9 @@
       "barblauncher",
       "chitinous-claws-and-teeth"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "disruption-bombardment"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2081,7 +2193,9 @@
     "weapon_ids": [
       "chitinous-claws-and-teeth"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "neurocytes"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2133,7 +2247,9 @@
       "tentaclids",
       "thorax-spur"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "airborne-predator"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2184,7 +2300,10 @@
       "massive-scything-talons",
       "stinger-salvoes"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "brood-progenitor-aura-psychic",
+      "spawn-termagants"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2232,7 +2351,11 @@
     "weapon_ids": [
       "old-one-eyes-claws-and-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "alpha-leader",
+      "leader",
+      "unstoppable-monster"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2281,7 +2404,9 @@
       "massive-scything-talons",
       "psychic-overload"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "encephalic-diffusion-aura-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2339,7 +2464,9 @@
       "spine-banks",
       "stranglethorn-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "blistering-assault"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2391,7 +2518,10 @@
       "monstrous-scything-talons",
       "stranglethorn-cannon"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "leader",
+      "onslaught-aura-psychic"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2447,7 +2577,9 @@
       "blinding-venom",
       "fleshborer"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "winged-swarm"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2495,7 +2627,9 @@
       "ravenous-maw",
       "shovelling-claws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "grisly-spectacle"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2541,7 +2675,9 @@
     "weapon_ids": [
       "lictor-claws-and-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "pheromone-trail"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2588,7 +2724,9 @@
     "weapon_ids": [
       "ravener-claws-and-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "death-from-below"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2628,7 +2766,9 @@
     "weapon_ids": [
       "massive-scything-sickle-talons"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "digestion-spine"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2670,7 +2810,9 @@
       "claws-and-teeth",
       "spinemaws"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "chitinous-horrors"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -2714,7 +2856,11 @@
     "weapon_ids": [
       "grasping-tail"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "enhanced-toxic-miasma",
+      "leader",
+      "prey-adaptation"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
