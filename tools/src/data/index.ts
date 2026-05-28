@@ -38,6 +38,13 @@ export type { RawData } from "./types.js";
 // `@alpaca-software/40kdc-data` without reaching into subpaths.
 export * from "../cruncher/index.js";
 
+// The DSL→Buff translator that powers AbilityView.getBuffs / describeBuffs.
+export { effectToBuffs, parseKeywordGrant } from "../cruncher/from-dsl.js";
+export type { EffectTranslation, UnsupportedFragment } from "../cruncher/from-dsl.js";
+
+// The eligible-abilities resolver (also reachable as Dataset.eligibleAbilities).
+export * from "../abilities-resolver/index.js";
+
 import { Dataset } from "./dataset.js";
 
 /** The dataset built from this package's embedded data. */

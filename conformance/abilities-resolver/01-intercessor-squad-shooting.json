@@ -1,0 +1,19 @@
+{
+  "name": "Intercessor Squad (adeptus-astartes) in shooting phase",
+  "input": { "unitId": "intercessor-squad", "factionId": "adeptus-astartes" },
+  "phase": "shooting",
+  "expected": [
+    { "kind": "army", "abilityId": "templar-vows" },
+    { "kind": "army", "abilityId": "space-marine-chapters" },
+    { "kind": "army", "abilityId": "heirs-of-sigismund" },
+    { "kind": "army", "abilityId": "oath-of-moment" },
+    { "kind": "army", "abilityId": "the-sons-of-sanguinius" },
+    { "kind": "army", "abilityId": "the-unforgiven" },
+    { "kind": "army", "abilityId": "the-ravenwing" },
+    { "kind": "army", "abilityId": "the-deathwing" },
+    { "kind": "army", "abilityId": "kill-teams" },
+    { "kind": "army", "abilityId": "curse-of-the-wulfen" },
+    { "kind": "army", "abilityId": "sagas" },
+    { "kind": "army", "abilityId": "sons-of-russ" }
+  ]
+}

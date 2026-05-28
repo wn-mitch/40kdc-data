@@ -47,7 +47,13 @@ export type BuffContribution =
     }
   | { type: "extra-keyword"; keywordRef: WeaponKeywordRef }
   | { type: "feel-no-pain"; threshold: number }
-  | { type: "damage-mod"; value: number };
+  | { type: "damage-mod"; value: number }
+  /** Additive modifier to the attacker's per-model attack count (A stat). */
+  | { type: "attacks-mod"; value: number }
+  /** Additive modifier to the attacker's Strength stat. */
+  | { type: "strength-mod"; value: number }
+  /** Additive modifier to the defender's Toughness stat. */
+  | { type: "toughness-mod"; value: number };
 
 /** Optional gating; the resolver drops buffs whose gate fails. */
 export type BuffApplicability = {
@@ -106,6 +112,9 @@ export type ResolvedModifiers = {
   extraKeywords: { keywordRef: WeaponKeywordRef; source: BuffSource }[];
   feelNoPain: { threshold: number; dominantSource: BuffSource } | null;
   damageMod: { value: number; sources: BuffSource[] };
+  attacksMod: { value: number; sources: BuffSource[] };
+  strengthMod: { value: number; sources: BuffSource[] };
+  toughnessMod: { value: number; sources: BuffSource[] };
 };
 
 /** Stable ordering used to break ties when multiple buffs claim the same field. */
@@ -160,6 +169,9 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
     extraKeywords: [],
     feelNoPain: null,
     damageMod: { value: 0, sources: [] },
+    attacksMod: { value: 0, sources: [] },
+    strengthMod: { value: 0, sources: [] },
+    toughnessMod: { value: 0, sources: [] },
   };
 
   // Hit / wound mods: sum, then cap at ±1, with dominant source picked from
@@ -215,6 +227,18 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
       case "damage-mod":
         out.damageMod.value += c.value;
         out.damageMod.sources.push(b.source);
+        break;
+      case "attacks-mod":
+        out.attacksMod.value += c.value;
+        out.attacksMod.sources.push(b.source);
+        break;
+      case "strength-mod":
+        out.strengthMod.value += c.value;
+        out.strengthMod.sources.push(b.source);
+        break;
+      case "toughness-mod":
+        out.toughnessMod.value += c.value;
+        out.toughnessMod.sources.push(b.source);
         break;
     }
   }

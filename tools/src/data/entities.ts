@@ -15,6 +15,7 @@ import type {
 } from "../generated.js";
 import type { Buff, BuffSource, EngineContext } from "../cruncher/buffs.js";
 import { buffsFromKeyword } from "../cruncher/from-keyword.js";
+import { effectToBuffs, type UnsupportedFragment } from "../cruncher/from-dsl.js";
 import type { Dataset } from "./dataset.js";
 
 /** A unit, linked to its faction, weapons, and abilities. */
@@ -100,13 +101,27 @@ export class AbilityView {
   }
 
   /**
-   * Buff stack this ability contributes against `context`. M1 stub: returns
-   * `[]`. M2 introduces the full DSL→Buff translator; the signature is shaped
-   * now so call sites can be written today.
+   * Buff stack this ability contributes against `context`, with provenance
+   * tagged via `source` (the caller knows whether this ability is being read
+   * as army, detachment, unit, leader, etc.). DSL branches the buff layer
+   * can't auto-apply are dropped here; call {@link describeBuffs} if you
+   * also want the diagnostics.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getBuffs(_source: BuffSource, _context?: EngineContext): Buff[] {
-    return [];
+  getBuffs(source: BuffSource, context?: EngineContext): Buff[] {
+    return this.describeBuffs(source, context).applied;
+  }
+
+  /**
+   * Full DSL→Buff translation, including the `unsupported` list of effect
+   * fragments the buff layer can't model. The SPA renders these as warnings
+   * so users see which abilities have effects that need a manual toggle.
+   */
+  describeBuffs(
+    source: BuffSource,
+    context?: EngineContext,
+  ): { applied: Buff[]; unsupported: UnsupportedFragment[] } {
+    const ctx: EngineContext = context ?? { phase: "shooting" };
+    return effectToBuffs(this.raw.effect, source, ctx);
   }
 }
 

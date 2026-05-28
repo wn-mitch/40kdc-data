@@ -1,0 +1,12 @@
+{
+  "name": "Khârn the Betrayer in fight phase",
+  "input": { "unitId": "kharn-the-betrayer" },
+  "phase": "fight",
+  "expected": [
+    { "kind": "army", "abilityId": "blessings-of-khorne" },
+    { "kind": "unit", "abilityId": "berzerker-frenzy" },
+    { "kind": "unit", "abilityId": "leader" },
+    { "kind": "unit", "abilityId": "legendary-killer" },
+    { "kind": "unit", "abilityId": "the-betrayer" }
+  ]
+}

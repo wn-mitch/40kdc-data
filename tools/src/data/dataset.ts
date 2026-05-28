@@ -35,7 +35,12 @@ import {
 } from "./entities.js";
 import { emptyRawData, type RawData } from "./types.js";
 import { RAW_DATA } from "./bundle.generated.js";
-import type { Buff, EngineContext } from "../cruncher/buffs.js";
+import type { Buff, BuffSource, EngineContext } from "../cruncher/buffs.js";
+import {
+  resolveEligibleAbilities,
+  type EligibilityInput,
+  type EligibleAbility,
+} from "../abilities-resolver/index.js";
 
 /** The whole dataset, with linked accessors over every entity collection. */
 export class Dataset {
@@ -159,21 +164,52 @@ export class Dataset {
   }
 
   /**
-   * Every {@link Buff} applicable to the given weapon profiles in this
-   * `context`. M1 scope: weapon-profile keywords only (M2 extends this to walk
-   * eligible abilities). Returns a flat buff stack the engine can consume
-   * straight; callers may concat additional manual / ability buffs onto it.
+   * Enumerate every ability that could apply to the given unit in `phase`,
+   * grouped by source. The SPA uses this to render the abilities pane.
+   */
+  eligibleAbilities(input: EligibilityInput, phase: Phase): EligibleAbility[] {
+    return resolveEligibleAbilities(this, input, phase);
+  }
+
+  /**
+   * The full applicable {@link Buff} stack for a (unit, phase) combination:
+   * intrinsic weapon-profile keywords plus every eligible ability whose DSL
+   * effect translates to a buff (army, detachment, unit, leader, support, plus
+   * any stratagems the caller has opted into).
+   *
+   * The result includes only buffs the buff layer can express today — the
+   * `unsupported` half of the DSL→Buff translation is dropped here so callers
+   * who just want the stack don't need to thread diagnostics through. Use
+   * {@link AbilityView.describeBuffs} when you need the diagnostics for an
+   * individual ability.
    */
   buffsFor(
-    input: { weaponProfiles?: { weaponId: string; profileIndex: number }[] },
+    input: EligibilityInput & {
+      weaponProfiles?: { weaponId: string; profileIndex: number }[];
+      /** Stratagem ids the caller has opted into spending CP on. */
+      optedInStratagemIds?: string[];
+    },
     context: EngineContext,
   ): Buff[] {
     const out: Buff[] = [];
+
+    // 1. Weapon-profile keywords (M1 stack).
     for (const ref of input.weaponProfiles ?? []) {
       const weapon = this.weapons.get(ref.weaponId);
       if (!weapon) continue;
       out.push(...weapon.profileBuffs(ref.profileIndex, context));
     }
+
+    // 2. Eligible abilities, filtered for opted-in stratagems.
+    const optedIn = new Set(input.optedInStratagemIds ?? []);
+    for (const entry of this.eligibleAbilities(input, context.phase)) {
+      if (entry.source.kind === "detachment-stratagem" && !optedIn.has(entry.source.stratagemId)) {
+        continue;
+      }
+      const source = bufferSourceFromEligible(entry);
+      out.push(...entry.ability.getBuffs(source, context));
+    }
+
     return out;
   }
 
@@ -226,4 +262,23 @@ function push<T>(map: Map<string, T[]>, key: string, value: T): void {
   const existing = map.get(key);
   if (existing) existing.push(value);
   else map.set(key, [value]);
+}
+
+/** Map an EligibleAbility back to the BuffSource the translator expects. */
+function bufferSourceFromEligible(entry: EligibleAbility): BuffSource {
+  const abilityId = entry.ability.id;
+  switch (entry.source.kind) {
+    case "army":
+      return { kind: "ability", abilityId, abilityKind: "army" };
+    case "detachment":
+      return { kind: "ability", abilityId, abilityKind: "detachment" };
+    case "detachment-stratagem":
+      return { kind: "ability", abilityId, abilityKind: "detachment-stratagem" };
+    case "unit":
+      return { kind: "ability", abilityId, abilityKind: "unit" };
+    case "leader":
+      return { kind: "ability", abilityId, abilityKind: "leader" };
+    case "support":
+      return { kind: "ability", abilityId, abilityKind: "support" };
+  }
 }

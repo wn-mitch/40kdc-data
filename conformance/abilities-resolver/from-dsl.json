@@ -1,0 +1,42 @@
+{
+  "name": "DSL→Buff translations for canonical abilities (attacker-perspective, fight phase)",
+  "cases": [
+    {
+      "abilityId": "oath-of-moment",
+      "source": { "kind": "ability", "abilityId": "oath-of-moment", "abilityKind": "army" },
+      "context": { "phase": "fight" },
+      "expected": {
+        "applied": [
+          { "type": "reroll", "roll": "hit", "subset": "all-failures" },
+          { "type": "reroll", "roll": "wound", "subset": "all-failures" }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "abilityId": "templar-vows",
+      "source": { "kind": "ability", "abilityId": "templar-vows", "abilityKind": "army" },
+      "context": { "phase": "fight" },
+      "expected": {
+        "applied": [
+          { "type": "wound-mod", "value": 1 },
+          { "type": "extra-keyword", "keywordRef": { "keyword_id": "precision" } }
+        ],
+        "unsupportedReasons": [
+          "re-roll on \"charge\" (subset \"all-failures\") is outside the damage path"
+        ]
+      }
+    },
+    {
+      "abilityId": "berzerker-frenzy",
+      "source": { "kind": "ability", "abilityId": "berzerker-frenzy", "abilityKind": "unit" },
+      "context": { "phase": "fight" },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"timing-is\" against current context"
+        ]
+      }
+    }
+  ]
+}

@@ -21,6 +21,9 @@ import { normalizeName } from "../src/data/normalize.js";
 import { exportRoster, type ExportFormat } from "../src/export/index.js";
 import { importRoster } from "../src/import/import-roster.js";
 import { crunch, type Buff, type EngineContext, type Stage } from "../src/cruncher/index.js";
+import type { Phase } from "../src/generated.js";
+import { effectToBuffs } from "../src/cruncher/from-dsl.js";
+import type { EligibilityInput } from "../src/abilities-resolver/index.js";
 
 const CONFORMANCE = join(dirname(fileURLToPath(import.meta.url)), "../../conformance");
 const readJson = (path: string): unknown => JSON.parse(readFileSync(path, "utf8"));
@@ -154,6 +157,63 @@ interface CruncherCase {
   buffs: Buff[];
   expected: { stages: Record<Stage["name"], number> };
 }
+
+// Abilities-resolver conformance — each case names an EligibilityInput, a
+// phase, and the expected (kind, abilityId) pairs the resolver should yield
+// in the order it yields them. Pins both content and order across runs so a
+// Rust port can replay byte-identical.
+
+interface ResolverCase {
+  name: string;
+  input: EligibilityInput;
+  phase: Phase;
+  expected: { kind: string; abilityId: string }[];
+}
+
+describe("abilities-resolver conformance corpus", () => {
+  const ds = Dataset.embedded();
+  const dir = join(CONFORMANCE, "abilities-resolver");
+  const files = readdirSync(dir)
+    .filter((n) => n.endsWith(".json") && !n.startsWith("from-dsl"))
+    .sort();
+
+  it("the resolver corpus is non-empty", () => {
+    expect(files.length).toBeGreaterThan(0);
+  });
+
+  for (const filename of files) {
+    const c = readJson(join(dir, filename)) as ResolverCase;
+    it(`abilities-resolver/${filename}: matches the expected (kind, abilityId) list`, () => {
+      const actual = ds
+        .eligibleAbilities(c.input, c.phase)
+        .map((e) => ({ kind: e.source.kind, abilityId: e.ability.id }));
+      expect(actual).toEqual(c.expected);
+    });
+  }
+
+  it("from-dsl.json: every case translates to the expected applied + unsupported", () => {
+    const dsl = readJson(join(dir, "from-dsl.json")) as {
+      cases: {
+        abilityId: string;
+        source: { kind: "ability"; abilityId: string; abilityKind: string };
+        context: EngineContext;
+        expected: {
+          applied: unknown[];
+          unsupportedReasons: string[];
+        };
+      }[];
+    };
+    for (const c of dsl.cases) {
+      const ability = ds.abilities.get(c.abilityId);
+      expect(ability, `unknown ability ${c.abilityId}`).toBeDefined();
+      const result = effectToBuffs(ability!.raw.effect, c.source as never, c.context);
+      const appliedContribs = result.applied.map((b) => b.contribution);
+      expect(appliedContribs, `applied buffs for ${c.abilityId}`).toEqual(c.expected.applied);
+      const reasons = result.unsupported.map((u) => u.reason);
+      expect(reasons, `unsupported reasons for ${c.abilityId}`).toEqual(c.expected.unsupportedReasons);
+    }
+  });
+});
 
 describe("cruncher conformance corpus", () => {
   const ds = Dataset.embedded();

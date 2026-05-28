@@ -81,7 +81,7 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   // 1. Attacks
   const isMelee = input.attacker.weapon.type === "melee";
   const baseA = evalStatValue(weaponProfile.stats.A);
-  const attacksPerModel = baseA;
+  const attacksPerModel = baseA + resolved.attacksMod.value;
   const rapidFire = findKeyword(resolved, "rapid-fire");
   const halfRange = ctx.withinHalfRange === true;
   const rapidFireExtraPerModel = rapidFire && halfRange ? evalStatValue(rapidFire.parameters?.value) : 0;
@@ -131,8 +131,8 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   stages.push({ name: "hits", expected: hits, detail: hitsDetail });
 
   // 3. Wounds
-  const S = evalStatValue(weaponProfile.stats.S);
-  const T = unitProfile.T;
+  const S = evalStatValue(weaponProfile.stats.S) + resolved.strengthMod.value;
+  const T = unitProfile.T + resolved.toughnessMod.value;
   const stdWoundNeeded = woundThreshold(S, T);
   const anti = findKeyword(resolved, "anti");
   let antiThreshold = 7; // unreachable
