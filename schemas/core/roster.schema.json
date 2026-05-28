@@ -8,12 +8,21 @@
     "name": { "type": "string", "minLength": 1, "maxLength": 256 },
     "source": {
       "type": "object",
-      "description": "Provenance of the imported list.",
+      "description": "Provenance of the imported list. `format` identifies which adapter parsed the source payload; new adapters extend this enum.",
       "properties": {
-        "format": { "type": "string", "const": "listforge" },
+        "format": {
+          "type": "string",
+          "enum": [
+            "listforge",
+            "newrecruit-json",
+            "newrecruit-wtc-compact",
+            "newrecruit-wtc-full",
+            "newrecruit-simple"
+          ]
+        },
         "generated_by": {
           "oneOf": [{ "type": "string" }, { "type": "null" }],
-          "description": "The `generatedBy` field reported by the source payload (e.g. 'List Forge'), if present."
+          "description": "The `generatedBy` field reported by the source payload (e.g. 'List Forge', 'https://newrecruit.eu'), if present."
         }
       },
       "required": ["format", "generated_by"],
@@ -123,6 +132,10 @@
           "oneOf": [{ "$ref": "#/$defs/roster-resolved-ref" }, { "type": "null" }],
           "description": "Attached enhancement, or null when none."
         },
+        "enhancement_points": {
+          "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }],
+          "description": "Points cost of the attached enhancement when the source reported one. Null when there is no enhancement or when the source didn't carry a cost line for it. Lets a Roster round-trip cleanly through formats that print enhancements as a separate `+N pts` line."
+        },
         "wargear": {
           "type": "array",
           "description": "Weapons/wargear selected on the unit. Always lists the raw name and count; `ref.id` is null when the weapon could not be matched.",
@@ -152,7 +165,7 @@
           ]
         }
       },
-      "required": ["ref", "model_count", "points", "is_warlord", "enhancement", "wargear", "leader_attachment"],
+      "required": ["ref", "model_count", "points", "is_warlord", "enhancement", "enhancement_points", "wargear", "leader_attachment"],
       "additionalProperties": false
     },
     "roster-diagnostics": {

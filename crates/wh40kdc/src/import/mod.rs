@@ -92,5 +92,5 @@ pub fn import_roster(decoded: &serde_json::Value, ds: &Dataset) -> Result<Roster
     let registry = adapters();
     let adapter = select_adapter(decoded, &registry)?;
     let parsed = adapter.parse(decoded)?;
-    Ok(resolve(&parsed, ds))
+    Ok(resolve(&parsed, ds, adapter.format()))
 }

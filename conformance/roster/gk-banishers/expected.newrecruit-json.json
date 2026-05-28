@@ -1,0 +1,252 @@
+{
+  "name": "Banishers Test List",
+  "generatedBy": "https://newrecruit.eu",
+  "roster": {
+    "name": "Banishers Test List",
+    "xmlns": "http://www.battlescribe.net/schema/rosterSchema",
+    "generatedBy": "https://newrecruit.eu",
+    "costs": [
+      {
+        "name": "pts",
+        "typeId": "pts-type",
+        "value": 585
+      }
+    ],
+    "forces": [
+      {
+        "id": "force-1",
+        "name": "Army Roster",
+        "catalogueName": "Grey Knights",
+        "selections": [
+          {
+            "id": "cfg-battle-size",
+            "name": "Battle Size",
+            "type": "upgrade",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Configuration",
+                "primary": true
+              }
+            ],
+            "selections": [
+              {
+                "id": "cfg-battle-size-val",
+                "name": "Strike Force (2000 Point limit)",
+                "type": "upgrade",
+                "number": 1
+              }
+            ]
+          },
+          {
+            "id": "cfg-detachment",
+            "name": "Detachment",
+            "type": "upgrade",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Configuration",
+                "primary": true
+              }
+            ],
+            "selections": [
+              {
+                "id": "cfg-detachment-val",
+                "name": "Banishers",
+                "type": "upgrade",
+                "number": 1
+              }
+            ]
+          },
+          {
+            "id": "u-0",
+            "name": "Castellan Crowe",
+            "type": "model",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Faction: Grey Knights",
+                "primary": false
+              }
+            ],
+            "costs": [
+              {
+                "name": "pts",
+                "typeId": "pts-type",
+                "value": 90
+              }
+            ],
+            "selections": [
+              {
+                "id": "w-0",
+                "name": "Black Blade of Antwyr",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "id": "w-1",
+                "name": "Purifying Flame",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "id": "w-2",
+                "name": "Storm bolter",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "u-1",
+            "name": "Grand Master in Nemesis Dreadknight",
+            "type": "model",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Faction: Grey Knights",
+                "primary": false
+              }
+            ],
+            "costs": [
+              {
+                "name": "pts",
+                "typeId": "pts-type",
+                "value": 225
+              }
+            ],
+            "selections": [
+              {
+                "id": "u1-warlord",
+                "name": "Warlord",
+                "type": "upgrade",
+                "number": 1
+              },
+              {
+                "id": "u1-enh",
+                "name": "Pyresoul (Psychic)",
+                "type": "upgrade",
+                "number": 1,
+                "group": "Enhancements",
+                "costs": [
+                  {
+                    "name": "pts",
+                    "typeId": "pts-type",
+                    "value": 20
+                  }
+                ]
+              },
+              {
+                "id": "w-0",
+                "name": "Heavy psycannon",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "id": "w-1",
+                "name": "Fragstorm grenade launcher",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "id": "w-2",
+                "name": "Nemesis daemon greathammer",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "u-2",
+            "name": "Purifier Squad",
+            "type": "unit",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Faction: Grey Knights",
+                "primary": false
+              }
+            ],
+            "costs": [
+              {
+                "name": "pts",
+                "typeId": "pts-type",
+                "value": 250
+              }
+            ],
+            "selections": [
+              {
+                "id": "u2-model",
+                "name": "Purifier Squad",
+                "type": "model",
+                "number": 10,
+                "selections": [
+                  {
+                    "id": "w-0",
+                    "name": "Purifying Flame",
+                    "type": "upgrade",
+                    "number": 1,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  },
+                  {
+                    "id": "w-1",
+                    "name": "Storm bolter",
+                    "type": "upgrade",
+                    "number": 9,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

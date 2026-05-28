@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { importRoster } from "../../src/import/import-listforge.js";
+import { importRoster } from "../../src/import/import-roster.js";
 
 /**
  * Regression guard for the project's IP rule: the importer must never carry

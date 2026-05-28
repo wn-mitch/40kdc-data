@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { Dataset } from "../../src/data/dataset.js";
-import { importRoster } from "../../src/import/import-listforge.js";
+import { importRoster } from "../../src/import/import-roster.js";
 import type { Roster } from "../../src/import/types.js";
 
 const ds = Dataset.embedded();

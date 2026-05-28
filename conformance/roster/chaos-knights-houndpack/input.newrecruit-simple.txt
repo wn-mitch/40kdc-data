@@ -1,0 +1,13 @@
+Chaos Knights - Dog Kill God? - [2000 pts]
+
+# ++ Army Roster ++ [485 pts]
+## Configuration
+Battle Size: Strike Force (2000 Point limit)
+Detachment: Houndpack Lance
+
+## Battleline [485 pts]
+War Dog Karnivore [165 pts]: Preyslayer's Mantle [15 pts], Reaper chaintalon, Slaughterclaw, Havoc multi-launcher
+War Dog Karnivore [150 pts]: Reaper chaintalon, Slaughterclaw, Havoc multi-launcher
+War Dog Executioner [130 pts]: Warlord, Armoured feet, 2x War Dog autocannon, Diabolus heavy stubber
+Nurglings [40 pts]:
+• 3x Nurglings: Diseased claws and teeth

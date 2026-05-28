@@ -1,0 +1,297 @@
+{
+  "name": "Dog Kill God?",
+  "generatedBy": "https://newrecruit.eu",
+  "roster": {
+    "name": "Dog Kill God?",
+    "xmlns": "http://www.battlescribe.net/schema/rosterSchema",
+    "generatedBy": "https://newrecruit.eu",
+    "costs": [
+      {
+        "name": "pts",
+        "typeId": "pts-type",
+        "value": 485
+      }
+    ],
+    "forces": [
+      {
+        "id": "force-1",
+        "name": "Army Roster",
+        "catalogueName": "Chaos Knights",
+        "selections": [
+          {
+            "id": "cfg-battle-size",
+            "name": "Battle Size",
+            "type": "upgrade",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Configuration",
+                "primary": true
+              }
+            ],
+            "selections": [
+              {
+                "id": "cfg-battle-size-val",
+                "name": "Strike Force (2000 Point limit)",
+                "type": "upgrade",
+                "number": 1
+              }
+            ]
+          },
+          {
+            "id": "cfg-detachment",
+            "name": "Detachment",
+            "type": "upgrade",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Configuration",
+                "primary": true
+              }
+            ],
+            "selections": [
+              {
+                "id": "cfg-detachment-val",
+                "name": "Houndpack Lance",
+                "type": "upgrade",
+                "number": 1
+              }
+            ]
+          },
+          {
+            "id": "u-0",
+            "name": "War Dog Karnivore",
+            "type": "model",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Faction: Chaos Knights",
+                "primary": false
+              }
+            ],
+            "costs": [
+              {
+                "name": "pts",
+                "typeId": "pts-type",
+                "value": 150
+              }
+            ],
+            "selections": [
+              {
+                "id": "u0-enh",
+                "name": "Preyslayer's Mantle",
+                "type": "upgrade",
+                "number": 1,
+                "group": "Enhancements",
+                "costs": [
+                  {
+                    "name": "pts",
+                    "typeId": "pts-type",
+                    "value": 15
+                  }
+                ]
+              },
+              {
+                "id": "w-0",
+                "name": "Reaper chaintalon",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "id": "w-1",
+                "name": "Slaughterclaw",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "id": "w-2",
+                "name": "Havoc multi-launcher",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "u-1",
+            "name": "War Dog Karnivore",
+            "type": "model",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Faction: Chaos Knights",
+                "primary": false
+              }
+            ],
+            "costs": [
+              {
+                "name": "pts",
+                "typeId": "pts-type",
+                "value": 150
+              }
+            ],
+            "selections": [
+              {
+                "id": "w-0",
+                "name": "Reaper chaintalon",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "id": "w-1",
+                "name": "Slaughterclaw",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "id": "w-2",
+                "name": "Havoc multi-launcher",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "u-2",
+            "name": "War Dog Executioner",
+            "type": "model",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Faction: Chaos Knights",
+                "primary": false
+              }
+            ],
+            "costs": [
+              {
+                "name": "pts",
+                "typeId": "pts-type",
+                "value": 130
+              }
+            ],
+            "selections": [
+              {
+                "id": "u2-warlord",
+                "name": "Warlord",
+                "type": "upgrade",
+                "number": 1
+              },
+              {
+                "id": "w-0",
+                "name": "Armoured feet",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "id": "w-1",
+                "name": "War Dog autocannon",
+                "type": "upgrade",
+                "number": 2,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "id": "w-2",
+                "name": "Diabolus heavy stubber",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "u-3",
+            "name": "Nurglings",
+            "type": "unit",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Faction: Chaos Knights",
+                "primary": false
+              }
+            ],
+            "costs": [
+              {
+                "name": "pts",
+                "typeId": "pts-type",
+                "value": 40
+              }
+            ],
+            "selections": [
+              {
+                "id": "u3-model",
+                "name": "Nurglings",
+                "type": "model",
+                "number": 3,
+                "selections": [
+                  {
+                    "id": "w-0",
+                    "name": "Diseased claws and teeth",
+                    "type": "upgrade",
+                    "number": 3,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

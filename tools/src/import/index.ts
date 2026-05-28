@@ -9,17 +9,24 @@
  *
  * @packageDocumentation
  */
-export { importListForge, importRoster } from "./import-listforge.js";
-export type { ImportOptions } from "./import-listforge.js";
+export { importListForge, importNewRecruit, importRoster } from "./import-roster.js";
+export type { ImportOptions } from "./import-roster.js";
 export { decodeListForge } from "./decode.js";
 export { resolve } from "./resolve.js";
 export { listForgeAdapter } from "./listforge.js";
+export { newRecruitJsonAdapter } from "./newrecruit-json.js";
+export { newRecruitSimpleAdapter } from "./newrecruit-simple.js";
+export {
+  newRecruitWtcCompactAdapter,
+  newRecruitWtcFullAdapter,
+} from "./newrecruit-wtc.js";
 export type { FormatAdapter } from "./adapter.js";
 export type {
   Roster,
   RosterUnit,
   RosterWargear,
   RosterSource,
+  RosterFormat,
   RosterPoints,
   ResolvedRef,
   Candidate,

@@ -1,0 +1,233 @@
+{
+  "id": "fixture-chaos-knights-houndpack",
+  "name": "Dog Kill God?",
+  "generatedBy": "https://newrecruit.eu",
+  "gameSystemId": "fixture",
+  "gameSystemName": "Warhammer 40,000",
+  "roster": {
+    "name": "Dog Kill God?",
+    "xmlns": "http://www.battlescribe.net/schema/rosterSchema",
+    "costs": [{ "name": "pts", "typeId": "pts-type", "value": 485 }],
+    "costLimits": [{ "name": "pts", "typeId": "pts-type", "value": 2000 }],
+    "forces": [
+      {
+        "id": "force-1",
+        "name": "Army Roster",
+        "catalogueName": "Chaos - Chaos Knights",
+        "selections": [
+          {
+            "id": "cfg-battle-size",
+            "name": "Battle Size",
+            "type": "upgrade",
+            "number": 1,
+            "categories": [{ "name": "Configuration", "primary": true }],
+            "selections": [
+              {
+                "id": "battle-size-strike-force",
+                "name": "Strike Force (2000 Point limit)",
+                "type": "upgrade",
+                "number": 1
+              }
+            ]
+          },
+          {
+            "id": "cfg-detachment",
+            "name": "Detachment",
+            "type": "upgrade",
+            "number": 1,
+            "categories": [{ "name": "Configuration", "primary": true }],
+            "selections": [
+              {
+                "id": "detachment-houndpack-lance",
+                "name": "Houndpack Lance",
+                "type": "upgrade",
+                "number": 1,
+                "group": "Detachment"
+              }
+            ]
+          },
+          {
+            "id": "unit-karnivore-warlord",
+            "name": "War Dog Karnivore",
+            "type": "model",
+            "number": 1,
+            "categories": [
+              { "name": "Faction: Chaos Knights", "primary": false },
+              { "name": "Vehicle", "primary": false },
+              { "name": "Walker", "primary": false },
+              { "name": "Chaos", "primary": false },
+              { "name": "War Dog", "primary": false },
+              { "name": "Karnivore", "primary": false },
+              { "name": "Character", "primary": false },
+              { "name": "Battleline", "primary": true }
+            ],
+            "costs": [{ "name": "pts", "typeId": "pts-type", "value": 150 }],
+            "selections": [
+              {
+                "id": "marker-houndpack-character",
+                "name": "Houndpack Lance Character",
+                "type": "upgrade",
+                "number": 1
+              },
+              {
+                "id": "enh-preyslayer",
+                "name": "Preyslayer's Mantle",
+                "type": "upgrade",
+                "number": 1,
+                "group": "Enhancements",
+                "costs": [{ "name": "pts", "typeId": "pts-type", "value": 15 }]
+              },
+              {
+                "id": "w-reaper-chaintalon",
+                "name": "Reaper chaintalon",
+                "type": "upgrade",
+                "number": 1,
+                "group": "Wargear",
+                "categories": [{ "name": "Melee Weapon", "primary": false }]
+              },
+              {
+                "id": "w-slaughterclaw",
+                "name": "Slaughterclaw",
+                "type": "upgrade",
+                "number": 1,
+                "group": "Wargear",
+                "categories": [{ "name": "Melee Weapon", "primary": false }]
+              },
+              {
+                "id": "w-havoc-multi-launcher",
+                "name": "Havoc multi-launcher",
+                "type": "upgrade",
+                "number": 1,
+                "group": "Wargear::Carapace weapon",
+                "categories": [
+                  { "name": "Attacks Dx Weapon", "primary": false },
+                  { "name": "Ranged Weapon", "primary": false }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "unit-karnivore-plain",
+            "name": "War Dog Karnivore",
+            "type": "model",
+            "number": 1,
+            "categories": [
+              { "name": "Faction: Chaos Knights", "primary": false },
+              { "name": "Vehicle", "primary": false },
+              { "name": "War Dog", "primary": false },
+              { "name": "Karnivore", "primary": false },
+              { "name": "Battleline", "primary": true }
+            ],
+            "costs": [{ "name": "pts", "typeId": "pts-type", "value": 150 }],
+            "selections": [
+              {
+                "id": "w-reaper-chaintalon-2",
+                "name": "Reaper chaintalon",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [{ "name": "Melee Weapon", "primary": false }]
+              },
+              {
+                "id": "w-slaughterclaw-2",
+                "name": "Slaughterclaw",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [{ "name": "Melee Weapon", "primary": false }]
+              },
+              {
+                "id": "w-havoc-multi-launcher-2",
+                "name": "Havoc multi-launcher",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [{ "name": "Ranged Weapon", "primary": false }]
+              }
+            ]
+          },
+          {
+            "id": "unit-executioner-warlord",
+            "name": "War Dog Executioner",
+            "type": "model",
+            "number": 1,
+            "categories": [
+              { "name": "Faction: Chaos Knights", "primary": false },
+              { "name": "Vehicle", "primary": false },
+              { "name": "War Dog", "primary": false },
+              { "name": "Executioner", "primary": false },
+              { "name": "Character", "primary": false },
+              { "name": "Battleline", "primary": true }
+            ],
+            "costs": [{ "name": "pts", "typeId": "pts-type", "value": 130 }],
+            "selections": [
+              {
+                "id": "marker-houndpack-character-2",
+                "name": "Houndpack Lance Character",
+                "type": "upgrade",
+                "number": 1
+              },
+              {
+                "id": "marker-warlord",
+                "name": "Warlord",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [{ "name": "Warlord", "primary": false }]
+              },
+              {
+                "id": "w-armoured-feet",
+                "name": "Armoured feet",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [{ "name": "Melee Weapon", "primary": false }]
+              },
+              {
+                "id": "w-war-dog-autocannon",
+                "name": "War Dog autocannon",
+                "type": "upgrade",
+                "number": 2,
+                "categories": [{ "name": "Ranged Weapon", "primary": false }]
+              },
+              {
+                "id": "w-diabolus-heavy-stubber",
+                "name": "Diabolus heavy stubber",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [{ "name": "Ranged Weapon", "primary": false }]
+              }
+            ]
+          },
+          {
+            "id": "unit-nurglings",
+            "name": "Nurglings",
+            "type": "unit",
+            "number": 1,
+            "categories": [
+              { "name": "Faction: Legiones Daemonica", "primary": false },
+              { "name": "Swarm", "primary": false },
+              { "name": "Daemon", "primary": false },
+              { "name": "Nurgle", "primary": false },
+              { "name": "Nurglings", "primary": false },
+              { "name": "Allied Units", "primary": true }
+            ],
+            "costs": [{ "name": "pts", "typeId": "pts-type", "value": 40 }],
+            "selections": [
+              {
+                "id": "model-nurgling-swarm",
+                "name": "Nurgling Swarm",
+                "type": "model",
+                "number": 3,
+                "selections": [
+                  {
+                    "id": "w-diseased-claws",
+                    "name": "Diseased claws and teeth",
+                    "type": "upgrade",
+                    "number": 3,
+                    "categories": [{ "name": "Melee Weapon", "primary": false }]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

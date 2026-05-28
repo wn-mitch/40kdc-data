@@ -1,21 +1,28 @@
 /**
- * ListForge adapter: lower a decoded ListForge "share JSON" payload (a
- * BattleScribe-derived roster tree) to a {@link ParsedRoster}.
+ * NewRecruit JSON adapter: lower a decoded NewRecruit roster export (a
+ * BattleScribe-derived tree, same outer shape as ListForge) to a {@link ParsedRoster}.
  *
- * The walk reads an ALLOWLIST of fields only — `name`, `number`, `type`,
- * `categories[].name`, `group`, and `costs` point values — and never touches
- * `rules[].description` or ability `profiles[].characteristics[].$text`, which
- * carry reproduced rules text. This keeps the importer's output free of
- * copyrighted prose by construction.
+ * NewRecruit-specific signals used to detect the format:
+ * - `generatedBy` reports the NewRecruit URL ("https://newrecruit.eu"), and/or
+ * - `roster.xmlns` is set to the BattleScribe rosterSchema namespace.
  *
- * Selection-tree shape (recursive `selections`):
+ * The primary faction surfaces in `forces[].catalogueName` (e.g.
+ * "Chaos - Chaos Knights") — we take the segment after the final " - ". Falls
+ * back to the first `"Faction: X"` category if no catalogueName is present.
+ *
+ * The walk reads the same ALLOWLIST as the ListForge adapter — `name`,
+ * `number`, `type`, `categories[].name`, `group`, `costs` point values, and
+ * `catalogueName`. `rules[].description`, ability `profiles[].characteristics[].$text`,
+ * and every other prose field are never touched, so the importer's output is
+ * free of copyrighted prose by construction.
+ *
+ * Selection-tree shape (recursive `selections`) is identical to ListForge:
  * - Configuration nodes (`type: "upgrade"`) named "Detachment" / "Battle Size"
  *   carry the chosen value as their first child selection.
  * - Unit nodes (`type: "model" | "unit"`) carry role categories, a points cost,
  *   and — nested anywhere beneath them — their wargear (weapon-category
  *   selections), enhancement (a selection whose `group` starts "Enhancements"),
  *   the "Warlord" marker, and model sub-selections.
- * - Every unit carries a `"Faction: <Name>"` category.
  *
  * @packageDocumentation
  */
@@ -28,6 +35,8 @@ const POINTS_LIMIT = /(\d[\d,]*)\s*Point/i;
 const ENHANCEMENT_GROUP_PREFIX = "Enhancements";
 const CHARACTER_CATEGORIES = new Set(["Character", "Epic Hero"]);
 const WEAPON_CATEGORY_SUFFIX = " Weapon"; // "Ranged Weapon", "Melee Weapon", "Psychic Weapon"
+const NEWRECRUIT_XMLNS = "http://www.battlescribe.net/schema/rosterSchema";
+const NEWRECRUIT_HOST_PREFIX = "https://newrecruit";
 
 // --- Minimal structural views of the parts of the payload we read. ----------
 
@@ -46,6 +55,7 @@ interface RawSelection {
   categories?: unknown;
   costs?: unknown;
   selections?: unknown;
+  catalogueName?: unknown;
 }
 
 function asArray(value: unknown): unknown[] {
@@ -64,12 +74,10 @@ function selectionType(sel: RawSelection): string {
   return asString(sel.type) ?? "";
 }
 
-/** A selection's multiplicity (`number`), defaulting to 1. */
 function selectionCount(sel: RawSelection): number {
   return typeof sel.number === "number" && sel.number > 0 ? sel.number : 1;
 }
 
-/** Point value from a selection's cost block, or null when absent. */
 function pointsOf(sel: RawSelection): number | null {
   for (const raw of asArray(sel.costs)) {
     const cost = raw as RawCost;
@@ -90,7 +98,6 @@ function childSelections(sel: RawSelection): RawSelection[] {
   return asArray(sel.selections) as RawSelection[];
 }
 
-/** Depth-first visit of a selection and everything beneath it. */
 function walk(sel: RawSelection, visit: (s: RawSelection) => void): void {
   visit(sel);
   for (const child of childSelections(sel)) walk(child, visit);
@@ -114,7 +121,6 @@ function isEnhancementSelection(sel: RawSelection): boolean {
   return group !== null && group.startsWith(ENHANCEMENT_GROUP_PREFIX);
 }
 
-/** Sum the model count of a unit from its nested model selections. */
 function modelCount(unit: RawSelection): number {
   let total = 0;
   walk(unit, (s) => {
@@ -123,7 +129,6 @@ function modelCount(unit: RawSelection): number {
   return total > 0 ? total : selectionCount(unit);
 }
 
-/** Build a parsed unit from a top-level unit selection. */
 function parseUnit(unit: RawSelection): ParsedUnit {
   const wargear: ParsedWargear[] = [];
   let enhancement_raw_name: string | null = null;
@@ -161,7 +166,6 @@ function parseUnit(unit: RawSelection): ParsedUnit {
   };
 }
 
-/** Value carried as the first child of a named configuration selection. */
 function configValue(
   selections: RawSelection[],
   configName: string,
@@ -179,7 +183,6 @@ function parseLimit(label: string | null): number | null {
   return Number.parseInt(match[1].replace(/,/g, ""), 10);
 }
 
-/** First `"Faction: X"` category found anywhere; reports all distinct names. */
 function collectFactions(forces: RawSelection[]): string[] {
   const seen = new Set<string>();
   for (const force of forces) {
@@ -195,10 +198,25 @@ function collectFactions(forces: RawSelection[]): string[] {
   return [...seen];
 }
 
+/** Primary faction from a force's `catalogueName` (e.g. "Chaos - Chaos Knights"
+ * → "Chaos Knights"). Returns null when no force has a catalogueName. */
+function primaryFactionFromCatalogue(forces: RawSelection[]): string | null {
+  for (const force of forces) {
+    const name = asString(force.catalogueName);
+    if (!name) continue;
+    const parts = name.split(" - ");
+    const last = parts[parts.length - 1]?.trim();
+    if (last) return last;
+  }
+  return null;
+}
+
 interface RawRoster {
   name?: unknown;
   costs?: unknown;
   forces?: unknown;
+  xmlns?: unknown;
+  generatedBy?: unknown;
 }
 interface RawPayload {
   name?: unknown;
@@ -214,23 +232,38 @@ function rosterOf(decoded: unknown): RawRoster | null {
   return roster as RawRoster;
 }
 
-export const listForgeAdapter: FormatAdapter = {
-  id: "listforge",
+/** Detect a NewRecruit payload: BattleScribe `rosterSchema` xmlns or a
+ * `generatedBy` URL pointing at newrecruit.eu. */
+function hasNewRecruitSignature(decoded: unknown, roster: RawRoster): boolean {
+  const payload = decoded as RawPayload;
+  const xmlns = asString(roster.xmlns);
+  if (xmlns === NEWRECRUIT_XMLNS) return true;
+  const genBy =
+    asString(payload.generatedBy) ?? asString(roster.generatedBy);
+  if (genBy && genBy.toLowerCase().startsWith(NEWRECRUIT_HOST_PREFIX)) {
+    return true;
+  }
+  return false;
+}
+
+export const newRecruitJsonAdapter: FormatAdapter = {
+  id: "newrecruit-json",
 
   matches(decoded: unknown): boolean {
-    return rosterOf(decoded) !== null;
+    const roster = rosterOf(decoded);
+    if (!roster) return false;
+    return hasNewRecruitSignature(decoded, roster);
   },
 
   parse(decoded: unknown): ParsedRoster {
     const payload = decoded as RawPayload;
     const roster = rosterOf(decoded);
     if (!roster) {
-      throw new Error("listforge: payload has no roster.forces array");
+      throw new Error("newrecruit-json: payload has no roster.forces array");
     }
 
     const forces = asArray(roster.forces) as RawSelection[];
 
-    // Configuration lives among each force's top-level selections.
     let detachment_raw_name: string | null = null;
     let battle_size_raw: string | null = null;
     const units: ParsedUnit[] = [];
@@ -244,11 +277,9 @@ export const listForgeAdapter: FormatAdapter = {
     }
 
     const factions = collectFactions(forces);
+    const primaryFaction = primaryFactionFromCatalogue(forces) ?? factions[0] ?? null;
     const total_reported = pointsOf(roster as RawSelection);
 
-    // Honest computed total: sum every cost line in the tree. A unit's own cost
-    // and its nested enhancement's cost are distinct lines that together make up
-    // the unit's army contribution, so a full walk reproduces the army total.
     let total_computed = 0;
     for (const force of forces) {
       for (const sel of childSelections(force)) {
@@ -259,10 +290,13 @@ export const listForgeAdapter: FormatAdapter = {
       }
     }
 
+    const generated_by =
+      asString(payload.generatedBy) ?? asString(roster.generatedBy);
+
     return {
       name: asString(payload.name) ?? asString(roster.name) ?? "Imported roster",
-      generated_by: asString(payload.generatedBy),
-      faction_raw_name: factions[0] ?? null,
+      generated_by,
+      faction_raw_name: primaryFaction,
       detachment_raw_name,
       battle_size_raw,
       declared_limit: parseLimit(battle_size_raw),

@@ -12,12 +12,12 @@
  *
  * @packageDocumentation
  */
-import type { ParsedRoster } from "./types.js";
+import type { ParsedRoster, RosterFormat } from "./types.js";
 
 /** Recognises and parses one source list-export format. */
 export interface FormatAdapter {
-  /** Stable identifier for the format (e.g. "listforge"). */
-  id: string;
+  /** Stable identifier for the format. Carries through to `Roster.source.format`. */
+  id: RosterFormat;
   /** True when this adapter can parse the given decoded payload. */
   matches(decoded: unknown): boolean;
   /** Lower a recognised payload to the format-agnostic intermediate. */

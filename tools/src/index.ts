@@ -16,7 +16,23 @@ export {
 // Army-list importer (ListForge → resolved 40kdc roster). Types are curated
 // rather than re-exported wholesale to avoid name clashes with generated types
 // (e.g. BattleSize, LeaderAttachment).
-export { importListForge, importRoster, decodeListForge } from "./import/index.js";
+export {
+  importListForge,
+  importNewRecruit,
+  importRoster,
+  decodeListForge,
+} from "./import/index.js";
+
+// Army-list exporter (Roster → text or JSON for any of the supported formats).
+export {
+  exportRoster,
+  newRecruitJsonSerializer,
+  newRecruitSimpleSerializer,
+  newRecruitWtcCompactSerializer,
+  newRecruitWtcFullSerializer,
+  rosterJsonSerializer,
+} from "./export/index.js";
+export type { ExportFormat, RosterSerializer } from "./export/index.js";
 export type { FormatAdapter } from "./import/index.js";
 export type {
   ImportOptions,
@@ -24,6 +40,7 @@ export type {
   RosterUnit,
   RosterWargear,
   RosterSource,
+  RosterFormat,
   RosterPoints,
   RosterLeaderAttachment,
   ResolvedRef,

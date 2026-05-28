@@ -1,0 +1,193 @@
+{
+  "name": "Dog Kill God?",
+  "source": {
+    "format": "newrecruit-json",
+    "generated_by": "https://newrecruit.eu"
+  },
+  "faction_id": "chaos-knights",
+  "detachment_id": "houndpack-lance",
+  "battle_size": "strike-force",
+  "points": {
+    "declared_limit": 2000,
+    "total_reported": 485,
+    "total_computed": 485
+  },
+  "units": [
+    {
+      "ref": {
+        "id": "war-dog-karnivore",
+        "raw_name": "War Dog Karnivore",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 150,
+      "is_warlord": false,
+      "enhancement": {
+        "id": "preyslayers-mantle",
+        "raw_name": "Preyslayer's Mantle",
+        "resolved": true,
+        "candidates": []
+      },
+      "enhancement_points": 15,
+      "wargear": [
+        {
+          "ref": {
+            "id": "reaper-chaintalon",
+            "raw_name": "Reaper chaintalon",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "slaughterclaw",
+            "raw_name": "Slaughterclaw",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "havoc-multi-launcher",
+            "raw_name": "Havoc multi-launcher",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "war-dog-karnivore",
+        "raw_name": "War Dog Karnivore",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 150,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "reaper-chaintalon",
+            "raw_name": "Reaper chaintalon",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "slaughterclaw",
+            "raw_name": "Slaughterclaw",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "havoc-multi-launcher",
+            "raw_name": "Havoc multi-launcher",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "war-dog-executioner",
+        "raw_name": "War Dog Executioner",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 130,
+      "is_warlord": true,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "armoured-feet",
+            "raw_name": "Armoured feet",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "war-dog-autocannon",
+            "raw_name": "War Dog autocannon",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 2
+        },
+        {
+          "ref": {
+            "id": "diabolus-heavy-stubber",
+            "raw_name": "Diabolus heavy stubber",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "nurglings",
+        "raw_name": "Nurglings",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 3,
+      "points": 40,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "diseased-claws-and-teeth",
+            "raw_name": "Diseased claws and teeth",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 3
+        }
+      ],
+      "leader_attachment": null
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "pre-launch-provisional"
+  },
+  "diagnostics": {
+    "resolved_units": 4,
+    "unresolved_units": 0,
+    "resolved_weapons": 10,
+    "unresolved_weapons": 0,
+    "warnings": [
+      {
+        "code": "multi-force",
+        "message": "Source list contains more than one faction; the primary faction was used for scoping.",
+        "raw_name": null
+      }
+    ]
+  }
+}

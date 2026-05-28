@@ -102,7 +102,7 @@ fn map_battle_size(raw: Option<&str>) -> Option<BattleSize> {
 /// let roster = import_roster(&payload, Dataset::embedded()).unwrap();
 /// assert_eq!(roster.source.format, "listforge");
 /// ```
-pub fn resolve(parsed: &ParsedRoster, ds: &Dataset) -> Roster {
+pub fn resolve(parsed: &ParsedRoster, ds: &Dataset, format: &str) -> Roster {
     let mut diag = DiagnosticsBuilder::default();
 
     if parsed.multi_force {
@@ -194,7 +194,7 @@ pub fn resolve(parsed: &ParsedRoster, ds: &Dataset) -> Roster {
     Roster {
         name: parsed.name.clone(),
         source: RosterSource {
-            format: "listforge".to_string(),
+            format: format.to_string(),
             generated_by: parsed.generated_by.clone(),
         },
         faction_id,
@@ -251,6 +251,11 @@ fn resolve_unit(
         .enhancement_raw_name
         .as_deref()
         .map(|name| resolve_enhancement(name, detachment_id, ds, diag));
+    let enhancement_points = if enhancement.is_some() {
+        parsed.enhancement_points
+    } else {
+        None
+    };
 
     let wargear = parsed
         .wargear
@@ -284,6 +289,7 @@ fn resolve_unit(
         points: parsed.points,
         is_warlord: parsed.is_warlord,
         enhancement,
+        enhancement_points,
         wargear,
         leader_attachment: None,
     }

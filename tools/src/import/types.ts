@@ -74,16 +74,28 @@ export interface RosterLeaderAttachment {
 export interface RosterUnit {
   ref: ResolvedRef;
   model_count: number;
+  /** Base unit cost (without the enhancement). */
   points: number | null;
   is_warlord: boolean;
   enhancement: ResolvedRef | null;
+  /** Points cost of the enhancement when the source reported one; null otherwise. */
+  enhancement_points: number | null;
   wargear: RosterWargear[];
   leader_attachment: RosterLeaderAttachment | null;
 }
 
+/** Identifier for the adapter that produced this roster. New format adapters
+ * extend this union; `roster.schema.json` keeps the canonical enum. */
+export type RosterFormat =
+  | "listforge"
+  | "newrecruit-json"
+  | "newrecruit-wtc-compact"
+  | "newrecruit-wtc-full"
+  | "newrecruit-simple";
+
 /** Provenance of the imported list. */
 export interface RosterSource {
-  format: "listforge";
+  format: RosterFormat;
   generated_by: string | null;
 }
 
@@ -145,9 +157,12 @@ export interface ParsedUnit {
   /** True when the source classifies this as a character/leader-capable model. */
   is_character: boolean;
   model_count: number;
+  /** Base unit cost (without the enhancement). */
   points: number | null;
   is_warlord: boolean;
   enhancement_raw_name: string | null;
+  /** Points cost of the enhancement when the source reported one; null otherwise. */
+  enhancement_points: number | null;
   wargear: ParsedWargear[];
 }
 

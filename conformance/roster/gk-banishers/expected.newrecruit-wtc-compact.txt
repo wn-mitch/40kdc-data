@@ -1,0 +1,16 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ LIST NAME: Banishers Test List
++ FACTION KEYWORD: Grey Knights
++ DETACHMENT: Banishers
++ TOTAL ARMY POINTS: 585pts
++ POINTS LIMIT: 2000pts
++
++ WARLORD: Char2: Grand Master in Nemesis Dreadknight
++ ENHANCEMENT: Pyresoul (Psychic) (on Char2: Grand Master in Nemesis Dreadknight)
++ NUMBER OF UNITS: 3
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Char1: 1x Castellan Crowe (90 pts): Black Blade of Antwyr, Purifying Flame, Storm bolter
+Char2: 1x Grand Master in Nemesis Dreadknight (245 pts): Heavy psycannon, Fragstorm grenade launcher, Nemesis daemon greathammer, Warlord
+Enhancement: Pyresoul (Psychic) (+20 pts)
+10x Purifier Squad (250 pts): Purifying Flame, 9x Storm bolter

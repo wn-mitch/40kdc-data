@@ -1,0 +1,65 @@
+{
+  "name": "Allied Test List",
+  "generatedBy": "https://newrecruit.eu",
+  "roster": {
+    "name": "Allied Test List",
+    "xmlns": "http://www.battlescribe.net/schema/rosterSchema",
+    "generatedBy": "https://newrecruit.eu",
+    "costs": [
+      {
+        "name": "pts",
+        "typeId": "pts-type",
+        "value": 315
+      }
+    ],
+    "forces": [
+      {
+        "id": "force-1",
+        "name": "Army Roster",
+        "catalogueName": "Grey Knights",
+        "selections": [
+          {
+            "id": "u-0",
+            "name": "Grand Master in Nemesis Dreadknight",
+            "type": "model",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Faction: Grey Knights",
+                "primary": false
+              }
+            ],
+            "costs": [
+              {
+                "name": "pts",
+                "typeId": "pts-type",
+                "value": 225
+              }
+            ],
+            "selections": []
+          },
+          {
+            "id": "u-1",
+            "name": "Callidus Assassin",
+            "type": "model",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Faction: Grey Knights",
+                "primary": false
+              }
+            ],
+            "costs": [
+              {
+                "name": "pts",
+                "typeId": "pts-type",
+                "value": 90
+              }
+            ],
+            "selections": []
+          }
+        ]
+      }
+    ]
+  }
+}

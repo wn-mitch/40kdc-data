@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { gzipSync } from "node:zlib";
-import { importListForge } from "../../src/import/import-listforge.js";
+import { importListForge } from "../../src/import/import-roster.js";
 import { createValidator } from "../../src/schema-loader.js";
 
 const ROSTER_SCHEMA_ID = "https://40kdc.dev/schemas/core/roster.schema.json";

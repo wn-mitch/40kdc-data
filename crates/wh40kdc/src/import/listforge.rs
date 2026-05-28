@@ -129,6 +129,7 @@ fn model_count(unit: &Value) -> u64 {
 fn parse_unit(unit: &Value) -> ParsedUnit {
     let mut wargear: Vec<ParsedWargear> = Vec::new();
     let mut enhancement_raw_name: Option<String> = None;
+    let mut enhancement_points: Option<u64> = None;
     let mut is_warlord = false;
 
     for node in child_selections(unit) {
@@ -136,6 +137,7 @@ fn parse_unit(unit: &Value) -> ParsedUnit {
             if is_enhancement_selection(s) {
                 if enhancement_raw_name.is_none() {
                     enhancement_raw_name = Some(selection_name(s).to_string());
+                    enhancement_points = points_of(s);
                 }
                 return;
             }
@@ -159,6 +161,7 @@ fn parse_unit(unit: &Value) -> ParsedUnit {
         points: points_of(unit),
         is_warlord,
         enhancement_raw_name,
+        enhancement_points,
         wargear,
     }
 }

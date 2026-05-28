@@ -24,6 +24,7 @@ import type {
   ParsedUnit,
   ResolvedRef,
   Roster,
+  RosterFormat,
   RosterUnit,
   Warning,
   WarningCode,
@@ -83,7 +84,11 @@ function mapBattleSize(raw: string | null): BattleSize | null {
   return null;
 }
 
-export function resolve(parsed: ParsedRoster, ds: Dataset): Roster {
+export function resolve(
+  parsed: ParsedRoster,
+  ds: Dataset,
+  format: RosterFormat = "listforge",
+): Roster {
   const diag = new DiagnosticsBuilder();
 
   if (parsed.multi_force) {
@@ -141,7 +146,7 @@ export function resolve(parsed: ParsedRoster, ds: Dataset): Roster {
 
   return {
     name: parsed.name,
-    source: { format: "listforge", generated_by: parsed.generated_by },
+    source: { format, generated_by: parsed.generated_by },
     faction_id,
     detachment_id,
     battle_size,
@@ -185,6 +190,7 @@ function resolveUnit(
   const enhancement = parsed.enhancement_raw_name
     ? resolveEnhancement(parsed.enhancement_raw_name, detachment_id, ds, diag)
     : null;
+  const enhancement_points = enhancement === null ? null : parsed.enhancement_points;
 
   const wargear = parsed.wargear.map((w) => {
     const hits = ds.weapons.findAll(w.raw_name);
@@ -203,6 +209,7 @@ function resolveUnit(
     points: parsed.points,
     is_warlord: parsed.is_warlord,
     enhancement,
+    enhancement_points,
     wargear,
     leader_attachment: null,
   };

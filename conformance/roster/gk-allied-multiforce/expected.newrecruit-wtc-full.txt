@@ -1,0 +1,19 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ LIST NAME: Allied Test List
++ FACTION KEYWORD: Grey Knights
++ DETACHMENT: —
++ TOTAL ARMY POINTS: 315pts
++ POINTS LIMIT: 315pts
++
++ WARLORD: —
++ ENHANCEMENT: —
++ NUMBER OF UNITS: 2
++++++++++++++++++++++++++++++++++++++++++++++++
+
+BATTLELINE
+
+1x Grand Master in Nemesis Dreadknight (225 pts)
+1 with 
+
+1x Callidus Assassin (90 pts)
+1 with 

@@ -89,17 +89,26 @@ pub struct RosterUnit {
     #[serde(rename = "ref")]
     pub ref_: ResolvedRef,
     pub model_count: u64,
+    /// Base unit cost (without the enhancement).
     pub points: Option<u64>,
     pub is_warlord: bool,
     pub enhancement: Option<ResolvedRef>,
+    /// Points cost of the enhancement when the source reported one; `None`
+    /// otherwise. Lets a Roster round-trip cleanly through formats that print
+    /// enhancements as a separate `+N pts` line.
+    pub enhancement_points: Option<u64>,
     pub wargear: Vec<RosterWargear>,
     pub leader_attachment: Option<RosterLeaderAttachment>,
 }
 
 /// Provenance of the imported list.
+///
+/// `format` is the stable id of the adapter that produced this roster — one of
+/// `"listforge"`, `"newrecruit-json"`, `"newrecruit-wtc-compact"`,
+/// `"newrecruit-wtc-full"`, `"newrecruit-simple"`. The canonical enum lives in
+/// `schemas/core/roster.schema.json`; new adapters extend it there first.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RosterSource {
-    /// Always `"listforge"` for v1.
     pub format: String,
     pub generated_by: Option<String>,
 }
@@ -169,9 +178,13 @@ pub struct ParsedUnit {
     /// True when the source classifies this as a character/leader-capable model.
     pub is_character: bool,
     pub model_count: u64,
+    /// Base unit cost (without the enhancement).
     pub points: Option<u64>,
     pub is_warlord: bool,
     pub enhancement_raw_name: Option<String>,
+    /// Points cost of the enhancement when the source reported one; `None`
+    /// otherwise.
+    pub enhancement_points: Option<u64>,
     pub wargear: Vec<ParsedWargear>,
 }
 
