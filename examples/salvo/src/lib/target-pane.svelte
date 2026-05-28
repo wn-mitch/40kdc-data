@@ -1,6 +1,7 @@
 <script lang="ts">
   import { salvo, ds } from "./store.svelte.js";
   import { resolveRosterUnit } from "@alpaca-software/40kdc-data";
+  import EmptyState from "./EmptyState.svelte";
 
   const datasetUnits = $derived(
     ds.units.all.slice().sort((a, b) => a.name.localeCompare(b.name)),
@@ -101,7 +102,7 @@
   </div>
 {:else if salvo.targetMode === "roster"}
   {#if rosterPicks.length === 0}
-    <p class="dim" style="font-size:12px">Import a target list in the Import pane.</p>
+    <EmptyState>Import a target list in the Import pane.</EmptyState>
   {:else}
     <div class="row">
       <label>Unit</label>

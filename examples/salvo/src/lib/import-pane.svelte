@@ -1,6 +1,7 @@
 <script lang="ts">
   import { salvo, importRosterText } from "./store.svelte.js";
   import type { AdapterTrial, RosterFormat } from "@alpaca-software/40kdc-data";
+  import EmptyState from "./EmptyState.svelte";
 
   let attackerText = $state("");
   let attackerError = $state<string | null>(null);
@@ -120,9 +121,9 @@
   </div>
 {/if}
 
-<p class="dim" style="margin-top:14px;font-size:12px">
-  No list to hand? Pick a unit straight from the embedded dataset in the Attacker pane.
-</p>
+<div style="margin-top: var(--space-3)">
+  <EmptyState>No list to hand? Pick a unit straight from the embedded dataset in the Attacker pane.</EmptyState>
+</div>
 
 <style>
   .trials {

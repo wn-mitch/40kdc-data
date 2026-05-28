@@ -13,6 +13,7 @@
     type EngineInput,
     type Unit,
   } from "@alpaca-software/40kdc-data";
+  import EmptyState from "./EmptyState.svelte";
 
   function synthTarget(t: ManualTarget): Unit {
     return {
@@ -142,7 +143,7 @@
 </script>
 
 {#if !projection}
-  <p class="dim" style="font-size:12px">Pick a unit, weapon, and target to see a projection.</p>
+  <EmptyState>Pick a unit, weapon, and target to see a projection.</EmptyState>
 {:else if "error" in projection}
   <div class="error">{projection.error}</div>
 {:else}

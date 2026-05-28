@@ -297,6 +297,17 @@ textarea {
 .dim { color: var(--muted); }
 .error { color: var(--danger); font-size: var(--text-xs); margin-top: var(--space-1); }
 
+.empty-state {
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--panel-2);
+  color: var(--muted);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  text-align: center;
+}
+
 .tabs { display: flex; gap: var(--space-1); margin-bottom: var(--space-2); }
 .tabs button { font-size: var(--text-xs); padding: var(--space-1) var(--space-3); }
 .tabs button.active {

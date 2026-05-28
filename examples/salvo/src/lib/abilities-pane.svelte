@@ -11,6 +11,7 @@
     StackableBuff,
     StackableBuffGroup,
   } from "@alpaca-software/40kdc-data";
+  import EmptyState from "./EmptyState.svelte";
 
   // EngineContext for the DSL→Buff translator. Without this the translator
   // defaults to `{ phase: "shooting" }`, so phase-gated branches misfire when
@@ -113,9 +114,9 @@
 </script>
 
 {#if !salvo.selectedUnitId}
-  <p class="dim" style="font-size:12px">Pick an attacker unit to see eligible buffs.</p>
+  <EmptyState>Pick an attacker unit to see eligible buffs.</EmptyState>
 {:else if stackable.buffs.length === 0}
-  <p class="dim" style="font-size:12px">No buffs available in the {salvo.phase} phase.</p>
+  <EmptyState>No buffs available in the {salvo.phase} phase.</EmptyState>
 {:else}
   <div class="ability-list">
     {#each ungrouped as b (b.id)}

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { salvo, ds, PHASE_CHOICES } from "./store.svelte.js";
   import { resolveRosterUnit } from "@alpaca-software/40kdc-data";
+  import EmptyState from "./EmptyState.svelte";
 
   // Roster-driven unit list (each entry is "this unit, this faction"), or the
   // raw embedded unit catalog when no roster is loaded.
@@ -189,21 +190,24 @@
 </div>
 
 {#if selectedUnit}
-  <div class="row">
-    <label>Weapon</label>
-    <select
-      class="grow"
-      value={salvo.selectedWeaponId ?? ""}
-      onchange={(e) => {
-        salvo.selectedWeaponId = (e.currentTarget as HTMLSelectElement).value || null;
-        salvo.selectedProfileIndex = 0;
-      }}
-    >
-      {#each weapons as w (w.id)}
-        <option value={w.id}>{w.name} ({w.raw.type})</option>
-      {/each}
-    </select>
-  </div>
+  {#if weapons.length === 0}
+    <EmptyState>No weapons drawn for {selectedUnit.name}.</EmptyState>
+  {:else}
+    <div class="row">
+      <label>Weapon</label>
+      <select
+        class="grow"
+        value={salvo.selectedWeaponId ?? ""}
+        onchange={(e) => {
+          salvo.selectedWeaponId = (e.currentTarget as HTMLSelectElement).value || null;
+          salvo.selectedProfileIndex = 0;
+        }}
+      >
+        {#each weapons as w (w.id)}
+          <option value={w.id}>{w.name} ({w.raw.type})</option>
+        {/each}
+      </select>
+    </div>
 
   {#if profiles.length > 1}
     <div class="row">
@@ -231,6 +235,7 @@
     />
     <span class="dim">of {selectedUnit.raw.model_count?.max ?? "?"}</span>
   </div>
+  {/if}
 {:else}
-  <p class="dim" style="font-size:12px">Pick a faction + unit (or import a roster).</p>
+  <EmptyState>Pick a faction + unit, or import a roster.</EmptyState>
 {/if}
