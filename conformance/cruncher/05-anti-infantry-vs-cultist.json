@@ -1,0 +1,34 @@
+{
+  "name": "bolt-rifle x5 vs cultist mob, manual Anti-INFANTRY 5+ buff",
+  "attacker": { "weaponId": "bolt-rifle", "profileIndex": 0 },
+  "modelsFiring": 5,
+  "target": { "unitId": "cultist-mob", "profileIndex": 0 },
+  "context": {
+    "phase": "shooting",
+    "attackerStationary": false,
+    "withinHalfRange": false
+  },
+  "buffs": [
+    {
+      "source": { "kind": "manual", "label": "Anti-INFANTRY 5+ (test)" },
+      "contribution": {
+        "type": "extra-keyword",
+        "keywordRef": {
+          "keyword_id": "anti",
+          "parameters": { "target_keyword": "Infantry", "threshold": 5 }
+        }
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 6.6667,
+      "wounds": 4.4444,
+      "unsaved": 4.4444,
+      "damage": 4.4444,
+      "after-fnp": 4.4444,
+      "models-killed": 4.4444
+    }
+  }
+}

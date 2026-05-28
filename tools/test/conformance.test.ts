@@ -20,6 +20,7 @@ import { Dataset } from "../src/data/dataset.js";
 import { normalizeName } from "../src/data/normalize.js";
 import { exportRoster, type ExportFormat } from "../src/export/index.js";
 import { importRoster } from "../src/import/import-roster.js";
+import { crunch, type Buff, type EngineContext, type Stage } from "../src/cruncher/index.js";
 
 const CONFORMANCE = join(dirname(fileURLToPath(import.meta.url)), "../../conformance");
 const readJson = (path: string): unknown => JSON.parse(readFileSync(path, "utf8"));
@@ -130,6 +131,73 @@ describe("conformance corpus (ties out with the Rust crate)", () => {
           : readText(path);
         const actual = exportRoster(roster, format);
         expect(actual, `export ${format} for roster/${entry.name}`).toBe(goldenText);
+      }
+    });
+  }
+});
+
+// Cruncher conformance — every case names an attacker/target by id (resolved
+// against the embedded dataset), a flat `buffs` stack, an `EngineContext`,
+// and an `expected.stages` map of expected-value floats. The runner asserts
+// each stage matches within `5e-4` of the golden — wide enough to absorb the
+// four-decimal rounding in the goldens themselves, tight enough that any
+// non-trivial engine drift is caught.
+
+const CRUNCHER_TOLERANCE = 5e-4;
+
+interface CruncherCase {
+  name: string;
+  attacker: { weaponId: string; profileIndex: number };
+  modelsFiring: number;
+  target: { unitId: string; profileIndex: number; modelCount?: number };
+  context: EngineContext;
+  buffs: Buff[];
+  expected: { stages: Record<Stage["name"], number> };
+}
+
+describe("cruncher conformance corpus", () => {
+  const ds = Dataset.embedded();
+  const cruncherDir = join(CONFORMANCE, "cruncher");
+  const files = readdirSync(cruncherDir).filter((n) => n.endsWith(".json")).sort();
+
+  it("the cruncher corpus is non-empty", () => {
+    expect(files.length).toBeGreaterThan(0);
+  });
+
+  for (const filename of files) {
+    const path = join(cruncherDir, filename);
+    const c = readJson(path) as CruncherCase;
+    it(`cruncher/${filename}: stages match the golden within ${CRUNCHER_TOLERANCE}`, () => {
+      const weapon = ds.weapons.get(c.attacker.weaponId);
+      const unit = ds.units.get(c.target.unitId);
+      expect(weapon, `unknown weapon ${c.attacker.weaponId} in ${filename}`).toBeDefined();
+      expect(unit, `unknown unit ${c.target.unitId} in ${filename}`).toBeDefined();
+      const out = crunch(
+        {
+          attacker: { weapon: weapon!.raw, profileIndex: c.attacker.profileIndex },
+          target: {
+            unit: unit!.raw,
+            profileIndex: c.target.profileIndex,
+            ...(c.target.modelCount !== undefined ? { modelCount: c.target.modelCount } : {}),
+          },
+          modelsFiring: c.modelsFiring,
+          buffs: c.buffs,
+          context: c.context,
+        },
+        ds,
+      );
+      const actualByName = Object.fromEntries(out.stages.map((s) => [s.name, s.expected])) as Record<
+        Stage["name"],
+        number
+      >;
+      for (const [name, expected] of Object.entries(c.expected.stages) as [Stage["name"], number][]) {
+        const actual = actualByName[name];
+        expect(actual, `stage ${name} missing in ${filename}`).toBeDefined();
+        const delta = Math.abs(actual - expected);
+        expect(
+          delta < CRUNCHER_TOLERANCE,
+          `cruncher/${filename} stage ${name}: expected ${expected.toFixed(6)}, got ${actual.toFixed(6)} (Δ ${delta.toFixed(6)})`,
+        ).toBe(true);
       }
     });
   }

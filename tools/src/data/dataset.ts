@@ -26,16 +26,23 @@ import type {
   WeaponKeyword,
 } from "../generated.js";
 import { Collection } from "./collection.js";
-import { AbilityView, FactionView, UnitView, WeaponView } from "./entities.js";
+import {
+  AbilityView,
+  FactionView,
+  UnitView,
+  WeaponKeywordView,
+  WeaponView,
+} from "./entities.js";
 import { emptyRawData, type RawData } from "./types.js";
 import { RAW_DATA } from "./bundle.generated.js";
+import type { Buff, EngineContext } from "../cruncher/buffs.js";
 
 /** The whole dataset, with linked accessors over every entity collection. */
 export class Dataset {
   // Richly-linked collections.
   readonly units: Collection<Unit, UnitView>;
   readonly weapons: Collection<RawData["weapons"][number], WeaponView>;
-  readonly weaponKeywords: Collection<WeaponKeyword, WeaponKeyword>;
+  readonly weaponKeywords: Collection<WeaponKeyword, WeaponKeywordView>;
   readonly factions: Collection<RawData["factions"][number], FactionView>;
   readonly abilities: Collection<RawData["abilities"][number], AbilityView>;
 
@@ -65,6 +72,8 @@ export class Dataset {
   private readonly unitsByAbility = new Map<string, Unit[]>();
   /** weapon id → units that list it. */
   private readonly unitsByWeapon = new Map<string, Unit[]>();
+  /** weapon-keyword id → weapons whose profiles reference it. */
+  private readonly weaponsByKeyword = new Map<string, RawData["weapons"][number][]>();
 
   constructor(raw: RawData = emptyRawData()) {
     this.units = new Collection({
@@ -83,7 +92,12 @@ export class Dataset {
       nameOf: (w) => w.name,
       wrap: (w) => new WeaponView(w, this),
     });
-    this.weaponKeywords = idCollection(raw.weaponKeywords);
+    this.weaponKeywords = new Collection({
+      items: raw.weaponKeywords,
+      idOf: (k) => k.id,
+      nameOf: (k) => k.name,
+      wrap: (k) => new WeaponKeywordView(k, this),
+    });
     this.factions = new Collection({
       items: raw.factions,
       idOf: (f) => f.id,
@@ -139,6 +153,30 @@ export class Dataset {
     return (this.unitsByWeapon.get(weaponId) ?? []).map((u) => new UnitView(u, this));
   }
 
+  /** Weapons whose profiles reference the given weapon-keyword id. */
+  weaponsWithKeyword(keywordId: string): WeaponView[] {
+    return (this.weaponsByKeyword.get(keywordId) ?? []).map((w) => new WeaponView(w, this));
+  }
+
+  /**
+   * Every {@link Buff} applicable to the given weapon profiles in this
+   * `context`. M1 scope: weapon-profile keywords only (M2 extends this to walk
+   * eligible abilities). Returns a flat buff stack the engine can consume
+   * straight; callers may concat additional manual / ability buffs onto it.
+   */
+  buffsFor(
+    input: { weaponProfiles?: { weaponId: string; profileIndex: number }[] },
+    context: EngineContext,
+  ): Buff[] {
+    const out: Buff[] = [];
+    for (const ref of input.weaponProfiles ?? []) {
+      const weapon = this.weapons.get(ref.weaponId);
+      if (!weapon) continue;
+      out.push(...weapon.profileBuffs(ref.profileIndex, context));
+    }
+    return out;
+  }
+
   private buildIndexes(raw: RawData): void {
     for (const pm of raw.phaseMappings) {
       const key = `${pm.source_type}:${pm.source_id}`;
@@ -151,6 +189,21 @@ export class Dataset {
     for (const unit of raw.units) {
       for (const abilityId of unit.ability_ids ?? []) push(this.unitsByAbility, abilityId, unit);
       for (const weaponId of unit.weapon_ids ?? []) push(this.unitsByWeapon, weaponId, unit);
+    }
+    const seenByKeyword = new Map<string, Set<string>>();
+    for (const weapon of raw.weapons) {
+      for (const profile of weapon.profiles) {
+        for (const ref of profile.keywords ?? []) {
+          let seen = seenByKeyword.get(ref.keyword_id);
+          if (!seen) {
+            seen = new Set();
+            seenByKeyword.set(ref.keyword_id, seen);
+          }
+          if (seen.has(weapon.id)) continue;
+          seen.add(weapon.id);
+          push(this.weaponsByKeyword, ref.keyword_id, weapon);
+        }
+      }
     }
   }
 }

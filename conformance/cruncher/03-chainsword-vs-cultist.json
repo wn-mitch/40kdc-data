@@ -1,0 +1,19 @@
+{
+  "name": "chainsword x5 vs cultist mob (melee, vanilla)",
+  "attacker": { "weaponId": "chainsword", "profileIndex": 0 },
+  "modelsFiring": 5,
+  "target": { "unitId": "cultist-mob", "profileIndex": 0 },
+  "context": { "phase": "fight" },
+  "buffs": [],
+  "expected": {
+    "stages": {
+      "attacks": 20,
+      "hits": 13.3333,
+      "wounds": 6.6667,
+      "unsaved": 5.5556,
+      "damage": 5.5556,
+      "after-fnp": 5.5556,
+      "models-killed": 5.5556
+    }
+  }
+}

@@ -1,5 +1,5 @@
 /**
- * Linked views over the four richly-connected entity types. Each wraps a raw
+ * Linked views over the richly-connected entity types. Each wraps a raw
  * generated record and resolves its relationships lazily against the owning
  * {@link Dataset}; the full underlying record is always available via `.raw`.
  *
@@ -11,7 +11,10 @@ import type {
   Phase,
   Unit,
   Weapon,
+  WeaponKeyword,
 } from "../generated.js";
+import type { Buff, BuffSource, EngineContext } from "../cruncher/buffs.js";
+import { buffsFromKeyword } from "../cruncher/from-keyword.js";
 import type { Dataset } from "./dataset.js";
 
 /** A unit, linked to its faction, weapons, and abilities. */
@@ -43,6 +46,21 @@ export class UnitView {
   /** Abilities referenced by `ability_ids`; unresolved ids are skipped. */
   get abilities(): AbilityView[] {
     return resolveAll(this.raw.ability_ids, (id) => this.ds.abilities.get(id));
+  }
+
+  /**
+   * The stat profile at index `i` (default 0). Returns the schema-generated
+   * profile object directly so callers can feed it straight to the engine
+   * without an intermediate wrapper.
+   */
+  profileAt(i = 0): Unit["profiles"][number] {
+    const profile = this.raw.profiles[i];
+    if (profile === undefined) {
+      throw new RangeError(
+        `UnitView(${this.raw.id}).profileAt(${i}): only ${this.raw.profiles.length} profile(s) defined`,
+      );
+    }
+    return profile;
   }
 }
 
@@ -80,6 +98,16 @@ export class AbilityView {
   get units(): UnitView[] {
     return this.ds.unitsWithAbility(this.raw.ability_id);
   }
+
+  /**
+   * Buff stack this ability contributes against `context`. M1 stub: returns
+   * `[]`. M2 introduces the full DSL→Buff translator; the signature is shaped
+   * now so call sites can be written today.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getBuffs(_source: BuffSource, _context?: EngineContext): Buff[] {
+    return [];
+  }
 }
 
 /** A weapon, linked to the units that carry it. */
@@ -101,6 +129,106 @@ export class WeaponView {
   /** Units that list this weapon in their `weapon_ids`. */
   get units(): UnitView[] {
     return this.ds.unitsWithWeapon(this.raw.id);
+  }
+
+  /** The stat profile at index `i` (default 0). */
+  profileAt(i = 0): Weapon["profiles"][number] {
+    const profile = this.raw.profiles[i];
+    if (profile === undefined) {
+      throw new RangeError(
+        `WeaponView(${this.raw.id}).profileAt(${i}): only ${this.raw.profiles.length} profile(s) defined`,
+      );
+    }
+    return profile;
+  }
+
+  /**
+   * Catalog views for each keyword referenced by profile `i`, paired with the
+   * reference-site parameters. Unresolved keyword ids are skipped.
+   */
+  keywordsAt(
+    i = 0,
+  ): { keyword: WeaponKeywordView; parameters: Record<string, unknown> | undefined }[] {
+    const profile = this.profileAt(i);
+    const refs = profile.keywords ?? [];
+    const out: { keyword: WeaponKeywordView; parameters: Record<string, unknown> | undefined }[] = [];
+    for (const ref of refs) {
+      const view = this.ds.weaponKeywords.get(ref.keyword_id);
+      if (!view) continue;
+      out.push({
+        keyword: view,
+        parameters: ref.parameters as Record<string, unknown> | undefined,
+      });
+    }
+    return out;
+  }
+
+  /**
+   * Buffs contributed by profile `i`'s intrinsic keywords against `context` —
+   * the natural "what does this profile bring on its own?" call the engine
+   * makes automatically before adding ability/manual buffs.
+   */
+  profileBuffs(i: number | undefined, context: EngineContext): Buff[] {
+    const index = i ?? 0;
+    const out: Buff[] = [];
+    for (const { keyword, parameters } of this.keywordsAt(index)) {
+      out.push(
+        ...buffsFromKeyword({
+          keywordId: keyword.id,
+          weaponId: this.raw.id,
+          effect: keyword.raw.effect,
+          ...(parameters !== undefined ? { parameters } : {}),
+          context,
+        }),
+      );
+    }
+    return out;
+  }
+}
+
+/**
+ * A weapon-keyword catalog entry, linked to the weapons whose profiles
+ * reference it. Exposes the keyword's mechanical effect as a buff stack
+ * via {@link getBuffs}.
+ */
+export class WeaponKeywordView {
+  constructor(
+    /** The full generated `WeaponKeyword` record. */
+    readonly raw: WeaponKeyword,
+    private readonly ds: Dataset,
+  ) {}
+
+  get id(): string {
+    return this.raw.id;
+  }
+
+  get name(): string {
+    return this.raw.name;
+  }
+
+  /** Weapons whose profiles reference this keyword id. */
+  get weapons(): WeaponView[] {
+    return this.ds.weaponsWithKeyword(this.raw.id);
+  }
+
+  /**
+   * Buff contributions from this catalog entry, for one reference site:
+   * pass the keyword's `parameters` (e.g. `{ value: 1 }` for Sustained Hits 1)
+   * along with the `weaponId` that's carrying it (used as the buff source)
+   * and the engine `context` (e.g. attacker stationary?).
+   */
+  getBuffs(
+    parameters: Record<string, unknown> | undefined,
+    weaponId: string,
+    context: EngineContext,
+  ): Buff[] {
+    return buffsFromKeyword({
+      keywordId: this.raw.id,
+      weaponId,
+      effect: this.raw.effect,
+      ...(parameters !== undefined ? { parameters } : {}),
+      context,
+    });
   }
 }
 

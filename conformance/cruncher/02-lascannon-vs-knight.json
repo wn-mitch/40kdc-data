@@ -1,0 +1,23 @@
+{
+  "name": "lascannon x1 vs questoris knight (no flags)",
+  "attacker": { "weaponId": "lascannon", "profileIndex": 0 },
+  "modelsFiring": 1,
+  "target": { "unitId": "questoris-knight-magaera", "profileIndex": 0 },
+  "context": {
+    "phase": "shooting",
+    "attackerStationary": false,
+    "withinHalfRange": false
+  },
+  "buffs": [],
+  "expected": {
+    "stages": {
+      "attacks": 1,
+      "hits": 0.6667,
+      "wounds": 0.4444,
+      "unsaved": 0.2963,
+      "damage": 1.3333,
+      "after-fnp": 1.3333,
+      "models-killed": 0.0513
+    }
+  }
+}

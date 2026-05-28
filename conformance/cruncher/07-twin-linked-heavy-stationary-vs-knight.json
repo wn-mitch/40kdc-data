@@ -1,0 +1,32 @@
+{
+  "name": "multi-melta x1 vs questoris knight, stationary, half range, manual twin-linked",
+  "attacker": { "weaponId": "multi-melta", "profileIndex": 0 },
+  "modelsFiring": 1,
+  "target": { "unitId": "questoris-knight-magaera", "profileIndex": 0 },
+  "context": {
+    "phase": "shooting",
+    "attackerStationary": true,
+    "withinHalfRange": true
+  },
+  "buffs": [
+    {
+      "source": { "kind": "manual", "label": "Twin-linked (test)" },
+      "contribution": {
+        "type": "reroll",
+        "roll": "wound",
+        "subset": "all-failures"
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 2,
+      "hits": 1.3333,
+      "wounds": 0.7407,
+      "unsaved": 0.4938,
+      "damage": 2.7160,
+      "after-fnp": 2.7160,
+      "models-killed": 0.1045
+    }
+  }
+}

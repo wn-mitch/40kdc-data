@@ -40,7 +40,7 @@ describe("weapon-keyword catalog", () => {
 
   it("twin-linked resolves to a reroll-failed-wounds effect", () => {
     const twin = ds.weaponKeywords.get("twin-linked");
-    expect(twin?.effect).toEqual({
+    expect(twin?.raw.effect).toEqual({
       type: "re-roll",
       target: "self",
       modifier: { roll: "wound", subset: "all-failures" },
@@ -74,7 +74,7 @@ describe("weapon-keyword catalog", () => {
     // express its failure subset. The catalog is the smallest case to pin;
     // M0.5's migration ensures the same for the ability corpus.
     for (const kw of weaponKeywords.all) {
-      walk(kw.effect, (node) => {
+      walk(kw.raw.effect, (node) => {
         if (
           typeof node === "object" && node !== null &&
           (node as { type?: unknown }).type === "re-roll"
@@ -102,7 +102,7 @@ describe("weapon-keyword conformance golden", () => {
     for (const { keyword_id, expected_effect } of cases) {
       const entry = ds.weaponKeywords.get(keyword_id);
       expect(entry, `catalog missing ${keyword_id}`).toBeDefined();
-      expect(entry!.effect, `effect mismatch for ${keyword_id}`).toEqual(expected_effect);
+      expect(entry!.raw.effect, `effect mismatch for ${keyword_id}`).toEqual(expected_effect);
     }
   });
 });

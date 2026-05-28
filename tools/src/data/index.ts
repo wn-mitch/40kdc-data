@@ -22,10 +22,21 @@
 export { Dataset } from "./dataset.js";
 export { Collection } from "./collection.js";
 export type { CollectionConfig } from "./collection.js";
-export { UnitView, AbilityView, WeaponView, FactionView } from "./entities.js";
+export {
+  UnitView,
+  AbilityView,
+  WeaponView,
+  WeaponKeywordView,
+  FactionView,
+} from "./entities.js";
 export { normalizeName } from "./normalize.js";
 export { emptyRawData } from "./types.js";
 export type { RawData } from "./types.js";
+
+// The cruncher surface — buff types + the engine — re-exported from the data
+// package so downstream callers can import their whole 40kdc API from
+// `@alpaca-software/40kdc-data` without reaching into subpaths.
+export * from "../cruncher/index.js";
 
 import { Dataset } from "./dataset.js";
 
