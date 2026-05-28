@@ -20,6 +20,7 @@
  * factions.find("World Eaters")!.units.length;
  */
 export { Dataset } from "./dataset.js";
+export type { StackableBuff, StackableBuffGroup } from "./dataset.js";
 export { Collection } from "./collection.js";
 export type { CollectionConfig } from "./collection.js";
 export {
@@ -41,6 +42,8 @@ export * from "../cruncher/index.js";
 // The DSL→Buff translator that powers AbilityView.getBuffs / describeBuffs.
 export { effectToBuffs, parseKeywordGrant } from "../cruncher/from-dsl.js";
 export type {
+  ActivatableBuff,
+  ActivatableGroupRef,
   EffectTranslation,
   TranslationPerspective,
   UnsupportedFragment,

@@ -17,8 +17,8 @@ import type { Buff, BuffSource, EngineContext } from "../cruncher/buffs.js";
 import { buffsFromKeyword } from "../cruncher/from-keyword.js";
 import {
   effectToBuffs,
+  type EffectTranslation,
   type TranslationPerspective,
-  type UnsupportedFragment,
 } from "../cruncher/from-dsl.js";
 import type { Dataset } from "./dataset.js";
 
@@ -130,7 +130,7 @@ export class AbilityView {
     source: BuffSource,
     context?: EngineContext,
     perspective: TranslationPerspective = "attacker",
-  ): { applied: Buff[]; unsupported: UnsupportedFragment[] } {
+  ): EffectTranslation {
     const ctx: EngineContext = context ?? { phase: "shooting" };
     return effectToBuffs(this.raw.effect, source, ctx, perspective);
   }

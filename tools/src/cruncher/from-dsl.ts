@@ -20,7 +20,15 @@
  *
  * @packageDocumentation
  */
-import type { Buff, BuffSource, EngineContext, WeaponKeywordRef } from "./buffs.js";
+import type {
+  Buff,
+  BuffApplicability,
+  BuffContribution,
+  BuffSource,
+  EngineContext,
+  WeaponKeywordRef,
+} from "./buffs.js";
+import type { Phase } from "../generated.js";
 
 /** A fragment we couldn't translate. The SPA can render these as warnings. */
 export type UnsupportedFragment = {
@@ -28,9 +36,43 @@ export type UnsupportedFragment = {
   effectFragment: unknown;
 };
 
+/**
+ * A mutually-limited pool of {@link ActivatableBuff} levers. Dice-pool
+ * allocations cap how many options fire at once (`max_activations`); a `choice`
+ * lets the player pick exactly one. Levers sharing a `group.id` are subject to
+ * that cap — the SPA greys out further checkboxes once it's reached, and an
+ * optimizer enumerates subsets within it.
+ */
+export type ActivatableGroupRef = {
+  id: string;
+  maxActivations: number;
+};
+
+/**
+ * A buff-bearing *player decision* the cruncher can't make on its own: a
+ * dice-pool option, a `choice` branch, or an activation gated on a timing the
+ * player controls (e.g. "start of phase"). It is not auto-applied — the
+ * consumer opts in (a checkbox, or an optimizer's search) and then folds
+ * {@link buffs} into the crunch. Conditions the activation still carries (a
+ * target keyword, a phase) ride on each buff's `applicableWhen`, so the
+ * resolver gates them per-target rather than the lever vanishing.
+ */
+export type ActivatableBuff = {
+  /** Stable toggle id, e.g. `"blessings-of-khorne#Warp Blades"`. */
+  id: string;
+  /** Human label for the lever (option name, or a summary of its buffs). */
+  label: string;
+  /** Contributions this activation adds when the player opts in (≥1). */
+  buffs: Buff[];
+  /** Set when the lever belongs to a mutually-limited pool. */
+  group?: ActivatableGroupRef;
+};
+
 export type EffectTranslation = {
   applied: Buff[];
   unsupported: UnsupportedFragment[];
+  /** Buffs sitting behind a player decision — see {@link ActivatableBuff}. */
+  activatable: ActivatableBuff[];
 };
 
 /**
@@ -80,12 +122,18 @@ export function effectToBuffs(
   context: EngineContext,
   perspective: TranslationPerspective = "attacker",
 ): EffectTranslation {
-  const out: EffectTranslation = { applied: [], unsupported: [] };
-  walk(effect, source, { context, perspective }, out);
+  const out: EffectTranslation = { applied: [], unsupported: [], activatable: [] };
+  const abilityId = source.kind === "ability" ? source.abilityId : "effect";
+  walk(effect, source, { context, perspective, abilityId }, out);
   return out;
 }
 
-type WalkOpts = { context: EngineContext; perspective: TranslationPerspective };
+type WalkOpts = {
+  context: EngineContext;
+  perspective: TranslationPerspective;
+  /** Owning ability id — seeds the stable ids of activatable levers. */
+  abilityId: string;
+};
 
 function walk(
   node: unknown,
@@ -121,11 +169,8 @@ function walk(
       for (const step of (node.steps as unknown[]) ?? []) walk(step, source, opts, out);
       return;
     case "choice":
-      // Player decision — auto-applying every branch would double-count.
-      out.unsupported.push({
-        reason: "choice: player picks one option; the buff layer can't choose",
-        effectFragment: node,
-      });
+      // Player decision — each branch becomes an opt-in lever (pick one).
+      enumerateChoice(node, source, opts, out);
       return;
     case "dice-gated":
       // Probabilistic; the buff layer is deterministic.
@@ -135,10 +180,9 @@ function walk(
       });
       return;
     case "dice-pool-allocation":
-      out.unsupported.push({
-        reason: "dice-pool-allocation: player allocates dice at runtime",
-        effectFragment: node,
-      });
+      // Player spends dice on options at runtime — each buff-bearing option
+      // becomes an opt-in lever, grouped under the pool's activation cap.
+      enumerateDicePool(node, source, opts, out);
       return;
     default:
       // Unknown effect — record it. Covers ability-grant, deep-strike,
@@ -401,10 +445,14 @@ function translateKeywordGrant(
   if (!appliesToBuffedUnit(node, "attacker")) return;
   const modifier = node.modifier;
   if (!isObject(modifier)) return;
-  const keywords = modifier.keywords;
-  if (!Array.isArray(keywords)) return;
-  for (const raw of keywords) {
-    if (typeof raw !== "string") continue;
+  // The DSL grants keywords in two shapes: a singular `keyword` string (often
+  // with a `weapon_type`) or a `keywords` array. Accept both.
+  const raws = keywordGrantList(modifier);
+  if (raws.length === 0) return;
+  // `weapon_type: melee|ranged` scopes the grant to that attack — a melee-only
+  // keyword shouldn't fire in the shooting phase. Express it as a phase gate.
+  const applicability = weaponTypeApplicability(modifier);
+  for (const raw of raws) {
     const ref = parseKeywordGrant(raw);
     if (!ref) {
       out.unsupported.push({
@@ -413,8 +461,26 @@ function translateKeywordGrant(
       });
       continue;
     }
-    out.applied.push({ source, contribution: { type: "extra-keyword", keywordRef: ref } });
+    const buff: Buff = { source, contribution: { type: "extra-keyword", keywordRef: ref } };
+    out.applied.push(applicability ? { ...buff, applicableWhen: applicability } : buff);
   }
+}
+
+/** Normalise a keyword-grant modifier's singular `keyword` and/or `keywords` array. */
+function keywordGrantList(modifier: Record<string, unknown>): string[] {
+  const out: string[] = [];
+  if (typeof modifier.keyword === "string") out.push(modifier.keyword);
+  if (Array.isArray(modifier.keywords)) {
+    for (const k of modifier.keywords) if (typeof k === "string") out.push(k);
+  }
+  return out;
+}
+
+/** Map a keyword-grant's `weapon_type` to the phase its weapons fire in. */
+function weaponTypeApplicability(modifier: Record<string, unknown>): BuffApplicability | undefined {
+  if (modifier.weapon_type === "melee") return { phases: ["fight"] };
+  if (modifier.weapon_type === "ranged") return { phases: ["shooting"] };
+  return undefined;
 }
 
 function translateBsModifier(
@@ -449,15 +515,328 @@ function translateConditional(
   const negated = condition.negated === true;
   const verdict = evaluateCondition(condition, opts.context);
   if (verdict === "unknown") {
-    out.unsupported.push({
-      reason: `conditional: cannot evaluate condition "${String(condition.type)}" against current context`,
-      effectFragment: node,
-    });
+    // A timing the player controls (e.g. "start of phase") isn't a wall — it's
+    // an activation the player can opt into. Surface it as a lever rather than
+    // dropping it. Other unevaluatable conditions stay unsupported.
+    if (conditionMentionsTiming(condition)) {
+      enumerateTimingGate(node, source, opts, out);
+    } else {
+      out.unsupported.push({
+        reason: `conditional: cannot evaluate condition "${String(condition.type)}" against current context`,
+        effectFragment: node,
+      });
+    }
     return;
   }
   const active = negated ? !verdict : verdict;
   if (!active) return;
   walk(effect, source, opts, out);
+}
+
+// ---------------------------------------------------------------------------
+// Activatable-lever enumeration
+//
+// Player-controlled gates — a `timing-is` the context can't pin down, each
+// `dice-pool-allocation` option, each `choice` branch — aren't walls for a
+// damage optimizer; they're the search space. Instead of dropping them to
+// `unsupported`, we descend through them and surface every buff-bearing branch
+// as an opt-in {@link ActivatableBuff}. The descent reuses the normal leaf
+// translators (so a lever applies exactly what it advertises) and turns the
+// conditions a branch still carries (target keyword, phase) into declarative
+// `applicableWhen` so the resolver gates them per-target.
+// ---------------------------------------------------------------------------
+
+/** Emit one lever per `choice` branch that yields a buff (pick exactly one). */
+function enumerateChoice(
+  node: Record<string, unknown>,
+  source: BuffSource,
+  opts: WalkOpts,
+  out: EffectTranslation,
+): void {
+  const options = Array.isArray(node.options) ? node.options : [];
+  options.forEach((opt, i) => {
+    const buffs: Buff[] = [];
+    collectGatedBuffs(opt, source, opts, {}, buffs);
+    if (buffs.length === 0) return;
+    out.activatable.push({
+      id: `${opts.abilityId}?${i}`,
+      label: labelForBuffs(buffs),
+      buffs,
+      group: { id: `${opts.abilityId}?choice`, maxActivations: 1 },
+    });
+  });
+}
+
+/** Emit one lever per buff-bearing dice-pool option, capped by `max_activations`. */
+function enumerateDicePool(
+  node: Record<string, unknown>,
+  source: BuffSource,
+  opts: WalkOpts,
+  out: EffectTranslation,
+): void {
+  const options = Array.isArray(node.options) ? node.options : [];
+  const maxActivations =
+    typeof node.max_activations === "number" ? node.max_activations : options.length;
+  for (const opt of options) {
+    if (!isObject(opt)) continue;
+    const buffs: Buff[] = [];
+    collectGatedBuffs(opt.effect, source, opts, {}, buffs);
+    if (buffs.length === 0) continue;
+    const name = typeof opt.name === "string" && opt.name ? opt.name : labelForBuffs(buffs);
+    out.activatable.push({
+      id: `${opts.abilityId}#${name}`,
+      label: name,
+      buffs,
+      group: { id: opts.abilityId, maxActivations },
+    });
+  }
+}
+
+/**
+ * Surface a timing-gated activation. The timing itself is just "when" — opting
+ * in satisfies it — so we descend into the body: an inner `dice-pool-allocation`
+ * or `choice` surfaces its *own* option levers (e.g. Blessings of Khorne's
+ * three keyword grants), while inner always-on buffs bundle into a single
+ * timing lever. A body with no modelable combat buff (a `resurrection` or
+ * `dice-gated`, like Berzerker Frenzy) yields nothing.
+ */
+function enumerateTimingGate(
+  node: Record<string, unknown>,
+  source: BuffSource,
+  opts: WalkOpts,
+  out: EffectTranslation,
+): void {
+  const condition = node.condition;
+  if (!isObject(condition)) return;
+  const sub: EffectTranslation = { applied: [], unsupported: [], activatable: [] };
+  walk(node.effect, source, opts, sub);
+  // Inner independent decisions (dice-pool options, choice branches) pass
+  // straight through as their own levers.
+  out.activatable.push(...sub.activatable);
+  // Inner unconditional buffs become one lever gated only on the timing.
+  if (sub.applied.length > 0) {
+    const timing = extractTiming(condition) ?? "timing";
+    out.activatable.push({
+      id: `${opts.abilityId}@${timing}`,
+      label: labelForBuffs(sub.applied),
+      buffs: sub.applied,
+    });
+  }
+}
+
+/**
+ * Walk the body of a player gate, collecting the buffs it would contribute.
+ * Conditions are deferred to `applicableWhen` where expressible; nested
+ * decisions and stochastic rolls inside an activation are not modelled.
+ */
+function collectGatedBuffs(
+  node: unknown,
+  source: BuffSource,
+  opts: WalkOpts,
+  applicability: BuffApplicability,
+  outBuffs: Buff[],
+): void {
+  if (!isObject(node)) return;
+  switch (node.type) {
+    case "conditional": {
+      const condition = node.condition;
+      if (!isObject(condition)) return;
+      const app = conditionToApplicability(condition);
+      if (app === "gate") {
+        // A nested timing gate: opting into the activation satisfies it, so
+        // keep descending without adding a constraint.
+        collectGatedBuffs(node.effect, source, opts, applicability, outBuffs);
+        return;
+      }
+      if (app === "context") {
+        // Can't express as a buff gate — fall back to the current context and
+        // only descend when the condition is definitely active.
+        if (evaluateCondition(condition, opts.context) === true) {
+          collectGatedBuffs(node.effect, source, opts, applicability, outBuffs);
+        }
+        return;
+      }
+      collectGatedBuffs(node.effect, source, opts, combineApplicability(applicability, app), outBuffs);
+      return;
+    }
+    case "sequence":
+      for (const step of (node.steps as unknown[]) ?? []) {
+        collectGatedBuffs(step, source, opts, applicability, outBuffs);
+      }
+      return;
+    case "choice":
+    case "dice-pool-allocation":
+    case "dice-gated":
+      // A decision (or stochastic roll) nested inside an activation. The outer
+      // lever already stands for a player choice; we don't model the inner one.
+      return;
+    default: {
+      // Leaf effect — run the normal leaf translators into a throwaway sink,
+      // then attach the accumulated applicability so target/phase gating
+      // defers to the resolver instead of vanishing the lever.
+      const tmp: EffectTranslation = { applied: [], unsupported: [], activatable: [] };
+      walk(node, source, opts, tmp);
+      for (const b of tmp.applied) outBuffs.push(applyApplicability(b, applicability));
+      return;
+    }
+  }
+}
+
+/** Does this condition (or any operand) gate on a player-controlled timing? */
+function conditionMentionsTiming(condition: Record<string, unknown>): boolean {
+  if (condition.type === "timing-is") return true;
+  if (typeof condition.operator === "string" && Array.isArray(condition.operands)) {
+    return condition.operands.some((o) => isObject(o) && conditionMentionsTiming(o));
+  }
+  return false;
+}
+
+/** Pull the first `timing-is` timing value out of a (possibly compound) condition. */
+function extractTiming(condition: Record<string, unknown>): string | undefined {
+  if (condition.type === "timing-is") {
+    const t = (condition.parameters as Record<string, unknown> | undefined)?.timing;
+    return typeof t === "string" ? t : undefined;
+  }
+  if (Array.isArray(condition.operands)) {
+    for (const o of condition.operands) {
+      if (isObject(o)) {
+        const t = extractTiming(o);
+        if (t) return t;
+      }
+    }
+  }
+  return undefined;
+}
+
+/**
+ * Translate a condition into a {@link BuffApplicability} the resolver can gate
+ * on. Returns `"gate"` for a player-controlled timing (satisfied by opting in),
+ * or `"context"` when the condition has no declarative buff representation and
+ * must fall back to context evaluation.
+ */
+function conditionToApplicability(
+  condition: Record<string, unknown>,
+): BuffApplicability | "context" | "gate" {
+  if (condition.negated === true) return "context";
+  if (typeof condition.operator === "string" && Array.isArray(condition.operands)) {
+    if (condition.operator !== "and") return "context";
+    let merged: BuffApplicability = {};
+    for (const operand of condition.operands) {
+      if (!isObject(operand)) return "context";
+      const a = conditionToApplicability(operand);
+      if (a === "gate") continue; // timing operand: satisfied by opting in.
+      if (a === "context") return "context";
+      merged = combineApplicability(merged, a);
+    }
+    return merged;
+  }
+  const params = condition.parameters as Record<string, unknown> | undefined;
+  switch (condition.type) {
+    case "timing-is":
+      return "gate";
+    case "phase-is": {
+      const phase = params?.phase;
+      return typeof phase === "string" ? { phases: [phase as Phase] } : "context";
+    }
+    case "target-has-keyword": {
+      const kw = params?.keyword;
+      return typeof kw === "string" ? { requiresTargetKeyword: kw } : "context";
+    }
+    case "unit-has-keyword": {
+      const kw = params?.keyword;
+      return typeof kw === "string" ? { requiresAttackerKeyword: kw } : "context";
+    }
+    case "attack-is-type": {
+      const t = params?.attack_type;
+      if (t === "melee") return { phases: ["fight"] };
+      if (t === "ranged") return { phases: ["shooting"] };
+      return "context";
+    }
+    default:
+      return "context";
+  }
+}
+
+/** Merge two applicabilities; `phases` intersect, the rest narrow. */
+function combineApplicability(a: BuffApplicability, b: BuffApplicability): BuffApplicability {
+  const out: BuffApplicability = { ...a };
+  if (b.phases) {
+    out.phases = a.phases ? a.phases.filter((p) => b.phases!.includes(p)) : b.phases;
+  }
+  if (b.rollType) out.rollType = b.rollType;
+  if (b.requiresTargetKeyword) out.requiresTargetKeyword = b.requiresTargetKeyword;
+  if (b.requiresAttackerKeyword) out.requiresAttackerKeyword = b.requiresAttackerKeyword;
+  return out;
+}
+
+/** Attach an accumulated applicability to a buff (no-op when empty). */
+function applyApplicability(buff: Buff, applicability: BuffApplicability): Buff {
+  if (Object.keys(applicability).length === 0) return buff;
+  const merged = buff.applicableWhen
+    ? combineApplicability(buff.applicableWhen, applicability)
+    : applicability;
+  return { ...buff, applicableWhen: merged };
+}
+
+/** A short, deduped human label summarising a lever's contributions. */
+function labelForBuffs(buffs: Buff[]): string {
+  const seen = new Set<string>();
+  const parts: string[] = [];
+  for (const b of buffs) {
+    const p = describeContribution(b.contribution);
+    if (!seen.has(p)) {
+      seen.add(p);
+      parts.push(p);
+    }
+  }
+  return parts.join(", ") || "buff";
+}
+
+function describeContribution(c: BuffContribution): string {
+  switch (c.type) {
+    case "extra-keyword":
+      return keywordLabel(c.keywordRef);
+    case "hit-mod":
+      return `${signed(c.value)} to hit`;
+    case "wound-mod":
+      return `${signed(c.value)} to wound`;
+    case "save-mod":
+      return `${signed(c.value)} to save`;
+    case "damage-mod":
+      return `${signed(c.value)} damage`;
+    case "attacks-mod":
+      return `${signed(c.value)} attacks`;
+    case "strength-mod":
+      return `${signed(c.value)} strength`;
+    case "toughness-mod":
+      return `${signed(c.value)} toughness`;
+    case "ap-mod":
+      return `AP ${c.value}`;
+    case "reroll":
+      return `re-roll ${c.roll}${c.subset === "ones" ? " 1s" : ""}`;
+    case "feel-no-pain":
+      return `feel no pain ${c.threshold}+`;
+    case "cover":
+      return "cover";
+  }
+}
+
+function signed(n: number): string {
+  return n >= 0 ? `+${n}` : `${n}`;
+}
+
+/** Render a weapon-keyword ref back to its printed form (best-effort). */
+function keywordLabel(ref: WeaponKeywordRef): string {
+  const params = ref.parameters ?? {};
+  if (ref.keyword_id === "anti" && typeof params.target_keyword === "string") {
+    const th = params.threshold;
+    return `Anti-${params.target_keyword}${typeof th === "number" ? ` ${th}+` : ""}`;
+  }
+  const base = ref.keyword_id
+    .split("-")
+    .map((w) => (w ? w.charAt(0).toUpperCase() + w.slice(1) : w))
+    .join(" ");
+  return typeof params.value === "number" ? `${base} ${params.value}` : base;
 }
 
 // ---------------------------------------------------------------------------

@@ -89,10 +89,26 @@ class SalvoState {
   modelsFiring = $state<number>(5);
 
   // Abilities / buffs
-  optedInStratagemIds = $state<Set<string>>(new Set());
-  disabledAbilityIds = $state<Set<string>>(new Set());
+  /**
+   * Per-lever overrides of the defaults `Dataset.stackableBuffsFor` returns
+   * (`id → on/off`). Absent ids fall back to the lever's `enabled` default:
+   * always-on for intrinsic keywords and unconditional abilities, off for
+   * stratagems and activatable gates. This single map subsumes the old
+   * opt-in-stratagem / opt-out-ability sets.
+   */
+  buffOverrides = $state<Record<string, boolean>>({});
   manualBuffsActive = $state<Set<string>>(new Set());
   contextFlags = $state<ContextFlags>({ attackerStationary: false, withinHalfRange: false });
+
+  /** Effective on/off for a lever, honouring any user override of its default. */
+  isBuffEnabled(id: string, defaultEnabled: boolean): boolean {
+    return this.buffOverrides[id] ?? defaultEnabled;
+  }
+
+  /** Record an explicit on/off choice for a lever. */
+  setBuffEnabled(id: string, enabled: boolean): void {
+    this.buffOverrides = { ...this.buffOverrides, [id]: enabled };
+  }
 
   // Target
   targetMode = $state<TargetMode>("manual");

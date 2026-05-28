@@ -164,7 +164,7 @@ describe("effectToBuffs: compound", () => {
     expect(fight.applied[0].contribution).toEqual({ type: "wound-mod", value: 1 });
   });
 
-  it("choice fragments are routed to unsupported", () => {
+  it("choice branches become opt-in levers (pick one)", () => {
     const result = effectToBuffs(
       {
         type: "choice",
@@ -176,9 +176,18 @@ describe("effectToBuffs: compound", () => {
       unitRule,
       ctx,
     );
+    // Player decision — not auto-applied, surfaced as activatable instead.
     expect(result.applied).toEqual([]);
-    expect(result.unsupported).toHaveLength(1);
-    expect(result.unsupported[0].reason).toMatch(/choice/);
+    expect(result.unsupported).toEqual([]);
+    expect(result.activatable).toHaveLength(2);
+    expect(result.activatable.map((a) => a.id)).toEqual(["fury?0", "fury?1"]);
+    // A choice is a pick-one group.
+    expect(result.activatable[0].group).toEqual({ id: "fury?choice", maxActivations: 1 });
+    expect(result.activatable[0].buffs[0].contribution).toEqual({
+      type: "reroll",
+      roll: "hit",
+      subset: "ones",
+    });
   });
 
   it("dice-gated fragments are routed to unsupported", () => {
@@ -571,10 +580,174 @@ describe("effectToBuffs: timing-is condition", () => {
     expect(result.unsupported).toEqual([]);
   });
 
-  it("surfaces unsupported when context timing is missing", () => {
+  it("becomes an opt-in lever when context timing is missing", () => {
+    // A timing the player controls isn't a wall — it's an activation they can
+    // toggle on. No diagnostic; a lever instead.
     const result = effectToBuffs(effect, unitRule, { phase: "fight" });
     expect(result.applied).toEqual([]);
-    expect(result.unsupported[0].reason).toMatch(/cannot evaluate condition "timing-is"/);
+    expect(result.unsupported).toEqual([]);
+    expect(result.activatable).toHaveLength(1);
+    expect(result.activatable[0].id).toBe("fury@end-of-phase");
+    expect(result.activatable[0].buffs[0].contribution).toEqual({ type: "wound-mod", value: 1 });
+  });
+});
+
+describe("effectToBuffs: activatable gates", () => {
+  it("dice-pool options become grouped levers capped by max_activations", () => {
+    const result = effectToBuffs(
+      {
+        type: "dice-pool-allocation",
+        pool: { count: 8, die: "D6" },
+        max_activations: 2,
+        options: [
+          {
+            name: "Martial Excellence",
+            requirement: { type: "pair", min_value: 4 },
+            effect: {
+              type: "keyword-grant",
+              target: "all-friendly",
+              modifier: { keywords: ["Sustained Hits 1"] },
+            },
+          },
+          {
+            name: "Warp Blades",
+            requirement: { type: "pair", min_value: 5 },
+            effect: {
+              type: "keyword-grant",
+              target: "all-friendly",
+              modifier: { keywords: ["Lethal Hits"] },
+            },
+          },
+        ],
+      },
+      unitRule,
+      { phase: "fight" },
+    );
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported).toEqual([]);
+    expect(result.activatable.map((a) => a.id)).toEqual([
+      "fury#Martial Excellence",
+      "fury#Warp Blades",
+    ]);
+    // Every lever is grouped under the pool, capped at the activation count.
+    expect(result.activatable.every((a) => a.group?.id === "fury" && a.group?.maxActivations === 2)).toBe(
+      true,
+    );
+    expect(result.activatable[1].buffs[0].contribution).toEqual({
+      type: "extra-keyword",
+      keywordRef: { keyword_id: "lethal-hits" },
+    });
+  });
+
+  it("a dice-pool option that yields no combat buff is not a lever", () => {
+    const result = effectToBuffs(
+      {
+        type: "dice-pool-allocation",
+        pool: { count: 8, die: "D6" },
+        max_activations: 2,
+        options: [
+          {
+            name: "Rage-Fuelled Invigoration",
+            requirement: { type: "pair", min_value: 2 },
+            effect: { type: "movement-modifier", target: "all-friendly", modifier: {} },
+          },
+        ],
+      },
+      unitRule,
+      { phase: "fight" },
+    );
+    expect(result.activatable).toEqual([]);
+    expect(result.applied).toEqual([]);
+  });
+
+  it("target/phase conditions inside a gate defer to applicableWhen", () => {
+    // Decapitating Strikes shape: Devastating Wounds, but only vs Infantry in melee.
+    const result = effectToBuffs(
+      {
+        type: "dice-pool-allocation",
+        pool: { count: 8, die: "D6" },
+        max_activations: 2,
+        options: [
+          {
+            name: "Decapitating Strikes",
+            requirement: { type: "triple", min_value: 6 },
+            effect: {
+              type: "conditional",
+              condition: {
+                operator: "and",
+                operands: [
+                  { type: "target-has-keyword", parameters: { keyword: "Infantry" } },
+                  { type: "attack-is-type", parameters: { attack_type: "melee" } },
+                ],
+              },
+              effect: {
+                type: "keyword-grant",
+                target: "all-friendly",
+                modifier: { keywords: ["Devastating Wounds"] },
+              },
+            },
+          },
+        ],
+      },
+      unitRule,
+      { phase: "fight" },
+    );
+    expect(result.activatable).toHaveLength(1);
+    const buff = result.activatable[0].buffs[0];
+    expect(buff.contribution).toEqual({
+      type: "extra-keyword",
+      keywordRef: { keyword_id: "devastating-wounds" },
+    });
+    // The "vs Infantry, in the fight phase" gate rides on the buff so the
+    // resolver applies it per-target rather than the lever vanishing.
+    expect(buff.applicableWhen).toEqual({ requiresTargetKeyword: "Infantry", phases: ["fight"] });
+  });
+
+  it("a timing gate around a sequence yields one lever bundling its buffs", () => {
+    // Possessed Lord shape: start-of-phase → A+3 and Devastating Wounds together.
+    const result = effectToBuffs(
+      {
+        type: "conditional",
+        condition: { type: "timing-is", parameters: { timing: "start-of-phase" } },
+        effect: {
+          type: "sequence",
+          steps: [
+            { type: "stat-modifier", target: "unit", modifier: { stat: "A", operation: "add", value: 3 } },
+            { type: "keyword-grant", target: "unit", modifier: { keywords: ["Devastating Wounds"] } },
+          ],
+        },
+      },
+      unitRule,
+      { phase: "fight" },
+    );
+    expect(result.activatable).toHaveLength(1);
+    expect(result.activatable[0].id).toBe("fury@start-of-phase");
+    expect(result.activatable[0].buffs.map((b) => b.contribution.type)).toEqual([
+      "attacks-mod",
+      "extra-keyword",
+    ]);
+  });
+
+  it("a timing gate whose body has no combat buff yields no lever", () => {
+    // Berzerker Frenzy shape: on-destroyed → dice-gated → resurrection.
+    const result = effectToBuffs(
+      {
+        type: "conditional",
+        condition: { type: "timing-is", parameters: { timing: "on-destroyed" } },
+        effect: {
+          type: "dice-gated",
+          dice: "D6",
+          threshold: 2,
+          on_success: { type: "resurrection", target: "self", modifier: {} },
+          on_fail: null,
+        },
+      },
+      unitRule,
+      { phase: "fight" },
+    );
+    expect(result.activatable).toEqual([]);
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported).toEqual([]);
   });
 });
 

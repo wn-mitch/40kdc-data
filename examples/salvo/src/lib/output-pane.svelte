@@ -48,7 +48,9 @@
   const datasetBuffs = $derived.by<Buff[]>(() => {
     if (!salvo.selectedUnitId || !salvo.selectedWeaponId) return [];
     try {
-      const buffs = ds.buffsFor(
+      // Single source of truth with the abilities pane: enumerate every lever,
+      // then keep the ones the user has on (defaults + their overrides).
+      const { buffs } = ds.stackableBuffsFor(
         {
           unitId: salvo.selectedUnitId,
           factionId: salvo.selectedFactionId ?? undefined,
@@ -57,19 +59,12 @@
           weaponProfiles: [
             { weaponId: salvo.selectedWeaponId, profileIndex: salvo.selectedProfileIndex },
           ],
-          optedInStratagemIds: [...salvo.optedInStratagemIds],
         },
         context,
       );
-      // Drop buffs originating from abilities the user explicitly disabled.
-      return buffs.filter((b) => {
-        if (b.source.kind !== "ability") return true;
-        const key =
-          b.source.abilityKind === "detachment-stratagem"
-            ? null
-            : `${b.source.abilityKind}:${b.source.abilityId}`;
-        return key === null ? true : !salvo.disabledAbilityIds.has(key);
-      });
+      return buffs
+        .filter((b) => salvo.isBuffEnabled(b.id, b.enabled))
+        .flatMap((b) => b.buffs);
     } catch {
       return [];
     }

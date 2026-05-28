@@ -33,8 +33,45 @@
       "context": { "phase": "fight" },
       "expected": {
         "applied": [],
-        "unsupportedReasons": [
-          "conditional: cannot evaluate condition \"timing-is\" against current context"
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "abilityId": "blessings-of-khorne",
+      "source": { "kind": "ability", "abilityId": "blessings-of-khorne", "abilityKind": "army" },
+      "context": { "phase": "fight" },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "blessings-of-khorne#Martial Excellence",
+            "label": "Martial Excellence",
+            "group": { "id": "blessings-of-khorne", "maxActivations": 2 },
+            "buffs": [
+              {
+                "type": "extra-keyword",
+                "keywordRef": { "keyword_id": "sustained-hits", "parameters": { "value": 1 } }
+              }
+            ]
+          },
+          {
+            "id": "blessings-of-khorne#Warp Blades",
+            "label": "Warp Blades",
+            "group": { "id": "blessings-of-khorne", "maxActivations": 2 },
+            "buffs": [
+              { "type": "extra-keyword", "keywordRef": { "keyword_id": "lethal-hits" } }
+            ]
+          },
+          {
+            "id": "blessings-of-khorne#Decapitating Strikes",
+            "label": "Decapitating Strikes",
+            "group": { "id": "blessings-of-khorne", "maxActivations": 2 },
+            "buffs": [
+              { "type": "extra-keyword", "keywordRef": { "keyword_id": "devastating-wounds" } }
+            ]
+          }
         ]
       }
     }

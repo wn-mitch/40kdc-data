@@ -42,6 +42,38 @@ import {
   type EligibleAbility,
 } from "../abilities-resolver/index.js";
 
+/**
+ * One toggleable buff lever for damage analysis: the contributions it adds and
+ * whether it's on by default. `enabled` is `true` for buffs that always apply
+ * (intrinsic keywords, unconditional abilities) and `false` for player
+ * decisions — stratagems (CP cost) and activatable gates (dice-pool options,
+ * `choice` branches, timing-gated activations). A consumer flips `enabled`,
+ * then crunches the enabled subset; an optimizer searches it.
+ *
+ * @see {@link Dataset.stackableBuffsFor}
+ */
+export type StackableBuff = {
+  /** Stable toggle id (stable across re-enumeration of the same input). */
+  id: string;
+  /** Human label for the lever. */
+  label: string;
+  /** Contributions this lever adds when enabled (≥1). */
+  buffs: Buff[];
+  /** Default selection state. */
+  enabled: boolean;
+  /** Where the lever came from. */
+  source: BuffSource;
+  /** Id of the mutually-limited {@link StackableBuffGroup} this belongs to, if any. */
+  group?: string;
+};
+
+/** A pool of {@link StackableBuff} levers limited to `maxActivations` at once. */
+export type StackableBuffGroup = {
+  id: string;
+  label: string;
+  maxActivations: number;
+};
+
 /** The whole dataset, with linked accessors over every entity collection. */
 export class Dataset {
   // Richly-linked collections.
@@ -213,6 +245,94 @@ export class Dataset {
     context: EngineContext,
   ): Buff[] {
     return this.collectBuffs(input, context, "target");
+  }
+
+  /**
+   * Enumerate every attacker-side buff a unit could stack in `context` as a
+   * list of toggleable levers, plus the activation groups that limit them.
+   *
+   * Unlike {@link buffsFor} — which returns only the buffs that auto-apply —
+   * this surfaces the *player decisions* too: stratagems, and the activatable
+   * gates the DSL models as dice-pool options, `choice` branches, or
+   * timing-gated activations (e.g. Blessings of Khorne's three keyword grants).
+   * Each lever carries `enabled` (its default state) and, where it's part of a
+   * limited pool, a `group` id whose {@link StackableBuffGroup} caps how many
+   * can fire at once. The intended loop:
+   *
+   * ```ts
+   * const { buffs } = ds.stackableBuffsFor(input, ctx);
+   * const chosen = buffs.filter(b => b.enabled).flatMap(b => b.buffs);
+   * crunch({ ...profiles, buffs: chosen, context: ctx }, ds);
+   * ```
+   *
+   * Target/phase conditions a lever still carries (e.g. "vs Infantry") ride on
+   * each buff's `applicableWhen`, so toggling it on is always safe — the
+   * resolver gates it per-target.
+   */
+  stackableBuffsFor(
+    input: EligibilityInput & {
+      weaponProfiles?: { weaponId: string; profileIndex: number }[];
+    },
+    context: EngineContext,
+  ): { buffs: StackableBuff[]; groups: StackableBuffGroup[] } {
+    const buffs: StackableBuff[] = [];
+    const groups = new Map<string, StackableBuffGroup>();
+
+    // Intrinsic weapon-profile keywords — always on.
+    for (const ref of input.weaponProfiles ?? []) {
+      const weapon = this.weapons.get(ref.weaponId);
+      if (!weapon) continue;
+      const wk = weapon.profileBuffs(ref.profileIndex, context);
+      if (wk.length === 0) continue;
+      buffs.push({
+        id: `weapon:${ref.weaponId}:${ref.profileIndex}`,
+        label: `${weapon.name} keywords`,
+        buffs: wk,
+        enabled: true,
+        source: wk[0].source,
+      });
+    }
+
+    for (const entry of this.eligibleAbilities(input, context.phase)) {
+      const source = bufferSourceFromEligible(entry);
+      const { applied, activatable } = entry.ability.describeBuffs(source, context, "attacker");
+      // Stratagems cost CP — opt-in, not on by default.
+      const isStratagem = entry.source.kind === "detachment-stratagem";
+
+      if (applied.length > 0) {
+        buffs.push({
+          id: `${entry.source.kind}:${entry.ability.id}`,
+          label: entry.ability.name,
+          buffs: applied,
+          enabled: !isStratagem,
+          source,
+        });
+      }
+
+      for (const act of activatable) {
+        let groupId: string | undefined;
+        if (act.group) {
+          groupId = act.group.id;
+          if (!groups.has(groupId)) {
+            groups.set(groupId, {
+              id: groupId,
+              label: entry.ability.name,
+              maxActivations: act.group.maxActivations,
+            });
+          }
+        }
+        buffs.push({
+          id: act.id,
+          label: `${entry.ability.name} — ${act.label}`,
+          buffs: act.buffs,
+          enabled: false,
+          source,
+          group: groupId,
+        });
+      }
+    }
+
+    return { buffs, groups: [...groups.values()] };
   }
 
   /** Shared implementation for buffsFor / defensiveBuffsFor. */

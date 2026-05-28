@@ -196,7 +196,12 @@ describe("abilities-resolver conformance corpus", () => {
     source: { kind: "ability"; abilityId: string; abilityKind: string };
     context: EngineContext;
     perspective?: "attacker" | "target";
-    expected: { applied: unknown[]; unsupportedReasons: string[] };
+    expected: {
+      applied: unknown[];
+      unsupportedReasons: string[];
+      /** Opt-in levers behind player gates, projected to id/label/group/buffs. */
+      activatable?: unknown[];
+    };
   };
 
   function runDslCorpus(filename: string): void {
@@ -220,6 +225,18 @@ describe("abilities-resolver conformance corpus", () => {
         reasons,
         `unsupported reasons for ${c.abilityId} (${c.perspective ?? "attacker"})`,
       ).toEqual(c.expected.unsupportedReasons);
+      if (c.expected.activatable) {
+        const acts = result.activatable.map((a) => ({
+          id: a.id,
+          label: a.label,
+          group: a.group ?? null,
+          buffs: a.buffs.map((b) => b.contribution),
+        }));
+        expect(
+          acts,
+          `activatable levers for ${c.abilityId} (${c.perspective ?? "attacker"})`,
+        ).toEqual(c.expected.activatable);
+      }
     }
   }
 

@@ -6,31 +6,15 @@
     CONTEXT_FLAG_TOGGLES,
   } from "./store.svelte.js";
   import type {
-    EligibleAbility,
+    Buff,
     EngineContext,
+    StackableBuff,
+    StackableBuffGroup,
   } from "@alpaca-software/40kdc-data";
 
-  const eligible = $derived.by<EligibleAbility[]>(() => {
-    if (!salvo.selectedUnitId) return [];
-    try {
-      return ds.eligibleAbilities(
-        {
-          unitId: salvo.selectedUnitId,
-          factionId: salvo.selectedFactionId ?? undefined,
-          detachmentId: salvo.selectedDetachmentId ?? undefined,
-          attachedLeaderId: salvo.attachedLeaderId ?? undefined,
-        },
-        salvo.phase,
-      );
-    } catch {
-      return [];
-    }
-  });
-
   // EngineContext for the DSL→Buff translator. Without this the translator
-  // defaults to `{ phase: "shooting" }`, so any phase-gated `conditional`
-  // branch fails to fire when the user has the fight tab open and the row
-  // renders an unhelpful "no buff translated".
+  // defaults to `{ phase: "shooting" }`, so phase-gated branches misfire when
+  // the fight tab is open.
   const attackerKeywords = $derived.by<string[]>(() => {
     if (!salvo.selectedUnitId) return [];
     const u = ds.units.get(salvo.selectedUnitId);
@@ -49,50 +33,56 @@
     targetKeywords: salvo.manualTarget.keywords.map((k) => k.toLowerCase()),
   });
 
-  const grouped = $derived.by(() => {
-    const byKind = new Map<string, EligibleAbility[]>();
-    for (const e of eligible) {
-      const list = byKind.get(e.source.kind) ?? [];
-      list.push(e);
-      byKind.set(e.source.kind, list);
+  // Every buff the attacker could stack, as toggleable levers. The package
+  // does the DSL walk once and hands back (buff, enabled) pairs plus the
+  // activation groups (dice-pool / choice) that cap how many fire at once.
+  const stackable = $derived.by<{ buffs: StackableBuff[]; groups: StackableBuffGroup[] }>(() => {
+    if (!salvo.selectedUnitId) return { buffs: [], groups: [] };
+    try {
+      return ds.stackableBuffsFor(
+        {
+          unitId: salvo.selectedUnitId,
+          factionId: salvo.selectedFactionId ?? undefined,
+          detachmentId: salvo.selectedDetachmentId ?? undefined,
+          attachedLeaderId: salvo.attachedLeaderId ?? undefined,
+          weaponProfiles: salvo.selectedWeaponId
+            ? [{ weaponId: salvo.selectedWeaponId, profileIndex: salvo.selectedProfileIndex }]
+            : [],
+        },
+        engineContext,
+      );
+    } catch {
+      return { buffs: [], groups: [] };
     }
-    const order = [
-      "army",
-      "detachment",
-      "detachment-stratagem",
-      "unit",
-      "leader",
-      "support",
-    ] as const;
-    return order
-      .map((k) => ({ kind: k, items: byKind.get(k) ?? [] }))
-      .filter((g) => g.items.length > 0);
   });
 
-  function abilityKey(e: EligibleAbility): string {
-    return `${e.source.kind}:${e.ability.id}`;
+  // Free-standing levers (always-on abilities, stratagems, weapon keywords).
+  const ungrouped = $derived(stackable.buffs.filter((b) => !b.group));
+
+  // Levers that belong to a capped activation pool (e.g. Blessings of Khorne).
+  const pools = $derived.by(() => {
+    const byGroup = new Map<string, StackableBuff[]>();
+    for (const b of stackable.buffs) {
+      if (!b.group) continue;
+      const list = byGroup.get(b.group) ?? [];
+      list.push(b);
+      byGroup.set(b.group, list);
+    }
+    return stackable.groups
+      .map((g) => ({ group: g, levers: byGroup.get(g.id) ?? [] }))
+      .filter((p) => p.levers.length > 0);
+  });
+
+  function enabled(b: StackableBuff): boolean {
+    return salvo.isBuffEnabled(b.id, b.enabled);
   }
 
-  function isActive(e: EligibleAbility): boolean {
-    if (e.source.kind === "detachment-stratagem") {
-      return salvo.optedInStratagemIds.has(e.ability.id);
-    }
-    return !salvo.disabledAbilityIds.has(abilityKey(e));
+  function activeInGroup(groupId: string): number {
+    return stackable.buffs.filter((b) => b.group === groupId && enabled(b)).length;
   }
 
-  function toggle(e: EligibleAbility) {
-    if (e.source.kind === "detachment-stratagem") {
-      const next = new Set(salvo.optedInStratagemIds);
-      if (next.has(e.ability.id)) next.delete(e.ability.id);
-      else next.add(e.ability.id);
-      salvo.optedInStratagemIds = next;
-    } else {
-      const next = new Set(salvo.disabledAbilityIds);
-      const k = abilityKey(e);
-      if (next.has(k)) next.delete(k);
-      else next.add(k);
-      salvo.disabledAbilityIds = next;
-    }
+  function toggle(b: StackableBuff) {
+    salvo.setBuffEnabled(b.id, !enabled(b));
   }
 
   function toggleManual(id: string) {
@@ -102,62 +92,65 @@
     salvo.manualBuffsActive = next;
   }
 
-  function describeSource(kind: EligibleAbility["source"]["kind"]): string {
-    switch (kind) {
-      case "detachment-stratagem":
-        return "Stratagem";
-      default:
-        return kind;
-    }
+  function sourceChip(b: StackableBuff): string {
+    if (b.source.kind === "weapon-keyword") return "weapon";
+    if (b.source.kind === "manual") return "manual";
+    return b.source.abilityKind === "detachment-stratagem" ? "stratagem" : b.source.abilityKind;
   }
 
-  function buffDescription(e: EligibleAbility): string {
-    try {
-      const { applied, unsupported } = e.ability.describeBuffs(
-        {
-          kind: "ability",
-          abilityId: e.ability.id,
-          abilityKind: e.source.kind,
-        },
-        engineContext,
-      );
-      if (applied.length > 0) {
-        return applied.map((b) => b.contribution.type).join(", ");
-      }
-      if (unsupported.length > 0) {
-        // The translator authors these strings for human consumption; first
-        // one is enough for the inline blurb.
-        return unsupported[0].reason;
-      }
-      return "no effect";
-    } catch {
-      return "—";
+  function describeBuff(b: Buff): string {
+    const c = b.contribution;
+    if (c.type === "extra-keyword") {
+      const v = c.keywordRef.parameters?.value;
+      return `${c.keywordRef.keyword_id}${typeof v === "number" ? ` ${v}` : ""}`;
     }
+    return "value" in c ? `${c.type} ${c.value}` : c.type;
+  }
+
+  function summary(b: StackableBuff): string {
+    return b.buffs.map(describeBuff).join(", ") || "no effect";
   }
 </script>
 
 {#if !salvo.selectedUnitId}
-  <p class="dim" style="font-size:12px">Pick an attacker unit to see eligible abilities.</p>
-{:else if eligible.length === 0}
-  <p class="dim" style="font-size:12px">No eligible abilities in the {salvo.phase} phase.</p>
+  <p class="dim" style="font-size:12px">Pick an attacker unit to see eligible buffs.</p>
+{:else if stackable.buffs.length === 0}
+  <p class="dim" style="font-size:12px">No buffs available in the {salvo.phase} phase.</p>
 {:else}
   <div class="ability-list">
-    {#each grouped as g (g.kind)}
-      <div style="margin-top:4px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em">
-        {g.kind}
+    {#each ungrouped as b (b.id)}
+      <label class="ability-row" class:active={enabled(b)}>
+        <input type="checkbox" checked={enabled(b)} onchange={() => toggle(b)} />
+        <span class="name">
+          {b.label}
+          <small>· {summary(b)}</small>
+        </span>
+        <span class="chip {sourceChip(b)}">{sourceChip(b)}</span>
+      </label>
+    {/each}
+
+    {#each pools as p (p.group.id)}
+      <div
+        style="margin-top:8px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em"
+      >
+        {p.group.label} · pick up to {p.group.maxActivations}
+        ({activeInGroup(p.group.id)}/{p.group.maxActivations})
       </div>
-      {#each g.items as e (g.kind + ":" + e.ability.id)}
-        <label class="ability-row" class:active={isActive(e)}>
+      {#each p.levers as b (b.id)}
+        {@const atCap =
+          !enabled(b) && activeInGroup(p.group.id) >= p.group.maxActivations}
+        <label class="ability-row" class:active={enabled(b)} class:dim={atCap}>
           <input
             type="checkbox"
-            checked={isActive(e)}
-            onchange={() => toggle(e)}
+            checked={enabled(b)}
+            disabled={atCap}
+            onchange={() => toggle(b)}
           />
           <span class="name">
-            {e.ability.name}
-            <small>· {buffDescription(e)}</small>
+            {b.label}
+            <small>· {summary(b)}</small>
           </span>
-          <span class="chip {g.kind}">{describeSource(g.kind)}</span>
+          <span class="chip activation">activation</span>
         </label>
       {/each}
     {/each}
