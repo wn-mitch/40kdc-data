@@ -76,7 +76,7 @@
       onchange={(e) => (salvo.datasetTargetUnitId = (e.currentTarget as HTMLSelectElement).value || null)}
     >
       <option value="">— pick a target unit —</option>
-      {#each datasetUnits as u (u.id)}
+      {#each datasetUnits as u (`${u.raw.faction_id}/${u.id}`)}
         <option value={u.id}>{u.name}</option>
       {/each}
     </select>

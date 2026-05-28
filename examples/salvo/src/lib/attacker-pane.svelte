@@ -87,7 +87,7 @@
       onchange={(e) => pickUnit((e.currentTarget as HTMLSelectElement).value)}
     >
       <option value="">— pick a unit —</option>
-      {#each rosterUnits as { ru, view } (ru.ref.raw_name)}
+      {#each rosterUnits as { ru, view, index } (index)}
         <option value={view!.id}>{view!.name} ({ru.model_count} models)</option>
       {/each}
     </select>
@@ -119,7 +119,7 @@
     onchange={(e) => pickUnit((e.currentTarget as HTMLSelectElement).value)}
   >
     <option value="">— pick a unit —</option>
-    {#each datasetUnits as u (u.id)}
+    {#each datasetUnits as u (`${u.raw.faction_id}/${u.id}`)}
       <option value={u.id}>{u.name}</option>
     {/each}
   </select>
