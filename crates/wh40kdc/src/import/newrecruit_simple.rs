@@ -41,10 +41,7 @@ static RE_SECTION_HEADER: Lazy<Regex> =
 static RE_UNIT_LINE: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"(?i)^(.+?)\s*\[\s*(\d+)\s*pts?\s*\](?:\s*:\s*(.*))?$").unwrap());
 static RE_BULLET: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(
-        r"^\s*•\s*(\d+)x\s+(.+?)(?:\s*\[\s*(\d+)\s*pts?\s*\])?(?:\s*:\s*(.*))?\s*$",
-    )
-    .unwrap()
+    Regex::new(r"^\s*•\s*(\d+)x\s+(.+?)(?:\s*\[\s*(\d+)\s*pts?\s*\])?(?:\s*:\s*(.*))?\s*$").unwrap()
 });
 
 #[derive(Default)]
@@ -106,7 +103,9 @@ impl UnitBuilder {
     }
 
     fn finish(self) -> (ParsedUnit, u64) {
-        let points = self.displayed_pts.map(|p| p.saturating_sub(self.enhancement_pts));
+        let points = self
+            .displayed_pts
+            .map(|p| p.saturating_sub(self.enhancement_pts));
         let enhancement_points = if self.enhancement_raw_name.is_some() {
             Some(self.enhancement_pts)
         } else {
@@ -142,7 +141,11 @@ struct FirstLine {
 fn parse_first_line(line: &str) -> Option<FirstLine> {
     let c = RE_FIRST_LINE.captures(line)?;
     let declared_limit: u64 = c[2].parse().ok()?;
-    let parts: Vec<&str> = c[1].split(" - ").map(str::trim).filter(|s| !s.is_empty()).collect();
+    let parts: Vec<&str> = c[1]
+        .split(" - ")
+        .map(str::trim)
+        .filter(|s| !s.is_empty())
+        .collect();
     if parts.is_empty() {
         return None;
     }

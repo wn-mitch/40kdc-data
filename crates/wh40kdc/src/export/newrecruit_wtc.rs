@@ -39,8 +39,14 @@ fn wargear_list_text(unit: &RosterUnit, include_warlord_tag: bool) -> String {
 fn header(roster: &Roster, units: &[RosterUnit], char_slots: &[Option<u32>]) -> String {
     let faction = title_case_id(roster.faction_id.as_deref()).unwrap_or_else(|| "Unknown".into());
     let detachment = title_case_id(roster.detachment_id.as_deref());
-    let limit = roster.points.declared_limit.unwrap_or_else(|| total_army_points(roster));
-    let total = roster.points.total_reported.unwrap_or_else(|| total_army_points(roster));
+    let limit = roster
+        .points
+        .declared_limit
+        .unwrap_or_else(|| total_army_points(roster));
+    let total = roster
+        .points
+        .total_reported
+        .unwrap_or_else(|| total_army_points(roster));
 
     let warlord_idx = units.iter().position(|u| u.is_warlord);
     let warlord = match warlord_idx {

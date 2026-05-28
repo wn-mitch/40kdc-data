@@ -54,13 +54,11 @@ static RE_WITH_PREFIX: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"(?i)^(\d+)\s+with\s+(.*)$").unwrap());
 static RE_MODEL_BREAKDOWN: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"^\s*•\s*(\d+)x\s+(.+?)(?:\s*\[[^\]]*\])?\s*$").unwrap());
-static RE_SECTION_HEADER: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"^[A-Z][A-Z0-9 \-/&]+$").unwrap());
+static RE_SECTION_HEADER: Lazy<Regex> = Lazy::new(|| Regex::new(r"^[A-Z][A-Z0-9 \-/&]+$").unwrap());
 static RE_CHAR_PREFIX: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?i)^Char\d+:").unwrap());
 static RE_FULL_FORMAT_MARKER: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"(?m)^[\t ]*\d+\s+with\b").unwrap());
-static RE_ALLIED_HEADER: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"(?im)^ALLIED UNITS\s*$").unwrap());
+static RE_ALLIED_HEADER: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?im)^ALLIED UNITS\s*$").unwrap());
 
 // --- Header parse ----------------------------------------------------------
 
@@ -275,16 +273,15 @@ fn parse_compact_body(body: &str) -> (Vec<ParsedUnit>, Vec<u64>) {
     let mut enhancement_pts: Vec<u64> = Vec::new();
     let mut current: Option<UnitBuilder> = None;
 
-    let finalize =
-        |current: &mut Option<UnitBuilder>,
-         units: &mut Vec<ParsedUnit>,
-         enhancement_pts: &mut Vec<u64>| {
-            if let Some(b) = current.take() {
-                let (u, pts) = b.finish();
-                units.push(u);
-                enhancement_pts.push(pts);
-            }
-        };
+    let finalize = |current: &mut Option<UnitBuilder>,
+                    units: &mut Vec<ParsedUnit>,
+                    enhancement_pts: &mut Vec<u64>| {
+        if let Some(b) = current.take() {
+            let (u, pts) = b.finish();
+            units.push(u);
+            enhancement_pts.push(pts);
+        }
+    };
 
     for raw in body.split('\n') {
         let line = raw.trim();
@@ -349,7 +346,12 @@ fn parse_full_body(body: &str) -> (Vec<ParsedUnit>, Vec<u64>) {
             continue;
         }
         if RE_SECTION_HEADER.is_match(line) && !RE_UNIT_FULL.is_match(line) {
-            finalize(&mut current, &mut breakdown_models, &mut units, &mut enhancement_pts);
+            finalize(
+                &mut current,
+                &mut breakdown_models,
+                &mut units,
+                &mut enhancement_pts,
+            );
             continue;
         }
 
@@ -362,12 +364,22 @@ fn parse_full_body(body: &str) -> (Vec<ParsedUnit>, Vec<u64>) {
         }
 
         if let Some(c) = RE_UNIT_FULL.captures(line) {
-            finalize(&mut current, &mut breakdown_models, &mut units, &mut enhancement_pts);
+            finalize(
+                &mut current,
+                &mut breakdown_models,
+                &mut units,
+                &mut enhancement_pts,
+            );
             let leading_count: u64 = c[1].parse().unwrap_or(1);
             let name = c[2].trim().to_string();
             let pts: u64 = c[3].parse().unwrap_or(0);
             let is_character_prefix = RE_CHAR_PREFIX.is_match(line);
-            current = Some(UnitBuilder::new(name, pts, leading_count, is_character_prefix));
+            current = Some(UnitBuilder::new(
+                name,
+                pts,
+                leading_count,
+                is_character_prefix,
+            ));
             continue;
         }
 
@@ -386,7 +398,12 @@ fn parse_full_body(body: &str) -> (Vec<ParsedUnit>, Vec<u64>) {
         }
     }
 
-    finalize(&mut current, &mut breakdown_models, &mut units, &mut enhancement_pts);
+    finalize(
+        &mut current,
+        &mut breakdown_models,
+        &mut units,
+        &mut enhancement_pts,
+    );
     (units, enhancement_pts)
 }
 
@@ -415,7 +432,9 @@ fn is_full_format(text: &str) -> bool {
 
 fn parse_with(text: &str, full: bool, format_id: &str) -> Result<ParsedRoster, ParseError> {
     let (header, body_start) = parse_wtc_header(text).ok_or_else(|| {
-        ParseError(format!("{format_id}: missing \"+ FACTION KEYWORD:\" header"))
+        ParseError(format!(
+            "{format_id}: missing \"+ FACTION KEYWORD:\" header"
+        ))
     })?;
     let body_lines: Vec<&str> = text.split('\n').collect();
     let body = if body_start >= body_lines.len() {
@@ -485,4 +504,3 @@ impl FormatAdapter for NewRecruitWtcFullAdapter {
         parse_with(text, true, "newrecruit-wtc-full")
     }
 }
-

@@ -228,7 +228,10 @@ mod tests {
     #[test]
     fn classify_inline_enhancement() {
         let c = classify_wargear_list(&["Preyslayer's Mantle [15 pts]", "Chainsword"]);
-        assert_eq!(c.enhancement_raw_name.as_deref(), Some("Preyslayer's Mantle"));
+        assert_eq!(
+            c.enhancement_raw_name.as_deref(),
+            Some("Preyslayer's Mantle")
+        );
         assert_eq!(c.enhancement_points, Some(15));
         assert_eq!(c.wargear.len(), 1);
     }
@@ -252,7 +255,10 @@ mod tests {
 
     #[test]
     fn strip_paren() {
-        assert_eq!(strip_parenthetical("Houndpack Lance (Marked Prey)"), "Houndpack Lance");
+        assert_eq!(
+            strip_parenthetical("Houndpack Lance (Marked Prey)"),
+            "Houndpack Lance"
+        );
         assert_eq!(strip_parenthetical("Plain Name"), "Plain Name");
     }
 

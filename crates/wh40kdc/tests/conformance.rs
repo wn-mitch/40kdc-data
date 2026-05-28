@@ -125,8 +125,7 @@ fn imported_rosters_match_reference_goldens() {
             }
             .unwrap_or_else(|e| panic!("import roster/{case_name} {filename}: {e}"));
 
-            let actual_value =
-                serde_json::to_value(&actual).expect("Roster serializes to a Value");
+            let actual_value = serde_json::to_value(&actual).expect("Roster serializes to a Value");
 
             let is_canonical = filename == "input.json" || filename == "input.newrecruit-json.json";
             if is_canonical {
@@ -160,12 +159,24 @@ fn exported_rosters_match_reference_goldens() {
     assert!(!cases.is_empty(), "no roster conformance cases found");
 
     const TEXT_EXPORTS: &[(ExportFormat, &str)] = &[
-        (ExportFormat::NewrecruitWtcCompact, "expected.newrecruit-wtc-compact.txt"),
-        (ExportFormat::NewrecruitWtcFull, "expected.newrecruit-wtc-full.txt"),
-        (ExportFormat::NewrecruitSimple, "expected.newrecruit-simple.txt"),
+        (
+            ExportFormat::NewrecruitWtcCompact,
+            "expected.newrecruit-wtc-compact.txt",
+        ),
+        (
+            ExportFormat::NewrecruitWtcFull,
+            "expected.newrecruit-wtc-full.txt",
+        ),
+        (
+            ExportFormat::NewrecruitSimple,
+            "expected.newrecruit-simple.txt",
+        ),
     ];
     const JSON_EXPORTS: &[(ExportFormat, &str)] = &[
-        (ExportFormat::NewrecruitJson, "expected.newrecruit-json.json"),
+        (
+            ExportFormat::NewrecruitJson,
+            "expected.newrecruit-json.json",
+        ),
         (ExportFormat::RosterJson, "expected.roster-json.json"),
     ];
 
@@ -190,7 +201,11 @@ fn exported_rosters_match_reference_goldens() {
         let seed_filename = files
             .iter()
             .find(|n| n.as_str() == "input.json")
-            .or_else(|| files.iter().find(|n| n.as_str() == "input.newrecruit-json.json"))
+            .or_else(|| {
+                files
+                    .iter()
+                    .find(|n| n.as_str() == "input.newrecruit-json.json")
+            })
             .unwrap_or_else(|| {
                 panic!("roster/{case_name}: export goldens present but no canonical JSON input")
             });

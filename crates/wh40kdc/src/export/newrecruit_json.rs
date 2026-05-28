@@ -300,4 +300,3 @@ impl RosterSerializer for NewRecruitJsonSerializer {
         pretty_json(&payload)
     }
 }
-
