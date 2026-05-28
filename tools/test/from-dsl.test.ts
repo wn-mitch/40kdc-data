@@ -87,13 +87,24 @@ describe("effectToBuffs: leaves", () => {
     expect(result.applied[0].contribution).toEqual({ type: "attacks-mod", value: 1 });
   });
 
-  it("feel-no-pain → FNP buff", () => {
+  it("feel-no-pain → FNP buff under target perspective", () => {
+    const result = effectToBuffs(
+      { type: "feel-no-pain", target: "unit", modifier: { threshold: 5 } },
+      unitRule,
+      ctx,
+      "target",
+    );
+    expect(result.applied[0].contribution).toEqual({ type: "feel-no-pain", threshold: 5 });
+  });
+
+  it("feel-no-pain drops silently under attacker perspective", () => {
     const result = effectToBuffs(
       { type: "feel-no-pain", target: "unit", modifier: { threshold: 5 } },
       unitRule,
       ctx,
     );
-    expect(result.applied[0].contribution).toEqual({ type: "feel-no-pain", threshold: 5 });
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported).toEqual([]);
   });
 
   it("keyword-grant 'Sustained Hits 1' → extra-keyword buff", () => {
@@ -260,6 +271,124 @@ describe("oath-of-moment full effect", () => {
       { type: "reroll", roll: "hit", subset: "all-failures" },
       { type: "reroll", roll: "wound", subset: "all-failures" },
     ]);
+  });
+});
+
+describe("effectToBuffs: target perspective", () => {
+  const ctxT: EngineContext = { phase: "shooting" };
+
+  it("stat-modifier T translates to toughness-mod", () => {
+    const result = effectToBuffs(
+      {
+        type: "stat-modifier",
+        target: "unit",
+        modifier: { stat: "T", operation: "add", value: 1 },
+      },
+      unitRule,
+      ctxT,
+      "target",
+    );
+    expect(result.applied[0].contribution).toEqual({ type: "toughness-mod", value: 1 });
+  });
+
+  it("stat-modifier Sv translates to save-mod with sign inversion", () => {
+    // "+1 Sv" improves the save → makes the needed roll *lower* → save-mod -1.
+    const improve = effectToBuffs(
+      {
+        type: "stat-modifier",
+        target: "unit",
+        modifier: { stat: "Sv", operation: "add", value: 1 },
+      },
+      unitRule,
+      ctxT,
+      "target",
+    );
+    expect(improve.applied[0].contribution).toEqual({ type: "save-mod", value: -1 });
+
+    // "-1 Sv" worsens the save → needed roll goes up → save-mod +1.
+    const worsen = effectToBuffs(
+      {
+        type: "stat-modifier",
+        target: "unit",
+        modifier: { stat: "Sv", operation: "subtract", value: 1 },
+      },
+      unitRule,
+      ctxT,
+      "target",
+    );
+    expect(worsen.applied[0].contribution).toEqual({ type: "save-mod", value: 1 });
+  });
+
+  it("roll-modifier save translates under target perspective only", () => {
+    const node = {
+      type: "roll-modifier",
+      target: "unit",
+      modifier: { roll: "save", operation: "add", value: 1 },
+    };
+    const tgt = effectToBuffs(node, unitRule, ctxT, "target");
+    expect(tgt.applied[0].contribution).toEqual({ type: "save-mod", value: 1 });
+    const atk = effectToBuffs(node, unitRule, ctxT, "attacker");
+    expect(atk.applied).toEqual([]); // saves aren't attacker-side.
+  });
+
+  it("bs-modifier on target: attacker translates to hit-mod under target perspective", () => {
+    const result = effectToBuffs(
+      {
+        type: "bs-modifier",
+        target: "attacker",
+        modifier: { operation: "subtract", value: 1 },
+      },
+      unitRule,
+      ctxT,
+      "target",
+    );
+    expect(result.applied[0].contribution).toEqual({ type: "hit-mod", value: -1 });
+  });
+
+  it("attacker-side rerolls are dropped under target perspective", () => {
+    const result = effectToBuffs(
+      {
+        type: "re-roll",
+        target: "unit",
+        modifier: { roll: "hit", subset: "all-failures" },
+      },
+      armyRule,
+      ctxT,
+      "target",
+    );
+    expect(result.applied).toEqual([]);
+  });
+
+  it("save reroll under target perspective passes through", () => {
+    const result = effectToBuffs(
+      {
+        type: "re-roll",
+        target: "unit",
+        modifier: { roll: "save", subset: "ones" },
+      },
+      unitRule,
+      ctxT,
+      "target",
+    );
+    expect(result.applied[0].contribution).toEqual({
+      type: "reroll",
+      roll: "save",
+      subset: "ones",
+    });
+  });
+
+  it("keyword-grant is attacker-side, drops under target perspective", () => {
+    const result = effectToBuffs(
+      {
+        type: "keyword-grant",
+        target: "unit",
+        modifier: { keywords: ["Lethal Hits"] },
+      },
+      unitRule,
+      ctxT,
+      "target",
+    );
+    expect(result.applied).toEqual([]);
   });
 });
 

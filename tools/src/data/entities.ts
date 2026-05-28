@@ -15,7 +15,11 @@ import type {
 } from "../generated.js";
 import type { Buff, BuffSource, EngineContext } from "../cruncher/buffs.js";
 import { buffsFromKeyword } from "../cruncher/from-keyword.js";
-import { effectToBuffs, type UnsupportedFragment } from "../cruncher/from-dsl.js";
+import {
+  effectToBuffs,
+  type TranslationPerspective,
+  type UnsupportedFragment,
+} from "../cruncher/from-dsl.js";
 import type { Dataset } from "./dataset.js";
 
 /** A unit, linked to its faction, weapons, and abilities. */
@@ -105,10 +109,16 @@ export class AbilityView {
    * tagged via `source` (the caller knows whether this ability is being read
    * as army, detachment, unit, leader, etc.). DSL branches the buff layer
    * can't auto-apply are dropped here; call {@link describeBuffs} if you
-   * also want the diagnostics.
+   * also want the diagnostics. `perspective` defaults to `"attacker"`; pass
+   * `"target"` to translate the ability as a defensive buff (FNP, T/Sv
+   * stat-mods, save rerolls, incoming hit penalties).
    */
-  getBuffs(source: BuffSource, context?: EngineContext): Buff[] {
-    return this.describeBuffs(source, context).applied;
+  getBuffs(
+    source: BuffSource,
+    context?: EngineContext,
+    perspective: TranslationPerspective = "attacker",
+  ): Buff[] {
+    return this.describeBuffs(source, context, perspective).applied;
   }
 
   /**
@@ -119,9 +129,10 @@ export class AbilityView {
   describeBuffs(
     source: BuffSource,
     context?: EngineContext,
+    perspective: TranslationPerspective = "attacker",
   ): { applied: Buff[]; unsupported: UnsupportedFragment[] } {
     const ctx: EngineContext = context ?? { phase: "shooting" };
-    return effectToBuffs(this.raw.effect, source, ctx);
+    return effectToBuffs(this.raw.effect, source, ctx, perspective);
   }
 }
 

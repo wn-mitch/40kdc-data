@@ -7,3 +7,4 @@ tools/src/data/bundle.generated.ts
 *.log
 scripts/model_output/
 scripts/faction_csvs/
+rube-goldberg-output.txt

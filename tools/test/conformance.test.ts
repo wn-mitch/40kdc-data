@@ -174,7 +174,7 @@ describe("abilities-resolver conformance corpus", () => {
   const ds = Dataset.embedded();
   const dir = join(CONFORMANCE, "abilities-resolver");
   const files = readdirSync(dir)
-    .filter((n) => n.endsWith(".json") && !n.startsWith("from-dsl"))
+    .filter((n) => n.endsWith(".json") && !n.endsWith("from-dsl.json"))
     .sort();
 
   it("the resolver corpus is non-empty", () => {
@@ -191,27 +191,44 @@ describe("abilities-resolver conformance corpus", () => {
     });
   }
 
-  it("from-dsl.json: every case translates to the expected applied + unsupported", () => {
-    const dsl = readJson(join(dir, "from-dsl.json")) as {
-      cases: {
-        abilityId: string;
-        source: { kind: "ability"; abilityId: string; abilityKind: string };
-        context: EngineContext;
-        expected: {
-          applied: unknown[];
-          unsupportedReasons: string[];
-        };
-      }[];
-    };
+  type DslCase = {
+    abilityId: string;
+    source: { kind: "ability"; abilityId: string; abilityKind: string };
+    context: EngineContext;
+    perspective?: "attacker" | "target";
+    expected: { applied: unknown[]; unsupportedReasons: string[] };
+  };
+
+  function runDslCorpus(filename: string): void {
+    const dsl = readJson(join(dir, filename)) as { cases: DslCase[] };
     for (const c of dsl.cases) {
       const ability = ds.abilities.get(c.abilityId);
       expect(ability, `unknown ability ${c.abilityId}`).toBeDefined();
-      const result = effectToBuffs(ability!.raw.effect, c.source as never, c.context);
+      const result = effectToBuffs(
+        ability!.raw.effect,
+        c.source as never,
+        c.context,
+        c.perspective ?? "attacker",
+      );
       const appliedContribs = result.applied.map((b) => b.contribution);
-      expect(appliedContribs, `applied buffs for ${c.abilityId}`).toEqual(c.expected.applied);
+      expect(
+        appliedContribs,
+        `applied buffs for ${c.abilityId} (${c.perspective ?? "attacker"})`,
+      ).toEqual(c.expected.applied);
       const reasons = result.unsupported.map((u) => u.reason);
-      expect(reasons, `unsupported reasons for ${c.abilityId}`).toEqual(c.expected.unsupportedReasons);
+      expect(
+        reasons,
+        `unsupported reasons for ${c.abilityId} (${c.perspective ?? "attacker"})`,
+      ).toEqual(c.expected.unsupportedReasons);
     }
+  }
+
+  it("from-dsl.json: every case translates to the expected applied + unsupported", () => {
+    runDslCorpus("from-dsl.json");
+  });
+
+  it("defensive-from-dsl.json: target-perspective translations match", () => {
+    runDslCorpus("defensive-from-dsl.json");
   });
 });
 

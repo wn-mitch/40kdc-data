@@ -33,68 +33,92 @@ export type EffectTranslation = {
   unsupported: UnsupportedFragment[];
 };
 
-/** Targets that apply to the attacker-perspective unit being crunched. */
-const ATTACKER_PERSPECTIVE_TARGETS = new Set([
+/**
+ * Whose perspective the translation runs from.
+ *
+ * - `"attacker"`: the buffed unit is *firing*. `target: "unit"/"self"` etc.
+ *   become attacker-side mods (re-rolls, hit/wound mods, A/S shifts, granted
+ *   keywords). `target: "defender"` is silently dropped — that's incoming
+ *   penalty math relevant when the buffed unit is the *target*, surfaced via
+ *   the `"target"` perspective instead.
+ *
+ * - `"target"`: the buffed unit is *being shot at*. Defensive mods on the
+ *   buffed unit (`stat-modifier T`, `stat-modifier Sv`, `feel-no-pain`,
+ *   `roll-modifier save`) become defender-side buffs. Conversely, attacker-
+ *   only mods (re-rolls, hit/wound mods, A/S shifts) drop silently because
+ *   they describe what the buffed unit does when *attacking*.
+ *
+ * The bs-modifier effect (a -1 to incoming hit rolls, e.g. Benefit of Cover)
+ * becomes a `hit-mod` buff under target perspective so it stacks correctly
+ * with attacker-side modifiers in the resolver's ±1 cap.
+ */
+export type TranslationPerspective = "attacker" | "target";
+
+/** Targets that resolve to the buffed unit itself. */
+const SELF_TARGETS = new Set([
   "self",
   "bearer",
   "unit",
   "attached-unit",
-  "attacker",
   "friendly-within-aura",
   "all-friendly",
 ]);
 
-/** Targets we silently drop because they describe defender-side effects. */
-const DEFENDER_PERSPECTIVE_TARGETS = new Set([
-  "defender",
-  "enemy-within-aura",
-  "all-enemy",
-]);
+/** Aliases the DSL uses when a node specifically calls out "the attacker". */
+const ATTACKER_TARGET = "attacker";
+/** Aliases the DSL uses when a node specifically calls out "the defender". */
+const DEFENDER_TARGETS = new Set(["defender", "enemy-within-aura", "all-enemy"]);
 
 /**
  * Walk an ability DSL `effect` tree and produce the buff stack it contributes
- * against `context`, plus an `unsupported` list naming any branches the buff
- * layer can't express today.
+ * against `context` from the given `perspective`, plus an `unsupported` list
+ * naming any branches the buff layer can't express today.
  */
 export function effectToBuffs(
   effect: unknown,
   source: BuffSource,
   context: EngineContext,
+  perspective: TranslationPerspective = "attacker",
 ): EffectTranslation {
   const out: EffectTranslation = { applied: [], unsupported: [] };
-  walk(effect, source, context, out);
+  walk(effect, source, { context, perspective }, out);
   return out;
 }
+
+type WalkOpts = { context: EngineContext; perspective: TranslationPerspective };
 
 function walk(
   node: unknown,
   source: BuffSource,
-  ctx: EngineContext,
+  opts: WalkOpts,
   out: EffectTranslation,
 ): void {
   if (!isObject(node)) return;
   const type = node.type;
   switch (type) {
     case "re-roll":
-      translateReroll(node, source, out);
+      translateReroll(node, source, opts, out);
       return;
     case "roll-modifier":
-      translateRollModifier(node, source, out);
+      translateRollModifier(node, source, opts, out);
       return;
     case "stat-modifier":
-      translateStatModifier(node, source, out);
+      translateStatModifier(node, source, opts, out);
       return;
     case "feel-no-pain":
-      translateFeelNoPain(node, source, out);
+      translateFeelNoPain(node, source, opts, out);
       return;
     case "keyword-grant":
-      translateKeywordGrant(node, source, out);
+      translateKeywordGrant(node, source, opts, out);
+      return;
+    case "bs-modifier":
+      translateBsModifier(node, source, opts, out);
       return;
     case "conditional":
-      translateConditional(node, source, ctx, out);
+      translateConditional(node, source, opts, out);
       return;
     case "sequence":
-      for (const step of (node.steps as unknown[]) ?? []) walk(step, source, ctx, out);
+      for (const step of (node.steps as unknown[]) ?? []) walk(step, source, opts, out);
       return;
     case "choice":
       // Player decision — auto-applying every branch would double-count.
@@ -104,7 +128,7 @@ function walk(
       });
       return;
     case "dice-gated":
-      // Probabilistic; the buff layer is deterministic. M2-out-of-scope.
+      // Probabilistic; the buff layer is deterministic.
       out.unsupported.push({
         reason: "dice-gated effect: stochastic; not expressible as a buff",
         effectFragment: node,
@@ -113,15 +137,6 @@ function walk(
     case "dice-pool-allocation":
       out.unsupported.push({
         reason: "dice-pool-allocation: player allocates dice at runtime",
-        effectFragment: node,
-      });
-      return;
-    case "bs-modifier":
-      // A defender-side mod on incoming attacks (-1 to hit against this unit).
-      // Drop it from attacker-perspective crunches; the M3 target side will
-      // surface it from the opposing direction.
-      out.unsupported.push({
-        reason: "bs-modifier: a defender-side hit penalty; applies when this unit is being shot at",
         effectFragment: node,
       });
       return;
@@ -141,19 +156,52 @@ function walk(
 // Leaf translators
 // ---------------------------------------------------------------------------
 
-function targetApplies(node: Record<string, unknown>): boolean {
+/**
+ * Classify a node's `target` field against the perspective we're translating
+ * for. Returns:
+ *  - `"self"`: the node targets the buffed unit (apply attacker-side or
+ *    defender-side translation, depending on perspective + stat).
+ *  - `"attacker"` / `"defender"`: the node targets the other party explicitly.
+ *  - `"unknown"`: missing/malformed target.
+ */
+function classifyTarget(
+  node: Record<string, unknown>,
+): "self" | "attacker" | "defender" | "unknown" {
   const target = node.target;
-  if (typeof target !== "string") return false;
-  if (DEFENDER_PERSPECTIVE_TARGETS.has(target)) return false;
-  return ATTACKER_PERSPECTIVE_TARGETS.has(target);
+  if (typeof target !== "string") return "unknown";
+  if (target === ATTACKER_TARGET) return "attacker";
+  if (DEFENDER_TARGETS.has(target)) return "defender";
+  if (SELF_TARGETS.has(target)) return "self";
+  return "unknown";
+}
+
+/**
+ * Does this node's target match the buffed unit under the current
+ * perspective? Used for symmetric roll/keyword translations where the same
+ * effect is "self" in either direction.
+ */
+function appliesToBuffedUnit(
+  node: Record<string, unknown>,
+  perspective: TranslationPerspective,
+): boolean {
+  const cls = classifyTarget(node);
+  if (cls === "self") return true;
+  if (cls === "attacker") return perspective === "attacker";
+  if (cls === "defender") return perspective === "target";
+  return false;
 }
 
 function translateReroll(
   node: Record<string, unknown>,
   source: BuffSource,
+  opts: WalkOpts,
   out: EffectTranslation,
 ): void {
-  if (!targetApplies(node)) return;
+  // Rerolls are inherently attacker-side (you re-roll your own hit/wound/
+  // damage; save rerolls fire when *you* are the target). Apply only under
+  // the matching perspective so a target-perspective walk doesn't grab the
+  // attacker's reroll-failed-hits buff.
+  if (opts.perspective === "attacker" && !appliesToBuffedUnit(node, "attacker")) return;
   const modifier = node.modifier;
   if (!isObject(modifier)) {
     out.unsupported.push({ reason: "re-roll: missing modifier object", effectFragment: node });
@@ -161,6 +209,8 @@ function translateReroll(
   }
   const roll = modifier.roll;
   const subset = modifier.subset;
+  // Under target perspective, only "save" rerolls fire on the buffed unit.
+  if (opts.perspective === "target" && roll !== "save") return;
   if (
     (roll === "hit" || roll === "wound" || roll === "save" || roll === "damage") &&
     (subset === "ones" || subset === "all-failures")
@@ -168,7 +218,6 @@ function translateReroll(
     out.applied.push({ source, contribution: { type: "reroll", roll, subset } });
     return;
   }
-  // Charge / advance / armour-pen rerolls aren't part of the damage math.
   out.unsupported.push({
     reason: `re-roll on "${String(roll)}" (subset "${String(subset)}") is outside the damage path`,
     effectFragment: node,
@@ -178,9 +227,9 @@ function translateReroll(
 function translateRollModifier(
   node: Record<string, unknown>,
   source: BuffSource,
+  opts: WalkOpts,
   out: EffectTranslation,
 ): void {
-  if (!targetApplies(node)) return;
   const modifier = node.modifier;
   if (!isObject(modifier)) {
     out.unsupported.push({
@@ -198,6 +247,17 @@ function translateRollModifier(
     return;
   }
   const roll = modifier.roll;
+  // Each roll type is intrinsically on one side. Hit / wound / damage are
+  // attacker-side; save is defender-side. The perspective decides whether the
+  // buffed unit's `target` is the right party for that roll type.
+  if (opts.perspective === "attacker") {
+    if (!appliesToBuffedUnit(node, "attacker")) return;
+    if (roll === "save") return; // saves apply to the defender, not the attacker.
+  } else {
+    // target perspective: only `save` rolls on the buffed unit fire here.
+    if (roll !== "save") return;
+    if (!appliesToBuffedUnit(node, "target")) return;
+  }
   switch (roll) {
     case "hit":
       out.applied.push({ source, contribution: { type: "hit-mod", value } });
@@ -222,6 +282,7 @@ function translateRollModifier(
 function translateStatModifier(
   node: Record<string, unknown>,
   source: BuffSource,
+  opts: WalkOpts,
   out: EffectTranslation,
 ): void {
   const modifier = node.modifier;
@@ -241,30 +302,43 @@ function translateStatModifier(
     return;
   }
   const stat = modifier.stat;
-  const isAttackerSide = targetApplies(node);
+  const isOnBuffedUnit = appliesToBuffedUnit(node, opts.perspective);
   switch (stat) {
     case "A":
-      if (!isAttackerSide) return;
+      if (opts.perspective !== "attacker" || !isOnBuffedUnit) return;
       out.applied.push({ source, contribution: { type: "attacks-mod", value } });
       return;
     case "S":
-      if (!isAttackerSide) return;
+      if (opts.perspective !== "attacker" || !isOnBuffedUnit) return;
       out.applied.push({ source, contribution: { type: "strength-mod", value } });
       return;
     case "T":
-      // Toughness is a defender stat. If this ability's target is the
-      // attacker-perspective unit (e.g. "+1 T to my unit"), the M2 crunch
-      // doesn't read it — the unit is firing, not being shot at. Defer to M3.
-      out.unsupported.push({
-        reason: "stat-modifier T: defender-side stat; applies when the buffed unit is the target",
-        effectFragment: node,
-      });
+      // Defender stat. Only relevant under target perspective.
+      if (opts.perspective !== "target") {
+        out.unsupported.push({
+          reason: "stat-modifier T: defender-side stat; applies when the buffed unit is the target",
+          effectFragment: node,
+        });
+        return;
+      }
+      if (!isOnBuffedUnit) return;
+      out.applied.push({ source, contribution: { type: "toughness-mod", value } });
       return;
     case "Sv":
-      out.unsupported.push({
-        reason: "stat-modifier Sv: defender-side stat; applies when the buffed unit is the target",
-        effectFragment: node,
-      });
+      // Saves improve when the *defender* gets +Sv. A +1 to Sv in printed
+      // rules means "improve the save by 1", which maps to a `save-mod` of
+      // `-value` since save-mod is signed against the *needed roll*.
+      // (Equivalent: a -1 Sv penalty is a +1 save-mod.) We translate
+      // "Sv add 1" → save-mod -1 to keep the resolver's sign convention.
+      if (opts.perspective !== "target") {
+        out.unsupported.push({
+          reason: "stat-modifier Sv: defender-side stat; applies when the buffed unit is the target",
+          effectFragment: node,
+        });
+        return;
+      }
+      if (!isOnBuffedUnit) return;
+      out.applied.push({ source, contribution: { type: "save-mod", value: -value } });
       return;
     default:
       out.unsupported.push({
@@ -277,13 +351,15 @@ function translateStatModifier(
 function translateFeelNoPain(
   node: Record<string, unknown>,
   source: BuffSource,
+  opts: WalkOpts,
   out: EffectTranslation,
 ): void {
-  // FNP applies when the buffed unit is the *target* (it ablates incoming
-  // damage). For an attacker-perspective crunch, this is irrelevant — but the
-  // target-perspective path (M3) will read the same buff list, so we still
-  // emit it. Engines that only care about the attacker side can ignore the
-  // `feelNoPain` field in `ResolvedModifiers`; M3 plumbs it through.
+  // FNP applies when the buffed unit is the *target* — it ablates incoming
+  // damage. Under attacker perspective the FNP is irrelevant (the unit is
+  // firing, not taking damage). Drop silently rather than as `unsupported`
+  // so attacker-perspective walks don't surface a spurious diagnostic for
+  // every unit that happens to have a FNP rule.
+  if (opts.perspective !== "target") return;
   const modifier = node.modifier;
   if (!isObject(modifier)) {
     out.unsupported.push({
@@ -306,9 +382,15 @@ function translateFeelNoPain(
 function translateKeywordGrant(
   node: Record<string, unknown>,
   source: BuffSource,
+  opts: WalkOpts,
   out: EffectTranslation,
 ): void {
-  if (!targetApplies(node)) return;
+  // Weapon-keyword grants ride with the attacker's profile (e.g. "your
+  // weapons gain [Sustained Hits 1]"). Defender-perspective walks ignore
+  // them — the keyword applies when the buffed unit fires, not when it's
+  // shot at.
+  if (opts.perspective !== "attacker") return;
+  if (!appliesToBuffedUnit(node, "attacker")) return;
   const modifier = node.modifier;
   if (!isObject(modifier)) return;
   const keywords = modifier.keywords;
@@ -327,17 +409,37 @@ function translateKeywordGrant(
   }
 }
 
+function translateBsModifier(
+  node: Record<string, unknown>,
+  source: BuffSource,
+  opts: WalkOpts,
+  out: EffectTranslation,
+): void {
+  // A bs-modifier on `target: "attacker"` is a defender-side rule: it
+  // penalises *incoming* hit rolls (e.g. Benefit of Cover). Translate it
+  // as a `hit-mod` buff under target perspective so the resolver's ±1 cap
+  // composes with attacker-side mods.
+  if (opts.perspective !== "target") return;
+  const cls = classifyTarget(node);
+  if (cls !== "attacker") return; // a bs-modifier on self wouldn't make sense.
+  const modifier = node.modifier;
+  if (!isObject(modifier)) return;
+  const value = signedValue(modifier);
+  if (value === null) return;
+  out.applied.push({ source, contribution: { type: "hit-mod", value } });
+}
+
 function translateConditional(
   node: Record<string, unknown>,
   source: BuffSource,
-  ctx: EngineContext,
+  opts: WalkOpts,
   out: EffectTranslation,
 ): void {
   const condition = node.condition;
   const effect = node.effect;
   if (!isObject(condition)) return;
   const negated = condition.negated === true;
-  const verdict = evaluateCondition(condition, ctx);
+  const verdict = evaluateCondition(condition, opts.context);
   if (verdict === "unknown") {
     out.unsupported.push({
       reason: `conditional: cannot evaluate condition "${String(condition.type)}" against current context`,
@@ -347,7 +449,7 @@ function translateConditional(
   }
   const active = negated ? !verdict : verdict;
   if (!active) return;
-  walk(effect, source, ctx, out);
+  walk(effect, source, opts, out);
 }
 
 // ---------------------------------------------------------------------------

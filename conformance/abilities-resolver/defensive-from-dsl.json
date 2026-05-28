@@ -1,0 +1,35 @@
+{
+  "name": "DSL→Buff translations under target perspective (defender-side)",
+  "cases": [
+    {
+      "abilityId": "feel-no-pain-5",
+      "source": { "kind": "ability", "abilityId": "feel-no-pain-5", "abilityKind": "unit" },
+      "context": { "phase": "shooting" },
+      "perspective": "target",
+      "expected": {
+        "applied": [{ "type": "feel-no-pain", "threshold": 5 }],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "abilityId": "feel-no-pain-5",
+      "source": { "kind": "ability", "abilityId": "feel-no-pain-5", "abilityKind": "unit" },
+      "context": { "phase": "shooting" },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "abilityId": "oath-of-moment",
+      "source": { "kind": "ability", "abilityId": "oath-of-moment", "abilityKind": "army" },
+      "context": { "phase": "shooting" },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": []
+      }
+    }
+  ]
+}

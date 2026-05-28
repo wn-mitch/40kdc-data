@@ -40,10 +40,17 @@ export * from "../cruncher/index.js";
 
 // The DSL→Buff translator that powers AbilityView.getBuffs / describeBuffs.
 export { effectToBuffs, parseKeywordGrant } from "../cruncher/from-dsl.js";
-export type { EffectTranslation, UnsupportedFragment } from "../cruncher/from-dsl.js";
+export type {
+  EffectTranslation,
+  TranslationPerspective,
+  UnsupportedFragment,
+} from "../cruncher/from-dsl.js";
 
 // The eligible-abilities resolver (also reachable as Dataset.eligibleAbilities).
 export * from "../abilities-resolver/index.js";
+
+// Bridge helpers from the importer's RosterUnit → linked views.
+export { resolveRosterUnit, resolveRosterWargear } from "./roster-resolve.js";
 
 import { Dataset } from "./dataset.js";
 

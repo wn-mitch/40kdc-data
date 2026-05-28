@@ -172,16 +172,17 @@ export class Dataset {
   }
 
   /**
-   * The full applicable {@link Buff} stack for a (unit, phase) combination:
+   * Attacker-perspective {@link Buff} stack for a (unit, phase) combination:
    * intrinsic weapon-profile keywords plus every eligible ability whose DSL
-   * effect translates to a buff (army, detachment, unit, leader, support, plus
-   * any stratagems the caller has opted into).
+   * effect translates to an attacker-side buff (army, detachment, unit,
+   * leader, support, plus any stratagems the caller has opted into).
    *
    * The result includes only buffs the buff layer can express today — the
    * `unsupported` half of the DSL→Buff translation is dropped here so callers
    * who just want the stack don't need to thread diagnostics through. Use
    * {@link AbilityView.describeBuffs} when you need the diagnostics for an
-   * individual ability.
+   * individual ability. Symmetric to {@link defensiveBuffsFor}, which walks
+   * the same eligibility set under target perspective.
    */
   buffsFor(
     input: EligibilityInput & {
@@ -191,23 +192,56 @@ export class Dataset {
     },
     context: EngineContext,
   ): Buff[] {
+    return this.collectBuffs(input, context, "attacker");
+  }
+
+  /**
+   * Defender-perspective buff stack for the chosen unit: walks the same
+   * eligible-abilities set as {@link buffsFor} but translates each ability's
+   * DSL effect as defensive (FNP, save mods from `stat-modifier Sv`,
+   * toughness mods from `stat-modifier T`, save rerolls, incoming hit
+   * penalties from `bs-modifier`). Use this when the chosen unit is being
+   * crunched as the *target* — the engine reads `feelNoPain`/`saveMod`/
+   * `toughnessMod` out of `resolveBuffs` so wiring the result into `crunch`
+   * just means concatenating onto the existing `buffs` array.
+   *
+   * `weaponProfiles` are ignored under target perspective — weapon-keyword
+   * effects ride with the firing weapon, not the receiving unit.
+   */
+  defensiveBuffsFor(
+    input: EligibilityInput & { optedInStratagemIds?: string[] },
+    context: EngineContext,
+  ): Buff[] {
+    return this.collectBuffs(input, context, "target");
+  }
+
+  /** Shared implementation for buffsFor / defensiveBuffsFor. */
+  private collectBuffs(
+    input: EligibilityInput & {
+      weaponProfiles?: { weaponId: string; profileIndex: number }[];
+      optedInStratagemIds?: string[];
+    },
+    context: EngineContext,
+    perspective: "attacker" | "target",
+  ): Buff[] {
     const out: Buff[] = [];
 
-    // 1. Weapon-profile keywords (M1 stack).
-    for (const ref of input.weaponProfiles ?? []) {
-      const weapon = this.weapons.get(ref.weaponId);
-      if (!weapon) continue;
-      out.push(...weapon.profileBuffs(ref.profileIndex, context));
+    // Weapon-profile keywords are attacker-only.
+    if (perspective === "attacker") {
+      for (const ref of input.weaponProfiles ?? []) {
+        const weapon = this.weapons.get(ref.weaponId);
+        if (!weapon) continue;
+        out.push(...weapon.profileBuffs(ref.profileIndex, context));
+      }
     }
 
-    // 2. Eligible abilities, filtered for opted-in stratagems.
     const optedIn = new Set(input.optedInStratagemIds ?? []);
     for (const entry of this.eligibleAbilities(input, context.phase)) {
       if (entry.source.kind === "detachment-stratagem" && !optedIn.has(entry.source.stratagemId)) {
         continue;
       }
       const source = bufferSourceFromEligible(entry);
-      out.push(...entry.ability.getBuffs(source, context));
+      out.push(...entry.ability.getBuffs(source, context, perspective));
     }
 
     return out;
