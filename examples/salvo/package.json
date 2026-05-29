@@ -7,13 +7,15 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "inspect": "node scripts/inspect.mjs"
   },
   "dependencies": {
     "@alpaca-software/40kdc-data": "*",
     "fflate": "^0.8.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.50.0",
     "@sveltejs/vite-plugin-svelte": "^5.0.0",
     "@tsconfig/svelte": "^5.0.0",
     "svelte": "^5.0.0",

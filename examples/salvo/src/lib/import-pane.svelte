@@ -35,7 +35,7 @@
     targetError = error;
     targetTrials = trials;
     targetFormat = format;
-    if (roster && salvo.targetMode !== "roster") salvo.targetMode = "roster";
+    if (roster) salvo.onTargetRosterImported();
   }
 </script>
 

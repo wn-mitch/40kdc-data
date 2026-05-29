@@ -111,11 +111,32 @@ class SalvoState {
     this.buffOverrides = { ...this.buffOverrides, [id]: enabled };
   }
 
-  // Target
-  targetMode = $state<TargetMode>("manual");
+  // Target. Default is "dataset" so the picker is useful before any roster
+  // has been imported. After a successful roster import we auto-flip to
+  // "roster" unless the user has explicitly picked a mode since the last
+  // import (tracked via `targetModeUserOverridden`).
+  targetMode = $state<TargetMode>("dataset");
+  targetModeUserOverridden = $state<boolean>(false);
   manualTarget = $state<ManualTarget>({ ...DEFAULT_TARGET });
   datasetTargetUnitId = $state<string | null>(null);
   rosterTargetUnitIndex = $state<number | null>(null);
+
+  /** User-initiated mode change. Records the override so a later import
+   *  doesn't yank the tab out from under them. */
+  selectTargetMode(mode: TargetMode): void {
+    this.targetMode = mode;
+    this.targetModeUserOverridden = true;
+  }
+
+  /** Called by import-pane after a successful target roster import. Flips to
+   *  "roster" if the user hasn't overridden since the last import. Resets the
+   *  override flag so a subsequent re-import behaves the same way. */
+  onTargetRosterImported(): void {
+    if (!this.targetModeUserOverridden) {
+      this.targetMode = "roster";
+    }
+    this.targetModeUserOverridden = false;
+  }
 }
 
 export const salvo = new SalvoState();

@@ -73,13 +73,13 @@
 </script>
 
 <div class="tabs">
-  <button class:active={salvo.targetMode === "manual"} onclick={() => (salvo.targetMode = "manual")}>Manual</button>
-  <button class:active={salvo.targetMode === "dataset"} onclick={() => (salvo.targetMode = "dataset")}>Dataset</button>
+  <button class:active={salvo.targetMode === "dataset"} onclick={() => salvo.selectTargetMode("dataset")}>Dataset</button>
   <button
     class:active={salvo.targetMode === "roster"}
     disabled={!salvo.targetRoster}
-    onclick={() => (salvo.targetMode = "roster")}>Imported list</button
+    onclick={() => salvo.selectTargetMode("roster")}>Imported list</button
   >
+  <button class:active={salvo.targetMode === "manual"} onclick={() => salvo.selectTargetMode("manual")}>Manual</button>
 </div>
 
 {#if salvo.targetMode === "dataset"}
