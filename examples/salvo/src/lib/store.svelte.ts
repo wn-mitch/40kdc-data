@@ -118,6 +118,7 @@ class SalvoState {
   targetMode = $state<TargetMode>("dataset");
   targetModeUserOverridden = $state<boolean>(false);
   manualTarget = $state<ManualTarget>({ ...DEFAULT_TARGET });
+  datasetTargetFactionId = $state<string | null>(null);
   datasetTargetUnitId = $state<string | null>(null);
   rosterTargetUnitIndex = $state<number | null>(null);
 

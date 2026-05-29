@@ -3,9 +3,28 @@
   import { resolveRosterUnit } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
 
-  const datasetUnits = $derived(
-    ds.units.all.slice().sort((a, b) => a.name.localeCompare(b.name)),
+  const factions = $derived(
+    ds.factions.all.slice().sort((a, b) => a.name.localeCompare(b.name)),
   );
+
+  const datasetUnits = $derived.by(() => {
+    const all = ds.units.all
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name));
+    return salvo.datasetTargetFactionId
+      ? all.filter((u) => u.raw.faction_id === salvo.datasetTargetFactionId)
+      : all;
+  });
+
+  // If the current dataset target pick falls outside the new faction filter,
+  // clear it so the dropdown doesn't display a stale value.
+  $effect(() => {
+    if (!salvo.datasetTargetUnitId || !salvo.datasetTargetFactionId) return;
+    const u = ds.units.get(salvo.datasetTargetUnitId);
+    if (!u || u.raw.faction_id !== salvo.datasetTargetFactionId) {
+      salvo.datasetTargetUnitId = null;
+    }
+  });
 
   // Disambiguate shared chassis (e.g. Hellbrute under multiple factions) by
   // appending faction context only when the same name appears more than once.
@@ -83,6 +102,21 @@
 </div>
 
 {#if salvo.targetMode === "dataset"}
+  <div class="row">
+    <label>Faction</label>
+    <select
+      class="grow"
+      value={salvo.datasetTargetFactionId ?? ""}
+      onchange={(e) =>
+        (salvo.datasetTargetFactionId =
+          (e.currentTarget as HTMLSelectElement).value || null)}
+    >
+      <option value="">— any —</option>
+      {#each factions as f (f.id)}
+        <option value={f.id}>{f.name}</option>
+      {/each}
+    </select>
+  </div>
   <div class="row">
     <label>Unit</label>
     <select
