@@ -61,6 +61,14 @@ pub mod import;
 #[cfg(feature = "export")]
 pub mod export;
 
+/// Expected-value damage-projection engine: pure-function math over schema
+/// profiles and a flat [`Buff`](cruncher::Buff) stack (default `cruncher`).
+/// Mirrors `tools/src/cruncher/` in the TS package; the
+/// `conformance/cruncher/` corpus pins both implementations to within
+/// `5e-4` per pipeline stage.
+#[cfg(feature = "cruncher")]
+pub mod cruncher;
+
 /// The bundled, self-contained JSON Schema (draft 2020-12) these types were
 /// generated from. Consumers can feed this to a JSON Schema validator to check
 /// data before deserializing; the canonical validation CLI lives in the

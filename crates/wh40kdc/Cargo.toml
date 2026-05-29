@@ -22,7 +22,7 @@ all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
 [features]
-default = ["bundled-data", "import", "export"]
+default = ["bundled-data", "import", "export", "cruncher"]
 # The embedded dataset + the linked, typed data API (Dataset/Collection/
 # normalize_name). default-features = false drops both for a types-only crate.
 bundled-data = ["dep:unicode-normalization"]
@@ -35,6 +35,11 @@ import = ["bundled-data", "dep:base64", "dep:flate2", "dep:once_cell", "dep:rege
 # wtc-full / simple / canonical Roster JSON). Dataset-free — needs only the
 # Roster domain types and serde, so it doesn't drag in base64/flate2/regex.
 export = []
+# The expected-value damage-projection engine (the Rust mirror of
+# `tools/src/cruncher/`). Pure math over schema profiles and a flat Buff
+# stack; needs the embedded dataset to look up weapon-keyword catalog
+# effects. No additional deps — the dice-notation parser is hand-rolled.
+cruncher = ["bundled-data"]
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
