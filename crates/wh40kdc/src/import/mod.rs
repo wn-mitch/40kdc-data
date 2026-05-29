@@ -33,6 +33,8 @@ mod adapter;
 #[cfg(feature = "import")]
 mod decode;
 #[cfg(feature = "import")]
+mod gw;
+#[cfg(feature = "import")]
 mod listforge;
 #[cfg(feature = "import")]
 mod newrecruit_json;
@@ -44,6 +46,8 @@ mod newrecruit_text;
 mod newrecruit_wtc;
 #[cfg(feature = "import")]
 mod resolve;
+#[cfg(feature = "import")]
+mod rosterizer;
 
 pub use types::{
     BattleSize, Candidate, Diagnostics, GameVersionRef, ParsedRoster, ParsedUnit, ParsedWargear,
@@ -56,6 +60,8 @@ pub use adapter::{format_id, select_adapter, FormatAdapter, ParseError};
 #[cfg(feature = "import")]
 pub use decode::{decode_listforge, DecodeError};
 #[cfg(feature = "import")]
+pub use gw::GwAdapter;
+#[cfg(feature = "import")]
 pub use listforge::ListForgeAdapter;
 #[cfg(feature = "import")]
 pub use newrecruit_json::NewRecruitJsonAdapter;
@@ -65,6 +71,8 @@ pub use newrecruit_simple::NewRecruitSimpleAdapter;
 pub use newrecruit_wtc::{NewRecruitWtcCompactAdapter, NewRecruitWtcFullAdapter};
 #[cfg(feature = "import")]
 pub use resolve::resolve;
+#[cfg(feature = "import")]
+pub use rosterizer::RosterizerAdapter;
 
 #[cfg(feature = "import")]
 use crate::data::Dataset;
@@ -111,13 +119,17 @@ impl From<ParseError> for ImportError {
 /// NewRecruit-JSON runs ahead of ListForge because both recognise a
 /// `roster.forces` BattleScribe payload; the NewRecruit signature is more
 /// specific (xmlns or `generatedBy: newrecruit.eu`). The text adapters
-/// (wtc-full / wtc-compact / simple) only match `Value::String` payloads and
-/// disambiguate among themselves via structural cues — wtc-full goes before
-/// wtc-compact because its matcher is the more specific of the two.
+/// (gw / wtc-full / wtc-compact / simple) only match `Value::String` payloads
+/// and disambiguate among themselves via structural cues — wtc-full goes before
+/// wtc-compact because its matcher is the more specific of the two. GW shares
+/// the WTC summary header but carries `•` bullets and no `N with` lines, so it
+/// stays disjoint from both wtc matchers.
 #[cfg(feature = "import")]
 fn adapters() -> Vec<Box<dyn FormatAdapter>> {
     vec![
+        Box::new(RosterizerAdapter),
         Box::new(NewRecruitJsonAdapter),
+        Box::new(GwAdapter),
         Box::new(NewRecruitWtcFullAdapter),
         Box::new(NewRecruitWtcCompactAdapter),
         Box::new(NewRecruitSimpleAdapter),

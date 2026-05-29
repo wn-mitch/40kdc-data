@@ -14,6 +14,7 @@ import { Dataset } from "../data/dataset.js";
 import type { FormatAdapter } from "./adapter.js";
 import { selectAdapter } from "./adapter.js";
 import { decodeListForge } from "./decode.js";
+import { gwAdapter } from "./gw.js";
 import { listForgeAdapter } from "./listforge.js";
 import { newRecruitJsonAdapter } from "./newrecruit-json.js";
 import { newRecruitSimpleAdapter } from "./newrecruit-simple.js";
@@ -22,6 +23,7 @@ import {
   newRecruitWtcFullAdapter,
 } from "./newrecruit-wtc.js";
 import { resolve } from "./resolve.js";
+import { rosterizerAdapter } from "./rosterizer.js";
 import type { Roster, RosterFormat } from "./types.js";
 
 /**
@@ -30,13 +32,19 @@ import type { Roster, RosterFormat } from "./types.js";
  * NewRecruit-JSON runs ahead of ListForge because both recognise a
  * `roster.forces` BattleScribe payload, and the NewRecruit signature is more
  * specific (`xmlns: rosterSchema` or `generatedBy: newrecruit.eu`). The text
- * adapters (`wtc-compact` / `wtc-full` / `simple`) only match strings and
+ * adapters (`gw` / `wtc-compact` / `wtc-full` / `simple`) only match strings and
  * disambiguate among themselves via structural cues, so their order amongst
  * each other doesn't matter; wtc-full goes before wtc-compact because its
- * matcher is the more specific of the two.
+ * matcher is the more specific of the two. GW shares the WTC summary header but
+ * carries `•` bullets and no `N with` lines, so it stays disjoint from both wtc
+ * matchers. Rosterizer rides at the top of the JSON dispatch — its `rulebook` +
+ * `snapshot` signature is structurally distinct from the BattleScribe
+ * `roster.forces` shape.
  */
 const ADAPTERS: readonly FormatAdapter[] = [
+  rosterizerAdapter,
   newRecruitJsonAdapter,
+  gwAdapter,
   newRecruitWtcFullAdapter,
   newRecruitWtcCompactAdapter,
   newRecruitSimpleAdapter,

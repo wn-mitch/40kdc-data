@@ -73,15 +73,20 @@ function genNormalize(): void {
 }
 
 /** Locate the canonical input for a fixture dir: prefer `input.json` (legacy
- * ListForge), fall back to `input.newrecruit-json.json` (NewRecruit). */
+ * ListForge), then `input.newrecruit-json.json` (NewRecruit), then the
+ * text-only `input.gw.txt` (GW app export — import-only, like ListForge). */
 function seedRoster(caseDir: string, ds: Dataset): Roster {
-  const candidates = ["input.json", "input.newrecruit-json.json"];
-  for (const name of candidates) {
-    const path = join(caseDir, name);
-    if (existsSync(path)) {
-      const decoded = JSON.parse(readFileSync(path, "utf8"));
-      return importRoster(decoded, { dataset: ds });
-    }
+  const jsonSeed = join(caseDir, "input.json");
+  if (existsSync(jsonSeed)) {
+    return importRoster(JSON.parse(readFileSync(jsonSeed, "utf8")), { dataset: ds });
+  }
+  const nrSeed = join(caseDir, "input.newrecruit-json.json");
+  if (existsSync(nrSeed)) {
+    return importRoster(JSON.parse(readFileSync(nrSeed, "utf8")), { dataset: ds });
+  }
+  const gwSeed = join(caseDir, "input.gw.txt");
+  if (existsSync(gwSeed)) {
+    return importRoster(readFileSync(gwSeed, "utf8"), { dataset: ds });
   }
   throw new Error(`no canonical input found in ${caseDir}`);
 }
@@ -135,6 +140,19 @@ function genRosters(): void {
       if (isNewRecruitSeed) {
         writeText(join(caseDir, inputName), out);
       }
+    }
+
+    // Rosterizer JSON export + a derived round-trip input. The exporter is
+    // deterministic and round-trips through the adapter, so emitting it as
+    // both `expected.rosterizer.json` and `input.rosterizer.json` pins the
+    // cross-implementation goldens and the importer regression at the same
+    // time. Same NewRecruit-seed gate as the text formats — multi-force
+    // ListForge fixtures lose their provisional leader-attachment under
+    // round-trip, so they only get the export golden, not the derived input.
+    const rosterizerOut = exportRoster(seed, "rosterizer");
+    writeJson(join(caseDir, "expected.rosterizer.json"), JSON.parse(rosterizerOut));
+    if (isNewRecruitSeed) {
+      writeJson(join(caseDir, "input.rosterizer.json"), JSON.parse(rosterizerOut));
     }
 
     console.log(

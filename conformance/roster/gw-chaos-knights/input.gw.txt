@@ -1,0 +1,97 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Chaos - Chaos Knights
++ DETACHMENT: Houndpack Lance (Marked Prey)
++ TOTAL ARMY POINTS: 2000pts
++
++ WARLORD: Char3: War Dog Executioner
++ ENHANCEMENT: Preyslayer's Mantle (on Batt1: War Dog Karnivore)
++ NUMBER OF UNITS: 16
++ SECONDARY: - Bring It Down: (13x2) - Assassination: 3 Characters
++++++++++++++++++++++++++++++++++++++++++++++++
+
+BATTLELINE
+
+War Dog Brigand (140 pts)
+• 1x Armoured feet
+• 1x Avenger chaincannon
+• 1x Daemonbreath spear
+• 1x Havoc multi-launcher
+
+War Dog Brigand (140 pts)
+• 1x Armoured feet
+• 1x Avenger chaincannon
+• 1x Daemonbreath spear
+• 1x Havoc multi-launcher
+
+War Dog Executioner (130 pts)
+• 1x Armoured feet
+• 2x War Dog autocannon
+• 1x Diabolus heavy stubber
+• Houndpack Lance Character, Warlord
+
+War Dog Executioner (130 pts)
+• 1x Armoured feet
+• 2x War Dog autocannon
+• 1x Diabolus heavy stubber
+
+War Dog Karnivore (165 pts)
+• 1x Reaper chaintalon
+• 1x Slaughterclaw
+• 1x Havoc multi-launcher
+• Houndpack Lance Character
+• Preyslayer's Mantle (+15 pts)
+
+War Dog Karnivore (150 pts)
+• 1x Reaper chaintalon
+• 1x Slaughterclaw
+• 1x Havoc multi-launcher
+
+War Dog Karnivore (150 pts)
+• 1x Reaper chaintalon
+• 1x Slaughterclaw
+• 1x Havoc multi-launcher
+
+War Dog Karnivore (150 pts)
+• 1x Reaper chaintalon
+• 1x Slaughterclaw
+• 1x Havoc multi-launcher
+
+War Dog Stalker (140 pts)
+• 1x Havoc multi-launcher
+• 1x Daemonbreath spear
+• 1x Slaughterclaw
+
+War Dog Stalker (140 pts)
+• 1x Havoc multi-launcher
+• 1x Daemonbreath spear
+• 1x Slaughterclaw
+• Houndpack Lance Character
+
+War Dog Stalker (140 pts)
+• 1x Havoc multi-launcher
+• 1x Daemonbreath spear
+• 1x Slaughterclaw
+
+War Dog Stalker (140 pts)
+• 1x Havoc multi-launcher
+• 1x Daemonbreath spear
+• 1x Slaughterclaw
+
+War Dog Stalker (140 pts)
+• 1x Havoc multi-launcher
+• 1x Daemonbreath spear
+• 1x Slaughterclaw
+
+ALLIED UNITS
+
+Beasts of Nurgle (65 pts)
+• 1x Beast of Nurgle
+    • 1x Putrid appendages
+
+Nurglings (40 pts)
+• 3x Nurgling Swarm
+    • 3x Diseased claws and teeth
+
+Nurglings (40 pts)
+• 3x Nurgling Swarm
+    • 3x Diseased claws and teeth

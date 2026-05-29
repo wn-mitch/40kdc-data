@@ -45,6 +45,7 @@ const TEXT_EXPORTS: { format: ExportFormat; filename: string }[] = [
 const JSON_EXPORTS: { format: ExportFormat; filename: string }[] = [
   { format: "newrecruit-json", filename: "expected.newrecruit-json.json" },
   { format: "roster-json", filename: "expected.roster-json.json" },
+  { format: "rosterizer", filename: "expected.rosterizer.json" },
 ];
 
 function inputsFor(caseDir: string): InputDescriptor[] {
@@ -69,6 +70,8 @@ function inputsFor(caseDir: string): InputDescriptor[] {
  */
 function expectedFormatFor(filename: string): RosterFormat {
   if (filename === "input.json") return "listforge";
+  if (filename === "input.rosterizer.json") return "rosterizer";
+  if (filename === "input.gw.txt") return "gw";
   const match = /^input\.(newrecruit-[a-z-]+)\.[a-z]+$/.exec(filename);
   if (!match) throw new Error(`unrecognised input fixture filename: ${filename}`);
   return match[1] as RosterFormat;
@@ -121,7 +124,10 @@ describe("conformance corpus (ties out with the Rust crate)", () => {
         const path = join(caseDir, filename);
         const raw = parseAsJson ? readJson(path) : readText(path);
         const actual = importRoster(raw, { dataset: ds });
-        const isCanonical = filename === "input.json" || filename === "input.newrecruit-json.json";
+        const isCanonical =
+          filename === "input.json" ||
+          filename === "input.newrecruit-json.json" ||
+          filename === "input.gw.txt";
         if (isCanonical) {
           // Canonical seed must reproduce the golden exactly.
           expect(
@@ -153,13 +159,18 @@ describe("conformance corpus (ties out with the Rust crate)", () => {
       const present = allExports.filter((e) => dirEntries.includes(e.filename));
       if (present.length === 0) return;
 
-      // Use the canonical seed (input.json or input.newrecruit-json.json) so
-      // the Roster we re-export is deterministic.
+      // Use the canonical seed (input.json, input.newrecruit-json.json, or the
+      // text-only input.gw.txt) so the Roster we re-export is deterministic.
       const seed =
         dirEntries.find((n) => n === "input.json") ??
-        dirEntries.find((n) => n === "input.newrecruit-json.json");
-      if (!seed) throw new Error(`no canonical JSON input in roster/${entry.name}`);
-      const roster = importRoster(readJson(join(caseDir, seed)), { dataset: ds });
+        dirEntries.find((n) => n === "input.newrecruit-json.json") ??
+        dirEntries.find((n) => n === "input.gw.txt");
+      if (!seed) throw new Error(`no canonical input in roster/${entry.name}`);
+      const seedPath = join(caseDir, seed);
+      const roster = importRoster(
+        seed.endsWith(".json") ? readJson(seedPath) : readText(seedPath),
+        { dataset: ds },
+      );
 
       for (const { format, filename } of present) {
         const path = join(caseDir, filename);

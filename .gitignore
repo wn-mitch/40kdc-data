@@ -3,6 +3,7 @@ dist/
 .vite/
 _site/
 /target/
+/rust_analyzer/
 tools/schemas/
 tools/src/data/bundle.generated.ts
 .DS_Store

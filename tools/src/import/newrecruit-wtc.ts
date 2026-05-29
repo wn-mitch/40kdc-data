@@ -34,6 +34,7 @@ import type { FormatAdapter } from "./adapter.js";
 import type { ParsedRoster, ParsedUnit, ParsedWargear } from "./types.js";
 import {
   classifyWargearList,
+  factionFromKeyword,
   inferBattleSizeRaw,
   splitWargearList,
   stripParenthetical,
@@ -59,12 +60,6 @@ const HEADER_FIELDS = {
   pointsLimit: /^\+\s*POINTS LIMIT:\s*(\d+)\s*pts?\s*$/i,
   listName: /^\+\s*LIST NAME:\s*(.+?)\s*$/i,
 } as const;
-
-/** Pull the primary faction out of "Chaos - Chaos Knights" → "Chaos Knights". */
-function factionFromKeyword(value: string): string {
-  const parts = value.split(" - ");
-  return (parts[parts.length - 1] ?? value).trim();
-}
 
 /** Parse the leading `++++ ... ++++` block. Returns `null` if no header is found. */
 function parseWtcHeader(text: string): { header: WtcHeader; bodyStart: number } | null {
@@ -373,6 +368,13 @@ function isFullFormat(text: string): boolean {
   return /^[\t ]*\d+\s+with\b/m.test(text);
 }
 
+/** `•`-prefixed body lines. wtc-full uses them for per-model breakdowns; the GW
+ * app format uses them for every wargear entry. wtc-compact never emits them,
+ * so it's the one matcher that must exclude them to stay disjoint from GW. */
+function hasBullets(text: string): boolean {
+  return /^[\t ]*•/mu.test(text);
+}
+
 function parseWith(text: string, format: "wtc-compact" | "wtc-full"): ParsedRoster {
   const parsed = parseWtcHeader(text);
   if (!parsed) {
@@ -403,7 +405,9 @@ export const newRecruitWtcCompactAdapter: FormatAdapter = {
   matches(decoded: unknown): boolean {
     const text = isWtcText(decoded);
     if (text === null) return false;
-    return !isFullFormat(text);
+    // wtc-compact has no `N with` lines (that's wtc-full) and no `•` bullets
+    // (that's the GW app format) — excluding both keeps the matcher disjoint.
+    return !isFullFormat(text) && !hasBullets(text);
   },
 
   parse(decoded: unknown): ParsedRoster {

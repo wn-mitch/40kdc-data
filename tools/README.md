@@ -1,5 +1,7 @@
 # @alpaca-software/40kdc-data
 
+Published by [Alpaca Software](https://alpacasoft.dev).
+
 The [40kdc](https://tabletop-developer-consortium.github.io) Warhammer 40,000
 dataset behind a **linked, typed API**. Find a unit, then walk straight to its
 weapons, abilities, the game phases those abilities act in, and its faction —

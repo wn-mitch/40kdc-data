@@ -1,0 +1,503 @@
+{
+  "slug": "",
+  "key": "",
+  "visible": "hidden",
+  "locked": false,
+  "rulebook": {
+    "name": "40kdc",
+    "game": "Warhammer 40,000",
+    "publisher": "Tabletop Developer Consortium",
+    "url": "https://40kdc.dev",
+    "genre": "wargame"
+  },
+  "snapshot": {
+    "item": "Roster§Roster",
+    "name": "Imported roster",
+    "quantity": 1,
+    "stats": {
+      "Points": {
+        "value": 2000
+      }
+    },
+    "assets": {
+      "included": [
+        {
+          "item": "Faction§Chaos Knights",
+          "name": "Chaos Knights",
+          "quantity": 1
+        },
+        {
+          "item": "Detachment§Houndpack Lance",
+          "name": "Houndpack Lance",
+          "quantity": 1
+        },
+        {
+          "item": "Battle Size§Strike Force (2000 Point limit)",
+          "name": "Strike Force (2000 Point limit)",
+          "quantity": 1
+        },
+        {
+          "item": "Unit§War Dog Brigand",
+          "name": "War Dog Brigand",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 140
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Armoured feet",
+                "name": "Armoured feet",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Avenger chaincannon",
+                "name": "Avenger chaincannon",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Daemonbreath spear",
+                "name": "Daemonbreath spear",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Havoc multi-launcher",
+                "name": "Havoc multi-launcher",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§War Dog Brigand",
+          "name": "War Dog Brigand",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 140
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Armoured feet",
+                "name": "Armoured feet",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Avenger chaincannon",
+                "name": "Avenger chaincannon",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Daemonbreath spear",
+                "name": "Daemonbreath spear",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Havoc multi-launcher",
+                "name": "Havoc multi-launcher",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§War Dog Executioner",
+          "name": "War Dog Executioner",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 130
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Armoured feet",
+                "name": "Armoured feet",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§War Dog autocannon",
+                "name": "War Dog autocannon",
+                "quantity": 2
+              },
+              {
+                "item": "Weapon§Diabolus heavy stubber",
+                "name": "Diabolus heavy stubber",
+                "quantity": 1
+              }
+            ],
+            "traits": [
+              {
+                "item": "Trait§Warlord",
+                "name": "Warlord",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§War Dog Executioner",
+          "name": "War Dog Executioner",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 130
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Armoured feet",
+                "name": "Armoured feet",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§War Dog autocannon",
+                "name": "War Dog autocannon",
+                "quantity": 2
+              },
+              {
+                "item": "Weapon§Diabolus heavy stubber",
+                "name": "Diabolus heavy stubber",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§War Dog Karnivore",
+          "name": "War Dog Karnivore",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 150
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Enhancement§Preyslayer's Mantle",
+                "name": "Preyslayer's Mantle",
+                "quantity": 1,
+                "stats": {
+                  "Points": {
+                    "value": 15
+                  }
+                }
+              },
+              {
+                "item": "Weapon§Reaper chaintalon",
+                "name": "Reaper chaintalon",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Slaughterclaw",
+                "name": "Slaughterclaw",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Havoc multi-launcher",
+                "name": "Havoc multi-launcher",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§War Dog Karnivore",
+          "name": "War Dog Karnivore",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 150
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Reaper chaintalon",
+                "name": "Reaper chaintalon",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Slaughterclaw",
+                "name": "Slaughterclaw",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Havoc multi-launcher",
+                "name": "Havoc multi-launcher",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§War Dog Karnivore",
+          "name": "War Dog Karnivore",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 150
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Reaper chaintalon",
+                "name": "Reaper chaintalon",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Slaughterclaw",
+                "name": "Slaughterclaw",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Havoc multi-launcher",
+                "name": "Havoc multi-launcher",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§War Dog Karnivore",
+          "name": "War Dog Karnivore",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 150
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Reaper chaintalon",
+                "name": "Reaper chaintalon",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Slaughterclaw",
+                "name": "Slaughterclaw",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Havoc multi-launcher",
+                "name": "Havoc multi-launcher",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§War Dog Stalker",
+          "name": "War Dog Stalker",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 140
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Havoc multi-launcher",
+                "name": "Havoc multi-launcher",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Daemonbreath spear",
+                "name": "Daemonbreath spear",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Slaughterclaw",
+                "name": "Slaughterclaw",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§War Dog Stalker",
+          "name": "War Dog Stalker",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 140
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Havoc multi-launcher",
+                "name": "Havoc multi-launcher",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Daemonbreath spear",
+                "name": "Daemonbreath spear",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Slaughterclaw",
+                "name": "Slaughterclaw",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§War Dog Stalker",
+          "name": "War Dog Stalker",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 140
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Havoc multi-launcher",
+                "name": "Havoc multi-launcher",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Daemonbreath spear",
+                "name": "Daemonbreath spear",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Slaughterclaw",
+                "name": "Slaughterclaw",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§War Dog Stalker",
+          "name": "War Dog Stalker",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 140
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Havoc multi-launcher",
+                "name": "Havoc multi-launcher",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Daemonbreath spear",
+                "name": "Daemonbreath spear",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Slaughterclaw",
+                "name": "Slaughterclaw",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§War Dog Stalker",
+          "name": "War Dog Stalker",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 140
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Havoc multi-launcher",
+                "name": "Havoc multi-launcher",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Daemonbreath spear",
+                "name": "Daemonbreath spear",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Slaughterclaw",
+                "name": "Slaughterclaw",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Beasts of Nurgle",
+          "name": "Beasts of Nurgle",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 65
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Putrid appendages",
+                "name": "Putrid appendages",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Nurglings",
+          "name": "Nurglings",
+          "quantity": 3,
+          "stats": {
+            "Points": {
+              "value": 40
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Diseased claws and teeth",
+                "name": "Diseased claws and teeth",
+                "quantity": 3
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Nurglings",
+          "name": "Nurglings",
+          "quantity": 3,
+          "stats": {
+            "Points": {
+              "value": 40
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Diseased claws and teeth",
+                "name": "Diseased claws and teeth",
+                "quantity": 3
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

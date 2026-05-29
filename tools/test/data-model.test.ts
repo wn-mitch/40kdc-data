@@ -66,6 +66,23 @@ describe("Collection.find / findAll", () => {
       expect(units.byFaction(f).some((u) => u.id === "ministorum-priest")).toBe(true);
     }
   });
+
+  it("getInFaction returns the requested faction's copy of a shared chassis", () => {
+    // `chaos-land-raider` exists under several Chaos factions; faction-blind
+    // `get` returns whichever was registered first, so a consumer that knows
+    // the faction must scope by it. (Regression guard for the World Eaters
+    // "pick a unit" collision.)
+    for (const f of ["chaos-space-marines", "death-guard", "world-eaters"]) {
+      const u = units.getInFaction("chaos-land-raider", f);
+      expect(u, `chaos-land-raider in ${f}`).toBeDefined();
+      expect(u!.id).toBe("chaos-land-raider");
+      expect(u!.raw.faction_id).toBe(f);
+    }
+  });
+
+  it("getInFaction returns undefined when the id is absent from the faction", () => {
+    expect(units.getInFaction("chaos-land-raider", "adepta-sororitas")).toBeUndefined();
+  });
 });
 
 describe("internationalization (diacritic- and punctuation-insensitive lookup)", () => {

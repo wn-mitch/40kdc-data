@@ -1,0 +1,105 @@
+{
+  "slug": "gk-banishers-test",
+  "key": "gk-banishers-test",
+  "visible": "hidden",
+  "locked": false,
+  "rulebook": {
+    "name": "40kdc",
+    "game": "Warhammer 40,000",
+    "publisher": "Tabletop Developer Consortium",
+    "url": "https://40kdc.dev",
+    "genre": "wargame"
+  },
+  "snapshot": {
+    "item": "Roster§Roster",
+    "name": "GK Banishers Test",
+    "quantity": 1,
+    "stats": { "Points": { "value": 585 } },
+    "assets": {
+      "included": [
+        {
+          "item": "Faction§Grey Knights",
+          "name": "Grey Knights",
+          "quantity": 1
+        },
+        {
+          "item": "Detachment§Banishers",
+          "name": "Banishers",
+          "quantity": 1
+        },
+        {
+          "item": "Battle Size§Strike Force (2000 Point limit)",
+          "name": "Strike Force (2000 Point limit)",
+          "quantity": 1
+        },
+        {
+          "item": "Unit§Castellan Crowe",
+          "name": "Castellan Crowe",
+          "quantity": 1,
+          "stats": { "Points": { "value": 90 } },
+          "keywords": { "role": ["Character"] },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Black Blade of Antwyr",
+                "name": "Black Blade of Antwyr",
+                "quantity": 1,
+                "text": "CANARY_TEXT_SHOULD_NOT_APPEAR",
+                "description": "CANARY_DESCRIPTION_SHOULD_NOT_APPEAR"
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Grand Master in Nemesis Dreadknight",
+          "name": "Grand Master in Nemesis Dreadknight",
+          "quantity": 1,
+          "stats": { "Points": { "value": 225 } },
+          "keywords": { "role": ["Character"] },
+          "assets": {
+            "included": [
+              {
+                "item": "Enhancement§Pyresoul (Psychic)",
+                "name": "Pyresoul (Psychic)",
+                "quantity": 1,
+                "stats": { "Points": { "value": 20 } }
+              },
+              {
+                "item": "Weapon§Heavy psycannon",
+                "name": "Heavy psycannon",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Nemesis daemon greathammer",
+                "name": "Nemesis daemon greathammer",
+                "quantity": 1
+              }
+            ],
+            "traits": [
+              {
+                "item": "Trait§Warlord",
+                "name": "Warlord",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Purifier Squad",
+          "name": "Purifier Squad",
+          "quantity": 10,
+          "stats": { "Points": { "value": 250 } },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Nemesis force halberd",
+                "name": "Nemesis force halberd",
+                "quantity": 10
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

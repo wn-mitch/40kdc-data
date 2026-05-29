@@ -1,0 +1,168 @@
+/**
+ * GW app text-export adapter unit tests.
+ *
+ * The Games Workshop 40K app exports a plain-text roster: a `++++…++++` summary
+ * header, ALL-CAPS battlefield-role sections, and units with `•`-bulleted
+ * wargear. These tests pin the parse (header, model groups, annotations,
+ * enhancement) and the disjointness from the NewRecruit WTC matchers that share
+ * the same `+ FACTION KEYWORD:` header.
+ */
+import { describe, it, expect } from "vitest";
+import { Dataset } from "../../src/data/dataset.js";
+import { importRoster, tryImportRoster } from "../../src/import/import-roster.js";
+import { gwAdapter } from "../../src/import/gw.js";
+
+const ds = Dataset.embedded();
+
+// The user's reference 2000pt Chaos Knights + Nurgle-allies list.
+const GW_SAMPLE = `+++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Chaos - Chaos Knights
++ DETACHMENT: Houndpack Lance (Marked Prey)
++ TOTAL ARMY POINTS: 2000pts
++
++ WARLORD: Char3: War Dog Executioner
++ ENHANCEMENT: Preyslayer's Mantle (on Batt1: War Dog Karnivore)
++ NUMBER OF UNITS: 16
++ SECONDARY: - Bring It Down: (13x2) - Assassination: 3 Characters
++++++++++++++++++++++++++++++++++++++++++++++++
+
+BATTLELINE
+
+War Dog Brigand (140 pts)
+• 1x Armoured feet
+• 1x Avenger chaincannon
+• 1x Daemonbreath spear
+• 1x Havoc multi-launcher
+
+War Dog Executioner (130 pts)
+• 1x Armoured feet
+• 2x War Dog autocannon
+• 1x Diabolus heavy stubber
+• Houndpack Lance Character, Warlord
+
+War Dog Executioner (130 pts)
+• 1x Armoured feet
+• 2x War Dog autocannon
+• 1x Diabolus heavy stubber
+
+War Dog Karnivore (165 pts)
+• 1x Reaper chaintalon
+• 1x Slaughterclaw
+• 1x Havoc multi-launcher
+• Houndpack Lance Character
+• Preyslayer's Mantle (+15 pts)
+
+War Dog Karnivore (150 pts)
+• 1x Reaper chaintalon
+• 1x Slaughterclaw
+• 1x Havoc multi-launcher
+
+ALLIED UNITS
+
+Beasts of Nurgle (65 pts)
+• 1x Beast of Nurgle
+    • 1x Putrid appendages
+
+Nurglings (40 pts)
+• 3x Nurgling Swarm
+    • 3x Diseased claws and teeth
+`;
+
+describe("gwAdapter.matches", () => {
+  it("recognises the GW text export (faction keyword + bullets, no `N with`)", () => {
+    expect(gwAdapter.matches(GW_SAMPLE)).toBe(true);
+  });
+
+  it("rejects a non-string payload", () => {
+    expect(gwAdapter.matches({ roster: {} })).toBe(false);
+  });
+
+  it("rejects WTC text (bullets present but `N with` body lines)", () => {
+    const wtcFull = `+++++
++ FACTION KEYWORD: Chaos Knights
++++++
+
+BATTLELINE
+
+1x War Dog Karnivore (150 pts)
+1 with Reaper chaintalon, Slaughterclaw
+`;
+    expect(gwAdapter.matches(wtcFull)).toBe(false);
+  });
+});
+
+describe("gwAdapter via tryImportRoster", () => {
+  it("auto-detects the GW format (not a NewRecruit WTC variant)", () => {
+    const result = tryImportRoster(GW_SAMPLE, { dataset: ds });
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.format).toBe("gw");
+  });
+});
+
+describe("gwAdapter.parse", () => {
+  const parsed = gwAdapter.parse(GW_SAMPLE);
+
+  it("reads the header (faction strips the super-prefix, detachment strips the rule)", () => {
+    expect(parsed.faction_raw_name).toBe("Chaos Knights");
+    expect(parsed.detachment_raw_name).toBe("Houndpack Lance");
+    expect(parsed.total_reported).toBe(2000);
+    // GW carries no separate POINTS LIMIT line — the total is the limit.
+    expect(parsed.declared_limit).toBe(2000);
+  });
+
+  it("parses every unit and flags allied units as multi-force", () => {
+    expect(parsed.units.length).toBe(7);
+    expect(parsed.multi_force).toBe(true);
+  });
+
+  it("backs the enhancement points out of the unit header total", () => {
+    const karnivores = parsed.units.filter((u) => u.raw_name === "War Dog Karnivore");
+    const withEnh = karnivores.find((u) => u.enhancement_raw_name !== null);
+    expect(withEnh).toBeDefined();
+    expect(withEnh!.enhancement_raw_name).toBe("Preyslayer's Mantle");
+    expect(withEnh!.enhancement_points).toBe(15);
+    expect(withEnh!.points).toBe(150); // 165 displayed − 15 enhancement
+    expect(withEnh!.is_character).toBe(true);
+  });
+
+  it("flags the warlord from the body annotation", () => {
+    const warlords = parsed.units.filter((u) => u.is_warlord);
+    expect(warlords.length).toBe(1);
+    expect(warlords[0].raw_name).toBe("War Dog Executioner");
+  });
+
+  it("treats top-level `• Nx` bullets as wargear", () => {
+    const exec = parsed.units.find(
+      (u) => u.raw_name === "War Dog Executioner" && u.is_warlord,
+    )!;
+    const autocannon = exec.wargear.find((w) => w.raw_name === "War Dog autocannon");
+    expect(autocannon?.count).toBe(2);
+    expect(exec.model_count).toBe(1);
+  });
+
+  it("treats a `• Nx Model` bullet with child bullets as a model group", () => {
+    const nurglings = parsed.units.find((u) => u.raw_name === "Nurglings")!;
+    expect(nurglings.model_count).toBe(3);
+    expect(nurglings.wargear).toEqual([{ raw_name: "Diseased claws and teeth", count: 3 }]);
+
+    const beasts = parsed.units.find((u) => u.raw_name === "Beasts of Nurgle")!;
+    expect(beasts.model_count).toBe(1);
+    expect(beasts.wargear).toEqual([{ raw_name: "Putrid appendages", count: 1 }]);
+  });
+});
+
+describe("gwAdapter resolves against the embedded dataset", () => {
+  const roster = importRoster(GW_SAMPLE, { dataset: ds });
+
+  it("resolves the faction and detachment ids", () => {
+    expect(roster.faction_id).toBe("chaos-knights");
+    expect(roster.detachment_id).toBe("houndpack-lance");
+  });
+
+  it("carries the warlord and the enhancement", () => {
+    const warlord = roster.units.find((u) => u.is_warlord);
+    expect(warlord?.ref.id).toBe("war-dog-executioner");
+    const enhanced = roster.units.find((u) => u.enhancement !== null);
+    expect(enhanced?.enhancement?.id).toBe("preyslayers-mantle");
+  });
+});

@@ -13,8 +13,9 @@ use flate2::write::GzEncoder;
 use flate2::Compression;
 use serde_json::Value;
 use wh40kdc::import::{
-    try_import_roster, ImportFailureReason, ImportResult, NewRecruitJsonAdapter,
+    try_import_roster, GwAdapter, ImportFailureReason, ImportResult, NewRecruitJsonAdapter,
     NewRecruitSimpleAdapter, NewRecruitWtcCompactAdapter, NewRecruitWtcFullAdapter, RosterFormat,
+    RosterizerAdapter,
 };
 use wh40kdc::import::{FormatAdapter, ListForgeAdapter};
 use wh40kdc::Dataset;
@@ -63,6 +64,16 @@ fn fixtures() -> Vec<Fixture> {
             label: "NewRecruit simple",
             input: conformance("chaos-knights-houndpack/input.newrecruit-simple.txt"),
             format: RosterFormat::NewrecruitSimple,
+        },
+        Fixture {
+            label: "Rosterizer JSON (chaos-knights-houndpack)",
+            input: conformance("chaos-knights-houndpack/input.rosterizer.json"),
+            format: RosterFormat::Rosterizer,
+        },
+        Fixture {
+            label: "GW app text (gw-chaos-knights)",
+            input: conformance("gw-chaos-knights/input.gw.txt"),
+            format: RosterFormat::Gw,
         },
     ]
 }
@@ -151,7 +162,7 @@ fn rejects_unknown_json_shape() {
         ImportResult::Err { reason, trials, .. } => {
             assert_eq!(reason, ImportFailureReason::NoAdapterMatched);
             // Every adapter should have been polled.
-            assert_eq!(trials.len(), 5);
+            assert_eq!(trials.len(), 7);
             for t in trials {
                 assert!(!t.matched, "{:?} should not have matched", t.id);
             }
@@ -176,7 +187,9 @@ fn adapter_matchers_are_disjoint_per_fixture() {
     // Greedy first-match dispatch relies on at most one adapter accepting a
     // given decoded payload. Guard the invariant against regressions.
     let adapters: Vec<Box<dyn FormatAdapter>> = vec![
+        Box::new(RosterizerAdapter),
         Box::new(NewRecruitJsonAdapter),
+        Box::new(GwAdapter),
         Box::new(NewRecruitWtcFullAdapter),
         Box::new(NewRecruitWtcCompactAdapter),
         Box::new(NewRecruitSimpleAdapter),

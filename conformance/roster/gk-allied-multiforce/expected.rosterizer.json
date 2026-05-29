@@ -1,0 +1,52 @@
+{
+  "slug": "",
+  "key": "",
+  "visible": "hidden",
+  "locked": false,
+  "rulebook": {
+    "name": "40kdc",
+    "game": "Warhammer 40,000",
+    "publisher": "Tabletop Developer Consortium",
+    "url": "https://40kdc.dev",
+    "genre": "wargame"
+  },
+  "snapshot": {
+    "item": "Roster§Roster",
+    "name": "Allied Test List",
+    "quantity": 1,
+    "stats": {
+      "Points": {
+        "value": 315
+      }
+    },
+    "assets": {
+      "included": [
+        {
+          "item": "Faction§Grey Knights",
+          "name": "Grey Knights",
+          "quantity": 1
+        },
+        {
+          "item": "Unit§Grand Master in Nemesis Dreadknight",
+          "name": "Grand Master in Nemesis Dreadknight",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 225
+            }
+          }
+        },
+        {
+          "item": "Unit§Callidus Assassin",
+          "name": "Callidus Assassin",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 90
+            }
+          }
+        }
+      ]
+    }
+  }
+}

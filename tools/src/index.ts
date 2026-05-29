@@ -32,6 +32,7 @@ export {
   newRecruitWtcCompactSerializer,
   newRecruitWtcFullSerializer,
   rosterJsonSerializer,
+  rosterizerSerializer,
 } from "./export/index.js";
 export type { ExportFormat, RosterSerializer } from "./export/index.js";
 export type { FormatAdapter } from "./import/index.js";

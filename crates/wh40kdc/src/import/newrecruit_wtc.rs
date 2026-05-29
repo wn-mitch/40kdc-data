@@ -20,7 +20,8 @@ use serde_json::Value;
 
 use super::adapter::{FormatAdapter, ParseError};
 use super::newrecruit_text::{
-    classify_wargear_list, infer_battle_size_raw, split_wargear_list, strip_parenthetical,
+    classify_wargear_list, faction_from_keyword, infer_battle_size_raw, split_wargear_list,
+    strip_parenthetical,
 };
 use super::types::{ParsedRoster, ParsedUnit, ParsedWargear, RosterFormat};
 
@@ -58,6 +59,7 @@ static RE_SECTION_HEADER: Lazy<Regex> = Lazy::new(|| Regex::new(r"^[A-Z][A-Z0-9 
 static RE_CHAR_PREFIX: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?i)^Char\d+:").unwrap());
 static RE_FULL_FORMAT_MARKER: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"(?m)^[\t ]*\d+\s+with\b").unwrap());
+static RE_BULLET_LINE: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?m)^[\t ]*•").unwrap());
 static RE_ALLIED_HEADER: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?im)^ALLIED UNITS\s*$").unwrap());
 
 // --- Header parse ----------------------------------------------------------
@@ -69,15 +71,6 @@ struct WtcHeader {
     declared_limit: Option<u64>,
     total_reported: Option<u64>,
     battle_size_raw: Option<String>,
-}
-
-fn faction_from_keyword(value: &str) -> String {
-    value
-        .rsplit(" - ")
-        .next()
-        .unwrap_or(value)
-        .trim()
-        .to_string()
 }
 
 fn parse_wtc_header(text: &str) -> Option<(WtcHeader, usize)> {
@@ -430,6 +423,13 @@ fn is_full_format(text: &str) -> bool {
     RE_FULL_FORMAT_MARKER.is_match(text)
 }
 
+/// `•`-prefixed body lines. wtc-full uses them for per-model breakdowns; the GW
+/// app format uses them for every wargear entry. wtc-compact never emits them,
+/// so it's the one matcher that must exclude them to stay disjoint from GW.
+fn has_bullets(text: &str) -> bool {
+    RE_BULLET_LINE.is_match(text)
+}
+
 fn parse_with(text: &str, full: bool, format_id: &str) -> Result<ParsedRoster, ParseError> {
     let (header, body_start) = parse_wtc_header(text).ok_or_else(|| {
         ParseError(format!(
@@ -471,8 +471,10 @@ impl FormatAdapter for NewRecruitWtcCompactAdapter {
     }
 
     fn detect(&self, decoded: &Value) -> bool {
+        // wtc-compact has no `N with` lines (that's wtc-full) and no `•`
+        // bullets (that's the GW app format) — excluding both keeps it disjoint.
         match is_wtc_text(decoded) {
-            Some(t) => !is_full_format(t),
+            Some(t) => !is_full_format(t) && !has_bullets(t),
             None => false,
         }
     }

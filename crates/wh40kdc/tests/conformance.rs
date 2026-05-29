@@ -111,6 +111,8 @@ fn expected_format_for(filename: &str) -> RosterFormat {
         "newrecruit-wtc-compact" => RosterFormat::NewrecruitWtcCompact,
         "newrecruit-wtc-full" => RosterFormat::NewrecruitWtcFull,
         "newrecruit-simple" => RosterFormat::NewrecruitSimple,
+        "rosterizer" => RosterFormat::Rosterizer,
+        "gw" => RosterFormat::Gw,
         other => panic!("unmapped input fixture stem: {other}"),
     }
 }
@@ -183,7 +185,9 @@ fn imported_rosters_match_reference_goldens() {
 
             let actual_value = serde_json::to_value(&actual).expect("Roster serializes to a Value");
 
-            let is_canonical = filename == "input.json" || filename == "input.newrecruit-json.json";
+            let is_canonical = filename == "input.json"
+                || filename == "input.newrecruit-json.json"
+                || filename == "input.gw.txt";
             if is_canonical {
                 assert_eq!(
                     actual_value, expected,
@@ -234,6 +238,7 @@ fn exported_rosters_match_reference_goldens() {
             "expected.newrecruit-json.json",
         ),
         (ExportFormat::RosterJson, "expected.roster-json.json"),
+        (ExportFormat::Rosterizer, "expected.rosterizer.json"),
     ];
 
     let mut total_assertions = 0;
@@ -262,12 +267,17 @@ fn exported_rosters_match_reference_goldens() {
                     .iter()
                     .find(|n| n.as_str() == "input.newrecruit-json.json")
             })
+            .or_else(|| files.iter().find(|n| n.as_str() == "input.gw.txt"))
             .unwrap_or_else(|| {
-                panic!("roster/{case_name}: export goldens present but no canonical JSON input")
+                panic!("roster/{case_name}: export goldens present but no canonical input")
             });
-        let seed = read_json(&case_dir.join(seed_filename));
-        let roster = import_roster(&seed, ds)
-            .unwrap_or_else(|e| panic!("seed import roster/{case_name}: {e}"));
+        let seed_path = case_dir.join(seed_filename);
+        let roster = if seed_filename.ends_with(".json") {
+            import_roster(&read_json(&seed_path), ds)
+        } else {
+            import_roster_text(&read_text(&seed_path), ds)
+        }
+        .unwrap_or_else(|e| panic!("seed import roster/{case_name}: {e}"));
 
         for (fmt, filename) in &present_text {
             let golden = read_text(&case_dir.join(filename));

@@ -18,7 +18,10 @@
   // the fight tab is open.
   const attackerKeywords = $derived.by<string[]>(() => {
     if (!salvo.selectedUnitId) return [];
-    const u = ds.units.get(salvo.selectedUnitId);
+    const u =
+      (salvo.selectedFactionId &&
+        ds.units.getInFaction(salvo.selectedUnitId, salvo.selectedFactionId)) ||
+      ds.units.get(salvo.selectedUnitId);
     if (!u) return [];
     return [
       ...((u.raw.keywords ?? []) as string[]),

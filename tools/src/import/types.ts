@@ -91,7 +91,9 @@ export type RosterFormat =
   | "newrecruit-json"
   | "newrecruit-wtc-compact"
   | "newrecruit-wtc-full"
-  | "newrecruit-simple";
+  | "newrecruit-simple"
+  | "rosterizer"
+  | "gw";
 
 /** Provenance of the imported list. */
 export interface RosterSource {

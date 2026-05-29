@@ -17,6 +17,7 @@ import {
   newRecruitWtcFullSerializer,
 } from "./newrecruit-wtc.js";
 import { rosterJsonSerializer } from "./roster-json.js";
+import { rosterizerSerializer } from "./rosterizer.js";
 import type { ExportFormat, RosterSerializer } from "./serializer.js";
 
 export type { ExportFormat, RosterSerializer } from "./serializer.js";
@@ -27,6 +28,7 @@ export {
   newRecruitWtcFullSerializer,
 } from "./newrecruit-wtc.js";
 export { rosterJsonSerializer } from "./roster-json.js";
+export { rosterizerSerializer } from "./rosterizer.js";
 
 /** All registered serializers, keyed by their {@link ExportFormat} id. */
 const SERIALIZERS: readonly RosterSerializer[] = [
@@ -35,6 +37,7 @@ const SERIALIZERS: readonly RosterSerializer[] = [
   newRecruitWtcFullSerializer,
   newRecruitSimpleSerializer,
   rosterJsonSerializer,
+  rosterizerSerializer,
 ];
 
 /** Serialize a {@link Roster} into the named target format. */

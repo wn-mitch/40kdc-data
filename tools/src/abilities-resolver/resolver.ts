@@ -66,7 +66,14 @@ export function resolveEligibleAbilities(
   input: EligibilityInput,
   phase: Phase,
 ): EligibleAbility[] {
-  const unit = dataset.units.get(input.unitId);
+  // Resolve units within the faction when one is known. Unit ids are shared
+  // across factions (a shared chassis like `chaos-land-raider` lives under
+  // several Chaos factions), so a faction-blind `get` can return the wrong
+  // faction's copy — and with it the wrong intrinsic abilities/keywords.
+  const resolveUnit = (id: string, fid: string | undefined) =>
+    (fid ? dataset.units.getInFaction(id, fid) : undefined) ?? dataset.units.get(id);
+
+  const unit = resolveUnit(input.unitId, input.factionId);
   if (!unit) return [];
   const factionId = input.factionId ?? unit.raw.faction_id;
   const seen = new Set<string>();
@@ -131,7 +138,7 @@ export function resolveEligibleAbilities(
   // pulled in full (not aura-filtered like step 6), regardless of which member
   // is the selected/firing unit.
   for (const memberId of input.attachedUnitIds ?? []) {
-    const member = dataset.units.get(memberId);
+    const member = resolveUnit(memberId, factionId);
     if (!member) continue;
     for (const ability of member.abilities) {
       if (!phaseMatches(ability, phase)) continue;
@@ -146,7 +153,7 @@ export function resolveEligibleAbilities(
   // 6. Supporting units — only aura-scoped abilities (otherwise the buff
   // would describe a self-target effect that doesn't reach the input unit).
   for (const supportId of input.supportingUnitIds ?? []) {
-    const supporter = dataset.units.get(supportId);
+    const supporter = resolveUnit(supportId, factionId);
     if (!supporter) continue;
     for (const ability of supporter.abilities) {
       if (!phaseMatches(ability, phase)) continue;

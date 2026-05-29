@@ -47,10 +47,12 @@ export class Collection<T, V> implements Iterable<V> {
   private readonly byId = new Map<string, T>();
   private readonly byNorm = new Map<string, T[]>();
   private readonly byFactionId = new Map<string, T[]>();
+  private readonly idOf: (item: T) => string;
   private readonly nameOf?: (item: T) => string | undefined;
   private readonly wrapFn: (item: T) => V;
 
   constructor(cfg: CollectionConfig<T, V>) {
+    this.idOf = cfg.idOf;
     this.nameOf = cfg.nameOf;
     this.wrapFn = cfg.wrap;
     const dedupeKeyOf = cfg.dedupeKeyOf ?? cfg.idOf;
@@ -85,6 +87,19 @@ export class Collection<T, V> implements Iterable<V> {
   /** Look up by exact id. */
   get(id: string): V | undefined {
     const item = this.byId.get(id);
+    return item ? this.wrapFn(item) : undefined;
+  }
+
+  /**
+   * Look up by exact id *within a faction*. Use this when an id is shared
+   * across factions (e.g. `chaos-land-raider` lives under five Chaos factions)
+   * and a faction context is known — {@link get} would return whichever copy
+   * was registered first, which may belong to the wrong faction. Returns
+   * `undefined` when no record with that id belongs to `factionId`.
+   */
+  getInFaction(id: string, factionId: string): V | undefined {
+    const list = this.byFactionId.get(factionId);
+    const item = list?.find((i) => this.idOf(i) === id);
     return item ? this.wrapFn(item) : undefined;
   }
 

@@ -24,7 +24,8 @@ export type ExportFormat =
   | "newrecruit-wtc-compact"
   | "newrecruit-wtc-full"
   | "newrecruit-simple"
-  | "roster-json";
+  | "roster-json"
+  | "rosterizer";
 
 /** Serializes a {@link Roster} into one specific format. */
 export interface RosterSerializer {

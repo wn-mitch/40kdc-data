@@ -67,9 +67,17 @@
       : [],
   );
 
-  const selectedUnit = $derived(
-    salvo.selectedUnitId ? ds.units.get(salvo.selectedUnitId) : undefined,
-  );
+  // Resolve the selected unit *within the selected faction* — shared chassis
+  // (e.g. `chaos-land-raider`) live under several factions, and a faction-blind
+  // `get` returns whichever copy was registered first (the wrong faction's).
+  const selectedUnit = $derived.by(() => {
+    if (!salvo.selectedUnitId) return undefined;
+    if (salvo.selectedFactionId) {
+      const scoped = ds.units.getInFaction(salvo.selectedUnitId, salvo.selectedFactionId);
+      if (scoped) return scoped;
+    }
+    return ds.units.get(salvo.selectedUnitId);
+  });
 
   // Bidirectional attachment partners for the selected unit: a leader+bodyguard
   // are one combined unit, so we offer the partner from either end. If the
@@ -148,11 +156,20 @@
 
   function pickUnit(unitId: string, factionId?: string) {
     salvo.selectedUnitId = unitId;
-    if (factionId) salvo.selectedFactionId = factionId;
-    else {
-      const u = ds.units.get(unitId);
-      if (u) salvo.selectedFactionId = u.raw.faction_id;
+    if (factionId) {
+      salvo.selectedFactionId = factionId;
+      return;
     }
+    // Keep the current faction when it actually owns this unit id — a shared
+    // chassis (e.g. `chaos-land-raider`) exists under several factions, and
+    // resolving it faction-blind would yank the faction over to whichever copy
+    // happens to be registered first. Only re-derive the faction when the
+    // current one has no such unit.
+    if (salvo.selectedFactionId && ds.units.getInFaction(unitId, salvo.selectedFactionId)) {
+      return;
+    }
+    const u = ds.units.get(unitId);
+    if (u) salvo.selectedFactionId = u.raw.faction_id;
   }
 </script>
 

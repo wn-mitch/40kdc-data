@@ -35,6 +35,8 @@ pub enum RosterFormat {
     NewrecruitWtcCompact,
     NewrecruitWtcFull,
     NewrecruitSimple,
+    Rosterizer,
+    Gw,
 }
 
 /// Diagnostic warning codes emitted during an import.

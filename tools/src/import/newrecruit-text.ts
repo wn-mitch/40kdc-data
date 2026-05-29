@@ -116,6 +116,13 @@ export function stripParenthetical(name: string): string {
   return idx >= 0 ? name.slice(0, idx).trim() : name.trim();
 }
 
+/** Pull the primary faction out of a "Super - Sub" keyword, e.g.
+ * "Chaos - Chaos Knights" → "Chaos Knights". Shared by the wtc and GW headers. */
+export function factionFromKeyword(value: string): string {
+  const parts = value.split(" - ");
+  return (parts[parts.length - 1] ?? value).trim();
+}
+
 /** Parse a `(\d+) pts` or `[\d+ pts]` suffix from a unit header line. */
 export function pointsFrom(token: string): number | null {
   const m = /\(\s*(\d+)\s*pts?\s*\)|\[\s*(\d+)\s*pts?\s*\]/i.exec(token);

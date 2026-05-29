@@ -162,6 +162,12 @@ pub fn strip_parenthetical(name: &str) -> &str {
     }
 }
 
+/// Pull the primary faction out of a "Super - Sub" keyword, e.g.
+/// "Chaos - Chaos Knights" → "Chaos Knights". Shared by the wtc and GW headers.
+pub fn faction_from_keyword(value: &str) -> String {
+    value.rsplit(" - ").next().unwrap_or(value).trim().to_string()
+}
+
 /// Parse a `(N pts)` or `[N pts]` suffix from a unit header line. Currently
 /// only used by tests — the WTC and simple adapters pull points off explicit
 /// regex captures rather than calling this helper. Kept for parity with the

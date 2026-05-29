@@ -17,7 +17,9 @@
             "newrecruit-json",
             "newrecruit-wtc-compact",
             "newrecruit-wtc-full",
-            "newrecruit-simple"
+            "newrecruit-simple",
+            "rosterizer",
+            "gw"
           ]
         },
         "generated_by": {

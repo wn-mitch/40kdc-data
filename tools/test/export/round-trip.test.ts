@@ -50,7 +50,14 @@ describe("export → import round-trips", () => {
     "newrecruit-wtc-full",
     "newrecruit-simple",
     "roster-json",
+    "rosterizer",
   ];
+
+  const jsonFormats: ReadonlySet<ExportFormat> = new Set([
+    "newrecruit-json",
+    "roster-json",
+    "rosterizer",
+  ]);
 
   for (const format of formats) {
     it(`Roster → ${format} → Roster is a fixed point`, () => {
@@ -58,7 +65,7 @@ describe("export → import round-trips", () => {
       expect(out.length).toBeGreaterThan(0);
       // Re-import: JSON formats parse through importRoster directly; text
       // formats too (the orchestrator dispatches on string vs. object).
-      const reparsed = format === "newrecruit-json" || format === "roster-json"
+      const reparsed = jsonFormats.has(format)
         ? importRoster(JSON.parse(out), { dataset: ds })
         : importRoster(out, { dataset: ds });
       expect(stable(reparsed)).toEqual(stable(seed));

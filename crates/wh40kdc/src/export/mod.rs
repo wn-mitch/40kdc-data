@@ -13,11 +13,13 @@ mod newrecruit_json;
 mod newrecruit_simple;
 mod newrecruit_wtc;
 mod roster_json;
+mod rosterizer;
 
 pub use newrecruit_json::NewRecruitJsonSerializer;
 pub use newrecruit_simple::NewRecruitSimpleSerializer;
 pub use newrecruit_wtc::{NewRecruitWtcCompactSerializer, NewRecruitWtcFullSerializer};
 pub use roster_json::RosterJsonSerializer;
+pub use rosterizer::RosterizerSerializer;
 
 use crate::import::Roster;
 
@@ -32,6 +34,7 @@ pub enum ExportFormat {
     NewrecruitWtcFull,
     NewrecruitSimple,
     RosterJson,
+    Rosterizer,
 }
 
 /// Symmetric counterpart to [`FormatAdapter`](crate::import::FormatAdapter):
@@ -49,5 +52,6 @@ pub fn export_roster(roster: &Roster, format: ExportFormat) -> String {
         ExportFormat::NewrecruitWtcFull => NewRecruitWtcFullSerializer.serialize(roster),
         ExportFormat::NewrecruitSimple => NewRecruitSimpleSerializer.serialize(roster),
         ExportFormat::RosterJson => RosterJsonSerializer.serialize(roster),
+        ExportFormat::Rosterizer => RosterizerSerializer.serialize(roster),
     }
 }

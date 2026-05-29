@@ -9,6 +9,7 @@
 
   const REPO_URL = "https://github.com/tabletop-developer-consortium/40kdc-data";
   const PACKAGE_URL = "https://www.npmjs.com/package/@alpaca-software/40kdc-data";
+  const PUBLISHER_URL = "https://alpacasoft.dev";
 
   // Auto-open panes once the user has put real content into them. Each Pane
   // also tracks an explicit user override (sticky once they click), so these
@@ -43,6 +44,9 @@
       </a>
       <a class="pkg" href={PACKAGE_URL} target="_blank" rel="noreferrer noopener">
         <code>@alpaca-software/40kdc-data</code>
+      </a>
+      <a class="publisher" href={PUBLISHER_URL} target="_blank" rel="noreferrer noopener">
+        alpacasoft.dev
       </a>
     </nav>
   </header>

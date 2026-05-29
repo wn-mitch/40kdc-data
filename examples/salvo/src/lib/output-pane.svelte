@@ -138,7 +138,13 @@
     const multiMember = members.length > 1;
     const lines: WeaponLine[] = [];
     for (const memberId of members) {
-      const unit = ds.units.get(memberId);
+      // Resolve within the selected faction so a shared chassis (e.g.
+      // `chaos-land-raider`) uses this faction's copy, not whichever was
+      // registered first. Falls back to the faction-blind lookup.
+      const unit =
+        (salvo.selectedFactionId &&
+          ds.units.getInFaction(memberId, salvo.selectedFactionId)) ||
+        ds.units.get(memberId);
       if (!unit) continue;
       const defaultModels = unit.raw.model_count?.min ?? 1;
       for (const w of unit.weapons) {
