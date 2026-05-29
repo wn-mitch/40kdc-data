@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { Dataset } from "../src/data/dataset.js";
-import { resolveRosterUnit, resolveRosterWargear } from "../src/data/roster-resolve.js";
-import type { RosterUnit, RosterWargear } from "../src/import/types.js";
+import {
+  resolveAttachedLeader,
+  resolveRosterUnit,
+  resolveRosterWargear,
+} from "../src/data/roster-resolve.js";
+import type { Roster, RosterUnit, RosterWargear } from "../src/import/types.js";
 
 const ds = Dataset.embedded();
 
@@ -31,6 +35,59 @@ describe("resolveRosterUnit", () => {
 
   it("returns undefined for an id not present in the dataset", () => {
     expect(resolveRosterUnit(rosterUnit("no-such-unit"), ds)).toBeUndefined();
+  });
+});
+
+function rosterOf(units: RosterUnit[]): Roster {
+  return {
+    name: "Test Roster",
+    source: { format: "listforge", generated_by: null },
+    faction_id: "adepta-sororitas",
+    detachment_id: null,
+    battle_size: null,
+    points: { declared_limit: null, total_reported: null, total_computed: 0 },
+    units,
+    game_version: { edition: "11th", dataslate: "pre-launch-provisional" },
+    diagnostics: {
+      resolved_units: units.length,
+      unresolved_units: 0,
+      resolved_weapons: 0,
+      unresolved_weapons: 0,
+      warnings: [],
+    },
+  };
+}
+
+function leaderUnit(leaderId: string, bodyguardId: string): RosterUnit {
+  const u = rosterUnit(leaderId);
+  u.leader_attachment = {
+    bodyguard_ref: { id: bodyguardId, raw_name: bodyguardId, resolved: true, candidates: [] },
+    provisional: true,
+  };
+  return u;
+}
+
+describe("resolveAttachedLeader", () => {
+  it("finds the leader attached to a given body unit", () => {
+    const roster = rosterOf([
+      rosterUnit("battle-sisters-squad"),
+      leaderUnit("palatine", "battle-sisters-squad"),
+    ]);
+    const leader = resolveAttachedLeader(roster, "battle-sisters-squad");
+    expect(leader?.ref.id).toBe("palatine");
+  });
+
+  it("returns undefined when no leader is attached to the body unit", () => {
+    const roster = rosterOf([
+      rosterUnit("battle-sisters-squad"),
+      leaderUnit("palatine", "dominion-squad"),
+    ]);
+    expect(resolveAttachedLeader(roster, "battle-sisters-squad")).toBeUndefined();
+  });
+
+  it("returns undefined for a roster with no attachments at all", () => {
+    const roster = rosterOf([rosterUnit("battle-sisters-squad"), rosterUnit("palatine")]);
+    expect(resolveAttachedLeader(roster, "battle-sisters-squad")).toBeUndefined();
   });
 });
 

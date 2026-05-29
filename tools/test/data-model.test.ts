@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   abilities,
   Dataset,
+  dataset,
   emptyRawData,
   factions,
   normalizeName,
@@ -141,6 +142,23 @@ describe("reverse links", () => {
     const we = factions.find("World Eaters")!;
     expect(we.units.length).toBeGreaterThan(0);
     expect(we.weapons.length).toBeGreaterThan(0);
+  });
+});
+
+describe("leadersAttachableTo", () => {
+  it("lists leaders whose attachment data covers the body unit, sorted by name", () => {
+    const leaders = dataset.leadersAttachableTo("battle-sisters-squad");
+    expect(leaders.map((l) => l.id)).toContain("palatine");
+    const names = leaders.map((l) => l.name);
+    expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
+  });
+
+  it("returns an empty array for a leader unit (nothing attaches to it)", () => {
+    expect(dataset.leadersAttachableTo("palatine")).toEqual([]);
+  });
+
+  it("returns an empty array for an unknown unit id", () => {
+    expect(dataset.leadersAttachableTo("no-such-unit")).toEqual([]);
   });
 });
 

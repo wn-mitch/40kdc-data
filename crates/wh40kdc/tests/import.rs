@@ -224,6 +224,43 @@ fn infers_a_provisional_leader_attachment() {
 }
 
 #[test]
+fn attached_leader_for_looks_up_by_body_unit() {
+    let payload = serde_json::json!({
+        "name": "Leader Test",
+        "generatedBy": "List Forge",
+        "roster": {
+            "name": "Leader Test",
+            "costs": [{ "name": "pts", "value": 0 }],
+            "forces": [{
+                "id": "f1",
+                "name": "Army Roster",
+                "selections": [
+                    {
+                        "id": "u-gm", "name": "Grand Master", "type": "model", "number": 1,
+                        "categories": [{ "name": "Faction: Grey Knights" }, { "name": "Character", "primary": true }]
+                    },
+                    {
+                        "id": "u-paladins", "name": "Paladin Squad", "type": "unit", "number": 1,
+                        "categories": [{ "name": "Faction: Grey Knights" }, { "name": "Infantry", "primary": true }]
+                    }
+                ]
+            }]
+        }
+    });
+    let roster = import_roster(&payload, Dataset::embedded()).unwrap();
+
+    // The body unit resolves to the leader attached to it.
+    let leader = roster
+        .attached_leader_for("paladin-squad")
+        .expect("leader attached to the body unit");
+    assert_eq!(leader.ref_.id.as_deref(), Some("grand-master"));
+
+    // The leader itself has nothing attached to it, and unknown ids miss.
+    assert!(roster.attached_leader_for("grand-master").is_none());
+    assert!(roster.attached_leader_for("no-such-unit").is_none());
+}
+
+#[test]
 fn retains_unresolved_unit_with_candidates_and_warning() {
     let payload = serde_json::json!({
         "name": "Miss Test",

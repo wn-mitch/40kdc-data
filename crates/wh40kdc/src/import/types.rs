@@ -172,6 +172,24 @@ pub struct Roster {
     pub diagnostics: Diagnostics,
 }
 
+impl Roster {
+    /// The roster's leader entry attached to `bodyguard_unit_id`, if any.
+    /// Import stores the inferred (always-provisional) attachment on the
+    /// *leader's* [`RosterUnit`], pointing down to its bodyguard via
+    /// `leader_attachment.bodyguard_ref`. Selection UIs start from the body
+    /// unit, so this scans for the leader whose `bodyguard_ref.id` matches.
+    /// Returns `None` when no leader in the roster is attached to that unit
+    /// (the common case — attachments are optional at game start).
+    pub fn attached_leader_for(&self, bodyguard_unit_id: &str) -> Option<&RosterUnit> {
+        self.units.iter().find(|u| {
+            u.leader_attachment
+                .as_ref()
+                .and_then(|la| la.bodyguard_ref.id.as_deref())
+                == Some(bodyguard_unit_id)
+        })
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Intermediate types (format-agnostic; produced by a parser adapter)
 // ---------------------------------------------------------------------------

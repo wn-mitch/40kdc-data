@@ -53,7 +53,11 @@ export type {
 export * from "../abilities-resolver/index.js";
 
 // Bridge helpers from the importer's RosterUnit → linked views.
-export { resolveRosterUnit, resolveRosterWargear } from "./roster-resolve.js";
+export {
+  resolveRosterUnit,
+  resolveRosterWargear,
+  resolveAttachedLeader,
+} from "./roster-resolve.js";
 
 import { Dataset } from "./dataset.js";
 

@@ -356,6 +356,26 @@ impl Dataset {
             .unwrap_or_default()
     }
 
+    /// Leaders whose leader-attachment data lists `bodyguard_unit_id` among its
+    /// eligible body units, sorted by name. The attachment is stored on the
+    /// leader pointing down to its bodyguards, so answering "which leaders can
+    /// attach to this unit?" means scanning the attachment list. Returns an
+    /// empty vec for a unit nothing attaches to (including leader units).
+    pub fn leaders_attachable_to(&self, bodyguard_unit_id: &str) -> Vec<&Unit> {
+        let mut out: Vec<&Unit> = self
+            .leader_attachments
+            .iter()
+            .filter(|la| {
+                la.eligible_bodyguard_ids
+                    .iter()
+                    .any(|id| id.as_str() == bodyguard_unit_id)
+            })
+            .filter_map(|la| self.units.get(la.leader_id.as_str()))
+            .collect();
+        out.sort_by(|a, b| a.name.cmp(&b.name));
+        out
+    }
+
     /// Faction-scoped abilities (abilities whose `faction_id` is this faction).
     pub fn abilities_of_faction(&self, faction_id: &str) -> Vec<&Ability> {
         self.abilities.by_faction(faction_id)

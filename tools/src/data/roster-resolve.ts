@@ -6,7 +6,7 @@
  *
  * @packageDocumentation
  */
-import type { RosterUnit, RosterWargear } from "../import/types.js";
+import type { Roster, RosterUnit, RosterWargear } from "../import/types.js";
 import type { Dataset } from "./dataset.js";
 import type { UnitView, WeaponView } from "./entities.js";
 
@@ -48,4 +48,22 @@ export function resolveRosterWargear(
     out.push({ weapon, count: w.count });
   }
   return out;
+}
+
+/**
+ * The roster's leader entry attached to `bodyguardUnitId`, if any. Import
+ * stores the inferred (always-provisional) attachment on the *leader's*
+ * {@link RosterUnit}, pointing down to its bodyguard via
+ * `leader_attachment.bodyguard_ref`. Selection UIs start from the body unit,
+ * so this scans for the leader whose `bodyguard_ref.id` matches. Returns
+ * `undefined` when no leader in the roster is attached to that unit (the
+ * common case — attachments are optional at game start).
+ */
+export function resolveAttachedLeader(
+  roster: Roster,
+  bodyguardUnitId: string,
+): RosterUnit | undefined {
+  return roster.units.find(
+    (u) => u.leader_attachment?.bodyguard_ref.id === bodyguardUnitId,
+  );
 }

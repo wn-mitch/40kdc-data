@@ -254,6 +254,29 @@ fn faction_links_units_and_weapons() {
     assert!(!ds.abilities_of_faction("world-eaters").is_empty());
 }
 
+#[test]
+fn leaders_attachable_to_lists_eligible_leaders_sorted() {
+    let ds = Dataset::embedded();
+    let leaders = ds.leaders_attachable_to("battle-sisters-squad");
+    assert!(leaders.iter().any(|u| u.id.as_str() == "palatine"));
+    let names: Vec<&str> = leaders.iter().map(|u| u.name.as_str()).collect();
+    let mut sorted = names.clone();
+    sorted.sort();
+    assert_eq!(names, sorted);
+}
+
+#[test]
+fn leaders_attachable_to_is_empty_for_a_leader_unit() {
+    let ds = Dataset::embedded();
+    assert!(ds.leaders_attachable_to("palatine").is_empty());
+}
+
+#[test]
+fn leaders_attachable_to_is_empty_for_unknown_id() {
+    let ds = Dataset::embedded();
+    assert!(ds.leaders_attachable_to("no-such-unit").is_empty());
+}
+
 // --- edge cases -------------------------------------------------------------
 
 #[test]

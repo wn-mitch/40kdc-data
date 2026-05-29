@@ -1,6 +1,6 @@
 <script lang="ts">
   import { salvo, ds, PHASE_CHOICES } from "./store.svelte.js";
-  import { resolveRosterUnit } from "@alpaca-software/40kdc-data";
+  import { resolveRosterUnit, resolveAttachedLeader } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
 
   // Roster-driven unit list (each entry is "this unit, this faction"), or the
@@ -67,6 +67,47 @@
   const selectedUnit = $derived(
     salvo.selectedUnitId ? ds.units.get(salvo.selectedUnitId) : undefined,
   );
+
+  // Leaders the dataset says can attach to the selected body unit. Empty for a
+  // unit nothing attaches to (including leader units themselves).
+  const attachableLeaders = $derived(
+    selectedUnit ? ds.leadersAttachableTo(selectedUnit.id) : [],
+  );
+
+  // Same shared-chassis disambiguation as the unit dropdowns: suffix ` ·
+  // <faction>` only for leader names that appear more than once.
+  const sharedLeaderNames = $derived.by(() => {
+    const counts = new Map<string, number>();
+    for (const u of attachableLeaders) {
+      counts.set(u.name, (counts.get(u.name) ?? 0) + 1);
+    }
+    return new Set(
+      Array.from(counts.entries())
+        .filter(([, n]) => n > 1)
+        .map(([name]) => name),
+    );
+  });
+
+  // Reset the attached leader when the unit changes. Keep a still-eligible
+  // selection; otherwise pre-fill from the imported roster's inferred
+  // attachment when present, else clear. The guard means a manual dropdown
+  // pick is never clobbered (mirrors the weapon-reset effect below).
+  $effect(() => {
+    if (!selectedUnit) return;
+    if (
+      salvo.attachedLeaderId &&
+      attachableLeaders.some((l) => l.id === salvo.attachedLeaderId)
+    ) {
+      return;
+    }
+    const fromRoster = salvo.attackerRoster
+      ? resolveAttachedLeader(salvo.attackerRoster, selectedUnit.id)?.ref.id
+      : undefined;
+    salvo.attachedLeaderId =
+      fromRoster && attachableLeaders.some((l) => l.id === fromRoster)
+        ? fromRoster
+        : null;
+  });
 
   const weapons = $derived(selectedUnit?.weapons ?? []);
 
@@ -175,6 +216,28 @@
       <option value="">— none —</option>
       {#each detachments as d (d.id)}
         <option value={d.id}>{d.name}</option>
+      {/each}
+    </select>
+  </div>
+{/if}
+
+{#if attachableLeaders.length > 0}
+  <div class="row">
+    <label>Leader</label>
+    <select
+      class="grow"
+      value={salvo.attachedLeaderId ?? ""}
+      onchange={(e) => {
+        salvo.attachedLeaderId = (e.currentTarget as HTMLSelectElement).value || null;
+      }}
+    >
+      <option value="">— none —</option>
+      {#each attachableLeaders as l (`${l.raw.faction_id}/${l.id}`)}
+        <option value={l.id}>
+          {l.name}{sharedLeaderNames.has(l.name)
+            ? ` · ${l.faction?.name ?? l.raw.faction_id}`
+            : ""}
+        </option>
       {/each}
     </select>
   </div>

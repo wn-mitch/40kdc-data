@@ -196,6 +196,21 @@ export class Dataset {
   }
 
   /**
+   * Leaders whose leader-attachment data lists `bodyguardUnitId` among its
+   * eligible body units, sorted by name. The attachment is stored on the
+   * leader pointing down to its bodyguards, so answering "which leaders can
+   * attach to this unit?" means scanning the attachment list. Returns an empty
+   * array for a unit that no leader can attach to (including leader units).
+   */
+  leadersAttachableTo(bodyguardUnitId: string): UnitView[] {
+    return this.leaderAttachments
+      .filter((la) => la.eligible_bodyguard_ids.includes(bodyguardUnitId))
+      .map((la) => this.units.get(la.leader_id))
+      .filter((u): u is UnitView => u !== undefined)
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  /**
    * Enumerate every ability that could apply to the given unit in `phase`,
    * grouped by source. The SPA uses this to render the abilities pane.
    */
