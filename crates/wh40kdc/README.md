@@ -84,13 +84,54 @@ The bundled schema is available as a string for downstream validation:
 let schema: serde_json::Value = serde_json::from_str(wh40kdc::BUNDLED_SCHEMA)?;
 ```
 
+## Damage projection
+
+The `cruncher` feature ships the Rust mirror of the npm package's expected-value
+damage engine. Closed-form math over a flat `Buff` stack — no sampling, no I/O.
+The cross-implementation [conformance corpus](../../conformance/cruncher/) pins
+both engines to within `5e-4` per stage.
+
+```rust
+use wh40kdc::{Dataset, Phase};
+use wh40kdc::cruncher::{crunch, AttackProfileRef, EngineContext, EngineInput, TargetProfileRef};
+
+let ds = Dataset::embedded();
+let weapon = ds.find_weapon("bolt-rifle").unwrap();
+let target = ds.find_unit("intercessor-squad").unwrap();
+
+let ctx = EngineContext {
+    phase: Phase::Shooting,
+    attacker_stationary: Some(false),
+    attacker_charged: None,
+    within_half_range: Some(false),
+    attacker_in_cover: None,
+    target_in_cover: None,
+    attacker_keywords: None,
+    target_keywords: None,
+    timing: None,
+    attacker_attached: None,
+};
+let out = crunch(&EngineInput {
+    attacker: AttackProfileRef { weapon, profile_index: 0 },
+    target: TargetProfileRef { unit: target, profile_index: 0, model_count: None },
+    models_firing: 5,
+    buffs: Vec::new(),
+    context: ctx,
+}, None).unwrap();
+// out.stages: attacks → hits → wounds → unsaved → damage → after-fnp → models-killed
+```
+
 ## Cargo features
 
 - `bundled-data` *(default)* — the embedded dataset and the linked data API
   (`Dataset`, `Collection`, `normalize_name`).
 - `import` *(default)* — the army-list importer (implies `bundled-data`).
+- `export` *(default)* — the roster exporter (NewRecruit JSON / wtc-compact /
+  wtc-full / simple / canonical Roster JSON / Rosterizer). Dataset-free.
+- `cruncher` *(default)* — the expected-value damage engine (implies
+  `bundled-data`).
 
-Disable both with `default-features = false` for a types-only build.
+Disable all four with `default-features = false` for a types-only build.
 
 ## Regenerating
 
