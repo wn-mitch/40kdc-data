@@ -3,6 +3,7 @@
 Carried forward from session handoffs so future sessions read this file instead of a paste.
 
 - [ ] **#12 Add Python and R packages** — this is free to do and we might as well. _(Added by a parallel session, 2026-05-28.)_
+- [ ] **#13 Migrate Salvo to Tailwind** — sibling app `~/bevy-deploy-helper` ("shadowboxing") uses SvelteKit + Tailwind v4 with `@theme`; Salvo currently consumes the same token values via vanilla CSS in `examples/salvo/src/app.css`. Migration would unify the toolchain across the two apps and let Salvo pick up Tailwind's utility-class density / pruning. Token values are already aligned, so the migration is mechanical — port the `:root` block into a `@theme { ... }` directive and rewrite component selectors as utility classes.
 
 ## Recently closed
 
