@@ -74,11 +74,7 @@ fn positive_auto_detect_per_format() {
         match try_import_roster(&f.input, ds) {
             ImportResult::Ok { roster, format } => {
                 assert_eq!(format, f.format, "wrong format for {}", f.label);
-                assert!(
-                    !roster.units.is_empty(),
-                    "empty units for {}",
-                    f.label
-                );
+                assert!(!roster.units.is_empty(), "empty units for {}", f.label);
                 assert_eq!(roster.source.format, f.format);
             }
             ImportResult::Err {
@@ -129,9 +125,7 @@ fn rejects_empty_input() {
 fn rejects_base64_shaped_but_not_gzip() {
     let ds = Dataset::embedded();
     match try_import_roster("H4sIAAAAnotreallygzip====", ds) {
-        ImportResult::Err {
-            reason, trials, ..
-        } => {
+        ImportResult::Err { reason, trials, .. } => {
             assert_eq!(reason, ImportFailureReason::DecodeFailed);
             assert_eq!(trials[0].id, RosterFormat::Listforge);
         }
@@ -154,9 +148,7 @@ fn rejects_malformed_json() {
 fn rejects_unknown_json_shape() {
     let ds = Dataset::embedded();
     match try_import_roster(r#"{"hello":"world"}"#, ds) {
-        ImportResult::Err {
-            reason, trials, ..
-        } => {
+        ImportResult::Err { reason, trials, .. } => {
             assert_eq!(reason, ImportFailureReason::NoAdapterMatched);
             // Every adapter should have been polled.
             assert_eq!(trials.len(), 5);

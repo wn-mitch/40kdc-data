@@ -208,7 +208,10 @@ fn looks_like_listforge_encoded(input: &str) -> bool {
     if input.contains("/listforge/") {
         return true;
     }
-    let lower = input.get(..8).map(str::to_ascii_lowercase).unwrap_or_default();
+    let lower = input
+        .get(..8)
+        .map(str::to_ascii_lowercase)
+        .unwrap_or_default();
     if lower.starts_with("http://") || lower.starts_with("https://") {
         return true;
     }
