@@ -4,6 +4,7 @@ Carried forward from session handoffs so future sessions read this file instead 
 
 - [ ] **#12 Add Python and R packages** — this is free to do and we might as well. _(Added by a parallel session, 2026-05-28.)_
 - [ ] **#13 Migrate Salvo to Tailwind** — sibling app `~/bevy-deploy-helper` ("shadowboxing") uses SvelteKit + Tailwind v4 with `@theme`; Salvo currently consumes the same token values via vanilla CSS in `examples/salvo/src/app.css`. Migration would unify the toolchain across the two apps and let Salvo pick up Tailwind's utility-class density / pruning. Token values are already aligned, so the migration is mechanical — port the `:root` block into a `@theme { ... }` directive and rewrite component selectors as utility classes.
+- [ ] **#14 Leader attachments UI in Salvo** — the plumbing already exists end-to-end: `salvo.attachedLeaderId` in `store.svelte.ts`, threaded through both `abilities-pane` and `output-pane` into `ds.stackableBuffsFor(...)`, with `abilities-resolver/resolver.ts:122-129` pulling in the leader's abilities as buff sources. Roster import also already detects `leader_attachment` (`tools/src/import/resolve.ts:264`). What's missing is the attacker-pane UI to select a leader for the chosen body unit — a dropdown filtered to leaders whose `leader-attachment.bodyguard_ref` matches the selected unit, plus auto-hydration from the imported roster when present. With #4's shared-chassis pattern as precedent, the dropdown should disambiguate identically-named leaders across factions.
 
 ## Recently closed
 
