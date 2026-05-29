@@ -128,6 +128,33 @@ describe("crunch: rerolls", () => {
     // BS3+, P(hit_initial) = 4/6. With reroll all-failures: 4/6 + 2/6 × 4/6 = 4/6 + 8/36 = 32/36 = 0.8889
     near(stage(buffed, "hits"), 10 * (4 / 6 + (2 / 6) * (4 / 6)), "hits with rerolls");
   });
+
+  it("Kharn's Legendary Killer rerolls flow through the attachment API to a crunch", () => {
+    // End-to-end: sourcing buffs via the public stackableBuffsFor API, attaching
+    // Kharn to Berzerkers surfaces his melee hit/wound rerolls (model-is-leader),
+    // which must lift both hits and wounds for the combined unit.
+    const enabled = (input: Parameters<typeof ds.stackableBuffsFor>[0]) =>
+      ds
+        .stackableBuffsFor(input, { phase: "fight" })
+        .buffs.filter((b) => b.enabled)
+        .flatMap((b) => b.buffs);
+
+    const ledByKharn = {
+      unitId: "khorne-berzerkers",
+      factionId: "world-eaters",
+      attachedUnitIds: ["kharn-the-betrayer"],
+    };
+    const alone = { unitId: "khorne-berzerkers", factionId: "world-eaters" };
+
+    const baseline = crunch(
+      inputFor("chainblade", 0, 5, "khorne-berzerkers", { phase: "fight" }, enabled(alone)),
+    );
+    const attached = crunch(
+      inputFor("chainblade", 0, 5, "khorne-berzerkers", { phase: "fight" }, enabled(ledByKharn)),
+    );
+    expect(stage(attached, "hits")).toBeGreaterThan(stage(baseline, "hits"));
+    expect(stage(attached, "wounds")).toBeGreaterThan(stage(baseline, "wounds"));
+  });
 });
 
 describe("crunch: cover", () => {

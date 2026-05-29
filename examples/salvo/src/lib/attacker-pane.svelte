@@ -1,7 +1,10 @@
 <script lang="ts">
-  import { salvo, ds, PHASE_CHOICES } from "./store.svelte.js";
-  import { resolveRosterUnit, resolveAttachedLeader } from "@alpaca-software/40kdc-data";
+  import { salvo, ds, PHASE_CHOICES, weaponTypeForPhase } from "./store.svelte.js";
+  import { resolveRosterUnit, resolveAttachmentPartners } from "@alpaca-software/40kdc-data";
+  import type { UnitView } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
+
+  type AttachmentPartner = { unit: UnitView; role: "leader" | "bodyguard" };
 
   // Roster-driven unit list (each entry is "this unit, this faction"), or the
   // raw embedded unit catalog when no roster is loaded.
@@ -68,18 +71,31 @@
     salvo.selectedUnitId ? ds.units.get(salvo.selectedUnitId) : undefined,
   );
 
-  // Leaders the dataset says can attach to the selected body unit. Empty for a
-  // unit nothing attaches to (including leader units themselves).
-  const attachableLeaders = $derived(
-    selectedUnit ? ds.leadersAttachableTo(selectedUnit.id) : [],
-  );
+  // Bidirectional attachment partners for the selected unit: a leader+bodyguard
+  // are one combined unit, so we offer the partner from either end. If the
+  // selected unit is a bodyguard, partners are the leaders that can join it; if
+  // it's a leader, partners are the bodyguards it can join. Empty for a unit
+  // that takes part in no attachment.
+  const attachmentPartners = $derived.by<AttachmentPartner[]>(() => {
+    if (!selectedUnit) return [];
+    return [
+      ...ds.leadersAttachableTo(selectedUnit.id).map((u) => ({ unit: u, role: "leader" as const })),
+      ...ds
+        .bodyguardsAttachableFrom(selectedUnit.id)
+        .map((u) => ({ unit: u, role: "bodyguard" as const })),
+    ];
+  });
+
+  const partnerLeaders = $derived(attachmentPartners.filter((p) => p.role === "leader"));
+  const partnerBodyguards = $derived(attachmentPartners.filter((p) => p.role === "bodyguard"));
 
   // Same shared-chassis disambiguation as the unit dropdowns: suffix ` ·
-  // <faction>` only for leader names that appear more than once.
-  const sharedLeaderNames = $derived.by(() => {
+  // <faction>` only for partner names that appear more than once across both
+  // role groups.
+  const sharedPartnerNames = $derived.by(() => {
     const counts = new Map<string, number>();
-    for (const u of attachableLeaders) {
-      counts.set(u.name, (counts.get(u.name) ?? 0) + 1);
+    for (const { unit } of attachmentPartners) {
+      counts.set(unit.name, (counts.get(unit.name) ?? 0) + 1);
     }
     return new Set(
       Array.from(counts.entries())
@@ -88,28 +104,39 @@
     );
   });
 
-  // Reset the attached leader when the unit changes. Keep a still-eligible
+  // Reset the attachment when the unit changes. Keep a still-eligible
   // selection; otherwise pre-fill from the imported roster's inferred
-  // attachment when present, else clear. The guard means a manual dropdown
-  // pick is never clobbered (mirrors the weapon-reset effect below).
+  // attachment (either direction) when present, else clear. The guard means a
+  // manual dropdown pick is never clobbered (mirrors the weapon-reset effect).
   $effect(() => {
     if (!selectedUnit) return;
-    if (
-      salvo.attachedLeaderId &&
-      attachableLeaders.some((l) => l.id === salvo.attachedLeaderId)
-    ) {
-      return;
-    }
-    const fromRoster = salvo.attackerRoster
-      ? resolveAttachedLeader(salvo.attackerRoster, selectedUnit.id)?.ref.id
-      : undefined;
-    salvo.attachedLeaderId =
-      fromRoster && attachableLeaders.some((l) => l.id === fromRoster)
-        ? fromRoster
-        : null;
+    const eligible = new Set(attachmentPartners.map((p) => p.unit.id));
+    const current = salvo.attachedUnitIds;
+    // Desired selection: keep the current one if still eligible, else hydrate
+    // from the imported roster's attachment (either direction), else none.
+    const next =
+      current.length > 0 && current.every((id) => eligible.has(id))
+        ? current
+        : salvo.attackerRoster
+          ? resolveAttachmentPartners(salvo.attackerRoster, selectedUnit.id)
+              .map((u) => u.ref.id)
+              .filter((id): id is string => id !== null && eligible.has(id))
+          : [];
+    // Assign only on a real content change. This effect reads
+    // `attachedUnitIds`, so writing a fresh array reference every run (even an
+    // unchanged `[]`) would re-trigger it until Svelte's update-depth guard
+    // fires — an infinite reactivity loop that hangs the tab.
+    if (next === current) return;
+    if (next.length === current.length && next.every((id, i) => id === current[i])) return;
+    salvo.attachedUnitIds = next;
   });
 
-  const weapons = $derived(selectedUnit?.weapons ?? []);
+  // Only weapons usable in the current phase: ranged in shooting, melee in fight.
+  const weapons = $derived(
+    (selectedUnit?.weapons ?? []).filter(
+      (w) => w.raw.type === weaponTypeForPhase(salvo.phase),
+    ),
+  );
 
   // Reset weapon selection when the unit changes.
   $effect(() => {
@@ -117,25 +144,6 @@
     if (salvo.selectedWeaponId && weapons.find((w) => w.id === salvo.selectedWeaponId)) return;
     salvo.selectedWeaponId = weapons[0]?.id ?? null;
     salvo.selectedProfileIndex = 0;
-  });
-
-  const selectedWeapon = $derived(
-    salvo.selectedWeaponId ? ds.weapons.get(salvo.selectedWeaponId) : undefined,
-  );
-
-  const profiles = $derived(selectedWeapon?.raw.profiles ?? []);
-
-  // Default models-firing: roster's reported model_count, else min model_count.
-  $effect(() => {
-    if (!selectedUnit) return;
-    const rosterEntry = salvo.attackerRoster?.units.find(
-      (u) => u.ref.id === selectedUnit.id,
-    );
-    if (rosterEntry) {
-      salvo.modelsFiring = rosterEntry.model_count;
-    } else {
-      salvo.modelsFiring = selectedUnit.raw.model_count?.min ?? 1;
-    }
   });
 
   function pickUnit(unitId: string, factionId?: string) {
@@ -185,24 +193,6 @@
   </select>
 </div>
 
-<div class="row">
-  <label>Unit</label>
-  <select
-    class="grow"
-    value={salvo.selectedUnitId ?? ""}
-    onchange={(e) => pickUnit((e.currentTarget as HTMLSelectElement).value)}
-  >
-    <option value="">— pick a unit —</option>
-    {#each datasetUnits as u (`${u.raw.faction_id}/${u.id}`)}
-      <option value={u.id}>
-        {u.name}{sharedDatasetNames.has(u.name)
-          ? ` · ${u.faction?.name ?? u.raw.faction_id}`
-          : ""}
-      </option>
-    {/each}
-  </select>
-</div>
-
 {#if detachments.length > 0}
   <div class="row">
     <label>Detachment</label>
@@ -221,24 +211,58 @@
   </div>
 {/if}
 
-{#if attachableLeaders.length > 0}
+<div class="row">
+  <label>Unit</label>
+  <select
+    class="grow"
+    value={salvo.selectedUnitId ?? ""}
+    onchange={(e) => pickUnit((e.currentTarget as HTMLSelectElement).value)}
+  >
+    <option value="">— pick a unit —</option>
+    {#each datasetUnits as u (`${u.raw.faction_id}/${u.id}`)}
+      <option value={u.id}>
+        {u.name}{sharedDatasetNames.has(u.name)
+          ? ` · ${u.faction?.name ?? u.raw.faction_id}`
+          : ""}
+      </option>
+    {/each}
+  </select>
+</div>
+
+{#if attachmentPartners.length > 0}
   <div class="row">
-    <label>Leader</label>
+    <label>Attached to</label>
     <select
       class="grow"
-      value={salvo.attachedLeaderId ?? ""}
+      value={salvo.attachedUnitIds[0] ?? ""}
       onchange={(e) => {
-        salvo.attachedLeaderId = (e.currentTarget as HTMLSelectElement).value || null;
+        const v = (e.currentTarget as HTMLSelectElement).value;
+        salvo.attachedUnitIds = v ? [v] : [];
       }}
     >
       <option value="">— none —</option>
-      {#each attachableLeaders as l (`${l.raw.faction_id}/${l.id}`)}
-        <option value={l.id}>
-          {l.name}{sharedLeaderNames.has(l.name)
-            ? ` · ${l.faction?.name ?? l.raw.faction_id}`
-            : ""}
-        </option>
-      {/each}
+      {#if partnerLeaders.length > 0}
+        <optgroup label="Leaders">
+          {#each partnerLeaders as { unit } (`${unit.raw.faction_id}/${unit.id}`)}
+            <option value={unit.id}>
+              {unit.name}{sharedPartnerNames.has(unit.name)
+                ? ` · ${unit.faction?.name ?? unit.raw.faction_id}`
+                : ""}
+            </option>
+          {/each}
+        </optgroup>
+      {/if}
+      {#if partnerBodyguards.length > 0}
+        <optgroup label="Bodyguards">
+          {#each partnerBodyguards as { unit } (`${unit.raw.faction_id}/${unit.id}`)}
+            <option value={unit.id}>
+              {unit.name}{sharedPartnerNames.has(unit.name)
+                ? ` · ${unit.faction?.name ?? unit.raw.faction_id}`
+                : ""}
+            </option>
+          {/each}
+        </optgroup>
+      {/if}
     </select>
   </div>
 {/if}
@@ -254,50 +278,7 @@
 
 {#if selectedUnit}
   {#if weapons.length === 0}
-    <EmptyState>No weapons drawn for {selectedUnit.name}.</EmptyState>
-  {:else}
-    <div class="row">
-      <label>Weapon</label>
-      <select
-        class="grow"
-        value={salvo.selectedWeaponId ?? ""}
-        onchange={(e) => {
-          salvo.selectedWeaponId = (e.currentTarget as HTMLSelectElement).value || null;
-          salvo.selectedProfileIndex = 0;
-        }}
-      >
-        {#each weapons as w (w.id)}
-          <option value={w.id}>{w.name} ({w.raw.type})</option>
-        {/each}
-      </select>
-    </div>
-
-  {#if profiles.length > 1}
-    <div class="row">
-      <label>Profile</label>
-      <select
-        class="grow"
-        value={salvo.selectedProfileIndex}
-        onchange={(e) => (salvo.selectedProfileIndex = Number((e.currentTarget as HTMLSelectElement).value))}
-      >
-        {#each profiles as p, i (i)}
-          <option value={i}>{p.name}</option>
-        {/each}
-      </select>
-    </div>
-  {/if}
-
-  <div class="row">
-    <label>Models firing</label>
-    <input
-      type="number"
-      min="1"
-      style="width:80px"
-      value={salvo.modelsFiring}
-      oninput={(e) => (salvo.modelsFiring = Math.max(1, Number((e.currentTarget as HTMLInputElement).value)))}
-    />
-    <span class="dim">of {selectedUnit.raw.model_count?.max ?? "?"}</span>
-  </div>
+    <EmptyState>No {salvo.phase}-phase weapons for {selectedUnit.name}.</EmptyState>
   {/if}
 {:else}
   <EmptyState>Pick a faction + unit, or import a roster.</EmptyState>

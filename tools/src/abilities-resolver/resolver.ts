@@ -12,7 +12,10 @@
  * 3. **detachment-stratagem** — stratagems on the detachment, each yielding
  *    the ability referenced by `stratagem.ability_id` (if any).
  * 4. **unit** — abilities listed in `unit.ability_ids`.
- * 5. **leader** — abilities listed in the attached leader's `ability_ids`.
+ * 5. **attached** — abilities of each attached member. A leader + bodyguard
+ *    (and, in 11th, support) form one combined unit, so every member's
+ *    abilities apply to the whole unit — pulled in full (not aura-filtered),
+ *    whichever member is the selected/firing unit.
  * 6. **support** — abilities on supporting units whose scope range is an
  *    aura (not `self` / `unit`).
  *
@@ -31,7 +34,7 @@ export type EligibleAbilitySource =
   | { kind: "detachment"; detachmentId: string }
   | { kind: "detachment-stratagem"; stratagemId: string; cpCost: number }
   | { kind: "unit"; unitId: string }
-  | { kind: "leader"; leaderId: string }
+  | { kind: "attached"; unitId: string }
   | { kind: "support"; sourceUnitId: string };
 
 export type EligibilityInput = {
@@ -39,7 +42,13 @@ export type EligibilityInput = {
   /** Overrides the unit's own `faction_id` when given (for inheritance cases). */
   factionId?: string;
   detachmentId?: string;
-  attachedLeaderId?: string;
+  /**
+   * Other members of the combined ("attached") unit — the attached leader, its
+   * bodyguard, or (11th) support attachments — whichever is *not* the selected
+   * `unitId`. Their abilities are pooled onto the combined unit. A list so
+   * multi-member attachments need no shape change; order is preserved.
+   */
+  attachedUnitIds?: string[];
   /** Friendly units whose auras could apply (M2 walks only their aura-ranged abilities). */
   supportingUnitIds?: string[];
 };
@@ -118,18 +127,19 @@ export function resolveEligibleAbilities(
     });
   }
 
-  // 5. Attached leader.
-  if (input.attachedLeaderId) {
-    const leader = dataset.units.get(input.attachedLeaderId);
-    if (leader) {
-      for (const ability of leader.abilities) {
-        if (!phaseMatches(ability, phase)) continue;
-        pushUnique(out, seen, {
-          ability,
-          source: { kind: "leader", leaderId: input.attachedLeaderId },
-          phases: intersect(ability.phases, phase),
-        });
-      }
+  // 5. Attached members — the combined unit pools every member's abilities,
+  // pulled in full (not aura-filtered like step 6), regardless of which member
+  // is the selected/firing unit.
+  for (const memberId of input.attachedUnitIds ?? []) {
+    const member = dataset.units.get(memberId);
+    if (!member) continue;
+    for (const ability of member.abilities) {
+      if (!phaseMatches(ability, phase)) continue;
+      pushUnique(out, seen, {
+        ability,
+        source: { kind: "attached", unitId: memberId },
+        phases: intersect(ability.phases, phase),
+      });
     }
   }
 

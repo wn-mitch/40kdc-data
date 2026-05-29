@@ -211,6 +211,30 @@ export class Dataset {
   }
 
   /**
+   * The inverse of {@link leadersAttachableTo}: the body units the given
+   * leader can attach to, sorted by name. Scans the same leader-attachment
+   * data from the leader's side (`leader_id` matches; resolve each
+   * `eligible_bodyguard_ids` entry), deduped by id. Empty for a non-leader
+   * unit. Together the two queries give the bidirectional attachment graph the
+   * SPA needs to offer a partner dropdown from either end.
+   */
+  bodyguardsAttachableFrom(leaderUnitId: string): UnitView[] {
+    const seen = new Set<string>();
+    const out: UnitView[] = [];
+    for (const la of this.leaderAttachments) {
+      if (la.leader_id !== leaderUnitId) continue;
+      for (const bodyguardId of la.eligible_bodyguard_ids) {
+        if (seen.has(bodyguardId)) continue;
+        const unit = this.units.get(bodyguardId);
+        if (!unit) continue;
+        seen.add(bodyguardId);
+        out.push(unit);
+      }
+    }
+    return out.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  /**
    * Enumerate every ability that could apply to the given unit in `phase`,
    * grouped by source. The SPA uses this to render the abilities pane.
    */
@@ -222,7 +246,7 @@ export class Dataset {
    * Attacker-perspective {@link Buff} stack for a (unit, phase) combination:
    * intrinsic weapon-profile keywords plus every eligible ability whose DSL
    * effect translates to an attacker-side buff (army, detachment, unit,
-   * leader, support, plus any stratagems the caller has opted into).
+   * attached members, support, plus any stratagems the caller has opted into).
    *
    * The result includes only buffs the buff layer can express today — the
    * `unsupported` half of the DSL→Buff translation is dropped here so callers
@@ -293,11 +317,19 @@ export class Dataset {
     const buffs: StackableBuff[] = [];
     const groups = new Map<string, StackableBuffGroup>();
 
+    // Surface the attachment fact to the DSL translator so `is-attached` /
+    // `model-is-leader` conditions can evaluate. Clone — never mutate the
+    // caller's context. An explicitly-set flag wins over the derivation.
+    const ctx: EngineContext = {
+      ...context,
+      attackerAttached: context.attackerAttached ?? (input.attachedUnitIds?.length ?? 0) > 0,
+    };
+
     // Intrinsic weapon-profile keywords — always on.
     for (const ref of input.weaponProfiles ?? []) {
       const weapon = this.weapons.get(ref.weaponId);
       if (!weapon) continue;
-      const wk = weapon.profileBuffs(ref.profileIndex, context);
+      const wk = weapon.profileBuffs(ref.profileIndex, ctx);
       if (wk.length === 0) continue;
       buffs.push({
         id: `weapon:${ref.weaponId}:${ref.profileIndex}`,
@@ -308,9 +340,9 @@ export class Dataset {
       });
     }
 
-    for (const entry of this.eligibleAbilities(input, context.phase)) {
+    for (const entry of this.eligibleAbilities(input, ctx.phase)) {
       const source = bufferSourceFromEligible(entry);
-      const { applied, activatable } = entry.ability.describeBuffs(source, context, "attacker");
+      const { applied, activatable } = entry.ability.describeBuffs(source, ctx, "attacker");
       // Stratagems cost CP — opt-in, not on by default.
       const isStratagem = entry.source.kind === "detachment-stratagem";
 
@@ -361,22 +393,29 @@ export class Dataset {
   ): Buff[] {
     const out: Buff[] = [];
 
+    // Surface the attachment fact to the DSL translator (see stackableBuffsFor).
+    // Clone — never mutate the caller's context; explicit flag wins.
+    const ctx: EngineContext = {
+      ...context,
+      attackerAttached: context.attackerAttached ?? (input.attachedUnitIds?.length ?? 0) > 0,
+    };
+
     // Weapon-profile keywords are attacker-only.
     if (perspective === "attacker") {
       for (const ref of input.weaponProfiles ?? []) {
         const weapon = this.weapons.get(ref.weaponId);
         if (!weapon) continue;
-        out.push(...weapon.profileBuffs(ref.profileIndex, context));
+        out.push(...weapon.profileBuffs(ref.profileIndex, ctx));
       }
     }
 
     const optedIn = new Set(input.optedInStratagemIds ?? []);
-    for (const entry of this.eligibleAbilities(input, context.phase)) {
+    for (const entry of this.eligibleAbilities(input, ctx.phase)) {
       if (entry.source.kind === "detachment-stratagem" && !optedIn.has(entry.source.stratagemId)) {
         continue;
       }
       const source = bufferSourceFromEligible(entry);
-      out.push(...entry.ability.getBuffs(source, context, perspective));
+      out.push(...entry.ability.getBuffs(source, ctx, perspective));
     }
 
     return out;
@@ -445,8 +484,13 @@ function bufferSourceFromEligible(entry: EligibleAbility): BuffSource {
       return { kind: "ability", abilityId, abilityKind: "detachment-stratagem" };
     case "unit":
       return { kind: "ability", abilityId, abilityKind: "unit" };
-    case "leader":
-      return { kind: "ability", abilityId, abilityKind: "leader" };
+    case "attached":
+      return {
+        kind: "ability",
+        abilityId,
+        abilityKind: "attached",
+        sourceUnitId: entry.source.unitId,
+      };
     case "support":
       return { kind: "ability", abilityId, abilityKind: "support" };
   }

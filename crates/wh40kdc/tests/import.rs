@@ -261,6 +261,52 @@ fn attached_leader_for_looks_up_by_body_unit() {
 }
 
 #[test]
+fn attachment_partners_for_resolves_from_either_end() {
+    let payload = serde_json::json!({
+        "name": "Leader Test",
+        "generatedBy": "List Forge",
+        "roster": {
+            "name": "Leader Test",
+            "costs": [{ "name": "pts", "value": 0 }],
+            "forces": [{
+                "id": "f1",
+                "name": "Army Roster",
+                "selections": [
+                    {
+                        "id": "u-gm", "name": "Grand Master", "type": "model", "number": 1,
+                        "categories": [{ "name": "Faction: Grey Knights" }, { "name": "Character", "primary": true }]
+                    },
+                    {
+                        "id": "u-paladins", "name": "Paladin Squad", "type": "unit", "number": 1,
+                        "categories": [{ "name": "Faction: Grey Knights" }, { "name": "Infantry", "primary": true }]
+                    }
+                ]
+            }]
+        }
+    });
+    let roster = import_roster(&payload, Dataset::embedded()).unwrap();
+
+    // From the bodyguard's end → the attached leader.
+    let from_body: Vec<&str> = roster
+        .attachment_partners_for("paladin-squad")
+        .iter()
+        .filter_map(|u| u.ref_.id.as_deref())
+        .collect();
+    assert_eq!(from_body, vec!["grand-master"]);
+
+    // From the leader's end → the bodyguard it joined.
+    let from_leader: Vec<&str> = roster
+        .attachment_partners_for("grand-master")
+        .iter()
+        .filter_map(|u| u.ref_.id.as_deref())
+        .collect();
+    assert_eq!(from_leader, vec!["paladin-squad"]);
+
+    // A unit in no attachment yields nothing.
+    assert!(roster.attachment_partners_for("no-such-unit").is_empty());
+}
+
+#[test]
 fn retains_unresolved_unit_with_candidates_and_warning() {
     let payload = serde_json::json!({
         "name": "Miss Test",

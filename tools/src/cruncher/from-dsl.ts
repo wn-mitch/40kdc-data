@@ -252,7 +252,11 @@ function translateReroll(
     return;
   }
   const roll = modifier.roll;
-  const subset = modifier.subset;
+  // A `value: 1` on a re-roll modifier unambiguously means "re-roll rolls of 1".
+  // A historical migration (2026-weapon-keywords) mis-defaulted such nodes to
+  // `subset: "all-failures"`; honor the value as the source of truth so any
+  // stray data of that shape can't silently over-apply the reroll.
+  const subset = modifier.value === 1 ? "ones" : modifier.subset;
   // Under target perspective, only "save" rerolls fire on the buffed unit.
   if (opts.perspective === "target" && roll !== "save") return;
   if (
@@ -337,6 +341,24 @@ function translateStatModifier(
     });
     return;
   }
+  const stat = modifier.stat;
+  const isOnBuffedUnit = appliesToBuffedUnit(node, opts.perspective);
+  // `attack_type: melee|ranged` scopes the mod to that attack — express it as a
+  // phase gate so e.g. a melee +1 Attack doesn't fire in the shooting phase.
+  const applicability = attackTypeApplicability(modifier);
+  const emit = (contribution: BuffContribution): void => {
+    const buff: Buff = { source, contribution };
+    out.applied.push(applicability ? { ...buff, applicableWhen: applicability } : buff);
+  };
+
+  // AP has an inverted sign convention (stored negative; more negative = more
+  // piercing) and offensive/defensive variants, so it computes its own delta
+  // and routes by attacker/defender rather than going through `signedValue`.
+  if (stat === "AP") {
+    translateApModifier(node, modifier, opts, out, emit);
+    return;
+  }
+
   const value = signedValue(modifier);
   if (value === null) {
     out.unsupported.push({
@@ -345,16 +367,14 @@ function translateStatModifier(
     });
     return;
   }
-  const stat = modifier.stat;
-  const isOnBuffedUnit = appliesToBuffedUnit(node, opts.perspective);
   switch (stat) {
     case "A":
       if (opts.perspective !== "attacker" || !isOnBuffedUnit) return;
-      out.applied.push({ source, contribution: { type: "attacks-mod", value } });
+      emit({ type: "attacks-mod", value });
       return;
     case "S":
       if (opts.perspective !== "attacker" || !isOnBuffedUnit) return;
-      out.applied.push({ source, contribution: { type: "strength-mod", value } });
+      emit({ type: "strength-mod", value });
       return;
     case "T":
       // Defender stat. Only relevant under target perspective.
@@ -366,7 +386,7 @@ function translateStatModifier(
         return;
       }
       if (!isOnBuffedUnit) return;
-      out.applied.push({ source, contribution: { type: "toughness-mod", value } });
+      emit({ type: "toughness-mod", value });
       return;
     case "Sv":
       // Saves improve when the *defender* gets +Sv. A +1 to Sv in printed
@@ -382,15 +402,7 @@ function translateStatModifier(
         return;
       }
       if (!isOnBuffedUnit) return;
-      out.applied.push({ source, contribution: { type: "save-mod", value: -value } });
-      return;
-    case "AP":
-      // AP rides on the attacker's weapon profile and is stored as a negative
-      // number in the data (e.g. AP -1). The data's `{operation:"add", value:-1}`
-      // form means "AP becomes one more negative" → more piercing. `signedValue`
-      // already returns that negative number directly, so pass it through.
-      if (opts.perspective !== "attacker" || !isOnBuffedUnit) return;
-      out.applied.push({ source, contribution: { type: "ap-mod", value } });
+      emit({ type: "save-mod", value: -value });
       return;
     default:
       out.unsupported.push({
@@ -398,6 +410,47 @@ function translateStatModifier(
         effectFragment: node,
       });
   }
+}
+
+/**
+ * Translate an `AP` stat-modifier. AP rides on the attacker's weapon profile and
+ * is stored as a negative number (e.g. AP -1); more negative = more piercing.
+ *
+ * Two variants exist in the data:
+ *  - **offensive** (`target` self/unit): the buffed unit's own weapons gain AP —
+ *    an attacker-side `ap-mod`. `improve N` → `-N` (more piercing), `worsen N` →
+ *    `+N`, and the legacy `add`/`subtract` forms (which already pass a signed,
+ *    usually negative, value) flow through `apDelta` unchanged.
+ *  - **defensive** (`target: "attacker"`): "enemy weapons targeting this unit
+ *    have AP worsened". This applies when the buffed unit is the *target*; we do
+ *    not model it as an attacker-side buff (that would wrongly weaken the buffed
+ *    unit's own attacks), so it is surfaced as `unsupported`.
+ */
+function translateApModifier(
+  node: Record<string, unknown>,
+  modifier: Record<string, unknown>,
+  opts: WalkOpts,
+  out: EffectTranslation,
+  emit: (contribution: BuffContribution) => void,
+): void {
+  if (classifyTarget(node) === "attacker") {
+    out.unsupported.push({
+      reason:
+        "stat-modifier AP on the attacker: defender-side AP reduction is not modelled by the buff layer",
+      effectFragment: node,
+    });
+    return;
+  }
+  if (opts.perspective !== "attacker" || !appliesToBuffedUnit(node, "attacker")) return;
+  const delta = apDelta(modifier);
+  if (delta === null) {
+    out.unsupported.push({
+      reason: `stat-modifier AP: operation "${String(modifier.operation)}" not supported`,
+      effectFragment: node,
+    });
+    return;
+  }
+  emit({ type: "ap-mod", value: delta });
 }
 
 function translateFeelNoPain(
@@ -480,6 +533,13 @@ function keywordGrantList(modifier: Record<string, unknown>): string[] {
 function weaponTypeApplicability(modifier: Record<string, unknown>): BuffApplicability | undefined {
   if (modifier.weapon_type === "melee") return { phases: ["fight"] };
   if (modifier.weapon_type === "ranged") return { phases: ["shooting"] };
+  return undefined;
+}
+
+/** Map a stat-modifier's `attack_type` to the phase that attack happens in. */
+function attackTypeApplicability(modifier: Record<string, unknown>): BuffApplicability | undefined {
+  if (modifier.attack_type === "melee") return { phases: ["fight"] };
+  if (modifier.attack_type === "ranged") return { phases: ["shooting"] };
   return undefined;
 }
 
@@ -871,6 +931,12 @@ function evaluateCondition(
     }
     case "remained-stationary":
       return ctx.attackerStationary === true;
+    case "charged-this-turn":
+      // A player-controlled context flag (did the buffed unit charge this turn?),
+      // mirroring `remained-stationary`. Undefined → the caller couldn't pin it
+      // down, so stay "unknown" and let the SPA surface the gap.
+      if (ctx.attackerCharged === undefined) return "unknown";
+      return ctx.attackerCharged;
     case "target-has-keyword": {
       const kw = (condition.parameters as Record<string, unknown> | undefined)?.keyword;
       if (typeof kw !== "string") return "unknown";
@@ -882,9 +948,13 @@ function evaluateCondition(
       return (ctx.attackerKeywords ?? []).includes(kw.toLowerCase());
     }
     case "is-attached":
-      // The resolver knows whether a leader is attached; absent that signal
-      // here, treat as unknown so the SPA can surface the gap.
-      return "unknown";
+    case "model-is-leader":
+      // True whenever the buffed unit is a combined ("attached") unit. We do
+      // not thread per-member leader identity — "attachment present" is the
+      // signal both conditions gate on. Undefined flag (caller couldn't
+      // determine attachment) stays "unknown" so the SPA surfaces the gap.
+      if (ctx.attackerAttached === undefined) return "unknown";
+      return ctx.attackerAttached;
     default:
       return "unknown";
   }
@@ -942,6 +1012,38 @@ function signedValue(modifier: Record<string, unknown>): number | null {
   const value = Number(modifier.value);
   if (!Number.isFinite(value)) return null;
   switch (modifier.operation) {
+    case "add":
+      return value;
+    case "subtract":
+      return -value;
+    // For the symmetric stats (A/S/T) and roll-/bs-modifiers, "improve" moves
+    // the number up (beneficial) and "worsen" down. AP is handled separately by
+    // `apDelta`, which inverts this because AP's beneficial direction is more
+    // negative.
+    case "improve":
+      return value;
+    case "worsen":
+      return -value;
+    default:
+      // set / halve / multiply: not a single signed delta — left unsupported.
+      return null;
+  }
+}
+
+/**
+ * Read the AP delta out of a stat-modifier `{operation, value}` pair. AP is
+ * stored negative (more negative = more piercing), so "improve" makes it more
+ * negative and "worsen" less. The legacy `add`/`subtract` forms pass a signed
+ * value through directly (the data already encodes the sign).
+ */
+function apDelta(modifier: Record<string, unknown>): number | null {
+  const value = Number(modifier.value);
+  if (!Number.isFinite(value)) return null;
+  switch (modifier.operation) {
+    case "improve":
+      return -Math.abs(value);
+    case "worsen":
+      return Math.abs(value);
     case "add":
       return value;
     case "subtract":

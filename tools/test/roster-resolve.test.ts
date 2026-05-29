@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { Dataset } from "../src/data/dataset.js";
 import {
   resolveAttachedLeader,
+  resolveAttachmentPartners,
   resolveRosterUnit,
   resolveRosterWargear,
 } from "../src/data/roster-resolve.js";
@@ -88,6 +89,28 @@ describe("resolveAttachedLeader", () => {
   it("returns undefined for a roster with no attachments at all", () => {
     const roster = rosterOf([rosterUnit("battle-sisters-squad"), rosterUnit("palatine")]);
     expect(resolveAttachedLeader(roster, "battle-sisters-squad")).toBeUndefined();
+  });
+});
+
+describe("resolveAttachmentPartners", () => {
+  const roster = rosterOf([
+    rosterUnit("battle-sisters-squad"),
+    leaderUnit("palatine", "battle-sisters-squad"),
+  ]);
+
+  it("finds the partner from the bodyguard's end (the attached leader)", () => {
+    const partners = resolveAttachmentPartners(roster, "battle-sisters-squad").map((u) => u.ref.id);
+    expect(partners).toEqual(["palatine"]);
+  });
+
+  it("finds the partner from the leader's end (the bodyguard it joined)", () => {
+    const partners = resolveAttachmentPartners(roster, "palatine").map((u) => u.ref.id);
+    expect(partners).toEqual(["battle-sisters-squad"]);
+  });
+
+  it("returns an empty array when the unit is in no attachment", () => {
+    const lone = rosterOf([rosterUnit("battle-sisters-squad"), rosterUnit("palatine")]);
+    expect(resolveAttachmentPartners(lone, "battle-sisters-squad")).toEqual([]);
   });
 });
 

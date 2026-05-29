@@ -23,8 +23,14 @@ export type BuffSource =
         | "detachment"
         | "detachment-stratagem"
         | "unit"
-        | "leader"
+        | "attached"
         | "support";
+      /**
+       * For `abilityKind: "attached"`, the combined-unit member the ability
+       * came from (so the UI can name it and show its leader/bodyguard role).
+       * Absent for other kinds.
+       */
+      sourceUnitId?: string;
     }
   | { kind: "manual"; label: string };
 
@@ -88,6 +94,13 @@ export type EngineContext = {
   phase: Phase;
   /** Attacker has not moved this turn — Heavy fires its +1 to hit. */
   attackerStationary?: boolean;
+  /**
+   * Attacker made a charge move this turn — drives the `charged-this-turn`
+   * condition (e.g. World Eaters' Relentless Rage). Left undefined when the
+   * caller can't determine it — the condition then evaluates as `"unknown"` and
+   * the SPA surfaces a diagnostic (mirrors `attackerStationary` / `timing`).
+   */
+  attackerCharged?: boolean;
   /** Within half the weapon's range — Melta / Rapid Fire fire. */
   withinHalfRange?: boolean;
   /** Attacker benefits from cover (mostly informational; cover applies to defenders). */
@@ -105,6 +118,15 @@ export type EngineContext = {
    * as `"unknown"` and the SPA surfaces a diagnostic.
    */
   timing?: string;
+  /**
+   * The buffed unit is part of a combined ("attached") unit — a leader is
+   * attached to a bodyguard, or vice-versa. Drives the `is-attached` and
+   * `model-is-leader` conditions. Derived from a non-empty
+   * `EligibilityInput.attachedUnitIds`. Left undefined when the caller can't
+   * determine attachment — the conditions then evaluate as `"unknown"` and the
+   * SPA surfaces a diagnostic (mirrors how `timing` undefined behaves).
+   */
+  attackerAttached?: boolean;
 };
 
 /** Back-compat alias — `resolveBuffs` accepts the shared engine context. */
@@ -137,7 +159,7 @@ const SOURCE_KIND_RANK: Record<string, number> = {
   "ability:detachment": 1,
   "ability:detachment-stratagem": 2,
   "ability:unit": 3,
-  "ability:leader": 4,
+  "ability:attached": 4,
   "ability:support": 5,
   manual: 6,
   "weapon-keyword": 7,

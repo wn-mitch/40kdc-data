@@ -207,9 +207,8 @@
               "target": "unit",
               "modifier": {
                 "roll": "hit",
-                "value": 1,
                 "attack_type": "melee",
-                "subset": "all-failures"
+                "subset": "ones"
               }
             },
             {
@@ -217,9 +216,8 @@
               "target": "unit",
               "modifier": {
                 "roll": "wound",
-                "value": 1,
                 "attack_type": "melee",
-                "subset": "all-failures"
+                "subset": "ones"
               }
             }
           ]
@@ -4197,9 +4195,8 @@
           "target": "unit",
           "modifier": {
             "roll": "hit",
-            "value": 1,
             "attack_type": "melee",
-            "subset": "all-failures"
+            "subset": "ones"
           }
         },
         {
@@ -4216,9 +4213,8 @@
             "target": "unit",
             "modifier": {
               "roll": "wound",
-              "value": 1,
               "attack_type": "melee",
-              "subset": "all-failures"
+              "subset": "ones"
             }
           }
         }

@@ -30,6 +30,7 @@
     phase: salvo.phase,
     attackerStationary: salvo.contextFlags.attackerStationary,
     withinHalfRange: salvo.contextFlags.withinHalfRange,
+    attackerCharged: salvo.contextFlags.attackerCharged,
     attackerKeywords,
     targetKeywords: salvo.manualTarget.keywords.map((k) => k.toLowerCase()),
   });
@@ -45,7 +46,7 @@
           unitId: salvo.selectedUnitId,
           factionId: salvo.selectedFactionId ?? undefined,
           detachmentId: salvo.selectedDetachmentId ?? undefined,
-          attachedLeaderId: salvo.attachedLeaderId ?? undefined,
+          attachedUnitIds: salvo.attachedUnitIds,
           weaponProfiles: salvo.selectedWeaponId
             ? [{ weaponId: salvo.selectedWeaponId, profileIndex: salvo.selectedProfileIndex }]
             : [],
@@ -93,9 +94,19 @@
     salvo.manualBuffsActive = next;
   }
 
+  // A combined-unit member is a leader if it can itself lead something;
+  // otherwise it's the bodyguard half. Derived from the attachment graph so it
+  // holds regardless of which half is the selected/firing unit.
+  function attachedRole(unitId: string): "leader" | "bodyguard" {
+    return ds.bodyguardsAttachableFrom(unitId).length > 0 ? "leader" : "bodyguard";
+  }
+
   function sourceChip(b: StackableBuff): string {
     if (b.source.kind === "weapon-keyword") return "weapon";
     if (b.source.kind === "manual") return "manual";
+    if (b.source.abilityKind === "attached") {
+      return b.source.sourceUnitId ? attachedRole(b.source.sourceUnitId) : "attached";
+    }
     return b.source.abilityKind === "detachment-stratagem" ? "stratagem" : b.source.abilityKind;
   }
 
@@ -109,7 +120,17 @@
   }
 
   function summary(b: StackableBuff): string {
-    return b.buffs.map(describeBuff).join(", ") || "no effect";
+    const effects = b.buffs.map(describeBuff).join(", ") || "no effect";
+    // Name the combined-unit member an attached buff came from.
+    if (
+      b.source.kind === "ability" &&
+      b.source.abilityKind === "attached" &&
+      b.source.sourceUnitId
+    ) {
+      const name = ds.units.get(b.source.sourceUnitId)?.name ?? b.source.sourceUnitId;
+      return `from ${name} · ${effects}`;
+    }
+    return effects;
   }
 </script>
 

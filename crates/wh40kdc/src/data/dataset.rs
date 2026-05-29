@@ -376,6 +376,31 @@ impl Dataset {
         out
     }
 
+    /// The inverse of [`leaders_attachable_to`](Self::leaders_attachable_to):
+    /// the body units the given leader can attach to, sorted by name. Scans the
+    /// same data from the leader's side (`leader_id` matches; resolve each
+    /// `eligible_bodyguard_ids` entry), deduped by id. Empty for a non-leader
+    /// unit. The two together give the bidirectional attachment graph.
+    pub fn bodyguards_attachable_from(&self, leader_unit_id: &str) -> Vec<&Unit> {
+        let mut seen = std::collections::HashSet::new();
+        let mut out: Vec<&Unit> = Vec::new();
+        for la in &self.leader_attachments {
+            if la.leader_id.as_str() != leader_unit_id {
+                continue;
+            }
+            for bodyguard_id in &la.eligible_bodyguard_ids {
+                if !seen.insert(bodyguard_id.as_str()) {
+                    continue;
+                }
+                if let Some(unit) = self.units.get(bodyguard_id.as_str()) {
+                    out.push(unit);
+                }
+            }
+        }
+        out.sort_by(|a, b| a.name.cmp(&b.name));
+        out
+    }
+
     /// Faction-scoped abilities (abilities whose `faction_id` is this faction).
     pub fn abilities_of_faction(&self, faction_id: &str) -> Vec<&Ability> {
         self.abilities.by_faction(faction_id)

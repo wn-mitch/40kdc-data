@@ -36,9 +36,15 @@ export const DEFAULT_TARGET: ManualTarget = {
 export type PhaseChoice = Extract<Phase, "shooting" | "fight">;
 export const PHASE_CHOICES: PhaseChoice[] = ["shooting", "fight"];
 
+/** Which weapon type can fire in a given phase: shooting → ranged, fight → melee. */
+export function weaponTypeForPhase(p: PhaseChoice): "ranged" | "melee" {
+  return p === "fight" ? "melee" : "ranged";
+}
+
 export interface ContextFlags {
   attackerStationary: boolean;
   withinHalfRange: boolean;
+  attackerCharged: boolean;
 }
 
 export interface ManualBuffToggle {
@@ -72,6 +78,7 @@ export const MANUAL_BUFF_TOGGLES: ManualBuffToggle[] = [
 export const CONTEXT_FLAG_TOGGLES: { id: keyof ContextFlags; label: string }[] = [
   { id: "attackerStationary", label: "Attacker stationary (Heavy +1)" },
   { id: "withinHalfRange", label: "Within half range (Melta / Rapid Fire)" },
+  { id: "attackerCharged", label: "Charged this turn (Relentless Rage)" },
 ];
 
 class SalvoState {
@@ -83,7 +90,13 @@ class SalvoState {
   selectedUnitId = $state<string | null>(null);
   selectedFactionId = $state<string | null>(null);
   selectedDetachmentId = $state<string | null>(null);
-  attachedLeaderId = $state<string | null>(null);
+  /**
+   * Other members of the combined unit attached to {@link selectedUnitId} — a
+   * leader joined to a bodyguard, or the bodyguard a selected leader joins.
+   * A list so 11th's multi-member attachments need no shape change; the UI
+   * writes 0 or 1 today.
+   */
+  attachedUnitIds = $state<string[]>([]);
   phase = $state<PhaseChoice>("shooting");
   selectedWeaponId = $state<string | null>(null);
   selectedProfileIndex = $state<number>(0);
@@ -99,7 +112,11 @@ class SalvoState {
    */
   buffOverrides = $state<Record<string, boolean>>({});
   manualBuffsActive = $state<Set<string>>(new Set());
-  contextFlags = $state<ContextFlags>({ attackerStationary: false, withinHalfRange: false });
+  contextFlags = $state<ContextFlags>({
+    attackerStationary: false,
+    withinHalfRange: false,
+    attackerCharged: false,
+  });
 
   /** Effective on/off for a lever, honouring any user override of its default. */
   isBuffEnabled(id: string, defaultEnabled: boolean): boolean {

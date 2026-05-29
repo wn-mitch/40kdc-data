@@ -25,3 +25,8 @@ export {
   type Stage,
   type TargetProfileRef,
 } from "./engine.js";
+export {
+  attributeStages,
+  type AttributedStage,
+  type StageLift,
+} from "./attribution.js";

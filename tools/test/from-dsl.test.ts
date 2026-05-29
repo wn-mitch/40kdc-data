@@ -34,6 +34,25 @@ describe("effectToBuffs: leaves", () => {
     expect(result.unsupported).toEqual([]);
   });
 
+  it("re-roll with value:1 means 'ones' even if subset says all-failures", () => {
+    // Guard against the 2026-weapon-keywords migration mis-default: a `value: 1`
+    // re-roll node is "re-roll rolls of 1", regardless of a stray subset.
+    const result = effectToBuffs(
+      {
+        type: "re-roll",
+        target: "unit",
+        modifier: { roll: "hit", value: 1, subset: "all-failures" },
+      },
+      armyRule,
+      ctx,
+    );
+    expect(result.applied[0].contribution).toEqual({
+      type: "reroll",
+      roll: "hit",
+      subset: "ones",
+    });
+  });
+
   it("roll-modifier add → matching mod buff", () => {
     const result = effectToBuffs(
       {
@@ -783,6 +802,112 @@ describe("effectToBuffs: AP stat-modifier", () => {
     );
     expect(result.applied).toEqual([]);
     expect(result.unsupported).toEqual([]);
+  });
+
+  it("operation 'improve' → more piercing (ap-mod negative)", () => {
+    // Hack and Slash shape: improve AP by 1 → one more negative.
+    const result = effectToBuffs(
+      {
+        type: "stat-modifier",
+        target: "unit",
+        modifier: { stat: "AP", operation: "improve", value: 1, attack_type: "melee" },
+      },
+      unitRule,
+      { phase: "fight" },
+      "attacker",
+    );
+    expect(result.applied).toHaveLength(1);
+    expect(result.applied[0].contribution).toEqual({ type: "ap-mod", value: -1 });
+    // melee attack_type rides on the buff as a fight-phase gate.
+    expect(result.applied[0].applicableWhen).toEqual({ phases: ["fight"] });
+    expect(result.unsupported).toEqual([]);
+  });
+
+  it("operation 'worsen' on the attacker is not applied as an attacker buff", () => {
+    // Defensive shape (orks/tau/custodes): "enemy weapons targeting this unit
+    // have AP worsened" — must not weaken the buffed unit's own attacks.
+    const result = effectToBuffs(
+      {
+        type: "stat-modifier",
+        target: "attacker",
+        modifier: { stat: "AP", operation: "worsen", value: 1 },
+      },
+      unitRule,
+      ctx,
+      "attacker",
+    );
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported).toHaveLength(1);
+    expect(result.unsupported[0].reason).toMatch(/defender-side AP reduction/);
+  });
+});
+
+describe("effectToBuffs: improve/worsen on symmetric stats", () => {
+  it("A improve → +value, S worsen → -value", () => {
+    const improve = effectToBuffs(
+      {
+        type: "stat-modifier",
+        target: "unit",
+        modifier: { stat: "A", operation: "improve", value: 2 },
+      },
+      unitRule,
+      ctx,
+    );
+    expect(improve.applied[0].contribution).toEqual({ type: "attacks-mod", value: 2 });
+
+    const worsen = effectToBuffs(
+      {
+        type: "stat-modifier",
+        target: "unit",
+        modifier: { stat: "S", operation: "worsen", value: 1 },
+      },
+      unitRule,
+      ctx,
+    );
+    expect(worsen.applied[0].contribution).toEqual({ type: "strength-mod", value: -1 });
+  });
+});
+
+describe("effectToBuffs: charged-this-turn condition", () => {
+  // Relentless Rage shape: charged this turn → +1 A, +2 S in melee.
+  const relentlessRage = {
+    type: "conditional",
+    condition: { type: "charged-this-turn" },
+    effect: {
+      type: "sequence",
+      steps: [
+        { type: "stat-modifier", target: "unit", modifier: { stat: "A", operation: "add", value: 1, attack_type: "melee" } },
+        { type: "stat-modifier", target: "unit", modifier: { stat: "S", operation: "add", value: 2, attack_type: "melee" } },
+      ],
+    },
+  };
+
+  it("applies when attackerCharged is true", () => {
+    const result = effectToBuffs(relentlessRage, unitRule, {
+      phase: "fight",
+      attackerCharged: true,
+    });
+    expect(result.applied.map((b) => b.contribution)).toEqual([
+      { type: "attacks-mod", value: 1 },
+      { type: "strength-mod", value: 2 },
+    ]);
+    expect(result.applied.every((b) => b.applicableWhen?.phases?.[0] === "fight")).toBe(true);
+    expect(result.unsupported).toEqual([]);
+  });
+
+  it("drops cleanly when attackerCharged is false", () => {
+    const result = effectToBuffs(relentlessRage, unitRule, {
+      phase: "fight",
+      attackerCharged: false,
+    });
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported).toEqual([]);
+  });
+
+  it("is unsupported when attackerCharged is undefined", () => {
+    const result = effectToBuffs(relentlessRage, unitRule, { phase: "fight" });
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported[0].reason).toMatch(/cannot evaluate condition/);
   });
 });
 

@@ -162,6 +162,33 @@ describe("leadersAttachableTo", () => {
   });
 });
 
+describe("bodyguardsAttachableFrom", () => {
+  it("lists the body units a leader can join, sorted by name", () => {
+    const bodies = dataset.bodyguardsAttachableFrom("palatine");
+    expect(bodies.map((b) => b.id)).toContain("battle-sisters-squad");
+    const names = bodies.map((b) => b.name);
+    expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
+  });
+
+  it("is the inverse of leadersAttachableTo", () => {
+    // palatine → battle-sisters-squad, and battle-sisters-squad → palatine.
+    expect(dataset.bodyguardsAttachableFrom("palatine").map((b) => b.id)).toContain(
+      "battle-sisters-squad",
+    );
+    expect(dataset.leadersAttachableTo("battle-sisters-squad").map((l) => l.id)).toContain(
+      "palatine",
+    );
+  });
+
+  it("returns an empty array for a non-leader unit", () => {
+    expect(dataset.bodyguardsAttachableFrom("battle-sisters-squad")).toEqual([]);
+  });
+
+  it("returns an empty array for an unknown unit id", () => {
+    expect(dataset.bodyguardsAttachableFrom("no-such-unit")).toEqual([]);
+  });
+});
+
 describe("edge cases", () => {
   it("a Space Marine successor faction resolves without throwing (units may be inherited)", () => {
     const ultra = factions.get("ultramarines");

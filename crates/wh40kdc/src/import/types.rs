@@ -188,6 +188,48 @@ impl Roster {
                 == Some(bodyguard_unit_id)
         })
     }
+
+    /// Every roster unit attached to `unit_id`, resolved from *either* end of
+    /// the attachment — a leader + bodyguard are one combined unit, so a
+    /// selection UI may start from either half:
+    ///   - `unit_id` is the **bodyguard** → the leader(s) pointing down at it
+    ///     (the [`attached_leader_for`](Self::attached_leader_for) direction), and
+    ///   - `unit_id` is the **leader** → the bodyguard its own
+    ///     `leader_attachment` points to.
+    ///
+    /// Returns the partner [`RosterUnit`]s (deduped, source order). Empty when
+    /// the unit takes part in no attachment — the common case, since
+    /// attachments are optional at game start. A `Vec` to carry 11th edition's
+    /// multi-member attachments without an API change.
+    pub fn attachment_partners_for(&self, unit_id: &str) -> Vec<&RosterUnit> {
+        let mut out: Vec<&RosterUnit> = Vec::new();
+        for u in &self.units {
+            // Body-first: leaders pointing down at `unit_id`.
+            if u.leader_attachment
+                .as_ref()
+                .and_then(|la| la.bodyguard_ref.id.as_deref())
+                == Some(unit_id)
+                && !out.iter().any(|q| std::ptr::eq(*q, u))
+            {
+                out.push(u);
+            }
+            // Leader-first: `unit_id`'s own entry points down at a bodyguard.
+            if u.ref_.id.as_deref() == Some(unit_id) {
+                if let Some(la) = u.leader_attachment.as_ref() {
+                    if let Some(bodyguard) = self
+                        .units
+                        .iter()
+                        .find(|b| b.ref_.id.as_deref() == la.bodyguard_ref.id.as_deref())
+                    {
+                        if !out.iter().any(|q| std::ptr::eq(*q, bodyguard)) {
+                            out.push(bodyguard);
+                        }
+                    }
+                }
+            }
+        }
+        out
+    }
 }
 
 // ---------------------------------------------------------------------------

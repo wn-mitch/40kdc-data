@@ -44,13 +44,13 @@ describe("Dataset.eligibleAbilities", () => {
     expect(unitAbilities.length).toBeGreaterThan(0);
   });
 
-  it("sorts entries by source kind (army → detachment → unit → leader → support)", () => {
+  it("sorts entries by source kind (army → detachment → unit → attached → support)", () => {
     const intercessor = ds.units.find("Intercessor Squad")!;
     const result = ds.eligibleAbilities(
       { unitId: intercessor.id, factionId: "adeptus-astartes" },
       "shooting",
     );
-    const order = ["army", "detachment", "detachment-stratagem", "unit", "leader", "support"];
+    const order = ["army", "detachment", "detachment-stratagem", "unit", "attached", "support"];
     const positions = result.map((e) => order.indexOf(e.source.kind));
     // Each successive position must be >= the previous one (non-decreasing).
     for (let i = 1; i < positions.length; i++) {
@@ -59,6 +59,32 @@ describe("Dataset.eligibleAbilities", () => {
         `entry ${i} (${result[i].source.kind}) breaks sort order`,
       ).toBe(true);
     }
+  });
+
+  // The combined-unit attachment is bidirectional: whichever half is the
+  // selected unit, the *other* half's abilities are pooled in as `attached`.
+  it("pools an attached leader's abilities onto the selected bodyguard", () => {
+    const result = ds.eligibleAbilities(
+      { unitId: "khorne-berzerkers", attachedUnitIds: ["kharn-the-betrayer"] },
+      "fight",
+    );
+    const attached = result.filter(
+      (e) => e.source.kind === "attached" && e.source.unitId === "kharn-the-betrayer",
+    );
+    expect(attached.length).toBeGreaterThan(0);
+    // And the bodyguard's own abilities still come through as `unit`.
+    expect(result.some((e) => e.source.kind === "unit")).toBe(true);
+  });
+
+  it("pools an attached bodyguard's abilities onto the selected leader (reverse direction)", () => {
+    const result = ds.eligibleAbilities(
+      { unitId: "kharn-the-betrayer", attachedUnitIds: ["khorne-berzerkers"] },
+      "fight",
+    );
+    const attached = result.filter(
+      (e) => e.source.kind === "attached" && e.source.unitId === "khorne-berzerkers",
+    );
+    expect(attached.length).toBeGreaterThan(0);
   });
 });
 

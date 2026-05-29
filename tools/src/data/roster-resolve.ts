@@ -67,3 +67,40 @@ export function resolveAttachedLeader(
     (u) => u.leader_attachment?.bodyguard_ref.id === bodyguardUnitId,
   );
 }
+
+/**
+ * Every roster unit attached to `unitId`, resolved from *either* end of the
+ * attachment. A leader+bodyguard are one combined unit, so a selection UI may
+ * start from either half:
+ *   - `unitId` is the **bodyguard** → the leader(s) whose
+ *     `leader_attachment.bodyguard_ref.id` points at it (body-first, the
+ *     {@link resolveAttachedLeader} direction), and
+ *   - `unitId` is the **leader** → the bodyguard its own `leader_attachment`
+ *     points to.
+ * Returns the partner {@link RosterUnit}s (deduped, source order). Empty when
+ * the unit has no attachment in this roster — the common case, since
+ * attachments are optional at game start. Shaped as a list to carry 11th
+ * edition's multi-member attachments without an API change.
+ */
+export function resolveAttachmentPartners(
+  roster: Roster,
+  unitId: string,
+): RosterUnit[] {
+  const seen = new Set<RosterUnit>();
+  const out: RosterUnit[] = [];
+  const add = (u: RosterUnit | undefined) => {
+    if (!u || seen.has(u)) return;
+    seen.add(u);
+    out.push(u);
+  };
+
+  for (const u of roster.units) {
+    // Body-first: leaders pointing down at `unitId`.
+    if (u.leader_attachment?.bodyguard_ref.id === unitId) add(u);
+    // Leader-first: `unitId`'s own entry points down at a bodyguard.
+    if (u.ref.id === unitId && u.leader_attachment) {
+      add(roster.units.find((b) => b.ref.id === u.leader_attachment!.bodyguard_ref.id));
+    }
+  }
+  return out;
+}

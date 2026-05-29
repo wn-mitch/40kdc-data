@@ -175,6 +175,9 @@ function migrateRerollModifier(mod: Record<string, unknown>): boolean {
   const cond = mod.condition;
   if (cond === "natural-1") mod.subset = "ones";
   else if (cond === "any-fail") mod.subset = "all-failures";
+  // Some pre-migration data encoded "re-roll 1s" as `value: 1` rather than a
+  // `condition`. Honor that signal before defaulting, or the intent is lost.
+  else if (typeof mod.value === "number" && mod.value === 1) mod.subset = "ones";
   else mod.subset = "all-failures";
   if ("condition" in mod) delete mod.condition;
   return true;

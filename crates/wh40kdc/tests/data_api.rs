@@ -277,6 +277,41 @@ fn leaders_attachable_to_is_empty_for_unknown_id() {
     assert!(ds.leaders_attachable_to("no-such-unit").is_empty());
 }
 
+#[test]
+fn bodyguards_attachable_from_lists_body_units_sorted() {
+    let ds = Dataset::embedded();
+    let bodies = ds.bodyguards_attachable_from("palatine");
+    assert!(bodies
+        .iter()
+        .any(|u| u.id.as_str() == "battle-sisters-squad"));
+    let names: Vec<&str> = bodies.iter().map(|u| u.name.as_str()).collect();
+    let mut sorted = names.clone();
+    sorted.sort();
+    assert_eq!(names, sorted);
+}
+
+#[test]
+fn bodyguards_attachable_from_is_the_inverse_of_leaders_attachable_to() {
+    let ds = Dataset::embedded();
+    assert!(ds
+        .bodyguards_attachable_from("palatine")
+        .iter()
+        .any(|u| u.id.as_str() == "battle-sisters-squad"));
+    assert!(ds
+        .leaders_attachable_to("battle-sisters-squad")
+        .iter()
+        .any(|u| u.id.as_str() == "palatine"));
+}
+
+#[test]
+fn bodyguards_attachable_from_is_empty_for_non_leader_and_unknown() {
+    let ds = Dataset::embedded();
+    assert!(ds
+        .bodyguards_attachable_from("battle-sisters-squad")
+        .is_empty());
+    assert!(ds.bodyguards_attachable_from("no-such-unit").is_empty());
+}
+
 // --- edge cases -------------------------------------------------------------
 
 #[test]

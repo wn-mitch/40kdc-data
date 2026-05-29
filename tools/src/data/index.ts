@@ -57,6 +57,7 @@ export {
   resolveRosterUnit,
   resolveRosterWargear,
   resolveAttachedLeader,
+  resolveAttachmentPartners,
 } from "./roster-resolve.js";
 
 import { Dataset } from "./dataset.js";
