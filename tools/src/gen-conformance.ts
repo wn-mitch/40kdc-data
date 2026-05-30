@@ -26,8 +26,11 @@ import { fileURLToPath } from "node:url";
 import { Dataset } from "./data/dataset.js";
 import { normalizeName } from "./data/normalize.js";
 import { exportRoster, type ExportFormat } from "./export/index.js";
-import { importRoster } from "./import/import-roster.js";
-import type { Roster } from "./import/types.js";
+import { importRoster, REGISTERED_ADAPTERS } from "./import/import-roster.js";
+import { selectAdapter } from "./import/adapter.js";
+import type { ParsedRoster, Roster } from "./import/types.js";
+import { attributeStages } from "./cruncher/attribution.js";
+import type { EngineInput } from "./cruncher/index.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, "../..");
@@ -56,6 +59,20 @@ const NORMALIZE_INPUTS = [
   // distinctness anchors (must NOT collapse together)
   "Khorne",
   "Khârn",
+  // Unicode whitespace beyond ASCII — every Unicode whitespace must collapse
+  // identically across implementations or `find("Khorne Lord")` and
+  // `find("Khorne Lord")` will silently disagree across ports.
+  "Khorne Lord",
+  "Khorne　Lord",
+  // Turkish dotted-I: NFD decomposes to `I` + combining dot above; the dot is
+  // stripped, then locale-independent lowercase yields `i`. The case pins that
+  // no implementation introduces locale-aware casefolding (which would map
+  // `I` → `ı` under Turkish locale and break ASCII-text search).
+  "İmperial Fists",
+  // Zero-width joiner: passes through every step today. Pinned so behavior
+  // does not silently change — if a future commit strips Cf-category chars,
+  // this golden updates in the same PR.
+  "Khorne‍Lord",
 ];
 
 function writeJson(path: string, value: unknown): void {
@@ -76,19 +93,37 @@ function genNormalize(): void {
  * ListForge), then `input.newrecruit-json.json` (NewRecruit), then the
  * text-only `input.gw.txt` (GW app export — import-only, like ListForge). */
 function seedRoster(caseDir: string, ds: Dataset): Roster {
+  const decoded = decodeCanonicalSeed(caseDir);
+  return importRoster(decoded, { dataset: ds });
+}
+
+/** Return the decoded payload for the canonical seed — the same value the
+ * import pipeline would dispatch on. JSON seeds come back parsed; text seeds
+ * come back as the raw string. */
+function decodeCanonicalSeed(caseDir: string): unknown {
   const jsonSeed = join(caseDir, "input.json");
   if (existsSync(jsonSeed)) {
-    return importRoster(JSON.parse(readFileSync(jsonSeed, "utf8")), { dataset: ds });
+    return JSON.parse(readFileSync(jsonSeed, "utf8"));
   }
   const nrSeed = join(caseDir, "input.newrecruit-json.json");
   if (existsSync(nrSeed)) {
-    return importRoster(JSON.parse(readFileSync(nrSeed, "utf8")), { dataset: ds });
+    return JSON.parse(readFileSync(nrSeed, "utf8"));
   }
   const gwSeed = join(caseDir, "input.gw.txt");
   if (existsSync(gwSeed)) {
-    return importRoster(readFileSync(gwSeed, "utf8"), { dataset: ds });
+    return readFileSync(gwSeed, "utf8");
   }
   throw new Error(`no canonical input found in ${caseDir}`);
+}
+
+/** Run a decoded payload through the adapter pipeline up to (but not past)
+ * resolution. The result is the format-agnostic ParsedRoster — the same
+ * intermediate the resolver consumes. Pinning this layer surfaces parser
+ * regressions even when resolution masks them. */
+function parsedFromCanonicalSeed(caseDir: string): ParsedRoster {
+  const decoded = decodeCanonicalSeed(caseDir);
+  const adapter = selectAdapter(decoded, [...REGISTERED_ADAPTERS]);
+  return adapter.parse(decoded);
 }
 
 const TEXT_FORMATS: { format: ExportFormat; inputName: string; goldenName: string }[] = [
@@ -119,6 +154,12 @@ function genRosters(): void {
     const seed = seedRoster(caseDir, ds);
     writeJson(join(caseDir, "expected.roster.json"), seed);
 
+    // Parsed-stage golden — the intermediate ParsedRoster produced by the
+    // adapter for the canonical seed, before resolution. Catches parser bugs
+    // that resolution would otherwise mask (e.g. wrong unit count from a
+    // duplicate cost line that resolves to the same unit twice).
+    writeJson(join(caseDir, "expected.parsed.json"), parsedFromCanonicalSeed(caseDir));
+
     // JSON export golden — NewRecruit-shaped skeleton.
     const jsonOut = exportRoster(seed, "newrecruit-json");
     writeJson(join(caseDir, "expected.newrecruit-json.json"), JSON.parse(jsonOut));
@@ -126,8 +167,8 @@ function genRosters(): void {
     // Canonical Roster JSON export — should equal the resolved roster.
     writeJson(join(caseDir, "expected.roster-json.json"), JSON.parse(exportRoster(seed, "roster-json")));
 
-    // Text exports: always write the export golden so the cross-implementation
-    // byte-equality check has something to compare against. Only write the
+    // Text exports: always write the export golden so every fixture exercises
+    // the cross-implementation byte-equality check. Only write the
     // `input.*.txt` round-trip seed when the fixture was authored for the
     // NewRecruit pipeline — legacy ListForge fixtures carry decoration
     // (multi-force warnings, leader-attachment inference) that the simple/wtc
@@ -161,5 +202,191 @@ function genRosters(): void {
   }
 }
 
+/**
+ * Linked-API query cases. Each descriptor names a query method on Dataset, the
+ * args to call it with, and how the result should be compared.
+ *
+ * `comparison: "ordered"` pins the result order — used for queries that iterate
+ * a data-driven array (`unit.ability_ids`, `unit.weapon_ids`) where order is
+ * encoded in the data and both implementations iterate it the same way.
+ *
+ * `comparison: "set"` pins only the set of ids — used for queries that walk an
+ * index (faction → abilities, ability → phases) where iteration order depends
+ * on dataset bundler internals and is incidental. Ids are sorted before
+ * comparison.
+ *
+ * `comparison: "scalar"` pins a single id-or-null result (find_* and
+ * faction_of(unit)).
+ */
+type LinkedApiQuery =
+  | { name: string; query: "find_unit"; args: { query: string }; comparison: "scalar" }
+  | { name: string; query: "find_weapon"; args: { query: string }; comparison: "scalar" }
+  | { name: string; query: "find_faction"; args: { query: string }; comparison: "scalar" }
+  | { name: string; query: "find_ability"; args: { query: string }; comparison: "scalar" }
+  | { name: string; query: "abilities_of"; args: { unitId: string }; comparison: "ordered" }
+  | { name: string; query: "weapons_of"; args: { unitId: string }; comparison: "ordered" }
+  | { name: string; query: "phases_of"; args: { abilityId: string }; comparison: "set" }
+  | { name: string; query: "faction_of"; args: { unitId: string }; comparison: "scalar" }
+  | { name: string; query: "abilities_of_faction"; args: { factionId: string }; comparison: "set" }
+  | { name: string; query: "weapons_of_faction"; args: { factionId: string }; comparison: "set" };
+
+const LINKED_API_QUERIES: LinkedApiQuery[] = [
+  // find_unit: diacritic-insensitive lookup, miss returns null.
+  { name: "find_unit by diacritic name", query: "find_unit", args: { query: "Kharn" }, comparison: "scalar" },
+  { name: "find_unit miss returns null", query: "find_unit", args: { query: "not-a-real-unit-xyz" }, comparison: "scalar" },
+  // find_weapon: hyphen + space tolerance.
+  { name: "find_weapon by name", query: "find_weapon", args: { query: "bolt rifle" }, comparison: "scalar" },
+  // find_faction: punctuation/diacritic tolerance.
+  { name: "find_faction by display name", query: "find_faction", args: { query: "World Eaters" }, comparison: "scalar" },
+  // find_ability: ability name lookup.
+  { name: "find_ability by name", query: "find_ability", args: { query: "Berzerker Frenzy" }, comparison: "scalar" },
+  // abilities_of(unit): ordered, iterates unit.ability_ids array.
+  { name: "abilities_of intercessor-squad", query: "abilities_of", args: { unitId: "intercessor-squad" }, comparison: "ordered" },
+  { name: "abilities_of kharn-the-betrayer", query: "abilities_of", args: { unitId: "kharn-the-betrayer" }, comparison: "ordered" },
+  // weapons_of(unit): ordered, iterates unit.weapon_ids array.
+  { name: "weapons_of intercessor-squad", query: "weapons_of", args: { unitId: "intercessor-squad" }, comparison: "ordered" },
+  { name: "weapons_of kharn-the-betrayer", query: "weapons_of", args: { unitId: "kharn-the-betrayer" }, comparison: "ordered" },
+  // phases_of(ability): compared as set (phase index iteration order is incidental).
+  { name: "phases_of berzerker-frenzy", query: "phases_of", args: { abilityId: "berzerker-frenzy" }, comparison: "set" },
+  // faction_of(unit): scalar id or null.
+  { name: "faction_of intercessor-squad", query: "faction_of", args: { unitId: "intercessor-squad" }, comparison: "scalar" },
+  // abilities_of_faction: compared as set (collection-index order is incidental).
+  { name: "abilities_of_faction world-eaters", query: "abilities_of_faction", args: { factionId: "world-eaters" }, comparison: "set" },
+  // weapons_of_faction: compared as set.
+  { name: "weapons_of_faction world-eaters", query: "weapons_of_faction", args: { factionId: "world-eaters" }, comparison: "set" },
+];
+
+function genLinkedApi(): void {
+  const ds = Dataset.embedded();
+  const cases = LINKED_API_QUERIES.map((q) => {
+    const expected = runLinkedQuery(ds, q);
+    return { ...q, expected };
+  });
+  writeJson(join(CONFORMANCE, "linked-api", "cases.json"), cases);
+  console.log(`linked-api/cases.json: ${cases.length} cases`);
+}
+
+function runLinkedQuery(ds: Dataset, q: LinkedApiQuery): string | null | string[] {
+  switch (q.query) {
+    case "find_unit":
+      return ds.units.find(q.args.query)?.id ?? null;
+    case "find_weapon":
+      return ds.weapons.find(q.args.query)?.id ?? null;
+    case "find_faction":
+      return ds.factions.find(q.args.query)?.id ?? null;
+    case "find_ability":
+      return ds.abilities.find(q.args.query)?.id ?? null;
+    case "abilities_of": {
+      const u = ds.units.get(q.args.unitId);
+      if (!u) throw new Error(`abilities_of: unknown unit ${q.args.unitId}`);
+      return u.abilities.map((a) => a.id);
+    }
+    case "weapons_of": {
+      const u = ds.units.get(q.args.unitId);
+      if (!u) throw new Error(`weapons_of: unknown unit ${q.args.unitId}`);
+      return u.weapons.map((w) => w.id);
+    }
+    case "phases_of": {
+      const a = ds.abilities.get(q.args.abilityId);
+      if (!a) throw new Error(`phases_of: unknown ability ${q.args.abilityId}`);
+      return [...a.phases].sort();
+    }
+    case "faction_of": {
+      const u = ds.units.get(q.args.unitId);
+      if (!u) throw new Error(`faction_of: unknown unit ${q.args.unitId}`);
+      return u.faction?.id ?? null;
+    }
+    case "abilities_of_faction":
+      return ds.abilities.byFaction(q.args.factionId).map((a) => a.id).sort();
+    case "weapons_of_faction": {
+      // Mirrors Rust `weapons_of_faction`: aggregate weapons across the
+      // faction's units and dedupe by id. The collection-level
+      // `weapons.byFaction()` is a different operation (it looks up weapons
+      // whose own `faction_id` is set, which is empty for most factions).
+      const f = ds.factions.get(q.args.factionId);
+      if (!f) throw new Error(`weapons_of_faction: unknown faction ${q.args.factionId}`);
+      return f.weapons.map((w) => w.id).sort();
+    }
+  }
+}
+
+/**
+ * Attribution corpus: reuses the existing cruncher inputs from the cases that
+ * carry at least one groupable buff (ability or manual). The expected shape
+ * is the AttributedStage array produced by attributeStages; both
+ * implementations of the leave-one-out decomposition must reproduce it
+ * within the per-stage float tolerance.
+ */
+const ATTRIBUTION_CASE_FILES = [
+  "05-anti-infantry-vs-cultist.json",
+  "07-twin-linked-heavy-stationary-vs-knight.json",
+];
+
+interface CruncherCaseInput {
+  name: string;
+  attacker: { weaponId: string; profileIndex: number };
+  modelsFiring: number;
+  target: { unitId: string; profileIndex: number; modelCount?: number };
+  context: EngineInput["context"];
+  buffs: EngineInput["buffs"];
+}
+
+function loadAttributionInput(ds: Dataset, filename: string): {
+  name: string;
+  input: EngineInput;
+} {
+  const path = join(CONFORMANCE, "cruncher", filename);
+  const c = JSON.parse(readFileSync(path, "utf8")) as CruncherCaseInput;
+  const weapon = ds.weapons.get(c.attacker.weaponId);
+  const unit = ds.units.get(c.target.unitId);
+  if (!weapon) throw new Error(`attribution: unknown weapon ${c.attacker.weaponId}`);
+  if (!unit) throw new Error(`attribution: unknown unit ${c.target.unitId}`);
+  return {
+    name: c.name,
+    input: {
+      attacker: { weapon: weapon.raw, profileIndex: c.attacker.profileIndex },
+      target: {
+        unit: unit.raw,
+        profileIndex: c.target.profileIndex,
+        ...(c.target.modelCount !== undefined ? { modelCount: c.target.modelCount } : {}),
+      },
+      modelsFiring: c.modelsFiring,
+      buffs: c.buffs,
+      context: c.context,
+    },
+  };
+}
+
+function genAttribution(): void {
+  const ds = Dataset.embedded();
+  const cases = ATTRIBUTION_CASE_FILES.map((filename, idx) => {
+    const { name, input } = loadAttributionInput(ds, filename);
+    const stages = attributeStages(input, ds);
+    return {
+      // Persist the input by file reference so the corpus stays a single
+      // source of truth — the cruncher case file already pins the EngineInput.
+      name,
+      cruncher_case: filename,
+      expected: stages.map((s) => ({
+        name: s.name,
+        expected: s.expected,
+        baseline: s.baseline,
+        lifts: s.lifts.map((l) => ({ source: l.source, delta: l.delta })),
+        residual: s.residual,
+        intrinsics: s.intrinsics,
+      })),
+      // Stable ordering of cases in the corpus file.
+      _order: idx,
+    };
+  });
+  // Sort by _order and strip the helper before writing.
+  cases.sort((a, b) => a._order - b._order);
+  const serialised = cases.map(({ _order: _o, ...rest }) => rest);
+  writeJson(join(CONFORMANCE, "attribution", "cases.json"), serialised);
+  console.log(`attribution/cases.json: ${cases.length} cases`);
+}
+
 genNormalize();
 genRosters();
+genLinkedApi();
+genAttribution();

@@ -37,7 +37,8 @@
     "README.md"
   ],
   "bin": {
-    "40kdc-validate": "./dist/cli.js"
+    "40kdc-validate": "./dist/cli.js",
+    "40kdc-runner": "./dist/runner.js"
   },
   "publishConfig": {
     "access": "public",

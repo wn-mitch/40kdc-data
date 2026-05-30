@@ -23,9 +23,26 @@ use std::path::{Path, PathBuf};
 
 use serde_json::Value;
 use wh40kdc::import::{
-    import_roster, import_roster_text, try_import_roster, ImportResult, RosterFormat,
+    import_roster, import_roster_text, select_adapter, try_import_roster, FormatAdapter,
+    GwAdapter, ImportResult, ListForgeAdapter, NewRecruitJsonAdapter, NewRecruitSimpleAdapter,
+    NewRecruitWtcCompactAdapter, NewRecruitWtcFullAdapter, RosterFormat, RosterizerAdapter,
 };
 use wh40kdc::{normalize_name, Dataset};
+
+/// Adapter registry in the same priority order as `import_roster` uses
+/// internally. Tests need this to drive the parsed stage directly without
+/// going through resolve.
+fn conformance_adapters() -> Vec<Box<dyn FormatAdapter>> {
+    vec![
+        Box::new(RosterizerAdapter),
+        Box::new(NewRecruitJsonAdapter),
+        Box::new(GwAdapter),
+        Box::new(NewRecruitWtcFullAdapter),
+        Box::new(NewRecruitWtcCompactAdapter),
+        Box::new(NewRecruitSimpleAdapter),
+        Box::new(ListForgeAdapter),
+    ]
+}
 
 #[cfg(feature = "export")]
 use wh40kdc::export::{export_roster, ExportFormat};
@@ -206,6 +223,49 @@ fn imported_rosters_match_reference_goldens() {
     }
 
     assert!(total_inputs > 0, "no roster inputs exercised");
+}
+
+#[test]
+fn parsed_stage_matches_reference_goldens() {
+    let roster_dir = conformance_dir().join("roster");
+    let cases = case_dirs(&roster_dir);
+    assert!(!cases.is_empty(), "no roster conformance cases found");
+
+    let registry = conformance_adapters();
+    for case_dir in &cases {
+        let case_name = case_dir.file_name().and_then(|s| s.to_str()).unwrap_or("?");
+        let dir_entries = list_files(case_dir);
+
+        // Pick the canonical seed (matches gen-conformance's decodeCanonicalSeed).
+        let (decoded, seed_name): (Value, &str) = if dir_entries.iter().any(|n| n == "input.json") {
+            (read_json(&case_dir.join("input.json")), "input.json")
+        } else if dir_entries.iter().any(|n| n == "input.newrecruit-json.json") {
+            (
+                read_json(&case_dir.join("input.newrecruit-json.json")),
+                "input.newrecruit-json.json",
+            )
+        } else if dir_entries.iter().any(|n| n == "input.gw.txt") {
+            (
+                Value::String(read_text(&case_dir.join("input.gw.txt"))),
+                "input.gw.txt",
+            )
+        } else {
+            panic!("roster/{case_name}: no canonical seed");
+        };
+
+        let adapter = select_adapter(&decoded, &registry)
+            .unwrap_or_else(|e| panic!("roster/{case_name} {seed_name}: select_adapter: {e}"));
+        let parsed = adapter
+            .parse(&decoded)
+            .unwrap_or_else(|e| panic!("roster/{case_name} {seed_name}: parse: {e}"));
+
+        let actual = serde_json::to_value(&parsed).expect("ParsedRoster serializes to a Value");
+        let expected = read_json(&case_dir.join("expected.parsed.json"));
+        assert_eq!(
+            actual, expected,
+            "roster/{case_name}: parsed stage diverged from the TS golden"
+        );
+    }
 }
 
 #[cfg(feature = "export")]

@@ -80,6 +80,16 @@ npm run validate   # validate all data files against schemas
 
 CI runs on every push and PR via `.github/workflows/validate.yml`.
 
+## Cross-language parity
+
+This repo holds the TypeScript and Rust implementations in parity through the `conformance/` corpus, and the same mechanism extends to upcoming Python and R ports. Full strategy: [`CONFORMANCE.md`](CONFORMANCE.md). Contributor workflow: [`CONTRIBUTING.md`](CONTRIBUTING.md). Runner wire format: [`conformance/RUNNER_PROTOCOL.md`](conformance/RUNNER_PROTOCOL.md).
+
+The load-bearing rule: **a new or changed golden in `conformance/` is not accepted until at least one implementation other than the one that produced it independently reproduces the same expected value.** A PR that touches the TS reference impl and the corpus in the same commit must also include the Rust (or Python, or R) test passing against the updated goldens. The same person can do both halves of the verification.
+
+`conformance/SPEC_VERSION` (single integer) bumps for any semantic corpus change — new case, changed expected value, removed case, runner-protocol change, per-area invariant change. Pure formatting changes don't bump it. Each implementation embeds the version it was tested against.
+
+When editing the corpus or changing behavior that the corpus pins, read the per-area invariants in `CONFORMANCE.md` first — several ordering and reduction-order details are deliberate contracts, not incidental output.
+
 ## Adding a New Schema
 
 1. Create the schema file in `schemas/core/` or `schemas/enrichment/`.

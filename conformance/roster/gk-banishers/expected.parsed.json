@@ -1,0 +1,78 @@
+{
+  "name": "Banishers Test List",
+  "generated_by": "List Forge",
+  "faction_raw_name": "Grey Knights",
+  "detachment_raw_name": "Banishers",
+  "battle_size_raw": "2. Strike Force (2000 Point limit)",
+  "declared_limit": 2000,
+  "total_reported": 585,
+  "total_computed": 585,
+  "units": [
+    {
+      "raw_name": "Castellan Crowe",
+      "is_character": true,
+      "model_count": 1,
+      "points": 90,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Black Blade of Antwyr",
+          "count": 1
+        },
+        {
+          "raw_name": "Purifying Flame",
+          "count": 1
+        },
+        {
+          "raw_name": "Storm bolter",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "Grand Master in Nemesis Dreadknight",
+      "is_character": true,
+      "model_count": 1,
+      "points": 225,
+      "is_warlord": true,
+      "enhancement_raw_name": "Pyresoul (Psychic)",
+      "enhancement_points": 20,
+      "wargear": [
+        {
+          "raw_name": "Heavy psycannon",
+          "count": 1
+        },
+        {
+          "raw_name": "Fragstorm grenade launcher",
+          "count": 1
+        },
+        {
+          "raw_name": "Nemesis daemon greathammer",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "Purifier Squad",
+      "is_character": false,
+      "model_count": 10,
+      "points": 250,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Purifying Flame",
+          "count": 1
+        },
+        {
+          "raw_name": "Storm bolter",
+          "count": 9
+        }
+      ]
+    }
+  ],
+  "multi_force": false
+}

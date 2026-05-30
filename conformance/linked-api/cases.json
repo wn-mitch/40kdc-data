@@ -1,0 +1,276 @@
+[
+  {
+    "name": "find_unit by diacritic name",
+    "query": "find_unit",
+    "args": {
+      "query": "Kharn"
+    },
+    "comparison": "scalar",
+    "expected": "kharn-the-betrayer"
+  },
+  {
+    "name": "find_unit miss returns null",
+    "query": "find_unit",
+    "args": {
+      "query": "not-a-real-unit-xyz"
+    },
+    "comparison": "scalar",
+    "expected": null
+  },
+  {
+    "name": "find_weapon by name",
+    "query": "find_weapon",
+    "args": {
+      "query": "bolt rifle"
+    },
+    "comparison": "scalar",
+    "expected": "bolt-rifle"
+  },
+  {
+    "name": "find_faction by display name",
+    "query": "find_faction",
+    "args": {
+      "query": "World Eaters"
+    },
+    "comparison": "scalar",
+    "expected": "world-eaters"
+  },
+  {
+    "name": "find_ability by name",
+    "query": "find_ability",
+    "args": {
+      "query": "Berzerker Frenzy"
+    },
+    "comparison": "scalar",
+    "expected": "berzerker-frenzy"
+  },
+  {
+    "name": "abilities_of intercessor-squad",
+    "query": "abilities_of",
+    "args": {
+      "unitId": "intercessor-squad"
+    },
+    "comparison": "ordered",
+    "expected": [
+      "objective-secured",
+      "target-elimination"
+    ]
+  },
+  {
+    "name": "abilities_of kharn-the-betrayer",
+    "query": "abilities_of",
+    "args": {
+      "unitId": "kharn-the-betrayer"
+    },
+    "comparison": "ordered",
+    "expected": [
+      "berzerker-frenzy",
+      "leader",
+      "legendary-killer",
+      "the-betrayer"
+    ]
+  },
+  {
+    "name": "weapons_of intercessor-squad",
+    "query": "weapons_of",
+    "args": {
+      "unitId": "intercessor-squad"
+    },
+    "comparison": "ordered",
+    "expected": [
+      "astartes-chainsword",
+      "astartes-grenade-launcher",
+      "bolt-pistol",
+      "bolt-rifle",
+      "close-combat-weapon",
+      "hand-flamer",
+      "plasma-pistol",
+      "power-fist",
+      "power-weapon",
+      "thunder-hammer"
+    ]
+  },
+  {
+    "name": "weapons_of kharn-the-betrayer",
+    "query": "weapons_of",
+    "args": {
+      "unitId": "kharn-the-betrayer"
+    },
+    "comparison": "ordered",
+    "expected": [
+      "gorechild",
+      "plasma-pistol"
+    ]
+  },
+  {
+    "name": "phases_of berzerker-frenzy",
+    "query": "phases_of",
+    "args": {
+      "abilityId": "berzerker-frenzy"
+    },
+    "comparison": "set",
+    "expected": [
+      "fight",
+      "shooting"
+    ]
+  },
+  {
+    "name": "faction_of intercessor-squad",
+    "query": "faction_of",
+    "args": {
+      "unitId": "intercessor-squad"
+    },
+    "comparison": "scalar",
+    "expected": "adeptus-astartes"
+  },
+  {
+    "name": "abilities_of_faction world-eaters",
+    "query": "abilities_of_faction",
+    "args": {
+      "factionId": "world-eaters"
+    },
+    "comparison": "set",
+    "expected": [
+      "a-worthy-skull-stratagem",
+      "aggressive-disembarkation",
+      "apoplectic-frenzy",
+      "archslaughterer",
+      "aspire-to-infamy",
+      "avengers-crown",
+      "berzerker-glaive",
+      "berzerkers-wrath",
+      "blade-of-endless-bloodshed",
+      "blessing-of-burning-blood",
+      "blessings-of-khorne",
+      "blood-forged-armour",
+      "blood-offering",
+      "blood-tithe",
+      "bloodthirsty-horde",
+      "bloody-vengeance",
+      "brazen-contempt",
+      "brazen-form",
+      "brazen-fury",
+      "brazen-idol",
+      "butcher-lord",
+      "chosen-of-the-blood-god",
+      "daemonic-fury",
+      "daemonic-resistance",
+      "daemonic-strength",
+      "daemontide",
+      "disciple-of-khorne",
+      "drawn-to-the-slaughter",
+      "endless-pursuit-of-violence",
+      "fail-not-the-blood-god",
+      "favoured-of-khorne",
+      "frenzied-focus",
+      "frenzied-resilience",
+      "full-throttle-assault",
+      "fury-unleashed",
+      "gateways-to-glory",
+      "gory-dedication",
+      "hack-and-slash",
+      "helm-of-brazen-ire",
+      "horrifying-violence",
+      "icon-of-khorne",
+      "icon-of-war",
+      "idols-of-khorne",
+      "immortal-fury",
+      "in-the-shadow-of-brass-idols",
+      "infernal-infusion",
+      "killing-clarity",
+      "malicious-vigour",
+      "meet-force-with-force",
+      "murder-call",
+      "murderous-onslaught",
+      "overshadowed-by-none",
+      "punish-the-craven",
+      "rapid-manifestation",
+      "relentless-rage",
+      "rush-to-the-fray",
+      "skulls-for-the-skull-throne",
+      "smash-through",
+      "strategic-slaughter",
+      "summoned-by-slaughter",
+      "unleash-hell-enhancement",
+      "unrelenting-advance",
+      "violent-demise",
+      "vox-diabolus",
+      "warp-stalkers",
+      "wrath-of-khorne"
+    ]
+  },
+  {
+    "name": "weapons_of_faction world-eaters",
+    "query": "weapons_of_faction",
+    "args": {
+      "factionId": "world-eaters"
+    },
+    "comparison": "set",
+    "expected": [
+      "accursed-weapon",
+      "armoured-tracks",
+      "autopistol",
+      "axe-of-dismemberment",
+      "baleflamer",
+      "bladed-horn",
+      "blood-harpoon",
+      "bolt-pistol",
+      "chainblade",
+      "chainblades",
+      "chainfist",
+      "close-combat-weapon",
+      "combi-bolter",
+      "combi-weapon",
+      "cowards-bane",
+      "daemongore-cannon",
+      "defiler-cannon",
+      "defiler-claws",
+      "defiler-scourge",
+      "ectoplasma-cannon",
+      "exalted-chainblade",
+      "forgefiend-claws",
+      "forgefiend-jaws",
+      "gorechild",
+      "gorestorm-cannon",
+      "great-cleaver-of-khorne",
+      "hades-autocannon",
+      "hades-gatling-cannon",
+      "havoc-launcher",
+      "heavy-bolter",
+      "heavy-flamer",
+      "helbrute-fist",
+      "helbrute-hammer",
+      "heldrake-claws",
+      "hellforged-weapons",
+      "hideous-mutations",
+      "ichor-cannon",
+      "infernal-cannon",
+      "khornate-eviscerator",
+      "lacerator-and-daemonic-claw",
+      "lascannon",
+      "lasher-tendrils",
+      "magma-cutter",
+      "mauler-chainblade",
+      "maulerfiend-fists",
+      "missile-launcher",
+      "multi-melta",
+      "paired-accursed-weapons",
+      "paired-manglers",
+      "plasma-cannon",
+      "plasma-pistol",
+      "power-fist",
+      "power-scourge",
+      "predator-autocannon",
+      "predator-twin-lascannon",
+      "reaper-autocannon",
+      "samniarius-and-spinegrinder",
+      "skullhurler",
+      "skullsmasher-and-mangler",
+      "soulshatter-lascannon",
+      "twin-autocannon",
+      "twin-heavy-bolter",
+      "twin-heavy-flamer",
+      "twin-lascannon"
+    ]
+  }
+]
