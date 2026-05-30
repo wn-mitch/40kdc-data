@@ -1,0 +1,97 @@
+{
+  "name": "Dog Kill God?",
+  "generated_by": "https://newrecruit.eu",
+  "faction_raw_name": "Chaos Knights",
+  "detachment_raw_name": "Houndpack Lance",
+  "battle_size_raw": "Strike Force (2000 Point limit)",
+  "declared_limit": 2000,
+  "total_reported": 485,
+  "total_computed": 485,
+  "units": [
+    {
+      "raw_name": "War Dog Karnivore",
+      "is_character": true,
+      "model_count": 1,
+      "points": 150,
+      "is_warlord": false,
+      "enhancement_raw_name": "Preyslayer's Mantle",
+      "enhancement_points": 15,
+      "wargear": [
+        {
+          "raw_name": "Reaper chaintalon",
+          "count": 1
+        },
+        {
+          "raw_name": "Slaughterclaw",
+          "count": 1
+        },
+        {
+          "raw_name": "Havoc multi-launcher",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "War Dog Karnivore",
+      "is_character": false,
+      "model_count": 1,
+      "points": 150,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Reaper chaintalon",
+          "count": 1
+        },
+        {
+          "raw_name": "Slaughterclaw",
+          "count": 1
+        },
+        {
+          "raw_name": "Havoc multi-launcher",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "War Dog Executioner",
+      "is_character": true,
+      "model_count": 1,
+      "points": 130,
+      "is_warlord": true,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Armoured feet",
+          "count": 1
+        },
+        {
+          "raw_name": "War Dog autocannon",
+          "count": 2
+        },
+        {
+          "raw_name": "Diabolus heavy stubber",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "Nurglings",
+      "is_character": false,
+      "model_count": 3,
+      "points": 40,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Diseased claws and teeth",
+          "count": 3
+        }
+      ]
+    }
+  ],
+  "multi_force": true
+}

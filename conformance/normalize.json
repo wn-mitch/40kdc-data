@@ -62,5 +62,21 @@
   {
     "input": "Khârn",
     "expected": "kharn"
+  },
+  {
+    "input": "Khorne Lord",
+    "expected": "khorne lord"
+  },
+  {
+    "input": "Khorne　Lord",
+    "expected": "khorne lord"
+  },
+  {
+    "input": "İmperial Fists",
+    "expected": "imperial fists"
+  },
+  {
+    "input": "Khorne‍Lord",
+    "expected": "khorne‍lord"
   }
 ]

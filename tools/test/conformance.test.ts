@@ -19,9 +19,11 @@ import { fileURLToPath } from "node:url";
 import { Dataset } from "../src/data/dataset.js";
 import { normalizeName } from "../src/data/normalize.js";
 import { exportRoster, type ExportFormat } from "../src/export/index.js";
-import { importRoster, tryImportRoster } from "../src/import/import-roster.js";
+import { importRoster, tryImportRoster, REGISTERED_ADAPTERS } from "../src/import/import-roster.js";
+import { selectAdapter } from "../src/import/adapter.js";
 import type { RosterFormat } from "../src/import/types.js";
 import { crunch, type Buff, type EngineContext, type Stage } from "../src/cruncher/index.js";
+import { attributeStages } from "../src/cruncher/attribution.js";
 import type { Phase } from "../src/generated.js";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
 import type { EligibilityInput } from "../src/abilities-resolver/index.js";
@@ -150,10 +152,30 @@ describe("conformance corpus (ties out with the Rust crate)", () => {
       }
     });
 
+    it(`roster/${entry.name}: canonical seed's parsed stage matches expected.parsed.json`, () => {
+      // Locate the canonical seed (mirrors gen-conformance's decodeCanonicalSeed).
+      const dirEntries = readdirSync(caseDir);
+      let decoded: unknown;
+      if (dirEntries.includes("input.json")) {
+        decoded = readJson(join(caseDir, "input.json"));
+      } else if (dirEntries.includes("input.newrecruit-json.json")) {
+        decoded = readJson(join(caseDir, "input.newrecruit-json.json"));
+      } else if (dirEntries.includes("input.gw.txt")) {
+        decoded = readText(join(caseDir, "input.gw.txt"));
+      } else {
+        throw new Error(`roster/${entry.name}: no canonical seed`);
+      }
+      const adapter = selectAdapter(decoded, [...REGISTERED_ADAPTERS]);
+      const parsed = adapter.parse(decoded);
+      const expectedParsed = readJson(join(caseDir, "expected.parsed.json"));
+      expect(JSON.parse(JSON.stringify(parsed))).toEqual(expectedParsed);
+    });
+
     it(`roster/${entry.name}: every export matches its golden`, () => {
-      // The conformance corpus carries export goldens only for the rosters
-      // built with the NewRecruit pipeline. Legacy ListForge fixtures don't
-      // exercise the exporter (yet), so skip when no goldens are present.
+      // Every fixture carries export goldens for all six formats. The
+      // defensive filter below tolerates a fixture authored without one of
+      // them, but in practice the present-set should always equal the full
+      // export list.
       const allExports = [...TEXT_EXPORTS, ...JSON_EXPORTS];
       const dirEntries = readdirSync(caseDir);
       const present = allExports.filter((e) => dirEntries.includes(e.filename));
@@ -204,15 +226,16 @@ interface CruncherCase {
 }
 
 // Abilities-resolver conformance — each case names an EligibilityInput, a
-// phase, and the expected (kind, abilityId) pairs the resolver should yield
-// in the order it yields them. Pins both content and order across runs so a
-// Rust port can replay byte-identical.
+// phase, and the expected ability ids grouped by source kind. Comparison is
+// set-per-kind (ids are sorted before comparison), not ordered, so the
+// resolver's internal iteration order is not part of the contract. See
+// CONFORMANCE.md "abilities-resolver" for the rationale.
 
 interface ResolverCase {
   name: string;
   input: EligibilityInput;
   phase: Phase;
-  expected: { kind: string; abilityId: string }[];
+  expected: Record<string, string[]>;
 }
 
 describe("abilities-resolver conformance corpus", () => {
@@ -228,11 +251,13 @@ describe("abilities-resolver conformance corpus", () => {
 
   for (const filename of files) {
     const c = readJson(join(dir, filename)) as ResolverCase;
-    it(`abilities-resolver/${filename}: matches the expected (kind, abilityId) list`, () => {
-      const actual = ds
-        .eligibleAbilities(c.input, c.phase)
-        .map((e) => ({ kind: e.source.kind, abilityId: e.ability.id }));
-      expect(actual).toEqual(c.expected);
+    it(`abilities-resolver/${filename}: ability ids per kind match the expected sets`, () => {
+      const grouped: Record<string, string[]> = {};
+      for (const e of ds.eligibleAbilities(c.input, c.phase)) {
+        (grouped[e.source.kind] ??= []).push(e.ability.id);
+      }
+      for (const k of Object.keys(grouped)) grouped[k].sort();
+      expect(grouped).toEqual(c.expected);
     });
   }
 
@@ -292,6 +317,268 @@ describe("abilities-resolver conformance corpus", () => {
   it("defensive-from-dsl.json: target-perspective translations match", () => {
     runDslCorpus("defensive-from-dsl.json");
   });
+});
+
+// Linked-API conformance — pins the cross-implementation contract for
+// Dataset's read-side query methods. Each case names a query, args, and a
+// comparison mode: "scalar" for id-or-null, "ordered" for data-driven array
+// iteration (e.g. unit.ability_ids), "set" for queries that walk an index
+// where iteration order is incidental. The corpus file is regenerated by
+// `npm run gen:conformance`.
+type LinkedApiComparison = "scalar" | "ordered" | "set";
+interface LinkedApiCase {
+  name: string;
+  query: string;
+  args: Record<string, string>;
+  comparison: LinkedApiComparison;
+  expected: string | null | string[];
+}
+
+function runLinkedApi(ds: Dataset, c: LinkedApiCase): string | null | string[] {
+  switch (c.query) {
+    case "find_unit":
+      return ds.units.find(c.args.query)?.id ?? null;
+    case "find_weapon":
+      return ds.weapons.find(c.args.query)?.id ?? null;
+    case "find_faction":
+      return ds.factions.find(c.args.query)?.id ?? null;
+    case "find_ability":
+      return ds.abilities.find(c.args.query)?.id ?? null;
+    case "abilities_of": {
+      const u = ds.units.get(c.args.unitId);
+      if (!u) throw new Error(`abilities_of: unknown unit ${c.args.unitId}`);
+      return u.abilities.map((a) => a.id);
+    }
+    case "weapons_of": {
+      const u = ds.units.get(c.args.unitId);
+      if (!u) throw new Error(`weapons_of: unknown unit ${c.args.unitId}`);
+      return u.weapons.map((w) => w.id);
+    }
+    case "phases_of": {
+      const a = ds.abilities.get(c.args.abilityId);
+      if (!a) throw new Error(`phases_of: unknown ability ${c.args.abilityId}`);
+      return [...a.phases];
+    }
+    case "faction_of": {
+      const u = ds.units.get(c.args.unitId);
+      if (!u) throw new Error(`faction_of: unknown unit ${c.args.unitId}`);
+      return u.faction?.id ?? null;
+    }
+    case "abilities_of_faction":
+      return ds.abilities.byFaction(c.args.factionId).map((a) => a.id);
+    case "weapons_of_faction": {
+      const f = ds.factions.get(c.args.factionId);
+      if (!f) throw new Error(`weapons_of_faction: unknown faction ${c.args.factionId}`);
+      return f.weapons.map((w) => w.id);
+    }
+    default:
+      throw new Error(`unknown linked-api query: ${c.query}`);
+  }
+}
+
+describe("linked-api conformance corpus", () => {
+  const ds = Dataset.embedded();
+  const cases = readJson(join(CONFORMANCE, "linked-api", "cases.json")) as LinkedApiCase[];
+
+  it("the linked-api corpus is non-empty", () => {
+    expect(cases.length).toBeGreaterThan(0);
+  });
+
+  for (const c of cases) {
+    it(`linked-api/${c.query}: ${c.name}`, () => {
+      const actual = runLinkedApi(ds, c);
+      if (c.comparison === "set") {
+        const sortedActual = (actual as string[]).slice().sort();
+        const sortedExpected = (c.expected as string[]).slice().sort();
+        expect(sortedActual).toEqual(sortedExpected);
+      } else {
+        expect(actual).toEqual(c.expected);
+      }
+    });
+  }
+});
+
+// Attribution conformance — pins the per-stage leave-one-out decomposition
+// from `attributeStages`. Each case references a cruncher input file (the
+// same EngineInput already pinned by the cruncher corpus) and lists every
+// AttributedStage's expected/baseline/residual floats, the per-group lifts
+// with their sources and deltas, and the intrinsics list. Floats are
+// compared with the same tolerance as the cruncher corpus.
+
+interface AttributionCase {
+  name: string;
+  cruncher_case: string;
+  expected: {
+    name: string;
+    expected: number;
+    baseline: number;
+    lifts: { source: unknown; delta: number }[];
+    residual: number;
+    intrinsics: string[];
+  }[];
+}
+
+// Validator conformance — pins the closed-enum error codes the schema
+// validator must emit for known invalid inputs. AJV errors are mapped to a
+// small enum so the contract is language-portable; downstream validators
+// (Python pydantic / jsonschema-rs, an eventual Rust validator) must reproduce
+// the same codes for the same inputs. Free-form AJV messages are intentionally
+// not part of the contract.
+//
+// The closed-enum lives in `conformance/RUNNER_PROTOCOL.md`; growing it is a
+// SPEC_VERSION bump.
+
+import { createValidator } from "../src/schema-loader.js";
+
+interface ValidatorCase {
+  name: string;
+  target: string;
+  input: unknown;
+  expected_errors: { path: string; code: string }[];
+}
+
+const VALIDATOR_TARGET_SCHEMAS: Record<string, string> = {
+  unit: "https://40kdc.dev/schemas/core/unit.schema.json",
+  weapon: "https://40kdc.dev/schemas/core/weapon.schema.json",
+  faction: "https://40kdc.dev/schemas/core/faction.schema.json",
+  ability: "https://40kdc.dev/schemas/enrichment/ability-dsl/ability.schema.json",
+};
+
+/** Map an AJV error to the closed-enum code defined in RUNNER_PROTOCOL.md. */
+function ajvKeywordToCode(keyword: string): string {
+  switch (keyword) {
+    case "required":
+      return "REQUIRED_MISSING";
+    case "type":
+      return "TYPE_MISMATCH";
+    case "enum":
+      return "ENUM_VIOLATION";
+    case "pattern":
+    case "format":
+      return "PATTERN_MISMATCH";
+    case "minimum":
+    case "maximum":
+    case "exclusiveMinimum":
+    case "exclusiveMaximum":
+    case "minLength":
+    case "maxLength":
+    case "minItems":
+    case "maxItems":
+      return "RANGE_VIOLATION";
+    case "additionalProperties":
+      return "ADDITIONAL_PROPERTY";
+    case "uniqueItems":
+      return "UNIQUE_VIOLATION";
+    default:
+      return `UNMAPPED:${keyword}`;
+  }
+}
+
+/** Compute the canonical error path for a closed-enum code. */
+function errorPath(err: { instancePath: string; keyword: string; params?: unknown }): string {
+  if (err.keyword === "required") {
+    const params = err.params as { missingProperty?: string };
+    return `${err.instancePath}/${params.missingProperty ?? ""}`;
+  }
+  return err.instancePath;
+}
+
+describe("validator conformance corpus", () => {
+  const ajv = createValidator();
+  const cases = readJson(join(CONFORMANCE, "validator", "cases.json")) as ValidatorCase[];
+
+  it("the validator corpus is non-empty", () => {
+    expect(cases.length).toBeGreaterThan(0);
+  });
+
+  for (const c of cases) {
+    it(`validator/${c.target}: ${c.name}`, () => {
+      const schemaId = VALIDATOR_TARGET_SCHEMAS[c.target];
+      if (!schemaId) throw new Error(`unknown validator target: ${c.target}`);
+      const validate = ajv.getSchema(schemaId);
+      if (!validate) throw new Error(`schema not loaded: ${schemaId}`);
+      const ok = validate(c.input);
+      const errors = (validate.errors ?? []).map((e) => ({
+        path: errorPath(e),
+        code: ajvKeywordToCode(e.keyword),
+      }));
+      // Filter: AJV emits both the specific keyword error and a containing
+      // schema error in nested oneOf/anyOf cases. Keep only mapped codes and
+      // dedupe by (path, code) so the closed-enum signature is what's pinned.
+      const seen = new Set<string>();
+      const filtered = errors
+        .filter((e) => !e.code.startsWith("UNMAPPED:"))
+        .filter((e) => {
+          const key = `${e.path}|${e.code}`;
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+      if (c.expected_errors.length === 0) {
+        expect(ok).toBe(true);
+        expect(filtered).toEqual([]);
+      } else {
+        expect(ok).toBe(false);
+        expect(filtered.sort((a, b) => `${a.path}|${a.code}`.localeCompare(`${b.path}|${b.code}`))).toEqual(
+          c.expected_errors.slice().sort((a, b) => `${a.path}|${a.code}`.localeCompare(`${b.path}|${b.code}`)),
+        );
+      }
+    });
+  }
+});
+
+describe("attribution conformance corpus", () => {
+  const ds = Dataset.embedded();
+  const dir = join(CONFORMANCE, "attribution");
+  const cases = readJson(join(dir, "cases.json")) as AttributionCase[];
+
+  it("the attribution corpus is non-empty", () => {
+    expect(cases.length).toBeGreaterThan(0);
+  });
+
+  for (const c of cases) {
+    it(`attribution/${c.cruncher_case}: stages match within ${CRUNCHER_TOLERANCE}`, () => {
+      const cruncherCasePath = join(CONFORMANCE, "cruncher", c.cruncher_case);
+      const crunchInput = readJson(cruncherCasePath) as CruncherCase;
+      const weapon = ds.weapons.get(crunchInput.attacker.weaponId);
+      const unit = ds.units.get(crunchInput.target.unitId);
+      expect(weapon).toBeDefined();
+      expect(unit).toBeDefined();
+      const stages = attributeStages(
+        {
+          attacker: { weapon: weapon!.raw, profileIndex: crunchInput.attacker.profileIndex },
+          target: {
+            unit: unit!.raw,
+            profileIndex: crunchInput.target.profileIndex,
+            ...(crunchInput.target.modelCount !== undefined
+              ? { modelCount: crunchInput.target.modelCount }
+              : {}),
+          },
+          modelsFiring: crunchInput.modelsFiring,
+          buffs: crunchInput.buffs,
+          context: crunchInput.context,
+        },
+        ds,
+      );
+      expect(stages.length, "stage count").toBe(c.expected.length);
+      for (let i = 0; i < stages.length; i++) {
+        const actual = stages[i];
+        const expected = c.expected[i];
+        expect(actual.name, `stage ${i} name`).toBe(expected.name);
+        expect(Math.abs(actual.expected - expected.expected) < CRUNCHER_TOLERANCE).toBe(true);
+        expect(Math.abs(actual.baseline - expected.baseline) < CRUNCHER_TOLERANCE).toBe(true);
+        expect(Math.abs(actual.residual - expected.residual) < CRUNCHER_TOLERANCE).toBe(true);
+        expect(actual.intrinsics, `stage ${expected.name} intrinsics`).toEqual(expected.intrinsics);
+        expect(actual.lifts.length, `stage ${expected.name} lift count`).toBe(expected.lifts.length);
+        for (let j = 0; j < actual.lifts.length; j++) {
+          expect(actual.lifts[j].source).toEqual(expected.lifts[j].source);
+          expect(
+            Math.abs(actual.lifts[j].delta - expected.lifts[j].delta) < CRUNCHER_TOLERANCE,
+          ).toBe(true);
+        }
+      }
+    });
+  }
 });
 
 describe("cruncher conformance corpus", () => {

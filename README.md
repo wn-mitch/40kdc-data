@@ -67,6 +67,13 @@ npm run validate:core      # or just core / enrichment
 npm run validate:enrichment
 ```
 
+The package also ships a `40kdc-runner` binary that implements the
+language-agnostic [conformance runner protocol](conformance/RUNNER_PROTOCOL.md):
+NDJSON requests on stdin, NDJSON responses on stdout. The cross-implementation
+parity differ uses this to compare every port against the same corpus. It is
+not the recommended way to use the library — import the package directly for
+that — but it is the supported entry point for cross-language verification.
+
 ## Schemas
 
 ### Core (structural entities)
@@ -115,7 +122,7 @@ Everything is tagged to edition + dataslate (e.g., `11th/2025-q3`). See [VERSION
 
 ## For Tool Developers
 
-Two ways to consume this repo:
+Multiple ways to consume this repo, depending on language and use case.
 
 **The data package** — `npm install @alpaca-software/40kdc-data` for the embedded
 dataset behind the linked typed API (above), plus the generated entity types and
@@ -145,7 +152,34 @@ let units: Vec<Unit> = serde_json::from_str(&json)?;
 ```
 
 The crate also bundles the schema as `wh40kdc::BUNDLED_SCHEMA` for downstream
-validation. Crate types are MIT; the schema content they describe is CC0.
+validation. The crate also ships a `wh40kdc-runner` binary used by the
+cross-implementation parity differ — see [`CONFORMANCE.md`](CONFORMANCE.md).
+Crate types are MIT; the schema content they describe is CC0.
+
+### Python *(planned)*
+
+A Python package mirroring the TypeScript API surface — Dataset linked queries,
+importers and exporters for all six roster formats, the damage-projection
+cruncher, and a schema validator — is planned. Types will be generated from the
+bundled JSON Schema via pydantic v2 or msgspec. Track progress in the
+implementation-status table in [`CONFORMANCE.md`](CONFORMANCE.md).
+
+### R *(planned)*
+
+An R package is planned, likely as an `extendr` wrapper around the Rust crate
+rather than a native port (the Rust ecosystem handles cruncher numerics and JSON
+parity more cleanly than R's idioms allow at the boundary). The decision is
+pending a wrapper prototype; the [`CONFORMANCE.md`](CONFORMANCE.md) FAQ explains
+the trade-off in more detail.
+
+### Parity guarantee
+
+All official ports — TypeScript, Rust, and the planned Python and R packages —
+are held in behavioral agreement by a shared conformance corpus in
+[`conformance/`](conformance/). Within the documented tolerances (notably
+`±5e-4` per cruncher stage; byte-equal export goldens otherwise), the same
+inputs produce the same outputs in every language. See [`CONFORMANCE.md`](CONFORMANCE.md)
+for what's pinned, the per-area invariants, and the contribution rules.
 
 ## Licensing
 

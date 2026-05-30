@@ -1,0 +1,98 @@
+[
+  {
+    "name": "valid Warden Sergeant unit",
+    "target": "unit",
+    "input": {
+      "id": "warden-sergeant",
+      "name": "Warden Sergeant",
+      "faction_id": "stellar-wardens",
+      "role": "character",
+      "profiles": [
+        {
+          "name": "Warden Sergeant",
+          "M": 6,
+          "T": 4,
+          "W": 4,
+          "Sv": 3,
+          "invuln_sv": 4,
+          "Ld": 6,
+          "OC": 1
+        }
+      ],
+      "points": [{ "models": 1, "cost": 80 }],
+      "keywords": ["Infantry", "Character"],
+      "faction_keywords": ["Stellar Wardens"],
+      "base_size_mm": { "shape": "round", "diameter": 32 },
+      "model_count": { "min": 1, "max": 1 },
+      "weapon_ids": ["bolt-carbine"],
+      "game_version": { "edition": "10th", "dataslate": "2025-q3" },
+      "is_legend": false
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "unit missing required name",
+    "target": "unit",
+    "input": {
+      "id": "warden-sergeant",
+      "faction_id": "stellar-wardens",
+      "role": "character",
+      "profiles": [
+        {
+          "name": "Warden Sergeant",
+          "M": 6,
+          "T": 4,
+          "W": 4,
+          "Sv": 3,
+          "invuln_sv": 4,
+          "Ld": 6,
+          "OC": 1
+        }
+      ],
+      "points": [{ "models": 1, "cost": 80 }],
+      "keywords": ["Infantry"],
+      "faction_keywords": ["Stellar Wardens"],
+      "base_size_mm": { "shape": "round", "diameter": 32 },
+      "model_count": { "min": 1, "max": 1 },
+      "weapon_ids": ["bolt-carbine"],
+      "game_version": { "edition": "10th", "dataslate": "2025-q3" },
+      "is_legend": false
+    },
+    "expected_errors": [
+      { "path": "/name", "code": "REQUIRED_MISSING" }
+    ]
+  },
+  {
+    "name": "unit with Sv out of range",
+    "target": "unit",
+    "input": {
+      "id": "warden-sergeant",
+      "name": "Warden Sergeant",
+      "faction_id": "stellar-wardens",
+      "role": "character",
+      "profiles": [
+        {
+          "name": "Warden Sergeant",
+          "M": 6,
+          "T": 4,
+          "W": 4,
+          "Sv": 10,
+          "invuln_sv": 4,
+          "Ld": 6,
+          "OC": 1
+        }
+      ],
+      "points": [{ "models": 1, "cost": 80 }],
+      "keywords": ["Infantry"],
+      "faction_keywords": ["Stellar Wardens"],
+      "base_size_mm": { "shape": "round", "diameter": 32 },
+      "model_count": { "min": 1, "max": 1 },
+      "weapon_ids": ["bolt-carbine"],
+      "game_version": { "edition": "10th", "dataslate": "2025-q3" },
+      "is_legend": false
+    },
+    "expected_errors": [
+      { "path": "/profiles/0/Sv", "code": "RANGE_VIOLATION" }
+    ]
+  }
+]

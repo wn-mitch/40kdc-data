@@ -1,0 +1,33 @@
+{
+  "name": "Allied Test List",
+  "generated_by": "List Forge",
+  "faction_raw_name": "Grey Knights",
+  "detachment_raw_name": null,
+  "battle_size_raw": null,
+  "declared_limit": null,
+  "total_reported": 315,
+  "total_computed": 315,
+  "units": [
+    {
+      "raw_name": "Grand Master in Nemesis Dreadknight",
+      "is_character": true,
+      "model_count": 1,
+      "points": 225,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": []
+    },
+    {
+      "raw_name": "Callidus Assassin",
+      "is_character": true,
+      "model_count": 1,
+      "points": 90,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": []
+    }
+  ],
+  "multi_force": true
+}

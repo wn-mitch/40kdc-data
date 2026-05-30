@@ -239,14 +239,14 @@ impl Roster {
 // ---------------------------------------------------------------------------
 
 /// A weapon/wargear selection before id resolution.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct ParsedWargear {
     pub raw_name: String,
     pub count: u64,
 }
 
 /// A unit selection before id resolution.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct ParsedUnit {
     pub raw_name: String,
     /// True when the source classifies this as a character/leader-capable model.
@@ -266,7 +266,7 @@ pub struct ParsedUnit {
 /// produces this from a decoded source payload; [`resolve`](super::resolve)
 /// consumes it. Contains only raw display names and counts — never reproduced
 /// rules text.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct ParsedRoster {
     pub name: String,
     pub generated_by: Option<String>,

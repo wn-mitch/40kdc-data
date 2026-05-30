@@ -1,0 +1,194 @@
+[
+  {
+    "name": "bolt-rifle x5 vs cultist mob, manual Anti-INFANTRY 5+ buff",
+    "cruncher_case": "05-anti-infantry-vs-cultist.json",
+    "expected": [
+      {
+        "name": "attacks",
+        "expected": 10,
+        "baseline": 10,
+        "lifts": [],
+        "residual": 0,
+        "intrinsics": [
+          "anti"
+        ]
+      },
+      {
+        "name": "hits",
+        "expected": 6.666666666666666,
+        "baseline": 6.666666666666666,
+        "lifts": [],
+        "residual": 0,
+        "intrinsics": [
+          "anti"
+        ]
+      },
+      {
+        "name": "wounds",
+        "expected": 4.444444444444444,
+        "baseline": 4.444444444444444,
+        "lifts": [],
+        "residual": 0,
+        "intrinsics": [
+          "anti"
+        ]
+      },
+      {
+        "name": "unsaved",
+        "expected": 4.444444444444444,
+        "baseline": 4.444444444444444,
+        "lifts": [],
+        "residual": 0,
+        "intrinsics": [
+          "anti"
+        ]
+      },
+      {
+        "name": "damage",
+        "expected": 4.444444444444444,
+        "baseline": 4.444444444444444,
+        "lifts": [],
+        "residual": 0,
+        "intrinsics": [
+          "anti"
+        ]
+      },
+      {
+        "name": "after-fnp",
+        "expected": 4.444444444444444,
+        "baseline": 4.444444444444444,
+        "lifts": [],
+        "residual": 0,
+        "intrinsics": [
+          "anti"
+        ]
+      },
+      {
+        "name": "models-killed",
+        "expected": 4.444444444444444,
+        "baseline": 4.444444444444444,
+        "lifts": [],
+        "residual": 0,
+        "intrinsics": [
+          "anti"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "multi-melta x1 vs questoris knight, stationary, half range, manual twin-linked",
+    "cruncher_case": "07-twin-linked-heavy-stationary-vs-knight.json",
+    "expected": [
+      {
+        "name": "attacks",
+        "expected": 2,
+        "baseline": 2,
+        "lifts": [],
+        "residual": 0,
+        "intrinsics": [
+          "melta"
+        ]
+      },
+      {
+        "name": "hits",
+        "expected": 1.3333333333333333,
+        "baseline": 1.3333333333333333,
+        "lifts": [],
+        "residual": 0,
+        "intrinsics": [
+          "melta"
+        ]
+      },
+      {
+        "name": "wounds",
+        "expected": 0.7407407407407406,
+        "baseline": 0.4444444444444444,
+        "lifts": [
+          {
+            "source": {
+              "kind": "manual",
+              "label": "Twin-linked (test)"
+            },
+            "delta": 0.29629629629629617
+          }
+        ],
+        "residual": 0,
+        "intrinsics": [
+          "melta"
+        ]
+      },
+      {
+        "name": "unsaved",
+        "expected": 0.49382716049382713,
+        "baseline": 0.29629629629629634,
+        "lifts": [
+          {
+            "source": {
+              "kind": "manual",
+              "label": "Twin-linked (test)"
+            },
+            "delta": 0.1975308641975308
+          }
+        ],
+        "residual": 0,
+        "intrinsics": [
+          "melta"
+        ]
+      },
+      {
+        "name": "damage",
+        "expected": 2.716049382716049,
+        "baseline": 1.6296296296296298,
+        "lifts": [
+          {
+            "source": {
+              "kind": "manual",
+              "label": "Twin-linked (test)"
+            },
+            "delta": 1.0864197530864192
+          }
+        ],
+        "residual": 0,
+        "intrinsics": [
+          "melta"
+        ]
+      },
+      {
+        "name": "after-fnp",
+        "expected": 2.716049382716049,
+        "baseline": 1.6296296296296298,
+        "lifts": [
+          {
+            "source": {
+              "kind": "manual",
+              "label": "Twin-linked (test)"
+            },
+            "delta": 1.0864197530864192
+          }
+        ],
+        "residual": 0,
+        "intrinsics": [
+          "melta"
+        ]
+      },
+      {
+        "name": "models-killed",
+        "expected": 0.10446343779677111,
+        "baseline": 0.06267806267806268,
+        "lifts": [
+          {
+            "source": {
+              "kind": "manual",
+              "label": "Twin-linked (test)"
+            },
+            "delta": 0.04178537511870843
+          }
+        ],
+        "residual": 0,
+        "intrinsics": [
+          "melta"
+        ]
+      }
+    ]
+  }
+]

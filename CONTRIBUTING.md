@@ -40,6 +40,36 @@ The validation CLI lives under `tools/`. Standard PR workflow:
 3. Run `npm test` and `npm run validate`
 4. Submit a PR
 
+## Cross-language parity
+
+`40kdc-data` ships in multiple languages (TypeScript, Rust, and over time Python and R). Behavior is held in agreement by the `conformance/` corpus. The high-level strategy is in [`CONFORMANCE.md`](CONFORMANCE.md); the runner wire format is in [`conformance/RUNNER_PROTOCOL.md`](conformance/RUNNER_PROTOCOL.md).
+
+**The load-bearing rule:**
+
+> A new or changed golden in `conformance/` is not accepted until at least one implementation other than the one that produced it independently reproduces the same expected value.
+
+This keeps the corpus from silently encoding any single implementation's quirks. The same person can do both halves of the verification — the rule is about evidence in the PR, not separation of duties.
+
+**Workflow for a behavior change:**
+
+1. Change the implementation in language X.
+2. Regenerate (or hand-author) the affected goldens. For TS today: `cd tools && npm run gen:conformance`.
+3. Run `just conformance-verify --impl <other-lang>` and confirm it passes against the updated goldens.
+4. Include both the implementation diff *and* the corpus diff *and* the second-impl verification in the same PR.
+
+**`SPEC_VERSION` bumps:**
+
+- Bump `conformance/SPEC_VERSION` (single integer) when the corpus changes semantics: new case, changed expected value, removed case, runner-protocol change, per-area invariant change.
+- Don't bump for pure formatting changes.
+
+### Adding a language port
+
+1. Implement the public-API surface inventoried in [`CONFORMANCE.md`](CONFORMANCE.md): Dataset linked queries, importers and exporters for all six formats, the cruncher, the validator (or a documented choice to omit one of these — but the omission needs to be deliberate, not accidental).
+2. Ship a runner binary conforming to [`conformance/RUNNER_PROTOCOL.md`](conformance/RUNNER_PROTOCOL.md). The runner is a thin entry point into the public API; it doesn't introduce new logic.
+3. Wire the runner into the cross-impl differ in `tooling/parity/` so CI can pair it against every other implementation.
+4. Confirm every corpus case passes (`just conformance-verify --impl <your-lang>`) before opening the PR.
+5. Add the port to the "For Tool Developers" section in `README.md` and the implementation-status table in `CONFORMANCE.md`.
+
 ## Style
 
 - JSON files: 2-space indent
