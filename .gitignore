@@ -11,3 +11,10 @@ tools/src/data/bundle.generated.ts
 scripts/model_output/
 scripts/faction_csvs/
 rube-goldberg-output.txt
+
+# _audit/ is the DSL-authoring worklist (#21). Keep the human-readable summaries
+# (coverage.json, summary.md, proposed/*.md) but ignore the bulky, churn-prone
+# machine-generated proposal/input JSON — it regenerates from the author-* tools.
+/data/_audit/author-input/
+/data/_audit/proposed/*.json
+/data/_audit/worklist.json

@@ -110,19 +110,15 @@ fn run_query(ds: &Dataset, query: &str, args: &Value) -> Value {
 /// the test ignores incidental iteration order.
 fn sort_string_array(v: &mut Value) {
     if let Some(arr) = v.as_array_mut() {
-        arr.sort_by(|a, b| {
-            a.as_str()
-                .unwrap_or("")
-                .cmp(b.as_str().unwrap_or(""))
-        });
+        arr.sort_by(|a, b| a.as_str().unwrap_or("").cmp(b.as_str().unwrap_or("")));
     }
 }
 
 #[test]
 fn linked_api_corpus_matches_reference() {
     let path = conformance_dir().join("linked-api").join("cases.json");
-    let raw = fs::read_to_string(&path)
-        .unwrap_or_else(|e| panic!("reading {}: {e}", path.display()));
+    let raw =
+        fs::read_to_string(&path).unwrap_or_else(|e| panic!("reading {}: {e}", path.display()));
     let cases: Vec<Value> = serde_json::from_str(&raw).expect("cases.json is a JSON array");
     assert!(!cases.is_empty(), "linked-api corpus is empty");
 

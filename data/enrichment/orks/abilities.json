@@ -580,20 +580,62 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "unit",
+          "modifier": {
+            "grant_type": "re-roll-advance-characteristic-rolls"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "making-normal-advance-or-fallback-move"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "movement-modifier",
+                "target": "unit",
+                "modifier": {
+                  "move_type": "through-terrain-and-models"
+                }
+              },
+              {
+                "type": "movement-modifier",
+                "target": "unit",
+                "modifier": {
+                  "move_type": "pass-through-engagement-range-no-end"
+                }
+              },
+              {
+                "type": "ability-grant",
+                "target": "unit",
+                "modifier": {
+                  "grant_type": "desperate-escape-auto-pass"
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "battle"
     },
     "unit_ids": [
       "big-mek"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: You can re‐roll Advance rolls made for this model’s unit. In addition, each time this model’s unit makes a Normal, Advance or Fall Back move, models i"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "feel-no-pain-5",
@@ -921,12 +963,29 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "bearer",
+          "modifier": {
+            "operation": "add",
+            "stat": "T",
+            "value": 2
+          }
+        },
+        {
+          "type": "ability-grant",
+          "target": "bearer",
+          "modifier": {
+            "operation": "revoke",
+            "ability": "firing-deck"
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "unit",
+      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -934,7 +993,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Add 2 to the bearer’s Toughness characteristic, but it no longer has the Firing Deck ability."
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "infiltrators",
@@ -1380,20 +1439,32 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "unit-has-keyword",
+        "parameters": {
+          "keyword": "ORKS"
+        }
+      },
+      "effect": {
+        "type": "leadership-modifier",
+        "target": "friendly-within-aura",
+        "modifier": {
+          "operation": "add",
+          "value": 1
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "aura-12",
+      "duration": "battle"
     },
     "unit_ids": [
       "stompa"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While a friendly ORKS unit is within 12\" of this model, each time you take a Battle‑shock test for that unit, add 1 to that test."
+    "behavior": "aura",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "stompin-forward",
@@ -1520,20 +1591,22 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "attack-restriction",
+      "target": "self",
+      "modifier": {
+        "restriction": "fire-overwatch"
+      }
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "battle"
     },
     "unit_ids": [
       "kommandos"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Enemy units cannot use the Fire Overwatch Stratagem to shoot at this unit."
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "distraction-grot",
@@ -1646,7 +1719,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: If this unit has a Starting Strength of 20, you can attach up to two Leader units to it instead of one (but only if one of those is a WARBOSS unit). I"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "firing-deck-12",
@@ -1849,20 +1922,34 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "targets-closest-eligible-with-snazzgun"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "self",
+        "modifier": {
+          "stat": "A",
+          "operation": "set",
+          "value": 4,
+          "weapon_name": "snazzgun"
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "phase"
     },
     "unit_ids": [
       "flash-gitz"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time a model in this unit targets the closest eligible target with its snazzgun, until the end of the phase, that weapon has an Attacks character"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "ammo-runt",
@@ -2470,20 +2557,55 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "selected-to-advance"
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "opponent-unit-within-range",
+              "parameters": {
+                "range": 9
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "deep-strike",
+              "target": "self",
+              "modifier": {}
+            },
+            {
+              "type": "ability-grant",
+              "target": "self",
+              "modifier": {
+                "grant_type": "counts-as-advanced-this-turn"
+              }
+            }
+          ]
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "turn"
     },
     "unit_ids": [
       "shokkjump-dragsta"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time this model is selected to Advance, you can remove it from the battlefield and set it up again anywhere on the battlefield that is more than "
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "one-last-kill",
@@ -2907,20 +3029,31 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "model-is-leader"
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "unit",
+        "modifier": {
+          "operation": "add",
+          "roll": "charge",
+          "value": 1,
+          "attack_type": "melee"
+        }
+      }
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "battle"
     },
     "unit_ids": [
       "beastboss-on-squigosaur"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While this model is leading a unit, add 1 to Charge rolls made for that unit."
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "single-minded-predator",
@@ -3184,20 +3317,57 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "starts-in-strategic-reserves"
+            }
+          },
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": 1
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": 2
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": 3
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "deep-strike",
+        "target": "self",
+        "modifier": {}
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "battle"
     },
     "unit_ids": [
       "chinork-warkopta"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: If this model starts the game in Strategic Reserves, it can be set up in the Reinforcements step of your first, second or third Movement phase, regard"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "big-bomms",
@@ -3740,20 +3910,31 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "arrives-from-strategic-reserves"
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "unit",
+        "modifier": {
+          "grant_type": "outflank-set-up-in-opponent-deployment-zone"
+        }
+      }
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "battle"
     },
     "unit_ids": [
       "warbuggies"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: When this unit arrives from Strategic Reserves, it can be set up within your opponent’s deployment zone (all other restrictions still apply)."
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "waaagh",

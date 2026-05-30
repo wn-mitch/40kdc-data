@@ -68,7 +68,9 @@ pub fn buffs_from_keyword(
         }];
     }
 
-    let Some(effect) = effect else { return Vec::new() };
+    let Some(effect) = effect else {
+        return Vec::new();
+    };
     walk(effect, &source, context)
 }
 
@@ -97,10 +99,7 @@ fn walk_children(steps: Option<&Value>, source: &BuffSource, ctx: &EngineContext
     arr.iter().flat_map(|c| walk(c, source, ctx)).collect()
 }
 
-fn reroll_buffs(
-    obj: &serde_json::Map<String, Value>,
-    source: &BuffSource,
-) -> Vec<Buff> {
+fn reroll_buffs(obj: &serde_json::Map<String, Value>, source: &BuffSource) -> Vec<Buff> {
     let Some(modifier) = obj.get("modifier").and_then(Value::as_object) else {
         return Vec::new();
     };
@@ -123,10 +122,7 @@ fn reroll_buffs(
     }]
 }
 
-fn roll_modifier_buffs(
-    obj: &serde_json::Map<String, Value>,
-    source: &BuffSource,
-) -> Vec<Buff> {
+fn roll_modifier_buffs(obj: &serde_json::Map<String, Value>, source: &BuffSource) -> Vec<Buff> {
     let Some(modifier) = obj.get("modifier").and_then(Value::as_object) else {
         return Vec::new();
     };
@@ -151,10 +147,7 @@ fn roll_modifier_buffs(
     }]
 }
 
-fn feel_no_pain_buffs(
-    obj: &serde_json::Map<String, Value>,
-    source: &BuffSource,
-) -> Vec<Buff> {
+fn feel_no_pain_buffs(obj: &serde_json::Map<String, Value>, source: &BuffSource) -> Vec<Buff> {
     let Some(modifier) = obj.get("modifier").and_then(Value::as_object) else {
         return Vec::new();
     };
@@ -168,10 +161,7 @@ fn feel_no_pain_buffs(
     }]
 }
 
-fn keyword_grant_buffs(
-    obj: &serde_json::Map<String, Value>,
-    source: &BuffSource,
-) -> Vec<Buff> {
+fn keyword_grant_buffs(obj: &serde_json::Map<String, Value>, source: &BuffSource) -> Vec<Buff> {
     let Some(modifier) = obj.get("modifier").and_then(Value::as_object) else {
         return Vec::new();
     };

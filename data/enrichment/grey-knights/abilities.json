@@ -1092,20 +1092,28 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "model-is-leader"
+      },
+      "effect": {
+        "type": "attack-restriction",
+        "target": "unit",
+        "modifier": {
+          "restriction": "within-18-inches"
+        }
+      }
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "battle"
     },
     "unit_ids": [
       "brotherhood-librarian"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While this model is leading a unit, that unit can only be selected as the target of a attack if the attacking model is within 18\"."
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "clarion-of-haste-psychic",
@@ -1639,6 +1647,6 @@
     "faction_id": "grey-knights",
     "ability_type": "faction",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: If your Army Faction is GREY KNIGHTS, at the end of your opponent’s Fight phase, you can select a number of units (see below) from your army that are "
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   }
 ]

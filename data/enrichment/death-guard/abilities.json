@@ -35,12 +35,15 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "movement-modifier",
+      "target": "bearer",
+      "modifier": {
+        "move_type": "contagion-range",
+        "value": 3
+      }
     },
     "scope": {
-      "range": "unit",
+      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -48,7 +51,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Add 3\" to the range of this model’s Contagion Range"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "shroud-of-disease",
@@ -152,7 +155,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Once per Fight phase, one unit from your army with this ability can be targeted with the Counter-offensive Stratagem for OCP, even if you have already"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "scuttling-walker",
@@ -345,7 +348,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While an enemy unit (excluding VEHICLE units) is within 3\" of this unit, subtract 1 from the Objective Control characteristic of models in that enemy "
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "deadly-demise-1",
@@ -658,7 +661,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time a POXWALKER model in this unit makes an attack that destroys an enemy model (excluding MONSTER and VEHICLE models). after this unit has reso"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "deep-strike",
@@ -1086,20 +1089,91 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "destroyed-by-attack-type",
+          "parameters": {
+            "attack_type": "ranged"
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "target-has-keyword",
+                "parameters": {
+                  "keyword": "AFFLICTED"
+                }
+              },
+              "effect": {
+                "type": "dice-gated",
+                "dice": "D6",
+                "threshold": 4,
+                "comparison": "gte",
+                "on_success": {
+                  "type": "keyword-grant",
+                  "target": "enemy-within-aura",
+                  "modifier": {
+                    "keywords": [
+                      "Afflicted"
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "target-has-keyword",
+                    "parameters": {
+                      "keyword": "AFFLICTED"
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "dice-gated",
+                "dice": "D6",
+                "threshold": 5,
+                "comparison": "gte",
+                "on_success": {
+                  "type": "keyword-grant",
+                  "target": "enemy-within-aura",
+                  "modifier": {
+                    "keywords": [
+                      "Afflicted"
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "aura-6",
+      "duration": "turn"
     },
     "unit_ids": [
       "foetid-bloat-drone-with-heavy-blight-launcher"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: In your Shooting phase, each time this model makes an attack that destroys an enemy unit, before removing the last model in that unit from play, roll "
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "spore-laced-shock-waves",
@@ -1477,20 +1551,40 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "deep-strike"
+        }
+      },
+      "effect": {
+        "type": "deep-strike",
+        "target": "self",
+        "modifier": {
+          "distance_constraints": [
+            {
+              "target_keyword": "AFFLICTED",
+              "minimum_distance": 6
+            },
+            {
+              "target_keyword": null,
+              "minimum_distance": 9
+            }
+          ]
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "battle"
     },
     "unit_ids": [
       "deathshroud-terminators"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: In your Movement phase, when this unit is set up on the battlefield using the Deep Strike ability, it can be set up anywhere on the battlefield that i"
+    "behavior": "activated",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "virulent-aura",
@@ -1699,20 +1793,73 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "target-has-keyword",
+                "parameters": {
+                  "keyword": "MONSTER"
+                }
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "target-has-keyword",
+                "parameters": {
+                  "keyword": "VEHICLE"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-grant",
+            "target": "enemy-within-aura",
+            "modifier": {
+              "grant_type": "forced-desperate-escape-on-fall-back"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "is-battle-shocked",
+              "parameters": {}
+            },
+            "effect": {
+              "type": "leadership-modifier",
+              "target": "enemy-within-aura",
+              "modifier": {
+                "test": "desperate-escape",
+                "operation": "subtract",
+                "value": 1
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "range": "unit",
+      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
       "daemon-prince-of-nurgle-with-wings"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While an enemy unit (excluding MONSTERS and VEHICLES) is within 6\" of this model, each time that unit is selected to Fall Back, models in that enemy u"
+    "behavior": "aura",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "putrescent-fog",
@@ -1837,7 +1984,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While a friendly HERETIC ASTARTES unit is within 6\" of this model, each time that unit makes a Dark Pact, until the end of the phase, weapons equipped"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "devoted-to-destruction",
@@ -1990,7 +2137,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: In your opponent’s Shooting phase, and in the Fight phase, each time an enemy unit targets this model, after that unit has finished making its attacks"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "tank-hunters",
@@ -2224,7 +2371,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: In your Shooting phase, after this model has shot, select one enemy INFANTRY unit hit by one or more of those attacks made with its Plague Wind. Until"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "firing-deck-2",

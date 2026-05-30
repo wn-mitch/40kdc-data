@@ -82,7 +82,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time you target this model with a Stratagem, you must spend twice that Stratagem’s stated CP cost to do so."
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "revenant-jet-pack",
@@ -650,7 +650,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While this model is leading a unit, in your Command phase, roll one D6: on a 2+, D3+1 destroyed Bodyguard models (excluding SUPPORT WEAPON models) are"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "herald-of-ynnead",
@@ -699,12 +699,20 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "army-composition-constraint",
+        "restriction_type": "mutual-exclusion",
+        "unit_a": "yvraine",
+        "keyword_b": "epic-hero",
+        "exception_keywords": [
+          "ynnari"
+        ]
+      }
     },
     "scope": {
-      "range": "unit",
+      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -712,7 +720,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: If your army includes YVRAINE, it cannot include any EPIC HERO units (excluding YNNARI units). If your army includes any EPIC HERO units (excluding YN"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "piratical-raiders",
@@ -877,20 +885,51 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "model-is-leader"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "re-roll",
+            "target": "unit",
+            "modifier": {
+              "roll": "advance",
+              "subset": "all-failures"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "timing-is",
+              "parameters": {
+                "timing": "agile-manoeuvre"
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "unit",
+              "modifier": {
+                "roll": "any",
+                "subset": "all-failures"
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "turn"
     },
     "unit_ids": [
       "autarch"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While this model is leading a unit, you can re‐roll Advance rolls made for that unit, and you can re‐roll any rolls made for that unit while it is per"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "path-of-command",
@@ -1161,7 +1200,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: When the last Storm Guardian model in this unit is destroyed, any remaining Serpent’s Scale Platform models in this unit are also destroyed."
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "serpent-shield",
@@ -1316,20 +1355,37 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "model-is-leader"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "timing-is",
+          "parameters": {
+            "timing": "flickerjump-used-this-turn"
+          }
+        },
+        "effect": {
+          "type": "ability-grant",
+          "target": "unit",
+          "modifier": {
+            "grant_type": "charge-after-movement"
+          }
+        }
+      }
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "turn"
     },
     "unit_ids": [
       "lhykhis"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While this model is leading a unit, that unit is eligible to declare a charge in a turn in which it used its Flickerjump ability."
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "whispering-web",
@@ -1600,20 +1656,54 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "post-deployment"
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "or",
+          "operands": [
+            {
+              "type": "engagement-state",
+              "parameters": {
+                "state": "on-battlefield"
+              }
+            },
+            {
+              "type": "is-attached",
+              "parameters": {
+                "attachment_type": "transport"
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "ability-grant",
+          "target": "all-friendly",
+          "modifier": {
+            "grant_type": "post-deployment-redeploy",
+            "unit_count": 3,
+            "faction_filter": "aeldari",
+            "ignore_reserves_limit": true
+          }
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "battle"
     },
     "unit_ids": [
       "prince-yriel"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: After both players have deployed their armies, if this unit is on the battlefield (or any TRANSPORT it is embarked within is on the battlefield), sele"
+    "behavior": "activated",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "inevitable-death",
@@ -1625,20 +1715,69 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent"
+            }
+          },
+          {
+            "type": "engagement-state",
+            "parameters": {
+              "state": "on-battlefield"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "once-per-opponent-turn"
+            }
+          },
+          {
+            "type": "units-destroyed",
+            "parameters": {
+              "side": "friendly",
+              "window": "this-turn",
+              "keyword": "aeldari"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "model-destruction",
+            "target": "self",
+            "modifier": {
+              "remove_from_play": true
+            }
+          },
+          {
+            "type": "deep-strike",
+            "target": "self",
+            "modifier": {
+              "placement_reference": "destroyed-friendly-unit-location",
+              "avoid_engagement_range": true
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "turn"
     },
     "unit_ids": [
       "the-yncarne"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Once in each of your opponent’s turns, if this model is on the battlefield when another friendly AELDARI unit is destroyed, just after removing the la"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "ethereal-form",
@@ -1677,12 +1816,20 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "army-composition-constraint",
+        "restriction_type": "mutual-exclusion",
+        "unit_a": "the-yncarne",
+        "keyword_b": "epic-hero",
+        "exception_keywords": [
+          "ynnari"
+        ]
+      }
     },
     "scope": {
-      "range": "unit",
+      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1690,7 +1837,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: If your army includes THE YNCARNE, it cannot include any EPIC HERO units (excluding YNNARI units). If your army includes any EPIC HERO units (excludin"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "branching-fates-psychic",
@@ -1981,20 +2128,34 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "unit",
+          "modifier": {
+            "grant_type": "fade-back-agile-manoeuvre-free"
+          }
+        },
+        {
+          "type": "ability-grant",
+          "target": "unit",
+          "modifier": {
+            "grant_type": "agile-manoeuvre-phase-limit-exemption"
+          }
+        }
+      ]
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "battle-round"
     },
     "unit_ids": [
       "guardian-defenders"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: This unit can perform the Fade Back Agile Manoeuvre without spending a Battle Focus token to do so. It can do so even if other units have done so in t"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "deadly-demise-d6-6",
@@ -2183,20 +2344,22 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "reserve-deployment-denial-aura-12"
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "aura-12",
+      "duration": "battle"
     },
     "unit_ids": [
       "kharseth"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Enemy units that are set up on the battlefield from Reserves cannot be set up within 12\" of this model."
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "fury-of-the-void-psychic",
@@ -2256,20 +2419,23 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "leadership-modifier",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "operation": "subtract",
+        "value": 1
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "aura-9",
+      "duration": "battle"
     },
     "unit_ids": [
       "hemlock-wraithfighter"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While an enemy unit is within 9\" of this model, subtract 1 from Battle-shock and Leadership tests taken for that unit."
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "deadly-demise-d6",
@@ -2315,12 +2481,48 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "movement-modifier",
+          "target": "self",
+          "modifier": {
+            "move_type": "through-non-titanic-models-and-terrain-up-to-4"
+          }
+        },
+        {
+          "type": "movement-modifier",
+          "target": "self",
+          "modifier": {
+            "move_type": "within-engagement-range-no-end-position"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "after-move-through-terrain-over-4-inches"
+            }
+          },
+          "effect": {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 1,
+            "comparison": "eq",
+            "on_success": {
+              "type": "ability-grant",
+              "target": "self",
+              "modifier": {
+                "grant_type": "inflict-battle-shock"
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "unit",
+      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2328,7 +2530,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time this model makes a Normal, Advance or Fall Back move, it can move through models (excluding TITANIC models) and sections of terrain features"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "point-blank-devastation",
@@ -2353,7 +2555,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time this model’s heavy wraithcannon or suncannon targets a unit within half range, you can re‐roll the dice to determine the number of attacks m"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "scattershield",
@@ -2459,7 +2661,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time you roll to inflict wounds using this unit’s Eviscerating Fly-by ability, you can re-roll one D6 for each model in this unit equipped with c"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "grenade-pack-flyover",
@@ -2534,7 +2736,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While this model is leading a unit, add 6\" to the Range characteristic of Melta weapons equipped by models in that unit."
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "unquenchable-resolve",
@@ -2827,20 +3029,28 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "model-is-leader"
+      },
+      "effect": {
+        "type": "attack-restriction",
+        "target": "unit",
+        "modifier": {
+          "restriction": "ranged-attack-only-within-range-18"
+        }
+      }
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "battle"
     },
     "unit_ids": [
       "shadowseer"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While this model is leading a unit, that unit can only be selected as the target of a ranged attack if the attacking model is within 18\"."
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "treacherous-illusion-psychic",
@@ -3036,9 +3246,13 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
+      "type": "keyword-grant",
       "target": "unit",
-      "modifier": {}
+      "modifier": {
+        "keywords": [
+          "grenades"
+        ]
+      }
     },
     "scope": {
       "range": "unit",
@@ -3049,7 +3263,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: The bearer’s unit has the GRENADES keyword."
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "polychromatic-camouflage",
@@ -3061,9 +3275,11 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
+      "type": "attack-restriction",
       "target": "unit",
-      "modifier": {}
+      "modifier": {
+        "restriction": "can only be selected as ranged target if attacker within 18\""
+      }
     },
     "scope": {
       "range": "unit",
@@ -3074,7 +3290,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: This unit can only be selected as the target of a ranged attack if the attacking model is within 18\"."
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "target-acquisition",
@@ -3134,7 +3350,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time an enemy unit declares a charge, if one or more units with this ability are selected as a target of that charge, subtract 2 from the Charge "
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "titanic-agility",
@@ -3146,12 +3362,26 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "movement-modifier",
+          "target": "self",
+          "modifier": {
+            "move_type": "through-models-and-terrain"
+          }
+        },
+        {
+          "type": "movement-modifier",
+          "target": "self",
+          "modifier": {
+            "move_type": "within-engagement-range-no-end-position"
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "unit",
+      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -3159,7 +3389,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time this model makes a Normal, Advance or Fall Back move, it can move through models and terrain features. When doing so, it can move within Eng"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "no-escape",
@@ -3261,20 +3491,71 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "after-shot-hits-scored"
+            }
+          },
+          {
+            "type": "opponent-unit-within-range",
+            "parameters": {
+              "weapon_name": "doomweaver"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-grant",
+            "target": "defender",
+            "modifier": {
+              "grant_type": "pinned"
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "defender",
+            "modifier": {
+              "stat": "M",
+              "operation": "subtract",
+              "value": 2
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "defender",
+            "modifier": {
+              "roll": "charge",
+              "operation": "subtract",
+              "value": 2
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "turn"
     },
     "unit_ids": [
       "night-spinner"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: In your Shooting phase, after this model has shot, if one or more of those attacks made with its doomweaver scored a hit against an enemy unit, until "
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "indomitable-strength-of-will",
@@ -3299,7 +3580,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While this model is leading a unit, each time you spend a Battle Focus token to enable that unit to perform an Agile Manoeuvre, roll one D6: on a 3+, "
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "bladestorm",
@@ -3680,7 +3961,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: At the start of your opponent’s Shooting phase, this unit can use this ability. If it does, select one AELDARI INFANTRY unit from your army visible to"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "acrobatic-grace",
@@ -3861,7 +4142,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time this model is set up on the battlefield, until the end of the turn, each time this model makes a ranged attack, a successful unmodified Hit "
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "malevolent-souls",
@@ -4467,7 +4748,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: If your army includes this model, after both players have deployed their armies and determined who has the first turn, you can select one Rangers or S"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "psytronome-shaper",
@@ -4634,6 +4915,6 @@
     "faction_id": "aeldari",
     "ability_type": "faction",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: If your Army Faction is ASURYANI, at the start of the battle round, you receive a number of Battle Focus tokens based on the battle size, as shown in "
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   }
 ]

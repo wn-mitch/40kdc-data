@@ -5,6 +5,7 @@ import { validateEnrichmentCommand } from "./commands/validate-enrichment.js";
 import { validateAllCommand } from "./commands/validate-all.js";
 import { translateCommand } from "./commands/translate.js";
 import { importCommand } from "./commands/import.js";
+import { auditCoverageCommand } from "./audit-coverage.js";
 
 const program = new Command();
 
@@ -36,6 +37,13 @@ program
   .description("Translate ability DSL to plain English")
   .argument("[path]", "Path to abilities.json file")
   .action(translateCommand);
+
+program
+  .command("audit-coverage")
+  .description("Audit how much ability data translates into cruncher buffs, per faction")
+  .option("--reporter <mode>", "Output format: pretty or json", "pretty")
+  .option("--write", "Also write data/_audit/coverage.json + summary.md", false)
+  .action((opts) => auditCoverageCommand({ reporter: opts.reporter, write: opts.write }));
 
 program
   .command("import")

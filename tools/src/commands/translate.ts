@@ -195,10 +195,13 @@ function translateEffectInline(e: Effect): string {
       return `deal ${m.amount ?? m.amount_table ? "variable" : "?"} mortal wounds to ${target}`;
     case "feel-no-pain":
       return `${target} gains Feel No Pain ${m.threshold}+`;
-    case "keyword-grant":
-      return `${target}'s ${m.weapon_type ?? "all"} weapons gain ${m.keyword}`;
+    case "keyword-grant": {
+      // Grants come as singular `keyword` or the (dominant) `keywords` array.
+      const kw = Array.isArray(m.keywords) ? m.keywords.join(", ") : (m.keyword ?? "keywords");
+      return `${target}'s ${m.weapon_type ?? "all"} weapons gain ${kw}`;
+    }
     case "ability-grant":
-      return `${target} gains ${formatGrantType(m.grant_type as string)}`;
+      return `${target} gains ${formatGrantType((m.grant_type ?? m.ability_id) as string | undefined)}`;
     case "movement-modifier":
       return `${target} gains ${m.move_type}${m.value ? ` ${m.value}"` : ""}`;
     case "damage-reduction":
@@ -256,8 +259,10 @@ function formatTarget(t?: string): string {
   return t.replace(/-/g, " ");
 }
 
-function formatGrantType(g: string): string {
-  return g.replace(/-/g, " ");
+function formatGrantType(g: string | undefined): string {
+  // ability-grant carries either `grant_type` or `ability_id`; an unauthored
+  // stub may carry neither. Don't crash the whole translation on a missing key.
+  return g ? g.replace(/-/g, " ") : "an ability";
 }
 
 function formatComparison(comp: string, threshold: number | string): string {

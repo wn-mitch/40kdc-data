@@ -10,7 +10,7 @@
 use std::path::PathBuf;
 
 use serde_json::Value;
-use wh40kdc::export::{export_roster, ExportFormat, RosterizerSerializer, RosterSerializer};
+use wh40kdc::export::{export_roster, ExportFormat, RosterSerializer, RosterizerSerializer};
 use wh40kdc::import::{import_roster, BattleSize, FormatAdapter, Roster, RosterizerAdapter};
 use wh40kdc::Dataset;
 
@@ -43,9 +43,7 @@ fn detects_a_rosterizer_envelope() {
     assert!(adapter.detect(&payload()));
     assert!(!adapter.detect(&serde_json::json!({ "not": "a roster" })));
     assert!(!adapter.detect(&serde_json::json!({ "rulebook": {} })));
-    assert!(!adapter.detect(
-        &serde_json::json!({ "snapshot": { "item": "Roster\u{00a7}Roster" } })
-    ));
+    assert!(!adapter.detect(&serde_json::json!({ "snapshot": { "item": "Roster\u{00a7}Roster" } })));
 }
 
 #[test]
@@ -153,7 +151,10 @@ fn parsed_output_leaks_no_prose_field_canaries() {
 #[test]
 fn resolves_faction_detachment_and_battle_size() {
     let roster = import_payload();
-    assert_eq!(roster.source.format, wh40kdc::import::RosterFormat::Rosterizer);
+    assert_eq!(
+        roster.source.format,
+        wh40kdc::import::RosterFormat::Rosterizer
+    );
     assert_eq!(roster.faction_id.as_deref(), Some("grey-knights"));
     assert_eq!(roster.detachment_id.as_deref(), Some("banishers"));
     assert_eq!(roster.battle_size, Some(BattleSize::StrikeForce));
@@ -196,7 +197,10 @@ fn exports_a_rosterizer_envelope_with_faction_and_detachment() {
     let out = RosterizerSerializer.serialize(&roster);
     let parsed: Value = serde_json::from_str(&out).expect("export is valid JSON");
     assert!(parsed["rulebook"].is_object());
-    assert_eq!(parsed["snapshot"]["item"].as_str(), Some("Roster\u{00a7}Roster"));
+    assert_eq!(
+        parsed["snapshot"]["item"].as_str(),
+        Some("Roster\u{00a7}Roster")
+    );
     let included = parsed["snapshot"]["assets"]["included"]
         .as_array()
         .expect("snapshot.assets.included is an array");
@@ -237,7 +241,11 @@ fn round_trip_export_then_import_preserves_resolved_ids() {
     assert_eq!(reparsed.detachment_id, seed.detachment_id);
     assert_eq!(reparsed.battle_size, seed.battle_size);
 
-    let seed_ids: Vec<&str> = seed.units.iter().filter_map(|u| u.ref_.id.as_deref()).collect();
+    let seed_ids: Vec<&str> = seed
+        .units
+        .iter()
+        .filter_map(|u| u.ref_.id.as_deref())
+        .collect();
     let reparsed_ids: Vec<&str> = reparsed
         .units
         .iter()
