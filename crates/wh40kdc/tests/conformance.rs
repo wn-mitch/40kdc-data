@@ -23,8 +23,8 @@ use std::path::{Path, PathBuf};
 
 use serde_json::Value;
 use wh40kdc::import::{
-    import_roster, import_roster_text, select_adapter, try_import_roster, FormatAdapter,
-    GwAdapter, ImportResult, ListForgeAdapter, NewRecruitJsonAdapter, NewRecruitSimpleAdapter,
+    import_roster, import_roster_text, select_adapter, try_import_roster, FormatAdapter, GwAdapter,
+    ImportResult, ListForgeAdapter, NewRecruitJsonAdapter, NewRecruitSimpleAdapter,
     NewRecruitWtcCompactAdapter, NewRecruitWtcFullAdapter, RosterFormat, RosterizerAdapter,
 };
 use wh40kdc::{normalize_name, Dataset};
@@ -239,7 +239,10 @@ fn parsed_stage_matches_reference_goldens() {
         // Pick the canonical seed (matches gen-conformance's decodeCanonicalSeed).
         let (decoded, seed_name): (Value, &str) = if dir_entries.iter().any(|n| n == "input.json") {
             (read_json(&case_dir.join("input.json")), "input.json")
-        } else if dir_entries.iter().any(|n| n == "input.newrecruit-json.json") {
+        } else if dir_entries
+            .iter()
+            .any(|n| n == "input.newrecruit-json.json")
+        {
             (
                 read_json(&case_dir.join("input.newrecruit-json.json")),
                 "input.newrecruit-json.json",

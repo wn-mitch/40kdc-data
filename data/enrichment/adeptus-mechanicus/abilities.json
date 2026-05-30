@@ -173,20 +173,49 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "normal-move"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "advance"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "fall-back"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "movement-modifier",
+        "target": "self",
+        "modifier": {
+          "move_type": "through-friendly-heavy-and-small-terrain",
+          "value": 4
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "battle"
     },
     "unit_ids": [
       "onager-dunecrawler"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time this model makes a Normal, Advance or Fall Back move, it can move through friendly MONSTER and VEHICLE models and sections of terrain featur"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "emanatus-force-field-aura",
@@ -524,20 +553,32 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "self",
+        "modifier": {
+          "grant_type": "canticle",
+          "selection_required": true
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "turn"
     },
     "unit_ids": [
       "belisarius-cawl"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: At the start of your Command phase, select one of the abilities in the Canticles of the Omnissiah section. Until the start of your next Command phase,"
+    "behavior": "activated",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "mechanicus-bodyguard",
@@ -628,20 +669,31 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "unit-has-keyword",
+        "parameters": {
+          "keyword": "TECH-PRIEST"
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "unit",
+        "modifier": {
+          "grant_type": "action-and-shoot-eligibility"
+        }
+      }
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "battle"
     },
     "unit_ids": [
       "servitor-battleclade"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While this unit contains one or more TECH-PRIEST models, this unit is:\n\n■ Eligible to perform an Action in a turn in which it Advanced.\n■ Eligible to "
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "attached-unit",
@@ -967,20 +1019,50 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "opponent-unit-within-range",
+        "parameters": {
+          "range": 6
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "unit-within-range-of",
+          "parameters": {
+            "target_type": "friendly-keyword",
+            "keyword": "ADEPTUS MECHANICUS BATTLELINE"
+          }
+        },
+        "effect": {
+          "type": "leadership-modifier",
+          "target": "enemy-within-aura",
+          "modifier": {
+            "operation": "subtract",
+            "value": 2
+          }
+        },
+        "on_fail": {
+          "type": "leadership-modifier",
+          "target": "enemy-within-aura",
+          "modifier": {
+            "operation": "subtract",
+            "value": 1
+          }
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "aura-6",
+      "duration": "phase"
     },
     "unit_ids": [
       "sicarian-infiltrators"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While an enemy unit is within 6\" of this unit, each time a Battle-shock or Leadership test is taken for that unit, subtract 1 from that test. While th"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "deep-strike",
@@ -1016,20 +1098,66 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "Hover"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "starts-in-strategic-reserves"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "timing-is",
+              "parameters": {
+                "timing": "reinforcements-step"
+              }
+            },
+            {
+              "type": "timing-is",
+              "parameters": {
+                "timing": "battle-round-1-to-3"
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "deep-strike",
+          "target": "self",
+          "modifier": {}
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "battle"
     },
     "unit_ids": [
       "archaeopter-transvector"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: If this model starts the game in Hover mode and in Strategic Reserves, it can be set up in the Reinforcements step of your first, second or third Move"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "rad-saturation-aura",
@@ -1054,7 +1182,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While an enemy unit (excluding VEHICLE units) is within 3\" of this unit, subtract 1 from the Objective Control characteristic of models in that unit."
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "enhanced-data-tether",
@@ -1187,20 +1315,102 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "after-unit-shot"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "engagement-state",
+                "parameters": {
+                  "state": "in-engagement-range"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "choice",
+        "choice_label": "post-shooting-movement",
+        "options": [
+          {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "movement-modifier",
+                "target": "unit",
+                "modifier": {
+                  "move_type": "normal",
+                  "value": 6
+                }
+              },
+              {
+                "type": "attack-restriction",
+                "target": "unit",
+                "modifier": {
+                  "restriction_type": "no-charge"
+                }
+              }
+            ]
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "unit-within-range-of",
+              "parameters": {
+                "target_type": "friendly-keyword",
+                "keyword": "ADEPTUS MECHANICUS BATTLELINE"
+              }
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "movement-modifier",
+                  "target": "unit",
+                  "modifier": {
+                    "move_type": "normal",
+                    "value": 12
+                  }
+                },
+                {
+                  "type": "attack-restriction",
+                  "target": "unit",
+                  "modifier": {
+                    "restriction_type": "no-charge"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "turn"
     },
     "unit_ids": [
       "pteraxii-skystalkers"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: In your Shooting phase, after this unit has shot, if it is not within Engagement Range of one or more enemy units, it can do one of the following:\n\n■ "
+    "behavior": "activated",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "breaching-command",
@@ -1526,20 +1736,60 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "units-destroyed",
+            "parameters": {
+              "side": "friendly",
+              "window": "battle",
+              "count_min": 1
+            }
+          },
+          {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "ADEPTUS MECHANICUS"
+            }
+          },
+          {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "VEHICLE"
+            }
+          },
+          {
+            "type": "unit-within-range-of",
+            "parameters": {
+              "target_type": "friendly",
+              "range": 12
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "self",
+        "modifier": {
+          "stat": "A",
+          "operation": "set",
+          "value": 6,
+          "attack_type": "melee"
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "battle"
     },
     "unit_ids": [
       "tech-priest-enginseer"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: If a friendly ADEPTUS MECHANICUS VEHICLE model is destroyed within 12\" of this model, until the end of the battle, this model’s Omnissian axe has an A"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "control-edict",
@@ -1873,20 +2123,55 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "is-attached"
+          },
+          {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "TECH-PRIEST"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "self",
+            "modifier": {
+              "stat": "BS",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "self",
+            "modifier": {
+              "stat": "WS",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "battle"
     },
     "unit_ids": [
       "x-101"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While a Tech-Priest model is leading this model’s unit, improve the Ballistic Skill and Weapon Skill characteristics of this model’s weapons by 1."
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "bound-creation",

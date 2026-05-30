@@ -735,20 +735,22 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "free-tank-shock"
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "battle"
     },
     "unit_ids": [
       "cerastus-knight-lancer"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: You can target this model with the Tank Shock Stratagem for 0CP, and can do so even if you have already targeted a different unit with that Stratagem "
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "deadly-demise-d3",
@@ -1277,7 +1279,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: In your Shooting phase, after this model has shot, if an enemy INFANTRY unit was hit by one or more of those attacks made with a graviton crusher, unt"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "atrapos-duty-bondsman",
@@ -1437,7 +1439,7 @@
     "faction_id": "imperial-knights",
     "ability_type": "faction",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time a model with this ability makes a Normal, Advance or Fall Back move, it can move through models (excluding TITANIC models) and sections of t"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "dreadblades",

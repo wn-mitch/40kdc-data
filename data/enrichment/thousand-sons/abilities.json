@@ -56,7 +56,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While a friendly HERETIC ASTARTES unit is within 6\" of this model, each time that unit makes a Dark Pact, until the end of the phase, weapons equipped"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "devoted-to-destruction",
@@ -209,7 +209,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: In your opponent’s Shooting phase, and in the Fight phase, each time an enemy unit targets this model, after that unit has finished making its attacks"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "deadly-demise-d6",
@@ -320,7 +320,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While a friendly THOUSAND SONS PSYKER model is within 6\" of this model, each time that model Channels the Warp, add 1 to the Psychic test result. This"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "assault-ramp",
@@ -431,7 +431,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While this model is leading a unit, in your Shooting phase and the Fight phase, each time that unit is selected to shoot or fight, this model can use "
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "mind-breaking-mutations-aura",
@@ -456,7 +456,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While an enemy unit (excluding VEHICLE units) is within 3\" of this unit, subtract 1 from the Objective Control characteristic of models in that enemy "
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "scouts-6",
@@ -755,7 +755,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: In your Shooting phase, after this model has shot, select one INFANTRY unit hit by one or more of those attacks made with its Agonising Energies. Unti"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "empyric-guidance-psychic",
@@ -1115,7 +1115,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: If your army includes this model, after both players have deployed their armies, you can select up to three THOUSAND SONS units from your army and red"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "arch-sorcerer-of-tzeentch-psychic",
@@ -1140,7 +1140,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time this model attempts a Ritual, add 1 to the Psychic test result."
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "bringers-of-change",
@@ -1396,20 +1396,32 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "start-of-battle-round"
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "self",
+        "modifier": {
+          "grant_type": "selective-from-pool",
+          "pool": "crimson-king"
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "battle-round"
     },
     "unit_ids": [
       "magnus-the-red"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: At the start of the battle round, select one of the abilities in the Crimson King section. Until the start of the next battle round, this model has th"
+    "behavior": "activated",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "lord-of-the-planet-of-the-sorcerers-psychic",
@@ -1434,7 +1446,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: This model can attempt up to two Rituals per turn instead of one, and each time this model attempts a Ritual, add 2 to the Psychic test result."
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "supreme-commander",
@@ -1645,7 +1657,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Once per Fight phase, one unit from your army with this ability can be targeted with the Counter-offensive Stratagem for OCP, even if you have already"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "scuttling-walker",
@@ -1849,20 +1861,62 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "reinforcements"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "deep-strike",
+            "target": "self",
+            "modifier": {}
+          },
+          {
+            "type": "keyword-grant",
+            "target": "self",
+            "modifier": {
+              "keywords": [
+                "Sustained Hits D3"
+              ],
+              "weapon_name": "Dark Blessing"
+            }
+          },
+          {
+            "type": "attack-restriction",
+            "target": "self",
+            "modifier": {
+              "restriction": "charge"
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "turn"
     },
     "unit_ids": [
       "daemon-prince-of-tzeentch-with-wings"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: In your Movement phase, when this model is set up on the battlefield using the Deep Strike ability, it can perform an aetherstride. If it does:\n■ It c"
+    "behavior": "activated",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "ambushing-hunters",
@@ -1927,20 +1981,38 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "within-range-of-objective"
+          },
+          {
+            "type": "controls-objective"
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "unit",
+        "modifier": {
+          "stat": "Ld",
+          "operation": "add",
+          "value": 1
+        }
+      }
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "battle"
     },
     "unit_ids": [
       "tzaangors"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While the bearer’s unit is within range of one or more objective markers you control, improve the Leadership characteristic of models in the bearer’s "
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "infiltrators",
@@ -2032,20 +2104,28 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "model-is-leader"
+      },
+      "effect": {
+        "type": "attack-restriction",
+        "target": "unit",
+        "modifier": {
+          "restriction": "ranged-attacks-only-within-18"
+        }
+      }
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "battle"
     },
     "unit_ids": [
       "exalted-sorcerer-on-disc-of-tzeentch"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While this model is leading a unit, that unit can only be selected as the target of a ranged attack if the attacking model is within 18\"."
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "binding-tendrils-psychic",
@@ -2070,7 +2150,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: In your Shooting phase, after this model has shot, select one enemy INFANTRY unit hit by one or more of those attacks made with Arcane Fire. Until the"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "siege-crawler",
@@ -2206,7 +2286,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time this model declares a charge that targets one or more units below Starting Strength, add 1 to the Charge roll. If one or more of the targets"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "savage-exaltation",
@@ -2897,7 +2977,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time a friendly THOUSAND SONS PSYKER model with the Cabal of Sorcerers ability is destroyed while within 9\" of one or more models with this abili"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "glamour-of-tzeentch-aura-psychic",
@@ -2909,20 +2989,44 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "THOUSAND SONS"
+            }
+          },
+          {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "INFANTRY"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "keyword-grant",
+        "target": "friendly-within-aura",
+        "modifier": {
+          "keywords": [
+            "stealth"
+          ]
+        }
+      }
     },
     "scope": {
-      "range": "unit",
+      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
       "daemon-prince-of-tzeentch"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While a friendly THOUSAND SONS INFANTRY unit is within 6\" of this model, models in that unit have the Stealth ability."
+    "behavior": "aura",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "cabal-of-sorcerers",

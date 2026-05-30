@@ -251,6 +251,11 @@ function translateReroll(
     out.unsupported.push({ reason: "re-roll: missing modifier object", effectFragment: node });
     return;
   }
+  const narrowed = unhonorableNarrowing(modifier);
+  if (narrowed) {
+    out.unsupported.push({ reason: `re-roll: narrows by "${narrowed}" which the cruncher can't resolve here`, effectFragment: node });
+    return;
+  }
   const roll = modifier.roll;
   // A `value: 1` on a re-roll modifier unambiguously means "re-roll rolls of 1".
   // A historical migration (2026-weapon-keywords) mis-defaulted such nodes to
@@ -284,6 +289,11 @@ function translateRollModifier(
       reason: "roll-modifier: missing modifier object",
       effectFragment: node,
     });
+    return;
+  }
+  const narrowed = unhonorableNarrowing(modifier);
+  if (narrowed) {
+    out.unsupported.push({ reason: `roll-modifier: narrows by "${narrowed}" which the cruncher can't resolve here`, effectFragment: node });
     return;
   }
   const value = signedValue(modifier);
@@ -339,6 +349,11 @@ function translateStatModifier(
       reason: "stat-modifier: missing modifier object",
       effectFragment: node,
     });
+    return;
+  }
+  const narrowed = unhonorableNarrowing(modifier);
+  if (narrowed) {
+    out.unsupported.push({ reason: `stat-modifier: narrows by "${narrowed}" which the cruncher can't resolve here`, effectFragment: node });
     return;
   }
   const stat = modifier.stat;
@@ -536,11 +551,30 @@ function weaponTypeApplicability(modifier: Record<string, unknown>): BuffApplica
   return undefined;
 }
 
-/** Map a stat-modifier's `attack_type` to the phase that attack happens in. */
+/**
+ * Map a stat-modifier's `attack_type` (or the equivalent `weapon_type`) to the
+ * phase that attack happens in. Both spellings carry the same melee/ranged
+ * intent; honoring `weapon_type` lets a "+1 A to melee weapons" mod phase-gate
+ * correctly instead of leaking into the shooting phase.
+ */
 function attackTypeApplicability(modifier: Record<string, unknown>): BuffApplicability | undefined {
-  if (modifier.attack_type === "melee") return { phases: ["fight"] };
-  if (modifier.attack_type === "ranged") return { phases: ["shooting"] };
+  const kind = modifier.attack_type ?? modifier.weapon_type;
+  if (kind === "melee") return { phases: ["fight"] };
+  if (kind === "ranged") return { phases: ["shooting"] };
   return undefined;
+}
+
+/**
+ * Narrowing keys that scope a buff to a named weapon or a model subset the
+ * cruncher can't resolve at translation time (it has no weapon/model context
+ * here). When present on a damage-path leaf, applying the buff unfiltered would
+ * silently OVER-APPLY it, so we surface it as `unsupported` instead — the data
+ * stays faithful for other consumers; the optimizer just doesn't assume it.
+ * `weapon_type`/`attack_type` are NOT here — those map cleanly to a phase gate.
+ */
+const UNHONORABLE_NARROWING = ["weapon_name", "weapon_profile", "weapon_keyword", "weapon_filter", "model_filter", "model_scope"];
+function unhonorableNarrowing(modifier: Record<string, unknown>): string | undefined {
+  return UNHONORABLE_NARROWING.find((k) => modifier[k] != null);
 }
 
 function translateBsModifier(

@@ -305,20 +305,47 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "unit-has-keyword",
+        "parameters": {
+          "keyword": "WAR DOG"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "friendly-within-aura",
+            "modifier": {
+              "stat": "Ld",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "friendly-within-aura",
+            "modifier": {
+              "stat": "OC",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "range": "unit",
+      "range": "aura-9",
       "duration": "permanent"
     },
     "unit_ids": [
       "knight-despoiler"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While a friendly WAR DOG model is within 9\" of this model, improve that WAR DOG model’s Leadership and Objective Control characteristics by 1."
+    "behavior": "aura",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "seething-hatred",
@@ -831,12 +858,14 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "tank-shock-zero-cp-unrestricted"
+      }
     },
     "scope": {
-      "range": "unit",
+      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -844,7 +873,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: You can target this model with the Tank Shock Stratagem for 0CP, and can do so even if you have already targeted a different unit with that Stratagem "
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "dark-fervour-aura",
@@ -1159,7 +1188,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: In your Shooting phase, after this model has shot, if an enemy INFANTRY unit was hit by one or more of those attacks made with a graviton crusher, unt"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "code-chivalric",
@@ -1230,7 +1259,7 @@
     "faction_id": "chaos-knights",
     "ability_type": "faction",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time a model with this ability makes a Normal, Advance or Fall Back move, it can move through models (excluding TITANIC models) and sections of t"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "freeblades",

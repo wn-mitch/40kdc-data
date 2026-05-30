@@ -400,20 +400,68 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent"
+            }
+          },
+          {
+            "type": "destroyed-by-attack-type",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "is-battle-shocked"
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "opponent-unit-within-range",
+                "parameters": {
+                  "range": 0
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "movement-modifier",
+        "target": "unit",
+        "modifier": {
+          "move_type": "righteous-zeal",
+          "value": 2
+        }
+      }
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "crusader-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: In your opponent’s Shooting phase, each time an enemy unit has shot, if any models in this unit were destroyed as a result of those attacks, this unit"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "remorseless-persecution",
@@ -717,20 +765,42 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "CENOBYTE SERVITOR"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "self",
+        "modifier": {
+          "grant_type": "temple-relics"
+        }
+      }
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "turn"
     },
     "unit_ids": [
       "chaplain-grimaldus"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: In your Command phase, if this unit contains one or more Cenobyte Servitor models, select one Temple Relics ability (see Temple Relics section). Until"
+    "behavior": "activated",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "vehement-aggression",
@@ -1079,7 +1149,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: The first time a model in this model’s unit makes a melee attack that destroys one or more enemy units, until the end of the battle, while this model’"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "stabilised-disembarkation",
@@ -1104,7 +1174,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: In your opponent’s Shooting phase, each time an enemy unit is selected to shoot, after that unit has shot, if any of those attacks targeted this TRANS"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "emergency-combat-embarkation",
@@ -1245,7 +1315,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: In your opponent’s Shooting phase, each time an enemy unit has shot, if this model was hit by one or more of those attacks, it can make a Driven by Fu"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "sanguinary-priest",
@@ -1683,20 +1753,31 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "fall-back-selected"
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "grant_type": "fallback-denial-on-leadership-failure"
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "aura-6",
+      "duration": "battle"
     },
     "unit_ids": [
       "chief-librarian-mephiston"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While an enemy unit is within 6\" of this model, each time that unit is selected to Fall Back, it must take a Leadership test. If that test is failed, "
+    "behavior": "aura",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "guardian-of-the-lost",
@@ -1893,20 +1974,43 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "unit-has-keyword",
+        "parameters": {
+          "keyword": "ADEPTUS ASTARTES"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-grant",
+            "target": "friendly-within-aura",
+            "modifier": {
+              "grant_type": "battle-shock-test-re-roll"
+            }
+          },
+          {
+            "type": "ability-grant",
+            "target": "friendly-within-aura",
+            "modifier": {
+              "grant_type": "leadership-test-re-roll"
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "aura-6",
+      "duration": "battle"
     },
     "unit_ids": [
       "the-sanguinor"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While a friendly ADEPTUS ASTARTES unit is within 6\" of this model, you can re-roll Battle-shock and Leadership tests taken for that unit."
+    "behavior": "aura",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "miraculous-saviour",
@@ -2061,20 +2165,22 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "reroll-advance"
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "battle"
     },
     "unit_ids": [
       "baal-predator"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: You can re‐roll Advance rolls made for this model."
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "savage-fury",
@@ -3085,7 +3191,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: The first time this model is destroyed, roll one D6 at the end of the phase. On a 2+, set this model back up on the battlefield, as close as possible "
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "indomitor-doctrines",
@@ -3826,7 +3932,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: In your Movement phase, when this unit is set up on the battlefield using the Deep Strike ability, it can perform a meteoric descent. If it does, this"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "keep-the-banner-high",
@@ -4017,20 +4123,52 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "units-destroyed",
+            "parameters": {
+              "side": "friendly",
+              "count_min": 1
+            }
+          },
+          {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "VEHICLE"
+            }
+          },
+          {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "ADEPTUS-ASTARTES"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "self",
+        "modifier": {
+          "stat": "A",
+          "operation": "set",
+          "value": 7,
+          "attack_type": "melee"
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "aura-12",
+      "duration": "battle"
     },
     "unit_ids": [
       "techmarine"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: If a friendly ADEPTUS ASTARTES VEHICLE model is destroyed within 12\" of this model, until the end of the battle, this model’s Omnissian power axe has "
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "spear-of-chogoris",
@@ -4066,20 +4204,55 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "normal-move"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "advance-move"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "fall-back-move"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "charge-move"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "movement-modifier",
+        "target": "unit",
+        "modifier": {
+          "move_type": "terrain-passthrough",
+          "value": 0
+        }
+      }
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "battle"
     },
     "unit_ids": [
       "suboden-khan"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time a model in this model’s unit makes a Normal, Advance, Fall Back or Charge move, it can move horizontally through terrain features."
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "master-of-shadows",
@@ -4157,7 +4330,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: At the start of the Declare Battle Formations step, if your army includes AETHON SHAAN and KAYVAAN SHRIKE, until the end of the battle, your KAYVAAN S"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "total-obliteration",
@@ -4316,20 +4489,67 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "unit-has-keyword",
+                "parameters": {
+                  "keyword": "TERMINATOR-ASSAULT-SQUAD"
+                }
+              },
+              {
+                "type": "unit-has-keyword",
+                "parameters": {
+                  "keyword": "TERMINATOR-SQUAD"
+                }
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "unit-has-keyword",
+                "parameters": {
+                  "keyword": "CHARACTER"
+                }
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "is-battle-shocked"
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "objective-control-modifier",
+        "target": "unit",
+        "modifier": {
+          "operation": "set",
+          "value": 2
+        }
+      }
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "battle"
     },
     "unit_ids": [
       "darnath-lysander"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: If you include this model in your army, until the end of the battle, non-CHARACTER models in TERMINATOR ASSAULT SQUAD and TERMINATOR SQUAD units from "
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "deadly-demise-1",
@@ -4822,20 +5042,31 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "self",
+        "modifier": {
+          "ability_id": "author-of-the-codex"
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "turn"
     },
     "unit_ids": [
       "roboute-guilliman"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: At the Start of your Command phase, select two Author of the Codex abilities. Until the start of your next Command phase, this model has those abiliti"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "ultramarines-bodyguard",
@@ -5004,12 +5235,39 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "model-destroyed"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "unit-within-range-of",
+                "parameters": {
+                  "target_type": "models-on-red-sections"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "unit",
+        "modifier": {
+          "grant_type": "passenger-relocation-on-destruction"
+        }
+      }
     },
     "scope": {
-      "range": "unit",
+      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -5017,7 +5275,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: The highlighted portions of this model are the only parts that are considered to make up its hull. Models can be set up or end a move on any part of t"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "angel-s-wrath",
@@ -5667,20 +5925,32 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "enemy-unit-destroyed-in-melee"
+        }
+      },
+      "effect": {
+        "type": "objective-control-modifier",
+        "target": "self",
+        "modifier": {
+          "operation": "set",
+          "value": 9
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "battle"
     },
     "unit_ids": [
       "apothecary-biologis"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: If this model’s unit destroys an enemy unit as the result of a melee attack, until the end of the battle, this model has an Objective Control characte"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "brutalis-charge",
@@ -6507,12 +6777,14 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "ability-grant",
+      "target": "all-friendly",
+      "modifier": {
+        "grant_type": "pregame-redeploy-up-to-three-units-may-enter-strategic-reserves"
+      }
     },
     "scope": {
-      "range": "unit",
+      "range": "any-on-battlefield",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -6520,7 +6792,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: After both players have deployed their armies, if this unit is on the battlefield (or any TRANSPORT it is embarked within is on the battlefield) selec"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "refractor-field",
@@ -6883,20 +7155,22 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "cannot-be-warlord"
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "battle"
     },
     "unit_ids": [
       "lieutenant-with-combi-weapon"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: This model cannot be selected as your WARLORD."
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "multi-spectrum-array",
@@ -7031,20 +7305,52 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "declare-battle-formations"
+            }
+          },
+          "effect": {
+            "type": "ability-grant",
+            "target": "all-friendly",
+            "modifier": {
+              "grant_type": "select-one-infantry-unit-gains-scouts-6"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "post-deployment"
+            }
+          },
+          "effect": {
+            "type": "ability-grant",
+            "target": "all-friendly",
+            "modifier": {
+              "grant_type": "pregame-redeploy-up-to-three-infantry-units"
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "any-on-battlefield",
+      "duration": "battle"
     },
     "unit_ids": [
       "caanok-var"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: ■ At the start of the Declare Battle Formations step, you can select one ADEPTUS ASTARTES INFANTRY unit from your army. Until the end of the battle, t"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "vanguard-assault",
@@ -7355,12 +7661,14 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "ability-grant",
+      "target": "all-friendly",
+      "modifier": {
+        "grant_type": "pregame-redeploy-up-to-three-infantry-units-may-enter-strategic-reserves"
+      }
     },
     "scope": {
-      "range": "unit",
+      "range": "any-on-battlefield",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -7368,7 +7676,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: After both players have deployed their armies, if your army includes one or more models with this ability, you can select up to three friendly ADEPTUS"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "exhortation-of-rage",
@@ -7546,12 +7854,14 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "transport-capacity-30-with-keyword-multipliers"
+      }
     },
     "scope": {
-      "range": "unit",
+      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -7559,7 +7869,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: This model has a transport capacity of 30 ADEPTUS ASTARTES INFANTRY or ADEPTUS ASTARTES MOUNTED models. Each JUMP PACK, WULFEN, GRAVIS or TERMINATOR m"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "firing-deck-2",
@@ -7686,20 +7996,22 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "attack-restriction",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "restriction": "prevents-enemy-reserves-within-12"
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "aura-12",
+      "duration": "battle"
     },
     "unit_ids": [
       "infiltrator-squad"
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Enemy units that are set up on the battlefield from Reserves cannot be set up within 12\" of this unit."
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "ballistus-strike",
@@ -7902,20 +8214,69 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "declare-battle-formations"
+            }
+          },
+          {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "ADEPTUS-ASTARTES"
+            }
+          },
+          {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "INFANTRY"
+            }
+          },
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "unit-has-keyword",
+                "parameters": {
+                  "keyword": "PHOBOS"
+                }
+              },
+              {
+                "type": "unit-has-keyword",
+                "parameters": {
+                  "keyword": "GRAVIS"
+                }
+              },
+              {
+                "type": "unit-has-keyword",
+                "parameters": {
+                  "keyword": "TACTICUS"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "deep-strike",
+        "target": "unit",
+        "modifier": {}
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "battle"
     },
     "unit_ids": [
       "uriel-ventris"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: During the Declare Battle Formations step, if your army includes this model, select one PHOBOS, GRAVIS or TACTICUS ADEPTUS ASTARTES INFANTRY unit from"
+    "behavior": "activated",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "strategic-dispersal",
@@ -8010,7 +8371,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While an enemy unit (excluding MONSTERS and VEHICLES) is within 3\" of one or more units with this ability, subtract 1 from the Objective Control chara"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "reiver-grav-chute",
@@ -9005,7 +9366,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: If this model starts the game in Hover mode and in Strategic Reserves, it can be set up in the Reinforcements step of your first, second or third Move"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "rolling-fortress",
@@ -9512,7 +9873,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While this unit is within 6\" of one or more friendly SPACE WOLVES CHARACTER models (excluding WULFEN models), if this unit is not Battle‑shocked, mode"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "healing-balms",
@@ -9556,20 +9917,31 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "declare-battle-formations"
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "self",
+        "modifier": {
+          "grant_type": "split-by-headtakers-hunting-wolves"
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "battle"
     },
     "unit_ids": [
       "wolf-guard-headtakers"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: At the start of the Declare Battle Formations step, split this unit into two units, one containing all of its HEADTAKERS models and one containing all"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "headhunters",
@@ -10010,20 +10382,41 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "shooting-phase"
+            }
+          },
+          {
+            "type": "has-lost-wounds",
+            "parameters": {}
+          }
+        ]
+      },
+      "effect": {
+        "type": "movement-modifier",
+        "target": "self",
+        "modifier": {
+          "move_type": "bestial-rage",
+          "value": "D6+2"
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "phase"
     },
     "unit_ids": [
       "wulfen-dreadnought"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time an enemy unit is selected to shoot, after that unit has shot, if this model lost one or more wounds as a result of those attacks, this model"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "violent-fury",
@@ -10842,7 +11235,7 @@
     "faction_id": "adeptus-astartes",
     "ability_type": "faction",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each Detachment rule in Codex Supplement: Space Wolves includes a Saga you can complete, with additional effects that apply once you have done so."
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "sons-of-russ",

@@ -129,27 +129,29 @@ fn cruncher_corpus_stages_match_reference_within_tolerance() {
             buffs: case.buffs,
             context: case.context,
         };
-        let out = crunch(&input, Some(ds)).unwrap_or_else(|e| {
-            panic!("crunch failed for {}: {e}", case_path.display())
-        });
-        let actual: HashMap<StageName, f64> = out
-            .stages
-            .iter()
-            .map(|s| (s.name, s.expected))
-            .collect();
+        let out = crunch(&input, Some(ds))
+            .unwrap_or_else(|e| panic!("crunch failed for {}: {e}", case_path.display()));
+        let actual: HashMap<StageName, f64> =
+            out.stages.iter().map(|s| (s.name, s.expected)).collect();
 
         for (stage_key, expected) in &case.expected.stages {
             let Some(name) = stage_name(stage_key) else {
                 panic!(
                     "cruncher/{}: unknown stage key {stage_key:?} (case '{}')",
-                    case_path.file_name().and_then(|s| s.to_str()).unwrap_or("?"),
+                    case_path
+                        .file_name()
+                        .and_then(|s| s.to_str())
+                        .unwrap_or("?"),
                     case.name
                 );
             };
             let actual_value = *actual.get(&name).unwrap_or_else(|| {
                 panic!(
                     "cruncher/{}: stage {stage_key} missing from engine output (case '{}')",
-                    case_path.file_name().and_then(|s| s.to_str()).unwrap_or("?"),
+                    case_path
+                        .file_name()
+                        .and_then(|s| s.to_str())
+                        .unwrap_or("?"),
                     case.name
                 )
             });

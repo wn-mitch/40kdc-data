@@ -35,20 +35,57 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "within-range-of-objective"
+          },
+          {
+            "type": "controls-objective"
+          }
+        ]
+      },
+      "effect": {
+        "type": "choice",
+        "choice_label": "spend-or-gain-yp",
+        "options": [
+          {
+            "type": "resource-spend",
+            "target": "self",
+            "modifier": {
+              "pool_id": "yp-pool",
+              "amount": 1
+            }
+          },
+          {
+            "type": "resource-gain",
+            "target": "self",
+            "modifier": {
+              "pool_id": "yp-pool",
+              "amount": 1
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "phase"
     },
     "unit_ids": [
       "memnyr-strategist"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: At the end of your Command phase, before you determine if units from your army have Hostile Acquisition or Fortify Takeover, for each objective marker"
+    "behavior": "activated",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "predictive-guidance",
@@ -801,7 +838,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: In your opponent’s Shooting phase, each time an enemy unit has shot, if this model lost one or more wounds as a result of those attacks, this model ca"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "brokhyr-guild-support",
@@ -1468,20 +1505,45 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "units-destroyed",
+            "parameters": {
+              "side": "enemy",
+              "window": "phase",
+              "count_min": 1
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "once-per-phase"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "self",
+        "modifier": {
+          "pool_id": "yp-pool",
+          "amount": 1
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "phase"
     },
     "unit_ids": [
       "kahl"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Once per phase, one model from your army with this ability can use it when its unit destroys an enemy unit. If it does, you gain 1YP."
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "feel-no-pain-6",

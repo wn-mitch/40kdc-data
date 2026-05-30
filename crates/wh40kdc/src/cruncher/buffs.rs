@@ -29,7 +29,11 @@ pub enum AbilityKind {
 
 /// Where a buff originated. Drives stable tie-breaking inside [`resolve_buffs`].
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(tag = "kind", rename_all = "kebab-case", rename_all_fields = "camelCase")]
+#[serde(
+    tag = "kind",
+    rename_all = "kebab-case",
+    rename_all_fields = "camelCase"
+)]
 pub enum BuffSource {
     WeaponKeyword {
         weapon_id: String,
@@ -81,7 +85,11 @@ pub enum RerollSubset {
 
 /// One typed contribution; the engine reads [`ResolvedModifiers`] for the rest.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(tag = "type", rename_all = "kebab-case", rename_all_fields = "camelCase")]
+#[serde(
+    tag = "type",
+    rename_all = "kebab-case",
+    rename_all_fields = "camelCase"
+)]
 pub enum BuffContribution {
     HitMod {
         value: f64,
@@ -382,8 +390,12 @@ pub fn resolve_buffs(buffs: &[Buff], ctx: &EngineContext) -> ResolvedModifiers {
                     });
                 }
             }
-            BuffContribution::DamageMod { value } => sum_into(&mut out.damage_mod, *value, &b.source),
-            BuffContribution::AttacksMod { value } => sum_into(&mut out.attacks_mod, *value, &b.source),
+            BuffContribution::DamageMod { value } => {
+                sum_into(&mut out.damage_mod, *value, &b.source)
+            }
+            BuffContribution::AttacksMod { value } => {
+                sum_into(&mut out.attacks_mod, *value, &b.source)
+            }
             BuffContribution::StrengthMod { value } => {
                 sum_into(&mut out.strength_mod, *value, &b.source)
             }
@@ -478,8 +490,7 @@ fn cap_modifier(contribs: &[Contribution]) -> CappedMod {
 fn canonical_keyword_key(ref_: &WeaponKeywordRef) -> String {
     let params_str = match ref_.parameters.as_ref() {
         Some(Value::Object(map)) => {
-            let sorted: BTreeMap<&str, &Value> =
-                map.iter().map(|(k, v)| (k.as_str(), v)).collect();
+            let sorted: BTreeMap<&str, &Value> = map.iter().map(|(k, v)| (k.as_str(), v)).collect();
             serde_json::to_string(&sorted).unwrap_or_else(|_| "{}".to_string())
         }
         Some(other) => serde_json::to_string(other).unwrap_or_else(|_| "{}".to_string()),

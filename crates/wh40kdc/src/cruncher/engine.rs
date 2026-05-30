@@ -15,9 +15,7 @@ use std::fmt;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use super::buffs::{
-    resolve_buffs, Buff, EngineContext, ResolvedModifiers, WeaponKeywordRef,
-};
+use super::buffs::{resolve_buffs, Buff, EngineContext, ResolvedModifiers, WeaponKeywordRef};
 use super::from_keyword::buffs_from_keyword;
 use crate::data::Dataset;
 use crate::{KeywordList, StatValue, Unit, Weapon, WeaponType};
@@ -137,32 +135,33 @@ impl std::error::Error for CruncherError {}
 /// Compute the expected per-stage projection for one (attacker, target,
 /// buffs) triple. The dataset defaults to [`Dataset::embedded`] when `None` —
 /// pass an alternate when crunching against a different bundle.
-pub fn crunch(input: &EngineInput, dataset: Option<&Dataset>) -> Result<EngineOutput, CruncherError> {
+pub fn crunch(
+    input: &EngineInput,
+    dataset: Option<&Dataset>,
+) -> Result<EngineOutput, CruncherError> {
     let ds: &Dataset = match dataset {
         Some(d) => d,
         None => Dataset::embedded(),
     };
 
-    let weapon_profile =
-        input
-            .attacker
-            .weapon
-            .profiles
-            .get(input.attacker.profile_index)
-            .ok_or_else(|| CruncherError::ProfileOutOfRange {
-                weapon_id: input.attacker.weapon.id.to_string(),
-                profile_index: input.attacker.profile_index,
-            })?;
-    let unit_profile =
-        input
-            .target
-            .unit
-            .profiles
-            .get(input.target.profile_index)
-            .ok_or_else(|| CruncherError::TargetProfileOutOfRange {
-                unit_id: input.target.unit.id.to_string(),
-                profile_index: input.target.profile_index,
-            })?;
+    let weapon_profile = input
+        .attacker
+        .weapon
+        .profiles
+        .get(input.attacker.profile_index)
+        .ok_or_else(|| CruncherError::ProfileOutOfRange {
+            weapon_id: input.attacker.weapon.id.to_string(),
+            profile_index: input.attacker.profile_index,
+        })?;
+    let unit_profile = input
+        .target
+        .unit
+        .profiles
+        .get(input.target.profile_index)
+        .ok_or_else(|| CruncherError::TargetProfileOutOfRange {
+            unit_id: input.target.unit.id.to_string(),
+            profile_index: input.target.profile_index,
+        })?;
 
     let target_keywords = unit_keywords_lower(input.target.unit);
     let mut ctx = input.context.clone();
@@ -204,8 +203,8 @@ pub fn crunch(input: &EngineInput, dataset: Option<&Dataset>) -> Result<EngineOu
         0.0
     };
     let models_firing = input.models_firing as f64;
-    let attacks = models_firing
-        * (attacks_per_model + rapid_fire_extra_per_model + blast_extra_per_model);
+    let attacks =
+        models_firing * (attacks_per_model + rapid_fire_extra_per_model + blast_extra_per_model);
     stages.push(Stage {
         name: StageName::Attacks,
         expected: attacks,
@@ -225,11 +224,7 @@ pub fn crunch(input: &EngineInput, dataset: Option<&Dataset>) -> Result<EngineOu
     };
     let torrent = find_extra_keyword(&resolved, "torrent").is_some();
     let (hits_raw, crit_hits, mut hits_detail) = if torrent {
-        (
-            attacks,
-            0.0,
-            format!("Torrent: auto-hits ({attacks:.4})"),
-        )
+        (attacks, 0.0, format!("Torrent: auto-hits ({attacks:.4})"))
     } else {
         let hit_stat = hit_stat_opt.ok_or_else(|| CruncherError::MissingHitStat {
             weapon_id: input.attacker.weapon.id.to_string(),
@@ -324,8 +319,7 @@ pub fn crunch(input: &EngineInput, dataset: Option<&Dataset>) -> Result<EngineOu
         auto_pass_on_six: true,
         crit_threshold: crit_wound_threshold,
     });
-    let regular_wounds_from_roll =
-        hits_for_wound_roll * (wound_probs.pass - wound_probs.crit);
+    let regular_wounds_from_roll = hits_for_wound_roll * (wound_probs.pass - wound_probs.crit);
     let crit_wounds_from_roll = hits_for_wound_roll * wound_probs.crit;
     let total_regular_wounds = regular_wounds_from_roll + lethal_auto_wounds;
     let has_devastating = find_extra_keyword(&resolved, "devastating-wounds").is_some();

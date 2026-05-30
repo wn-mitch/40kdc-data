@@ -482,7 +482,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: At the end of your Command phase, for each objective marker you control that has one or more units from your army with this ability within range of it"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "attached-unit",
@@ -571,7 +571,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time this unit is selected to fight, you can choose to invoke its extremis trigger word. If you do, until the end of the phase, arco-flails equip"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "rituale-nullificatus",
@@ -664,7 +664,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time the bearer’s unit’s quarry is destroyed, you can select a new unit from your opponent’s army to be its quarry."
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "litany-of-deeds",
@@ -689,7 +689,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time you gain a Miracle dice as the result of an ADEPTA SORORITAS unit or model from your army being destroyed, if that unit or model was destroy"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "stanchion-of-holy-martyrs",
@@ -736,20 +736,32 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "start-of-battle-round"
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "self",
+        "modifier": {
+          "grant_type": "relics-of-matriarchs",
+          "max_count": 2
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "battle-round"
     },
     "unit_ids": [
       "triumph-of-saint-katherine"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: At the start of the battle round, select up to two of the abilities in the Relics of the Matriarchs section. Until the start of the next battle round,"
+    "behavior": "activated",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "solemn-procession",
@@ -774,7 +786,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: Each time you gain 1 Miracle dice at the start of the battle round, if this model is on the battlefield, do not roll one D6 to determine the value of "
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "angelic-ascent",
@@ -910,7 +922,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While this model is leading a unit, each time that unit performs an Act of Faith, the value of one of the Miracle dice used in that Act of Faith is fi"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "executioner-of-heretics-aura",
@@ -2097,20 +2109,93 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "command-phase"
+            }
+          },
+          {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "CELESTINE"
+            }
+          },
+          {
+            "type": "unit-below-starting-strength",
+            "parameters": {}
+          }
+        ]
+      },
+      "effect": {
+        "type": "choice",
+        "choice_label": "resurrect-allies",
+        "options": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "unit-has-keyword",
+              "parameters": {
+                "keyword": "GEMINAE SUPERIA"
+              }
+            },
+            "effect": {
+              "type": "resurrection",
+              "target": "unit",
+              "modifier": {
+                "count": 1
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "unit-has-keyword",
+                  "parameters": {
+                    "keyword": "BODYGUARD"
+                  }
+                },
+                {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "unit-has-keyword",
+                      "parameters": {
+                        "keyword": "GEMINAE SUPERIA"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "effect": {
+              "type": "resurrection",
+              "target": "unit",
+              "modifier": {
+                "count": "D3"
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "turn"
     },
     "unit_ids": [
       "saint-celestine"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While this unit contains a Celestine model, in your Command phase, if this unit is below its Starting Strength, either one destroyed Geminae Superia m"
+    "behavior": "activated",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "lifewards",
@@ -2148,20 +2233,48 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "destroyed-by-attack-type",
+            "parameters": {
+              "attack_type": "any"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "once-per-battle"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 2,
+        "comparison": "gte",
+        "on_success": {
+          "type": "resurrection",
+          "target": "self",
+          "modifier": {
+            "count": 1
+          }
+        }
+      }
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "battle"
     },
     "unit_ids": [
       "saint-celestine"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: The first time this unit’s Celestine model is destroyed, roll one D6 at the end of the phase. On a 2+, set that Celestine model back up on the battlef"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "defenders-of-the-faith",
@@ -2313,20 +2426,81 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "model-is-leader",
+                "parameters": {}
+              },
+              {
+                "type": "unit-has-keyword",
+                "parameters": {
+                  "keyword": "AGATHE-DOLAN"
+                }
+              },
+              {
+                "type": "units-destroyed",
+                "parameters": {
+                  "side": "enemy",
+                  "count_min": 1
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "resource-gain",
+            "target": "unit",
+            "modifier": {
+              "pool_id": "miracle-dice-pool",
+              "amount": 1
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "unit-has-keyword",
+                "parameters": {
+                  "keyword": "AGATHE-DOLAN"
+                }
+              },
+              {
+                "type": "destroyed-by-attack-type",
+                "parameters": {
+                  "attack_type": "any"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "resource-gain",
+            "target": "unit",
+            "modifier": {
+              "pool_id": "miracle-dice-pool",
+              "amount": "1D3"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "turn"
     },
     "unit_ids": [
       "aestred-thurga-and-agathae-dolan"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: While this unit is leading a unit and contains an Agathe Dolan model, each time that unit destroys an enemy unit, you gain 1 Miracle dice. When that A"
+    "behavior": "aura",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "firing-deck-6",
@@ -2473,7 +2647,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring. Original: When this Fortification is set up, all parts of it must be set up within 1\" of another part. Friendly Adepta Sororitas Infantry models can be set up o"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "acts-of-faith",

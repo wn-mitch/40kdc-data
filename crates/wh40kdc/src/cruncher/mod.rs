@@ -47,7 +47,7 @@ pub mod from_keyword;
 pub use attribution::{attribute_stages, AttributedStage, StageLift};
 pub use buffs::{
     resolve_buffs, AbilityKind, Buff, BuffApplicability, BuffContribution, BuffSource,
-    EngineContext, ResolvedModifiers, RerollSubset, RollKind, WeaponKeywordRef,
+    EngineContext, RerollSubset, ResolvedModifiers, RollKind, WeaponKeywordRef,
 };
 pub use engine::{
     crunch, AttackProfileRef, CruncherError, EngineInput, EngineOutput, Stage, StageName,

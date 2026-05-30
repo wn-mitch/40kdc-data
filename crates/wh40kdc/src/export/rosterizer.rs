@@ -239,7 +239,11 @@ impl RosterSerializer for RosterizerSerializer {
             item: item_key(CLS_ROSTER, CLS_ROSTER),
             name: Some(roster.name.clone()),
             quantity: Some(1),
-            stats: if total > 0 { points_stat(Some(total)) } else { None },
+            stats: if total > 0 {
+                points_stat(Some(total))
+            } else {
+                None
+            },
             assets: Some(AssetChildren {
                 included: Some(included),
                 traits: None,

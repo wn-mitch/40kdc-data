@@ -144,6 +144,46 @@ describe("effectToBuffs: leaves", () => {
   });
 });
 
+describe("effectToBuffs: unhonorable narrowing filters fail safe", () => {
+  // A weapon-name / model filter the cruncher can't resolve here must NOT apply
+  // the buff unfiltered (silent over-apply); it surfaces as `unsupported`.
+  it("stat-modifier with weapon_name → unsupported, not applied", () => {
+    const r = effectToBuffs(
+      { type: "stat-modifier", target: "unit", modifier: { stat: "A", operation: "add", value: 1, weapon_name: "power fist" } },
+      unitRule, { phase: "fight", attackerStationary: false },
+    );
+    expect(r.applied).toEqual([]);
+    expect(r.unsupported).toHaveLength(1);
+    expect(r.unsupported[0].reason).toContain("weapon_name");
+  });
+
+  it("roll-modifier with model_filter → unsupported", () => {
+    const r = effectToBuffs(
+      { type: "roll-modifier", target: "unit", modifier: { roll: "hit", operation: "add", value: 1, model_filter: "not-character" } },
+      unitRule, ctx,
+    );
+    expect(r.applied).toEqual([]);
+    expect(r.unsupported[0].reason).toContain("model_filter");
+  });
+
+  it("re-roll with weapon_profile → unsupported", () => {
+    const r = effectToBuffs(
+      { type: "re-roll", target: "unit", modifier: { roll: "hit", subset: "all-failures", weapon_profile: "macro-scalpels" } },
+      unitRule, ctx,
+    );
+    expect(r.applied).toEqual([]);
+    expect(r.unsupported[0].reason).toContain("weapon_profile");
+  });
+
+  it("weapon_type is honorable — phase-gates the stat-modifier rather than blocking it", () => {
+    const eff = { type: "stat-modifier", target: "unit", modifier: { stat: "A", operation: "add", value: 1, weapon_type: "melee" } };
+    const r = effectToBuffs(eff, unitRule, { phase: "fight", attackerStationary: false });
+    expect(r.applied).toHaveLength(1);
+    expect(r.unsupported).toEqual([]);
+    expect(r.applied[0].applicableWhen).toEqual({ phases: ["fight"] });
+  });
+});
+
 describe("effectToBuffs: compound", () => {
   it("sequence walks every step", () => {
     const oath = {

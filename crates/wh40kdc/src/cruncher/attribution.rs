@@ -51,7 +51,10 @@ pub struct AttributedStage {
 const DEFAULT_EPSILON: f64 = 1e-6;
 
 fn is_groupable(source: &BuffSource) -> bool {
-    matches!(source, BuffSource::Ability { .. } | BuffSource::Manual { .. })
+    matches!(
+        source,
+        BuffSource::Ability { .. } | BuffSource::Manual { .. }
+    )
 }
 
 /// Stable grouping key. Every buff a single UI toggle flatMaps to shares one
@@ -122,8 +125,7 @@ pub fn attribute_stages(
     let baseline = crunch(&baseline_input, dataset)?;
 
     // Leave-one-out: drop one whole group, keep the rest.
-    let mut loo: std::collections::HashMap<String, EngineOutput> =
-        std::collections::HashMap::new();
+    let mut loo: std::collections::HashMap<String, EngineOutput> = std::collections::HashMap::new();
     for key in &order {
         let without_input = EngineInput {
             attacker: input.attacker,

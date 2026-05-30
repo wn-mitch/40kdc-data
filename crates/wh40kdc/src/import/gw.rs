@@ -45,12 +45,10 @@ static RE_DETACHMENT: Lazy<Regex> =
 static RE_TOTAL_PTS: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"(?i)^\+\s*TOTAL ARMY POINTS:\s*(\d+)\s*pts?\s*$").unwrap());
 static RE_FENCE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^\++\s*$").unwrap());
-static RE_SECTION_HEADER: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"^[A-Z][A-Z0-9 \-/&]+$").unwrap());
+static RE_SECTION_HEADER: Lazy<Regex> = Lazy::new(|| Regex::new(r"^[A-Z][A-Z0-9 \-/&]+$").unwrap());
 static RE_UNIT_HEADER: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"(?i)^(.+?)\s*\(\s*(\d+)\s*pts?\s*\)\s*$").unwrap());
-static RE_BULLET_LINE: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"^([\t ]*)•\s*(.+?)\s*$").unwrap());
+static RE_BULLET_LINE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^([\t ]*)•\s*(.+?)\s*$").unwrap());
 static RE_NX_PREFIX: Lazy<Regex> = Lazy::new(|| Regex::new(r"^(\d+)x\s+(.+)$").unwrap());
 static RE_ENHANCEMENT_ANNOT: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"(?i)^(.+?)\s*\(\+\s*(\d+)\s*pts?\s*\)\s*$").unwrap());
@@ -395,7 +393,10 @@ Nurglings (40 pts)
     fn parses_header_and_units() {
         let parsed = GwAdapter.parse(&json!(SAMPLE)).unwrap();
         assert_eq!(parsed.faction_raw_name.as_deref(), Some("Chaos Knights"));
-        assert_eq!(parsed.detachment_raw_name.as_deref(), Some("Houndpack Lance"));
+        assert_eq!(
+            parsed.detachment_raw_name.as_deref(),
+            Some("Houndpack Lance")
+        );
         assert_eq!(parsed.total_reported, Some(2000));
         assert_eq!(parsed.declared_limit, Some(2000));
         assert_eq!(parsed.units.len(), 3);

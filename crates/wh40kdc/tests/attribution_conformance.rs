@@ -84,8 +84,8 @@ struct ExpectedLift {
 #[test]
 fn attribution_corpus_matches_reference() {
     let path = conformance_dir().join("attribution").join("cases.json");
-    let raw = fs::read_to_string(&path)
-        .unwrap_or_else(|e| panic!("reading {}: {e}", path.display()));
+    let raw =
+        fs::read_to_string(&path).unwrap_or_else(|e| panic!("reading {}: {e}", path.display()));
     let cases: Vec<AttributionCase> =
         serde_json::from_str(&raw).expect("attribution/cases.json is a valid JSON array");
     assert!(!cases.is_empty(), "attribution corpus is empty");
@@ -93,9 +93,7 @@ fn attribution_corpus_matches_reference() {
     let ds = Dataset::embedded();
 
     for case in &cases {
-        let crunch_path = conformance_dir()
-            .join("cruncher")
-            .join(&case.cruncher_case);
+        let crunch_path = conformance_dir().join("cruncher").join(&case.cruncher_case);
         let crunch_raw = fs::read_to_string(&crunch_path)
             .unwrap_or_else(|e| panic!("reading {}: {e}", crunch_path.display()));
         let crunch_case: CruncherCase = serde_json::from_str(&crunch_raw)
@@ -174,9 +172,7 @@ fn attribution_corpus_matches_reference() {
                 case.cruncher_case,
                 i
             );
-            for (j, (got_lift, want_lift)) in
-                got.lifts.iter().zip(want.lifts.iter()).enumerate()
-            {
+            for (j, (got_lift, want_lift)) in got.lifts.iter().zip(want.lifts.iter()).enumerate() {
                 let got_source = serde_json::to_value(&got_lift.source)
                     .expect("BuffSource serializes to a Value");
                 assert_eq!(
