@@ -6,7 +6,10 @@ This document is the protocol contract. Changes to it bump [`SPEC_VERSION`](./SP
 
 ## Status
 
-Draft (pre-implementation). The protocol is being defined now so that the first runner (TypeScript) and the cross-impl differ can be built against a stable spec.
+The protocol is implemented in TypeScript (`tools/src/runner.ts`) and Rust
+(`crates/wh40kdc/src/bin/wh40kdc-runner.rs`); both report `spec_version` 7. The
+cross-impl differ in `tooling/parity/` drives any pair of runners against the
+corpus.
 
 ## Wire format
 
@@ -131,6 +134,29 @@ Adding a new code is a semantic change to the spec and bumps `SPEC_VERSION`. `ta
 ```
 
 Response value is the engine output with the `stages` array. The differ compares per-stage floats with tolerance `5e-4` (see CONFORMANCE.md for the reduction-order invariant).
+
+### `attribution`
+
+```json
+{"op":"attribution","args":{
+  "attacker":{"weaponId":"bolt-rifle","profileIndex":0},
+  "modelsFiring":5,
+  "target":{"unitId":"intercessor-squad","profileIndex":0},
+  "context":{"phase":"shooting","attackerStationary":false,"withinHalfRange":false},
+  "buffs":[],
+  "epsilon":1e-6
+}}
+```
+
+Same input envelope as `crunch`, plus an optional `epsilon` (default `1e-6`)
+below which lifts and residuals collapse to zero. Response value is the array of
+`AttributedStage`s — the per-stage leave-one-out decomposition documented in
+[`CONFORMANCE.md`](../CONFORMANCE.md#attributioncasesjson). Floats compare with
+`±5e-4` per value (`expected`, `baseline`, `residual`, each `lifts[].delta`);
+`lifts` order is load-bearing (groups appear in first-seen order from the input
+`buffs` array). `BuffSource` values inside `lifts[].source` use the serde
+kind-tagged discriminated union (`"manual"` / `"ability"` / `"weapon-keyword"`
+with camelCase fields).
 
 ### `shutdown`
 

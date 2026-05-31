@@ -30,7 +30,14 @@
 export function normalizeName(input: string): string {
   return input
     .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "")
+    // Strip the Unicode Mark category (Mn/Mc/Me) — every combining mark.
+    // \p{Diacritic} is a smaller property that misses some Mn characters,
+    // which let TS and Rust drift apart on non-Latin combining marks (the
+    // Rust mirror uses unicode-normalization's is_combining_mark, which is
+    // \p{M}). The cross-impl property fuzz in tooling/parity/ surfaces the
+    // divergence; the documented contract in CONFORMANCE.md is "strip
+    // combining marks", so \p{M} is canonical.
+    .replace(/\p{M}/gu, "")
     .toLowerCase()
     .replace(/['’‘`"“”]/g, "")
     .replace(/[\s-]+/g, " ")

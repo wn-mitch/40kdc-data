@@ -58,7 +58,7 @@ flate2 = { version = "1", optional = true }
 # Text-format adapters (NewRecruit WTC + simple) — header/body line regexes
 # compiled once per process via `once_cell::sync::Lazy`.
 once_cell = { version = "1", optional = true }
-regex = { version = "1", optional = true, default-features = false, features = ["std", "unicode-perl"] }
+regex = { version = "1", optional = true, default-features = false, features = ["std", "unicode-perl", "unicode-case"] }
 
 [dev-dependencies]
 # Validate serialized Roster output against schemas/core/roster.schema.json
