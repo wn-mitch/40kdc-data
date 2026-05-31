@@ -180,8 +180,18 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
     resolved.cover.active && !ignoresCover && input.attacker.weapon.type === "ranged";
   const armorAfterCover = covered ? Math.max(3, armorTargetRaw - 1) : armorTargetRaw;
   const armorFinal = clamp(armorAfterCover, 2, 7);
-  const invuln = unitProfile.invuln_sv ?? null;
-  const effectiveSaveTarget = invuln !== null ? Math.min(armorFinal, invuln) : armorFinal;
+  // The unit's printed invuln (from the profile) and any ability-granted
+  // invuln combine best-wins (lowest threshold). Invuln bypasses AP and cover
+  // — only the armor branch above is affected by those — so the final save is
+  // min(armor-after-AP-and-cover, effective-invuln).
+  const printedInvuln = unitProfile.invuln_sv ?? null;
+  const abilityInvuln = resolved.invulnerable?.threshold ?? null;
+  const effectiveInvuln =
+    printedInvuln !== null && abilityInvuln !== null
+      ? Math.min(printedInvuln, abilityInvuln)
+      : (printedInvuln ?? abilityInvuln);
+  const effectiveSaveTarget =
+    effectiveInvuln !== null ? Math.min(armorFinal, effectiveInvuln) : armorFinal;
 
   const saveProbs = checkProbabilities({
     unmodifiedNeeded: effectiveSaveTarget,
@@ -196,34 +206,41 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   stages.push({
     name: "unsaved",
     expected: unsaved,
-    detail: `Sv${unitProfile.Sv}+, AP${signed(AP)}${apMod !== 0 ? ` (apmod ${signed(apMod)})` : ""}${saveMod !== 0 ? `, savemod ${signed(saveMod)}` : ""}${covered ? ", cover (+1, cap 3+)" : ""} → effective ${effectiveSaveTarget}+ (P(save)=${pSaved.toFixed(4)})`,
+    detail: `Sv${unitProfile.Sv}+, AP${signed(AP)}${apMod !== 0 ? ` (apmod ${signed(apMod)})` : ""}${saveMod !== 0 ? `, savemod ${signed(saveMod)}` : ""}${covered ? ", cover (+1, cap 3+)" : ""}${abilityInvuln !== null ? `, invuln ${abilityInvuln}+ (ability)` : ""} → effective ${effectiveSaveTarget}+ (P(save)=${pSaved.toFixed(4)})`,
   });
 
   // 5. Damage
   const baseD = evalStatValue(weaponProfile.stats.D);
   const melta = findKeyword(resolved, "melta");
   const meltaBonus = melta && halfRange ? evalStatValue(melta.parameters?.value) : 0;
-  const damagePerHit = Math.max(0, baseD + meltaBonus + resolved.damageMod.value);
+  const beforeReduction = Math.max(0, baseD + meltaBonus + resolved.damageMod.value);
+  const damageReduction = resolved.damageReduction.value;
+  // 10e damage-reduction abilities always carry the canonical "to a minimum
+  // of 1" clause, so the floor lives in the math, not the data. The clause
+  // only applies when damage-reduction is active — without it, a D1 weapon
+  // with a -1 attacker damage-mod still produces 0 damage.
+  const damagePerHit =
+    damageReduction > 0 ? Math.max(1, beforeReduction - damageReduction) : beforeReduction;
   const damageMain = unsaved * damagePerHit;
   const damageMortal = mortalWoundsStream * damagePerHit;
   const damage = damageMain + damageMortal;
   stages.push({
     name: "damage",
     expected: damage,
-    detail: `D ${baseD}${meltaBonus ? ` + Melta ${meltaBonus} (half range)` : ""}${resolved.damageMod.value !== 0 ? ` ${signed(resolved.damageMod.value)} (mod)` : ""} = ${damagePerHit} per hit; main ${damageMain.toFixed(4)}, mortal ${damageMortal.toFixed(4)}`,
+    detail: `D ${baseD}${meltaBonus ? ` + Melta ${meltaBonus} (half range)` : ""}${resolved.damageMod.value !== 0 ? ` ${signed(resolved.damageMod.value)} (mod)` : ""}${damageReduction > 0 ? ` -${damageReduction} (defender, min 1)` : ""} = ${damagePerHit} per hit; main ${damageMain.toFixed(4)}, mortal ${damageMortal.toFixed(4)}`,
   });
 
   // 6. FNP
-  let afterFnp = damage;
-  let fnpDetail = "no FNP";
-  const fnp = resolved.feelNoPain;
-  if (fnp) {
-    const pSucc = Math.max(0, Math.min(1, (7 - fnp.threshold) / 6));
-    afterFnp = damage * (1 - pSucc);
-    fnpDetail = `FNP ${fnp.threshold}+ (P=${pSucc.toFixed(4)})`;
-  }
-  // TODO M2: per-damage-point FNP rolls (e.g. Death Guard 5+ FNP only on
-  // mortals); the current model applies FNP linearly to expected damage.
+  // Two scopes compose: an all-FNP fires on every unsaved wound; a mortal-FNP
+  // fires only on the mortal-wound stream (e.g. Death Guard 5+ FNP vs mortals).
+  // A target carrying both rolls both against mortals — independent Bernoulli
+  // trials, so the surviving fractions multiply.
+  const pSurviveAll = fnpSurvivalFraction(resolved.feelNoPain);
+  const pSurviveMortal = fnpSurvivalFraction(resolved.feelNoPainMortal);
+  const afterMain = damageMain * pSurviveAll;
+  const afterMortal = damageMortal * pSurviveAll * pSurviveMortal;
+  const afterFnp = afterMain + afterMortal;
+  const fnpDetail = describeFnp(resolved.feelNoPain, resolved.feelNoPainMortal);
   stages.push({ name: "after-fnp", expected: afterFnp, detail: fnpDetail });
 
   // 7. Models killed
@@ -376,6 +393,32 @@ function signed(n: number): string {
   if (n > 0) return `+${n}`;
   if (n < 0) return `${n}`;
   return "0";
+}
+
+/** Fraction of damage that survives a single FNP roll (1 if no FNP). */
+function fnpSurvivalFraction(
+  fnp: { threshold: number; dominantSource: unknown } | null,
+): number {
+  if (!fnp) return 1;
+  const pSucc = Math.max(0, Math.min(1, (7 - fnp.threshold) / 6));
+  return 1 - pSucc;
+}
+
+function describeFnp(
+  all: { threshold: number; dominantSource: unknown } | null,
+  mortal: { threshold: number; dominantSource: unknown } | null,
+): string {
+  if (!all && !mortal) return "no FNP";
+  const parts: string[] = [];
+  if (all) {
+    const pSucc = (7 - all.threshold) / 6;
+    parts.push(`FNP ${all.threshold}+ (P=${pSucc.toFixed(4)})`);
+  }
+  if (mortal) {
+    const pSucc = (7 - mortal.threshold) / 6;
+    parts.push(`FNP ${mortal.threshold}+ vs mortals (P=${pSucc.toFixed(4)})`);
+  }
+  return parts.join(", ");
 }
 
 function attacksDetail(

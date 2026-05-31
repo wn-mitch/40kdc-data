@@ -52,7 +52,15 @@ export type BuffContribution =
       subset: "ones" | "all-failures";
     }
   | { type: "extra-keyword"; keywordRef: WeaponKeywordRef }
-  | { type: "feel-no-pain"; threshold: number }
+  /**
+   * Feel-no-pain: roll one D6 per unsaved wound at `threshold`+, ignoring the
+   * wound on a pass. `scope` controls which wound stream it applies to:
+   *  - `"all"` (default): every unsaved wound (main + mortal).
+   *  - `"mortal"`: mortal-wound stream only (e.g. Death Guard 5+ FNP vs
+   *    mortals). A target may carry both an all-FNP and a mortal-FNP; the
+   *    engine rolls both against mortals.
+   */
+  | { type: "feel-no-pain"; threshold: number; scope?: "all" | "mortal" }
   | { type: "damage-mod"; value: number }
   /** Additive modifier to the attacker's per-model attack count (A stat). */
   | { type: "attacks-mod"; value: number }
@@ -65,7 +73,23 @@ export type BuffContribution =
    * defender's save (negative = more piercing), so a value of `-1` here makes
    * the weapon one AP more piercing.
    */
-  | { type: "ap-mod"; value: number };
+  | { type: "ap-mod"; value: number }
+  /**
+   * Defender-side: subtract `value` from each unsaved damage point (floored at
+   * 1 by the engine). Multiple sources do NOT stack in 10e — the largest
+   * reduction wins. The corpus also encodes `"half"` and `"to-zero"`
+   * reductions; the buff layer only models the additive form because the
+   * other two are typically one-use ablation that doesn't fold into the
+   * expected-value math cleanly.
+   */
+  | { type: "damage-reduction"; value: number }
+  /**
+   * Defender-side: ability-granted invulnerable save threshold (e.g. a buff
+   * that grants a 4+ invuln). Best (lowest) threshold wins; the engine then
+   * picks the better of `printed Sv after AP/cover` and `effective invuln`
+   * (invuln bypasses both AP and cover).
+   */
+  | { type: "invulnerable-save"; threshold: number };
 
 /** Optional gating; the resolver drops buffs whose gate fails. */
 export type BuffApplicability = {
@@ -145,12 +169,27 @@ export type ResolvedModifiers = {
     >
   >;
   extraKeywords: { keywordRef: WeaponKeywordRef; source: BuffSource }[];
+  /** All-wound FNP — fires on the main and mortal damage streams alike. */
   feelNoPain: { threshold: number; dominantSource: BuffSource } | null;
+  /** Mortal-only FNP — fires only on the mortal-wound damage stream. */
+  feelNoPainMortal: { threshold: number; dominantSource: BuffSource } | null;
   damageMod: { value: number; sources: BuffSource[] };
   attacksMod: { value: number; sources: BuffSource[] };
   strengthMod: { value: number; sources: BuffSource[] };
   toughnessMod: { value: number; sources: BuffSource[] };
   apMod: { value: number; sources: BuffSource[] };
+  /**
+   * Defender-side damage reduction. Highest-wins (multiple sources do not
+   * stack in 10e); the dominant source is the one whose value matches the
+   * surviving reduction.
+   */
+  damageReduction: { value: number; dominantSource: BuffSource | null };
+  /**
+   * Ability-granted invulnerable save. Best (lowest) threshold wins. `null`
+   * when no ability granted one; the engine still uses the unit's printed
+   * `invuln_sv` from the profile in that case.
+   */
+  invulnerable: { threshold: number; dominantSource: BuffSource } | null;
 };
 
 /** Stable ordering used to break ties when multiple buffs claim the same field. */
@@ -204,11 +243,14 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
     rerolls: {},
     extraKeywords: [],
     feelNoPain: null,
+    feelNoPainMortal: null,
     damageMod: { value: 0, sources: [] },
     attacksMod: { value: 0, sources: [] },
     strengthMod: { value: 0, sources: [] },
     toughnessMod: { value: 0, sources: [] },
     apMod: { value: 0, sources: [] },
+    damageReduction: { value: 0, dominantSource: null },
+    invulnerable: null,
   };
 
   // Hit / wound mods: sum, then cap at ±1, with dominant source picked from
@@ -256,11 +298,17 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
         }
         break;
       }
-      case "feel-no-pain":
-        if (out.feelNoPain === null || c.threshold < out.feelNoPain.threshold) {
-          out.feelNoPain = { threshold: c.threshold, dominantSource: b.source };
+      case "feel-no-pain": {
+        // Best (lowest) threshold wins per scope. An undeclared scope is
+        // treated as "all" — that's the existing convention (unscoped FNP =
+        // applies to every wound) and keeps every shipped FNP buff regression-safe.
+        const scope = c.scope ?? "all";
+        const slot = scope === "mortal" ? "feelNoPainMortal" : "feelNoPain";
+        if (out[slot] === null || c.threshold < out[slot]!.threshold) {
+          out[slot] = { threshold: c.threshold, dominantSource: b.source };
         }
         break;
+      }
       case "damage-mod":
         out.damageMod.value += c.value;
         out.damageMod.sources.push(b.source);
@@ -280,6 +328,30 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
       case "ap-mod":
         out.apMod.value += c.value;
         out.apMod.sources.push(b.source);
+        break;
+      case "damage-reduction":
+        // Highest reduction wins (no stacking). Ties break by source rank so
+        // an ability source is preferred over a manual one for provenance
+        // purposes; either way the resolved value is unchanged.
+        if (
+          out.damageReduction.dominantSource === null ||
+          c.value > out.damageReduction.value ||
+          (c.value === out.damageReduction.value &&
+            rank(b.source) < rank(out.damageReduction.dominantSource))
+        ) {
+          out.damageReduction = { value: c.value, dominantSource: b.source };
+        }
+        break;
+      case "invulnerable-save":
+        // Best (lowest threshold) wins. Same tie-break by source rank.
+        if (
+          out.invulnerable === null ||
+          c.threshold < out.invulnerable.threshold ||
+          (c.threshold === out.invulnerable.threshold &&
+            rank(b.source) < rank(out.invulnerable.dominantSource))
+        ) {
+          out.invulnerable = { threshold: c.threshold, dominantSource: b.source };
+        }
         break;
     }
   }

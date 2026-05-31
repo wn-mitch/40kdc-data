@@ -157,7 +157,10 @@ fn feel_no_pain_buffs(obj: &serde_json::Map<String, Value>, source: &BuffSource)
     vec![Buff {
         source: source.clone(),
         applicable_when: None,
-        contribution: BuffContribution::FeelNoPain { threshold },
+        contribution: BuffContribution::FeelNoPain {
+            threshold,
+            scope: Default::default(),
+        },
     }]
 }
 

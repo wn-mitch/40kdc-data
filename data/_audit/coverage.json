@@ -15,8 +15,8 @@
       "faction": "adepta-sororitas",
       "total": 80,
       "offensive": 21,
-      "defensive": 5,
-      "inert": 54,
+      "defensive": 6,
+      "inert": 53,
       "stub": 14,
       "stubStructural": 7,
       "gwTextLeak": 0,
@@ -26,8 +26,8 @@
       "faction": "adeptus-astartes",
       "total": 344,
       "offensive": 109,
-      "defensive": 14,
-      "inert": 221,
+      "defensive": 24,
+      "inert": 211,
       "stub": 25,
       "stubStructural": 10,
       "gwTextLeak": 0,
@@ -37,8 +37,8 @@
       "faction": "adeptus-custodes",
       "total": 65,
       "offensive": 13,
-      "defensive": 5,
-      "inert": 47,
+      "defensive": 7,
+      "inert": 45,
       "stub": 4,
       "stubStructural": 1,
       "gwTextLeak": 0,
@@ -48,8 +48,8 @@
       "faction": "adeptus-mechanicus",
       "total": 71,
       "offensive": 13,
-      "defensive": 5,
-      "inert": 53,
+      "defensive": 7,
+      "inert": 51,
       "stub": 1,
       "stubStructural": 1,
       "gwTextLeak": 0,
@@ -59,8 +59,8 @@
       "faction": "aeldari",
       "total": 151,
       "offensive": 33,
-      "defensive": 2,
-      "inert": 116,
+      "defensive": 7,
+      "inert": 111,
       "stub": 19,
       "stubStructural": 12,
       "gwTextLeak": 0,
@@ -70,8 +70,8 @@
       "faction": "agents-of-the-imperium",
       "total": 92,
       "offensive": 23,
-      "defensive": 2,
-      "inert": 67,
+      "defensive": 6,
+      "inert": 63,
       "stub": 3,
       "stubStructural": 3,
       "gwTextLeak": 0,
@@ -81,8 +81,8 @@
       "faction": "astra-militarum",
       "total": 148,
       "offensive": 35,
-      "defensive": 7,
-      "inert": 106,
+      "defensive": 11,
+      "inert": 102,
       "stub": 7,
       "stubStructural": 5,
       "gwTextLeak": 0,
@@ -92,8 +92,8 @@
       "faction": "chaos-daemons",
       "total": 123,
       "offensive": 34,
-      "defensive": 6,
-      "inert": 83,
+      "defensive": 8,
+      "inert": 81,
       "stub": 14,
       "stubStructural": 7,
       "gwTextLeak": 0,
@@ -114,8 +114,8 @@
       "faction": "chaos-space-marines",
       "total": 182,
       "offensive": 47,
-      "defensive": 6,
-      "inert": 129,
+      "defensive": 9,
+      "inert": 126,
       "stub": 26,
       "stubStructural": 12,
       "gwTextLeak": 0,
@@ -136,8 +136,8 @@
       "faction": "drukhari",
       "total": 76,
       "offensive": 19,
-      "defensive": 1,
-      "inert": 56,
+      "defensive": 3,
+      "inert": 54,
       "stub": 15,
       "stubStructural": 10,
       "gwTextLeak": 0,
@@ -147,8 +147,8 @@
       "faction": "emperors-children",
       "total": 61,
       "offensive": 12,
-      "defensive": 1,
-      "inert": 48,
+      "defensive": 2,
+      "inert": 47,
       "stub": 12,
       "stubStructural": 6,
       "gwTextLeak": 0,
@@ -158,8 +158,8 @@
       "faction": "genestealer-cults",
       "total": 63,
       "offensive": 13,
-      "defensive": 3,
-      "inert": 47,
+      "defensive": 4,
+      "inert": 46,
       "stub": 2,
       "stubStructural": 2,
       "gwTextLeak": 0,
@@ -169,8 +169,8 @@
       "faction": "grey-knights",
       "total": 52,
       "offensive": 14,
-      "defensive": 2,
-      "inert": 36,
+      "defensive": 4,
+      "inert": 34,
       "stub": 3,
       "stubStructural": 1,
       "gwTextLeak": 0,
@@ -180,8 +180,8 @@
       "faction": "imperial-knights",
       "total": 45,
       "offensive": 21,
-      "defensive": 0,
-      "inert": 24,
+      "defensive": 1,
+      "inert": 23,
       "stub": 7,
       "stubStructural": 2,
       "gwTextLeak": 0,
@@ -191,8 +191,8 @@
       "faction": "leagues-of-votann",
       "total": 54,
       "offensive": 13,
-      "defensive": 3,
-      "inert": 38,
+      "defensive": 5,
+      "inert": 36,
       "stub": 1,
       "stubStructural": 1,
       "gwTextLeak": 0,
@@ -202,8 +202,8 @@
       "faction": "necrons",
       "total": 122,
       "offensive": 22,
-      "defensive": 9,
-      "inert": 91,
+      "defensive": 13,
+      "inert": 87,
       "stub": 10,
       "stubStructural": 8,
       "gwTextLeak": 0,
@@ -213,8 +213,8 @@
       "faction": "orks",
       "total": 118,
       "offensive": 29,
-      "defensive": 5,
-      "inert": 84,
+      "defensive": 8,
+      "inert": 81,
       "stub": 6,
       "stubStructural": 1,
       "gwTextLeak": 0,
@@ -224,8 +224,8 @@
       "faction": "tau-empire",
       "total": 113,
       "offensive": 32,
-      "defensive": 3,
-      "inert": 78,
+      "defensive": 4,
+      "inert": 77,
       "stub": 7,
       "stubStructural": 4,
       "gwTextLeak": 0,
@@ -235,8 +235,8 @@
       "faction": "thousand-sons",
       "total": 95,
       "offensive": 25,
-      "defensive": 2,
-      "inert": 68,
+      "defensive": 3,
+      "inert": 67,
       "stub": 20,
       "stubStructural": 13,
       "gwTextLeak": 0,
@@ -246,8 +246,8 @@
       "faction": "tyranids",
       "total": 89,
       "offensive": 19,
-      "defensive": 4,
-      "inert": 67,
+      "defensive": 5,
+      "inert": 66,
       "stub": 7,
       "stubStructural": 2,
       "gwTextLeak": 0,
@@ -268,8 +268,8 @@
   "totals": {
     "total": 2397,
     "offensive": 598,
-    "defensive": 96,
-    "inert": 1704,
+    "defensive": 148,
+    "inert": 1652,
     "stub": 217,
     "stubStructural": 116,
     "gwTextLeak": 0,
@@ -313,10 +313,6 @@
       "count": 45
     },
     {
-      "reason": "effect type \"invulnerable-save\" is not modelled by the buff layer",
-      "count": 40
-    },
-    {
       "reason": "conditional: cannot evaluate condition \"undefined\" against current context",
       "count": 40
     },
@@ -339,10 +335,6 @@
     {
       "reason": "effect type \"deep-strike\" is not modelled by the buff layer",
       "count": 32
-    },
-    {
-      "reason": "effect type \"damage-reduction\" is not modelled by the buff layer",
-      "count": 29
     },
     {
       "reason": "effect type \"fallback-and-act\" is not modelled by the buff layer",
@@ -1193,8 +1185,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "adepta-sororitas",
@@ -1593,8 +1585,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "adeptus-astartes",
@@ -1853,8 +1845,8 @@
       "shape": "conditional",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "adeptus-astartes",
@@ -2153,8 +2145,8 @@
       "shape": "damage-reduction",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "adeptus-astartes",
@@ -2303,8 +2295,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "adeptus-astartes",
@@ -2474,7 +2466,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "adeptus-astartes",
@@ -2643,8 +2635,8 @@
       "shape": "conditional",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "adeptus-astartes",
@@ -2663,8 +2655,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "adeptus-astartes",
@@ -3383,8 +3375,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "adeptus-astartes",
@@ -3403,8 +3395,8 @@
       "shape": "damage-reduction",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "adeptus-astartes",
@@ -3623,8 +3615,8 @@
       "shape": "damage-reduction",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "adeptus-astartes",
@@ -3983,8 +3975,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "adeptus-astartes",
@@ -4024,7 +4016,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "adeptus-astartes",
@@ -4753,8 +4745,8 @@
       "shape": "damage-reduction",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "adeptus-custodes",
@@ -5363,8 +5355,8 @@
       "shape": "conditional",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "adeptus-custodes",
@@ -5453,8 +5445,8 @@
       "shape": "conditional",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "adeptus-mechanicus",
@@ -5533,8 +5525,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "adeptus-mechanicus",
@@ -6343,8 +6335,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "aeldari",
@@ -6364,7 +6356,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "aeldari",
@@ -6473,8 +6465,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "aeldari",
@@ -6764,7 +6756,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "aeldari",
@@ -6863,8 +6855,8 @@
       "shape": "damage-reduction",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "aeldari",
@@ -6973,8 +6965,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "aeldari",
@@ -7334,7 +7326,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "aeldari",
@@ -7373,8 +7365,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "aeldari",
@@ -7903,8 +7895,8 @@
       "shape": "conditional",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "agents-of-the-imperium",
@@ -7993,8 +7985,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "agents-of-the-imperium",
@@ -8153,8 +8145,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "agents-of-the-imperium",
@@ -8283,8 +8275,8 @@
       "shape": "conditional",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "agents-of-the-imperium",
@@ -8983,8 +8975,8 @@
       "shape": "damage-reduction",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "astra-militarum",
@@ -9003,8 +8995,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "astra-militarum",
@@ -9274,7 +9266,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "astra-militarum",
@@ -9753,8 +9745,8 @@
       "shape": "conditional",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "astra-militarum",
@@ -9893,8 +9885,8 @@
       "shape": "damage-reduction",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "astra-militarum",
@@ -10093,8 +10085,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "chaos-daemons",
@@ -10783,8 +10775,8 @@
       "shape": "conditional",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "chaos-daemons",
@@ -11764,7 +11756,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "chaos-space-marines",
@@ -11883,8 +11875,8 @@
       "shape": "conditional",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "chaos-space-marines",
@@ -12494,7 +12486,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "chaos-space-marines",
@@ -12974,7 +12966,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "chaos-space-marines",
@@ -13233,8 +13225,8 @@
       "shape": "damage-reduction",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "chaos-space-marines",
@@ -13343,8 +13335,8 @@
       "shape": "conditional",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "chaos-space-marines",
@@ -14683,8 +14675,8 @@
       "shape": "conditional",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "drukhari",
@@ -14844,7 +14836,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "drukhari",
@@ -14953,8 +14945,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "drukhari",
@@ -14964,7 +14956,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "drukhari",
@@ -15533,8 +15525,8 @@
       "shape": "damage-reduction",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "emperors-children",
@@ -16283,8 +16275,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "genestealer-cults",
@@ -16623,8 +16615,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "grey-knights",
@@ -16863,8 +16855,8 @@
       "shape": "damage-reduction",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "grey-knights",
@@ -16913,8 +16905,8 @@
       "shape": "damage-reduction",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "imperial-knights",
@@ -17373,8 +17365,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "leagues-of-votann",
@@ -17693,8 +17685,8 @@
       "shape": "conditional",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "leagues-of-votann",
@@ -18053,8 +18045,8 @@
       "shape": "damage-reduction",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "necrons",
@@ -18143,8 +18135,8 @@
       "shape": "conditional",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "necrons",
@@ -18473,8 +18465,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "necrons",
@@ -18993,8 +18985,8 @@
       "shape": "conditional",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "necrons",
@@ -19323,8 +19315,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "orks",
@@ -19563,8 +19555,8 @@
       "shape": "conditional",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "orks",
@@ -19773,8 +19765,8 @@
       "shape": "conditional",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "orks",
@@ -20954,7 +20946,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "tau-empire",
@@ -21023,8 +21015,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "tau-empire",
@@ -22143,8 +22135,8 @@
       "shape": "conditional",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "thousand-sons",
@@ -22184,7 +22176,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "thousand-sons",
@@ -22774,7 +22766,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "tyranids",
@@ -22843,8 +22835,8 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
-      "gap": "effect type \"invulnerable-save\" is not modelled by the buff layer"
+      "defensive": true,
+      "gap": null
     },
     {
       "faction": "tyranids",
@@ -23874,7 +23866,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "world-eaters",
@@ -24194,7 +24186,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "world-eaters",
@@ -24404,7 +24396,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"damage-reduction\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "world-eaters",

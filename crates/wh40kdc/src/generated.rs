@@ -6991,7 +6991,7 @@ impl ::std::convert::TryFrom<::std::string::String> for SimpleConditionType {
 ///      ]
 ///    }
 ///  },
-///  "$comment": "When `type` is `re-roll`, `modifier` must carry `roll` (string) and `subset` (`ones` | `all-failures`). Rerolls always target failures; the subset decides whether only 1s are rerolled or every failed die. The constraint is enforced by AJV at validation time and stripped from the codegen bundle (typify can't model if/then/else) — the generated TS/Rust types therefore see `modifier` as an open object, matching its other-`type` callers."
+///  "$comment": "When `type` is `re-roll`, `modifier` must carry `roll` (string) and `subset` (`ones` | `all-failures`). Rerolls always target failures; the subset decides whether only 1s are rerolled or every failed die. The constraint is enforced by AJV at validation time and stripped from the codegen bundle (typify can't model if/then/else) — the generated TS/Rust types therefore see `modifier` as an open object, matching its other-`type` callers. When `type` is `feel-no-pain`, `modifier` carries `threshold` (the FNP save target) and optionally `scope` ∈ {`all`, `mortal`}; an absent scope defaults to `all` (fires on every unsaved wound). The two scopes compose independently against the mortal-wound stream."
 ///}
 /// ```
 /// </details>

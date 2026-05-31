@@ -15,7 +15,9 @@ use std::fmt;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use super::buffs::{resolve_buffs, Buff, EngineContext, ResolvedModifiers, WeaponKeywordRef};
+use super::buffs::{
+    resolve_buffs, Buff, EngineContext, FeelNoPainState, ResolvedModifiers, WeaponKeywordRef,
+};
 use super::from_keyword::buffs_from_keyword;
 use crate::data::Dataset;
 use crate::{KeywordList, StatValue, Unit, Weapon, WeaponType};
@@ -374,8 +376,19 @@ pub fn crunch(
         armor_target_raw
     };
     let armor_final = clamp(armor_after_cover, 2.0, 7.0);
-    let invuln = unit_profile.invuln_sv.map(|n| n as f64);
-    let effective_save_target = match invuln {
+    // The unit's printed invuln (from the profile) and any ability-granted
+    // invuln combine best-wins (lowest threshold). Invuln bypasses AP and
+    // cover — only the armor branch above is affected by those — so the final
+    // save is min(armor-after-AP-and-cover, effective-invuln).
+    let printed_invuln = unit_profile.invuln_sv.map(|n| n as f64);
+    let ability_invuln = resolved.invulnerable.as_ref().map(|i| i.threshold);
+    let effective_invuln = match (printed_invuln, ability_invuln) {
+        (Some(a), Some(b)) => Some(a.min(b)),
+        (Some(a), None) => Some(a),
+        (None, Some(b)) => Some(b),
+        (None, None) => None,
+    };
+    let effective_save_target = match effective_invuln {
         Some(inv) => armor_final.min(inv),
         None => armor_final,
     };
@@ -403,7 +416,7 @@ pub fn crunch(
         name: StageName::Unsaved,
         expected: unsaved,
         detail: format!(
-            "Sv{}+, AP{}{}{}{} → effective {}+ (P(save)={:.4})",
+            "Sv{}+, AP{}{}{}{}{} → effective {}+ (P(save)={:.4})",
             unit_profile.sv,
             signed(ap),
             if ap_mod != 0.0 {
@@ -417,6 +430,10 @@ pub fn crunch(
                 String::new()
             },
             if covered { ", cover (+1, cap 3+)" } else { "" },
+            match ability_invuln {
+                Some(inv) => format!(", invuln {inv}+ (ability)"),
+                None => String::new(),
+            },
             effective_save_target,
             p_saved,
         ),
@@ -429,7 +446,17 @@ pub fn crunch(
         (Some(kw), true) => eval_param_value(parameter(kw, "value")),
         _ => 0.0,
     };
-    let damage_per_hit = (base_d + melta_bonus + resolved.damage_mod.value).max(0.0);
+    let before_reduction = (base_d + melta_bonus + resolved.damage_mod.value).max(0.0);
+    let damage_reduction = resolved.damage_reduction.value;
+    // 10e damage-reduction abilities always carry the canonical "to a minimum
+    // of 1" clause, so the floor lives in the math, not the data. The clause
+    // only applies when damage-reduction is active — without it, a D1 weapon
+    // with a -1 attacker damage-mod still produces 0 damage.
+    let damage_per_hit = if damage_reduction > 0.0 {
+        (before_reduction - damage_reduction).max(1.0)
+    } else {
+        before_reduction
+    };
     let damage_main = unsaved * damage_per_hit;
     let damage_mortal = mortal_wounds_stream * damage_per_hit;
     let damage = damage_main + damage_mortal;
@@ -437,7 +464,7 @@ pub fn crunch(
         name: StageName::Damage,
         expected: damage,
         detail: format!(
-            "D {base_d}{}{} = {damage_per_hit} per hit; main {damage_main:.4}, mortal {damage_mortal:.4}",
+            "D {base_d}{}{}{} = {damage_per_hit} per hit; main {damage_main:.4}, mortal {damage_mortal:.4}",
             if melta_bonus != 0.0 {
                 format!(" + Melta {melta_bonus} (half range)")
             } else {
@@ -448,20 +475,28 @@ pub fn crunch(
             } else {
                 String::new()
             },
+            if damage_reduction > 0.0 {
+                format!(" -{damage_reduction} (defender, min 1)")
+            } else {
+                String::new()
+            },
         ),
     });
 
     // 6. FNP
-    let (after_fnp, fnp_detail) = match resolved.feel_no_pain.as_ref() {
-        Some(fnp) => {
-            let p_succ = ((7.0 - fnp.threshold) / 6.0).clamp(0.0, 1.0);
-            (
-                damage * (1.0 - p_succ),
-                format!("FNP {}+ (P={:.4})", fnp.threshold, p_succ),
-            )
-        }
-        None => (damage, "no FNP".to_string()),
-    };
+    // Two scopes compose: an all-FNP fires on every unsaved wound; a
+    // mortal-FNP fires only on the mortal-wound stream. A target carrying
+    // both rolls both against mortals — independent Bernoulli trials, so
+    // the surviving fractions multiply.
+    let p_survive_all = fnp_survival_fraction(resolved.feel_no_pain.as_ref());
+    let p_survive_mortal = fnp_survival_fraction(resolved.feel_no_pain_mortal.as_ref());
+    let after_main = damage_main * p_survive_all;
+    let after_mortal = damage_mortal * p_survive_all * p_survive_mortal;
+    let after_fnp = after_main + after_mortal;
+    let fnp_detail = describe_fnp(
+        resolved.feel_no_pain.as_ref(),
+        resolved.feel_no_pain_mortal.as_ref(),
+    );
     stages.push(Stage {
         name: StageName::AfterFnp,
         expected: after_fnp,
@@ -754,6 +789,31 @@ fn signed(n: f64) -> String {
         format!("{n}")
     } else {
         "0".to_string()
+    }
+}
+
+/// Fraction of damage that survives a single FNP roll (1 if no FNP).
+fn fnp_survival_fraction(fnp: Option<&FeelNoPainState>) -> f64 {
+    match fnp {
+        None => 1.0,
+        Some(f) => 1.0 - ((7.0 - f.threshold) / 6.0).clamp(0.0, 1.0),
+    }
+}
+
+fn describe_fnp(all: Option<&FeelNoPainState>, mortal: Option<&FeelNoPainState>) -> String {
+    let mut parts: Vec<String> = Vec::new();
+    if let Some(f) = all {
+        let p_succ = (7.0 - f.threshold) / 6.0;
+        parts.push(format!("FNP {}+ (P={:.4})", f.threshold, p_succ));
+    }
+    if let Some(f) = mortal {
+        let p_succ = (7.0 - f.threshold) / 6.0;
+        parts.push(format!("FNP {}+ vs mortals (P={:.4})", f.threshold, p_succ));
+    }
+    if parts.is_empty() {
+        "no FNP".to_string()
+    } else {
+        parts.join(", ")
     }
 }
 
