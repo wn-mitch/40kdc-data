@@ -8,6 +8,10 @@
   } from "./lib/data.js";
   import MissionCard from "./lib/MissionCard.svelte";
 
+  // Relative path back up to the docs-site landing page that wraps the
+  // examples (./examples/<name>/ → ./). Resolves correctly on the deployed
+  // GitHub Pages site regardless of the TOOLLET_BASE prefix.
+  const HOME_URL = "../../";
   const REPO_URL =
     "https://github.com/tabletop-developer-consortium/40kdc-data";
   const PACKAGE_URL =
@@ -51,6 +55,9 @@
       <span class="tag">11e Force Disposition matchups</span>
     </a>
     <nav class="app-header-links">
+      <a class="home" href={HOME_URL} aria-label="Back to 40kdc-data examples">
+        ← 40kdc-data
+      </a>
       <a
         href={REPO_URL}
         target="_blank"
@@ -132,6 +139,41 @@
           </div>
         {/each}
       {/each}
+    </div>
+
+    <div class="selectors" role="group" aria-label="Pick dispositions">
+      <div class="selector-group">
+        <span class="section-label">You</span>
+        <div class="pill-row">
+          {#each DISPOSITIONS as d (d)}
+            <button
+              type="button"
+              class="pill"
+              class:selected={you === d}
+              aria-pressed={you === d}
+              onclick={() => pickYou(d)}
+            >
+              {DISPOSITION_LABELS[d]}
+            </button>
+          {/each}
+        </div>
+      </div>
+      <div class="selector-group">
+        <span class="section-label">Opponent</span>
+        <div class="pill-row">
+          {#each DISPOSITIONS as d (d)}
+            <button
+              type="button"
+              class="pill"
+              class:selected={opp === d}
+              aria-pressed={opp === d}
+              onclick={() => pickOpp(d)}
+            >
+              {DISPOSITION_LABELS[d]}
+            </button>
+          {/each}
+        </div>
+      </div>
     </div>
 
     {#if ready}

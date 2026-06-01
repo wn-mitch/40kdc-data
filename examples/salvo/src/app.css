@@ -252,6 +252,14 @@ footer.app-footer { grid-area: footer; }
   transition: color 80ms ease;
 }
 .app-header-links a:hover { color: var(--accent); }
+.app-header-links .home {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  white-space: nowrap;
+}
 .app-header-links .pkg code {
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
@@ -262,7 +270,8 @@ footer.app-footer { grid-area: footer; }
   .app-header-links .pkg { display: none; }
 }
 @media (max-width: 380px) {
-  .app-header-links { display: none; }
+  /* Keep the back-link on the smallest phones; drop the rest. */
+  .app-header-links a:not(.home) { display: none; }
 }
 
 .app-footer {

@@ -173,6 +173,14 @@ button:focus-visible {
   transition: color 80ms ease;
 }
 .app-header-links a:hover { color: var(--accent); }
+.app-header-links .home {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  white-space: nowrap;
+}
 .app-header-links .pkg code {
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
@@ -183,7 +191,8 @@ button:focus-visible {
   .app-header-links .pkg { display: none; }
 }
 @media (max-width: 380px) {
-  .app-header-links { display: none; }
+  /* Keep the back-link on the smallest phones; drop the rest. */
+  .app-header-links a:not(.home) { display: none; }
 }
 
 .app-footer {
@@ -283,6 +292,47 @@ button:focus-visible {
   grid-template-columns: minmax(120px, 0.9fr) repeat(var(--cols), minmax(0, 1fr));
   gap: var(--space-1);
   margin-bottom: var(--space-5);
+}
+
+/* Mobile selector — replaces the matrix below the readout's stack point. Two
+   pill rows reusing the same pick handlers as the row/column headers. */
+.selectors { display: none; }
+.selector-group .section-label { display: block; margin-bottom: var(--space-2); }
+.pill-row { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.pill {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  padding: var(--space-2) var(--space-3);
+  color: var(--muted);
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color 100ms ease, color 100ms ease, background 100ms ease;
+}
+.pill:hover { border-color: var(--accent); color: var(--accent); }
+.pill.selected,
+.pill.selected:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+  border-color: var(--accent);
+}
+.pill:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+
+/* Below the readout's stack point, swap the matrix for the pill selectors.
+   This block must come after the .matrix / .selectors base rules above so it
+   wins on source order (media queries add no specificity). */
+@media (max-width: 560px) {
+  .matrix { display: none; }
+  .selectors {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
 }
 
 .corner {
