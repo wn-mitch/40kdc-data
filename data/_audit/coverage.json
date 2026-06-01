@@ -15,243 +15,243 @@
       "faction": "adepta-sororitas",
       "total": 80,
       "offensive": 21,
-      "defensive": 6,
+      "defensive": 8,
       "inert": 53,
       "stub": 14,
       "stubStructural": 7,
       "gwTextLeak": 0,
-      "defensiveSkipped": 3
+      "defensiveSkipped": 1
     },
     {
       "faction": "adeptus-astartes",
       "total": 344,
       "offensive": 109,
-      "defensive": 24,
+      "defensive": 39,
       "inert": 211,
       "stub": 25,
       "stubStructural": 10,
       "gwTextLeak": 0,
-      "defensiveSkipped": 21
+      "defensiveSkipped": 7
     },
     {
       "faction": "adeptus-custodes",
       "total": 65,
       "offensive": 13,
-      "defensive": 7,
+      "defensive": 11,
       "inert": 45,
       "stub": 4,
       "stubStructural": 1,
       "gwTextLeak": 0,
-      "defensiveSkipped": 7
+      "defensiveSkipped": 3
     },
     {
       "faction": "adeptus-mechanicus",
       "total": 71,
       "offensive": 13,
-      "defensive": 7,
+      "defensive": 10,
       "inert": 51,
       "stub": 1,
       "stubStructural": 1,
       "gwTextLeak": 0,
-      "defensiveSkipped": 4
+      "defensiveSkipped": 2
     },
     {
       "faction": "aeldari",
       "total": 151,
       "offensive": 33,
-      "defensive": 7,
-      "inert": 111,
+      "defensive": 13,
+      "inert": 110,
       "stub": 19,
       "stubStructural": 12,
       "gwTextLeak": 0,
-      "defensiveSkipped": 10
+      "defensiveSkipped": 5
     },
     {
       "faction": "agents-of-the-imperium",
       "total": 92,
       "offensive": 23,
-      "defensive": 6,
+      "defensive": 8,
       "inert": 63,
       "stub": 3,
       "stubStructural": 3,
       "gwTextLeak": 0,
-      "defensiveSkipped": 3
+      "defensiveSkipped": 2
     },
     {
       "faction": "astra-militarum",
       "total": 148,
       "offensive": 35,
-      "defensive": 11,
+      "defensive": 14,
       "inert": 102,
       "stub": 7,
       "stubStructural": 5,
       "gwTextLeak": 0,
-      "defensiveSkipped": 7
+      "defensiveSkipped": 5
     },
     {
       "faction": "chaos-daemons",
       "total": 123,
       "offensive": 34,
-      "defensive": 8,
+      "defensive": 14,
       "inert": 81,
       "stub": 14,
       "stubStructural": 7,
       "gwTextLeak": 0,
-      "defensiveSkipped": 9
+      "defensiveSkipped": 4
     },
     {
       "faction": "chaos-knights",
       "total": 41,
       "offensive": 18,
-      "defensive": 0,
+      "defensive": 1,
       "inert": 23,
       "stub": 4,
       "stubStructural": 2,
       "gwTextLeak": 0,
-      "defensiveSkipped": 1
+      "defensiveSkipped": 0
     },
     {
       "faction": "chaos-space-marines",
       "total": 182,
       "offensive": 47,
-      "defensive": 9,
+      "defensive": 16,
       "inert": 126,
       "stub": 26,
       "stubStructural": 12,
       "gwTextLeak": 0,
-      "defensiveSkipped": 12
+      "defensiveSkipped": 6
     },
     {
       "faction": "death-guard",
       "total": 89,
       "offensive": 19,
-      "defensive": 4,
+      "defensive": 7,
       "inert": 66,
       "stub": 10,
       "stubStructural": 6,
       "gwTextLeak": 0,
-      "defensiveSkipped": 6
+      "defensiveSkipped": 3
     },
     {
       "faction": "drukhari",
       "total": 76,
       "offensive": 19,
-      "defensive": 3,
-      "inert": 54,
+      "defensive": 6,
+      "inert": 53,
       "stub": 15,
       "stubStructural": 10,
       "gwTextLeak": 0,
-      "defensiveSkipped": 3
+      "defensiveSkipped": 1
     },
     {
       "faction": "emperors-children",
       "total": 61,
       "offensive": 12,
-      "defensive": 2,
+      "defensive": 3,
       "inert": 47,
       "stub": 12,
       "stubStructural": 6,
       "gwTextLeak": 0,
-      "defensiveSkipped": 2
+      "defensiveSkipped": 1
     },
     {
       "faction": "genestealer-cults",
       "total": 63,
       "offensive": 13,
-      "defensive": 4,
+      "defensive": 6,
       "inert": 46,
       "stub": 2,
       "stubStructural": 2,
       "gwTextLeak": 0,
-      "defensiveSkipped": 2
+      "defensiveSkipped": 1
     },
     {
       "faction": "grey-knights",
       "total": 52,
       "offensive": 14,
-      "defensive": 4,
+      "defensive": 5,
       "inert": 34,
       "stub": 3,
       "stubStructural": 1,
       "gwTextLeak": 0,
-      "defensiveSkipped": 2
+      "defensiveSkipped": 1
     },
     {
       "faction": "imperial-knights",
       "total": 45,
       "offensive": 21,
-      "defensive": 1,
+      "defensive": 3,
       "inert": 23,
       "stub": 7,
       "stubStructural": 2,
       "gwTextLeak": 0,
-      "defensiveSkipped": 3
+      "defensiveSkipped": 1
     },
     {
       "faction": "leagues-of-votann",
       "total": 54,
       "offensive": 13,
-      "defensive": 5,
+      "defensive": 7,
       "inert": 36,
       "stub": 1,
       "stubStructural": 1,
       "gwTextLeak": 0,
-      "defensiveSkipped": 2
+      "defensiveSkipped": 1
     },
     {
       "faction": "necrons",
       "total": 122,
       "offensive": 22,
-      "defensive": 13,
+      "defensive": 21,
       "inert": 87,
       "stub": 10,
       "stubStructural": 8,
       "gwTextLeak": 0,
-      "defensiveSkipped": 8
+      "defensiveSkipped": 1
     },
     {
       "faction": "orks",
       "total": 118,
       "offensive": 29,
-      "defensive": 8,
+      "defensive": 12,
       "inert": 81,
       "stub": 6,
       "stubStructural": 1,
       "gwTextLeak": 0,
-      "defensiveSkipped": 6
+      "defensiveSkipped": 3
     },
     {
       "faction": "tau-empire",
       "total": 113,
       "offensive": 32,
-      "defensive": 4,
+      "defensive": 7,
       "inert": 77,
       "stub": 7,
       "stubStructural": 4,
       "gwTextLeak": 0,
-      "defensiveSkipped": 5
+      "defensiveSkipped": 3
     },
     {
       "faction": "thousand-sons",
       "total": 95,
       "offensive": 25,
-      "defensive": 3,
+      "defensive": 8,
       "inert": 67,
       "stub": 20,
       "stubStructural": 13,
       "gwTextLeak": 0,
-      "defensiveSkipped": 6
+      "defensiveSkipped": 2
     },
     {
       "faction": "tyranids",
       "total": 89,
       "offensive": 19,
-      "defensive": 5,
+      "defensive": 7,
       "inert": 66,
       "stub": 7,
       "stubStructural": 2,
       "gwTextLeak": 0,
-      "defensiveSkipped": 7
+      "defensiveSkipped": 6
     },
     {
       "faction": "world-eaters",
@@ -268,12 +268,12 @@
   "totals": {
     "total": 2397,
     "offensive": 598,
-    "defensive": 148,
-    "inert": 1652,
+    "defensive": 233,
+    "inert": 1650,
     "stub": 217,
     "stubStructural": 116,
     "gwTextLeak": 0,
-    "defensiveSkipped": 129
+    "defensiveSkipped": 59
   },
   "unsupportedReasons": [
     {
@@ -495,7 +495,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -1035,7 +1035,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -1915,7 +1915,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -1925,7 +1925,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -2045,7 +2045,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -2115,7 +2115,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -2335,7 +2335,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -2645,7 +2645,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -2775,7 +2775,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -2925,7 +2925,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -2955,7 +2955,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -3175,7 +3175,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -3555,7 +3555,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -4225,7 +4225,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -4445,7 +4445,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -4475,7 +4475,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -4495,7 +4495,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -4785,7 +4785,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -4915,7 +4915,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -4925,7 +4925,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -5165,7 +5165,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -5535,7 +5535,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -5625,7 +5625,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -6075,7 +6075,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -6185,7 +6185,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -6285,7 +6285,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -7145,7 +7145,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -7295,7 +7295,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -7325,7 +7325,7 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -7405,7 +7405,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -7855,7 +7855,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -8045,7 +8045,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -8795,7 +8795,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -9095,7 +9095,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -9365,7 +9365,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -10225,7 +10225,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -10365,7 +10365,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -10515,7 +10515,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -11005,7 +11005,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -11025,7 +11025,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -11035,7 +11035,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -11465,7 +11465,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -11785,7 +11785,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -11825,7 +11825,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -12235,7 +12235,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -12355,7 +12355,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -12435,7 +12435,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -12865,7 +12865,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -13245,7 +13245,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -13795,7 +13795,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -14025,7 +14025,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -14275,7 +14275,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -14525,7 +14525,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -14835,7 +14835,7 @@
       "shape": "invulnerable-save",
       "stub": false,
       "offensive": false,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -14885,7 +14885,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -15175,7 +15175,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -15735,7 +15735,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -16185,7 +16185,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -16815,7 +16815,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -16975,7 +16975,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -17225,7 +17225,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -17495,7 +17495,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -17565,7 +17565,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -17955,7 +17955,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -18295,7 +18295,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -18435,7 +18435,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -18455,7 +18455,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -18585,7 +18585,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -18785,7 +18785,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -18875,7 +18875,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -18995,7 +18995,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -19175,7 +19175,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -19385,7 +19385,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -19965,7 +19965,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -20005,7 +20005,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -20425,7 +20425,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -20535,7 +20535,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -20715,7 +20715,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -21615,7 +21615,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -21845,7 +21845,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -21915,7 +21915,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -22045,7 +22045,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -22245,7 +22245,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -22565,7 +22565,7 @@
       "shape": "roll-modifier",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {
@@ -22865,7 +22865,7 @@
       "shape": "conditional",
       "stub": false,
       "offensive": true,
-      "defensive": false,
+      "defensive": true,
       "gap": null
     },
     {

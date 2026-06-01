@@ -622,8 +622,7 @@
       "sorcerer"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "gift-of-chaos-psychic",
@@ -1994,8 +1993,7 @@
       "noctilith-crown"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "fearsome-aura",
@@ -2404,8 +2402,7 @@
       "chaos-predator-destructor"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "chosen-marauders",
@@ -2656,8 +2653,7 @@
       "forgefiend"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "furious-onslaught",
@@ -4214,8 +4210,7 @@
       "vashtorr-the-arkifane"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "indentured-daemon-engines",
@@ -5312,8 +5307,7 @@
       "mutoid-vermin"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "psychic-barrier-psychic",

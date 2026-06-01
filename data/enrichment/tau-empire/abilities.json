@@ -891,8 +891,7 @@
       "strike-team"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "ds8-support-turret",
@@ -1477,8 +1476,7 @@
       "tidewall-gunrig"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "tidewall-cover",

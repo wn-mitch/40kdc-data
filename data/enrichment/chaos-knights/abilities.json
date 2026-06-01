@@ -817,8 +817,7 @@
       "chaos-cerastus-knight-castigator"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "offerings-for-the-dark-gods-aura",

@@ -765,8 +765,7 @@
       "nurglings"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "activated"
   },
   {
     "ability_id": "leader",
@@ -1209,8 +1208,7 @@
       "keeper-of-secrets"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "shining-aegis",
@@ -1747,8 +1745,7 @@
       "feculent-gnarlmaw"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "daemon-lord-of-nurgle-aura",
@@ -3395,8 +3392,7 @@
       "the-changeling"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "fluxmaster",
@@ -3430,8 +3426,7 @@
       "fluxmaster"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "altered-reality-psychic",

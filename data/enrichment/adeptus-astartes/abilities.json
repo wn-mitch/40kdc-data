@@ -2078,8 +2078,7 @@
       "sanguinary-guard"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "reactive"
   },
   {
     "ability_id": "heirs-of-azkaellon",
@@ -2124,8 +2123,7 @@
       "sanguinary-guard"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "reactive"
   },
   {
     "ability_id": "sanguinary-banner",
@@ -2498,8 +2496,7 @@
       "inner-circle-companions"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "reactive"
   },
   {
     "ability_id": "enmity-for-the-unworthy",
@@ -2722,8 +2719,7 @@
       "nephilim-jetfighter"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "exemplar-of-hate",
@@ -4445,8 +4441,7 @@
       "darnath-lysander"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "rampart",
@@ -4899,8 +4894,7 @@
       "victrix-honour-guard"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "reactive"
   },
   {
     "ability_id": "glory-of-ultramar",
@@ -5406,8 +5400,7 @@
       "hammerfall-bunker"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "ceramite-cover",
@@ -5505,8 +5498,7 @@
       "suppressor-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "veil-of-time-psychic",
@@ -6165,8 +6157,7 @@
       "chief-librarian-tigurius"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "activated"
   },
   {
     "ability_id": "strafing-run",
@@ -7405,8 +7396,7 @@
       "company-heroes"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "reactive"
   },
   {
     "ability_id": "company-heroes",
@@ -9635,8 +9625,7 @@
       "ultramarines-honour-guard"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "reactive"
   },
   {
     "ability_id": "honour-guard-of-macragge",
@@ -10360,8 +10349,7 @@
       "wolf-guard-terminators"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "reactive"
   },
   {
     "ability_id": "bestial-rage",
@@ -10472,8 +10460,7 @@
       "wulfen-with-storm-shields"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "death-totem",
@@ -10537,8 +10524,7 @@
       "bjorn-the-fell-handed"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "ancient-tactician",

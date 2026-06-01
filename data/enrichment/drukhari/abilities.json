@@ -1490,8 +1490,7 @@
       "type": "invulnerable-save",
       "target": "self",
       "modifier": {
-        "type": "shadowfield",
-        "fragile": true
+        "invuln_sv": 4
       }
     },
     "scope": {
@@ -1503,7 +1502,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "fragile invuln: lost on a failed save (engine reads the 4+; the breaking mechanic is not modelled)"
   },
   {
     "ability_id": "soul-trap",
@@ -1690,8 +1689,7 @@
       "ravager"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "eradicate-the-foe",

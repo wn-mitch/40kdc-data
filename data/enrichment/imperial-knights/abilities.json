@@ -367,8 +367,7 @@
       "cerastus-knight-castigator"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "paladin-s-duty-bondsman",
@@ -1163,8 +1162,7 @@
       "armiger-helverin"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "magaera-s-duty-bondsman",

@@ -283,8 +283,7 @@
       "canoptek-macrocytes"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "nanoscarab-projector",
@@ -1416,8 +1415,7 @@
       "convergence-of-dominion"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "deployment",
@@ -1837,8 +1835,7 @@
       "catacomb-command-barge"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "hard-wired-for-destruction",
@@ -1908,8 +1905,7 @@
       "lychguard"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "reactive"
   },
   {
     "ability_id": "dispersion-shield",
@@ -3008,8 +3004,7 @@
       "doom-scythe"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "tectonic-reverberations",
@@ -3297,8 +3292,7 @@
       "chronomancer"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "chronometron",
@@ -3687,8 +3681,7 @@
       "anrakyr-the-traveller"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "lord-of-the-pyrrhian-eternals",
