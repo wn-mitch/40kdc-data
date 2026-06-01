@@ -72,6 +72,27 @@ describe("runner CLI subprocess", () => {
     expect(responses[3].value).toBeNull();
   }, 20_000);
 
+  it("dispatches the attribution op end-to-end", async () => {
+    const responses = (await driveRunner([
+      { op: "init", args: { spec_version: SPEC_VERSION, locale: "C", tz: "UTC", seed: 0 } },
+      {
+        op: "attribution",
+        args: {
+          attacker: { weaponId: "bolt-rifle", profileIndex: 0 },
+          modelsFiring: 5,
+          target: { unitId: "intercessor-squad", profileIndex: 0 },
+          context: { phase: "shooting", attackerStationary: false, withinHalfRange: false },
+          buffs: [],
+        },
+      },
+    ])) as ({ ok: boolean; value?: unknown })[];
+    expect(responses).toHaveLength(3);
+    expect(responses[1].ok).toBe(true);
+    const stages = responses[1].value as { name: string }[];
+    expect(stages).toHaveLength(7);
+    expect(stages[0].name).toBe("attacks");
+  }, 20_000);
+
   it("preserves request/response ordering under pipelined input", async () => {
     const requests = [
       { op: "init", args: { spec_version: SPEC_VERSION, locale: "C", tz: "UTC", seed: 0 } },

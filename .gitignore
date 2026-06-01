@@ -18,3 +18,13 @@ rube-goldberg-output.txt
 /data/_audit/author-input/
 /data/_audit/proposed/*.json
 /data/_audit/worklist.json
+
+# Fuzz-mode regression repros from the cross-impl parity differ. The directory
+# itself is kept (via .gitkeep) so the differ has somewhere to write; the JSON
+# repros are ephemeral — promoting one to the permanent corpus is a deliberate
+# act and lands under conformance/.
+/tooling/parity/regressions/*.json
+
+# Python bytecode caches from running the differ locally.
+__pycache__/
+*.pyc

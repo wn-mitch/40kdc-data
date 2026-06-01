@@ -192,6 +192,28 @@ describe("runner: ops dispatch through the public API", () => {
     expect(out.stages[0].name).toBe("attacks");
   });
 
+  it("attribution returns one entry per stage with lifts/baseline/residual", () => {
+    const state = createRunnerState();
+    init(state);
+    const resp = send(state, {
+      op: "attribution",
+      args: {
+        attacker: { weaponId: "bolt-rifle", profileIndex: 0 },
+        modelsFiring: 5,
+        target: { unitId: "intercessor-squad", profileIndex: 0 },
+        context: { phase: "shooting", attackerStationary: false, withinHalfRange: false },
+        buffs: [],
+      },
+    });
+    expect(resp.ok).toBe(true);
+    const stages = resp.value as { name: string; expected: number; baseline: number; lifts: unknown[]; residual: number; intrinsics: string[] }[];
+    expect(stages).toHaveLength(7);
+    expect(stages[0].name).toBe("attacks");
+    // No groupable buffs in the input → no lifts, baseline == expected.
+    expect(stages[0].lifts).toEqual([]);
+    expect(stages[0].baseline).toBeCloseTo(stages[0].expected, 6);
+  });
+
   it("shutdown returns ok null (CLI exits separately)", () => {
     const state = createRunnerState();
     init(state);

@@ -26,7 +26,7 @@ import { exportRoster, type ExportFormat } from "./export/index.js";
 import { importRoster, tryImportRoster, REGISTERED_ADAPTERS } from "./import/import-roster.js";
 import { selectAdapter } from "./import/adapter.js";
 import { createValidator } from "./schema-loader.js";
-import { crunch, type Buff, type EngineContext, type EngineInput } from "./cruncher/index.js";
+import { attributeStages, crunch, type Buff, type EngineContext, type EngineInput } from "./cruncher/index.js";
 import type Ajv from "ajv";
 
 // -----------------------------------------------------------------------------
@@ -372,47 +372,97 @@ function handleValidate(state: RunnerState, args: unknown): RunnerResponse {
   return ok(out);
 }
 
+interface CrunchArgs {
+  attacker?: { weaponId?: string; profileIndex?: number };
+  modelsFiring?: number;
+  target?: { unitId?: string; profileIndex?: number; modelCount?: number };
+  context?: EngineContext;
+  buffs?: Buff[];
+}
+
+/**
+ * Validate the wire-shape `crunch`/`attribution` args and assemble the
+ * {@link EngineInput} both ops share, or return a typed runner error. The two
+ * ops have identical inputs — separating this lets each handler stay tiny and
+ * keeps the validation contract in one place.
+ */
+function buildEngineInput(
+  state: RunnerState,
+  a: CrunchArgs,
+  opName: string,
+): { ok: true; input: EngineInput } | { ok: false; response: RunnerResponse } {
+  if (!a.attacker?.weaponId || typeof a.attacker.profileIndex !== "number") {
+    return { ok: false, response: err("INVALID_INPUT", { detail: `${opName}.attacker.weaponId/profileIndex required` }) };
+  }
+  if (!a.target?.unitId || typeof a.target.profileIndex !== "number") {
+    return { ok: false, response: err("INVALID_INPUT", { detail: `${opName}.target.unitId/profileIndex required` }) };
+  }
+  if (typeof a.modelsFiring !== "number") {
+    return { ok: false, response: err("INVALID_INPUT", { detail: `${opName}.modelsFiring required` }) };
+  }
+  if (!a.context) {
+    return { ok: false, response: err("INVALID_INPUT", { detail: `${opName}.context required` }) };
+  }
+  const ds = getDataset(state);
+  const weapon = ds.weapons.get(a.attacker.weaponId);
+  if (!weapon) return { ok: false, response: err("UNKNOWN_ENTITY", { kind: "weapon", id: a.attacker.weaponId }) };
+  const unit = ds.units.get(a.target.unitId);
+  if (!unit) return { ok: false, response: err("UNKNOWN_ENTITY", { kind: "unit", id: a.target.unitId }) };
+  const input: EngineInput = {
+    attacker: { weapon: weapon.raw, profileIndex: a.attacker.profileIndex },
+    target: {
+      unit: unit.raw,
+      profileIndex: a.target.profileIndex,
+      ...(a.target.modelCount !== undefined ? { modelCount: a.target.modelCount } : {}),
+    },
+    modelsFiring: a.modelsFiring,
+    buffs: a.buffs ?? [],
+    context: a.context,
+  };
+  return { ok: true, input };
+}
+
 function handleCrunch(state: RunnerState, args: unknown): RunnerResponse {
   if (typeof args !== "object" || args === null) {
     return err("INVALID_INPUT", { detail: "crunch args must be an object" });
   }
-  const a = args as {
-    attacker?: { weaponId?: string; profileIndex?: number };
-    modelsFiring?: number;
-    target?: { unitId?: string; profileIndex?: number; modelCount?: number };
-    context?: EngineContext;
-    buffs?: Buff[];
-  };
-  if (!a.attacker?.weaponId || typeof a.attacker.profileIndex !== "number") {
-    return err("INVALID_INPUT", { detail: "crunch.attacker.weaponId/profileIndex required" });
-  }
-  if (!a.target?.unitId || typeof a.target.profileIndex !== "number") {
-    return err("INVALID_INPUT", { detail: "crunch.target.unitId/profileIndex required" });
-  }
-  if (typeof a.modelsFiring !== "number") {
-    return err("INVALID_INPUT", { detail: "crunch.modelsFiring required" });
-  }
-  if (!a.context) {
-    return err("INVALID_INPUT", { detail: "crunch.context required" });
-  }
-  const ds = getDataset(state);
-  const weapon = ds.weapons.get(a.attacker.weaponId);
-  if (!weapon) return err("UNKNOWN_ENTITY", { kind: "weapon", id: a.attacker.weaponId });
-  const unit = ds.units.get(a.target.unitId);
-  if (!unit) return err("UNKNOWN_ENTITY", { kind: "unit", id: a.target.unitId });
+  const built = buildEngineInput(state, args as CrunchArgs, "crunch");
+  if (!built.ok) return built.response;
   try {
-    const input: EngineInput = {
-      attacker: { weapon: weapon.raw, profileIndex: a.attacker.profileIndex },
-      target: {
-        unit: unit.raw,
-        profileIndex: a.target.profileIndex,
-        ...(a.target.modelCount !== undefined ? { modelCount: a.target.modelCount } : {}),
-      },
-      modelsFiring: a.modelsFiring,
-      buffs: a.buffs ?? [],
-      context: a.context,
-    };
-    return ok(crunch(input, ds));
+    // Canonical wire shape: stages array only. `resolved` is impl-internal
+    // (TS/Rust shape diverges); per-stage `detail` strings aren't byte-equal
+    // across impls. The differ compares per-stage `expected` with 5e-4
+    // tolerance — that's the cross-impl contract.
+    const out = crunch(built.input, getDataset(state));
+    return ok({ stages: out.stages.map((s) => ({ name: s.name, expected: s.expected })) });
+  } catch (e) {
+    return err("CRUNCH_ERROR", { detail: (e as Error).message });
+  }
+}
+
+function handleAttribution(state: RunnerState, args: unknown): RunnerResponse {
+  if (typeof args !== "object" || args === null) {
+    return err("INVALID_INPUT", { detail: "attribution args must be an object" });
+  }
+  const a = args as CrunchArgs & { epsilon?: number };
+  const built = buildEngineInput(state, a, "attribution");
+  if (!built.ok) return built.response;
+  try {
+    const opts = typeof a.epsilon === "number" ? { epsilon: a.epsilon } : undefined;
+    // Drop `detail` from the wire (impl-specific formatting). Keep all
+    // numeric fields and the kind-tagged BuffSource shape that's already
+    // serde-compatible.
+    const stages = attributeStages(built.input, getDataset(state), opts);
+    return ok(
+      stages.map((s) => ({
+        name: s.name,
+        expected: s.expected,
+        baseline: s.baseline,
+        lifts: s.lifts,
+        residual: s.residual,
+        intrinsics: s.intrinsics,
+      })),
+    );
   } catch (e) {
     return err("CRUNCH_ERROR", { detail: (e as Error).message });
   }
@@ -449,6 +499,8 @@ export function dispatch(state: RunnerState, req: { op: string; args?: unknown }
       return handleValidate(state, req.args);
     case "crunch":
       return handleCrunch(state, req.args);
+    case "attribution":
+      return handleAttribution(state, req.args);
     case "shutdown":
       return ok(null);
     default:

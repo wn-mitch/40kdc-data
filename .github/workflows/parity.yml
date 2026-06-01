@@ -1,0 +1,51 @@
+name: Cross-impl parity
+
+on: [push, pull_request]
+
+# The cross-implementation differ at tooling/parity/differ.py drives the TS
+# and Rust NDJSON runners against the shared conformance corpus. It is the
+# mechanically-enforceable form of the second-impl-reproduces rule documented
+# in CONFORMANCE.md: a golden the runners disagree on fails CI in the same PR
+# that introduced it.
+#
+# Runs parallel to validate.yml — the existing `conformance` job tests each
+# impl against committed goldens; this workflow tests them against each
+# other. Different signal, no ordering dependency.
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+
+      # Build both runners up front; the differ's auto-detection picks them
+      # up from tools/dist/ and target/release/ without flag flips.
+      - run: cd tools && npm ci
+      - run: cd tools && npm run build
+      - run: cargo build --release --bin wh40kdc-runner
+
+      # 1. Full corpus replay.
+      - name: Corpus parity (TS vs Rust)
+        run: python3 tooling/parity/differ.py --json
+
+      # 2. Property-style fuzzing. Deterministic seeds make CI reproducible;
+      # on any divergence the script writes full repros under
+      # tooling/parity/regressions/, which we upload as a job artifact so the
+      # PR author can grab them without rerunning locally.
+      - name: Fuzz normalize
+        run: python3 tooling/parity/differ.py --mode fuzz --fuzz-target normalize --fuzz-seed 1 --fuzz-count 1000
+      - name: Fuzz crunch
+        run: python3 tooling/parity/differ.py --mode fuzz --fuzz-target crunch --fuzz-seed 1 --fuzz-count 200
+
+      - name: Upload regressions (only on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: parity-regressions
+          path: tooling/parity/regressions/
+          if-no-files-found: ignore
