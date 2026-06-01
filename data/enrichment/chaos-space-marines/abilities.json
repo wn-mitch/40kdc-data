@@ -787,8 +787,7 @@
       "dark-commune"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "dark-ritual",
@@ -5599,8 +5598,7 @@
       "sorcerer-on-steed-of-slaanesh"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "revolting-regeneration",

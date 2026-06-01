@@ -250,8 +250,7 @@
       "onager-dunecrawler"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "broad-spectrum-data-tether",
@@ -484,8 +483,7 @@
       "tech-priest-manipulus"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "activated"
   },
   {
     "ability_id": "stealth",

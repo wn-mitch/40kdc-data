@@ -57,8 +57,7 @@
       "telemon-heavy-dreadnought"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "devoted-to-destruction",
@@ -1984,8 +1983,7 @@
       "trajann-valoris"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "activated"
   },
   {
     "ability_id": "supreme-commander",

@@ -844,8 +844,7 @@
       "venerable-dreadnought"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "champion-of-the-order-of-purifiers-psychic",
@@ -1623,8 +1622,7 @@
       "stormraven-gunship"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "gate-of-infinity",
