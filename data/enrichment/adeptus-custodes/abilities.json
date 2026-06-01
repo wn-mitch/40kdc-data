@@ -188,8 +188,7 @@
       "contemptor-galatus-dreadnought"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "unyielding-ancient",
@@ -555,8 +554,7 @@
       "vigilators"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "reactive"
   },
   {
     "ability_id": "saturation-volleys",
@@ -593,8 +591,7 @@
       "sagittarum-custodians"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "disintegration-beams",
@@ -1340,8 +1337,7 @@
       "custodian-wardens"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "reactive"
   },
   {
     "ability_id": "living-fortress",

@@ -659,8 +659,7 @@
       "sorcerer"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "gift-of-chaos-psychic",
@@ -1383,8 +1382,7 @@
       "scarab-occult-terminators"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "reactive"
   },
   {
     "ability_id": "unearthly-power",
@@ -1631,8 +1629,7 @@
       "chaos-predator-destructor"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "daemonforge",
@@ -2796,8 +2793,7 @@
       "forgefiend"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "furious-onslaught",

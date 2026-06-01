@@ -783,8 +783,7 @@
       "fulgurite-electro-priests"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "reactive"
   },
   {
     "ability_id": "blistering-salvoes",
@@ -2323,8 +2322,7 @@
       "secutarii-peltasts"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "doctrina-imperatives",

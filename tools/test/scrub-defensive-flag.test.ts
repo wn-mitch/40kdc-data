@@ -40,17 +40,17 @@ describe("scrubDefensiveFlags", () => {
     expect(abilities[0].community_notes).toBe(STALE_FLAG);
   });
 
-  it("leaves the flag on a roll-modifier defender effect the translator can't read yet", () => {
-    // The 69 flagged entries with this shape are blocked on a translator
-    // extension; the scrub correctly identifies them as not-yet-translatable.
+  it("leaves the flag on an ability-grant entry (genuinely outside the buff layer)", () => {
+    // Grants are not stat mods — the buff layer doesn't model them, and they
+    // legitimately remain in the residue worklist for downstream consumers.
     const abilities = [
       {
-        ability_id: "test-cover",
+        ability_id: "test-grant",
         ability_type: "unit",
         effect: {
-          type: "roll-modifier",
-          target: "attacker",
-          modifier: { roll: "hit", operation: "subtract", value: 1 },
+          type: "ability-grant",
+          target: "unit",
+          modifier: { grant_type: "label", value: "stealth" },
         },
         community_notes: STALE_FLAG,
       },

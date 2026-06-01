@@ -318,9 +318,22 @@ function translateRollModifier(
     if (!appliesToBuffedUnit(node, "attacker")) return;
     if (roll === "save") return; // saves apply to the defender, not the attacker.
   } else {
-    // target perspective: only `save` rolls on the buffed unit fire here.
-    if (roll !== "save") return;
-    if (!appliesToBuffedUnit(node, "target")) return;
+    // Target perspective accepts two shapes:
+    //  - `target: "self"/"unit"/...` + `roll: "save"` — the buffed unit's
+    //    own save rolls (mirrors the attacker path's reroll/stat handling).
+    //  - `target: "attacker"` + `roll: "hit"/"wound"` — a defender-side
+    //    rule that penalises the *incoming* attacker's hit/wound rolls (e.g.
+    //    "subtract 1 from hit rolls targeting this unit"). Functionally
+    //    identical to a `bs-modifier {target:"attacker"}` but with the
+    //    canonical `roll-modifier` shape; the data uses both forms.
+    const cls = classifyTarget(node);
+    if (cls === "attacker") {
+      if (roll !== "hit" && roll !== "wound") return; // damage/save against the attacker make no sense here.
+    } else if (cls === "self") {
+      if (roll !== "save") return;
+    } else {
+      return;
+    }
   }
   switch (roll) {
     case "hit":

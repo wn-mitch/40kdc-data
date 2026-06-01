@@ -399,6 +399,54 @@ describe("effectToBuffs: target perspective", () => {
     expect(atk.applied).toEqual([]); // saves aren't attacker-side.
   });
 
+  it('roll-modifier {target:"attacker", roll:"hit"} translates to hit-mod (incoming-hit penalty)', () => {
+    // Functionally identical to bs-modifier {target:"attacker"} — both shapes
+    // appear in the corpus for "-1 to hit rolls targeting this unit". The
+    // translator now accepts both.
+    const result = effectToBuffs(
+      {
+        type: "roll-modifier",
+        target: "attacker",
+        modifier: { roll: "hit", operation: "subtract", value: 1 },
+      },
+      unitRule,
+      ctxT,
+      "target",
+    );
+    expect(result.applied[0].contribution).toEqual({ type: "hit-mod", value: -1 });
+    expect(result.unsupported).toEqual([]);
+  });
+
+  it('roll-modifier {target:"attacker", roll:"wound"} translates to wound-mod', () => {
+    const result = effectToBuffs(
+      {
+        type: "roll-modifier",
+        target: "attacker",
+        modifier: { roll: "wound", operation: "subtract", value: 1 },
+      },
+      unitRule,
+      ctxT,
+      "target",
+    );
+    expect(result.applied[0].contribution).toEqual({ type: "wound-mod", value: -1 });
+  });
+
+  it('roll-modifier {target:"attacker", roll:"damage"} is not a defender knob', () => {
+    // Damage rolls belong to the attacker's weapon; a defender-side
+    // "-1 to damage rolls" would be expressed as damage-reduction instead.
+    const result = effectToBuffs(
+      {
+        type: "roll-modifier",
+        target: "attacker",
+        modifier: { roll: "damage", operation: "subtract", value: 1 },
+      },
+      unitRule,
+      ctxT,
+      "target",
+    );
+    expect(result.applied).toEqual([]);
+  });
+
   it("bs-modifier on target: attacker translates to hit-mod under target perspective", () => {
     const result = effectToBuffs(
       {
