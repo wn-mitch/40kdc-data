@@ -162,6 +162,12 @@ function walk(
     case "bs-modifier":
       translateBsModifier(node, source, opts, out);
       return;
+    case "damage-reduction":
+      translateDamageReduction(node, source, opts, out);
+      return;
+    case "invulnerable-save":
+      translateInvulnerableSave(node, source, opts, out);
+      return;
     case "conditional":
       translateConditional(node, source, opts, out);
       return;
@@ -496,7 +502,28 @@ function translateFeelNoPain(
     });
     return;
   }
-  out.applied.push({ source, contribution: { type: "feel-no-pain", threshold } });
+  // `modifier.scope` ∈ {"all", "mortal"} (default "all"). Schema's `modifier`
+  // is `additionalProperties: true`, so any string lands here; we accept the
+  // two documented values and route everything else to unsupported so a typo
+  // ("mortals", "mortal-wound") can't silently masquerade as an all-FNP.
+  const rawScope = modifier.scope;
+  let scope: "all" | "mortal" = "all";
+  if (rawScope !== undefined) {
+    if (rawScope === "all" || rawScope === "mortal") {
+      scope = rawScope;
+    } else {
+      out.unsupported.push({
+        reason: `feel-no-pain: unrecognised scope "${String(rawScope)}" (expected "all" or "mortal")`,
+        effectFragment: node,
+      });
+      return;
+    }
+  }
+  const contribution =
+    scope === "mortal"
+      ? ({ type: "feel-no-pain", threshold, scope: "mortal" } as const)
+      : ({ type: "feel-no-pain", threshold } as const);
+  out.applied.push({ source, contribution });
 }
 
 function translateKeywordGrant(
@@ -575,6 +602,81 @@ function attackTypeApplicability(modifier: Record<string, unknown>): BuffApplica
 const UNHONORABLE_NARROWING = ["weapon_name", "weapon_profile", "weapon_keyword", "weapon_filter", "model_filter", "model_scope"];
 function unhonorableNarrowing(modifier: Record<string, unknown>): string | undefined {
   return UNHONORABLE_NARROWING.find((k) => modifier[k] != null);
+}
+
+/**
+ * Defender-side damage-reduction (`{type: "damage-reduction", modifier:
+ * {reduction: N | "half" | "to-zero"}}`). The buff layer only models the
+ * additive numeric form — `"half"` and `"to-zero"` are one-use ablation
+ * effects that don't fold into a deterministic expected-value crunch, so
+ * they surface as `unsupported`. Attacker-perspective walks drop silently
+ * (this is a defender stat).
+ */
+function translateDamageReduction(
+  node: Record<string, unknown>,
+  source: BuffSource,
+  opts: WalkOpts,
+  out: EffectTranslation,
+): void {
+  if (opts.perspective !== "target") return;
+  if (!appliesToBuffedUnit(node, "target")) return;
+  const modifier = node.modifier;
+  if (!isObject(modifier)) {
+    out.unsupported.push({
+      reason: "damage-reduction: missing modifier object",
+      effectFragment: node,
+    });
+    return;
+  }
+  const reduction = modifier.reduction;
+  if (typeof reduction === "number" && Number.isFinite(reduction) && reduction > 0) {
+    out.applied.push({ source, contribution: { type: "damage-reduction", value: reduction } });
+    return;
+  }
+  if (reduction === "half" || reduction === "to-zero") {
+    out.unsupported.push({
+      reason: `damage-reduction: "${reduction}" is a one-use ablation effect, not modelled by the expected-value engine`,
+      effectFragment: node,
+    });
+    return;
+  }
+  out.unsupported.push({
+    reason: `damage-reduction: unrecognised reduction "${String(reduction)}"`,
+    effectFragment: node,
+  });
+}
+
+/**
+ * Defender-side ability-granted invulnerable save (`{type: "invulnerable-save",
+ * modifier: {invuln_sv: N}}`). Best (lowest threshold) wins, combined with the
+ * unit's printed invuln by the engine. Attacker-perspective walks drop
+ * silently (this is a defender stat).
+ */
+function translateInvulnerableSave(
+  node: Record<string, unknown>,
+  source: BuffSource,
+  opts: WalkOpts,
+  out: EffectTranslation,
+): void {
+  if (opts.perspective !== "target") return;
+  if (!appliesToBuffedUnit(node, "target")) return;
+  const modifier = node.modifier;
+  if (!isObject(modifier)) {
+    out.unsupported.push({
+      reason: "invulnerable-save: missing modifier object",
+      effectFragment: node,
+    });
+    return;
+  }
+  const threshold = Number(modifier.invuln_sv);
+  if (!Number.isFinite(threshold) || threshold < 2 || threshold > 7) {
+    out.unsupported.push({
+      reason: `invulnerable-save: invuln_sv "${String(modifier.invuln_sv)}" is not a valid save threshold (2–7)`,
+      effectFragment: node,
+    });
+    return;
+  }
+  out.applied.push({ source, contribution: { type: "invulnerable-save", threshold } });
 }
 
 function translateBsModifier(
@@ -909,7 +1011,13 @@ function describeContribution(c: BuffContribution): string {
     case "reroll":
       return `re-roll ${c.roll}${c.subset === "ones" ? " 1s" : ""}`;
     case "feel-no-pain":
-      return `feel no pain ${c.threshold}+`;
+      return c.scope === "mortal"
+        ? `feel no pain ${c.threshold}+ vs mortals`
+        : `feel no pain ${c.threshold}+`;
+    case "damage-reduction":
+      return `-${c.value} damage`;
+    case "invulnerable-save":
+      return `${c.threshold}+ invuln`;
     case "cover":
       return "cover";
   }

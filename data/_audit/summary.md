@@ -7,30 +7,30 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 | faction | total | offensive | defensive | inert | stub* | notes-stub | gw-leak | def-skipped |
 |---|--:|--:|--:|--:|--:|--:|--:|--:|
 | _core | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
-| adepta-sororitas | 80 | 21 | 5 | 54 | 7 | 14 | 0 | 4 |
-| adeptus-astartes | 344 | 109 | 14 | 221 | 10 | 25 | 0 | 30 |
-| adeptus-custodes | 65 | 13 | 5 | 47 | 1 | 4 | 0 | 9 |
-| adeptus-mechanicus | 71 | 13 | 5 | 53 | 1 | 1 | 0 | 6 |
-| aeldari | 151 | 33 | 2 | 116 | 12 | 19 | 0 | 15 |
-| agents-of-the-imperium | 92 | 23 | 2 | 67 | 3 | 3 | 0 | 7 |
-| astra-militarum | 148 | 35 | 7 | 106 | 5 | 7 | 0 | 9 |
-| chaos-daemons | 123 | 34 | 6 | 83 | 7 | 14 | 0 | 11 |
+| adepta-sororitas | 80 | 21 | 6 | 53 | 7 | 14 | 0 | 4 |
+| adeptus-astartes | 344 | 109 | 24 | 211 | 10 | 25 | 0 | 30 |
+| adeptus-custodes | 65 | 13 | 7 | 45 | 1 | 4 | 0 | 9 |
+| adeptus-mechanicus | 71 | 13 | 7 | 51 | 1 | 1 | 0 | 6 |
+| aeldari | 151 | 33 | 7 | 111 | 12 | 19 | 0 | 15 |
+| agents-of-the-imperium | 92 | 23 | 6 | 63 | 3 | 3 | 0 | 7 |
+| astra-militarum | 148 | 35 | 11 | 102 | 5 | 7 | 0 | 9 |
+| chaos-daemons | 123 | 34 | 8 | 81 | 7 | 14 | 0 | 11 |
 | chaos-knights | 41 | 18 | 0 | 23 | 2 | 4 | 0 | 1 |
-| chaos-space-marines | 182 | 47 | 6 | 129 | 12 | 26 | 0 | 14 |
+| chaos-space-marines | 182 | 47 | 9 | 126 | 12 | 26 | 0 | 14 |
 | death-guard | 89 | 19 | 4 | 66 | 6 | 10 | 0 | 6 |
-| drukhari | 76 | 19 | 1 | 56 | 10 | 15 | 0 | 5 |
-| emperors-children | 61 | 12 | 1 | 48 | 6 | 12 | 0 | 3 |
-| genestealer-cults | 63 | 13 | 3 | 47 | 2 | 2 | 0 | 3 |
-| grey-knights | 52 | 14 | 2 | 36 | 1 | 3 | 0 | 4 |
-| imperial-knights | 45 | 21 | 0 | 24 | 2 | 7 | 0 | 3 |
-| leagues-of-votann | 54 | 13 | 3 | 38 | 1 | 1 | 0 | 4 |
-| necrons | 122 | 22 | 9 | 91 | 8 | 10 | 0 | 12 |
-| orks | 118 | 29 | 5 | 84 | 1 | 6 | 0 | 9 |
-| tau-empire | 113 | 32 | 3 | 78 | 4 | 7 | 0 | 6 |
-| thousand-sons | 95 | 25 | 2 | 68 | 13 | 20 | 0 | 7 |
-| tyranids | 89 | 19 | 4 | 67 | 2 | 7 | 0 | 9 |
+| drukhari | 76 | 19 | 3 | 54 | 10 | 15 | 0 | 5 |
+| emperors-children | 61 | 12 | 2 | 47 | 6 | 12 | 0 | 3 |
+| genestealer-cults | 63 | 13 | 4 | 46 | 2 | 2 | 0 | 3 |
+| grey-knights | 52 | 14 | 4 | 34 | 1 | 3 | 0 | 4 |
+| imperial-knights | 45 | 21 | 1 | 23 | 2 | 7 | 0 | 3 |
+| leagues-of-votann | 54 | 13 | 5 | 36 | 1 | 1 | 0 | 4 |
+| necrons | 122 | 22 | 13 | 87 | 8 | 10 | 0 | 12 |
+| orks | 118 | 29 | 8 | 81 | 1 | 6 | 0 | 9 |
+| tau-empire | 113 | 32 | 4 | 77 | 4 | 7 | 0 | 6 |
+| thousand-sons | 95 | 25 | 3 | 67 | 13 | 20 | 0 | 7 |
+| tyranids | 89 | 19 | 5 | 66 | 2 | 7 | 0 | 9 |
 | world-eaters | 122 | 14 | 6 | 102 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **2397** | **598** | **96** | **1704** | **116** | **217** | **0** | **177** |
+| **TOTAL** | **2397** | **598** | **148** | **1652** | **116** | **217** | **0** | **177** |
 
 `stub*` = structural (empty-modifier placeholder node) — the authoring worklist. `notes-stub` = flagged in community_notes.
 
@@ -45,14 +45,12 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 - `60` — effect type "leadership-modifier" is not modelled by the buff layer
 - `54` — effect type "resurrection" is not modelled by the buff layer
 - `45` — effect type "cp-refund" is not modelled by the buff layer
-- `40` — effect type "invulnerable-save" is not modelled by the buff layer
 - `40` — conditional: cannot evaluate condition "undefined" against current context
 - `37` — stat-modifier: operation "set" not supported
 - `37` — effect type "objective-control-modifier" is not modelled by the buff layer
 - `35` — effect type "cp-gain" is not modelled by the buff layer
 - `33` — re-roll on "charge" (subset …) is outside the damage path
 - `32` — effect type "deep-strike" is not modelled by the buff layer
-- `29` — effect type "damage-reduction" is not modelled by the buff layer
 - `26` — effect type "fallback-and-act" is not modelled by the buff layer
 - `22` — effect type "fight-on-death" is not modelled by the buff layer
 - `18` — effect type "fight-first" is not modelled by the buff layer

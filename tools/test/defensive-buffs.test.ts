@@ -78,6 +78,245 @@ describe("end-to-end: defensive FNP buff plumbed through crunch", () => {
     expect(fnpAfterFnp / baseAfterFnp).toBeCloseTo(4 / 6, 4);
   });
 
+  it("damage-reduction buff trims damage per hit with a 'min 1' floor", () => {
+    const lascannon = ds.weapons.get("lascannon")!; // D = D6+1 → EV 4.5
+    const knight = ds.units.find("Questoris Knight Magaera")!;
+    const base: EngineInput = {
+      attacker: { weapon: lascannon.raw, profileIndex: 0 },
+      target: { unit: knight.raw, profileIndex: 0 },
+      modelsFiring: 1,
+      buffs: [],
+      context: { phase: "shooting", withinHalfRange: false },
+    };
+    const baseline = crunch(base);
+    const reduced = crunch({
+      ...base,
+      buffs: [
+        {
+          source: { kind: "ability", abilityId: "dr-test", abilityKind: "unit" },
+          contribution: { type: "damage-reduction", value: 1 },
+        },
+      ],
+    });
+    const baseDamage = baseline.stages.find((s) => s.name === "damage")!.expected;
+    const reducedDamage = reduced.stages.find((s) => s.name === "damage")!.expected;
+    // Per-hit damage drops from 4.5 to 3.5; ratio = 3.5/4.5.
+    expect(reducedDamage / baseDamage).toBeCloseTo(3.5 / 4.5, 4);
+  });
+
+  it("damage-reduction floors at 1 even when reduction exceeds base damage", () => {
+    // Bolt rifle: D 1. With damage-reduction 2, damage per hit must clamp to 1,
+    // not -1 or 0 — the "min 1" rule from the canonical damage-reduction text.
+    const bolt = ds.weapons.get("bolt-rifle")!;
+    const cultists = ds.units.find("Cultist Mob")!;
+    const out = crunch({
+      attacker: { weapon: bolt.raw, profileIndex: 0 },
+      target: { unit: cultists.raw, profileIndex: 0 },
+      modelsFiring: 1,
+      buffs: [
+        {
+          source: { kind: "ability", abilityId: "dr-floor", abilityKind: "unit" },
+          contribution: { type: "damage-reduction", value: 2 },
+        },
+      ],
+      context: { phase: "shooting" },
+    });
+    // damage detail line announces "1 per hit" — the floor held.
+    expect(out.stages.find((s) => s.name === "damage")!.detail).toContain("1 per hit");
+  });
+
+  it("damage-reduction does not stack: highest-wins across buffs", () => {
+    const lascannon = ds.weapons.get("lascannon")!;
+    const knight = ds.units.find("Questoris Knight Magaera")!;
+    const base: EngineInput = {
+      attacker: { weapon: lascannon.raw, profileIndex: 0 },
+      target: { unit: knight.raw, profileIndex: 0 },
+      modelsFiring: 1,
+      buffs: [],
+      context: { phase: "shooting" },
+    };
+    const single = crunch({
+      ...base,
+      buffs: [
+        {
+          source: { kind: "ability", abilityId: "dr-a", abilityKind: "unit" },
+          contribution: { type: "damage-reduction", value: 1 },
+        },
+      ],
+    });
+    const stacked = crunch({
+      ...base,
+      buffs: [
+        {
+          source: { kind: "ability", abilityId: "dr-a", abilityKind: "unit" },
+          contribution: { type: "damage-reduction", value: 1 },
+        },
+        {
+          source: { kind: "ability", abilityId: "dr-b", abilityKind: "detachment" },
+          contribution: { type: "damage-reduction", value: 1 },
+        },
+      ],
+    });
+    expect(stacked.stages.find((s) => s.name === "damage")!.expected).toBeCloseTo(
+      single.stages.find((s) => s.name === "damage")!.expected,
+      4,
+    );
+  });
+
+  it("ability-granted invulnerable save beats AP and stays through cover", () => {
+    // Lascannon AP-3 vs Cultists (Sv 6+, no printed invuln). Without an
+    // invuln, the effective save is 9+ (always fails). Granting a 4+ invuln
+    // pulls the effective save to 4+ — saves go from 0% to 50%.
+    const lascannon = ds.weapons.get("lascannon")!;
+    const cultists = ds.units.find("Cultist Mob")!;
+    const base: EngineInput = {
+      attacker: { weapon: lascannon.raw, profileIndex: 0 },
+      target: { unit: cultists.raw, profileIndex: 0, modelCount: 10 },
+      modelsFiring: 1,
+      buffs: [],
+      context: { phase: "shooting" },
+    };
+    const baseline = crunch(base);
+    const withInvuln = crunch({
+      ...base,
+      buffs: [
+        {
+          source: { kind: "ability", abilityId: "invuln-test", abilityKind: "unit" },
+          contribution: { type: "invulnerable-save", threshold: 4 },
+        },
+      ],
+    });
+    const baseUnsaved = baseline.stages.find((s) => s.name === "unsaved")!.expected;
+    const invulnUnsaved = withInvuln.stages.find((s) => s.name === "unsaved")!.expected;
+    // 4+ invuln saves half of wounds; unsaved should be roughly half.
+    expect(invulnUnsaved / baseUnsaved).toBeCloseTo(0.5, 4);
+  });
+
+  it("best ability invuln wins; better printed invuln still preferred", () => {
+    // Questoris Knight has a printed 5+ invuln. Granting a 4+ ability invuln
+    // should improve to 4+; granting a 6+ should NOT degrade past 5+.
+    const lascannon = ds.weapons.get("lascannon")!;
+    const knight = ds.units.find("Questoris Knight Magaera")!;
+    const base: EngineInput = {
+      attacker: { weapon: lascannon.raw, profileIndex: 0 },
+      target: { unit: knight.raw, profileIndex: 0 },
+      modelsFiring: 1,
+      buffs: [],
+      context: { phase: "shooting" },
+    };
+    const better = crunch({
+      ...base,
+      buffs: [
+        {
+          source: { kind: "ability", abilityId: "i-better", abilityKind: "unit" },
+          contribution: { type: "invulnerable-save", threshold: 4 },
+        },
+      ],
+    });
+    const worse = crunch({
+      ...base,
+      buffs: [
+        {
+          source: { kind: "ability", abilityId: "i-worse", abilityKind: "unit" },
+          contribution: { type: "invulnerable-save", threshold: 6 },
+        },
+      ],
+    });
+    expect(better.stages.find((s) => s.name === "unsaved")!.detail).toContain(
+      "invuln 4+ (ability)",
+    );
+    // The 6+ ability invuln is worse than the printed 5+, so the effective
+    // save target shouldn't have moved past 5+. The Knight Sv3 - AP3 = 6+
+    // armor branch would have been the active save in the no-buff case; the
+    // printed 5+ invuln still drives the effective save here.
+    expect(worse.stages.find((s) => s.name === "unsaved")!.detail).toContain("effective 5+");
+  });
+
+  it("mortal-scoped FNP fires only on the mortal-wound stream", () => {
+    // Lascannon + manual devastating-wounds keyword → ~11% of wounds are
+    // mortal. A 4+ mortal-FNP should halve those mortals; the main stream is
+    // untouched (no all-FNP in play).
+    const lascannon = ds.weapons.get("lascannon")!;
+    const cultists = ds.units.find("Cultist Mob")!;
+    const baseBuffs = [
+      {
+        source: { kind: "manual" as const, label: "Devastating Wounds (test)" },
+        contribution: {
+          type: "extra-keyword" as const,
+          keywordRef: { keyword_id: "devastating-wounds" },
+        },
+      },
+    ];
+    const baseline = crunch({
+      attacker: { weapon: lascannon.raw, profileIndex: 0 },
+      target: { unit: cultists.raw, profileIndex: 0, modelCount: 10 },
+      modelsFiring: 1,
+      buffs: baseBuffs,
+      context: { phase: "shooting" },
+    });
+    const withMortalFnp = crunch({
+      attacker: { weapon: lascannon.raw, profileIndex: 0 },
+      target: { unit: cultists.raw, profileIndex: 0, modelCount: 10 },
+      modelsFiring: 1,
+      buffs: [
+        ...baseBuffs,
+        {
+          source: { kind: "ability" as const, abilityId: "fnp-m", abilityKind: "unit" as const },
+          contribution: {
+            type: "feel-no-pain" as const,
+            threshold: 4,
+            scope: "mortal" as const,
+          },
+        },
+      ],
+      context: { phase: "shooting" },
+    });
+    // Detail line for the FNP stage names the mortal-scope.
+    expect(withMortalFnp.stages.find((s) => s.name === "after-fnp")!.detail).toContain(
+      "vs mortals",
+    );
+    // The mortal stream is 20% of damage (0.5 of 2.5); halving it with a 4+
+    // mortal FNP shaves exactly 10% off the total.
+    const ratio =
+      withMortalFnp.stages.find((s) => s.name === "after-fnp")!.expected /
+      baseline.stages.find((s) => s.name === "after-fnp")!.expected;
+    expect(ratio).toBeCloseTo(0.9, 4);
+  });
+
+  it("FNP-mortal stacks with FNP-all (independent rolls)", () => {
+    // Two FNP buffs at different scopes fire against the mortal stream
+    // independently: surviving fraction = (1 - pAll) * (1 - pMortal).
+    const lascannon = ds.weapons.get("lascannon")!;
+    const cultists = ds.units.find("Cultist Mob")!;
+    const out = crunch({
+      attacker: { weapon: lascannon.raw, profileIndex: 0 },
+      target: { unit: cultists.raw, profileIndex: 0, modelCount: 10 },
+      modelsFiring: 1,
+      buffs: [
+        {
+          source: { kind: "manual", label: "Devastating Wounds (test)" },
+          contribution: {
+            type: "extra-keyword",
+            keywordRef: { keyword_id: "devastating-wounds" },
+          },
+        },
+        {
+          source: { kind: "ability", abilityId: "fnp-all", abilityKind: "unit" },
+          contribution: { type: "feel-no-pain", threshold: 5 },
+        },
+        {
+          source: { kind: "ability", abilityId: "fnp-m", abilityKind: "unit" },
+          contribution: { type: "feel-no-pain", threshold: 4, scope: "mortal" },
+        },
+      ],
+      context: { phase: "shooting" },
+    });
+    // Detail line mentions both — sanity check the labelling.
+    const detail = out.stages.find((s) => s.name === "after-fnp")!.detail;
+    expect(detail).toContain("FNP 5+");
+    expect(detail).toContain("FNP 4+ vs mortals");
+  });
+
   it("toughness-mod buff hardens the target (wound threshold shifts)", () => {
     const bolt = ds.weapons.get("bolt-rifle")!;
     const target = ds.units.find("Cultist Mob")!; // T3

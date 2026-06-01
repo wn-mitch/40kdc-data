@@ -1,0 +1,39 @@
+{
+  "name": "devastating-wounds lascannon vs cultists with 5+ FNP all + 4+ FNP vs mortals",
+  "attacker": { "weaponId": "lascannon", "profileIndex": 0 },
+  "modelsFiring": 1,
+  "target": { "unitId": "cultist-mob", "profileIndex": 0, "modelCount": 10 },
+  "context": {
+    "phase": "shooting",
+    "attackerStationary": false,
+    "withinHalfRange": false
+  },
+  "buffs": [
+    {
+      "source": { "kind": "manual", "label": "Devastating Wounds (test)" },
+      "contribution": {
+        "type": "extra-keyword",
+        "keywordRef": { "keyword_id": "devastating-wounds" }
+      }
+    },
+    {
+      "source": { "kind": "manual", "label": "5+ FNP all" },
+      "contribution": { "type": "feel-no-pain", "threshold": 5 }
+    },
+    {
+      "source": { "kind": "manual", "label": "4+ FNP vs mortals" },
+      "contribution": { "type": "feel-no-pain", "threshold": 4, "scope": "mortal" }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 1,
+      "hits": 0.6667,
+      "wounds": 0.5556,
+      "unsaved": 0.4444,
+      "damage": 2.5,
+      "after-fnp": 1.5,
+      "models-killed": 1.5
+    }
+  }
+}

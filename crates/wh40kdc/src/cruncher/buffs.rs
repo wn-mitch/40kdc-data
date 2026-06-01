@@ -83,6 +83,22 @@ pub enum RerollSubset {
     AllFailures,
 }
 
+/// Feel-no-pain scope. `All` (the default) applies to every unsaved wound;
+/// `Mortal` applies only to the mortal-wound stream.
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum FnpScope {
+    #[default]
+    All,
+    Mortal,
+}
+
+impl FnpScope {
+    fn is_default(&self) -> bool {
+        matches!(self, FnpScope::All)
+    }
+}
+
 /// One typed contribution; the engine reads [`ResolvedModifiers`] for the rest.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(
@@ -108,8 +124,15 @@ pub enum BuffContribution {
     ExtraKeyword {
         keyword_ref: WeaponKeywordRef,
     },
+    /// Feel-no-pain: roll one D6 per unsaved wound at `threshold`+, ignoring
+    /// the wound on a pass. `scope` controls which wound stream it applies to:
+    /// `All` (default) fires on every unsaved wound; `Mortal` fires only on
+    /// the mortal-wound stream (e.g. Death Guard 5+ FNP vs mortals). A target
+    /// carrying both rolls both against mortals.
     FeelNoPain {
         threshold: f64,
+        #[serde(default, skip_serializing_if = "FnpScope::is_default")]
+        scope: FnpScope,
     },
     DamageMod {
         value: f64,
@@ -131,6 +154,21 @@ pub enum BuffContribution {
     /// makes the weapon one AP more piercing.
     ApMod {
         value: f64,
+    },
+    /// Defender-side: subtract `value` from each unsaved damage point (floored
+    /// at 1 by the engine). Multiple sources do NOT stack in 10e — the largest
+    /// reduction wins. The corpus also encodes `"half"` and `"to-zero"`
+    /// reductions; the buff layer only models the additive form because the
+    /// other two are typically one-use ablation that doesn't fold into the
+    /// expected-value math cleanly.
+    DamageReduction {
+        value: f64,
+    },
+    /// Defender-side: ability-granted invulnerable save threshold. Best
+    /// (lowest) threshold wins, combined with the unit's printed invuln by
+    /// the engine. Invuln bypasses both AP and cover.
+    InvulnerableSave {
+        threshold: f64,
     },
 }
 
@@ -204,12 +242,40 @@ pub struct ResolvedModifiers {
     pub cover: CoverState,
     pub rerolls: Rerolls,
     pub extra_keywords: Vec<ExtraKeywordEntry>,
+    /// All-wound FNP — fires on the main and mortal damage streams alike.
     pub feel_no_pain: Option<FeelNoPainState>,
+    /// Mortal-only FNP — fires only on the mortal-wound damage stream.
+    pub feel_no_pain_mortal: Option<FeelNoPainState>,
     pub damage_mod: SummedMod,
     pub attacks_mod: SummedMod,
     pub strength_mod: SummedMod,
     pub toughness_mod: SummedMod,
     pub ap_mod: SummedMod,
+    /// Defender-side damage reduction. Highest-wins (multiple sources do not
+    /// stack in 10e); the dominant source is the one whose value matches the
+    /// surviving reduction.
+    pub damage_reduction: HighestMod,
+    /// Ability-granted invulnerable save. Best (lowest threshold) wins. `None`
+    /// when no ability granted one; the engine still uses the unit's printed
+    /// `invuln_sv` from the profile in that case.
+    pub invulnerable: Option<InvulnerableState>,
+}
+
+/// Ability-granted invulnerable save read-out: the surviving threshold plus
+/// the source that produced it. Combined with the unit's printed invuln in
+/// the engine.
+#[derive(Clone, Debug)]
+pub struct InvulnerableState {
+    pub threshold: f64,
+    pub dominant_source: BuffSource,
+}
+
+/// Highest-wins modifier: `value` is the largest contributor, `dominant_source`
+/// is the one that produced it (with rank as the tiebreaker on equal values).
+#[derive(Clone, Debug, Default)]
+pub struct HighestMod {
+    pub value: f64,
+    pub dominant_source: Option<BuffSource>,
 }
 
 /// Hit/wound mod: signed sum clamped to ±1, dominant source picked from the
@@ -378,13 +444,20 @@ pub fn resolve_buffs(buffs: &[Buff], ctx: &EngineContext) -> ResolvedModifiers {
                     });
                 }
             }
-            BuffContribution::FeelNoPain { threshold } => {
-                let take = match &out.feel_no_pain {
+            BuffContribution::FeelNoPain { threshold, scope } => {
+                // Best (lowest) threshold wins per scope. An undeclared scope
+                // (the default) is "all" — fires on every wound; "mortal"
+                // fires only on the mortal-wound stream.
+                let slot: &mut Option<FeelNoPainState> = match scope {
+                    FnpScope::All => &mut out.feel_no_pain,
+                    FnpScope::Mortal => &mut out.feel_no_pain_mortal,
+                };
+                let take = match slot.as_ref() {
                     None => true,
                     Some(cur) => *threshold < cur.threshold,
                 };
                 if take {
-                    out.feel_no_pain = Some(FeelNoPainState {
+                    *slot = Some(FeelNoPainState {
                         threshold: *threshold,
                         dominant_source: b.source.clone(),
                     });
@@ -403,6 +476,38 @@ pub fn resolve_buffs(buffs: &[Buff], ctx: &EngineContext) -> ResolvedModifiers {
                 sum_into(&mut out.toughness_mod, *value, &b.source)
             }
             BuffContribution::ApMod { value } => sum_into(&mut out.ap_mod, *value, &b.source),
+            BuffContribution::DamageReduction { value } => {
+                let take = match &out.damage_reduction.dominant_source {
+                    None => true,
+                    Some(prev) => {
+                        *value > out.damage_reduction.value
+                            || (*value == out.damage_reduction.value
+                                && rank(&b.source) < rank(prev))
+                    }
+                };
+                if take {
+                    out.damage_reduction = HighestMod {
+                        value: *value,
+                        dominant_source: Some(b.source.clone()),
+                    };
+                }
+            }
+            BuffContribution::InvulnerableSave { threshold } => {
+                let take = match &out.invulnerable {
+                    None => true,
+                    Some(cur) => {
+                        *threshold < cur.threshold
+                            || (*threshold == cur.threshold
+                                && rank(&b.source) < rank(&cur.dominant_source))
+                    }
+                };
+                if take {
+                    out.invulnerable = Some(InvulnerableState {
+                        threshold: *threshold,
+                        dominant_source: b.source.clone(),
+                    });
+                }
+            }
         }
     }
 

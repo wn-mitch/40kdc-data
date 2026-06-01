@@ -458,6 +458,137 @@ describe("effectToBuffs: target perspective", () => {
     );
     expect(result.applied).toEqual([]);
   });
+
+  it("damage-reduction numeric translates to damage-reduction buff", () => {
+    const result = effectToBuffs(
+      {
+        type: "damage-reduction",
+        target: "unit",
+        modifier: { reduction: 1 },
+      },
+      unitRule,
+      ctxT,
+      "target",
+    );
+    expect(result.applied[0].contribution).toEqual({ type: "damage-reduction", value: 1 });
+    expect(result.unsupported).toEqual([]);
+  });
+
+  it("damage-reduction drops silently under attacker perspective", () => {
+    // The effect is defender-side; an attacker-perspective walk shouldn't
+    // surface it as either applied or unsupported (mirrors feel-no-pain).
+    const result = effectToBuffs(
+      {
+        type: "damage-reduction",
+        target: "unit",
+        modifier: { reduction: 1 },
+      },
+      unitRule,
+      { phase: "shooting" },
+      "attacker",
+    );
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported).toEqual([]);
+  });
+
+  it("invulnerable-save translates to invulnerable-save buff", () => {
+    const result = effectToBuffs(
+      {
+        type: "invulnerable-save",
+        target: "self",
+        modifier: { invuln_sv: 4 },
+      },
+      unitRule,
+      ctxT,
+      "target",
+    );
+    expect(result.applied[0].contribution).toEqual({ type: "invulnerable-save", threshold: 4 });
+    expect(result.unsupported).toEqual([]);
+  });
+
+  it("invulnerable-save drops silently under attacker perspective", () => {
+    const result = effectToBuffs(
+      {
+        type: "invulnerable-save",
+        target: "self",
+        modifier: { invuln_sv: 4 },
+      },
+      unitRule,
+      { phase: "shooting" },
+      "attacker",
+    );
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported).toEqual([]);
+  });
+
+  it("invulnerable-save with out-of-range threshold routes to unsupported", () => {
+    for (const invuln_sv of [1, 8, "garbage"]) {
+      const result = effectToBuffs(
+        {
+          type: "invulnerable-save",
+          target: "self",
+          modifier: { invuln_sv },
+        },
+        unitRule,
+        ctxT,
+        "target",
+      );
+      expect(result.applied).toEqual([]);
+      expect(result.unsupported).toHaveLength(1);
+    }
+  });
+
+  it('feel-no-pain modifier.scope:"mortal" carries through to the buff', () => {
+    const result = effectToBuffs(
+      {
+        type: "feel-no-pain",
+        target: "self",
+        modifier: { threshold: 5, scope: "mortal" },
+      },
+      unitRule,
+      ctxT,
+      "target",
+    );
+    expect(result.applied[0].contribution).toEqual({
+      type: "feel-no-pain",
+      threshold: 5,
+      scope: "mortal",
+    });
+  });
+
+  it("feel-no-pain with unrecognised scope routes to unsupported", () => {
+    const result = effectToBuffs(
+      {
+        type: "feel-no-pain",
+        target: "self",
+        modifier: { threshold: 5, scope: "mortals" }, // typo
+      },
+      unitRule,
+      ctxT,
+      "target",
+    );
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported).toHaveLength(1);
+    expect(result.unsupported[0].reason).toContain("scope");
+  });
+
+  it('damage-reduction "half" and "to-zero" route to unsupported', () => {
+    for (const reduction of ["half", "to-zero"]) {
+      const result = effectToBuffs(
+        {
+          type: "damage-reduction",
+          target: "unit",
+          modifier: { reduction },
+        },
+        unitRule,
+        ctxT,
+        "target",
+      );
+      expect(result.applied).toEqual([]);
+      expect(result.unsupported).toHaveLength(1);
+      expect(result.unsupported[0].reason).toContain(reduction);
+    }
+  });
 });
 
 describe("effectToBuffs: compound conditions", () => {
