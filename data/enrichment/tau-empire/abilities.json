@@ -2401,8 +2401,7 @@
       "commander-in-coldstar-battlesuit"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "trail-finding",

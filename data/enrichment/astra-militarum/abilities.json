@@ -1412,8 +1412,7 @@
       "bullgryn-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "malign-wardings-psychic",
@@ -4438,8 +4437,7 @@
       "minotaur"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "overwhelming-short-range-firepower",

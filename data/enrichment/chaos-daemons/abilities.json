@@ -287,8 +287,7 @@
       "daemon-prince-of-chaos"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "activated"
   },
   {
     "ability_id": "deadly-demise-d6",
@@ -2609,8 +2608,7 @@
       "epidemius"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "tally-of-pestilence",

@@ -58,6 +58,7 @@
     "validate:enrichment": "tsx src/cli.ts validate-enrichment",
     "translate": "tsx src/cli.ts translate",
     "audit:coverage": "tsx src/cli.ts audit-coverage --write",
+    "scrub:defensive-flag": "tsx src/scrub-defensive-flag.ts",
     "author:input": "tsx src/author-input.ts",
     "author:propose": "tsx src/author-batch.ts propose",
     "author:repair": "tsx src/author-batch.ts repair",

@@ -860,8 +860,7 @@
       "wazbom-blastajet"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "deadly-demise-d6",
@@ -1641,8 +1640,7 @@
       "kommandos"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "activated"
   },
   {
     "ability_id": "patrol-squad",
@@ -2302,8 +2300,7 @@
       "big-mek-in-mega-armour"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "grot-oiler",

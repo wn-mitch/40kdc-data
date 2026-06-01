@@ -973,8 +973,7 @@
       "impulsor"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "interception-strike",
@@ -2623,8 +2622,7 @@
       "azrael"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "activated"
   },
   {
     "ability_id": "storm-of-vengeance",
@@ -3289,8 +3287,7 @@
       "deathwatch-veterans"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "talonstrike-doctrines",
@@ -4420,8 +4417,7 @@
       "librarian"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "icon-of-obstinacy",
@@ -4476,8 +4472,7 @@
       "darnath-lysander"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "activated"
   },
   {
     "ability_id": "inspiring-commander",
@@ -6818,8 +6813,7 @@
       "wardens-of-ultramar"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "heroes-of-ultramar",
@@ -6871,8 +6865,7 @@
       "redemptor-dreadnought"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "unbreakable-duty",
@@ -7614,8 +7607,7 @@
       "stormraven-gunship"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "deadly-terror",
@@ -8782,8 +8774,7 @@
       "venerable-dreadnought"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "even-in-death-i-serve",

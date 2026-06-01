@@ -20,7 +20,7 @@
       "stub": 14,
       "stubStructural": 7,
       "gwTextLeak": 0,
-      "defensiveSkipped": 4
+      "defensiveSkipped": 3
     },
     {
       "faction": "adeptus-astartes",
@@ -31,7 +31,7 @@
       "stub": 25,
       "stubStructural": 10,
       "gwTextLeak": 0,
-      "defensiveSkipped": 30
+      "defensiveSkipped": 21
     },
     {
       "faction": "adeptus-custodes",
@@ -42,7 +42,7 @@
       "stub": 4,
       "stubStructural": 1,
       "gwTextLeak": 0,
-      "defensiveSkipped": 9
+      "defensiveSkipped": 7
     },
     {
       "faction": "adeptus-mechanicus",
@@ -53,7 +53,7 @@
       "stub": 1,
       "stubStructural": 1,
       "gwTextLeak": 0,
-      "defensiveSkipped": 6
+      "defensiveSkipped": 4
     },
     {
       "faction": "aeldari",
@@ -64,7 +64,7 @@
       "stub": 19,
       "stubStructural": 12,
       "gwTextLeak": 0,
-      "defensiveSkipped": 15
+      "defensiveSkipped": 10
     },
     {
       "faction": "agents-of-the-imperium",
@@ -75,7 +75,7 @@
       "stub": 3,
       "stubStructural": 3,
       "gwTextLeak": 0,
-      "defensiveSkipped": 7
+      "defensiveSkipped": 3
     },
     {
       "faction": "astra-militarum",
@@ -86,7 +86,7 @@
       "stub": 7,
       "stubStructural": 5,
       "gwTextLeak": 0,
-      "defensiveSkipped": 9
+      "defensiveSkipped": 7
     },
     {
       "faction": "chaos-daemons",
@@ -97,7 +97,7 @@
       "stub": 14,
       "stubStructural": 7,
       "gwTextLeak": 0,
-      "defensiveSkipped": 11
+      "defensiveSkipped": 9
     },
     {
       "faction": "chaos-knights",
@@ -119,7 +119,7 @@
       "stub": 26,
       "stubStructural": 12,
       "gwTextLeak": 0,
-      "defensiveSkipped": 14
+      "defensiveSkipped": 12
     },
     {
       "faction": "death-guard",
@@ -141,7 +141,7 @@
       "stub": 15,
       "stubStructural": 10,
       "gwTextLeak": 0,
-      "defensiveSkipped": 5
+      "defensiveSkipped": 3
     },
     {
       "faction": "emperors-children",
@@ -152,7 +152,7 @@
       "stub": 12,
       "stubStructural": 6,
       "gwTextLeak": 0,
-      "defensiveSkipped": 3
+      "defensiveSkipped": 2
     },
     {
       "faction": "genestealer-cults",
@@ -163,7 +163,7 @@
       "stub": 2,
       "stubStructural": 2,
       "gwTextLeak": 0,
-      "defensiveSkipped": 3
+      "defensiveSkipped": 2
     },
     {
       "faction": "grey-knights",
@@ -174,7 +174,7 @@
       "stub": 3,
       "stubStructural": 1,
       "gwTextLeak": 0,
-      "defensiveSkipped": 4
+      "defensiveSkipped": 2
     },
     {
       "faction": "imperial-knights",
@@ -196,7 +196,7 @@
       "stub": 1,
       "stubStructural": 1,
       "gwTextLeak": 0,
-      "defensiveSkipped": 4
+      "defensiveSkipped": 2
     },
     {
       "faction": "necrons",
@@ -207,7 +207,7 @@
       "stub": 10,
       "stubStructural": 8,
       "gwTextLeak": 0,
-      "defensiveSkipped": 12
+      "defensiveSkipped": 8
     },
     {
       "faction": "orks",
@@ -218,7 +218,7 @@
       "stub": 6,
       "stubStructural": 1,
       "gwTextLeak": 0,
-      "defensiveSkipped": 9
+      "defensiveSkipped": 6
     },
     {
       "faction": "tau-empire",
@@ -229,7 +229,7 @@
       "stub": 7,
       "stubStructural": 4,
       "gwTextLeak": 0,
-      "defensiveSkipped": 6
+      "defensiveSkipped": 5
     },
     {
       "faction": "thousand-sons",
@@ -240,7 +240,7 @@
       "stub": 20,
       "stubStructural": 13,
       "gwTextLeak": 0,
-      "defensiveSkipped": 7
+      "defensiveSkipped": 6
     },
     {
       "faction": "tyranids",
@@ -251,7 +251,7 @@
       "stub": 7,
       "stubStructural": 2,
       "gwTextLeak": 0,
-      "defensiveSkipped": 9
+      "defensiveSkipped": 7
     },
     {
       "faction": "world-eaters",
@@ -273,7 +273,7 @@
     "stub": 217,
     "stubStructural": 116,
     "gwTextLeak": 0,
-    "defensiveSkipped": 177
+    "defensiveSkipped": 129
   },
   "unsupportedReasons": [
     {

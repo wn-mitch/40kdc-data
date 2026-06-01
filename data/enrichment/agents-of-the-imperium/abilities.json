@@ -876,8 +876,7 @@
       "inquisitor"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "psychic-gifts",
@@ -1133,8 +1132,7 @@
       "deathwatch-kill-team"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "scouts-9",
@@ -1607,8 +1605,7 @@
       "imperial-navy-breachers"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "etheric-emergence",
@@ -2060,8 +2057,7 @@
       "inquisitor-coteaz"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "spy-network",
