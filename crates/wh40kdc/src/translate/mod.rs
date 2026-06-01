@@ -178,9 +178,15 @@ fn describe_simple(s: &SimpleCondition) -> String {
         T::RemainedStationary => format!("{negate}the unit remained stationary"),
         T::UnitBelowStartingStrength => format!("{negate}the unit is below starting strength"),
         T::UnitBelowHalfStrength => format!("{negate}the unit is below half strength"),
-        T::UnitHasKeyword => format!("{negate}the unit has \"{}\"", ps(p, "keyword").unwrap_or("")),
+        T::UnitHasKeyword => format!(
+            "{negate}the unit has \"{}\"",
+            ps(p, "keyword").unwrap_or("")
+        ),
         T::TargetHasKeyword => {
-            format!("{negate}the target has \"{}\"", ps(p, "keyword").unwrap_or(""))
+            format!(
+                "{negate}the target has \"{}\"",
+                ps(p, "keyword").unwrap_or("")
+            )
         }
         T::ModelIsLeader => format!("{negate}the model is leading a unit"),
         T::IsAttached => {
@@ -215,7 +221,10 @@ fn describe_simple(s: &SimpleCondition) -> String {
         T::WithinRangeOfObjective => format!("{negate}within range of an objective"),
         T::HasFoughtThisPhase => format!("{negate}has fought this phase"),
         T::DestroyedByAttackType => {
-            format!("{negate}destroyed by a {} attack", ps(p, "attack_type").unwrap_or(""))
+            format!(
+                "{negate}destroyed by a {} attack",
+                ps(p, "attack_type").unwrap_or("")
+            )
         }
 
         // ── Scoring conditions (secondary-card award `when`) ────────────────
@@ -228,7 +237,10 @@ fn describe_simple(s: &SimpleCondition) -> String {
                 Some(r) => format!("{} objective", dekebab(r)),
                 None => "objective".to_string(),
             };
-            let mut out = format!("{negate}you control {}", count(pu(p, "count_min", 1), &noun));
+            let mut out = format!(
+                "{negate}you control {}",
+                count(pu(p, "count_min", 1), &noun)
+            );
             if let Some(o) = ps(p, "objective") {
                 out.push_str(&format!(" ({})", dekebab(o)));
             }
@@ -242,7 +254,10 @@ fn describe_simple(s: &SimpleCondition) -> String {
         }
         T::UnitsDestroyed => format!(
             "{negate}{} destroyed {}",
-            count(pu(p, "count_min", 1), &format!("{} unit", ps(p, "side").unwrap_or(""))),
+            count(
+                pu(p, "count_min", 1),
+                &format!("{} unit", ps(p, "side").unwrap_or(""))
+            ),
             dekebab(ps(p, "window").unwrap_or(""))
         ),
         T::UnitsDestroyedComparison => {
@@ -268,7 +283,10 @@ fn describe_simple(s: &SimpleCondition) -> String {
             count(pu(p, "count_min", 1), "objective")
         ),
         T::DestroyedWhileOnObjective => {
-            let mut out = format!("{negate}{} destroyed", count(pu(p, "count_min", 1), "enemy unit"));
+            let mut out = format!(
+                "{negate}{} destroyed",
+                count(pu(p, "count_min", 1), "enemy unit")
+            );
             if pb(p, "destroyer_on_objective") {
                 out.push_str(" by a unit on an objective");
             }
@@ -278,7 +296,10 @@ fn describe_simple(s: &SimpleCondition) -> String {
             out
         }
         T::ActionCompleted => {
-            let mut out = format!("{negate}{} completed", count(pu(p, "count_min", 1), "action"));
+            let mut out = format!(
+                "{negate}{} completed",
+                count(pu(p, "count_min", 1), "action")
+            );
             if let Some(a) = ps(p, "action_id") {
                 out.push_str(&format!(" ({})", dekebab(a)));
             }
@@ -324,7 +345,10 @@ fn describe_simple(s: &SimpleCondition) -> String {
         T::UnitHasTag => {
             let mut out = format!(
                 "{negate}{} tagged {}",
-                count(pu(p, "count_min", 1), &format!("{} unit", ps(p, "side").unwrap_or(""))),
+                count(
+                    pu(p, "count_min", 1),
+                    &format!("{} unit", ps(p, "side").unwrap_or(""))
+                ),
                 dekebab(ps(p, "tag").unwrap_or(""))
             );
             if let Some(w) = ps(p, "window") {
@@ -333,7 +357,10 @@ fn describe_simple(s: &SimpleCondition) -> String {
             out
         }
         T::TerrainHasTag => {
-            let mut out = format!("{negate}terrain tagged {}", dekebab(ps(p, "tag").unwrap_or("")));
+            let mut out = format!(
+                "{negate}terrain tagged {}",
+                dekebab(ps(p, "tag").unwrap_or(""))
+            );
             if let Some(fm) = p.get("friendly_units_min").and_then(Value::as_u64) {
                 out.push_str(&format!(" with {fm}+ friendly units"));
             }
@@ -363,7 +390,10 @@ fn describe_simple(s: &SimpleCondition) -> String {
             out
         }
         T::EngagementFronts => {
-            format!("{negate}you are engaged on {}+ fronts", pu(p, "count_min", 1))
+            format!(
+                "{negate}you are engaged on {}+ fronts",
+                pu(p, "count_min", 1)
+            )
         }
 
         // Schema types with no scoring usage today — match the TS `dekebab(type)`
