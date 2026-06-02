@@ -24,6 +24,7 @@ import type {
   TimingFlag,
   Unit,
   UnitComposition,
+  Wargear,
   WargearOption,
   WeaponKeyword,
 } from "../generated.js";
@@ -91,6 +92,7 @@ export class Dataset {
   readonly enhancements: Collection<Enhancement, Enhancement>;
   readonly stratagems: Collection<Stratagem, Stratagem>;
   readonly wargearOptions: Collection<WargearOption, WargearOption>;
+  readonly wargear: Collection<Wargear, Wargear>;
   readonly missions: Collection<Mission, Mission>;
   readonly missionMatchups: Collection<MissionMatchup, MissionMatchup>;
   readonly missionCards: Collection<SecondaryCard, SecondaryCard>;
@@ -116,6 +118,8 @@ export class Dataset {
   private readonly unitsByWeapon = new Map<string, Unit[]>();
   /** weapon-keyword id → weapons whose profiles reference it. */
   private readonly weaponsByKeyword = new Map<string, RawData["weapons"][number][]>();
+  /** unit id → wargear options authored for it (declared order preserved). */
+  private readonly wargearOptionsByUnit = new Map<string, WargearOption[]>();
 
   constructor(raw: RawData = emptyRawData()) {
     this.units = new Collection({
@@ -158,6 +162,7 @@ export class Dataset {
     this.enhancements = idCollection(raw.enhancements);
     this.stratagems = idCollection(raw.stratagems);
     this.wargearOptions = idCollection(raw.wargearOptions);
+    this.wargear = idCollection(raw.wargear);
     this.missions = idCollection(raw.missions);
     this.missionMatchups = idCollection(raw.missionMatchups);
     this.missionCards = idCollection(raw.missionCards);
@@ -222,6 +227,14 @@ export class Dataset {
   /** Weapons whose profiles reference the given weapon-keyword id. */
   weaponsWithKeyword(keywordId: string): WeaponView[] {
     return (this.weaponsByKeyword.get(keywordId) ?? []).map((w) => new WeaponView(w, this));
+  }
+
+  /**
+   * Wargear options authored for the given unit, in declared order. Mirror of
+   * Rust `Dataset::wargear_options_of`. Empty for a unit with no options.
+   */
+  wargearOptionsOf(unit: Unit): WargearOption[] {
+    return this.wargearOptionsByUnit.get(unit.id) ?? [];
   }
 
   /**
@@ -462,6 +475,9 @@ export class Dataset {
     for (const unit of raw.units) {
       for (const abilityId of unit.ability_ids ?? []) push(this.unitsByAbility, abilityId, unit);
       for (const weaponId of unit.weapon_ids ?? []) push(this.unitsByWeapon, weaponId, unit);
+    }
+    for (const option of raw.wargearOptions) {
+      push(this.wargearOptionsByUnit, option.unit_id, option);
     }
     const seenByKeyword = new Map<string, Set<string>>();
     for (const weapon of raw.weapons) {

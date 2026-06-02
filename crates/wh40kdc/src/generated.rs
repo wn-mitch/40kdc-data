@@ -5808,9 +5808,6 @@ impl ::std::convert::TryFrom<::std::string::String> for ScopeRange {
 ///{
 ///  "description": "When a VP award is evaluated. A bare `phase` is the legacy shorthand for 'during this phase'; richer triggers add `timing` (the moment within a phase/turn/game), `player_turn`, and a `battle_round` window. A card's section headers map onto these: 'ANY BATTLE ROUND' omits `battle_round`; 'SECOND BATTLE ROUND ONWARDS' is { min: 2 }; 'END OF THE BATTLE' is timing: end-of-battle.",
 ///  "type": "object",
-///  "allOf": [
-///    {}
-///  ],
 ///  "minProperties": 1,
 ///  "properties": {
 ///    "battle_round": {
@@ -7861,9 +7858,6 @@ impl ::std::convert::TryFrom<::std::string::String> for SimpleConditionType {
 /// ```json
 ///{
 ///  "type": "object",
-///  "allOf": [
-///    {}
-///  ],
 ///  "required": [
 ///    "target",
 ///    "type"
@@ -11119,20 +11113,219 @@ pub struct Vec2 {
     pub x: f64,
     pub y: f64,
 }
-///A weapon substitution option available to models within a unit.
+///A non-weapon item a model may carry — an icon, attachment, or other piece of equipment with no weapon profile. Weapons live in weapon.schema.json; this entity exists so wargear-option swaps and add-ons can reference equipment that is not a weapon.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "title": "Wargear",
+///  "description": "A non-weapon item a model may carry — an icon, attachment, or other piece of equipment with no weapon profile. Weapons live in weapon.schema.json; this entity exists so wargear-option swaps and add-ons can reference equipment that is not a weapon.",
+///  "type": "object",
+///  "required": [
+///    "game_version",
+///    "id",
+///    "name"
+///  ],
+///  "properties": {
+///    "category": {
+///      "oneOf": [
+///        {
+///          "description": "Free-form grouping such as 'icon', 'upgrade', or 'equipment'.",
+///          "type": "string",
+///          "minLength": 1
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "game_version": {
+///      "$ref": "#/$defs/game-version-ref"
+///    },
+///    "id": {
+///      "$ref": "#/$defs/entity-id"
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 128,
+///      "minLength": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct Wargear {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub category: ::std::option::Option<WargearCategory>,
+    pub game_version: GameVersionRef,
+    pub id: EntityId,
+    pub name: WargearName,
+}
+///Free-form grouping such as 'icon', 'upgrade', or 'equipment'.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Free-form grouping such as 'icon', 'upgrade', or 'equipment'.",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct WargearCategory(::std::string::String);
+impl ::std::ops::Deref for WargearCategory {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<WargearCategory> for ::std::string::String {
+    fn from(value: WargearCategory) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for WargearCategory {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for WargearCategory {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for WargearCategory {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for WargearCategory {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for WargearCategory {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`WargearName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 128,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct WargearName(::std::string::String);
+impl ::std::ops::Deref for WargearName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<WargearName> for ::std::string::String {
+    fn from(value: WargearName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for WargearName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 128usize {
+            return Err("longer than 128 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for WargearName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for WargearName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for WargearName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for WargearName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///A wargear option available to models within a unit: a weapon/wargear swap, a pure add-on, or a choice between alternatives. Models start with the unit's base loadout; an option modifies that loadout for the number of models its `model_constraint` permits.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
 ///  "title": "Wargear Option",
-///  "description": "A weapon substitution option available to models within a unit.",
+///  "description": "A wargear option available to models within a unit: a weapon/wargear swap, a pure add-on, or a choice between alternatives. Models start with the unit's base loadout; an option modifies that loadout for the number of models its `model_constraint` permits.",
 ///  "type": "object",
 ///  "required": [
 ///    "game_version",
 ///    "id",
-///    "replacement",
-///    "replaces",
 ///    "unit_id"
 ///  ],
 ///  "properties": {
@@ -11160,8 +11353,14 @@ pub struct Vec2 {
 ///    "model_constraint": {
 ///      "oneOf": [
 ///        {
+///          "description": "Limits how many models may take this option. The eligible-model count is: `any_number` ? model_count : `per_n_models` ? floor(model_count / per_n_models) : (`max_count` ?? 1); then clamped by `max_count` when both are set. `model_name` scopes the option to a specific model profile (e.g. the unit's champion); omit for single-profile units.",
 ///          "type": "object",
 ///          "properties": {
+///            "any_number": {
+///              "description": "When true, every model in the unit may take the option ('Any number of models can each ...'). Mutually exclusive in spirit with `per_n_models`.",
+///              "default": false,
+///              "type": "boolean"
+///            },
 ///            "max_count": {
 ///              "type": "integer",
 ///              "minimum": 1.0
@@ -11183,15 +11382,27 @@ pub struct Vec2 {
 ///      ]
 ///    },
 ///    "replacement": {
-///      "description": "Weapon IDs being added",
+///      "description": "Weapon or wargear IDs added to the model — all of them. Exactly one of `replacement` / `replacement_choice` is present.",
 ///      "type": "array",
 ///      "items": {
 ///        "$ref": "#/$defs/entity-id"
 ///      },
 ///      "minItems": 1
 ///    },
+///    "replacement_choice": {
+///      "description": "A choice of replacements ('one of the following'): pick exactly one inner group; each group's IDs are all added together. Exactly one of `replacement` / `replacement_choice` is present.",
+///      "type": "array",
+///      "items": {
+///        "type": "array",
+///        "items": {
+///          "$ref": "#/$defs/entity-id"
+///        },
+///        "minItems": 1
+///      },
+///      "minItems": 2
+///    },
 ///    "replaces": {
-///      "description": "Weapon IDs being removed",
+///      "description": "Weapon or wargear IDs removed from the model. Omit for a pure add-on (the option only equips new wargear).",
 ///      "type": "array",
 ///      "items": {
 ///        "$ref": "#/$defs/entity-id"
@@ -11217,20 +11428,31 @@ pub struct WargearOption {
     pub is_free: bool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub model_constraint: ::std::option::Option<WargearOptionModelConstraint>,
-    ///Weapon IDs being added
+    ///Weapon or wargear IDs added to the model — all of them. Exactly one of `replacement` / `replacement_choice` is present.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub replacement: ::std::vec::Vec<EntityId>,
-    ///Weapon IDs being removed
+    ///A choice of replacements ('one of the following'): pick exactly one inner group; each group's IDs are all added together. Exactly one of `replacement` / `replacement_choice` is present.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub replacement_choice: ::std::vec::Vec<::std::vec::Vec<EntityId>>,
+    ///Weapon or wargear IDs removed from the model. Omit for a pure add-on (the option only equips new wargear).
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub replaces: ::std::vec::Vec<EntityId>,
     pub unit_id: EntityId,
 }
-///`WargearOptionModelConstraint`
+///Limits how many models may take this option. The eligible-model count is: `any_number` ? model_count : `per_n_models` ? floor(model_count / per_n_models) : (`max_count` ?? 1); then clamped by `max_count` when both are set. `model_name` scopes the option to a specific model profile (e.g. the unit's champion); omit for single-profile units.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
+///  "description": "Limits how many models may take this option. The eligible-model count is: `any_number` ? model_count : `per_n_models` ? floor(model_count / per_n_models) : (`max_count` ?? 1); then clamped by `max_count` when both are set. `model_name` scopes the option to a specific model profile (e.g. the unit's champion); omit for single-profile units.",
 ///  "type": "object",
 ///  "properties": {
+///    "any_number": {
+///      "description": "When true, every model in the unit may take the option ('Any number of models can each ...'). Mutually exclusive in spirit with `per_n_models`.",
+///      "default": false,
+///      "type": "boolean"
+///    },
 ///    "max_count": {
 ///      "type": "integer",
 ///      "minimum": 1.0
@@ -11251,6 +11473,9 @@ pub struct WargearOption {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct WargearOptionModelConstraint {
+    ///When true, every model in the unit may take the option ('Any number of models can each ...'). Mutually exclusive in spirit with `per_n_models`.
+    #[serde(default)]
+    pub any_number: bool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_count: ::std::option::Option<::std::num::NonZeroU64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -11261,6 +11486,7 @@ pub struct WargearOptionModelConstraint {
 impl ::std::default::Default for WargearOptionModelConstraint {
     fn default() -> Self {
         Self {
+            any_number: Default::default(),
             max_count: Default::default(),
             model_name: Default::default(),
             per_n_models: Default::default(),

@@ -8,6 +8,11 @@ export * from "./generated.js";
 // shared Ability-DSL condition humanizer). Cross-impl pinned by conformance.
 export * from "./translate/index.js";
 
+// `ScoringTrigger` is emitted by both ./generated.js (schema-derived) and
+// ./translate (hand-authored). They are structurally identical; disambiguate the
+// two wildcard re-exports in favour of the generated, schema-canonical type.
+export type { ScoringTrigger } from "./generated.js";
+
 // Terrain geometry resolver (template-anchored layout → board-space vertices).
 // Curated (not wildcard) so its internal type aliases don't clash with the
 // generated Footprint/TerrainTemplate/TerrainLayout types. Cross-impl pinned.

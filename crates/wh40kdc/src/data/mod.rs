@@ -21,8 +21,13 @@
 
 mod collection;
 mod dataset;
+mod loadout;
 mod normalize;
 
 pub use collection::Collection;
 pub use dataset::{Dataset, RawData};
+pub use loadout::{
+    clamp_weapon_count, maximal_loadout, option_cap, validate_loadout, Loadout, Violation,
+    ViolationCode, WeaponBound,
+};
 pub use normalize::normalize_name;

@@ -21,6 +21,10 @@
     type StageLift,
     type Unit,
     type Weapon,
+    maximalLoadout,
+    weaponBounds,
+    clampWeaponCount,
+    type WeaponBound,
   } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
   import { buildDebugSnapshot } from "./debug-export.js";
@@ -131,6 +135,40 @@
     ownerMemberId: string;
     defaultModels: number;
   };
+  // Per-member wargear loadout: the maximal (take-every-swap) default
+  // distribution and the per-weapon valid count range, computed once from this
+  // unit's wargear options. Units with no options collapse to "every weapon on
+  // every model" — identical to the old `model_count.min` default. Dogfooding
+  // the crate's own loadout maths (see @alpaca-software/40kdc-data/loadout).
+  type MemberLoadout = {
+    counts: Map<string, number>;
+    bounds: Map<string, WeaponBound>;
+    modelCount: number;
+  };
+  function loadoutFor(memberId: string): MemberLoadout | undefined {
+    const unit =
+      (salvo.selectedFactionId &&
+        ds.units.getInFaction(memberId, salvo.selectedFactionId)) ||
+      ds.units.get(memberId);
+    if (!unit) return undefined;
+    const modelCount = unit.raw.model_count?.min ?? 1;
+    const options = ds.wargearOptionsOf(unit.raw);
+    return {
+      counts: maximalLoadout(unit.raw, modelCount, options).counts,
+      bounds: weaponBounds(unit.raw, modelCount, options),
+      modelCount,
+    };
+  }
+  const loadoutByMember = $derived.by<Map<string, MemberLoadout>>(() => {
+    const map = new Map<string, MemberLoadout>();
+    for (const memberId of [salvo.selectedUnitId, ...salvo.attachedUnitIds]) {
+      if (!memberId) continue;
+      const lo = loadoutFor(memberId);
+      if (lo) map.set(memberId, lo);
+    }
+    return map;
+  });
+
   const weaponLines = $derived.by<WeaponLine[]>(() => {
     const members = [salvo.selectedUnitId, ...salvo.attachedUnitIds].filter(
       (id): id is string => !!id,
@@ -146,7 +184,8 @@
           ds.units.getInFaction(memberId, salvo.selectedFactionId)) ||
         ds.units.get(memberId);
       if (!unit) continue;
-      const defaultModels = unit.raw.model_count?.min ?? 1;
+      const lo = loadoutByMember.get(memberId);
+      const modelCount = lo?.modelCount ?? unit.raw.model_count?.min ?? 1;
       for (const w of unit.weapons) {
         if (w.raw.type !== weaponTypeForPhase(salvo.phase)) continue;
         w.raw.profiles.forEach((p, profileIndex) => {
@@ -159,7 +198,10 @@
             label: multiMember ? `${unit.name} · ${weaponPart}` : weaponPart,
             weaponRaw: w.raw,
             ownerMemberId: memberId,
-            defaultModels,
+            // Maximal-loadout count for this weapon (e.g. 7 bolt pistols, 3
+            // plasma pistols on a 10-model Berzerker squad); falls back to the
+            // full model count for weapons untouched by any option.
+            defaultModels: lo?.counts.get(w.id) ?? modelCount,
           });
         });
       }
@@ -175,8 +217,17 @@
   function modelsFor(line: WeaponLine): number {
     return modelsOverrides.get(line.id) ?? line.defaultModels;
   }
-  function setModels(id: string, n: number): void {
-    modelsOverrides.set(id, Math.max(1, Math.floor(n) || 1));
+  // Clamp the requested count into this weapon's valid range so an invalid
+  // wargear config is unreachable (e.g. plasma pistols can't exceed 3 on a
+  // 10-model Berzerker squad). Weapons with no bound (a unit without options)
+  // keep the old "≥1" floor.
+  function setModels(line: WeaponLine, n: number): void {
+    const bounds = loadoutByMember.get(line.ownerMemberId)?.bounds;
+    if (bounds?.has(line.weaponId)) {
+      modelsOverrides.set(line.id, clampWeaponCount(bounds, line.weaponId, n));
+    } else {
+      modelsOverrides.set(line.id, Math.max(1, Math.floor(n) || 1));
+    }
   }
 
   // Crunch every line with the shared (weapon-agnostic) buff stack and that
@@ -454,7 +505,7 @@
               min="1"
               class="models-input"
               value={modelsFor(r)}
-              oninput={(e) => setModels(r.id, Number((e.currentTarget as HTMLInputElement).value))}
+              oninput={(e) => setModels(r, Number((e.currentTarget as HTMLInputElement).value))}
               aria-label={`Models firing ${r.label}`}
             />
           </td>

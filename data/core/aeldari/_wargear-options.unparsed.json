@@ -1,0 +1,30 @@
+[
+  {
+    "unit_id": "war-walkers",
+    "datasheet": "War Walkers",
+    "line": "1",
+    "description": "Each model can have each shuriken cannon it is equipped with replaced with one of the following:1 missile launcher1 bright lance1 scatter laser1 starcannon",
+    "reason": "could not isolate replaced weapon / replacement"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000614",
+    "line": "1",
+    "description": "This model's suncannon can be replaced with 1 heavy wraithcannon.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000614",
+    "line": "2",
+    "description": "This model's scattershield can be replaced with 1 heavy wraithcannon.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000614",
+    "line": "3",
+    "description": "This model can be equipped with up to two of the following:1 scatter laser1 shuriken cannon1 starcannon",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  }
+]

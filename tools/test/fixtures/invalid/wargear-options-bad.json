@@ -1,0 +1,26 @@
+[
+  {
+    "id": "both-replacement-and-choice",
+    "unit_id": "khorne-berzerkers",
+    "replaces": ["bolt-pistol"],
+    "replacement": ["plasma-pistol"],
+    "replacement_choice": [["plasma-pistol"], ["plasma-pistol"]],
+    "is_free": true,
+    "game_version": { "edition": "10th", "dataslate": "2025-q3" }
+  },
+  {
+    "id": "neither-replacement-nor-choice",
+    "unit_id": "khorne-berzerkers",
+    "replaces": ["bolt-pistol"],
+    "is_free": true,
+    "game_version": { "edition": "10th", "dataslate": "2025-q3" }
+  },
+  {
+    "id": "single-item-choice",
+    "unit_id": "khorne-berzerkers",
+    "replaces": ["chainblade"],
+    "replacement_choice": [["khornate-eviscerator"]],
+    "is_free": true,
+    "game_version": { "edition": "10th", "dataslate": "2025-q3" }
+  }
+]

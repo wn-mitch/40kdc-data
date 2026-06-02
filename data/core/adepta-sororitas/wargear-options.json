@@ -1,0 +1,1242 @@
+[
+  {
+    "id": "paragon-warsuits-swap-1",
+    "unit_id": "paragon-warsuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Paladins",
+      "per_n_models": 5,
+      "max_count": 2
+    },
+    "replaces": [
+      "storm-bolter"
+    ],
+    "replacement_choice": [
+      [
+        "incinerator"
+      ],
+      [
+        "psilencer"
+      ],
+      [
+        "psycannon"
+      ]
+    ]
+  },
+  {
+    "id": "paragon-warsuits-swap-1",
+    "unit_id": "paragon-warsuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "paragon-storm-bolters"
+    ],
+    "replacement": [
+      "paragon-grenade-launchers"
+    ]
+  },
+  {
+    "id": "paragon-warsuits-swap-2",
+    "unit_id": "paragon-warsuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Paladin",
+      "max_count": 1
+    },
+    "replaces": [
+      "storm-bolter"
+    ],
+    "replacement": [
+      "apothecarys-narthecium"
+    ]
+  },
+  {
+    "id": "paragon-warsuits-swap-2",
+    "unit_id": "paragon-warsuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "paragon-war-blade"
+    ],
+    "replacement": [
+      "paragon-war-mace"
+    ]
+  },
+  {
+    "id": "paragon-warsuits-swap-3",
+    "unit_id": "paragon-warsuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Paladin",
+      "max_count": 1
+    },
+    "replaces": [
+      "storm-bolter"
+    ],
+    "replacement_choice": [
+      [
+        "incinerator-and"
+      ],
+      [
+        "ancients-banner"
+      ],
+      [
+        "psilencer-and"
+      ],
+      [
+        "ancients-banner"
+      ],
+      [
+        "psycannon-and"
+      ],
+      [
+        "ancients-banner"
+      ],
+      [
+        "storm-bolter-and"
+      ],
+      [
+        "ancients-banner"
+      ]
+    ]
+  },
+  {
+    "id": "paragon-warsuits-swap-3",
+    "unit_id": "paragon-warsuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "heavy-bolter"
+    ],
+    "replacement_choice": [
+      [
+        "ministorum-heavy-flamer"
+      ],
+      [
+        "multi-melta"
+      ]
+    ]
+  },
+  {
+    "id": "penitent-engines-swap-1",
+    "unit_id": "penitent-engines",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "twin-penitent-buzz-blades"
+    ],
+    "replacement_choice": [
+      [
+        "penitent-buzz-blade-and"
+      ],
+      [
+        "penitent-flail"
+      ],
+      [
+        "twin-penitent-flails"
+      ]
+    ]
+  },
+  {
+    "id": "canoness-swap-1",
+    "unit_id": "canoness",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "condemnor-boltgun"
+      ],
+      [
+        "inferno-pistol"
+      ],
+      [
+        "plasma-pistol"
+      ]
+    ]
+  },
+  {
+    "id": "canoness-swap-2",
+    "unit_id": "canoness",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "hallowed-chainsword"
+    ],
+    "replacement_choice": [
+      [
+        "blessed-blade"
+      ],
+      [
+        "power-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "canoness-addon-3",
+    "unit_id": "canoness",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "brazier-of-holy-fire"
+      ],
+      [
+        "null-rod"
+      ]
+    ]
+  },
+  {
+    "id": "canoness-addon-4",
+    "unit_id": "canoness",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "a-plasma-pistol",
+      "a-power-weapon-it-can-be-equipped-with-1-rod-of-office"
+    ]
+  },
+  {
+    "id": "battle-sisters-squad-swap-1",
+    "unit_id": "battle-sisters-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sister Superior",
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "bolt-pistol"
+      ],
+      [
+        "combi-weapon"
+      ],
+      [
+        "condemnor-boltgun"
+      ],
+      [
+        "inferno-pistol"
+      ],
+      [
+        "ministorum-hand-flamer"
+      ],
+      [
+        "plasma-pistol"
+      ]
+    ]
+  },
+  {
+    "id": "battle-sisters-squad-addon-2",
+    "unit_id": "battle-sisters-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sister Superior",
+      "max_count": 1
+    },
+    "replacement_choice": [
+      [
+        "chainsword"
+      ],
+      [
+        "power-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "battle-sisters-squad-swap-3",
+    "unit_id": "battle-sisters-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Battle Sister",
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "artificer-crafted-storm-bolter"
+      ],
+      [
+        "meltagun"
+      ],
+      [
+        "ministorum-flamer"
+      ]
+    ]
+  },
+  {
+    "id": "battle-sisters-squad-swap-4",
+    "unit_id": "battle-sisters-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Battle Sister",
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "artificer-crafted-storm-bolter"
+      ],
+      [
+        "heavy-bolter"
+      ],
+      [
+        "meltagun"
+      ],
+      [
+        "ministorum-flamer"
+      ],
+      [
+        "ministorum-heavy-flamer"
+      ],
+      [
+        "multi-melta"
+      ]
+    ]
+  },
+  {
+    "id": "seraphim-squad-swap-1",
+    "unit_id": "seraphim-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Seraphim",
+      "per_n_models": 5,
+      "max_count": 2
+    },
+    "replaces": [
+      "bolt-pistols"
+    ],
+    "replacement_choice": [
+      [
+        "inferno-pistols"
+      ],
+      [
+        "ministorum-hand-flamers"
+      ]
+    ]
+  },
+  {
+    "id": "seraphim-squad-swap-2",
+    "unit_id": "seraphim-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Seraphim Superior",
+      "max_count": 1
+    },
+    "replaces": [
+      "bolt-pistols"
+    ],
+    "replacement_choice": [
+      [
+        "bolt-pistol-and"
+      ],
+      [
+        "chainsword"
+      ],
+      [
+        "bolt-pistol-and"
+      ],
+      [
+        "plasma-pistol"
+      ],
+      [
+        "bolt-pistol-and"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "plasma-pistol-and"
+      ],
+      [
+        "chainsword"
+      ],
+      [
+        "plasma-pistol-and"
+      ],
+      [
+        "power-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "retributor-squad-swap-1",
+    "unit_id": "retributor-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Retributor Superior",
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "bolt-pistol"
+      ],
+      [
+        "combi-weapon"
+      ],
+      [
+        "condemnor-boltgun"
+      ],
+      [
+        "inferno-pistol"
+      ],
+      [
+        "ministorum-hand-flamer"
+      ],
+      [
+        "plasma-pistol"
+      ]
+    ]
+  },
+  {
+    "id": "retributor-squad-addon-2",
+    "unit_id": "retributor-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Retributor Superior",
+      "max_count": 1
+    },
+    "replacement_choice": [
+      [
+        "chainsword"
+      ],
+      [
+        "power-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "retributor-squad-swap-3",
+    "unit_id": "retributor-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heavy-bolter"
+    ],
+    "replacement_choice": [
+      [
+        "ministorum-heavy-flamer"
+      ],
+      [
+        "multi-melta"
+      ]
+    ]
+  },
+  {
+    "id": "dominion-squad-swap-1",
+    "unit_id": "dominion-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Dominion Superior",
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "bolt-pistol"
+      ],
+      [
+        "combi-weapon"
+      ],
+      [
+        "condemnor-boltgun"
+      ],
+      [
+        "inferno-pistol"
+      ],
+      [
+        "ministorum-hand-flamer"
+      ],
+      [
+        "plasma-pistol"
+      ]
+    ]
+  },
+  {
+    "id": "dominion-squad-addon-2",
+    "unit_id": "dominion-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Dominion Superior",
+      "max_count": 1
+    },
+    "replacement_choice": [
+      [
+        "chainsword"
+      ],
+      [
+        "power-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "dominion-squad-swap-3",
+    "unit_id": "dominion-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Dominions",
+      "max_count": 4
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "artificer-crafted-storm-bolter"
+      ],
+      [
+        "meltagun"
+      ],
+      [
+        "ministorum-flamer"
+      ]
+    ]
+  },
+  {
+    "id": "sororitas-rhino-addon-1",
+    "unit_id": "sororitas-rhino",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "immolator-addon-1",
+    "unit_id": "immolator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "immolator-swap-2",
+    "unit_id": "immolator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "immolation-flamers"
+    ],
+    "replacement_choice": [
+      [
+        "twin-heavy-bolter"
+      ],
+      [
+        "twin-multi-melta"
+      ]
+    ]
+  },
+  {
+    "id": "exorcist-addon-1",
+    "unit_id": "exorcist",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "exorcist-swap-2",
+    "unit_id": "exorcist",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "exorcist-missile-launcher"
+    ],
+    "replacement": [
+      "exorcist-conflagration-rockets"
+    ]
+  },
+  {
+    "id": "repressor-addon-1",
+    "unit_id": "repressor",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "repressor-addon-2",
+    "unit_id": "repressor",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-flamer"
+      ],
+      [
+        "storm-bolter"
+      ]
+    ]
+  },
+  {
+    "id": "ministorum-priest-swap-1",
+    "unit_id": "ministorum-priest",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "zealots-vindictor"
+    ],
+    "replacement": [
+      "holy-pistol",
+      "power-weapon"
+    ]
+  },
+  {
+    "id": "ministorum-priest-swap-1",
+    "unit_id": "ministorum-priest",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "zealots-vindictor"
+    ],
+    "replacement": [
+      "holy-pistol",
+      "power-weapon"
+    ]
+  },
+  {
+    "id": "zephyrim-squad-addon-1",
+    "unit_id": "zephyrim-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Zephyrim Superior",
+      "max_count": 1
+    },
+    "replacement": [
+      "sacred-banner"
+    ]
+  },
+  {
+    "id": "zephyrim-squad-swap-2",
+    "unit_id": "zephyrim-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Zephyrim Superior",
+      "max_count": 1
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement": [
+      "plasma-pistol"
+    ]
+  },
+  {
+    "id": "mortifiers-addon-1",
+    "unit_id": "mortifiers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replacement": [
+      "anchorite-sarcophagus"
+    ]
+  },
+  {
+    "id": "mortifiers-swap-2",
+    "unit_id": "mortifiers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "heavy-bolters"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-bolter-and"
+      ],
+      [
+        "mortifier-flamer"
+      ],
+      [
+        "mortifier-flamers"
+      ]
+    ]
+  },
+  {
+    "id": "mortifiers-swap-3",
+    "unit_id": "mortifiers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "twin-penitent-buzz-blades"
+    ],
+    "replacement_choice": [
+      [
+        "twin-penitent-flails"
+      ],
+      [
+        "penitent-buzz-blade-and"
+      ],
+      [
+        "penitent-flail"
+      ]
+    ]
+  },
+  {
+    "id": "palatine-swap-1",
+    "unit_id": "palatine",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement": [
+      "plasma-pistol"
+    ]
+  },
+  {
+    "id": "celestian-sacresants-swap-1",
+    "unit_id": "celestian-sacresants",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "hallowed-mace"
+    ],
+    "replacement": [
+      "anointed-halberd"
+    ]
+  },
+  {
+    "id": "celestian-sacresants-swap-2",
+    "unit_id": "celestian-sacresants",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sacresant Superior",
+      "max_count": 1
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "inferno-pistol"
+      ],
+      [
+        "ministorum-hand-flamer"
+      ],
+      [
+        "plasma-pistol"
+      ]
+    ]
+  },
+  {
+    "id": "celestian-sacresants-swap-3",
+    "unit_id": "celestian-sacresants",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sacresant Superior",
+      "max_count": 1
+    },
+    "replaces": [
+      "hallowed-mace"
+    ],
+    "replacement": [
+      "spear-of-the-faithful"
+    ]
+  },
+  {
+    "id": "castigator-swap-1",
+    "unit_id": "castigator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "castigator-autocannons"
+    ],
+    "replacement": [
+      "castigator-battle-cannon"
+    ]
+  },
+  {
+    "id": "castigator-addon-2",
+    "unit_id": "castigator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "castigator-addon-3",
+    "unit_id": "castigator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "sisters-novitiate-squad-swap-1",
+    "unit_id": "sisters-novitiate-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Novitiate Superior",
+      "max_count": 1
+    },
+    "replaces": [
+      "bolt-pistol",
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "bolt-pistol-and"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "plasma-pistol-and"
+      ],
+      [
+        "power-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "sisters-novitiate-squad-swap-2",
+    "unit_id": "sisters-novitiate-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sister Novitiate",
+      "max_count": 1
+    },
+    "replaces": [
+      "autogun"
+    ],
+    "replacement": [
+      "sacred-banner"
+    ]
+  },
+  {
+    "id": "sisters-novitiate-squad-swap-3",
+    "unit_id": "sisters-novitiate-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sister Novitiate",
+      "max_count": 1
+    },
+    "replaces": [
+      "autogun"
+    ],
+    "replacement": [
+      "simulacrum-imperialis"
+    ]
+  },
+  {
+    "id": "sisters-novitiate-squad-swap-4",
+    "unit_id": "sisters-novitiate-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sisters Novitiate",
+      "max_count": 2
+    },
+    "replaces": [
+      "autogun"
+    ],
+    "replacement": [
+      "ministorum-flamer"
+    ]
+  },
+  {
+    "id": "sisters-novitiate-squad-swap-5",
+    "unit_id": "sisters-novitiate-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sisters Novitiate",
+      "any_number": true
+    },
+    "replaces": [
+      "autogun",
+      "close-combat-weapon"
+    ],
+    "replacement": [
+      "novitiate-melee-weapons"
+    ]
+  },
+  {
+    "id": "canoness-with-jump-pack-swap-1",
+    "unit_id": "canoness-with-jump-pack",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "blessed-halberd"
+    ],
+    "replacement_choice": [
+      [
+        "holy-eviscerator"
+      ],
+      [
+        "ministorum-hand-flamer-and"
+      ],
+      [
+        "power-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "sanctifiers-swap-1",
+    "unit_id": "sanctifiers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Missionary model",
+      "max_count": 1
+    },
+    "replaces": [
+      "plasma-gun"
+    ],
+    "replacement": [
+      "meltagun"
+    ]
+  },
+  {
+    "id": "sanctifiers-swap-3",
+    "unit_id": "sanctifiers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sanctifier model",
+      "max_count": 1
+    },
+    "replaces": [
+      "sanctifier-melee-weapon"
+    ],
+    "replacement": [
+      "ministorum-hand-flamer",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "sanctifiers-swap-4",
+    "unit_id": "sanctifiers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sanctifier model",
+      "max_count": 1
+    },
+    "replaces": [
+      "sanctifier-melee-weapon"
+    ],
+    "replacement": [
+      "close-combat-weapon",
+      "simulacrum-imperialis"
+    ]
+  },
+  {
+    "id": "celestian-insidiants-swap-1",
+    "unit_id": "celestian-insidiants",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Celestian Insidiant Superior",
+      "max_count": 1
+    },
+    "replaces": [
+      "condemnor-bolt-pistol"
+    ],
+    "replacement": [
+      "inferno-pistol"
+    ]
+  },
+  {
+    "id": "celestian-insidiants-swap-2",
+    "unit_id": "celestian-insidiants",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Celestian Insidiants",
+      "max_count": 2
+    },
+    "replaces": [
+      "condemnor-bolt-pistol"
+    ],
+    "replacement": [
+      "ministorum-hand-flamer"
+    ]
+  },
+  {
+    "id": "celestian-insidiants-swap-3",
+    "unit_id": "celestian-insidiants",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Celestian Insidiants",
+      "max_count": 2
+    },
+    "replaces": [
+      "condemnor-bolt-pistol",
+      "null-mace"
+    ],
+    "replacement": [
+      "blessed-sword"
+    ]
+  },
+  {
+    "id": "celestian-insidiants-swap-4",
+    "unit_id": "celestian-insidiants",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Celestian Insidiant",
+      "max_count": 1
+    },
+    "replaces": [
+      "condemnor-bolt-pistol",
+      "null-mace"
+    ],
+    "replacement": [
+      "virge-of-admonition"
+    ]
+  },
+  {
+    "id": "celestian-insidiants-swap-5",
+    "unit_id": "celestian-insidiants",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Celestian Insidiant",
+      "max_count": 1
+    },
+    "replaces": [
+      "condemnor-bolt-pistol"
+    ],
+    "replacement": [
+      "denuncia-oratory"
+    ]
+  }
+]

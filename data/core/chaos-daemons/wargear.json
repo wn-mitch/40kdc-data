@@ -1,0 +1,28 @@
+[
+  {
+    "id": "a-daemonic-icon-can-be-equipped-with-1-instrument-of-chaos",
+    "name": "a daemonic icon can be equipped with 1 instrument of Chaos",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "category": "icon"
+  },
+  {
+    "id": "an-instrument-of-chaos-can-be-equipped-with-1-daemonic-icon",
+    "name": "an instrument of Chaos can be equipped with 1 daemonic icon",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "category": "icon"
+  },
+  {
+    "id": "living-whipritual-knifeshining-aegis",
+    "name": "Living whipRitual knifeShining aegis",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  }
+]

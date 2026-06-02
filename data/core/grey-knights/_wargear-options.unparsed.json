@@ -1,0 +1,37 @@
+[
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000381",
+    "line": "1",
+    "description": "For every 5 models in this unit, 1 Grey Knight's storm bolter and Nemesis force weapon can be replaced with one of the following:1 incinerator and 1 close combat weapon1 psilencer and 1 close combat weapon1 psycannon and 1 close combat weapon",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000382",
+    "line": "1",
+    "description": "For every 5 models in this unit, 1 Terminator's storm bolter can be replaced with one of the following:1 incinerator1 psilencer1 psycannon",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000382",
+    "line": "2",
+    "description": "1 Terminator can have its storm bolter replaced with 1 Apothecary's narthecium.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000382",
+    "line": "3",
+    "description": "1 Terminator's storm bolter can be replaced with one of the following:1 incinerator and 1 Ancient's banner1 psilencer and 1 Ancient's banner1 psycannon and 1 Ancient's banner1 storm bolter and 1 Ancient's banner*",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000382",
+    "line": "4",
+    "description": "* That model's storm bolter cannot be replaced.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  }
+]

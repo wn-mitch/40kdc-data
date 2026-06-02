@@ -10,6 +10,7 @@ import type {
   Faction,
   Phase,
   Unit,
+  WargearOption,
   Weapon,
   WeaponKeyword,
 } from "../generated.js";
@@ -51,6 +52,11 @@ export class UnitView {
   /** Abilities referenced by `ability_ids`; unresolved ids are skipped. */
   get abilities(): AbilityView[] {
     return resolveAll(this.raw.ability_ids, (id) => this.ds.abilities.get(id));
+  }
+
+  /** Wargear options (weapon swaps, add-ons, choices) authored for this unit. */
+  get wargearOptions(): WargearOption[] {
+    return this.ds.wargearOptionsOf(this.raw);
   }
 
   /**

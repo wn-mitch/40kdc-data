@@ -1,0 +1,30 @@
+[
+  {
+    "unit_id": "aquila-kill-team",
+    "datasheet": "Aquila Kill Team",
+    "line": "1",
+    "description": "For every 5 models in the unit, up to 1 model's infernus heavy bolter can be replaced with one of the following:1 frag cannon.1 hellstorm bolt rifle and 1 Astartes grenade launcher.",
+    "reason": "could not isolate replaced weapon / replacement"
+  },
+  {
+    "unit_id": "aquila-kill-team",
+    "datasheet": "Aquila Kill Team",
+    "line": "2",
+    "description": "For every 5 models in the unit, up to 1 model's heavy thunder hammer can be replaced with 1 power weapon and 1 Astartes shield.",
+    "reason": "could not isolate replaced weapon / replacement"
+  },
+  {
+    "unit_id": "aquila-kill-team",
+    "datasheet": "Aquila Kill Team",
+    "line": "3",
+    "description": "For every 5 models in the unit, up to 1 model's stalker bolt rifle can be replaced with 1 plasma incinerator.",
+    "reason": "could not isolate replaced weapon / replacement"
+  },
+  {
+    "unit_id": "aquila-kill-team",
+    "datasheet": "Aquila Kill Team",
+    "line": "4",
+    "description": "For every 5 models in the unit, up to 1 model's Deathwatch marksman bolt carbine can be replaced with 1 combat knife.",
+    "reason": "could not isolate replaced weapon / replacement"
+  }
+]

@@ -91,6 +91,7 @@ const FILE_TO_COLLECTION: &[(&str, &str)] = &[
     ("leader-attachments", "leader_attachments"),
     ("unit-compositions", "unit_compositions"),
     ("wargear-options", "wargear_options"),
+    ("wargear", "wargear"),
     ("game-versions", "game_versions"),
     ("missions", "missions"),
     ("mission-matchups", "mission_matchups"),

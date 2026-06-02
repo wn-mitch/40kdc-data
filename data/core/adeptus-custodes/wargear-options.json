@@ -1,0 +1,481 @@
+[
+  {
+    "id": "custodian-guard-swap-1",
+    "unit_id": "custodian-guard",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "guardian-spear"
+    ],
+    "replacement": [
+      "sentinel-blade",
+      "praesidium-shield"
+    ]
+  },
+  {
+    "id": "custodian-guard-swap-2",
+    "unit_id": "custodian-guard",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replaces": [
+      "guardian-spear"
+    ],
+    "replacement_choice": [
+      [
+        "vexilla-and"
+      ],
+      [
+        "misericordia"
+      ],
+      [
+        "vexilla"
+      ],
+      [
+        "misericordia-and"
+      ],
+      [
+        "praesidium-shield"
+      ]
+    ]
+  },
+  {
+    "id": "venerable-contemptor-dreadnought-swap-1",
+    "unit_id": "venerable-contemptor-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "multi-melta"
+    ],
+    "replacement": [
+      "kheres-pattern-assault-cannon"
+    ]
+  },
+  {
+    "id": "venerable-land-raider-addon-1",
+    "unit_id": "venerable-land-raider",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "venerable-land-raider-addon-2",
+    "unit_id": "venerable-land-raider",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "shield-captain-swap-1",
+    "unit_id": "shield-captain",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "guardian-spear"
+    ],
+    "replacement_choice": [
+      [
+        "castellan-axe"
+      ],
+      [
+        "sentinel-blade"
+      ],
+      [
+        "sentinel-blade-and"
+      ],
+      [
+        "praesidium-shield"
+      ],
+      [
+        "pyrithite-spear-and"
+      ],
+      [
+        "praesidium-shield"
+      ]
+    ]
+  },
+  {
+    "id": "shield-captain-in-allarus-terminator-armour-swap-1",
+    "unit_id": "shield-captain-in-allarus-terminator-armour",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "guardian-spear"
+    ],
+    "replacement": [
+      "castellan-axe"
+    ]
+  },
+  {
+    "id": "shield-captain-on-dawneagle-jetbike-swap-1",
+    "unit_id": "shield-captain-on-dawneagle-jetbike",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "salvo-launcher"
+    ],
+    "replacement": [
+      "vertus-hurricane-bolter"
+    ]
+  },
+  {
+    "id": "custodian-wardens-swap-1",
+    "unit_id": "custodian-wardens",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "guardian-spear"
+    ],
+    "replacement": [
+      "castellan-axe"
+    ]
+  },
+  {
+    "id": "custodian-wardens-addon-2",
+    "unit_id": "custodian-wardens",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replacement": [
+      "vexilla"
+    ]
+  },
+  {
+    "id": "allarus-custodians-swap-1",
+    "unit_id": "allarus-custodians",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "guardian-spear"
+    ],
+    "replacement": [
+      "castellan-axe"
+    ]
+  },
+  {
+    "id": "allarus-custodians-swap-2",
+    "unit_id": "allarus-custodians",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replaces": [
+      "guardian-spear"
+    ],
+    "replacement": [
+      "vexilla",
+      "misericordia"
+    ]
+  },
+  {
+    "id": "vertus-praetors-swap-1",
+    "unit_id": "vertus-praetors",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "salvo-launcher"
+    ],
+    "replacement": [
+      "vertus-hurricane-bolter"
+    ]
+  },
+  {
+    "id": "contemptor-achillus-dreadnought-swap-1",
+    "unit_id": "contemptor-achillus-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "lastrum-storm-bolters"
+    ],
+    "replacement_choice": [
+      [
+        "infernus-incinerators"
+      ],
+      [
+        "twin-adrathic-destructors"
+      ],
+      [
+        "lastrum-storm-bolter-and"
+      ],
+      [
+        "infernus-incinerator"
+      ],
+      [
+        "lastrum-storm-bolter-and"
+      ],
+      [
+        "twin-adrathic-destructor"
+      ],
+      [
+        "infernus-incinerator-and"
+      ],
+      [
+        "twin-adrathic-destructor"
+      ]
+    ]
+  },
+  {
+    "id": "caladius-grav-tank-swap-1",
+    "unit_id": "caladius-grav-tank",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-iliastus-accelerator-cannon"
+    ],
+    "replacement": [
+      "twin-arachnus-heavy-blaze-cannon"
+    ]
+  },
+  {
+    "id": "telemon-heavy-dreadnought-swap-1",
+    "unit_id": "telemon-heavy-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "iliastus-accelerator-culverins"
+    ],
+    "replacement_choice": [
+      [
+        "arachnus-storm-cannons"
+      ],
+      [
+        "telemon-caestus-and"
+      ],
+      [
+        "twin-plasma-projectors"
+      ],
+      [
+        "iliastus-accelerator-culverin-and"
+      ],
+      [
+        "arachnus-storm-cannon"
+      ],
+      [
+        "iliastus-accelerator-culverin"
+      ],
+      [
+        "telemon-caestus-and"
+      ],
+      [
+        "twin-plasma-projector"
+      ],
+      [
+        "arachnus-storm-cannon"
+      ],
+      [
+        "telemon-caestus-and"
+      ],
+      [
+        "twin-plasma-projector"
+      ]
+    ]
+  },
+  {
+    "id": "aquilon-custodians-swap-1",
+    "unit_id": "aquilon-custodians",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "lastrum-storm-bolter"
+    ],
+    "replacement_choice": [
+      [
+        "infernus-firepike"
+      ],
+      [
+        "twin-adrathic-destructor"
+      ]
+    ]
+  },
+  {
+    "id": "aquilon-custodians-swap-2",
+    "unit_id": "aquilon-custodians",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "solerite-power-gauntlet"
+    ],
+    "replacement": [
+      "solerite-power-talon"
+    ]
+  },
+  {
+    "id": "custodian-guard-with-adrasite-and-pyrithite-spears-swap-1",
+    "unit_id": "custodian-guard-with-adrasite-and-pyrithite-spears",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "adrasite-spear"
+    ],
+    "replacement": [
+      "pyrithite-spear"
+    ]
+  },
+  {
+    "id": "agamatus-custodians-swap-1",
+    "unit_id": "agamatus-custodians",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "lastrum-bolt-cannon"
+    ],
+    "replacement_choice": [
+      [
+        "adrathic-devastator"
+      ],
+      [
+        "twin-las-pulsar"
+      ]
+    ]
+  },
+  {
+    "id": "venatari-custodians-swap-1",
+    "unit_id": "venatari-custodians",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "venatari-lance"
+    ],
+    "replacement": [
+      "kinetic-destroyer",
+      "tarsus-buckler"
+    ]
+  },
+  {
+    "id": "knight-centura-swap-1",
+    "unit_id": "knight-centura",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "executioner-greatblade"
+    ],
+    "replacement_choice": [
+      [
+        "master-crafted-boltgun-and"
+      ],
+      [
+        "close-combat-weapon"
+      ],
+      [
+        "witchseeker-flamer-and"
+      ],
+      [
+        "close-combat-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "anathema-psykana-rhino-addon-1",
+    "unit_id": "anathema-psykana-rhino",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  }
+]

@@ -22,6 +22,7 @@ import process from "node:process";
 
 import { Dataset } from "./data/dataset.js";
 import { normalizeName } from "./data/normalize.js";
+import { maximalLoadout } from "./data/loadout.js";
 import { exportRoster, type ExportFormat } from "./export/index.js";
 import { importRoster, tryImportRoster, REGISTERED_ADAPTERS } from "./import/import-roster.js";
 import { selectAdapter } from "./import/adapter.js";
@@ -278,6 +279,19 @@ function handleLinkedQuery(state: RunnerState, args: unknown): RunnerResponse {
         if (!u) return err("UNKNOWN_ENTITY", { kind: "unit", id: input.unitId });
         return ok(u.weapons.map((x) => x.id));
       }
+      case "wargear_options_of": {
+        const u = ds.units.get(input.unitId);
+        if (!u) return err("UNKNOWN_ENTITY", { kind: "unit", id: input.unitId });
+        return ok(u.wargearOptions.map((x) => x.id));
+      }
+      case "maximal_loadout": {
+        const u = ds.units.get(input.unitId);
+        if (!u) return err("UNKNOWN_ENTITY", { kind: "unit", id: input.unitId });
+        const modelCount = Number(input.modelCount);
+        const lo = maximalLoadout(u.raw, modelCount, ds.wargearOptionsOf(u.raw));
+        // Encode the id→count map as sorted "id:count" strings for set compare.
+        return ok([...lo.counts].map(([id, n]) => `${id}:${n}`).sort());
+      }
       case "phases_of": {
         const ab = ds.abilities.get(input.abilityId);
         if (!ab) return err("UNKNOWN_ENTITY", { kind: "ability", id: input.abilityId });
@@ -308,6 +322,8 @@ const VALIDATOR_TARGETS: Record<string, string> = {
   weapon: "https://40kdc.dev/schemas/core/weapon.schema.json",
   faction: "https://40kdc.dev/schemas/core/faction.schema.json",
   ability: "https://40kdc.dev/schemas/enrichment/ability-dsl/ability.schema.json",
+  wargear: "https://40kdc.dev/schemas/core/wargear.schema.json",
+  "wargear-option": "https://40kdc.dev/schemas/core/wargear-option.schema.json",
 };
 
 function ajvKeywordToCode(keyword: string): string {

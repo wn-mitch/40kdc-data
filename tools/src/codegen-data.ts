@@ -39,6 +39,7 @@ const FILE_TO_COLLECTION: Record<string, keyof RawData> = {
   "leader-attachments": "leaderAttachments",
   "unit-compositions": "unitCompositions",
   "wargear-options": "wargearOptions",
+  wargear: "wargear",
   "game-versions": "gameVersions",
   missions: "missions",
   "mission-matchups": "missionMatchups",

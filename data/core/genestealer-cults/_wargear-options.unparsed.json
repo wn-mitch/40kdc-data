@@ -1,0 +1,44 @@
+[
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000511",
+    "line": "1",
+    "description": "One Acolyte Hybrid's autopistol can be replaced with 1 cult icon.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000511",
+    "line": "2",
+    "description": "For every 5 models in this unit, up to 3 Acolyte Hybrids can each have their autopistol and cult claws and knife replaced with 1 heavy mining tool.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000511",
+    "line": "3",
+    "description": "The Acolyte Leader's cult claws and knife can be replaced with 1 Leader's bio-weapons.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000003716",
+    "line": "1",
+    "description": "One Acolyte Hybrid's hand flamer can be replaced with 1 cult icon.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000003716",
+    "line": "2",
+    "description": "For every 5 models in this unit, up to 2 Acolyte Hybrids can each have their hand flamer replaced with 1 demolition charges",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000003716",
+    "line": "3",
+    "description": "The Acolyte Leader's cult claws and knife can be replaced with 1 Leader's bio-weapons.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  }
+]

@@ -1,0 +1,204 @@
+[
+  {
+    "id": "incinerator",
+    "name": "incinerator",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "psilencer",
+    "name": "psilencer",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "psycannon",
+    "name": "psycannon",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "apothecarys-narthecium",
+    "name": "Apothecary's narthecium",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "incinerator-and",
+    "name": "incinerator and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "ancients-banner",
+    "name": "Ancient's banner",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "category": "standard"
+  },
+  {
+    "id": "psilencer-and",
+    "name": "psilencer and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "psycannon-and",
+    "name": "psycannon and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "storm-bolter-and",
+    "name": "storm bolter and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "penitent-buzz-blade-and",
+    "name": "penitent buzz-blade and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "null-rod",
+    "name": "null rod",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "a-plasma-pistol",
+    "name": "a plasma pistol",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "a-power-weapon-it-can-be-equipped-with-1-rod-of-office",
+    "name": "a power weapon, it can be equipped with:1 rod of office",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "inferno-pistols",
+    "name": "inferno pistols",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "ministorum-hand-flamers",
+    "name": "Ministorum hand flamers",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "bolt-pistol-and",
+    "name": "bolt pistol and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "plasma-pistol-and",
+    "name": "plasma pistol and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "sacred-banner",
+    "name": "sacred banner",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "category": "standard"
+  },
+  {
+    "id": "anchorite-sarcophagus",
+    "name": "anchorite sarcophagus",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "heavy-bolters",
+    "name": "heavy bolters",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "heavy-bolter-and",
+    "name": "heavy bolter and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "mortifier-flamers",
+    "name": "Mortifier flamers",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "simulacrum-imperialis",
+    "name": "simulacrum imperialis",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "ministorum-hand-flamer-and",
+    "name": "Ministorum hand flamer and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "denuncia-oratory",
+    "name": "denuncia oratory",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  }
+]

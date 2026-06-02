@@ -92,6 +92,26 @@ function stripConditionals(node: unknown): unknown {
       if (key === "if" || key === "then" || key === "else") continue;
       out[key] = stripConditionals(value);
     }
+    // Stripping `if`/`then`/`else` can empty out `allOf` members that existed
+    // only to express a conditional (e.g. exactly-one-of cross-field rules). An
+    // empty subschema is a no-op constraint, so drop those members; if none
+    // remain, drop the `allOf` entirely. Without this the bundle keeps
+    // `allOf: [{}, {}]`, which makes typify/json2ts emit a degenerate type and
+    // lose the whole entity. The real constraint is still enforced by ajv
+    // against the un-stripped source schemas.
+    if (Array.isArray(out.allOf)) {
+      const kept = (out.allOf as unknown[]).filter(
+        (m) =>
+          !(
+            m &&
+            typeof m === "object" &&
+            !Array.isArray(m) &&
+            Object.keys(m as JsonObject).length === 0
+          ),
+      );
+      if (kept.length === 0) delete out.allOf;
+      else out.allOf = kept;
+    }
     return out;
   }
   return node;

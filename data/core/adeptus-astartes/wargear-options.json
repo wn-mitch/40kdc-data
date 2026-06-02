@@ -1,0 +1,6492 @@
+[
+  {
+    "id": "land-raider-addon-1",
+    "unit_id": "land-raider",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "land-raider-addon-2",
+    "unit_id": "land-raider",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "multi-melta"
+    ]
+  },
+  {
+    "id": "land-raider-addon-3",
+    "unit_id": "land-raider",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "land-raider-crusader-addon-1",
+    "unit_id": "land-raider-crusader",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "land-raider-crusader-addon-2",
+    "unit_id": "land-raider-crusader",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "multi-melta"
+    ]
+  },
+  {
+    "id": "land-raider-crusader-addon-3",
+    "unit_id": "land-raider-crusader",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "land-raider-excelsior-addon-1",
+    "unit_id": "land-raider-excelsior",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "land-raider-excelsior-addon-2",
+    "unit_id": "land-raider-excelsior",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "land-raider-excelsior-addon-3",
+    "unit_id": "land-raider-excelsior",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "multi-melta"
+    ]
+  },
+  {
+    "id": "land-raider-excelsior-addon-4",
+    "unit_id": "land-raider-excelsior",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "combi-weapon"
+    ]
+  },
+  {
+    "id": "tactical-squad-swap-1",
+    "unit_id": "tactical-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Tactical Marine",
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "flamer"
+      ],
+      [
+        "heavy-bolter"
+      ],
+      [
+        "grav-cannon"
+      ],
+      [
+        "grav-gun"
+      ],
+      [
+        "lascannon"
+      ],
+      [
+        "meltagun"
+      ],
+      [
+        "missile-launcher"
+      ],
+      [
+        "multi-melta"
+      ],
+      [
+        "plasma-cannon"
+      ],
+      [
+        "plasma-gun"
+      ]
+    ]
+  },
+  {
+    "id": "tactical-squad-swap-2",
+    "unit_id": "tactical-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Tactical Marine",
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "flamer"
+      ],
+      [
+        "grav-gun"
+      ],
+      [
+        "meltagun"
+      ],
+      [
+        "plasma-gun"
+      ]
+    ]
+  },
+  {
+    "id": "bladeguard-veteran-squad-swap-1",
+    "unit_id": "bladeguard-veteran-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Bladeguard Veteran Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "heavy-bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "neo-volkite-pistol"
+      ],
+      [
+        "plasma-pistol"
+      ]
+    ]
+  },
+  {
+    "id": "captain-swap-1",
+    "unit_id": "captain",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "bolt-pistol-master-crafted-bolter",
+      "close-combat-weapon"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-bolt-pistol-and"
+      ],
+      [
+        "power-fist"
+      ],
+      [
+        "heavy-bolt-pistol-and"
+      ],
+      [
+        "master-crafted-power-weapon"
+      ],
+      [
+        "neo-volkite-pistol-and"
+      ],
+      [
+        "power-fist"
+      ],
+      [
+        "neo-volkite-pistol-and"
+      ],
+      [
+        "master-crafted-power-weapon"
+      ],
+      [
+        "plasma-pistol-and"
+      ],
+      [
+        "power-fist"
+      ],
+      [
+        "plasma-pistol-and"
+      ],
+      [
+        "master-crafted-power-weapon"
+      ],
+      [
+        "heavy-bolt-pistol"
+      ],
+      [
+        "master-crafted-power-weapon-and"
+      ],
+      [
+        "relic-shield"
+      ]
+    ]
+  },
+  {
+    "id": "captain-swap-2",
+    "unit_id": "captain",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "close-combat-weapon"
+    ],
+    "replacement_choice": [
+      [
+        "master-crafted-power-weapon"
+      ],
+      [
+        "power-fist"
+      ]
+    ]
+  },
+  {
+    "id": "librarian-in-terminator-armour-addon-1",
+    "unit_id": "librarian-in-terminator-armour",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "combi-weapon"
+      ],
+      [
+        "storm-bolter"
+      ]
+    ]
+  },
+  {
+    "id": "captain-with-jump-pack-swap-1",
+    "unit_id": "captain-with-jump-pack",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heavy-bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "plasma-pistol"
+      ],
+      [
+        "hand-flamer"
+      ]
+    ]
+  },
+  {
+    "id": "captain-with-jump-pack-swap-2",
+    "unit_id": "captain-with-jump-pack",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "astartes-chainsword"
+    ],
+    "replacement_choice": [
+      [
+        "power-fist"
+      ],
+      [
+        "relic-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "captain-with-jump-pack-swap-3",
+    "unit_id": "captain-with-jump-pack",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heavy-bolt-pistol",
+      "astartes-chainsword"
+    ],
+    "replacement": [
+      "thunder-hammer",
+      "relic-shield"
+    ]
+  },
+  {
+    "id": "stormhawk-interceptor-swap-1",
+    "unit_id": "stormhawk-interceptor",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "skyhammer-missile-launcher"
+    ],
+    "replacement_choice": [
+      [
+        "twin-heavy-bolter"
+      ],
+      [
+        "typhoon-missile-launcher"
+      ]
+    ]
+  },
+  {
+    "id": "stormhawk-interceptor-swap-1",
+    "unit_id": "stormhawk-interceptor",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "las-talon"
+    ],
+    "replacement": [
+      "icarus-stormcannon"
+    ]
+  },
+  {
+    "id": "stormhawk-interceptor-swap-2",
+    "unit_id": "stormhawk-interceptor",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "las-talon"
+    ],
+    "replacement": [
+      "icarus-stormcannon"
+    ]
+  },
+  {
+    "id": "rhino-primaris-addon-1",
+    "unit_id": "rhino-primaris",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "firestrike-servo-turrets-swap-1",
+    "unit_id": "firestrike-servo-turrets",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "twin-firestrike-las-talon"
+    ],
+    "replacement": [
+      "twin-firestrike-autocannon"
+    ]
+  },
+  {
+    "id": "sicaran-venator-addon-1",
+    "unit_id": "sicaran-venator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-bolters"
+      ],
+      [
+        "lascannons"
+      ]
+    ]
+  },
+  {
+    "id": "sicaran-venator-addon-2",
+    "unit_id": "sicaran-venator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "sicaran-venator-addon-3",
+    "unit_id": "sicaran-venator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "typhon-addon-1",
+    "unit_id": "typhon",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-bolters"
+      ],
+      [
+        "lascannons"
+      ]
+    ]
+  },
+  {
+    "id": "typhon-addon-2",
+    "unit_id": "typhon",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-bolter"
+      ],
+      [
+        "heavy-flamer"
+      ],
+      [
+        "multi-melta"
+      ],
+      [
+        "storm-bolter"
+      ]
+    ]
+  },
+  {
+    "id": "hammerfall-bunker-swap-1",
+    "unit_id": "hammerfall-bunker",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "hammerfall-heavy-bolter-array"
+    ],
+    "replacement": [
+      "hammerfall-heavy-flamer-array"
+    ]
+  },
+  {
+    "id": "eradicator-squad-swap-1",
+    "unit_id": "eradicator-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Eradicator",
+      "per_n_models": 3
+    },
+    "replaces": [
+      "melta-rifle"
+    ],
+    "replacement": [
+      "multi-melta"
+    ]
+  },
+  {
+    "id": "javelin-attack-speeder-swap-1",
+    "unit_id": "javelin-attack-speeder",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "javelin-missile-launcher"
+    ],
+    "replacement": [
+      "lascannons"
+    ]
+  },
+  {
+    "id": "javelin-attack-speeder-swap-2",
+    "unit_id": "javelin-attack-speeder",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heavy-bolter"
+    ],
+    "replacement": [
+      "multi-melta"
+    ]
+  },
+  {
+    "id": "javelin-attack-speeder-addon-3",
+    "unit_id": "javelin-attack-speeder",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "up-to-2-hunter-killer-missiles"
+    ]
+  },
+  {
+    "id": "rapier-carrier-swap-1",
+    "unit_id": "rapier-carrier",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "quad-heavy-bolter"
+    ],
+    "replacement_choice": [
+      [
+        "graviton-cannon"
+      ],
+      [
+        "laser-destroyer"
+      ],
+      [
+        "quad-launcher"
+      ]
+    ]
+  },
+  {
+    "id": "mortis-dreadnought-swap-1",
+    "unit_id": "mortis-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-heavy-bolters"
+    ],
+    "replacement_choice": [
+      [
+        "assault-cannons"
+      ],
+      [
+        "dreadnought-inferno-cannons"
+      ],
+      [
+        "heavy-plasma-cannons"
+      ],
+      [
+        "missile-launchers"
+      ],
+      [
+        "multi-meltas"
+      ],
+      [
+        "twin-autocannons"
+      ],
+      [
+        "twin-lascannons"
+      ]
+    ]
+  },
+  {
+    "id": "chaplain-with-jump-pack-swap-1",
+    "unit_id": "chaplain-with-jump-pack",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "boltgun"
+      ],
+      [
+        "combi-weapon"
+      ],
+      [
+        "grav-pistol"
+      ],
+      [
+        "hand-flamer"
+      ],
+      [
+        "inferno-pistol"
+      ],
+      [
+        "plasma-pistol"
+      ],
+      [
+        "storm-bolter"
+      ],
+      [
+        "power-fist"
+      ]
+    ]
+  },
+  {
+    "id": "storm-eagle-gunship-swap-1",
+    "unit_id": "storm-eagle-gunship",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-heavy-bolter"
+    ],
+    "replacement_choice": [
+      [
+        "twin-multi-melta"
+      ],
+      [
+        "typhoon-missile-launcher"
+      ]
+    ]
+  },
+  {
+    "id": "storm-eagle-gunship-swap-2",
+    "unit_id": "storm-eagle-gunship",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-hellstrike-missile-launchers"
+    ],
+    "replacement": [
+      "twin-lascannons"
+    ]
+  },
+  {
+    "id": "chaplain-in-terminator-armour-swap-1",
+    "unit_id": "chaplain-in-terminator-armour",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "storm-bolter"
+    ],
+    "replacement": [
+      "relic-shield"
+    ]
+  },
+  {
+    "id": "dreadnought-swap-1",
+    "unit_id": "dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "assault-cannon"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-plasma-cannon"
+      ],
+      [
+        "multi-melta"
+      ],
+      [
+        "twin-lascannon"
+      ]
+    ]
+  },
+  {
+    "id": "dreadnought-swap-2",
+    "unit_id": "dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "dreadnought-combat-weapon",
+      "storm-bolter"
+    ],
+    "replacement_choice": [
+      [
+        "missile-launcher-and"
+      ],
+      [
+        "close-combat-weapon"
+      ],
+      [
+        "heavy-flamer-and"
+      ],
+      [
+        "dreadnought-combat-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "terminator-assault-squad-swap-1",
+    "unit_id": "terminator-assault-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "thunder-hammer",
+      "storm-shield"
+    ],
+    "replacement": [
+      "twin-lightning-claws"
+    ]
+  },
+  {
+    "id": "venerable-dreadnought-swap-1",
+    "unit_id": "venerable-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "assault-cannon"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-plasma-cannon"
+      ],
+      [
+        "multi-melta"
+      ],
+      [
+        "twin-autocannon"
+      ],
+      [
+        "twin-heavy-bolter"
+      ],
+      [
+        "twin-heavy-flamer"
+      ],
+      [
+        "twin-lascannon"
+      ],
+      [
+        "dreadnought-inferno-cannon"
+      ]
+    ]
+  },
+  {
+    "id": "venerable-dreadnought-swap-1",
+    "unit_id": "venerable-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "assault-cannon"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-plasma-cannon"
+      ],
+      [
+        "twin-lascannon"
+      ]
+    ]
+  },
+  {
+    "id": "venerable-dreadnought-swap-1",
+    "unit_id": "venerable-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "assault-cannon"
+    ],
+    "replacement_choice": [
+      [
+        "helfrost-cannon"
+      ],
+      [
+        "multi-melta"
+      ]
+    ]
+  },
+  {
+    "id": "venerable-dreadnought-swap-2",
+    "unit_id": "venerable-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "storm-bolter",
+      "dreadnought-combat-weapon"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-flamer-and"
+      ],
+      [
+        "dreadnought-combat-weapon"
+      ],
+      [
+        "missile-launcher"
+      ],
+      [
+        "twin-autocannon"
+      ]
+    ]
+  },
+  {
+    "id": "venerable-dreadnought-swap-2",
+    "unit_id": "venerable-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "storm-bolter"
+    ],
+    "replacement": [
+      "heavy-flamer"
+    ]
+  },
+  {
+    "id": "venerable-dreadnought-swap-3",
+    "unit_id": "venerable-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "assault-cannon-storm-bolter",
+      "dreadnought-combat-weapon"
+    ],
+    "replacement_choice": [
+      [
+        "fenrisian-greataxe"
+      ],
+      [
+        "blizzard-shield-and"
+      ],
+      [
+        "storm-bolter"
+      ],
+      [
+        "fenrisian-greataxe"
+      ],
+      [
+        "blizzard-shield-and"
+      ],
+      [
+        "heavy-flamer"
+      ]
+    ]
+  },
+  {
+    "id": "sicaran-punisher-addon-1",
+    "unit_id": "sicaran-punisher",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-bolters"
+      ],
+      [
+        "lascannons"
+      ]
+    ]
+  },
+  {
+    "id": "sicaran-punisher-addon-2",
+    "unit_id": "sicaran-punisher",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "sicaran-punisher-addon-3",
+    "unit_id": "sicaran-punisher",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "inceptor-squad-swap-1",
+    "unit_id": "inceptor-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "assault-bolters"
+    ],
+    "replacement": [
+      "plasma-exterminators"
+    ]
+  },
+  {
+    "id": "infiltrator-squad-addon-1",
+    "unit_id": "infiltrator-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Infiltrator",
+      "max_count": 1
+    },
+    "replacement": [
+      "helix-gauntlet"
+    ]
+  },
+  {
+    "id": "infiltrator-squad-addon-2",
+    "unit_id": "infiltrator-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Infiltrator",
+      "max_count": 1
+    },
+    "replacement": [
+      "infiltrator-comms-array"
+    ]
+  },
+  {
+    "id": "razorback-swap-1",
+    "unit_id": "razorback",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-heavy-bolter"
+    ],
+    "replacement": [
+      "twin-lascannon"
+    ]
+  },
+  {
+    "id": "razorback-addon-2",
+    "unit_id": "razorback",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "razorback-addon-3",
+    "unit_id": "razorback",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "leviathan-dreadnought-swap-1",
+    "unit_id": "leviathan-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "grav-flux-bombards"
+    ],
+    "replacement_choice": [
+      [
+        "cyclonic-melta-lance"
+      ],
+      [
+        "storm-cannon"
+      ],
+      [
+        "meltagun-and"
+      ],
+      [
+        "leviathan-siege-claw"
+      ],
+      [
+        "meltagun-and"
+      ],
+      [
+        "leviathan-siege-drill"
+      ]
+    ]
+  },
+  {
+    "id": "leviathan-dreadnought-swap-2",
+    "unit_id": "leviathan-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heavy-flamers"
+    ],
+    "replacement": [
+      "twin-volkite-calivers"
+    ]
+  },
+  {
+    "id": "leviathan-dreadnought-addon-3",
+    "unit_id": "leviathan-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missiles"
+    ]
+  },
+  {
+    "id": "captain-in-terminator-armour-swap-1",
+    "unit_id": "captain-in-terminator-armour",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "storm-bolter"
+    ],
+    "replacement": [
+      "combi-weapon"
+    ]
+  },
+  {
+    "id": "captain-in-terminator-armour-swap-2",
+    "unit_id": "captain-in-terminator-armour",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "relic-weapon"
+    ],
+    "replacement": [
+      "relic-fist"
+    ]
+  },
+  {
+    "id": "brutalis-dreadnought-swap-1",
+    "unit_id": "brutalis-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-heavy-bolter"
+    ],
+    "replacement": [
+      "twin-multi-melta"
+    ]
+  },
+  {
+    "id": "brutalis-dreadnought-swap-2",
+    "unit_id": "brutalis-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "brutalis-fists",
+      "brutalis-bolt-rifles"
+    ],
+    "replacement": [
+      "brutalis-talons"
+    ]
+  },
+  {
+    "id": "thunderhawk-gunship-swap-1",
+    "unit_id": "thunderhawk-gunship",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "thunderhawk-heavy-cannon"
+    ],
+    "replacement": [
+      "turbo-laser-destructor"
+    ]
+  },
+  {
+    "id": "thunderhawk-gunship-swap-2",
+    "unit_id": "thunderhawk-gunship",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "thunderhawk-cluster-bombs"
+    ],
+    "replacement": [
+      "hellstrike-missile-battery"
+    ]
+  },
+  {
+    "id": "vanguard-veteran-squad-with-jump-packs-swap-1",
+    "unit_id": "vanguard-veteran-squad-with-jump-packs",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "storm-shield"
+      ],
+      [
+        "grav-pistol"
+      ],
+      [
+        "hand-flamer"
+      ],
+      [
+        "inferno-pistol"
+      ],
+      [
+        "plasma-pistol"
+      ]
+    ]
+  },
+  {
+    "id": "sanguinary-priest-on-bike-swap-1",
+    "unit_id": "sanguinary-priest-on-bike",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "boltgun"
+      ],
+      [
+        "combi-weapon"
+      ],
+      [
+        "grav-pistol"
+      ],
+      [
+        "hand-flamer"
+      ],
+      [
+        "inferno-pistol"
+      ],
+      [
+        "plasma-pistol"
+      ],
+      [
+        "storm-bolter"
+      ]
+    ]
+  },
+  {
+    "id": "sanguinary-priest-on-bike-swap-2",
+    "unit_id": "sanguinary-priest-on-bike",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "astartes-chainsword"
+    ],
+    "replacement_choice": [
+      [
+        "power-fist"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "thunder-hammer"
+      ]
+    ]
+  },
+  {
+    "id": "sanguinary-guard-swap-1",
+    "unit_id": "sanguinary-guard",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "encarmine-blade"
+    ],
+    "replacement": [
+      "encarmine-spear"
+    ]
+  },
+  {
+    "id": "sanguinary-guard-swap-2",
+    "unit_id": "sanguinary-guard",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 3
+    },
+    "replaces": [
+      "angelus-boltgun"
+    ],
+    "replacement": [
+      "inferno-pistol"
+    ]
+  },
+  {
+    "id": "sanguinary-guard-addon-3",
+    "unit_id": "sanguinary-guard",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replacement": [
+      "sanguinary-banner"
+    ]
+  },
+  {
+    "id": "death-company-dreadnought-swap-1",
+    "unit_id": "death-company-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-heavy-bolter"
+    ],
+    "replacement": [
+      "twin-multi-melta"
+    ]
+  },
+  {
+    "id": "death-company-dreadnought-swap-1",
+    "unit_id": "death-company-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "storm-bolter"
+    ],
+    "replacement": [
+      "heavy-flamer"
+    ]
+  },
+  {
+    "id": "death-company-dreadnought-swap-2",
+    "unit_id": "death-company-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "blood-fists",
+      "blood-fist-bolt-rifles"
+    ],
+    "replacement": [
+      "blood-talons"
+    ]
+  },
+  {
+    "id": "death-company-dreadnought-swap-2",
+    "unit_id": "death-company-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "meltagun"
+    ],
+    "replacement": [
+      "heavy-flamer"
+    ]
+  },
+  {
+    "id": "death-company-dreadnought-swap-3",
+    "unit_id": "death-company-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "furioso-fists"
+    ],
+    "replacement": [
+      "blood-talons"
+    ]
+  },
+  {
+    "id": "death-company-dreadnought-addon-4",
+    "unit_id": "death-company-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "smoke-launchers"
+    ]
+  },
+  {
+    "id": "baal-predator-swap-1",
+    "unit_id": "baal-predator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-assault-cannon"
+    ],
+    "replacement": [
+      "baal-flamestorm-cannon"
+    ]
+  },
+  {
+    "id": "baal-predator-addon-2",
+    "unit_id": "baal-predator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "baal-predator-addon-3",
+    "unit_id": "baal-predator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "baal-predator-addon-4",
+    "unit_id": "baal-predator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-bolters"
+      ],
+      [
+        "heavy-flamers"
+      ]
+    ]
+  },
+  {
+    "id": "deathwing-terminator-squad-swap-1",
+    "unit_id": "deathwing-terminator-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Deathwing Terminators",
+      "any_number": true
+    },
+    "replaces": [
+      "power-fist"
+    ],
+    "replacement": [
+      "chainfist"
+    ]
+  },
+  {
+    "id": "deathwing-terminator-squad-addon-3",
+    "unit_id": "deathwing-terminator-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "watcher-in-the-dark"
+    ]
+  },
+  {
+    "id": "deathwing-knights-swap-1",
+    "unit_id": "deathwing-knights",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Knight Master",
+      "max_count": 1
+    },
+    "replaces": [
+      "great-weapon-of-the-unforgiven"
+    ],
+    "replacement": [
+      "relic-weapon"
+    ]
+  },
+  {
+    "id": "deathwing-knights-swap-2",
+    "unit_id": "deathwing-knights",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "mace-of-absolution"
+    ],
+    "replacement": [
+      "power-weapon"
+    ]
+  },
+  {
+    "id": "deathwing-knights-addon-3",
+    "unit_id": "deathwing-knights",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "watcher-in-the-dark"
+    ]
+  },
+  {
+    "id": "ravenwing-darkshroud-swap-1",
+    "unit_id": "ravenwing-darkshroud",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heavy-bolter"
+    ],
+    "replacement": [
+      "assault-cannon"
+    ]
+  },
+  {
+    "id": "nephilim-jetfighter-swap-1",
+    "unit_id": "nephilim-jetfighter",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "avenger-mega-bolter"
+    ],
+    "replacement": [
+      "nephilim-lascannons"
+    ]
+  },
+  {
+    "id": "ravenwing-black-knights-swap-1",
+    "unit_id": "ravenwing-black-knights",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 3
+    },
+    "replaces": [
+      "plasma-talon"
+    ],
+    "replacement": [
+      "astartes-grenade-launcher"
+    ]
+  },
+  {
+    "id": "land-speeder-vengeance-swap-1",
+    "unit_id": "land-speeder-vengeance",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heavy-bolter"
+    ],
+    "replacement": [
+      "assault-cannon"
+    ]
+  },
+  {
+    "id": "bjorn-the-fell-handed-swap-1",
+    "unit_id": "bjorn-the-fell-handed",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "assault-cannon"
+    ],
+    "replacement": [
+      "helfrost-cannonmulti-melta"
+    ]
+  },
+  {
+    "id": "blood-claws-swap-1",
+    "unit_id": "blood-claws",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Blood Claw Pack Leader",
+      "max_count": 1
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement": [
+      "plasma-pistol"
+    ]
+  },
+  {
+    "id": "blood-claws-swap-2",
+    "unit_id": "blood-claws",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Blood Claw Pack Leader",
+      "max_count": 1
+    },
+    "replaces": [
+      "astartes-chainsword"
+    ],
+    "replacement": [
+      "power-weapon"
+    ]
+  },
+  {
+    "id": "grey-hunters-swap-1",
+    "unit_id": "grey-hunters",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Grey Hunter Pack Leader",
+      "max_count": 1
+    },
+    "replaces": [
+      "bolt-carbine"
+    ],
+    "replacement": [
+      "plasma-pistol"
+    ]
+  },
+  {
+    "id": "grey-hunters-swap-2",
+    "unit_id": "grey-hunters",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Grey Hunter Pack Leader",
+      "max_count": 1
+    },
+    "replaces": [
+      "astartes-chainsword"
+    ],
+    "replacement_choice": [
+      [
+        "power-fist"
+      ],
+      [
+        "power-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "iron-priest-on-thunderwolf-swap-1",
+    "unit_id": "iron-priest-on-thunderwolf",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "bolt-pistol"
+      ],
+      [
+        "helfrost-pistol"
+      ]
+    ]
+  },
+  {
+    "id": "wolf-scouts-swap-1",
+    "unit_id": "wolf-scouts",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Wolf Scout",
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun",
+      "bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "bolt-pistol-and"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "plasma-pistol-and"
+      ],
+      [
+        "boltgun"
+      ]
+    ]
+  },
+  {
+    "id": "wolf-scouts-swap-1",
+    "unit_id": "wolf-scouts",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Wolf Scout",
+      "max_count": 1
+    },
+    "replaces": [
+      "plasma-pistol"
+    ],
+    "replacement": [
+      "plasma-gun"
+    ]
+  },
+  {
+    "id": "wolf-scouts-swap-2",
+    "unit_id": "wolf-scouts",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Wolf Scout",
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "flamer"
+      ],
+      [
+        "grav-gun"
+      ],
+      [
+        "heavy-bolter"
+      ],
+      [
+        "meltagun"
+      ],
+      [
+        "missile-launcher"
+      ],
+      [
+        "plasma-gun"
+      ]
+    ]
+  },
+  {
+    "id": "wolf-scouts-swap-3",
+    "unit_id": "wolf-scouts",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "astartes-shotgun"
+      ],
+      [
+        "combat-knife"
+      ]
+    ]
+  },
+  {
+    "id": "wolf-scouts-swap-3",
+    "unit_id": "wolf-scouts",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Wolf Scout",
+      "max_count": 1
+    },
+    "replaces": [
+      "plasma-pistol",
+      "combat-blade"
+    ],
+    "replacement": [
+      "bolt-pistol-1-thunderclap",
+      "runic-stave"
+    ]
+  },
+  {
+    "id": "wolf-scouts-swap-4",
+    "unit_id": "wolf-scouts",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "plasma-pistol"
+    ],
+    "replacement": [
+      "instigator-bolt-carbine"
+    ]
+  },
+  {
+    "id": "wolf-guard-terminators-swap-1",
+    "unit_id": "wolf-guard-terminators",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "storm-bolter"
+    ],
+    "replacement": [
+      "storm-shield"
+    ]
+  },
+  {
+    "id": "wolf-guard-terminators-swap-2",
+    "unit_id": "wolf-guard-terminators",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Wolf Guard Terminator",
+      "per_n_models": 5
+    },
+    "replaces": [
+      "storm-bolter",
+      "master-crafted-power-weapon"
+    ],
+    "replacement": [
+      "assault-cannon",
+      "powerfist"
+    ]
+  },
+  {
+    "id": "wolf-guard-terminators-swap-3",
+    "unit_id": "wolf-guard-terminators",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Wolf Guard Terminator Pack Leader",
+      "max_count": 1
+    },
+    "replaces": [
+      "storm-bolter",
+      "master-crafted-power-weapon"
+    ],
+    "replacement": [
+      "of-the-following-1-relic-greataxe1-twin-lightning-claws"
+    ]
+  },
+  {
+    "id": "thunderwolf-cavalry-swap-1",
+    "unit_id": "thunderwolf-cavalry",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "boltgun"
+      ],
+      [
+        "storm-shield"
+      ]
+    ]
+  },
+  {
+    "id": "thunderwolf-cavalry-swap-2",
+    "unit_id": "thunderwolf-cavalry",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 3
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement": [
+      "plasma-pistol"
+    ]
+  },
+  {
+    "id": "corvus-blackstar-swap-1",
+    "unit_id": "corvus-blackstar",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-assault-cannon"
+    ],
+    "replacement": [
+      "twin-lascannon"
+    ]
+  },
+  {
+    "id": "corvus-blackstar-swap-2",
+    "unit_id": "corvus-blackstar",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "blackstar-rocket-launchers"
+    ],
+    "replacement": [
+      "stormstrike-missile-launchers"
+    ]
+  },
+  {
+    "id": "corvus-blackstar-addon-3",
+    "unit_id": "corvus-blackstar",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hurricane-bolter"
+    ]
+  },
+  {
+    "id": "corvus-blackstar-addon-4",
+    "unit_id": "corvus-blackstar",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "auspex-array"
+      ],
+      [
+        "infernum-halo-launcher"
+      ]
+    ]
+  },
+  {
+    "id": "land-raider-redeemer-addon-1",
+    "unit_id": "land-raider-redeemer",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "land-raider-redeemer-addon-2",
+    "unit_id": "land-raider-redeemer",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "multi-melta"
+    ]
+  },
+  {
+    "id": "land-raider-redeemer-addon-3",
+    "unit_id": "land-raider-redeemer",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "rhino-addon-1",
+    "unit_id": "rhino",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "rhino-addon-2",
+    "unit_id": "rhino",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "additional-storm-bolter"
+    ]
+  },
+  {
+    "id": "stormraven-gunship-addon-1",
+    "unit_id": "stormraven-gunship",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hurricane-bolters"
+    ]
+  },
+  {
+    "id": "stormraven-gunship-swap-2",
+    "unit_id": "stormraven-gunship",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-assault-cannon"
+    ],
+    "replacement_choice": [
+      [
+        "twin-heavy-plasma-cannon"
+      ],
+      [
+        "twin-lascannon"
+      ]
+    ]
+  },
+  {
+    "id": "stormraven-gunship-swap-3",
+    "unit_id": "stormraven-gunship",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "typhoon-missile-launcher"
+    ],
+    "replacement_choice": [
+      [
+        "twin-heavy-bolter"
+      ],
+      [
+        "twin-multi-melta"
+      ]
+    ]
+  },
+  {
+    "id": "cerberus-addon-1",
+    "unit_id": "cerberus",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-bolters"
+      ],
+      [
+        "lascannons"
+      ]
+    ]
+  },
+  {
+    "id": "cerberus-addon-2",
+    "unit_id": "cerberus",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-bolter"
+      ],
+      [
+        "heavy-flamer"
+      ],
+      [
+        "multi-melta"
+      ],
+      [
+        "storm-bolter"
+      ]
+    ]
+  },
+  {
+    "id": "invictor-tactical-warsuit-swap-1",
+    "unit_id": "invictor-tactical-warsuit",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "incendium-cannon"
+    ],
+    "replacement": [
+      "twin-ironhail-autocannon"
+    ]
+  },
+  {
+    "id": "intercessor-squad-swap-1",
+    "unit_id": "intercessor-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Intercessor Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "bolt-rifle"
+    ],
+    "replacement_choice": [
+      [
+        "astartes-chainsword"
+      ],
+      [
+        "hand-flamer"
+      ],
+      [
+        "plasma-pistol"
+      ],
+      [
+        "power-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "intercessor-squad-swap-2",
+    "unit_id": "intercessor-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Intercessor Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "close-combat-weapon"
+    ],
+    "replacement_choice": [
+      [
+        "astartes-chainsword"
+      ],
+      [
+        "power-fist"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "thunder-hammer"
+      ]
+    ]
+  },
+  {
+    "id": "intercessor-squad-addon-3",
+    "unit_id": "intercessor-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "model equipped with a bolt rifle",
+      "per_n_models": 5
+    },
+    "replacement": [
+      "a-bolt-rifle-can-be-equipped-with-1-astartes-grenade-launcher"
+    ]
+  },
+  {
+    "id": "incursor-squad-addon-1",
+    "unit_id": "incursor-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Incursor",
+      "max_count": 1
+    },
+    "replacement": [
+      "haywire-mine"
+    ]
+  },
+  {
+    "id": "scout-squad-swap-1",
+    "unit_id": "scout-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Scout Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement": [
+      "astartes-chainsword"
+    ]
+  },
+  {
+    "id": "scout-squad-swap-2",
+    "unit_id": "scout-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "astartes-shotgun"
+      ],
+      [
+        "combat-knife"
+      ]
+    ]
+  },
+  {
+    "id": "scout-squad-swap-3",
+    "unit_id": "scout-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Scout",
+      "per_n_models": 5
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement": [
+      "scout-sniper-rifle"
+    ]
+  },
+  {
+    "id": "scout-squad-swap-4",
+    "unit_id": "scout-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Scout",
+      "per_n_models": 5
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-bolter"
+      ],
+      [
+        "missile-launcher"
+      ]
+    ]
+  },
+  {
+    "id": "sicaran-arcus-addon-1",
+    "unit_id": "sicaran-arcus",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-bolters"
+      ],
+      [
+        "lascannons"
+      ]
+    ]
+  },
+  {
+    "id": "sicaran-arcus-addon-2",
+    "unit_id": "sicaran-arcus",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "sicaran-arcus-addon-3",
+    "unit_id": "sicaran-arcus",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "sicaran-omega-addon-1",
+    "unit_id": "sicaran-omega",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-bolters"
+      ],
+      [
+        "lascannons"
+      ]
+    ]
+  },
+  {
+    "id": "sicaran-omega-addon-2",
+    "unit_id": "sicaran-omega",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "sicaran-omega-addon-3",
+    "unit_id": "sicaran-omega",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "company-veterans-on-bikes-swap-1",
+    "unit_id": "company-veterans-on-bikes",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Veteran Biker Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "boltgun"
+      ],
+      [
+        "combi-weapon"
+      ],
+      [
+        "grav-pistol"
+      ],
+      [
+        "plasma-pistol"
+      ],
+      [
+        "storm-bolter"
+      ]
+    ]
+  },
+  {
+    "id": "company-veterans-on-bikes-addon-1",
+    "unit_id": "company-veterans-on-bikes",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Veteran Biker Sergeant",
+      "max_count": 1
+    },
+    "replacement_choice": [
+      [
+        "long-vigil-ranged-weapon"
+      ],
+      [
+        "long-vigil-melee-weapon"
+      ],
+      [
+        "xenophase-blade"
+      ],
+      [
+        "astartes-shield"
+      ]
+    ]
+  },
+  {
+    "id": "company-veterans-on-bikes-swap-2",
+    "unit_id": "company-veterans-on-bikes",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Veteran Biker Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "astartes-chainsword"
+    ],
+    "replacement_choice": [
+      [
+        "power-fist"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "thunder-hammer"
+      ]
+    ]
+  },
+  {
+    "id": "company-veterans-on-bikes-addon-2",
+    "unit_id": "company-veterans-on-bikes",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Veteran Biker models",
+      "any_number": true
+    },
+    "replacement": [
+      "long-vigil-melee-weapon"
+    ]
+  },
+  {
+    "id": "captain-in-gravis-armour-swap-1",
+    "unit_id": "captain-in-gravis-armour",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "master-crafted-heavy-bolt-rifle",
+      "master-crafted-power-weapon"
+    ],
+    "replacement": [
+      "boltstorm-gauntlet-1-power-fist",
+      "relic-chainsword1-boltstorm-gauntlet-1-power-fist",
+      "relic-blade1-boltstorm-gauntlet-1-power-fist",
+      "relic-fist"
+    ]
+  },
+  {
+    "id": "kratos-swap-1",
+    "unit_id": "kratos",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "kratos-battle-cannon"
+    ],
+    "replacement_choice": [
+      [
+        "melta-blast-gun"
+      ],
+      [
+        "volkite-cardanelle"
+      ]
+    ]
+  },
+  {
+    "id": "kratos-swap-2",
+    "unit_id": "kratos",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "of this model",
+      "max_count": 2
+    },
+    "replaces": [
+      "heavy-bolters"
+    ],
+    "replacement_choice": [
+      [
+        "autocannons"
+      ],
+      [
+        "lascannons"
+      ],
+      [
+        "volkite-calivers"
+      ]
+    ]
+  },
+  {
+    "id": "kratos-swap-3",
+    "unit_id": "kratos",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "of this model",
+      "max_count": 2
+    },
+    "replaces": [
+      "heavy-bolters"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-flamers"
+      ],
+      [
+        "lascannons"
+      ],
+      [
+        "volkite-culverins"
+      ]
+    ]
+  },
+  {
+    "id": "kratos-addon-4",
+    "unit_id": "kratos",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "combi-weapon"
+      ],
+      [
+        "havoc-launcher"
+      ],
+      [
+        "heavy-bolter"
+      ],
+      [
+        "heavy-flamer"
+      ],
+      [
+        "multi-melta"
+      ],
+      [
+        "twin-boltgun"
+      ]
+    ]
+  },
+  {
+    "id": "kratos-addon-5",
+    "unit_id": "kratos",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "heavy-intercessor-squad-swap-1",
+    "unit_id": "heavy-intercessor-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Heavy Intercessor",
+      "per_n_models": 5
+    },
+    "replaces": [
+      "heavy-bolt-rifle"
+    ],
+    "replacement": [
+      "heavy-bolter"
+    ]
+  },
+  {
+    "id": "vindicator-laser-destroyer-addon-1",
+    "unit_id": "vindicator-laser-destroyer",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "ancient-on-bike-swap-1",
+    "unit_id": "ancient-on-bike",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "boltgun"
+      ],
+      [
+        "combi-weapon"
+      ],
+      [
+        "grav-pistol"
+      ],
+      [
+        "plasma-pistol"
+      ],
+      [
+        "storm-bolter"
+      ],
+      [
+        "power-fist"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "thunder-hammer"
+      ]
+    ]
+  },
+  {
+    "id": "terminus-ultra-addon-1",
+    "unit_id": "terminus-ultra",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "terminus-ultra-addon-2",
+    "unit_id": "terminus-ultra",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "multi-melta"
+    ]
+  },
+  {
+    "id": "terminus-ultra-addon-3",
+    "unit_id": "terminus-ultra",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "sicaran-battle-tank-addon-1",
+    "unit_id": "sicaran-battle-tank",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-bolters"
+      ],
+      [
+        "lascannons"
+      ]
+    ]
+  },
+  {
+    "id": "sicaran-battle-tank-addon-2",
+    "unit_id": "sicaran-battle-tank",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "sicaran-battle-tank-addon-3",
+    "unit_id": "sicaran-battle-tank",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "vindicator-addon-1",
+    "unit_id": "vindicator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "vindicator-addon-2",
+    "unit_id": "vindicator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "mastodon-swap-1",
+    "unit_id": "mastodon",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heavy-flamers"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-bolters"
+      ],
+      [
+        "lascannons"
+      ],
+      [
+        "volkite-culverins"
+      ]
+    ]
+  },
+  {
+    "id": "mastodon-swap-2",
+    "unit_id": "mastodon",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "lascannons"
+    ],
+    "replacement": [
+      "on-of-the-following-2-heavy-bolters2-heavy-flamers2-volkite-culverins"
+    ]
+  },
+  {
+    "id": "stormtalon-gunship-swap-1",
+    "unit_id": "stormtalon-gunship",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "skyhammer-missile-launcher"
+    ],
+    "replacement_choice": [
+      [
+        "twin-heavy-bolter"
+      ],
+      [
+        "twin-lascannon"
+      ],
+      [
+        "typhoon-missile-launcher"
+      ]
+    ]
+  },
+  {
+    "id": "chaplain-venerable-dreadnought-swap-1",
+    "unit_id": "chaplain-venerable-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "storm-bolter",
+      "dreadnought-combat-weapon"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-flamer-and"
+      ],
+      [
+        "dreadnought-combat-weapon"
+      ],
+      [
+        "assault-cannon"
+      ],
+      [
+        "dreadnought-inferno-cannon"
+      ],
+      [
+        "heavy-plasma-cannon"
+      ],
+      [
+        "multi-melta"
+      ],
+      [
+        "twin-lascannon"
+      ]
+    ]
+  },
+  {
+    "id": "chaplain-venerable-dreadnought-swap-2",
+    "unit_id": "chaplain-venerable-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "assault-cannon"
+    ],
+    "replacement_choice": [
+      [
+        "dreadnought-inferno-cannon"
+      ],
+      [
+        "heavy-plasma-cannon"
+      ],
+      [
+        "multi-melta"
+      ],
+      [
+        "storm-bolter-and"
+      ],
+      [
+        "dreadnought-combat-weapon"
+      ],
+      [
+        "heavy-flamer-and"
+      ],
+      [
+        "dreadnought-combat-weapon"
+      ],
+      [
+        "twin-lascannon"
+      ]
+    ]
+  },
+  {
+    "id": "centurion-devastator-squad-swap-1",
+    "unit_id": "centurion-devastator-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "centurion-bolters"
+    ],
+    "replacement": [
+      "centurion-missile-launcher"
+    ]
+  },
+  {
+    "id": "centurion-devastator-squad-swap-2",
+    "unit_id": "centurion-devastator-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "grav-cannon"
+    ],
+    "replacement_choice": [
+      [
+        "twin-heavy-bolter"
+      ],
+      [
+        "twin-lascannon"
+      ]
+    ]
+  },
+  {
+    "id": "lieutenant-swap-1",
+    "unit_id": "lieutenant",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "master-crafted-bolter"
+    ],
+    "replacement_choice": [
+      [
+        "plasma-pistol"
+      ],
+      [
+        "master-crafted-power-weapon"
+      ],
+      [
+        "power-fist"
+      ]
+    ]
+  },
+  {
+    "id": "lieutenant-swap-2",
+    "unit_id": "lieutenant",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "bolt-pistol-master-crafted-bolter",
+      "close-combat-weapon"
+    ],
+    "replacement": [
+      "neo-volkite-pistol-1-master-crafted-power-weapon",
+      "storm-shield"
+    ]
+  },
+  {
+    "id": "lieutenant-swap-3",
+    "unit_id": "lieutenant",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement": [
+      "heavy-bolt-pistol"
+    ]
+  },
+  {
+    "id": "lieutenant-swap-4",
+    "unit_id": "lieutenant",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "close-combat-weapon"
+    ],
+    "replacement_choice": [
+      [
+        "master-crafted-power-weapon"
+      ],
+      [
+        "power-fist"
+      ]
+    ]
+  },
+  {
+    "id": "land-raider-prometheus-addon-1",
+    "unit_id": "land-raider-prometheus",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "multi-melta"
+    ]
+  },
+  {
+    "id": "land-raider-prometheus-addon-2",
+    "unit_id": "land-raider-prometheus",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "land-raider-prometheus-addon-3",
+    "unit_id": "land-raider-prometheus",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "librarian-on-bike-swap-1",
+    "unit_id": "librarian-on-bike",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "boltgun"
+      ],
+      [
+        "combi-weapon"
+      ],
+      [
+        "grav-pistol"
+      ],
+      [
+        "plasma-pistol"
+      ],
+      [
+        "storm-bolter"
+      ]
+    ]
+  },
+  {
+    "id": "techmarine-on-bike-swap-1",
+    "unit_id": "techmarine-on-bike",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "boltgun"
+      ],
+      [
+        "combi-weapon"
+      ],
+      [
+        "grav-pistol"
+      ],
+      [
+        "plasma-pistol"
+      ],
+      [
+        "storm-bolter"
+      ]
+    ]
+  },
+  {
+    "id": "techmarine-on-bike-swap-2",
+    "unit_id": "techmarine-on-bike",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "omnissian-power-axe"
+    ],
+    "replacement_choice": [
+      [
+        "astartes-chainsword"
+      ],
+      [
+        "power-fist"
+      ],
+      [
+        "thunder-hammer"
+      ]
+    ]
+  },
+  {
+    "id": "techmarine-on-bike-addon-3",
+    "unit_id": "techmarine-on-bike",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "servo-arm"
+      ],
+      [
+        "conversion-beamer"
+      ],
+      [
+        "flamer"
+      ],
+      [
+        "plasma-cutter-and"
+      ],
+      [
+        "servo-arms"
+      ]
+    ]
+  },
+  {
+    "id": "terrax-pattern-termite-swap-1",
+    "unit_id": "terrax-pattern-termite",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "combi-bolters"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-flamers"
+      ],
+      [
+        "twin-volkite-chargers"
+      ]
+    ]
+  },
+  {
+    "id": "assault-intercessor-squad-swap-1",
+    "unit_id": "assault-intercessor-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Assault Intercessor Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "heavy-bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "hand-flamer"
+      ],
+      [
+        "plasma-pistol"
+      ]
+    ]
+  },
+  {
+    "id": "assault-intercessor-squad-swap-2",
+    "unit_id": "assault-intercessor-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Assault Intercessor Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "astartes-chainsword"
+    ],
+    "replacement_choice": [
+      [
+        "power-fist"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "thunder-hammer"
+      ]
+    ]
+  },
+  {
+    "id": "land-raider-achilles-swap-1",
+    "unit_id": "land-raider-achilles",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-volkite-culverins"
+    ],
+    "replacement": [
+      "twin-multi-melta"
+    ]
+  },
+  {
+    "id": "land-raider-achilles-addon-2",
+    "unit_id": "land-raider-achilles",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "land-raider-achilles-addon-3",
+    "unit_id": "land-raider-achilles",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "land-raider-proteus-addon-1",
+    "unit_id": "land-raider-proteus",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-bolter"
+      ],
+      [
+        "multi-melta"
+      ],
+      [
+        "twin-heavy-bolter"
+      ],
+      [
+        "twin-heavy-flamer"
+      ]
+    ]
+  },
+  {
+    "id": "land-raider-proteus-addon-2",
+    "unit_id": "land-raider-proteus",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "land-raider-proteus-addon-3",
+    "unit_id": "land-raider-proteus",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "land-raider-proteus-addon-4",
+    "unit_id": "land-raider-proteus",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "explorator-augury-web"
+    ]
+  },
+  {
+    "id": "fire-raptor-gunship-swap-1",
+    "unit_id": "fire-raptor-gunship",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-hellstrike-missile-launchers"
+    ],
+    "replacement": [
+      "twin-lascannons"
+    ]
+  },
+  {
+    "id": "fire-raptor-gunship-swap-2",
+    "unit_id": "fire-raptor-gunship",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-autocannons"
+    ],
+    "replacement": [
+      "quad-heavy-bolters"
+    ]
+  },
+  {
+    "id": "falchion-swap-1",
+    "unit_id": "falchion",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "quad-lascannons"
+    ],
+    "replacement": [
+      "laser-destroyers"
+    ]
+  },
+  {
+    "id": "falchion-swap-2",
+    "unit_id": "falchion",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-heavy-bolter"
+    ],
+    "replacement": [
+      "twin-heavy-flamer"
+    ]
+  },
+  {
+    "id": "falchion-addon-3",
+    "unit_id": "falchion",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-bolter"
+      ],
+      [
+        "heavy-flamer"
+      ],
+      [
+        "multi-melta"
+      ],
+      [
+        "storm-bolter"
+      ]
+    ]
+  },
+  {
+    "id": "gladiator-reaper-addon-1",
+    "unit_id": "gladiator-reaper",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "ironhail-heavy-stubber"
+    ]
+  },
+  {
+    "id": "gladiator-reaper-addon-1",
+    "unit_id": "gladiator-reaper",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "ironhail-heavy-stubber"
+      ],
+      [
+        "multi-melta"
+      ]
+    ]
+  },
+  {
+    "id": "gladiator-reaper-addon-2",
+    "unit_id": "gladiator-reaper",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "icarus-rocket-pod"
+    ]
+  },
+  {
+    "id": "eliminator-squad-swap-1",
+    "unit_id": "eliminator-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Eliminator Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "bolt-sniper-rifle"
+    ],
+    "replacement_choice": [
+      [
+        "instigator-bolt-carbine"
+      ],
+      [
+        "las-fusil"
+      ]
+    ]
+  },
+  {
+    "id": "eliminator-squad-swap-2",
+    "unit_id": "eliminator-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "bolt-sniper-rifle"
+    ],
+    "replacement": [
+      "las-fusil"
+    ]
+  },
+  {
+    "id": "gladiator-valiant-addon-1",
+    "unit_id": "gladiator-valiant",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "ironhail-heavy-stubber"
+    ]
+  },
+  {
+    "id": "gladiator-valiant-addon-1",
+    "unit_id": "gladiator-valiant",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "ironhail-heavy-stubber"
+      ],
+      [
+        "multi-melta"
+      ]
+    ]
+  },
+  {
+    "id": "gladiator-valiant-addon-2",
+    "unit_id": "gladiator-valiant",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "icarus-rocket-pod"
+    ]
+  },
+  {
+    "id": "death-company-marines-swap-1",
+    "unit_id": "death-company-marines",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replaces": [
+      "heavy-bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "hand-flamer"
+      ],
+      [
+        "inferno-pistol"
+      ],
+      [
+        "plasma-pistol"
+      ]
+    ]
+  },
+  {
+    "id": "death-company-marines-swap-1",
+    "unit_id": "death-company-marines",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "boltgun",
+      "close-combat-weapon"
+    ],
+    "replacement_choice": [
+      [
+        "astartes-chainsword-and"
+      ],
+      [
+        "bolt-pistol"
+      ],
+      [
+        "thunder-hammer"
+      ]
+    ]
+  },
+  {
+    "id": "death-company-marines-swap-2",
+    "unit_id": "death-company-marines",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5
+    },
+    "replaces": [
+      "astartes-chainsword"
+    ],
+    "replacement": [
+      "equipped-with-1-eviscerator"
+    ]
+  },
+  {
+    "id": "death-company-marines-swap-2",
+    "unit_id": "death-company-marines",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "hand-flamer"
+      ],
+      [
+        "inferno-pistol"
+      ],
+      [
+        "plasma-pistol"
+      ]
+    ]
+  },
+  {
+    "id": "death-company-marines-swap-3",
+    "unit_id": "death-company-marines",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replaces": [
+      "astartes-chainsword"
+    ],
+    "replacement_choice": [
+      [
+        "power-fist"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "thunder-hammer"
+      ]
+    ]
+  },
+  {
+    "id": "death-company-marines-swap-3",
+    "unit_id": "death-company-marines",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "astartes-chainsword"
+    ],
+    "replacement_choice": [
+      [
+        "power-fist"
+      ],
+      [
+        "power-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "hellblaster-squad-swap-1",
+    "unit_id": "hellblaster-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Hellblaster Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement": [
+      "plasma-pistol"
+    ]
+  },
+  {
+    "id": "aggressor-squad-swap-1",
+    "unit_id": "aggressor-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "flamestorm-gauntlets"
+    ],
+    "replacement": [
+      "auto-boltstorm-gauntlets",
+      "fragstorm-grenade-launcher"
+    ]
+  },
+  {
+    "id": "devastator-squad-swap-1",
+    "unit_id": "devastator-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Devastator Marines",
+      "max_count": 4
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "grav-cannon"
+      ],
+      [
+        "heavy-bolter"
+      ],
+      [
+        "lascannon"
+      ],
+      [
+        "missile-launcher"
+      ],
+      [
+        "multi-melta"
+      ],
+      [
+        "plasma-cannon"
+      ]
+    ]
+  },
+  {
+    "id": "spartan-swap-1",
+    "unit_id": "spartan",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "quad-lascannons"
+    ],
+    "replacement": [
+      "laser-destroyers"
+    ]
+  },
+  {
+    "id": "spartan-swap-2",
+    "unit_id": "spartan",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-heavy-bolter"
+    ],
+    "replacement": [
+      "twin-heavy-flamer"
+    ]
+  },
+  {
+    "id": "spartan-addon-3",
+    "unit_id": "spartan",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-bolter"
+      ],
+      [
+        "heavy-flamer"
+      ],
+      [
+        "multi-melta"
+      ],
+      [
+        "storm-bolter"
+      ]
+    ]
+  },
+  {
+    "id": "sternguard-veteran-squad-swap-1",
+    "unit_id": "sternguard-veteran-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sternguard Veteran Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "sternguard-bolt-rifle"
+    ],
+    "replacement_choice": [
+      [
+        "astartes-chainsword"
+      ],
+      [
+        "combi-weapon"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "power-fist"
+      ],
+      [
+        "astartes-chainsword-and"
+      ],
+      [
+        "sternguard-bolt-rifle"
+      ],
+      [
+        "power-weapon-and"
+      ],
+      [
+        "sternguard-bolt-rifle"
+      ],
+      [
+        "power-fist-and"
+      ],
+      [
+        "sternguard-bolt-rifle"
+      ]
+    ]
+  },
+  {
+    "id": "sternguard-veteran-squad-swap-2",
+    "unit_id": "sternguard-veteran-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sternguard Veterans",
+      "any_number": true
+    },
+    "replaces": [
+      "sternguard-bolt-rifle"
+    ],
+    "replacement": [
+      "combi-weapon"
+    ]
+  },
+  {
+    "id": "sternguard-veteran-squad-swap-3",
+    "unit_id": "sternguard-veteran-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sternguard Veteran",
+      "per_n_models": 5
+    },
+    "replaces": [
+      "sternguard-bolt-rifle"
+    ],
+    "replacement_choice": [
+      [
+        "pyrecannon"
+      ],
+      [
+        "sternguard-heavy-bolter"
+      ]
+    ]
+  },
+  {
+    "id": "deathstorm-drop-pod-swap-1",
+    "unit_id": "deathstorm-drop-pod",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "deathstorm-cannon-array"
+    ],
+    "replacement": [
+      "deathstorm-missile-array"
+    ]
+  },
+  {
+    "id": "deimos-predator-swap-1",
+    "unit_id": "deimos-predator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "plasma-destroyer"
+    ],
+    "replacement_choice": [
+      [
+        "conversion-beam-cannon"
+      ],
+      [
+        "infernus-cannon"
+      ],
+      [
+        "magna-melta-cannon"
+      ]
+    ]
+  },
+  {
+    "id": "deimos-predator-addon-2",
+    "unit_id": "deimos-predator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-bolters"
+      ],
+      [
+        "heavy-flamers"
+      ],
+      [
+        "lascannons"
+      ]
+    ]
+  },
+  {
+    "id": "deimos-predator-addon-3",
+    "unit_id": "deimos-predator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "deimos-predator-addon-4",
+    "unit_id": "deimos-predator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "deredeo-dreadnought-swap-1",
+    "unit_id": "deredeo-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "anvilus-autocannon-battery"
+    ],
+    "replacement_choice": [
+      [
+        "arachnus-heavy-lascannon-battery"
+      ],
+      [
+        "hellfire-plasma-carronade"
+      ],
+      [
+        "volkite-falconet-battery"
+      ]
+    ]
+  },
+  {
+    "id": "deredeo-dreadnought-swap-2",
+    "unit_id": "deredeo-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-heavy-bolter"
+    ],
+    "replacement": [
+      "twin-heavy-flamer"
+    ]
+  },
+  {
+    "id": "deredeo-dreadnought-addon-3",
+    "unit_id": "deredeo-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "aiolos-missile-launcher"
+      ],
+      [
+        "boreas-air-defence-missiles"
+      ]
+    ]
+  },
+  {
+    "id": "desolation-squad-swap-1",
+    "unit_id": "desolation-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "superfrag-rocket-launcher"
+    ],
+    "replacement": [
+      "superkrak-rocket-launcher"
+    ]
+  },
+  {
+    "id": "desolation-squad-swap-2",
+    "unit_id": "desolation-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Desolation Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "superfrag-rocket-launcher-or-superkrak-rocket-launcher"
+    ],
+    "replacement": [
+      "vengor-launcher"
+    ]
+  },
+  {
+    "id": "death-company-marines-with-bolt-rifles-swap-1",
+    "unit_id": "death-company-marines-with-bolt-rifles",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replaces": [
+      "bolt-rifle"
+    ],
+    "replacement_choice": [
+      [
+        "astartes-chainsword"
+      ],
+      [
+        "hand-flamer"
+      ],
+      [
+        "inferno-pistol"
+      ],
+      [
+        "plasma-pistol"
+      ]
+    ]
+  },
+  {
+    "id": "death-company-marines-with-bolt-rifles-swap-2",
+    "unit_id": "death-company-marines-with-bolt-rifles",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5
+    },
+    "replaces": [
+      "bolt-rifle",
+      "close-combat-weapon"
+    ],
+    "replacement": [
+      "eviscerator"
+    ]
+  },
+  {
+    "id": "death-company-marines-with-bolt-rifles-addon-3",
+    "unit_id": "death-company-marines-with-bolt-rifles",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "model equipped with a bolt rifle",
+      "per_n_models": 5
+    },
+    "replacement": [
+      "a-bolt-rifle-can-be-equipped-with-1-astartes-grenade-launcher"
+    ]
+  },
+  {
+    "id": "death-company-marines-with-bolt-rifles-swap-4",
+    "unit_id": "death-company-marines-with-bolt-rifles",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replaces": [
+      "close-combat-weapon"
+    ],
+    "replacement_choice": [
+      [
+        "astartes-chainsword"
+      ],
+      [
+        "power-fist"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "thunder-hammer"
+      ]
+    ]
+  },
+  {
+    "id": "impulsor-addon-1",
+    "unit_id": "impulsor",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "ironhail-heavy-stubber"
+    ]
+  },
+  {
+    "id": "impulsor-addon-1",
+    "unit_id": "impulsor",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "ironhail-heavy-stubber"
+      ],
+      [
+        "multi-melta"
+      ]
+    ]
+  },
+  {
+    "id": "impulsor-swap-2",
+    "unit_id": "impulsor",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "storm-bolters"
+    ],
+    "replacement": [
+      "fragstorm-grenade-launchers"
+    ]
+  },
+  {
+    "id": "impulsor-addon-3",
+    "unit_id": "impulsor",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "bellicatus-missile-array"
+      ],
+      [
+        "ironhail-skytalon-array"
+      ],
+      [
+        "orbital-comms-array"
+      ],
+      [
+        "shield-dome"
+      ]
+    ]
+  },
+  {
+    "id": "ancient-in-terminator-armour-swap-1",
+    "unit_id": "ancient-in-terminator-armour",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "power-fist"
+    ],
+    "replacement_choice": [
+      [
+        "chainfist"
+      ],
+      [
+        "close-combat-weapon"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "thunder-hammer"
+      ]
+    ]
+  },
+  {
+    "id": "ancient-in-terminator-armour-swap-2",
+    "unit_id": "ancient-in-terminator-armour",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "storm-bolter",
+      "power-fist"
+    ],
+    "replacement_choice": [
+      [
+        "twin-lightning-claws"
+      ],
+      [
+        "thunder-hammer-and"
+      ],
+      [
+        "terminator-storm-shield"
+      ]
+    ]
+  },
+  {
+    "id": "astraeus-swap-1",
+    "unit_id": "astraeus",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "astraeus-las-rippers"
+    ],
+    "replacement": [
+      "plasma-eradicators"
+    ]
+  },
+  {
+    "id": "astraeus-swap-2",
+    "unit_id": "astraeus",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-heavy-bolter"
+    ],
+    "replacement": [
+      "twin-lascannon"
+    ]
+  },
+  {
+    "id": "astraeus-addon-3",
+    "unit_id": "astraeus",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "ironhail-heavy-stubber"
+    ]
+  },
+  {
+    "id": "centurion-assault-squad-swap-1",
+    "unit_id": "centurion-assault-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "twin-flamer"
+    ],
+    "replacement": [
+      "twin-meltagun"
+    ]
+  },
+  {
+    "id": "centurion-assault-squad-swap-2",
+    "unit_id": "centurion-assault-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "centurion-bolters"
+    ],
+    "replacement": [
+      "centurion-assault-launcher"
+    ]
+  },
+  {
+    "id": "fellblade-swap-1",
+    "unit_id": "fellblade",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "quad-lascannons"
+    ],
+    "replacement": [
+      "laser-destroyers"
+    ]
+  },
+  {
+    "id": "fellblade-swap-2",
+    "unit_id": "fellblade",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-heavy-bolter"
+    ],
+    "replacement": [
+      "twin-heavy-flamer"
+    ]
+  },
+  {
+    "id": "fellblade-addon-3",
+    "unit_id": "fellblade",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-bolter"
+      ],
+      [
+        "heavy-flamer"
+      ],
+      [
+        "multi-melta"
+      ],
+      [
+        "storm-bolter"
+      ]
+    ]
+  },
+  {
+    "id": "gladiator-lancer-swap-1",
+    "unit_id": "gladiator-lancer",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "storm-bolters"
+    ],
+    "replacement": [
+      "fragstorm-grenade-launchers"
+    ]
+  },
+  {
+    "id": "gladiator-lancer-addon-2",
+    "unit_id": "gladiator-lancer",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "ironhail-heavy-stubber"
+    ]
+  },
+  {
+    "id": "gladiator-lancer-addon-2",
+    "unit_id": "gladiator-lancer",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "ironhail-heavy-stubber"
+      ],
+      [
+        "multi-melta"
+      ]
+    ]
+  },
+  {
+    "id": "gladiator-lancer-addon-3",
+    "unit_id": "gladiator-lancer",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "icarus-rocket-pod"
+    ]
+  },
+  {
+    "id": "land-raider-helios-addon-1",
+    "unit_id": "land-raider-helios",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "land-raider-helios-addon-2",
+    "unit_id": "land-raider-helios",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "outrider-squad-swap-1",
+    "unit_id": "outrider-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "onslaught-gatling-cannon"
+    ],
+    "replacement": [
+      "multi-melta"
+    ]
+  },
+  {
+    "id": "predator-annihilator-addon-1",
+    "unit_id": "predator-annihilator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-bolters"
+      ],
+      [
+        "lascannons"
+      ]
+    ]
+  },
+  {
+    "id": "predator-annihilator-addon-2",
+    "unit_id": "predator-annihilator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "predator-annihilator-addon-3",
+    "unit_id": "predator-annihilator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "predator-destructor-addon-1",
+    "unit_id": "predator-destructor",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-bolters"
+      ],
+      [
+        "lascannons"
+      ]
+    ]
+  },
+  {
+    "id": "predator-destructor-addon-2",
+    "unit_id": "predator-destructor",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "predator-destructor-addon-3",
+    "unit_id": "predator-destructor",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "redemptor-dreadnought-addon-1",
+    "unit_id": "redemptor-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "icarus-rocket-pod"
+    ]
+  },
+  {
+    "id": "redemptor-dreadnought-swap-2",
+    "unit_id": "redemptor-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heavy-flamer"
+    ],
+    "replacement": [
+      "onslaught-gatling-cannon"
+    ]
+  },
+  {
+    "id": "redemptor-dreadnought-swap-3",
+    "unit_id": "redemptor-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heavy-onslaught-gatling-cannon"
+    ],
+    "replacement": [
+      "macro-plasma-incinerator"
+    ]
+  },
+  {
+    "id": "redemptor-dreadnought-swap-4",
+    "unit_id": "redemptor-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-fragstorm-grenade-launcher"
+    ],
+    "replacement": [
+      "twin-storm-bolter"
+    ]
+  },
+  {
+    "id": "reiver-squad-swap-1",
+    "unit_id": "reiver-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "combat-knife"
+    ],
+    "replacement": [
+      "bolt-carbine",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "reiver-squad-addon-2",
+    "unit_id": "reiver-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "bolt-carbine-it-can-be-equipped-with-1-combat-knife"
+    ]
+  },
+  {
+    "id": "reiver-squad-addon-3",
+    "unit_id": "reiver-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "reiver-grav-chute"
+    ]
+  },
+  {
+    "id": "reiver-squad-addon-4",
+    "unit_id": "reiver-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "grapnel-launcher"
+    ]
+  },
+  {
+    "id": "relic-contemptor-dreadnought-swap-1",
+    "unit_id": "relic-contemptor-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heavy-plasma-cannons"
+    ],
+    "replacement_choice": [
+      [
+        "conversion-beam-cannon"
+      ],
+      [
+        "kheres-pattern-assault-cannon"
+      ],
+      [
+        "multi-melta"
+      ],
+      [
+        "twin-autocannon"
+      ],
+      [
+        "twin-heavy-bolter"
+      ],
+      [
+        "twin-lascannon"
+      ],
+      [
+        "twin-volkite-culverin"
+      ],
+      [
+        "dreadnought-chainfist-and"
+      ],
+      [
+        "combi-bolter"
+      ],
+      [
+        "dreadnought-combat-weapon-and"
+      ],
+      [
+        "combi-bolter"
+      ]
+    ]
+  },
+  {
+    "id": "relic-contemptor-dreadnought-swap-2",
+    "unit_id": "relic-contemptor-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "combi-bolters"
+    ],
+    "replacement_choice": [
+      [
+        "graviton-blaster"
+      ],
+      [
+        "heavy-flamer"
+      ],
+      [
+        "plasma-blaster"
+      ]
+    ]
+  },
+  {
+    "id": "relic-contemptor-dreadnought-addon-3",
+    "unit_id": "relic-contemptor-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "cyclone-missile-launcher"
+    ]
+  },
+  {
+    "id": "relic-razorback-swap-1",
+    "unit_id": "relic-razorback",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-heavy-bolter"
+    ],
+    "replacement_choice": [
+      [
+        "multi-melta"
+      ],
+      [
+        "twin-assault-cannon"
+      ],
+      [
+        "twin-lascannon"
+      ]
+    ]
+  },
+  {
+    "id": "relic-razorback-addon-2",
+    "unit_id": "relic-razorback",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "relic-razorback-addon-3",
+    "unit_id": "relic-razorback",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "repulsor-swap-1",
+    "unit_id": "repulsor",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-heavy-bolter"
+    ],
+    "replacement": [
+      "twin-lascannon"
+    ]
+  },
+  {
+    "id": "repulsor-swap-2",
+    "unit_id": "repulsor",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heavy-onslaught-gatling-cannon"
+    ],
+    "replacement": [
+      "las-talon"
+    ]
+  },
+  {
+    "id": "repulsor-addon-3",
+    "unit_id": "repulsor",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "multi-melta"
+    ]
+  },
+  {
+    "id": "repulsor-executioner-swap-1",
+    "unit_id": "repulsor-executioner",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "macro-plasma-incinerator"
+    ],
+    "replacement": [
+      "heavy-laser-destroyer"
+    ]
+  },
+  {
+    "id": "repulsor-executioner-addon-2",
+    "unit_id": "repulsor-executioner",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "ironhail-heavy-stubber"
+    ]
+  },
+  {
+    "id": "repulsor-executioner-addon-2",
+    "unit_id": "repulsor-executioner",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "ironhail-heavy-stubber"
+      ],
+      [
+        "multi-melta"
+      ]
+    ]
+  },
+  {
+    "id": "repulsor-executioner-addon-3",
+    "unit_id": "repulsor-executioner",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "icarus-rocket-pod"
+    ]
+  },
+  {
+    "id": "whirlwind-addon-1",
+    "unit_id": "whirlwind",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "whirlwind-addon-2",
+    "unit_id": "whirlwind",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "whirlwind-scorpius-addon-1",
+    "unit_id": "whirlwind-scorpius",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "whirlwind-scorpius-addon-2",
+    "unit_id": "whirlwind-scorpius",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "death-company-marines-with-jump-packs-swap-1",
+    "unit_id": "death-company-marines-with-jump-packs",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5
+    },
+    "replaces": [
+      "heavy-bolt-pistol"
+    ],
+    "replacement": [
+      "plasma-pistol"
+    ]
+  },
+  {
+    "id": "death-company-marines-with-jump-packs-swap-1",
+    "unit_id": "death-company-marines-with-jump-packs",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "boltgun",
+      "close-combat-weapon"
+    ],
+    "replacement_choice": [
+      [
+        "astartes-chainsword-and"
+      ],
+      [
+        "bolt-pistol"
+      ],
+      [
+        "thunder-hammer"
+      ]
+    ]
+  },
+  {
+    "id": "death-company-marines-with-jump-packs-swap-2",
+    "unit_id": "death-company-marines-with-jump-packs",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5
+    },
+    "replaces": [
+      "astartes-chainsword"
+    ],
+    "replacement": [
+      "eviscerator"
+    ]
+  },
+  {
+    "id": "death-company-marines-with-jump-packs-swap-2",
+    "unit_id": "death-company-marines-with-jump-packs",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "hand-flamer"
+      ],
+      [
+        "inferno-pistol"
+      ],
+      [
+        "plasma-pistol"
+      ]
+    ]
+  },
+  {
+    "id": "death-company-marines-with-jump-packs-swap-3",
+    "unit_id": "death-company-marines-with-jump-packs",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replaces": [
+      "astartes-chainsword"
+    ],
+    "replacement_choice": [
+      [
+        "power-fist"
+      ],
+      [
+        "power-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "death-company-marines-with-jump-packs-swap-3",
+    "unit_id": "death-company-marines-with-jump-packs",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "astartes-chainsword"
+    ],
+    "replacement_choice": [
+      [
+        "power-fist"
+      ],
+      [
+        "power-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "death-company-marines-with-jump-packs-swap-4",
+    "unit_id": "death-company-marines-with-jump-packs",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5
+    },
+    "replaces": [
+      "heavy-bolt-pistol",
+      "astartes-chainsword"
+    ],
+    "replacement_choice": [
+      [
+        "hand-flamer-and"
+      ],
+      [
+        "astartes-chainsword"
+      ],
+      [
+        "hand-flamer-and"
+      ],
+      [
+        "power-fist"
+      ],
+      [
+        "hand-flamer-and"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "heavy-bolt-pistol-and"
+      ],
+      [
+        "power-fist"
+      ],
+      [
+        "heavy-bolt-pistol-and"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "inferno-pistol-and"
+      ],
+      [
+        "astartes-chainsword"
+      ],
+      [
+        "inferno-pistol-and"
+      ],
+      [
+        "power-fist"
+      ],
+      [
+        "inferno-pistol-and"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "plasma-pistol-and"
+      ],
+      [
+        "astartes-chainsword"
+      ],
+      [
+        "plasma-pistol-and"
+      ],
+      [
+        "power-fist"
+      ],
+      [
+        "plasma-pistol-and"
+      ],
+      [
+        "power-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "ravenwing-command-squad-swap-1",
+    "unit_id": "ravenwing-command-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 3
+    },
+    "replaces": [
+      "plasma-talon"
+    ],
+    "replacement": [
+      "astartes-grenade-launcher"
+    ]
+  },
+  {
+    "id": "assault-intercessors-with-jump-packs-swap-1",
+    "unit_id": "assault-intercessors-with-jump-packs",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Assault Intercessor with Jump Pack",
+      "per_n_models": 5
+    },
+    "replaces": [
+      "heavy-bolt-pistol"
+    ],
+    "replacement": [
+      "plasma-pistol"
+    ]
+  },
+  {
+    "id": "assault-intercessors-with-jump-packs-swap-2",
+    "unit_id": "assault-intercessors-with-jump-packs",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Assault Intercessor Sergeant with Jump Pack",
+      "max_count": 1
+    },
+    "replaces": [
+      "astartes-chainsword"
+    ],
+    "replacement_choice": [
+      [
+        "power-weapon"
+      ],
+      [
+        "power-fist"
+      ]
+    ]
+  },
+  {
+    "id": "assault-intercessors-with-jump-packs-swap-3",
+    "unit_id": "assault-intercessors-with-jump-packs",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Assault Intercessor Sergeant with Jump Pack",
+      "max_count": 1
+    },
+    "replaces": [
+      "heavy-bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "hand-flamer"
+      ],
+      [
+        "plasma-pistol"
+      ]
+    ]
+  },
+  {
+    "id": "decimus-kill-team-swap-1",
+    "unit_id": "decimus-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Kill Team Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "deathwatch-bolt-rifle"
+    ],
+    "replacement_choice": [
+      [
+        "astartes-chainsword"
+      ],
+      [
+        "hand-flamer"
+      ],
+      [
+        "plasma-pistol"
+      ],
+      [
+        "power-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "decimus-kill-team-swap-2",
+    "unit_id": "decimus-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Kill Team Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "close-combat-weapon"
+    ],
+    "replacement_choice": [
+      [
+        "astartes-chainsword"
+      ],
+      [
+        "power-fist"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "thunder-hammer"
+      ]
+    ]
+  },
+  {
+    "id": "decimus-kill-team-addon-3",
+    "unit_id": "decimus-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "model equipped with a Deathwatch bolt rifle",
+      "per_n_models": 5
+    },
+    "replacement": [
+      "a-deathwatch-bolt-rifle-can-be-equipped-with-1-astartes-grenade-launcher"
+    ]
+  },
+  {
+    "id": "decimus-kill-team-swap-4",
+    "unit_id": "decimus-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "model equipped with a plasma incinerator",
+      "max_count": 1
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement": [
+      "plasma-pistol"
+    ]
+  },
+  {
+    "id": "decimus-kill-team-swap-5",
+    "unit_id": "decimus-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replaces": [
+      "superfrag-rocket-launcher"
+    ],
+    "replacement": [
+      "vengor-launcher"
+    ]
+  },
+  {
+    "id": "decimus-kill-team-swap-6",
+    "unit_id": "decimus-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "superfrag-rocket-launcher"
+    ],
+    "replacement": [
+      "superkrak-rocket-launcher"
+    ]
+  },
+  {
+    "id": "deathwatch-veterans-swap-1",
+    "unit_id": "deathwatch-veterans",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5,
+      "max_count": 2
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement_choice": [
+      [
+        "boltgun"
+      ],
+      [
+        "astartes-shield-and"
+      ],
+      [
+        "close-combat-weapon"
+      ],
+      [
+        "power-weapon-and"
+      ],
+      [
+        "astartes-shield"
+      ]
+    ]
+  },
+  {
+    "id": "deathwatch-veterans-swap-1",
+    "unit_id": "deathwatch-veterans",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5,
+      "max_count": 2
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement_choice": [
+      [
+        "boltgun-and"
+      ],
+      [
+        "astartes-shield"
+      ],
+      [
+        "power-weapon-and"
+      ],
+      [
+        "astartes-shield"
+      ]
+    ]
+  },
+  {
+    "id": "deathwatch-veterans-swap-2",
+    "unit_id": "deathwatch-veterans",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5,
+      "max_count": 2
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement": [
+      "deathwatch-thunder-hammer"
+    ]
+  },
+  {
+    "id": "deathwatch-veterans-swap-3",
+    "unit_id": "deathwatch-veterans",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement": [
+      "stalker-pattern-boltgun",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "deathwatch-veterans-swap-3",
+    "unit_id": "deathwatch-veterans",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement": [
+      "stalker-pattern-boltgun",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "deathwatch-veterans-swap-4",
+    "unit_id": "deathwatch-veterans",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5,
+      "max_count": 2
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement": [
+      "deathwatch-shotgun",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "deathwatch-veterans-swap-5",
+    "unit_id": "deathwatch-veterans",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement": [
+      "frag-cannon",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "deathwatch-veterans-swap-6",
+    "unit_id": "deathwatch-veterans",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement": [
+      "infernus-heavy-bolter",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "deathwatch-veterans-swap-7",
+    "unit_id": "deathwatch-veterans",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement": [
+      "black-shield-blades"
+    ]
+  },
+  {
+    "id": "deathwatch-veterans-swap-7",
+    "unit_id": "deathwatch-veterans",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement": [
+      "black-shield-blades"
+    ]
+  },
+  {
+    "id": "deathwatch-veterans-swap-8",
+    "unit_id": "deathwatch-veterans",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Watch Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "power-weapon"
+    ],
+    "replacement": [
+      "xenophase-blade"
+    ]
+  },
+  {
+    "id": "deathwatch-veterans-swap-9",
+    "unit_id": "deathwatch-veterans",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Watch Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement": [
+      "combi-weapon"
+    ]
+  },
+  {
+    "id": "castellan-swap-1",
+    "unit_id": "castellan",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "combi-weapon"
+    ],
+    "replacement": [
+      "heavy-bolt-pistol"
+    ]
+  },
+  {
+    "id": "castellan-swap-2",
+    "unit_id": "castellan",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "master-crafted-power-weapon"
+    ],
+    "replacement": [
+      "astartes-chainsword"
+    ]
+  },
+  {
+    "id": "marshal-swap-1",
+    "unit_id": "marshal",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "plasma-pistol"
+    ],
+    "replacement": [
+      "one-combi-weapon"
+    ]
+  },
+  {
+    "id": "sword-brethren-squad-swap-1",
+    "unit_id": "sword-brethren-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sword Brothers",
+      "any_number": true
+    },
+    "replaces": [
+      "astartes-chainsword"
+    ],
+    "replacement": [
+      "master-crafted-power-weapon"
+    ]
+  },
+  {
+    "id": "sword-brethren-squad-swap-2",
+    "unit_id": "sword-brethren-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sword Brother",
+      "per_n_models": 5
+    },
+    "replaces": [
+      "astartes-chainsword"
+    ],
+    "replacement": [
+      "thunder-hammer"
+    ]
+  },
+  {
+    "id": "sword-brethren-squad-swap-3",
+    "unit_id": "sword-brethren-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sword Brother",
+      "per_n_models": 5
+    },
+    "replaces": [
+      "heavy-bolt-pistol"
+    ],
+    "replacement": [
+      "plasma-pistol"
+    ]
+  },
+  {
+    "id": "sword-brethren-squad-swap-4",
+    "unit_id": "sword-brethren-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sword Brothers",
+      "per_n_models": 5,
+      "max_count": 2
+    },
+    "replaces": [
+      "heavy-bolt-pistol"
+    ],
+    "replacement": [
+      "pyre-pistol"
+    ]
+  },
+  {
+    "id": "sword-brethren-squad-swap-5",
+    "unit_id": "sword-brethren-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sword Brother",
+      "per_n_models": 5
+    },
+    "replaces": [
+      "heavy-bolt-pistol",
+      "astartes-chainsword"
+    ],
+    "replacement": [
+      "twin-lightning-claws"
+    ]
+  },
+  {
+    "id": "deathwatch-terminator-squad-swap-2",
+    "unit_id": "deathwatch-terminator-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "power-fist",
+      "storm-bolter"
+    ],
+    "replacement_choice": [
+      [
+        "storm-bolter-and"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "storm-bolter-and"
+      ],
+      [
+        "chainfist"
+      ],
+      [
+        "twin-lightning-claws"
+      ],
+      [
+        "thunder-hammer-and"
+      ],
+      [
+        "storm-shield"
+      ]
+    ]
+  },
+  {
+    "id": "deathwatch-terminator-squad-swap-2",
+    "unit_id": "deathwatch-terminator-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "power-fist",
+      "storm-bolter"
+    ],
+    "replacement_choice": [
+      [
+        "storm-bolter-and"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "storm-bolter-and"
+      ],
+      [
+        "chainfist"
+      ],
+      [
+        "thunder-hammer-and"
+      ],
+      [
+        "storm-shield"
+      ],
+      [
+        "twin-lightning-claws"
+      ]
+    ]
+  },
+  {
+    "id": "indomitor-kill-team-swap-1",
+    "unit_id": "indomitor-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "model equipped with a heavy bolt rifle",
+      "per_n_models": 5
+    },
+    "replaces": [
+      "heavy-bolt-rifle"
+    ],
+    "replacement": [
+      "heavy-bolter"
+    ]
+  },
+  {
+    "id": "indomitor-kill-team-swap-2",
+    "unit_id": "indomitor-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "model equipped with a melta rifle",
+      "max_count": 1
+    },
+    "replaces": [
+      "melta-rifle"
+    ],
+    "replacement": [
+      "multi-melta"
+    ]
+  },
+  {
+    "id": "indomitor-kill-team-swap-3",
+    "unit_id": "indomitor-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "models equipped with flamestorm gauntlets",
+      "any_number": true
+    },
+    "replaces": [
+      "flamestorm-gauntlets"
+    ],
+    "replacement": [
+      "auto-boltstorm-gauntlets",
+      "fragstorm-grenade-launcher"
+    ]
+  },
+  {
+    "id": "indomitor-kill-team-swap-4",
+    "unit_id": "indomitor-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "models equipped with assault bolters",
+      "any_number": true
+    },
+    "replaces": [
+      "assault-bolters"
+    ],
+    "replacement": [
+      "plasma-exterminators"
+    ]
+  },
+  {
+    "id": "blood-angels-captain-swap-1",
+    "unit_id": "blood-angels-captain",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heavy-bolt-pistol"
+    ],
+    "replacement": [
+      "inferno-pistol"
+    ]
+  },
+  {
+    "id": "blood-angels-captain-swap-2",
+    "unit_id": "blood-angels-captain",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "master-crafted-chainsword"
+    ],
+    "replacement_choice": [
+      [
+        "relic-weapon"
+      ],
+      [
+        "power-fist"
+      ]
+    ]
+  },
+  {
+    "id": "death-company-captain-swap-1",
+    "unit_id": "death-company-captain",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heavy-bolt-pistol"
+    ],
+    "replacement": [
+      "inferno-pistol"
+    ]
+  },
+  {
+    "id": "death-company-captain-swap-2",
+    "unit_id": "death-company-captain",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "master-crafted-chainsword"
+    ],
+    "replacement_choice": [
+      [
+        "relic-weapon"
+      ],
+      [
+        "power-fist"
+      ]
+    ]
+  },
+  {
+    "id": "death-company-captain-with-jump-pack-swap-1",
+    "unit_id": "death-company-captain-with-jump-pack",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heavy-bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "plasma-pistol"
+      ],
+      [
+        "hand-flamer"
+      ]
+    ]
+  },
+  {
+    "id": "death-company-captain-with-jump-pack-swap-2",
+    "unit_id": "death-company-captain-with-jump-pack",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "astartes-chainsword"
+    ],
+    "replacement_choice": [
+      [
+        "relic-weapon"
+      ],
+      [
+        "power-fist"
+      ]
+    ]
+  },
+  {
+    "id": "talonstrike-kill-team-swap-1",
+    "unit_id": "talonstrike-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Kill Team Sergeant with Jump Pack",
+      "max_count": 1
+    },
+    "replaces": [
+      "heavy-bolt-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "hand-flamer"
+      ],
+      [
+        "plasma-pistol"
+      ]
+    ]
+  },
+  {
+    "id": "talonstrike-kill-team-swap-2",
+    "unit_id": "talonstrike-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Kill Team Sergeant with Jump Pack",
+      "max_count": 1
+    },
+    "replaces": [
+      "astartes-chainsword"
+    ],
+    "replacement_choice": [
+      [
+        "power-fist"
+      ],
+      [
+        "power-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "talonstrike-kill-team-swap-3",
+    "unit_id": "talonstrike-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5
+    },
+    "replaces": [
+      "heavy-bolt-pistol"
+    ],
+    "replacement": [
+      "plasma-pistol"
+    ]
+  },
+  {
+    "id": "talonstrike-kill-team-swap-4",
+    "unit_id": "talonstrike-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "assault-bolters"
+    ],
+    "replacement": [
+      "plasma-exterminators"
+    ]
+  },
+  {
+    "id": "wolf-guard-battle-leader-swap-1",
+    "unit_id": "wolf-guard-battle-leader",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "master-crafted-power-weapon"
+    ],
+    "replacement": [
+      "thunder-hammer"
+    ]
+  },
+  {
+    "id": "wolf-guard-battle-leader-swap-2",
+    "unit_id": "wolf-guard-battle-leader",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "storm-shield"
+    ],
+    "replacement_choice": [
+      [
+        "master-crafted-bolt-carbine"
+      ],
+      [
+        "master-crafted-heavy-bolt-pistol"
+      ],
+      [
+        "plasma-pistol"
+      ]
+    ]
+  },
+  {
+    "id": "wolf-guard-headtakers-swap-1",
+    "unit_id": "wolf-guard-headtakers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "master-crafted-power-weapon",
+      "storm-shield"
+    ],
+    "replacement": [
+      "paired-master-crafted-power-weapons"
+    ]
+  },
+  {
+    "id": "wulfen-dreadnought-swap-1",
+    "unit_id": "wulfen-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "fenrisian-greataxe-or-great-wolf-claw",
+      "storm-bolter"
+    ],
+    "replacement": [
+      "blizzard-shield",
+      "heavy-flamer"
+    ]
+  },
+  {
+    "id": "wulfen-dreadnought-swap-2",
+    "unit_id": "wulfen-dreadnought",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "if-this-model-is-not-equipped-with-a-storm-bolter-its-heavy-flamer"
+    ],
+    "replacement": [
+      "storm-bolter"
+    ]
+  },
+  {
+    "id": "execrator-swap-1",
+    "unit_id": "execrator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "absolvor-bolt-pistol"
+    ],
+    "replacement": [
+      "pyre-pistol"
+    ]
+  },
+  {
+    "id": "terminator-squad-swap-1",
+    "unit_id": "terminator-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Terminator",
+      "per_n_models": 5
+    },
+    "replaces": [
+      "storm-bolter"
+    ],
+    "replacement_choice": [
+      [
+        "assault-cannon"
+      ],
+      [
+        "heavy-flamer"
+      ],
+      [
+        "cyclone-missile-launcher-and"
+      ],
+      [
+        "storm-bolter"
+      ]
+    ]
+  },
+  {
+    "id": "terminator-squad-swap-2",
+    "unit_id": "terminator-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "power-fist"
+    ],
+    "replacement": [
+      "chainfist"
+    ]
+  },
+  {
+    "id": "terminator-squad-swap-3",
+    "unit_id": "terminator-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Terminator Squad Leader",
+      "max_count": 1
+    },
+    "replaces": [
+      "power-fist"
+    ],
+    "replacement": [
+      "power-weapon"
+    ]
+  }
+]

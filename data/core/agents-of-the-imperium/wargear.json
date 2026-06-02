@@ -1,0 +1,251 @@
+[
+  {
+    "id": "blackstar-rocket-launchers",
+    "name": "Blackstar rocket launchers",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "stormstrike-missile-launchers",
+    "name": "stormstrike missile launchers",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "auspex-array",
+    "name": "auspex array",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "infernum-halo-launcher",
+    "name": "infernum halo-launcher",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "blessed-wardings",
+    "name": "blessed wardings",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "psychic-gifts",
+    "name": "psychic gifts",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "if-this-model-is-equipped-with-1-psychic-gifts-its-inquisitorial-melee-weapon",
+    "name": "If this model is equipped with 1 psychic gifts, its Inquisitorial melee weapon",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "navis-sergeant-at-arms-navis-shotgun",
+    "name": "Navis Sergeant-at-Arms' Navis shotgun",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "autopistol-and",
+    "name": "autopistol and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "bolt-pistol-and",
+    "name": "bolt pistol and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "duplicates-are-not-allowed",
+    "name": "(duplicates are not allowed)",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "nuncio-aquila",
+    "name": "nuncio aquila",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "an-arbites-combat-shotgun-can-be-equipped-with-1-excruciator-maul",
+    "name": "an Arbites combat shotgun can be equipped with 1 excruciator maul",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "an-arbites-combat-shotgun-can-be-equipped-with-1-arbites-medi-kit",
+    "name": "an Arbites combat shotgun can be equipped with 1 Arbites medi-kit",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "an-arbites-combat-shotgun-can-be-equipped-with-1-soulguilt-scanner",
+    "name": "an Arbites combat shotgun can be equipped with 1 soulguilt scanner",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "if-this-model-is-equipped-with-1-psychic-gifts-its-storm-bolter",
+    "name": "If this model is equipped with 1 psychic gifts, its storm bolter",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "plasma-pistol-and",
+    "name": "plasma pistol and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "deathwatch-bolt-rifle",
+    "name": "Deathwatch bolt rifle",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "hand-flamer",
+    "name": "hand flamer",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "thunder-hammer",
+    "name": "thunder hammer",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "a-deathwatch-bolt-rifle-can-be-equipped-with-1-astartes-grenade-launcher",
+    "name": "a Deathwatch bolt rifle can be equipped with 1 Astartes grenade launcher",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "superfrag-rocket-launcher",
+    "name": "superfrag rocket launcher",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "vengor-launcher",
+    "name": "vengor launcher",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "superkrak-rocket-launcher",
+    "name": "superkrak rocket launcher",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "astartes-shield-and",
+    "name": "Astartes shield and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "power-weapon-and",
+    "name": "power weapon and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "astartes-shield",
+    "name": "Astartes shield",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "boltgun-and",
+    "name": "boltgun and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "a-storm-bolter-can-be-equipped-with-1-ancients-banner",
+    "name": "a storm bolter can be equipped with 1 Ancient's banner",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "category": "standard"
+  },
+  {
+    "id": "narthecium",
+    "name": "narthecium",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "simulacrum-imperialis",
+    "name": "simulacrum imperialis",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  }
+]

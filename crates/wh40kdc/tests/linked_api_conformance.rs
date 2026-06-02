@@ -67,6 +67,35 @@ fn run_query(ds: &Dataset, query: &str, args: &Value) -> Value {
                     .collect(),
             )
         }
+        "wargear_options_of" => {
+            let id = arg_str("unitId");
+            let u = ds
+                .units
+                .get(id)
+                .unwrap_or_else(|| panic!("wargear_options_of: unknown unit {id}"));
+            Value::Array(
+                ds.wargear_options_of(u)
+                    .into_iter()
+                    .map(|o| Value::String(o.id.to_string()))
+                    .collect(),
+            )
+        }
+        "maximal_loadout" => {
+            let id = arg_str("unitId");
+            let model_count: u64 = arg_str("modelCount").parse().expect("modelCount is an integer");
+            let u = ds
+                .units
+                .get(id)
+                .unwrap_or_else(|| panic!("maximal_loadout: unknown unit {id}"));
+            let lo = wh40kdc::maximal_loadout(u, model_count, &ds.wargear_options_of(u));
+            let mut encoded: Vec<Value> = lo
+                .counts
+                .iter()
+                .map(|(k, v)| Value::String(format!("{k}:{v}")))
+                .collect();
+            encoded.sort_by(|a, b| a.as_str().unwrap_or("").cmp(b.as_str().unwrap_or("")));
+            Value::Array(encoded)
+        }
         "phases_of" => {
             let id = arg_str("abilityId");
             let a = ds

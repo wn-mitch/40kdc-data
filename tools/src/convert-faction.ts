@@ -14,6 +14,7 @@ import { nameToId, parseStratagemType, parsePlayerTurn, mapPhases } from "./conv
 import { parseMove, parseTargetNumber, parseIntStat, parseInvuln } from "./converters/stat-parser.js";
 import { findFactionViewIndex, getViewEntries, getPointsForView, splitIntoViews, type SourceAbility } from "./converters/view-selector.js";
 import { buildWeaponRegistry, type SourceWargear } from "./converters/weapon-dedup.js";
+import { buildWargearOptions } from "./converters/wargear-options.js";
 import { getKeywordsForFaction, type SourceKeyword } from "./converters/keyword-filter.js";
 import { type FactionConfig, getFactionConfig, listFactions } from "./converters/faction-config.js";
 
@@ -201,7 +202,10 @@ function parseTransport(
 
 // ─── Main conversion ─────────────────────────────────────────────────
 
-export function convertFaction(config: FactionConfig): void {
+export function convertFaction(
+  config: FactionConfig,
+  options: { wargearOnly?: boolean } = {},
+): void {
   const { sourceFactionId, factionId, factionName, factionAbilityName } = config;
 
   console.log(`Converting ${factionName} (${sourceFactionId} → ${factionId})...`);
@@ -210,6 +214,12 @@ export function convertFaction(config: FactionConfig): void {
   const datasheets = readJSON<SourceDatasheet[]>("Datasheets.json");
   const allModels = readJSON<SourceModel[]>("Datasheets_models.json");
   const allWargear = readJSON<SourceWargear[]>("Datasheets_wargear.json");
+  const allOptions = readJSON<
+    { datasheet_id: string; line: string; description: string | null }[]
+  >("Datasheets_options.json");
+  const allComposition = readJSON<
+    { datasheet_id: string; line: string; description: string }[]
+  >("Datasheets_unit_composition.json");
   const allAbilities = readJSON<SourceAbility[]>("Datasheets_abilities.json");
   const allKeywords = readJSON<SourceKeyword[]>("Datasheets_keywords.json");
   const allPoints = readJSON<SourcePoints[]>("Datasheets_points.json");
@@ -356,6 +366,23 @@ export function convertFaction(config: FactionConfig): void {
       (unit as { weapon_ids: string[] }).weapon_ids = [...weaponIds].sort();
     }
   }
+
+  // ─── Build wargear options + non-weapon wargear ───
+  console.log("Converting wargear options...");
+  const globalWeaponIds = new Set(weapons.map((w) => w.id));
+  const {
+    wargearOptions,
+    wargear: wargearItems,
+    unparsed: unparsedOptions,
+  } = buildWargearOptions(
+    factionDatasheets.map((d) => ({ id: d.id, name: d.name })),
+    allModels,
+    allOptions,
+    allComposition,
+    unitWeaponIds,
+    globalWeaponIds,
+    GAME_VERSION
+  );
 
   // ─── Build leader attachments ───
   console.log("Converting leader attachments...");
@@ -604,18 +631,37 @@ export function convertFaction(config: FactionConfig): void {
 
   console.log("\nWriting output files...");
 
-  writeOutput(`${coreDir}/factions.json`, factionEntity);
-  if (!config.skipUnits) {
-    writeOutput(`${coreDir}/units.json`, units);
-    writeOutput(`${coreDir}/weapons.json`, weapons);
-    writeOutput(`${coreDir}/leader-attachments.json`, leaderAttachments);
-    writeOutput(`${coreDir}/unit-compositions.json`, unitCompositions);
+  // `wargearOnly` adds just the wargear data: the rest of the converter's output
+  // has drifted from the committed dataset (e.g. weapon keywords are object refs
+  // there, strings here), so a full rewrite would regress those files. Adding
+  // wargear must not touch them.
+  if (!options.wargearOnly) {
+    writeOutput(`${coreDir}/factions.json`, factionEntity);
   }
-  writeOutput(`${coreDir}/detachments.json`, detachments);
-  writeOutput(`${coreDir}/enhancements.json`, enhancementEntities);
-  writeOutput(`${coreDir}/stratagems.json`, stratagemEntities);
   if (!config.skipUnits) {
-    writeOutput(`${enrichDir}/phase-mappings.json`, dedupedPhaseMappings);
+    if (!options.wargearOnly) {
+      writeOutput(`${coreDir}/units.json`, units);
+      writeOutput(`${coreDir}/weapons.json`, weapons);
+      writeOutput(`${coreDir}/leader-attachments.json`, leaderAttachments);
+      writeOutput(`${coreDir}/unit-compositions.json`, unitCompositions);
+    }
+    writeOutput(`${coreDir}/wargear-options.json`, wargearOptions);
+    if (wargearItems.length > 0) {
+      writeOutput(`${coreDir}/wargear.json`, wargearItems);
+    }
+    if (unparsedOptions.length > 0) {
+      // Underscore-prefixed: a report for manual review, skipped by validation
+      // and not bundled into the dataset.
+      writeOutput(`${coreDir}/_wargear-options.unparsed.json`, unparsedOptions);
+    }
+  }
+  if (!options.wargearOnly) {
+    writeOutput(`${coreDir}/detachments.json`, detachments);
+    writeOutput(`${coreDir}/enhancements.json`, enhancementEntities);
+    writeOutput(`${coreDir}/stratagems.json`, stratagemEntities);
+    if (!config.skipUnits) {
+      writeOutput(`${enrichDir}/phase-mappings.json`, dedupedPhaseMappings);
+    }
   }
 
   // ─── Summary ───
@@ -625,6 +671,9 @@ export function convertFaction(config: FactionConfig): void {
     console.log(`  Weapons: ${weapons.length}`);
     console.log(`  Leader attachments: ${leaderAttachments.length}`);
     console.log(`  Unit compositions: ${unitCompositions.length}`);
+    console.log(`  Wargear options: ${wargearOptions.length}`);
+    console.log(`  Wargear items: ${wargearItems.length}`);
+    console.log(`  Unparsed options: ${unparsedOptions.length}`);
   }
   console.log(`  Detachments: ${detachments.length}`);
   console.log(`  Enhancements: ${enhancementEntities.length}`);
@@ -644,14 +693,20 @@ const isMain = process.argv[1] &&
 
 if (isMain) {
   const args = process.argv.slice(2);
+  const wargearOnly = args.includes("--wargear-only");
+  const positional = args.filter((a) => !a.startsWith("--"));
 
-  if (args.length === 0 || args[0] === "--help") {
-    console.log("Usage: npx tsx tools/src/convert-faction.ts <faction-id>");
+  if (positional.length === 0 || args[0] === "--help") {
+    console.log(
+      "Usage: npx tsx tools/src/convert-faction.ts <faction-id|all> [--wargear-only]",
+    );
     console.log(`Available factions: ${listFactions().join(", ")}`);
     process.exit(args[0] === "--help" ? 0 : 1);
   }
 
-  const factionIdArg = args[0];
-  const factionConfig = getFactionConfig(factionIdArg);
-  convertFaction(factionConfig);
+  const target = positional[0];
+  const factionIds = target === "all" ? listFactions() : [target];
+  for (const id of factionIds) {
+    convertFaction(getFactionConfig(id), { wargearOnly });
+  }
 }

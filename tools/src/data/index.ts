@@ -34,6 +34,16 @@ export { normalizeName } from "./normalize.js";
 export { emptyRawData } from "./types.js";
 export type { RawData } from "./types.js";
 
+// Wargear-loadout maths: maximal default loadout, per-weapon bounds, validation.
+export {
+  optionCap,
+  maximalLoadout,
+  weaponBounds,
+  clampWeaponCount,
+  validateLoadout,
+} from "./loadout.js";
+export type { Loadout, WeaponBound, Violation } from "./loadout.js";
+
 // The cruncher surface — buff types + the engine — re-exported from the data
 // package so downstream callers can import their whole 40kdc API from
 // `@alpaca-software/40kdc-data` without reaching into subpaths.
@@ -83,6 +93,8 @@ export const enhancements = dataset.enhancements;
 export const stratagems = dataset.stratagems;
 /** All wargear options. */
 export const wargearOptions = dataset.wargearOptions;
+/** All non-weapon wargear items (icons, attachments). */
+export const wargear = dataset.wargear;
 /** All missions. */
 export const missions = dataset.missions;
 /** All mission matchups. */

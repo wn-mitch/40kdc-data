@@ -46,6 +46,11 @@ pub mod data;
 #[cfg(feature = "bundled-data")]
 pub use data::{normalize_name, Collection, Dataset, RawData};
 
+pub use data::{
+    clamp_weapon_count, maximal_loadout, option_cap, validate_loadout, Loadout, Violation,
+    ViolationCode, WeaponBound,
+};
+
 /// Army-list importer: ListForge share payload + NewRecruit (JSON / wtc /
 /// simple) → resolved 40kdc roster (default `import`). The same module
 /// hosts the [`Roster`](import::Roster) domain types, which are also reused

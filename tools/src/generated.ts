@@ -174,256 +174,6 @@ export type AbilityEffect =
   | DicePoolAllocationEffect;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "single-effect".
- */
-export type SingleEffect = unknown & {
-  type:
-    | "stat-modifier"
-    | "roll-modifier"
-    | "re-roll"
-    | "mortal-wounds"
-    | "feel-no-pain"
-    | "invulnerable-save"
-    | "ward"
-    | "keyword-grant"
-    | "movement-modifier"
-    | "deep-strike"
-    | "fallback-and-act"
-    | "fight-first"
-    | "fight-last"
-    | "shoot-on-death"
-    | "fight-on-death"
-    | "objective-control-modifier"
-    | "leadership-modifier"
-    | "damage-reduction"
-    | "attack-restriction"
-    | "ability-grant"
-    | "cp-gain"
-    | "cp-refund"
-    | "model-destruction"
-    | "resurrection"
-    | "resource-gain"
-    | "resource-spend"
-    | "charge-roll-modifier"
-    | "terrain-area-tag"
-    | "objective-tag"
-    | "unit-tag"
-    | "bs-modifier"
-    | "engagement-passthrough";
-  target:
-    | "self"
-    | "bearer"
-    | "unit"
-    | "attached-unit"
-    | "attacker"
-    | "defender"
-    | "friendly-within-aura"
-    | "enemy-within-aura"
-    | "all-friendly"
-    | "all-enemy";
-  modifier?: {
-    [k: string]: unknown;
-  };
-  [k: string]: unknown;
-} & {
-  type:
-    | "stat-modifier"
-    | "roll-modifier"
-    | "re-roll"
-    | "mortal-wounds"
-    | "feel-no-pain"
-    | "invulnerable-save"
-    | "ward"
-    | "keyword-grant"
-    | "movement-modifier"
-    | "deep-strike"
-    | "fallback-and-act"
-    | "fight-first"
-    | "fight-last"
-    | "shoot-on-death"
-    | "fight-on-death"
-    | "objective-control-modifier"
-    | "leadership-modifier"
-    | "damage-reduction"
-    | "attack-restriction"
-    | "ability-grant"
-    | "cp-gain"
-    | "cp-refund"
-    | "model-destruction"
-    | "resurrection"
-    | "resource-gain"
-    | "resource-spend"
-    | "charge-roll-modifier"
-    | "terrain-area-tag"
-    | "objective-tag"
-    | "unit-tag"
-    | "bs-modifier"
-    | "engagement-passthrough";
-  target:
-    | "self"
-    | "bearer"
-    | "unit"
-    | "attached-unit"
-    | "attacker"
-    | "defender"
-    | "friendly-within-aura"
-    | "enemy-within-aura"
-    | "all-friendly"
-    | "all-enemy";
-  modifier?: {
-    [k: string]: unknown;
-  };
-  [k: string]: unknown;
-} & {
-  type:
-    | "stat-modifier"
-    | "roll-modifier"
-    | "re-roll"
-    | "mortal-wounds"
-    | "feel-no-pain"
-    | "invulnerable-save"
-    | "ward"
-    | "keyword-grant"
-    | "movement-modifier"
-    | "deep-strike"
-    | "fallback-and-act"
-    | "fight-first"
-    | "fight-last"
-    | "shoot-on-death"
-    | "fight-on-death"
-    | "objective-control-modifier"
-    | "leadership-modifier"
-    | "damage-reduction"
-    | "attack-restriction"
-    | "ability-grant"
-    | "cp-gain"
-    | "cp-refund"
-    | "model-destruction"
-    | "resurrection"
-    | "resource-gain"
-    | "resource-spend"
-    | "charge-roll-modifier"
-    | "terrain-area-tag"
-    | "objective-tag"
-    | "unit-tag"
-    | "bs-modifier"
-    | "engagement-passthrough";
-  target:
-    | "self"
-    | "bearer"
-    | "unit"
-    | "attached-unit"
-    | "attacker"
-    | "defender"
-    | "friendly-within-aura"
-    | "enemy-within-aura"
-    | "all-friendly"
-    | "all-enemy";
-  modifier?: {
-    [k: string]: unknown;
-  };
-  [k: string]: unknown;
-} & {
-  type:
-    | "stat-modifier"
-    | "roll-modifier"
-    | "re-roll"
-    | "mortal-wounds"
-    | "feel-no-pain"
-    | "invulnerable-save"
-    | "ward"
-    | "keyword-grant"
-    | "movement-modifier"
-    | "deep-strike"
-    | "fallback-and-act"
-    | "fight-first"
-    | "fight-last"
-    | "shoot-on-death"
-    | "fight-on-death"
-    | "objective-control-modifier"
-    | "leadership-modifier"
-    | "damage-reduction"
-    | "attack-restriction"
-    | "ability-grant"
-    | "cp-gain"
-    | "cp-refund"
-    | "model-destruction"
-    | "resurrection"
-    | "resource-gain"
-    | "resource-spend"
-    | "charge-roll-modifier"
-    | "terrain-area-tag"
-    | "objective-tag"
-    | "unit-tag"
-    | "bs-modifier"
-    | "engagement-passthrough";
-  target:
-    | "self"
-    | "bearer"
-    | "unit"
-    | "attached-unit"
-    | "attacker"
-    | "defender"
-    | "friendly-within-aura"
-    | "enemy-within-aura"
-    | "all-friendly"
-    | "all-enemy";
-  modifier?: {
-    [k: string]: unknown;
-  };
-  [k: string]: unknown;
-} & {
-  type:
-    | "stat-modifier"
-    | "roll-modifier"
-    | "re-roll"
-    | "mortal-wounds"
-    | "feel-no-pain"
-    | "invulnerable-save"
-    | "ward"
-    | "keyword-grant"
-    | "movement-modifier"
-    | "deep-strike"
-    | "fallback-and-act"
-    | "fight-first"
-    | "fight-last"
-    | "shoot-on-death"
-    | "fight-on-death"
-    | "objective-control-modifier"
-    | "leadership-modifier"
-    | "damage-reduction"
-    | "attack-restriction"
-    | "ability-grant"
-    | "cp-gain"
-    | "cp-refund"
-    | "model-destruction"
-    | "resurrection"
-    | "resource-gain"
-    | "resource-spend"
-    | "charge-roll-modifier"
-    | "terrain-area-tag"
-    | "objective-tag"
-    | "unit-tag"
-    | "bs-modifier"
-    | "engagement-passthrough";
-  target:
-    | "self"
-    | "bearer"
-    | "unit"
-    | "attached-unit"
-    | "attacker"
-    | "defender"
-    | "friendly-within-aura"
-    | "enemy-within-aura"
-    | "all-friendly"
-    | "all-enemy";
-  modifier?: {
-    [k: string]: unknown;
-  };
-  [k: string]: unknown;
-};
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "effect-node".
  */
 export type EffectNode =
@@ -435,7 +185,7 @@ export type EffectNode =
   | DicePoolAllocationEffect;
 export type AbilityCondition2 = SimpleCondition | CompoundCondition;
 export type AbilityEffect1 =
-  | unknown
+  | SingleEffect
   | ChoiceEffect
   | SequenceEffect
   | DiceGatedEffect
@@ -714,6 +464,30 @@ export interface Mission {
   game_version: GameVersionReference;
 }
 /**
+ * When a VP award is evaluated. A bare `phase` is the legacy shorthand for 'during this phase'; richer triggers add `timing` (the moment within a phase/turn/game), `player_turn`, and a `battle_round` window. A card's section headers map onto these: 'ANY BATTLE ROUND' omits `battle_round`; 'SECOND BATTLE ROUND ONWARDS' is { min: 2 }; 'END OF THE BATTLE' is timing: end-of-battle.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "scoring-trigger".
+ */
+export interface ScoringTrigger {
+  /**
+   * The five official game phases. Unchanged between 10th and 11th edition — 11e reorders Pile In timing within the Fight phase but adds no top-level phase.
+   */
+  phase?: "command" | "movement" | "shooting" | "charge" | "fight";
+  /**
+   * The moment the award is checked. 'End of your turn' = end-of-turn; 'End of your Command phase' = end-of-phase with phase: command; 'End of the battle' = end-of-battle.
+   */
+  timing?: "start-of-turn" | "end-of-turn" | "start-of-phase" | "end-of-phase" | "end-of-battle";
+  player_turn?: PlayerTurn;
+  /**
+   * Battle-round window in which the trigger is active. Absent means any battle round (1-5). 'Second battle round onwards' is { min: 2 }.
+   */
+  battle_round?: {
+    min?: number;
+    max?: number;
+  };
+}
+/**
  * A draw-time predicate over an army list (not runtime board state, so deliberately NOT the Ability DSL condition). Used to gate when_drawn operations such as redraws. Example: a card that is void unless the opponent fields a large unit (10e 'Cull the Horde' redrew when the opponent had no unit of 14+ models) is { subject: 'opponent', quantifier: 'none', unit_filter: { model_count_min: 14 } } with operation 'redraw'.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -930,6 +704,60 @@ export interface CompoundCondition {
    * @minItems 1
    */
   operands: [ConditionNode, ...ConditionNode[]];
+  [k: string]: unknown;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "single-effect".
+ */
+export interface SingleEffect {
+  type:
+    | "stat-modifier"
+    | "roll-modifier"
+    | "re-roll"
+    | "mortal-wounds"
+    | "feel-no-pain"
+    | "invulnerable-save"
+    | "ward"
+    | "keyword-grant"
+    | "movement-modifier"
+    | "deep-strike"
+    | "fallback-and-act"
+    | "fight-first"
+    | "fight-last"
+    | "shoot-on-death"
+    | "fight-on-death"
+    | "objective-control-modifier"
+    | "leadership-modifier"
+    | "damage-reduction"
+    | "attack-restriction"
+    | "ability-grant"
+    | "cp-gain"
+    | "cp-refund"
+    | "model-destruction"
+    | "resurrection"
+    | "resource-gain"
+    | "resource-spend"
+    | "charge-roll-modifier"
+    | "terrain-area-tag"
+    | "objective-tag"
+    | "unit-tag"
+    | "bs-modifier"
+    | "engagement-passthrough";
+  target:
+    | "self"
+    | "bearer"
+    | "unit"
+    | "attached-unit"
+    | "attacker"
+    | "defender"
+    | "friendly-within-aura"
+    | "enemy-within-aura"
+    | "all-friendly"
+    | "all-enemy";
+  modifier?: {
+    [k: string]: unknown;
+  };
   [k: string]: unknown;
 }
 /**
@@ -1376,7 +1204,7 @@ export interface Unit {
   is_legend?: boolean;
 }
 /**
- * A weapon substitution option available to models within a unit.
+ * A wargear option available to models within a unit: a weapon/wargear swap, a pure add-on, or a choice between alternatives. Models start with the unit's base loadout; an option modifies that loadout for the number of models its `model_constraint` permits.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "wargear-option".
@@ -1388,21 +1216,43 @@ export interface WargearOption {
     model_name?: string;
     per_n_models?: number;
     max_count?: number;
+    /**
+     * When true, every model in the unit may take the option ('Any number of models can each ...'). Mutually exclusive in spirit with `per_n_models`.
+     */
+    any_number?: boolean;
   } | null;
   /**
-   * Weapon IDs being removed
+   * Weapon or wargear IDs removed from the model. Omit for a pure add-on (the option only equips new wargear).
    *
    * @minItems 1
    */
-  replaces: [EntityId, ...EntityId[]];
+  replaces?: [EntityId, ...EntityId[]];
   /**
-   * Weapon IDs being added
+   * Weapon or wargear IDs added to the model — all of them. Exactly one of `replacement` / `replacement_choice` is present.
    *
    * @minItems 1
    */
-  replacement: [EntityId, ...EntityId[]];
+  replacement?: [EntityId, ...EntityId[]];
+  /**
+   * A choice of replacements ('one of the following'): pick exactly one inner group; each group's IDs are all added together. Exactly one of `replacement` / `replacement_choice` is present.
+   *
+   * @minItems 2
+   */
+  replacement_choice?: [[EntityId, ...EntityId[]], [EntityId, ...EntityId[]], ...[EntityId, ...EntityId[]][]];
   is_free?: boolean;
   additional_cost?: number | null;
+  game_version: GameVersionReference;
+}
+/**
+ * A non-weapon item a model may carry — an icon, attachment, or other piece of equipment with no weapon profile. Weapons live in weapon.schema.json; this entity exists so wargear-option swaps and add-ons can reference equipment that is not a weapon.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "wargear".
+ */
+export interface Wargear {
+  id: EntityId;
+  name: string;
+  category?: string | null;
   game_version: GameVersionReference;
 }
 /**
@@ -1428,7 +1278,10 @@ export interface WeaponKeyword {
         "value" | "target_keyword" | "threshold",
         "value" | "target_keyword" | "threshold"
       ];
-  effect: unknown;
+  /**
+   * Mechanical effect of this keyword. Null when the behaviour is faction-specific flavour not yet expressible in the DSL — engines treat such references as no-op buffs and may surface them as 'cannot auto-apply'.
+   */
+  effect: AbilityEffect1 | null;
   game_version: GameVersionReference;
 }
 /**

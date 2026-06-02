@@ -1,0 +1,65 @@
+[
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000020",
+    "line": "1",
+    "description": "1 of the Boss Nob's rokkit pistols can be replaced with 1 smash hammer.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000020",
+    "line": "2",
+    "description": "One Tankbusta can be equipped with one of the following:1 pulsa rokkit1 additional rokkit launcha",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000025",
+    "line": "1",
+    "description": "The Boss Nob's choppa can be replaced with one of the following:1 big choppa1 power klaw",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000025",
+    "line": "2",
+    "description": "Up to 2 Kommandos can each have their slugga and choppa replaced with 1 speshul Kommando shoota and 1 close combat weapon.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000025",
+    "line": "3",
+    "description": "1 Kommando's slugga and choppa can be replaced with 1 breacha ram.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000025",
+    "line": "4",
+    "description": "1 Kommando's slugga and choppa can be replaced with 1 burna and 1 close combat weapon.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000025",
+    "line": "5",
+    "description": "1 Kommando's slugga and choppa can be replaced with 1 rokkit launcha and 1 close combat weapon.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000025",
+    "line": "6",
+    "description": "This unit can be equipped with 1 bomb squig.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000025",
+    "line": "7",
+    "description": "This unit can be equipped with 1 distraction grot.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  }
+]

@@ -1,0 +1,332 @@
+[
+  {
+    "id": "bloodletters-addon-1",
+    "unit_id": "bloodletters",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Bloodletter that is not equipped with a daemonic icon",
+      "max_count": 1
+    },
+    "replacement": [
+      "a-daemonic-icon-can-be-equipped-with-1-instrument-of-chaos"
+    ]
+  },
+  {
+    "id": "bloodletters-addon-2",
+    "unit_id": "bloodletters",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Bloodletter that is not equipped with an instrument of Chaos",
+      "max_count": 1
+    },
+    "replacement": [
+      "an-instrument-of-chaos-can-be-equipped-with-1-daemonic-icon"
+    ]
+  },
+  {
+    "id": "bloodcrushers-addon-1",
+    "unit_id": "bloodcrushers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Bloodcrusher that is not equipped with a daemonic icon",
+      "max_count": 1
+    },
+    "replacement": [
+      "a-daemonic-icon-can-be-equipped-with-1-instrument-of-chaos"
+    ]
+  },
+  {
+    "id": "bloodcrushers-addon-2",
+    "unit_id": "bloodcrushers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Bloodcrusher that is not equipped with an instrument of Chaos",
+      "max_count": 1
+    },
+    "replacement": [
+      "an-instrument-of-chaos-can-be-equipped-with-1-daemonic-icon"
+    ]
+  },
+  {
+    "id": "lord-of-change-addon-1",
+    "unit_id": "lord-of-change",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "rod-of-sorcery"
+      ],
+      [
+        "baleful-sword"
+      ]
+    ]
+  },
+  {
+    "id": "great-unclean-one-swap-1",
+    "unit_id": "great-unclean-one",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "plague-flail"
+    ],
+    "replacement": [
+      "bileblade"
+    ]
+  },
+  {
+    "id": "great-unclean-one-swap-2",
+    "unit_id": "great-unclean-one",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "bilesword"
+    ],
+    "replacement": [
+      "doomsday-bell"
+    ]
+  },
+  {
+    "id": "plaguebearers-addon-1",
+    "unit_id": "plaguebearers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Plaguebearer that is not equipped with a daemonic icon",
+      "max_count": 1
+    },
+    "replacement": [
+      "a-daemonic-icon-can-be-equipped-with-1-instrument-of-chaos"
+    ]
+  },
+  {
+    "id": "plaguebearers-addon-2",
+    "unit_id": "plaguebearers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Plaguebearer that is not equipped with an instrument of Chaos",
+      "max_count": 1
+    },
+    "replacement": [
+      "an-instrument-of-chaos-can-be-equipped-with-1-daemonic-icon"
+    ]
+  },
+  {
+    "id": "plague-drones-addon-1",
+    "unit_id": "plague-drones",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Plague Drone that is not equipped with a daemonic icon",
+      "max_count": 1
+    },
+    "replacement": [
+      "a-daemonic-icon-can-be-equipped-with-1-instrument-of-chaos"
+    ]
+  },
+  {
+    "id": "plague-drones-addon-2",
+    "unit_id": "plague-drones",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Plague Drone that is not equipped with an instrument of Chaos",
+      "max_count": 1
+    },
+    "replacement": [
+      "an-instrument-of-chaos-can-be-equipped-with-1-daemonic-icon"
+    ]
+  },
+  {
+    "id": "keeper-of-secrets-addon-1",
+    "unit_id": "keeper-of-secrets",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "living-whipritual-knifeshining-aegis"
+    ]
+  },
+  {
+    "id": "keeper-of-secrets-addon-1",
+    "unit_id": "keeper-of-secrets",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "living-whipritual-knifeshining-aegis"
+    ]
+  },
+  {
+    "id": "daemonettes-addon-1",
+    "unit_id": "daemonettes",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Daemonette that is not equipped with a daemonic icon",
+      "max_count": 1
+    },
+    "replacement": [
+      "a-daemonic-icon-can-be-equipped-with-1-instrument-of-chaos"
+    ]
+  },
+  {
+    "id": "daemonettes-addon-2",
+    "unit_id": "daemonettes",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Daemonette that is not equipped with an instrument of Chaos",
+      "max_count": 1
+    },
+    "replacement": [
+      "an-instrument-of-chaos-can-be-equipped-with-1-daemonic-icon"
+    ]
+  },
+  {
+    "id": "seekers-addon-1",
+    "unit_id": "seekers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Seeker that is not equipped with a daemonic icon",
+      "max_count": 1
+    },
+    "replacement": [
+      "a-daemonic-icon-can-be-equipped-with-1-instrument-of-chaos"
+    ]
+  },
+  {
+    "id": "seekers-addon-2",
+    "unit_id": "seekers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Seeker that is not equipped with an instrument of Chaos",
+      "max_count": 1
+    },
+    "replacement": [
+      "an-instrument-of-chaos-can-be-equipped-with-1-daemonic-icon"
+    ]
+  },
+  {
+    "id": "soul-grinder-swap-1",
+    "unit_id": "soul-grinder",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "warpsword"
+    ],
+    "replacement": [
+      "warpclaw"
+    ]
+  },
+  {
+    "id": "pox-riders-addon-1",
+    "unit_id": "pox-riders",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Pox Rider that is not equipped with a daemonic icon",
+      "max_count": 1
+    },
+    "replacement": [
+      "a-daemonic-icon-can-be-equipped-with-1-instrument-of-chaos"
+    ]
+  },
+  {
+    "id": "pox-riders-addon-2",
+    "unit_id": "pox-riders",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Pox Rider that is not equipped with an instrument of Chaos",
+      "max_count": 1
+    },
+    "replacement": [
+      "an-instrument-of-chaos-can-be-equipped-with-1-daemonic-icon"
+    ]
+  },
+  {
+    "id": "bloodthirster-swap-1",
+    "unit_id": "bloodthirster",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "great-axe-of-khorne"
+    ],
+    "replacement_choice": [
+      [
+        "bloodflail"
+      ],
+      [
+        "lash-of-khorne"
+      ]
+    ]
+  }
+]

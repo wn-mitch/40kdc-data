@@ -18,6 +18,7 @@ import { fileURLToPath } from "node:url";
 
 import { Dataset } from "../src/data/dataset.js";
 import { normalizeName } from "../src/data/normalize.js";
+import { maximalLoadout } from "../src/data/loadout.js";
 import { exportRoster, type ExportFormat } from "../src/export/index.js";
 import { importRoster, tryImportRoster, REGISTERED_ADAPTERS } from "../src/import/import-roster.js";
 import { selectAdapter } from "../src/import/adapter.js";
@@ -360,6 +361,17 @@ function runLinkedApi(ds: Dataset, c: LinkedApiCase): string | null | string[] {
       if (!u) throw new Error(`weapons_of: unknown unit ${c.args.unitId}`);
       return u.weapons.map((w) => w.id);
     }
+    case "wargear_options_of": {
+      const u = ds.units.get(c.args.unitId);
+      if (!u) throw new Error(`wargear_options_of: unknown unit ${c.args.unitId}`);
+      return u.wargearOptions.map((o) => o.id);
+    }
+    case "maximal_loadout": {
+      const u = ds.units.get(c.args.unitId);
+      if (!u) throw new Error(`maximal_loadout: unknown unit ${c.args.unitId}`);
+      const lo = maximalLoadout(u.raw, Number(c.args.modelCount), ds.wargearOptionsOf(u.raw));
+      return [...lo.counts].map(([id, n]) => `${id}:${n}`).sort();
+    }
     case "phases_of": {
       const a = ds.abilities.get(c.args.abilityId);
       if (!a) throw new Error(`phases_of: unknown ability ${c.args.abilityId}`);
@@ -448,6 +460,8 @@ const VALIDATOR_TARGET_SCHEMAS: Record<string, string> = {
   weapon: "https://40kdc.dev/schemas/core/weapon.schema.json",
   faction: "https://40kdc.dev/schemas/core/faction.schema.json",
   ability: "https://40kdc.dev/schemas/enrichment/ability-dsl/ability.schema.json",
+  wargear: "https://40kdc.dev/schemas/core/wargear.schema.json",
+  "wargear-option": "https://40kdc.dev/schemas/core/wargear-option.schema.json",
 };
 
 /** Map an AJV error to the closed-enum code defined in RUNNER_PROTOCOL.md. */

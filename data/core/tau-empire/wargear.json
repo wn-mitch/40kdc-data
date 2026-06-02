@@ -1,0 +1,338 @@
+[
+  {
+    "id": "battlesuit-support-system",
+    "name": "battlesuit support system",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "shield-generator",
+    "name": "shield generator",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "weapon-support-system",
+    "name": "weapon support system",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "up-to-two-of-the-following",
+    "name": "up to two of the following",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "can-take-duplicates-1-gun-drone1-marker-drone1-shield-drone",
+    "name": "can take duplicates:1 gun drone1 marker drone1 shield drone",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "hover-drone",
+    "name": "hover drone",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "can-take-duplicates-1-guardian-drone-it-cannot-take-duplicates-of-this-piece-of-wargear-1-gun-drone1-marker-drone1-shield-drone",
+    "name": "can take duplicates:1 guardian drone (it cannot take duplicates of this piece of wargear)1 gun drone1 marker drone1 shield drone",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "gun-drone",
+    "name": "gun drone",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "marker-drone",
+    "name": "marker drone",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "homing-beacon",
+    "name": "homing beacon",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "one-battlesuit-support-system",
+    "name": "one battlesuit support system",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "twin-plasma-rifles",
+    "name": "twin plasma rifles",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "up-to-2-missile-drones",
+    "name": "up to 2 missile drones",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "grav-inhibitor-drone",
+    "name": "grav-inhibitor drone",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "pulse-accelerator-drone",
+    "name": "pulse accelerator drone",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "recon-drone",
+    "name": "recon drone",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "piranha-burst-cannon-can-be",
+    "name": "Piranha burst cannon can be",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "up-to-2-seeker-missiles",
+    "name": "up to 2 seeker missiles",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "twin-pulse-carbines",
+    "name": "twin pulse carbines",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "smart-missile-systems",
+    "name": "smart missile systems",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "accelerator-burst-cannons",
+    "name": "accelerator burst cannons",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "can-take-duplicates-1-gun-drone1-marker-drone1-missile-drone1-shield-drone",
+    "name": "can take duplicates:1 gun drone1 marker drone1 missile drone1 shield drone",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "tidewall-defence-platform",
+    "name": "Tidewall defence platform",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "pulse-ordnance-drivers",
+    "name": "pulse ordnance drivers",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "nexus-missile-launchers",
+    "name": "nexus missile launchers",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "heavy-rail-cannon-array-and",
+    "name": "heavy rail cannon array and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "plasma-rifles",
+    "name": "plasma rifles",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "fusion-blasters",
+    "name": "fusion blasters",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "missile-pods",
+    "name": "missile pods",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "rail-rifles",
+    "name": "rail rifles",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "markerlight",
+    "name": "markerlight",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "up-to-6-seeker-missiles",
+    "name": "up to 6 seeker missiles",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "burst-cannons",
+    "name": "burst cannons",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "cyclic-ion-blasters",
+    "name": "cyclic ion blasters",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "kroot-bolt-thrower-and",
+    "name": "Kroot bolt thrower and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "baggage-harness",
+    "name": "baggage harness",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "up-to-two-of-the-following-but-cannot-take-duplicates-1-gun-drone1-marker-drone1-shield-drone",
+    "name": "up to two of the following, but cannot take duplicates:1 gun drone1 marker drone1 shield drone",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "up-to-two-of-the-following-but-cannot-take-duplicates1-gun-drone1-marker-drone1-shield-drone",
+    "name": "up to two of the following, but cannot take duplicates1 gun drone1 marker drone1 shield drone",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "dart-bow",
+    "name": "dart-bow",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "tri-bade",
+    "name": "tri-bade",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "bladestave",
+    "name": "bladestave",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "prey-hook",
+    "name": "prey-hook",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  }
+]

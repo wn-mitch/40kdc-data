@@ -1,0 +1,42 @@
+[
+  {
+    "id": "monstrous-bonesword",
+    "name": "monstrous bonesword",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "ranged-weapon",
+    "name": "ranged weapon",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "rending-claws",
+    "name": "rending claws",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "bone-cleaver-lash-whip",
+    "name": "bone cleaver, lash whip",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "crushing-claws",
+    "name": "crushing claws",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  }
+]

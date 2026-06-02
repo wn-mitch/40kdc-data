@@ -395,6 +395,39 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
                     .collect(),
             ))
         }
+        "wargear_options_of" => {
+            let id = str_arg("unitId");
+            let Some(unit) = ds.units.get(id) else {
+                return err_value(
+                    ErrorKind::UnknownEntity,
+                    Some(json!({ "kind": "unit", "id": id })),
+                );
+            };
+            ok_value(Value::Array(
+                ds.wargear_options_of(unit)
+                    .into_iter()
+                    .map(|o| Value::String(o.id.to_string()))
+                    .collect(),
+            ))
+        }
+        "maximal_loadout" => {
+            let id = str_arg("unitId");
+            let Some(unit) = ds.units.get(id) else {
+                return err_value(
+                    ErrorKind::UnknownEntity,
+                    Some(json!({ "kind": "unit", "id": id })),
+                );
+            };
+            let model_count: u64 = str_arg("modelCount").parse().unwrap_or(0);
+            let lo = wh40kdc::maximal_loadout(unit, model_count, &ds.wargear_options_of(unit));
+            let mut encoded: Vec<Value> = lo
+                .counts
+                .iter()
+                .map(|(k, v)| Value::String(format!("{k}:{v}")))
+                .collect();
+            encoded.sort_by(|a, b| a.as_str().unwrap_or("").cmp(b.as_str().unwrap_or("")));
+            ok_value(Value::Array(encoded))
+        }
         "phases_of" => {
             let id = str_arg("abilityId");
             let Some(ability) = ds.abilities.get(id) else {

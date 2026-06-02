@@ -28,6 +28,7 @@ import type {
   TimingFlag,
   Unit,
   UnitComposition,
+  Wargear,
   WargearOption,
   Weapon,
   WeaponKeyword,
@@ -56,6 +57,8 @@ export interface RawData {
   leaderAttachments: LeaderAttachment[];
   unitCompositions: UnitComposition[];
   wargearOptions: WargearOption[];
+  /** Non-weapon wargear items (icons, attachments) referenced by wargear options. */
+  wargear: Wargear[];
   gameVersions: GameVersion[];
   missions: Mission[];
   missionMatchups: MissionMatchup[];
@@ -86,6 +89,7 @@ export function emptyRawData(): RawData {
     leaderAttachments: [],
     unitCompositions: [],
     wargearOptions: [],
+    wargear: [],
     gameVersions: [],
     missions: [],
     missionMatchups: [],

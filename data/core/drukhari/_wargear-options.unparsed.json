@@ -1,0 +1,37 @@
+[
+  {
+    "unit_id": "ravager",
+    "datasheet": "Ravager",
+    "line": "1",
+    "description": "Any number of this model's dark lances can each be replaced with 1 disintegrator cannon.",
+    "reason": "could not isolate replaced weapon / replacement"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000662",
+    "line": "1",
+    "description": "The Solarite's shardcarbine can be replaced with one of the following:1 blast pistol and 1 power weapon1 splinter pistol and 1 power weapon",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000662",
+    "line": "2",
+    "description": "Any number of Scourges can each replace their splinter cannon with one of the following:1 blaster1 dark lance1 haywire blaster1 heat lance1 shredder",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000004157",
+    "line": "1",
+    "description": "The Solarite's shardcarbine can be replaced with one of the following:1 blast pistol and 1 power weapon1 splinter pistol and 1 power weapon",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000004157",
+    "line": "2",
+    "description": "1 Scourge's shardcarbine can be replaced with one of the following:1 blaster1 shredder",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  }
+]

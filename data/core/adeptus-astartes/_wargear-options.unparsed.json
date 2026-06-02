@@ -1,0 +1,135 @@
+[
+  {
+    "unit_id": "tactical-squad",
+    "datasheet": "Tactical Squad",
+    "line": "3",
+    "description": "The Tactical Sergeant's bolt pistol and boltgun can be replaced with 1 twin lightning claws, or two different weapons from the following list:* 1 Astartes chainsword1 bolt pistol1 boltgun1 combi-weapon1 grav-pistol1 plasma pistol1 storm bolter1 power fist1 power weapon1 thunder hammer",
+    "reason": "name resolution failed: name too long: twin lightning claws, or two different w…"
+  },
+  {
+    "unit_id": "tarantula-sentry-battery",
+    "datasheet": "Tarantula Sentry Battery",
+    "line": "1",
+    "description": "This model's twin heavy bolter replaced with 1 twin lascannon.",
+    "reason": "could not isolate replaced weapon / replacement"
+  },
+  {
+    "unit_id": "wolf-scouts",
+    "datasheet": "Wolf Scouts",
+    "line": "4",
+    "description": "The Wolf Scout Pack Leader's bolt pistol and boltgun can be replaced with with 1 twin lightning claws, or two different weapons from the following list:*1 bolt pistol1 boltgun1 combi-weapon1 grav-pistol1 hand flamer1 inferno pistol1 plasma pistol1 storm bolter1 Astartes chainsword1 power fist1 power weapon1 thunder hammer.",
+    "reason": "name resolution failed: name too long: with 1 twin lightning claws, or two diff…"
+  },
+  {
+    "unit_id": "company-veterans-on-bikes",
+    "datasheet": "Company Veterans On Bikes",
+    "line": "3",
+    "description": "Any number of Veteran Bikers' bolt pistols can each be replaced with one of the following:1 grav-pistol1 plasma pistol1 thunder hammer1 power fist1 power weapon1 storm shield",
+    "reason": "could not isolate replaced weapon / replacement"
+  },
+  {
+    "unit_id": "company-veterans-on-bikes",
+    "datasheet": "Company Veterans On Bikes",
+    "line": "4",
+    "description": "Any number of Veteran Bikers' Astartes chainswords can each be replaced with one of the following:1 flamer 1 grav-gun1 grav-pistol1 meltagun1 plasma gun1 plasma pistol1 power fist1 power weapon1 thunder hammer1 storm shield",
+    "reason": "could not isolate replaced weapon / replacement"
+  },
+  {
+    "unit_id": "devastator-squad",
+    "datasheet": "Devastator Squad",
+    "line": "2",
+    "description": "The Devastator Sergeant's bolt pistol and boltgun can be replaced with two different weapons from the following list:*1 Astartes chain sword1 bolt pistol1 boltgun1 combi-weapon1 grav-pistol1 plasma pistol1 power fist1 power weapon1 thunder hammer",
+    "reason": "name resolution failed: name too long: two different weapons from the following…"
+  },
+  {
+    "unit_id": "decimus-kill-team",
+    "datasheet": "Decimus Kill Team",
+    "line": "1",
+    "description": "For every 5 models in the unit, up to 1 model's infernus heavy bolter can be replaced with one of the following:1 frag cannon.1 hellstorm bolt rifle and 1 Astartes grenade launcher.",
+    "reason": "could not isolate replaced weapon / replacement"
+  },
+  {
+    "unit_id": "decimus-kill-team",
+    "datasheet": "Decimus Kill Team",
+    "line": "2",
+    "description": "For every 5 models in the unit, up to 1 model's heavy thunder hammer can be replaced with 1 power weapon and 1 Astartes shield.",
+    "reason": "could not isolate replaced weapon / replacement"
+  },
+  {
+    "unit_id": "decimus-kill-team",
+    "datasheet": "Decimus Kill Team",
+    "line": "3",
+    "description": "For every 5 models in the unit, up to 1 model's stalker bolt rifle can be replaced with 1 plasma incinerator.",
+    "reason": "could not isolate replaced weapon / replacement"
+  },
+  {
+    "unit_id": "decimus-kill-team",
+    "datasheet": "Decimus Kill Team",
+    "line": "4",
+    "description": "For every 5 models in the unit, up to 1 model's Deathwatch marksman bolt carbine can be replaced with 1 combat knife.",
+    "reason": "could not isolate replaced weapon / replacement"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000311",
+    "line": "1",
+    "description": "Any number of models can each have their death totem replaced with 1 stormfrag auto-launcher.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000001158",
+    "line": "1",
+    "description": "This model's onslaught gatling cannon can be replaced with 1 multi-melta.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000002103",
+    "line": "1",
+    "description": "Any number of models can each have their bolt pistol replaced with one of the following:1 hand flamer1 grav-pistol1 inferno pistol1 plasma pistol",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000002103",
+    "line": "2",
+    "description": "Any number of Company Veterans can each have their bolt pistol replaced with 1 Astartes shield.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000002103",
+    "line": "3",
+    "description": "Any number of Company Veterans can each have  their bolt pistol and boltgun replaced with 1 twin lightning claws.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000002103",
+    "line": "4",
+    "description": "The Company Ancient's bolt pistol can be replaced  with one of the following:1 boltgun1 combi-weapon",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000002103",
+    "line": "5",
+    "description": "Any number of Company Veterans can each have their boltgun replaced with one of the following:1 Astartes chainsword1 Astartes shield1 combi-weapon1 flamer1 heavy bolter1 heavy flamer1 grav-cannon1 grav-gun1 lascannon1 meltagun1 missile launcher1 multi-melta1 plasma cannon1 plasma gun1 storm bolter1 power fist1 power weapon1 thunder hammer",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000002775",
+    "line": "1",
+    "description": "This model's bolt rifle and close combat weapon can be replaced with 1 power weapon.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000004132",
+    "line": "1",
+    "description": "Any number of models can each have their death totem replaced with 1 stormfrag auto-launcher.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  }
+]

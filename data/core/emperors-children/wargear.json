@@ -1,0 +1,74 @@
+[
+  {
+    "id": "additional-inferno-combi-bolter",
+    "name": "additional inferno combi-bolter",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "inferno-combi-weapon",
+    "name": "inferno combi-weapon",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "additional-combi-bolter",
+    "name": "additional combi-bolter",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "inferno-combi-bolter",
+    "name": "inferno combi-bolter",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "twin-heavy-flamer",
+    "name": "twin heavy flamer",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "defiler-scourge",
+    "name": "Defiler scourge",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "twin-lascannon",
+    "name": "twin lascannon",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "twin-inferno-heavy-bolter",
+    "name": "twin inferno heavy bolter",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "prosperine-khopesh",
+    "name": "Prosperine khopesh",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  }
+]

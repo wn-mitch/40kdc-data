@@ -1,0 +1,30 @@
+[
+  {
+    "unit_id": "hearthkyn-warriors",
+    "datasheet": "Hearthkyn Warriors",
+    "line": "2",
+    "description": "Up to 2 Hearthkyn Warriors can each have their  Autoch-pattern bolter or ion blaster replaced with one of the following (duplicates are not allowed):1 HYLas auto rifle1 HYLas rotary cannon1 L7 missile launcher1 EtaCarn plasma beamer1 magna-rail rifle",
+    "reason": "name resolution failed: Generated ID \"l\" from name \"L\" does not match entity-id pattern"
+  },
+  {
+    "unit_id": "sagitaur",
+    "datasheet": "Sagitaur",
+    "line": "1",
+    "description": "This model's HYLas beam cannon can be replaced with one of the following:1 L7 missile launcher and 1 Sagitaur missile launcher1 MATR autocannon",
+    "reason": "name resolution failed: Generated ID \"l\" from name \"L\" does not match entity-id pattern"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000004143",
+    "line": "1",
+    "description": "The Steeljack Theyn's heavy volkanite disintegrator and plasma knife can be replaced with 1 Autoch-pattern bolter and 1 plasma sword.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000004144",
+    "line": "1",
+    "description": "Any number of models in this unit can each have their plasma sword replaced with 1 concussion gauntlet.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  }
+]

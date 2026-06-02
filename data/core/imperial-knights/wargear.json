@@ -1,0 +1,50 @@
+[
+  {
+    "id": "acastus-autocannons",
+    "name": "Acastus autocannons",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "lascannons",
+    "name": "lascannons",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "acastus-autocannon-and",
+    "name": "Acastus autocannon and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "shieldbreaker-missile-launchers",
+    "name": "shieldbreaker missile launchers",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "twin-siegebreaker-cannons",
+    "name": "twin siegebreaker cannons",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "siege-claw-and",
+    "name": "siege claw and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  }
+]

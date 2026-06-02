@@ -20,6 +20,7 @@ describe("schema-loader", () => {
     expect(ids).toContain("https://40kdc.dev/schemas/core/enhancement.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/core/stratagem.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/core/wargear-option.schema.json");
+    expect(ids).toContain("https://40kdc.dev/schemas/core/wargear.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/core/leader-attachment.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/core/unit-composition.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/core/roster.schema.json");

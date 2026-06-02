@@ -1,0 +1,66 @@
+[
+  {
+    "id": "acastus-autocannons",
+    "name": "Acastus autocannons",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "lascannons",
+    "name": "lascannons",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "acastus-autocannon-and",
+    "name": "Acastus autocannon and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "despoiler-gatling-cannon-and",
+    "name": "despoiler gatling cannon and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "despoiler-battle-cannon-and",
+    "name": "despoiler battle cannon and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "gheiststrike-missile-launchers",
+    "name": "gheiststrike missile launchers",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "twin-desecrator-cannons",
+    "name": "twin Desecrator cannons",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "siege-claw-and",
+    "name": "siege claw and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  }
+]

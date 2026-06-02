@@ -1,0 +1,363 @@
+[
+  {
+    "id": "hive-tyrant-swap-1",
+    "unit_id": "hive-tyrant",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "monstrous-bonesword",
+      "lash-whip"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-venom-cannon"
+      ],
+      [
+        "stranglethorn-cannon"
+      ],
+      [
+        "monstrous-scything-talons"
+      ]
+    ]
+  },
+  {
+    "id": "hive-tyrant-swap-2",
+    "unit_id": "hive-tyrant",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "monstrous-scything-talons"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-venom-cannon"
+      ],
+      [
+        "stranglethorn-cannon"
+      ]
+    ]
+  },
+  {
+    "id": "tervigon-swap-1",
+    "unit_id": "tervigon",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "massive-scything-talons"
+    ],
+    "replacement": [
+      "massive-crushing-claws"
+    ]
+  },
+  {
+    "id": "termagants-swap-1",
+    "unit_id": "termagants",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "fleshborer"
+    ],
+    "replacement": [
+      "termagant-devourer"
+    ]
+  },
+  {
+    "id": "termagants-swap-2",
+    "unit_id": "termagants",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "fleshborer"
+    ],
+    "replacement": [
+      "termagant-spinefists"
+    ]
+  },
+  {
+    "id": "termagants-swap-3",
+    "unit_id": "termagants",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 10
+    },
+    "replaces": [
+      "ranged-weapon"
+    ],
+    "replacement": [
+      "shardlauncher"
+    ]
+  },
+  {
+    "id": "termagants-swap-4",
+    "unit_id": "termagants",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 10
+    },
+    "replaces": [
+      "ranged-weapon"
+    ],
+    "replacement": [
+      "spike-rifle"
+    ]
+  },
+  {
+    "id": "termagants-swap-5",
+    "unit_id": "termagants",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 10
+    },
+    "replaces": [
+      "ranged-weapon"
+    ],
+    "replacement": [
+      "strangleweb"
+    ]
+  },
+  {
+    "id": "ripper-swarms-addon-1",
+    "unit_id": "ripper-swarms",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "spinemaws"
+    ]
+  },
+  {
+    "id": "tyrant-guard-swap-1",
+    "unit_id": "tyrant-guard",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "scything-talons",
+      "rending-claws"
+    ],
+    "replacement_choice": [
+      [
+        "bone-cleaver-lash-whip",
+        "rending-claws"
+      ],
+      [
+        "crushing-claws",
+        "rending-claws"
+      ]
+    ]
+  },
+  {
+    "id": "hive-guard-swap-1",
+    "unit_id": "hive-guard",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "shockcannon"
+    ],
+    "replacement": [
+      "impaler-cannon"
+    ]
+  },
+  {
+    "id": "sky-slasher-swarms-addon-1",
+    "unit_id": "sky-slasher-swarms",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replacement": [
+      "spinemaws"
+    ]
+  },
+  {
+    "id": "harpy-swap-1",
+    "unit_id": "harpy",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-stranglethorn-cannon"
+    ],
+    "replacement": [
+      "twin-heavy-venom-cannon"
+    ]
+  },
+  {
+    "id": "carnifexes-swap-1",
+    "unit_id": "carnifexes",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "carnifex-extra-scything-talons"
+    ],
+    "replacement_choice": [
+      [
+        "deathspitters-with-slimer-maggots"
+      ],
+      [
+        "devourers-with-brainleech-worms"
+      ],
+      [
+        "heavy-venom-cannon"
+      ],
+      [
+        "stranglethorn-cannon"
+      ],
+      [
+        "carnifex-crushing-claws"
+      ]
+    ]
+  },
+  {
+    "id": "carnifexes-swap-2",
+    "unit_id": "carnifexes",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "carnifex-scything-talons"
+    ],
+    "replacement_choice": [
+      [
+        "deathspitters-with-slimer-maggots"
+      ],
+      [
+        "devourers-with-brainleech-worms"
+      ],
+      [
+        "carnifex-crushing-claws"
+      ]
+    ]
+  },
+  {
+    "id": "carnifexes-addon-3",
+    "unit_id": "carnifexes",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replacement": [
+      "bio-plasma"
+    ]
+  },
+  {
+    "id": "carnifexes-addon-4",
+    "unit_id": "carnifexes",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replacement": [
+      "spine-banks"
+    ]
+  },
+  {
+    "id": "tyrannofex-swap-1",
+    "unit_id": "tyrannofex",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "fleshborer-hive"
+    ],
+    "replacement_choice": [
+      [
+        "acid-spray"
+      ],
+      [
+        "rupture-cannon"
+      ]
+    ]
+  },
+  {
+    "id": "winged-hive-tyrant-swap-1",
+    "unit_id": "winged-hive-tyrant",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "monstrous-bonesword",
+      "lash-whip"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-venom-cannon"
+      ],
+      [
+        "stranglethorn-cannon"
+      ],
+      [
+        "monstrous-scything-talons"
+      ]
+    ]
+  }
+]

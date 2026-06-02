@@ -1,0 +1,37 @@
+[
+  {
+    "unit_id": "chaos-rhino",
+    "datasheet": "Chaos Rhino",
+    "line": "2",
+    "description": "This model can be equipped with 1 havoc launcher or can replace 1 combi-bolter with 1 havoc launcher.",
+    "reason": "could not isolate replaced weapon / replacement"
+  },
+  {
+    "unit_id": "chaos-rhino",
+    "datasheet": "Chaos Rhino",
+    "line": "2",
+    "description": "This model can be equipped with 1 havoc launcher or can replace 1 inferno combi-bolter with 1 havoc launcher.",
+    "reason": "could not isolate replaced weapon / replacement"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000001033",
+    "line": "1",
+    "description": "This model can be equipped with 1 Prosperine khopesh.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000001474",
+    "line": "1",
+    "description": "Any number of models can each have their divining spear replaced with 1 autopistol and 1 chainsword.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000002755",
+    "line": "1",
+    "description": "This model can be equipped with 1 Prosperine khopesh.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  }
+]

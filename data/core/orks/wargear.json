@@ -1,0 +1,250 @@
+[
+  {
+    "id": "kustom-force-field",
+    "name": "kustom force field",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "grot-oiler",
+    "name": "grot oiler",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "wrench",
+    "name": "wrench",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "grot-orderly",
+    "name": "grot orderly",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "big-shoota-and",
+    "name": "big shoota and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "rokkit-launcha-and",
+    "name": "rokkit launcha and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "ammo-runt",
+    "name": "ammo runt",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "kombi-weapon-and",
+    "name": "kombi-weapon and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "kustom-shoota-and",
+    "name": "kustom shoota and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "killsaw-and",
+    "name": "killsaw and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "additional-twin-supa-shoota",
+    "name": "additional twin supa-shoota",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "blastajet-force-field",
+    "name": "blastajet force field",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "up-to-4-big-shootas",
+    "name": "up to 4 big shootas",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "tracks",
+    "name": "tracks",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "wheels",
+    "name": "wheels",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "any-of-the-following-1-ard-case1-grabbin-klaw1-wreckin-ball",
+    "name": "any of the following:1 'ard case1 grabbin' klaw1 wreckin' ball",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "big-shootas",
+    "name": "big shootas",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "dread-klaws",
+    "name": "dread klaws",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "rokkit-launchas",
+    "name": "rokkit launchas",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "up-to-3-big-shootas",
+    "name": "up to 3 big shootas",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "up-to-2-big-bomms",
+    "name": "up to 2 big bomms",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "deffguns",
+    "name": "deffguns",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "rattler-kannons",
+    "name": "rattler kannons",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "wing-missilessmall-bomms",
+    "name": "wing missilesSmall bomms",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "up-to-5-big-shootas",
+    "name": "up to 5 big shootas",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "zzap-guns",
+    "name": "zzap guns",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "twin-big-shootas",
+    "name": "twin big shootas",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "grot-assistant",
+    "name": "grot assistant",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "bomb-squig",
+    "name": "bomb squig",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "up-to-3-additional-big-shootas",
+    "name": "up to 3 additional big shootas",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "kopta-rockets",
+    "name": "kopta rockets",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  }
+]

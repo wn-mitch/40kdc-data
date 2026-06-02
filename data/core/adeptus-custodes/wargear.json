@@ -1,0 +1,154 @@
+[
+  {
+    "id": "praesidium-shield",
+    "name": "praesidium shield",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "vexilla-and",
+    "name": "vexilla and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "vexilla",
+    "name": "vexilla",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "misericordia-and",
+    "name": "misericordia and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "sentinel-blade-and",
+    "name": "sentinel blade and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "pyrithite-spear-and",
+    "name": "pyrithite spear and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "lastrum-storm-bolters",
+    "name": "lastrum storm bolters",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "infernus-incinerators",
+    "name": "infernus incinerators",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "twin-adrathic-destructors",
+    "name": "twin adrathic destructors",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "lastrum-storm-bolter-and",
+    "name": "lastrum storm bolter and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "infernus-incinerator-and",
+    "name": "infernus incinerator and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "iliastus-accelerator-culverins",
+    "name": "iliastus accelerator culverins",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "arachnus-storm-cannons",
+    "name": "arachnus storm cannons",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "telemon-caestus-and",
+    "name": "Telemon caestus and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "twin-plasma-projectors",
+    "name": "twin plasma projectors",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "iliastus-accelerator-culverin-and",
+    "name": "iliastus accelerator culverin and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "tarsus-buckler",
+    "name": "tarsus buckler",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "master-crafted-boltgun-and",
+    "name": "master-crafted boltgun and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "witchseeker-flamer-and",
+    "name": "Witchseeker flamer and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  }
+]

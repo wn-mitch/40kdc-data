@@ -1,0 +1,178 @@
+[
+  {
+    "id": "a-tachyon-arrow-it-can-be-equipped-with-1-resurrection-orb",
+    "name": "a tachyon arrow, it can be equipped with 1 resurrection orb",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "resurrection-orb",
+    "name": "resurrection orb",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "dispersion-shield",
+    "name": "dispersion shield",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "shieldvanes",
+    "name": "shieldvanes",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "nebuloscope",
+    "name": "nebuloscope",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "shadowloom",
+    "name": "shadowloom",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "particle-beamers",
+    "name": "particle beamers",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "fabricator-claw-array",
+    "name": "fabricator claw array",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "gloom-prism",
+    "name": "gloom prism",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "gauss-flux-arcs",
+    "name": "gauss flux arcs",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "death-rays",
+    "name": "death rays",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "singularity-generators",
+    "name": "singularity generators",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "synaptic-obliterators",
+    "name": "synaptic obliterators",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "transdimensional-projectors",
+    "name": "transdimensional projectors",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "plasmacyte",
+    "name": "Plasmacyte",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "nanoscarab-amulet",
+    "name": "nanoscarab amulet",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "gauss-exterminator-and",
+    "name": "gauss exterminator and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "gauss-exterminators",
+    "name": "gauss exterminators",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "twin-tesla-destructors",
+    "name": "twin tesla destructors",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "gauss-scalpel-or-tesla-caster",
+    "name": "gauss scalpel or tesla caster",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "nanoscarab-projector",
+    "name": "nanoscarab projector",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "accelerator-mandible",
+    "name": "accelerator mandible",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  }
+]

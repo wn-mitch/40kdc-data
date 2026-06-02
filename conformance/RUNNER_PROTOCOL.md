@@ -93,6 +93,8 @@ The `query` enum covers the read paths on `Dataset`:
 | `find_ability`           | `{"query":"<string>"}`               | ability id or null |
 | `abilities_of`           | `{"unitId":"<id>"}`                  | ordered list of ability ids |
 | `weapons_of`             | `{"unitId":"<id>"}`                  | ordered list of weapon ids |
+| `wargear_options_of`     | `{"unitId":"<id>"}`                  | ordered list of wargear-option ids |
+| `maximal_loadout`        | `{"unitId":"<id>","modelCount":"<n>"}` | sorted list of `"id:count"` strings |
 | `phases_of`              | `{"abilityId":"<id>"}`               | ordered list of phase enum values |
 | `faction_of`             | `{"unitId":"<id>"}`                  | faction id or null |
 | `abilities_of_faction`   | `{"factionId":"<id>"}`               | ordered list of ability ids |
@@ -119,7 +121,7 @@ Response value is a list of error objects: `[{"path":"/profiles/0/Sv","code":"RA
 - `ADDITIONAL_PROPERTY` — object has a property not allowed by `additionalProperties: false`.
 - `UNIQUE_VIOLATION` — array with `uniqueItems: true` has a duplicate.
 
-Adding a new code is a semantic change to the spec and bumps `SPEC_VERSION`. `target` is one of `unit`, `weapon`, `faction`, `ability` for the initial set; more schemas can be added as needed.
+Adding a new code is a semantic change to the spec and bumps `SPEC_VERSION`. `target` is one of `unit`, `weapon`, `faction`, `ability`, `wargear`, `wargear-option`; more schemas can be added as needed.
 
 ### `crunch`
 

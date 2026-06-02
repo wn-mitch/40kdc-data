@@ -1,0 +1,377 @@
+[
+  {
+    "id": "chaos-questoris-knight-magaera-swap-1",
+    "unit_id": "chaos-questoris-knight-magaera",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "reaper-chainsword"
+    ],
+    "replacement": [
+      "hekaton-siege-claw",
+      "twin-rad-cleanser"
+    ]
+  },
+  {
+    "id": "chaos-acastus-knight-porphyrion-swap-1",
+    "unit_id": "chaos-acastus-knight-porphyrion",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "acastus-autocannons"
+    ],
+    "replacement_choice": [
+      [
+        "lascannons"
+      ],
+      [
+        "acastus-autocannon-and"
+      ],
+      [
+        "lascannon"
+      ]
+    ]
+  },
+  {
+    "id": "chaos-acastus-knight-porphyrion-swap-2",
+    "unit_id": "chaos-acastus-knight-porphyrion",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "acastus-ironstorm-missile-pod"
+    ],
+    "replacement": [
+      "helios-defence-missiles"
+    ]
+  },
+  {
+    "id": "chaos-questoris-knight-styrix-swap-1",
+    "unit_id": "chaos-questoris-knight-styrix",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "reaper-chainsword"
+    ],
+    "replacement": [
+      "hekaton-siege-claw",
+      "twin-rad-cleanser"
+    ]
+  },
+  {
+    "id": "knight-despoiler-swap-1",
+    "unit_id": "knight-despoiler",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "daemonbreath-meltagun"
+    ],
+    "replacement": [
+      "diabolus-heavy-stubber"
+    ]
+  },
+  {
+    "id": "knight-despoiler-swap-2",
+    "unit_id": "knight-despoiler",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "reaper-chainsword"
+    ],
+    "replacement_choice": [
+      [
+        "daemonbreath-thermal-cannon"
+      ],
+      [
+        "despoiler-gatling-cannon-and"
+      ],
+      [
+        "heavy-darkflamer"
+      ],
+      [
+        "despoiler-battle-cannon-and"
+      ],
+      [
+        "diabolus-heavy-stubber"
+      ]
+    ]
+  },
+  {
+    "id": "knight-despoiler-swap-3",
+    "unit_id": "knight-despoiler",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "warpstrike-claw"
+    ],
+    "replacement_choice": [
+      [
+        "daemonbreath-thermal-cannon"
+      ],
+      [
+        "despoiler-gatling-cannon-and"
+      ],
+      [
+        "heavy-darkflamer"
+      ],
+      [
+        "despoiler-battle-cannon-and"
+      ],
+      [
+        "diabolus-heavy-stubber"
+      ]
+    ]
+  },
+  {
+    "id": "knight-despoiler-addon-4",
+    "unit_id": "knight-despoiler",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "havoc-missile-pod"
+      ],
+      [
+        "ruinspear-rocket-pod"
+      ],
+      [
+        "hellstorm-autocannons"
+      ]
+    ]
+  },
+  {
+    "id": "knight-tyrant-swap-1",
+    "unit_id": "knight-tyrant",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "gheiststrike-missile-launchers",
+      "twin-desecrator-cannon"
+    ],
+    "replacement": [
+      "gheiststrike-missile-launcher",
+      "twin-desecrator-cannons"
+    ]
+  },
+  {
+    "id": "knight-tyrant-swap-2",
+    "unit_id": "knight-tyrant",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "brimstone-volcano-lance",
+      "ectoplasma-decimator"
+    ],
+    "replacement": [
+      "darkflame-cannon",
+      "warpshock-harpoon"
+    ]
+  },
+  {
+    "id": "knight-desecrator-swap-1",
+    "unit_id": "knight-desecrator",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "reaper-chainsword"
+    ],
+    "replacement": [
+      "warpstrike-claw"
+    ]
+  },
+  {
+    "id": "war-dog-moirax-swap-1",
+    "unit_id": "war-dog-moirax",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "graviton-pulsar"
+    ],
+    "replacement_choice": [
+      [
+        "siege-claw-and"
+      ],
+      [
+        "rad-cleanser"
+      ],
+      [
+        "lightning-lock"
+      ],
+      [
+        "conversion-beam-cannon"
+      ],
+      [
+        "volkite-veuglaire"
+      ]
+    ]
+  },
+  {
+    "id": "war-dog-moirax-swap-2",
+    "unit_id": "war-dog-moirax",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "volkite-veuglaire"
+    ],
+    "replacement_choice": [
+      [
+        "siege-claw-and"
+      ],
+      [
+        "rad-cleanser"
+      ],
+      [
+        "graviton-pulsar"
+      ],
+      [
+        "lightning-lock"
+      ],
+      [
+        "conversion-beam-cannon"
+      ]
+    ]
+  },
+  {
+    "id": "war-dog-executioner-swap-1",
+    "unit_id": "war-dog-executioner",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "diabolus-heavy-stubber"
+    ],
+    "replacement": [
+      "daemonbreath-meltagun"
+    ]
+  },
+  {
+    "id": "war-dog-stalker-swap-1",
+    "unit_id": "war-dog-stalker",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "avenger-chaincannon"
+    ],
+    "replacement": [
+      "daemonbreath-spear"
+    ]
+  },
+  {
+    "id": "war-dog-stalker-swap-2",
+    "unit_id": "war-dog-stalker",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "diabolus-heavy-stubber"
+    ],
+    "replacement": [
+      "havoc-multi-launcher"
+    ]
+  },
+  {
+    "id": "war-dog-stalker-swap-3",
+    "unit_id": "war-dog-stalker",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "slaughterclaw"
+    ],
+    "replacement": [
+      "reaper-chaintalon"
+    ]
+  },
+  {
+    "id": "war-dog-karnivore-swap-1",
+    "unit_id": "war-dog-karnivore",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "diabolus-heavy-stubber"
+    ],
+    "replacement": [
+      "havoc-multi-launcher"
+    ]
+  },
+  {
+    "id": "war-dog-brigand-swap-1",
+    "unit_id": "war-dog-brigand",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "diabolus-heavy-stubber"
+    ],
+    "replacement": [
+      "havoc-multi-launcher"
+    ]
+  },
+  {
+    "id": "war-dog-huntsman-swap-1",
+    "unit_id": "war-dog-huntsman",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "diabolus-heavy-stubber"
+    ],
+    "replacement": [
+      "daemonbreath-meltagun"
+    ]
+  }
+]

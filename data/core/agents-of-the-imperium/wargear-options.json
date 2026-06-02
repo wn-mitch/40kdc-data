@@ -1,0 +1,1275 @@
+[
+  {
+    "id": "corvus-blackstar-swap-1",
+    "unit_id": "corvus-blackstar",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-assault-cannon"
+    ],
+    "replacement": [
+      "twin-lascannon"
+    ]
+  },
+  {
+    "id": "corvus-blackstar-swap-2",
+    "unit_id": "corvus-blackstar",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "blackstar-rocket-launchers"
+    ],
+    "replacement": [
+      "stormstrike-missile-launchers"
+    ]
+  },
+  {
+    "id": "corvus-blackstar-addon-3",
+    "unit_id": "corvus-blackstar",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hurricane-bolter"
+    ]
+  },
+  {
+    "id": "corvus-blackstar-addon-4",
+    "unit_id": "corvus-blackstar",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "auspex-array"
+      ],
+      [
+        "infernum-halo-launcher"
+      ]
+    ]
+  },
+  {
+    "id": "inquisitor-swap-1",
+    "unit_id": "inquisitor",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement": [
+      "combi-weapon"
+    ]
+  },
+  {
+    "id": "inquisitor-swap-2",
+    "unit_id": "inquisitor",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "blessed-wardings"
+    ],
+    "replacement": [
+      "psychic-gifts",
+      "psychic-shock-wave"
+    ]
+  },
+  {
+    "id": "inquisitor-swap-3",
+    "unit_id": "inquisitor",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "if-this-model-is-equipped-with-1-psychic-gifts-its-inquisitorial-melee-weapon"
+    ],
+    "replacement": [
+      "force-weapon"
+    ]
+  },
+  {
+    "id": "sisters-of-battle-squad-swap-1",
+    "unit_id": "sisters-of-battle-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sister Superior",
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "bolt-pistol"
+      ],
+      [
+        "combi-weapon"
+      ],
+      [
+        "condemnor-boltgun"
+      ],
+      [
+        "inferno-pistol"
+      ],
+      [
+        "ministorum-hand-flamer"
+      ],
+      [
+        "plasma-pistol"
+      ]
+    ]
+  },
+  {
+    "id": "sisters-of-battle-squad-addon-2",
+    "unit_id": "sisters-of-battle-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sister Superior",
+      "max_count": 1
+    },
+    "replacement_choice": [
+      [
+        "chainsword"
+      ],
+      [
+        "power-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "sisters-of-battle-squad-swap-3",
+    "unit_id": "sisters-of-battle-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Battle Sister",
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "artificer-crafted-storm-bolter"
+      ],
+      [
+        "meltagun"
+      ],
+      [
+        "ministorum-flamer"
+      ]
+    ]
+  },
+  {
+    "id": "sisters-of-battle-squad-swap-4",
+    "unit_id": "sisters-of-battle-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Battle Sister",
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "artificer-crafted-storm-bolter"
+      ],
+      [
+        "heavy-bolter"
+      ],
+      [
+        "meltagun"
+      ],
+      [
+        "ministorum-flamer"
+      ],
+      [
+        "ministorum-heavy-flamer"
+      ],
+      [
+        "multi-melta"
+      ]
+    ]
+  },
+  {
+    "id": "ministorum-priest-swap-1",
+    "unit_id": "ministorum-priest",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "zealots-vindictor"
+    ],
+    "replacement": [
+      "holy-pistol",
+      "power-weapon"
+    ]
+  },
+  {
+    "id": "ministorum-priest-swap-1",
+    "unit_id": "ministorum-priest",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "zealots-vindictor"
+    ],
+    "replacement": [
+      "holy-pistol",
+      "power-weapon"
+    ]
+  },
+  {
+    "id": "imperial-navy-breachers-swap-1",
+    "unit_id": "imperial-navy-breachers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Navis Sergeant-at-Arms' Navis shotgun",
+      "max_count": 1
+    },
+    "replaces": [
+      "navis-sergeant-at-arms-navis-shotgun"
+    ],
+    "replacement_choice": [
+      [
+        "autopistol-and"
+      ],
+      [
+        "chainsword"
+      ],
+      [
+        "bolt-pistol-and"
+      ],
+      [
+        "power-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "imperial-navy-breachers-swap-2",
+    "unit_id": "imperial-navy-breachers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Navis Armsman",
+      "max_count": 1
+    },
+    "replaces": [
+      "navis-las-volley"
+    ],
+    "replacement_choice": [
+      [
+        "meltagun"
+      ],
+      [
+        "plasma-gun"
+      ]
+    ]
+  },
+  {
+    "id": "imperial-navy-breachers-swap-3",
+    "unit_id": "imperial-navy-breachers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Navis Armsman",
+      "max_count": 1
+    },
+    "replaces": [
+      "navis-shotgun"
+    ],
+    "replacement": [
+      "autopistol",
+      "power-weapon"
+    ]
+  },
+  {
+    "id": "imperial-navy-breachers-swap-4",
+    "unit_id": "imperial-navy-breachers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Navis Armsman",
+      "max_count": 1
+    },
+    "replaces": [
+      "navis-shotgun"
+    ],
+    "replacement": [
+      "autopistol",
+      "chainfist"
+    ]
+  },
+  {
+    "id": "imperial-navy-breachers-addon-5",
+    "unit_id": "imperial-navy-breachers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Navis Armsman",
+      "max_count": 1
+    },
+    "replacement": [
+      "demolition-charge"
+    ]
+  },
+  {
+    "id": "vigilant-squad-swap-1",
+    "unit_id": "vigilant-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Vigilants",
+      "max_count": 2
+    },
+    "replaces": [
+      "arbites-combat-shotgun"
+    ],
+    "replacement_choice": [
+      [
+        "duplicates-are-not-allowed"
+      ],
+      [
+        "executioner-shotgun"
+      ],
+      [
+        "arbites-grenade-launcher"
+      ],
+      [
+        "heavy-stubber"
+      ],
+      [
+        "webber"
+      ]
+    ]
+  },
+  {
+    "id": "vigilant-squad-addon-2",
+    "unit_id": "vigilant-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Proctor-Vigilant",
+      "max_count": 1
+    },
+    "replacement": [
+      "nuncio-aquila"
+    ]
+  },
+  {
+    "id": "subductor-squad-addon-1",
+    "unit_id": "subductor-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Proctor-Subductor",
+      "max_count": 1
+    },
+    "replacement": [
+      "nuncio-aquila"
+    ]
+  },
+  {
+    "id": "exaction-squad-swap-1",
+    "unit_id": "exaction-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Exaction Vigilants",
+      "max_count": 2
+    },
+    "replaces": [
+      "arbites-combat-shotgun"
+    ],
+    "replacement_choice": [
+      [
+        "duplicates-are-not-allowed"
+      ],
+      [
+        "executioner-shotgun"
+      ],
+      [
+        "arbites-grenade-launcher"
+      ],
+      [
+        "heavy-stubber"
+      ],
+      [
+        "webber"
+      ]
+    ]
+  },
+  {
+    "id": "exaction-squad-addon-2",
+    "unit_id": "exaction-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Exaction Vigilant that is equipped with an Arbites combat shotgun",
+      "max_count": 1
+    },
+    "replacement": [
+      "an-arbites-combat-shotgun-can-be-equipped-with-1-excruciator-maul"
+    ]
+  },
+  {
+    "id": "exaction-squad-addon-3",
+    "unit_id": "exaction-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "other Exaction Vigilant that is equipped with an Arbites combat shotgun",
+      "max_count": 1
+    },
+    "replacement": [
+      "an-arbites-combat-shotgun-can-be-equipped-with-1-arbites-medi-kit"
+    ]
+  },
+  {
+    "id": "exaction-squad-addon-4",
+    "unit_id": "exaction-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "other Exaction Vigilant that is equipped with an Arbites combat shotgun",
+      "max_count": 1
+    },
+    "replacement": [
+      "an-arbites-combat-shotgun-can-be-equipped-with-1-soulguilt-scanner"
+    ]
+  },
+  {
+    "id": "exaction-squad-addon-5",
+    "unit_id": "exaction-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Proctor-Exactant",
+      "max_count": 1
+    },
+    "replacement": [
+      "nuncio-aquila"
+    ]
+  },
+  {
+    "id": "inquisitor-in-terminator-armour-swap-1",
+    "unit_id": "inquisitor-in-terminator-armour",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "storm-bolter"
+    ],
+    "replacement": [
+      "combi-weapon"
+    ]
+  },
+  {
+    "id": "inquisitor-in-terminator-armour-swap-2",
+    "unit_id": "inquisitor-in-terminator-armour",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "blessed-wardings"
+    ],
+    "replacement": [
+      "psychic-gifts",
+      "psychic-shock-wave"
+    ]
+  },
+  {
+    "id": "inquisitor-in-terminator-armour-swap-3",
+    "unit_id": "inquisitor-in-terminator-armour",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "if-this-model-is-equipped-with-1-psychic-gifts-its-inquisitorial-melee-weapon"
+    ],
+    "replacement": [
+      "force-weapon"
+    ]
+  },
+  {
+    "id": "inquisitor-in-terminator-armour-swap-4",
+    "unit_id": "inquisitor-in-terminator-armour",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "if-this-model-is-equipped-with-1-psychic-gifts-its-storm-bolter"
+    ],
+    "replacement": [
+      "psycannon"
+    ]
+  },
+  {
+    "id": "damned-legionnaires-swap-1",
+    "unit_id": "damned-legionnaires",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Legionnaire Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "bolt-pistol-and"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "plasma-pistol-and"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "bolt-pistol-and"
+      ],
+      [
+        "astartes-chainsword"
+      ],
+      [
+        "plasma-pistol-and"
+      ],
+      [
+        "astartes-chainsword"
+      ]
+    ]
+  },
+  {
+    "id": "damned-legionnaires-swap-2",
+    "unit_id": "damned-legionnaires",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Legionnaire",
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-flamer"
+      ],
+      [
+        "multi-melta"
+      ]
+    ]
+  },
+  {
+    "id": "damned-legionnaires-swap-3",
+    "unit_id": "damned-legionnaires",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Legionnaire",
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement_choice": [
+      [
+        "flamer"
+      ],
+      [
+        "meltagun"
+      ],
+      [
+        "plasma-gun"
+      ]
+    ]
+  },
+  {
+    "id": "aquila-kill-team-swap-1",
+    "unit_id": "aquila-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Kill Team Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "deathwatch-bolt-rifle"
+    ],
+    "replacement_choice": [
+      [
+        "astartes-chainsword"
+      ],
+      [
+        "hand-flamer"
+      ],
+      [
+        "plasma-pistol"
+      ],
+      [
+        "power-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "aquila-kill-team-swap-2",
+    "unit_id": "aquila-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Kill Team Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "close-combat-weapon"
+    ],
+    "replacement_choice": [
+      [
+        "astartes-chainsword"
+      ],
+      [
+        "power-fist"
+      ],
+      [
+        "power-weapon"
+      ],
+      [
+        "thunder-hammer"
+      ]
+    ]
+  },
+  {
+    "id": "aquila-kill-team-addon-3",
+    "unit_id": "aquila-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "model equipped with a Deathwatch bolt rifle",
+      "per_n_models": 5
+    },
+    "replacement": [
+      "a-deathwatch-bolt-rifle-can-be-equipped-with-1-astartes-grenade-launcher"
+    ]
+  },
+  {
+    "id": "aquila-kill-team-swap-4",
+    "unit_id": "aquila-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "model equipped with a plasma incinerator",
+      "max_count": 1
+    },
+    "replaces": [
+      "bolt-pistol"
+    ],
+    "replacement": [
+      "plasma-pistol"
+    ]
+  },
+  {
+    "id": "aquila-kill-team-swap-5",
+    "unit_id": "aquila-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replaces": [
+      "superfrag-rocket-launcher"
+    ],
+    "replacement": [
+      "vengor-launcher"
+    ]
+  },
+  {
+    "id": "aquila-kill-team-swap-6",
+    "unit_id": "aquila-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "superfrag-rocket-launcher"
+    ],
+    "replacement": [
+      "superkrak-rocket-launcher"
+    ]
+  },
+  {
+    "id": "deathwatch-kill-team-swap-1",
+    "unit_id": "deathwatch-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5,
+      "max_count": 2
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement_choice": [
+      [
+        "boltgun"
+      ],
+      [
+        "astartes-shield-and"
+      ],
+      [
+        "close-combat-weapon"
+      ],
+      [
+        "power-weapon-and"
+      ],
+      [
+        "astartes-shield"
+      ]
+    ]
+  },
+  {
+    "id": "deathwatch-kill-team-swap-1",
+    "unit_id": "deathwatch-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5,
+      "max_count": 2
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement_choice": [
+      [
+        "boltgun-and"
+      ],
+      [
+        "astartes-shield"
+      ],
+      [
+        "power-weapon-and"
+      ],
+      [
+        "astartes-shield"
+      ]
+    ]
+  },
+  {
+    "id": "deathwatch-kill-team-swap-2",
+    "unit_id": "deathwatch-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5,
+      "max_count": 2
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement": [
+      "deathwatch-thunder-hammer"
+    ]
+  },
+  {
+    "id": "deathwatch-kill-team-swap-3",
+    "unit_id": "deathwatch-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement": [
+      "stalker-pattern-boltgun",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "deathwatch-kill-team-swap-3",
+    "unit_id": "deathwatch-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement": [
+      "stalker-pattern-boltgun",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "deathwatch-kill-team-swap-4",
+    "unit_id": "deathwatch-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5,
+      "max_count": 2
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement": [
+      "deathwatch-shotgun",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "deathwatch-kill-team-swap-5",
+    "unit_id": "deathwatch-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement": [
+      "frag-cannon",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "deathwatch-kill-team-swap-6",
+    "unit_id": "deathwatch-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement": [
+      "infernus-heavy-bolter",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "deathwatch-kill-team-swap-7",
+    "unit_id": "deathwatch-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement": [
+      "black-shield-blades"
+    ]
+  },
+  {
+    "id": "deathwatch-kill-team-swap-7",
+    "unit_id": "deathwatch-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement": [
+      "black-shield-blades"
+    ]
+  },
+  {
+    "id": "deathwatch-kill-team-swap-8",
+    "unit_id": "deathwatch-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Watch Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "power-weapon"
+    ],
+    "replacement": [
+      "xenophase-blade"
+    ]
+  },
+  {
+    "id": "deathwatch-kill-team-swap-9",
+    "unit_id": "deathwatch-kill-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Watch Sergeant",
+      "max_count": 1
+    },
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement": [
+      "combi-weapon"
+    ]
+  },
+  {
+    "id": "grey-knights-terminator-squad-swap-1",
+    "unit_id": "grey-knights-terminator-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Grey Knights Terminator",
+      "per_n_models": 5
+    },
+    "replaces": [
+      "storm-bolter"
+    ],
+    "replacement_choice": [
+      [
+        "incinerator"
+      ],
+      [
+        "psilencer"
+      ],
+      [
+        "psycannon"
+      ]
+    ]
+  },
+  {
+    "id": "grey-knights-terminator-squad-addon-2",
+    "unit_id": "grey-knights-terminator-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Grey Knights Terminator equipped with a storm bolter",
+      "max_count": 1
+    },
+    "replacement": [
+      "a-storm-bolter-can-be-equipped-with-1-ancients-banner"
+    ]
+  },
+  {
+    "id": "grey-knights-terminator-squad-swap-3",
+    "unit_id": "grey-knights-terminator-squad",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Grey Knights Terminator",
+      "max_count": 1
+    },
+    "replaces": [
+      "storm-bolter"
+    ],
+    "replacement": [
+      "narthecium"
+    ]
+  },
+  {
+    "id": "inquisitorial-chimera-swap-1",
+    "unit_id": "inquisitorial-chimera",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heavy-bolter"
+    ],
+    "replacement": [
+      "heavy-flamer"
+    ]
+  },
+  {
+    "id": "inquisitorial-chimera-swap-2",
+    "unit_id": "inquisitorial-chimera",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "multi-laser"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-bolter"
+      ],
+      [
+        "heavy-flamer"
+      ]
+    ]
+  },
+  {
+    "id": "inquisitorial-chimera-addon-3",
+    "unit_id": "inquisitorial-chimera",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "heavy-stubber"
+      ],
+      [
+        "storm-bolter"
+      ]
+    ]
+  },
+  {
+    "id": "inquisitorial-chimera-addon-4",
+    "unit_id": "inquisitorial-chimera",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "imperial-rhino-addon-1",
+    "unit_id": "imperial-rhino",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hunter-killer-missile"
+    ]
+  },
+  {
+    "id": "sanctifiers-swap-1",
+    "unit_id": "sanctifiers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Missionary model",
+      "max_count": 1
+    },
+    "replaces": [
+      "plasma-gun"
+    ],
+    "replacement": [
+      "meltagun"
+    ]
+  },
+  {
+    "id": "sanctifiers-swap-3",
+    "unit_id": "sanctifiers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sanctifier model",
+      "max_count": 1
+    },
+    "replaces": [
+      "sanctifier-melee-weapon"
+    ],
+    "replacement": [
+      "ministorum-hand-flamer",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "sanctifiers-swap-4",
+    "unit_id": "sanctifiers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Sanctifier model",
+      "max_count": 1
+    },
+    "replaces": [
+      "sanctifier-melee-weapon"
+    ],
+    "replacement": [
+      "close-combat-weapon",
+      "simulacrum-imperialis"
+    ]
+  }
+]

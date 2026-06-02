@@ -1,0 +1,84 @@
+[
+  {
+    "id": "a-hybrid-firearm-can-be-equipped-with-1-cult-icon",
+    "name": "a Hybrid firearm can be equipped with 1 cult icon",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "category": "icon"
+  },
+  {
+    "id": "heavy-stubbermining-laserseismic-cannon",
+    "name": "Heavy stubberMining laserSeismic cannon",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "flamergrenade-launcherwebber",
+    "name": "FlamerGrenade launcherWebber",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "of-the-following-1-anointed-pistol",
+    "name": "of the following:1 anointed pistol",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "chainsword1-anointed-pistol",
+    "name": "chainsword1 anointed pistol",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "cult-icon",
+    "name": "cult icon",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "category": "icon"
+  },
+  {
+    "id": "flare-launcher",
+    "name": "flare launcher",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "spotter",
+    "name": "spotter",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "survey-augur",
+    "name": "survey augur",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "for-every-4-atalan-jackals-in-this-unit-up-to-2-atalan-jackals-close-combat-weapons",
+    "name": "For every 4 Atalan Jackals in this unit, up to 2 Atalan Jackals' close combat weapons",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  }
+]

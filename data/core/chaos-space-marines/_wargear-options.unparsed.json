@@ -1,0 +1,16 @@
+[
+  {
+    "unit_id": "chaos-rhino",
+    "datasheet": "Chaos Rhino",
+    "line": "2",
+    "description": "This model can be equipped with 1 havoc launcher or can replace 1 combi-bolter with 1 havoc launcher.",
+    "reason": "could not isolate replaced weapon / replacement"
+  },
+  {
+    "unit_id": "chaos-rhino",
+    "datasheet": "Chaos Rhino",
+    "line": "2",
+    "description": "This model can be equipped with 1 havoc launcher or can replace 1 inferno combi-bolter with 1 havoc launcher.",
+    "reason": "could not isolate replaced weapon / replacement"
+  }
+]

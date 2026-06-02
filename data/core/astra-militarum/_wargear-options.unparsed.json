@@ -1,0 +1,37 @@
+[
+  {
+    "unit_id": "sabre-weapons-battery",
+    "datasheet": "Sabre Weapons Battery",
+    "line": "1",
+    "description": "Any number of models' twin heavy bolters can each be replaced with one of the following:1 defence searchlight1 twin autocannon1 twin heavy stubber1 twin lascannon",
+    "reason": "could not isolate replaced weapon / replacement"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000686",
+    "line": "1",
+    "description": "Any number of models can each have their heavy bolter replaced with one of the following:1 autocannon1 lascannon1 missile launcher1 mortar",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000003894",
+    "line": "1",
+    "description": "Any number of models can each have their heavy bolter replaced with one of the following:1 autocannon1 lascannon1 missile launcher1 mortar",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000003967",
+    "line": "1",
+    "description": "Any number of models can each have their heavy bolter replaced with one of the following:1 autocannon1 lascannon1 missile launcher1 mortar",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000003968",
+    "line": "1",
+    "description": "Any number of models can each have their heavy bolter replaced with one of the following:1 autocannon1 lascannon1 missile launcher1 mortar",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  }
+]

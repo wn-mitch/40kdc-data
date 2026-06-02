@@ -1,0 +1,37 @@
+[
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000482",
+    "line": "1",
+    "description": "None",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000002692",
+    "line": "1",
+    "description": "Any number of models can each have their devourer replaced with one of the following:1 deathspitter1 spinefists",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000002692",
+    "line": "2",
+    "description": "For every 3 models in this unit, 1 model's devourer can be replaced with 1 barbed strangler.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000002692",
+    "line": "3",
+    "description": "For every 3 models in this unit, 1 model's devourer can be replaced with 1 venom cannon.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000003886",
+    "line": "1",
+    "description": "None",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  }
+]

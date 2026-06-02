@@ -1,0 +1,300 @@
+[
+  {
+    "id": "heavy-bolters",
+    "name": "heavy bolters",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "heavy-flamers",
+    "name": "heavy flamers",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "multi-meltas",
+    "name": "multi-meltas",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "plasma-cannons",
+    "name": "plasma cannons",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "twin-heavy-flamers",
+    "name": "twin heavy flamers",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "twin-heavy-bolters",
+    "name": "twin heavy bolters",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "lascannons-and",
+    "name": "lascannons and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "master-vox",
+    "name": "master vox",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "command-rod",
+    "name": "command rod",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "demolition-gear",
+    "name": "demolition gear",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "one-ratling-battlemutt",
+    "name": "one Ratling Battlemutt",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "multiple-rocket-pods",
+    "name": "multiple rocket pods",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "multi-lasers",
+    "name": "multi-lasers",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "lascannons",
+    "name": "lascannons",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "autocannons",
+    "name": "autocannons",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "gorgon-mortars",
+    "name": "Gorgon mortars",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "heavy-stubbers",
+    "name": "heavy stubbers",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "vendetta-twin-lascannons",
+    "name": "Vendetta twin lascannons",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "brute-shield",
+    "name": "brute shield",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "slabshield",
+    "name": "slabshield",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "boltgun-and",
+    "name": "boltgun and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "regimental-standard",
+    "name": "regimental standard",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "category": "standard"
+  },
+  {
+    "id": "flamer-and",
+    "name": "flamer and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "grenade-launcher-and",
+    "name": "grenade launcher and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "meltagun-and",
+    "name": "meltagun and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "plasma-gun-and",
+    "name": "plasma gun and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "melta-mine",
+    "name": "melta mine",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "meltaguns",
+    "name": "meltaguns",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "additional-heavy-stubbers",
+    "name": "additional heavy stubbers",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "vox-caster",
+    "name": "vox-caster",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "hota-shot-lascarbine",
+    "name": "hotâshot lascarbine",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "of-the-following-1-melta-carbine1-plasma-carbine",
+    "name": "of the following:1 melta carbine1 plasma carbine",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "hot-shot-laspistols",
+    "name": "hot-shot laspistols",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "a-lasgun-can-be-equipped-with-1-master-vox",
+    "name": "a lasgun can be equipped with 1 master vox",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "a-lasgun-can-be-equipped-1-medi-pack",
+    "name": "a lasgun can be equipped 1 medi-pack",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "a-lasgun-can-be-equipped-with-1-regimental-standard",
+    "name": "a lasgun can be equipped with 1 regimental standard",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "category": "standard"
+  },
+  {
+    "id": "autopistol-1-remote-mine",
+    "name": "autopistol, 1 remote mine",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  }
+]

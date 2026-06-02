@@ -1,0 +1,138 @@
+[
+  {
+    "id": "autoch-pattem-combi-bolter",
+    "name": "Autoch-pattem combi-bolter",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "rampart-crest",
+    "name": "rampart crest",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "teleport-crest",
+    "name": "teleport crest",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "weavefield-crest",
+    "name": "weavefield crest",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "autoch-pattern-bolter-or-ion-blaster",
+    "name": "Autoch-pattern bolter or ion blaster",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "concussion-gauntlet-or-plasma-blade-gauntlet",
+    "name": "concussion gauntlet or plasma blade gauntlet",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "heavy-plasma-axe-or-concussion-maul",
+    "name": "heavy plasma axe or concussion maul",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "a-twin-concussion-gauntlet-or-a-mole-grenade-launcher-can-be-equipped-with-1-mole-grenade-launcher",
+    "name": "a twin concussion gauntlet or a mole grenade launcher can be equipped with 1 mole grenade launcher",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "either-a-hylas-rotary-cannon-or-an-ion-beamer-can-be-equipped-with-1-multiwave-comms-array",
+    "name": "either a HYLas rotary cannon or an ion beamer can be equipped with 1 multiwave comms array",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "either-a-hylas-rotary-cannon-or-an-ion-beamer-can-be-equipped-with-1-panspectral-scanner",
+    "name": "either a HYLas rotary cannon or an ion beamer can be equipped with 1 panspectral scanner",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "either-a-hylas-rotary-cannon-or-an-ion-beamer-can-be-equipped-with-1-rollbar-searchlight",
+    "name": "either a HYLas rotary cannon or an ion beamer can be equipped with 1 rollbar searchlight",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "twin-bolt-cannons",
+    "name": "twin bolt cannons",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "twin-bolt-cannon-and",
+    "name": "twin bolt cannon and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "twin-ion-beamers",
+    "name": "twin ion beamers",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "panspectral-scanner",
+    "name": "panspectral scanner",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "plasma-knife-or-its-bolt-shotgun",
+    "name": "plasma knife or its bolt shotgun",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "smoke-launcher",
+    "name": "smoke launcher",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  }
+]

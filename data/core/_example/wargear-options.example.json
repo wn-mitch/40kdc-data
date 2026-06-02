@@ -23,5 +23,31 @@
     "is_free": false,
     "additional_cost": 5,
     "game_version": { "edition": "10th", "dataslate": "2025-q3" }
+  },
+  {
+    "id": "sentinel-icon-addon",
+    "unit_id": "ironclad-sentinels",
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replacement": ["icon-of-the-example"],
+    "is_free": true,
+    "game_version": { "edition": "10th", "dataslate": "2025-q3" }
+  },
+  {
+    "id": "sentinel-pintle-choice",
+    "unit_id": "ironclad-sentinels",
+    "model_constraint": {
+      "per_n_models": 5,
+      "max_count": 1
+    },
+    "replaces": ["bolt-carbine"],
+    "replacement_choice": [
+      ["stellar-lance"],
+      ["power-halberd", "combat-blade"]
+    ],
+    "is_free": false,
+    "additional_cost": 10,
+    "game_version": { "edition": "10th", "dataslate": "2025-q3" }
   }
 ]

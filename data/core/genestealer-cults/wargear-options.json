@@ -1,0 +1,253 @@
+[
+  {
+    "id": "neophyte-hybrids-addon-1",
+    "unit_id": "neophyte-hybrids",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Neophyte Hybrid equipped with a Hybrid firearm",
+      "max_count": 1
+    },
+    "replacement": [
+      "a-hybrid-firearm-can-be-equipped-with-1-cult-icon"
+    ]
+  },
+  {
+    "id": "neophyte-hybrids-swap-2",
+    "unit_id": "neophyte-hybrids",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Neophyte Hybrids",
+      "per_n_models": 10,
+      "max_count": 2
+    },
+    "replaces": [
+      "hybrid-firearm"
+    ],
+    "replacement": [
+      "heavy-stubbermining-laserseismic-cannon"
+    ]
+  },
+  {
+    "id": "neophyte-hybrids-swap-3",
+    "unit_id": "neophyte-hybrids",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Neophyte Hybrids",
+      "per_n_models": 10,
+      "max_count": 2
+    },
+    "replaces": [
+      "hybrid-firearm"
+    ],
+    "replacement": [
+      "flamergrenade-launcherwebber"
+    ]
+  },
+  {
+    "id": "neophyte-hybrids-swap-4",
+    "unit_id": "neophyte-hybrids",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Neophyte Leader",
+      "max_count": 1
+    },
+    "replaces": [
+      "hybrid-firearm",
+      "close-combat-weapon"
+    ],
+    "replacement": [
+      "of-the-following-1-anointed-pistol",
+      "chainsword1-anointed-pistol",
+      "power-weapon"
+    ]
+  },
+  {
+    "id": "hybrid-metamorphs-swap-1",
+    "unit_id": "hybrid-metamorphs",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "autopistol"
+    ],
+    "replacement": [
+      "hand-flamer"
+    ]
+  },
+  {
+    "id": "hybrid-metamorphs-swap-2",
+    "unit_id": "hybrid-metamorphs",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Hybrid Metamorph",
+      "max_count": 1
+    },
+    "replaces": [
+      "autopistol"
+    ],
+    "replacement": [
+      "cult-icon"
+    ]
+  },
+  {
+    "id": "goliath-rockgrinder-swap-1",
+    "unit_id": "goliath-rockgrinder",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heavy-mining-laser"
+    ],
+    "replacement_choice": [
+      [
+        "clearance-incinerator"
+      ],
+      [
+        "heavy-seismic-cannon"
+      ]
+    ]
+  },
+  {
+    "id": "sanctus-swap-1",
+    "unit_id": "sanctus",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "sanctus-bio-dagger"
+    ],
+    "replacement": [
+      "cult-sniper-rifle",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "achilles-ridgerunners-swap-1",
+    "unit_id": "achilles-ridgerunners",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "heavy-mining-laser"
+    ],
+    "replacement_choice": [
+      [
+        "achilles-missile-launcher"
+      ],
+      [
+        "heavy-mortar"
+      ]
+    ]
+  },
+  {
+    "id": "achilles-ridgerunners-swap-2",
+    "unit_id": "achilles-ridgerunners",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "flare-launcher"
+    ],
+    "replacement_choice": [
+      [
+        "spotter"
+      ],
+      [
+        "survey-augur"
+      ]
+    ]
+  },
+  {
+    "id": "atalan-jackals-swap-1",
+    "unit_id": "atalan-jackals",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "for-every-4-atalan-jackals-in-this-unit-up-to-2-atalan-jackals-close-combat-weapons"
+    ],
+    "replacement": [
+      "atalan-power-weapon"
+    ]
+  },
+  {
+    "id": "atalan-jackals-swap-2",
+    "unit_id": "atalan-jackals",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "atalan-small-arms"
+    ],
+    "replacement": [
+      "grenade-launcher"
+    ]
+  },
+  {
+    "id": "atalan-jackals-swap-3",
+    "unit_id": "atalan-jackals",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Atalan Wolfquads",
+      "any_number": true
+    },
+    "replaces": [
+      "heavy-stubber"
+    ],
+    "replacement_choice": [
+      [
+        "atalan-incinerator"
+      ],
+      [
+        "mining-laser"
+      ]
+    ]
+  }
+]

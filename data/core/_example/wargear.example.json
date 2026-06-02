@@ -1,0 +1,14 @@
+[
+  {
+    "id": "icon-of-the-example",
+    "name": "Icon of the Example",
+    "category": "icon",
+    "game_version": { "edition": "10th", "dataslate": "2025-q3" }
+  },
+  {
+    "id": "attack-squig",
+    "name": "Attack Squig",
+    "category": "equipment",
+    "game_version": { "edition": "10th", "dataslate": "2025-q3" }
+  }
+]

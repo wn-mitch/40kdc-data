@@ -1,0 +1,1142 @@
+[
+  {
+    "id": "commander-in-coldstar-battlesuit-swap-1",
+    "unit_id": "commander-in-coldstar-battlesuit",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "high-output-burst-cannon"
+    ],
+    "replacement_choice": [
+      [
+        "airbursting-fragmentation-projector"
+      ],
+      [
+        "battlesuit-support-system"
+      ],
+      [
+        "burst-cannon"
+      ],
+      [
+        "cyclic-ion-blaster"
+      ],
+      [
+        "fusion-blaster"
+      ],
+      [
+        "missile-pod"
+      ],
+      [
+        "plasma-rifle"
+      ],
+      [
+        "shield-generator"
+      ],
+      [
+        "tau-flamer"
+      ],
+      [
+        "weapon-support-system"
+      ]
+    ]
+  },
+  {
+    "id": "commander-in-coldstar-battlesuit-addon-2",
+    "unit_id": "commander-in-coldstar-battlesuit",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "up-to-two-of-the-following",
+      "can-take-duplicates-1-gun-drone1-marker-drone1-shield-drone"
+    ]
+  },
+  {
+    "id": "ethereal-addon-1",
+    "unit_id": "ethereal",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "hover-drone"
+    ]
+  },
+  {
+    "id": "ethereal-addon-2",
+    "unit_id": "ethereal",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "up-to-two-of-the-following",
+      "can-take-duplicates-1-gun-drone1-marker-drone1-shield-drone"
+    ]
+  },
+  {
+    "id": "cadre-fireblade-addon-1",
+    "unit_id": "cadre-fireblade",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "up-to-two-of-the-following",
+      "can-take-duplicates-1-gun-drone1-marker-drone1-shield-drone"
+    ]
+  },
+  {
+    "id": "strike-team-addon-1",
+    "unit_id": "strike-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Fire Warrior Shas'ui",
+      "max_count": 1
+    },
+    "replacement": [
+      "up-to-two-of-the-following",
+      "can-take-duplicates-1-guardian-drone-it-cannot-take-duplicates-of-this-piece-of-wargear-1-gun-drone1-marker-drone1-shield-drone"
+    ]
+  },
+  {
+    "id": "strike-team-swap-2",
+    "unit_id": "strike-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Fire Warrior models",
+      "any_number": true
+    },
+    "replaces": [
+      "pulse-rifle"
+    ],
+    "replacement": [
+      "pulse-carbine"
+    ]
+  },
+  {
+    "id": "breacher-team-addon-1",
+    "unit_id": "breacher-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Breacher Fire Warrior Shas'ui",
+      "max_count": 1
+    },
+    "replacement": [
+      "up-to-two-of-the-following",
+      "can-take-duplicates-1-guardian-drone-it-cannot-take-duplicates-of-this-piece-of-wargear-1-gun-drone1-marker-drone1-shield-drone"
+    ]
+  },
+  {
+    "id": "kroot-carnivores-swap-1",
+    "unit_id": "kroot-carnivores",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Long-quill",
+      "max_count": 1
+    },
+    "replaces": [
+      "kroot-rifle"
+    ],
+    "replacement": [
+      "kroot-carbine"
+    ]
+  },
+  {
+    "id": "kroot-carnivores-swap-2",
+    "unit_id": "kroot-carnivores",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Kroot Carnivore",
+      "per_n_models": 10
+    },
+    "replaces": [
+      "kroot-rifle"
+    ],
+    "replacement": [
+      "tanglebomb-launcher"
+    ]
+  },
+  {
+    "id": "krootox-riders-swap-1",
+    "unit_id": "krootox-riders",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "repeater-cannon"
+    ],
+    "replacement": [
+      "tanglecannon"
+    ]
+  },
+  {
+    "id": "stealth-battlesuits-addon-1",
+    "unit_id": "stealth-battlesuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Stealth Shas'vre",
+      "max_count": 1
+    },
+    "replacement": [
+      "gun-drone"
+    ]
+  },
+  {
+    "id": "stealth-battlesuits-addon-2",
+    "unit_id": "stealth-battlesuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Stealth Shas'vre",
+      "max_count": 1
+    },
+    "replacement": [
+      "marker-drone"
+    ]
+  },
+  {
+    "id": "stealth-battlesuits-addon-3",
+    "unit_id": "stealth-battlesuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Stealth Shas'vre",
+      "max_count": 1
+    },
+    "replacement": [
+      "pulse-pistol"
+    ]
+  },
+  {
+    "id": "stealth-battlesuits-addon-4",
+    "unit_id": "stealth-battlesuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Stealth Shas'ui",
+      "max_count": 1
+    },
+    "replacement": [
+      "homing-beacon"
+    ]
+  },
+  {
+    "id": "stealth-battlesuits-swap-5",
+    "unit_id": "stealth-battlesuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 2
+    },
+    "replaces": [
+      "burst-cannon"
+    ],
+    "replacement": [
+      "fusion-blaster"
+    ]
+  },
+  {
+    "id": "ghostkeel-battlesuit-swap-1",
+    "unit_id": "ghostkeel-battlesuit",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "fusion-collider"
+    ],
+    "replacement": [
+      "cyclic-ion-raker"
+    ]
+  },
+  {
+    "id": "ghostkeel-battlesuit-swap-2",
+    "unit_id": "ghostkeel-battlesuit",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-tau-flamer"
+    ],
+    "replacement_choice": [
+      [
+        "twin-fusion-blaster"
+      ],
+      [
+        "twin-burst-cannon"
+      ]
+    ]
+  },
+  {
+    "id": "ghostkeel-battlesuit-addon-3",
+    "unit_id": "ghostkeel-battlesuit",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "one-battlesuit-support-system"
+    ]
+  },
+  {
+    "id": "riptide-battlesuit-swap-1",
+    "unit_id": "riptide-battlesuit",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heavy-burst-cannon"
+    ],
+    "replacement": [
+      "ion-accelerator"
+    ]
+  },
+  {
+    "id": "riptide-battlesuit-swap-2",
+    "unit_id": "riptide-battlesuit",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-plasma-rifles"
+    ],
+    "replacement_choice": [
+      [
+        "twin-fusion-blaster"
+      ],
+      [
+        "twin-smart-missile-system"
+      ]
+    ]
+  },
+  {
+    "id": "riptide-battlesuit-addon-3",
+    "unit_id": "riptide-battlesuit",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "up-to-2-missile-drones"
+    ]
+  },
+  {
+    "id": "pathfinder-team-addon-1",
+    "unit_id": "pathfinder-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Pathfinder Shas'ui",
+      "max_count": 1
+    },
+    "replacement_choice": [
+      [
+        "grav-inhibitor-drone"
+      ],
+      [
+        "pulse-accelerator-drone"
+      ],
+      [
+        "recon-drone"
+      ]
+    ]
+  },
+  {
+    "id": "pathfinder-team-addon-2",
+    "unit_id": "pathfinder-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Pathfinder Shas'ui",
+      "max_count": 1
+    },
+    "replacement": [
+      "up-to-two-of-the-following",
+      "can-take-duplicates-1-gun-drone1-marker-drone1-shield-drone"
+    ]
+  },
+  {
+    "id": "pathfinder-team-swap-3",
+    "unit_id": "pathfinder-team",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Pathfinders",
+      "max_count": 3
+    },
+    "replaces": [
+      "pulse-carbine"
+    ],
+    "replacement_choice": [
+      [
+        "ion-rifle"
+      ],
+      [
+        "rail-rifle"
+      ]
+    ]
+  },
+  {
+    "id": "piranhas-swap-1",
+    "unit_id": "piranhas",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "piranha-burst-cannon-can-be"
+    ],
+    "replacement": [
+      "piranha-fusion-blaster"
+    ]
+  },
+  {
+    "id": "piranhas-addon-2",
+    "unit_id": "piranhas",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replacement": [
+      "up-to-2-seeker-missiles"
+    ]
+  },
+  {
+    "id": "devilfish-swap-1",
+    "unit_id": "devilfish",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-pulse-carbines"
+    ],
+    "replacement": [
+      "smart-missile-systems"
+    ]
+  },
+  {
+    "id": "devilfish-addon-2",
+    "unit_id": "devilfish",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "up-to-2-seeker-missiles"
+    ]
+  },
+  {
+    "id": "razorshark-strike-fighter-swap-1",
+    "unit_id": "razorshark-strike-fighter",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "accelerator-burst-cannon"
+    ],
+    "replacement": [
+      "missile-pod"
+    ]
+  },
+  {
+    "id": "sun-shark-bomber-swap-1",
+    "unit_id": "sun-shark-bomber",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "missile-pod"
+    ],
+    "replacement": [
+      "twin-missile-pod"
+    ]
+  },
+  {
+    "id": "sky-ray-gunship-swap-1",
+    "unit_id": "sky-ray-gunship",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-pulse-carbines"
+    ],
+    "replacement_choice": [
+      [
+        "accelerator-burst-cannons"
+      ],
+      [
+        "smart-missile-systems"
+      ]
+    ]
+  },
+  {
+    "id": "hammerhead-gunship-swap-1",
+    "unit_id": "hammerhead-gunship",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "railgun"
+    ],
+    "replacement": [
+      "ion-cannon"
+    ]
+  },
+  {
+    "id": "hammerhead-gunship-swap-2",
+    "unit_id": "hammerhead-gunship",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-pulse-carbines"
+    ],
+    "replacement_choice": [
+      [
+        "accelerator-burst-cannons"
+      ],
+      [
+        "smart-missile-systems"
+      ]
+    ]
+  },
+  {
+    "id": "hammerhead-gunship-addon-3",
+    "unit_id": "hammerhead-gunship",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "up-to-2-seeker-missiles"
+    ]
+  },
+  {
+    "id": "broadside-battlesuits-swap-1",
+    "unit_id": "broadside-battlesuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "heavy-rail-rifle"
+    ],
+    "replacement": [
+      "high-yield-missile-pods"
+    ]
+  },
+  {
+    "id": "broadside-battlesuits-addon-3",
+    "unit_id": "broadside-battlesuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replacement": [
+      "up-to-two-of-the-following",
+      "can-take-duplicates-1-gun-drone1-marker-drone1-missile-drone1-shield-drone"
+    ]
+  },
+  {
+    "id": "stormsurge-swap-1",
+    "unit_id": "stormsurge",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "pulse-driver-cannon"
+    ],
+    "replacement": [
+      "pulse-blast-cannon"
+    ]
+  },
+  {
+    "id": "stormsurge-swap-2",
+    "unit_id": "stormsurge",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-tau-flamer"
+    ],
+    "replacement_choice": [
+      [
+        "twin-airbursting-fragmentation-projector"
+      ],
+      [
+        "twin-burst-cannon"
+      ]
+    ]
+  },
+  {
+    "id": "tidewall-shieldline-addon-1",
+    "unit_id": "tidewall-shieldline",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "tidewall-defence-platform"
+    ]
+  },
+  {
+    "id": "xv9-hazard-battlesuits-swap-1",
+    "unit_id": "xv9-hazard-battlesuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "fusion-cascade"
+    ],
+    "replacement_choice": [
+      [
+        "phased-ion-gun"
+      ],
+      [
+        "twin-hazard-burst-cannon"
+      ]
+    ]
+  },
+  {
+    "id": "xv9-hazard-battlesuits-swap-2",
+    "unit_id": "xv9-hazard-battlesuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "twin-hazard-burst-cannon"
+    ],
+    "replacement_choice": [
+      [
+        "fusion-cascade"
+      ],
+      [
+        "phased-ion-gun"
+      ]
+    ]
+  },
+  {
+    "id": "xv9-hazard-battlesuits-addon-3",
+    "unit_id": "xv9-hazard-battlesuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replacement_choice": [
+      [
+        "battlesuit-support-system"
+      ],
+      [
+        "shield-generator"
+      ],
+      [
+        "weapon-support-system"
+      ]
+    ]
+  },
+  {
+    "id": "xv9-hazard-battlesuits-addon-4",
+    "unit_id": "xv9-hazard-battlesuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replacement": [
+      "up-to-two-of-the-following",
+      "can-take-duplicates-1-gun-drone1-marker-drone1-shield-drone"
+    ]
+  },
+  {
+    "id": "taunar-supremacy-armour-swap-1",
+    "unit_id": "taunar-supremacy-armour",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "tri-axis-ion-cannon"
+    ],
+    "replacement": [
+      "fusion-eradicator"
+    ]
+  },
+  {
+    "id": "taunar-supremacy-armour-swap-2",
+    "unit_id": "taunar-supremacy-armour",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "fusion-eradicator"
+    ],
+    "replacement": [
+      "tri-axis-ion-cannon"
+    ]
+  },
+  {
+    "id": "taunar-supremacy-armour-swap-3",
+    "unit_id": "taunar-supremacy-armour",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "pulse-ordnance-drivers"
+    ],
+    "replacement_choice": [
+      [
+        "nexus-missile-launchers"
+      ],
+      [
+        "heavy-rail-cannon-array-and"
+      ],
+      [
+        "fragmentation-cluster-shell-launcher"
+      ]
+    ]
+  },
+  {
+    "id": "tx42-piranha-swap-1",
+    "unit_id": "tx42-piranha",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "plasma-rifles"
+    ],
+    "replacement_choice": [
+      [
+        "fusion-blasters"
+      ],
+      [
+        "missile-pods"
+      ],
+      [
+        "rail-rifles"
+      ]
+    ]
+  },
+  {
+    "id": "heavy-gun-drones-swap-1",
+    "unit_id": "heavy-gun-drones",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "burst-cannon",
+      "markerlight"
+    ],
+    "replacement": [
+      "twin-burst-cannon"
+    ]
+  },
+  {
+    "id": "ax-1-0-tiger-shark-addon-1",
+    "unit_id": "ax-1-0-tiger-shark",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "up-to-6-seeker-missiles"
+    ]
+  },
+  {
+    "id": "ax-1-0-tiger-shark-swap-2",
+    "unit_id": "ax-1-0-tiger-shark",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "burst-cannons"
+    ],
+    "replacement": [
+      "cyclic-ion-blasters"
+    ]
+  },
+  {
+    "id": "drone-sentry-turret-swap-1",
+    "unit_id": "drone-sentry-turret",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-plasma-rifle"
+    ],
+    "replacement_choice": [
+      [
+        "twin-burst-cannon"
+      ],
+      [
+        "twin-fusion-blaster"
+      ],
+      [
+        "twin-missile-pod"
+      ]
+    ]
+  },
+  {
+    "id": "great-knarloc-addon-1",
+    "unit_id": "great-knarloc",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "kroot-bolt-thrower-and"
+      ],
+      [
+        "kroot-rifle"
+      ],
+      [
+        "twin-kroot-gun"
+      ],
+      [
+        "baggage-harness"
+      ]
+    ]
+  },
+  {
+    "id": "commander-in-enforcer-battlesuit-swap-1",
+    "unit_id": "commander-in-enforcer-battlesuit",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "burst-cannon"
+    ],
+    "replacement_choice": [
+      [
+        "airbursting-fragmentation-projector"
+      ],
+      [
+        "battlesuit-support-system"
+      ],
+      [
+        "cyclic-ion-blaster"
+      ],
+      [
+        "fusion-blaster"
+      ],
+      [
+        "missile-pod"
+      ],
+      [
+        "plasma-rifle"
+      ],
+      [
+        "shield-generator"
+      ],
+      [
+        "tau-flamer"
+      ],
+      [
+        "weapon-support-system"
+      ]
+    ]
+  },
+  {
+    "id": "commander-in-enforcer-battlesuit-addon-2",
+    "unit_id": "commander-in-enforcer-battlesuit",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "up-to-two-of-the-following",
+      "can-take-duplicates-1-gun-drone1-marker-drone1-shield-drone"
+    ]
+  },
+  {
+    "id": "crisis-sunforge-battlesuits-addon-1",
+    "unit_id": "crisis-sunforge-battlesuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replacement": [
+      "up-to-two-of-the-following-but-cannot-take-duplicates-1-gun-drone1-marker-drone1-shield-drone"
+    ]
+  },
+  {
+    "id": "crisis-fireknife-battlesuits-swap-1",
+    "unit_id": "crisis-fireknife-battlesuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "plasma-rifle"
+    ],
+    "replacement": [
+      "missile-pod"
+    ]
+  },
+  {
+    "id": "crisis-fireknife-battlesuits-swap-2",
+    "unit_id": "crisis-fireknife-battlesuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "missile-pod"
+    ],
+    "replacement": [
+      "plasma-rifle"
+    ]
+  },
+  {
+    "id": "crisis-fireknife-battlesuits-addon-3",
+    "unit_id": "crisis-fireknife-battlesuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replacement": [
+      "up-to-two-of-the-following-but-cannot-take-duplicates1-gun-drone1-marker-drone1-shield-drone"
+    ]
+  },
+  {
+    "id": "crisis-starscythe-battlesuits-swap-1",
+    "unit_id": "crisis-starscythe-battlesuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "burst-cannon"
+    ],
+    "replacement": [
+      "tau-flamer"
+    ]
+  },
+  {
+    "id": "crisis-starscythe-battlesuits-swap-2",
+    "unit_id": "crisis-starscythe-battlesuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "tau-flamer"
+    ],
+    "replacement": [
+      "burst-cannon"
+    ]
+  },
+  {
+    "id": "crisis-starscythe-battlesuits-addon-3",
+    "unit_id": "crisis-starscythe-battlesuits",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replacement": [
+      "up-to-two-of-the-following-but-cannot-take-duplicates1-gun-drone1-marker-drone1-shield-drone"
+    ]
+  },
+  {
+    "id": "kroot-war-shaper-swap-1",
+    "unit_id": "kroot-war-shaper",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "dart-bow",
+      "tri-bade"
+    ],
+    "replacement": [
+      "bladestave",
+      "prey-hook"
+    ]
+  },
+  {
+    "id": "kroot-lone-spear-swap-1",
+    "unit_id": "kroot-lone-spear",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "kroot-long-gun"
+    ],
+    "replacement": [
+      "blast-javelin",
+      "hunting-javelin"
+    ]
+  }
+]

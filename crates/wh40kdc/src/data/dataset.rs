@@ -15,7 +15,7 @@ use crate::generated::{
     Ability, DeploymentPattern, Detachment, Enhancement, Faction, ForceDisposition, GameVersion,
     InteractionFlag, LeaderAttachment, Mission, MissionMatchup, Phase, PhaseMapping, ResourcePool,
     SecondaryCard, Stratagem, TerrainLayout, TerrainTemplate, TimingFlag, Unit, UnitComposition,
-    WargearOption, Weapon, WeaponKeyword,
+    Wargear, WargearOption, Weapon, WeaponKeyword,
 };
 
 use super::collection::Collection;
@@ -57,6 +57,9 @@ pub struct RawData {
     pub unit_compositions: Vec<UnitComposition>,
     #[serde(default)]
     pub wargear_options: Vec<WargearOption>,
+    /// Non-weapon wargear items (icons, attachments) referenced by wargear options.
+    #[serde(default)]
+    pub wargear: Vec<Wargear>,
     #[serde(default)]
     pub game_versions: Vec<GameVersion>,
     #[serde(default)]
@@ -123,6 +126,7 @@ pub struct Dataset {
     pub enhancements: Collection<Enhancement>,
     pub stratagems: Collection<Stratagem>,
     pub wargear_options: Collection<WargearOption>,
+    pub wargear: Collection<Wargear>,
     pub missions: Collection<Mission>,
     pub mission_matchups: Collection<MissionMatchup>,
     pub mission_cards: Collection<SecondaryCard>,
@@ -146,6 +150,8 @@ pub struct Dataset {
     units_by_ability: HashMap<String, Vec<usize>>,
     /// weapon id → indices of units that list it (into `units`).
     units_by_weapon: HashMap<String, Vec<usize>>,
+    /// unit id → indices of wargear options for it (into `wargear_options`).
+    wargear_options_by_unit: HashMap<String, Vec<usize>>,
 }
 
 /// The embedded dataset bundle, inlined at build time and parsed once.
@@ -224,6 +230,11 @@ impl Dataset {
         );
         let wargear_options =
             id_name_collection(raw.wargear_options, |w| w.id.to_string(), |_| None);
+        let wargear = id_name_collection(
+            raw.wargear,
+            |w| w.id.to_string(),
+            |w| Some(w.name.as_str()),
+        );
         let missions = id_name_collection(
             raw.missions,
             |m| m.id.to_string(),
@@ -267,6 +278,13 @@ impl Dataset {
 
         let phase_index = build_phase_index(&raw.phase_mappings);
         let (units_by_ability, units_by_weapon) = build_reverse_indexes(&units);
+        let mut wargear_options_by_unit: HashMap<String, Vec<usize>> = HashMap::new();
+        for (idx, option) in wargear_options.all().iter().enumerate() {
+            wargear_options_by_unit
+                .entry(option.unit_id.to_string())
+                .or_default()
+                .push(idx);
+        }
 
         Dataset {
             units,
@@ -278,6 +296,7 @@ impl Dataset {
             enhancements,
             stratagems,
             wargear_options,
+            wargear,
             missions,
             mission_matchups,
             mission_cards,
@@ -295,6 +314,7 @@ impl Dataset {
             phase_index,
             units_by_ability,
             units_by_weapon,
+            wargear_options_by_unit,
         }
     }
 
@@ -367,6 +387,15 @@ impl Dataset {
             .iter()
             .filter_map(|id| self.weapons.get(id.as_str()))
             .collect()
+    }
+
+    /// Wargear options authored for the given unit, in declared order. Mirror of
+    /// TS `Dataset.wargearOptionsOf`. Empty for a unit with no options.
+    pub fn wargear_options_of(&self, unit: &Unit) -> Vec<&WargearOption> {
+        self.wargear_options_by_unit
+            .get(unit.id.as_str())
+            .map(|idxs| idxs.iter().map(|&i| self.wargear_options.at(i)).collect())
+            .unwrap_or_default()
     }
 
     /// Abilities referenced by `ability_ids`; unresolved ids are skipped.

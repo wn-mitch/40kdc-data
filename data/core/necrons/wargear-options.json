@@ -1,0 +1,569 @@
+[
+  {
+    "id": "overlord-swap-1",
+    "unit_id": "overlord",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "tachyon-arrow",
+      "overlords-blade"
+    ],
+    "replacement_choice": [
+      [
+        "staff-of-light"
+      ],
+      [
+        "voidscythe"
+      ]
+    ]
+  },
+  {
+    "id": "overlord-addon-2",
+    "unit_id": "overlord",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "a-tachyon-arrow-it-can-be-equipped-with-1-resurrection-orb"
+    ]
+  },
+  {
+    "id": "lord-swap-1",
+    "unit_id": "lord",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "staff-of-light"
+    ],
+    "replacement": [
+      "lords-blade"
+    ]
+  },
+  {
+    "id": "lord-addon-2",
+    "unit_id": "lord",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "resurrection-orb"
+    ]
+  },
+  {
+    "id": "catacomb-command-barge-swap-1",
+    "unit_id": "catacomb-command-barge",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "gauss-cannon"
+    ],
+    "replacement": [
+      "tesla-cannon"
+    ]
+  },
+  {
+    "id": "catacomb-command-barge-swap-2",
+    "unit_id": "catacomb-command-barge",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "staff-of-light"
+    ],
+    "replacement": [
+      "overlords-blade"
+    ]
+  },
+  {
+    "id": "catacomb-command-barge-addon-3",
+    "unit_id": "catacomb-command-barge",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "resurrection-orb"
+    ]
+  },
+  {
+    "id": "necron-warriors-swap-1",
+    "unit_id": "necron-warriors",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "gauss-flayer"
+    ],
+    "replacement": [
+      "gauss-reaper"
+    ]
+  },
+  {
+    "id": "immortals-swap-1",
+    "unit_id": "immortals",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "gauss-blaster"
+    ],
+    "replacement": [
+      "tesla-carbine"
+    ]
+  },
+  {
+    "id": "lychguard-swap-1",
+    "unit_id": "lychguard",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "warscythe"
+    ],
+    "replacement": [
+      "hyperphase-sword",
+      "dispersion-shield"
+    ]
+  },
+  {
+    "id": "triarch-praetorians-swap-1",
+    "unit_id": "triarch-praetorians",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "rod-of-covenant"
+    ],
+    "replacement": [
+      "particle-caster",
+      "voidblade"
+    ]
+  },
+  {
+    "id": "triarch-stalker-swap-1",
+    "unit_id": "triarch-stalker",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "heat-ray"
+    ],
+    "replacement_choice": [
+      [
+        "particle-shredder"
+      ],
+      [
+        "heavy-gauss-cannon-array"
+      ]
+    ]
+  },
+  {
+    "id": "canoptek-wraiths-addon-1",
+    "unit_id": "canoptek-wraiths",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replacement_choice": [
+      [
+        "particle-caster"
+      ],
+      [
+        "transdimensional-beamer"
+      ]
+    ]
+  },
+  {
+    "id": "canoptek-wraiths-swap-2",
+    "unit_id": "canoptek-wraiths",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "vicious-claws"
+    ],
+    "replacement": [
+      "whip-coils"
+    ]
+  },
+  {
+    "id": "tomb-blades-swap-1",
+    "unit_id": "tomb-blades",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "twin-gauss-blaster"
+    ],
+    "replacement_choice": [
+      [
+        "particle-beamer"
+      ],
+      [
+        "twin-tesla-carbine"
+      ]
+    ]
+  },
+  {
+    "id": "tomb-blades-addon-2",
+    "unit_id": "tomb-blades",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replacement": [
+      "shieldvanes"
+    ]
+  },
+  {
+    "id": "tomb-blades-addon-3",
+    "unit_id": "tomb-blades",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replacement_choice": [
+      [
+        "nebuloscope"
+      ],
+      [
+        "shadowloom"
+      ]
+    ]
+  },
+  {
+    "id": "canoptek-spyders-addon-1",
+    "unit_id": "canoptek-spyders",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replacement": [
+      "particle-beamers"
+    ]
+  },
+  {
+    "id": "canoptek-spyders-addon-2",
+    "unit_id": "canoptek-spyders",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replacement": [
+      "fabricator-claw-array"
+    ]
+  },
+  {
+    "id": "canoptek-spyders-addon-3",
+    "unit_id": "canoptek-spyders",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replacement": [
+      "gloom-prism"
+    ]
+  },
+  {
+    "id": "monolith-swap-1",
+    "unit_id": "monolith",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "gauss-flux-arcs"
+    ],
+    "replacement": [
+      "death-rays"
+    ]
+  },
+  {
+    "id": "annihilation-barge-swap-1",
+    "unit_id": "annihilation-barge",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "gauss-cannon"
+    ],
+    "replacement": [
+      "tesla-cannon"
+    ]
+  },
+  {
+    "id": "sentry-pylon-swap-1",
+    "unit_id": "sentry-pylon",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "gauss-exterminator"
+    ],
+    "replacement_choice": [
+      [
+        "focused-death-ray"
+      ],
+      [
+        "heat-cannon"
+      ]
+    ]
+  },
+  {
+    "id": "seraptek-heavy-construct-swap-1",
+    "unit_id": "seraptek-heavy-construct",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "singularity-generators"
+    ],
+    "replacement": [
+      "synaptic-obliterators",
+      "transdimensional-projectors"
+    ]
+  },
+  {
+    "id": "skorpekh-destroyers-addon-1",
+    "unit_id": "skorpekh-destroyers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 3
+    },
+    "replacement": [
+      "plasmacyte"
+    ]
+  },
+  {
+    "id": "lokhust-heavy-destroyers-swap-1",
+    "unit_id": "lokhust-heavy-destroyers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "gauss-destructor"
+    ],
+    "replacement": [
+      "enmitic-exterminator"
+    ]
+  },
+  {
+    "id": "lokhust-lord-swap-1",
+    "unit_id": "lokhust-lord",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "staff-of-light"
+    ],
+    "replacement": [
+      "lords-blade"
+    ]
+  },
+  {
+    "id": "lokhust-lord-addon-2",
+    "unit_id": "lokhust-lord",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "nanoscarab-amulet"
+      ],
+      [
+        "resurrection-orb"
+      ]
+    ]
+  },
+  {
+    "id": "ophydian-destroyers-addon-1",
+    "unit_id": "ophydian-destroyers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 3
+    },
+    "replacement": [
+      "plasmacyte"
+    ]
+  },
+  {
+    "id": "tomb-citadel-walls-addon-1",
+    "unit_id": "tomb-citadel-walls",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "gauss-exterminator-and"
+      ],
+      [
+        "twin-tesla-destructor"
+      ],
+      [
+        "gauss-exterminators"
+      ],
+      [
+        "twin-tesla-destructors"
+      ]
+    ]
+  },
+  {
+    "id": "canoptek-macrocytes-swap-1",
+    "unit_id": "canoptek-macrocytes",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "gauss-scalpel"
+    ],
+    "replacement": [
+      "tesla-caster"
+    ]
+  },
+  {
+    "id": "canoptek-macrocytes-swap-2",
+    "unit_id": "canoptek-macrocytes",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replaces": [
+      "gauss-scalpel-or-tesla-caster"
+    ],
+    "replacement": [
+      "atomiser-beam",
+      "nanoscarab-projector"
+    ]
+  },
+  {
+    "id": "canoptek-macrocytes-swap-3",
+    "unit_id": "canoptek-macrocytes",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replaces": [
+      "gauss-scalpel-or-tesla-caster"
+    ],
+    "replacement": [
+      "accelerator-mandible"
+    ]
+  },
+  {
+    "id": "canoptek-tomb-crawlers-swap-1",
+    "unit_id": "canoptek-tomb-crawlers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replaces": [
+      "twin-gauss-reaper"
+    ],
+    "replacement": [
+      "transdimensional-isolator"
+    ]
+  }
+]

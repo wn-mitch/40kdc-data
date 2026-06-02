@@ -1,0 +1,546 @@
+[
+  {
+    "id": "chaos-terminators-swap-1",
+    "unit_id": "chaos-terminators",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Terminator",
+      "per_n_models": 5
+    },
+    "replaces": [
+      "combi-bolter"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-flamer"
+      ],
+      [
+        "reaper-autocannon"
+      ]
+    ]
+  },
+  {
+    "id": "chaos-terminators-swap-1",
+    "unit_id": "chaos-terminators",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Chaos Terminator",
+      "per_n_models": 5
+    },
+    "replaces": [
+      "combi-bolter"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-flamer"
+      ],
+      [
+        "reaper-autocannon"
+      ]
+    ]
+  },
+  {
+    "id": "chaos-terminators-swap-1",
+    "unit_id": "chaos-terminators",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Chaos Terminator",
+      "max_count": 1
+    },
+    "replaces": [
+      "combi-bolter"
+    ],
+    "replacement_choice": [
+      [
+        "heavy-flamer"
+      ],
+      [
+        "reaper-autocannon"
+      ]
+    ]
+  },
+  {
+    "id": "chaos-terminators-swap-2",
+    "unit_id": "chaos-terminators",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "combi-bolter"
+    ],
+    "replacement": [
+      "combi-weapon"
+    ]
+  },
+  {
+    "id": "chaos-terminators-swap-3",
+    "unit_id": "chaos-terminators",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5
+    },
+    "replaces": [
+      "combi-bolter",
+      "accursed-weapon"
+    ],
+    "replacement": [
+      "paired-accursed-weapons"
+    ]
+  },
+  {
+    "id": "chaos-terminators-swap-3",
+    "unit_id": "chaos-terminators",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replaces": [
+      "combi-bolter",
+      "accursed-weapon"
+    ],
+    "replacement": [
+      "paired-accursed-weapons"
+    ]
+  },
+  {
+    "id": "chaos-terminators-swap-4",
+    "unit_id": "chaos-terminators",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5,
+      "max_count": 3
+    },
+    "replaces": [
+      "accursed-weapon"
+    ],
+    "replacement": [
+      "power-fist"
+    ]
+  },
+  {
+    "id": "chaos-terminators-swap-4",
+    "unit_id": "chaos-terminators",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 3
+    },
+    "replaces": [
+      "accursed-weapon"
+    ],
+    "replacement": [
+      "power-fist"
+    ]
+  },
+  {
+    "id": "chaos-terminators-swap-5",
+    "unit_id": "chaos-terminators",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5
+    },
+    "replaces": [
+      "accursed-weapon"
+    ],
+    "replacement": [
+      "chainfist"
+    ]
+  },
+  {
+    "id": "chaos-terminators-swap-5",
+    "unit_id": "chaos-terminators",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "max_count": 1
+    },
+    "replaces": [
+      "accursed-weapon"
+    ],
+    "replacement": [
+      "chainfist"
+    ]
+  },
+  {
+    "id": "chaos-rhino-addon-1",
+    "unit_id": "chaos-rhino",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "combi-bolter"
+      ],
+      [
+        "combi-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "chaos-rhino-addon-1",
+    "unit_id": "chaos-rhino",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "additional-inferno-combi-bolter"
+      ],
+      [
+        "inferno-combi-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "chaos-rhino-addon-1",
+    "unit_id": "chaos-rhino",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "additional-combi-bolter"
+      ],
+      [
+        "combi-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "heldrake-swap-1",
+    "unit_id": "heldrake",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "hades-autocannon"
+    ],
+    "replacement": [
+      "baleflamer"
+    ]
+  },
+  {
+    "id": "chaos-land-raider-addon-1",
+    "unit_id": "chaos-land-raider",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "combi-bolter"
+      ],
+      [
+        "combi-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "chaos-land-raider-addon-1",
+    "unit_id": "chaos-land-raider",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "inferno-combi-bolter"
+      ],
+      [
+        "inferno-combi-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "chaos-land-raider-addon-2",
+    "unit_id": "chaos-land-raider",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "havoc-launcher"
+    ]
+  },
+  {
+    "id": "maulerfiend-swap-1",
+    "unit_id": "maulerfiend",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "lasher-tendrils"
+    ],
+    "replacement": [
+      "magma-cutters"
+    ]
+  },
+  {
+    "id": "defiler-swap-1",
+    "unit_id": "defiler",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-heavy-flamer"
+    ],
+    "replacement_choice": [
+      [
+        "defiler-scourge"
+      ],
+      [
+        "havoc-launcher"
+      ]
+    ]
+  },
+  {
+    "id": "defiler-swap-1",
+    "unit_id": "defiler",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-heavy-flamer"
+    ],
+    "replacement_choice": [
+      [
+        "havoc-launcher"
+      ],
+      [
+        "defiler-scourge"
+      ]
+    ]
+  },
+  {
+    "id": "defiler-swap-2",
+    "unit_id": "defiler",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "reaper-autocannon"
+    ],
+    "replacement_choice": [
+      [
+        "twin-heavy-bolter"
+      ],
+      [
+        "twin-lascannon"
+      ]
+    ]
+  },
+  {
+    "id": "defiler-swap-2",
+    "unit_id": "defiler",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "reaper-autocannon"
+    ],
+    "replacement_choice": [
+      [
+        "twin-lascannon"
+      ],
+      [
+        "twin-inferno-heavy-bolter"
+      ]
+    ]
+  },
+  {
+    "id": "defiler-addon-3",
+    "unit_id": "defiler",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "combi-bolter"
+      ],
+      [
+        "combi-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "defiler-addon-3",
+    "unit_id": "defiler",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "inferno-combi-weapon"
+    ]
+  },
+  {
+    "id": "sorcerer-addon-1",
+    "unit_id": "sorcerer",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "prosperine-khopesh"
+    ]
+  },
+  {
+    "id": "lord-exultant-swap-1",
+    "unit_id": "lord-exultant",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "plasma-pistol"
+    ],
+    "replacement_choice": [
+      [
+        "power-fist"
+      ],
+      [
+        "rapture-lash"
+      ]
+    ]
+  },
+  {
+    "id": "lord-exultant-swap-2",
+    "unit_id": "lord-exultant",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "phoenix-power-spear"
+    ],
+    "replacement_choice": [
+      [
+        "master-crafted-power-sword"
+      ],
+      [
+        "screamer-pistol"
+      ]
+    ]
+  },
+  {
+    "id": "lord-kakophonist-swap-1",
+    "unit_id": "lord-kakophonist",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "power-sword"
+    ],
+    "replacement": [
+      "screamer-pistol",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "noise-marines-swap-1",
+    "unit_id": "noise-marines",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Disharmonist",
+      "max_count": 1
+    },
+    "replaces": [
+      "sonic-blaster"
+    ],
+    "replacement": [
+      "screamer-pistol",
+      "power-sword"
+    ]
+  },
+  {
+    "id": "noise-marines-swap-2",
+    "unit_id": "noise-marines",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Noise Marines",
+      "max_count": 2
+    },
+    "replaces": [
+      "sonic-blaster"
+    ],
+    "replacement": [
+      "blastmaster"
+    ]
+  }
+]

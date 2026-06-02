@@ -1,0 +1,79 @@
+[
+  {
+    "unit_id": "commander-in-coldstar-battlesuit",
+    "datasheet": "Commander in Coldstar Battlesuit",
+    "line": "3",
+    "description": "This model can be equipped with up to three of the following, and can take duplicates:1 airbursting fragmentation projector*1 battlesuit support system*1 burst cannon1 cyclic ion blaster*1 fusion blaster1 missile pod1 plasma rifle1 shield generator*1 T'au flamer1 weapon support system* ",
+    "reason": "name resolution failed: name too long: can take duplicates:1 airbursting fragme…"
+  },
+  {
+    "unit_id": "vespid-stingwings",
+    "datasheet": "Vespid Stingwings",
+    "line": "1",
+    "description": "If this unit contains 10 models:The Vespid Strain Leader can be equipped with 1 Oversight Drone.1 Vespid Stingwing can replace its neutron blaster with 1 T'au flamer1 Vespid Stingwing can replace its neutron blaster with 1 neutron grenade launcher1 Vespid Stingwing can replace its neutron blaster with 1 neutron rail rifle.",
+    "reason": "name resolution failed: name too long: T'au flamer1 Vespid Stingwing can replac…"
+  },
+  {
+    "unit_id": "broadside-battlesuits",
+    "datasheet": "Broadside Battlesuits",
+    "line": "2",
+    "description": "Any number of models can each be equipped with up to two of the following, but cannot take duplicates:1 seeker missile1 twin plasma rifle*1 twin smart missile system*1 weapon support system",
+    "reason": "name resolution failed: name too long: up to two of the following, but cannot t…"
+  },
+  {
+    "unit_id": "commander-in-enforcer-battlesuit",
+    "datasheet": "Commander in Enforcer Battlesuit",
+    "line": "3",
+    "description": "This model can be equipped with up to three of the following, and can take duplicates:1 airbursting fragmentation projector*1 battlesuit support system*1 burst cannon1 cyclic ion blaster*1 fusion blaster1 missile pod1 plasma rifle1 shield generator*1 T'au flamer1 weapon support system* ",
+    "reason": "name resolution failed: name too long: can take duplicates:1 airbursting fragme…"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000454",
+    "line": "1",
+    "description": "This model's 2 burst cannons can be replaced with 2 cyclic ion blasters.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000454",
+    "line": "2",
+    "description": "This model's 2 ion cannons can be replaced with one of the following:2 swiftstrike burst cannons2 swiftstrike railguns",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000454",
+    "line": "3",
+    "description": "This model can be equipped with up to 6 seeker missiles.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000000454",
+    "line": "4",
+    "description": "This model's transport bay can be replaced with 2 skyspear missile racks.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000002588",
+    "line": "1",
+    "description": "The Kroot Kill-broker's Farstalker firearm can be replaced with 1 T'au-tech rifle.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000002588",
+    "line": "2",
+    "description": "1 Kroot Farstalker's Farstalker firearm can be replaced with one of the following:1 Dvorgite skinner1 Londaxi tribalest",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  },
+  {
+    "unit_id": null,
+    "datasheet": "numeric:000002588",
+    "line": "3",
+    "description": "1 Kroot Farstalker equipped with a Farstalker firearm can be equipped with 1 Pech'ra.",
+    "reason": "ambiguous unit match (model names tie across datasheets)"
+  }
+]

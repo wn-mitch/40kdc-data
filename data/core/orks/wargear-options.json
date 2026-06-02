@@ -1,0 +1,1283 @@
+[
+  {
+    "id": "warboss-swap-1",
+    "unit_id": "warboss",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "big-choppa"
+    ],
+    "replacement": [
+      "power-klaw"
+    ]
+  },
+  {
+    "id": "warboss-addon-2",
+    "unit_id": "warboss",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "attack-squig"
+    ]
+  },
+  {
+    "id": "big-mek-in-mega-armour-swap-1",
+    "unit_id": "big-mek-in-mega-armour",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "kustom-mega-blasta"
+    ],
+    "replacement_choice": [
+      [
+        "killsaw"
+      ],
+      [
+        "kombi-weapon"
+      ],
+      [
+        "kustom-shoota"
+      ]
+    ]
+  },
+  {
+    "id": "big-mek-in-mega-armour-addon-2",
+    "unit_id": "big-mek-in-mega-armour",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "tellyport-blasta"
+      ],
+      [
+        "kustom-force-field"
+      ]
+    ]
+  },
+  {
+    "id": "big-mek-in-mega-armour-addon-3",
+    "unit_id": "big-mek-in-mega-armour",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "grot-oiler"
+    ]
+  },
+  {
+    "id": "big-mek-on-warbike-swap-1",
+    "unit_id": "big-mek-on-warbike",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "slugga"
+    ],
+    "replacement_choice": [
+      [
+        "shokk-attack-gun"
+      ],
+      [
+        "kustom-force-field"
+      ],
+      [
+        "kombi-weapon"
+      ],
+      [
+        "kustom-mega-blasta"
+      ],
+      [
+        "kustom-mega-slugga"
+      ],
+      [
+        "rokkit-launcha"
+      ],
+      [
+        "big-choppa"
+      ],
+      [
+        "power-klaw"
+      ]
+    ]
+  },
+  {
+    "id": "big-mek-on-warbike-swap-2",
+    "unit_id": "big-mek-on-warbike",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "choppa"
+    ],
+    "replacement_choice": [
+      [
+        "kombi-weapon"
+      ],
+      [
+        "kustom-mega-blasta"
+      ],
+      [
+        "kustom-mega-slugga"
+      ],
+      [
+        "rokkit-launcha"
+      ],
+      [
+        "big-choppa"
+      ],
+      [
+        "killsaw"
+      ],
+      [
+        "power-klaw"
+      ]
+    ]
+  },
+  {
+    "id": "mek-swap-1",
+    "unit_id": "mek",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "wrench"
+    ],
+    "replacement": [
+      "killsaw"
+    ]
+  },
+  {
+    "id": "painboy-addon-1",
+    "unit_id": "painboy",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "grot-orderly"
+    ]
+  },
+  {
+    "id": "painboy-on-warbike-swap-1",
+    "unit_id": "painboy-on-warbike",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "power-klaw"
+    ],
+    "replacement": [
+      "killsaw"
+    ]
+  },
+  {
+    "id": "boyz-swap-1",
+    "unit_id": "boyz",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Boss Nob",
+      "max_count": 1
+    },
+    "replaces": [
+      "big-choppa"
+    ],
+    "replacement": [
+      "power-klaw"
+    ]
+  },
+  {
+    "id": "boyz-swap-2",
+    "unit_id": "boyz",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Boss Nob",
+      "max_count": 1
+    },
+    "replaces": [
+      "big-choppa",
+      "slugga"
+    ],
+    "replacement": [
+      "kombi-weapon",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "boyz-swap-3",
+    "unit_id": "boyz",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Boyz",
+      "any_number": true
+    },
+    "replaces": [
+      "slugga",
+      "choppa"
+    ],
+    "replacement": [
+      "shoota",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "boyz-swap-4",
+    "unit_id": "boyz",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Boy",
+      "per_n_models": 10
+    },
+    "replaces": [
+      "choppa",
+      "slugga"
+    ],
+    "replacement_choice": [
+      [
+        "big-shoota-and"
+      ],
+      [
+        "close-combat-weapon"
+      ],
+      [
+        "rokkit-launcha-and"
+      ],
+      [
+        "close-combat-weapon"
+      ]
+    ]
+  },
+  {
+    "id": "burna-boyz-swap-1",
+    "unit_id": "burna-boyz",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Spanners",
+      "any_number": true
+    },
+    "replaces": [
+      "big-shoota"
+    ],
+    "replacement_choice": [
+      [
+        "kustom-mega-blasta"
+      ],
+      [
+        "rokkit-launcha"
+      ]
+    ]
+  },
+  {
+    "id": "nobz-swap-1",
+    "unit_id": "nobz",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "big-choppa"
+    ],
+    "replacement": [
+      "power-klaw"
+    ]
+  },
+  {
+    "id": "nobz-swap-2",
+    "unit_id": "nobz",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "slugga",
+      "big-choppa"
+    ],
+    "replacement": [
+      "kombi-weapon",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "nobz-addon-3",
+    "unit_id": "nobz",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 5
+    },
+    "replacement": [
+      "ammo-runt"
+    ]
+  },
+  {
+    "id": "meganobz-swap-1",
+    "unit_id": "meganobz",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "kustom-shoota",
+      "power-klaw"
+    ],
+    "replacement_choice": [
+      [
+        "kombi-weapon-and"
+      ],
+      [
+        "power-klaw"
+      ],
+      [
+        "kombi-weapon-and"
+      ],
+      [
+        "killsaw"
+      ],
+      [
+        "kustom-shoota-and"
+      ],
+      [
+        "killsaw"
+      ],
+      [
+        "killsaw-and"
+      ],
+      [
+        "power-klaw"
+      ],
+      [
+        "twin-killsaw"
+      ]
+    ]
+  },
+  {
+    "id": "trukk-addon-1",
+    "unit_id": "trukk",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "wreckin-ball"
+    ]
+  },
+  {
+    "id": "stormboyz-swap-1",
+    "unit_id": "stormboyz",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Boss Nob",
+      "max_count": 1
+    },
+    "replaces": [
+      "choppa"
+    ],
+    "replacement": [
+      "power-klaw"
+    ]
+  },
+  {
+    "id": "deffkoptas-swap-1",
+    "unit_id": "deffkoptas",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Deffkopta",
+      "per_n_models": 3
+    },
+    "replaces": [
+      "kopta-rokkits"
+    ],
+    "replacement": [
+      "kustom-mega-blasta"
+    ]
+  },
+  {
+    "id": "dakkajet-addon-1",
+    "unit_id": "dakkajet",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "additional-twin-supa-shoota"
+    ]
+  },
+  {
+    "id": "burna-bommer-addon-1",
+    "unit_id": "burna-bommer",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "skorcha-missile-rack"
+    ]
+  },
+  {
+    "id": "wazbom-blastajet-swap-1",
+    "unit_id": "wazbom-blastajet",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-wazbom-mega-kannon"
+    ],
+    "replacement": [
+      "twin-tellyport-mega-blasta"
+    ]
+  },
+  {
+    "id": "wazbom-blastajet-addon-2",
+    "unit_id": "wazbom-blastajet",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "blastajet-force-field"
+    ]
+  },
+  {
+    "id": "wazbom-blastajet-addon-3",
+    "unit_id": "wazbom-blastajet",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "twin-supa-shoota"
+    ]
+  },
+  {
+    "id": "warbikers-addon-1",
+    "unit_id": "warbikers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "slugga"
+      ],
+      [
+        "choppa"
+      ]
+    ]
+  },
+  {
+    "id": "warbikers-addon-2",
+    "unit_id": "warbikers",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Boss Nob on Warbike",
+      "max_count": 1
+    },
+    "replacement_choice": [
+      [
+        "slugga"
+      ],
+      [
+        "big-choppa"
+      ],
+      [
+        "power-klaw"
+      ]
+    ]
+  },
+  {
+    "id": "wartrakks-swap-1",
+    "unit_id": "wartrakks",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "twin-big-shoota"
+    ],
+    "replacement": [
+      "rack-of-rokkits"
+    ]
+  },
+  {
+    "id": "warbuggies-swap-1",
+    "unit_id": "warbuggies",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "twin-big-shoota"
+    ],
+    "replacement": [
+      "rack-of-rokkits"
+    ]
+  },
+  {
+    "id": "big-gunz-swap-1",
+    "unit_id": "big-gunz",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "kannon"
+    ],
+    "replacement_choice": [
+      [
+        "lobba"
+      ],
+      [
+        "zzap-gun"
+      ]
+    ]
+  },
+  {
+    "id": "mek-gunz-swap-1",
+    "unit_id": "mek-gunz",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "smasha-gun"
+    ],
+    "replacement_choice": [
+      [
+        "bubblechukka"
+      ],
+      [
+        "kustom-mega-kannon"
+      ],
+      [
+        "traktor-kannon"
+      ]
+    ]
+  },
+  {
+    "id": "battlewagon-addon-1",
+    "unit_id": "battlewagon",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "kannon"
+      ],
+      [
+        "killkannon"
+      ],
+      [
+        "zzap-gun"
+      ]
+    ]
+  },
+  {
+    "id": "battlewagon-addon-2",
+    "unit_id": "battlewagon",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "lobba"
+    ]
+  },
+  {
+    "id": "battlewagon-addon-3",
+    "unit_id": "battlewagon",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "up-to-4-big-shootas"
+    ]
+  },
+  {
+    "id": "battlewagon-swap-4",
+    "unit_id": "battlewagon",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "tracks",
+      "wheels"
+    ],
+    "replacement": [
+      "deff-rolla"
+    ]
+  },
+  {
+    "id": "battlewagon-addon-5",
+    "unit_id": "battlewagon",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "any-of-the-following-1-ard-case1-grabbin-klaw1-wreckin-ball"
+    ]
+  },
+  {
+    "id": "deff-dread-swap-1",
+    "unit_id": "deff-dread",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "big-shootas"
+    ],
+    "replacement_choice": [
+      [
+        "dread-klaw"
+      ],
+      [
+        "kustom-mega-blasta"
+      ],
+      [
+        "rokkit-launcha"
+      ],
+      [
+        "skorcha"
+      ]
+    ]
+  },
+  {
+    "id": "deff-dread-swap-2",
+    "unit_id": "deff-dread",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "dread-klaws"
+    ],
+    "replacement_choice": [
+      [
+        "big-shoota"
+      ],
+      [
+        "kustom-mega-blasta"
+      ],
+      [
+        "rokkit-launcha"
+      ],
+      [
+        "skorcha"
+      ]
+    ]
+  },
+  {
+    "id": "killa-kans-swap-1",
+    "unit_id": "killa-kans",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "kan-shoota"
+    ],
+    "replacement_choice": [
+      [
+        "grotzooka"
+      ],
+      [
+        "rokkit-launcha"
+      ],
+      [
+        "skorcha"
+      ]
+    ]
+  },
+  {
+    "id": "flash-gitz-addon-1",
+    "unit_id": "flash-gitz",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "ammo-runt"
+    ]
+  },
+  {
+    "id": "lifta-wagon-swap-1",
+    "unit_id": "lifta-wagon",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "tracks",
+      "wheels"
+    ],
+    "replacement": [
+      "deff-rolla"
+    ]
+  },
+  {
+    "id": "lifta-wagon-addon-2",
+    "unit_id": "lifta-wagon",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "grabbin-klaw"
+    ]
+  },
+  {
+    "id": "lifta-wagon-addon-3",
+    "unit_id": "lifta-wagon",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "wreckin-ball"
+    ]
+  },
+  {
+    "id": "lifta-wagon-addon-4",
+    "unit_id": "lifta-wagon",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "big-shoota"
+      ],
+      [
+        "big-shootas"
+      ],
+      [
+        "big-shoota-and"
+      ],
+      [
+        "rokkit-launcha"
+      ],
+      [
+        "rokkit-launcha"
+      ],
+      [
+        "rokkit-launchas"
+      ]
+    ]
+  },
+  {
+    "id": "kannonwagon-addon-1",
+    "unit_id": "kannonwagon",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "up-to-3-big-shootas"
+    ]
+  },
+  {
+    "id": "chinork-warkopta-addon-1",
+    "unit_id": "chinork-warkopta",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "up-to-2-big-bomms"
+    ]
+  },
+  {
+    "id": "chinork-warkopta-swap-2",
+    "unit_id": "chinork-warkopta",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "big-shoota"
+    ],
+    "replacement_choice": [
+      [
+        "kustom-mega-blasta"
+      ],
+      [
+        "rokkit-launcha"
+      ],
+      [
+        "skorcha"
+      ]
+    ]
+  },
+  {
+    "id": "chinork-warkopta-swap-3",
+    "unit_id": "chinork-warkopta",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "deffguns"
+    ],
+    "replacement": [
+      "rattler-kannons"
+    ]
+  },
+  {
+    "id": "gargantuan-squiggoth-addon-1",
+    "unit_id": "gargantuan-squiggoth",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "kannon"
+      ],
+      [
+        "supa-kannon"
+      ]
+    ]
+  },
+  {
+    "id": "attack-fighta-addon-1",
+    "unit_id": "attack-fighta",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "wing-missiles"
+    ]
+  },
+  {
+    "id": "fighta-bommer-addon-1",
+    "unit_id": "fighta-bommer",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "grot-guided-bomms"
+      ],
+      [
+        "wing-missilessmall-bomms"
+      ]
+    ]
+  },
+  {
+    "id": "deff-rolla-battle-fortress-addon-1",
+    "unit_id": "deff-rolla-battle-fortress",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "up-to-5-big-shootas"
+    ]
+  },
+  {
+    "id": "deff-rolla-battle-fortress-swap-2",
+    "unit_id": "deff-rolla-battle-fortress",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "zzap-guns"
+    ],
+    "replacement_choice": [
+      [
+        "lobba"
+      ],
+      [
+        "kannon"
+      ]
+    ]
+  },
+  {
+    "id": "deff-rolla-battle-fortress-swap-3",
+    "unit_id": "deff-rolla-battle-fortress",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "kannon"
+    ],
+    "replacement_choice": [
+      [
+        "lobba"
+      ],
+      [
+        "zzap-gun"
+      ]
+    ]
+  },
+  {
+    "id": "deff-rolla-battle-fortress-swap-4",
+    "unit_id": "deff-rolla-battle-fortress",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "twin-big-shootas"
+    ],
+    "replacement_choice": [
+      [
+        "skorcha"
+      ],
+      [
+        "rokkit-launcha"
+      ]
+    ]
+  },
+  {
+    "id": "kill-krusha-addon-1",
+    "unit_id": "kill-krusha",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement_choice": [
+      [
+        "twin-big-shoota"
+      ],
+      [
+        "rokkit-launchas"
+      ],
+      [
+        "skorcha"
+      ]
+    ]
+  },
+  {
+    "id": "big-mek-with-shokk-attack-gun-addon-1",
+    "unit_id": "big-mek-with-shokk-attack-gun",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "grot-assistant"
+    ]
+  },
+  {
+    "id": "beastboss-on-squigosaur-addon-1",
+    "unit_id": "beastboss-on-squigosaur",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "thump-gun"
+    ]
+  },
+  {
+    "id": "painboss-addon-1",
+    "unit_id": "painboss",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "grot-orderly"
+    ]
+  },
+  {
+    "id": "beast-snagga-boyz-swap-1",
+    "unit_id": "beast-snagga-boyz",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Beast Snagga Boy",
+      "per_n_models": 10
+    },
+    "replaces": [
+      "slugga",
+      "choppa"
+    ],
+    "replacement": [
+      "thump-gun",
+      "close-combat-weapon"
+    ]
+  },
+  {
+    "id": "squighog-boyz-addon-1",
+    "unit_id": "squighog-boyz",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "per_n_models": 3
+    },
+    "replacement": [
+      "bomb-squig"
+    ]
+  },
+  {
+    "id": "biged-bossbunka-addon-1",
+    "unit_id": "biged-bossbunka",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replacement": [
+      "up-to-3-additional-big-shootas"
+    ]
+  },
+  {
+    "id": "deffkoptas-with-big-shootas-swap-1",
+    "unit_id": "deffkoptas-with-big-shootas",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replaces": [
+      "twin-big-shoota"
+    ],
+    "replacement_choice": [
+      [
+        "kopta-rockets"
+      ],
+      [
+        "kustom-mega-blasta"
+      ]
+    ]
+  },
+  {
+    "id": "deffkoptas-with-big-shootas-addon-2",
+    "unit_id": "deffkoptas-with-big-shootas",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "any_number": true
+    },
+    "replacement": [
+      "killsaw"
+    ]
+  },
+  {
+    "id": "big-mek-swap-1",
+    "unit_id": "big-mek",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "kustom-mega-blasta"
+    ],
+    "replacement": [
+      "traktor-blasta"
+    ]
+  },
+  {
+    "id": "big-mek-swap-2",
+    "unit_id": "big-mek",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "replaces": [
+      "power-klaw"
+    ],
+    "replacement": [
+      "drilla"
+    ]
+  },
+  {
+    "id": "breaka-boyz-swap-1",
+    "unit_id": "breaka-boyz",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Boss Nob",
+      "max_count": 1
+    },
+    "replaces": [
+      "smash-hammer"
+    ],
+    "replacement": [
+      "rokkit-pistol"
+    ]
+  },
+  {
+    "id": "breaka-boyz-swap-2",
+    "unit_id": "breaka-boyz",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Breaka Boy",
+      "max_count": 1
+    },
+    "replaces": [
+      "smash-hammer"
+    ],
+    "replacement": [
+      "knucklebustas"
+    ]
+  },
+  {
+    "id": "breaka-boyz-swap-3",
+    "unit_id": "breaka-boyz",
+    "is_free": true,
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "model_constraint": {
+      "model_name": "Breaka Boy",
+      "max_count": 1
+    },
+    "replaces": [
+      "smash-hammer"
+    ],
+    "replacement": [
+      "tankhammer"
+    ]
+  }
+]

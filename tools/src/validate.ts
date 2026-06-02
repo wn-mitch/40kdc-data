@@ -34,6 +34,7 @@ const SCHEMA_MAP: Record<string, string> = {
   enhancements: "https://40kdc.dev/schemas/core/enhancement.schema.json",
   stratagems: "https://40kdc.dev/schemas/core/stratagem.schema.json",
   "wargear-options": "https://40kdc.dev/schemas/core/wargear-option.schema.json",
+  wargear: "https://40kdc.dev/schemas/core/wargear.schema.json",
   "leader-attachments": "https://40kdc.dev/schemas/core/leader-attachment.schema.json",
   "unit-compositions": "https://40kdc.dev/schemas/core/unit-composition.schema.json",
   "force-dispositions": "https://40kdc.dev/schemas/core/force-disposition.schema.json",
@@ -52,14 +53,16 @@ const SCHEMA_MAP: Record<string, string> = {
 
 /**
  * Determine which schema $id to use for a given data file path.
- * Convention: the file's base name prefix (before the first dot) maps to a schema.
+ * Convention: the file's base name starts with a SCHEMA_MAP prefix (real data is
+ * `<prefix>.json`; test fixtures are `<prefix>-good.json` / `<prefix>-bad.json`).
+ * Prefixes are tried longest-first so `wargear-options.json` resolves to the
+ * wargear-option schema rather than the shorter `wargear` key (distinct entities).
  */
+const SCHEMA_PREFIXES = Object.keys(SCHEMA_MAP).sort((a, b) => b.length - a.length);
 function resolveSchemaId(filePath: string): string | null {
   const base = basename(filePath);
-  for (const [prefix, schemaId] of Object.entries(SCHEMA_MAP)) {
-    if (base.startsWith(prefix)) {
-      return schemaId;
-    }
+  for (const prefix of SCHEMA_PREFIXES) {
+    if (base.startsWith(prefix)) return SCHEMA_MAP[prefix];
   }
   return null;
 }
@@ -85,6 +88,9 @@ export async function validateFiles(
   };
 
   for (const file of files) {
+    // Underscore-prefixed files are scratch/reports (e.g. the converter's
+    // `_wargear-options.unparsed.json`), not dataset entities — skip them.
+    if (basename(file).startsWith("_")) continue;
     const schemaId = resolveSchemaId(file);
     if (!schemaId) {
       result.errors.push({

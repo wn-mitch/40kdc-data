@@ -825,9 +825,6 @@
         }
       },
       "minProperties": 1,
-      "allOf": [
-        {}
-      ],
       "additionalProperties": false
     },
     "army-composition-predicate": {
@@ -1793,7 +1790,7 @@
     },
     "wargear-option": {
       "title": "Wargear Option",
-      "description": "A weapon substitution option available to models within a unit.",
+      "description": "A wargear option available to models within a unit: a weapon/wargear swap, a pure add-on, or a choice between alternatives. Models start with the unit's base loadout; an option modifies that loadout for the number of models its `model_constraint` permits.",
       "type": "object",
       "properties": {
         "id": {
@@ -1806,6 +1803,7 @@
           "oneOf": [
             {
               "type": "object",
+              "description": "Limits how many models may take this option. The eligible-model count is: `any_number` ? model_count : `per_n_models` ? floor(model_count / per_n_models) : (`max_count` ?? 1); then clamped by `max_count` when both are set. `model_name` scopes the option to a specific model profile (e.g. the unit's champion); omit for single-profile units.",
               "properties": {
                 "model_name": {
                   "type": "string",
@@ -1818,6 +1816,11 @@
                 "max_count": {
                   "type": "integer",
                   "minimum": 1
+                },
+                "any_number": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "When true, every model in the unit may take the option ('Any number of models can each ...'). Mutually exclusive in spirit with `per_n_models`."
                 }
               },
               "additionalProperties": false
@@ -1833,7 +1836,7 @@
             "$ref": "#/$defs/entity-id"
           },
           "minItems": 1,
-          "description": "Weapon IDs being removed"
+          "description": "Weapon or wargear IDs removed from the model. Omit for a pure add-on (the option only equips new wargear)."
         },
         "replacement": {
           "type": "array",
@@ -1841,7 +1844,19 @@
             "$ref": "#/$defs/entity-id"
           },
           "minItems": 1,
-          "description": "Weapon IDs being added"
+          "description": "Weapon or wargear IDs added to the model — all of them. Exactly one of `replacement` / `replacement_choice` is present."
+        },
+        "replacement_choice": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/entity-id"
+            },
+            "minItems": 1
+          },
+          "minItems": 2,
+          "description": "A choice of replacements ('one of the following'): pick exactly one inner group; each group's IDs are all added together. Exactly one of `replacement` / `replacement_choice` is present."
         },
         "is_free": {
           "type": "boolean",
@@ -1865,8 +1880,42 @@
       "required": [
         "id",
         "unit_id",
-        "replaces",
-        "replacement",
+        "game_version"
+      ],
+      "additionalProperties": false
+    },
+    "wargear": {
+      "title": "Wargear",
+      "description": "A non-weapon item a model may carry — an icon, attachment, or other piece of equipment with no weapon profile. Weapons live in weapon.schema.json; this entity exists so wargear-option swaps and add-ons can reference equipment that is not a weapon.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/entity-id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "category": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "description": "Free-form grouping such as 'icon', 'upgrade', or 'equipment'."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "game_version": {
+          "$ref": "#/$defs/game-version-ref"
+        }
+      },
+      "required": [
+        "id",
+        "name",
         "game_version"
       ],
       "additionalProperties": false
@@ -2385,10 +2434,7 @@
         "type",
         "target"
       ],
-      "$comment": "When `type` is `re-roll`, `modifier` must carry `roll` (string) and `subset` (`ones` | `all-failures`). Rerolls always target failures; the subset decides whether only 1s are rerolled or every failed die. The constraint is enforced by AJV at validation time and stripped from the codegen bundle (typify can't model if/then/else) — the generated TS/Rust types therefore see `modifier` as an open object, matching its other-`type` callers. When `type` is `feel-no-pain`, `modifier` carries `threshold` (the FNP save target) and optionally `scope` ∈ {`all`, `mortal`}; an absent scope defaults to `all` (fires on every unsaved wound). The two scopes compose independently against the mortal-wound stream. Tag effects (`terrain-area-tag`, `objective-tag`, `unit-tag`) set a transient marker on the named subject; `modifier` carries `tag` (string) and optionally `source` ('this-action'|'destroying-unit') and `clears_on` ('turn-rollover'|'never'). `target` for tag effects names the kind of entity the tag is applied to ('unit', 'self') — a placeholder, since the marker target is the objective/terrain/unit specified by the action context, not a combat target.",
-      "allOf": [
-        {}
-      ]
+      "$comment": "When `type` is `re-roll`, `modifier` must carry `roll` (string) and `subset` (`ones` | `all-failures`). Rerolls always target failures; the subset decides whether only 1s are rerolled or every failed die. The constraint is enforced by AJV at validation time and stripped from the codegen bundle (typify can't model if/then/else) — the generated TS/Rust types therefore see `modifier` as an open object, matching its other-`type` callers. When `type` is `feel-no-pain`, `modifier` carries `threshold` (the FNP save target) and optionally `scope` ∈ {`all`, `mortal`}; an absent scope defaults to `all` (fires on every unsaved wound). The two scopes compose independently against the mortal-wound stream. Tag effects (`terrain-area-tag`, `objective-tag`, `unit-tag`) set a transient marker on the named subject; `modifier` carries `tag` (string) and optionally `source` ('this-action'|'destroying-unit') and `clears_on` ('turn-rollover'|'never'). `target` for tag effects names the kind of entity the tag is applied to ('unit', 'self') — a placeholder, since the marker target is the objective/terrain/unit specified by the action context, not a combat target."
     },
     "choice-effect": {
       "type": "object",

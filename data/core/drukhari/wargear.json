@@ -1,0 +1,148 @@
+[
+  {
+    "id": "soul-trap",
+    "name": "soul trap",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "sybarite-weapon",
+    "name": "Sybarite weapon",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "kabalite-icon",
+    "name": "Kabalite icon",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "category": "icon"
+  },
+  {
+    "id": "phantasm-grenade-launcher",
+    "name": "phantasm grenade launcher",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "demilklaives",
+    "name": "demilklaives",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "incubi-shrine-token",
+    "name": "Incubi Shrine token",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "category": "token"
+  },
+  {
+    "id": "torturers-tool1-models-twin-torturers-tools-can-be-replaced-with-1-liquifier-gun",
+    "name": "torturer's tool1 model's twin torturer's tools can be replaced with 1 liquifier gun",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "torturers-tool1-models-twin-torturers-tools-can-be-replaced-with-1-ossefactor",
+    "name": "torturer's tool1 model's twin torturer's tools can be replaced with 1 ossefactor",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "torturers-tool1-models-twin-torturers-tools-can-be-replaced-with-1-stinger-pistol",
+    "name": "torturer's tool1 model's twin torturer's tools can be replaced with 1 stinger pistol",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "tool",
+    "name": "tool",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "cluster-caltrops",
+    "name": "cluster caltrops",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "grav-talon",
+    "name": "grav-talon",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "splinter-pistol-and",
+    "name": "splinter pistol and",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "dark-lances",
+    "name": "dark lances",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "disintegrator-cannons",
+    "name": "disintegrator cannons",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "void-lances",
+    "name": "void lances",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "dark-scythes",
+    "name": "dark scythes",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  },
+  {
+    "id": "macro-scalpels",
+    "name": "macro-scalpels",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    }
+  }
+]
