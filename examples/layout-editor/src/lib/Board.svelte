@@ -1,29 +1,58 @@
 <script lang="ts">
-  import { BOARD, type EditLayout, type Vec2 } from "./model.js";
+  import Handles from "./Handles.svelte";
+  import {
+    BOARD,
+    BOARD_CENTER,
+    orientedFootprint,
+    upperFloorBoardVerts,
+    isGroundBlocked,
+    bbox,
+    type EditLayout,
+    type EditPiece,
+    type Mirror,
+    type Vec2,
+    type SolverRef,
+    type SolverViz,
+    type OrientedFootprint,
+    type DeployZone,
+  } from "./model.js";
   import type { ResolvedPiece } from "@alpaca-software/40kdc-data";
 
   interface Props {
     layout: EditLayout;
     resolved: ResolvedPiece[];
     selectedId: string | null;
+    selectedPiece: EditPiece | null;
+    solver: SolverViz;
+    zones: DeployZone[];
     onselect: (id: string | null) => void;
     onmove: (id: string, position: Vec2) => void;
+    onorient: (id: string, patch: { rotation_degrees?: number; mirror?: Mirror }) => void;
   }
-  let { layout, resolved, selectedId, onselect, onmove }: Props = $props();
+  let { layout, resolved, selectedId, selectedPiece, solver, zones, onselect, onmove, onorient }: Props =
+    $props();
 
-  // viewBox is in board inches (y-down), so resolved vertices map 1:1. We only
-  // need pixels-per-inch to translate a pointer drag back into inches.
-  let svgEl = $state<SVGSVGElement | null>(null);
-  let drag = $state<{ id: string; startX: number; startY: number; origin: Vec2 } | null>(null);
+  // The board is shown rotated 90° CW for portrait terrain cards. Board coords stay
+  // 60×44 y-down; the content group carries the rotation, and we map pointers back
+  // through its CTM so all geometry stays in true board space.
+  let gEl = $state<SVGGElement | null>(null);
+  let drag = $state<{ id: string; offset: Vec2 } | null>(null);
 
+  function toBoard(e: PointerEvent): Vec2 {
+    const ctm = gEl?.getScreenCTM();
+    if (!ctm) return { x: 0, y: 0 };
+    const pt = new DOMPoint(e.clientX, e.clientY).matrixTransform(ctm.inverse());
+    return { x: pt.x, y: pt.y };
+  }
   function pxPerInch(): number {
-    const w = svgEl?.getBoundingClientRect().width ?? BOARD.width;
-    return w / BOARD.width;
+    const ctm = gEl?.getScreenCTM();
+    return ctm ? Math.hypot(ctm.a, ctm.b) : 12;
   }
-
-  function points(p: ResolvedPiece): string {
-    return p.vertices.map((v) => `${v.x},${v.y}`).join(" ");
+  /** Board (x,y) → display, matching the group's translate(BOARD.height,0) rotate(90), for upright labels. */
+  function toDisplay(b: Vec2): Vec2 {
+    return { x: BOARD.height - b.y, y: b.x };
   }
+  const clamp = (n: number, hi: number): number => Math.max(0, Math.min(hi, Math.round(n * 100) / 100));
 
   function onPointerDown(e: PointerEvent, p: ResolvedPiece): void {
     if (!p.id) return;
@@ -32,103 +61,304 @@
     const piece = layout.pieces.find((q) => q.id === p.id);
     if (!piece) return;
     (e.target as Element).setPointerCapture(e.pointerId);
-    drag = { id: p.id, startX: e.clientX, startY: e.clientY, origin: { ...piece.position } };
+    const b = toBoard(e);
+    drag = { id: p.id, offset: { x: b.x - piece.position.x, y: b.y - piece.position.y } };
   }
-
   function onPointerMove(e: PointerEvent): void {
     if (!drag) return;
-    const scale = pxPerInch();
-    const nx = drag.origin.x + (e.clientX - drag.startX) / scale;
-    const ny = drag.origin.y + (e.clientY - drag.startY) / scale;
-    onmove(drag.id, {
-      x: Math.max(0, Math.min(BOARD.width, Math.round(nx * 100) / 100)),
-      y: Math.max(0, Math.min(BOARD.height, Math.round(ny * 100) / 100)),
-    });
+    const b = toBoard(e);
+    onmove(drag.id, { x: clamp(b.x - drag.offset.x, BOARD.width), y: clamp(b.y - drag.offset.y, BOARD.height) });
   }
-
   function endDrag(): void {
     drag = null;
   }
 
-  // Centroid markers (the stored anchor) for the selected piece.
-  const selectedAnchor = $derived(
-    selectedId ? layout.pieces.find((p) => p.id === selectedId)?.position ?? null : null,
+  const pts = (p: ResolvedPiece): string => p.vertices.map((v) => `${v.x},${v.y}`).join(" ");
+  const polyPts = (vs: Vec2[]): string => vs.map((v) => `${v.x},${v.y}`).join(" ");
+
+  const twinId = $derived(selectedPiece?.twin_id ?? null);
+  const editById = $derived(new Map(layout.pieces.map((p) => [p.id, p])));
+
+  // Upper-floor platforms across the layout (dashed overlays).
+  const uppers = $derived(
+    layout.pieces
+      .map((p) => ({ id: p.id, verts: upperFloorBoardVerts(p) }))
+      .filter((u): u is { id: string; verts: Vec2[] } => !!u.verts),
   );
+
+  const selOriented = $derived<OrientedFootprint | null>(
+    selectedPiece ? orientedFootprint(selectedPiece) : null,
+  );
+
+  function refPoint(o: OrientedFootprint, ref: SolverRef): Vec2 {
+    if (ref.kind === "vertex") return o.verticesBoard[ref.index] ?? o.centroid;
+    const b = bbox(o.verticesBoard);
+    if (ref.side === "min-x") return { x: b.minX, y: (b.minY + b.maxY) / 2 };
+    if (ref.side === "max-x") return { x: b.maxX, y: (b.minY + b.maxY) / 2 };
+    if (ref.side === "min-y") return { x: (b.minX + b.maxX) / 2, y: b.minY };
+    return { x: (b.minX + b.maxX) / 2, y: b.maxY };
+  }
+  function faceSeg(o: OrientedFootprint, side: string): [Vec2, Vec2] {
+    const b = bbox(o.verticesBoard);
+    if (side === "min-x") return [{ x: b.minX, y: b.minY }, { x: b.minX, y: b.maxY }];
+    if (side === "max-x") return [{ x: b.maxX, y: b.minY }, { x: b.maxX, y: b.maxY }];
+    if (side === "min-y") return [{ x: b.minX, y: b.minY }, { x: b.maxX, y: b.minY }];
+    return [{ x: b.minX, y: b.maxY }, { x: b.maxX, y: b.maxY }];
+  }
+  function guide(o: OrientedFootprint, line: SolverViz["lines"][number]) {
+    const t = refPoint(o, line.ref);
+    const from: Vec2 =
+      line.edge === "left"
+        ? { x: 0, y: t.y }
+        : line.edge === "right"
+          ? { x: BOARD.width, y: t.y }
+          : line.edge === "top"
+            ? { x: t.x, y: 0 }
+            : { x: t.x, y: BOARD.height };
+    return { from, to: t, mid: { x: (from.x + t.x) / 2, y: (from.y + t.y) / 2 }, text: `${line.distance}″` };
+  }
+
+  // Edge labels (board edges, named) so the rotation never hides which edge is which.
+  const edgeLabels = $derived([
+    { at: toDisplay({ x: BOARD.width / 2, y: 0.8 }), text: "top (y0)" },
+    { at: toDisplay({ x: BOARD.width / 2, y: BOARD.height - 0.8 }), text: "bottom (y44)" },
+    { at: toDisplay({ x: 1.4, y: BOARD.height / 2 }), text: "left (x0)" },
+    { at: toDisplay({ x: BOARD.width - 1.4, y: BOARD.height / 2 }), text: "right (x60)" },
+  ]);
 </script>
 
 <svg
-  bind:this={svgEl}
   class="board"
-  viewBox={`0 0 ${BOARD.width} ${BOARD.height}`}
+  viewBox="0 0 44 60"
   preserveAspectRatio="xMidYMid meet"
   role="application"
-  aria-label="Terrain board, 60 by 44 inches"
+  aria-label="Terrain board, 60 by 44 inches, shown portrait"
   onpointermove={onPointerMove}
   onpointerup={endDrag}
   onpointerleave={endDrag}
   onpointerdown={() => onselect(null)}
 >
-  <!-- board + grid -->
-  <rect x="0" y="0" width={BOARD.width} height={BOARD.height} class="board-bg" />
-  {#each Array(BOARD.width / 6 + 1) as _, i (i)}
-    <line x1={i * 6} y1="0" x2={i * 6} y2={BOARD.height} class="grid" />
-  {/each}
-  {#each Array(BOARD.height / 4 + 1) as _, i (i)}
-    <line x1="0" y1={i * 4} x2={BOARD.width} y2={i * 4} class="grid" />
-  {/each}
+  <g class="board-layer" bind:this={gEl} transform="translate(44,0) rotate(90)">
+    <rect x="0" y="0" width={BOARD.width} height={BOARD.height} class="board-bg" />
 
-  {#each resolved as p (p.id ?? p.name)}
-    <polygon
-      points={points(p)}
-      class="piece {p.piece_type} {p.id === selectedId ? 'selected' : ''}"
-      role="button"
-      tabindex="0"
-      aria-label={p.name ?? p.id ?? "piece"}
-      onpointerdown={(e) => onPointerDown(e, p)}
-    />
-  {/each}
+    <!-- deployment zones (under the grid, like the printed card) -->
+    {#each zones as z, i (z.player + i)}
+      <polygon
+        points={z.points.map((p) => `${p.x},${p.y}`).join(" ")}
+        class="zone"
+        style:fill={z.color ?? "var(--accent)"}
+        style:stroke={z.color ?? "var(--accent)"}
+      />
+    {/each}
 
-  {#if selectedAnchor}
-    <circle cx={selectedAnchor.x} cy={selectedAnchor.y} r="0.6" class="anchor" />
-  {/if}
+    <!-- 1" grid with honor lines every 5" -->
+    {#each Array(BOARD.width + 1) as _, i (i)}
+      <line x1={i} y1="0" x2={i} y2={BOARD.height} class="grid {i % 5 === 0 ? 'major' : 'minor'}" />
+    {/each}
+    {#each Array(BOARD.height + 1) as _, i (i)}
+      <line x1="0" y1={i} x2={BOARD.width} y2={i} class="grid {i % 5 === 0 ? 'major' : 'minor'}" />
+    {/each}
+
+    <!-- centre of symmetry -->
+    <line x1={BOARD_CENTER.x - 1} y1={BOARD_CENTER.y} x2={BOARD_CENTER.x + 1} y2={BOARD_CENTER.y} class="centre" />
+    <line x1={BOARD_CENTER.x} y1={BOARD_CENTER.y - 1} x2={BOARD_CENTER.x} y2={BOARD_CENTER.y + 1} class="centre" />
+
+    {#each resolved as p (p.id ?? p.name)}
+      {@const ep = p.id ? editById.get(p.id) : undefined}
+      <polygon
+        points={pts(p)}
+        class="piece {p.piece_type} {p.id === selectedId ? 'selected' : ''} {p.id === twinId
+          ? 'twin'
+          : ''} {ep && isGroundBlocked(ep) ? 'blocked' : ''}"
+        role="button"
+        tabindex="0"
+        aria-label={p.name ?? p.id ?? "piece"}
+        onpointerdown={(e) => onPointerDown(e, p)}
+      />
+    {/each}
+
+    {#each uppers as u (u.id)}
+      <polygon points={polyPts(u.verts)} class="upper" />
+    {/each}
+
+    <!-- solver indicators on the selected piece -->
+    {#if selOriented}
+      {#if solver.hover}
+        {#if solver.hover.kind === "vertex"}
+          {@const v = selOriented.verticesBoard[solver.hover.index]}
+          {#if v}<circle cx={v.x} cy={v.y} r="0.7" class="ind hover" />{/if}
+        {:else}
+          {@const seg = faceSeg(selOriented, solver.hover.side)}
+          <line x1={seg[0].x} y1={seg[0].y} x2={seg[1].x} y2={seg[1].y} class="ind-edge hover" />
+        {/if}
+      {/if}
+      {#each solver.lines as line (line.edge)}
+        {#if line.distance}
+          {@const g = guide(selOriented, line)}
+          <line x1={g.from.x} y1={g.from.y} x2={g.to.x} y2={g.to.y} class="measure" />
+          {#if line.ref.kind === "vertex"}
+            {@const v = selOriented.verticesBoard[line.ref.index]}
+            {#if v}<circle cx={v.x} cy={v.y} r="0.5" class="ind active" />{/if}
+          {:else}
+            {@const seg = faceSeg(selOriented, line.ref.side)}
+            <line x1={seg[0].x} y1={seg[0].y} x2={seg[1].x} y2={seg[1].y} class="ind-edge active" />
+          {/if}
+        {/if}
+      {/each}
+
+      <circle cx={selOriented.centroid.x} cy={selOriented.centroid.y} r="0.3" class="anchor" />
+    {/if}
+
+    {#if selectedPiece}
+      <Handles piece={selectedPiece} {toBoard} {pxPerInch} onorient={(patch) => onorient(selectedPiece.id, patch)} />
+    {/if}
+  </g>
+
+  <!-- upright label layer (not rotated) -->
+  <g class="labels">
+    {#each edgeLabels as l (l.text)}
+      <text x={l.at.x} y={l.at.y} class="edge-label">{l.text}</text>
+    {/each}
+    {#if selOriented}
+      {#each solver.lines as line (line.edge)}
+        {#if line.distance}
+          {@const g = guide(selOriented, line)}
+          {@const d = toDisplay(g.mid)}
+          <text x={d.x} y={d.y} class="measure-label">{g.text}</text>
+        {/if}
+      {/each}
+    {/if}
+  </g>
 </svg>
 
 <style>
   .board {
     width: 100%;
-    height: auto;
-    background: #0b0f14;
-    border: 1px solid #243140;
+    height: 100%;
+    background: var(--bg);
+    border: 1px solid var(--rim);
     border-radius: 6px;
     touch-action: none;
+    display: block;
   }
+  /* A light tabletop surface so terrain, zones and grid read against the dark chrome. */
   .board-bg {
-    fill: #11161d;
+    fill: oklch(0.74 0.008 220);
   }
-  .grid {
-    stroke: #1b2530;
-    stroke-width: 0.06;
+  .grid.minor {
+    stroke: oklch(0.62 0.01 220);
+    stroke-width: 0.035;
+  }
+  .grid.major {
+    stroke: oklch(0.42 0.02 235);
+    stroke-width: 0.09;
+  }
+  .zone {
+    fill-opacity: 0.18;
+    stroke-opacity: 0.7;
+    stroke-width: 0.25;
+    pointer-events: none;
+  }
+  .centre {
+    stroke: oklch(0.34 0.03 25);
+    stroke-width: 0.12;
+    opacity: 0.8;
   }
   .piece {
     stroke-width: 0.18;
     cursor: grab;
   }
-  .piece.area {
-    fill: rgba(56, 132, 222, 0.28);
-    stroke: #3884de;
+  .piece:focus {
+    outline: none;
   }
-  .piece.feature {
-    fill: rgba(222, 160, 56, 0.5);
-    stroke: #dea038;
-  }
-  .piece.selected {
-    stroke: #f4f6f8;
+  .piece:focus-visible {
+    outline: none;
+    stroke: var(--accent-strong);
     stroke-width: 0.32;
   }
+  /* Piece colours are tuned for the light tabletop surface (distinct from the
+     dark-card thumbnails, which keep the token palette). */
+  .piece.area {
+    fill: oklch(0.55 0.15 258 / 0.42);
+    stroke: oklch(0.42 0.16 262);
+  }
+  .piece.feature {
+    fill: oklch(0.68 0.15 62 / 0.55);
+    stroke: oklch(0.5 0.16 58);
+  }
+  .piece.blocked {
+    stroke-dasharray: 0.5 0.4;
+  }
+  .piece.twin {
+    stroke: oklch(0.52 0.13 195);
+    stroke-width: 0.26;
+    stroke-dasharray: 0.6 0.4;
+  }
+  .piece.selected {
+    stroke: oklch(0.48 0.15 195);
+    stroke-width: 0.36;
+  }
+  .upper {
+    fill: none;
+    stroke: oklch(0.4 0.02 255);
+    stroke-width: 0.1;
+    stroke-dasharray: 0.5 0.35;
+    pointer-events: none;
+  }
   .anchor {
-    fill: #f4f6f8;
-    stroke: #0b0f14;
-    stroke-width: 0.12;
+    fill: oklch(0.25 0.02 220);
+    stroke: oklch(0.96 0.01 220);
+    stroke-width: 0.08;
+    pointer-events: none;
+  }
+  .ind {
+    pointer-events: none;
+  }
+  .ind.hover {
+    fill: oklch(0.52 0.14 195);
+    opacity: 0.7;
+  }
+  .ind.active {
+    fill: oklch(0.42 0.15 195);
+  }
+  .ind-edge {
+    pointer-events: none;
+    fill: none;
+  }
+  .ind-edge.hover {
+    stroke: oklch(0.52 0.14 195);
+    stroke-width: 0.4;
+    opacity: 0.7;
+  }
+  .ind-edge.active {
+    stroke: oklch(0.42 0.15 195);
+    stroke-width: 0.4;
+  }
+  .measure {
+    stroke: oklch(0.4 0.15 195);
+    stroke-width: 0.14;
+    stroke-dasharray: 0.4 0.3;
+    pointer-events: none;
+  }
+  .edge-label {
+    fill: oklch(0.32 0.02 235);
+    font-size: 1.1px;
+    text-anchor: middle;
+    font-family: "JetBrains Mono", monospace;
+    paint-order: stroke;
+    stroke: oklch(0.82 0.008 220);
+    stroke-width: 0.35px;
+    pointer-events: none;
+  }
+  .measure-label {
+    fill: oklch(0.34 0.15 195);
+    font-size: 1.7px;
+    font-weight: 600;
+    text-anchor: middle;
+    font-family: "JetBrains Mono", monospace;
+    paint-order: stroke;
+    stroke: oklch(0.85 0.008 220);
+    stroke-width: 0.55px;
     pointer-events: none;
   }
 </style>

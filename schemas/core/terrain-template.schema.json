@@ -67,6 +67,26 @@
       "type": "boolean",
       "description": "Whether the template blocks line of sight / movement by default."
     },
+    "ground_accessible": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether models may be placed on the ground footprint. `false` marks an elevated-only piece (a platform reachable only on its `upper_floor`, e.g. a gantry/catwalk) or a solid obstacle with no valid placement (e.g. a generator). Meaningful for `kind: \"feature\"`."
+    },
+    "upper_floor": {
+      "type": "object",
+      "description": "An elevated platform carried by this feature (e.g. a ruin's second storey). Its footprint is authored in the SAME local frame as `footprint` and re-centered on the GROUND footprint's polygon area centroid, so the two floors stay registered when the piece is placed, rotated, or mirrored. Non-resolved metadata: the terrain resolver does not emit it; authoring/visualization tools render it as an overlay. Meaningful for `kind: \"feature\"`.",
+      "properties": {
+        "footprint": { "$ref": "../defs/common.schema.json#/$defs/footprint" },
+        "floor": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "description": "Ruin floor this platform occupies (1 = first floor above ground)."
+        }
+      },
+      "required": ["footprint"],
+      "additionalProperties": false
+    },
     "default_terrain_area_keywords": {
       "type": "array",
       "uniqueItems": true,

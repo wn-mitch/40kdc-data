@@ -48,78 +48,8 @@
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   },
   {
-    "id": "wall-long",
-    "name": "Long Wall",
-    "kind": "feature",
-    "source": "gw-11e",
-    "footprint": { "type": "rectangle", "width": 7, "height": 0.25 },
-    "default_height_inches": 5,
-    "default_blocking": true,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
-  },
-  {
-    "id": "wall-medium",
-    "name": "Medium Wall",
-    "kind": "feature",
-    "source": "gw-11e",
-    "footprint": { "type": "rectangle", "width": 5, "height": 0.25 },
-    "default_height_inches": 5,
-    "default_blocking": true,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
-  },
-  {
-    "id": "wall-short",
-    "name": "Short Wall",
-    "kind": "feature",
-    "source": "gw-11e",
-    "footprint": { "type": "rectangle", "width": 3, "height": 0.25 },
-    "default_height_inches": 5,
-    "default_blocking": true,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
-  },
-  {
-    "id": "wall-xs",
-    "name": "Extra-Short Wall",
-    "kind": "feature",
-    "source": "gw-11e",
-    "footprint": { "type": "rectangle", "width": 2, "height": 0.25 },
-    "default_height_inches": 5,
-    "default_blocking": true,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
-  },
-  {
-    "id": "warzone-wall-large",
-    "name": "Warzone Wall (Large)",
-    "kind": "feature",
-    "source": "gw-11e",
-    "footprint": { "type": "rectangle", "width": 9, "height": 0.25 },
-    "default_height_inches": 5,
-    "default_blocking": true,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
-  },
-  {
-    "id": "warzone-wall-medium",
-    "name": "Warzone Wall (Medium)",
-    "kind": "feature",
-    "source": "gw-11e",
-    "footprint": { "type": "rectangle", "width": 6, "height": 0.25 },
-    "default_height_inches": 5,
-    "default_blocking": true,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
-  },
-  {
-    "id": "warzone-wall-small",
-    "name": "Warzone Wall (Small)",
-    "kind": "feature",
-    "source": "gw-11e",
-    "footprint": { "type": "rectangle", "width": 5, "height": 0.25 },
-    "default_height_inches": 5,
-    "default_blocking": true,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
-  },
-  {
-    "id": "corner-xs",
-    "name": "Extra-Small Corner",
+    "id": "corner-tiny",
+    "name": "Tiny Corner L",
     "kind": "feature",
     "source": "gw-11e",
     "footprint": {
@@ -127,9 +57,9 @@
       "points": [
         { "x": 0, "y": 0 },
         { "x": 2, "y": 0 },
-        { "x": 2, "y": 0.25 },
-        { "x": 0.25, "y": 0.25 },
-        { "x": 0.25, "y": 2 },
+        { "x": 2, "y": 0.5 },
+        { "x": 0.5, "y": 0.5 },
+        { "x": 0.5, "y": 2 },
         { "x": 0, "y": 2 }
       ]
     },
@@ -138,19 +68,19 @@
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   },
   {
-    "id": "corner-small",
-    "name": "Small Corner",
+    "id": "corner-short",
+    "name": "Short Corner L",
     "kind": "feature",
     "source": "gw-11e",
     "footprint": {
       "type": "polygon",
       "points": [
         { "x": 0, "y": 0 },
-        { "x": 3, "y": 0 },
-        { "x": 3, "y": 0.25 },
-        { "x": 0.25, "y": 0.25 },
-        { "x": 0.25, "y": 6 },
-        { "x": 0, "y": 6 }
+        { "x": 2, "y": 0 },
+        { "x": 2, "y": 0.5 },
+        { "x": 0.5, "y": 0.5 },
+        { "x": 0.5, "y": 3 },
+        { "x": 0, "y": 3 }
       ]
     },
     "default_height_inches": 5,
@@ -158,63 +88,25 @@
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   },
   {
-    "id": "corner-medium",
-    "name": "Medium Corner",
+    "id": "barricade",
+    "name": "Barricade",
     "kind": "feature",
     "source": "gw-11e",
     "footprint": {
       "type": "polygon",
       "points": [
         { "x": 0, "y": 0 },
-        { "x": 5, "y": 0 },
-        { "x": 5, "y": 0.25 },
-        { "x": 0.25, "y": 0.25 },
-        { "x": 0.25, "y": 5 },
-        { "x": 0, "y": 5 }
+        { "x": 3.5, "y": 0 },
+        { "x": 3.5, "y": 1 },
+        { "x": 3, "y": 1 },
+        { "x": 3, "y": 0.5 },
+        { "x": 0.5, "y": 0.5 },
+        { "x": 0.5, "y": 1 },
+        { "x": 0, "y": 1 }
       ]
     },
-    "default_height_inches": 5,
-    "default_blocking": true,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
-  },
-  {
-    "id": "corner-large",
-    "name": "Large Corner",
-    "kind": "feature",
-    "source": "gw-11e",
-    "footprint": {
-      "type": "polygon",
-      "points": [
-        { "x": 0, "y": 0 },
-        { "x": 6, "y": 0 },
-        { "x": 6, "y": 0.25 },
-        { "x": 0.25, "y": 0.25 },
-        { "x": 0.25, "y": 7 },
-        { "x": 0, "y": 7 }
-      ]
-    },
-    "default_height_inches": 5,
-    "default_blocking": true,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
-  },
-  {
-    "id": "canister",
-    "name": "Canister",
-    "kind": "feature",
-    "source": "gw-11e",
-    "footprint": { "type": "rectangle", "width": 3, "height": 5 },
-    "default_height_inches": 3,
-    "default_blocking": true,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
-  },
-  {
-    "id": "scaffold",
-    "name": "Scaffold",
-    "kind": "feature",
-    "source": "gw-11e",
-    "footprint": { "type": "rectangle", "width": 2, "height": 2 },
-    "default_height_inches": 4,
-    "default_blocking": true,
+    "default_height_inches": 2,
+    "default_blocking": false,
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   },
   {
@@ -222,44 +114,111 @@
     "name": "Pipe",
     "kind": "feature",
     "source": "gw-11e",
-    "footprint": { "type": "rectangle", "width": 5, "height": 1 },
+    "footprint": { "type": "rectangle", "width": 5.5, "height": 1 },
     "default_height_inches": 2,
     "default_blocking": false,
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   },
   {
-    "id": "floor-4x4",
-    "name": "Floor Segment 4x4",
+    "id": "gantry",
+    "name": "Gantry",
     "kind": "feature",
     "source": "gw-11e",
-    "footprint": { "type": "rectangle", "width": 4, "height": 4 },
+    "footprint": { "type": "rectangle", "width": 2, "height": 2 },
     "default_height_inches": 3,
     "default_blocking": false,
+    "ground_accessible": false,
+    "upper_floor": {
+      "footprint": { "type": "rectangle", "width": 2, "height": 2 },
+      "floor": 1
+    },
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   },
   {
-    "id": "floor-3x4",
-    "name": "Floor Segment 3x4",
+    "id": "catwalk",
+    "name": "Catwalk",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": { "type": "rectangle", "width": 7, "height": 2 },
+    "default_height_inches": 3,
+    "default_blocking": false,
+    "ground_accessible": false,
+    "upper_floor": {
+      "footprint": { "type": "rectangle", "width": 7, "height": 2 },
+      "floor": 1
+    },
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "generator",
+    "name": "Generator",
     "kind": "feature",
     "source": "gw-11e",
     "footprint": { "type": "rectangle", "width": 3, "height": 4 },
     "default_height_inches": 3,
-    "default_blocking": false,
+    "default_blocking": true,
+    "ground_accessible": false,
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   },
   {
-    "id": "floor-2p5x4",
-    "name": "Floor Segment 2.5x4",
+    "id": "corner-ruin-balanced-left",
+    "name": "Corner Ruin (Balanced, Left)",
     "kind": "feature",
     "source": "gw-11e",
-    "footprint": { "type": "rectangle", "width": 2.5, "height": 4 },
-    "default_height_inches": 3,
-    "default_blocking": false,
+    "footprint": {
+      "type": "polygon",
+      "points": [
+        { "x": 0, "y": 0 },
+        { "x": 5, "y": 0 },
+        { "x": 5, "y": 0.5 },
+        { "x": 0.5, "y": 0.5 },
+        { "x": 0.5, "y": 4.5 },
+        { "x": 0, "y": 4.5 }
+      ]
+    },
+    "default_height_inches": 5,
+    "default_blocking": true,
+    "upper_floor": {
+      "footprint": { "type": "rectangle", "width": 3, "height": 4 },
+      "floor": 1
+    },
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   },
   {
-    "id": "floor-trapezoid",
-    "name": "Floor Segment (Trapezoid)",
+    "id": "corner-ruin-balanced-right",
+    "name": "Corner Ruin (Balanced, Right)",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": {
+      "type": "polygon",
+      "points": [
+        { "x": 5, "y": 0 },
+        { "x": 0, "y": 0 },
+        { "x": 0, "y": 0.5 },
+        { "x": 4.5, "y": 0.5 },
+        { "x": 4.5, "y": 4.5 },
+        { "x": 5, "y": 4.5 }
+      ]
+    },
+    "default_height_inches": 5,
+    "default_blocking": true,
+    "upper_floor": {
+      "footprint": {
+        "type": "polygon",
+        "points": [
+          { "x": 2, "y": 0 },
+          { "x": 5, "y": 0 },
+          { "x": 5, "y": 4 },
+          { "x": 2, "y": 4 }
+        ]
+      },
+      "floor": 1
+    },
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "corner-ruin-right",
+    "name": "Corner Ruin (Right)",
     "kind": "feature",
     "source": "gw-11e",
     "footprint": {
@@ -267,12 +226,42 @@
       "points": [
         { "x": 0, "y": 0 },
         { "x": 3, "y": 0 },
-        { "x": 2.5, "y": 4 },
-        { "x": 0.5, "y": 4 }
+        { "x": 3, "y": 7 },
+        { "x": 2.5, "y": 7 },
+        { "x": 2.5, "y": 0.5 },
+        { "x": 0, "y": 0.5 }
       ]
     },
-    "default_height_inches": 3,
-    "default_blocking": false,
+    "default_height_inches": 5,
+    "default_blocking": true,
+    "upper_floor": {
+      "footprint": { "type": "rectangle", "width": 3, "height": 5 },
+      "floor": 1
+    },
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "corner-ruin-left",
+    "name": "Corner Ruin (Left)",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": {
+      "type": "polygon",
+      "points": [
+        { "x": 3, "y": 0 },
+        { "x": 0, "y": 0 },
+        { "x": 0, "y": 7 },
+        { "x": 0.5, "y": 7 },
+        { "x": 0.5, "y": 0.5 },
+        { "x": 3, "y": 0.5 }
+      ]
+    },
+    "default_height_inches": 5,
+    "default_blocking": true,
+    "upper_floor": {
+      "footprint": { "type": "rectangle", "width": 3, "height": 5 },
+      "floor": 1
+    },
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   }
 ]

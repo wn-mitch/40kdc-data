@@ -14,8 +14,16 @@ import { RAW_DATA } from "../src/data/bundle.generated.js";
 
 describe("terrain (embedded catalog + layout resolution)", () => {
   it("embeds the 11e template catalog and migrated layouts", () => {
-    expect(dataset.terrainTemplates.all.length).toBe(23);
+    // 5 areas + 11 GW features (walls/old corners/old scenery removed; see the
+    // catalog-correction migration). Pieces carrying an elevated platform expose
+    // `upper_floor`; elevated-only / solid pieces set `ground_accessible: false`.
+    expect(dataset.terrainTemplates.all.length).toBe(16);
     expect(dataset.terrainTemplates.get("area-large")).toBeDefined();
+    expect(dataset.terrainTemplates.get("corner-ruin-balanced-left")?.upper_floor).toBeDefined();
+    expect(dataset.terrainTemplates.get("gantry")?.ground_accessible).toBe(false);
+    // removed in the catalog correction
+    expect(dataset.terrainTemplates.get("wall-medium")).toBeUndefined();
+    expect(dataset.terrainTemplates.get("scaffold")).toBeUndefined();
     expect(dataset.terrainLayouts.get("gw-11e-crucible")).toBeDefined();
     expect(dataset.terrainLayouts.get("gw-11e-hammer-anvil")).toBeDefined();
   });

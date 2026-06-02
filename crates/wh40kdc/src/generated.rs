@@ -9178,6 +9178,11 @@ impl<'de> ::serde::Deserialize<'de> for TerrainLayoutSource {
 ///    "game_version": {
 ///      "$ref": "#/$defs/game-version-ref"
 ///    },
+///    "ground_accessible": {
+///      "description": "Whether models may be placed on the ground footprint. `false` marks an elevated-only piece (a platform reachable only on its `upper_floor`, e.g. a gantry/catwalk) or a solid obstacle with no valid placement (e.g. a generator). Meaningful for `kind: \"feature\"`.",
+///      "default": true,
+///      "type": "boolean"
+///    },
 ///    "id": {
 ///      "$ref": "#/$defs/entity-id"
 ///    },
@@ -9199,6 +9204,25 @@ impl<'de> ::serde::Deserialize<'de> for TerrainLayoutSource {
 ///      "type": "string",
 ///      "maxLength": 64,
 ///      "minLength": 1
+///    },
+///    "upper_floor": {
+///      "description": "An elevated platform carried by this feature (e.g. a ruin's second storey). Its footprint is authored in the SAME local frame as `footprint` and re-centered on the GROUND footprint's polygon area centroid, so the two floors stay registered when the piece is placed, rotated, or mirrored. Non-resolved metadata: the terrain resolver does not emit it; authoring/visualization tools render it as an overlay. Meaningful for `kind: \"feature\"`.",
+///      "type": "object",
+///      "required": [
+///        "footprint"
+///      ],
+///      "properties": {
+///        "floor": {
+///          "description": "Ruin floor this platform occupies (1 = first floor above ground).",
+///          "default": 1,
+///          "type": "integer",
+///          "minimum": 1.0
+///        },
+///        "footprint": {
+///          "$ref": "#/$defs/footprint"
+///        }
+///      },
+///      "additionalProperties": false
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -9222,6 +9246,9 @@ pub struct TerrainTemplate {
     pub features: ::std::vec::Vec<ComposedFeature>,
     pub footprint: Footprint,
     pub game_version: GameVersionRef,
+    ///Whether models may be placed on the ground footprint. `false` marks an elevated-only piece (a platform reachable only on its `upper_floor`, e.g. a gantry/catwalk) or a solid obstacle with no valid placement (e.g. a generator). Meaningful for `kind: "feature"`.
+    #[serde(default = "defaults::default_bool::<true>")]
+    pub ground_accessible: bool,
     pub id: EntityId,
     ///`area` = a gameplay terrain zone; `feature` = physical scenery placed on an area.
     pub kind: TerrainTemplateKind,
@@ -9229,6 +9256,8 @@ pub struct TerrainTemplate {
     ///Catalog or mission pack the template originates from.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub source: ::std::option::Option<TerrainTemplateSource>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub upper_floor: ::std::option::Option<TerrainTemplateUpperFloor>,
 }
 ///`area` = a gameplay terrain zone; `feature` = physical scenery placed on an area.
 ///
@@ -9459,6 +9488,40 @@ impl<'de> ::serde::Deserialize<'de> for TerrainTemplateSource {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
     }
+}
+///An elevated platform carried by this feature (e.g. a ruin's second storey). Its footprint is authored in the SAME local frame as `footprint` and re-centered on the GROUND footprint's polygon area centroid, so the two floors stay registered when the piece is placed, rotated, or mirrored. Non-resolved metadata: the terrain resolver does not emit it; authoring/visualization tools render it as an overlay. Meaningful for `kind: "feature"`.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "An elevated platform carried by this feature (e.g. a ruin's second storey). Its footprint is authored in the SAME local frame as `footprint` and re-centered on the GROUND footprint's polygon area centroid, so the two floors stay registered when the piece is placed, rotated, or mirrored. Non-resolved metadata: the terrain resolver does not emit it; authoring/visualization tools render it as an overlay. Meaningful for `kind: \"feature\"`.",
+///  "type": "object",
+///  "required": [
+///    "footprint"
+///  ],
+///  "properties": {
+///    "floor": {
+///      "description": "Ruin floor this platform occupies (1 = first floor above ground).",
+///      "default": 1,
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "footprint": {
+///      "$ref": "#/$defs/footprint"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct TerrainTemplateUpperFloor {
+    ///Ruin floor this platform occupies (1 = first floor above ground).
+    #[serde(default = "defaults::default_nzu64::<::std::num::NonZeroU64, 1>")]
+    pub floor: ::std::num::NonZeroU64,
+    pub footprint: Footprint,
 }
 ///`TimingFlag`
 ///

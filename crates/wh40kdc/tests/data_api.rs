@@ -392,8 +392,15 @@ fn collection_is_iterable() {
 #[test]
 fn terrain_catalog_and_layouts_are_embedded() {
     let ds = Dataset::embedded();
-    assert_eq!(ds.terrain_templates.len(), 23);
+    // 5 areas + 11 GW features after the catalog correction (walls / old corners
+    // / old scenery removed). Elevated-only and solid pieces set ground_accessible
+    // = false; ruins/platforms carry an upper_floor.
+    assert_eq!(ds.terrain_templates.len(), 16);
     assert!(ds.terrain_templates.get("area-large").is_some());
+    assert!(ds.terrain_templates.get("corner-ruin-balanced-left").unwrap().upper_floor.is_some());
+    assert!(!ds.terrain_templates.get("gantry").unwrap().ground_accessible);
+    assert!(ds.terrain_templates.get("wall-medium").is_none());
+    assert!(ds.terrain_templates.get("scaffold").is_none());
     assert!(ds.terrain_layouts.get("gw-11e-crucible").is_some());
     assert!(ds.terrain_layouts.get("gw-11e-hammer-anvil").is_some());
 }

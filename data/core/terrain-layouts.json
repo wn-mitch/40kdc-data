@@ -131,7 +131,7 @@
       },
       {
         "id": "piece-7",
-        "name": "Scaffold",
+        "name": "Gantry",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -158,7 +158,7 @@
           "x": 35.7544,
           "y": 9.3927
         },
-        "template": "scaffold"
+        "template": "gantry"
       },
       {
         "id": "piece-8",
@@ -345,7 +345,7 @@
       },
       {
         "id": "piece-19",
-        "name": "Scaffold",
+        "name": "Gantry",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -372,7 +372,7 @@
           "x": 24.3821,
           "y": 34.4683
         },
-        "template": "scaffold"
+        "template": "gantry"
       },
       {
         "id": "piece-20",
@@ -433,7 +433,7 @@
       },
       {
         "id": "piece-25-1",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -460,11 +460,11 @@
           "x": 34.25,
           "y": 26.5
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-25-2",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -491,11 +491,11 @@
           "x": 35.25,
           "y": 25.5
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-27-1",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -522,11 +522,11 @@
           "x": 25.75,
           "y": 17.5
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-27-2",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -553,11 +553,11 @@
           "x": 24.75,
           "y": 18.5
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-29-1",
-        "name": "Medium Corner",
+        "name": "Corner Ruin (Balanced, Left)",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -584,11 +584,11 @@
           "x": 35,
           "y": 20
         },
-        "template": "corner-medium"
+        "template": "corner-ruin-balanced-left"
       },
       {
         "id": "piece-29-2",
-        "name": "Medium Corner",
+        "name": "Corner Ruin (Balanced, Left)",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -615,11 +615,11 @@
           "x": 32.5,
           "y": 17.5
         },
-        "template": "corner-medium"
+        "template": "corner-ruin-balanced-left"
       },
       {
         "id": "piece-30",
-        "name": "Canister",
+        "name": "Generator",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -646,7 +646,7 @@
           "x": 45.0941,
           "y": 25.5888
         },
-        "template": "canister"
+        "template": "generator"
       },
       {
         "id": "piece-31",
@@ -681,7 +681,7 @@
       },
       {
         "id": "piece-32-1",
-        "name": "Small Corner",
+        "name": "Short Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -708,11 +708,11 @@
           "x": 43,
           "y": 10
         },
-        "template": "corner-small"
+        "template": "corner-short"
       },
       {
         "id": "piece-32-2",
-        "name": "Small Corner",
+        "name": "Short Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -739,11 +739,11 @@
           "x": 46,
           "y": 11.5
         },
-        "template": "corner-small"
+        "template": "corner-short"
       },
       {
         "id": "piece-33-1",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -770,11 +770,11 @@
           "x": 53.5303,
           "y": 6.593
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-33-2",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -801,11 +801,11 @@
           "x": 52.5303,
           "y": 5.593
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-34-1",
-        "name": "Medium Corner",
+        "name": "Corner Ruin (Balanced, Left)",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -832,11 +832,11 @@
           "x": 25,
           "y": 24
         },
-        "template": "corner-medium"
+        "template": "corner-ruin-balanced-left"
       },
       {
         "id": "piece-34-2",
-        "name": "Medium Corner",
+        "name": "Corner Ruin (Balanced, Left)",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -863,11 +863,11 @@
           "x": 27.5,
           "y": 26.5
         },
-        "template": "corner-medium"
+        "template": "corner-ruin-balanced-left"
       },
       {
         "id": "piece-35",
-        "name": "Canister",
+        "name": "Generator",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -894,7 +894,7 @@
           "x": 14.8507,
           "y": 18.4278
         },
-        "template": "canister"
+        "template": "generator"
       },
       {
         "id": "piece-36",
@@ -929,7 +929,7 @@
       },
       {
         "id": "piece-37-1",
-        "name": "Small Corner",
+        "name": "Short Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -956,11 +956,11 @@
           "x": 17,
           "y": 34
         },
-        "template": "corner-small"
+        "template": "corner-short"
       },
       {
         "id": "piece-37-2",
-        "name": "Small Corner",
+        "name": "Short Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -987,11 +987,11 @@
           "x": 14,
           "y": 32.5
         },
-        "template": "corner-small"
+        "template": "corner-short"
       },
       {
         "id": "piece-38-1",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1018,11 +1018,11 @@
           "x": 6.5048,
           "y": 37.5196
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-38-2",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1049,11 +1049,11 @@
           "x": 7.5048,
           "y": 38.5196
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-39",
-        "name": "Canister",
+        "name": "Generator",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1080,11 +1080,11 @@
           "x": 24.1896,
           "y": 9.6538
         },
-        "template": "canister"
+        "template": "generator"
       },
       {
         "id": "piece-40-1",
-        "name": "Large Corner",
+        "name": "Corner Ruin (Right)",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1111,11 +1111,11 @@
           "x": 50.3679,
           "y": 41.488
         },
-        "template": "corner-large"
+        "template": "corner-ruin-right"
       },
       {
         "id": "piece-40-2",
-        "name": "Large Corner",
+        "name": "Corner Ruin (Right)",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1142,11 +1142,11 @@
           "x": 50.8178,
           "y": 36.9003
         },
-        "template": "corner-large"
+        "template": "corner-ruin-right"
       },
       {
         "id": "piece-41-1",
-        "name": "Medium Corner",
+        "name": "Corner Ruin (Balanced, Left)",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1173,11 +1173,11 @@
           "x": 44.0749,
           "y": 33.2669
         },
-        "template": "corner-medium"
+        "template": "corner-ruin-balanced-left"
       },
       {
         "id": "piece-41-2",
-        "name": "Medium Corner",
+        "name": "Corner Ruin (Balanced, Left)",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1204,11 +1204,11 @@
           "x": 43.461,
           "y": 36.7487
         },
-        "template": "corner-medium"
+        "template": "corner-ruin-balanced-left"
       },
       {
         "id": "piece-42",
-        "name": "Canister",
+        "name": "Generator",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1235,11 +1235,11 @@
           "x": 35.8104,
           "y": 34.3462
         },
-        "template": "canister"
+        "template": "generator"
       },
       {
         "id": "piece-43-1",
-        "name": "Large Corner",
+        "name": "Corner Ruin (Right)",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1266,11 +1266,11 @@
           "x": 9.6321,
           "y": 2.512
         },
-        "template": "corner-large"
+        "template": "corner-ruin-right"
       },
       {
         "id": "piece-43-2",
-        "name": "Large Corner",
+        "name": "Corner Ruin (Right)",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1297,11 +1297,11 @@
           "x": 9.1822,
           "y": 7.0997
         },
-        "template": "corner-large"
+        "template": "corner-ruin-right"
       },
       {
         "id": "piece-44-1",
-        "name": "Medium Corner",
+        "name": "Corner Ruin (Balanced, Left)",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1328,11 +1328,11 @@
           "x": 15.9251,
           "y": 10.7331
         },
-        "template": "corner-medium"
+        "template": "corner-ruin-balanced-left"
       },
       {
         "id": "piece-44-2",
-        "name": "Medium Corner",
+        "name": "Corner Ruin (Balanced, Left)",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1359,11 +1359,11 @@
           "x": 16.539,
           "y": 7.2513
         },
-        "template": "corner-medium"
+        "template": "corner-ruin-balanced-left"
       },
       {
         "id": "piece-45",
-        "name": "Floor 4x4",
+        "name": "Catwalk",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1390,12 +1390,12 @@
           "x": 32.8521,
           "y": 19.6124
         },
-        "template": "floor-4x4",
+        "template": "catwalk",
         "floor": 1
       },
       {
         "id": "piece-46",
-        "name": "Floor 2.5x4",
+        "name": "Catwalk",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1422,12 +1422,12 @@
           "x": 45.153,
           "y": 10.1683
         },
-        "template": "floor-2p5x4",
+        "template": "catwalk",
         "floor": 1
       },
       {
         "id": "piece-47",
-        "name": "Floor 3x4",
+        "name": "Catwalk",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1454,12 +1454,12 @@
           "x": 44.7043,
           "y": 34.8273
         },
-        "template": "floor-3x4",
+        "template": "catwalk",
         "floor": 1
       },
       {
         "id": "piece-48",
-        "name": "Floor 2.5x4",
+        "name": "Catwalk",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1486,12 +1486,12 @@
           "x": 50.611,
           "y": 38.9022
         },
-        "template": "floor-2p5x4",
+        "template": "catwalk",
         "floor": 1
       },
       {
         "id": "piece-49",
-        "name": "Floor 4x4",
+        "name": "Catwalk",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1518,12 +1518,12 @@
           "x": 27.1479,
           "y": 24.3876
         },
-        "template": "floor-4x4",
+        "template": "catwalk",
         "floor": 1
       },
       {
         "id": "piece-50",
-        "name": "Floor 2.5x4",
+        "name": "Catwalk",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1550,12 +1550,12 @@
           "x": 14.847,
           "y": 33.8317
         },
-        "template": "floor-2p5x4",
+        "template": "catwalk",
         "floor": 1
       },
       {
         "id": "piece-51",
-        "name": "Floor 3x4",
+        "name": "Catwalk",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1582,12 +1582,12 @@
           "x": 15.2957,
           "y": 9.1727
         },
-        "template": "floor-3x4",
+        "template": "catwalk",
         "floor": 1
       },
       {
         "id": "piece-52",
-        "name": "Floor 2.5x4",
+        "name": "Catwalk",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1614,7 +1614,7 @@
           "x": 9.389,
           "y": 5.0978
         },
-        "template": "floor-2p5x4",
+        "template": "catwalk",
         "floor": 1
       }
     ],
@@ -1652,7 +1652,7 @@
       },
       {
         "id": "piece-3-1",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1679,11 +1679,11 @@
           "x": 40.0354,
           "y": 1.4646
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-3-2",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1710,11 +1710,11 @@
           "x": 39.0354,
           "y": 0.4646
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-4-1",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1741,11 +1741,11 @@
           "x": 36.9381,
           "y": 4.6526
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-4-2",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1772,7 +1772,7 @@
           "x": 37.9381,
           "y": 5.6526
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-5",
@@ -1786,7 +1786,7 @@
       },
       {
         "id": "piece-6",
-        "name": "Canister",
+        "name": "Generator",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1813,7 +1813,7 @@
           "x": 33.5735,
           "y": 7.9877
         },
-        "template": "canister"
+        "template": "generator"
       },
       {
         "id": "piece-7",
@@ -1828,7 +1828,7 @@
       },
       {
         "id": "piece-8-1",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1855,11 +1855,11 @@
           "x": 33.5405,
           "y": 27.4396
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-8-2",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1886,11 +1886,11 @@
           "x": 34.5405,
           "y": 26.4396
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-9",
-        "name": "Wall Medium",
+        "name": "Barricade",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1917,11 +1917,11 @@
           "x": 32.231,
           "y": 16.6816
         },
-        "template": "wall-medium"
+        "template": "barricade"
       },
       {
         "id": "piece-10",
-        "name": "Wall Short",
+        "name": "Barricade",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1948,11 +1948,11 @@
           "x": 34.6671,
           "y": 18.1816
         },
-        "template": "wall-short"
+        "template": "barricade"
       },
       {
         "id": "piece-11",
-        "name": "Floor 3x4",
+        "name": "Catwalk",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -1979,7 +1979,7 @@
           "x": 32.6038,
           "y": 18.1816
         },
-        "template": "floor-3x4",
+        "template": "catwalk",
         "floor": 1
       },
       {
@@ -2027,7 +2027,7 @@
       },
       {
         "id": "piece-16-1",
-        "name": "Small Corner",
+        "name": "Short Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2054,11 +2054,11 @@
           "x": 45.0006,
           "y": 13.4239
         },
-        "template": "corner-small"
+        "template": "corner-short"
       },
       {
         "id": "piece-16-2",
-        "name": "Small Corner",
+        "name": "Short Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2085,11 +2085,11 @@
           "x": 43.5006,
           "y": 16.4239
         },
-        "template": "corner-small"
+        "template": "corner-short"
       },
       {
         "id": "piece-17",
-        "name": "Floor 3x4",
+        "name": "Catwalk",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2116,7 +2116,7 @@
           "x": 45.0006,
           "y": 15.5652
         },
-        "template": "floor-3x4",
+        "template": "catwalk",
         "floor": 1
       },
       {
@@ -2183,7 +2183,7 @@
       },
       {
         "id": "piece-20-1",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2210,11 +2210,11 @@
           "x": 48.5761,
           "y": 23.9501
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-20-2",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2241,11 +2241,11 @@
           "x": 49.5761,
           "y": 22.9501
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-21",
-        "name": "Scaffold",
+        "name": "Gantry",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2272,7 +2272,7 @@
           "x": 46.81,
           "y": 33.0268
         },
-        "template": "scaffold"
+        "template": "gantry"
       },
       {
         "id": "piece-22",
@@ -2338,7 +2338,7 @@
       },
       {
         "id": "piece-24",
-        "name": "Wall Medium",
+        "name": "Barricade",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2365,11 +2365,11 @@
           "x": 38.6309,
           "y": 32.9945
         },
-        "template": "wall-medium"
+        "template": "barricade"
       },
       {
         "id": "piece-25",
-        "name": "Wall Short",
+        "name": "Barricade",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2396,11 +2396,11 @@
           "x": 41.0761,
           "y": 34.4945
         },
-        "template": "wall-short"
+        "template": "barricade"
       },
       {
         "id": "piece-26",
-        "name": "Wall Medium",
+        "name": "Barricade",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2427,11 +2427,11 @@
           "x": 35.0713,
           "y": 41.0755
         },
-        "template": "wall-medium"
+        "template": "barricade"
       },
       {
         "id": "piece-27",
-        "name": "Wall Short",
+        "name": "Barricade",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2458,11 +2458,11 @@
           "x": 36.5713,
           "y": 43.5207
         },
-        "template": "wall-short"
+        "template": "barricade"
       },
       {
         "id": "piece-28",
-        "name": "Floor 2.5x4",
+        "name": "Catwalk",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2489,12 +2489,12 @@
           "x": 36.3919,
           "y": 41.4939
         },
-        "template": "floor-2p5x4",
+        "template": "catwalk",
         "floor": 1
       },
       {
         "id": "piece-29",
-        "name": "Floor 2.5x4",
+        "name": "Catwalk",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2521,7 +2521,7 @@
           "x": 38.9348,
           "y": 34.3152
         },
-        "template": "floor-2p5x4",
+        "template": "catwalk",
         "floor": 1
       },
       {
@@ -2548,7 +2548,7 @@
       },
       {
         "id": "piece-32-1",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2575,11 +2575,11 @@
           "x": 19.9646,
           "y": 42.5354
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-32-2",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2606,11 +2606,11 @@
           "x": 20.9646,
           "y": 43.5354
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-33-1",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2637,11 +2637,11 @@
           "x": 23.0619,
           "y": 39.3474
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-33-2",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2668,7 +2668,7 @@
           "x": 22.0619,
           "y": 38.3474
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-34",
@@ -2683,7 +2683,7 @@
       },
       {
         "id": "piece-35",
-        "name": "Canister",
+        "name": "Generator",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2710,7 +2710,7 @@
           "x": 26.4265,
           "y": 36.0123
         },
-        "template": "canister"
+        "template": "generator"
       },
       {
         "id": "piece-36",
@@ -2725,7 +2725,7 @@
       },
       {
         "id": "piece-37-1",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2752,11 +2752,11 @@
           "x": 26.4595,
           "y": 16.5604
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-37-2",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2783,11 +2783,11 @@
           "x": 25.4595,
           "y": 17.5604
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-38",
-        "name": "Wall Medium",
+        "name": "Barricade",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2814,11 +2814,11 @@
           "x": 27.769,
           "y": 27.3184
         },
-        "template": "wall-medium"
+        "template": "barricade"
       },
       {
         "id": "piece-39",
-        "name": "Wall Short",
+        "name": "Barricade",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2845,11 +2845,11 @@
           "x": 25.3329,
           "y": 25.8184
         },
-        "template": "wall-short"
+        "template": "barricade"
       },
       {
         "id": "piece-40",
-        "name": "Floor 3x4",
+        "name": "Catwalk",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2876,7 +2876,7 @@
           "x": 27.3962,
           "y": 25.8184
         },
-        "template": "floor-3x4",
+        "template": "catwalk",
         "floor": 1
       },
       {
@@ -2925,7 +2925,7 @@
       },
       {
         "id": "piece-45-1",
-        "name": "Small Corner",
+        "name": "Short Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2952,11 +2952,11 @@
           "x": 14.9994,
           "y": 30.5761
         },
-        "template": "corner-small"
+        "template": "corner-short"
       },
       {
         "id": "piece-45-2",
-        "name": "Small Corner",
+        "name": "Short Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -2983,11 +2983,11 @@
           "x": 16.4994,
           "y": 27.5761
         },
-        "template": "corner-small"
+        "template": "corner-short"
       },
       {
         "id": "piece-46",
-        "name": "Floor 3x4",
+        "name": "Catwalk",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -3014,7 +3014,7 @@
           "x": 14.9994,
           "y": 28.4348
         },
-        "template": "floor-3x4",
+        "template": "catwalk",
         "floor": 1
       },
       {
@@ -3081,7 +3081,7 @@
       },
       {
         "id": "piece-49-1",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -3108,11 +3108,11 @@
           "x": 11.4239,
           "y": 20.0499
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-49-2",
-        "name": "XS Corner",
+        "name": "Tiny Corner L",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -3139,11 +3139,11 @@
           "x": 10.4239,
           "y": 21.0499
         },
-        "template": "corner-xs"
+        "template": "corner-tiny"
       },
       {
         "id": "piece-50",
-        "name": "Scaffold",
+        "name": "Gantry",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -3170,7 +3170,7 @@
           "x": 13.19,
           "y": 10.9732
         },
-        "template": "scaffold"
+        "template": "gantry"
       },
       {
         "id": "piece-51",
@@ -3236,7 +3236,7 @@
       },
       {
         "id": "piece-53",
-        "name": "Wall Medium",
+        "name": "Barricade",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -3263,11 +3263,11 @@
           "x": 21.3691,
           "y": 11.0055
         },
-        "template": "wall-medium"
+        "template": "barricade"
       },
       {
         "id": "piece-54",
-        "name": "Wall Short",
+        "name": "Barricade",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -3294,11 +3294,11 @@
           "x": 18.9239,
           "y": 9.5055
         },
-        "template": "wall-short"
+        "template": "barricade"
       },
       {
         "id": "piece-55",
-        "name": "Wall Medium",
+        "name": "Barricade",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -3325,11 +3325,11 @@
           "x": 24.9287,
           "y": 2.9245
         },
-        "template": "wall-medium"
+        "template": "barricade"
       },
       {
         "id": "piece-56",
-        "name": "Wall Short",
+        "name": "Barricade",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -3356,11 +3356,11 @@
           "x": 23.4287,
           "y": 0.4793
         },
-        "template": "wall-short"
+        "template": "barricade"
       },
       {
         "id": "piece-57",
-        "name": "Floor 2.5x4",
+        "name": "Catwalk",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -3387,12 +3387,12 @@
           "x": 23.6081,
           "y": 2.5061
         },
-        "template": "floor-2p5x4",
+        "template": "catwalk",
         "floor": 1
       },
       {
         "id": "piece-58",
-        "name": "Floor 2.5x4",
+        "name": "Catwalk",
         "piece_type": "feature",
         "footprint": {
           "type": "polygon",
@@ -3419,8 +3419,170 @@
           "x": 21.0652,
           "y": 9.6848
         },
-        "template": "floor-2p5x4",
+        "template": "catwalk",
         "floor": 1
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "gw-11e-search-destroy",
+    "name": "Search and Destroy (Take and Hold vs Purge the Foe 2)",
+    "source": "gw-11e",
+    "description": "Provisional draft transcribed from the published terrain card. Positions are APPROXIMATE — refine in the layout editor against the card measurements. 180°-rotationally symmetric.",
+    "pieces": [
+      {
+        "id": "piece-1",
+        "name": "Corner Ruin Area (objective)",
+        "piece_type": "area",
+        "template": "area-large",
+        "position": {
+          "x": 10,
+          "y": 9
+        }
+      },
+      {
+        "id": "piece-2",
+        "name": "Corner Ruin Area (objective)",
+        "piece_type": "area",
+        "template": "area-large",
+        "position": {
+          "x": 50,
+          "y": 35
+        },
+        "rotation_degrees": 180
+      },
+      {
+        "id": "piece-3",
+        "name": "Flank Ruin Area",
+        "piece_type": "area",
+        "template": "area-large",
+        "position": {
+          "x": 12,
+          "y": 33
+        },
+        "rotation_degrees": 5
+      },
+      {
+        "id": "piece-4",
+        "name": "Flank Ruin Area",
+        "piece_type": "area",
+        "template": "area-large",
+        "position": {
+          "x": 48,
+          "y": 11
+        },
+        "rotation_degrees": 185
+      },
+      {
+        "id": "piece-5",
+        "name": "Central Ruin",
+        "piece_type": "area",
+        "template": "area-trapezoid",
+        "position": {
+          "x": 27.5,
+          "y": 21
+        }
+      },
+      {
+        "id": "piece-6",
+        "name": "Central Ruin",
+        "piece_type": "area",
+        "template": "area-trapezoid",
+        "position": {
+          "x": 32.5,
+          "y": 23
+        },
+        "rotation_degrees": 180
+      },
+      {
+        "id": "piece-7",
+        "name": "Green Tower",
+        "piece_type": "feature",
+        "template": "gantry",
+        "position": {
+          "x": 21,
+          "y": 9
+        }
+      },
+      {
+        "id": "piece-8",
+        "name": "Green Tower",
+        "piece_type": "feature",
+        "template": "gantry",
+        "position": {
+          "x": 39,
+          "y": 35
+        },
+        "rotation_degrees": 180
+      },
+      {
+        "id": "piece-9",
+        "name": "Pipe Run",
+        "piece_type": "feature",
+        "template": "pipe",
+        "position": {
+          "x": 24,
+          "y": 34
+        },
+        "rotation_degrees": 40
+      },
+      {
+        "id": "piece-10",
+        "name": "Pipe Run",
+        "piece_type": "feature",
+        "template": "pipe",
+        "position": {
+          "x": 36,
+          "y": 10
+        },
+        "rotation_degrees": 220
+      },
+      {
+        "id": "piece-11",
+        "name": "Barricade",
+        "piece_type": "feature",
+        "template": "barricade",
+        "position": {
+          "x": 14,
+          "y": 22
+        },
+        "rotation_degrees": 90
+      },
+      {
+        "id": "piece-12",
+        "name": "Barricade",
+        "piece_type": "feature",
+        "template": "barricade",
+        "position": {
+          "x": 46,
+          "y": 22
+        },
+        "rotation_degrees": 270
+      },
+      {
+        "id": "piece-13",
+        "name": "Corner Ruin",
+        "piece_type": "feature",
+        "template": "corner-ruin-balanced-left",
+        "position": {
+          "x": 16,
+          "y": 5
+        }
+      },
+      {
+        "id": "piece-14",
+        "name": "Corner Ruin",
+        "piece_type": "feature",
+        "template": "corner-ruin-balanced-left",
+        "position": {
+          "x": 44,
+          "y": 39
+        },
+        "rotation_degrees": 180
       }
     ],
     "game_version": {

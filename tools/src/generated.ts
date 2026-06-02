@@ -1236,6 +1236,20 @@ export interface TerrainTemplate {
    */
   default_blocking?: boolean;
   /**
+   * Whether models may be placed on the ground footprint. `false` marks an elevated-only piece (a platform reachable only on its `upper_floor`, e.g. a gantry/catwalk) or a solid obstacle with no valid placement (e.g. a generator). Meaningful for `kind: "feature"`.
+   */
+  ground_accessible?: boolean;
+  /**
+   * An elevated platform carried by this feature (e.g. a ruin's second storey). Its footprint is authored in the SAME local frame as `footprint` and re-centered on the GROUND footprint's polygon area centroid, so the two floors stay registered when the piece is placed, rotated, or mirrored. Non-resolved metadata: the terrain resolver does not emit it; authoring/visualization tools render it as an overlay. Meaningful for `kind: "feature"`.
+   */
+  upper_floor?: {
+    footprint: Footprint;
+    /**
+     * Ruin floor this platform occupies (1 = first floor above ground).
+     */
+    floor?: number;
+  };
+  /**
    * Terrain-area keywords areas of this template carry by default. Meaningful for `kind: "area"`.
    */
   default_terrain_area_keywords?: TerrainAreaKeyword[];
