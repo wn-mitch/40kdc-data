@@ -150,7 +150,10 @@ pub fn footprint_vertices(fp: &Footprint) -> Vec<Vec2> {
         Footprint::Rectangle { width, height } => vec![
             Vec2 { x: 0.0, y: 0.0 },
             Vec2 { x: *width, y: 0.0 },
-            Vec2 { x: *width, y: *height },
+            Vec2 {
+                x: *width,
+                y: *height,
+            },
             Vec2 { x: 0.0, y: *height },
         ],
         Footprint::RightTriangle { width, height } => vec![
@@ -186,9 +189,15 @@ pub fn polygon_centroid(verts: &[Vec2]) -> Vec2 {
             mx += v.x;
             my += v.y;
         }
-        return Vec2 { x: mx / n as f64, y: my / n as f64 };
+        return Vec2 {
+            x: mx / n as f64,
+            y: my / n as f64,
+        };
     }
-    Vec2 { x: cx / (3.0 * twice_area), y: cy / (3.0 * twice_area) }
+    Vec2 {
+        x: cx / (3.0 * twice_area),
+        y: cy / (3.0 * twice_area),
+    }
 }
 
 fn apply_mirror(v: Vec2, m: Mirror) -> Vec2 {
@@ -207,7 +216,10 @@ fn rotate_cw(v: Vec2, deg: f64) -> Vec2 {
     let r = deg * std::f64::consts::PI / 180.0;
     let c = r.cos();
     let s = r.sin();
-    Vec2 { x: c * v.x - s * v.y, y: s * v.x + c * v.y }
+    Vec2 {
+        x: c * v.x - s * v.y,
+        y: s * v.x + c * v.y,
+    }
 }
 
 /// mirror → rotate (no translation).
@@ -219,7 +231,10 @@ fn orient(v: Vec2, rotation: f64, mirror: Mirror) -> Vec2 {
 /// so the two implementations round half-values identically.
 fn round4(v: Vec2) -> Vec2 {
     let r = |x: f64| (x * 10000.0 + 0.5).floor() / 10000.0;
-    Vec2 { x: r(v.x), y: r(v.y) }
+    Vec2 {
+        x: r(v.x),
+        y: r(v.y),
+    }
 }
 
 /// Recenter a footprint on its centroid, mirror, rotate, translate to `position`.
@@ -229,8 +244,18 @@ fn place_footprint(fp: &Footprint, position: Vec2, rotation: f64, mirror: Mirror
     verts
         .iter()
         .map(|v| {
-            let o = orient(Vec2 { x: v.x - c.x, y: v.y - c.y }, rotation, mirror);
-            Vec2 { x: o.x + position.x, y: o.y + position.y }
+            let o = orient(
+                Vec2 {
+                    x: v.x - c.x,
+                    y: v.y - c.y,
+                },
+                rotation,
+                mirror,
+            );
+            Vec2 {
+                x: o.x + position.x,
+                y: o.y + position.y,
+            }
         })
         .collect()
 }
@@ -248,7 +273,10 @@ pub fn resolve_layout(
         .filter_map(|p| p.id.as_deref().map(|id| (id, p)))
         .collect();
 
-    let footprint_of = |piece_fp: &Option<Footprint>, piece_template: &Option<String>, where_: &str| -> Result<Footprint, TerrainResolveError> {
+    let footprint_of = |piece_fp: &Option<Footprint>,
+                        piece_template: &Option<String>,
+                        where_: &str|
+     -> Result<Footprint, TerrainResolveError> {
         if let Some(fp) = piece_fp {
             return Ok(fp.clone());
         }
@@ -256,9 +284,13 @@ pub fn resolve_layout(
             return by_id
                 .get(tid.as_str())
                 .map(|t| t.footprint.clone())
-                .ok_or_else(|| TerrainResolveError(format!("{where_}: unknown template \"{tid}\"")));
+                .ok_or_else(|| {
+                    TerrainResolveError(format!("{where_}: unknown template \"{tid}\""))
+                });
         }
-        Err(TerrainResolveError(format!("{where_}: piece has neither footprint nor template")))
+        Err(TerrainResolveError(format!(
+            "{where_}: piece has neither footprint nor template"
+        )))
     };
 
     let mut out: Vec<ResolvedPiece> = Vec::new();
@@ -273,10 +305,13 @@ pub fn resolve_layout(
         let fp = footprint_of(&piece.footprint, &piece.template, &where_)?;
         let rotation = piece.rotation_degrees.unwrap_or(0.0);
         let mirror = piece.mirror;
-        let piece_type = piece
-            .piece_type
-            .clone()
-            .unwrap_or_else(|| if piece.parent_area_id.is_some() { "feature".into() } else { "area".into() });
+        let piece_type = piece.piece_type.clone().unwrap_or_else(|| {
+            if piece.parent_area_id.is_some() {
+                "feature".into()
+            } else {
+                "area".into()
+            }
+        });
 
         if let Some(parent_id) = &piece.parent_area_id {
             let parent = areas_by_id.get(parent_id.as_str()).ok_or_else(|| {
@@ -289,7 +324,10 @@ pub fn resolve_layout(
                 .iter()
                 .map(|p| {
                     let o = orient(*p, a_rot, a_mirror);
-                    round4(Vec2 { x: o.x + parent.position.x, y: o.y + parent.position.y })
+                    round4(Vec2 {
+                        x: o.x + parent.position.x,
+                        y: o.y + parent.position.y,
+                    })
                 })
                 .collect();
             out.push(ResolvedPiece {
@@ -335,7 +373,10 @@ pub fn resolve_layout(
                         .iter()
                         .map(|p| {
                             let o = orient(*p, rotation, mirror);
-                            round4(Vec2 { x: o.x + piece.position.x, y: o.y + piece.position.y })
+                            round4(Vec2 {
+                                x: o.x + piece.position.x,
+                                y: o.y + piece.position.y,
+                            })
                         })
                         .collect();
                     out.push(ResolvedPiece {

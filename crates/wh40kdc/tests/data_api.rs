@@ -397,8 +397,18 @@ fn terrain_catalog_and_layouts_are_embedded() {
     // = false; ruins/platforms carry an upper_floor.
     assert_eq!(ds.terrain_templates.len(), 16);
     assert!(ds.terrain_templates.get("area-large").is_some());
-    assert!(ds.terrain_templates.get("corner-ruin-balanced-left").unwrap().upper_floor.is_some());
-    assert!(!ds.terrain_templates.get("gantry").unwrap().ground_accessible);
+    assert!(ds
+        .terrain_templates
+        .get("corner-ruin-balanced-left")
+        .unwrap()
+        .upper_floor
+        .is_some());
+    assert!(
+        !ds.terrain_templates
+            .get("gantry")
+            .unwrap()
+            .ground_accessible
+    );
     assert!(ds.terrain_templates.get("wall-medium").is_none());
     assert!(ds.terrain_templates.get("scaffold").is_none());
     assert!(ds.terrain_layouts.get("gw-11e-crucible").is_some());
@@ -408,14 +418,26 @@ fn terrain_catalog_and_layouts_are_embedded() {
 #[test]
 fn resolve_terrain_produces_board_vertices() {
     let ds = Dataset::embedded();
-    let layout = ds.terrain_layouts.get("gw-11e-crucible").expect("crucible layout");
-    let resolved = ds.resolve_terrain(layout).expect("resolves against embedded catalog");
+    let layout = ds
+        .terrain_layouts
+        .get("gw-11e-crucible")
+        .expect("crucible layout");
+    let resolved = ds
+        .resolve_terrain(layout)
+        .expect("resolves against embedded catalog");
     assert!(!resolved.is_empty());
     // Every resolved piece is a polygon (>= 3 vertices) inside the 60x44 board.
     for p in &resolved {
-        assert!(p.vertices.len() >= 3, "piece {:?} has too few vertices", p.id);
+        assert!(
+            p.vertices.len() >= 3,
+            "piece {:?} has too few vertices",
+            p.id
+        );
         for v in &p.vertices {
-            assert!(v.x >= -1.0 && v.x <= 61.0 && v.y >= -1.0 && v.y <= 45.0, "vertex off-board: {v:?}");
+            assert!(
+                v.x >= -1.0 && v.x <= 61.0 && v.y >= -1.0 && v.y <= 45.0,
+                "vertex off-board: {v:?}"
+            );
         }
     }
 }

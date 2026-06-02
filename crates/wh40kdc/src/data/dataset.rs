@@ -339,8 +339,10 @@ impl Dataset {
         layout: &TerrainLayout,
     ) -> Result<Vec<crate::terrain::ResolvedPiece>, crate::terrain::TerrainResolveError> {
         fn convert<T: serde::de::DeserializeOwned, S: serde::Serialize>(value: &S) -> T {
-            serde_json::from_value(serde_json::to_value(value).expect("generated terrain serializes"))
-                .expect("generated terrain type matches resolver shape")
+            serde_json::from_value(
+                serde_json::to_value(value).expect("generated terrain serializes"),
+            )
+            .expect("generated terrain type matches resolver shape")
         }
         let r_layout: crate::terrain::TerrainLayout = convert(layout);
         let templates: Vec<crate::terrain::TerrainTemplate> =

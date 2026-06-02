@@ -724,7 +724,10 @@ fn handle_resolve_terrain(args: &Value) -> Value {
         };
     match wh40kdc::resolve_layout(&layout, &templates) {
         Ok(pieces) => ok_value(json!({ "pieces": pieces })),
-        Err(e) => err_value(ErrorKind::InvalidInput, Some(json!({ "detail": e.to_string() }))),
+        Err(e) => err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": e.to_string() })),
+        ),
     }
 }
 
