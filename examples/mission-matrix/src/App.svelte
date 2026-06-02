@@ -31,6 +31,8 @@
   const HOME_URL = "../../";
   const REPO_URL = "https://github.com/tabletop-developer-consortium/40kdc-data";
   const PACKAGE_URL = "https://www.npmjs.com/package/@alpaca-software/40kdc-data";
+  // Base-aware path to the Alpaca mark (also the PWA/favicon icon).
+  const ALPACA_ICON = `${import.meta.env.BASE_URL}favicon-32x32.png`;
   const DEFAULT_ROUND_CAP = 15;
 
   type Side = "you" | "opp";
@@ -295,6 +297,9 @@
   <footer class="flex items-center gap-2 px-4 py-2 mt-auto bg-surface border-t border-border text-[11px] text-text-dim shrink-0">
     <a class="text-text-muted hover:text-accent no-underline" href={REPO_URL} target="_blank" rel="noreferrer noopener">github.com/tabletop-developer-consortium/40kdc-data</a>
     <span aria-hidden="true">·</span>
-    <span>powered by <a class="text-text-muted hover:text-accent no-underline" href={PACKAGE_URL} target="_blank" rel="noreferrer noopener"><code class="font-mono">@alpaca-software/40kdc-data</code></a></span>
+    <span class="inline-flex items-center gap-1.5">
+      <img src={ALPACA_ICON} alt="" width="16" height="16" class="rounded-[3px]" aria-hidden="true" />
+      powered by <a class="text-text-muted hover:text-accent no-underline" href={PACKAGE_URL} target="_blank" rel="noreferrer noopener"><code class="font-mono">@alpaca-software/40kdc-data</code></a>
+    </span>
   </footer>
 </div>
