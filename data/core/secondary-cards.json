@@ -173,13 +173,7 @@
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": {
-          "operator": "and",
-          "operands": [
-            { "type": "terrain-has-tag", "parameters": { "tag": "mined" } },
-            { "type": "units-destroyed", "parameters": { "side": "enemy", "window": "this-turn", "count_min": 1 } }
-          ]
-        },
+        "when": { "type": "destroyed-in-tagged-terrain", "parameters": { "tag": "mined", "at_start_of_turn": true, "count_min": 1 } },
         "vp": 3
       },
       {
@@ -188,7 +182,7 @@
         "vp": 4
       }
     ],
-    "text": "Disruption against Take-and-Hold. Mine terrain outside your own deployment zone with player actions — each mining pays out, with a bonus when the mined terrain is also an objective. Killing an enemy unit standing in mined terrain pays out separately, and from the second battle round you also score for holding objectives outside your home.",
+    "text": "Disruption against Take-and-Hold. Mine terrain outside your own deployment zone with player actions — each mining pays out, with a bonus when the mined terrain is also an objective. Killing an enemy unit that started the turn in mined terrain pays out separately, and from the second battle round you also score for holding objectives outside your home.",
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   },
   {

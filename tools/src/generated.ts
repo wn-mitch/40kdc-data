@@ -912,7 +912,8 @@ export interface SimpleCondition {
     | "terrain-has-tag"
     | "new-objective-controlled"
     | "engagement-fronts"
-    | "destroyed-while-on-objective";
+    | "destroyed-while-on-objective"
+    | "destroyed-in-tagged-terrain";
   parameters?: {
     [k: string]: unknown;
   };

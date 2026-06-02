@@ -60,6 +60,24 @@ describe("describeCondition", () => {
       "terrain tagged mined and 1+ enemy units destroyed this turn",
     );
   });
+
+  it("destroyed-in-tagged-terrain (start of turn)", () => {
+    expect(
+      describeCondition({
+        type: "destroyed-in-tagged-terrain",
+        parameters: { tag: "mined", at_start_of_turn: true, count_min: 1 },
+      }),
+    ).toBe("1+ enemy units destroyed that started the turn in mined terrain");
+  });
+
+  it("destroyed-in-tagged-terrain (moment of kill)", () => {
+    expect(
+      describeCondition({
+        type: "destroyed-in-tagged-terrain",
+        parameters: { tag: "marked", count_min: 2 },
+      }),
+    ).toBe("2+ enemy units destroyed while in marked terrain");
+  });
 });
 
 describe("describeAward", () => {

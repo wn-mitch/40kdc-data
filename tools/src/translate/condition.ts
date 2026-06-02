@@ -123,6 +123,10 @@ export function describeCondition(c: Condition): string {
       if (p.victim_on_objective) s += " while on an objective";
       return s;
     }
+    case "destroyed-in-tagged-terrain": {
+      const where = p.at_start_of_turn ? "that started the turn in" : "while in";
+      return `${negate}${count(p.count_min ?? 1, "enemy unit")} destroyed ${where} ${dekebab(str(p.tag))} terrain`;
+    }
     case "action-completed": {
       let s = `${negate}${count(p.count_min ?? 1, "action")} completed`;
       if (p.action_id != null) s += ` (${dekebab(str(p.action_id))})`;

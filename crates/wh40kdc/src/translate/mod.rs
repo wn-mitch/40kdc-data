@@ -295,6 +295,18 @@ fn describe_simple(s: &SimpleCondition) -> String {
             }
             out
         }
+        T::DestroyedInTaggedTerrain => {
+            let where_ = if pb(p, "at_start_of_turn") {
+                "that started the turn in"
+            } else {
+                "while in"
+            };
+            format!(
+                "{negate}{} destroyed {where_} {} terrain",
+                count(pu(p, "count_min", 1), "enemy unit"),
+                dekebab(ps(p, "tag").unwrap_or(""))
+            )
+        }
         T::ActionCompleted => {
             let mut out = format!(
                 "{negate}{} completed",

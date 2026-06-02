@@ -79,7 +79,7 @@
       "awards": [
         "End of your turn: 2 VP per mining action completed this turn",
         "+ End of your turn: 3 VP per mining action on objective terrain completed this turn",
-        "End of your turn: 3 VP when terrain tagged mined and 1+ enemy units destroyed this turn",
+        "End of your turn: 3 VP when 1+ enemy units destroyed that started the turn in mined terrain",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)"
       ]
     }
