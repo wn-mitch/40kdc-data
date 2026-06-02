@@ -6,7 +6,9 @@
     "description": "Fabricated layout exercising every footprint type and piece field.",
     "pieces": [
       {
+        "id": "central-ruin",
         "name": "Central Ruin",
+        "piece_type": "area",
         "footprint": { "type": "rectangle", "width": 7, "height": 11.5 },
         "position": { "x": 30, "y": 22 },
         "rotation_degrees": 0,
@@ -18,12 +20,30 @@
         "objective": { "position": { "x": 30, "y": 24 }, "control_range_inches": 3 }
       },
       {
+        "id": "central-ruin-wall",
+        "name": "Central Ruin Wall",
+        "piece_type": "feature",
+        "template": "wall-7",
+        "parent_area_id": "central-ruin",
+        "position": { "x": 0, "y": -5 },
+        "rotation_degrees": 90,
+        "mirror": "horizontal",
+        "floor": 1
+      },
+      {
         "name": "Corner Wedge",
         "footprint": { "type": "right-triangle", "width": 8, "height": 11.5 },
         "position": { "x": 6, "y": 6 },
         "rotation_degrees": 90,
+        "mirror": "vertical",
         "height_inches": 2,
         "terrain_area_keywords": ["plunging-fire"]
+      },
+      {
+        "name": "Templated Trapezoid",
+        "template": "area-trapezoid",
+        "position": { "x": 48, "y": 12 },
+        "rotation_degrees": 235
       },
       {
         "name": "Irregular Outcrop",

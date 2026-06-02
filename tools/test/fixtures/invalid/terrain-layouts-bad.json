@@ -60,5 +60,23 @@
     "name": "Negative Height",
     "pieces": [{ "footprint": { "type": "rectangle", "width": 6, "height": 4 }, "position": { "x": 1, "y": 1 }, "height_inches": -2 }],
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-mirror-value",
+    "name": "Bad Mirror Value",
+    "pieces": [{ "template": "area-large", "position": { "x": 30, "y": 22 }, "mirror": "diagonal" }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-negative-floor",
+    "name": "Bad Negative Floor",
+    "pieces": [{ "template": "area-large", "position": { "x": 30, "y": 22 }, "floor": -1 }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-piece-no-geometry",
+    "name": "Piece With No Template Or Footprint",
+    "pieces": [{ "name": "floating", "position": { "x": 10, "y": 10 } }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   }
 ]

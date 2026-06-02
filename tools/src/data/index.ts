@@ -93,5 +93,9 @@ export const secondaryCards = dataset.secondaryCards;
 export const deploymentPatterns = dataset.deploymentPatterns;
 /** All force dispositions. */
 export const forceDispositions = dataset.forceDispositions;
+/** Reusable terrain catalog: standard areas and scenery features. */
+export const terrainTemplates = dataset.terrainTemplates;
+/** All terrain layouts. */
+export const terrainLayouts = dataset.terrainLayouts;
 /** All resource pools. */
 export const resourcePools = dataset.resourcePools;

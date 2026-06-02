@@ -1,0 +1,44 @@
+[
+  {
+    "id": "demo-layout",
+    "name": "Demo Layout",
+    "source": "fabricated-pack",
+    "description": "Fabricated layout: a railed block area with a child wall, a standalone templated block, and an inline polygon outcrop. Demonstrates centroid anchoring, mirror, parenting, and the inline-footprint escape hatch.",
+    "pieces": [
+      {
+        "id": "centre-block",
+        "name": "Centre Railed Block",
+        "piece_type": "area",
+        "template": "demo-railed-block",
+        "position": { "x": 30, "y": 22 },
+        "rotation_degrees": 30,
+        "terrain_area_keywords": ["obscuring", "hidden"],
+        "link_group": "centre",
+        "is_objective": true,
+        "objective": { "control_range_inches": 3 }
+      },
+      {
+        "id": "centre-block-extra-rail",
+        "name": "Extra Rail",
+        "piece_type": "feature",
+        "template": "demo-rail",
+        "parent_area_id": "centre-block",
+        "position": { "x": 0, "y": 2.25 },
+        "mirror": "horizontal"
+      },
+      {
+        "name": "Flank Block",
+        "template": "demo-block",
+        "position": { "x": 12, "y": 10 },
+        "rotation_degrees": 90,
+        "mirror": "vertical"
+      },
+      {
+        "name": "Outcrop",
+        "footprint": { "type": "polygon", "points": [{ "x": 0, "y": 0 }, { "x": 4, "y": 0 }, { "x": 2, "y": 5 }] },
+        "position": { "x": 48, "y": 34 }
+      }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

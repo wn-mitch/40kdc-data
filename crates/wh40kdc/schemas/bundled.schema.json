@@ -125,6 +125,84 @@
       ],
       "additionalProperties": false
     },
+    "footprint": {
+      "description": "A terrain piece's 2D footprint in local inches (y-down): an axis-aligned rectangle with its min corner at the local origin, a right triangle with the right angle at the local origin and legs along +x/+y, or an explicit polygon (>= 3 points). The placement resolver re-centers the footprint on its polygon area centroid, so the local-origin convention does not affect where the piece lands — only its shape matters.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "rectangle"
+            },
+            "width": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "height": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "required": [
+            "type",
+            "width",
+            "height"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "right-triangle"
+            },
+            "width": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "height": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "required": [
+            "type",
+            "width",
+            "height"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "polygon"
+            },
+            "points": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/vec2"
+              },
+              "minItems": 3
+            }
+          },
+          "required": [
+            "type",
+            "points"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "terrain-area-keyword": {
+      "type": "string",
+      "enum": [
+        "obscuring",
+        "hidden",
+        "plunging-fire"
+      ],
+      "description": "An 11e terrain-area keyword. Confirmed launch set; extend as further keywords publish on dataslate."
+    },
     "game-version-ref": {
       "title": "Game Version Reference",
       "type": "object",
@@ -1105,121 +1183,75 @@
       ],
       "additionalProperties": false
     },
-    "footprint": {
-      "description": "A terrain piece's 2D footprint, relative to the piece's `position`. Axis-aligned rectangle, right triangle (right angle at the local origin, legs along +x/+y), or an explicit polygon. GW's standard templates (e.g. 7\"×11.5\" rectangles, 8\"×11.5\" right triangles, 6\"×4\" rectangles, 10\"×2.5\" and 6\"×2\" lines) are all expressible here; lines are thin rectangles.",
-      "oneOf": [
-        {
-          "type": "object",
-          "properties": {
-            "type": {
-              "const": "rectangle"
-            },
-            "width": {
-              "type": "number",
-              "exclusiveMinimum": 0
-            },
-            "height": {
-              "type": "number",
-              "exclusiveMinimum": 0
-            }
-          },
-          "required": [
-            "type",
-            "width",
-            "height"
-          ],
-          "additionalProperties": false
-        },
-        {
-          "type": "object",
-          "properties": {
-            "type": {
-              "const": "right-triangle"
-            },
-            "width": {
-              "type": "number",
-              "exclusiveMinimum": 0
-            },
-            "height": {
-              "type": "number",
-              "exclusiveMinimum": 0
-            }
-          },
-          "required": [
-            "type",
-            "width",
-            "height"
-          ],
-          "additionalProperties": false
-        },
-        {
-          "type": "object",
-          "properties": {
-            "type": {
-              "const": "polygon"
-            },
-            "points": {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/vec2"
-              },
-              "minItems": 3
-            }
-          },
-          "required": [
-            "type",
-            "points"
-          ],
-          "additionalProperties": false
-        }
-      ]
-    },
-    "terrain-area-keyword": {
-      "type": "string",
-      "enum": [
-        "obscuring",
-        "hidden",
-        "plunging-fire"
-      ],
-      "description": "An 11e terrain-area keyword. Confirmed launch set; extend as further keywords publish on dataslate."
-    },
     "piece": {
       "type": "object",
-      "description": "One terrain feature placed on the board.",
+      "description": "One terrain piece placed on the board. Geometry comes from a catalog `template` or an inline `footprint` (if both are present, `footprint` is authoritative and `template` is provenance).",
       "properties": {
+        "id": {
+          "$ref": "#/$defs/entity-id",
+          "description": "Layout-local id. Required for any piece referenced by another piece's `parent_area_id`."
+        },
         "name": {
           "type": "string",
           "minLength": 1,
           "maxLength": 128
         },
+        "piece_type": {
+          "type": "string",
+          "enum": [
+            "area",
+            "feature"
+          ],
+          "default": "area",
+          "description": "An `area` is a gameplay terrain zone (the 11e 'terrain area'); a `feature` is physical scenery (walls, containers, pipes) placed on an area."
+        },
+        "template": {
+          "$ref": "#/$defs/entity-id",
+          "description": "Id of the terrain-template this piece instances. Footprint and defaults (height, blocking, keywords) are taken from that template unless overridden here."
+        },
         "footprint": {
-          "$ref": "#/$defs/footprint"
+          "$ref": "#/$defs/footprint",
+          "description": "Inline geometry, standing in for or overriding a template footprint. Authoritative when present."
         },
         "position": {
           "$ref": "#/$defs/vec2",
-          "description": "Board-inch placement of the footprint's local origin."
+          "description": "Placement of the piece's CENTROID (the polygon area centroid of its footprint). Rotation- and mirror-invariant: changing `rotation_degrees` or `mirror` never moves this point. In board inches, unless the piece is a feature with `parent_area_id`, in which case it is in the parent area's centroid-local frame."
         },
         "rotation_degrees": {
           "type": "number",
           "minimum": 0,
           "exclusiveMaximum": 360,
-          "description": "Clockwise rotation of the footprint about `position`. Absent or 0 means axis-aligned."
+          "description": "Clockwise rotation about the centroid in the y-down board frame. Absent or 0 means the template's natural orientation."
         },
-        "template": {
+        "mirror": {
           "type": "string",
-          "minLength": 1,
-          "maxLength": 64,
-          "description": "Optional descriptive label for the GW standard template this piece uses (e.g. 'large-ruin', 'long-wall'). Free-form, not enum-locked — the geometry in `footprint` is authoritative."
+          "enum": [
+            "none",
+            "horizontal",
+            "vertical"
+          ],
+          "default": "none",
+          "description": "Reflection applied in the centroid-local frame before rotation: `horizontal` negates local x (left-right flip), `vertical` negates local y."
+        },
+        "parent_area_id": {
+          "$ref": "#/$defs/entity-id",
+          "description": "For a feature: the layout-local id of the area it sits on. The feature's `position`/`rotation_degrees`/`mirror` are composed with the parent area's placement, so moving, rotating, or mirroring the area carries the feature with it."
+        },
+        "floor": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "Ruin floor this piece occupies (0 = ground level)."
         },
         "height_inches": {
           "type": "number",
           "minimum": 0,
-          "description": "Height of the piece in inches. Gates Plunging Fire (a piece 3\" or taller confers +1 BS on ground-level targets)."
+          "description": "Height of the piece in inches; overrides the template default. Gates Plunging Fire (a piece 3\" or taller confers +1 BS on ground-level targets)."
         },
         "terrain_area_keywords": {
           "type": "array",
           "uniqueItems": true,
-          "description": "Terrain-area keywords this piece's area carries.",
+          "description": "Terrain-area keywords this piece's area carries; overrides the template default.",
           "items": {
             "$ref": "#/$defs/terrain-area-keyword"
           }
@@ -1253,14 +1285,13 @@
         }
       },
       "required": [
-        "footprint",
         "position"
       ],
       "additionalProperties": false
     },
     "terrain-layout": {
       "title": "Terrain Layout",
-      "description": "A recommended arrangement of terrain pieces on the board, independent of the deployment map (a deployment-pattern references the layouts it recommends via recommended_terrain_layout_ids). Geometry is the source of truth; the GW standard piece templates are expressed as explicit footprints, with an optional descriptive `template` label. Footprints are deliberately open (not enum-locked) — the launch catalog and its size are unconfirmed, so this models any shape rather than a fixed set. No layout data is authored yet.",
+      "description": "A recommended arrangement of terrain pieces on the board, independent of the deployment map (a deployment-pattern references the layouts it recommends via recommended_terrain_layout_ids). Each piece draws its geometry from a catalog `template` (a terrain-template entity) or an inline `footprint`; geometry is the source of truth. Placement is template-centroid-anchored: `position` is the piece's centroid, which is invariant under rotation and mirror, so orientation and location are decoupled. Resolved board-space vertices are derived by the shared terrain resolver (pinned by the conformance corpus), never stored here. No layout data is authored yet beyond migrated examples.",
       "type": "object",
       "properties": {
         "id": {
@@ -1294,6 +1325,117 @@
       "required": [
         "id",
         "name",
+        "game_version"
+      ],
+      "additionalProperties": false
+    },
+    "composed-feature": {
+      "type": "object",
+      "description": "A feature placed on an area template, positioned in the area's centroid-local frame (y-down inches). When the area is placed, rotated, or mirrored, its composed features are carried along.",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/entity-id",
+          "description": "Composition-local id for this feature instance."
+        },
+        "template": {
+          "$ref": "#/$defs/entity-id",
+          "description": "Id of the feature-kind terrain-template to place."
+        },
+        "position": {
+          "$ref": "#/$defs/vec2",
+          "description": "The feature's centroid in the area's centroid-local frame (origin at the area centroid, y-down inches)."
+        },
+        "rotation_degrees": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 360,
+          "description": "Clockwise rotation of the feature about its own centroid, within the area-local frame."
+        },
+        "mirror": {
+          "type": "string",
+          "enum": [
+            "none",
+            "horizontal",
+            "vertical"
+          ],
+          "default": "none"
+        },
+        "floor": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "Ruin floor this feature occupies (0 = ground level)."
+        }
+      },
+      "required": [
+        "template",
+        "position"
+      ],
+      "additionalProperties": false
+    },
+    "terrain-template": {
+      "title": "Terrain Template",
+      "description": "A reusable terrain piece in the standard catalog: a gameplay area (the 11e terrain-area templates) or a scenery feature (walls, containers, pipes, floor segments). Footprints are authored in natural local inches; the terrain resolver derives each footprint's polygon area centroid and re-centers on it, so a layout piece that instances a template places its centroid via the layout's `position`. An `area` template may carry an embedded `features` list — scenery placed in the area's centroid-local frame — making the template a reusable composition (e.g. a ruin with its walls). Placing such a template places all of its features, transformed by the area's own placement.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/entity-id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "area",
+            "feature"
+          ],
+          "description": "`area` = a gameplay terrain zone; `feature` = physical scenery placed on an area."
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "description": "Catalog or mission pack the template originates from."
+        },
+        "footprint": {
+          "$ref": "#/$defs/footprint"
+        },
+        "default_height_inches": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Default height in inches for pieces instancing this template. Gates Plunging Fire (>= 3\")."
+        },
+        "default_blocking": {
+          "type": "boolean",
+          "description": "Whether the template blocks line of sight / movement by default."
+        },
+        "default_terrain_area_keywords": {
+          "type": "array",
+          "uniqueItems": true,
+          "description": "Terrain-area keywords areas of this template carry by default. Meaningful for `kind: \"area\"`.",
+          "items": {
+            "$ref": "#/$defs/terrain-area-keyword"
+          }
+        },
+        "features": {
+          "type": "array",
+          "description": "Composed scenery features, in the area's centroid-local frame. Only meaningful for `kind: \"area\"`.",
+          "items": {
+            "$ref": "#/$defs/composed-feature"
+          }
+        },
+        "game_version": {
+          "$ref": "#/$defs/game-version-ref"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "kind",
+        "footprint",
         "game_version"
       ],
       "additionalProperties": false

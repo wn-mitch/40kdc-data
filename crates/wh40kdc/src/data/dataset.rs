@@ -14,8 +14,8 @@ use std::sync::OnceLock;
 use crate::generated::{
     Ability, DeploymentPattern, Detachment, Enhancement, Faction, ForceDisposition, GameVersion,
     InteractionFlag, LeaderAttachment, Mission, MissionMatchup, Phase, PhaseMapping, ResourcePool,
-    SecondaryCard, Stratagem, TimingFlag, Unit, UnitComposition, WargearOption, Weapon,
-    WeaponKeyword,
+    SecondaryCard, Stratagem, TerrainLayout, TerrainTemplate, TimingFlag, Unit, UnitComposition,
+    WargearOption, Weapon, WeaponKeyword,
 };
 
 use super::collection::Collection;
@@ -69,6 +69,12 @@ pub struct RawData {
     pub deployment_patterns: Vec<DeploymentPattern>,
     #[serde(default)]
     pub force_dispositions: Vec<ForceDisposition>,
+    /// Reusable terrain catalog: standard areas and scenery features.
+    #[serde(default)]
+    pub terrain_templates: Vec<TerrainTemplate>,
+    /// Terrain layouts: arrangements of catalog/inline pieces on the board.
+    #[serde(default)]
+    pub terrain_layouts: Vec<TerrainLayout>,
     #[serde(default)]
     pub resource_pools: Vec<ResourcePool>,
     #[serde(default)]
@@ -122,6 +128,8 @@ pub struct Dataset {
     pub secondary_cards: Collection<SecondaryCard>,
     pub deployment_patterns: Collection<DeploymentPattern>,
     pub force_dispositions: Collection<ForceDisposition>,
+    pub terrain_templates: Collection<TerrainTemplate>,
+    pub terrain_layouts: Collection<TerrainLayout>,
     pub resource_pools: Collection<ResourcePool>,
 
     // Id-less collections, exposed as plain slices.
@@ -239,6 +247,16 @@ impl Dataset {
             |f| f.id.to_string(),
             |f| Some(f.name.as_str()),
         );
+        let terrain_templates = id_name_collection(
+            raw.terrain_templates,
+            |t| t.id.to_string(),
+            |t| Some(t.name.as_str()),
+        );
+        let terrain_layouts = id_name_collection(
+            raw.terrain_layouts,
+            |l| l.id.to_string(),
+            |l| Some(l.name.as_str()),
+        );
         let resource_pools = Collection::build(
             raw.resource_pools,
             |r| r.id.to_string(),
@@ -265,6 +283,8 @@ impl Dataset {
             secondary_cards,
             deployment_patterns,
             force_dispositions,
+            terrain_templates,
+            terrain_layouts,
             resource_pools,
             leader_attachments: raw.leader_attachments,
             unit_compositions: raw.unit_compositions,
@@ -306,6 +326,37 @@ impl Dataset {
     /// The unit's faction, or `None` if its `faction_id` is unknown.
     pub fn faction_of(&self, unit: &Unit) -> Option<&Faction> {
         self.factions.get(unit.faction_id.as_str())
+    }
+
+    /// Resolve a terrain layout to absolute board-space vertices, using this
+    /// dataset's embedded terrain-template catalog. This is the layout-id →
+    /// renderable-geometry hop a consumer (e.g. shadowboxing) wants. Errors if
+    /// the layout references a template absent from the catalog. The generated
+    /// types round-trip through their canonical JSON into the resolver's input
+    /// structs — the same JSON the conformance corpus pins.
+    pub fn resolve_terrain(
+        &self,
+        layout: &TerrainLayout,
+    ) -> Result<Vec<crate::terrain::ResolvedPiece>, crate::terrain::TerrainResolveError> {
+        fn convert<T: serde::de::DeserializeOwned, S: serde::Serialize>(value: &S) -> T {
+            serde_json::from_value(serde_json::to_value(value).expect("generated terrain serializes"))
+                .expect("generated terrain type matches resolver shape")
+        }
+        let r_layout: crate::terrain::TerrainLayout = convert(layout);
+        let templates: Vec<crate::terrain::TerrainTemplate> =
+            self.terrain_templates.all().iter().map(convert).collect();
+        crate::terrain::resolve_layout(&r_layout, &templates)
+    }
+
+    /// The terrain layouts a deployment pattern recommends, in declared order,
+    /// skipping any ids absent from the dataset.
+    pub fn recommended_terrain_layouts(&self, pattern: &DeploymentPattern) -> Vec<&TerrainLayout> {
+        pattern
+            .recommended_terrain_layout_ids
+            .iter()
+            .flatten()
+            .filter_map(|id| self.terrain_layouts.get(id.as_str()))
+            .collect()
     }
 
     /// Weapons referenced by `weapon_ids`; unresolved ids are skipped.

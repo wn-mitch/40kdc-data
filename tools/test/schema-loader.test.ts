@@ -28,6 +28,7 @@ describe("schema-loader", () => {
     expect(ids).toContain("https://40kdc.dev/schemas/core/mission.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/core/mission-matchup.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/core/secondary-card.schema.json");
+    expect(ids).toContain("https://40kdc.dev/schemas/core/terrain-template.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/core/terrain-layout.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/enrichment/phase-mapping.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/enrichment/timing-flag.schema.json");

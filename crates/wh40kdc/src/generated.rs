@@ -914,6 +914,163 @@ pub struct ChoiceEffect {
     #[serde(rename = "type")]
     pub type_: ::serde_json::Value,
 }
+///A feature placed on an area template, positioned in the area's centroid-local frame (y-down inches). When the area is placed, rotated, or mirrored, its composed features are carried along.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "A feature placed on an area template, positioned in the area's centroid-local frame (y-down inches). When the area is placed, rotated, or mirrored, its composed features are carried along.",
+///  "type": "object",
+///  "required": [
+///    "position",
+///    "template"
+///  ],
+///  "properties": {
+///    "floor": {
+///      "description": "Ruin floor this feature occupies (0 = ground level).",
+///      "default": 0,
+///      "type": "integer",
+///      "minimum": 0.0
+///    },
+///    "id": {
+///      "description": "Composition-local id for this feature instance.",
+///      "$ref": "#/$defs/entity-id"
+///    },
+///    "mirror": {
+///      "default": "none",
+///      "type": "string",
+///      "enum": [
+///        "none",
+///        "horizontal",
+///        "vertical"
+///      ]
+///    },
+///    "position": {
+///      "description": "The feature's centroid in the area's centroid-local frame (origin at the area centroid, y-down inches).",
+///      "$ref": "#/$defs/vec2"
+///    },
+///    "rotation_degrees": {
+///      "description": "Clockwise rotation of the feature about its own centroid, within the area-local frame.",
+///      "type": "number",
+///      "exclusiveMaximum": 360.0,
+///      "minimum": 0.0
+///    },
+///    "template": {
+///      "description": "Id of the feature-kind terrain-template to place.",
+///      "$ref": "#/$defs/entity-id"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ComposedFeature {
+    ///Ruin floor this feature occupies (0 = ground level).
+    #[serde(default)]
+    pub floor: u64,
+    ///Composition-local id for this feature instance.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<EntityId>,
+    #[serde(default = "defaults::composed_feature_mirror")]
+    pub mirror: ComposedFeatureMirror,
+    ///The feature's centroid in the area's centroid-local frame (origin at the area centroid, y-down inches).
+    pub position: Vec2,
+    ///Clockwise rotation of the feature about its own centroid, within the area-local frame.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub rotation_degrees: ::std::option::Option<f64>,
+    ///Id of the feature-kind terrain-template to place.
+    pub template: EntityId,
+}
+///`ComposedFeatureMirror`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "default": "none",
+///  "type": "string",
+///  "enum": [
+///    "none",
+///    "horizontal",
+///    "vertical"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ComposedFeatureMirror {
+    #[serde(rename = "none")]
+    None,
+    #[serde(rename = "horizontal")]
+    Horizontal,
+    #[serde(rename = "vertical")]
+    Vertical,
+}
+impl ::std::fmt::Display for ComposedFeatureMirror {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::None => f.write_str("none"),
+            Self::Horizontal => f.write_str("horizontal"),
+            Self::Vertical => f.write_str("vertical"),
+        }
+    }
+}
+impl ::std::str::FromStr for ComposedFeatureMirror {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "none" => Ok(Self::None),
+            "horizontal" => Ok(Self::Horizontal),
+            "vertical" => Ok(Self::Vertical),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ComposedFeatureMirror {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for ComposedFeatureMirror {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for ComposedFeatureMirror {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::default::Default for ComposedFeatureMirror {
+    fn default() -> Self {
+        ComposedFeatureMirror::None
+    }
+}
 ///`CompoundCondition`
 ///
 /// <details><summary>JSON schema</summary>
@@ -3265,13 +3422,13 @@ impl<'de> ::serde::Deserialize<'de> for FactionName {
             })
     }
 }
-///A terrain piece's 2D footprint, relative to the piece's `position`. Axis-aligned rectangle, right triangle (right angle at the local origin, legs along +x/+y), or an explicit polygon. GW's standard templates (e.g. 7"×11.5" rectangles, 8"×11.5" right triangles, 6"×4" rectangles, 10"×2.5" and 6"×2" lines) are all expressible here; lines are thin rectangles.
+///A terrain piece's 2D footprint in local inches (y-down): an axis-aligned rectangle with its min corner at the local origin, a right triangle with the right angle at the local origin and legs along +x/+y, or an explicit polygon (>= 3 points). The placement resolver re-centers the footprint on its polygon area centroid, so the local-origin convention does not affect where the piece lands — only its shape matters.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "A terrain piece's 2D footprint, relative to the piece's `position`. Axis-aligned rectangle, right triangle (right angle at the local origin, legs along +x/+y), or an explicit polygon. GW's standard templates (e.g. 7\"×11.5\" rectangles, 8\"×11.5\" right triangles, 6\"×4\" rectangles, 10\"×2.5\" and 6\"×2\" lines) are all expressible here; lines are thin rectangles.",
+///  "description": "A terrain piece's 2D footprint in local inches (y-down): an axis-aligned rectangle with its min corner at the local origin, a right triangle with the right angle at the local origin and legs along +x/+y, or an explicit polygon (>= 3 points). The placement resolver re-centers the footprint on its polygon area centroid, so the local-origin convention does not affect where the piece lands — only its shape matters.",
 ///  "oneOf": [
 ///    {
 ///      "type": "object",
@@ -4490,26 +4647,36 @@ pub struct PhaseMapping {
     pub source_id: EntityId,
     pub source_type: SourceType,
 }
-///One terrain feature placed on the board.
+///One terrain piece placed on the board. Geometry comes from a catalog `template` or an inline `footprint` (if both are present, `footprint` is authoritative and `template` is provenance).
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "One terrain feature placed on the board.",
+///  "description": "One terrain piece placed on the board. Geometry comes from a catalog `template` or an inline `footprint` (if both are present, `footprint` is authoritative and `template` is provenance).",
 ///  "type": "object",
 ///  "required": [
-///    "footprint",
 ///    "position"
 ///  ],
 ///  "properties": {
+///    "floor": {
+///      "description": "Ruin floor this piece occupies (0 = ground level).",
+///      "default": 0,
+///      "type": "integer",
+///      "minimum": 0.0
+///    },
 ///    "footprint": {
+///      "description": "Inline geometry, standing in for or overriding a template footprint. Authoritative when present.",
 ///      "$ref": "#/$defs/footprint"
 ///    },
 ///    "height_inches": {
-///      "description": "Height of the piece in inches. Gates Plunging Fire (a piece 3\" or taller confers +1 BS on ground-level targets).",
+///      "description": "Height of the piece in inches; overrides the template default. Gates Plunging Fire (a piece 3\" or taller confers +1 BS on ground-level targets).",
 ///      "type": "number",
 ///      "minimum": 0.0
+///    },
+///    "id": {
+///      "description": "Layout-local id. Required for any piece referenced by another piece's `parent_area_id`.",
+///      "$ref": "#/$defs/entity-id"
 ///    },
 ///    "is_objective": {
 ///      "description": "Whether this piece carries an objective marker.",
@@ -4521,6 +4688,16 @@ pub struct PhaseMapping {
 ///      "type": "string",
 ///      "maxLength": 64,
 ///      "minLength": 1
+///    },
+///    "mirror": {
+///      "description": "Reflection applied in the centroid-local frame before rotation: `horizontal` negates local x (left-right flip), `vertical` negates local y.",
+///      "default": "none",
+///      "type": "string",
+///      "enum": [
+///        "none",
+///        "horizontal",
+///        "vertical"
+///      ]
 ///    },
 ///    "name": {
 ///      "type": "string",
@@ -4543,24 +4720,35 @@ pub struct PhaseMapping {
 ///      },
 ///      "additionalProperties": false
 ///    },
+///    "parent_area_id": {
+///      "description": "For a feature: the layout-local id of the area it sits on. The feature's `position`/`rotation_degrees`/`mirror` are composed with the parent area's placement, so moving, rotating, or mirroring the area carries the feature with it.",
+///      "$ref": "#/$defs/entity-id"
+///    },
+///    "piece_type": {
+///      "description": "An `area` is a gameplay terrain zone (the 11e 'terrain area'); a `feature` is physical scenery (walls, containers, pipes) placed on an area.",
+///      "default": "area",
+///      "type": "string",
+///      "enum": [
+///        "area",
+///        "feature"
+///      ]
+///    },
 ///    "position": {
-///      "description": "Board-inch placement of the footprint's local origin.",
+///      "description": "Placement of the piece's CENTROID (the polygon area centroid of its footprint). Rotation- and mirror-invariant: changing `rotation_degrees` or `mirror` never moves this point. In board inches, unless the piece is a feature with `parent_area_id`, in which case it is in the parent area's centroid-local frame.",
 ///      "$ref": "#/$defs/vec2"
 ///    },
 ///    "rotation_degrees": {
-///      "description": "Clockwise rotation of the footprint about `position`. Absent or 0 means axis-aligned.",
+///      "description": "Clockwise rotation about the centroid in the y-down board frame. Absent or 0 means the template's natural orientation.",
 ///      "type": "number",
 ///      "exclusiveMaximum": 360.0,
 ///      "minimum": 0.0
 ///    },
 ///    "template": {
-///      "description": "Optional descriptive label for the GW standard template this piece uses (e.g. 'large-ruin', 'long-wall'). Free-form, not enum-locked — the geometry in `footprint` is authoritative.",
-///      "type": "string",
-///      "maxLength": 64,
-///      "minLength": 1
+///      "description": "Id of the terrain-template this piece instances. Footprint and defaults (height, blocking, keywords) are taken from that template unless overridden here.",
+///      "$ref": "#/$defs/entity-id"
 ///    },
 ///    "terrain_area_keywords": {
-///      "description": "Terrain-area keywords this piece's area carries.",
+///      "description": "Terrain-area keywords this piece's area carries; overrides the template default.",
 ///      "type": "array",
 ///      "items": {
 ///        "$ref": "#/$defs/terrain-area-keyword"
@@ -4575,29 +4763,46 @@ pub struct PhaseMapping {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct Piece {
-    pub footprint: Footprint,
-    ///Height of the piece in inches. Gates Plunging Fire (a piece 3" or taller confers +1 BS on ground-level targets).
+    ///Ruin floor this piece occupies (0 = ground level).
+    #[serde(default)]
+    pub floor: u64,
+    ///Inline geometry, standing in for or overriding a template footprint. Authoritative when present.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub footprint: ::std::option::Option<Footprint>,
+    ///Height of the piece in inches; overrides the template default. Gates Plunging Fire (a piece 3" or taller confers +1 BS on ground-level targets).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub height_inches: ::std::option::Option<f64>,
+    ///Layout-local id. Required for any piece referenced by another piece's `parent_area_id`.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<EntityId>,
     ///Whether this piece carries an objective marker.
     #[serde(default)]
     pub is_objective: bool,
     ///Pieces sharing a `link_group` value are linked terrain — treated as a single terrain feature (and, where an objective sits among them, a single objective).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub link_group: ::std::option::Option<PieceLinkGroup>,
+    ///Reflection applied in the centroid-local frame before rotation: `horizontal` negates local x (left-right flip), `vertical` negates local y.
+    #[serde(default = "defaults::piece_mirror")]
+    pub mirror: PieceMirror,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<PieceName>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub objective: ::std::option::Option<PieceObjective>,
-    ///Board-inch placement of the footprint's local origin.
+    ///For a feature: the layout-local id of the area it sits on. The feature's `position`/`rotation_degrees`/`mirror` are composed with the parent area's placement, so moving, rotating, or mirroring the area carries the feature with it.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub parent_area_id: ::std::option::Option<EntityId>,
+    ///An `area` is a gameplay terrain zone (the 11e 'terrain area'); a `feature` is physical scenery (walls, containers, pipes) placed on an area.
+    #[serde(default = "defaults::piece_piece_type")]
+    pub piece_type: PiecePieceType,
+    ///Placement of the piece's CENTROID (the polygon area centroid of its footprint). Rotation- and mirror-invariant: changing `rotation_degrees` or `mirror` never moves this point. In board inches, unless the piece is a feature with `parent_area_id`, in which case it is in the parent area's centroid-local frame.
     pub position: Vec2,
-    ///Clockwise rotation of the footprint about `position`. Absent or 0 means axis-aligned.
+    ///Clockwise rotation about the centroid in the y-down board frame. Absent or 0 means the template's natural orientation.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub rotation_degrees: ::std::option::Option<f64>,
-    ///Optional descriptive label for the GW standard template this piece uses (e.g. 'large-ruin', 'long-wall'). Free-form, not enum-locked — the geometry in `footprint` is authoritative.
+    ///Id of the terrain-template this piece instances. Footprint and defaults (height, blocking, keywords) are taken from that template unless overridden here.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub template: ::std::option::Option<PieceTemplate>,
-    ///Terrain-area keywords this piece's area carries.
+    pub template: ::std::option::Option<EntityId>,
+    ///Terrain-area keywords this piece's area carries; overrides the template default.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub terrain_area_keywords: ::std::option::Option<Vec<TerrainAreaKeyword>>,
 }
@@ -4676,6 +4881,94 @@ impl<'de> ::serde::Deserialize<'de> for PieceLinkGroup {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///Reflection applied in the centroid-local frame before rotation: `horizontal` negates local x (left-right flip), `vertical` negates local y.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Reflection applied in the centroid-local frame before rotation: `horizontal` negates local x (left-right flip), `vertical` negates local y.",
+///  "default": "none",
+///  "type": "string",
+///  "enum": [
+///    "none",
+///    "horizontal",
+///    "vertical"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum PieceMirror {
+    #[serde(rename = "none")]
+    None,
+    #[serde(rename = "horizontal")]
+    Horizontal,
+    #[serde(rename = "vertical")]
+    Vertical,
+}
+impl ::std::fmt::Display for PieceMirror {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::None => f.write_str("none"),
+            Self::Horizontal => f.write_str("horizontal"),
+            Self::Vertical => f.write_str("vertical"),
+        }
+    }
+}
+impl ::std::str::FromStr for PieceMirror {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "none" => Ok(Self::None),
+            "horizontal" => Ok(Self::Horizontal),
+            "vertical" => Ok(Self::Vertical),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for PieceMirror {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for PieceMirror {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for PieceMirror {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::default::Default for PieceMirror {
+    fn default() -> Self {
+        PieceMirror::None
     }
 }
 ///`PieceName`
@@ -4795,48 +5088,61 @@ impl ::std::default::Default for PieceObjective {
         }
     }
 }
-///Optional descriptive label for the GW standard template this piece uses (e.g. 'large-ruin', 'long-wall'). Free-form, not enum-locked — the geometry in `footprint` is authoritative.
+///An `area` is a gameplay terrain zone (the 11e 'terrain area'); a `feature` is physical scenery (walls, containers, pipes) placed on an area.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "Optional descriptive label for the GW standard template this piece uses (e.g. 'large-ruin', 'long-wall'). Free-form, not enum-locked — the geometry in `footprint` is authoritative.",
+///  "description": "An `area` is a gameplay terrain zone (the 11e 'terrain area'); a `feature` is physical scenery (walls, containers, pipes) placed on an area.",
+///  "default": "area",
 ///  "type": "string",
-///  "maxLength": 64,
-///  "minLength": 1
+///  "enum": [
+///    "area",
+///    "feature"
+///  ]
 ///}
 /// ```
 /// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct PieceTemplate(::std::string::String);
-impl ::std::ops::Deref for PieceTemplate {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum PiecePieceType {
+    #[serde(rename = "area")]
+    Area,
+    #[serde(rename = "feature")]
+    Feature,
+}
+impl ::std::fmt::Display for PiecePieceType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Area => f.write_str("area"),
+            Self::Feature => f.write_str("feature"),
+        }
     }
 }
-impl ::std::convert::From<PieceTemplate> for ::std::string::String {
-    fn from(value: PieceTemplate) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for PieceTemplate {
+impl ::std::str::FromStr for PiecePieceType {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() > 64usize {
-            return Err("longer than 64 characters".into());
+        match value {
+            "area" => Ok(Self::Area),
+            "feature" => Ok(Self::Feature),
+            _ => Err("invalid value".into()),
         }
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
     }
 }
-impl ::std::convert::TryFrom<&str> for PieceTemplate {
+impl ::std::convert::TryFrom<&str> for PiecePieceType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -4844,7 +5150,7 @@ impl ::std::convert::TryFrom<&str> for PieceTemplate {
         value.parse()
     }
 }
-impl ::std::convert::TryFrom<&::std::string::String> for PieceTemplate {
+impl ::std::convert::TryFrom<&::std::string::String> for PiecePieceType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &::std::string::String,
@@ -4852,7 +5158,7 @@ impl ::std::convert::TryFrom<&::std::string::String> for PieceTemplate {
         value.parse()
     }
 }
-impl ::std::convert::TryFrom<::std::string::String> for PieceTemplate {
+impl ::std::convert::TryFrom<::std::string::String> for PiecePieceType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -4860,16 +5166,9 @@ impl ::std::convert::TryFrom<::std::string::String> for PieceTemplate {
         value.parse()
     }
 }
-impl<'de> ::serde::Deserialize<'de> for PieceTemplate {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
+impl ::std::default::Default for PiecePieceType {
+    fn default() -> Self {
+        PiecePieceType::Area
     }
 }
 ///Which player's turn this applies during
@@ -8617,14 +8916,14 @@ impl ::std::convert::TryFrom<::std::string::String> for TerrainAreaKeyword {
         value.parse()
     }
 }
-///A recommended arrangement of terrain pieces on the board, independent of the deployment map (a deployment-pattern references the layouts it recommends via recommended_terrain_layout_ids). Geometry is the source of truth; the GW standard piece templates are expressed as explicit footprints, with an optional descriptive `template` label. Footprints are deliberately open (not enum-locked) — the launch catalog and its size are unconfirmed, so this models any shape rather than a fixed set. No layout data is authored yet.
+///A recommended arrangement of terrain pieces on the board, independent of the deployment map (a deployment-pattern references the layouts it recommends via recommended_terrain_layout_ids). Each piece draws its geometry from a catalog `template` (a terrain-template entity) or an inline `footprint`; geometry is the source of truth. Placement is template-centroid-anchored: `position` is the piece's centroid, which is invariant under rotation and mirror, so orientation and location are decoupled. Resolved board-space vertices are derived by the shared terrain resolver (pinned by the conformance corpus), never stored here. No layout data is authored yet beyond migrated examples.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
 ///  "title": "Terrain Layout",
-///  "description": "A recommended arrangement of terrain pieces on the board, independent of the deployment map (a deployment-pattern references the layouts it recommends via recommended_terrain_layout_ids). Geometry is the source of truth; the GW standard piece templates are expressed as explicit footprints, with an optional descriptive `template` label. Footprints are deliberately open (not enum-locked) — the launch catalog and its size are unconfirmed, so this models any shape rather than a fixed set. No layout data is authored yet.",
+///  "description": "A recommended arrangement of terrain pieces on the board, independent of the deployment map (a deployment-pattern references the layouts it recommends via recommended_terrain_layout_ids). Each piece draws its geometry from a catalog `template` (a terrain-template entity) or an inline `footprint`; geometry is the source of truth. Placement is template-centroid-anchored: `position` is the piece's centroid, which is invariant under rotation and mirror, so orientation and location are decoupled. Resolved board-space vertices are derived by the shared terrain resolver (pinned by the conformance corpus), never stored here. No layout data is authored yet beyond migrated examples.",
 ///  "type": "object",
 ///  "required": [
 ///    "game_version",
@@ -8821,6 +9120,335 @@ impl ::std::convert::TryFrom<::std::string::String> for TerrainLayoutSource {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for TerrainLayoutSource {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///A reusable terrain piece in the standard catalog: a gameplay area (the 11e terrain-area templates) or a scenery feature (walls, containers, pipes, floor segments). Footprints are authored in natural local inches; the terrain resolver derives each footprint's polygon area centroid and re-centers on it, so a layout piece that instances a template places its centroid via the layout's `position`. An `area` template may carry an embedded `features` list — scenery placed in the area's centroid-local frame — making the template a reusable composition (e.g. a ruin with its walls). Placing such a template places all of its features, transformed by the area's own placement.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "title": "Terrain Template",
+///  "description": "A reusable terrain piece in the standard catalog: a gameplay area (the 11e terrain-area templates) or a scenery feature (walls, containers, pipes, floor segments). Footprints are authored in natural local inches; the terrain resolver derives each footprint's polygon area centroid and re-centers on it, so a layout piece that instances a template places its centroid via the layout's `position`. An `area` template may carry an embedded `features` list — scenery placed in the area's centroid-local frame — making the template a reusable composition (e.g. a ruin with its walls). Placing such a template places all of its features, transformed by the area's own placement.",
+///  "type": "object",
+///  "required": [
+///    "footprint",
+///    "game_version",
+///    "id",
+///    "kind",
+///    "name"
+///  ],
+///  "properties": {
+///    "default_blocking": {
+///      "description": "Whether the template blocks line of sight / movement by default.",
+///      "type": "boolean"
+///    },
+///    "default_height_inches": {
+///      "description": "Default height in inches for pieces instancing this template. Gates Plunging Fire (>= 3\").",
+///      "type": "number",
+///      "minimum": 0.0
+///    },
+///    "default_terrain_area_keywords": {
+///      "description": "Terrain-area keywords areas of this template carry by default. Meaningful for `kind: \"area\"`.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/terrain-area-keyword"
+///      },
+///      "uniqueItems": true
+///    },
+///    "features": {
+///      "description": "Composed scenery features, in the area's centroid-local frame. Only meaningful for `kind: \"area\"`.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/composed-feature"
+///      }
+///    },
+///    "footprint": {
+///      "$ref": "#/$defs/footprint"
+///    },
+///    "game_version": {
+///      "$ref": "#/$defs/game-version-ref"
+///    },
+///    "id": {
+///      "$ref": "#/$defs/entity-id"
+///    },
+///    "kind": {
+///      "description": "`area` = a gameplay terrain zone; `feature` = physical scenery placed on an area.",
+///      "type": "string",
+///      "enum": [
+///        "area",
+///        "feature"
+///      ]
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 128,
+///      "minLength": 1
+///    },
+///    "source": {
+///      "description": "Catalog or mission pack the template originates from.",
+///      "type": "string",
+///      "maxLength": 64,
+///      "minLength": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct TerrainTemplate {
+    ///Whether the template blocks line of sight / movement by default.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub default_blocking: ::std::option::Option<bool>,
+    ///Default height in inches for pieces instancing this template. Gates Plunging Fire (>= 3").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub default_height_inches: ::std::option::Option<f64>,
+    ///Terrain-area keywords areas of this template carry by default. Meaningful for `kind: "area"`.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub default_terrain_area_keywords: ::std::option::Option<Vec<TerrainAreaKeyword>>,
+    ///Composed scenery features, in the area's centroid-local frame. Only meaningful for `kind: "area"`.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub features: ::std::vec::Vec<ComposedFeature>,
+    pub footprint: Footprint,
+    pub game_version: GameVersionRef,
+    pub id: EntityId,
+    ///`area` = a gameplay terrain zone; `feature` = physical scenery placed on an area.
+    pub kind: TerrainTemplateKind,
+    pub name: TerrainTemplateName,
+    ///Catalog or mission pack the template originates from.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub source: ::std::option::Option<TerrainTemplateSource>,
+}
+///`area` = a gameplay terrain zone; `feature` = physical scenery placed on an area.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "`area` = a gameplay terrain zone; `feature` = physical scenery placed on an area.",
+///  "type": "string",
+///  "enum": [
+///    "area",
+///    "feature"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum TerrainTemplateKind {
+    #[serde(rename = "area")]
+    Area,
+    #[serde(rename = "feature")]
+    Feature,
+}
+impl ::std::fmt::Display for TerrainTemplateKind {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Area => f.write_str("area"),
+            Self::Feature => f.write_str("feature"),
+        }
+    }
+}
+impl ::std::str::FromStr for TerrainTemplateKind {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "area" => Ok(Self::Area),
+            "feature" => Ok(Self::Feature),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for TerrainTemplateKind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for TerrainTemplateKind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for TerrainTemplateKind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`TerrainTemplateName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 128,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct TerrainTemplateName(::std::string::String);
+impl ::std::ops::Deref for TerrainTemplateName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<TerrainTemplateName> for ::std::string::String {
+    fn from(value: TerrainTemplateName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for TerrainTemplateName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 128usize {
+            return Err("longer than 128 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for TerrainTemplateName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for TerrainTemplateName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for TerrainTemplateName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for TerrainTemplateName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Catalog or mission pack the template originates from.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Catalog or mission pack the template originates from.",
+///  "type": "string",
+///  "maxLength": 64,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct TerrainTemplateSource(::std::string::String);
+impl ::std::ops::Deref for TerrainTemplateSource {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<TerrainTemplateSource> for ::std::string::String {
+    fn from(value: TerrainTemplateSource) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for TerrainTemplateSource {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 64usize {
+            return Err("longer than 64 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for TerrainTemplateSource {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for TerrainTemplateSource {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for TerrainTemplateSource {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for TerrainTemplateSource {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,
@@ -11597,8 +12225,17 @@ pub mod defaults {
     {
         T::try_from(::std::num::NonZeroU64::try_from(V).unwrap()).unwrap()
     }
+    pub(super) fn composed_feature_mirror() -> super::ComposedFeatureMirror {
+        super::ComposedFeatureMirror::None
+    }
     pub(super) fn dice_gated_effect_comparison() -> super::DiceGatedEffectComparison {
         super::DiceGatedEffectComparison::Gte
+    }
+    pub(super) fn piece_mirror() -> super::PieceMirror {
+        super::PieceMirror::None
+    }
+    pub(super) fn piece_piece_type() -> super::PiecePieceType {
+        super::PiecePieceType::Area
     }
     pub(super) fn secondary_card_card_type() -> super::SecondaryCardCardType {
         super::SecondaryCardCardType::Secondary

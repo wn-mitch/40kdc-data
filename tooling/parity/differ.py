@@ -354,6 +354,22 @@ def iter_scoring_translation_cases(corpus: Path) -> Iterator[Case]:
         )
 
 
+def iter_terrain_resolver_cases(corpus: Path) -> Iterator[Case]:
+    path = corpus / "terrain-resolver" / "cases.json"
+    cases = json.loads(path.read_text())
+    for entry in cases:
+        # Each case carries its own templates + layout; the op resolves them to
+        # board-space vertices. Vertices are floats, so compare with tolerance
+        # (string identity fields compared exactly by the recursive comparator).
+        yield Case(
+            area="terrain-resolver",
+            case_id=f"terrain-resolver/{entry['name']}",
+            op="resolve_terrain",
+            args={"layout": entry["layout"], "templates": entry["templates"]},
+            compare_mode="floats",
+        )
+
+
 AREA_ITERATORS: dict[str, Any] = {
     "normalize": iter_normalize_cases,
     "roster": iter_roster_cases,
@@ -361,6 +377,7 @@ AREA_ITERATORS: dict[str, Any] = {
     "linked-api": iter_linked_api_cases,
     "attribution": iter_attribution_cases,
     "scoring-translation": iter_scoring_translation_cases,
+    "terrain-resolver": iter_terrain_resolver_cases,
 }
 
 

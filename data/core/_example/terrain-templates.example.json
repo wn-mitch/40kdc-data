@@ -1,0 +1,34 @@
+[
+  {
+    "id": "demo-block",
+    "name": "Demo Block",
+    "kind": "area",
+    "source": "fabricated-pack",
+    "footprint": { "type": "rectangle", "width": 8, "height": 5 },
+    "default_terrain_area_keywords": ["obscuring"],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "demo-rail",
+    "name": "Demo Rail",
+    "kind": "feature",
+    "source": "fabricated-pack",
+    "footprint": { "type": "rectangle", "width": 6, "height": 0.25 },
+    "default_height_inches": 4,
+    "default_blocking": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "demo-railed-block",
+    "name": "Demo Railed Block",
+    "kind": "area",
+    "source": "fabricated-pack",
+    "footprint": { "type": "rectangle", "width": 8, "height": 5 },
+    "default_terrain_area_keywords": ["obscuring"],
+    "features": [
+      { "id": "north-rail", "template": "demo-rail", "position": { "x": 0, "y": -2.25 } },
+      { "id": "east-rail", "template": "demo-rail", "position": { "x": 3.75, "y": 0 }, "rotation_degrees": 90 }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

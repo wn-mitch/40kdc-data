@@ -81,6 +81,49 @@
       },
       "required": ["x", "y"],
       "additionalProperties": false
+    },
+    "footprint": {
+      "description": "A terrain piece's 2D footprint in local inches (y-down): an axis-aligned rectangle with its min corner at the local origin, a right triangle with the right angle at the local origin and legs along +x/+y, or an explicit polygon (>= 3 points). The placement resolver re-centers the footprint on its polygon area centroid, so the local-origin convention does not affect where the piece lands — only its shape matters.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "rectangle" },
+            "width": { "type": "number", "exclusiveMinimum": 0 },
+            "height": { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "required": ["type", "width", "height"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "right-triangle" },
+            "width": { "type": "number", "exclusiveMinimum": 0 },
+            "height": { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "required": ["type", "width", "height"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "polygon" },
+            "points": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/vec2" },
+              "minItems": 3
+            }
+          },
+          "required": ["type", "points"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "terrain-area-keyword": {
+      "type": "string",
+      "enum": ["obscuring", "hidden", "plunging-fire"],
+      "description": "An 11e terrain-area keyword. Confirmed launch set; extend as further keywords publish on dataslate."
     }
   }
 }

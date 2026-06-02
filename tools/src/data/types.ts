@@ -23,6 +23,8 @@ import type {
   ResourcePool,
   SecondaryCard,
   Stratagem,
+  TerrainLayout,
+  TerrainTemplate,
   TimingFlag,
   Unit,
   UnitComposition,
@@ -60,6 +62,10 @@ export interface RawData {
   secondaryCards: SecondaryCard[];
   deploymentPatterns: DeploymentPattern[];
   forceDispositions: ForceDisposition[];
+  /** Reusable terrain catalog: standard areas and scenery features. */
+  terrainTemplates: TerrainTemplate[];
+  /** Terrain layouts: arrangements of catalog/inline pieces on the board. */
+  terrainLayouts: TerrainLayout[];
   resourcePools: ResourcePool[];
   timingFlags: TimingFlag[];
   interactionFlags: InteractionFlag[];
@@ -86,6 +92,8 @@ export function emptyRawData(): RawData {
     secondaryCards: [],
     deploymentPatterns: [],
     forceDispositions: [],
+    terrainTemplates: [],
+    terrainLayouts: [],
     resourcePools: [],
     timingFlags: [],
     interactionFlags: [],

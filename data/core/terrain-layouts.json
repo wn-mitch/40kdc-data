@@ -1,0 +1,3431 @@
+[
+  {
+    "id": "gw-11e-crucible",
+    "name": "Crucible of Battle",
+    "source": "gw-11e",
+    "pieces": [
+      {
+        "id": "piece-1",
+        "name": "11e Large Area",
+        "piece_type": "area",
+        "template": "area-large",
+        "position": {
+          "x": 48.25,
+          "y": 8.5
+        }
+      },
+      {
+        "id": "piece-2",
+        "name": "11e Long Line Area",
+        "piece_type": "area",
+        "template": "area-long-line",
+        "position": {
+          "x": 35.5939,
+          "y": 9.5627
+        },
+        "rotation_degrees": 55
+      },
+      {
+        "id": "piece-3",
+        "name": "11e Short Line Area",
+        "piece_type": "area",
+        "template": "area-short-line",
+        "position": {
+          "x": 30.9016,
+          "y": 3.031
+        },
+        "rotation_degrees": 55
+      },
+      {
+        "id": "piece-4",
+        "name": "Pipe",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -1.0244,
+              "y": -2.3347
+            },
+            {
+              "x": 1.8435,
+              "y": 1.7611
+            },
+            {
+              "x": 1.0244,
+              "y": 2.3347
+            },
+            {
+              "x": -1.8435,
+              "y": -1.7611
+            }
+          ]
+        },
+        "position": {
+          "x": 31.0244,
+          "y": 3.0847
+        },
+        "template": "pipe"
+      },
+      {
+        "id": "piece-5",
+        "name": "Pipe",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -1.0244,
+              "y": -2.3347
+            },
+            {
+              "x": 1.8435,
+              "y": 1.7611
+            },
+            {
+              "x": 1.0244,
+              "y": 2.3347
+            },
+            {
+              "x": -1.8435,
+              "y": -1.7611
+            }
+          ]
+        },
+        "position": {
+          "x": 34.5244,
+          "y": 7.5847
+        },
+        "template": "pipe"
+      },
+      {
+        "id": "piece-6",
+        "name": "Pipe",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -1.0244,
+              "y": -2.3347
+            },
+            {
+              "x": 1.8435,
+              "y": 1.7611
+            },
+            {
+              "x": 1.0244,
+              "y": 2.3347
+            },
+            {
+              "x": -1.8435,
+              "y": -1.7611
+            }
+          ]
+        },
+        "position": {
+          "x": 37.0244,
+          "y": 11.0847
+        },
+        "template": "pipe"
+      },
+      {
+        "id": "piece-7",
+        "name": "Scaffold",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0.2456,
+              "y": -1.3927
+            },
+            {
+              "x": 1.3927,
+              "y": 0.2456
+            },
+            {
+              "x": -0.2456,
+              "y": 1.3927
+            },
+            {
+              "x": -1.3927,
+              "y": -0.2456
+            }
+          ]
+        },
+        "position": {
+          "x": 35.7544,
+          "y": 9.3927
+        },
+        "template": "scaffold"
+      },
+      {
+        "id": "piece-8",
+        "name": "11e Medium Area",
+        "piece_type": "area",
+        "template": "area-medium",
+        "position": {
+          "x": 45.0824,
+          "y": 25.6046
+        },
+        "rotation_degrees": 55
+      },
+      {
+        "id": "piece-9",
+        "name": "11e Short Line Area",
+        "piece_type": "area",
+        "template": "area-short-line",
+        "position": {
+          "x": 46.781,
+          "y": 19.3484
+        },
+        "rotation_degrees": 325
+      },
+      {
+        "id": "piece-10",
+        "name": "11e Large Area",
+        "piece_type": "area",
+        "template": "area-large",
+        "position": {
+          "x": 47.431,
+          "y": 37.2176
+        },
+        "rotation_degrees": 55
+      },
+      {
+        "id": "piece-11",
+        "name": "11e Medium Area",
+        "piece_type": "area",
+        "template": "area-medium",
+        "position": {
+          "x": 35.8324,
+          "y": 34.3546
+        },
+        "rotation_degrees": 55
+      },
+      {
+        "id": "piece-12",
+        "name": "11e Trapezoid Area",
+        "piece_type": "area",
+        "template": "area-trapezoid",
+        "position": {
+          "x": 31.15,
+          "y": 24.2
+        },
+        "rotation_degrees": 90,
+        "mirror": "horizontal",
+        "link_group": "center"
+      },
+      {
+        "id": "piece-13",
+        "name": "11e Large Area",
+        "piece_type": "area",
+        "template": "area-large",
+        "position": {
+          "x": 11.75,
+          "y": 35.5
+        },
+        "rotation_degrees": 180
+      },
+      {
+        "id": "piece-14",
+        "name": "11e Long Line Area",
+        "piece_type": "area",
+        "template": "area-long-line",
+        "position": {
+          "x": 24.4061,
+          "y": 34.4373
+        },
+        "rotation_degrees": 235
+      },
+      {
+        "id": "piece-15",
+        "name": "11e Short Line Area",
+        "piece_type": "area",
+        "template": "area-short-line",
+        "position": {
+          "x": 29.0984,
+          "y": 40.969
+        },
+        "rotation_degrees": 235
+      },
+      {
+        "id": "piece-16",
+        "name": "Pipe",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 1.0244,
+              "y": 2.3347
+            },
+            {
+              "x": -1.8435,
+              "y": -1.7611
+            },
+            {
+              "x": -1.0244,
+              "y": -2.3347
+            },
+            {
+              "x": 1.8435,
+              "y": 1.7611
+            }
+          ]
+        },
+        "position": {
+          "x": 28.9756,
+          "y": 40.9153
+        },
+        "template": "pipe"
+      },
+      {
+        "id": "piece-17",
+        "name": "Pipe",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 1.0244,
+              "y": 2.3347
+            },
+            {
+              "x": -1.8435,
+              "y": -1.7611
+            },
+            {
+              "x": -1.0244,
+              "y": -2.3347
+            },
+            {
+              "x": 1.8435,
+              "y": 1.7611
+            }
+          ]
+        },
+        "position": {
+          "x": 25.5131,
+          "y": 36.3764
+        },
+        "template": "pipe"
+      },
+      {
+        "id": "piece-18",
+        "name": "Pipe",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 1.0244,
+              "y": 2.3347
+            },
+            {
+              "x": -1.8435,
+              "y": -1.7611
+            },
+            {
+              "x": -1.0244,
+              "y": -2.3347
+            },
+            {
+              "x": 1.8435,
+              "y": 1.7611
+            }
+          ]
+        },
+        "position": {
+          "x": 23.1335,
+          "y": 32.8028
+        },
+        "template": "pipe"
+      },
+      {
+        "id": "piece-19",
+        "name": "Scaffold",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -0.2456,
+              "y": 1.3927
+            },
+            {
+              "x": -1.3927,
+              "y": -0.2456
+            },
+            {
+              "x": 0.2456,
+              "y": -1.3927
+            },
+            {
+              "x": 1.3927,
+              "y": 0.2456
+            }
+          ]
+        },
+        "position": {
+          "x": 24.3821,
+          "y": 34.4683
+        },
+        "template": "scaffold"
+      },
+      {
+        "id": "piece-20",
+        "name": "11e Medium Area",
+        "piece_type": "area",
+        "template": "area-medium",
+        "position": {
+          "x": 14.9176,
+          "y": 18.3954
+        },
+        "rotation_degrees": 235
+      },
+      {
+        "id": "piece-21",
+        "name": "11e Short Line Area",
+        "piece_type": "area",
+        "template": "area-short-line",
+        "position": {
+          "x": 13.219,
+          "y": 24.6516
+        },
+        "rotation_degrees": 145
+      },
+      {
+        "id": "piece-22",
+        "name": "11e Large Area",
+        "piece_type": "area",
+        "template": "area-large",
+        "position": {
+          "x": 12.569,
+          "y": 6.7824
+        },
+        "rotation_degrees": 235
+      },
+      {
+        "id": "piece-23",
+        "name": "11e Medium Area",
+        "piece_type": "area",
+        "template": "area-medium",
+        "position": {
+          "x": 24.1612,
+          "y": 9.6454
+        },
+        "rotation_degrees": 235
+      },
+      {
+        "id": "piece-24",
+        "name": "11e Trapezoid Area",
+        "piece_type": "area",
+        "template": "area-trapezoid",
+        "position": {
+          "x": 28.85,
+          "y": 19.8
+        },
+        "rotation_degrees": 90,
+        "mirror": "vertical",
+        "link_group": "center"
+      },
+      {
+        "id": "piece-25-1",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 1,
+              "y": 0.125
+            },
+            {
+              "x": -1,
+              "y": 0.125
+            },
+            {
+              "x": -1,
+              "y": -0.125
+            },
+            {
+              "x": 1,
+              "y": -0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 34.25,
+          "y": 26.5
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-25-2",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -0.125,
+              "y": 1
+            },
+            {
+              "x": -0.125,
+              "y": -1
+            },
+            {
+              "x": 0.125,
+              "y": -1
+            },
+            {
+              "x": 0.125,
+              "y": 1
+            }
+          ]
+        },
+        "position": {
+          "x": 35.25,
+          "y": 25.5
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-27-1",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -1,
+              "y": -0.125
+            },
+            {
+              "x": 1,
+              "y": -0.125
+            },
+            {
+              "x": 1,
+              "y": 0.125
+            },
+            {
+              "x": -1,
+              "y": 0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 25.75,
+          "y": 17.5
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-27-2",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0.125,
+              "y": -1
+            },
+            {
+              "x": 0.125,
+              "y": 1
+            },
+            {
+              "x": -0.125,
+              "y": 1
+            },
+            {
+              "x": -0.125,
+              "y": -1
+            }
+          ]
+        },
+        "position": {
+          "x": 24.75,
+          "y": 18.5
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-29-1",
+        "name": "Medium Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0.125,
+              "y": -2.5
+            },
+            {
+              "x": 0.125,
+              "y": 2.5
+            },
+            {
+              "x": -0.125,
+              "y": 2.5
+            },
+            {
+              "x": -0.125,
+              "y": -2.5
+            }
+          ]
+        },
+        "position": {
+          "x": 35,
+          "y": 20
+        },
+        "template": "corner-medium"
+      },
+      {
+        "id": "piece-29-2",
+        "name": "Medium Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 2.5,
+              "y": 0.125
+            },
+            {
+              "x": -2.5,
+              "y": 0.125
+            },
+            {
+              "x": -2.5,
+              "y": -0.125
+            },
+            {
+              "x": 2.5,
+              "y": -0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 32.5,
+          "y": 17.5
+        },
+        "template": "corner-medium"
+      },
+      {
+        "id": "piece-30",
+        "name": "Canister",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -2.6627,
+              "y": -1.1875
+            },
+            {
+              "x": -0.2052,
+              "y": -2.9082
+            },
+            {
+              "x": 2.6627,
+              "y": 1.1875
+            },
+            {
+              "x": 0.2052,
+              "y": 2.9082
+            }
+          ]
+        },
+        "position": {
+          "x": 45.0941,
+          "y": 25.5888
+        },
+        "template": "canister"
+      },
+      {
+        "id": "piece-31",
+        "name": "Pipe",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -2.3347,
+              "y": 1.0244
+            },
+            {
+              "x": 1.7611,
+              "y": -1.8435
+            },
+            {
+              "x": 2.3347,
+              "y": -1.0244
+            },
+            {
+              "x": -1.7611,
+              "y": 1.8435
+            }
+          ]
+        },
+        "position": {
+          "x": 46.8298,
+          "y": 19.3154
+        },
+        "template": "pipe"
+      },
+      {
+        "id": "piece-32-1",
+        "name": "Small Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -0.125,
+              "y": 1.5
+            },
+            {
+              "x": -0.125,
+              "y": -1.5
+            },
+            {
+              "x": 0.125,
+              "y": -1.5
+            },
+            {
+              "x": 0.125,
+              "y": 1.5
+            }
+          ]
+        },
+        "position": {
+          "x": 43,
+          "y": 10
+        },
+        "template": "corner-small"
+      },
+      {
+        "id": "piece-32-2",
+        "name": "Small Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -3,
+              "y": -0.125
+            },
+            {
+              "x": 3,
+              "y": -0.125
+            },
+            {
+              "x": 3,
+              "y": 0.125
+            },
+            {
+              "x": -3,
+              "y": 0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 46,
+          "y": 11.5
+        },
+        "template": "corner-small"
+      },
+      {
+        "id": "piece-33-1",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0.125,
+              "y": -1
+            },
+            {
+              "x": 0.125,
+              "y": 1
+            },
+            {
+              "x": -0.125,
+              "y": 1
+            },
+            {
+              "x": -0.125,
+              "y": -1
+            }
+          ]
+        },
+        "position": {
+          "x": 53.5303,
+          "y": 6.593
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-33-2",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 1,
+              "y": 0.125
+            },
+            {
+              "x": -1,
+              "y": 0.125
+            },
+            {
+              "x": -1,
+              "y": -0.125
+            },
+            {
+              "x": 1,
+              "y": -0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 52.5303,
+          "y": 5.593
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-34-1",
+        "name": "Medium Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -0.125,
+              "y": 2.5
+            },
+            {
+              "x": -0.125,
+              "y": -2.5
+            },
+            {
+              "x": 0.125,
+              "y": -2.5
+            },
+            {
+              "x": 0.125,
+              "y": 2.5
+            }
+          ]
+        },
+        "position": {
+          "x": 25,
+          "y": 24
+        },
+        "template": "corner-medium"
+      },
+      {
+        "id": "piece-34-2",
+        "name": "Medium Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -2.5,
+              "y": -0.125
+            },
+            {
+              "x": 2.5,
+              "y": -0.125
+            },
+            {
+              "x": 2.5,
+              "y": 0.125
+            },
+            {
+              "x": -2.5,
+              "y": 0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 27.5,
+          "y": 26.5
+        },
+        "template": "corner-medium"
+      },
+      {
+        "id": "piece-35",
+        "name": "Canister",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 2.6627,
+              "y": 1.1875
+            },
+            {
+              "x": 0.2052,
+              "y": 2.9082
+            },
+            {
+              "x": -2.6627,
+              "y": -1.1875
+            },
+            {
+              "x": -0.2052,
+              "y": -2.9082
+            }
+          ]
+        },
+        "position": {
+          "x": 14.8507,
+          "y": 18.4278
+        },
+        "template": "canister"
+      },
+      {
+        "id": "piece-36",
+        "name": "Pipe",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 2.3347,
+              "y": -1.0244
+            },
+            {
+              "x": -1.7611,
+              "y": 1.8435
+            },
+            {
+              "x": -2.3347,
+              "y": 1.0244
+            },
+            {
+              "x": 1.7611,
+              "y": -1.8435
+            }
+          ]
+        },
+        "position": {
+          "x": 13.304,
+          "y": 24.582
+        },
+        "template": "pipe"
+      },
+      {
+        "id": "piece-37-1",
+        "name": "Small Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0.125,
+              "y": -1.5
+            },
+            {
+              "x": 0.125,
+              "y": 1.5
+            },
+            {
+              "x": -0.125,
+              "y": 1.5
+            },
+            {
+              "x": -0.125,
+              "y": -1.5
+            }
+          ]
+        },
+        "position": {
+          "x": 17,
+          "y": 34
+        },
+        "template": "corner-small"
+      },
+      {
+        "id": "piece-37-2",
+        "name": "Small Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 3,
+              "y": 0.125
+            },
+            {
+              "x": -3,
+              "y": 0.125
+            },
+            {
+              "x": -3,
+              "y": -0.125
+            },
+            {
+              "x": 3,
+              "y": -0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 14,
+          "y": 32.5
+        },
+        "template": "corner-small"
+      },
+      {
+        "id": "piece-38-1",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -0.125,
+              "y": 1
+            },
+            {
+              "x": -0.125,
+              "y": -1
+            },
+            {
+              "x": 0.125,
+              "y": -1
+            },
+            {
+              "x": 0.125,
+              "y": 1
+            }
+          ]
+        },
+        "position": {
+          "x": 6.5048,
+          "y": 37.5196
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-38-2",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -1,
+              "y": -0.125
+            },
+            {
+              "x": 1,
+              "y": -0.125
+            },
+            {
+              "x": 1,
+              "y": 0.125
+            },
+            {
+              "x": -1,
+              "y": 0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 7.5048,
+          "y": 38.5196
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-39",
+        "name": "Canister",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -2.6627,
+              "y": -1.1875
+            },
+            {
+              "x": -0.2052,
+              "y": -2.9082
+            },
+            {
+              "x": 2.6627,
+              "y": 1.1875
+            },
+            {
+              "x": 0.2052,
+              "y": 2.9082
+            }
+          ]
+        },
+        "position": {
+          "x": 24.1896,
+          "y": 9.6538
+        },
+        "template": "canister"
+      },
+      {
+        "id": "piece-40-1",
+        "name": "Large Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 2.5292,
+              "y": -1.6183
+            },
+            {
+              "x": -2.3858,
+              "y": 1.8231
+            },
+            {
+              "x": -2.5292,
+              "y": 1.6183
+            },
+            {
+              "x": 2.3858,
+              "y": -1.8231
+            }
+          ]
+        },
+        "position": {
+          "x": 50.3679,
+          "y": 41.488
+        },
+        "template": "corner-large"
+      },
+      {
+        "id": "piece-40-2",
+        "name": "Large Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 1.9051,
+              "y": 2.9387
+            },
+            {
+              "x": -2.1099,
+              "y": -2.7953
+            },
+            {
+              "x": -1.9051,
+              "y": -2.9387
+            },
+            {
+              "x": 2.1099,
+              "y": 2.7953
+            }
+          ]
+        },
+        "position": {
+          "x": 50.8178,
+          "y": 36.9003
+        },
+        "template": "corner-large"
+      },
+      {
+        "id": "piece-41-1",
+        "name": "Medium Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -2.1196,
+              "y": 1.3315
+            },
+            {
+              "x": 1.9762,
+              "y": -1.5363
+            },
+            {
+              "x": 2.1196,
+              "y": -1.3315
+            },
+            {
+              "x": -1.9762,
+              "y": 1.5363
+            }
+          ]
+        },
+        "position": {
+          "x": 44.0749,
+          "y": 33.2669
+        },
+        "template": "corner-medium"
+      },
+      {
+        "id": "piece-41-2",
+        "name": "Medium Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -1.3315,
+              "y": -2.1196
+            },
+            {
+              "x": 1.5363,
+              "y": 1.9762
+            },
+            {
+              "x": 1.3315,
+              "y": 2.1196
+            },
+            {
+              "x": -1.5363,
+              "y": -1.9762
+            }
+          ]
+        },
+        "position": {
+          "x": 43.461,
+          "y": 36.7487
+        },
+        "template": "corner-medium"
+      },
+      {
+        "id": "piece-42",
+        "name": "Canister",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 2.6627,
+              "y": 1.1875
+            },
+            {
+              "x": 0.2052,
+              "y": 2.9082
+            },
+            {
+              "x": -2.6627,
+              "y": -1.1875
+            },
+            {
+              "x": -0.2052,
+              "y": -2.9082
+            }
+          ]
+        },
+        "position": {
+          "x": 35.8104,
+          "y": 34.3462
+        },
+        "template": "canister"
+      },
+      {
+        "id": "piece-43-1",
+        "name": "Large Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -2.5292,
+              "y": 1.6183
+            },
+            {
+              "x": 2.3858,
+              "y": -1.8231
+            },
+            {
+              "x": 2.5292,
+              "y": -1.6183
+            },
+            {
+              "x": -2.3858,
+              "y": 1.8231
+            }
+          ]
+        },
+        "position": {
+          "x": 9.6321,
+          "y": 2.512
+        },
+        "template": "corner-large"
+      },
+      {
+        "id": "piece-43-2",
+        "name": "Large Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -1.9051,
+              "y": -2.9387
+            },
+            {
+              "x": 2.1099,
+              "y": 2.7953
+            },
+            {
+              "x": 1.9051,
+              "y": 2.9387
+            },
+            {
+              "x": -2.1099,
+              "y": -2.7953
+            }
+          ]
+        },
+        "position": {
+          "x": 9.1822,
+          "y": 7.0997
+        },
+        "template": "corner-large"
+      },
+      {
+        "id": "piece-44-1",
+        "name": "Medium Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 2.1196,
+              "y": -1.3315
+            },
+            {
+              "x": -1.9762,
+              "y": 1.5363
+            },
+            {
+              "x": -2.1196,
+              "y": 1.3315
+            },
+            {
+              "x": 1.9762,
+              "y": -1.5363
+            }
+          ]
+        },
+        "position": {
+          "x": 15.9251,
+          "y": 10.7331
+        },
+        "template": "corner-medium"
+      },
+      {
+        "id": "piece-44-2",
+        "name": "Medium Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 1.3315,
+              "y": 2.1196
+            },
+            {
+              "x": -1.5363,
+              "y": -1.9762
+            },
+            {
+              "x": -1.3315,
+              "y": -2.1196
+            },
+            {
+              "x": 1.5363,
+              "y": 1.9762
+            }
+          ]
+        },
+        "position": {
+          "x": 16.539,
+          "y": 7.2513
+        },
+        "template": "corner-medium"
+      },
+      {
+        "id": "piece-45",
+        "name": "Floor 4x4",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -2,
+              "y": -2
+            },
+            {
+              "x": 2,
+              "y": -2
+            },
+            {
+              "x": 2,
+              "y": 2
+            },
+            {
+              "x": -2,
+              "y": 2
+            }
+          ]
+        },
+        "position": {
+          "x": 32.8521,
+          "y": 19.6124
+        },
+        "template": "floor-4x4",
+        "floor": 1
+      },
+      {
+        "id": "piece-46",
+        "name": "Floor 2.5x4",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 2,
+              "y": -1.25
+            },
+            {
+              "x": 2,
+              "y": 1.25
+            },
+            {
+              "x": -2,
+              "y": 1.25
+            },
+            {
+              "x": -2,
+              "y": -1.25
+            }
+          ]
+        },
+        "position": {
+          "x": 45.153,
+          "y": 10.1683
+        },
+        "template": "floor-2p5x4",
+        "floor": 1
+      },
+      {
+        "id": "piece-47",
+        "name": "Floor 3x4",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0.7779,
+              "y": -2.3759
+            },
+            {
+              "x": 2.4987,
+              "y": 0.0816
+            },
+            {
+              "x": -0.7779,
+              "y": 2.3759
+            },
+            {
+              "x": -2.4987,
+              "y": -0.0816
+            }
+          ]
+        },
+        "position": {
+          "x": 44.7043,
+          "y": 34.8273
+        },
+        "template": "floor-3x4",
+        "floor": 1
+      },
+      {
+        "id": "piece-48",
+        "name": "Floor 2.5x4",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 2.1711,
+              "y": 0.9213
+            },
+            {
+              "x": 0.1232,
+              "y": 2.3553
+            },
+            {
+              "x": -2.1711,
+              "y": -0.9213
+            },
+            {
+              "x": -0.1232,
+              "y": -2.3553
+            }
+          ]
+        },
+        "position": {
+          "x": 50.611,
+          "y": 38.9022
+        },
+        "template": "floor-2p5x4",
+        "floor": 1
+      },
+      {
+        "id": "piece-49",
+        "name": "Floor 4x4",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 2,
+              "y": 2
+            },
+            {
+              "x": -2,
+              "y": 2
+            },
+            {
+              "x": -2,
+              "y": -2
+            },
+            {
+              "x": 2,
+              "y": -2
+            }
+          ]
+        },
+        "position": {
+          "x": 27.1479,
+          "y": 24.3876
+        },
+        "template": "floor-4x4",
+        "floor": 1
+      },
+      {
+        "id": "piece-50",
+        "name": "Floor 2.5x4",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -2,
+              "y": 1.25
+            },
+            {
+              "x": -2,
+              "y": -1.25
+            },
+            {
+              "x": 2,
+              "y": -1.25
+            },
+            {
+              "x": 2,
+              "y": 1.25
+            }
+          ]
+        },
+        "position": {
+          "x": 14.847,
+          "y": 33.8317
+        },
+        "template": "floor-2p5x4",
+        "floor": 1
+      },
+      {
+        "id": "piece-51",
+        "name": "Floor 3x4",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -0.7779,
+              "y": 2.3759
+            },
+            {
+              "x": -2.4987,
+              "y": -0.0816
+            },
+            {
+              "x": 0.7779,
+              "y": -2.3759
+            },
+            {
+              "x": 2.4987,
+              "y": 0.0816
+            }
+          ]
+        },
+        "position": {
+          "x": 15.2957,
+          "y": 9.1727
+        },
+        "template": "floor-3x4",
+        "floor": 1
+      },
+      {
+        "id": "piece-52",
+        "name": "Floor 2.5x4",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -2.1711,
+              "y": -0.9213
+            },
+            {
+              "x": -0.1232,
+              "y": -2.3553
+            },
+            {
+              "x": 2.1711,
+              "y": 0.9213
+            },
+            {
+              "x": 0.1232,
+              "y": 2.3553
+            }
+          ]
+        },
+        "position": {
+          "x": 9.389,
+          "y": 5.0978
+        },
+        "template": "floor-2p5x4",
+        "floor": 1
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "gw-11e-hammer-anvil",
+    "name": "Hammer and Anvil",
+    "source": "gw-11e",
+    "pieces": [
+      {
+        "id": "piece-1",
+        "name": "11e Large Area",
+        "piece_type": "area",
+        "template": "area-large",
+        "position": {
+          "x": 46.5,
+          "y": 18.75
+        },
+        "rotation_degrees": 90
+      },
+      {
+        "id": "piece-2",
+        "name": "11e Medium Area",
+        "piece_type": "area",
+        "template": "area-medium",
+        "position": {
+          "x": 38.5,
+          "y": 3
+        },
+        "rotation_degrees": 90
+      },
+      {
+        "id": "piece-3-1",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0.125,
+              "y": -1
+            },
+            {
+              "x": 0.125,
+              "y": 1
+            },
+            {
+              "x": -0.125,
+              "y": 1
+            },
+            {
+              "x": -0.125,
+              "y": -1
+            }
+          ]
+        },
+        "position": {
+          "x": 40.0354,
+          "y": 1.4646
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-3-2",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 1,
+              "y": 0.125
+            },
+            {
+              "x": -1,
+              "y": 0.125
+            },
+            {
+              "x": -1,
+              "y": -0.125
+            },
+            {
+              "x": 1,
+              "y": -0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 39.0354,
+          "y": 0.4646
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-4-1",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -0.125,
+              "y": 1
+            },
+            {
+              "x": -0.125,
+              "y": -1
+            },
+            {
+              "x": 0.125,
+              "y": -1
+            },
+            {
+              "x": 0.125,
+              "y": 1
+            }
+          ]
+        },
+        "position": {
+          "x": 36.9381,
+          "y": 4.6526
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-4-2",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -1,
+              "y": -0.125
+            },
+            {
+              "x": 1,
+              "y": -0.125
+            },
+            {
+              "x": 1,
+              "y": 0.125
+            },
+            {
+              "x": -1,
+              "y": 0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 37.9381,
+          "y": 5.6526
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-5",
+        "name": "11e Medium Area",
+        "piece_type": "area",
+        "template": "area-medium",
+        "position": {
+          "x": 33.5,
+          "y": 8
+        }
+      },
+      {
+        "id": "piece-6",
+        "name": "Canister",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 2.5,
+              "y": -1.5
+            },
+            {
+              "x": 2.5,
+              "y": 1.5
+            },
+            {
+              "x": -2.5,
+              "y": 1.5
+            },
+            {
+              "x": -2.5,
+              "y": -1.5
+            }
+          ]
+        },
+        "position": {
+          "x": 33.5735,
+          "y": 7.9877
+        },
+        "template": "canister"
+      },
+      {
+        "id": "piece-7",
+        "name": "11e Trapezoid Area",
+        "piece_type": "area",
+        "template": "area-trapezoid",
+        "position": {
+          "x": 32.2,
+          "y": 20.85
+        },
+        "mirror": "horizontal"
+      },
+      {
+        "id": "piece-8-1",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 1,
+              "y": 0.125
+            },
+            {
+              "x": -1,
+              "y": 0.125
+            },
+            {
+              "x": -1,
+              "y": -0.125
+            },
+            {
+              "x": 1,
+              "y": -0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 33.5405,
+          "y": 27.4396
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-8-2",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -0.125,
+              "y": 1
+            },
+            {
+              "x": -0.125,
+              "y": -1
+            },
+            {
+              "x": 0.125,
+              "y": -1
+            },
+            {
+              "x": 0.125,
+              "y": 1
+            }
+          ]
+        },
+        "position": {
+          "x": 34.5405,
+          "y": 26.4396
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-9",
+        "name": "Wall Medium",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -2.5,
+              "y": -0.125
+            },
+            {
+              "x": 2.5,
+              "y": -0.125
+            },
+            {
+              "x": 2.5,
+              "y": 0.125
+            },
+            {
+              "x": -2.5,
+              "y": 0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 32.231,
+          "y": 16.6816
+        },
+        "template": "wall-medium"
+      },
+      {
+        "id": "piece-10",
+        "name": "Wall Short",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0.125,
+              "y": -1.5
+            },
+            {
+              "x": 0.125,
+              "y": 1.5
+            },
+            {
+              "x": -0.125,
+              "y": 1.5
+            },
+            {
+              "x": -0.125,
+              "y": -1.5
+            }
+          ]
+        },
+        "position": {
+          "x": 34.6671,
+          "y": 18.1816
+        },
+        "template": "wall-short"
+      },
+      {
+        "id": "piece-11",
+        "name": "Floor 3x4",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 2,
+              "y": -1.5
+            },
+            {
+              "x": 2,
+              "y": 1.5
+            },
+            {
+              "x": -2,
+              "y": 1.5
+            },
+            {
+              "x": -2,
+              "y": -1.5
+            }
+          ]
+        },
+        "position": {
+          "x": 32.6038,
+          "y": 18.1816
+        },
+        "template": "floor-3x4",
+        "floor": 1
+      },
+      {
+        "id": "piece-12",
+        "name": "11e Short Line Area",
+        "piece_type": "area",
+        "template": "area-short-line",
+        "position": {
+          "x": 46,
+          "y": 6
+        }
+      },
+      {
+        "id": "piece-13",
+        "name": "11e Short Line Area",
+        "piece_type": "area",
+        "template": "area-short-line",
+        "position": {
+          "x": 42,
+          "y": 9.9314
+        },
+        "rotation_degrees": 90
+      },
+      {
+        "id": "piece-14",
+        "name": "11e Large Area",
+        "piece_type": "area",
+        "template": "area-large",
+        "position": {
+          "x": 38,
+          "y": 38.25
+        },
+        "rotation_degrees": 90
+      },
+      {
+        "id": "piece-15",
+        "name": "11e Long Line Area",
+        "piece_type": "area",
+        "template": "area-long-line",
+        "position": {
+          "x": 46.75,
+          "y": 33
+        },
+        "rotation_degrees": 90
+      },
+      {
+        "id": "piece-16-1",
+        "name": "Small Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -1.5,
+              "y": -0.125
+            },
+            {
+              "x": 1.5,
+              "y": -0.125
+            },
+            {
+              "x": 1.5,
+              "y": 0.125
+            },
+            {
+              "x": -1.5,
+              "y": 0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 45.0006,
+          "y": 13.4239
+        },
+        "template": "corner-small"
+      },
+      {
+        "id": "piece-16-2",
+        "name": "Small Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0.125,
+              "y": -3
+            },
+            {
+              "x": 0.125,
+              "y": 3
+            },
+            {
+              "x": -0.125,
+              "y": 3
+            },
+            {
+              "x": -0.125,
+              "y": -3
+            }
+          ]
+        },
+        "position": {
+          "x": 43.5006,
+          "y": 16.4239
+        },
+        "template": "corner-small"
+      },
+      {
+        "id": "piece-17",
+        "name": "Floor 3x4",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -1.5,
+              "y": -2
+            },
+            {
+              "x": 1.5,
+              "y": -2
+            },
+            {
+              "x": 1.5,
+              "y": 2
+            },
+            {
+              "x": -1.5,
+              "y": 2
+            }
+          ]
+        },
+        "position": {
+          "x": 45.0006,
+          "y": 15.5652
+        },
+        "template": "floor-3x4",
+        "floor": 1
+      },
+      {
+        "id": "piece-18",
+        "name": "Pipe",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -2.5,
+              "y": -0.5
+            },
+            {
+              "x": 2.5,
+              "y": -0.5
+            },
+            {
+              "x": 2.5,
+              "y": 0.5
+            },
+            {
+              "x": -2.5,
+              "y": 0.5
+            }
+          ]
+        },
+        "position": {
+          "x": 45.9945,
+          "y": 5.9239
+        },
+        "template": "pipe"
+      },
+      {
+        "id": "piece-19",
+        "name": "Pipe",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0.5,
+              "y": -2.5
+            },
+            {
+              "x": 0.5,
+              "y": 2.5
+            },
+            {
+              "x": -0.5,
+              "y": 2.5
+            },
+            {
+              "x": -0.5,
+              "y": -2.5
+            }
+          ]
+        },
+        "position": {
+          "x": 42.0055,
+          "y": 10.1378
+        },
+        "template": "pipe"
+      },
+      {
+        "id": "piece-20-1",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 1,
+              "y": 0.125
+            },
+            {
+              "x": -1,
+              "y": 0.125
+            },
+            {
+              "x": -1,
+              "y": -0.125
+            },
+            {
+              "x": 1,
+              "y": -0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 48.5761,
+          "y": 23.9501
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-20-2",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -0.125,
+              "y": 1
+            },
+            {
+              "x": -0.125,
+              "y": -1
+            },
+            {
+              "x": 0.125,
+              "y": -1
+            },
+            {
+              "x": 0.125,
+              "y": 1
+            }
+          ]
+        },
+        "position": {
+          "x": 49.5761,
+          "y": 22.9501
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-21",
+        "name": "Scaffold",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -1,
+              "y": -1
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            }
+          ]
+        },
+        "position": {
+          "x": 46.81,
+          "y": 33.0268
+        },
+        "template": "scaffold"
+      },
+      {
+        "id": "piece-22",
+        "name": "Pipe",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0.5,
+              "y": -2.5
+            },
+            {
+              "x": 0.5,
+              "y": 2.5
+            },
+            {
+              "x": -0.5,
+              "y": 2.5
+            },
+            {
+              "x": -0.5,
+              "y": -2.5
+            }
+          ]
+        },
+        "position": {
+          "x": 46.8642,
+          "y": 30.9239
+        },
+        "template": "pipe"
+      },
+      {
+        "id": "piece-23",
+        "name": "Pipe",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0.5,
+              "y": -2.5
+            },
+            {
+              "x": 0.5,
+              "y": 2.5
+            },
+            {
+              "x": -0.5,
+              "y": 2.5
+            },
+            {
+              "x": -0.5,
+              "y": -2.5
+            }
+          ]
+        },
+        "position": {
+          "x": 46.8642,
+          "y": 35.092
+        },
+        "template": "pipe"
+      },
+      {
+        "id": "piece-24",
+        "name": "Wall Medium",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -2.5,
+              "y": -0.125
+            },
+            {
+              "x": 2.5,
+              "y": -0.125
+            },
+            {
+              "x": 2.5,
+              "y": 0.125
+            },
+            {
+              "x": -2.5,
+              "y": 0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 38.6309,
+          "y": 32.9945
+        },
+        "template": "wall-medium"
+      },
+      {
+        "id": "piece-25",
+        "name": "Wall Short",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0.125,
+              "y": -1.5
+            },
+            {
+              "x": 0.125,
+              "y": 1.5
+            },
+            {
+              "x": -0.125,
+              "y": 1.5
+            },
+            {
+              "x": -0.125,
+              "y": -1.5
+            }
+          ]
+        },
+        "position": {
+          "x": 41.0761,
+          "y": 34.4945
+        },
+        "template": "wall-short"
+      },
+      {
+        "id": "piece-26",
+        "name": "Wall Medium",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0.125,
+              "y": -2.5
+            },
+            {
+              "x": 0.125,
+              "y": 2.5
+            },
+            {
+              "x": -0.125,
+              "y": 2.5
+            },
+            {
+              "x": -0.125,
+              "y": -2.5
+            }
+          ]
+        },
+        "position": {
+          "x": 35.0713,
+          "y": 41.0755
+        },
+        "template": "wall-medium"
+      },
+      {
+        "id": "piece-27",
+        "name": "Wall Short",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -1.5,
+              "y": -0.125
+            },
+            {
+              "x": 1.5,
+              "y": -0.125
+            },
+            {
+              "x": 1.5,
+              "y": 0.125
+            },
+            {
+              "x": -1.5,
+              "y": 0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 36.5713,
+          "y": 43.5207
+        },
+        "template": "wall-short"
+      },
+      {
+        "id": "piece-28",
+        "name": "Floor 2.5x4",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -1.25,
+              "y": -2
+            },
+            {
+              "x": 1.25,
+              "y": -2
+            },
+            {
+              "x": 1.25,
+              "y": 2
+            },
+            {
+              "x": -1.25,
+              "y": 2
+            }
+          ]
+        },
+        "position": {
+          "x": 36.3919,
+          "y": 41.4939
+        },
+        "template": "floor-2p5x4",
+        "floor": 1
+      },
+      {
+        "id": "piece-29",
+        "name": "Floor 2.5x4",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 2,
+              "y": -1.25
+            },
+            {
+              "x": 2,
+              "y": 1.25
+            },
+            {
+              "x": -2,
+              "y": 1.25
+            },
+            {
+              "x": -2,
+              "y": -1.25
+            }
+          ]
+        },
+        "position": {
+          "x": 38.9348,
+          "y": 34.3152
+        },
+        "template": "floor-2p5x4",
+        "floor": 1
+      },
+      {
+        "id": "piece-30",
+        "name": "11e Large Area",
+        "piece_type": "area",
+        "template": "area-large",
+        "position": {
+          "x": 13.5,
+          "y": 25.25
+        },
+        "rotation_degrees": 270
+      },
+      {
+        "id": "piece-31",
+        "name": "11e Medium Area",
+        "piece_type": "area",
+        "template": "area-medium",
+        "position": {
+          "x": 21.5,
+          "y": 41
+        },
+        "rotation_degrees": 270
+      },
+      {
+        "id": "piece-32-1",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -0.125,
+              "y": 1
+            },
+            {
+              "x": -0.125,
+              "y": -1
+            },
+            {
+              "x": 0.125,
+              "y": -1
+            },
+            {
+              "x": 0.125,
+              "y": 1
+            }
+          ]
+        },
+        "position": {
+          "x": 19.9646,
+          "y": 42.5354
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-32-2",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -1,
+              "y": -0.125
+            },
+            {
+              "x": 1,
+              "y": -0.125
+            },
+            {
+              "x": 1,
+              "y": 0.125
+            },
+            {
+              "x": -1,
+              "y": 0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 20.9646,
+          "y": 43.5354
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-33-1",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0.125,
+              "y": -1
+            },
+            {
+              "x": 0.125,
+              "y": 1
+            },
+            {
+              "x": -0.125,
+              "y": 1
+            },
+            {
+              "x": -0.125,
+              "y": -1
+            }
+          ]
+        },
+        "position": {
+          "x": 23.0619,
+          "y": 39.3474
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-33-2",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 1,
+              "y": 0.125
+            },
+            {
+              "x": -1,
+              "y": 0.125
+            },
+            {
+              "x": -1,
+              "y": -0.125
+            },
+            {
+              "x": 1,
+              "y": -0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 22.0619,
+          "y": 38.3474
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-34",
+        "name": "11e Medium Area",
+        "piece_type": "area",
+        "template": "area-medium",
+        "position": {
+          "x": 26.5,
+          "y": 36
+        },
+        "rotation_degrees": 180
+      },
+      {
+        "id": "piece-35",
+        "name": "Canister",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -2.5,
+              "y": 1.5
+            },
+            {
+              "x": -2.5,
+              "y": -1.5
+            },
+            {
+              "x": 2.5,
+              "y": -1.5
+            },
+            {
+              "x": 2.5,
+              "y": 1.5
+            }
+          ]
+        },
+        "position": {
+          "x": 26.4265,
+          "y": 36.0123
+        },
+        "template": "canister"
+      },
+      {
+        "id": "piece-36",
+        "name": "11e Trapezoid Area",
+        "piece_type": "area",
+        "template": "area-trapezoid",
+        "position": {
+          "x": 27.8,
+          "y": 23.15
+        },
+        "mirror": "vertical"
+      },
+      {
+        "id": "piece-37-1",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -1,
+              "y": -0.125
+            },
+            {
+              "x": 1,
+              "y": -0.125
+            },
+            {
+              "x": 1,
+              "y": 0.125
+            },
+            {
+              "x": -1,
+              "y": 0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 26.4595,
+          "y": 16.5604
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-37-2",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0.125,
+              "y": -1
+            },
+            {
+              "x": 0.125,
+              "y": 1
+            },
+            {
+              "x": -0.125,
+              "y": 1
+            },
+            {
+              "x": -0.125,
+              "y": -1
+            }
+          ]
+        },
+        "position": {
+          "x": 25.4595,
+          "y": 17.5604
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-38",
+        "name": "Wall Medium",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 2.5,
+              "y": 0.125
+            },
+            {
+              "x": -2.5,
+              "y": 0.125
+            },
+            {
+              "x": -2.5,
+              "y": -0.125
+            },
+            {
+              "x": 2.5,
+              "y": -0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 27.769,
+          "y": 27.3184
+        },
+        "template": "wall-medium"
+      },
+      {
+        "id": "piece-39",
+        "name": "Wall Short",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -0.125,
+              "y": 1.5
+            },
+            {
+              "x": -0.125,
+              "y": -1.5
+            },
+            {
+              "x": 0.125,
+              "y": -1.5
+            },
+            {
+              "x": 0.125,
+              "y": 1.5
+            }
+          ]
+        },
+        "position": {
+          "x": 25.3329,
+          "y": 25.8184
+        },
+        "template": "wall-short"
+      },
+      {
+        "id": "piece-40",
+        "name": "Floor 3x4",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -2,
+              "y": 1.5
+            },
+            {
+              "x": -2,
+              "y": -1.5
+            },
+            {
+              "x": 2,
+              "y": -1.5
+            },
+            {
+              "x": 2,
+              "y": 1.5
+            }
+          ]
+        },
+        "position": {
+          "x": 27.3962,
+          "y": 25.8184
+        },
+        "template": "floor-3x4",
+        "floor": 1
+      },
+      {
+        "id": "piece-41",
+        "name": "11e Short Line Area",
+        "piece_type": "area",
+        "template": "area-short-line",
+        "position": {
+          "x": 14,
+          "y": 38
+        },
+        "rotation_degrees": 180
+      },
+      {
+        "id": "piece-42",
+        "name": "11e Short Line Area",
+        "piece_type": "area",
+        "template": "area-short-line",
+        "position": {
+          "x": 18,
+          "y": 34.0686
+        },
+        "rotation_degrees": 270
+      },
+      {
+        "id": "piece-43",
+        "name": "11e Large Area",
+        "piece_type": "area",
+        "template": "area-large",
+        "position": {
+          "x": 22,
+          "y": 5.75
+        },
+        "rotation_degrees": 270
+      },
+      {
+        "id": "piece-44",
+        "name": "11e Long Line Area",
+        "piece_type": "area",
+        "template": "area-long-line",
+        "position": {
+          "x": 13.25,
+          "y": 11
+        },
+        "rotation_degrees": 270
+      },
+      {
+        "id": "piece-45-1",
+        "name": "Small Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 1.5,
+              "y": 0.125
+            },
+            {
+              "x": -1.5,
+              "y": 0.125
+            },
+            {
+              "x": -1.5,
+              "y": -0.125
+            },
+            {
+              "x": 1.5,
+              "y": -0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 14.9994,
+          "y": 30.5761
+        },
+        "template": "corner-small"
+      },
+      {
+        "id": "piece-45-2",
+        "name": "Small Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -0.125,
+              "y": 3
+            },
+            {
+              "x": -0.125,
+              "y": -3
+            },
+            {
+              "x": 0.125,
+              "y": -3
+            },
+            {
+              "x": 0.125,
+              "y": 3
+            }
+          ]
+        },
+        "position": {
+          "x": 16.4994,
+          "y": 27.5761
+        },
+        "template": "corner-small"
+      },
+      {
+        "id": "piece-46",
+        "name": "Floor 3x4",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 1.5,
+              "y": 2
+            },
+            {
+              "x": -1.5,
+              "y": 2
+            },
+            {
+              "x": -1.5,
+              "y": -2
+            },
+            {
+              "x": 1.5,
+              "y": -2
+            }
+          ]
+        },
+        "position": {
+          "x": 14.9994,
+          "y": 28.4348
+        },
+        "template": "floor-3x4",
+        "floor": 1
+      },
+      {
+        "id": "piece-47",
+        "name": "Pipe",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 2.5,
+              "y": 0.5
+            },
+            {
+              "x": -2.5,
+              "y": 0.5
+            },
+            {
+              "x": -2.5,
+              "y": -0.5
+            },
+            {
+              "x": 2.5,
+              "y": -0.5
+            }
+          ]
+        },
+        "position": {
+          "x": 14.0055,
+          "y": 38.0761
+        },
+        "template": "pipe"
+      },
+      {
+        "id": "piece-48",
+        "name": "Pipe",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -0.5,
+              "y": 2.5
+            },
+            {
+              "x": -0.5,
+              "y": -2.5
+            },
+            {
+              "x": 0.5,
+              "y": -2.5
+            },
+            {
+              "x": 0.5,
+              "y": 2.5
+            }
+          ]
+        },
+        "position": {
+          "x": 17.9945,
+          "y": 33.8622
+        },
+        "template": "pipe"
+      },
+      {
+        "id": "piece-49-1",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -1,
+              "y": -0.125
+            },
+            {
+              "x": 1,
+              "y": -0.125
+            },
+            {
+              "x": 1,
+              "y": 0.125
+            },
+            {
+              "x": -1,
+              "y": 0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 11.4239,
+          "y": 20.0499
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-49-2",
+        "name": "XS Corner",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0.125,
+              "y": -1
+            },
+            {
+              "x": 0.125,
+              "y": 1
+            },
+            {
+              "x": -0.125,
+              "y": 1
+            },
+            {
+              "x": -0.125,
+              "y": -1
+            }
+          ]
+        },
+        "position": {
+          "x": 10.4239,
+          "y": 21.0499
+        },
+        "template": "corner-xs"
+      },
+      {
+        "id": "piece-50",
+        "name": "Scaffold",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": -1
+            },
+            {
+              "x": 1,
+              "y": -1
+            }
+          ]
+        },
+        "position": {
+          "x": 13.19,
+          "y": 10.9732
+        },
+        "template": "scaffold"
+      },
+      {
+        "id": "piece-51",
+        "name": "Pipe",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -0.5,
+              "y": 2.5
+            },
+            {
+              "x": -0.5,
+              "y": -2.5
+            },
+            {
+              "x": 0.5,
+              "y": -2.5
+            },
+            {
+              "x": 0.5,
+              "y": 2.5
+            }
+          ]
+        },
+        "position": {
+          "x": 13.1358,
+          "y": 13.0761
+        },
+        "template": "pipe"
+      },
+      {
+        "id": "piece-52",
+        "name": "Pipe",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -0.5,
+              "y": 2.5
+            },
+            {
+              "x": -0.5,
+              "y": -2.5
+            },
+            {
+              "x": 0.5,
+              "y": -2.5
+            },
+            {
+              "x": 0.5,
+              "y": 2.5
+            }
+          ]
+        },
+        "position": {
+          "x": 13.1358,
+          "y": 8.908
+        },
+        "template": "pipe"
+      },
+      {
+        "id": "piece-53",
+        "name": "Wall Medium",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 2.5,
+              "y": 0.125
+            },
+            {
+              "x": -2.5,
+              "y": 0.125
+            },
+            {
+              "x": -2.5,
+              "y": -0.125
+            },
+            {
+              "x": 2.5,
+              "y": -0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 21.3691,
+          "y": 11.0055
+        },
+        "template": "wall-medium"
+      },
+      {
+        "id": "piece-54",
+        "name": "Wall Short",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -0.125,
+              "y": 1.5
+            },
+            {
+              "x": -0.125,
+              "y": -1.5
+            },
+            {
+              "x": 0.125,
+              "y": -1.5
+            },
+            {
+              "x": 0.125,
+              "y": 1.5
+            }
+          ]
+        },
+        "position": {
+          "x": 18.9239,
+          "y": 9.5055
+        },
+        "template": "wall-short"
+      },
+      {
+        "id": "piece-55",
+        "name": "Wall Medium",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -0.125,
+              "y": 2.5
+            },
+            {
+              "x": -0.125,
+              "y": -2.5
+            },
+            {
+              "x": 0.125,
+              "y": -2.5
+            },
+            {
+              "x": 0.125,
+              "y": 2.5
+            }
+          ]
+        },
+        "position": {
+          "x": 24.9287,
+          "y": 2.9245
+        },
+        "template": "wall-medium"
+      },
+      {
+        "id": "piece-56",
+        "name": "Wall Short",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 1.5,
+              "y": 0.125
+            },
+            {
+              "x": -1.5,
+              "y": 0.125
+            },
+            {
+              "x": -1.5,
+              "y": -0.125
+            },
+            {
+              "x": 1.5,
+              "y": -0.125
+            }
+          ]
+        },
+        "position": {
+          "x": 23.4287,
+          "y": 0.4793
+        },
+        "template": "wall-short"
+      },
+      {
+        "id": "piece-57",
+        "name": "Floor 2.5x4",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 1.25,
+              "y": 2
+            },
+            {
+              "x": -1.25,
+              "y": 2
+            },
+            {
+              "x": -1.25,
+              "y": -2
+            },
+            {
+              "x": 1.25,
+              "y": -2
+            }
+          ]
+        },
+        "position": {
+          "x": 23.6081,
+          "y": 2.5061
+        },
+        "template": "floor-2p5x4",
+        "floor": 1
+      },
+      {
+        "id": "piece-58",
+        "name": "Floor 2.5x4",
+        "piece_type": "feature",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": -2,
+              "y": 1.25
+            },
+            {
+              "x": -2,
+              "y": -1.25
+            },
+            {
+              "x": 2,
+              "y": -1.25
+            },
+            {
+              "x": 2,
+              "y": 1.25
+            }
+          ]
+        },
+        "position": {
+          "x": 21.0652,
+          "y": 9.6848
+        },
+        "template": "floor-2p5x4",
+        "floor": 1
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

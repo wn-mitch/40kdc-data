@@ -28,6 +28,8 @@ import { selectAdapter } from "./import/adapter.js";
 import { createValidator } from "./schema-loader.js";
 import { attributeStages, crunch, type Buff, type EngineContext, type EngineInput } from "./cruncher/index.js";
 import { describeScoringCard } from "./translate/index.js";
+import { resolveLayout, TerrainResolveError } from "./terrain/index.js";
+import type { TerrainTemplate, TerrainLayout } from "./terrain/resolve.js";
 import type Ajv from "ajv";
 
 // -----------------------------------------------------------------------------
@@ -482,6 +484,29 @@ function handleTranslateScoring(state: RunnerState, args: unknown): RunnerRespon
   return ok({ awards: describeScoringCard(card) });
 }
 
+function handleResolveTerrain(args: unknown): RunnerResponse {
+  if (typeof args !== "object" || args === null) {
+    return err("INVALID_INPUT", { detail: "resolve_terrain args must be an object" });
+  }
+  const a = args as { layout?: unknown; templates?: unknown };
+  if (typeof a.layout !== "object" || a.layout === null) {
+    return err("INVALID_INPUT", { detail: "resolve_terrain.layout must be an object" });
+  }
+  const templates = a.templates ?? [];
+  if (!Array.isArray(templates)) {
+    return err("INVALID_INPUT", { detail: "resolve_terrain.templates must be an array" });
+  }
+  try {
+    const pieces = resolveLayout(a.layout as TerrainLayout, templates as TerrainTemplate[]);
+    return ok({ pieces });
+  } catch (e) {
+    if (e instanceof TerrainResolveError) {
+      return err("INVALID_INPUT", { detail: e.message });
+    }
+    return err("INTERNAL_ERROR", { detail: (e as Error).message });
+  }
+}
+
 // -----------------------------------------------------------------------------
 // Dispatcher and per-line entry point.
 // -----------------------------------------------------------------------------
@@ -517,6 +542,8 @@ export function dispatch(state: RunnerState, req: { op: string; args?: unknown }
       return handleAttribution(state, req.args);
     case "translate_scoring":
       return handleTranslateScoring(state, req.args);
+    case "resolve_terrain":
+      return handleResolveTerrain(req.args);
     case "shutdown":
       return ok(null);
     default:

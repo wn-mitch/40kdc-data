@@ -32,6 +32,11 @@ import { selectAdapter } from "./import/adapter.js";
 import type { ParsedRoster, Roster } from "./import/types.js";
 import { attributeStages } from "./cruncher/attribution.js";
 import type { EngineInput } from "./cruncher/index.js";
+import {
+  resolveLayout,
+  type TerrainTemplate as ResolverTemplate,
+  type TerrainLayout as ResolverLayout,
+} from "./terrain/resolve.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, "../..");
@@ -407,8 +412,170 @@ function genScoringTranslation(): void {
   console.log(`scoring-translation/cases.json: ${cases.length} cases`);
 }
 
+/**
+ * Terrain-resolver corpus: resolve template-anchored layouts to absolute
+ * board-space vertices (y-down inches). The TS resolver is the oracle; the Rust
+ * port must reproduce every vertex within 5e-4 (per-area invariant in
+ * CONFORMANCE.md). Cases are self-contained — each carries its own `templates`
+ * and `layout` — so the corpus does not depend on the bundled catalog and the
+ * runner op can pass both in `args`. Coverage: per-template centroid anchoring
+ * (identity), cardinal + oblique rotations, both mirror axes on an asymmetric
+ * shape, embedded-feature composition, explicit parenting, and the inline
+ * footprint escape hatch.
+ */
+function genTerrainResolver(): void {
+  mkdirSync(join(CONFORMANCE, "terrain-resolver"), { recursive: true });
+
+  const areaLarge: ResolverTemplate = {
+    id: "area-large",
+    name: "Large Area",
+    kind: "area",
+    footprint: { type: "rectangle", width: 11.5, height: 7 },
+  };
+  const areaMedium: ResolverTemplate = {
+    id: "area-medium",
+    name: "Medium Area",
+    kind: "area",
+    footprint: { type: "rectangle", width: 6, height: 4 },
+  };
+  const areaTrapezoid: ResolverTemplate = {
+    id: "area-trapezoid",
+    name: "Trapezoid Area",
+    kind: "area",
+    footprint: {
+      type: "polygon",
+      points: [
+        { x: 0, y: 0 },
+        { x: 8, y: 0 },
+        { x: 2, y: 11.5 },
+        { x: 0, y: 11.5 },
+      ],
+    },
+  };
+  const wedge: ResolverTemplate = {
+    id: "wedge",
+    name: "Right Wedge",
+    kind: "area",
+    footprint: { type: "right-triangle", width: 8, height: 11.5 },
+  };
+  const wallLong: ResolverTemplate = {
+    id: "wall-long",
+    name: "Long Wall",
+    kind: "feature",
+    footprint: { type: "rectangle", width: 7, height: 0.25 },
+  };
+  const ruinComposed: ResolverTemplate = {
+    id: "ruin-composed",
+    name: "Composed Ruin",
+    kind: "area",
+    footprint: { type: "rectangle", width: 11.5, height: 7 },
+    features: [
+      { id: "back-wall", template: "wall-long", position: { x: 0, y: -3 } },
+      { id: "side-wall", template: "wall-long", position: { x: -5, y: 0 }, rotation_degrees: 90, mirror: "horizontal" },
+    ],
+  };
+
+  const baseCatalog = [areaLarge, areaMedium, areaTrapezoid, wedge, wallLong];
+
+  const layoutCases: { name: string; templates: ResolverTemplate[]; layout: ResolverLayout }[] = [
+    {
+      name: "identity-large",
+      templates: baseCatalog,
+      layout: { id: "c", name: "c", pieces: [{ id: "p", template: "area-large", position: { x: 30, y: 22 } }] },
+    },
+    {
+      name: "identity-wedge",
+      templates: baseCatalog,
+      layout: { id: "c", name: "c", pieces: [{ id: "p", template: "wedge", position: { x: 12, y: 30 } }] },
+    },
+    {
+      name: "identity-trapezoid",
+      templates: baseCatalog,
+      layout: { id: "c", name: "c", pieces: [{ id: "p", template: "area-trapezoid", position: { x: 40, y: 18 } }] },
+    },
+    {
+      name: "rotate-medium-90",
+      templates: baseCatalog,
+      layout: { id: "c", name: "c", pieces: [{ id: "p", template: "area-medium", position: { x: 30, y: 22 }, rotation_degrees: 90 }] },
+    },
+    {
+      name: "rotate-medium-180",
+      templates: baseCatalog,
+      layout: { id: "c", name: "c", pieces: [{ id: "p", template: "area-medium", position: { x: 30, y: 22 }, rotation_degrees: 180 }] },
+    },
+    {
+      name: "rotate-medium-270",
+      templates: baseCatalog,
+      layout: { id: "c", name: "c", pieces: [{ id: "p", template: "area-medium", position: { x: 30, y: 22 }, rotation_degrees: 270 }] },
+    },
+    {
+      name: "rotate-large-oblique-55",
+      templates: baseCatalog,
+      layout: { id: "c", name: "c", pieces: [{ id: "p", template: "area-large", position: { x: 30, y: 22 }, rotation_degrees: 55 }] },
+    },
+    {
+      name: "rotate-trapezoid-oblique-235",
+      templates: baseCatalog,
+      layout: { id: "c", name: "c", pieces: [{ id: "p", template: "area-trapezoid", position: { x: 35.75, y: 27 }, rotation_degrees: 235 }] },
+    },
+    {
+      name: "mirror-trapezoid-horizontal",
+      templates: baseCatalog,
+      layout: { id: "c", name: "c", pieces: [{ id: "p", template: "area-trapezoid", position: { x: 40, y: 18 }, mirror: "horizontal" }] },
+    },
+    {
+      name: "mirror-trapezoid-vertical-rot90",
+      templates: baseCatalog,
+      layout: { id: "c", name: "c", pieces: [{ id: "p", template: "area-trapezoid", position: { x: 40, y: 18 }, rotation_degrees: 90, mirror: "vertical" }] },
+    },
+    {
+      name: "composition-ruin-rot90-mirror-h",
+      templates: [ruinComposed, wallLong],
+      layout: { id: "c", name: "c", pieces: [{ id: "a1", template: "ruin-composed", position: { x: 30, y: 22 }, rotation_degrees: 90, mirror: "horizontal" }] },
+    },
+    {
+      name: "explicit-parent-feature",
+      templates: [areaLarge, wallLong],
+      layout: {
+        id: "c",
+        name: "c",
+        pieces: [
+          { id: "a1", template: "area-large", position: { x: 30, y: 22 }, rotation_degrees: 90, mirror: "horizontal" },
+          { id: "back-wall", template: "wall-long", parent_area_id: "a1", position: { x: 0, y: -3 } },
+        ],
+      },
+    },
+    {
+      name: "inline-footprint-polygon",
+      templates: [],
+      layout: {
+        id: "c",
+        name: "c",
+        pieces: [
+          {
+            id: "p",
+            footprint: { type: "polygon", points: [{ x: 0, y: 0 }, { x: 4, y: 0 }, { x: 2, y: 5 }] },
+            position: { x: 50, y: 40 },
+            rotation_degrees: 30,
+          },
+        ],
+      },
+    },
+  ];
+
+  const cases = layoutCases.map((c) => ({
+    name: c.name,
+    templates: c.templates,
+    layout: c.layout,
+    expected: { pieces: resolveLayout(c.layout, c.templates) },
+  }));
+  writeJson(join(CONFORMANCE, "terrain-resolver", "cases.json"), cases);
+  console.log(`terrain-resolver/cases.json: ${cases.length} cases`);
+}
+
 genNormalize();
 genRosters();
 genLinkedApi();
 genAttribution();
 genScoringTranslation();
+genTerrainResolver();

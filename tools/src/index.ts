@@ -8,6 +8,27 @@ export * from "./generated.js";
 // shared Ability-DSL condition humanizer). Cross-impl pinned by conformance.
 export * from "./translate/index.js";
 
+// Terrain geometry resolver (template-anchored layout → board-space vertices).
+// Curated (not wildcard) so its internal type aliases don't clash with the
+// generated Footprint/TerrainTemplate/TerrainLayout types. Cross-impl pinned.
+export {
+  resolveLayout,
+  polygonCentroid,
+  footprintVertices,
+  orientedOffsets,
+  TerrainResolveError,
+  solveCentroid,
+  TerrainSolveError,
+} from "./terrain/index.js";
+export type {
+  ResolvedPiece,
+  ResolvedVec2,
+  BoardEdge,
+  FeatureRef,
+  DimensionLine,
+  SolveInput,
+} from "./terrain/index.js";
+
 // Schema access + AJV validation (secondary: this package also validates data
 // against the canonical JSON Schemas).
 export {

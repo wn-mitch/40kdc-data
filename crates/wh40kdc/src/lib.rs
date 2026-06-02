@@ -79,6 +79,13 @@ pub mod translate;
 
 pub use translate::{describe_award, describe_condition, describe_scoring_card, describe_trigger};
 
+/// Terrain layout geometry: resolve template-anchored layouts to absolute
+/// board-space vertices. Pure (no data deps), so available in every build.
+/// Cross-impl pinned by the `terrain-resolver` conformance corpus.
+pub mod terrain;
+
+pub use terrain::{resolve_layout, ResolvedPiece, TerrainResolveError};
+
 /// The bundled, self-contained JSON Schema (draft 2020-12) these types were
 /// generated from. Consumers can feed this to a JSON Schema validator to check
 /// data before deserializing; the canonical validation CLI lives in the

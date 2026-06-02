@@ -1,0 +1,278 @@
+[
+  {
+    "id": "area-large",
+    "name": "Large Area",
+    "kind": "area",
+    "source": "gw-11e",
+    "footprint": { "type": "rectangle", "width": 11.5, "height": 7 },
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "area-trapezoid",
+    "name": "Trapezoid Area",
+    "kind": "area",
+    "source": "gw-11e",
+    "footprint": {
+      "type": "polygon",
+      "points": [
+        { "x": 0, "y": 0 },
+        { "x": 8, "y": 0 },
+        { "x": 2, "y": 11.5 },
+        { "x": 0, "y": 11.5 }
+      ]
+    },
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "area-medium",
+    "name": "Medium Area",
+    "kind": "area",
+    "source": "gw-11e",
+    "footprint": { "type": "rectangle", "width": 6, "height": 4 },
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "area-long-line",
+    "name": "Long Line Area",
+    "kind": "area",
+    "source": "gw-11e",
+    "footprint": { "type": "rectangle", "width": 10, "height": 2.5 },
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "area-short-line",
+    "name": "Short Line Area",
+    "kind": "area",
+    "source": "gw-11e",
+    "footprint": { "type": "rectangle", "width": 6, "height": 2 },
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "wall-long",
+    "name": "Long Wall",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": { "type": "rectangle", "width": 7, "height": 0.25 },
+    "default_height_inches": 5,
+    "default_blocking": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "wall-medium",
+    "name": "Medium Wall",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": { "type": "rectangle", "width": 5, "height": 0.25 },
+    "default_height_inches": 5,
+    "default_blocking": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "wall-short",
+    "name": "Short Wall",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": { "type": "rectangle", "width": 3, "height": 0.25 },
+    "default_height_inches": 5,
+    "default_blocking": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "wall-xs",
+    "name": "Extra-Short Wall",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": { "type": "rectangle", "width": 2, "height": 0.25 },
+    "default_height_inches": 5,
+    "default_blocking": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "warzone-wall-large",
+    "name": "Warzone Wall (Large)",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": { "type": "rectangle", "width": 9, "height": 0.25 },
+    "default_height_inches": 5,
+    "default_blocking": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "warzone-wall-medium",
+    "name": "Warzone Wall (Medium)",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": { "type": "rectangle", "width": 6, "height": 0.25 },
+    "default_height_inches": 5,
+    "default_blocking": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "warzone-wall-small",
+    "name": "Warzone Wall (Small)",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": { "type": "rectangle", "width": 5, "height": 0.25 },
+    "default_height_inches": 5,
+    "default_blocking": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "corner-xs",
+    "name": "Extra-Small Corner",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": {
+      "type": "polygon",
+      "points": [
+        { "x": 0, "y": 0 },
+        { "x": 2, "y": 0 },
+        { "x": 2, "y": 0.25 },
+        { "x": 0.25, "y": 0.25 },
+        { "x": 0.25, "y": 2 },
+        { "x": 0, "y": 2 }
+      ]
+    },
+    "default_height_inches": 5,
+    "default_blocking": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "corner-small",
+    "name": "Small Corner",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": {
+      "type": "polygon",
+      "points": [
+        { "x": 0, "y": 0 },
+        { "x": 3, "y": 0 },
+        { "x": 3, "y": 0.25 },
+        { "x": 0.25, "y": 0.25 },
+        { "x": 0.25, "y": 6 },
+        { "x": 0, "y": 6 }
+      ]
+    },
+    "default_height_inches": 5,
+    "default_blocking": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "corner-medium",
+    "name": "Medium Corner",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": {
+      "type": "polygon",
+      "points": [
+        { "x": 0, "y": 0 },
+        { "x": 5, "y": 0 },
+        { "x": 5, "y": 0.25 },
+        { "x": 0.25, "y": 0.25 },
+        { "x": 0.25, "y": 5 },
+        { "x": 0, "y": 5 }
+      ]
+    },
+    "default_height_inches": 5,
+    "default_blocking": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "corner-large",
+    "name": "Large Corner",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": {
+      "type": "polygon",
+      "points": [
+        { "x": 0, "y": 0 },
+        { "x": 6, "y": 0 },
+        { "x": 6, "y": 0.25 },
+        { "x": 0.25, "y": 0.25 },
+        { "x": 0.25, "y": 7 },
+        { "x": 0, "y": 7 }
+      ]
+    },
+    "default_height_inches": 5,
+    "default_blocking": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "canister",
+    "name": "Canister",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": { "type": "rectangle", "width": 3, "height": 5 },
+    "default_height_inches": 3,
+    "default_blocking": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "scaffold",
+    "name": "Scaffold",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": { "type": "rectangle", "width": 2, "height": 2 },
+    "default_height_inches": 4,
+    "default_blocking": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "pipe",
+    "name": "Pipe",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": { "type": "rectangle", "width": 5, "height": 1 },
+    "default_height_inches": 2,
+    "default_blocking": false,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "floor-4x4",
+    "name": "Floor Segment 4x4",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": { "type": "rectangle", "width": 4, "height": 4 },
+    "default_height_inches": 3,
+    "default_blocking": false,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "floor-3x4",
+    "name": "Floor Segment 3x4",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": { "type": "rectangle", "width": 3, "height": 4 },
+    "default_height_inches": 3,
+    "default_blocking": false,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "floor-2p5x4",
+    "name": "Floor Segment 2.5x4",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": { "type": "rectangle", "width": 2.5, "height": 4 },
+    "default_height_inches": 3,
+    "default_blocking": false,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "floor-trapezoid",
+    "name": "Floor Segment (Trapezoid)",
+    "kind": "feature",
+    "source": "gw-11e",
+    "footprint": {
+      "type": "polygon",
+      "points": [
+        { "x": 0, "y": 0 },
+        { "x": 3, "y": 0 },
+        { "x": 2.5, "y": 4 },
+        { "x": 0.5, "y": 4 }
+      ]
+    },
+    "default_height_inches": 3,
+    "default_blocking": false,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

@@ -12,6 +12,30 @@ import {
 } from "../src/data/index.js";
 import { RAW_DATA } from "../src/data/bundle.generated.js";
 
+describe("terrain (embedded catalog + layout resolution)", () => {
+  it("embeds the 11e template catalog and migrated layouts", () => {
+    expect(dataset.terrainTemplates.all.length).toBe(23);
+    expect(dataset.terrainTemplates.get("area-large")).toBeDefined();
+    expect(dataset.terrainLayouts.get("gw-11e-crucible")).toBeDefined();
+    expect(dataset.terrainLayouts.get("gw-11e-hammer-anvil")).toBeDefined();
+  });
+
+  it("resolveTerrain produces on-board polygons (mirror of Rust resolve_terrain)", () => {
+    const layout = dataset.terrainLayouts.get("gw-11e-crucible")!;
+    const resolved = dataset.resolveTerrain(layout);
+    expect(resolved.length).toBeGreaterThan(0);
+    for (const p of resolved) {
+      expect(p.vertices.length).toBeGreaterThanOrEqual(3);
+      for (const v of p.vertices) {
+        expect(v.x).toBeGreaterThanOrEqual(-1);
+        expect(v.x).toBeLessThanOrEqual(61);
+        expect(v.y).toBeGreaterThanOrEqual(-1);
+        expect(v.y).toBeLessThanOrEqual(45);
+      }
+    }
+  });
+});
+
 describe("normalizeName", () => {
   it("strips diacritics via NFD", () => {
     expect(normalizeName("Khârn the Betrayer")).toBe("kharn the betrayer");

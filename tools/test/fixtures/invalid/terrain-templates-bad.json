@@ -1,0 +1,44 @@
+[
+  {
+    "id": "bad-missing-kind",
+    "name": "Missing Kind",
+    "footprint": { "type": "rectangle", "width": 6, "height": 4 },
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-missing-footprint",
+    "name": "Missing Footprint",
+    "kind": "area",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-kind-value",
+    "name": "Bad Kind Value",
+    "kind": "scenery",
+    "footprint": { "type": "rectangle", "width": 6, "height": 4 },
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-footprint-shape",
+    "name": "Bad Footprint Shape",
+    "kind": "feature",
+    "footprint": { "type": "circle", "radius": 3 },
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-composed-feature-missing-template",
+    "name": "Composed Feature Missing Template",
+    "kind": "area",
+    "footprint": { "type": "rectangle", "width": 11.5, "height": 7 },
+    "features": [{ "position": { "x": 0, "y": 0 } }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-extra-property",
+    "name": "Extra Property",
+    "kind": "area",
+    "footprint": { "type": "rectangle", "width": 6, "height": 4 },
+    "unexpected": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

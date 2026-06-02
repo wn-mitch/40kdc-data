@@ -27,6 +27,12 @@ import { attributeStages } from "../src/cruncher/attribution.js";
 import type { Phase } from "../src/generated.js";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
 import type { EligibilityInput } from "../src/abilities-resolver/index.js";
+import {
+  resolveLayout,
+  type TerrainTemplate as ResolverTemplate,
+  type TerrainLayout as ResolverLayout,
+  type ResolvedPiece,
+} from "../src/terrain/resolve.js";
 
 const CONFORMANCE = join(dirname(fileURLToPath(import.meta.url)), "../../conformance");
 const readJson = (path: string): unknown => JSON.parse(readFileSync(path, "utf8"));
@@ -575,6 +581,48 @@ describe("attribution conformance corpus", () => {
           expect(
             Math.abs(actual.lifts[j].delta - expected.lifts[j].delta) < CRUNCHER_TOLERANCE,
           ).toBe(true);
+        }
+      }
+    });
+  }
+});
+
+// Terrain-resolver conformance — pins the template-anchored layout → board
+// vertex geometry. Each case carries its own templates + layout and the
+// expected resolved pieces. Vertices compared within 5e-4 (the corpus float
+// tolerance); piece id/name/type/floor compared exactly. The Rust port asserts
+// against the same corpus (crates/wh40kdc/tests/terrain_resolver_conformance.rs).
+const TERRAIN_TOLERANCE = 5e-4;
+
+interface TerrainCase {
+  name: string;
+  templates: ResolverTemplate[];
+  layout: ResolverLayout;
+  expected: { pieces: ResolvedPiece[] };
+}
+
+describe("terrain-resolver conformance corpus", () => {
+  const cases = readJson(join(CONFORMANCE, "terrain-resolver", "cases.json")) as TerrainCase[];
+
+  it("the terrain-resolver corpus is non-empty", () => {
+    expect(cases.length).toBeGreaterThan(0);
+  });
+
+  for (const c of cases) {
+    it(`terrain-resolver/${c.name}: resolved vertices match within ${TERRAIN_TOLERANCE}`, () => {
+      const actual = resolveLayout(c.layout, c.templates);
+      expect(actual.length, "piece count").toBe(c.expected.pieces.length);
+      for (let i = 0; i < actual.length; i++) {
+        const a = actual[i];
+        const e = c.expected.pieces[i];
+        expect(a.id, `piece ${i} id`).toBe(e.id);
+        expect(a.name, `piece ${i} name`).toBe(e.name);
+        expect(a.piece_type, `piece ${i} type`).toBe(e.piece_type);
+        expect(a.floor, `piece ${i} floor`).toBe(e.floor);
+        expect(a.vertices.length, `piece ${i} vertex count`).toBe(e.vertices.length);
+        for (let j = 0; j < a.vertices.length; j++) {
+          expect(Math.abs(a.vertices[j].x - e.vertices[j].x), `piece ${i} vert ${j} x`).toBeLessThanOrEqual(TERRAIN_TOLERANCE);
+          expect(Math.abs(a.vertices[j].y - e.vertices[j].y), `piece ${i} vert ${j} y`).toBeLessThanOrEqual(TERRAIN_TOLERANCE);
         }
       }
     });

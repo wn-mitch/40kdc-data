@@ -93,6 +93,37 @@ export type ForceDispositionId =
   | "priority-assets"
   | "reconnaissance";
 /**
+ * A terrain piece's 2D footprint in local inches (y-down): an axis-aligned rectangle with its min corner at the local origin, a right triangle with the right angle at the local origin and legs along +x/+y, or an explicit polygon (>= 3 points). The placement resolver re-centers the footprint on its polygon area centroid, so the local-origin convention does not affect where the piece lands — only its shape matters.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "footprint".
+ */
+export type Footprint =
+  | {
+      type: "rectangle";
+      width: number;
+      height: number;
+    }
+  | {
+      type: "right-triangle";
+      width: number;
+      height: number;
+    }
+  | {
+      type: "polygon";
+      /**
+       * @minItems 3
+       */
+      points: [Vec2, Vec2, Vec2, ...Vec2[]];
+    };
+/**
+ * An 11e terrain-area keyword. Confirmed launch set; extend as further keywords publish on dataslate.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "terrain-area-keyword".
+ */
+export type TerrainAreaKeyword = "obscuring" | "hidden" | "plunging-fire";
+/**
  * A zone footprint, expressed as an axis-aligned rectangle or an explicit polygon. Vertices/extent are relative to the owning element's position.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -403,37 +434,6 @@ export type EffectNode =
   | ConditionalEffect
   | DicePoolAllocationEffect;
 export type AbilityCondition2 = SimpleCondition | CompoundCondition;
-/**
- * A terrain piece's 2D footprint, relative to the piece's `position`. Axis-aligned rectangle, right triangle (right angle at the local origin, legs along +x/+y), or an explicit polygon. GW's standard templates (e.g. 7"×11.5" rectangles, 8"×11.5" right triangles, 6"×4" rectangles, 10"×2.5" and 6"×2" lines) are all expressible here; lines are thin rectangles.
- *
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "footprint".
- */
-export type Footprint =
-  | {
-      type: "rectangle";
-      width: number;
-      height: number;
-    }
-  | {
-      type: "right-triangle";
-      width: number;
-      height: number;
-    }
-  | {
-      type: "polygon";
-      /**
-       * @minItems 3
-       */
-      points: [Vec2, Vec2, Vec2, ...Vec2[]];
-    };
-/**
- * An 11e terrain-area keyword. Confirmed launch set; extend as further keywords publish on dataslate.
- *
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "terrain-area-keyword".
- */
-export type TerrainAreaKeyword = "obscuring" | "hidden" | "plunging-fire";
 export type AbilityEffect1 =
   | unknown
   | ChoiceEffect
@@ -1058,29 +1058,69 @@ export interface Stratagem {
   game_version: GameVersionReference;
 }
 /**
- * One terrain feature placed on the board.
+ * One terrain piece placed on the board. Geometry comes from a catalog `template` or an inline `footprint` (if both are present, `footprint` is authoritative and `template` is provenance).
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "piece".
  */
 export interface Piece {
-  name?: string;
-  footprint: Footprint;
-  position: Vec21;
   /**
-   * Clockwise rotation of the footprint about `position`. Absent or 0 means axis-aligned.
+   * Kebab-case identifier
    */
-  rotation_degrees?: number;
+  id?: string;
+  name?: string;
   /**
-   * Optional descriptive label for the GW standard template this piece uses (e.g. 'large-ruin', 'long-wall'). Free-form, not enum-locked — the geometry in `footprint` is authoritative.
+   * An `area` is a gameplay terrain zone (the 11e 'terrain area'); a `feature` is physical scenery (walls, containers, pipes) placed on an area.
+   */
+  piece_type?: "area" | "feature";
+  /**
+   * Kebab-case identifier
    */
   template?: string;
   /**
-   * Height of the piece in inches. Gates Plunging Fire (a piece 3" or taller confers +1 BS on ground-level targets).
+   * Inline geometry, standing in for or overriding a template footprint. Authoritative when present.
+   */
+  footprint?:
+    | {
+        type: "rectangle";
+        width: number;
+        height: number;
+      }
+    | {
+        type: "right-triangle";
+        width: number;
+        height: number;
+      }
+    | {
+        type: "polygon";
+        /**
+         * @minItems 3
+         */
+        points: [Vec2, Vec2, Vec2, ...Vec2[]];
+      };
+  position: Vec21;
+  /**
+   * Clockwise rotation about the centroid in the y-down board frame. Absent or 0 means the template's natural orientation.
+   */
+  rotation_degrees?: number;
+  /**
+   * Reflection applied in the centroid-local frame before rotation: `horizontal` negates local x (left-right flip), `vertical` negates local y.
+   */
+  mirror?: "none" | "horizontal" | "vertical";
+  /**
+   * Kebab-case identifier
+   */
+  parent_area_id?: string;
+  /**
+   * Ruin floor this piece occupies (0 = ground level).
+   */
+  floor?: number;
+  /**
+   * Height of the piece in inches; overrides the template default. Gates Plunging Fire (a piece 3" or taller confers +1 BS on ground-level targets).
    */
   height_inches?: number;
   /**
-   * Terrain-area keywords this piece's area carries.
+   * Terrain-area keywords this piece's area carries; overrides the template default.
    */
   terrain_area_keywords?: TerrainAreaKeyword[];
   /**
@@ -1117,7 +1157,7 @@ export interface Vec22 {
   y: number;
 }
 /**
- * A recommended arrangement of terrain pieces on the board, independent of the deployment map (a deployment-pattern references the layouts it recommends via recommended_terrain_layout_ids). Geometry is the source of truth; the GW standard piece templates are expressed as explicit footprints, with an optional descriptive `template` label. Footprints are deliberately open (not enum-locked) — the launch catalog and its size are unconfirmed, so this models any shape rather than a fixed set. No layout data is authored yet.
+ * A recommended arrangement of terrain pieces on the board, independent of the deployment map (a deployment-pattern references the layouts it recommends via recommended_terrain_layout_ids). Each piece draws its geometry from a catalog `template` (a terrain-template entity) or an inline `footprint`; geometry is the source of truth. Placement is template-centroid-anchored: `position` is the piece's centroid, which is invariant under rotation and mirror, so orientation and location are decoupled. Resolved board-space vertices are derived by the shared terrain resolver (pinned by the conformance corpus), never stored here. No layout data is authored yet beyond migrated examples.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "terrain-layout".
@@ -1134,6 +1174,75 @@ export interface TerrainLayout {
    * Terrain pieces composing the layout. May be empty while a layout is registered by name ahead of its confirmed geometry.
    */
   pieces?: Piece[];
+  game_version: GameVersionReference;
+}
+/**
+ * A feature placed on an area template, positioned in the area's centroid-local frame (y-down inches). When the area is placed, rotated, or mirrored, its composed features are carried along.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "composed-feature".
+ */
+export interface ComposedFeature {
+  /**
+   * Kebab-case identifier
+   */
+  id?: string;
+  /**
+   * Kebab-case identifier
+   */
+  template: string;
+  position: Vec23;
+  /**
+   * Clockwise rotation of the feature about its own centroid, within the area-local frame.
+   */
+  rotation_degrees?: number;
+  mirror?: "none" | "horizontal" | "vertical";
+  /**
+   * Ruin floor this feature occupies (0 = ground level).
+   */
+  floor?: number;
+}
+/**
+ * A 2D point in board inches. Origin at a board corner; JSON uses y-down (downstream renderers may flip to y-up).
+ */
+export interface Vec23 {
+  x: number;
+  y: number;
+}
+/**
+ * A reusable terrain piece in the standard catalog: a gameplay area (the 11e terrain-area templates) or a scenery feature (walls, containers, pipes, floor segments). Footprints are authored in natural local inches; the terrain resolver derives each footprint's polygon area centroid and re-centers on it, so a layout piece that instances a template places its centroid via the layout's `position`. An `area` template may carry an embedded `features` list — scenery placed in the area's centroid-local frame — making the template a reusable composition (e.g. a ruin with its walls). Placing such a template places all of its features, transformed by the area's own placement.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "terrain-template".
+ */
+export interface TerrainTemplate {
+  id: EntityId;
+  name: string;
+  /**
+   * `area` = a gameplay terrain zone; `feature` = physical scenery placed on an area.
+   */
+  kind: "area" | "feature";
+  /**
+   * Catalog or mission pack the template originates from.
+   */
+  source?: string;
+  footprint: Footprint;
+  /**
+   * Default height in inches for pieces instancing this template. Gates Plunging Fire (>= 3").
+   */
+  default_height_inches?: number;
+  /**
+   * Whether the template blocks line of sight / movement by default.
+   */
+  default_blocking?: boolean;
+  /**
+   * Terrain-area keywords areas of this template carry by default. Meaningful for `kind: "area"`.
+   */
+  default_terrain_area_keywords?: TerrainAreaKeyword[];
+  /**
+   * Composed scenery features, in the area's centroid-local frame. Only meaningful for `kind: "area"`.
+   */
+  features?: ComposedFeature[];
   game_version: GameVersionReference;
 }
 /**

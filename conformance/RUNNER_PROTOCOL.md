@@ -174,6 +174,32 @@ unknown `cardId` returns `error_kind: "UNKNOWN_ENTITY"`. Only `card_type:
 "primary"` cards are exercised by the corpus today (the secondary deck isn't
 revealed yet, but the op works for any card present in the dataset).
 
+### `resolve_terrain`
+
+```json
+{"op":"resolve_terrain","args":{"layout":{…TerrainLayout…},"templates":[{…TerrainTemplate…}, …]}}
+```
+
+Resolves a template-anchored terrain layout to absolute board-space polygon
+vertices (board inches, y-down). `layout` is a `terrain-layout` document;
+`templates` is the catalog its piece `template` references resolve against
+(passed inline so the op is dataset-independent). Response value is
+`{"pieces": [{"id": <string|null>, "name": <string|null>, "piece_type":
+"area"|"feature", "floor": <int>, "vertices": [{"x": <num>, "y": <num>}, …]},
+…]}`.
+
+Pieces are emitted in `layout.pieces` order; an area piece that instances a
+template carrying composed `features` emits those features immediately after it,
+in template-declaration order. Vertices are rounded to 4 dp; the differ compares
+them with float tolerance (`5e-4`) and the identity fields exactly. Equivalent
+to TS `resolveLayout(layout, templates)` / Rust `resolve_layout(&layout,
+&templates)`. A layout that references a missing template, or a piece with
+neither `footprint` nor `template`, returns `error_kind: "INVALID_INPUT"`.
+
+The transform contract (mirror → rotate → translate about the footprint
+centroid; clockwise rotation in the y-down frame) is specified in CONFORMANCE.md
+under the `terrain-resolver` per-area invariants.
+
 ### `shutdown`
 
 ```json

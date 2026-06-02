@@ -689,6 +689,45 @@ fn handle_translate_scoring(state: &mut RunnerState, args: &Value) -> Value {
     }
 }
 
+fn handle_resolve_terrain(args: &Value) -> Value {
+    let Some(layout_val) = args.get("layout") else {
+        return err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": "resolve_terrain.layout must be an object" })),
+        );
+    };
+    let templates_val = args.get("templates").cloned().unwrap_or_else(|| json!([]));
+    if !templates_val.is_array() {
+        return err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": "resolve_terrain.templates must be an array" })),
+        );
+    }
+    let layout: wh40kdc::terrain::TerrainLayout = match serde_json::from_value(layout_val.clone()) {
+        Ok(l) => l,
+        Err(e) => {
+            return err_value(
+                ErrorKind::InvalidInput,
+                Some(json!({ "detail": format!("resolve_terrain.layout: {e}") })),
+            )
+        }
+    };
+    let templates: Vec<wh40kdc::terrain::TerrainTemplate> =
+        match serde_json::from_value(templates_val) {
+            Ok(t) => t,
+            Err(e) => {
+                return err_value(
+                    ErrorKind::InvalidInput,
+                    Some(json!({ "detail": format!("resolve_terrain.templates: {e}") })),
+                )
+            }
+        };
+    match wh40kdc::resolve_layout(&layout, &templates) {
+        Ok(pieces) => ok_value(json!({ "pieces": pieces })),
+        Err(e) => err_value(ErrorKind::InvalidInput, Some(json!({ "detail": e.to_string() }))),
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Dispatcher.
 // ---------------------------------------------------------------------------
@@ -718,6 +757,7 @@ fn dispatch(state: &mut RunnerState, op: &str, args: &Value) -> Value {
         "crunch" => handle_crunch(state, args),
         "attribution" => handle_attribution(state, args),
         "translate_scoring" => handle_translate_scoring(state, args),
+        "resolve_terrain" => handle_resolve_terrain(args),
         "shutdown" => ok_value(Value::Null),
         other => err_value(ErrorKind::UnknownOp, Some(json!({ "op": other }))),
     }

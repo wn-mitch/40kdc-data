@@ -97,6 +97,8 @@ const FILE_TO_COLLECTION: &[(&str, &str)] = &[
     ("secondary-cards", "secondary_cards"),
     ("deployment-patterns", "deployment_patterns"),
     ("force-dispositions", "force_dispositions"),
+    ("terrain-templates", "terrain_templates"),
+    ("terrain-layouts", "terrain_layouts"),
     ("resource-pools", "resource_pools"),
     ("timing-flags", "timing_flags"),
     ("interaction-flags", "interaction_flags"),

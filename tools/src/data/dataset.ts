@@ -19,6 +19,8 @@ import type {
   ResourcePool,
   SecondaryCard,
   Stratagem,
+  TerrainLayout,
+  TerrainTemplate,
   TimingFlag,
   Unit,
   UnitComposition,
@@ -35,6 +37,7 @@ import {
 } from "./entities.js";
 import { emptyRawData, type RawData } from "./types.js";
 import { RAW_DATA } from "./bundle.generated.js";
+import { resolveLayout, type ResolvedPiece } from "../terrain/resolve.js";
 import type { Buff, BuffSource, EngineContext } from "../cruncher/buffs.js";
 import {
   resolveEligibleAbilities,
@@ -93,6 +96,8 @@ export class Dataset {
   readonly secondaryCards: Collection<SecondaryCard, SecondaryCard>;
   readonly deploymentPatterns: Collection<DeploymentPattern, DeploymentPattern>;
   readonly forceDispositions: Collection<ForceDisposition, ForceDisposition>;
+  readonly terrainTemplates: Collection<TerrainTemplate, TerrainTemplate>;
+  readonly terrainLayouts: Collection<TerrainLayout, TerrainLayout>;
   readonly resourcePools: Collection<ResourcePool, ResourcePool>;
 
   // Id-less collections, exposed as plain arrays.
@@ -158,6 +163,8 @@ export class Dataset {
     this.secondaryCards = idCollection(raw.secondaryCards);
     this.deploymentPatterns = idCollection(raw.deploymentPatterns);
     this.forceDispositions = idCollection(raw.forceDispositions);
+    this.terrainTemplates = idCollection(raw.terrainTemplates);
+    this.terrainLayouts = idCollection(raw.terrainLayouts);
     this.resourcePools = idCollection(raw.resourcePools);
 
     this.leaderAttachments = raw.leaderAttachments;
@@ -178,6 +185,28 @@ export class Dataset {
   /** Phases a source acts in, unioned across its phase-mappings. */
   phasesFor(sourceType: string, sourceId: string): Phase[] {
     return this.phaseIndex.get(`${sourceType}:${sourceId}`) ?? [];
+  }
+
+  /**
+   * Resolve a terrain layout to absolute board-space vertices using this
+   * dataset's embedded terrain-template catalog — the layout-id →
+   * renderable-geometry hop. Mirror of Rust `Dataset::resolve_terrain`; the
+   * geometry is pinned by the `terrain-resolver` conformance corpus.
+   */
+  resolveTerrain(layout: TerrainLayout): ResolvedPiece[] {
+    // The resolver takes its own structurally-identical input types, decoupled
+    // from the generated `anyOf`/newtype shapes; the underlying JSON is the same.
+    return resolveLayout(layout as never, this.terrainTemplates.all as never);
+  }
+
+  /**
+   * The terrain layouts a deployment pattern recommends, in declared order,
+   * skipping any ids absent from the dataset.
+   */
+  recommendedTerrainLayouts(pattern: DeploymentPattern): TerrainLayout[] {
+    return (pattern.recommended_terrain_layout_ids ?? [])
+      .map((id) => this.terrainLayouts.get(id))
+      .filter((l): l is TerrainLayout => l !== undefined);
   }
 
   /** Units that list the given ability id. */

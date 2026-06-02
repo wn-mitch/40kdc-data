@@ -1,0 +1,47 @@
+[
+  {
+    "id": "area-large",
+    "name": "Large Area",
+    "kind": "area",
+    "source": "fabricated-pack",
+    "footprint": { "type": "rectangle", "width": 11.5, "height": 7 },
+    "default_height_inches": 5,
+    "default_blocking": true,
+    "default_terrain_area_keywords": ["obscuring", "hidden"],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "area-trapezoid",
+    "name": "Trapezoid Area",
+    "kind": "area",
+    "footprint": {
+      "type": "polygon",
+      "points": [{ "x": 0, "y": 0 }, { "x": 8, "y": 0 }, { "x": 2, "y": 11.5 }, { "x": 0, "y": 11.5 }]
+    },
+    "default_terrain_area_keywords": ["obscuring"],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "wall-7",
+    "name": "Long Wall",
+    "kind": "feature",
+    "footprint": { "type": "rectangle", "width": 7, "height": 0.5 },
+    "default_height_inches": 4,
+    "default_blocking": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "ruin-large-composed",
+    "name": "Large Ruin (composed)",
+    "kind": "area",
+    "footprint": { "type": "rectangle", "width": 11.5, "height": 7 },
+    "default_height_inches": 5,
+    "default_blocking": true,
+    "default_terrain_area_keywords": ["obscuring", "hidden"],
+    "features": [
+      { "id": "back-wall", "template": "wall-7", "position": { "x": 0, "y": -3.25 }, "rotation_degrees": 0, "floor": 0 },
+      { "id": "side-wall", "template": "wall-7", "position": { "x": -5.5, "y": 0 }, "rotation_degrees": 90, "mirror": "horizontal" }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

@@ -12,7 +12,8 @@ use std::path::{Path, PathBuf};
 
 use wh40kdc::{
     Ability, Detachment, Enhancement, Faction, GameVersion, LeaderAttachment, Mission,
-    MissionMatchup, PhaseMapping, Stratagem, Unit, UnitComposition, Weapon,
+    MissionMatchup, PhaseMapping, Stratagem, TerrainLayout, TerrainTemplate, Unit, UnitComposition,
+    Weapon,
 };
 
 fn data_dir(kind: &str) -> PathBuf {
@@ -99,8 +100,13 @@ fn top_level_core_data_deserializes_into_generated_types() {
     let game_versions = load_file::<GameVersion>(&core, "game-versions.json");
     let missions = load_file::<Mission>(&core, "missions.json");
     let matchups = load_file::<MissionMatchup>(&core, "mission-matchups.json");
+    // Terrain catalog + the migrated 11e layouts. The layout pieces exercise the
+    // generated `anyOf` Piece type (templated vs inline-footprint) against real
+    // data — including the baked-polygon features from the migration.
+    let terrain_templates = load_file::<TerrainTemplate>(&core, "terrain-templates.json");
+    let terrain_layouts = load_file::<TerrainLayout>(&core, "terrain-layouts.json");
 
-    eprintln!("top-level core: {game_versions} game-versions, {missions} missions, {matchups} mission-matchups");
+    eprintln!("top-level core: {game_versions} game-versions, {missions} missions, {matchups} mission-matchups, {terrain_templates} terrain-templates, {terrain_layouts} terrain-layouts");
 }
 
 #[test]
