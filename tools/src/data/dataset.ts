@@ -93,7 +93,7 @@ export class Dataset {
   readonly wargearOptions: Collection<WargearOption, WargearOption>;
   readonly missions: Collection<Mission, Mission>;
   readonly missionMatchups: Collection<MissionMatchup, MissionMatchup>;
-  readonly secondaryCards: Collection<SecondaryCard, SecondaryCard>;
+  readonly missionCards: Collection<SecondaryCard, SecondaryCard>;
   readonly deploymentPatterns: Collection<DeploymentPattern, DeploymentPattern>;
   readonly forceDispositions: Collection<ForceDisposition, ForceDisposition>;
   readonly terrainTemplates: Collection<TerrainTemplate, TerrainTemplate>;
@@ -160,7 +160,7 @@ export class Dataset {
     this.wargearOptions = idCollection(raw.wargearOptions);
     this.missions = idCollection(raw.missions);
     this.missionMatchups = idCollection(raw.missionMatchups);
-    this.secondaryCards = idCollection(raw.secondaryCards);
+    this.missionCards = idCollection(raw.missionCards);
     this.deploymentPatterns = idCollection(raw.deploymentPatterns);
     this.forceDispositions = idCollection(raw.forceDispositions);
     this.terrainTemplates = idCollection(raw.terrainTemplates);

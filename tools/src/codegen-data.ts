@@ -42,7 +42,7 @@ const FILE_TO_COLLECTION: Record<string, keyof RawData> = {
   "game-versions": "gameVersions",
   missions: "missions",
   "mission-matchups": "missionMatchups",
-  "secondary-cards": "secondaryCards",
+  "secondary-cards": "missionCards",
   "deployment-patterns": "deploymentPatterns",
   "force-dispositions": "forceDispositions",
   "terrain-templates": "terrainTemplates",

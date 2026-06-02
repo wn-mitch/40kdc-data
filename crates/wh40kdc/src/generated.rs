@@ -6109,6 +6109,14 @@ impl ::std::convert::TryFrom<::std::string::String> for ScoringTriggerTiming {
 ///            "maxLength": 64,
 ///            "minLength": 1
 ///          },
+///          "mode": {
+///            "description": "Which scoring track this award belongs to on cards that print both. Fixed missions are chosen for the whole game and score the (usually lower) `fixed` values; Tactical missions are drawn each turn and score the `tactical` values. Omitted on cards that score the same regardless of approach. A card may carry parallel `fixed` and `tactical` awards for the same condition; a consumer scores only the awards matching the player's chosen approach.",
+///            "type": "string",
+///            "enum": [
+///              "fixed",
+///              "tactical"
+///            ]
+///          },
 ///          "per": {
 ///            "description": "What `vp_per` counts, as a kebab-case descriptor (e.g. 'operation-marker-within-range-of-controlled-central-objective'). Required when `vp_per` is present.",
 ///            "type": "string",
@@ -6127,6 +6135,11 @@ impl ::std::convert::TryFrom<::std::string::String> for ScoringTriggerTiming {
 ///            "description": "Flat VP scored when the award fires.",
 ///            "type": "integer",
 ///            "minimum": 0.0
+///          },
+///          "vp_max": {
+///            "description": "Optional cap on the total VP this award can contribute over the game — the card's 'UP TO N VP' ceiling. Distinct from `per_max`, which caps the instance count; use `vp_max` when the printed ceiling is not a multiple of `vp_per` (e.g. Burden of Trust's '2VP per guarded objective, up to 9VP').",
+///            "type": "integer",
+///            "minimum": 1.0
 ///          },
 ///          "vp_per": {
 ///            "description": "VP scored per instance of the thing named by `per` (e.g. 1 VP per operation marker within range of a controlled objective).",
@@ -6525,6 +6538,14 @@ impl ::std::default::Default for SecondaryCardActionsItemUseLimitScope {
 ///      "maxLength": 64,
 ///      "minLength": 1
 ///    },
+///    "mode": {
+///      "description": "Which scoring track this award belongs to on cards that print both. Fixed missions are chosen for the whole game and score the (usually lower) `fixed` values; Tactical missions are drawn each turn and score the `tactical` values. Omitted on cards that score the same regardless of approach. A card may carry parallel `fixed` and `tactical` awards for the same condition; a consumer scores only the awards matching the player's chosen approach.",
+///      "type": "string",
+///      "enum": [
+///        "fixed",
+///        "tactical"
+///      ]
+///    },
 ///    "per": {
 ///      "description": "What `vp_per` counts, as a kebab-case descriptor (e.g. 'operation-marker-within-range-of-controlled-central-objective'). Required when `vp_per` is present.",
 ///      "type": "string",
@@ -6543,6 +6564,11 @@ impl ::std::default::Default for SecondaryCardActionsItemUseLimitScope {
 ///      "description": "Flat VP scored when the award fires.",
 ///      "type": "integer",
 ///      "minimum": 0.0
+///    },
+///    "vp_max": {
+///      "description": "Optional cap on the total VP this award can contribute over the game — the card's 'UP TO N VP' ceiling. Distinct from `per_max`, which caps the instance count; use `vp_max` when the printed ceiling is not a multiple of `vp_per` (e.g. Burden of Trust's '2VP per guarded objective, up to 9VP').",
+///      "type": "integer",
+///      "minimum": 1.0
 ///    },
 ///    "vp_per": {
 ///      "description": "VP scored per instance of the thing named by `per` (e.g. 1 VP per operation marker within range of a controlled objective).",
@@ -6569,12 +6595,18 @@ pub enum SecondaryCardAwardsItem {
         exclusive_group: ::std::option::Option<
             SecondaryCardAwardsItemVariant0ExclusiveGroup,
         >,
+        ///Which scoring track this award belongs to on cards that print both. Fixed missions are chosen for the whole game and score the (usually lower) `fixed` values; Tactical missions are drawn each turn and score the `tactical` values. Omitted on cards that score the same regardless of approach. A card may carry parallel `fixed` and `tactical` awards for the same condition; a consumer scores only the awards matching the player's chosen approach.
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        mode: ::std::option::Option<SecondaryCardAwardsItemVariant0Mode>,
         ///Optional cap on how many instances `vp_per` counts.
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         per_max: ::std::option::Option<::std::num::NonZeroU64>,
         trigger: ScoringTrigger,
         ///Flat VP scored when the award fires.
         vp: u64,
+        ///Optional cap on the total VP this award can contribute over the game — the card's 'UP TO N VP' ceiling. Distinct from `per_max`, which caps the instance count; use `vp_max` when the printed ceiling is not a multiple of `vp_per` (e.g. Burden of Trust's '2VP per guarded objective, up to 9VP').
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        vp_max: ::std::option::Option<::std::num::NonZeroU64>,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         when: ::std::option::Option<Condition>,
     },
@@ -6587,12 +6619,18 @@ pub enum SecondaryCardAwardsItem {
         exclusive_group: ::std::option::Option<
             SecondaryCardAwardsItemVariant1ExclusiveGroup,
         >,
+        ///Which scoring track this award belongs to on cards that print both. Fixed missions are chosen for the whole game and score the (usually lower) `fixed` values; Tactical missions are drawn each turn and score the `tactical` values. Omitted on cards that score the same regardless of approach. A card may carry parallel `fixed` and `tactical` awards for the same condition; a consumer scores only the awards matching the player's chosen approach.
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        mode: ::std::option::Option<SecondaryCardAwardsItemVariant1Mode>,
         ///What `vp_per` counts, as a kebab-case descriptor (e.g. 'operation-marker-within-range-of-controlled-central-objective'). Required when `vp_per` is present.
         per: SecondaryCardAwardsItemVariant1Per,
         ///Optional cap on how many instances `vp_per` counts.
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         per_max: ::std::option::Option<::std::num::NonZeroU64>,
         trigger: ScoringTrigger,
+        ///Optional cap on the total VP this award can contribute over the game — the card's 'UP TO N VP' ceiling. Distinct from `per_max`, which caps the instance count; use `vp_max` when the printed ceiling is not a multiple of `vp_per` (e.g. Burden of Trust's '2VP per guarded objective, up to 9VP').
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        vp_max: ::std::option::Option<::std::num::NonZeroU64>,
         ///VP scored per instance of the thing named by `per` (e.g. 1 VP per operation marker within range of a controlled objective).
         vp_per: u64,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -6679,6 +6717,85 @@ impl<'de> ::serde::Deserialize<'de> for SecondaryCardAwardsItemVariant0Exclusive
             })
     }
 }
+///Which scoring track this award belongs to on cards that print both. Fixed missions are chosen for the whole game and score the (usually lower) `fixed` values; Tactical missions are drawn each turn and score the `tactical` values. Omitted on cards that score the same regardless of approach. A card may carry parallel `fixed` and `tactical` awards for the same condition; a consumer scores only the awards matching the player's chosen approach.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Which scoring track this award belongs to on cards that print both. Fixed missions are chosen for the whole game and score the (usually lower) `fixed` values; Tactical missions are drawn each turn and score the `tactical` values. Omitted on cards that score the same regardless of approach. A card may carry parallel `fixed` and `tactical` awards for the same condition; a consumer scores only the awards matching the player's chosen approach.",
+///  "type": "string",
+///  "enum": [
+///    "fixed",
+///    "tactical"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum SecondaryCardAwardsItemVariant0Mode {
+    #[serde(rename = "fixed")]
+    Fixed,
+    #[serde(rename = "tactical")]
+    Tactical,
+}
+impl ::std::fmt::Display for SecondaryCardAwardsItemVariant0Mode {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Fixed => f.write_str("fixed"),
+            Self::Tactical => f.write_str("tactical"),
+        }
+    }
+}
+impl ::std::str::FromStr for SecondaryCardAwardsItemVariant0Mode {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "fixed" => Ok(Self::Fixed),
+            "tactical" => Ok(Self::Tactical),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for SecondaryCardAwardsItemVariant0Mode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for SecondaryCardAwardsItemVariant0Mode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for SecondaryCardAwardsItemVariant0Mode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///Awards sharing this kebab-case group key resolve as 'score only the highest, not the sum' (the card's literal OR between tier rows). Awards with different `exclusive_group` values, or no value, accrue independently.
 ///
 /// <details><summary>JSON schema</summary>
@@ -6757,6 +6874,85 @@ impl<'de> ::serde::Deserialize<'de> for SecondaryCardAwardsItemVariant1Exclusive
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///Which scoring track this award belongs to on cards that print both. Fixed missions are chosen for the whole game and score the (usually lower) `fixed` values; Tactical missions are drawn each turn and score the `tactical` values. Omitted on cards that score the same regardless of approach. A card may carry parallel `fixed` and `tactical` awards for the same condition; a consumer scores only the awards matching the player's chosen approach.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Which scoring track this award belongs to on cards that print both. Fixed missions are chosen for the whole game and score the (usually lower) `fixed` values; Tactical missions are drawn each turn and score the `tactical` values. Omitted on cards that score the same regardless of approach. A card may carry parallel `fixed` and `tactical` awards for the same condition; a consumer scores only the awards matching the player's chosen approach.",
+///  "type": "string",
+///  "enum": [
+///    "fixed",
+///    "tactical"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum SecondaryCardAwardsItemVariant1Mode {
+    #[serde(rename = "fixed")]
+    Fixed,
+    #[serde(rename = "tactical")]
+    Tactical,
+}
+impl ::std::fmt::Display for SecondaryCardAwardsItemVariant1Mode {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Fixed => f.write_str("fixed"),
+            Self::Tactical => f.write_str("tactical"),
+        }
+    }
+}
+impl ::std::str::FromStr for SecondaryCardAwardsItemVariant1Mode {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "fixed" => Ok(Self::Fixed),
+            "tactical" => Ok(Self::Tactical),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for SecondaryCardAwardsItemVariant1Mode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for SecondaryCardAwardsItemVariant1Mode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for SecondaryCardAwardsItemVariant1Mode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///What `vp_per` counts, as a kebab-case descriptor (e.g. 'operation-marker-within-range-of-controlled-central-objective'). Required when `vp_per` is present.

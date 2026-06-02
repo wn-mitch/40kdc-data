@@ -995,5 +995,339 @@
     ],
     "text": "Reconnaissance mirror. Battle round 1 pays out for holding a central objective. From the second battle round, classic non-home control plus a per-action-completed scaling reward. End of battle pays out twice — once for 3+ Marked objectives, once if the opponent's home is Marked.",
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "forward-position",
+    "name": "Forward Position",
+    "card_type": "secondary",
+    "when_drawn": { "operation": "redraw" },
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "vp": 5
+      }
+    ],
+    "text": "Establish a forward position. Score the payout at the end of your turn while you hold the opponent's home objective or any expansion objective. If it is drawn in the first battle round, redraw and shuffle this card back.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "burden-of-trust",
+    "name": "Burden of Trust",
+    "card_type": "secondary",
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "opponent-turn" },
+        "vp_per": 2,
+        "per": "objective-guarded-by-your-army",
+        "vp_max": 9
+      }
+    ],
+    "text": "On draw, assign a friendly unit to guard each objective it controls and remains in range of. Score per guarded objective at the end of the opponent's turn (or the fifth battle round). The fixed approach caps at 9 VP; tactical play caps at 5 VP.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "display-of-might",
+    "name": "Display of Might",
+    "card_type": "secondary",
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "vp": 2
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "opponent-turn" },
+        "vp": 5
+      }
+    ],
+    "text": "Dominate the centre with bodies. Score the smaller payout at the end of your turn, or the larger one at the end of the opponent's turn, while you have more non-aircraft, non-battle-shocked units than the enemy wholly within No Man's Land.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "assassination",
+    "name": "Assassination",
+    "card_type": "secondary",
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "either" },
+        "vp_per": 3,
+        "per": "enemy-character-model-destroyed-this-turn",
+        "mode": "fixed"
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "either" },
+        "vp_per": 1,
+        "per": "enemy-character-model-with-wounds-4-or-more-destroyed-this-turn",
+        "cumulative": true,
+        "mode": "fixed"
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "either" },
+        "vp": 5,
+        "mode": "tactical"
+      }
+    ],
+    "text": "Hunt enemy leaders. Fixed play scores per enemy CHARACTER model destroyed each turn, with a bonus for each that had 4 or more wounds. Tactical play instead pays a flat amount for destroying any CHARACTER this turn, or for having destroyed them all by the end of the battle.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "centre-ground",
+    "name": "Centre Ground",
+    "card_type": "secondary",
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "vp": 3,
+        "exclusive_group": "centre-hold"
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "vp": 5,
+        "exclusive_group": "centre-hold"
+      }
+    ],
+    "text": "Own the middle. At the end of your turn, score the lower amount for holding near the centre of the battlefield with no enemy contesting it, or the higher amount for holding it more tightly. Only the better tier scores.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "beacon",
+    "name": "Beacon",
+    "card_type": "secondary",
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "opponent-turn" },
+        "vp": 3,
+        "exclusive_group": "beacon-position"
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "opponent-turn" },
+        "vp": 5,
+        "exclusive_group": "beacon-position"
+      }
+    ],
+    "text": "On draw, nominate a friendly beacon unit. At the end of the opponent's turn (or the fifth battle round), score the lower amount while the beacon survives outside your deployment zone, or the higher amount while it survives outside your territory. Only the better tier scores.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "outflank",
+    "name": "Outflank",
+    "card_type": "secondary",
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "vp": 3,
+        "exclusive_group": "flank"
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "vp": 5,
+        "exclusive_group": "flank"
+      }
+    ],
+    "text": "Sweep the flanks. At the end of your turn, score the lower amount for non-aircraft, non-battle-shocked units near a battlefield edge outside your territory, or the higher amount for reaching opposite edges. Only the better tier scores.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "plunder",
+    "name": "Plunder",
+    "card_type": "secondary",
+    "when_drawn": { "operation": "redraw", "card_ids": ["cleanse"] },
+    "actions": [
+      {
+        "action_id": "plunder",
+        "starts": "shooting",
+        "player_turn": "your-turn",
+        "use_limit": 1,
+        "effect": {
+          "type": "terrain-area-tag",
+          "target": "self",
+          "modifier": { "tag": "plundered", "source": "this-action", "clears_on": "never" }
+        }
+      }
+    ],
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "when": { "type": "terrain-has-tag", "parameters": { "tag": "plundered" } },
+        "vp": 5
+      }
+    ],
+    "text": "A unit in a terrain area outside your territory can perform an action in your Shooting phase to plunder it. Score the payout at the end of your turn if a terrain area was plundered. If the Cleanse mission is active for you when this is drawn, redraw and shuffle this card back.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "engage-on-all-fronts",
+    "name": "Engage on All Fronts",
+    "card_type": "secondary",
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "when": { "type": "engagement-fronts", "parameters": { "count_min": 3 } },
+        "vp": 2,
+        "exclusive_group": "fronts-fixed",
+        "mode": "fixed"
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "when": { "type": "engagement-fronts", "parameters": { "count_min": 4 } },
+        "vp": 4,
+        "exclusive_group": "fronts-fixed",
+        "mode": "fixed"
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "when": { "type": "engagement-fronts", "parameters": { "count_min": 3 } },
+        "vp": 3,
+        "exclusive_group": "fronts-tactical",
+        "mode": "tactical"
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "when": { "type": "engagement-fronts", "parameters": { "count_min": 4 } },
+        "vp": 5,
+        "exclusive_group": "fronts-tactical",
+        "mode": "tactical"
+      }
+    ],
+    "text": "Spread your presence across the table. At the end of your turn, score by how many table quarters you have a presence in. Each mode has a three-quarter tier and a higher four-quarter tier, and only the better tier scores; tactical values are higher but cap at 5 VP.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "secure-no-mans-land",
+    "name": "Secure No Man's Land",
+    "card_type": "secondary",
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "vp": 5
+      }
+    ],
+    "text": "Seize the middle ground. Score the payout at the end of your turn while you control two or more objectives within No Man's Land, not counting your home objective.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "no-prisoners",
+    "name": "No Prisoners",
+    "card_type": "secondary",
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "either" },
+        "vp_per": 2,
+        "per": "enemy-unit-destroyed-this-turn",
+        "vp_max": 5
+      }
+    ],
+    "text": "Give no quarter. Score per enemy unit destroyed this turn, evaluated at the end of a turn, up to a ceiling of 5 VP.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bring-it-down",
+    "name": "Bring It Down",
+    "card_type": "secondary",
+    "when_drawn": {
+      "operation": "replace",
+      "condition": { "subject": "opponent", "quantifier": "none", "unit_filter": { "wounds_min": 10 } }
+    },
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "either" },
+        "vp_per": 4,
+        "per": "enemy-model-with-wounds-10-or-more-destroyed-this-turn",
+        "vp_max": 5,
+        "mode": "fixed"
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "either" },
+        "vp_per": 5,
+        "per": "enemy-model-with-wounds-10-or-more-destroyed-this-turn",
+        "vp_max": 5,
+        "mode": "tactical"
+      }
+    ],
+    "text": "Bring down the big targets. Score per enemy model with 10 or more wounds destroyed this turn, up to 5 VP. Tactical play scores more per kill than fixed. If there are no such enemy models on the battlefield when drawn, discard and draw a replacement.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "overwhelming-force",
+    "name": "Overwhelming Force",
+    "card_type": "secondary",
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "vp_per": 3,
+        "per": "enemy-unit-destroyed-while-within-range-of-an-objective-this-turn",
+        "vp_max": 9
+      }
+    ],
+    "text": "Clear the objectives by force. Score per enemy unit that began the turn within range of one or more objectives and was destroyed, evaluated at the end of your turn. Fixed play caps at 9 VP; tactical play caps at 5 VP.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "cleanse",
+    "name": "Cleanse",
+    "card_type": "secondary",
+    "when_drawn": { "operation": "redraw", "card_ids": ["plunder"] },
+    "actions": [
+      {
+        "action_id": "cleanse",
+        "starts": "shooting",
+        "player_turn": "your-turn",
+        "effect": {
+          "type": "objective-tag",
+          "target": "self",
+          "modifier": { "tag": "cleansed", "source": "this-action", "clears_on": "never" }
+        }
+      }
+    ],
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "when": { "type": "objective-has-tag", "parameters": { "tag": "cleansed", "count_min": 1 } },
+        "vp": 2,
+        "exclusive_group": "cleanse-count"
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "when": { "type": "objective-has-tag", "parameters": { "tag": "cleansed", "count_min": 2 } },
+        "vp": 5,
+        "exclusive_group": "cleanse-count"
+      }
+    ],
+    "text": "Purify objectives with a unit action in your Shooting phase while controlling them. At the end of your turn, score the lower amount for one objective cleansed this turn or the higher amount for two or more. Only the better tier scores. If the Plunder mission is active for you when this is drawn, redraw and shuffle this card back.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "behind-enemy-lines",
+    "name": "Behind Enemy Lines",
+    "card_type": "secondary",
+    "when_drawn": { "operation": "redraw" },
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "vp_per": 3,
+        "per": "friendly-unit-wholly-within-opponent-deployment-zone",
+        "vp_max": 9
+      }
+    ],
+    "text": "Push into the enemy backfield. Score per non-aircraft, non-battle-shocked friendly unit wholly within the opponent's deployment zone, evaluated at the end of your turn. Fixed play caps at 9 VP; tactical play caps at 5 VP. If drawn in the first battle round, redraw and shuffle this card back.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "defend-bastion",
+    "name": "Defend Bastion",
+    "card_type": "secondary",
+    "when_drawn": { "operation": "redraw" },
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "opponent-turn", "battle_round": { "min": 2 } },
+        "vp": 3
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "opponent-turn", "battle_round": { "min": 2 } },
+        "vp": 2,
+        "cumulative": true
+      }
+    ],
+    "text": "Protect a key position. From the second battle round, at the end of the opponent's turn (or the fifth battle round), score for controlling your home objective, with a bonus if there are no enemy units within your deployment zone. If drawn in the first battle round, redraw and shuffle this card back.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   }
 ]

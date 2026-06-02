@@ -59,7 +59,7 @@ export interface RawData {
   gameVersions: GameVersion[];
   missions: Mission[];
   missionMatchups: MissionMatchup[];
-  secondaryCards: SecondaryCard[];
+  missionCards: SecondaryCard[];
   deploymentPatterns: DeploymentPattern[];
   forceDispositions: ForceDisposition[];
   /** Reusable terrain catalog: standard areas and scenery features. */
@@ -89,7 +89,7 @@ export function emptyRawData(): RawData {
     gameVersions: [],
     missions: [],
     missionMatchups: [],
-    secondaryCards: [],
+    missionCards: [],
     deploymentPatterns: [],
     forceDispositions: [],
     terrainTemplates: [],

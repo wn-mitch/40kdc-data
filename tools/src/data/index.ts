@@ -88,7 +88,7 @@ export const missions = dataset.missions;
 /** All mission matchups. */
 export const missionMatchups = dataset.missionMatchups;
 /** All secondary mission cards. */
-export const secondaryCards = dataset.secondaryCards;
+export const missionCards = dataset.missionCards;
 /** All deployment patterns. */
 export const deploymentPatterns = dataset.deploymentPatterns;
 /** All force dispositions. */

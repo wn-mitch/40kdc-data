@@ -680,7 +680,7 @@ fn handle_translate_scoring(state: &mut RunnerState, args: &Value) -> Value {
         );
     };
     let ds = state.dataset();
-    match ds.secondary_cards.get(card_id) {
+    match ds.mission_cards.get(card_id) {
         Some(card) => ok_value(json!({ "awards": describe_scoring_card(card) })),
         None => err_value(
             ErrorKind::UnknownEntity,

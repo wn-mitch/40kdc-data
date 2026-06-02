@@ -311,7 +311,7 @@ function emptyRaw() {
     gameVersions: [],
     missions: [],
     missionMatchups: [],
-    secondaryCards: [],
+    missionCards: [],
     deploymentPatterns: [],
     forceDispositions: [],
     resourcePools: [],

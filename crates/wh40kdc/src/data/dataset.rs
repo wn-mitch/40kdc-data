@@ -64,7 +64,7 @@ pub struct RawData {
     #[serde(default)]
     pub mission_matchups: Vec<MissionMatchup>,
     #[serde(default)]
-    pub secondary_cards: Vec<SecondaryCard>,
+    pub mission_cards: Vec<SecondaryCard>,
     #[serde(default)]
     pub deployment_patterns: Vec<DeploymentPattern>,
     #[serde(default)]
@@ -125,7 +125,7 @@ pub struct Dataset {
     pub wargear_options: Collection<WargearOption>,
     pub missions: Collection<Mission>,
     pub mission_matchups: Collection<MissionMatchup>,
-    pub secondary_cards: Collection<SecondaryCard>,
+    pub mission_cards: Collection<SecondaryCard>,
     pub deployment_patterns: Collection<DeploymentPattern>,
     pub force_dispositions: Collection<ForceDisposition>,
     pub terrain_templates: Collection<TerrainTemplate>,
@@ -231,8 +231,8 @@ impl Dataset {
         );
         let mission_matchups =
             id_name_collection(raw.mission_matchups, |m| m.id.to_string(), |_| None);
-        let secondary_cards = id_name_collection(
-            raw.secondary_cards,
+        let mission_cards = id_name_collection(
+            raw.mission_cards,
             |s| s.id.to_string(),
             |s| Some(s.name.as_str()),
         );
@@ -280,7 +280,7 @@ impl Dataset {
             wargear_options,
             missions,
             mission_matchups,
-            secondary_cards,
+            mission_cards,
             deployment_patterns,
             force_dispositions,
             terrain_templates,

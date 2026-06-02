@@ -479,7 +479,7 @@ function handleTranslateScoring(state: RunnerState, args: unknown): RunnerRespon
   if (typeof a.cardId !== "string") {
     return err("INVALID_INPUT", { detail: "translate_scoring.cardId must be a string" });
   }
-  const card = getDataset(state).secondaryCards.get(a.cardId);
+  const card = getDataset(state).missionCards.get(a.cardId);
   if (!card) return err("UNKNOWN_ENTITY", { kind: "secondary-card", id: a.cardId });
   return ok({ awards: describeScoringCard(card) });
 }

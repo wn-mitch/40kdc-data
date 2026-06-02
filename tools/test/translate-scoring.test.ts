@@ -92,7 +92,7 @@ describe("describeScoringCard against the embedded dataset", () => {
   const ds = Dataset.embedded();
 
   it("translates ground-control's awards", () => {
-    const card = ds.secondaryCards.get("ground-control");
+    const card = ds.missionCards.get("ground-control");
     expect(card).toBeDefined();
     expect(describeScoringCard(card!)).toEqual([
       "End of your turn (rounds 1-2): 2 VP when you hold more objectives than the opponent",
@@ -102,7 +102,7 @@ describe("describeScoringCard against the embedded dataset", () => {
   });
 
   it("every primary card translates to one line per award, no [unknown] fallbacks", () => {
-    const primaries = ds.secondaryCards.all.filter((c) => c.card_type === "primary");
+    const primaries = ds.missionCards.all.filter((c) => c.card_type === "primary");
     expect(primaries.length).toBe(25);
     for (const card of primaries) {
       const lines = describeScoringCard(card);

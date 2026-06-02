@@ -29,6 +29,11 @@ export type {
   SolveInput,
 } from "./terrain/index.js";
 
+// Card-driven secondary-mission scoring: compute VP from asserted awards and
+// track per-round, per-player scoring. TypeScript-only for now (Rust port +
+// conformance area are a follow-up).
+export * from "./scoring/index.js";
+
 // Schema access + AJV validation (secondary: this package also validates data
 // against the canonical JSON Schemas).
 export {

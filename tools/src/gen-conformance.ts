@@ -403,8 +403,11 @@ function genAttribution(): void {
 function genScoringTranslation(): void {
   const ds = Dataset.embedded();
   mkdirSync(join(CONFORMANCE, "scoring-translation"), { recursive: true });
-  const cases = ds.secondaryCards.all
-    .filter((c) => c.card_type === "primary")
+  // Pin the translation of every mission card's awards — primary and secondary
+  // alike (the secondary deck has the same `awards` shape and deserves the same
+  // cross-impl pinning).
+  const cases = ds.missionCards.all
+    .filter((c) => c.card_type === "primary" || c.card_type === "secondary")
     .slice()
     .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
     .map((card) => ({ cardId: card.id, expected: { awards: describeScoringCard(card) } }));

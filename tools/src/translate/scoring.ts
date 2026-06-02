@@ -18,6 +18,9 @@ export interface ScoringTrigger {
   battle_round?: { min?: number; max?: number };
 }
 
+/** The scoring approach a card is played under (cards that print both). */
+export type ScoringMode = "fixed" | "tactical";
+
 /** One VP-award block on a scoring card. */
 export interface ScoringAward {
   trigger?: ScoringTrigger;
@@ -26,8 +29,12 @@ export interface ScoringAward {
   vp_per?: number;
   per?: string;
   per_max?: number;
+  /** Per-game VP ceiling for this award (the card's "UP TO N VP"). */
+  vp_max?: number;
   cumulative?: boolean;
   exclusive_group?: string;
+  /** Which scoring track this award belongs to, on cards that print both. */
+  mode?: ScoringMode;
 }
 
 function capitalize(s: string): string {

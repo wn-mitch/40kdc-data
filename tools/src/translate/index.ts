@@ -11,4 +11,5 @@ export {
   describeScoringCard,
   type ScoringTrigger,
   type ScoringAward,
+  type ScoringMode,
 } from "./scoring.js";

@@ -65,5 +65,40 @@ export function missionFor(
  * the community `text` summary and the structured `awards` the readout humanizes.
  */
 export function scoringCardFor(missionId: string): SecondaryCard | undefined {
-  return ds.secondaryCards.get(missionId);
+  return ds.missionCards.get(missionId);
+}
+
+/**
+ * The drawable secondary deck: every `card_type: "secondary"` card. The deck is
+ * a single shared list (the Attacker/Defender printings are identical), so both
+ * players draw from the same pool.
+ */
+export const SECONDARY_DECK: SecondaryCard[] = ds.missionCards.all.filter(
+  (c) => c.card_type === "secondary",
+);
+
+const byId = new Map(SECONDARY_DECK.map((c) => [c.id, c] as const));
+
+/** Resolve drawn card ids back to cards, dropping any that are unknown. */
+export function secondariesByIds(ids: readonly string[]): SecondaryCard[] {
+  return ids.map((id) => byId.get(id)).filter((c): c is SecondaryCard => c !== undefined);
+}
+
+/** A secondary's display name, or the raw id if unknown. */
+export function secondaryName(id: string): string {
+  return byId.get(id)?.name ?? id;
+}
+
+/**
+ * Draw one random secondary not already held. Returns `undefined` once the
+ * whole deck is in hand. `rand` is injectable for determinism in tests.
+ */
+export function drawSecondary(
+  heldIds: readonly string[],
+  rand: () => number = Math.random,
+): SecondaryCard | undefined {
+  const held = new Set(heldIds);
+  const pool = SECONDARY_DECK.filter((c) => !held.has(c.id));
+  if (pool.length === 0) return undefined;
+  return pool[Math.floor(rand() * pool.length)];
 }

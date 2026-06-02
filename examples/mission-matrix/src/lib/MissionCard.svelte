@@ -8,40 +8,39 @@
   // The award lines come from the package's cross-impl translator — the same
   // strings the Rust crate produces and the conformance corpus pins.
   const awards = $derived(card ? describeScoringCard(card) : []);
-  const actionCount = $derived(card?.actions?.length ?? 0);
 </script>
 
 {#if mission}
-  <div class="mission-card">
-    <h3>{mission.name}</h3>
-    <div class="vp">
-      <span class="vp-stat">
-        <span class="vp-num">{mission.vp_per_game_cap}</span>
-        <span class="vp-label">VP / game</span>
+  <div>
+    <h3 class="font-heading text-lg font-bold uppercase tracking-wide text-accent m-0 mb-2">
+      {mission.name}
+    </h3>
+    <div class="flex gap-6 mb-3">
+      <span class="flex flex-col">
+        <span class="font-mono tabular-nums text-2xl leading-none">{mission.vp_per_game_cap}</span>
+        <span class="mt-1 font-heading text-[11px] uppercase tracking-wide text-text-muted">VP / game</span>
       </span>
-      <span class="vp-stat">
-        <span class="vp-num">{mission.vp_per_round_cap}</span>
-        <span class="vp-label">VP / round</span>
+      <span class="flex flex-col">
+        <span class="font-mono tabular-nums text-2xl leading-none">{mission.vp_per_round_cap}</span>
+        <span class="mt-1 font-heading text-[11px] uppercase tracking-wide text-text-muted">VP / round</span>
       </span>
     </div>
 
     {#if card?.text}
-      <p class="summary">{card.text}</p>
+      <p class="m-0 mb-3 text-sm leading-normal text-text-muted">{card.text}</p>
     {/if}
 
     {#if awards.length > 0}
-      <div class="section-label">Scoring</div>
-      <ul class="awards">
+      <div class="font-heading text-[11px] font-bold uppercase tracking-wider text-text-muted mb-2">
+        Scoring
+      </div>
+      <ul class="m-0 mb-1 pl-4 flex flex-col gap-1 list-disc marker:text-text-dim">
         {#each awards as line}
-          <li>{line}</li>
+          <li class="text-xs leading-snug text-text">{line}</li>
         {/each}
       </ul>
     {/if}
-
-    {#if actionCount > 0}
-      <span class="chip">Player action{actionCount > 1 ? ` ×${actionCount}` : ""}</span>
-    {/if}
   </div>
 {:else}
-  <div class="dim">No mission found for this pairing.</div>
+  <div class="text-text-muted text-sm">No mission found for this pairing.</div>
 {/if}

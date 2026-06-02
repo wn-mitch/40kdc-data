@@ -1,5 +1,67 @@
 [
   {
+    "cardId": "assassination",
+    "expected": {
+      "awards": [
+        "End of any turn: 3 VP per enemy character model destroyed this turn",
+        "+ End of any turn: 1 VP per enemy character model with wounds 4 or more destroyed this turn",
+        "End of any turn: 5 VP"
+      ]
+    }
+  },
+  {
+    "cardId": "beacon",
+    "expected": {
+      "awards": [
+        "End of the opponent's turn: 3 VP [highest tier]",
+        "End of the opponent's turn: 5 VP [highest tier]"
+      ]
+    }
+  },
+  {
+    "cardId": "behind-enemy-lines",
+    "expected": {
+      "awards": [
+        "End of your turn: 3 VP per friendly unit wholly within opponent deployment zone"
+      ]
+    }
+  },
+  {
+    "cardId": "bring-it-down",
+    "expected": {
+      "awards": [
+        "End of any turn: 4 VP per enemy model with wounds 10 or more destroyed this turn",
+        "End of any turn: 5 VP per enemy model with wounds 10 or more destroyed this turn"
+      ]
+    }
+  },
+  {
+    "cardId": "burden-of-trust",
+    "expected": {
+      "awards": [
+        "End of the opponent's turn: 2 VP per objective guarded by your army"
+      ]
+    }
+  },
+  {
+    "cardId": "centre-ground",
+    "expected": {
+      "awards": [
+        "End of your turn: 3 VP [highest tier]",
+        "End of your turn: 5 VP [highest tier]"
+      ]
+    }
+  },
+  {
+    "cardId": "cleanse",
+    "expected": {
+      "awards": [
+        "End of your turn: 2 VP when 1+ objectives tagged cleansed [highest tier]",
+        "End of your turn: 5 VP when 2+ objectives tagged cleansed [highest tier]"
+      ]
+    }
+  },
+  {
     "cardId": "consecration",
     "expected": {
       "awards": [
@@ -19,6 +81,15 @@
         "+ End of your turn: 3 VP per mining action on objective terrain completed this turn",
         "End of your turn: 3 VP when terrain tagged mined and 1+ enemy units destroyed this turn",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)"
+      ]
+    }
+  },
+  {
+    "cardId": "defend-bastion",
+    "expected": {
+      "awards": [
+        "End of the opponent's turn (round 2+): 3 VP",
+        "+ End of the opponent's turn (round 2+): 2 VP"
       ]
     }
   },
@@ -54,6 +125,15 @@
     }
   },
   {
+    "cardId": "display-of-might",
+    "expected": {
+      "awards": [
+        "End of your turn: 2 VP",
+        "End of the opponent's turn: 5 VP"
+      ]
+    }
+  },
+  {
     "cardId": "eliminate-and-secure",
     "expected": {
       "awards": [
@@ -61,6 +141,17 @@
         "End of your turn: 3 VP when 1+ enemy units destroyed while on an objective [highest tier]",
         "End of your Command phase (round 2+): 4 VP per controlled non home objective at end of command phase",
         "End of your turn (round 2+): 3 VP when you newly control 1+ objectives this turn"
+      ]
+    }
+  },
+  {
+    "cardId": "engage-on-all-fronts",
+    "expected": {
+      "awards": [
+        "End of your turn: 2 VP when you are engaged on 3+ fronts [highest tier]",
+        "End of your turn: 4 VP when you are engaged on 4+ fronts [highest tier]",
+        "End of your turn: 3 VP when you are engaged on 3+ fronts [highest tier]",
+        "End of your turn: 5 VP when you are engaged on 4+ fronts [highest tier]"
       ]
     }
   },
@@ -83,6 +174,14 @@
         "End of your turn: 2 VP when 1+ enemy units destroyed this turn and you control a terrain area with 1+ models",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
         "End of the battle: 5 VP when you control your territory with at most 0 enemy units"
+      ]
+    }
+  },
+  {
+    "cardId": "forward-position",
+    "expected": {
+      "awards": [
+        "End of your turn: 5 VP"
       ]
     }
   },
@@ -142,6 +241,14 @@
     }
   },
   {
+    "cardId": "no-prisoners",
+    "expected": {
+      "awards": [
+        "End of any turn: 2 VP per enemy unit destroyed this turn"
+      ]
+    }
+  },
+  {
     "cardId": "observe-enemy",
     "expected": {
       "awards": [
@@ -153,6 +260,15 @@
     }
   },
   {
+    "cardId": "outflank",
+    "expected": {
+      "awards": [
+        "End of your turn: 3 VP [highest tier]",
+        "End of your turn: 5 VP [highest tier]"
+      ]
+    }
+  },
+  {
     "cardId": "outmaneuver",
     "expected": {
       "awards": [
@@ -160,6 +276,22 @@
         "End of your turn (round 1): 4 VP per controlled non home objective at end of turn",
         "End of your Command phase (rounds 2-3): 5 VP per controlled non home objective at end of command phase",
         "End of your turn (rounds 4-5): 6 VP per controlled non home objective at end of turn"
+      ]
+    }
+  },
+  {
+    "cardId": "overwhelming-force",
+    "expected": {
+      "awards": [
+        "End of your turn: 3 VP per enemy unit destroyed while within range of an objective this turn"
+      ]
+    }
+  },
+  {
+    "cardId": "plunder",
+    "expected": {
+      "awards": [
+        "End of your turn: 5 VP when terrain tagged plundered"
       ]
     }
   },
@@ -215,6 +347,14 @@
         "End of your turn: 2 VP when 1+ enemy units destroyed while on an objective",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
         "+ End of your Command phase (round 2+): 4 VP when you control 3+ objectives"
+      ]
+    }
+  },
+  {
+    "cardId": "secure-no-mans-land",
+    "expected": {
+      "awards": [
+        "End of your turn: 5 VP"
       ]
     }
   },

@@ -1,499 +1,89 @@
-:root {
-  /* Color tokens — the shadowboxing identity, shared with examples/salvo
-     (originally ported from ~/bevy-deploy-helper). */
-  --bg: #0f0f11;
-  --bg-dark: #0a0a0c;
-  --panel: #1b1b1f;          /* raised pane surface */
-  --panel-2: #0c0c0e;         /* recessed nested surface (inputs, code) */
-  --panel-surface: #151517;   /* shallow nested (table head, etc.) */
-  --panel-hover: #1e1e22;     /* hovered row */
-  --border: #2e2e34;
-  --border-subtle: #262629;
-  --text: #ededf0;
-  --muted: #a8a8b2;
-  --dim: #8a8a94;
-  --accent: #14b8a6;
-  --accent-foreground: #0a1f1c;
-  --accent-hover: #0d9488;
-  --accent-dim: #0d4a44;
-  --good: #22c55e;
-  --warn: #f59e0b;
-  --danger: #ef4444;
+@import "tailwindcss";
+
+/* Shadowboxing dialect — industrial near-black, teal accent, inset rim-lit
+   elevation. Tokens are the Tailwind v4 `@theme` form ported from
+   ~/bevy-deploy-helper/site/src/app.css, so utilities (bg-bg, text-text,
+   bg-accent, font-heading, shadow-md, ...) generate straight from the system.
+   Component styling lives in the Svelte files as utility classes. */
+@theme {
+  --color-bg: #0f0f11;
+  --color-bg-dark: #0a0a0c;
+  --color-surface: #1b1b1f;
+  --color-border: #2e2e34;
+  --color-border-subtle: #262629;
+  --color-text: #ededf0;
+  --color-text-muted: #a8a8b2; /* AAA 7.9:1 on --color-bg */
+  --color-text-dim: #8a8a94; /* AA 5.1:1 on --color-bg */
+  --color-accent: #14b8a6;
+  --color-accent-foreground: #0a1f1c;
+  --color-accent-hover: #0d9488;
+  --color-accent-dim: #0d4a44; /* highlight backgrounds */
+
+  /* Darker tier for nested panes */
+  --color-panel: #0c0c0e;
+  --color-panel-surface: #151517;
+  --color-panel-border: #262629;
+  --color-panel-hover: #1e1e22;
+
+  /* Semantic */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
 
   /* Typography */
   --font-heading: "Barlow Condensed", system-ui, sans-serif;
   --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  --text-2xs: 11px;
-  --text-xs: 12px;
-  --text-sm: 13px;
-  --text-base: 14px;
-  --text-md: 16px;
-  --text-lg: 18px;
-  --text-xl: 22px;
-  --text-2xl: 26px;
-  --text-display: 30px;
-  --tracking-wide: 0.05em;
-  --tracking-wider: 0.08em;
 
-  /* Spacing */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
-
-  /* Radius */
+  /* Border radius — angular, industrial */
   --radius-sm: 2px;
   --radius-md: 4px;
   --radius-lg: 8px;
 
-  /* Elevation — the signature shadowboxing inset-rim-lit treatment. */
-  --shadow-sm:
-    0 1px 0 0 rgba(255, 255, 255, 0.04) inset,
-    0 1px 0 0 rgba(0, 0, 0, 0.6),
-    0 4px 8px -2px rgba(0, 0, 0, 0.8);
-  --shadow-md:
-    0 1px 0 0 rgba(255, 255, 255, 0.08) inset,
-    0 2px 0 0 rgba(0, 0, 0, 0.8),
-    0 10px 20px -4px rgba(0, 0, 0, 0.95);
-  --shadow-xl:
-    0 1px 0 0 rgba(255, 255, 255, 0.14) inset,
-    0 -1px 0 0 rgba(0, 0, 0, 0.6) inset,
-    0 4px 0 0 rgba(0, 0, 0, 0.9),
-    0 20px 30px -6px rgba(0, 0, 0, 0.95),
-    0 40px 80px -20px rgba(0, 0, 0, 0.8);
-  --shadow-focus: 0 0 0 2px var(--accent);
+  /* Tracking */
+  --tracking-wide: 0.05em;
+  --tracking-wider: 0.08em;
 
-  font-family: var(--font-body);
+  /* Elevation — the signature shadowboxing inset-rim-lit treatment */
+  --shadow-sm: 0 1px 0 0 rgba(255, 255, 255, 0.04) inset, 0 1px 0 0 rgba(0, 0, 0, 0.6),
+    0 4px 8px -2px rgba(0, 0, 0, 0.8);
+  --shadow-md: 0 1px 0 0 rgba(255, 255, 255, 0.08) inset, 0 2px 0 0 rgba(0, 0, 0, 0.8),
+    0 10px 20px -4px rgba(0, 0, 0, 0.95);
+  --shadow-focus: 0 0 0 2px var(--color-accent);
+}
+
+html {
   color-scheme: dark;
 }
 
-* { box-sizing: border-box; }
-
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--text);
+  background: var(--color-bg);
+  color: var(--color-text);
   font-family: var(--font-body);
-  font-size: var(--text-base);
   line-height: 1.45;
   -webkit-font-smoothing: antialiased;
 }
 
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
-}
-*::-webkit-scrollbar { width: 8px; height: 8px; }
-*::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--radius-sm); }
-*::-webkit-scrollbar-track { background: transparent; }
-
-a { color: var(--accent); }
-a:hover { color: var(--accent-hover); }
-
-button {
-  background: var(--panel-2);
-  color: var(--text);
-  border: 1px solid var(--border);
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font: inherit;
-  font-size: var(--text-xs);
-  letter-spacing: 0.01em;
-}
-button:hover { border-color: var(--accent); color: var(--accent); }
-button:focus-visible {
+/* Token-surfaced focus ring reused across interactive elements. */
+.focus-ring:focus-visible {
   outline: none;
   box-shadow: var(--shadow-focus);
 }
 
-/* App shell — header on top, centered content, footer beneath. */
-.app {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background: var(--bg);
+/* Thin, dark scrollbars matching the panel chrome */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-panel-border) transparent;
 }
-
-.app-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-  height: 44px;
-  padding: 0 var(--space-4);
-  background: var(--panel);
-  border-bottom: 1px solid var(--border);
-  flex-wrap: nowrap;
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
-.app-header .brand {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-3);
-  text-decoration: none;
-  color: inherit;
-  min-width: 0;
-  flex: 0 1 auto;
+*::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-sm);
 }
-.app-header h1 {
-  margin: 0;
-  font-family: var(--font-heading);
-  font-size: var(--text-lg);
-  font-weight: 800;
-  letter-spacing: var(--tracking-wider);
-  text-transform: uppercase;
-  line-height: 1;
-  color: var(--accent);
-}
-.app-header .brand:hover h1 { color: var(--accent-hover); }
-.app-header .tag {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: var(--muted);
-  font-size: var(--text-xs);
-  font-family: var(--font-heading);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-}
-.app-header-links {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  flex: 0 0 auto;
-}
-.app-header-links a {
-  display: inline-flex;
-  align-items: center;
-  color: var(--muted);
-  text-decoration: none;
-  transition: color 80ms ease;
-}
-.app-header-links a:hover { color: var(--accent); }
-.app-header-links .home {
-  font-family: var(--font-heading);
-  font-size: var(--text-2xs);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  white-space: nowrap;
-}
-.app-header-links .pkg code {
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-}
-@media (max-width: 640px) {
-  .app-header { padding: 0 var(--space-3); gap: var(--space-2); }
-  .app-header .tag { display: none; }
-  .app-header-links .pkg { display: none; }
-}
-@media (max-width: 380px) {
-  /* Keep the back-link on the smallest phones; drop the rest. */
-  .app-header-links a:not(.home) { display: none; }
-}
-
-.app-footer {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  height: 32px;
-  padding: 0 var(--space-4);
-  margin-top: auto;
-  background: var(--panel);
-  border-top: 1px solid var(--border);
-  font-size: var(--text-2xs);
-  color: var(--dim);
-}
-.app-footer a { color: var(--muted); text-decoration: none; }
-.app-footer a:hover { color: var(--accent); }
-.app-footer code { font-family: var(--font-mono); font-size: var(--text-2xs); }
-.app-footer .dot { color: var(--border); }
-.app-footer .muted { color: var(--dim); }
-@media (max-width: 640px) {
-  .app-footer { height: auto; padding: var(--space-2) var(--space-3); flex-wrap: wrap; }
-}
-
-/* Centered content column. */
-.content {
-  flex: 1;
-  width: 100%;
-  max-width: 1040px;
-  margin: 0 auto;
-  padding: var(--space-5) var(--space-4) var(--space-6);
-}
-.intro {
-  color: var(--muted);
-  font-size: var(--text-sm);
-  line-height: 1.55;
-  max-width: 64ch;
-  margin: 0 0 var(--space-5);
-}
-.intro strong { color: var(--text); font-weight: 600; }
-
-/* Shared shadowboxing component classes. */
-.pane {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: var(--space-3);
-  box-shadow: var(--shadow-sm);
-}
-.pane.projection { padding: var(--space-4); box-shadow: var(--shadow-md); }
-
-.section-label {
-  font-family: var(--font-heading);
-  font-size: var(--text-2xs);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wider);
-  color: var(--muted);
-  margin: 0 0 var(--space-2);
-}
-
-.chip {
-  display: inline-block;
-  padding: 1px var(--space-2);
-  border-radius: 999px;
-  font-size: var(--text-2xs);
-  font-family: var(--font-heading);
-  font-weight: 600;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  border: 1px solid var(--border);
-  background: var(--panel-2);
-  color: var(--muted);
-}
-.chip.accent { color: var(--accent); border-color: var(--accent-dim); }
-.chip.warn { color: var(--warn); border-color: var(--warn); }
-
-.empty-state {
-  padding: var(--space-4);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--panel-2);
-  color: var(--muted);
-  font-size: var(--text-sm);
-  line-height: 1.5;
-  text-align: center;
-}
-
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
-@media (max-width: 560px) { .grid-2 { grid-template-columns: 1fr; } }
-
-.dim { color: var(--muted); }
-
-/* The matrix grid: a corner cell + 5 column headers, then 5 rows of
-   (row header + 5 mission buttons). */
-.matrix {
-  display: grid;
-  grid-template-columns: minmax(120px, 0.9fr) repeat(var(--cols), minmax(0, 1fr));
-  gap: var(--space-1);
-  margin-bottom: var(--space-5);
-}
-
-/* Mobile selector — replaces the matrix below the readout's stack point. Two
-   pill rows reusing the same pick handlers as the row/column headers. */
-.selectors { display: none; }
-.selector-group .section-label { display: block; margin-bottom: var(--space-2); }
-.pill-row { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-.pill {
-  font-family: var(--font-heading);
-  font-size: var(--text-2xs);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  padding: var(--space-2) var(--space-3);
-  color: var(--muted);
-  background: var(--panel-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: border-color 100ms ease, color 100ms ease, background 100ms ease;
-}
-.pill:hover { border-color: var(--accent); color: var(--accent); }
-.pill.selected,
-.pill.selected:hover {
-  background: var(--accent);
-  color: var(--accent-foreground);
-  border-color: var(--accent);
-}
-.pill:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
-
-/* Below the readout's stack point, swap the matrix for the pill selectors.
-   This block must come after the .matrix / .selectors base rules above so it
-   wins on source order (media queries add no specificity). */
-@media (max-width: 560px) {
-  .matrix { display: none; }
-  .selectors {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-    margin-bottom: var(--space-5);
-  }
-}
-
-.corner {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: var(--space-2);
-  font-family: var(--font-heading);
-  font-size: var(--text-2xs);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  color: var(--dim);
-}
-.corner .axis-opp { align-self: flex-end; }
-
-/* Row/column headers are the selectors — token-surfaced buttons that light up
-   when active. */
-.col-head,
-.row-head {
-  font-family: var(--font-heading);
-  font-size: var(--text-2xs);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wider);
-  color: var(--muted);
-  background: var(--panel-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: border-color 100ms ease, color 100ms ease, background 100ms ease;
-}
-.col-head {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  text-align: center;
-  padding: var(--space-2) var(--space-1);
-}
-.row-head {
-  display: flex;
-  align-items: center;
-  text-align: left;
-  padding: var(--space-1) var(--space-2);
-}
-.col-head:hover,
-.row-head:hover { border-color: var(--accent); color: var(--accent); }
-.col-head.selected,
-.row-head.selected,
-.col-head.selected:hover,
-.row-head.selected:hover {
-  background: var(--accent);
-  color: var(--accent-foreground);
-  border-color: var(--accent);
-}
-.col-head:focus-visible,
-.row-head:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
-
-/* Body cells are display-only; highlight states mark the selected pairing. */
-.cell {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  min-height: 64px;
-  padding: var(--space-3) var(--space-2) var(--space-2);
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  color: var(--text);
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  line-height: 1.25;
-  transition: border-color 100ms ease, opacity 100ms ease;
-}
-/* Your selection — solid accent, full strength. */
-.cell.your-cell {
-  border-color: var(--accent);
-  background: var(--accent-dim);
-  box-shadow: var(--shadow-focus);
-}
-/* The opponent's reciprocal pairing — same accent, dimmed (it wasn't your pick). */
-.cell.opp-cell {
-  border-color: var(--accent);
-  background: var(--accent-dim);
-  opacity: 0.45;
-}
-.cell-tag {
-  position: absolute;
-  top: 3px;
-  left: 5px;
-  font-family: var(--font-heading);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--accent);
-}
-.cell.your-cell .cell-tag,
-.cell.your-cell .cell-name { color: var(--text); }
-
-/* Readout — two equally-weighted mission panels. */
-.readout { margin-top: var(--space-2); }
-.mirror-note { font-size: var(--text-xs); margin: 0 0 var(--space-3); }
-.readout-head {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-3);
-  flex-wrap: wrap;
-}
-.readout-head .section-label { margin: 0; }
-.readout-head .vs {
-  font-family: var(--font-heading);
-  text-transform: uppercase;
-  font-size: var(--text-2xs);
-  letter-spacing: var(--tracking-wide);
-  color: var(--dim);
-}
-
-.mission-card h3 {
-  margin: 0 0 var(--space-2);
-  font-family: var(--font-heading);
-  font-size: var(--text-lg);
-  font-weight: 700;
-  letter-spacing: var(--tracking-wide);
-  color: var(--accent);
-}
-.mission-card .vp { display: flex; gap: var(--space-5); margin-bottom: var(--space-3); }
-.mission-card .vp-stat { display: flex; flex-direction: column; }
-.mission-card .vp-num {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
-  font-size: var(--text-xl);
-  font-weight: 500;
-  line-height: 1;
-}
-.mission-card .vp-label {
-  margin-top: var(--space-1);
-  font-family: var(--font-heading);
-  font-size: var(--text-2xs);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  color: var(--muted);
-}
-.mission-card .summary {
-  margin: 0 0 var(--space-3);
-  font-size: var(--text-sm);
-  color: var(--muted);
-  line-height: 1.5;
-}
-.mission-card .awards {
-  margin: 0 0 var(--space-3);
-  padding-left: var(--space-4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-.mission-card .awards li {
-  font-size: var(--text-xs);
-  line-height: 1.4;
-  color: var(--text);
+*::-webkit-scrollbar-track {
+  background: transparent;
 }

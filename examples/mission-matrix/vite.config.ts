@@ -1,5 +1,6 @@
 import { defineConfig, type Plugin } from "vite";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
+import tailwindcss from "@tailwindcss/vite";
 
 /**
  * The 40kdc-data package's barrel re-exports schema-loader and validate, which
@@ -67,6 +68,6 @@ function stubNodeOnlyModules(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [stubNodeOnlyModules(), svelte()],
+  plugins: [stubNodeOnlyModules(), tailwindcss(), svelte()],
   base: process.env.TOOLLET_BASE ?? "/",
 });

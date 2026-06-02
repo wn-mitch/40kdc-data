@@ -1026,6 +1026,19 @@
                 "minimum": 1,
                 "description": "Optional cap on how many instances `vp_per` counts."
               },
+              "vp_max": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Optional cap on the total VP this award can contribute over the game — the card's 'UP TO N VP' ceiling. Distinct from `per_max`, which caps the instance count; use `vp_max` when the printed ceiling is not a multiple of `vp_per` (e.g. Burden of Trust's '2VP per guarded objective, up to 9VP')."
+              },
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "fixed",
+                  "tactical"
+                ],
+                "description": "Which scoring track this award belongs to on cards that print both. Fixed missions are chosen for the whole game and score the (usually lower) `fixed` values; Tactical missions are drawn each turn and score the `tactical` values. Omitted on cards that score the same regardless of approach. A card may carry parallel `fixed` and `tactical` awards for the same condition; a consumer scores only the awards matching the player's chosen approach."
+              },
               "cumulative": {
                 "type": "boolean",
                 "default": false,

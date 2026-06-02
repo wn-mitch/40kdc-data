@@ -1264,20 +1264,70 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "after-scoring-hit"
+            }
+          },
+          {
+            "type": "target-has-keyword",
+            "parameters": {
+              "keyword": "INFANTRY"
+            }
+          },
+          {
+            "type": "attack-is-type",
+            "parameters": {
+              "attack_type": "graviton-crusher"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "defender",
+            "modifier": {
+              "stat": "M",
+              "operation": "subtract",
+              "value": 2
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "defender",
+            "modifier": {
+              "roll": "charge",
+              "operation": "subtract",
+              "value": 2
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "battle-round"
     },
     "unit_ids": [
       "questoris-knight-styrix"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "atrapos-duty-bondsman",
@@ -1426,18 +1476,70 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "movement"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "movement-modifier",
+            "target": "self",
+            "modifier": {
+              "move_type": "through-non-titanic-models",
+              "value": 0
+            }
+          },
+          {
+            "type": "movement-modifier",
+            "target": "self",
+            "modifier": {
+              "move_type": "through-terrain-max-4-inches",
+              "value": 0
+            }
+          },
+          {
+            "type": "engagement-passthrough",
+            "target": "self",
+            "modifier": {}
+          },
+          {
+            "type": "movement-modifier",
+            "target": "self",
+            "modifier": {
+              "move_type": "through-terrain-over-4-inches",
+              "value": 0
+            }
+          },
+          {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 1,
+            "comparison": "eq",
+            "on_success": {
+              "type": "bs-modifier",
+              "target": "self",
+              "modifier": {
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "range": "any-on-battlefield",
+      "range": "self",
       "duration": "permanent"
     },
     "faction_id": "imperial-knights",
     "ability_type": "faction",
     "behavior": "passive",
-    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
     "ability_id": "dreadblades",
