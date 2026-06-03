@@ -6515,6 +6515,24 @@ impl ::std::convert::TryFrom<::std::string::String> for ScoringTriggerTiming {
 ///        "operation"
 ///      ],
 ///      "properties": {
+///        "battle_round": {
+///          "description": "Battle-round window in which the draw operation is eligible (e.g. { max: 1 } means 'only when drawn in the first battle round'). Absent means the operation fires regardless of round.",
+///          "type": "object",
+///          "minProperties": 1,
+///          "properties": {
+///            "max": {
+///              "type": "integer",
+///              "maximum": 5.0,
+///              "minimum": 1.0
+///            },
+///            "min": {
+///              "type": "integer",
+///              "maximum": 5.0,
+///              "minimum": 1.0
+///            }
+///          },
+///          "additionalProperties": false
+///        },
 ///        "card_ids": {
 ///          "description": "Other cards this operation references, by id.",
 ///          "type": "array",
@@ -7606,6 +7624,24 @@ impl<'de> ::serde::Deserialize<'de> for SecondaryCardSubtype {
 ///    "operation"
 ///  ],
 ///  "properties": {
+///    "battle_round": {
+///      "description": "Battle-round window in which the draw operation is eligible (e.g. { max: 1 } means 'only when drawn in the first battle round'). Absent means the operation fires regardless of round.",
+///      "type": "object",
+///      "minProperties": 1,
+///      "properties": {
+///        "max": {
+///          "type": "integer",
+///          "maximum": 5.0,
+///          "minimum": 1.0
+///        },
+///        "min": {
+///          "type": "integer",
+///          "maximum": 5.0,
+///          "minimum": 1.0
+///        }
+///      },
+///      "additionalProperties": false
+///    },
 ///    "card_ids": {
 ///      "description": "Other cards this operation references, by id.",
 ///      "type": "array",
@@ -7637,6 +7673,8 @@ impl<'de> ::serde::Deserialize<'de> for SecondaryCardSubtype {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct SecondaryCardWhenDrawn {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub battle_round: ::std::option::Option<SecondaryCardWhenDrawnBattleRound>,
     ///Other cards this operation references, by id.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub card_ids: ::std::option::Option<Vec<EntityId>>,
@@ -7645,6 +7683,47 @@ pub struct SecondaryCardWhenDrawn {
     pub condition: ::std::option::Option<ArmyCompositionPredicate>,
     ///The deck manipulation this card triggers on draw.
     pub operation: SecondaryCardWhenDrawnOperation,
+}
+///Battle-round window in which the draw operation is eligible (e.g. { max: 1 } means 'only when drawn in the first battle round'). Absent means the operation fires regardless of round.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Battle-round window in which the draw operation is eligible (e.g. { max: 1 } means 'only when drawn in the first battle round'). Absent means the operation fires regardless of round.",
+///  "type": "object",
+///  "minProperties": 1,
+///  "properties": {
+///    "max": {
+///      "type": "integer",
+///      "maximum": 5.0,
+///      "minimum": 1.0
+///    },
+///    "min": {
+///      "type": "integer",
+///      "maximum": 5.0,
+///      "minimum": 1.0
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct SecondaryCardWhenDrawnBattleRound {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub max: ::std::option::Option<::std::num::NonZeroU64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub min: ::std::option::Option<::std::num::NonZeroU64>,
+}
+impl ::std::default::Default for SecondaryCardWhenDrawnBattleRound {
+    fn default() -> Self {
+        Self {
+            max: Default::default(),
+            min: Default::default(),
+        }
+    }
 }
 ///The deck manipulation this card triggers on draw.
 ///
@@ -7910,7 +7989,7 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///      ]
 ///    }
 ///  },
-///  "$comment": "Board/meta-state and scoring predicates. `parameters` is intentionally open (additionalProperties: true); each type documents its own param convention. Scoring predicates added for mission cards: `units-destroyed` { side: 'enemy'|'friendly', window: 'this-turn'|'previous-turn', count_min: int } — at least count_min units of `side` were destroyed in `window`. `units-destroyed-comparison` { subject: {side, window}, comparator: 'greater-than'|'greater-or-equal', reference: {side, window} } — compares two destruction tallies (e.g. more enemy units destroyed this turn than friendly last turn). `objective-majority` { relative_to: 'opponent' } — you control more objectives than the named party. `controls-objective` params: { count_min: int, objective_role?: 'central'|'expansion'|'non-home'|'home', exclude?: 'home', objective?: 'opponent-home'|'your-home', scope?: 'enemy-territory'|'your-territory' }. Mission-card extensions (11e primary deck): `action-completed` { action_id?: string, target_kind?: 'objective'|'terrain'|'enemy-unit'|'self', target_filter?: { in_enemy_territory?: bool, objective_role?: 'central'|'non-home', exclude?: 'home' }, count_min: int, window?: 'this-turn'|'previous-turn'|'cumulative' } — at least count_min instances of a named action were completed in the window. `objective-has-tag` { tag: 'baited'|'triangulated'|'consecrated'|'sabotaged'|'marked'|'vanguard'|'spotted', count_min: int, count_max?: int, objective?: 'opponent-home'|'your-home', scope?: 'enemy-territory'|'your-territory' } — at least count_min objectives carry the named transient tag. `unit-has-tag` { tag: 'doomed'|'spotted', side: 'enemy'|'friendly', count_min: int, window?: 'destroyed-this-turn'|'still-on-board' } — at least count_min units of `side` carry the tag (optionally with a destruction filter — Punishment scores when a Doomed unit was destroyed or left the battlefield). `terrain-has-tag` { tag: 'mined'|'marked'|'vanguard', friendly_units_min?: int, enemy_units_max?: int, last_marked?: bool, in_enemy_dz?: bool } — terrain piece state predicate; `last_marked` selects the most-recently-marked piece (Find and Deny / Recover the Relics' Overwhelming Force trigger). `new-objective-controlled` { count_min: int } — at least count_min objectives are controlled this turn that were not controlled in the previous command phase. `engagement-fronts` { count_min: int } — friendly units engage enemies in at least count_min distinct fronts; a 'front' is one of the territory zones from the deployment-pattern's `territories[]`, so this composes with the existing `territory-control` predicate. `destroyed-while-on-objective` { destroyer_on_objective?: bool, victim_on_objective?: bool, count_min: int } — count_min enemy units were destroyed this turn under the named spatial condition (the destroying friendly unit, the destroyed enemy unit, or both were standing on an objective at the moment of the kill). `destroyed-in-tagged-terrain` { tag: 'mined'|'marked'|'vanguard', at_start_of_turn?: bool, count_min: int } — count_min enemy units were destroyed this turn while in terrain carrying the named tag; with `at_start_of_turn` the victim must have been in that terrain at the start of the turn (Death Trap's Disruption kill bonus), otherwise the spatial test is at the moment of the kill (parallels `destroyed-while-on-objective`)."
+///  "$comment": "Board/meta-state and scoring predicates. `parameters` is intentionally open (additionalProperties: true); each type documents its own param convention. Scoring predicates added for mission cards: `units-destroyed` { side: 'enemy'|'friendly', window: 'this-turn'|'previous-turn', count_min: int } — at least count_min units of `side` were destroyed in `window`. `units-destroyed-comparison` { subject: {side, window}, comparator: 'greater-than'|'greater-or-equal', reference: {side, window} } — compares two destruction tallies (e.g. more enemy units destroyed this turn than friendly last turn). `objective-majority` { relative_to: 'opponent' } — you control more objectives than the named party. `controls-objective` params: { count_min: int, objective_role?: 'central'|'expansion'|'non-home'|'home', exclude?: 'home', objective?: 'opponent-home'|'your-home', scope?: 'enemy-territory'|'your-territory' }. Mission-card extensions (11e primary deck): `action-completed` { action_id?: string, target_kind?: 'objective'|'terrain'|'enemy-unit'|'self', target_filter?: { in_enemy_territory?: bool, objective_role?: 'central'|'non-home', exclude?: 'home' }, count_min: int, window?: 'this-turn'|'previous-turn'|'cumulative' } — at least count_min instances of a named action were completed in the window. `objective-has-tag` { tag: 'baited'|'cleansed'|'triangulated'|'consecrated'|'sabotaged'|'marked'|'vanguard'|'spotted', count_min: int, count_max?: int, objective?: 'opponent-home'|'your-home', scope?: 'enemy-territory'|'your-territory' } — at least count_min objectives carry the named transient tag. `unit-has-tag` { tag: 'doomed'|'spotted', side: 'enemy'|'friendly', count_min: int, window?: 'destroyed-this-turn'|'still-on-board' } — at least count_min units of `side` carry the tag (optionally with a destruction filter — Punishment scores when a Doomed unit was destroyed or left the battlefield). `terrain-has-tag` { tag: 'mined'|'marked'|'vanguard'|'plundered', friendly_units_min?: int, enemy_units_max?: int, last_marked?: bool, in_enemy_dz?: bool } — terrain piece state predicate; `last_marked` selects the most-recently-marked piece (Find and Deny / Recover the Relics' Overwhelming Force trigger). `new-objective-controlled` { count_min: int } — at least count_min objectives are controlled this turn that were not controlled in the previous command phase. `engagement-fronts` { count_min: int } — friendly units engage enemies in at least count_min distinct fronts; a 'front' is one of the four table quarters (board quadrants about the board's centre — each of the four areas formed by dividing the table along both centre lines). `destroyed-while-on-objective` { destroyer_on_objective?: bool, victim_on_objective?: bool, count_min: int } — count_min enemy units were destroyed this turn under the named spatial condition (the destroying friendly unit, the destroyed enemy unit, or both were standing on an objective at the moment of the kill). `destroyed-in-tagged-terrain` { tag: 'mined'|'marked'|'vanguard'|'plundered', at_start_of_turn?: bool, count_min: int } — count_min enemy units were destroyed this turn while in terrain carrying the named tag; with `at_start_of_turn` the victim must have been in that terrain at the start of the turn (Death Trap's Disruption kill bonus), otherwise the spatial test is at the moment of the kill (parallels `destroyed-while-on-objective`)."
 ///}
 /// ```
 /// </details>

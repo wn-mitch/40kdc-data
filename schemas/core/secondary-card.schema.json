@@ -106,6 +106,16 @@
         "condition": {
           "$ref": "#/$defs/army-composition-predicate",
           "description": "Draw-time army-composition predicate gating the operation (e.g. redraw when the opponent lacks a qualifying unit)."
+        },
+        "battle_round": {
+          "type": "object",
+          "description": "Battle-round window in which the draw operation is eligible (e.g. { max: 1 } means 'only when drawn in the first battle round'). Absent means the operation fires regardless of round.",
+          "properties": {
+            "min": { "type": "integer", "minimum": 1, "maximum": 5 },
+            "max": { "type": "integer", "minimum": 1, "maximum": 5 }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
         }
       },
       "required": ["operation"],

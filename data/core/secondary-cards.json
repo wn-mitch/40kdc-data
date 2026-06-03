@@ -1293,7 +1293,7 @@
     "id": "behind-enemy-lines",
     "name": "Behind Enemy Lines",
     "card_type": "secondary",
-    "when_drawn": { "operation": "redraw" },
+    "when_drawn": { "operation": "redraw", "battle_round": { "max": 1 } },
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
