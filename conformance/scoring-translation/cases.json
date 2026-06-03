@@ -1,5 +1,13 @@
 [
   {
+    "cardId": "a-grievous-blow",
+    "expected": {
+      "awards": [
+        "End of any turn: 4 VP per enemy unit of 14 or more starting models destroyed this turn"
+      ]
+    }
+  },
+  {
     "cardId": "assassination",
     "expected": {
       "awards": [
@@ -366,6 +374,15 @@
         "+ End of your turn: 2 VP per baited objective in enemy territory",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
         "End of the battle: 10 VP when 4+ objectives tagged baited"
+      ]
+    }
+  },
+  {
+    "cardId": "tempting-target",
+    "expected": {
+      "awards": [
+        "End of your turn: 4 VP",
+        "End of your turn: 5 VP"
       ]
     }
   },
