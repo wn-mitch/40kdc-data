@@ -13,7 +13,8 @@ use flate2::write::GzEncoder;
 use flate2::Compression;
 use serde_json::Value;
 use wh40kdc::import::{
-    try_import_roster, GwAdapter, ImportFailureReason, ImportResult, NewRecruitJsonAdapter,
+    try_import_roster, GwAdapter, GwHeaderlessAdapter, ImportFailureReason, ImportResult,
+    NewRecruitJsonAdapter,
     NewRecruitSimpleAdapter, NewRecruitWtcCompactAdapter, NewRecruitWtcFullAdapter, RosterFormat,
     RosterizerAdapter,
 };
@@ -162,7 +163,7 @@ fn rejects_unknown_json_shape() {
         ImportResult::Err { reason, trials, .. } => {
             assert_eq!(reason, ImportFailureReason::NoAdapterMatched);
             // Every adapter should have been polled.
-            assert_eq!(trials.len(), 7);
+            assert_eq!(trials.len(), 8);
             for t in trials {
                 assert!(!t.matched, "{:?} should not have matched", t.id);
             }
@@ -193,6 +194,7 @@ fn adapter_matchers_are_disjoint_per_fixture() {
         Box::new(NewRecruitWtcFullAdapter),
         Box::new(NewRecruitWtcCompactAdapter),
         Box::new(NewRecruitSimpleAdapter),
+        Box::new(GwHeaderlessAdapter),
         Box::new(ListForgeAdapter),
     ];
 

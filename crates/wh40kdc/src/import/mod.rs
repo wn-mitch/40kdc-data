@@ -35,6 +35,8 @@ mod decode;
 #[cfg(feature = "import")]
 mod gw;
 #[cfg(feature = "import")]
+mod gw_headerless;
+#[cfg(feature = "import")]
 mod listforge;
 #[cfg(feature = "import")]
 mod newrecruit_json;
@@ -61,6 +63,8 @@ pub use adapter::{format_id, select_adapter, FormatAdapter, ParseError};
 pub use decode::{decode_listforge, DecodeError};
 #[cfg(feature = "import")]
 pub use gw::GwAdapter;
+#[cfg(feature = "import")]
+pub use gw_headerless::GwHeaderlessAdapter;
 #[cfg(feature = "import")]
 pub use listforge::ListForgeAdapter;
 #[cfg(feature = "import")]
@@ -133,6 +137,10 @@ fn adapters() -> Vec<Box<dyn FormatAdapter>> {
         Box::new(NewRecruitWtcFullAdapter),
         Box::new(NewRecruitWtcCompactAdapter),
         Box::new(NewRecruitSimpleAdapter),
+        // Fallback for bullet-bearing plain text without a summary fence (GW app
+        // export, NewRecruit copy-text, `##` markdown lists). Placed after the
+        // framed text adapters so they win when their headers are present.
+        Box::new(GwHeaderlessAdapter),
         Box::new(ListForgeAdapter),
     ]
 }
