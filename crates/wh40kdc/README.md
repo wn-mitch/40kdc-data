@@ -1,7 +1,7 @@
 # wh40kdc
 
 The Warhammer 40K dataset for the
-[40kdc-data](https://github.com/Tabletop-Developer-Consortium/40kdc-data) schema
+[40kdc-data](https://github.com/alpaca-software/40kdc-data) schema
 layer — the canonical community schema for 40K game entities. This crate is the
 Rust counterpart of the `@alpaca-software/40kdc-data` npm package: it ships the
 generated entity types, the **whole dataset embedded** behind a linked, typed
@@ -9,7 +9,7 @@ API, and a **ListForge army-list importer**.
 
 Every type is generated from the project's JSON Schemas (JSON Schema draft
 2020-12) via [`typify`](https://crates.io/crates/typify), so the Rust structs
-stay in lockstep with the schemas that other consortium tools validate against.
+stay in lockstep with the schemas that other 40kdc tools validate against.
 
 ## Data API (the headline)
 
@@ -154,8 +154,8 @@ CI fails if the committed artifacts drift from the schemas or the data.
   and the community-authored enrichment data (abilities, phase-mappings, and the
   ability mechanics they encode) is **[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)**.
   If you redistribute the embedded data (e.g. by depending on this crate with the
-  default `bundled-data` feature), attribute the **40kdc community**
-  (Tabletop Developer Consortium). The types-only build
+  default `bundled-data` feature), attribute **Alpaca Software and the 40kdc
+  community**. The types-only build
   (`default-features = false`) carries no data and so no attribution obligation.
 
 This dataset is community-created and mirrors Games Workshop's datasheet

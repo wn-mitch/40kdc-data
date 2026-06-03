@@ -2,7 +2,7 @@
 
 Published by [Alpaca Software](https://alpacasoft.dev).
 
-The [40kdc](https://tabletop-developer-consortium.github.io) Warhammer 40,000
+The [40kdc](https://40kdc.alpacasoft.dev) Warhammer 40,000
 dataset behind a **linked, typed API**. Find a unit, then walk straight to its
 weapons, abilities, the game phases those abilities act in, and its faction —
 all strongly typed, all resolved for you.
@@ -71,8 +71,8 @@ data against them. See the repository root for schema details.
 
 - Code (`tools/`): **MIT**.
 - Embedded enrichment data (`data/enrichment/`): **CC BY 4.0** —
-  attribution: *40kdc community contributors*
-  (<https://github.com/Tabletop-Developer-Consortium/40kdc-data>).
+  attribution: *Alpaca Software and the 40kdc community contributors*
+  (<https://github.com/alpaca-software/40kdc-data>).
 - JSON Schemas: **CC0**.
 
 Stat lines and points are numerical facts. Ability and rules text are never

@@ -6,7 +6,7 @@
 
 # Class: Collection\<T, V\>
 
-Defined in: [data/collection.ts:45](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/collection.ts#L45)
+Defined in: [data/collection.ts:45](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/collection.ts#L45)
 
 A collection of one entity type, exposing id/name/faction lookups.
 
@@ -36,7 +36,7 @@ the linked view type returned to callers
 
 > **new Collection**\<`T`, `V`\>(`cfg`): `Collection`\<`T`, `V`\>
 
-Defined in: [data/collection.ts:53](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/collection.ts#L53)
+Defined in: [data/collection.ts:54](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/collection.ts#L54)
 
 #### Parameters
 
@@ -56,7 +56,7 @@ Defined in: [data/collection.ts:53](https://github.com/Tabletop-Developer-Consor
 
 > **get** **all**(): `V`[]
 
-Defined in: [data/collection.ts:76](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/collection.ts#L76)
+Defined in: [data/collection.ts:78](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/collection.ts#L78)
 
 Every record, deduplicated by id, in first-seen order.
 
@@ -72,7 +72,7 @@ Every record, deduplicated by id, in first-seen order.
 
 > **get** **size**(): `number`
 
-Defined in: [data/collection.ts:81](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/collection.ts#L81)
+Defined in: [data/collection.ts:83](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/collection.ts#L83)
 
 Number of distinct records.
 
@@ -86,7 +86,7 @@ Number of distinct records.
 
 > **get**(`id`): `V` \| `undefined`
 
-Defined in: [data/collection.ts:86](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/collection.ts#L86)
+Defined in: [data/collection.ts:88](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/collection.ts#L88)
 
 Look up by exact id.
 
@@ -102,11 +102,39 @@ Look up by exact id.
 
 ***
 
+### getInFaction()
+
+> **getInFaction**(`id`, `factionId`): `V` \| `undefined`
+
+Defined in: [data/collection.ts:100](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/collection.ts#L100)
+
+Look up by exact id *within a faction*. Use this when an id is shared
+across factions (e.g. `chaos-land-raider` lives under five Chaos factions)
+and a faction context is known — [get](#get) would return whichever copy
+was registered first, which may belong to the wrong faction. Returns
+`undefined` when no record with that id belongs to `factionId`.
+
+#### Parameters
+
+##### id
+
+`string`
+
+##### factionId
+
+`string`
+
+#### Returns
+
+`V` \| `undefined`
+
+***
+
 ### has()
 
 > **has**(`id`): `boolean`
 
-Defined in: [data/collection.ts:92](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/collection.ts#L92)
+Defined in: [data/collection.ts:107](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/collection.ts#L107)
 
 Whether a record with this exact id exists.
 
@@ -126,7 +154,7 @@ Whether a record with this exact id exists.
 
 > **find**(`query`): `V` \| `undefined`
 
-Defined in: [data/collection.ts:106](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/collection.ts#L106)
+Defined in: [data/collection.ts:121](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/collection.ts#L121)
 
 Find one record by id or name. Name matching is diacritic- and
 punctuation-insensitive (see [normalizeName](../functions/normalizeName.md)), trying, in order:
@@ -156,7 +184,7 @@ units.find("Kharn"); // resolves "Khârn the Betrayer"
 
 > **findAll**(`query`): `V`[]
 
-Defined in: [data/collection.ts:116](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/collection.ts#L116)
+Defined in: [data/collection.ts:131](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/collection.ts#L131)
 
 All records matching a query, by the same rules as [find](#find). An exact id
 match returns just that record; otherwise every normalized-name-exact match
@@ -179,7 +207,7 @@ to surface (rather than silently collapse) names shared across factions.
 
 > **byFaction**(`factionId`): `V`[]
 
-Defined in: [data/collection.ts:131](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/collection.ts#L131)
+Defined in: [data/collection.ts:146](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/collection.ts#L146)
 
 All records belonging to a faction id (empty if the type has no faction).
 
@@ -199,7 +227,7 @@ All records belonging to a faction id (empty if the type has no faction).
 
 > **\[iterator\]**(): `Iterator`\<`V`\>
 
-Defined in: [data/collection.ts:135](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/collection.ts#L135)
+Defined in: [data/collection.ts:150](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/collection.ts#L150)
 
 #### Returns
 

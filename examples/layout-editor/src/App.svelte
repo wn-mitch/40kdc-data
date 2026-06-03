@@ -28,8 +28,10 @@
   import Inspector from "./lib/Inspector.svelte";
   import Palette from "./lib/Palette.svelte";
 
-  const HOME_URL = "../../";
-  const REPO_URL = "https://github.com/tabletop-developer-consortium/40kdc-data";
+  const HOME_URL = "https://40kdc.alpacasoft.dev";
+  const REPO_URL = "https://github.com/alpaca-software/40kdc-data";
+  const PUBLISHER_URL = "https://alpacasoft.dev";
+  const PATREON_URL = "https://www.patreon.com/c/AlpacaSoftware";
 
   const EMBEDDED = [
     { id: "gw-11e-crucible", label: "Crucible of Battle" },
@@ -129,6 +131,8 @@
         {#each DEPLOYMENT_PATTERNS as d (d.id)}<option value={d.id}>{d.name}</option>{/each}
       </select>
       <a class="home" href={HOME_URL}>← 40kdc-data</a>
+      <a class="home" href={PUBLISHER_URL} target="_blank" rel="noreferrer noopener">alpacasoft.dev</a>
+      <a class="home" href={PATREON_URL} target="_blank" rel="noreferrer noopener">Patreon</a>
     </nav>
   </header>
 

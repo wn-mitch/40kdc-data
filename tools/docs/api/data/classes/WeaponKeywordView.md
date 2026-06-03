@@ -6,7 +6,7 @@
 
 # Class: WeaponKeywordView
 
-Defined in: [data/entities.ts:220](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/entities.ts#L220)
+Defined in: [data/entities.ts:226](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/entities.ts#L226)
 
 A weapon-keyword catalog entry, linked to the weapons whose profiles
 reference it. Exposes the keyword's mechanical effect as a buff stack
@@ -18,7 +18,7 @@ via [getBuffs](#getbuffs).
 
 > **new WeaponKeywordView**(`raw`, `ds`): `WeaponKeywordView`
 
-Defined in: [data/entities.ts:221](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/entities.ts#L221)
+Defined in: [data/entities.ts:227](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/entities.ts#L227)
 
 #### Parameters
 
@@ -42,7 +42,7 @@ The full generated `WeaponKeyword` record.
 
 > `readonly` **raw**: [`WeaponKeyword`](../../generated/interfaces/WeaponKeyword.md)
 
-Defined in: [data/entities.ts:223](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/entities.ts#L223)
+Defined in: [data/entities.ts:229](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/entities.ts#L229)
 
 The full generated `WeaponKeyword` record.
 
@@ -54,7 +54,7 @@ The full generated `WeaponKeyword` record.
 
 > **get** **id**(): `string`
 
-Defined in: [data/entities.ts:227](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/entities.ts#L227)
+Defined in: [data/entities.ts:233](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/entities.ts#L233)
 
 ##### Returns
 
@@ -68,7 +68,7 @@ Defined in: [data/entities.ts:227](https://github.com/Tabletop-Developer-Consort
 
 > **get** **name**(): `string`
 
-Defined in: [data/entities.ts:231](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/entities.ts#L231)
+Defined in: [data/entities.ts:237](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/entities.ts#L237)
 
 ##### Returns
 
@@ -82,7 +82,7 @@ Defined in: [data/entities.ts:231](https://github.com/Tabletop-Developer-Consort
 
 > **get** **weapons**(): [`WeaponView`](WeaponView.md)[]
 
-Defined in: [data/entities.ts:236](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/entities.ts#L236)
+Defined in: [data/entities.ts:242](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/entities.ts#L242)
 
 Weapons whose profiles reference this keyword id.
 
@@ -96,7 +96,7 @@ Weapons whose profiles reference this keyword id.
 
 > **getBuffs**(`parameters`, `weaponId`, `context`): [`Buff`](../type-aliases/Buff.md)[]
 
-Defined in: [data/entities.ts:246](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/entities.ts#L246)
+Defined in: [data/entities.ts:252](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/entities.ts#L252)
 
 Buff contributions from this catalog entry, for one reference site:
 pass the keyword's `parameters` (e.g. `{ value: 1 }` for Sustained Hits 1)

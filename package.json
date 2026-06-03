@@ -4,5 +4,8 @@
   "workspaces": [
     "tools",
     "examples/*"
-  ]
+  ],
+  "devDependencies": {
+    "wrangler": "^4.97.0"
+  }
 }

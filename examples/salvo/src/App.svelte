@@ -7,13 +7,14 @@
   import Pane from "./lib/Pane.svelte";
   import { salvo } from "./lib/store.svelte.js";
 
-  // Relative path back up to the docs-site landing page that wraps the
-  // examples (./examples/<name>/ → ./). Resolves correctly on the deployed
-  // GitHub Pages site regardless of the TOOLLET_BASE prefix.
-  const HOME_URL = "../../";
-  const REPO_URL = "https://github.com/tabletop-developer-consortium/40kdc-data";
+  // Absolute link to the 40kdc landing page. Each example is deployed to its
+  // own subdomain (salvo.alpacasoft.dev), so the landing page is a different
+  // origin — a relative hop can't reach it.
+  const HOME_URL = "https://40kdc.alpacasoft.dev";
+  const REPO_URL = "https://github.com/alpaca-software/40kdc-data";
   const PACKAGE_URL = "https://www.npmjs.com/package/@alpaca-software/40kdc-data";
   const PUBLISHER_URL = "https://alpacasoft.dev";
+  const PATREON_URL = "https://www.patreon.com/c/AlpacaSoftware";
 
   // Auto-open panes once the user has put real content into them. Each Pane
   // also tracks an explicit user override (sticky once they click), so these
@@ -55,6 +56,9 @@
       <a class="publisher" href={PUBLISHER_URL} target="_blank" rel="noreferrer noopener">
         alpacasoft.dev
       </a>
+      <a class="patreon" href={PATREON_URL} target="_blank" rel="noreferrer noopener">
+        Patreon
+      </a>
     </nav>
   </header>
 
@@ -74,7 +78,7 @@
 
   <footer class="app-footer">
     <a href={REPO_URL} target="_blank" rel="noreferrer noopener">
-      github.com/tabletop-developer-consortium/40kdc-data
+      github.com/alpaca-software/40kdc-data
     </a>
     <span class="dot" aria-hidden="true">·</span>
     <span class="muted">

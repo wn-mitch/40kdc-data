@@ -6,7 +6,7 @@
 
 # Interface: DicePoolAllocationEffect
 
-Defined in: [generated.ts:1217](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1217)
+Defined in: [generated.ts:841](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L841)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "dice-pool-allocation-effect".
@@ -21,7 +21,7 @@ via the `definition` "dice-pool-allocation-effect".
 
 > **type**: `"dice-pool-allocation"`
 
-Defined in: [generated.ts:1218](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1218)
+Defined in: [generated.ts:842](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L842)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [generated.ts:1218](https://github.com/Tabletop-Developer-Consortium
 
 > **pool**: `object`
 
-Defined in: [generated.ts:1219](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1219)
+Defined in: [generated.ts:843](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L843)
 
 #### Index Signature
 
@@ -49,7 +49,7 @@ Defined in: [generated.ts:1219](https://github.com/Tabletop-Developer-Consortium
 
 > **max\_activations**: `number`
 
-Defined in: [generated.ts:1224](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1224)
+Defined in: [generated.ts:848](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L848)
 
 ***
 
@@ -57,7 +57,7 @@ Defined in: [generated.ts:1224](https://github.com/Tabletop-Developer-Consortium
 
 > **options**: \[\{\[`k`: `string`\]: `unknown`; `name`: `string`; `requirement`: \{\[`k`: `string`\]: `unknown`; `type`: `"pair"` \| `"triple"` \| `"single"` \| `"run"`; `min_value`: `number`; \}; `effect`: [`EffectNode`](../type-aliases/EffectNode.md); \}, ...\{ name: string; requirement: \{ type: "pair" \| "triple" \| "single" \| "run"; min\_value: number; \[k: string\]: unknown \}; effect: EffectNode; \[k: string\]: unknown \}\[\]\]
 
-Defined in: [generated.ts:1228](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1228)
+Defined in: [generated.ts:852](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L852)
 
 #### Min Items
 

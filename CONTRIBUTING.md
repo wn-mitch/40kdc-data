@@ -11,7 +11,7 @@ Schema changes affect all downstream tools. Before modifying a schema:
 
 ## Enrichment Data
 
-Enrichment data (phase mappings, timing flags, interaction flags, ability DSL entries) is the consortium's primary output.
+Enrichment data (phase mappings, timing flags, interaction flags, ability DSL entries) is this project's primary output.
 
 1. Fork the repository
 2. Add or update data files under `data/enrichment/`

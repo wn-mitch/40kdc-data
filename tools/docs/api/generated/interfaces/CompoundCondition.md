@@ -6,7 +6,7 @@
 
 # Interface: CompoundCondition
 
-Defined in: [generated.ts:865](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L865)
+Defined in: [generated.ts:721](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L721)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "compound-condition".
@@ -21,7 +21,7 @@ via the `definition` "compound-condition".
 
 > **operator**: `"and"` \| `"or"` \| `"not"`
 
-Defined in: [generated.ts:866](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L866)
+Defined in: [generated.ts:722](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L722)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [generated.ts:866](https://github.com/Tabletop-Developer-Consortium/
 
 > **operands**: \[[`ConditionNode`](../type-aliases/ConditionNode.md), `...ConditionNode[]`\]
 
-Defined in: [generated.ts:870](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L870)
+Defined in: [generated.ts:726](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L726)
 
 #### Min Items
 

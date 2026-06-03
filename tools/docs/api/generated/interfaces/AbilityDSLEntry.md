@@ -6,7 +6,7 @@
 
 # Interface: AbilityDSLEntry
 
-Defined in: [generated.ts:1329](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1329)
+Defined in: [generated.ts:1400](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1400)
 
 Community-authored structured representation of what a game ability does. NOT GW text.
 
@@ -19,7 +19,7 @@ via the `definition` "ability".
 
 > **ability\_id**: `string`
 
-Defined in: [generated.ts:1330](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1330)
+Defined in: [generated.ts:1401](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1401)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:1330](https://github.com/Tabletop-Developer-Consortium
 
 > **name**: `string`
 
-Defined in: [generated.ts:1331](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1331)
+Defined in: [generated.ts:1402](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1402)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:1331](https://github.com/Tabletop-Developer-Consortium
 
 > **authored\_by**: `string`
 
-Defined in: [generated.ts:1332](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1332)
+Defined in: [generated.ts:1403](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1403)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [generated.ts:1332](https://github.com/Tabletop-Developer-Consortium
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:1333](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1333)
+Defined in: [generated.ts:1404](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1404)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [generated.ts:1333](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **version?**: `string`
 
-Defined in: [generated.ts:1334](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1334)
+Defined in: [generated.ts:1405](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1405)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [generated.ts:1334](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **supersedes?**: `string` \| `null`
 
-Defined in: [generated.ts:1335](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1335)
+Defined in: [generated.ts:1406](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1406)
 
 ***
 
@@ -67,7 +67,7 @@ Defined in: [generated.ts:1335](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **unit\_ids?**: `string`[]
 
-Defined in: [generated.ts:1336](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1336)
+Defined in: [generated.ts:1407](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1407)
 
 ***
 
@@ -75,7 +75,7 @@ Defined in: [generated.ts:1336](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **faction\_id?**: `string` \| `null`
 
-Defined in: [generated.ts:1340](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1340)
+Defined in: [generated.ts:1411](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1411)
 
 For faction-type abilities, the faction this rule belongs to
 
@@ -85,7 +85,7 @@ For faction-type abilities, the faction this rule belongs to
 
 > `optional` **detachment\_id?**: `string` \| `null`
 
-Defined in: [generated.ts:1344](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1344)
+Defined in: [generated.ts:1415](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1415)
 
 For detachment/enhancement/stratagem-type abilities, the associated detachment
 
@@ -95,7 +95,7 @@ For detachment/enhancement/stratagem-type abilities, the associated detachment
 
 > `optional` **ability\_type?**: `"stratagem"` \| `"enhancement"` \| `"unit"` \| `"core"` \| `"detachment"` \| `"faction"`
 
-Defined in: [generated.ts:1345](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1345)
+Defined in: [generated.ts:1416](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1416)
 
 ***
 
@@ -103,7 +103,7 @@ Defined in: [generated.ts:1345](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **behavior?**: `"passive"` \| `"activated"` \| `"reactive"` \| `"aura"`
 
-Defined in: [generated.ts:1349](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1349)
+Defined in: [generated.ts:1420](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1420)
 
 How this ability interacts with the game flow — not a runtime predicate
 
@@ -113,7 +113,7 @@ How this ability interacts with the game flow — not a runtime predicate
 
 > **effect**: [`AbilityEffect1`](../type-aliases/AbilityEffect1.md)
 
-Defined in: [generated.ts:1350](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1350)
+Defined in: [generated.ts:1421](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1421)
 
 ***
 
@@ -121,7 +121,7 @@ Defined in: [generated.ts:1350](https://github.com/Tabletop-Developer-Consortium
 
 > **scope**: [`AbilityScope`](AbilityScope.md)
 
-Defined in: [generated.ts:1351](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1351)
+Defined in: [generated.ts:1422](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1422)
 
 ***
 
@@ -129,7 +129,7 @@ Defined in: [generated.ts:1351](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **interactions?**: `object`[]
 
-Defined in: [generated.ts:1352](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1352)
+Defined in: [generated.ts:1423](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1423)
 
 #### Index Signature
 
@@ -153,7 +153,7 @@ Defined in: [generated.ts:1352](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **disputed?**: `boolean`
 
-Defined in: [generated.ts:1358](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1358)
+Defined in: [generated.ts:1429](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1429)
 
 ***
 
@@ -161,7 +161,7 @@ Defined in: [generated.ts:1358](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **dispute\_notes?**: `string`
 
-Defined in: [generated.ts:1359](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1359)
+Defined in: [generated.ts:1430](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1430)
 
 ***
 
@@ -169,4 +169,4 @@ Defined in: [generated.ts:1359](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **community\_notes?**: `string`
 
-Defined in: [generated.ts:1360](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1360)
+Defined in: [generated.ts:1431](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1431)

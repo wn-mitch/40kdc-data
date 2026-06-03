@@ -6,7 +6,7 @@
 
 # Interface: SecondaryCard
 
-Defined in: [generated.ts:727](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L727)
+Defined in: [generated.ts:541](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L541)
 
 An 11e mission card. The deck-level rule (draw 2 per turn, keep unscored cards) is separate and not modelled here. This is the per-card shape: an optional on-draw deck operation, an optional player action, and zero or more VP-award blocks. Primary mission cards reuse this shape via card_type. Mechanic blocks reference the Ability DSL; prose is community-authored (no reproduced rules text).
 
@@ -19,7 +19,7 @@ via the `definition` "secondary-card".
 
 > **id**: `string`
 
-Defined in: [generated.ts:728](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L728)
+Defined in: [generated.ts:542](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L542)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:728](https://github.com/Tabletop-Developer-Consortium/
 
 > **name**: `string`
 
-Defined in: [generated.ts:729](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L729)
+Defined in: [generated.ts:543](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L543)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:729](https://github.com/Tabletop-Developer-Consortium/
 
 > `optional` **card\_type?**: `"secondary"` \| `"primary"`
 
-Defined in: [generated.ts:733](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L733)
+Defined in: [generated.ts:547](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L547)
 
 Whether this is a secondary card or a primary mission card (which reuses this shape).
 
@@ -45,7 +45,7 @@ Whether this is a secondary card or a primary mission card (which reuses this sh
 
 > `optional` **subtype?**: `string`
 
-Defined in: [generated.ts:737](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L737)
+Defined in: [generated.ts:551](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L551)
 
 Finer classification within the deck (e.g. a category or tactical/fixed split). Free-form — not enum-locked until 11e categories are confirmed.
 
@@ -55,13 +55,13 @@ Finer classification within the deck (e.g. a category or tactical/fixed split). 
 
 > `optional` **when\_drawn?**: `object`
 
-Defined in: [generated.ts:741](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L741)
+Defined in: [generated.ts:555](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L555)
 
 Optional deck operation performed when this card is drawn (e.g. redraw, swap). Distinct from combat effects — deck operations have no combat target, so they are not modelled via the Ability DSL effect language. If `condition` is present, the operation fires only when the predicate holds.
 
 #### operation
 
-> **operation**: `"replace"` \| `"reshuffle"` \| `"redraw"` \| `"draw-extra"` \| `"swap"`
+> **operation**: `"reshuffle"` \| `"replace"` \| `"redraw"` \| `"draw-extra"` \| `"swap"`
 
 The deck manipulation this card triggers on draw.
 
@@ -77,41 +77,17 @@ Other cards this operation references, by id.
 
 ***
 
-### action?
+### actions?
 
-> `optional` **action?**: `object`
+> `optional` **actions?**: \[\{ `action_id?`: `string`; `starts?`: `"command"` \| `"movement"` \| `"shooting"` \| `"charge"` \| `"fight"`; `player_turn?`: [`PlayerTurn`](../type-aliases/PlayerTurn.md); `units?`: [`AbilityCondition`](../type-aliases/AbilityCondition.md); `use_limit?`: `number`; `use_limit_scope?`: `"per-turn"` \| `"per-game"`; `completes?`: [`AbilityCondition1`](../type-aliases/AbilityCondition1.md); `effect?`: [`AbilityEffect`](../type-aliases/AbilityEffect.md); \}, ...\{ action\_id?: string; starts?: "command" \| "movement" \| "shooting" \| "charge" \| "fight"; player\_turn?: PlayerTurn; units?: AbilityCondition; use\_limit?: number; use\_limit\_scope?: "per-turn" \| "per-game"; completes?: AbilityCondition1; effect?: AbilityEffect \}\[\]\]
 
-Defined in: [generated.ts:755](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L755)
+Defined in: [generated.ts:571](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L571)
 
-Optional player action the card enables.
+Optional player actions the card enables. Most cards have a single action; a few (e.g. Observe Enemy, with separate Baited-removal and Spotted actions) have two distinct actions on the same card.
 
-#### starts?
+#### Min Items
 
-> `optional` **starts?**: `"command"` \| `"movement"` \| `"shooting"` \| `"charge"` \| `"fight"`
-
-The five official game phases. Unchanged between 10th and 11th edition — 11e reorders Pile In timing within the Fight phase but adds no top-level phase.
-
-#### player\_turn?
-
-> `optional` **player\_turn?**: [`PlayerTurn`](../type-aliases/PlayerTurn.md)
-
-#### units?
-
-> `optional` **units?**: [`AbilityCondition`](../type-aliases/AbilityCondition.md)
-
-#### use\_limit?
-
-> `optional` **use\_limit?**: `number`
-
-Maximum number of times the action may be performed.
-
-#### completes?
-
-> `optional` **completes?**: [`AbilityCondition1`](../type-aliases/AbilityCondition1.md)
-
-#### effect?
-
-> `optional` **effect?**: `unknown`
+1
 
 ***
 
@@ -119,9 +95,9 @@ Maximum number of times the action may be performed.
 
 > `optional` **awards?**: \[\{\[`k`: `string`\]: `unknown`; \} \| \{\[`k`: `string`\]: `unknown`; \}, ...(\{ \[k: string\]: unknown \} \| \{ \[k: string\]: unknown \})\[\]\]
 
-Defined in: [generated.ts:774](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L774)
+Defined in: [generated.ts:622](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L622)
 
-VP-award blocks: each scores when `trigger` fires and the optional `when` condition holds. An award scores either a flat `vp` or a count-scaled `vp_per` (VP per instance of the thing named by `per`). Awards accrue independently and sum; a card's '+ ... CUMULATIVE' rows are modelled as separate awards flagged `cumulative` for faithful round-trip.
+VP-award blocks: each scores when `trigger` fires and the optional `when` condition holds. An award scores either a flat `vp` or a count-scaled `vp_per` (VP per instance of the thing named by `per`). Awards accrue independently and sum; a card's '+ ... CUMULATIVE' rows are modelled as separate awards flagged `cumulative` for faithful round-trip. Awards sharing the same `exclusive_group` value within a card resolve as the highest-scoring single award fires (the card's literal 'OR' rows between tier breakpoints, e.g. Record-Breaking Mission's 3-Fronts vs 4-Fronts).
 
 #### Min Items
 
@@ -133,7 +109,7 @@ VP-award blocks: each scores when `trigger` fires and the optional `when` condit
 
 > `optional` **text?**: `string`
 
-Defined in: [generated.ts:795](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L795)
+Defined in: [generated.ts:643](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L643)
 
 Community-authored card description (original prose only — no reproduced rules text).
 
@@ -143,4 +119,4 @@ Community-authored card description (original prose only — no reproduced rules
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:796](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L796)
+Defined in: [generated.ts:644](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L644)

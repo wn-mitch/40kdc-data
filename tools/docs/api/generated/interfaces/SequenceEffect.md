@@ -6,7 +6,7 @@
 
 # Interface: SequenceEffect
 
-Defined in: [generated.ts:1176](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1176)
+Defined in: [generated.ts:800](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L800)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "sequence-effect".
@@ -21,7 +21,7 @@ via the `definition` "sequence-effect".
 
 > **type**: `"sequence"`
 
-Defined in: [generated.ts:1177](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1177)
+Defined in: [generated.ts:801](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L801)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [generated.ts:1177](https://github.com/Tabletop-Developer-Consortium
 
 > **steps**: \[[`EffectNode`](../type-aliases/EffectNode.md), `...EffectNode[]`\]
 
-Defined in: [generated.ts:1181](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1181)
+Defined in: [generated.ts:805](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L805)
 
 #### Min Items
 

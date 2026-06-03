@@ -42,6 +42,9 @@ factions.find("World Eaters")!.units.length;
 
 - [HasBuffs](interfaces/HasBuffs.md)
 - [CollectionConfig](interfaces/CollectionConfig.md)
+- [WeaponBound](interfaces/WeaponBound.md)
+- [Loadout](interfaces/Loadout.md)
+- [Violation](interfaces/Violation.md)
 - [RawData](interfaces/RawData.md)
 
 ## Type Aliases
@@ -49,6 +52,8 @@ factions.find("World Eaters")!.units.length;
 - [EligibleAbilitySource](type-aliases/EligibleAbilitySource.md)
 - [EligibilityInput](type-aliases/EligibilityInput.md)
 - [EligibleAbility](type-aliases/EligibleAbility.md)
+- [StageLift](type-aliases/StageLift.md)
+- [AttributedStage](type-aliases/AttributedStage.md)
 - [BuffSource](type-aliases/BuffSource.md)
 - [WeaponKeywordRef](type-aliases/WeaponKeywordRef.md)
 - [BuffContribution](type-aliases/BuffContribution.md)
@@ -63,8 +68,12 @@ factions.find("World Eaters")!.units.length;
 - [EngineInput](type-aliases/EngineInput.md)
 - [EngineOutput](type-aliases/EngineOutput.md)
 - [UnsupportedFragment](type-aliases/UnsupportedFragment.md)
+- [ActivatableGroupRef](type-aliases/ActivatableGroupRef.md)
+- [ActivatableBuff](type-aliases/ActivatableBuff.md)
 - [EffectTranslation](type-aliases/EffectTranslation.md)
 - [TranslationPerspective](type-aliases/TranslationPerspective.md)
+- [StackableBuff](type-aliases/StackableBuff.md)
+- [StackableBuffGroup](type-aliases/StackableBuffGroup.md)
 
 ## Variables
 
@@ -78,23 +87,34 @@ factions.find("World Eaters")!.units.length;
 - [enhancements](variables/enhancements.md)
 - [stratagems](variables/stratagems.md)
 - [wargearOptions](variables/wargearOptions.md)
+- [wargear](variables/wargear.md)
 - [missions](variables/missions.md)
 - [missionMatchups](variables/missionMatchups.md)
-- [secondaryCards](variables/secondaryCards.md)
+- [missionCards](variables/missionCards.md)
 - [deploymentPatterns](variables/deploymentPatterns.md)
 - [forceDispositions](variables/forceDispositions.md)
+- [terrainTemplates](variables/terrainTemplates.md)
+- [terrainLayouts](variables/terrainLayouts.md)
 - [resourcePools](variables/resourcePools.md)
 
 ## Functions
 
 - [resolveEligibleAbilities](functions/resolveEligibleAbilities.md)
+- [attributeStages](functions/attributeStages.md)
 - [resolveBuffs](functions/resolveBuffs.md)
 - [crunch](functions/crunch.md)
 - [effectToBuffs](functions/effectToBuffs.md)
 - [parseKeywordGrant](functions/parseKeywordGrant.md)
 - [buffsFromKeyword](functions/buffsFromKeyword.md)
 - [getBuffs](functions/getBuffs.md)
+- [optionCap](functions/optionCap.md)
+- [maximalLoadout](functions/maximalLoadout.md)
+- [weaponBounds](functions/weaponBounds.md)
+- [clampWeaponCount](functions/clampWeaponCount.md)
+- [validateLoadout](functions/validateLoadout.md)
 - [normalizeName](functions/normalizeName.md)
 - [resolveRosterUnit](functions/resolveRosterUnit.md)
 - [resolveRosterWargear](functions/resolveRosterWargear.md)
+- [resolveAttachedLeader](functions/resolveAttachedLeader.md)
+- [resolveAttachmentPartners](functions/resolveAttachmentPartners.md)
 - [emptyRawData](functions/emptyRawData.md)

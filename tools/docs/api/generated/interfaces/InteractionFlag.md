@@ -6,7 +6,7 @@
 
 # Interface: InteractionFlag
 
-Defined in: [generated.ts:1387](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1387)
+Defined in: [generated.ts:1458](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1458)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "interaction-flag".
@@ -21,7 +21,7 @@ via the `definition` "interaction-flag".
 
 > **ability\_a**: `string`
 
-Defined in: [generated.ts:1388](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1388)
+Defined in: [generated.ts:1459](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1459)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [generated.ts:1388](https://github.com/Tabletop-Developer-Consortium
 
 > **ability\_b**: `string`
 
-Defined in: [generated.ts:1389](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1389)
+Defined in: [generated.ts:1460](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1460)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [generated.ts:1389](https://github.com/Tabletop-Developer-Consortium
 
 > **interaction\_type**: `"replaces"` \| `"conflicts"` \| `"combos"` \| `"sequencing-dependent"` \| `"stacks"` \| `"does-not-stack"`
 
-Defined in: [generated.ts:1390](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1390)
+Defined in: [generated.ts:1461](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1461)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [generated.ts:1390](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **resolution?**: `string`
 
-Defined in: [generated.ts:1391](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1391)
+Defined in: [generated.ts:1462](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1462)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [generated.ts:1391](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **faq\_reference?**: `string`
 
-Defined in: [generated.ts:1392](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1392)
+Defined in: [generated.ts:1463](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1463)
 
 ***
 
@@ -61,7 +61,7 @@ Defined in: [generated.ts:1392](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **disputed?**: `boolean`
 
-Defined in: [generated.ts:1393](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1393)
+Defined in: [generated.ts:1464](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1464)
 
 ***
 
@@ -69,7 +69,7 @@ Defined in: [generated.ts:1393](https://github.com/Tabletop-Developer-Consortium
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:1394](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1394)
+Defined in: [generated.ts:1465](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1465)
 
 ***
 
@@ -77,4 +77,4 @@ Defined in: [generated.ts:1394](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **authored\_by?**: `string`
 
-Defined in: [generated.ts:1395](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1395)
+Defined in: [generated.ts:1466](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1466)

@@ -1,4 +1,4 @@
-//! Rust types for the [40kdc-data](https://github.com/Tabletop-Developer-Consortium/40kdc-data)
+//! Rust types for the [40kdc-data](https://github.com/alpaca-software/40kdc-data)
 //! Warhammer 40K schema layer.
 //!
 //! Every type in this crate is generated from the canonical JSON Schemas by

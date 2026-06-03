@@ -6,7 +6,7 @@
 
 # Interface: Unit
 
-Defined in: [generated.ts:1022](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1022)
+Defined in: [generated.ts:1167](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1167)
 
 A unit datasheet entry with stat profiles and point costs.
 
@@ -19,7 +19,7 @@ via the `definition` "unit".
 
 > **id**: `string`
 
-Defined in: [generated.ts:1023](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1023)
+Defined in: [generated.ts:1168](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1168)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:1023](https://github.com/Tabletop-Developer-Consortium
 
 > **name**: `string`
 
-Defined in: [generated.ts:1024](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1024)
+Defined in: [generated.ts:1169](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1169)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:1024](https://github.com/Tabletop-Developer-Consortium
 
 > **faction\_id**: `string`
 
-Defined in: [generated.ts:1025](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1025)
+Defined in: [generated.ts:1170](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1170)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [generated.ts:1025](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **role?**: `"character"` \| `"battleline"` \| `"dedicated-transport"` \| `"fortification"` \| `"allied"` \| `"epic-hero"`
 
-Defined in: [generated.ts:1029](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1029)
+Defined in: [generated.ts:1174](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1174)
 
 Battlefield role from the datasheet header. Unit types (Infantry, Vehicle, etc.) belong in keywords.
 
@@ -53,7 +53,7 @@ Battlefield role from the datasheet header. Unit types (Infantry, Vehicle, etc.)
 
 > `optional` **attachment\_role?**: `"leader"` \| `"support"` \| `null`
 
-Defined in: [generated.ts:1033](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1033)
+Defined in: [generated.ts:1178](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1178)
 
 Character attachment role (11e). 'support' implies the unit is only legal when attached to a host unit (cannot be taken solo); 'leader' is valid as a standalone list entry. null/absent for non-attaching units.
 
@@ -63,7 +63,7 @@ Character attachment role (11e). 'support' implies the unit is only legal when a
 
 > **profiles**: \[\{\[`k`: `string`\]: `unknown`; `name?`: `string`; `M`: [`StatValue`](../type-aliases/StatValue.md); `T`: `number`; `W`: `number`; `Sv`: `number`; `invuln_sv?`: `number` \| `null`; `Ld`: `number`; `OC`: `number`; \}, ...\{ name?: string; M: StatValue; T: number; W: number; Sv: number; invuln\_sv?: number \| null; Ld: number; OC: number; \[k: string\]: unknown \}\[\]\]
 
-Defined in: [generated.ts:1037](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1037)
+Defined in: [generated.ts:1182](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1182)
 
 #### Min Items
 
@@ -75,7 +75,7 @@ Defined in: [generated.ts:1037](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **points?**: `object`[]
 
-Defined in: [generated.ts:1067](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1067)
+Defined in: [generated.ts:1212](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1212)
 
 #### Index Signature
 
@@ -95,7 +95,7 @@ Defined in: [generated.ts:1067](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **points\_provisional?**: `boolean`
 
-Defined in: [generated.ts:1075](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1075)
+Defined in: [generated.ts:1220](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1220)
 
 True when point costs are carried over provisionally (e.g. seeded from a prior edition during migration) and not yet confirmed against the current dataslate.
 
@@ -105,7 +105,7 @@ True when point costs are carried over provisionally (e.g. seeded from a prior e
 
 > `optional` **keywords?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:1076](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1076)
+Defined in: [generated.ts:1221](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1221)
 
 ***
 
@@ -113,15 +113,17 @@ Defined in: [generated.ts:1076](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **faction\_keywords?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:1077](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1077)
+Defined in: [generated.ts:1222](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1222)
 
 ***
 
 ### base\_size\_mm?
 
-> `optional` **base\_size\_mm?**: \{\[`k`: `string`\]: `unknown`; `shape`: `"round"` \| `"oval"`; `diameter?`: `number`; `width?`: `number`; `length?`: `number`; \} \| `null`
+> `optional` **base\_size\_mm?**: [`BaseSize`](BaseSize.md) \| `null`
 
-Defined in: [generated.ts:1078](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1078)
+Defined in: [generated.ts:1226](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1226)
+
+The unit's representative base (the most-numerous model's base). Mixed-model units carry the full per-model breakdown in unit-composition; this top-level value is a convenience for consumers that need a single base.
 
 ***
 
@@ -129,7 +131,7 @@ Defined in: [generated.ts:1078](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **model\_count?**: `object`
 
-Defined in: [generated.ts:1085](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1085)
+Defined in: [generated.ts:1227](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1227)
 
 #### Index Signature
 
@@ -149,7 +151,7 @@ Defined in: [generated.ts:1085](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **weapon\_ids?**: `string`[]
 
-Defined in: [generated.ts:1090](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1090)
+Defined in: [generated.ts:1232](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1232)
 
 ***
 
@@ -157,7 +159,7 @@ Defined in: [generated.ts:1090](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **ability\_ids?**: `string`[]
 
-Defined in: [generated.ts:1091](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1091)
+Defined in: [generated.ts:1233](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1233)
 
 ***
 
@@ -165,7 +167,7 @@ Defined in: [generated.ts:1091](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **transport\_capacity?**: \{ `capacity`: `number`; `keyword_restrictions?`: [`KeywordList`](../type-aliases/KeywordList.md) \| `null`; `exclusion_keywords?`: [`KeywordList`](../type-aliases/KeywordList.md) \| `null`; \} \| `null`
 
-Defined in: [generated.ts:1092](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1092)
+Defined in: [generated.ts:1234](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1234)
 
 ***
 
@@ -173,7 +175,7 @@ Defined in: [generated.ts:1092](https://github.com/Tabletop-Developer-Consortium
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:1097](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1097)
+Defined in: [generated.ts:1239](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1239)
 
 ***
 
@@ -181,4 +183,4 @@ Defined in: [generated.ts:1097](https://github.com/Tabletop-Developer-Consortium
 
 > `optional` **is\_legend?**: `boolean`
 
-Defined in: [generated.ts:1098](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1098)
+Defined in: [generated.ts:1240](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1240)

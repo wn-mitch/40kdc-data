@@ -3,7 +3,7 @@
 ## Project Overview
 
 40kdc-data is two things for the
-[Tabletop Developer Consortium](https://tabletop-developer-consortium.github.io):
+[40kdc](https://40kdc.alpacasoft.dev) ecosystem:
 (1) the shared **schema layer** — JSON Schema files that model Warhammer 40K game
 entities plus community-authored enrichment data describing what abilities do
 (without reproducing copyrighted text); and (2) a **data-distribution package**
@@ -132,7 +132,7 @@ Entity IDs are the interoperability contract. If two tools use
 
 - **40kdc-editor**: Web-based UI for authoring enrichment data. Imports schemas
   from this repo for form validation. Changes here affect the editor's forms.
-- **Consortium site**: https://tabletop-developer-consortium.github.io
+- **Project site**: https://40kdc.alpacasoft.dev
 
 ## Data Sources
 

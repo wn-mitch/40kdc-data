@@ -13,14 +13,14 @@
     "json-schema"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/Tabletop-Developer-Consortium/40kdc-data/tree/main/tools#readme",
+  "homepage": "https://40kdc.alpacasoft.dev",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Tabletop-Developer-Consortium/40kdc-data.git",
+    "url": "git+https://github.com/alpaca-software/40kdc-data.git",
     "directory": "tools"
   },
   "bugs": {
-    "url": "https://github.com/Tabletop-Developer-Consortium/40kdc-data/issues"
+    "url": "https://github.com/alpaca-software/40kdc-data/issues"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

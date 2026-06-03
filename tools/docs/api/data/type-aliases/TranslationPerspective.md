@@ -8,7 +8,7 @@
 
 > **TranslationPerspective** = `"attacker"` \| `"target"`
 
-Defined in: [cruncher/from-dsl.ts:55](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/cruncher/from-dsl.ts#L55)
+Defined in: [cruncher/from-dsl.ts:97](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/cruncher/from-dsl.ts#L97)
 
 Whose perspective the translation runs from.
 

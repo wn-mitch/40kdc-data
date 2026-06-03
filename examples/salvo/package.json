@@ -1,6 +1,7 @@
 {
   "name": "@40kdc/salvo",
   "private": true,
+  "homepage": "https://salvo.alpacasoft.dev",
   "version": "0.0.0",
   "type": "module",
   "scripts": {

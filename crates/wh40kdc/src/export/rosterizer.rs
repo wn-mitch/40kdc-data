@@ -34,7 +34,7 @@ const ITEM_SEPARATOR: char = '§';
 
 const RULEBOOK_NAME: &str = "40kdc";
 const RULEBOOK_GAME: &str = "Warhammer 40,000";
-const RULEBOOK_PUBLISHER: &str = "Tabletop Developer Consortium";
+const RULEBOOK_PUBLISHER: &str = "Alpaca Software";
 const RULEBOOK_URL: &str = "https://40kdc.dev";
 const RULEBOOK_GENRE: &str = "wargame";
 

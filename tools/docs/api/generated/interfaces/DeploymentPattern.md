@@ -6,7 +6,7 @@
 
 # Interface: DeploymentPattern
 
-Defined in: [generated.ts:472](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L472)
+Defined in: [generated.ts:262](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L262)
 
 A deployment map: per-side deployment zones, objective positions, and (11e) per-side territory polygons. Pattern geometry carries forward unchanged from 10th edition; downstream tooling (e.g. bevy-deploy-helper) consumes this as the canonical encoding.
 
@@ -19,7 +19,7 @@ via the `definition` "deployment-pattern".
 
 > **id**: `string`
 
-Defined in: [generated.ts:473](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L473)
+Defined in: [generated.ts:263](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L263)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:473](https://github.com/Tabletop-Developer-Consortium/
 
 > **name**: `string`
 
-Defined in: [generated.ts:474](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L474)
+Defined in: [generated.ts:264](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L264)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:474](https://github.com/Tabletop-Developer-Consortium/
 
 > `optional` **source?**: `string`
 
-Defined in: [generated.ts:478](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L478)
+Defined in: [generated.ts:268](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L268)
 
 Mission pack or source the pattern originates from (e.g. 'leviathan').
 
@@ -45,7 +45,7 @@ Mission pack or source the pattern originates from (e.g. 'leviathan').
 
 > `optional` **description?**: `string`
 
-Defined in: [generated.ts:479](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L479)
+Defined in: [generated.ts:269](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L269)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [generated.ts:479](https://github.com/Tabletop-Developer-Consortium/
 
 > **zones**: \[\{ `player`: [`Side`](../type-aliases/Side.md); `name?`: `string`; `shape`: [`ZoneShape`](../type-aliases/ZoneShape.md); `position`: [`Vec2`](Vec2.md); `color?`: `string`; \}, `...{ player: Side; name?: string; shape: ZoneShape; position: Vec2; color?: string }[]`\]
 
-Defined in: [generated.ts:485](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L485)
+Defined in: [generated.ts:275](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L275)
 
 Per-side deployment zones.
 
@@ -67,7 +67,7 @@ Per-side deployment zones.
 
 > `optional` **territories?**: `object`[]
 
-Defined in: [generated.ts:510](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L510)
+Defined in: [generated.ts:300](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L300)
 
 11e per-side territory polygons, mirroring the deployment-zone shape (e.g. the band between a deployment zone and the midline). Empty until authored.
 
@@ -89,7 +89,7 @@ Defined in: [generated.ts:510](https://github.com/Tabletop-Developer-Consortium/
 
 > `optional` **objectives?**: [`Vec2`](Vec2.md)[]
 
-Defined in: [generated.ts:518](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L518)
+Defined in: [generated.ts:308](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L308)
 
 Objective-marker positions on the board.
 
@@ -99,7 +99,7 @@ Objective-marker positions on the board.
 
 > `optional` **recommended\_terrain\_layout\_ids?**: `string`[]
 
-Defined in: [generated.ts:522](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L522)
+Defined in: [generated.ts:312](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L312)
 
 Ids of recommended terrain-layout entities (resolved once terrain-layout data is authored).
 
@@ -109,4 +109,4 @@ Ids of recommended terrain-layout entities (resolved once terrain-layout data is
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:523](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L523)
+Defined in: [generated.ts:313](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L313)

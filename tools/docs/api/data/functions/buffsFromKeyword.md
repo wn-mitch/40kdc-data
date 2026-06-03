@@ -8,7 +8,7 @@
 
 > **buffsFromKeyword**(`args`): [`Buff`](../type-aliases/Buff.md)[]
 
-Defined in: [cruncher/from-keyword.ts:41](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/cruncher/from-keyword.ts#L41)
+Defined in: [cruncher/from-keyword.ts:41](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/cruncher/from-keyword.ts#L41)
 
 Convert a single weapon-keyword reference (catalog effect + reference-site
 parameters) into the buff contributions it makes against `context`.

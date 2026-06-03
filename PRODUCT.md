@@ -33,7 +33,7 @@ salvo's expected damage against a target.
   one source of truth, many tools.
 - **Tools share a dialect**: when an example app needs a visual language, it
   reaches for the shadowboxing dialect (industrial near-black, teal accent,
-  inset rim-lit elevation) shared with sibling apps so the consortium feels
+  inset rim-lit elevation) shared with sibling apps so they feel
   like one product family.
 
 ## Anti-references

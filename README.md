@@ -1,6 +1,6 @@
 # 40kdc-data
 
-> **Looking for 10th edition data?** The 10e dataset is preserved on branch [`10e-archive`](https://github.com/Tabletop-Developer-Consortium/40kdc-data/tree/10e-archive) and tagged [`10th/2025-q3`](https://github.com/Tabletop-Developer-Consortium/40kdc-data/releases/tag/10th/2025-q3). The `main` branch is migrating to **11th edition** — see [`11e-migration.md`](11e-migration.md) for status and the work plan.
+> **Looking for 10th edition data?** The 10e dataset is preserved on branch [`10e-archive`](https://github.com/alpaca-software/40kdc-data/tree/10e-archive) and tagged [`10th/2025-q3`](https://github.com/alpaca-software/40kdc-data/releases/tag/10th/2025-q3). The `main` branch is migrating to **11th edition** — see [`11e-migration.md`](11e-migration.md) for status and the work plan.
 
 Community-owned data schemas for Warhammer 40,000 developer tooling — **and** a linked, typed API over the dataset they describe.
 
@@ -8,7 +8,7 @@ Community-owned data schemas for Warhammer 40,000 developer tooling — **and** 
 
 Two things, both community-owned:
 
-1. **The schema layer** for the [Tabletop Developer Consortium](https://tabletop-developer-consortium.github.io) ecosystem — JSON Schemas that model 40K entities so tools can exchange data. Entity IDs are the interoperability contract.
+1. **The schema layer** for the [40kdc](https://40kdc.alpacasoft.dev) ecosystem — JSON Schemas that model 40K entities so tools can exchange data. Entity IDs are the interoperability contract.
 2. **A ready-to-use dataset package.** The whole dataset ships embedded behind an intuitive, typed API: find a unit, then walk to its weapons, abilities, the phases those abilities act in, and its faction — no database, no network, no runtime filesystem access. Same ergonomics consumers expect, available today.
 
 ```ts
@@ -103,7 +103,7 @@ that — but it is the supported entry point for cross-language verification.
 
 ## Ability DSL
 
-Instead of storing ability text, the consortium builds structured game trees that express what abilities *do*. Game mechanics aren't copyrightable — only their expression is. The DSL is a new expression authored by the community.
+Instead of storing ability text, 40kdc builds structured game trees that express what abilities *do*. Game mechanics aren't copyrightable — only their expression is. The DSL is a new expression authored by the community.
 
 An ability entry composes four primitives:
 
@@ -132,7 +132,7 @@ an AJV validator. This is the fastest path for most tools.
 
 1. Add `40kdc-data` as a git submodule, or reference schema `$id` URLs
 2. Point your JSON Schema validator (draft 2020-12) at `schemas/`
-3. Use entity IDs from the consortium dataset for interoperability
+3. Use entity IDs from the 40kdc dataset for interoperability
 
 ### Rust
 
@@ -142,7 +142,7 @@ it publishes to crates.io, depend on it via git:
 
 ```toml
 [dependencies]
-wh40kdc = { git = "https://github.com/Tabletop-Developer-Consortium/40kdc-data" }
+wh40kdc = { git = "https://github.com/alpaca-software/40kdc-data" }
 ```
 
 ```rust

@@ -6,7 +6,7 @@
 
 # Interface: ForceDisposition
 
-Defined in: [generated.ts:606](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L606)
+Defined in: [generated.ts:396](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L396)
 
 A 11e strategic-intent tag granted by detachments. Players compare dispositions at game start to determine the shared mission; asymmetric primary objectives result.
 
@@ -19,7 +19,7 @@ via the `definition` "force-disposition".
 
 > **id**: `"take-and-hold"` \| `"disruption"` \| `"purge-the-foe"` \| `"priority-assets"` \| `"reconnaissance"`
 
-Defined in: [generated.ts:610](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L610)
+Defined in: [generated.ts:400](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L400)
 
 One of the five confirmed launch Force Dispositions.
 
@@ -29,7 +29,7 @@ One of the five confirmed launch Force Dispositions.
 
 > **name**: `string`
 
-Defined in: [generated.ts:611](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L611)
+Defined in: [generated.ts:401](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L401)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [generated.ts:611](https://github.com/Tabletop-Developer-Consortium/
 
 > `optional` **text?**: `string`
 
-Defined in: [generated.ts:615](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L615)
+Defined in: [generated.ts:405](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L405)
 
 Community-authored description of the disposition's effect (original prose only — no reproduced rules text).
 
@@ -47,4 +47,4 @@ Community-authored description of the disposition's effect (original prose only 
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:616](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L616)
+Defined in: [generated.ts:406](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L406)

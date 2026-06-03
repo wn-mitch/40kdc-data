@@ -1,11 +1,16 @@
-name: GitHub Pages
+name: GitHub Pages (redirects)
+
+# 40kdc moved off GitHub Pages to per-subdomain Cloudflare hosting (see
+# deploy.yml). This workflow no longer builds the apps — it publishes lightweight
+# redirect stubs so old Pages bookmarks
+# (<owner>.github.io/40kdc-data/..., /examples/<name>/, /api/) don't 404 and
+# point at the new *.alpacasoft.dev homes instead.
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
-# Cancel an in-flight Pages deploy when a newer commit lands on main.
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -20,48 +25,38 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
 
-      - name: Install workspaces
-        run: npm ci
-
-      - name: Build npm package + TypeDoc
-        run: |
-          cd tools
-          npm run build
-          npm run docs:api
-          npm run docs:api:html
-
-      - name: Build example toollets
+      - name: Generate redirect stubs
         run: |
           set -euo pipefail
-          for dir in examples/*/; do
-            name=$(basename "$dir")
-            if [ -f "$dir/package.json" ] && node -e "const p=require('./$dir/package.json'); process.exit(p.scripts && p.scripts.build ? 0 : 1)"; then
-              echo "::group::Building $name"
-              TOOLLET_BASE="/40kdc-data/examples/$name/" npm --workspace "examples/$name" run build
-              echo "::endgroup::"
-            else
-              echo "Skipping $name (no build script)"
-            fi
-          done
+          # stub <output-path> <destination-url>
+          stub() {
+            local path="$1" url="$2"
+            mkdir -p "$(dirname "$path")"
+            cat > "$path" <<HTML
+          <!doctype html>
+          <html lang="en">
+            <head>
+              <meta charset="utf-8" />
+              <meta name="viewport" content="width=device-width, initial-scale=1" />
+              <meta http-equiv="refresh" content="0; url=${url}" />
+              <link rel="canonical" href="${url}" />
+              <meta name="robots" content="noindex" />
+              <title>Moved to ${url}</title>
+            </head>
+            <body>
+              <p>This page has moved to <a href="${url}">${url}</a>.</p>
+            </body>
+          </html>
+          HTML
+          }
 
-      - name: Assemble Pages artifact
-        run: |
-          set -euo pipefail
-          mkdir -p _site _site/api _site/examples
-          cp docs-site/index.html _site/index.html
-          cp -R tools/docs/api-html/. _site/api/
-          for dir in examples/*/; do
-            name=$(basename "$dir")
-            if [ -d "$dir/dist" ]; then
-              mkdir -p "_site/examples/$name"
-              cp -R "$dir/dist/." "_site/examples/$name/"
-            fi
-          done
-          ls -la _site
+          stub _site/index.html                       https://40kdc.alpacasoft.dev
+          stub _site/api/index.html                    https://40kdc.alpacasoft.dev/api/
+          stub _site/examples/salvo/index.html         https://salvo.alpacasoft.dev
+          stub _site/examples/mission-matrix/index.html https://mission-matrix.alpacasoft.dev
+          stub _site/examples/layout-editor/index.html  https://layout-editor.alpacasoft.dev
+          ls -R _site
 
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -7,5 +7,6 @@
   "exclude": ["**/*.generated.ts", "**/node_modules/**"],
   "githubPages": true,
   "hideGenerator": true,
-  "sort": ["source-order"]
+  "sort": ["source-order"],
+  "sourceLinkTemplate": "https://github.com/alpaca-software/40kdc-data/blob/{gitRevision}/{path}#L{line}"
 }

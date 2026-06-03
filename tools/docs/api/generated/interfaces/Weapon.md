@@ -6,7 +6,7 @@
 
 # Interface: Weapon
 
-Defined in: [generated.ts:1258](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1258)
+Defined in: [generated.ts:1329](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1329)
 
 A weapon entry with one or more stat profiles (e.g., standard and overcharge modes).
 
@@ -19,7 +19,7 @@ via the `definition` "weapon".
 
 > **id**: `string`
 
-Defined in: [generated.ts:1259](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1259)
+Defined in: [generated.ts:1330](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1330)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:1259](https://github.com/Tabletop-Developer-Consortium
 
 > **name**: `string`
 
-Defined in: [generated.ts:1260](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1260)
+Defined in: [generated.ts:1331](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1331)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:1260](https://github.com/Tabletop-Developer-Consortium
 
 > **type**: `"ranged"` \| `"melee"`
 
-Defined in: [generated.ts:1261](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1261)
+Defined in: [generated.ts:1332](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1332)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [generated.ts:1261](https://github.com/Tabletop-Developer-Consortium
 
 > **profiles**: \[\{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../type-aliases/StatValue.md); \}; `keywords?`: `object`[]; \}, ...\{ name: string; range?: number \| "Melee"; stats: \{ A: StatValue; BS?: number \| null; WS?: number \| null; S: StatValue; AP: number; D: StatValue; \[k: string\]: unknown \}; keywords?: \{ keyword\_id: string; parameters?: \{ value?: StatValue; target\_keyword?: string; threshold?: number \} \}\[\] \}\[\]\]
 
-Defined in: [generated.ts:1265](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1265)
+Defined in: [generated.ts:1336](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1336)
 
 #### Min Items
 
@@ -55,4 +55,4 @@ Defined in: [generated.ts:1265](https://github.com/Tabletop-Developer-Consortium
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:1321](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L1321)
+Defined in: [generated.ts:1392](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L1392)

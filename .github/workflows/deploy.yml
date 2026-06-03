@@ -1,0 +1,75 @@
+name: Deploy (Cloudflare)
+
+# Builds the landing site + the three example toollets and deploys each to its
+# own *.alpacasoft.dev subdomain as a Workers static-assets site. Replaces the
+# old GitHub Pages hosting (pages.yml now only publishes redirect stubs).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-deploy
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      # Token scopes: Workers Scripts:Edit, Workers Routes:Edit, SSL/Certs:Edit,
+      # Zone:Read on the alpacasoft.dev zone. wrangler reads it from the env.
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install workspaces
+        run: npm ci
+
+      - name: Build npm package + TypeDoc HTML
+        run: |
+          cd tools
+          npm run build
+          npm run docs:api:html
+
+      - name: Build example toollets
+        run: |
+          set -euo pipefail
+          for dir in examples/*/; do
+            name=$(basename "$dir")
+            if [ -f "$dir/package.json" ] && node -e "const p=require('./$dir/package.json'); process.exit(p.scripts && p.scripts.build ? 0 : 1)"; then
+              echo "::group::Building $name"
+              # No TOOLLET_BASE: each example deploys at its own subdomain root (base "/").
+              npm --workspace "examples/$name" run build
+              echo "::endgroup::"
+            fi
+          done
+
+      - name: Assemble landing site (index.html + /api)
+        run: |
+          set -euo pipefail
+          rm -rf docs-site/dist
+          mkdir -p docs-site/dist/api
+          cp docs-site/index.html docs-site/dist/index.html
+          cp -R tools/docs/api-html/. docs-site/dist/api/
+
+      - name: Deploy landing site
+        run: npx wrangler deploy --config docs-site/wrangler.jsonc
+
+      - name: Deploy example toollets
+        run: |
+          set -euo pipefail
+          for dir in examples/*/; do
+            name=$(basename "$dir")
+            if [ -f "$dir/wrangler.jsonc" ]; then
+              echo "::group::Deploying $name"
+              npx wrangler deploy --config "$dir/wrangler.jsonc"
+              echo "::endgroup::"
+            fi
+          done

@@ -33,7 +33,7 @@ const DSG_WARLORD = "Warlord";
 
 const RULEBOOK_NAME = "40kdc";
 const RULEBOOK_GAME = "Warhammer 40,000";
-const RULEBOOK_PUBLISHER = "Tabletop Developer Consortium";
+const RULEBOOK_PUBLISHER = "Alpaca Software";
 const RULEBOOK_URL = "https://40kdc.dev";
 const RULEBOOK_GENRE = "wargame";
 

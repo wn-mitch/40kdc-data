@@ -8,7 +8,7 @@
 
 > **ResolvedModifiers** = `object`
 
-Defined in: [cruncher/buffs.ts:101](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/cruncher/buffs.ts#L101)
+Defined in: [cruncher/buffs.ts:160](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/cruncher/buffs.ts#L160)
 
 Read-out of a resolved buff stack, with provenance per field.
 
@@ -18,7 +18,7 @@ Read-out of a resolved buff stack, with provenance per field.
 
 > **hitMod**: `object`
 
-Defined in: [cruncher/buffs.ts:102](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/cruncher/buffs.ts#L102)
+Defined in: [cruncher/buffs.ts:161](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/cruncher/buffs.ts#L161)
 
 #### value
 
@@ -34,7 +34,7 @@ Defined in: [cruncher/buffs.ts:102](https://github.com/Tabletop-Developer-Consor
 
 > **woundMod**: `object`
 
-Defined in: [cruncher/buffs.ts:103](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/cruncher/buffs.ts#L103)
+Defined in: [cruncher/buffs.ts:162](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/cruncher/buffs.ts#L162)
 
 #### value
 
@@ -50,7 +50,7 @@ Defined in: [cruncher/buffs.ts:103](https://github.com/Tabletop-Developer-Consor
 
 > **saveMod**: `object`
 
-Defined in: [cruncher/buffs.ts:104](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/cruncher/buffs.ts#L104)
+Defined in: [cruncher/buffs.ts:163](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/cruncher/buffs.ts#L163)
 
 #### value
 
@@ -66,7 +66,7 @@ Defined in: [cruncher/buffs.ts:104](https://github.com/Tabletop-Developer-Consor
 
 > **cover**: `object`
 
-Defined in: [cruncher/buffs.ts:105](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/cruncher/buffs.ts#L105)
+Defined in: [cruncher/buffs.ts:164](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/cruncher/buffs.ts#L164)
 
 #### active
 
@@ -82,7 +82,7 @@ Defined in: [cruncher/buffs.ts:105](https://github.com/Tabletop-Developer-Consor
 
 > **rerolls**: `Partial`\<`Record`\<`"hit"` \| `"wound"` \| `"save"` \| `"damage"`, \{ `subset`: `"ones"` \| `"all-failures"`; `dominantSource`: [`BuffSource`](BuffSource.md); \}\>\>
 
-Defined in: [cruncher/buffs.ts:106](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/cruncher/buffs.ts#L106)
+Defined in: [cruncher/buffs.ts:165](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/cruncher/buffs.ts#L165)
 
 ***
 
@@ -90,7 +90,7 @@ Defined in: [cruncher/buffs.ts:106](https://github.com/Tabletop-Developer-Consor
 
 > **extraKeywords**: `object`[]
 
-Defined in: [cruncher/buffs.ts:112](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/cruncher/buffs.ts#L112)
+Defined in: [cruncher/buffs.ts:171](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/cruncher/buffs.ts#L171)
 
 #### keywordRef
 
@@ -106,7 +106,19 @@ Defined in: [cruncher/buffs.ts:112](https://github.com/Tabletop-Developer-Consor
 
 > **feelNoPain**: \{ `threshold`: `number`; `dominantSource`: [`BuffSource`](BuffSource.md); \} \| `null`
 
-Defined in: [cruncher/buffs.ts:113](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/cruncher/buffs.ts#L113)
+Defined in: [cruncher/buffs.ts:173](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/cruncher/buffs.ts#L173)
+
+All-wound FNP — fires on the main and mortal damage streams alike.
+
+***
+
+### feelNoPainMortal
+
+> **feelNoPainMortal**: \{ `threshold`: `number`; `dominantSource`: [`BuffSource`](BuffSource.md); \} \| `null`
+
+Defined in: [cruncher/buffs.ts:175](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/cruncher/buffs.ts#L175)
+
+Mortal-only FNP — fires only on the mortal-wound damage stream.
 
 ***
 
@@ -114,7 +126,7 @@ Defined in: [cruncher/buffs.ts:113](https://github.com/Tabletop-Developer-Consor
 
 > **damageMod**: `object`
 
-Defined in: [cruncher/buffs.ts:114](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/cruncher/buffs.ts#L114)
+Defined in: [cruncher/buffs.ts:176](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/cruncher/buffs.ts#L176)
 
 #### value
 
@@ -130,7 +142,7 @@ Defined in: [cruncher/buffs.ts:114](https://github.com/Tabletop-Developer-Consor
 
 > **attacksMod**: `object`
 
-Defined in: [cruncher/buffs.ts:115](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/cruncher/buffs.ts#L115)
+Defined in: [cruncher/buffs.ts:177](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/cruncher/buffs.ts#L177)
 
 #### value
 
@@ -146,7 +158,7 @@ Defined in: [cruncher/buffs.ts:115](https://github.com/Tabletop-Developer-Consor
 
 > **strengthMod**: `object`
 
-Defined in: [cruncher/buffs.ts:116](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/cruncher/buffs.ts#L116)
+Defined in: [cruncher/buffs.ts:178](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/cruncher/buffs.ts#L178)
 
 #### value
 
@@ -162,7 +174,7 @@ Defined in: [cruncher/buffs.ts:116](https://github.com/Tabletop-Developer-Consor
 
 > **toughnessMod**: `object`
 
-Defined in: [cruncher/buffs.ts:117](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/cruncher/buffs.ts#L117)
+Defined in: [cruncher/buffs.ts:179](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/cruncher/buffs.ts#L179)
 
 #### value
 
@@ -171,3 +183,51 @@ Defined in: [cruncher/buffs.ts:117](https://github.com/Tabletop-Developer-Consor
 #### sources
 
 > **sources**: [`BuffSource`](BuffSource.md)[]
+
+***
+
+### apMod
+
+> **apMod**: `object`
+
+Defined in: [cruncher/buffs.ts:180](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/cruncher/buffs.ts#L180)
+
+#### value
+
+> **value**: `number`
+
+#### sources
+
+> **sources**: [`BuffSource`](BuffSource.md)[]
+
+***
+
+### damageReduction
+
+> **damageReduction**: `object`
+
+Defined in: [cruncher/buffs.ts:186](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/cruncher/buffs.ts#L186)
+
+Defender-side damage reduction. Highest-wins (multiple sources do not
+stack in 10e); the dominant source is the one whose value matches the
+surviving reduction.
+
+#### value
+
+> **value**: `number`
+
+#### dominantSource
+
+> **dominantSource**: [`BuffSource`](BuffSource.md) \| `null`
+
+***
+
+### invulnerable
+
+> **invulnerable**: \{ `threshold`: `number`; `dominantSource`: [`BuffSource`](BuffSource.md); \} \| `null`
+
+Defined in: [cruncher/buffs.ts:192](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/cruncher/buffs.ts#L192)
+
+Ability-granted invulnerable save. Best (lowest) threshold wins. `null`
+when no ability granted one; the engine still uses the unit's printed
+`invuln_sv` from the profile in that case.

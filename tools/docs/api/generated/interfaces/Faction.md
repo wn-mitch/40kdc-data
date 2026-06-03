@@ -6,7 +6,7 @@
 
 # Interface: Faction
 
-Defined in: [generated.ts:588](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L588)
+Defined in: [generated.ts:378](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L378)
 
 A playable faction or sub-faction.
 
@@ -19,7 +19,7 @@ via the `definition` "faction".
 
 > **id**: `string`
 
-Defined in: [generated.ts:589](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L589)
+Defined in: [generated.ts:379](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L379)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:589](https://github.com/Tabletop-Developer-Consortium/
 
 > **name**: `string`
 
-Defined in: [generated.ts:590](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L590)
+Defined in: [generated.ts:380](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L380)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:590](https://github.com/Tabletop-Developer-Consortium/
 
 > `optional` **parent\_faction\_id?**: `string` \| `null`
 
-Defined in: [generated.ts:591](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L591)
+Defined in: [generated.ts:381](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L381)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [generated.ts:591](https://github.com/Tabletop-Developer-Consortium/
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:592](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L592)
+Defined in: [generated.ts:382](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L382)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [generated.ts:592](https://github.com/Tabletop-Developer-Consortium/
 
 > `optional` **keywords?**: [`KeywordList`](../type-aliases/KeywordList.md)
 
-Defined in: [generated.ts:593](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L593)
+Defined in: [generated.ts:383](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L383)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [generated.ts:593](https://github.com/Tabletop-Developer-Consortium/
 
 > `optional` **aliases?**: `string`[]
 
-Defined in: [generated.ts:594](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L594)
+Defined in: [generated.ts:384](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L384)
 
 ***
 
@@ -67,6 +67,6 @@ Defined in: [generated.ts:594](https://github.com/Tabletop-Developer-Consortium/
 
 > `optional` **faction\_rule\_id?**: `string` \| `null`
 
-Defined in: [generated.ts:598](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L598)
+Defined in: [generated.ts:388](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L388)
 
 Reference to the faction-wide ability (e.g., Oath of Moment)

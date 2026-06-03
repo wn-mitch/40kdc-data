@@ -1,6 +1,7 @@
 {
   "name": "@40kdc/layout-editor",
   "private": true,
+  "homepage": "https://layout-editor.alpacasoft.dev",
   "version": "0.0.0",
   "type": "module",
   "scripts": {

@@ -1,0 +1,11 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "40kdc-landing",
+  "compatibility_date": "2026-06-01",
+  // Static landing page + the TypeDoc HTML under /api/. Assembled into ./dist by
+  // the deploy workflow (index.html + api/). Not an SPA — unmatched paths 404.
+  "assets": {
+    "directory": "./dist"
+  },
+  "routes": [{ "pattern": "40kdc.alpacasoft.dev", "custom_domain": true }]
+}

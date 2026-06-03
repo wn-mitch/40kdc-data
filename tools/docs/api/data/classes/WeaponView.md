@@ -6,7 +6,7 @@
 
 # Class: WeaponView
 
-Defined in: [data/entities.ts:140](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/entities.ts#L140)
+Defined in: [data/entities.ts:146](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/entities.ts#L146)
 
 A weapon, linked to the units that carry it.
 
@@ -16,7 +16,7 @@ A weapon, linked to the units that carry it.
 
 > **new WeaponView**(`raw`, `ds`): `WeaponView`
 
-Defined in: [data/entities.ts:141](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/entities.ts#L141)
+Defined in: [data/entities.ts:147](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/entities.ts#L147)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ The full generated `Weapon` record.
 
 > `readonly` **raw**: [`Weapon`](../../generated/interfaces/Weapon.md)
 
-Defined in: [data/entities.ts:143](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/entities.ts#L143)
+Defined in: [data/entities.ts:149](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/entities.ts#L149)
 
 The full generated `Weapon` record.
 
@@ -52,7 +52,7 @@ The full generated `Weapon` record.
 
 > **get** **id**(): `string`
 
-Defined in: [data/entities.ts:147](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/entities.ts#L147)
+Defined in: [data/entities.ts:153](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/entities.ts#L153)
 
 ##### Returns
 
@@ -66,7 +66,7 @@ Defined in: [data/entities.ts:147](https://github.com/Tabletop-Developer-Consort
 
 > **get** **name**(): `string`
 
-Defined in: [data/entities.ts:151](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/entities.ts#L151)
+Defined in: [data/entities.ts:157](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/entities.ts#L157)
 
 ##### Returns
 
@@ -80,7 +80,7 @@ Defined in: [data/entities.ts:151](https://github.com/Tabletop-Developer-Consort
 
 > **get** **units**(): [`UnitView`](UnitView.md)[]
 
-Defined in: [data/entities.ts:156](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/entities.ts#L156)
+Defined in: [data/entities.ts:162](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/entities.ts#L162)
 
 Units that list this weapon in their `weapon_ids`.
 
@@ -94,7 +94,7 @@ Units that list this weapon in their `weapon_ids`.
 
 > **profileAt**(`i?`): \{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../../generated/type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../../generated/type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../../generated/type-aliases/StatValue.md); \}; `keywords?`: `object`[]; \} \| \{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../../generated/type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../../generated/type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../../generated/type-aliases/StatValue.md); \}; `keywords?`: `object`[]; \}
 
-Defined in: [data/entities.ts:161](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/entities.ts#L161)
+Defined in: [data/entities.ts:167](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/entities.ts#L167)
 
 The stat profile at index `i` (default 0).
 
@@ -214,7 +214,7 @@ References into the weapon-keyword catalog. Each entry names the catalog id and 
 
 > **keywordsAt**(`i?`): `object`[]
 
-Defined in: [data/entities.ts:175](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/entities.ts#L175)
+Defined in: [data/entities.ts:181](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/entities.ts#L181)
 
 Catalog views for each keyword referenced by profile `i`, paired with the
 reference-site parameters. Unresolved keyword ids are skipped.
@@ -235,7 +235,7 @@ reference-site parameters. Unresolved keyword ids are skipped.
 
 > **profileBuffs**(`i`, `context`): [`Buff`](../type-aliases/Buff.md)[]
 
-Defined in: [data/entities.ts:197](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/entities.ts#L197)
+Defined in: [data/entities.ts:203](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/entities.ts#L203)
 
 Buffs contributed by profile `i`'s intrinsic keywords against `context` —
 the natural "what does this profile bring on its own?" call the engine

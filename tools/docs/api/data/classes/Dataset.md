@@ -6,7 +6,7 @@
 
 # Class: Dataset
 
-Defined in: [data/dataset.ts:46](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L46)
+Defined in: [data/dataset.ts:82](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L82)
 
 The whole dataset, with linked accessors over every entity collection.
 
@@ -16,7 +16,7 @@ The whole dataset, with linked accessors over every entity collection.
 
 > **new Dataset**(`raw?`): `Dataset`
 
-Defined in: [data/dataset.ts:83](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L83)
+Defined in: [data/dataset.ts:124](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L124)
 
 #### Parameters
 
@@ -34,7 +34,7 @@ Defined in: [data/dataset.ts:83](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **units**: [`Collection`](Collection.md)\<[`Unit`](../../generated/interfaces/Unit.md), [`UnitView`](UnitView.md)\>
 
-Defined in: [data/dataset.ts:48](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L48)
+Defined in: [data/dataset.ts:84](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L84)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [data/dataset.ts:48](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **weapons**: [`Collection`](Collection.md)\<[`Weapon`](../../generated/interfaces/Weapon.md), [`WeaponView`](WeaponView.md)\>
 
-Defined in: [data/dataset.ts:49](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L49)
+Defined in: [data/dataset.ts:85](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L85)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [data/dataset.ts:49](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **weaponKeywords**: [`Collection`](Collection.md)\<[`WeaponKeyword`](../../generated/interfaces/WeaponKeyword.md), [`WeaponKeywordView`](WeaponKeywordView.md)\>
 
-Defined in: [data/dataset.ts:50](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L50)
+Defined in: [data/dataset.ts:86](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L86)
 
 ***
 
@@ -58,7 +58,7 @@ Defined in: [data/dataset.ts:50](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **factions**: [`Collection`](Collection.md)\<[`Faction`](../../generated/interfaces/Faction.md), [`FactionView`](FactionView.md)\>
 
-Defined in: [data/dataset.ts:51](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L51)
+Defined in: [data/dataset.ts:87](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L87)
 
 ***
 
@@ -66,7 +66,7 @@ Defined in: [data/dataset.ts:51](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **abilities**: [`Collection`](Collection.md)\<[`AbilityDSLEntry`](../../generated/interfaces/AbilityDSLEntry.md), [`AbilityView`](AbilityView.md)\>
 
-Defined in: [data/dataset.ts:52](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L52)
+Defined in: [data/dataset.ts:88](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L88)
 
 ***
 
@@ -74,7 +74,7 @@ Defined in: [data/dataset.ts:52](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **detachments**: [`Collection`](Collection.md)\<[`Detachment`](../../generated/interfaces/Detachment.md), [`Detachment`](../../generated/interfaces/Detachment.md)\>
 
-Defined in: [data/dataset.ts:55](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L55)
+Defined in: [data/dataset.ts:91](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L91)
 
 ***
 
@@ -82,7 +82,7 @@ Defined in: [data/dataset.ts:55](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **enhancements**: [`Collection`](Collection.md)\<[`Enhancement`](../../generated/interfaces/Enhancement.md), [`Enhancement`](../../generated/interfaces/Enhancement.md)\>
 
-Defined in: [data/dataset.ts:56](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L56)
+Defined in: [data/dataset.ts:92](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L92)
 
 ***
 
@@ -90,7 +90,7 @@ Defined in: [data/dataset.ts:56](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **stratagems**: [`Collection`](Collection.md)\<[`Stratagem`](../../generated/interfaces/Stratagem.md), [`Stratagem`](../../generated/interfaces/Stratagem.md)\>
 
-Defined in: [data/dataset.ts:57](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L57)
+Defined in: [data/dataset.ts:93](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L93)
 
 ***
 
@@ -98,7 +98,15 @@ Defined in: [data/dataset.ts:57](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **wargearOptions**: [`Collection`](Collection.md)\<[`WargearOption`](../../generated/interfaces/WargearOption.md), [`WargearOption`](../../generated/interfaces/WargearOption.md)\>
 
-Defined in: [data/dataset.ts:58](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L58)
+Defined in: [data/dataset.ts:94](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L94)
+
+***
+
+### wargear
+
+> `readonly` **wargear**: [`Collection`](Collection.md)\<[`Wargear`](../../generated/interfaces/Wargear.md), [`Wargear`](../../generated/interfaces/Wargear.md)\>
+
+Defined in: [data/dataset.ts:95](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L95)
 
 ***
 
@@ -106,7 +114,7 @@ Defined in: [data/dataset.ts:58](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **missions**: [`Collection`](Collection.md)\<[`Mission`](../../generated/interfaces/Mission.md), [`Mission`](../../generated/interfaces/Mission.md)\>
 
-Defined in: [data/dataset.ts:59](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L59)
+Defined in: [data/dataset.ts:96](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L96)
 
 ***
 
@@ -114,15 +122,15 @@ Defined in: [data/dataset.ts:59](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **missionMatchups**: [`Collection`](Collection.md)\<[`MissionMatchup`](../../generated/interfaces/MissionMatchup.md), [`MissionMatchup`](../../generated/interfaces/MissionMatchup.md)\>
 
-Defined in: [data/dataset.ts:60](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L60)
+Defined in: [data/dataset.ts:97](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L97)
 
 ***
 
-### secondaryCards
+### missionCards
 
-> `readonly` **secondaryCards**: [`Collection`](Collection.md)\<[`SecondaryCard`](../../generated/interfaces/SecondaryCard.md), [`SecondaryCard`](../../generated/interfaces/SecondaryCard.md)\>
+> `readonly` **missionCards**: [`Collection`](Collection.md)\<[`SecondaryCard`](../../generated/interfaces/SecondaryCard.md), [`SecondaryCard`](../../generated/interfaces/SecondaryCard.md)\>
 
-Defined in: [data/dataset.ts:61](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L61)
+Defined in: [data/dataset.ts:98](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L98)
 
 ***
 
@@ -130,7 +138,7 @@ Defined in: [data/dataset.ts:61](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **deploymentPatterns**: [`Collection`](Collection.md)\<[`DeploymentPattern`](../../generated/interfaces/DeploymentPattern.md), [`DeploymentPattern`](../../generated/interfaces/DeploymentPattern.md)\>
 
-Defined in: [data/dataset.ts:62](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L62)
+Defined in: [data/dataset.ts:99](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L99)
 
 ***
 
@@ -138,7 +146,23 @@ Defined in: [data/dataset.ts:62](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **forceDispositions**: [`Collection`](Collection.md)\<[`ForceDisposition`](../../generated/interfaces/ForceDisposition.md), [`ForceDisposition`](../../generated/interfaces/ForceDisposition.md)\>
 
-Defined in: [data/dataset.ts:63](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L63)
+Defined in: [data/dataset.ts:100](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L100)
+
+***
+
+### terrainTemplates
+
+> `readonly` **terrainTemplates**: [`Collection`](Collection.md)\<[`TerrainTemplate`](../../generated/interfaces/TerrainTemplate.md), [`TerrainTemplate`](../../generated/interfaces/TerrainTemplate.md)\>
+
+Defined in: [data/dataset.ts:101](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L101)
+
+***
+
+### terrainLayouts
+
+> `readonly` **terrainLayouts**: [`Collection`](Collection.md)\<[`TerrainLayout`](../../generated/interfaces/TerrainLayout.md), [`TerrainLayout`](../../generated/interfaces/TerrainLayout.md)\>
+
+Defined in: [data/dataset.ts:102](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L102)
 
 ***
 
@@ -146,7 +170,7 @@ Defined in: [data/dataset.ts:63](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **resourcePools**: [`Collection`](Collection.md)\<[`ResourcePool`](../../generated/interfaces/ResourcePool.md), [`ResourcePool`](../../generated/interfaces/ResourcePool.md)\>
 
-Defined in: [data/dataset.ts:64](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L64)
+Defined in: [data/dataset.ts:103](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L103)
 
 ***
 
@@ -154,7 +178,7 @@ Defined in: [data/dataset.ts:64](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **leaderAttachments**: readonly [`LeaderAttachment`](../../generated/interfaces/LeaderAttachment.md)[]
 
-Defined in: [data/dataset.ts:67](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L67)
+Defined in: [data/dataset.ts:106](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L106)
 
 ***
 
@@ -162,7 +186,7 @@ Defined in: [data/dataset.ts:67](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **unitCompositions**: readonly [`UnitComposition`](../../generated/interfaces/UnitComposition.md)[]
 
-Defined in: [data/dataset.ts:68](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L68)
+Defined in: [data/dataset.ts:107](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L107)
 
 ***
 
@@ -170,7 +194,7 @@ Defined in: [data/dataset.ts:68](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **gameVersions**: readonly [`GameVersion`](../../generated/interfaces/GameVersion.md)[]
 
-Defined in: [data/dataset.ts:69](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L69)
+Defined in: [data/dataset.ts:108](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L108)
 
 ***
 
@@ -178,7 +202,7 @@ Defined in: [data/dataset.ts:69](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **timingFlags**: readonly [`TimingFlag`](../../generated/interfaces/TimingFlag.md)[]
 
-Defined in: [data/dataset.ts:70](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L70)
+Defined in: [data/dataset.ts:109](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L109)
 
 ***
 
@@ -186,7 +210,7 @@ Defined in: [data/dataset.ts:70](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **interactionFlags**: readonly [`InteractionFlag`](../../generated/interfaces/InteractionFlag.md)[]
 
-Defined in: [data/dataset.ts:71](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L71)
+Defined in: [data/dataset.ts:110](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L110)
 
 ***
 
@@ -194,7 +218,7 @@ Defined in: [data/dataset.ts:71](https://github.com/Tabletop-Developer-Consortiu
 
 > `readonly` **phaseMappings**: readonly [`PhaseMapping`](../../generated/interfaces/PhaseMapping.md)[]
 
-Defined in: [data/dataset.ts:72](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L72)
+Defined in: [data/dataset.ts:111](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L111)
 
 ## Methods
 
@@ -202,7 +226,7 @@ Defined in: [data/dataset.ts:72](https://github.com/Tabletop-Developer-Consortiu
 
 > `static` **embedded**(): `Dataset`
 
-Defined in: [data/dataset.ts:142](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L142)
+Defined in: [data/dataset.ts:186](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L186)
 
 The dataset built from the package's embedded data.
 
@@ -216,7 +240,7 @@ The dataset built from the package's embedded data.
 
 > **phasesFor**(`sourceType`, `sourceId`): [`Phase`](../../generated/type-aliases/Phase.md)[]
 
-Defined in: [data/dataset.ts:147](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L147)
+Defined in: [data/dataset.ts:191](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L191)
 
 Phases a source acts in, unioned across its phase-mappings.
 
@@ -236,11 +260,55 @@ Phases a source acts in, unioned across its phase-mappings.
 
 ***
 
+### resolveTerrain()
+
+> **resolveTerrain**(`layout`): `ResolvedPiece`[]
+
+Defined in: [data/dataset.ts:201](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L201)
+
+Resolve a terrain layout to absolute board-space vertices using this
+dataset's embedded terrain-template catalog — the layout-id →
+renderable-geometry hop. Mirror of Rust `Dataset::resolve_terrain`; the
+geometry is pinned by the `terrain-resolver` conformance corpus.
+
+#### Parameters
+
+##### layout
+
+[`TerrainLayout`](../../generated/interfaces/TerrainLayout.md)
+
+#### Returns
+
+`ResolvedPiece`[]
+
+***
+
+### recommendedTerrainLayouts()
+
+> **recommendedTerrainLayouts**(`pattern`): [`TerrainLayout`](../../generated/interfaces/TerrainLayout.md)[]
+
+Defined in: [data/dataset.ts:211](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L211)
+
+The terrain layouts a deployment pattern recommends, in declared order,
+skipping any ids absent from the dataset.
+
+#### Parameters
+
+##### pattern
+
+[`DeploymentPattern`](../../generated/interfaces/DeploymentPattern.md)
+
+#### Returns
+
+[`TerrainLayout`](../../generated/interfaces/TerrainLayout.md)[]
+
+***
+
 ### unitsWithAbility()
 
 > **unitsWithAbility**(`abilityId`): [`UnitView`](UnitView.md)[]
 
-Defined in: [data/dataset.ts:152](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L152)
+Defined in: [data/dataset.ts:218](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L218)
 
 Units that list the given ability id.
 
@@ -260,7 +328,7 @@ Units that list the given ability id.
 
 > **unitsWithWeapon**(`weaponId`): [`UnitView`](UnitView.md)[]
 
-Defined in: [data/dataset.ts:157](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L157)
+Defined in: [data/dataset.ts:223](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L223)
 
 Units that list the given weapon id.
 
@@ -280,7 +348,7 @@ Units that list the given weapon id.
 
 > **weaponsWithKeyword**(`keywordId`): [`WeaponView`](WeaponView.md)[]
 
-Defined in: [data/dataset.ts:162](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L162)
+Defined in: [data/dataset.ts:228](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L228)
 
 Weapons whose profiles reference the given weapon-keyword id.
 
@@ -296,11 +364,81 @@ Weapons whose profiles reference the given weapon-keyword id.
 
 ***
 
+### wargearOptionsOf()
+
+> **wargearOptionsOf**(`unit`): [`WargearOption`](../../generated/interfaces/WargearOption.md)[]
+
+Defined in: [data/dataset.ts:236](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L236)
+
+Wargear options authored for the given unit, in declared order. Mirror of
+Rust `Dataset::wargear_options_of`. Empty for a unit with no options.
+
+#### Parameters
+
+##### unit
+
+[`Unit`](../../generated/interfaces/Unit.md)
+
+#### Returns
+
+[`WargearOption`](../../generated/interfaces/WargearOption.md)[]
+
+***
+
+### leadersAttachableTo()
+
+> **leadersAttachableTo**(`bodyguardUnitId`): [`UnitView`](UnitView.md)[]
+
+Defined in: [data/dataset.ts:247](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L247)
+
+Leaders whose leader-attachment data lists `bodyguardUnitId` among its
+eligible body units, sorted by name. The attachment is stored on the
+leader pointing down to its bodyguards, so answering "which leaders can
+attach to this unit?" means scanning the attachment list. Returns an empty
+array for a unit that no leader can attach to (including leader units).
+
+#### Parameters
+
+##### bodyguardUnitId
+
+`string`
+
+#### Returns
+
+[`UnitView`](UnitView.md)[]
+
+***
+
+### bodyguardsAttachableFrom()
+
+> **bodyguardsAttachableFrom**(`leaderUnitId`): [`UnitView`](UnitView.md)[]
+
+Defined in: [data/dataset.ts:263](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L263)
+
+The inverse of [leadersAttachableTo](#leadersattachableto): the body units the given
+leader can attach to, sorted by name. Scans the same leader-attachment
+data from the leader's side (`leader_id` matches; resolve each
+`eligible_bodyguard_ids` entry), deduped by id. Empty for a non-leader
+unit. Together the two queries give the bidirectional attachment graph the
+SPA needs to offer a partner dropdown from either end.
+
+#### Parameters
+
+##### leaderUnitId
+
+`string`
+
+#### Returns
+
+[`UnitView`](UnitView.md)[]
+
+***
+
 ### eligibleAbilities()
 
 > **eligibleAbilities**(`input`, `phase`): [`EligibleAbility`](../type-aliases/EligibleAbility.md)[]
 
-Defined in: [data/dataset.ts:170](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L170)
+Defined in: [data/dataset.ts:283](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L283)
 
 Enumerate every ability that could apply to the given unit in `phase`,
 grouped by source. The SPA uses this to render the abilities pane.
@@ -325,12 +463,12 @@ grouped by source. The SPA uses this to render the abilities pane.
 
 > **buffsFor**(`input`, `context`): [`Buff`](../type-aliases/Buff.md)[]
 
-Defined in: [data/dataset.ts:187](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L187)
+Defined in: [data/dataset.ts:300](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L300)
 
 Attacker-perspective [Buff](../type-aliases/Buff.md) stack for a (unit, phase) combination:
 intrinsic weapon-profile keywords plus every eligible ability whose DSL
 effect translates to an attacker-side buff (army, detachment, unit,
-leader, support, plus any stratagems the caller has opted into).
+attached members, support, plus any stratagems the caller has opted into).
 
 The result includes only buffs the buff layer can express today — the
 `unsupported` half of the DSL→Buff translation is dropped here so callers
@@ -359,7 +497,7 @@ the same eligibility set under target perspective.
 
 > **defensiveBuffsFor**(`input`, `context`): [`Buff`](../type-aliases/Buff.md)[]
 
-Defined in: [data/dataset.ts:211](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/data/dataset.ts#L211)
+Defined in: [data/dataset.ts:324](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L324)
 
 Defender-perspective buff stack for the chosen unit: walks the same
 eligible-abilities set as [buffsFor](#buffsfor) but translates each ability's
@@ -386,3 +524,54 @@ effects ride with the firing weapon, not the receiving unit.
 #### Returns
 
 [`Buff`](../type-aliases/Buff.md)[]
+
+***
+
+### stackableBuffsFor()
+
+> **stackableBuffsFor**(`input`, `context`): `object`
+
+Defined in: [data/dataset.ts:353](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/data/dataset.ts#L353)
+
+Enumerate every attacker-side buff a unit could stack in `context` as a
+list of toggleable levers, plus the activation groups that limit them.
+
+Unlike [buffsFor](#buffsfor) — which returns only the buffs that auto-apply —
+this surfaces the *player decisions* too: stratagems, and the activatable
+gates the DSL models as dice-pool options, `choice` branches, or
+timing-gated activations (e.g. Blessings of Khorne's three keyword grants).
+Each lever carries `enabled` (its default state) and, where it's part of a
+limited pool, a `group` id whose [StackableBuffGroup](../type-aliases/StackableBuffGroup.md) caps how many
+can fire at once. The intended loop:
+
+```ts
+const { buffs } = ds.stackableBuffsFor(input, ctx);
+const chosen = buffs.filter(b => b.enabled).flatMap(b => b.buffs);
+crunch({ ...profiles, buffs: chosen, context: ctx }, ds);
+```
+
+Target/phase conditions a lever still carries (e.g. "vs Infantry") ride on
+each buff's `applicableWhen`, so toggling it on is always safe — the
+resolver gates it per-target.
+
+#### Parameters
+
+##### input
+
+[`EligibilityInput`](../type-aliases/EligibilityInput.md) & `object`
+
+##### context
+
+[`EngineContext`](../type-aliases/EngineContext.md)
+
+#### Returns
+
+`object`
+
+##### buffs
+
+> **buffs**: [`StackableBuff`](../type-aliases/StackableBuff.md)[]
+
+##### groups
+
+> **groups**: [`StackableBuffGroup`](../type-aliases/StackableBuffGroup.md)[]

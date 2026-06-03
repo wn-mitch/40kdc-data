@@ -11,7 +11,7 @@
 //!
 //! The schema is rulebook-agnostic, so the actual `Classification` strings
 //! come from whichever Rosterizer rulebook authored the roster. The
-//! constants here encode the 40K convention used by the consortium's
+//! constants here encode the 40K convention used by the 40kdc
 //! reference rulebook; tune them in one place if a real export disagrees.
 //!
 //! **IP safety**: the walk reads an ALLOWLIST — `item`, `designation`,

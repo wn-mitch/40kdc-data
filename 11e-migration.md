@@ -1,6 +1,6 @@
 # 11th Edition Migration — TODO
 
-The shared schema layer for the [Tabletop Developer Consortium](https://tabletop-developer-consortium.github.io) is migrating to Warhammer 40K 11th edition. This document is the durable, citable tracker for that migration. This file scopes the work to `40kdc-data` specifically; cross-repo strategic context (captured 11e intel, disposition matrix, sequencing) lives in the consortium's parent migration doc.
+The shared [40kdc](https://40kdc.alpacasoft.dev) schema layer is migrating to Warhammer 40K 11th edition. This document is the durable, citable tracker for that migration. This file scopes the work to `40kdc-data` specifically; cross-repo strategic context (captured 11e intel, disposition matrix, sequencing) lives in the parent migration doc linked below.
 
 - **Parent (cross-repo)**: [`tabletop-developer-consortium.github.io/11e-migration.md`](https://github.com/Tabletop-Developer-Consortium/tabletop-developer-consortium.github.io/blob/main/11e-migration.md)
 - **Sister trackers**: [`shadowboxing`](https://github.com/wn-mitch/shadowboxing/blob/main/11e-migration.md), [`army-assist`](https://github.com/wn-mitch/army-assist/blob/main/11e-migration.md)
@@ -11,7 +11,7 @@ The shared schema layer for the [Tabletop Developer Consortium](https://tabletop
 
 ## Status
 
-- **10e archive**: branch [`10e-archive`](https://github.com/Tabletop-Developer-Consortium/40kdc-data/tree/10e-archive), tags [`10th/2025-q3`](https://github.com/Tabletop-Developer-Consortium/40kdc-data/releases/tag/10th/2025-q3) and [`10e-final`](https://github.com/Tabletop-Developer-Consortium/40kdc-data/releases/tag/10e-final) — frozen snapshot of the 10th edition dataset. `10e-final` is the uniform cross-repo marker for the 10e freeze point; `10th/2025-q3` is the dataslate-style native tag (both point at the same commit).
+- **10e archive**: branch [`10e-archive`](https://github.com/alpaca-software/40kdc-data/tree/10e-archive), tags [`10th/2025-q3`](https://github.com/alpaca-software/40kdc-data/releases/tag/10th/2025-q3) and [`10e-final`](https://github.com/alpaca-software/40kdc-data/releases/tag/10e-final) — frozen snapshot of the 10th edition dataset. `10e-final` is the uniform cross-repo marker for the 10e freeze point; `10th/2025-q3` is the dataslate-style native tag (both point at the same commit).
 - **`main`**: 11th edition development. The schema layer carries forward; `data/core/` is being repopulated faction-by-faction as 11e datasheets land.
 
 ## Confirmed 11e mechanics (from WCommunity previews, May 2026; cross-checked against the 11e Core Rules PDF, June 2026)

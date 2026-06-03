@@ -8,7 +8,7 @@
 
 > **Edition** = `string`
 
-Defined in: [generated.ts:16](https://github.com/Tabletop-Developer-Consortium/40kdc-data/blob/c14295da9ec1432e1911fa2926d4bc9c0c5a796f/tools/src/generated.ts#L16)
+Defined in: [generated.ts:16](https://github.com/alpaca-software/40kdc-data/blob/8142c2c1ee9b76b8bb6b93c47c11cdb583e5d4c2/tools/src/generated.ts#L16)
 
 Game edition, e.g. '10th' or '11'
 

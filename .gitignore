@@ -1,6 +1,7 @@
 node_modules/
 dist/
 .vite/
+.wrangler/
 _site/
 # HTML TypeDoc output for the Pages site — a CI build artifact assembled into
 # _site/api/. The markdown counterpart (tools/docs/api/) stays committed for
