@@ -10,6 +10,8 @@
     orientPiece,
     setLinkGroup,
     setParentArea,
+    snapToAreaCenter,
+    snapFeatureToAreaCorner,
     setObjectiveRole,
     boardCentroid,
     objectiveMarkers,
@@ -125,6 +127,12 @@
   }
   function onparent(id: string, parentId: string | undefined): void {
     setParentArea(layout, id, parentId);
+  }
+  function onsnapcenter(id: string): void {
+    snapToAreaCenter(layout, id);
+  }
+  function onsnapcorner(id: string): void {
+    snapFeatureToAreaCorner(layout, id);
   }
   function onobjectiverole(id: string, role: ObjectiveRole | undefined): void {
     setObjectiveRole(layout, id, role);
@@ -274,6 +282,8 @@
         {onorient}
         {onlinkgroup}
         {onparent}
+        {onsnapcenter}
+        {onsnapcorner}
         {onobjectiverole}
         onsolverhover={(ref) => (solverHover = ref)}
         onsolverlines={(lines) => (solverLines = lines)}

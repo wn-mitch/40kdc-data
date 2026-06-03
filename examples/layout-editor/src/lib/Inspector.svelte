@@ -25,6 +25,8 @@
     onlinkgroup: (id: string, group: string | undefined) => void;
     onparent: (id: string, parentId: string | undefined) => void;
     onobjectiverole: (id: string, role: ObjectiveRole | undefined) => void;
+    onsnapcenter: (id: string) => void;
+    onsnapcorner: (id: string) => void;
     onsolverhover: (ref: SolverRef | null) => void;
     onsolverlines: (lines: SolverLine[]) => void;
   }
@@ -38,6 +40,8 @@
     onlinkgroup,
     onparent,
     onobjectiverole,
+    onsnapcenter,
+    onsnapcorner,
     onsolverhover,
     onsolverlines,
   }: Props = $props();
@@ -260,6 +264,12 @@
             {/each}
           </select>
         </label>
+        {#if piece.parent_area_id}
+          <div class="snaps">
+            <button class="feat" onclick={() => onsnapcenter(piece.id)}>⊙ center</button>
+            <button class="feat" onclick={() => onsnapcorner(piece.id)}>◻ corner</button>
+          </div>
+        {/if}
       {/if}
       <label
         >link group

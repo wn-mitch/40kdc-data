@@ -397,9 +397,63 @@ function perimeterGapMidpoints(def: Vec2[], atk: Vec2[]): Vec2[] {
   return mids;
 }
 
+/**
+ * Territory polygons for a deployment pattern — the large half-board shapes that
+ * define which player controls which side. Distinct from the smaller `zones` (the
+ * actual deployment areas). Read from the `territories` key of the pattern.
+ */
+function deploymentTerritories(patternId: string): DeployZone[] {
+  const p = ds.deploymentPatterns.get(patternId) as
+    | { territories?: { player: string; name?: string; color?: string; shape: never; position: Vec2 }[] }
+    | undefined;
+  if (!p?.territories) return [];
+  return p.territories.map((z) => ({
+    player: z.player,
+    name: z.name,
+    color: z.color,
+    points: shapeToPoints(z.shape, z.position),
+  }));
+}
+
 /** The dashed territory divider (line + per-end Attacker/Defender badges), or null. */
 export function territoryDivider(patternId: string | null): TerritoryDivider | null {
   if (!patternId) return null;
+
+  // Prefer the explicit territory boundary when territories are defined.
+  // Find the two vertices shared between the defender and attacker territory polygons —
+  // those are exactly the endpoints of the dividing line (e.g. the board diagonal for
+  // Search and Destroy's corner-to-corner split).
+  const territories = deploymentTerritories(patternId);
+  const defT = territories.find((z) => z.player === "defender");
+  const atkT = territories.find((z) => z.player === "attacker");
+  if (defT && atkT) {
+    const EPS = 0.01;
+    const shared = defT.points.filter((d) =>
+      atkT.points.some((a) => Math.hypot(a.x - d.x, a.y - d.y) < EPS),
+    );
+    if (shared.length >= 2) {
+      const [from, to] = [shared[0], shared[shared.length - 1]];
+      const u = { x: to.x - from.x, y: to.y - from.y };
+      const len = Math.hypot(u.x, u.y) || 1;
+      const nrm = { x: -u.y / len, y: u.x / len };
+      const mid = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2 };
+      const cD = polyMean(defT.points);
+      const sideD = nrm.x * (cD.x - mid.x) + nrm.y * (cD.y - mid.y);
+      const defDir = sideD >= 0 ? nrm : { x: -nrm.x, y: -nrm.y };
+      const atkDir = { x: -defDir.x, y: -defDir.y };
+      const OFF = 3;
+      const defColor = defT.color ?? "#3b82f6";
+      const atkColor = atkT.color ?? "#ef4444";
+      const badges: TerritoryBadge[] = [];
+      for (const e of [from, to]) {
+        badges.push({ at: { x: e.x + defDir.x * OFF, y: e.y + defDir.y * OFF }, player: "D", color: defColor });
+        badges.push({ at: { x: e.x + atkDir.x * OFF, y: e.y + atkDir.y * OFF }, player: "A", color: atkColor });
+      }
+      return { from, to, badges };
+    }
+  }
+
+  // Fall back to zone-gap midpoints for patterns without territory data.
   const zones = deploymentZones(patternId);
   const def = zones.find((z) => z.player === "defender");
   const atk = zones.find((z) => z.player === "attacker");
@@ -606,6 +660,45 @@ export function setParentArea(layout: EditLayout, id: string, parentId: string |
     t.parent_area_id = undefined;
     t.position = tBoard;
   }
+}
+
+/** Snap a parented feature's centroid to the area's centroid (area-local {0,0}). */
+export function snapToAreaCenter(layout: EditLayout, id: string): void {
+  const p = byId(layout, id);
+  if (!p || !p.parent_area_id) return;
+  p.position = { x: 0, y: 0 };
+  const t = twinOf(layout, p);
+  if (t) t.position = { x: 0, y: 0 };
+}
+
+/**
+ * Snap a parented feature so its nearest vertex aligns with the nearest corner of
+ * the parent area. Template-agnostic: the feature is already approximately placed,
+ * so the closest (featureVert, areaCorner) pair is always the intended one.
+ */
+export function snapFeatureToAreaCorner(layout: EditLayout, id: string): void {
+  const p = byId(layout, id);
+  if (!p || !p.parent_area_id) return;
+  const area = parentAreaOf(layout, p);
+  if (!area) return;
+  const fp = orientedFootprint(p, layout);
+  const afp = orientedFootprint(area, layout);
+  if (!fp || !afp) return;
+  let best = Infinity;
+  let delta = { x: 0, y: 0 };
+  for (const fv of fp.verticesBoard) {
+    for (const av of afp.verticesBoard) {
+      const d = Math.hypot(av.x - fv.x, av.y - fv.y);
+      if (d < best) {
+        best = d;
+        delta = { x: av.x - fv.x, y: av.y - fv.y };
+      }
+    }
+  }
+  const newBoard = { x: fp.centroid.x + delta.x, y: fp.centroid.y + delta.y };
+  p.position = inverseAreaFrame(newBoard, area);
+  const t = twinOf(layout, p);
+  if (t) t.position = { x: p.position.x, y: p.position.y };
 }
 
 /** Set a piece's link group, mirroring the same value onto its twin. */

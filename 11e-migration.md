@@ -321,6 +321,7 @@ Section 6 (port) and Section 3 (DSL primitives) are both complete. The remaining
      - **Secondary deck contents** — the 14 secondaries drawn 2/turn are not in the spreadsheet (which covers only the primary mission cards). Still need a leak / the printed pack.
 4. **Section 4 — tooling / publish**: npm + Rust crate publish, CI extensions (block on DSL parse errors, auto-publish on tag), extend `SCHEMA_MAP` for the new entity prefixes.
 5. **Section 5 — docs**: `VERSIONING.md`, `CONTRIBUTING.md` (secondary-card text workflow), `README.md` consumption snippets.
+6. **Terrain layouts in Mission Matrix** — once all three GW launch layouts are authored, surface them in the mission matrix UI. When a disposition pairing is selected, an expandable card shows the matching terrain layout (keyed by `TerrainLayout.mission_matchup_id`); matchups without a layout yet show "coming soon." Architecture is already in place: `Dataset.terrainLayouts` exposes the collection, and the layout-editor's board-rendering SVG is the rendering primitive to reuse. Deferred until layouts are complete.
 
 Each numbered item above is a natural next PR.
 
