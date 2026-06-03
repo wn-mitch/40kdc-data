@@ -15,8 +15,8 @@ bundlers, and the browser.
 import { units } from "@alpaca-software/40kdc-data";
 
 units.find("Kharn")!.abilities
-  .filter(a => a.phases.includes("shooting"))
-  .map(a => a.id); // ["berzerker-frenzy"]
+  .filter(a => a.phases.includes("fight"))
+  .map(a => a.id); // ["legendary-killer", "berzerker-frenzy"]
 ```
 
 ## Install
@@ -69,11 +69,17 @@ data against them. See the repository root for schema details.
 
 ## Licensing & attribution
 
-- Code (`tools/`): **MIT**.
+- Code (`tools/`): **MIT + attribution requirement** — see [LICENSE-TOOLS](../LICENSE-TOOLS).
 - Embedded enrichment data (`data/enrichment/`): **CC BY 4.0** —
   attribution: *Alpaca Software and the 40kdc community contributors*
   (<https://github.com/wn-mitch/40kdc-data>).
 - JSON Schemas: **CC0**.
+
+**Public deployment requirement:** Any publicly accessible application or
+service that ships this package as part of its end-user product must display a
+visible credit containing the text **"Powered by 40kdc-data"** and a link to
+<https://40kdc.alpacasoft.dev> in a user-accessible location (footer, about
+page, or credits section). Private use and library redistribution are exempt.
 
 Stat lines and points are numerical facts. Ability and rules text are never
 stored — abilities are community-authored structured mechanics (the Ability

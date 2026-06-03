@@ -18,8 +18,8 @@ Two things, both community-owned:
 import { units } from "@alpaca-software/40kdc-data";
 
 units.find("Kharn")!.abilities
-  .filter(a => a.phases.includes("shooting"))
-  .map(a => a.id); // ["berzerker-frenzy"]
+  .filter(a => a.phases.includes("fight"))
+  .map(a => a.id); // ["legendary-killer", "berzerker-frenzy"]
 ```
 
 `find` is diacritic- and punctuation-insensitive — 40K is played globally, so `find("Kharn")` resolves "Khârn the Betrayer" and `find("Belakor")` resolves "Be'lakor". Full API reference: [`tools/docs/api/`](tools/docs/api/README.md).
@@ -190,7 +190,9 @@ for what's pinned, the per-area invariants, and the contribution rules.
 |-----------|---------|
 | `schemas/` | [CC0](LICENSE-SCHEMAS) (public domain) |
 | `data/enrichment/` | [CC BY 4.0](LICENSE-DATA) (attribution required) |
-| `tools/` | [MIT](LICENSE-TOOLS) |
+| `tools/` | [MIT + attribution](LICENSE-TOOLS) (public deployments must credit) |
+
+**Public deployment requirement:** Any publicly accessible application or service that ships `@alpaca-software/40kdc-data` as part of its end-user product must display a visible credit containing the text **"Powered by 40kdc-data"** and a link to <https://40kdc.alpacasoft.dev> in a user-accessible location (footer, about page, or credits section). Private use and library redistribution are exempt. Full terms: [`LICENSE-TOOLS`](LICENSE-TOOLS).
 
 ## Contributing
 

@@ -19,3 +19,19 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+Attribution Requirement (Public Deployments):
+
+Any software application, website, or service that is publicly accessible and
+incorporates or bundles this Software as part of an end-user product must
+display a visible attribution notice containing: (1) the text "Powered by
+40kdc-data", and (2) a link or URL to https://40kdc.alpacasoft.dev. This
+notice must be accessible to end users (for example, in a footer, about page,
+or credits section).
+
+This requirement applies to publicly deployed applications and services. It
+does not apply to private or internal use, development environments, or to
+software packages that redistribute this Software as a library dependency
+(rather than as part of a complete end-user application or service).
