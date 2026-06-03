@@ -6,7 +6,11 @@
         "name": "War Dog Huntsman",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -21,7 +25,11 @@
         "name": "War Dog Brigand",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -36,7 +44,11 @@
         "name": "War Dog Executioner",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -51,7 +63,11 @@
         "name": "War Dog Stalker",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -66,7 +82,11 @@
         "name": "War Dog Moirax",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -81,7 +101,11 @@
         "name": "War Dog Karnivore",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -96,7 +120,12 @@
         "name": "Knight Despoiler",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -111,7 +140,12 @@
         "name": "Chaos Cerastus Knight Acheron",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -126,7 +160,12 @@
         "name": "Knight Ruinator",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -141,7 +180,12 @@
         "name": "Knight Desecrator",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -156,7 +200,11 @@
         "name": "Chaos Acastus Knight Porphyrion",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -171,7 +219,12 @@
         "name": "Chaos Cerastus Knight Atrapos",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -186,7 +239,11 @@
         "name": "Chaos Acastus Knight Asterius",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -201,7 +258,12 @@
         "name": "Chaos Cerastus Knight Castigator",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -216,7 +278,12 @@
         "name": "Chaos Cerastus Knight Lancer",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -231,7 +298,12 @@
         "name": "Knight Rampager",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -246,7 +318,12 @@
         "name": "Chaos Questoris Knight Magaera",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -261,7 +338,12 @@
         "name": "Knight Tyrant",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -276,7 +358,12 @@
         "name": "Knight Abominant",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -291,7 +378,12 @@
         "name": "Chaos Questoris Knight Styrix",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {

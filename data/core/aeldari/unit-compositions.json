@@ -6,7 +6,11 @@
         "name": "Revenant Titan",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -21,7 +25,11 @@
         "name": "Shadow Weaver Platform",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -40,7 +48,11 @@
           "scorpion-chainsword",
           "shuriken-pistol"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Striking Scorpion",
@@ -50,7 +62,11 @@
           "scorpion-chainsword",
           "shuriken-pistol"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {
@@ -65,7 +81,11 @@
         "name": "Eldrad Ulthran",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -80,7 +100,11 @@
         "name": "Wraithlord",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -95,7 +119,14 @@
         "name": "Wave Serpent",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -110,7 +141,12 @@
         "name": "Yvraine",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 75,
+          "length": 42
+        }
       }
     ],
     "game_version": {
@@ -125,7 +161,11 @@
         "name": "Way Seeker",
         "min": 5,
         "max": 13,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {
@@ -140,7 +180,14 @@
         "name": "Fire Prism",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -155,7 +202,11 @@
         "name": "Autarch",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -173,7 +224,11 @@
         "default_weapon_ids": [
           "demiklaives-single-blade"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Incubi",
@@ -182,7 +237,11 @@
         "default_weapon_ids": [
           "klaive"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {
@@ -201,7 +260,11 @@
           "dragon-fusion-gun",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Fire Dragon",
@@ -211,7 +274,11 @@
           "dragon-fusion-gun",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {
@@ -226,7 +293,11 @@
         "name": "Asurmen",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -245,7 +316,11 @@
           "shuriken-pistol",
           "aeldari-power-sword"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Serpent’s Scale Platform",
@@ -254,7 +329,11 @@
         "default_weapon_ids": [
           "shuriken-catapult"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -269,7 +348,11 @@
         "name": "D-cannon Platform",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -284,7 +367,12 @@
         "name": "Warlock Skyrunners",
         "min": 1,
         "max": 2,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "small",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -299,7 +387,11 @@
         "name": "Lhykhis",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -314,7 +406,11 @@
         "name": "Death Jester",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -329,7 +425,11 @@
         "name": "Prince Yriel",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -344,7 +444,11 @@
         "name": "The Yncarne",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 80
+        }
       }
     ],
     "game_version": {
@@ -359,7 +463,12 @@
         "name": "Farseer Skyrunner",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "small",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -374,7 +483,11 @@
         "name": "Solitaire",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -389,7 +502,11 @@
         "name": "Maugan Ra",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -404,7 +521,11 @@
         "name": "Skyreaver",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {
@@ -423,7 +544,11 @@
           "shuriken-catapult",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Heavy Weapon Platform",
@@ -432,7 +557,11 @@
         "default_weapon_ids": [
           "bright-lance"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -447,7 +576,11 @@
         "name": "Phantom Titan",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -462,7 +595,11 @@
         "name": "Avatar of Khaine",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 80
+        }
       }
     ],
     "game_version": {
@@ -477,7 +614,11 @@
         "name": "War Walkers",
         "min": 1,
         "max": 2,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -492,7 +633,11 @@
         "name": "Kharseth",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -507,7 +652,12 @@
         "name": "Hemlock Wraithfighter",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -522,7 +672,12 @@
         "name": "Wraithknight",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -542,7 +697,12 @@
           "splinter-pistol",
           "bladevanes"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "small",
+          "draft": true
+        }
       },
       {
         "name": "Reaver",
@@ -552,7 +712,12 @@
           "splinter-pistol",
           "bladevanes"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "small",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -571,7 +736,11 @@
           "lasblaster",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Swooping Hawk",
@@ -581,7 +750,11 @@
           "lasblaster",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -596,7 +769,11 @@
         "name": "Wraithguard",
         "min": 5,
         "max": 5,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -611,7 +788,11 @@
         "name": "Fuegan",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -626,7 +807,11 @@
         "name": "Ynnari Succubus",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -645,7 +830,14 @@
           "twin-shuriken-catapult",
           "laser-lance"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       },
       {
         "name": "Shining Spear",
@@ -655,7 +847,14 @@
           "twin-shuriken-catapult",
           "laser-lance"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -670,7 +869,11 @@
         "name": "The Visarch",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -685,7 +888,11 @@
         "name": "Corsair Voidreaver",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {
@@ -700,7 +907,11 @@
         "name": "Vibro Cannon Platform",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -715,7 +926,11 @@
         "name": "Shadowseer",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -730,7 +945,11 @@
         "name": "Jain Zar",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -749,7 +968,11 @@
           "death-spinner",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Warp Spider",
@@ -759,7 +982,11 @@
           "death-spinner",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {
@@ -778,7 +1005,11 @@
           "reaper-launcher",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Dark Reaper",
@@ -788,7 +1019,11 @@
           "reaper-launcher",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {
@@ -808,7 +1043,11 @@
           "splinter-pistol",
           "power-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       },
       {
         "name": "Kabalite Warrior",
@@ -818,7 +1057,11 @@
           "splinter-rifle",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -833,7 +1076,14 @@
         "name": "Voidweaver",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -848,7 +1098,14 @@
         "name": "Shroud Runners",
         "min": 3,
         "max": 6,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -863,7 +1120,11 @@
         "name": "Warlock",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -878,7 +1139,12 @@
         "name": "Wraithknight with Ghostglaive",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -898,7 +1164,11 @@
           "splinter-pistol",
           "power-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       },
       {
         "name": "Wych",
@@ -908,7 +1178,11 @@
           "splinter-pistol",
           "hekatarii-blade"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -923,7 +1197,11 @@
         "name": "Warlock Conclave",
         "min": 2,
         "max": 4,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -938,7 +1216,11 @@
         "name": "Farseer",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -953,7 +1235,14 @@
         "name": "Night Spinner",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -968,7 +1257,11 @@
         "name": "Autarch Wayleaper",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -987,7 +1280,11 @@
           "avenger-shuriken-catapult",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Dire Avenger",
@@ -997,7 +1294,11 @@
           "avenger-shuriken-catapult",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {
@@ -1016,7 +1317,11 @@
           "shuriken-pistol",
           "power-sword"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Howling Banshee",
@@ -1026,7 +1331,11 @@
           "shuriken-pistol",
           "power-sword"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {
@@ -1041,7 +1350,14 @@
         "name": "Falcon",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -1056,7 +1372,12 @@
         "name": "Windriders",
         "min": 3,
         "max": 6,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "small",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -1071,7 +1392,11 @@
         "name": "Troupe Master",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -1086,7 +1411,11 @@
         "name": "Rangers",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {
@@ -1101,7 +1430,12 @@
         "name": "Crimson Hunter",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -1116,7 +1450,14 @@
         "name": "Ynnari Raider",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -1131,7 +1472,12 @@
         "name": "Starfangs",
         "min": 1,
         "max": 2,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 105,
+          "length": 70
+        }
       }
     ],
     "game_version": {
@@ -1146,7 +1492,14 @@
         "name": "Skyweavers",
         "min": 2,
         "max": 4,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -1161,7 +1514,11 @@
         "name": "Ynnari Archon",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -1176,7 +1533,11 @@
         "name": "Baharroth",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1191,7 +1552,11 @@
         "name": "Wraithblades",
         "min": 5,
         "max": 5,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1211,7 +1576,11 @@
           "shuriken-pistol",
           "harlequins-blade"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       },
       {
         "name": "Player",
@@ -1221,7 +1590,11 @@
           "shuriken-pistol",
           "harlequins-blade"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -1236,7 +1609,14 @@
         "name": "Ynnari Venom",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -1251,7 +1631,14 @@
         "name": "Vyper",
         "min": 1,
         "max": 2,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -1266,7 +1653,11 @@
         "name": "Spiritseer",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -1281,7 +1672,14 @@
         "name": "Starweaver",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {

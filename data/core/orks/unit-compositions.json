@@ -6,7 +6,11 @@
         "name": "Weirdboy",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -21,7 +25,12 @@
         "name": "Megatrakk Scrapjet",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 150,
+          "length": 95
+        }
       }
     ],
     "game_version": {
@@ -40,7 +49,12 @@
           "slugga",
           "choppa"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 75,
+          "length": 42
+        }
       },
       {
         "name": "Warbiker",
@@ -50,7 +64,12 @@
           "dakkagun",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 75,
+          "length": 42
+        }
       }
     ],
     "game_version": {
@@ -65,7 +84,12 @@
         "name": "Deffkoptas",
         "min": 3,
         "max": 6,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 75,
+          "length": 42
+        }
       }
     ],
     "game_version": {
@@ -80,7 +104,12 @@
         "name": "Kustom Boosta-blasta",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 150,
+          "length": 95
+        }
       }
     ],
     "game_version": {
@@ -95,7 +124,11 @@
         "name": "Painboy",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -110,7 +143,11 @@
         "name": "Killa Kans",
         "min": 3,
         "max": 6,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -130,7 +167,11 @@
           "kustom-mega-blasta",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Loota",
@@ -140,7 +181,11 @@
           "deffgun",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -155,7 +200,11 @@
         "name": "Big Mek",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -174,7 +223,12 @@
           "slugga",
           "big-choppa"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 90,
+          "length": 52.5
+        }
       },
       {
         "name": "Squighog Boy",
@@ -184,7 +238,12 @@
           "saddlegit-weapons",
           "squighog-jaws"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 75,
+          "length": 42
+        }
       }
     ],
     "game_version": {
@@ -199,7 +258,11 @@
         "name": "Warboss in Mega Armour",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -214,7 +277,12 @@
         "name": "Wazbom Blastajet",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 150,
+          "length": 95
+        }
       }
     ],
     "game_version": {
@@ -229,7 +297,11 @@
         "name": "Battlewagon",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -244,7 +316,11 @@
         "name": "Boss Snikrot",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -259,7 +335,12 @@
         "name": "Morkanaut",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -277,7 +358,11 @@
         "default_weapon_ids": [
           "gork-klaw-and-mork-klaw"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 80
+        }
       },
       {
         "name": "Makari",
@@ -286,7 +371,11 @@
         "default_weapon_ids": [
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -301,7 +390,11 @@
         "name": "Breaka Boy",
         "min": 6,
         "max": 6,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -316,7 +409,11 @@
         "name": "Stompa",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -331,7 +428,11 @@
         "name": "Big’ed Bossbunka",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -350,7 +451,11 @@
           "rokkit-launcha",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Tankbusta",
@@ -360,7 +465,11 @@
           "rokkit-launcha",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -379,7 +488,11 @@
           "slugga",
           "power-klaw"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Kommando",
@@ -389,7 +502,11 @@
           "slugga",
           "choppa"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -408,7 +525,11 @@
           "slugga",
           "choppa"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Boy",
@@ -418,7 +539,11 @@
           "slugga",
           "choppa"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -433,7 +558,11 @@
         "name": "Trukk",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -448,7 +577,11 @@
         "name": "Painboss",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -463,7 +596,12 @@
         "name": "Gorkanaut",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -478,7 +616,11 @@
         "name": "Mek Gunz",
         "min": 1,
         "max": 3,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -497,7 +639,11 @@
           "slugga",
           "choppa"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Stormboy",
@@ -507,7 +653,11 @@
           "slugga",
           "choppa"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -527,7 +677,11 @@
           "snazzgun",
           "choppa"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Flash Git",
@@ -537,7 +691,11 @@
           "snazzgun",
           "choppa"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -552,7 +710,12 @@
         "name": "Blitza-bommer",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -567,7 +730,11 @@
         "name": "Deff Dread",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -582,7 +749,11 @@
         "name": "Wurrboy",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -597,7 +768,11 @@
         "name": "Beastboss",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -612,7 +787,12 @@
         "name": "Dakkajet",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -627,7 +807,11 @@
         "name": "Big Mek in Mega Armour",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -642,7 +826,12 @@
         "name": "Rukkatrukk Squigbuggy",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 150,
+          "length": 95
+        }
       }
     ],
     "game_version": {
@@ -661,7 +850,11 @@
           "slugga",
           "choppa"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Beast Snagga Boy",
@@ -671,7 +864,11 @@
           "slugga",
           "choppa"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -686,7 +883,12 @@
         "name": "Deffkilla Wartrike",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 150,
+          "length": 95
+        }
       }
     ],
     "game_version": {
@@ -701,7 +903,11 @@
         "name": "Mek",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -716,7 +922,12 @@
         "name": "Shokkjump Dragsta",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 150,
+          "length": 95
+        }
       }
     ],
     "game_version": {
@@ -731,7 +942,11 @@
         "name": "Mozrog Skragbad",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 80
+        }
       }
     ],
     "game_version": {
@@ -746,7 +961,11 @@
         "name": "Zodgrod Wortsnagga",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -765,7 +984,11 @@
           "slugga",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Gretchin",
@@ -775,7 +998,11 @@
           "grot-blasta",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -790,7 +1017,11 @@
         "name": "Big Mek with Shokk Attack Gun",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -805,7 +1036,12 @@
         "name": "Kill Rig",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -825,7 +1061,11 @@
           "kustom-mega-blasta",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Burna Boy",
@@ -835,7 +1075,11 @@
           "burna",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -855,7 +1099,11 @@
           "slugga",
           "power-klaw"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Nob",
@@ -865,7 +1113,11 @@
           "slugga",
           "choppa"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -880,7 +1132,11 @@
         "name": "Beastboss on Squigosaur",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 80
+        }
       }
     ],
     "game_version": {
@@ -900,7 +1156,11 @@
           "kombi-weapon",
           "power-klaw"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Meganob",
@@ -910,7 +1170,11 @@
           "kombi-weapon",
           "power-klaw"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -925,7 +1189,12 @@
         "name": "Boomdakka Snazzwagon",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 150,
+          "length": 95
+        }
       }
     ],
     "game_version": {
@@ -940,7 +1209,11 @@
         "name": "Gargantuan Squiggoth",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -955,7 +1228,12 @@
         "name": "Burna-bommer",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -970,7 +1248,12 @@
         "name": "Hunta Rig",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -985,7 +1268,11 @@
         "name": "Warboss",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {

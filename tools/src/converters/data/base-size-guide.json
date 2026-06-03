@@ -1,0 +1,4132 @@
+[
+  {
+    "unit": "Aestred Thurga and Agathae Dolan",
+    "model": "Aestred Thurga",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Aestred Thurga and Agathae Dolan",
+    "model": "Agathae Dolan",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Arco-flagellants",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Battle Sisters Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Canoness",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Canoness with Jump Pack",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Castigator",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Celestian Sacresants",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Daemonifuge",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Dialogus",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Dogmata",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Dominion Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Exorcist",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Hospitaller",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Imagifier",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Immolator",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Junith Eruita",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Ministorum Priest",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Mortifiers",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Morvenn Vahl",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Palatine",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Paragon Warsuits",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Penitent Engines",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Repentia Squad",
+    "model": "Repentia Superior",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Repentia Squad",
+    "model": "Sister Repentia",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Retributor Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Saint Celestine",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Saint Celestine",
+    "model": "Geminae Superia",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Sanctifiers",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Seraphim Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Sisters Novitiate Squad",
+    "model": "Novitiate Superior",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Sisters Novitiate Squad",
+    "model": "Sister Novitiate",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Sororitas Rhino",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Triumph of Saint Katherine",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Zephyrim Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Aleya",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Allarus Custodians",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Anathema Psykana Rhino",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Blade Champion",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Custodian Guard",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Custodian Wardens",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Knight-Centura",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Prosecutors",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Shield-Captain",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Shield-Captain in Allarus Terminator Armour",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Shield-Captain on Dawneagle Jetbike",
+    "raw": "75x42mm Oval Base"
+  },
+  {
+    "unit": "Trajann Valoris",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Valerian",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Venerable Contemptor Dreadnought",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Venerable Land Raider",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Vertus Praetors",
+    "raw": "75x42mm Oval Base"
+  },
+  {
+    "unit": "Vigilators",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Witchseekers",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Agamatus Custodians",
+    "raw": "75x42mm Oval Base"
+  },
+  {
+    "unit": "Aquilon Custodians",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Ares Gunship",
+    "raw": "160mm"
+  },
+  {
+    "unit": "Caladius Grav-tank",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Contemptor-Achillus Dreadnought",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Contemptor-Galatus Dreadnought",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Coronus Grav-carrier",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Custodian Guard with Adrasite and Pyrithite Spears",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Orion Assault Dropship",
+    "raw": "160mm"
+  },
+  {
+    "unit": "Pallas Grav-attack",
+    "raw": "105x70mm Oval Base"
+  },
+  {
+    "unit": "Sagittarum Custodians",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Telemon Heavy Dreadnought",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Venatari Custodians",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Archaeopter Fusilave",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Archaeopter Stratoraptor",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Archaeopter Transvector",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Belisarius Cawl",
+    "raw": "105x70mm Oval Base"
+  },
+  {
+    "unit": "Corpuscarii Electro-Priests",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Cybernetica Datasmith",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Fulgurite Electro-Priests",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Ironstrider Ballistarii",
+    "raw": "105x70mm Oval Base"
+  },
+  {
+    "unit": "Kastelan Robots",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Kataphron Breachers",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Kataphron Destroyers",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Onager Dunecrawler",
+    "raw": "130mm"
+  },
+  {
+    "unit": "Pteraxii Skystalkers",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Pteraxii Sterylizors",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Serberys Raiders",
+    "raw": "60x35.5mm Oval Base"
+  },
+  {
+    "unit": "Serberys Sulphurhounds",
+    "raw": "60x35.5mm Oval Base"
+  },
+  {
+    "unit": "Sicarian Infiltrators",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Sicarian Ruststalkers",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Skitarii Marshal",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Skitarii Rangers",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Skitarii Rangers/Skitarii Vanguard",
+    "model": "Transuranic Arquebus",
+    "raw": "60x35.5mm Oval Base"
+  },
+  {
+    "unit": "Skitarii Vanguard",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Skorpius Disintegrator",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Skorpius Dunerider",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Sydonian Dragoons with Radium Jezzails",
+    "raw": "105x70mm Oval Base"
+  },
+  {
+    "unit": "Sydonian Dragoons with Taser Lances",
+    "raw": "105x70mm Oval Base"
+  },
+  {
+    "unit": "Sydonian Skatros",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Tech-Priest Dominus",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Tech-Priest Enginseer",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Tech-Priest Manipulus",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Technoarcheologist",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Reaver Titan",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Warbringer Nemesis Titan",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Warhound Titan",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Warlord Titan",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Asurmen",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Autarch",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Autarch wayleaper",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Avatar of Khaine",
+    "raw": "80mm"
+  },
+  {
+    "unit": "Baharroth",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Corsair Voidreavers",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Corsair Voidscarred",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Crimson Hunter",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "D-cannon Platform",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Dark Reapers",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Death Jester",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Dire Avengers",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Eldrad Ulthran",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Falcon",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Farseer",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Farseer Skyrunner",
+    "raw": "Small Flying Base"
+  },
+  {
+    "unit": "Fire Dragons",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Fire Prism",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Fuegan",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Guardian Defenders",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Guardian Defenders",
+    "model": "Heavy Weapon Platform",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Hemlock Wraithfighter",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Howling Banshees",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Jain Zar",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Lhykhis",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Maugan Ra",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Night Spinner",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Rangers",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Shadow Weaver Platform",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Shadowseer",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Shining Spears",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Shroud Runners",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Skyweavers",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Solitaire",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Spiritseer",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Starweaver",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Storm Guardians",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Storm Guardians",
+    "model": "Serpent’s Scale Platform",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Striking Scorpions",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Swooping Hawks",
+    "raw": "32mm"
+  },
+  {
+    "unit": "The Visarch",
+    "raw": "32mm"
+  },
+  {
+    "unit": "The Yncarne",
+    "raw": "80mm"
+  },
+  {
+    "unit": "Troupe",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Troupe Master",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Vibro Cannon Platform",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Voidweaver",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Vyper",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "War Walker",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Warlock",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Warlock Conclave",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Warlock Skyrunners",
+    "raw": "Small Flying Base"
+  },
+  {
+    "unit": "Warp Spiders",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Wave Serpent",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Windriders",
+    "raw": "Small Flying Base"
+  },
+  {
+    "unit": "Wraithblades",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Wraithguard",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Wraithknight",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Wraithknight with Ghostglaive",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Wraithlord",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Ynnari Archon",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Ynnari Incubi",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Ynnari Kabalite Warriors",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Ynnari Raider",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Ynnari Reavers",
+    "raw": "Small Flying Base"
+  },
+  {
+    "unit": "Ynnari Succubus",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Ynnari Venom",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Ynnari Wyches",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Yvraine",
+    "raw": "75x42mm Oval Base"
+  },
+  {
+    "unit": "Phantom Titan",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Revenant Titan",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Aegis Defence Line",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Armoured Sentinels",
+    "raw": "80mm"
+  },
+  {
+    "unit": "Artillery Team",
+    "raw": "130mm"
+  },
+  {
+    "unit": "Attilan Rough Riders",
+    "raw": "60x35.5mm Oval Base"
+  },
+  {
+    "unit": "Baneblade",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Banehammer",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Banesword",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Basilisk",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Bullgryn squad",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Cadian Castellan",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Cadian Command Squad",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Cadian Heavy Weapons Squad",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Cadian Shock Troops",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Catachan Command Squad",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Catachan Heavy Weapons Squad",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Catachan Jungle Fighters",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Chimera",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Commissar",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Death Korps of Krieg",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Death Riders",
+    "raw": "60x35.5mm Oval Base"
+  },
+  {
+    "unit": "Deathstrike",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Doomhammer",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Field Ordnance Battery",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Gaunt’s Ghosts",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Hellhammer",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Hellhound",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Hydra",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Kasrkin",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Krieg Combat Engineers",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Krieg Command Squad",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Krieg Command Squad",
+    "model": "Lord Commissar",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Krieg Heavy Weapons Squad",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Krieg Heavy Weapons Squad",
+    "model": "Fire Coordinator",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Leman Russ Battle Tank",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Leman Russ Commander",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Leman Russ Demolisher",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Leman Russ Eradicator",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Leman Russ Executioner",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Leman Russ Exterminator",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Leman Russ Punisher",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Leman Russ Vanquisher",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Lord Marshal Dreir",
+    "raw": "75x42mm Oval Base"
+  },
+  {
+    "unit": "Lord Solar Leontus",
+    "raw": "80mm"
+  },
+  {
+    "unit": "Manticore",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Militarum Tempestus Command Squad",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Ministorum Priest",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Nork Deddog",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Ogryn Bodyguard",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Ogryn squad",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Primaris Psyker",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Ratlings",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Ratlings",
+    "model": "Tankstopper Rifle",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Rogal Dorn Battle Tank",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Rogal Dorn Commander",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Scout Sentinels",
+    "raw": "80mm"
+  },
+  {
+    "unit": "Shadowsword",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Sly Marbo",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Stormlord",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Stormsword",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Taurox",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Taurox Prime",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Tech-Priest Enginseer",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Tempestus Aquilons",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Tempestus Scions",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Ursula Creed",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Valkyrie",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Wyvern",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Avenger Strike Fighter",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Cyclops Demolition Vehicle",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Black Templars Gladiator Lancer",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Black Templars Gladiator Reaper",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Black Templars Gladiator Valiant",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Black Templars Impulsor",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Black Templars Repulsor",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Black Templars Repulsor Executioner",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Castellan",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Chaplain Grimaldus",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Chaplain Grimaldus",
+    "model": "Cenobyte Servitors",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Crusader Squad",
+    "model": "Neophytes",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Crusader Squad",
+    "model": "Sword Brother/Initiates",
+    "raw": "32mm"
+  },
+  {
+    "unit": "High Marshal Helbrecht",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Marshal",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Primaris Crusader Squad",
+    "model": "Initiates",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Primaris Crusader Squad",
+    "model": "Neophytes",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Primaris Crusader Squad",
+    "model": "Sword Brother",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Primaris Sword Brethren",
+    "raw": "40mm"
+  },
+  {
+    "unit": "The Emperor’s Champion",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Astorath",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Baal Predator",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Blood Angels Captain",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Chief Librarian Mephiston",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Commander Dante",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Death Company Captain",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Death Company Captain with Jump Pack",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Death Company Dreadnought",
+    "raw": "90mm"
+  },
+  {
+    "unit": "Death Company Marines",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Death Company Marines with Bolt Rifles",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Death Company Marines with Jump Packs",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Lemartes",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Sanguinary Guard",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Sanguinary Priest",
+    "raw": "40mm"
+  },
+  {
+    "unit": "The Sanguinor",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Be’lakor",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Beasts of Nurgle",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Bloodcrushers",
+    "raw": "90x52.5mm Oval Base"
+  },
+  {
+    "unit": "Bloodletters",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Bloodmaster",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Bloodthirster",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Blue Horrors",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Burning Chariot",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Changecaster",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Contorted Epitome",
+    "raw": "75x42mm Oval Base"
+  },
+  {
+    "unit": "Daemon Prince of Chaos",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Daemon Prince of Chaos with Wings",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Daemonettes",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Epidemius",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Exalted Flamer",
+    "raw": "75x42mm Oval Base"
+  },
+  {
+    "unit": "Fateskimmer",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Feculent Gnarlmaw",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Fiends",
+    "raw": "75x42mm Oval Base"
+  },
+  {
+    "unit": "Flamers",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Flesh Hounds",
+    "raw": "60x35.5mm Oval Base"
+  },
+  {
+    "unit": "Fluxmaster",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Great Unclean One",
+    "raw": "130mm"
+  },
+  {
+    "unit": "Hellflayers",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Horticulous Slimux",
+    "raw": "105x70mm Oval Base"
+  },
+  {
+    "unit": "Infernal Enrapturess",
+    "raw": "60x35.5mm Oval Base"
+  },
+  {
+    "unit": "Kairos Fateweaver",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Karanak",
+    "raw": "75x42mm Oval Base"
+  },
+  {
+    "unit": "Keeper of Secrets",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Lord of Change",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Nurglings",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Pink Horrors",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Plague Drones",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Plaguebearers",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Poxbringer",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Rendmaster on Blood Throne",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Rotigus",
+    "raw": "130mm"
+  },
+  {
+    "unit": "Screamers",
+    "raw": "Small Flying Base"
+  },
+  {
+    "unit": "Seekers",
+    "raw": "60x35.5mm Oval Base"
+  },
+  {
+    "unit": "Shalaxi Helbane",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Skarbrand",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Skull Altar",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Skull Cannon",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Skullmaster",
+    "raw": "90x52.5mm Oval Base"
+  },
+  {
+    "unit": "Skulltaker",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Sloppity Bilepiper",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Soul Grinder",
+    "raw": "160mm"
+  },
+  {
+    "unit": "Spoilpox Scrivener",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Syll’esske",
+    "raw": "50mm"
+  },
+  {
+    "unit": "The Blue Scribes",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "The Changeling",
+    "raw": "40mm"
+  },
+  {
+    "unit": "The Masque of Slaanesh",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Tormentbringer",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Tranceweaver",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Knight Abominant",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Knight Desecrator",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Knight Despoiler",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Knight Rampager",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Knight Tyrant",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "War Dog Brigand",
+    "raw": "100mm"
+  },
+  {
+    "unit": "War Dog Executioner",
+    "raw": "100mm"
+  },
+  {
+    "unit": "War Dog Huntsman",
+    "raw": "100mm"
+  },
+  {
+    "unit": "War Dog Karnivore",
+    "raw": "100mm"
+  },
+  {
+    "unit": "War Dog Stalker",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Chaos Acastus Knight Asterius",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Acastus Knight Porphyrion",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Cerastus Knight Acheron",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Chaos Cerastus Knight Atrapos",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Chaos Cerastus Knight Castigator",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Chaos Cerastus Knight Lancer",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Chaos Questoris Knight Magaera",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Chaos Questoris Knight Styrix",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "War Dog Moirax",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Abaddon the Despoiler",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Accursed Cultists",
+    "model": "Mutant",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Accursed Cultists",
+    "model": "Torment",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Chaos Bikers",
+    "raw": "75x42mm Oval Base"
+  },
+  {
+    "unit": "Chaos Land Raider",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Lord",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Chaos Lord in Terminator Armour",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Chaos Lord with Jump Pack",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Chaos Predator Annihilator",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Predator Destructor",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Rhino",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Spawn",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Chaos Terminator Squad",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Chaos Vindicator",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chosen",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Cultist Firebrand",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Cultist Mob",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Cypher",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Dark Apostle",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Dark Apostle",
+    "model": "Dark Disciple",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Dark Commune",
+    "model": "Blessed Blade",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Dark Commune",
+    "model": "Cult Demagogue, Mindwitch, Iconarch",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Defiler",
+    "raw": "160mm"
+  },
+  {
+    "unit": "Fabius Bile",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Fabius Bile",
+    "model": "Surgeon Acolyte",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Fellgor beastmen",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Forgefiend",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Haarken Worldclaimer",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Havocs",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Helbrute",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Heldrake",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Heretic Astartes Daemon Prince",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Heretic Astartes Daemon Prince with Wings",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Huron Blackheart",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Khorne Lord of Skulls",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Legionaries",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Lord Discordant on Helstalker",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Master of Executions",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Master of Possession",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Maulerfiend",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Nemesis Claw",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Noctilith Crown",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Obliterators",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Possessed",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Raptors",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Sorcerer",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Sorcerer in Terminator Armour",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Traitor Enforcer",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Traitor Enforcer",
+    "model": "Traitor Ogryn",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Traitor Guardsmen Squad",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Vashtorr the Arkifane",
+    "raw": "80mm"
+  },
+  {
+    "unit": "Venomcrawler",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Warp Talons",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Warpsmith",
+    "raw": "60x35.5mm Oval Base"
+  },
+  {
+    "unit": "Asmodai",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Azrael",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Belial",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Deathwing Knights",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Deathwing Terminator Squad",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Ezekiel",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Inner Circle Companions",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Land Speeder Vengeance",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Lazarus",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Lion El’Jonson",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Nephilim Jetfighter",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Ravenwing Black Knights",
+    "raw": "75x42mm Oval Base"
+  },
+  {
+    "unit": "Ravenwing Command Squad",
+    "raw": "75x42mm Oval Base"
+  },
+  {
+    "unit": "Ravenwing Dark Talon",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Ravenwing Darkshroud",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Sammael",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Biologus Putrifier",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Blightlord Terminators",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Chaos Land Raider",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Predator Annihilator",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Predator Destructor",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Rhino",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Spawn",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Daemon Prince of Nurgle",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Daemon Prince of Nurgle with Wings",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Deathshroud Terminators",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Defiler",
+    "raw": "160mm"
+  },
+  {
+    "unit": "Foetid Bloat-Drone",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Foetid Bloat-drone with Heavy Blight Launcher",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Foul Blightspawn",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Helbrute",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Icon Bearer",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Lord of Contagion",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Lord of Poxes",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Lord of Virulence",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Malignant Plaguecaster",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Miasmic Malignifier",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Mortarion",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Myphitic Blight-Haulers",
+    "raw": "80mm"
+  },
+  {
+    "unit": "Noxious Blightbringer",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Plague Marines",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Plague Surgeon",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Plagueburst Crawler",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Poxwalkers",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Tallyman",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Typhus",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Beasts of Nurgle",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Great Unclean One",
+    "raw": "130mm"
+  },
+  {
+    "unit": "Nurglings",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Plague Drones",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Plaguebearers",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Rotigus",
+    "raw": "130mm"
+  },
+  {
+    "unit": "Corvus Blackstar",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Deathwatch Terminator Squad",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Deathwatch Veterans",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Fortis Kill Team",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Indomitor Kill Team",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Spectrus Kill Team",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Spectrus Kill Team",
+    "model": "Kill Team Infiltrators with bolt sniper rifles",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Talonstrike Kill Team",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Talonstrike Kill Team",
+    "model": "Kill Team Heavy Intercessors with Jump Packs",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Watch Captain Artemis",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Watch Master",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Archon",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Beastmaster",
+    "raw": "Small Flying Base"
+  },
+  {
+    "unit": "Beastmaster",
+    "model": "Clawed Fiends, Khymerae, Razorwing Flocks",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Court of the Archon",
+    "model": "Sslyth",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Court of the Archon",
+    "model": "Ur-Ghul, Lhamaean, Medusae",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Cronos",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Drazhar",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Grotesques",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Haemonculus",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Hellions",
+    "raw": "Small Flying Base"
+  },
+  {
+    "unit": "Incubi",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Kabalite Warriors",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Lelith Hesperax",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Mandrakes",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Raider",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Ravager",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Razorwing Jetfighter",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Reavers",
+    "raw": "Small Flying Base"
+  },
+  {
+    "unit": "Scourges",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Succubus",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Talos",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Urien Rakarth",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Venom",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Voidraven Bomber",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Wracks",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Wyches",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Chaos Land Raider",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Rhino",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Spawn",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Chaos Terminators",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Daemon Prince of Slaanesh",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Daemon Prince of Slaanesh with Wings",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Flawless Blades",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Fulgrim",
+    "raw": "130mm"
+  },
+  {
+    "unit": "Heldrake",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Infractors",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Lord Exultant",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Lord Kakophonist",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Lucius the Eternal",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Maulerfiend",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Noise Marines",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Sorcerer",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Tormentors",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Daemonettes",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Fiends",
+    "raw": "75x42mm Oval Base"
+  },
+  {
+    "unit": "Keeper of Secrets",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Seekers",
+    "raw": "60x35.5mm Oval Base"
+  },
+  {
+    "unit": "Shalaxi Helbane",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Aberrants",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Abominant",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Achilles Ridgerunners",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Acolyte Hybrids with Autopistols",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Acolyte Hybrids with Hand Flamers",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Acolyte Iconward",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Atalan Jackals",
+    "raw": "60x35.5mm Oval Base"
+  },
+  {
+    "unit": "Atalan Jackals",
+    "model": "Wolfquad",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Benefictus",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Biophagus",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Clamavus",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Goliath Rockgrinder",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Goliath Truck",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Hybrid Metamorphs",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Jackal Alphus",
+    "raw": "60x35.5mm Oval Base"
+  },
+  {
+    "unit": "Kelermorph",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Locus",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Magus",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Neophyte Hybrids",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Neophyte Hybrids",
+    "model": "Heavy stubber, Mining laser, Seismic cannon",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Nexos",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Patriarch",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Primus",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Purestrain Genestealers",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Reductus Saboteur",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Sanctus",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Brother-Captain",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Brother-Captain Stern",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Brotherhood Champion",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Brotherhood Chaplain",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Brotherhood Librarian",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Brotherhood Techmarine",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Brotherhood Terminator Squad",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Castellan Crowe",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Grand Master",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Grand Master in Nemesis Dreadknight",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Grand Master Voldus",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Grey Knights Land Raider",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Grey knights Land Raider Crusader",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Grey knights Land Raider Redeemer",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Grey knights Razorback",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Grey knights Rhino",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Grey knights Stormhawk Interceptor",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Grey knights Stormraven Gunship",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Grey knights Stormtalon Gunship",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Grey Knights Venerable Dreadnought",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Interceptor Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Kaldor Draigo",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Nemesis Dreadknight",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Paladin Squad",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Purgation Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Purifier Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Servitors",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Strike Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Grey Knights Thunderhawk Gunship",
+    "raw": "Unique"
+  },
+  {
+    "unit": "Land Raider Banisher",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Callidus Assassin",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Corvus Blackstar",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Culexus Assassin",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Deathwatch Kill Team",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Eversor Assassin",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Exaction Squad",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Exaction Squad",
+    "model": "Cyber-mastiff",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Grey Knights Terminator Squad",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Imperial Navy Breachers",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Imperial Navy Breachers",
+    "model": "Navis las-volley, endurant shield",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Imperial Rhino",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Inquisitor",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Inquisitor Coteaz",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Inquisitor Draxus",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Inquisitor Greyfax",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Inquisitorial Agents",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Inquisitorial Agents",
+    "model": "Gun Servitors",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Inquisitorial Chimera",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Ministorum Priest",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Navigator",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Rogue Trader entourage",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Sanctifiers",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Sisters of Battle Immolator",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Sisters of Battle Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Subductor Squad",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Subductor Squad",
+    "model": "Cyber-mastiff",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Vigilant Squad",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Vigilant Squad",
+    "model": "Cyber-mastiff",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Vindicare Assassin",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Voidsmen-at-Arms",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Watch Captain Artemis",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Watch Master",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Armiger Helverin",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Armiger Warglaive",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Canis Rex",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Knight Castellan",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Knight Crusader",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Knight Errant",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Knight Gallant",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Knight Paladin",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Knight Preceptor",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Knight Valiant",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Knight Warden",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Acastus Knight Asterius",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Acastus Knight Porphyrion",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Armiger Moirax",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Cerastus Knight Acheron",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Cerastus Knight Atrapos",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Cerastus Knight Castigator",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Cerastus Knight Lancer",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Questoris Knight Magaera",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Questoris Knight Styrix",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Brôkhyr Iron-master",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Brôkhyr Iron-master",
+    "model": "E-COG",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Brôkhyr Iron-master",
+    "model": "Ironkin Assistant",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Brôkhyr Thunderkyn",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Cthonian Beserks",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Cthonian Beserks",
+    "model": "Mole grenade launcher",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Einhyr Champion",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Einhyr Hearthguard",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Grimnyr",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Grimnyr",
+    "model": "CORV",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Hearthkyn Warriors",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Hekaton Land Fortress",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Hernkyn Pioneers",
+    "raw": "90x52.5mm Oval Base"
+  },
+  {
+    "unit": "Hernkyn Yaegirs",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Kâhl",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Sagitaur",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Ûthar the Destined",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Annihilation Barge",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "C’tan Shard of the Deceiver",
+    "raw": "40mm"
+  },
+  {
+    "unit": "C’tan Shard of the Nightbringer",
+    "raw": "40mm"
+  },
+  {
+    "unit": "C’tan Shard of the Void Dragon",
+    "raw": "80mm"
+  },
+  {
+    "unit": "Canoptek Doomstalker",
+    "raw": "90mm"
+  },
+  {
+    "unit": "Canoptek Reanimator",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Canoptek Scarab Swarms",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Canoptek Spyders",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Canoptek Wraiths",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Catacomb Command Barge",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Chronomancer",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Convergence of Dominion",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Cryptothralls",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Deathmarks",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Doom Scythe",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Doomsday Ark",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Flayed Ones",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Ghost Ark",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Hexmark Destroyer",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Illuminor Szeras",
+    "raw": "80mm"
+  },
+  {
+    "unit": "Immortals",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Imotekh the Stormlord",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Lokhust Destroyers",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Lokhust Heavy Destroyers",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Lokhust Lord",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Lychguard",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Monolith",
+    "raw": "160mm"
+  },
+  {
+    "unit": "Necron Warriors",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Night Scythe",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Obelisk",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Ophydian Destroyers",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Orikan the Diviner",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Overlord",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Overlord with Translocation Shroud",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Plasmancer",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Psychomancer",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Royal Warden",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Skorpekh Destroyers",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Skorpekh Lord",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Technomancer",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Tesseract Vault",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "The Silent King",
+    "model": "Szarekh",
+    "raw": "100mm"
+  },
+  {
+    "unit": "The Silent King",
+    "model": "Triarchal Menhir",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Tomb Blades",
+    "raw": "Small Flying Base"
+  },
+  {
+    "unit": "Transcendent C’tan",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Trazyn the Infinite",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Triarch Praetorians",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Triarch Stalker",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Seraptek Heavy Construct",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Battlewagon",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Beast Snagga Boyz",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Beastboss",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Beastboss on Squigosaur",
+    "raw": "80mm"
+  },
+  {
+    "unit": "Big Mek",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Big Mek in Mega Armour",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Big Mek with Shokk Attack Gun",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Big’ed Bossbunka",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Blitza-bommer",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Boomdakka Snazzwagon",
+    "raw": "150x95mm Oval Base"
+  },
+  {
+    "unit": "Boss Snikrot",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Boyz",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Breaka Boyz",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Breaka Boyz",
+    "model": "Boss Nob",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Burna Boyz",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Burna-bommer",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Dakkajet",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Deff Dread",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Deffkilla Wartrike",
+    "raw": "150x95mm Oval Base"
+  },
+  {
+    "unit": "Deffkoptas",
+    "raw": "75x42mm Oval Base"
+  },
+  {
+    "unit": "Flash Gitz",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Ghazghkull Thraka",
+    "raw": "80mm"
+  },
+  {
+    "unit": "Ghazghkull Thraka",
+    "model": "Makari",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Gorkanaut",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Gretchin",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Gretchin",
+    "model": "Runtherd",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Hunta Rig",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Kill Rig",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Killa Kans",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Kommandos",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Kustom Boosta-blasta",
+    "raw": "150x95mm Oval Base"
+  },
+  {
+    "unit": "Lootas",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Meganobz",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Megatrakk Scrapjet",
+    "raw": "150x95mm Oval Base"
+  },
+  {
+    "unit": "Mek",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Mek Gunz",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Morkanaut",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Mozrog Skragbad",
+    "raw": "80mm"
+  },
+  {
+    "unit": "Nobz",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Painboss",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Painboy",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Rukkatrukk Squigbuggy",
+    "raw": "150x95mm Oval Base"
+  },
+  {
+    "unit": "Shokkjump Dragsta",
+    "raw": "150x95mm Oval Base"
+  },
+  {
+    "unit": "Squighog Boyz",
+    "raw": "75x42mm Oval Base"
+  },
+  {
+    "unit": "Squighog Boyz",
+    "model": "Nob on Smasha Squig",
+    "raw": "90x52.5mm Oval Base"
+  },
+  {
+    "unit": "Stompa",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Stormboyz",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Tankbustas",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Tankbustas",
+    "model": "Boss Nob",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Trukk",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Warbikers",
+    "raw": "75x42mm Oval Base"
+  },
+  {
+    "unit": "Warboss",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Warboss in Mega Armour",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Wazbom Blastajet",
+    "raw": "150x95mm Oval Base"
+  },
+  {
+    "unit": "Weirdboy",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Wurrboy",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Zodgrod Wortsnagga",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Gargantuan Squiggoth",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Adrax Agatone",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Aggressor Squad",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Ancient",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Ancient in Terminator Armour",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Apothecary",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Apothecary Biologis",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Assault Intercessor Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Assault Intercessors with Jump Packs",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Ballistus Dreadnought",
+    "raw": "90mm"
+  },
+  {
+    "unit": "Bladeguard Ancient",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Bladeguard Veteran Squad",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Brutalis Dreadnought",
+    "raw": "90mm"
+  },
+  {
+    "unit": "Captain",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Captain in Gravis Armour",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Captain in Phobos Armour",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Captain in Terminator Armour",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Captain Sicarius",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Captain with Jump Pack",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Centurion Assault Squad",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Centurion Devastator Squad",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Chaplain",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Chaplain in Terminator Armour",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Chaplain on Bike",
+    "raw": "90x52.5mm Oval Base"
+  },
+  {
+    "unit": "Chaplain with Jump Pack",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Chief Librarian Tigurius",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Company Heroes",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Darnath Lysander",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Desolation Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Devastator Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Dreadnought",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Drop Pod",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Eliminator Squad",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Eradicator Squad",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Firestrike Servo-turrets",
+    "raw": "80mm"
+  },
+  {
+    "unit": "Gladiator Lancer",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Gladiator Reaper",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Gladiator Valiant",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Hammerfall Bunker",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Heavy Intercessor Squad",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Hellblaster Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Impulsor",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Inceptor Squad",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Incursor Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Infernus Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Infiltrator Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Intercessor Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Invader ATV",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Invictor Tactical Warsuit",
+    "raw": "90mm"
+  },
+  {
+    "unit": "Iron Father Feirros",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Judiciar",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Kayvaan Shrike",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Kor’sarro Khan",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Land Raider",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Land Raider Crusader",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Land Raider Redeemer",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Librarian",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Librarian in Phobos Armour",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Librarian in Terminator Armour",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Lieutenant",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Lieutenant in Phobos Armour",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Lieutenant in Reiver Armour",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Lieutenant Titus",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Lieutenant with Combi-weapon",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Marneus Calgar",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Marneus Calgar",
+    "model": "Victrix Honour Guard",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Outrider Squad",
+    "raw": "90x52.5mm Oval Base"
+  },
+  {
+    "unit": "Pedro Kantor",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Predator Annihilator",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Predator Destructor",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Razorback",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Redemptor Dreadnought",
+    "raw": "90mm"
+  },
+  {
+    "unit": "Reiver Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Repulsor",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Repulsor Executioner",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Rhino",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Roboute Guilliman",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Scout Squad",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Sternguard Veteran Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Storm Speeder Hailstrike",
+    "raw": "90mm"
+  },
+  {
+    "unit": "Storm Speeder Hammerstrike",
+    "raw": "90mm"
+  },
+  {
+    "unit": "Storm Speeder Thunderstrike",
+    "raw": "90mm"
+  },
+  {
+    "unit": "Stormhawk Interceptor",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Stormraven Gunship",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Stormtalon Gunship",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Suppressor Squad",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Tactical Squad",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Techmarine",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Terminator Assault Squad",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Terminator Squad",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Tor Garadon",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Uriel Ventris",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Vanguard Veteran Squad with Jump Packs",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Vindicator",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Vulkan He’stan",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Whirlwind",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Astraeus",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Thunderhawk Gunship",
+    "raw": "Unique"
+  },
+  {
+    "unit": "Arjac Rockfist",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Bjorn the Fell-handed",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Blood Claws",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Fenrisian Wolves",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Grey Hunters",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Iron Priest",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Logan Grimnar",
+    "raw": "80mm"
+  },
+  {
+    "unit": "Murderfang",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Njal Stormcaller",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Ragnar Blackmane",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Thunderwolf Cavalry",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Ulrik the Slayer",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Venerable Dreadnought",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Wolf Guard Battle Leader",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Wolf Guard Headtakers",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Wolf Guard Headtakers",
+    "model": "Hunting Wolves",
+    "raw": "60x35.5mm Oval Base"
+  },
+  {
+    "unit": "Wolf Guard Terminators",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Wolf Priest",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Wulfen",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Wulfen Dreadnought",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Wulfen with Storm Shields",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Breacher Team",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Broadside Battlesuits",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Cadre Fireblade",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Commander Farsight",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Commander in Coldstar Battlesuit",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Commander in Enforcer Battlesuit",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Commander Shadowsun",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Crisis Fireknife Battlesuits",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Crisis Starscythe Battlesuits",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Crisis Sunforge Battlesuits",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Darkstrider",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Devilfish",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Ethereal",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Firesight Team",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Ghostkeel Battlesuit",
+    "raw": "105x70mm Oval Base"
+  },
+  {
+    "unit": "Hammerhead Gunship",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Kroot Carnivores",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Kroot Farstalkers",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Kroot Farstalkers",
+    "model": "Kroot Kill-broker",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Kroot Flesh Shaper",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Kroot Hounds",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Kroot Lone-spear",
+    "raw": "90x52.5mm Oval Base"
+  },
+  {
+    "unit": "Kroot Trail Shaper",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Kroot War Shaper",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Krootox Rampagers",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Krootox Riders",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Pathfinder Team",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Piranhas",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Razorshark Strike Fighter",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Riptide Battlesuit",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Sky Ray Gunship",
+    "raw": "Large Flying Base"
+  },
+  {
+    "unit": "Stealth Battlesuits",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Stormsurge",
+    "raw": "170x109mm Oval Base"
+  },
+  {
+    "unit": "Strike Team",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Sun Shark Bomber",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Tidewall Defence Platform",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Tidewall Droneport",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Tidewall Gunrig",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Tidewall Shieldline",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Vespid Stingwings",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "AX-1-0 Tiger Shark",
+    "raw": "160mm"
+  },
+  {
+    "unit": "Manta",
+    "raw": "Unique"
+  },
+  {
+    "unit": "Ta’unar Supremacy Armour",
+    "raw": "160mm"
+  },
+  {
+    "unit": "Tiger Shark",
+    "raw": "160mm"
+  },
+  {
+    "unit": "Ahriman",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Chaos Land Raider",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Predator Annihilator",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Predator Destructor",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Rhino",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Spawn",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Chaos Vindicator",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Daemon Prince of Tzeentch",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Daemon Prince of Tzeentch with Wings",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Defiler",
+    "raw": "160mm"
+  },
+  {
+    "unit": "Exalted Sorcerer",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Exalted Sorcerer on Disc of Tzeentch",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Forgefiend",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Helbrute",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Heldrake",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Infernal Master",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Magnus the Red",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Maulerfiend",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Mutalith Vortex Beast",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Rubric Marines",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Scarab Occult Terminators",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Sekhetar Robots",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Sorcerer",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Sorcerer in Terminator Armour",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Tzaangor Enlightened",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Tzaangor Enlightened with Fatecaster Greatbows",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Tzaangor Shaman",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Tzaangors",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Blue Horrors",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Flamers",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Kairos Fateweaver",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Lord of Change",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Pink Horrors",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Screamers",
+    "raw": "Small Flying Base"
+  },
+  {
+    "unit": "Barbgaunts",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Biovores",
+    "raw": "80mm"
+  },
+  {
+    "unit": "Broodlord",
+    "raw": "75x42mm Oval Base"
+  },
+  {
+    "unit": "Carnifexes",
+    "raw": "105x70mm Oval Base"
+  },
+  {
+    "unit": "Deathleaper",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Exocrine",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Gargoyles",
+    "raw": "Small Flying Base"
+  },
+  {
+    "unit": "Genestealers",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Harpy",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Haruspex",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Hive Crone",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Hive Guard",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Hive Tyrant",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Hormagaunts",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Lictor",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Maleceptor",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Mawloc",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Mucolid Spores",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Neurogaunts",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Neurogaunts",
+    "model": "Nodebeasts",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Neurolictor",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Neurotyrant",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Norn Assimilator",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Norn Emissary",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Old One Eye",
+    "raw": "105x70mm Oval Base"
+  },
+  {
+    "unit": "Parasite of Mortrex",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Psychophage",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Pyrovores",
+    "raw": "80mm"
+  },
+  {
+    "unit": "Raveners",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Ripper Swarms",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Screamer-killer",
+    "raw": "90mm"
+  },
+  {
+    "unit": "Spore MInes",
+    "raw": "25mm"
+  },
+  {
+    "unit": "Sporocyst",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Termagants",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Tervigon",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "The Swarmlord",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Toxicrene",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Trygon",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Tyranid Warriors with Melee Bio-weapons",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Tyranid Warriors with Ranged Bio-weapons",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Tyrannocyte",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Tyrannofex",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Tyrant Guard",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Venomthropes",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Von Ryan’s Leapers",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Winged Hive Tyrant",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Winged Tyranid Prime",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Zoanthropes",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Harridan",
+    "raw": "Unique"
+  },
+  {
+    "unit": "Hierophant",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Angron",
+    "raw": "100mm"
+  },
+  {
+    "unit": "Chaos Land Raider",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Predator Annihilator",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Predator Destructor",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Rhino",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Chaos Spawn",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Daemon Prince of Khorne",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Daemon Prince of Khorne with Wings",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Defiler",
+    "raw": "160mm"
+  },
+  {
+    "unit": "Eightbound",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Exalted Eightbound",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Forgefiend",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Goremongers",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Helbrute",
+    "raw": "60mm"
+  },
+  {
+    "unit": "Heldrake",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Jakhals",
+    "raw": "28.5mm"
+  },
+  {
+    "unit": "Jakhals",
+    "model": "Dishonoured",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Khârn the Betrayer",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Khorne Berzerkers",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Khorne Lord of Skulls",
+    "raw": "Hull"
+  },
+  {
+    "unit": "Lord Invocatus",
+    "raw": "90x52.5mm Oval Base"
+  },
+  {
+    "unit": "Lord on Juggernaut",
+    "raw": "90x52.5mm Oval Base"
+  },
+  {
+    "unit": "Master of Executions",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Maulerfiend",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Slaughterbound",
+    "raw": "50mm"
+  },
+  {
+    "unit": "Terminator Squad",
+    "raw": "40mm"
+  },
+  {
+    "unit": "Bloodcrushers",
+    "raw": "90x52.5mm Oval Base"
+  },
+  {
+    "unit": "Bloodletters",
+    "raw": "32mm"
+  },
+  {
+    "unit": "Bloodthirster",
+    "raw": "120x92mm Oval Base"
+  },
+  {
+    "unit": "Flesh Hounds",
+    "raw": "60x35.5mm Oval Base"
+  },
+  {
+    "unit": "Skarbrand",
+    "raw": "100mm"
+  }
+]

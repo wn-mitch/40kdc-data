@@ -6,7 +6,11 @@
         "name": "Krootox Rampagers",
         "min": 3,
         "max": 6,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -21,7 +25,11 @@
         "name": "Manta",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "unique",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -36,7 +44,11 @@
         "name": "Crisis Fireknife Shas’ui",
         "min": 3,
         "max": 3,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -51,7 +63,14 @@
         "name": "Piranhas",
         "min": 1,
         "max": 3,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -71,7 +90,11 @@
           "burst-cannon",
           "battlesuit-fists"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Stealth Battlesuit",
@@ -81,7 +104,11 @@
           "burst-cannon",
           "battlesuit-fists"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -96,7 +123,12 @@
         "name": "Sun Shark Bomber",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -116,7 +148,11 @@
           "farstalker-firearm",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Kroot Farstalker",
@@ -126,7 +162,11 @@
           "farstalker-firearm",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Kroot Hound",
@@ -135,7 +175,11 @@
         "default_weapon_ids": [
           "ripping-fangs"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {
@@ -150,7 +194,11 @@
         "name": "Ta’unar Supremacy Armour",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 160
+        }
       }
     ],
     "game_version": {
@@ -170,7 +218,11 @@
           "pulse-carbine",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       },
       {
         "name": "Pathfinder",
@@ -180,7 +232,11 @@
           "pulse-carbine",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -201,7 +257,11 @@
           "pulse-rifle",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       },
       {
         "name": "Fire Warrior",
@@ -212,7 +272,11 @@
           "pulse-rifle",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -227,7 +291,11 @@
         "name": "Ri’Locai",
         "min": 2,
         "max": 2,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -242,7 +310,11 @@
         "name": "Crisis Starscythe Shas’ui",
         "min": 3,
         "max": 3,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -257,7 +329,11 @@
         "name": "Tiger Shark",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 160
+        }
       }
     ],
     "game_version": {
@@ -278,7 +354,11 @@
           "pulse-pistol",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       },
       {
         "name": "Fire Warrior",
@@ -289,7 +369,11 @@
           "pulse-pistol",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -304,7 +388,12 @@
         "name": "Stormsurge",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -319,7 +408,11 @@
         "name": "Tidewall Gunrig",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -334,7 +427,11 @@
         "name": "Kroot Hounds",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {
@@ -349,7 +446,11 @@
         "name": "Ethereal",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -364,7 +465,12 @@
         "name": "Riptide Battlesuit",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -379,7 +485,11 @@
         "name": "Commander Farsight",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -394,7 +504,11 @@
         "name": "Krootox Riders",
         "min": 1,
         "max": 3,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -409,7 +523,11 @@
         "name": "Commander Shadowsun",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -424,7 +542,12 @@
         "name": "Ghostkeel Battlesuit",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 105,
+          "length": 70
+        }
       }
     ],
     "game_version": {
@@ -439,7 +562,11 @@
         "name": "AX-1-0 Tiger Shark",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 160
+        }
       }
     ],
     "game_version": {
@@ -454,7 +581,14 @@
         "name": "Sky Ray Gunship",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -474,7 +608,11 @@
           "neutron-blaster",
           "stingwing-claws"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Vespid Stingwing",
@@ -484,7 +622,11 @@
           "neutron-blaster",
           "stingwing-claws"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {
@@ -499,7 +641,11 @@
         "name": "Commander in Coldstar Battlesuit",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -514,7 +660,11 @@
         "name": "Kroot Trail Shaper",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -529,7 +679,11 @@
         "name": "Tidewall Shieldline",
         "min": 1,
         "max": 2,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -544,7 +698,11 @@
         "name": "Broadside Shas’vre",
         "min": 1,
         "max": 3,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -559,7 +717,11 @@
         "name": "Commander in Enforcer Battlesuit",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -574,7 +736,11 @@
         "name": "Cadre Fireblade",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -589,7 +755,12 @@
         "name": "Razorshark Strike Fighter",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -604,7 +775,14 @@
         "name": "Devilfish",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -619,7 +797,11 @@
         "name": "Darkstrider",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -634,7 +816,14 @@
         "name": "Hammerhead Gunship",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -649,7 +838,11 @@
         "name": "Tidewall Droneport",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -664,7 +857,11 @@
         "name": "Crisis Sunforge Shas’ui",
         "min": 3,
         "max": 3,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -679,7 +876,11 @@
         "name": "Firesight Team",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -699,7 +900,11 @@
           "kroot-rifle",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Kroot Carnivore",
@@ -709,7 +914,11 @@
           "kroot-rifle",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {
@@ -724,7 +933,11 @@
         "name": "Kroot War Shaper",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -739,7 +952,12 @@
         "name": "Kroot Lone-spear",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 90,
+          "length": 52.5
+        }
       }
     ],
     "game_version": {
@@ -754,7 +972,11 @@
         "name": "Kroot Flesh Shaper",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {

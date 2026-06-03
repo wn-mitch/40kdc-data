@@ -6,7 +6,11 @@
         "name": "Acastus Knight Asterius",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -21,7 +25,12 @@
         "name": "Knight Defender",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -36,7 +45,12 @@
         "name": "Cerastus Knight Acheron",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -51,7 +65,11 @@
         "name": "Acastus Knight Porphyrion",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -66,7 +84,12 @@
         "name": "Cerastus Knight Castigator",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -81,7 +104,12 @@
         "name": "Knight Paladin",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -96,7 +124,12 @@
         "name": "Knight Errant",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -111,7 +144,12 @@
         "name": "Knight Crusader",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -126,7 +164,12 @@
         "name": "Knight Warden",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -141,7 +184,12 @@
         "name": "Knight Preceptor",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -156,7 +204,12 @@
         "name": "Cerastus Knight Lancer",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -171,7 +224,11 @@
         "name": "Armiger Moirax",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -186,7 +243,12 @@
         "name": "Knight Gallant",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -201,7 +263,11 @@
         "name": "Armiger Warglaive",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -216,7 +282,12 @@
         "name": "Knight Valiant",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -231,7 +302,11 @@
         "name": "Sir Hekhtur",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -246,7 +321,12 @@
         "name": "Canis Rex",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -261,7 +341,12 @@
         "name": "Knight Castellan",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -276,7 +361,11 @@
         "name": "Armiger Helverin",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -291,7 +380,12 @@
         "name": "Questoris Knight Magaera",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -306,7 +400,12 @@
         "name": "Questoris Knight Styrix",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {
@@ -321,7 +420,12 @@
         "name": "Cerastus Knight Atrapos",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 170,
+          "length": 109
+        }
       }
     ],
     "game_version": {

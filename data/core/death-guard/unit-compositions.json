@@ -6,7 +6,11 @@
         "name": "Lord of Poxes",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -21,7 +25,11 @@
         "name": "Defiler",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 160
+        }
       }
     ],
     "game_version": {
@@ -39,7 +47,11 @@
         "default_weapon_ids": [
           "hideous-mutations"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -54,7 +66,11 @@
         "name": "Tallyman",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -69,7 +85,11 @@
         "name": "Poxwalkers",
         "min": 10,
         "max": 20,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -84,7 +104,11 @@
         "name": "Lord of Contagion",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -99,7 +123,11 @@
         "name": "Chaos Predator Annihilator",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -114,7 +142,11 @@
         "name": "Chaos Predator Destructor",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -129,7 +161,11 @@
         "name": "Foetid Bloat-Drone with Heavy Blight Launcher",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -144,7 +180,11 @@
         "name": "Plagueburst Crawler",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -159,7 +199,11 @@
         "name": "Biologus Putrifier",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -179,7 +223,11 @@
           "bolt-pistol",
           "plague-knives"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Plague Marine",
@@ -189,7 +237,11 @@
           "boltgun",
           "plague-knives"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -204,7 +256,11 @@
         "name": "Plague Surgeon",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -219,7 +275,11 @@
         "name": "Daemon Prince of Nurgle",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -239,7 +299,11 @@
           "plaguespurt-gauntlet",
           "manreaper-strike"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Deathshroud Terminator",
@@ -249,7 +313,11 @@
           "plaguespurt-gauntlet",
           "manreaper-strike"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -264,7 +332,11 @@
         "name": "Lord of Virulence",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -279,7 +351,11 @@
         "name": "Foetid Bloat-Drone",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -294,7 +370,11 @@
         "name": "Noxious Blightbringer",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -309,7 +389,11 @@
         "name": "Daemon Prince of Nurgle with Wings",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -324,7 +408,11 @@
         "name": "Miasmic Malignifier",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -339,7 +427,11 @@
         "name": "Helbrute",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -354,7 +446,11 @@
         "name": "Myphitic Blight-haulers",
         "min": 1,
         "max": 2,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 80
+        }
       }
     ],
     "game_version": {
@@ -369,7 +465,11 @@
         "name": "Mortarion",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -384,7 +484,11 @@
         "name": "Malignant Plaguecaster",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -399,7 +503,11 @@
         "name": "Chaos Rhino",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -414,7 +522,11 @@
         "name": "Chaos Land Raider",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -429,7 +541,11 @@
         "name": "Foul Blightspawn",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -444,7 +560,11 @@
         "name": "Icon Bearer",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -459,7 +579,11 @@
         "name": "Typhus",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -479,7 +603,11 @@
           "combi-bolter",
           "bubotic-blade"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Blightlord Terminator",
@@ -489,7 +617,11 @@
           "combi-bolter",
           "bubotic-blade"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {

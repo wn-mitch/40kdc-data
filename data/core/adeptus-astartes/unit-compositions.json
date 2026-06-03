@@ -6,7 +6,11 @@
         "name": "High Marshal Helbrecht",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -21,7 +25,11 @@
         "name": "Gladiator Lancer",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -36,7 +44,11 @@
         "name": "Terminator",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -51,7 +63,11 @@
         "name": "Marshal",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -66,7 +82,11 @@
         "name": "Sword Brethren Squad",
         "min": 4,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -86,7 +106,11 @@
           "bolt-pistol",
           "power-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Initiate",
@@ -96,7 +120,11 @@
           "bolt-pistol",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Neophyte",
@@ -106,7 +134,11 @@
           "bolt-pistol",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -121,7 +153,11 @@
         "name": "Execrator",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -136,7 +172,11 @@
         "name": "Sternguard Veteran",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -151,7 +191,11 @@
         "name": "Land Raider Crusader",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -170,7 +214,11 @@
           "plasma-pistol",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Cenobyte Servitor",
@@ -179,7 +227,11 @@
         "default_weapon_ids": [
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -194,7 +246,11 @@
         "name": "Castellan",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -209,7 +265,11 @@
         "name": "Emperor’s Champion",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -224,7 +284,11 @@
         "name": "Impulsor",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -239,7 +303,11 @@
         "name": "Repulsor Executioner",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -254,7 +322,11 @@
         "name": "Gladiator Valiant",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -269,7 +341,11 @@
         "name": "Crusade Ancient",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -284,7 +360,11 @@
         "name": "Repulsor",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -299,7 +379,11 @@
         "name": "Gladiator Reaper",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -314,7 +398,11 @@
         "name": "Death Company Dreadnought",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 90
+        }
       }
     ],
     "game_version": {
@@ -329,7 +417,11 @@
         "name": "Sanguinary Priest",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -344,7 +436,11 @@
         "name": "Death Company Captain with Jump Pack",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -359,7 +455,11 @@
         "name": "Death Company Marines",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -374,7 +474,11 @@
         "name": "Astorath",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -389,7 +493,11 @@
         "name": "Blood Angels Captain",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -404,7 +512,11 @@
         "name": "Chief Librarian Mephiston",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -419,7 +531,11 @@
         "name": "Lemartes",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -434,7 +550,11 @@
         "name": "Commander Dante",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -449,7 +569,11 @@
         "name": "Death Company Marines with Bolt Rifles",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -464,7 +588,11 @@
         "name": "The Sanguinor",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -479,7 +607,11 @@
         "name": "Sanguinary Guard",
         "min": 3,
         "max": 6,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -494,7 +626,11 @@
         "name": "Baal Predator",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -509,7 +645,11 @@
         "name": "Death Company Marines with Jump Packs",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -524,7 +664,11 @@
         "name": "Death Company Captain",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -554,7 +698,14 @@
         "name": "Ravenwing Darkshroud",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -569,7 +720,12 @@
         "name": "Ravenwing Black Knight",
         "min": 3,
         "max": 6,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 75,
+          "length": 42
+        }
       }
     ],
     "game_version": {
@@ -584,7 +740,11 @@
         "name": "Ezekiel",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -599,7 +759,11 @@
         "name": "Deathwing Terminator",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -614,7 +778,11 @@
         "name": "Inner Circle Companions",
         "min": 3,
         "max": 6,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -629,7 +797,11 @@
         "name": "Azrael",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -644,7 +816,14 @@
         "name": "Land Speeder Vengeance",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -659,7 +838,12 @@
         "name": "Nephilim Jetfighter",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -674,7 +858,11 @@
         "name": "Asmodai",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -689,7 +877,11 @@
         "name": "Deathwing Knight",
         "min": 5,
         "max": 5,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -704,7 +896,11 @@
         "name": "Belial",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -719,7 +915,11 @@
         "name": "Lion El’Jonson",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -734,7 +934,12 @@
         "name": "Ravenwing Champion",
         "min": 3,
         "max": 3,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 75,
+          "length": 42
+        }
       }
     ],
     "game_version": {
@@ -749,7 +954,11 @@
         "name": "Lazarus",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -764,7 +973,12 @@
         "name": "Ravenwing Dark Talon",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -779,7 +993,14 @@
         "name": "Sammael",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -794,7 +1015,11 @@
         "name": "Watch Captain Artemis",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -809,7 +1034,11 @@
         "name": "Kill Team Heavy Intercessors",
         "min": 16,
         "max": 16,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -828,7 +1057,11 @@
           "boltgun",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Deathwatch Veteran",
@@ -839,7 +1072,11 @@
           "boltgun",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -859,7 +1096,11 @@
           "boltgun",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Deathwatch Veteran",
@@ -869,7 +1110,11 @@
           "boltgun",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Gravis Veteran",
@@ -879,7 +1124,11 @@
           "bolt-rifle",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -898,7 +1147,11 @@
           "bolt-rifle",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Kill Team Heavy Intercessor with Jump Pack",
@@ -908,7 +1161,11 @@
           "heavy-bolt-rifle",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -923,7 +1180,11 @@
         "name": "Watch Master",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -938,7 +1199,12 @@
         "name": "Corvus Blackstar",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -953,7 +1219,11 @@
         "name": "Deathwatch Terminator",
         "min": 10,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -968,7 +1238,11 @@
         "name": "Kill Team Intercessor",
         "min": 24,
         "max": 24,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -983,7 +1257,11 @@
         "name": "Kill Team Infiltrator",
         "min": 21,
         "max": 21,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -998,7 +1276,11 @@
         "name": "Captain in Gravis Armour",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1013,7 +1295,11 @@
         "name": "Adrax Agatone",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1028,7 +1314,11 @@
         "name": "Assault Intercessor",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1043,7 +1333,11 @@
         "name": "Inceptor",
         "min": 3,
         "max": 6,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1058,7 +1352,11 @@
         "name": "Ancient in Terminator Armour",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1073,7 +1371,11 @@
         "name": "Storm Speeder Hailstrike",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 90
+        }
       }
     ],
     "game_version": {
@@ -1088,7 +1390,11 @@
         "name": "Techmarine",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1103,7 +1409,11 @@
         "name": "Kor’sarro Khan",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1118,7 +1428,12 @@
         "name": "Suboden Khan",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 90,
+          "length": 52.5
+        }
       }
     ],
     "game_version": {
@@ -1133,7 +1448,11 @@
         "name": "Aethon Shaan",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -1148,7 +1467,11 @@
         "name": "Eradicator",
         "min": 3,
         "max": 6,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1163,7 +1486,11 @@
         "name": "Librarian",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1178,7 +1505,11 @@
         "name": "Watch Captain Artemis",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1193,7 +1524,11 @@
         "name": "Darnath Lysander",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1208,7 +1543,11 @@
         "name": "Dreadnought",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -1223,7 +1562,11 @@
         "name": "Assault Terminator",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1238,7 +1581,11 @@
         "name": "Predator Destructor",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -1253,7 +1600,11 @@
         "name": "Bladeguard Veteran",
         "min": 3,
         "max": 6,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1268,7 +1619,11 @@
         "name": "Firestrike Servo-turrets",
         "min": 1,
         "max": 2,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 80
+        }
       }
     ],
     "game_version": {
@@ -1283,7 +1638,11 @@
         "name": "Impulsor",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -1298,7 +1657,11 @@
         "name": "Storm Speeder Hammerstrike",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 90
+        }
       }
     ],
     "game_version": {
@@ -1313,7 +1676,11 @@
         "name": "Tor Garadon",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1328,7 +1695,11 @@
         "name": "Judiciar",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1343,7 +1714,11 @@
         "name": "Victrix Honour Guard",
         "min": 3,
         "max": 6,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1358,7 +1733,11 @@
         "name": "Gladiator Lancer",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -1373,7 +1752,11 @@
         "name": "Captain in Terminator Armour",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -1388,7 +1771,11 @@
         "name": "Roboute Guilliman",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -1403,7 +1790,11 @@
         "name": "Drop Pod",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -1418,7 +1809,11 @@
         "name": "Captain with Jump Pack",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1433,7 +1828,11 @@
         "name": "Storm Speeder Thunderstrike",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 90
+        }
       }
     ],
     "game_version": {
@@ -1448,7 +1847,11 @@
         "name": "Repulsor",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -1463,7 +1866,11 @@
         "name": "Hammerfall Bunker",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -1478,7 +1885,11 @@
         "name": "Suppressor",
         "min": 3,
         "max": 3,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1493,7 +1904,11 @@
         "name": "Librarian in Terminator Armour",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1508,7 +1923,11 @@
         "name": "Devastator",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1523,7 +1942,11 @@
         "name": "Kill Team Heavy Intercessors",
         "min": 16,
         "max": 16,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1542,7 +1965,11 @@
           "boltgun",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Deathwatch Veteran",
@@ -1553,7 +1980,11 @@
           "boltgun",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1568,7 +1999,11 @@
         "name": "Vulkan He’stan",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1583,7 +2018,11 @@
         "name": "Devastator Centurion",
         "min": 3,
         "max": 6,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -1598,7 +2037,11 @@
         "name": "Repulsor Executioner",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -1613,7 +2056,11 @@
         "name": "Hellblaster",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1628,7 +2075,11 @@
         "name": "Heavy Intercessor",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1643,7 +2094,11 @@
         "name": "Iron Father Feirros",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1663,7 +2118,11 @@
           "boltgun",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Deathwatch Veteran",
@@ -1673,7 +2132,11 @@
           "boltgun",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Gravis Veteran",
@@ -1683,7 +2146,11 @@
           "bolt-rifle",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1698,7 +2165,11 @@
         "name": "Scout",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {
@@ -1713,7 +2184,11 @@
         "name": "Marneus Calgar in Armour of Antilochus",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -1728,7 +2203,11 @@
         "name": "Apothecary Biologis",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1743,7 +2222,11 @@
         "name": "Brutalis Dreadnought",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 90
+        }
       }
     ],
     "game_version": {
@@ -1758,7 +2241,11 @@
         "name": "Librarian in Phobos Armour",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1773,7 +2260,11 @@
         "name": "Apothecary",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1788,7 +2279,11 @@
         "name": "Land Raider",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -1803,7 +2298,11 @@
         "name": "Lieutenant",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1818,7 +2317,11 @@
         "name": "Chief Librarian Tigurius",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1833,7 +2336,12 @@
         "name": "Stormtalon Gunship",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -1848,7 +2356,11 @@
         "name": "Captain Titus",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1863,7 +2375,11 @@
         "name": "Razorback",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -1878,7 +2394,11 @@
         "name": "Eliminator",
         "min": 3,
         "max": 3,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1898,7 +2418,12 @@
           "heavy-bolt-pistol",
           "astartes-chainsword"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 90,
+          "length": 52.5
+        }
       },
       {
         "name": "Outrider",
@@ -1908,7 +2433,12 @@
           "heavy-bolt-pistol",
           "astartes-chainsword"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 90,
+          "length": 52.5
+        }
       },
       {
         "name": "Invader ATV",
@@ -1917,7 +2447,12 @@
         "default_weapon_ids": [
           "onslaught-gatling-cannon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 90,
+          "length": 52.5
+        }
       }
     ],
     "game_version": {
@@ -1932,7 +2467,11 @@
         "name": "Desolation Marine",
         "min": 5,
         "max": 5,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1947,7 +2486,11 @@
         "name": "Assault Centurion",
         "min": 3,
         "max": 6,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -1962,7 +2505,11 @@
         "name": "Vindicator",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -1977,7 +2524,11 @@
         "name": "Tactical Marine",
         "min": 10,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1992,7 +2543,11 @@
         "name": "Whirlwind",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -2007,7 +2562,11 @@
         "name": "Cato Sicarius",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -2064,7 +2623,11 @@
         "name": "Redemptor Dreadnought",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 90
+        }
       }
     ],
     "game_version": {
@@ -2079,7 +2642,11 @@
         "name": "Ancient",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -2094,7 +2661,11 @@
         "name": "Pedro Kantor",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -2109,7 +2680,11 @@
         "name": "Chaplain in Terminator Armour",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -2124,7 +2699,11 @@
         "name": "Lieutenant with Combi-weapon",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -2139,7 +2718,11 @@
         "name": "Incursor",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -2154,7 +2737,11 @@
         "name": "Assault Intercessors with Jump Packs",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -2173,7 +2760,11 @@
           "bolt-rifle",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Kill Team Heavy Intercessor with Jump Pack",
@@ -2183,7 +2774,11 @@
           "heavy-bolt-rifle",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -2198,7 +2793,11 @@
         "name": "Caanok Var",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -2213,7 +2812,11 @@
         "name": "Vanguard Veteran with Jump Pack",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -2228,7 +2831,11 @@
         "name": "Company Veteran",
         "min": 4,
         "max": 4,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -2243,7 +2850,11 @@
         "name": "Aggressor",
         "min": 3,
         "max": 6,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -2258,7 +2869,12 @@
         "name": "Stormhawk Interceptor",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -2273,7 +2889,11 @@
         "name": "Captain",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -2288,7 +2908,11 @@
         "name": "Predator Annihilator",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -2303,7 +2927,12 @@
         "name": "Chaplain on Bike",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 90,
+          "length": 52.5
+        }
       }
     ],
     "game_version": {
@@ -2318,7 +2947,12 @@
         "name": "Stormraven Gunship",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -2333,7 +2967,11 @@
         "name": "Lieutenant in Reiver Armour",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -2348,7 +2986,11 @@
         "name": "Captain in Phobos Armour",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -2363,7 +3005,11 @@
         "name": "Watch Master",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -2378,7 +3024,11 @@
         "name": "Chaplain with Jump Pack",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -2393,7 +3043,11 @@
         "name": "Intercessor",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -2408,7 +3062,11 @@
         "name": "Astraeus",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -2423,7 +3081,11 @@
         "name": "Land Raider Redeemer",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -2438,7 +3100,11 @@
         "name": "Terminator",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -2453,7 +3119,11 @@
         "name": "Thunderhawk Gunship",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "unique",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -2468,7 +3138,11 @@
         "name": "Gladiator Reaper",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -2483,7 +3157,12 @@
         "name": "Corvus Blackstar",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        }
       }
     ],
     "game_version": {
@@ -2498,7 +3177,11 @@
         "name": "Rhino",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -2513,7 +3196,11 @@
         "name": "Invader ATV",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -2528,7 +3215,11 @@
         "name": "Infiltrator",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -2543,7 +3234,11 @@
         "name": "Ballistus Dreadnought",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 90
+        }
       }
     ],
     "game_version": {
@@ -2558,7 +3253,11 @@
         "name": "Deathwatch Terminator",
         "min": 10,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -2573,7 +3272,11 @@
         "name": "Infernus Marine",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -2588,7 +3291,11 @@
         "name": "Sternguard Veteran",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -2603,7 +3310,11 @@
         "name": "Gladiator Valiant",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
@@ -2618,7 +3329,11 @@
         "name": "Kayvaan Shrike",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -2633,7 +3348,11 @@
         "name": "Uriel Ventris",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -2648,7 +3367,11 @@
         "name": "Lieutenant in Phobos Armour",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -2663,7 +3386,11 @@
         "name": "Land Raider Crusader",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
       }
     ],
     "game_version": {
@@ -2678,7 +3405,11 @@
         "name": "Reiver",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -2693,7 +3424,11 @@
         "name": "Kill Team Intercessor",
         "min": 24,
         "max": 24,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -2708,7 +3443,11 @@
         "name": "Chaplain",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -2723,7 +3462,11 @@
         "name": "Invictor Tactical Warsuit",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 90
+        }
       }
     ],
     "game_version": {
@@ -2738,7 +3481,11 @@
         "name": "Bladeguard Ancient",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -2753,7 +3500,11 @@
         "name": "Kill Team Infiltrator",
         "min": 21,
         "max": 21,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -2843,7 +3594,11 @@
         "name": "Venerable Dreadnought",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -3548,7 +4303,11 @@
         "name": "Ragnar Blackmane",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -3563,7 +4322,11 @@
         "name": "Thunderwolf Cavalry",
         "min": 3,
         "max": 6,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -3578,7 +4341,11 @@
         "name": "Grey Hunter",
         "min": 10,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -3593,7 +4360,11 @@
         "name": "Fenrisian Wolves",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -3608,7 +4379,11 @@
         "name": "Wolf Priest",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -3626,7 +4401,11 @@
         "default_weapon_ids": [
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Hunting Wolf",
@@ -3636,7 +4415,11 @@
         "default_weapon_ids": [
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -3651,7 +4434,11 @@
         "name": "Iron Priest",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -3666,7 +4453,11 @@
         "name": "Njal Stormcaller",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -3681,7 +4472,11 @@
         "name": "Blood Claw",
         "min": 10,
         "max": 20,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -3696,7 +4491,11 @@
         "name": "Ulrik the Slayer",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -3711,7 +4510,11 @@
         "name": "Logan Grimnar",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 80
+        }
       }
     ],
     "game_version": {
@@ -3726,7 +4529,11 @@
         "name": "Wolf Guard Terminator",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -3741,7 +4548,11 @@
         "name": "Venerable Dreadnought",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -3756,7 +4567,11 @@
         "name": "Wulfen Dreadnought",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -3771,7 +4586,11 @@
         "name": "Wulfen with Storm Shields",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -3786,7 +4605,11 @@
         "name": "Bjorn the Fell-Handed",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -3801,7 +4624,11 @@
         "name": "Arjac Rockfist",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -3816,7 +4643,11 @@
         "name": "Wolf Guard Battle Leader",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -3836,7 +4667,12 @@
           "boltgun",
           "close-combat-weapon"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        }
       },
       {
         "name": "Wolf Scout",
@@ -3846,7 +4682,12 @@
           "boltgun",
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        }
       },
       {
         "name": "Hunting Wolf",
@@ -3855,7 +4696,12 @@
         "default_weapon_ids": [
           "close-combat-weapon"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        }
       }
     ],
     "game_version": {
@@ -3870,7 +4716,11 @@
         "name": "Wulfen",
         "min": 5,
         "max": 10,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -3885,7 +4735,11 @@
         "name": "Murderfang",
         "min": 1,
         "max": 1,
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {

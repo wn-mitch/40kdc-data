@@ -34,6 +34,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 5,
       "max": 10
@@ -93,6 +97,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
     "model_count": {
       "min": 1,
       "max": 2
@@ -153,6 +161,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -210,6 +222,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -303,6 +319,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
     "model_count": {
       "min": 9,
       "max": 9
@@ -369,6 +389,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
     "model_count": {
       "min": 3,
       "max": 10
@@ -417,6 +441,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 10,
       "max": 10
@@ -474,6 +502,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -530,6 +562,11 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -588,6 +625,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 5,
       "max": 10
@@ -657,6 +698,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 28.5
+    },
     "model_count": {
       "min": 5,
       "max": 10
@@ -708,6 +753,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -762,6 +811,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -817,6 +870,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -878,6 +935,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -933,6 +994,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -987,6 +1052,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 5,
       "max": 5
@@ -1058,6 +1127,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 28.5
+    },
     "model_count": {
       "min": 10,
       "max": 10
@@ -1129,6 +1202,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 2,
       "max": 2
@@ -1185,6 +1262,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1243,6 +1324,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
     "model_count": {
       "min": 3,
       "max": 3
@@ -1298,6 +1383,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1351,6 +1440,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1408,6 +1501,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
     "model_count": {
       "min": 1,
       "max": 2
@@ -1463,6 +1560,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1517,6 +1618,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1580,6 +1685,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 5,
       "max": 10
@@ -1630,6 +1739,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 10,
       "max": 10
@@ -1706,6 +1819,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 3,
       "max": 3
@@ -1762,6 +1879,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 10,
       "max": 10
@@ -1827,6 +1948,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1900,6 +2025,10 @@
     "faction_keywords": [
       "Adepta Sororitas"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 2,
       "max": 2

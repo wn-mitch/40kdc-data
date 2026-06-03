@@ -124,6 +124,20 @@
       "type": "string",
       "enum": ["obscuring", "hidden", "plunging-fire"],
       "description": "An 11e terrain-area keyword. Confirmed launch set; extend as further keywords publish on dataslate."
+    },
+    "base-size": {
+      "type": "object",
+      "description": "A model's base. 'round' carries 'diameter'; 'oval' carries 'width'+'length'. 'flying-base' (with 'size': small/large), 'hull', and 'unique' are categories the GW base-size guide gives without standard millimetre dimensions; entries carrying such a category, or any millimetre value not taken from an authoritative source, set 'draft': true to mark them for later hand-authoring.",
+      "properties": {
+        "shape": { "enum": ["round", "oval", "flying-base", "hull", "unique"] },
+        "diameter": { "type": "number", "exclusiveMinimum": 0 },
+        "width": { "type": "number", "exclusiveMinimum": 0 },
+        "length": { "type": "number", "exclusiveMinimum": 0 },
+        "size": { "enum": ["small", "large"], "description": "Flying-base size class, when 'shape' is 'flying-base'." },
+        "draft": { "type": "boolean", "default": false, "description": "True when the entry is provisional/guessed (e.g. a category without authoritative dimensions) and should be revisited." }
+      },
+      "required": ["shape"],
+      "additionalProperties": false
     }
   }
 }

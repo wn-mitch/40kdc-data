@@ -33,6 +33,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -93,6 +97,11 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -156,6 +165,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -218,6 +231,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -275,6 +292,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -336,6 +357,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 5,
       "max": 10
@@ -391,6 +416,11 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -447,6 +477,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "unique",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -509,6 +543,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -568,6 +606,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -627,6 +669,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -688,6 +734,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -748,6 +798,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 5,
       "max": 10
@@ -805,6 +859,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -863,6 +921,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -920,6 +982,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -977,6 +1043,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 5,
       "max": 10
@@ -1031,6 +1101,11 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1090,6 +1165,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 5,
       "max": 10
@@ -1146,6 +1225,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1212,6 +1295,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 4,
       "max": 10
@@ -1267,6 +1354,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1329,6 +1420,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1398,6 +1493,10 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 4,
       "max": 10
@@ -1452,6 +1551,11 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1508,6 +1612,11 @@
     "faction_keywords": [
       "Grey Knights"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1

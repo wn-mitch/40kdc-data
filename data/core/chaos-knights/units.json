@@ -31,6 +31,10 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -84,6 +88,10 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -137,6 +145,10 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -189,6 +201,10 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -244,6 +260,10 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -299,6 +319,10 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -355,6 +379,11 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 170,
+      "length": 109
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -421,6 +450,11 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 170,
+      "length": 109
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -478,6 +512,11 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 170,
+      "length": 109
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -534,6 +573,11 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 170,
+      "length": 109
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -589,6 +633,10 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -648,6 +696,11 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 170,
+      "length": 109
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -701,6 +754,10 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -757,6 +814,11 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 170,
+      "length": 109
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -812,6 +874,11 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 170,
+      "length": 109
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -866,6 +933,11 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 170,
+      "length": 109
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -922,6 +994,11 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 170,
+      "length": 109
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -979,6 +1056,11 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 170,
+      "length": 109
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1041,6 +1123,11 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 170,
+      "length": 109
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1098,6 +1185,11 @@
     "faction_keywords": [
       "Chaos Knights"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 170,
+      "length": 109
+    },
     "model_count": {
       "min": 1,
       "max": 1

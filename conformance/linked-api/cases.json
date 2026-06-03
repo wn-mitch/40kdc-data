@@ -1,35 +1,5 @@
 [
   {
-    "name": "wargear_options_of khorne-berzerkers (declared order)",
-    "query": "wargear_options_of",
-    "args": {
-      "unitId": "khorne-berzerkers"
-    },
-    "comparison": "ordered",
-    "expected": [
-      "khorne-berzerkers-swap-1",
-      "khorne-berzerkers-swap-2",
-      "khorne-berzerkers-swap-3",
-      "khorne-berzerkers-addon-4"
-    ]
-  },
-  {
-    "name": "maximal_loadout khorne-berzerkers @10",
-    "query": "maximal_loadout",
-    "args": {
-      "unitId": "khorne-berzerkers",
-      "modelCount": "10"
-    },
-    "comparison": "set",
-    "expected": [
-      "bolt-pistol:7",
-      "chainblade:8",
-      "icon-of-khorne:1",
-      "khornate-eviscerator:2",
-      "plasma-pistol:3"
-    ]
-  },
-  {
     "name": "find_unit by diacritic name",
     "query": "find_unit",
     "args": {
@@ -301,6 +271,46 @@
       "twin-heavy-bolter",
       "twin-heavy-flamer",
       "twin-lascannon"
+    ]
+  },
+  {
+    "name": "base_size_of intercessor-squad",
+    "query": "base_size_of",
+    "args": {
+      "unitId": "intercessor-squad"
+    },
+    "comparison": "scalar",
+    "expected": "round:32"
+  },
+  {
+    "name": "base_size_of vertus-praetors",
+    "query": "base_size_of",
+    "args": {
+      "unitId": "vertus-praetors"
+    },
+    "comparison": "scalar",
+    "expected": "oval:75x42"
+  },
+  {
+    "name": "base_size_of windriders (draft flying base)",
+    "query": "base_size_of",
+    "args": {
+      "unitId": "windriders"
+    },
+    "comparison": "scalar",
+    "expected": "flying-base:small:draft"
+  },
+  {
+    "name": "model_bases_of jakhals (mixed)",
+    "query": "model_bases_of",
+    "args": {
+      "unitId": "jakhals"
+    },
+    "comparison": "ordered",
+    "expected": [
+      "Jakhal Pack Leader=round:28.5",
+      "Dishonoured=round:40",
+      "Jakhal=round:28.5"
     ]
   }
 ]

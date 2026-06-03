@@ -225,6 +225,26 @@ export interface Vec2 {
   y: number;
 }
 /**
+ * A model's base. 'round' carries 'diameter'; 'oval' carries 'width'+'length'. 'flying-base' (with 'size': small/large), 'hull', and 'unique' are categories the GW base-size guide gives without standard millimetre dimensions; entries carrying such a category, or any millimetre value not taken from an authoritative source, set 'draft': true to mark them for later hand-authoring.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "base-size".
+ */
+export interface BaseSize {
+  shape: "round" | "oval" | "flying-base" | "hull" | "unique";
+  diameter?: number;
+  width?: number;
+  length?: number;
+  /**
+   * Flying-base size class, when 'shape' is 'flying-base'.
+   */
+  size?: "small" | "large";
+  /**
+   * True when the entry is provisional/guessed (e.g. a category without authoritative dimensions) and should be revisited.
+   */
+  draft?: boolean;
+}
+/**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "game-version-ref".
  */
@@ -1107,6 +1127,7 @@ export interface UnitComposition {
       max: number;
       default_weapon_ids?: EntityId[];
       is_leader_model?: boolean;
+      base_size_mm?: BaseSize1;
     },
     ...{
       name: string;
@@ -1115,9 +1136,27 @@ export interface UnitComposition {
       max: number;
       default_weapon_ids?: EntityId[];
       is_leader_model?: boolean;
+      base_size_mm?: BaseSize1;
     }[]
   ];
   game_version: GameVersionReference;
+}
+/**
+ * This model's base. Absent when no base could be resolved for the model.
+ */
+export interface BaseSize1 {
+  shape: "round" | "oval" | "flying-base" | "hull" | "unique";
+  diameter?: number;
+  width?: number;
+  length?: number;
+  /**
+   * Flying-base size class, when 'shape' is 'flying-base'.
+   */
+  size?: "small" | "large";
+  /**
+   * True when the entry is provisional/guessed (e.g. a category without authoritative dimensions) and should be revisited.
+   */
+  draft?: boolean;
 }
 /**
  * A unit datasheet entry with stat profiles and point costs.
@@ -1181,13 +1220,10 @@ export interface Unit {
   points_provisional?: boolean;
   keywords?: KeywordList;
   faction_keywords?: KeywordList;
-  base_size_mm?: {
-    shape: "round" | "oval";
-    diameter?: number;
-    width?: number;
-    length?: number;
-    [k: string]: unknown;
-  } | null;
+  /**
+   * The unit's representative base (the most-numerous model's base). Mixed-model units carry the full per-model breakdown in unit-composition; this top-level value is a convenience for consumers that need a single base.
+   */
+  base_size_mm?: BaseSize | null;
   model_count?: {
     min: number;
     max: number;

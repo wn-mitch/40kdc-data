@@ -249,6 +249,29 @@ function handleExport(args: unknown): RunnerResponse {
   }
 }
 
+/**
+ * Canonical string encoding of a base size for cross-impl comparison (mirrors the
+ * string-encoding used by `maximal_loadout`). Returns null for an absent base.
+ *   round 32     → "round:32"
+ *   oval 75×42   → "oval:75x42"
+ *   small flyer  → "flying-base:small:draft"
+ *   hull (draft) → "hull:draft"
+ */
+export function encodeBase(
+  b:
+    | { shape: string; diameter?: number; width?: number; length?: number; size?: string; draft?: boolean }
+    | null
+    | undefined,
+): string | null {
+  if (!b) return null;
+  const parts: string[] = [b.shape];
+  if (b.shape === "round" && b.diameter != null) parts.push(String(b.diameter));
+  else if (b.shape === "oval" && b.width != null && b.length != null) parts.push(`${b.width}x${b.length}`);
+  else if (b.shape === "flying-base" && b.size) parts.push(b.size);
+  if (b.draft) parts.push("draft");
+  return parts.join(":");
+}
+
 function handleLinkedQuery(state: RunnerState, args: unknown): RunnerResponse {
   if (typeof args !== "object" || args === null) {
     return err("INVALID_INPUT", { detail: "linked_query args must be an object" });
@@ -301,6 +324,18 @@ function handleLinkedQuery(state: RunnerState, args: unknown): RunnerResponse {
         const u = ds.units.get(input.unitId);
         if (!u) return err("UNKNOWN_ENTITY", { kind: "unit", id: input.unitId });
         return ok(u.faction?.id ?? null);
+      }
+      case "base_size_of": {
+        const u = ds.units.get(input.unitId);
+        if (!u) return err("UNKNOWN_ENTITY", { kind: "unit", id: input.unitId });
+        return ok(encodeBase(u.raw.base_size_mm));
+      }
+      case "model_bases_of": {
+        const u = ds.units.get(input.unitId);
+        if (!u) return err("UNKNOWN_ENTITY", { kind: "unit", id: input.unitId });
+        const comp = ds.unitCompositions.find((c) => c.unit_id === input.unitId);
+        // Ordered "modelName=encodedBase" pairs in declared model order.
+        return ok((comp?.models ?? []).map((m) => `${m.name}=${encodeBase(m.base_size_mm) ?? "none"}`));
       }
       case "abilities_of_faction":
         return ok(ds.abilities.byFaction(input.factionId).map((x) => x.id));

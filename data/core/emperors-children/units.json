@@ -32,6 +32,10 @@
     "faction_keywords": [
       "Emperor’s Children"
     ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -94,6 +98,10 @@
     "faction_keywords": [
       "Emperor’s Children"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 5,
       "max": 10
@@ -155,6 +163,10 @@
     "faction_keywords": [
       "Emperor’s Children"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -215,6 +227,10 @@
     "faction_keywords": [
       "Emperor’s Children"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -277,6 +293,10 @@
     "faction_keywords": [
       "Emperor’s Children"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -330,6 +350,10 @@
     "faction_keywords": [
       "Emperor’s Children"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
     "model_count": {
       "min": 2,
       "max": 2
@@ -389,6 +413,10 @@
     "faction_keywords": [
       "Emperor’s Children"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -441,6 +469,10 @@
     "faction_keywords": [
       "Emperor’s Children"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 6,
       "max": 6
@@ -500,6 +532,10 @@
     "faction_keywords": [
       "Emperor’s Children"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 5,
       "max": 10
@@ -561,6 +597,10 @@
     "faction_keywords": [
       "Emperor’s Children"
     ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -624,6 +664,10 @@
     "faction_keywords": [
       "Emperor’s Children"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -680,6 +724,10 @@
     "faction_keywords": [
       "Emperor’s Children"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 130
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -736,6 +784,10 @@
     "faction_keywords": [
       "Emperor’s Children"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -792,6 +844,11 @@
     "faction_keywords": [
       "Emperor’s Children"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -851,6 +908,10 @@
     "faction_keywords": [
       "Emperor’s Children"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 5,
       "max": 10
@@ -905,6 +966,11 @@
     "faction_keywords": [
       "Emperor’s Children"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -964,6 +1030,10 @@
     "faction_keywords": [
       "Emperor’s Children"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 3,
       "max": 6

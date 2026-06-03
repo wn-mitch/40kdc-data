@@ -456,6 +456,45 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
                 None => Value::Null,
             })
         }
+        "base_size_of" => {
+            let id = str_arg("unitId");
+            let Some(unit) = ds.units.get(id) else {
+                return err_value(
+                    ErrorKind::UnknownEntity,
+                    Some(json!({ "kind": "unit", "id": id })),
+                );
+            };
+            ok_value(match &unit.base_size_mm {
+                Some(b) => Value::String(encode_base(b)),
+                None => Value::Null,
+            })
+        }
+        "model_bases_of" => {
+            let id = str_arg("unitId");
+            if ds.units.get(id).is_none() {
+                return err_value(
+                    ErrorKind::UnknownEntity,
+                    Some(json!({ "kind": "unit", "id": id })),
+                );
+            }
+            let comp = ds.unit_compositions.iter().find(|c| c.unit_id.as_str() == id);
+            let pairs: Vec<Value> = comp
+                .map(|c| {
+                    c.models
+                        .iter()
+                        .map(|m| {
+                            let base = m
+                                .base_size_mm
+                                .as_ref()
+                                .map(encode_base)
+                                .unwrap_or_else(|| "none".to_string());
+                            Value::String(format!("{}={}", m.name.as_str(), base))
+                        })
+                        .collect()
+                })
+                .unwrap_or_default();
+            ok_value(Value::Array(pairs))
+        }
         "abilities_of_faction" => {
             let id = str_arg("factionId");
             ok_value(Value::Array(
@@ -496,6 +535,8 @@ fn phase_str(p: Phase) -> &'static str {
         Phase::Fight => "fight",
     }
 }
+
+use wh40kdc::encode_base_size as encode_base;
 
 /// Rust has no validator yet (the crate exposes `BUNDLED_SCHEMA` as a string
 /// constant but no validation function). Return UNKNOWN_OP so the differ can

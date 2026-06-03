@@ -35,6 +35,11 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "flying-base",
+      "size": "small",
+      "draft": true
+    },
     "model_count": {
       "min": 3,
       "max": 6
@@ -95,6 +100,13 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "flying-base",
+      "size": "large",
+      "draft": true,
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 2
@@ -150,6 +162,10 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -207,6 +223,11 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "flying-base",
+      "size": "small",
+      "draft": true
+    },
     "model_count": {
       "min": 5,
       "max": 10
@@ -265,6 +286,13 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "flying-base",
+      "size": "large",
+      "draft": true,
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -325,6 +353,10 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 5,
       "max": 5
@@ -382,6 +414,10 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
     "model_count": {
       "min": 10,
       "max": 10
@@ -443,6 +479,13 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "flying-base",
+      "size": "large",
+      "draft": true,
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -503,6 +546,10 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -557,6 +604,11 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -615,6 +667,10 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 5,
       "max": 5
@@ -679,6 +735,13 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "flying-base",
+      "size": "large",
+      "draft": true,
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 2
@@ -747,6 +810,10 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
     "model_count": {
       "min": 5,
       "max": 10
@@ -804,6 +871,10 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -859,6 +930,10 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -921,6 +996,10 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -975,6 +1054,13 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "flying-base",
+      "size": "large",
+      "draft": true,
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1029,6 +1115,10 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
     "model_count": {
       "min": 10,
       "max": 10
@@ -1083,6 +1173,10 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
     "model_count": {
       "min": 10,
       "max": 10
@@ -1148,6 +1242,11 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1203,6 +1302,10 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1269,6 +1372,10 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 28.5
+    },
     "model_count": {
       "min": 5,
       "max": 10
@@ -1324,6 +1431,10 @@
     "faction_keywords": [
       "Drukhari"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 28.5
+    },
     "model_count": {
       "min": 5,
       "max": 10

@@ -62,17 +62,9 @@
     "keywords": { "$ref": "../defs/common.schema.json#/$defs/keyword-list" },
     "faction_keywords": { "$ref": "../defs/common.schema.json#/$defs/keyword-list" },
     "base_size_mm": {
+      "description": "The unit's representative base (the most-numerous model's base). Mixed-model units carry the full per-model breakdown in unit-composition; this top-level value is a convenience for consumers that need a single base.",
       "oneOf": [
-        {
-          "type": "object",
-          "properties": {
-            "shape": { "enum": ["round", "oval"] },
-            "diameter": { "type": "number" },
-            "width": { "type": "number" },
-            "length": { "type": "number" }
-          },
-          "required": ["shape"]
-        },
+        { "$ref": "../defs/common.schema.json#/$defs/base-size" },
         { "type": "null" }
       ]
     },

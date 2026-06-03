@@ -39,6 +39,36 @@ mod generated;
 
 pub use generated::*;
 
+/// Canonical string encoding of a base size, shared by the conformance runner and
+/// its tests so both sides of the cross-impl contract agree byte-for-byte. Mirrors
+/// the TS `encodeBase`. Examples: round 32 → `"round:32"`; oval 75×42 →
+/// `"oval:75x42"`; small flyer → `"flying-base:small:draft"`; hull → `"hull:draft"`.
+pub fn encode_base_size(b: &BaseSize) -> String {
+    let mut parts = vec![b.shape.to_string()];
+    match b.shape {
+        BaseSizeShape::Round => {
+            if let Some(d) = b.diameter {
+                parts.push(d.to_string());
+            }
+        }
+        BaseSizeShape::Oval => {
+            if let (Some(w), Some(l)) = (b.width, b.length) {
+                parts.push(format!("{}x{}", w, l));
+            }
+        }
+        BaseSizeShape::FlyingBase => {
+            if let Some(s) = &b.size {
+                parts.push(s.to_string());
+            }
+        }
+        _ => {}
+    }
+    if b.draft {
+        parts.push("draft".to_string());
+    }
+    parts.join(":")
+}
+
 /// Linked, typed access over the embedded dataset (default `bundled-data`).
 #[cfg(feature = "bundled-data")]
 pub mod data;

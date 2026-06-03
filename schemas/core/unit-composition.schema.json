@@ -24,7 +24,11 @@
             "type": "array",
             "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" }
           },
-          "is_leader_model": { "type": "boolean", "default": false }
+          "is_leader_model": { "type": "boolean", "default": false },
+          "base_size_mm": {
+            "description": "This model's base. Absent when no base could be resolved for the model.",
+            "$ref": "../defs/common.schema.json#/$defs/base-size"
+          }
         },
         "required": ["name", "min", "max"],
         "additionalProperties": false

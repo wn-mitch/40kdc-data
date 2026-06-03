@@ -31,6 +31,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 160
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -92,6 +96,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -144,6 +152,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -200,6 +212,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 130
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -258,6 +274,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -312,6 +332,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
     "model_count": {
       "min": 10,
       "max": 10
@@ -369,6 +393,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 3,
       "max": 6
@@ -421,6 +449,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -476,6 +508,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -529,6 +565,11 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -594,6 +635,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 10,
       "max": 10
@@ -651,6 +696,11 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 60,
+      "length": 35.5
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -706,6 +756,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 10,
       "max": 10
@@ -758,6 +812,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -818,6 +876,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -875,6 +937,11 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 60,
+      "length": 35.5
+    },
     "model_count": {
       "min": 5,
       "max": 10
@@ -930,6 +997,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -987,6 +1058,11 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "flying-base",
+      "size": "small",
+      "draft": true
+    },
     "model_count": {
       "min": 3,
       "max": 6
@@ -1038,6 +1114,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 10,
       "max": 10
@@ -1091,6 +1171,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1148,6 +1232,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1201,6 +1289,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1253,6 +1345,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 130
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1311,6 +1407,11 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 90,
+      "length": 52.5
+    },
     "model_count": {
       "min": 3,
       "max": 6
@@ -1365,6 +1466,11 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 75,
+      "length": 42
+    },
     "model_count": {
       "min": 3,
       "max": 6
@@ -1417,6 +1523,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1473,6 +1583,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1532,6 +1646,11 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 105,
+      "length": 70
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1587,6 +1706,11 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 75,
+      "length": 42
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1643,6 +1767,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1700,6 +1828,11 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1758,6 +1891,11 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 2
@@ -1814,6 +1952,13 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "flying-base",
+      "size": "large",
+      "draft": true,
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 3,
       "max": 6
@@ -1868,6 +2013,11 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1925,6 +2075,11 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 75,
+      "length": 42
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1981,6 +2136,11 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 90,
+      "length": 52.5
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2037,6 +2197,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2092,6 +2256,11 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 75,
+      "length": 42
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2148,6 +2317,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2204,6 +2377,11 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2261,6 +2439,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2315,6 +2497,11 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2366,6 +2553,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2416,6 +2607,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2473,6 +2668,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2527,6 +2726,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
     "model_count": {
       "min": 10,
       "max": 10
@@ -2584,6 +2787,13 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "flying-base",
+      "size": "large",
+      "draft": true,
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2638,6 +2848,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2694,6 +2908,13 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "flying-base",
+      "size": "large",
+      "draft": true,
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2752,6 +2973,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 3,
       "max": 6
@@ -2806,6 +3031,10 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    },
     "model_count": {
       "min": 1,
       "max": 2
@@ -2861,6 +3090,11 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 60,
+      "length": 35.5
+    },
     "model_count": {
       "min": 5,
       "max": 10
@@ -2912,6 +3146,11 @@
     "faction_keywords": [
       "Legiones Daemonica"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1

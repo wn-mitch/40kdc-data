@@ -30,6 +30,7 @@ import { exportRoster, type ExportFormat } from "./export/index.js";
 import { importRoster, REGISTERED_ADAPTERS } from "./import/import-roster.js";
 import { selectAdapter } from "./import/adapter.js";
 import type { ParsedRoster, Roster } from "./import/types.js";
+import { encodeBase } from "./runner.js";
 import { attributeStages } from "./cruncher/attribution.js";
 import type { EngineInput } from "./cruncher/index.js";
 import {
@@ -234,7 +235,9 @@ type LinkedApiQuery =
   | { name: string; query: "phases_of"; args: { abilityId: string }; comparison: "set" }
   | { name: string; query: "faction_of"; args: { unitId: string }; comparison: "scalar" }
   | { name: string; query: "abilities_of_faction"; args: { factionId: string }; comparison: "set" }
-  | { name: string; query: "weapons_of_faction"; args: { factionId: string }; comparison: "set" };
+  | { name: string; query: "weapons_of_faction"; args: { factionId: string }; comparison: "set" }
+  | { name: string; query: "base_size_of"; args: { unitId: string }; comparison: "scalar" }
+  | { name: string; query: "model_bases_of"; args: { unitId: string }; comparison: "ordered" };
 
 const LINKED_API_QUERIES: LinkedApiQuery[] = [
   // find_unit: diacritic-insensitive lookup, miss returns null.
@@ -260,6 +263,12 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
   { name: "abilities_of_faction world-eaters", query: "abilities_of_faction", args: { factionId: "world-eaters" }, comparison: "set" },
   // weapons_of_faction: compared as set.
   { name: "weapons_of_faction world-eaters", query: "weapons_of_faction", args: { factionId: "world-eaters" }, comparison: "set" },
+  // base_size_of(unit): scalar encoded base — round, oval, and a draft flying-base.
+  { name: "base_size_of intercessor-squad", query: "base_size_of", args: { unitId: "intercessor-squad" }, comparison: "scalar" },
+  { name: "base_size_of vertus-praetors", query: "base_size_of", args: { unitId: "vertus-praetors" }, comparison: "scalar" },
+  { name: "base_size_of windriders (draft flying base)", query: "base_size_of", args: { unitId: "windriders" }, comparison: "scalar" },
+  // model_bases_of(unit): ordered per-model bases; jakhals mixes 28.5mm bodies with a 40mm Dishonoured.
+  { name: "model_bases_of jakhals (mixed)", query: "model_bases_of", args: { unitId: "jakhals" }, comparison: "ordered" },
 ];
 
 function genLinkedApi(): void {
@@ -312,6 +321,17 @@ function runLinkedQuery(ds: Dataset, q: LinkedApiQuery): string | null | string[
       const f = ds.factions.get(q.args.factionId);
       if (!f) throw new Error(`weapons_of_faction: unknown faction ${q.args.factionId}`);
       return f.weapons.map((w) => w.id).sort();
+    }
+    case "base_size_of": {
+      const u = ds.units.get(q.args.unitId);
+      if (!u) throw new Error(`base_size_of: unknown unit ${q.args.unitId}`);
+      return encodeBase(u.raw.base_size_mm);
+    }
+    case "model_bases_of": {
+      const u = ds.units.get(q.args.unitId);
+      if (!u) throw new Error(`model_bases_of: unknown unit ${q.args.unitId}`);
+      const comp = ds.unitCompositions.find((c) => c.unit_id === q.args.unitId);
+      return (comp?.models ?? []).map((m) => `${m.name}=${encodeBase(m.base_size_mm) ?? "none"}`);
     }
   }
 }

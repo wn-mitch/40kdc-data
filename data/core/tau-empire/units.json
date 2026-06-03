@@ -34,6 +34,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
     "model_count": {
       "min": 3,
       "max": 6
@@ -88,6 +92,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "unique",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -149,6 +157,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
     "model_count": {
       "min": 3,
       "max": 3
@@ -211,6 +223,13 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "flying-base",
+      "size": "large",
+      "draft": true,
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 3
@@ -267,6 +286,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 5,
       "max": 5
@@ -321,6 +344,11 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -384,6 +412,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 28.5
+    },
     "model_count": {
       "min": 12,
       "max": 12
@@ -441,6 +473,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 160
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -500,6 +536,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
     "model_count": {
       "min": 10,
       "max": 10
@@ -559,6 +599,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
     "model_count": {
       "min": 10,
       "max": 10
@@ -617,6 +661,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    },
     "model_count": {
       "min": 2,
       "max": 2
@@ -674,6 +722,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
     "model_count": {
       "min": 3,
       "max": 3
@@ -725,6 +777,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 160
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -786,6 +842,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
     "model_count": {
       "min": 10,
       "max": 10
@@ -838,6 +898,11 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 170,
+      "length": 109
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -897,6 +962,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -953,6 +1022,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 28.5
+    },
     "model_count": {
       "min": 5,
       "max": 10
@@ -1002,6 +1075,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1055,6 +1132,11 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1116,6 +1198,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1177,6 +1263,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
     "model_count": {
       "min": 1,
       "max": 3
@@ -1231,6 +1321,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1290,6 +1384,11 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 105,
+      "length": 70
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1343,6 +1442,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 160
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1396,6 +1499,13 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "flying-base",
+      "size": "large",
+      "draft": true,
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1452,6 +1562,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 28.5
+    },
     "model_count": {
       "min": 5,
       "max": 10
@@ -1508,6 +1622,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1569,6 +1687,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1626,6 +1748,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 2
@@ -1684,6 +1810,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    },
     "model_count": {
       "min": 1,
       "max": 3
@@ -1740,6 +1870,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1798,6 +1932,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1850,6 +1988,11 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1904,6 +2047,13 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "flying-base",
+      "size": "large",
+      "draft": true,
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -1961,6 +2111,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2012,6 +2166,13 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "flying-base",
+      "size": "large",
+      "draft": true,
+      "width": 120,
+      "length": 92
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2067,6 +2228,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2120,6 +2285,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
     "model_count": {
       "min": 3,
       "max": 3
@@ -2170,6 +2339,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2224,6 +2397,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 28.5
+    },
     "model_count": {
       "min": 10,
       "max": 20
@@ -2279,6 +2456,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2334,6 +2515,11 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 90,
+      "length": 52.5
+    },
     "model_count": {
       "min": 1,
       "max": 1
@@ -2389,6 +2575,10 @@
     "faction_keywords": [
       "T’au Empire"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 1,
       "max": 1

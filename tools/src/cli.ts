@@ -6,6 +6,7 @@ import { validateAllCommand } from "./commands/validate-all.js";
 import { translateCommand } from "./commands/translate.js";
 import { importCommand } from "./commands/import.js";
 import { auditCoverageCommand } from "./audit-coverage.js";
+import { populateBaseSizesCommand } from "./commands/populate-base-sizes.js";
 
 const program = new Command();
 
@@ -52,5 +53,10 @@ program
   .option("--reporter <mode>", "Output format: json or pretty", "json")
   .option("--out <file>", "Write roster JSON to a file instead of stdout")
   .action(importCommand);
+
+program
+  .command("populate-base-sizes")
+  .description("Populate base_size_mm on units + composition models from the GW base-size guide (+ bevy fallback)")
+  .action(populateBaseSizesCommand);
 
 program.parse();

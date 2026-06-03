@@ -800,6 +800,239 @@ impl ::std::default::Default for ArmyCompositionPredicateUnitFilter {
         }
     }
 }
+///A model's base. 'round' carries 'diameter'; 'oval' carries 'width'+'length'. 'flying-base' (with 'size': small/large), 'hull', and 'unique' are categories the GW base-size guide gives without standard millimetre dimensions; entries carrying such a category, or any millimetre value not taken from an authoritative source, set 'draft': true to mark them for later hand-authoring.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "A model's base. 'round' carries 'diameter'; 'oval' carries 'width'+'length'. 'flying-base' (with 'size': small/large), 'hull', and 'unique' are categories the GW base-size guide gives without standard millimetre dimensions; entries carrying such a category, or any millimetre value not taken from an authoritative source, set 'draft': true to mark them for later hand-authoring.",
+///  "type": "object",
+///  "required": [
+///    "shape"
+///  ],
+///  "properties": {
+///    "diameter": {
+///      "type": "number",
+///      "exclusiveMinimum": 0.0
+///    },
+///    "draft": {
+///      "description": "True when the entry is provisional/guessed (e.g. a category without authoritative dimensions) and should be revisited.",
+///      "default": false,
+///      "type": "boolean"
+///    },
+///    "length": {
+///      "type": "number",
+///      "exclusiveMinimum": 0.0
+///    },
+///    "shape": {
+///      "enum": [
+///        "round",
+///        "oval",
+///        "flying-base",
+///        "hull",
+///        "unique"
+///      ]
+///    },
+///    "size": {
+///      "description": "Flying-base size class, when 'shape' is 'flying-base'.",
+///      "enum": [
+///        "small",
+///        "large"
+///      ]
+///    },
+///    "width": {
+///      "type": "number",
+///      "exclusiveMinimum": 0.0
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct BaseSize {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub diameter: ::std::option::Option<f64>,
+    ///True when the entry is provisional/guessed (e.g. a category without authoritative dimensions) and should be revisited.
+    #[serde(default)]
+    pub draft: bool,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub length: ::std::option::Option<f64>,
+    pub shape: BaseSizeShape,
+    ///Flying-base size class, when 'shape' is 'flying-base'.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub size: ::std::option::Option<BaseSizeSize>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub width: ::std::option::Option<f64>,
+}
+///`BaseSizeShape`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "round",
+///    "oval",
+///    "flying-base",
+///    "hull",
+///    "unique"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum BaseSizeShape {
+    #[serde(rename = "round")]
+    Round,
+    #[serde(rename = "oval")]
+    Oval,
+    #[serde(rename = "flying-base")]
+    FlyingBase,
+    #[serde(rename = "hull")]
+    Hull,
+    #[serde(rename = "unique")]
+    Unique,
+}
+impl ::std::fmt::Display for BaseSizeShape {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Round => f.write_str("round"),
+            Self::Oval => f.write_str("oval"),
+            Self::FlyingBase => f.write_str("flying-base"),
+            Self::Hull => f.write_str("hull"),
+            Self::Unique => f.write_str("unique"),
+        }
+    }
+}
+impl ::std::str::FromStr for BaseSizeShape {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "round" => Ok(Self::Round),
+            "oval" => Ok(Self::Oval),
+            "flying-base" => Ok(Self::FlyingBase),
+            "hull" => Ok(Self::Hull),
+            "unique" => Ok(Self::Unique),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for BaseSizeShape {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for BaseSizeShape {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for BaseSizeShape {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Flying-base size class, when 'shape' is 'flying-base'.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Flying-base size class, when 'shape' is 'flying-base'.",
+///  "enum": [
+///    "small",
+///    "large"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum BaseSizeSize {
+    #[serde(rename = "small")]
+    Small,
+    #[serde(rename = "large")]
+    Large,
+}
+impl ::std::fmt::Display for BaseSizeSize {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Small => f.write_str("small"),
+            Self::Large => f.write_str("large"),
+        }
+    }
+}
+impl ::std::str::FromStr for BaseSizeSize {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "small" => Ok(Self::Small),
+            "large" => Ok(Self::Large),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for BaseSizeSize {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for BaseSizeSize {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for BaseSizeSize {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///11e battle size, which sets the army's points limit and detachment-point budget: 'incursion' = 1000 pts / 2 detachment points; 'strike-force' = 2000 pts / 3 detachment points.
 ///
 /// <details><summary>JSON schema</summary>
@@ -9988,29 +10221,10 @@ impl ::std::convert::TryFrom<::std::string::String> for TimingFlagTiming {
 ///      ]
 ///    },
 ///    "base_size_mm": {
+///      "description": "The unit's representative base (the most-numerous model's base). Mixed-model units carry the full per-model breakdown in unit-composition; this top-level value is a convenience for consumers that need a single base.",
 ///      "oneOf": [
 ///        {
-///          "type": "object",
-///          "required": [
-///            "shape"
-///          ],
-///          "properties": {
-///            "diameter": {
-///              "type": "number"
-///            },
-///            "length": {
-///              "type": "number"
-///            },
-///            "shape": {
-///              "enum": [
-///                "round",
-///                "oval"
-///              ]
-///            },
-///            "width": {
-///              "type": "number"
-///            }
-///          }
+///          "$ref": "#/$defs/base-size"
 ///        },
 ///        {
 ///          "type": "null"
@@ -10212,8 +10426,9 @@ pub struct Unit {
     ///Character attachment role (11e). 'support' implies the unit is only legal when attached to a host unit (cannot be taken solo); 'leader' is valid as a standalone list entry. null/absent for non-attaching units.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attachment_role: ::std::option::Option<UnitAttachmentRole>,
+    ///The unit's representative base (the most-numerous model's base). Mixed-model units carry the full per-model breakdown in unit-composition; this top-level value is a convenience for consumers that need a single base.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub base_size_mm: ::std::option::Option<UnitBaseSizeMm>,
+    pub base_size_mm: ::std::option::Option<BaseSize>,
     pub faction_id: EntityId,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub faction_keywords: ::std::option::Option<KeywordList>,
@@ -10315,121 +10530,6 @@ impl ::std::convert::TryFrom<::std::string::String> for UnitAttachmentRole {
         value.parse()
     }
 }
-///`UnitBaseSizeMm`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "shape"
-///  ],
-///  "properties": {
-///    "diameter": {
-///      "type": "number"
-///    },
-///    "length": {
-///      "type": "number"
-///    },
-///    "shape": {
-///      "enum": [
-///        "round",
-///        "oval"
-///      ]
-///    },
-///    "width": {
-///      "type": "number"
-///    }
-///  }
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
-pub struct UnitBaseSizeMm {
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub diameter: ::std::option::Option<f64>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub length: ::std::option::Option<f64>,
-    pub shape: UnitBaseSizeMmShape,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub width: ::std::option::Option<f64>,
-}
-///`UnitBaseSizeMmShape`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "enum": [
-///    "round",
-///    "oval"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum UnitBaseSizeMmShape {
-    #[serde(rename = "round")]
-    Round,
-    #[serde(rename = "oval")]
-    Oval,
-}
-impl ::std::fmt::Display for UnitBaseSizeMmShape {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Round => f.write_str("round"),
-            Self::Oval => f.write_str("oval"),
-        }
-    }
-}
-impl ::std::str::FromStr for UnitBaseSizeMmShape {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "round" => Ok(Self::Round),
-            "oval" => Ok(Self::Oval),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for UnitBaseSizeMmShape {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String> for UnitBaseSizeMmShape {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for UnitBaseSizeMmShape {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
 ///Describes the internal model-type breakdown of a unit.
 ///
 /// <details><summary>JSON schema</summary>
@@ -10458,6 +10558,10 @@ impl ::std::convert::TryFrom<::std::string::String> for UnitBaseSizeMmShape {
 ///          "name"
 ///        ],
 ///        "properties": {
+///          "base_size_mm": {
+///            "description": "This model's base. Absent when no base could be resolved for the model.",
+///            "$ref": "#/$defs/base-size"
+///          },
 ///          "default_weapon_ids": {
 ///            "type": "array",
 ///            "items": {
@@ -10524,6 +10628,10 @@ pub struct UnitComposition {
 ///    "name"
 ///  ],
 ///  "properties": {
+///    "base_size_mm": {
+///      "description": "This model's base. Absent when no base could be resolved for the model.",
+///      "$ref": "#/$defs/base-size"
+///    },
 ///    "default_weapon_ids": {
 ///      "type": "array",
 ///      "items": {
@@ -10565,6 +10673,9 @@ pub struct UnitComposition {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct UnitCompositionModelsItem {
+    ///This model's base. Absent when no base could be resolved for the model.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub base_size_mm: ::std::option::Option<BaseSize>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub default_weapon_ids: ::std::vec::Vec<EntityId>,
     #[serde(default)]

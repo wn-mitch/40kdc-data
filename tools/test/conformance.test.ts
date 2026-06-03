@@ -27,6 +27,7 @@ import { crunch, type Buff, type EngineContext, type Stage } from "../src/crunch
 import { attributeStages } from "../src/cruncher/attribution.js";
 import type { Phase } from "../src/generated.js";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
+import { encodeBase } from "../src/runner.js";
 import type { EligibilityInput } from "../src/abilities-resolver/index.js";
 import {
   resolveLayout,
@@ -388,6 +389,17 @@ function runLinkedApi(ds: Dataset, c: LinkedApiCase): string | null | string[] {
       const f = ds.factions.get(c.args.factionId);
       if (!f) throw new Error(`weapons_of_faction: unknown faction ${c.args.factionId}`);
       return f.weapons.map((w) => w.id);
+    }
+    case "base_size_of": {
+      const u = ds.units.get(c.args.unitId);
+      if (!u) throw new Error(`base_size_of: unknown unit ${c.args.unitId}`);
+      return encodeBase(u.raw.base_size_mm);
+    }
+    case "model_bases_of": {
+      const u = ds.units.get(c.args.unitId);
+      if (!u) throw new Error(`model_bases_of: unknown unit ${c.args.unitId}`);
+      const comp = ds.unitCompositions.find((cc) => cc.unit_id === c.args.unitId);
+      return (comp?.models ?? []).map((m) => `${m.name}=${encodeBase(m.base_size_mm) ?? "none"}`);
     }
     default:
       throw new Error(`unknown linked-api query: ${c.query}`);

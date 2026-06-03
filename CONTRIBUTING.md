@@ -31,6 +31,47 @@ If you need core data for your tools:
 3. Run `cd tools && npm run validate:core` to verify
 4. **Do not submit PRs with real core data back to this repository**
 
+### Base sizes
+
+`base_size_mm` on units (and per-model on `unit-compositions`) is populated by a
+dedicated, additive converter — **not** by `convert-faction` (re-running that
+regresses unrelated committed data). Sources, in priority order:
+
+1. **GW Chapter Approved Tournament Companion — Base Size Guide** (authoritative for
+   current matched-play units). Base sizes are numerical facts, so the extracted
+   `name → size` rows are committed at `tools/src/converters/data/base-size-guide.json`.
+   The **PDF itself is GW copyright and is never committed.**
+2. **bevy-deploy-helper** (`../bevy-deploy-helper/assets/`) — fallback for the Forge
+   World / Legends units the tournament guide omits.
+
+To refresh from a newer guide revision (download the PDF locally first):
+
+```bash
+pdftotext -layout tournament-companion.pdf tc.txt
+cd tools
+tsx src/converters/base-size-guide-extract.ts tc.txt > src/converters/data/base-size-guide.json
+tsx src/cli.ts populate-base-sizes   # patches data/core/*/{units,unit-compositions}.json
+```
+
+The populate step writes a report to `data/core/_reports/_base-sizes.unresolved.json`
+listing unmatched units, bevy fallbacks, and unresolved models.
+
+**Draft entries.** Categories the guide gives without standard millimetres
+(`flying-base`, `hull`, `unique`) — and any non-authoritative value — are written
+with `"draft": true`. These are placeholders to revisit: hand-author the real
+dimensions in the relevant `units.json` / `unit-compositions.json` and drop the
+`draft` flag. Find them with:
+
+```bash
+jq -r '.[] | select(.base_size_mm.draft) | .id' data/core/*/units.json
+```
+
+After editing schemas or data, regenerate downstream artifacts:
+`npm run bundle:schemas && npm run codegen:types && npm run codegen:data`,
+`cargo run -p xtask -- codegen`, `cargo run -p xtask -- bundle-data`. A base-size
+change that touches conformance also bumps `conformance/SPEC_VERSION` and the
+`tools/package.json` + `crates/wh40kdc/Cargo.toml` versions in lockstep.
+
 ## Tooling
 
 The validation CLI lives under `tools/`. Standard PR workflow:

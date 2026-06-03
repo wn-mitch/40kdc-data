@@ -131,6 +131,40 @@ fn run_query(ds: &Dataset, query: &str, args: &Value) -> Value {
                 .map(|w| Value::String(w.id.to_string()))
                 .collect(),
         ),
+        "base_size_of" => {
+            let id = arg_str("unitId");
+            let u = ds
+                .units
+                .get(id)
+                .unwrap_or_else(|| panic!("base_size_of: unknown unit {id}"));
+            match &u.base_size_mm {
+                Some(b) => Value::String(wh40kdc::encode_base_size(b)),
+                None => Value::Null,
+            }
+        }
+        "model_bases_of" => {
+            let id = arg_str("unitId");
+            if ds.units.get(id).is_none() {
+                panic!("model_bases_of: unknown unit {id}");
+            }
+            let comp = ds.unit_compositions.iter().find(|c| c.unit_id.as_str() == id);
+            let pairs: Vec<Value> = comp
+                .map(|c| {
+                    c.models
+                        .iter()
+                        .map(|m| {
+                            let base = m
+                                .base_size_mm
+                                .as_ref()
+                                .map(wh40kdc::encode_base_size)
+                                .unwrap_or_else(|| "none".to_string());
+                            Value::String(format!("{}={}", m.name.as_str(), base))
+                        })
+                        .collect()
+                })
+                .unwrap_or_default();
+            Value::Array(pairs)
+        }
         other => panic!("unknown linked-api query: {other}"),
     }
 }
