@@ -68,12 +68,27 @@
   const areas = CATALOG.filter((t) => t.kind === "area");
   const features = CATALOG.filter((t) => t.kind === "feature");
 
-  // Area pieces the selected feature can be anchored to (itself excluded).
-  const areaOptions = $derived(
-    layout.pieces
-      .filter((p) => p.piece_type === "area" && p.id !== selectedId)
-      .map((p) => ({ id: p.id, name: p.name ?? p.id })),
-  );
+  // Area pieces the selected feature can be anchored to. In symmetric mode each
+  // area has a twin; we list only one of each pair, since parenting to it carries
+  // the feature's twin onto the area's twin automatically — the mirrored copy
+  // isn't a separate choice. The selected feature's current parent is always kept
+  // visible (even if it is the dropped twin) so the select never blanks out.
+  const areaOptions = $derived.by(() => {
+    const seenTwin = new Set<string>();
+    const out: { id: string; name: string }[] = [];
+    for (const p of layout.pieces) {
+      if (p.piece_type !== "area" || p.id === selectedId) continue;
+      if (seenTwin.has(p.id)) continue; // already represented by its twin
+      out.push({ id: p.id, name: p.name ?? p.id });
+      if (p.twin_id) seenTwin.add(p.twin_id);
+    }
+    const cur = selectedPiece?.parent_area_id;
+    if (cur && !out.some((o) => o.id === cur)) {
+      const a = layout.pieces.find((p) => p.id === cur);
+      if (a) out.push({ id: a.id, name: a.name ?? a.id });
+    }
+    return out;
+  });
 
   function loadLayout(id: string): void {
     layout = id === "__new__" ? blankLayout() : loadEmbedded(id, symmetric) ?? blankLayout();
