@@ -1315,6 +1315,15 @@
           "maxLength": 64,
           "description": "Pieces sharing a `link_group` value are linked terrain — treated as a single terrain feature (and, where an objective sits among them, a single objective)."
         },
+        "objective_role": {
+          "type": "string",
+          "enum": [
+            "home",
+            "expansion",
+            "center"
+          ],
+          "description": "Designates this terrain area — or, when `link_group`'d, the union of linked areas (one objective for the set) — as carrying an objective of the given 11e role: `home` (inside a deployment zone), `center` (board middle), or `expansion` (no-man's-land). Implies `is_objective`."
+        },
         "is_objective": {
           "type": "boolean",
           "default": false,

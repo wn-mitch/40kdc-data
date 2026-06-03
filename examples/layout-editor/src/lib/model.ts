@@ -19,6 +19,7 @@ import {
   Dataset,
   resolveLayout,
   solveCentroid,
+  solveCentroidTriangulated,
   footprintVertices,
   orientedOffsets,
   polygonCentroid,
@@ -81,6 +82,12 @@ export interface EditPiece {
   parent_area_id?: string;
   floor?: number;
   link_group?: string;
+  /** Objective role of this area (or its link_group union): home/expansion/center. */
+  objective_role?: "home" | "expansion" | "center";
+  /** Whether this piece carries an objective marker (set by an objective role). */
+  is_objective?: boolean;
+  /** Opaque objective-marker metadata, round-tripped as authored. */
+  objective?: { position?: Vec2; control_range_inches?: number };
   /** Editor-only: the id of this piece's symmetry twin. Never serialized. */
   twin_id?: string;
 }
@@ -213,6 +220,11 @@ function inverseAreaFrame(board: Vec2, area: EditPiece): Vec2 {
   const d = { x: board.x - area.position.x, y: board.y - area.position.y };
   // mirror is its own inverse; undo rotate first, then mirror.
   return mirrorVec(rotateCw(d, -area.rotation_degrees), area.mirror);
+}
+/** Clamp a board-space point to the table (2-dp), so pieces can't leave the map. */
+function clampToBoard(p: Vec2): Vec2 {
+  const c = (n: number, hi: number): number => Math.max(0, Math.min(hi, Math.round(n * 100) / 100));
+  return { x: c(p.x, BOARD.width), y: c(p.y, BOARD.height) };
 }
 /** The area a feature is parented to, if any (and still present). */
 function parentAreaOf(layout: EditLayout, piece: EditPiece): EditPiece | undefined {
@@ -511,16 +523,19 @@ export function addTemplate(
 export function movePiece(layout: EditLayout, id: string, position: Vec2): void {
   const p = byId(layout, id);
   if (!p) return;
+  // Clamp the board centroid to the table so no piece (or runaway edit) can leave
+  // the map. Applies to every path: drag, inspector fields, and solver placement.
+  const board = clampToBoard(position);
   const area = parentAreaOf(layout, p);
   if (area) {
-    p.position = inverseAreaFrame(position, area);
+    p.position = inverseAreaFrame(board, area);
     const t = twinOf(layout, p);
     if (t) t.position = { x: p.position.x, y: p.position.y };
     return;
   }
-  p.position = position;
+  p.position = board;
   const t = twinOf(layout, p);
-  if (t) t.position = twinPosition(position);
+  if (t) t.position = twinPosition(board);
 }
 
 /**
@@ -600,6 +615,67 @@ export function setLinkGroup(layout: EditLayout, id: string, group: string | und
   p.link_group = group || undefined;
   const t = twinOf(layout, p);
   if (t) t.link_group = group || undefined;
+}
+
+export type ObjectiveRole = "home" | "expansion" | "center";
+
+/** Every piece that forms the same objective as `p`: its link_group union, else just itself — each with its twin. */
+function objectiveUnion(layout: EditLayout, p: EditPiece): EditPiece[] {
+  const base = p.link_group
+    ? layout.pieces.filter((q) => q.link_group === p.link_group)
+    : [p];
+  const set = new Set<EditPiece>();
+  for (const m of base) {
+    set.add(m);
+    const t = twinOf(layout, m);
+    if (t) set.add(t);
+  }
+  return [...set];
+}
+
+/**
+ * Mark a terrain area's objective role (home/expansion/center), applied across
+ * its symmetry twin and its whole link_group union — linked areas are one area
+ * "slotted like puzzle pieces", so the union reads as a single objective. A role
+ * implies `is_objective`; clearing it drops the flag.
+ */
+export function setObjectiveRole(layout: EditLayout, id: string, role: ObjectiveRole | undefined): void {
+  const p = byId(layout, id);
+  if (!p) return;
+  for (const m of objectiveUnion(layout, p)) {
+    m.objective_role = role || undefined;
+    m.is_objective = role ? true : undefined;
+  }
+}
+
+export interface ObjectiveMarker {
+  /** Board-space centre of the objective (the union's centroid). */
+  at: Vec2;
+  role?: ObjectiveRole;
+}
+
+/**
+ * One marker per objective: pieces flagged `is_objective` grouped by link_group
+ * (unlinked pieces stand alone), placed at the union's board centroid. Lets the
+ * board draw a single marker for a puzzle-piece union.
+ */
+export function objectiveMarkers(layout: EditLayout): ObjectiveMarker[] {
+  const groups = new Map<string, EditPiece[]>();
+  for (const p of layout.pieces) {
+    if (!p.is_objective) continue;
+    const key = p.link_group ? `g:${p.link_group}` : `p:${p.id}`;
+    (groups.get(key) ?? groups.set(key, []).get(key)!).push(p);
+  }
+  const out: ObjectiveMarker[] = [];
+  for (const members of groups.values()) {
+    const cs = members.map((m) => boardCentroid(layout, m));
+    const at = {
+      x: cs.reduce((s, c) => s + c.x, 0) / cs.length,
+      y: cs.reduce((s, c) => s + c.y, 0) / cs.length,
+    };
+    out.push({ at, role: members.find((m) => m.objective_role)?.objective_role });
+  }
+  return out;
 }
 
 /** Delete a piece and its twin, re-baking any features parented to them into board space. */
@@ -718,6 +794,9 @@ export function loadEmbedded(id: string, symmetric = true): EditLayout | undefin
     parent_area_id: p.parent_area_id,
     floor: p.floor,
     link_group: p.link_group,
+    objective_role: p.objective_role,
+    is_objective: p.is_objective,
+    objective: p.objective,
   }));
   if (symmetric) autoPairTwins(pieces);
   return {
@@ -757,6 +836,9 @@ export function toCanonicalJson(layout: EditLayout): unknown {
         ...(p.parent_area_id ? { parent_area_id: p.parent_area_id } : {}),
         ...(p.floor ? { floor: p.floor } : {}),
         ...(p.link_group ? { link_group: p.link_group } : {}),
+        ...(p.objective_role ? { objective_role: p.objective_role } : {}),
+        ...(p.is_objective ? { is_objective: true } : {}),
+        ...(p.objective ? { objective: p.objective } : {}),
       })),
       game_version: { edition: "11th", dataslate: "pre-launch-provisional" },
     },
@@ -764,5 +846,5 @@ export function toCanonicalJson(layout: EditLayout): unknown {
 }
 
 // Re-exports the inspector's solver panel and on-canvas affordances lean on.
-export { solveCentroid, footprintVertices, orientedOffsets, polygonCentroid };
+export { solveCentroid, solveCentroidTriangulated, footprintVertices, orientedOffsets, polygonCentroid };
 export type { SolveInput };

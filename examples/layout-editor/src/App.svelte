@@ -10,6 +10,9 @@
     orientPiece,
     setLinkGroup,
     setParentArea,
+    setObjectiveRole,
+    boardCentroid,
+    objectiveMarkers,
     deletePiece,
     repairTwins,
     unpairTwins,
@@ -27,6 +30,7 @@
     type SolverViz,
     type DeployZone,
     type TerritoryDivider,
+    type ObjectiveRole,
   } from "./lib/model.js";
   import type { TerrainTemplate } from "@alpaca-software/40kdc-data";
   import Board from "./lib/Board.svelte";
@@ -63,6 +67,11 @@
   const selectedPiece = $derived<EditPiece | null>(
     selectedId ? layout.pieces.find((p) => p.id === selectedId) ?? null : null,
   );
+  /** Board-space centroid of the selection — the inspector fields always speak board inches. */
+  const selectedBoardPos = $derived(
+    selectedPiece ? boardCentroid(layout, selectedPiece) : { x: 0, y: 0 },
+  );
+  const markers = $derived(objectiveMarkers(layout));
   const exportText = $derived(JSON.stringify(toCanonicalJson(layout), null, 2));
 
   const areas = CATALOG.filter((t) => t.kind === "area");
@@ -116,6 +125,9 @@
   }
   function onparent(id: string, parentId: string | undefined): void {
     setParentArea(layout, id, parentId);
+  }
+  function onobjectiverole(id: string, role: ObjectiveRole | undefined): void {
+    setObjectiveRole(layout, id, role);
   }
   function onDeploymentChange(value: string): void {
     deployment = value || null;
@@ -241,6 +253,7 @@
         solver={solverViz}
         {zones}
         {divider}
+        {markers}
         onselect={(id) => (selectedId = id)}
         {onmove}
         {onorient}
@@ -254,12 +267,14 @@
     <aside class="rail side">
       <Inspector
         piece={selectedPiece}
+        boardPos={selectedBoardPos}
         {areaOptions}
         ondelete={remove}
         {onmove}
         {onorient}
         {onlinkgroup}
         {onparent}
+        {onobjectiverole}
         onsolverhover={(ref) => (solverHover = ref)}
         onsolverlines={(lines) => (solverLines = lines)}
       />

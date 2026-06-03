@@ -23,6 +23,7 @@ export {
   orientedOffsets,
   TerrainResolveError,
   solveCentroid,
+  solveCentroidTriangulated,
   TerrainSolveError,
 } from "./terrain/index.js";
 export type {
@@ -32,6 +33,8 @@ export type {
   FeatureRef,
   DimensionLine,
   SolveInput,
+  TriangulationLine,
+  TriangulateInput,
 } from "./terrain/index.js";
 
 // Card-driven secondary-mission scoring: compute VP from asserted awards and

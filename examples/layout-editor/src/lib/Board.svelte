@@ -16,6 +16,7 @@
     type OrientedFootprint,
     type DeployZone,
     type TerritoryDivider,
+    type ObjectiveMarker,
   } from "./model.js";
   import type { ResolvedPiece } from "@alpaca-software/40kdc-data";
 
@@ -27,11 +28,12 @@
     solver: SolverViz;
     zones: DeployZone[];
     divider: TerritoryDivider | null;
+    markers: ObjectiveMarker[];
     onselect: (id: string | null) => void;
     onmove: (id: string, position: Vec2) => void;
     onorient: (id: string, patch: { rotation_degrees?: number; mirror?: Mirror }) => void;
   }
-  let { layout, resolved, selectedId, selectedPiece, solver, zones, divider, onselect, onmove, onorient }: Props =
+  let { layout, resolved, selectedId, selectedPiece, solver, zones, divider, markers, onselect, onmove, onorient }: Props =
     $props();
 
   // The board is shown rotated 90° CW for portrait terrain cards. Board coords stay
@@ -193,6 +195,12 @@
       <polygon points={polyPts(u.verts)} class="upper" />
     {/each}
 
+    <!-- objective markers: one ring per objective (a link_group union is one) -->
+    {#each markers as m, i (i)}
+      <circle cx={m.at.x} cy={m.at.y} r="1.5" class="objective-ring" />
+      <circle cx={m.at.x} cy={m.at.y} r="0.25" class="objective-dot" />
+    {/each}
+
     <!-- solver indicators on the selected piece -->
     {#if selOriented}
       {#if solver.hover}
@@ -240,6 +248,12 @@
         <text x={d.x} y={d.y} class="terr-badge-text">{b.player}</text>
       {/each}
     {/if}
+    {#each markers as m, i (i)}
+      {#if m.role}
+        {@const d = toDisplay(m.at)}
+        <text x={d.x} y={d.y - 2.1} class="objective-label">{m.role}</text>
+      {/if}
+    {/each}
     {#if selOriented}
       {#each solver.lines as line (line.edge)}
         {#if line.distance}
@@ -290,6 +304,27 @@
     stroke-width: 0.18;
     stroke-dasharray: 0.9 0.7;
     opacity: 0.85;
+    pointer-events: none;
+  }
+  .objective-ring {
+    fill: oklch(0.75 0.14 85 / 0.12);
+    stroke: oklch(0.55 0.13 85);
+    stroke-width: 0.18;
+    pointer-events: none;
+  }
+  .objective-dot {
+    fill: oklch(0.45 0.13 85);
+    pointer-events: none;
+  }
+  .objective-label {
+    fill: oklch(0.42 0.12 85);
+    font-size: 1.3px;
+    font-weight: 600;
+    text-anchor: middle;
+    font-family: "JetBrains Mono", monospace;
+    paint-order: stroke;
+    stroke: oklch(0.85 0.008 220);
+    stroke-width: 0.4px;
     pointer-events: none;
   }
   .terr-badge {

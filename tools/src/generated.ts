@@ -977,6 +977,10 @@ export interface Piece {
    */
   link_group?: string;
   /**
+   * Designates this terrain area — or, when `link_group`'d, the union of linked areas (one objective for the set) — as carrying an objective of the given 11e role: `home` (inside a deployment zone), `center` (board middle), or `expansion` (no-man's-land). Implies `is_objective`.
+   */
+  objective_role?: "home" | "expansion" | "center";
+  /**
    * Whether this piece carries an objective marker.
    */
   is_objective?: boolean;

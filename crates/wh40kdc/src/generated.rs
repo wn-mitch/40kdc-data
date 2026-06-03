@@ -4953,6 +4953,15 @@ pub struct PhaseMapping {
 ///      },
 ///      "additionalProperties": false
 ///    },
+///    "objective_role": {
+///      "description": "Designates this terrain area — or, when `link_group`'d, the union of linked areas (one objective for the set) — as carrying an objective of the given 11e role: `home` (inside a deployment zone), `center` (board middle), or `expansion` (no-man's-land). Implies `is_objective`.",
+///      "type": "string",
+///      "enum": [
+///        "home",
+///        "expansion",
+///        "center"
+///      ]
+///    },
 ///    "parent_area_id": {
 ///      "description": "For a feature: the layout-local id of the area it sits on. The feature's `position`/`rotation_degrees`/`mirror` are composed with the parent area's placement, so moving, rotating, or mirroring the area carries the feature with it.",
 ///      "$ref": "#/$defs/entity-id"
@@ -5021,6 +5030,9 @@ pub struct Piece {
     pub name: ::std::option::Option<PieceName>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub objective: ::std::option::Option<PieceObjective>,
+    ///Designates this terrain area — or, when `link_group`'d, the union of linked areas (one objective for the set) — as carrying an objective of the given 11e role: `home` (inside a deployment zone), `center` (board middle), or `expansion` (no-man's-land). Implies `is_objective`.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub objective_role: ::std::option::Option<PieceObjectiveRole>,
     ///For a feature: the layout-local id of the area it sits on. The feature's `position`/`rotation_degrees`/`mirror` are composed with the parent area's placement, so moving, rotating, or mirroring the area carries the feature with it.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub parent_area_id: ::std::option::Option<EntityId>,
@@ -5319,6 +5331,88 @@ impl ::std::default::Default for PieceObjective {
             control_range_inches: Default::default(),
             position: Default::default(),
         }
+    }
+}
+///Designates this terrain area — or, when `link_group`'d, the union of linked areas (one objective for the set) — as carrying an objective of the given 11e role: `home` (inside a deployment zone), `center` (board middle), or `expansion` (no-man's-land). Implies `is_objective`.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Designates this terrain area — or, when `link_group`'d, the union of linked areas (one objective for the set) — as carrying an objective of the given 11e role: `home` (inside a deployment zone), `center` (board middle), or `expansion` (no-man's-land). Implies `is_objective`.",
+///  "type": "string",
+///  "enum": [
+///    "home",
+///    "expansion",
+///    "center"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum PieceObjectiveRole {
+    #[serde(rename = "home")]
+    Home,
+    #[serde(rename = "expansion")]
+    Expansion,
+    #[serde(rename = "center")]
+    Center,
+}
+impl ::std::fmt::Display for PieceObjectiveRole {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Home => f.write_str("home"),
+            Self::Expansion => f.write_str("expansion"),
+            Self::Center => f.write_str("center"),
+        }
+    }
+}
+impl ::std::str::FromStr for PieceObjectiveRole {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "home" => Ok(Self::Home),
+            "expansion" => Ok(Self::Expansion),
+            "center" => Ok(Self::Center),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for PieceObjectiveRole {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for PieceObjectiveRole {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for PieceObjectiveRole {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///An `area` is a gameplay terrain zone (the 11e 'terrain area'); a `feature` is physical scenery (walls, containers, pipes) placed on an area.

@@ -3440,152 +3440,97 @@
     "deployment_pattern_id": "search-and-destroy",
     "pieces": [
       {
-        "id": "piece-1",
-        "name": "Corner Ruin Area (objective)",
+        "id": "area-trapezoid-1",
+        "name": "Trapezoid Area",
         "piece_type": "area",
-        "template": "area-large",
+        "template": "area-trapezoid",
         "position": {
-          "x": 10,
-          "y": 9
-        }
-      },
-      {
-        "id": "piece-2",
-        "name": "Corner Ruin Area (objective)",
-        "piece_type": "area",
-        "template": "area-large",
-        "position": {
-          "x": 50,
-          "y": 35
+          "x": 31.15,
+          "y": 19.8
         },
-        "rotation_degrees": 180
+        "rotation_degrees": 90,
+        "link_group": "Center",
+        "objective_role": "center",
+        "is_objective": true
       },
       {
-        "id": "piece-3",
-        "name": "Flank Ruin Area",
+        "id": "area-trapezoid-2",
+        "name": "Trapezoid Area",
         "piece_type": "area",
-        "template": "area-large",
+        "template": "area-trapezoid",
         "position": {
-          "x": 12,
-          "y": 33
+          "x": 28.85,
+          "y": 24.2
         },
-        "rotation_degrees": 5
+        "rotation_degrees": 270,
+        "link_group": "Center",
+        "objective_role": "center",
+        "is_objective": true
       },
       {
-        "id": "piece-4",
-        "name": "Flank Ruin Area",
+        "id": "corner-ruin-balanced-left-3",
+        "name": "Corner Ruin (Balanced, Left)",
+        "piece_type": "feature",
+        "template": "corner-ruin-balanced-left",
+        "position": {
+          "x": -1,
+          "y": -2.94
+        },
+        "parent_area_id": "area-trapezoid-1"
+      },
+      {
+        "id": "corner-ruin-balanced-left-4",
+        "name": "Corner Ruin (Balanced, Left)",
+        "piece_type": "feature",
+        "template": "corner-ruin-balanced-left",
+        "position": {
+          "x": -1,
+          "y": -2.94
+        },
+        "parent_area_id": "area-trapezoid-2"
+      },
+      {
+        "id": "corner-tiny-5",
+        "name": "Tiny Corner L",
+        "piece_type": "feature",
+        "template": "corner-tiny",
+        "position": {
+          "x": -1.73,
+          "y": 5.87
+        },
+        "rotation_degrees": 270,
+        "parent_area_id": "area-trapezoid-1"
+      },
+      {
+        "id": "corner-tiny-6",
+        "name": "Tiny Corner L",
+        "piece_type": "feature",
+        "template": "corner-tiny",
+        "position": {
+          "x": -1.73,
+          "y": 5.87
+        },
+        "rotation_degrees": 270,
+        "parent_area_id": "area-trapezoid-2"
+      },
+      {
+        "id": "area-short-line-7",
+        "name": "Short Line Area",
         "piece_type": "area",
-        "template": "area-large",
+        "template": "area-short-line",
         "position": {
           "x": 48,
-          "y": 11
-        },
-        "rotation_degrees": 185
-      },
-      {
-        "id": "piece-5",
-        "name": "Central Ruin",
-        "piece_type": "area",
-        "template": "area-trapezoid",
-        "position": {
-          "x": 27.5,
-          "y": 21
-        }
-      },
-      {
-        "id": "piece-6",
-        "name": "Central Ruin",
-        "piece_type": "area",
-        "template": "area-trapezoid",
-        "position": {
-          "x": 32.5,
           "y": 23
-        },
-        "rotation_degrees": 180
-      },
-      {
-        "id": "piece-7",
-        "name": "Green Tower",
-        "piece_type": "feature",
-        "template": "gantry",
-        "position": {
-          "x": 21,
-          "y": 9
         }
       },
       {
-        "id": "piece-8",
-        "name": "Green Tower",
-        "piece_type": "feature",
-        "template": "gantry",
+        "id": "area-short-line-8",
+        "name": "Short Line Area",
+        "piece_type": "area",
+        "template": "area-short-line",
         "position": {
-          "x": 39,
-          "y": 35
-        },
-        "rotation_degrees": 180
-      },
-      {
-        "id": "piece-9",
-        "name": "Pipe Run",
-        "piece_type": "feature",
-        "template": "pipe",
-        "position": {
-          "x": 24,
-          "y": 34
-        },
-        "rotation_degrees": 40
-      },
-      {
-        "id": "piece-10",
-        "name": "Pipe Run",
-        "piece_type": "feature",
-        "template": "pipe",
-        "position": {
-          "x": 36,
-          "y": 10
-        },
-        "rotation_degrees": 220
-      },
-      {
-        "id": "piece-11",
-        "name": "Barricade",
-        "piece_type": "feature",
-        "template": "barricade",
-        "position": {
-          "x": 14,
-          "y": 22
-        },
-        "rotation_degrees": 90
-      },
-      {
-        "id": "piece-12",
-        "name": "Barricade",
-        "piece_type": "feature",
-        "template": "barricade",
-        "position": {
-          "x": 46,
-          "y": 22
-        },
-        "rotation_degrees": 270
-      },
-      {
-        "id": "piece-13",
-        "name": "Corner Ruin",
-        "piece_type": "feature",
-        "template": "corner-ruin-balanced-left",
-        "position": {
-          "x": 16,
-          "y": 5
-        }
-      },
-      {
-        "id": "piece-14",
-        "name": "Corner Ruin",
-        "piece_type": "feature",
-        "template": "corner-ruin-balanced-left",
-        "position": {
-          "x": 44,
-          "y": 39
+          "x": 12,
+          "y": 21
         },
         "rotation_degrees": 180
       }
