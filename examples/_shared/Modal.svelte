@@ -65,6 +65,11 @@
     color: #ededf0;
     max-width: min(92vw, 30rem);
     width: 100%;
+    /* Restore the UA's centering. Tailwind v4 Preflight resets `margin: 0` on the
+       universal selector, which overrides `dialog`'s default `margin: auto` and
+       pins the modal to the top-left; re-asserting it here re-centers under
+       Tailwind and is a no-op for the plain-CSS example apps. */
+    margin: auto;
   }
   dialog::backdrop {
     background: rgba(0, 0, 0, 0.6);
