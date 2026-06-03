@@ -230,11 +230,8 @@ impl Dataset {
         );
         let wargear_options =
             id_name_collection(raw.wargear_options, |w| w.id.to_string(), |_| None);
-        let wargear = id_name_collection(
-            raw.wargear,
-            |w| w.id.to_string(),
-            |w| Some(w.name.as_str()),
-        );
+        let wargear =
+            id_name_collection(raw.wargear, |w| w.id.to_string(), |w| Some(w.name.as_str()));
         let missions = id_name_collection(
             raw.missions,
             |m| m.id.to_string(),

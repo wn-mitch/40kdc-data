@@ -82,7 +82,9 @@ fn run_query(ds: &Dataset, query: &str, args: &Value) -> Value {
         }
         "maximal_loadout" => {
             let id = arg_str("unitId");
-            let model_count: u64 = arg_str("modelCount").parse().expect("modelCount is an integer");
+            let model_count: u64 = arg_str("modelCount")
+                .parse()
+                .expect("modelCount is an integer");
             let u = ds
                 .units
                 .get(id)
@@ -147,7 +149,10 @@ fn run_query(ds: &Dataset, query: &str, args: &Value) -> Value {
             if ds.units.get(id).is_none() {
                 panic!("model_bases_of: unknown unit {id}");
             }
-            let comp = ds.unit_compositions.iter().find(|c| c.unit_id.as_str() == id);
+            let comp = ds
+                .unit_compositions
+                .iter()
+                .find(|c| c.unit_id.as_str() == id);
             let pairs: Vec<Value> = comp
                 .map(|c| {
                     c.models

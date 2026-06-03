@@ -151,7 +151,9 @@ pub fn weapon_bounds(
     for option in options {
         let cap = option_cap(option, model_count);
         for id in &option.replaces {
-            let b = bounds.entry(id.to_string()).or_insert(WeaponBound { min: 0, max: 0 });
+            let b = bounds
+                .entry(id.to_string())
+                .or_insert(WeaponBound { min: 0, max: 0 });
             b.min = b.min.saturating_sub(cap);
         }
         let mut adds: HashSet<String> = HashSet::new();
@@ -173,11 +175,7 @@ pub fn weapon_bounds(
 
 /// Clamp a single weapon's requested count into its valid range. Ids with no
 /// bound are returned unchanged (floored at zero).
-pub fn clamp_weapon_count(
-    bounds: &BTreeMap<String, WeaponBound>,
-    id: &str,
-    requested: u64,
-) -> u64 {
+pub fn clamp_weapon_count(bounds: &BTreeMap<String, WeaponBound>, id: &str, requested: u64) -> u64 {
     match bounds.get(id) {
         Some(b) => requested.min(b.max).max(b.min),
         None => requested,
@@ -221,7 +219,10 @@ mod tests {
 
     fn berzerkers() -> (&'static crate::generated::Unit, Vec<&'static WargearOption>) {
         let ds = Dataset::embedded();
-        let bz = ds.units.get("khorne-berzerkers").expect("berzerkers in dataset");
+        let bz = ds
+            .units
+            .get("khorne-berzerkers")
+            .expect("berzerkers in dataset");
         (bz, ds.wargear_options_of(bz))
     }
 
@@ -243,7 +244,12 @@ mod tests {
         let (_bz, opts) = berzerkers();
         let ratio = opts
             .iter()
-            .find(|o| o.model_constraint.as_ref().and_then(|c| c.per_n_models).is_some())
+            .find(|o| {
+                o.model_constraint
+                    .as_ref()
+                    .and_then(|c| c.per_n_models)
+                    .is_some()
+            })
             .expect("a per_n_models option");
         assert_eq!(option_cap(ratio, 10), 2);
         assert_eq!(option_cap(ratio, 9), 1);

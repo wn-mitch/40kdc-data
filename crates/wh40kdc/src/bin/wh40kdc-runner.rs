@@ -477,7 +477,10 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
                     Some(json!({ "kind": "unit", "id": id })),
                 );
             }
-            let comp = ds.unit_compositions.iter().find(|c| c.unit_id.as_str() == id);
+            let comp = ds
+                .unit_compositions
+                .iter()
+                .find(|c| c.unit_id.as_str() == id);
             let pairs: Vec<Value> = comp
                 .map(|c| {
                     c.models
