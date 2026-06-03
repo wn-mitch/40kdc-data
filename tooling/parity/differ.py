@@ -354,6 +354,22 @@ def iter_scoring_translation_cases(corpus: Path) -> Iterator[Case]:
         )
 
 
+def iter_scoring_cases(corpus: Path) -> Iterator[Case]:
+    path = corpus / "scoring" / "cases.json"
+    cases = json.loads(path.read_text())
+    for entry in cases:
+        # Each case carries its own op (score_event | score_state | wtc_result)
+        # and args; the goldens are integers, so the two impls must agree
+        # exactly (no tolerance).
+        yield Case(
+            area="scoring",
+            case_id=f"scoring/{entry['name']}",
+            op=entry["op"],
+            args=entry["args"],
+            compare_mode="struct",
+        )
+
+
 def iter_terrain_resolver_cases(corpus: Path) -> Iterator[Case]:
     path = corpus / "terrain-resolver" / "cases.json"
     cases = json.loads(path.read_text())
@@ -377,6 +393,7 @@ AREA_ITERATORS: dict[str, Any] = {
     "linked-api": iter_linked_api_cases,
     "attribution": iter_attribution_cases,
     "scoring-translation": iter_scoring_translation_cases,
+    "scoring": iter_scoring_cases,
     "terrain-resolver": iter_terrain_resolver_cases,
 }
 

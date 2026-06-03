@@ -655,6 +655,50 @@ describe("terrain-resolver conformance corpus", () => {
   }
 });
 
+// Scoring conformance — pins the pure VP arithmetic of the scoring engine
+// (`score_event`, `score_state`, `wtc_result`). Each case is dispatched through
+// the runner — the same path the cross-impl differ drives — and the value is
+// compared exactly (integers, no tolerance). The Rust port asserts against the
+// same corpus (crates/wh40kdc/tests/scoring_conformance.rs).
+
+import { createRunnerState, dispatch } from "../src/runner.js";
+
+interface ScoringCase {
+  name: string;
+  op: string;
+  args: unknown;
+  expected: unknown;
+}
+
+describe("scoring conformance corpus", () => {
+  const cases = readJson(join(CONFORMANCE, "scoring", "cases.json")) as ScoringCase[];
+  const specVersion = Number.parseInt(
+    readFileSync(join(CONFORMANCE, "SPEC_VERSION"), "utf8").trim(),
+    10,
+  );
+  const state = createRunnerState();
+  const init = dispatch(state, {
+    op: "init",
+    args: { spec_version: specVersion, locale: "C", tz: "UTC", seed: 0 },
+  });
+
+  it("the runner initializes at the corpus spec version", () => {
+    expect(init.ok, JSON.stringify(init)).toBe(true);
+  });
+
+  it("the scoring corpus is non-empty", () => {
+    expect(cases.length).toBeGreaterThan(0);
+  });
+
+  for (const c of cases) {
+    it(`scoring/${c.name}`, () => {
+      const res = dispatch(state, { op: c.op, args: c.args });
+      expect(res.ok, `op ${c.op} errored: ${JSON.stringify(res)}`).toBe(true);
+      if (res.ok) expect(res.value).toEqual(c.expected);
+    });
+  }
+});
+
 describe("cruncher conformance corpus", () => {
   const ds = Dataset.embedded();
   const cruncherDir = join(CONFORMANCE, "cruncher");

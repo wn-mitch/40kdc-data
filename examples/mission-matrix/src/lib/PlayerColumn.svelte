@@ -6,11 +6,12 @@
     ScoringMode,
     AssertedAward,
   } from "@alpaca-software/40kdc-data";
+  import { awardsForApproach, scoreCap } from "@alpaca-software/40kdc-data";
   import { SECONDARY_DECK, secondariesByIds, secondaryName } from "./data.js";
   import MissionCard from "./MissionCard.svelte";
   import WtcGrid from "./WtcGrid.svelte";
   import SecondaryHand from "./SecondaryHand.svelte";
-  import ActiveSecondary from "./ActiveSecondary.svelte";
+  import ScoringPanel from "./ScoringPanel.svelte";
 
   let {
     label,
@@ -20,7 +21,7 @@
     game,
     activeId,
     round,
-    roundCap,
+    effectiveRoundCap,
     ownTotal,
     oppTotal,
     onDraw,
@@ -29,7 +30,8 @@
     onDiscard,
     onScore,
     onRemoveScore,
-    onPrimary,
+    onPrimaryScore,
+    onClearPrimary,
     onApproach,
   }: {
     label: string;
@@ -39,7 +41,8 @@
     game: PlayerGame;
     activeId: string | null;
     round: number;
-    roundCap: number;
+    /** Primary VP still scorable this round, after the round and per-game caps. */
+    effectiveRoundCap: number;
     ownTotal: number;
     oppTotal: number;
     onDraw: () => void;
@@ -48,7 +51,8 @@
     onDiscard: (id: string) => void;
     onScore: (asserted: AssertedAward[]) => void;
     onRemoveScore: (index: number) => void;
-    onPrimary: (round: number, value: number) => void;
+    onPrimaryScore: (asserted: AssertedAward[]) => void;
+    onClearPrimary: () => void;
     onApproach: (mode: ScoringMode) => void;
   } = $props();
 
@@ -59,6 +63,14 @@
   const diffLabel = $derived(
     diff === 0 ? "Level" : `${diff > 0 ? "+" : ""}${diff} vs opponent`,
   );
+
+  // Secondary scoring inputs for the active card (filtered by approach).
+  const secondaryAwards = $derived(activeCard ? awardsForApproach(activeCard, game.approach) : []);
+  const secondaryCap = $derived(activeCard ? scoreCap(activeCard, game.approach) : 0);
+  // Primary scoring inputs for the mission's primary card (no `mode`, so all show).
+  const primaryAwards = $derived(card ? awardsForApproach(card, game.approach) : []);
+  const currentPrimary = $derived(game.rounds[round - 1]?.primary ?? 0);
+  const capLabel = (c: number): string => (c === Infinity ? "∞" : String(c));
 </script>
 
 <section class="flex flex-col gap-3 rounded border border-border bg-surface shadow-md p-4">
@@ -92,8 +104,8 @@
     </div>
   </header>
 
-  <!-- Per-round WTC grid. -->
-  <WtcGrid rounds={game.rounds} current={round} {roundCap} {onPrimary} />
+  <!-- Per-round WTC grid (read-only; primary is scored via the panel below). -->
+  <WtcGrid rounds={game.rounds} current={round} />
 
   <!-- Record of scored secondaries; remove one to undo a mis-score. -->
   {#if game.log.length > 0}
@@ -126,7 +138,23 @@
       Primary mission{#if mission}<span class="text-text-dim font-normal"> — {mission.name}</span>{/if}
     </summary>
     <div class="px-3 pb-3 pt-1">
-      {#if mission}
+      {#if mission && card && primaryAwards.length > 0}
+        <!-- Score this round's primary by ticking the awards achieved; the
+             commit writes the current round's cell, capped at the round/game cap. -->
+        {#key `${mission.id}:${round}`}
+          <ScoringPanel
+            title={mission.name}
+            text={card.text}
+            awards={primaryAwards}
+            cap={effectiveRoundCap}
+            capLabel={capLabel(effectiveRoundCap)}
+            commitLabel={(vp) => `Score ${vp} VP → Round ${round}`}
+            emptyHint="No primary scoring for this mission."
+            onCommit={onPrimaryScore}
+            extraAction={{ label: "Clear round", disabled: currentPrimary === 0, onClick: onClearPrimary }}
+          />
+        {/key}
+      {:else if mission}
         <MissionCard {mission} {card} />
       {:else}
         <div class="text-text-muted text-xs">Pick both dispositions above to reveal this primary.</div>
@@ -147,7 +175,20 @@
   />
   <div class="rounded border border-panel-border bg-panel-surface p-3">
     {#key activeCard?.id}
-      <ActiveSecondary card={activeCard} approach={game.approach} {onScore} />
+      {#if activeCard}
+        <ScoringPanel
+          title={activeCard.name}
+          text={activeCard.text}
+          awards={secondaryAwards}
+          cap={secondaryCap}
+          capLabel={capLabel(secondaryCap)}
+          commitLabel={(vp) => `Score ${vp} VP & discard`}
+          emptyHint="Draw a secondary and tap it to score it here."
+          onCommit={onScore}
+        />
+      {:else}
+        <div class="text-text-muted text-sm">Draw a secondary and tap it to score it here.</div>
+      {/if}
     {/key}
   </div>
 </section>

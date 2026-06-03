@@ -21,10 +21,10 @@
  * `PlayerGame` is a plain JSON-serializable object so a UI can persist a whole
  * match (two of them) to localStorage and rehydrate without a revival step.
  *
- * CONFORMANCE FOLLOW-UP: this engine is TypeScript-only for now. A Rust port
- * plus a `conformance/scoring` corpus area (and a `SPEC_VERSION` bump) are a
- * separate change; the public shapes below are the surface that port mirrors,
- * so keep them stable.
+ * CONFORMANCE: mirrored by the Rust `wh40kdc::scoring` module and pinned by the
+ * `conformance/scoring` corpus (this is the reference/oracle implementation).
+ * The public shapes below are the surface that port mirrors — changing them is
+ * a cross-impl, `SPEC_VERSION`-bumping change.
  */
 
 import type { SecondaryCard } from "../generated.js";
@@ -155,6 +155,19 @@ export function scoreSecondaryEvent(
   return Math.min(scoreTurn(asserted), scoreCap(card, approach));
 }
 
+/**
+ * The primary VP a single battle round's scoring grants: the asserted awards'
+ * total, clamped to the per-round cap (`mission.vp_per_round_cap`, 15 by 11e
+ * default). Unlike a secondary, a primary is scored once *per round* against the
+ * same card, so the ceiling is the round cap rather than a per-card cap — there
+ * is no tactical 5-VP rule on primary. The per-game primary cap
+ * (`vp_per_game_cap`) is applied separately by {@link setPrimary}, which sees
+ * the other rounds' totals.
+ */
+export function scorePrimaryEvent(asserted: AssertedAward[], roundCap: number): number {
+  return Math.min(scoreTurn(asserted), roundCap);
+}
+
 function roundIndex(round: number): number {
   return Math.max(0, Math.min(ROUNDS - 1, Math.trunc(round) - 1));
 }
@@ -206,12 +219,27 @@ export function removeScore(pg: PlayerGame, index: number): PlayerGame {
   return { ...pg, rounds, log, handIds };
 }
 
-/** Set primary VP for a battle round (1-based) to a clamped value. Pure. */
-export function setPrimary(pg: PlayerGame, round: number, vp: number): PlayerGame {
+/**
+ * Set primary VP for a battle round (1-based) to a clamped value. Pure.
+ *
+ * `caps` bounds the stored value by both the per-round ceiling (`roundCap`,
+ * `mission.vp_per_round_cap`) and the remaining per-game primary room
+ * (`gameCap`, `mission.vp_per_game_cap`) — the latter computed against the
+ * *other* rounds' primary, so no sequence of round scores can push the primary
+ * game total past `gameCap`. With no caps both default to `Infinity`, leaving
+ * only the floor-at-zero clamp (the historical behavior).
+ */
+export function setPrimary(
+  pg: PlayerGame,
+  round: number,
+  vp: number,
+  caps: { roundCap?: number; gameCap?: number } = {},
+): PlayerGame {
   const i = roundIndex(round);
-  const rounds = pg.rounds.map((c, idx) =>
-    idx === i ? { ...c, primary: Math.max(0, vp) } : c,
-  );
+  const others = pg.rounds.reduce((s, c, idx) => (idx === i ? s : s + c.primary), 0);
+  const room = Math.max(0, Math.min(caps.roundCap ?? Infinity, (caps.gameCap ?? Infinity) - others));
+  const clamped = Math.max(0, Math.min(vp, room));
+  const rounds = pg.rounds.map((c, idx) => (idx === i ? { ...c, primary: clamped } : c));
   return { ...pg, rounds };
 }
 

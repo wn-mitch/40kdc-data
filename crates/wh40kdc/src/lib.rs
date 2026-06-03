@@ -121,6 +121,19 @@ pub mod terrain;
 
 pub use terrain::{resolve_layout, ResolvedPiece, TerrainResolveError};
 
+/// Card-driven secondary-mission scoring engine: pure-function VP computation
+/// from asserted awards, plus per-round, per-player scoring state. Mirrors
+/// `tools/src/scoring/` in the TS package (the reference implementation); the
+/// `conformance/scoring` corpus pins both ports. Depends only on the generated
+/// types, so it stays available even in a types-only build.
+pub mod scoring;
+
+pub use scoring::{
+    empty_player_game, player_primary, player_secondary, player_total, score_award, score_cap,
+    score_primary_event, score_secondary, score_secondary_event, score_turn, set_primary,
+    wtc_result, AssertedAward, PlayerGame, RoundCell, ScoreEntry, ScoringMode, WtcResult,
+};
+
 /// The bundled, self-contained JSON Schema (draft 2020-12) these types were
 /// generated from. Consumers can feed this to a JSON Schema validator to check
 /// data before deserializing; the canonical validation CLI lives in the

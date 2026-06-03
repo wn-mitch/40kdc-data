@@ -22,7 +22,12 @@ use wh40kdc::import::{
     import_roster, try_import_roster, AdapterTrial, ImportFailureReason, ImportResult, Roster,
     RosterFormat,
 };
-use wh40kdc::{describe_scoring_card, normalize_name, Dataset, Phase};
+use wh40kdc::scoring::{
+    add_to_hand, empty_player_game, player_primary, player_secondary, player_total, remove_score,
+    score_cap, score_primary_event, score_secondary, score_secondary_event, score_turn,
+    set_primary, wtc_result, AssertedAward, ScoringMode,
+};
+use wh40kdc::{describe_scoring_card, normalize_name, Dataset, Phase, SecondaryCard};
 
 // ---------------------------------------------------------------------------
 // Spec version + impl identity.
@@ -766,6 +771,220 @@ fn handle_translate_scoring(state: &mut RunnerState, args: &Value) -> Value {
     }
 }
 
+// ---------------------------------------------------------------------------
+// Scoring engine ops. Awards are referenced by index into a card's `awards`
+// array (never serialized over the wire); both impls reconstruct the same
+// `AssertedAward` from the shared embedded dataset.
+// ---------------------------------------------------------------------------
+
+fn parse_mode(s: &str) -> Option<ScoringMode> {
+    match s {
+        "fixed" => Some(ScoringMode::Fixed),
+        "tactical" => Some(ScoringMode::Tactical),
+        _ => None,
+    }
+}
+
+/// Resolve `[{index, count?}]` against a card's `awards`, or a typed error. The
+/// index addresses the full `awards` array (approach affects only the cap).
+fn resolve_asserted(card: &SecondaryCard, asserted: &Value) -> Result<Vec<AssertedAward>, Value> {
+    let Some(arr) = asserted.as_array() else {
+        return Err(err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": "asserted must be an array" })),
+        ));
+    };
+    let n = card.awards.len();
+    let mut out = Vec::with_capacity(arr.len());
+    for raw in arr {
+        let Some(idx) = raw.get("index").and_then(Value::as_u64) else {
+            return Err(err_value(
+                ErrorKind::InvalidInput,
+                Some(json!({ "detail": "asserted.index must be a number" })),
+            ));
+        };
+        let idx = idx as usize;
+        if idx >= n {
+            return Err(err_value(
+                ErrorKind::InvalidInput,
+                Some(json!({ "detail": format!("asserted.index out of range: {idx}") })),
+            ));
+        }
+        out.push(AssertedAward {
+            award: card.awards[idx].clone(),
+            count: raw.get("count").and_then(Value::as_u64),
+        });
+    }
+    Ok(out)
+}
+
+fn optional_caps(op: &Value) -> (Option<u64>, Option<u64>) {
+    (
+        op.get("roundCap").and_then(Value::as_u64),
+        op.get("gameCap").and_then(Value::as_u64),
+    )
+}
+
+fn handle_score_event(state: &mut RunnerState, args: &Value) -> Value {
+    let Some(card_id) = args.get("cardId").and_then(Value::as_str) else {
+        return err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": "score_event.cardId must be a string" })),
+        );
+    };
+    let Some(approach) = args
+        .get("approach")
+        .and_then(Value::as_str)
+        .and_then(parse_mode)
+    else {
+        return err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": "score_event.approach must be 'fixed' or 'tactical'" })),
+        );
+    };
+    let ds = state.dataset();
+    let Some(card) = ds.mission_cards.get(card_id) else {
+        return err_value(
+            ErrorKind::UnknownEntity,
+            Some(json!({ "kind": "secondary-card", "id": card_id })),
+        );
+    };
+    let asserted = match resolve_asserted(card, args.get("asserted").unwrap_or(&Value::Null)) {
+        Ok(a) => a,
+        Err(e) => return e,
+    };
+    let turn = score_turn(&asserted);
+    let cap = score_cap(card, approach);
+    let banked = score_secondary_event(&asserted, card, approach);
+    let mut value = serde_json::Map::new();
+    value.insert("turn".into(), json!(turn));
+    // Infinity (uncapped fixed) has no JSON form — null means "no cap".
+    value.insert("cap".into(), cap.map(|c| json!(c)).unwrap_or(Value::Null));
+    value.insert("banked".into(), json!(banked));
+    if let Some(round_cap) = args.get("roundCap").and_then(Value::as_u64) {
+        value.insert(
+            "primaryBanked".into(),
+            json!(score_primary_event(&asserted, round_cap)),
+        );
+    }
+    ok_value(Value::Object(value))
+}
+
+fn handle_score_state(state: &mut RunnerState, args: &Value) -> Value {
+    let Some(approach) = args
+        .get("approach")
+        .and_then(Value::as_str)
+        .and_then(parse_mode)
+    else {
+        return err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": "score_state.approach must be 'fixed' or 'tactical'" })),
+        );
+    };
+    let Some(ops) = args.get("ops").and_then(Value::as_array) else {
+        return err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": "score_state.ops must be an array" })),
+        );
+    };
+    let ds = state.dataset();
+    let mut pg = empty_player_game(approach);
+    for op in ops {
+        let kind = op.get("kind").and_then(Value::as_str).unwrap_or("");
+        match kind {
+            "draw" => {
+                let Some(cid) = op.get("cardId").and_then(Value::as_str) else {
+                    return err_value(
+                        ErrorKind::InvalidInput,
+                        Some(json!({ "detail": "draw.cardId must be a string" })),
+                    );
+                };
+                pg = add_to_hand(&pg, cid);
+            }
+            "score-secondary" | "score-primary" => {
+                let (Some(cid), Some(round)) = (
+                    op.get("cardId").and_then(Value::as_str),
+                    op.get("round").and_then(Value::as_u64),
+                ) else {
+                    return err_value(
+                        ErrorKind::InvalidInput,
+                        Some(json!({ "detail": format!("{kind} needs cardId and round") })),
+                    );
+                };
+                let Some(card) = ds.mission_cards.get(cid) else {
+                    return err_value(
+                        ErrorKind::UnknownEntity,
+                        Some(json!({ "kind": "secondary-card", "id": cid })),
+                    );
+                };
+                let asserted =
+                    match resolve_asserted(card, op.get("asserted").unwrap_or(&Value::Null)) {
+                        Ok(a) => a,
+                        Err(e) => return e,
+                    };
+                if kind == "score-secondary" {
+                    let vp = score_secondary_event(&asserted, card, pg.approach);
+                    pg = score_secondary(&pg, round, cid, vp);
+                } else {
+                    // The app path: compute the round's raw total, then clamp on store.
+                    let (rc, gc) = optional_caps(op);
+                    pg = set_primary(&pg, round, score_turn(&asserted), rc, gc);
+                }
+            }
+            "set-primary" => {
+                let (Some(round), Some(vp)) = (
+                    op.get("round").and_then(Value::as_u64),
+                    op.get("vp").and_then(Value::as_u64),
+                ) else {
+                    return err_value(
+                        ErrorKind::InvalidInput,
+                        Some(json!({ "detail": "set-primary needs round and vp" })),
+                    );
+                };
+                let (rc, gc) = optional_caps(op);
+                pg = set_primary(&pg, round, vp, rc, gc);
+            }
+            "remove-score" => {
+                let Some(index) = op.get("index").and_then(Value::as_u64) else {
+                    return err_value(
+                        ErrorKind::InvalidInput,
+                        Some(json!({ "detail": "remove-score needs index" })),
+                    );
+                };
+                pg = remove_score(&pg, index as usize);
+            }
+            other => {
+                return err_value(
+                    ErrorKind::InvalidInput,
+                    Some(json!({ "detail": format!("unknown score_state op kind: {other}") })),
+                );
+            }
+        }
+    }
+    ok_value(json!({
+        "rounds": pg.rounds,
+        "handIds": pg.hand_ids,
+        "log": pg.log,
+        "primary": player_primary(&pg),
+        "secondary": player_secondary(&pg),
+        "total": player_total(&pg),
+    }))
+}
+
+fn handle_wtc_result(args: &Value) -> Value {
+    let (Some(a), Some(b)) = (
+        args.get("a").and_then(Value::as_u64),
+        args.get("b").and_then(Value::as_u64),
+    ) else {
+        return err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": "wtc_result needs numeric a and b" })),
+        );
+    };
+    let r = wtc_result(a, b);
+    ok_value(json!({ "a": r.a, "b": r.b }))
+}
+
 fn handle_resolve_terrain(args: &Value) -> Value {
     let Some(layout_val) = args.get("layout") else {
         return err_value(
@@ -837,6 +1056,9 @@ fn dispatch(state: &mut RunnerState, op: &str, args: &Value) -> Value {
         "crunch" => handle_crunch(state, args),
         "attribution" => handle_attribution(state, args),
         "translate_scoring" => handle_translate_scoring(state, args),
+        "score_event" => handle_score_event(state, args),
+        "score_state" => handle_score_state(state, args),
+        "wtc_result" => handle_wtc_result(args),
         "resolve_terrain" => handle_resolve_terrain(args),
         "shutdown" => ok_value(Value::Null),
         other => err_value(ErrorKind::UnknownOp, Some(json!({ "op": other }))),

@@ -35,8 +35,8 @@ export type {
 } from "./terrain/index.js";
 
 // Card-driven secondary-mission scoring: compute VP from asserted awards and
-// track per-round, per-player scoring. TypeScript-only for now (Rust port +
-// conformance area are a follow-up).
+// track per-round, per-player scoring. Mirrored by the Rust `wh40kdc::scoring`
+// module and pinned by the `conformance/scoring` corpus.
 export * from "./scoring/index.js";
 
 // Schema access + AJV validation (secondary: this package also validates data

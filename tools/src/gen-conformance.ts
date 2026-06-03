@@ -26,6 +26,8 @@ import { fileURLToPath } from "node:url";
 import { Dataset } from "./data/dataset.js";
 import { normalizeName } from "./data/normalize.js";
 import { describeScoringCard } from "./translate/index.js";
+import { awardsOf } from "./scoring/index.js";
+import { createRunnerState, dispatch } from "./runner.js";
 import { exportRoster, type ExportFormat } from "./export/index.js";
 import { importRoster, REGISTERED_ADAPTERS } from "./import/import-roster.js";
 import { selectAdapter } from "./import/adapter.js";
@@ -436,6 +438,166 @@ function genScoringTranslation(): void {
 }
 
 /**
+ * Scoring-engine corpus: pin the pure VP arithmetic of the scoring engine
+ * (`tools/src/scoring/` — the oracle) so the Rust `wh40kdc::scoring` port
+ * reproduces it. Three ops, each case `{ name, op, args, expected }`:
+ *
+ * - `score_event` — per card and approach, assert every award matching the
+ *   approach (by its full-`awards`-array index). Pins `scoreAward`, `scoreTurn`
+ *   (exclusive-group "highest only", `vp_per × count` clamped to `per_max`,
+ *   cumulative sums), `scoreCap` (tactical 5 vs fixed `vp_max`/uncapped), and
+ *   `scoreSecondaryEvent`; primary cards also carry a `roundCap` to pin
+ *   `scorePrimaryEvent`. `cap: null` means uncapped (Infinity has no JSON form).
+ * - `score_state` — replay scenarios over a `PlayerGame`, pinning the per-round
+ *   cap (15), per-game primary cap (45), grand-total cap (100), score+discard,
+ *   and undo.
+ * - `wtc_result` — the 20-point band mapping across its boundaries.
+ *
+ * Goldens are produced by driving the TS runner's own `dispatch`, so the corpus
+ * and the runner agree by construction; the cross-impl contract is the Rust
+ * runner reproducing them. Integers are compared exactly (no tolerance).
+ */
+function genScoring(): void {
+  const ds = Dataset.embedded();
+  mkdirSync(join(CONFORMANCE, "scoring"), { recursive: true });
+
+  // One initialized runner state, reused across cases (the ops don't mutate it).
+  const specVersion = Number.parseInt(
+    readFileSync(join(CONFORMANCE, "SPEC_VERSION"), "utf8").trim(),
+    10,
+  );
+  const state = createRunnerState();
+  const init = dispatch(state, {
+    op: "init",
+    args: { spec_version: specVersion, locale: "C", tz: "UTC", seed: 0 },
+  });
+  if (!init.ok) throw new Error(`gen scoring: init failed: ${JSON.stringify(init)}`);
+  const run = (op: string, args: unknown): unknown => {
+    const r = dispatch(state, { op, args });
+    if (!r.ok) throw new Error(`gen scoring: ${op} failed: ${JSON.stringify(r)} for ${JSON.stringify(args)}`);
+    return r.value;
+  };
+
+  type Case = { name: string; op: string; args: unknown; expected: unknown };
+  const cases: Case[] = [];
+
+  // score_event: every mission card, both approaches. Assert the approach's
+  // awards by their full-array index; count vp_per awards to their per_max
+  // (else 2) so the cap logic actually bites.
+  const cards = ds.missionCards.all
+    .slice()
+    .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+  for (const card of cards) {
+    for (const approach of ["fixed", "tactical"] as const) {
+      const asserted = awardsOf(card)
+        .map((aw, index) => ({ aw, index }))
+        .filter(({ aw }) => aw.mode == null || aw.mode === approach)
+        .map(({ aw, index }) =>
+          aw.vp_per != null ? { index, count: aw.per_max ?? 2 } : { index },
+        );
+      const args: Record<string, unknown> = { cardId: card.id, approach, asserted };
+      if (card.card_type === "primary") args.roundCap = 15;
+      cases.push({
+        name: `score_event/${card.id}/${approach}`,
+        op: "score_event",
+        args,
+        expected: run("score_event", args),
+      });
+    }
+  }
+
+  // score_state: hand-authored replay scenarios. Card ids are real deck/mission
+  // cards; expected state is whatever the engine produces.
+  const stateScenarios: { name: string; args: unknown }[] = [
+    {
+      name: "primary-round-and-game-caps",
+      args: {
+        approach: "tactical",
+        ops: [
+          { kind: "set-primary", round: 1, vp: 30, roundCap: 15, gameCap: 45 },
+          { kind: "set-primary", round: 2, vp: 30, roundCap: 15, gameCap: 45 },
+          { kind: "set-primary", round: 3, vp: 30, roundCap: 15, gameCap: 45 },
+          { kind: "set-primary", round: 4, vp: 30, roundCap: 15, gameCap: 45 },
+        ],
+      },
+    },
+    {
+      // The full primary path: a card's raw round total, clamped to the round
+      // cap on store, then cleared back to 0 by a set-primary 0.
+      name: "score-primary-then-clear",
+      args: {
+        approach: "tactical",
+        ops: [
+          {
+            kind: "score-primary",
+            cardId: "ground-control",
+            round: 2,
+            asserted: awardsOf(ds.missionCards.get("ground-control")!).map((aw, index) =>
+              aw.vp_per != null ? { index, count: aw.per_max ?? 3 } : { index },
+            ),
+            roundCap: 15,
+            gameCap: 45,
+          },
+          { kind: "set-primary", round: 3, vp: 99, roundCap: 15, gameCap: 45 },
+          { kind: "set-primary", round: 2, vp: 0, roundCap: 15, gameCap: 45 },
+        ],
+      },
+    },
+    {
+      name: "secondary-score-and-undo",
+      args: {
+        approach: "tactical",
+        ops: [
+          { kind: "draw", cardId: "no-prisoners" },
+          { kind: "score-secondary", cardId: "no-prisoners", round: 2, asserted: [{ index: 0, count: 3 }] },
+          { kind: "remove-score", index: 0 },
+        ],
+      },
+    },
+    {
+      // Uncapped set-primary (no caps) overshoots so the 100 grand-total cap bites.
+      name: "grand-total-cap-at-100",
+      args: {
+        approach: "tactical",
+        ops: [
+          { kind: "set-primary", round: 1, vp: 30 },
+          { kind: "set-primary", round: 2, vp: 30 },
+          { kind: "set-primary", round: 3, vp: 30 },
+          { kind: "set-primary", round: 4, vp: 30 },
+          { kind: "set-primary", round: 5, vp: 30 },
+          { kind: "draw", cardId: "no-prisoners" },
+          { kind: "score-secondary", cardId: "no-prisoners", round: 5, asserted: [{ index: 0, count: 99 }] },
+        ],
+      },
+    },
+  ];
+  for (const s of stateScenarios) {
+    cases.push({ name: `score_state/${s.name}`, op: "score_state", args: s.args, expected: run("score_state", s.args) });
+  }
+
+  // wtc_result: band boundaries and symmetry.
+  const wtcPairs: [number, number][] = [
+    [50, 50],
+    [48, 45],
+    [45, 50],
+    [56, 50],
+    [50, 61],
+    [100, 50],
+    [100, 49],
+    [0, 100],
+    [60, 40],
+    [55, 50],
+  ];
+  for (const [a, b] of wtcPairs) {
+    const args = { a, b };
+    cases.push({ name: `wtc_result/${a}-${b}`, op: "wtc_result", args, expected: run("wtc_result", args) });
+  }
+
+  writeJson(join(CONFORMANCE, "scoring", "cases.json"), cases);
+  console.log(`scoring/cases.json: ${cases.length} cases`);
+}
+
+/**
  * Terrain-resolver corpus: resolve template-anchored layouts to absolute
  * board-space vertices (y-down inches). The TS resolver is the oracle; the Rust
  * port must reproduce every vertex within 5e-4 (per-area invariant in
@@ -601,4 +763,5 @@ genRosters();
 genLinkedApi();
 genAttribution();
 genScoringTranslation();
+genScoring();
 genTerrainResolver();

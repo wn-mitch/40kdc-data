@@ -5,23 +5,14 @@
   let {
     rounds,
     current,
-    roundCap,
-    onPrimary,
   }: {
     rounds: RoundCell[];
     current: number;
-    roundCap: number;
-    onPrimary: (round: number, value: number) => void;
   } = $props();
 
   const primaryTotal = $derived(rounds.reduce((s, c) => s + c.primary, 0));
   const secondaryTotal = $derived(rounds.reduce((s, c) => s + c.secondary, 0));
   const grand = $derived(Math.min(GAME_VP_CAP, primaryTotal + secondaryTotal));
-
-  function onInput(i: number, e: Event): void {
-    const v = Number((e.currentTarget as HTMLInputElement).value);
-    onPrimary(i + 1, Number.isFinite(v) ? v : 0);
-  }
 </script>
 
 <table class="w-full border-collapse font-mono tabular-nums text-sm">
@@ -47,18 +38,9 @@
     <tr class="border-t border-border">
       <td class="font-heading text-[11px] uppercase tracking-wide text-text-muted px-1 py-1">Primary</td>
       {#each rounds as cell, i (i)}
-        <td class="border-l border-border p-0 {i + 1 === current ? 'bg-accent-dim' : ''}">
-          <input
-            type="number"
-            min="0"
-            max={roundCap}
-            inputmode="numeric"
-            class="focus-ring w-full h-8 bg-transparent text-center text-text outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
-            value={cell.primary}
-            oninput={(e) => onInput(i, e)}
-            aria-label={`Primary VP, round ${i + 1}`}
-          />
-        </td>
+        <td class="border-l border-border text-center text-text px-0 py-1 {i + 1 === current ? 'bg-accent-dim' : ''}"
+          >{cell.primary || ""}</td
+        >
       {/each}
       <td class="border-l border-border text-center text-text px-1">{primaryTotal}</td>
     </tr>

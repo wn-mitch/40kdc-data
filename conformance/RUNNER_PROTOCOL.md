@@ -176,6 +176,56 @@ unknown `cardId` returns `error_kind: "UNKNOWN_ENTITY"`. Only `card_type:
 "primary"` cards are exercised by the corpus today (the secondary deck isn't
 revealed yet, but the op works for any card present in the dataset).
 
+### `score_event`
+
+```json
+{"op":"score_event","args":{"cardId":"ground-control","approach":"tactical","asserted":[{"index":0},{"index":1,"count":3}],"roundCap":15}}
+```
+
+Scores one asserted set of a card's `awards` under `approach` (`"fixed"` or
+`"tactical"`). `asserted` references awards by `index` into the card's full
+`awards` array (approach affects only the cap, never which indices are valid);
+`count` defaults to 1 and matters only for `vp_per` awards. Response value is
+`{"turn": <int>, "cap": <int|null>, "banked": <int>, "primaryBanked"?: <int>}`:
+`turn` is the asserted total (exclusive-group "highest only", `vp_per × count`
+clamped to `per_max`, cumulative rows summed); `cap` is the per-score ceiling
+(tactical = 5, fixed = max printed `vp_max` or **`null` when uncapped** — there
+is no JSON `Infinity`); `banked = min(turn, cap)`. `primaryBanked = min(turn,
+roundCap)` is present only when `roundCap` is supplied (primary scoring has no
+tactical 5-cap). Equivalent to TS `scoreTurn`/`scoreCap`/`scoreSecondaryEvent`/
+`scorePrimaryEvent` / Rust `score_turn`/`score_cap`/`score_secondary_event`/
+`score_primary_event`. Unknown `cardId` → `UNKNOWN_ENTITY`; an out-of-range
+`asserted.index` → `INVALID_INPUT`.
+
+### `score_state`
+
+```json
+{"op":"score_state","args":{"approach":"tactical","ops":[{"kind":"set-primary","round":1,"vp":30,"roundCap":15,"gameCap":45},{"kind":"draw","cardId":"no-prisoners"},{"kind":"score-secondary","cardId":"no-prisoners","round":2,"asserted":[{"index":0,"count":3}]},{"kind":"remove-score","index":0}]}}
+```
+
+Replays `ops` over a fresh `PlayerGame` and returns its state plus derived
+totals: `{"rounds":[{"primary":<int>,"secondary":<int>}, …5],"handIds":[<string>,
+…],"log":[{"cardId":<string>,"round":<int>,"vp":<int>}, …],"primary":<int>,
+"secondary":<int>,"total":<int>}`. Op kinds: `draw` (`cardId`); `score-secondary`
+(`cardId`, `round`, `asserted`) banks `min(turn, cap)`, logs it, discards from
+hand; `score-primary` (`cardId`, `round`, `asserted`, `roundCap?`, `gameCap?`)
+stores the round's raw `scoreTurn` through the cap clamp; `set-primary` (`round`,
+`vp`, `roundCap?`, `gameCap?`) clamps `vp` to the round cap **and** the remaining
+per-game room; `remove-score` (`index`) reverses a logged scoring. `total` is
+`min(100, primary + secondary)`. **Op order is load-bearing.** Unknown `cardId`
+→ `UNKNOWN_ENTITY`; malformed op → `INVALID_INPUT`.
+
+### `wtc_result`
+
+```json
+{"op":"wtc_result","args":{"a":100,"b":49}}
+```
+
+Maps two grand totals onto the WTC 20-point result. Response value is
+`{"a": <int>, "b": <int>}` summing to 20. Equal totals → 10-10; margin 0-5 →
+10-10; then one band per 5 VP (`10 ± ceil((diff−5)/5)`), capped at 20-0 for a
+51+ differential. Equivalent to TS `wtcResult(a, b)` / Rust `wtc_result(a, b)`.
+
 ### `resolve_terrain`
 
 ```json

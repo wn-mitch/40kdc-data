@@ -18,6 +18,7 @@ import {
   scoreTurn,
   scoreCap,
   scoreSecondaryEvent,
+  scorePrimaryEvent,
   emptyPlayerGame,
   recordSecondary,
   scoreSecondary,
@@ -106,6 +107,16 @@ describe("scoreCap / scoreSecondaryEvent", () => {
   });
 });
 
+describe("scorePrimaryEvent", () => {
+  it("clamps a round's asserted total to the per-round cap (no tactical 5 rule)", () => {
+    const perKill = awardsForApproach(noPrisoners, "tactical")[0]; // 2 VP per
+    // 2 VP × 8 = 16 raw, clamped to the 15 round cap.
+    expect(scorePrimaryEvent([{ award: perKill, count: 8 }], 15)).toBe(15);
+    // Under the cap passes through unchanged.
+    expect(scorePrimaryEvent([{ award: perKill, count: 3 }], 15)).toBe(6);
+  });
+});
+
 describe("PlayerGame round recording", () => {
   it("starts empty with one cell per round", () => {
     const pg = emptyPlayerGame();
@@ -137,6 +148,35 @@ describe("PlayerGame round recording", () => {
     for (let r = 1; r <= ROUNDS; r++) pg = setPrimary(pg, r, 30);
     expect(playerPrimary(pg)).toBe(150);
     expect(playerTotal(pg)).toBe(GAME_VP_CAP);
+  });
+
+  it("clamps a round's primary to the per-round cap", () => {
+    const pg = setPrimary(emptyPlayerGame(), 1, 30, { roundCap: 15 });
+    expect(pg.rounds[0].primary).toBe(15);
+  });
+
+  it("clamps primary so the per-game cap is never exceeded across rounds", () => {
+    let pg = emptyPlayerGame();
+    // Three rounds at the round cap reach the 45 game cap exactly...
+    for (const r of [1, 2, 3]) pg = setPrimary(pg, r, 15, { roundCap: 15, gameCap: 45 });
+    expect(playerPrimary(pg)).toBe(45);
+    // ...so a fourth round has no room left and clamps to 0.
+    pg = setPrimary(pg, 4, 15, { roundCap: 15, gameCap: 45 });
+    expect(pg.rounds[3].primary).toBe(0);
+    expect(playerPrimary(pg)).toBe(45);
+  });
+
+  it("game-cap room is computed against the other rounds, so re-scoring a round is stable", () => {
+    let pg = emptyPlayerGame();
+    pg = setPrimary(pg, 1, 15, { roundCap: 15, gameCap: 45 });
+    pg = setPrimary(pg, 2, 15, { roundCap: 15, gameCap: 45 });
+    // Round 3 has 45 - 30 = 15 room; full 15 fits.
+    pg = setPrimary(pg, 3, 20, { roundCap: 15, gameCap: 45 });
+    expect(pg.rounds[2].primary).toBe(15);
+    // Re-scoring round 1 lower frees room without compounding.
+    pg = setPrimary(pg, 1, 5, { roundCap: 15, gameCap: 45 });
+    expect(pg.rounds[0].primary).toBe(5);
+    expect(playerPrimary(pg)).toBe(35);
   });
 
   it("hand add/remove is the score-then-discard path", () => {

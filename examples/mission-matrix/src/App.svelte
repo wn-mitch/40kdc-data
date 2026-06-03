@@ -13,6 +13,7 @@
     removeScore,
     setPrimary,
     scoreSecondaryEvent,
+    scoreTurn,
     playerTotal,
   } from "@alpaca-software/40kdc-data";
   import {
@@ -40,6 +41,7 @@
   // Base-aware path to the Alpaca mark (also the PWA/favicon icon).
   const ALPACA_ICON = `${import.meta.env.BASE_URL}favicon-32x32.png`;
   const DEFAULT_ROUND_CAP = 15;
+  const DEFAULT_GAME_CAP = 45;
 
   type Side = "you" | "opp";
 
@@ -105,8 +107,17 @@
   const cardOpp = $derived(missionOpp ? scoringCardFor(missionOpp.id) : undefined);
   const capYou = $derived(missionYou?.vp_per_round_cap ?? DEFAULT_ROUND_CAP);
   const capOpp = $derived(missionOpp?.vp_per_round_cap ?? DEFAULT_ROUND_CAP);
+  const gameCapYou = $derived(missionYou?.vp_per_game_cap ?? DEFAULT_GAME_CAP);
+  const gameCapOpp = $derived(missionOpp?.vp_per_game_cap ?? DEFAULT_GAME_CAP);
   const totalYou = $derived(playerTotal(gameYou));
   const totalOpp = $derived(playerTotal(gameOpp));
+
+  // Primary VP still scorable in the *current* round, after the per-round cap
+  // and the remaining per-game primary room (other rounds' primary).
+  const otherPrimary = (g: PlayerGame): number =>
+    g.rounds.reduce((s, c, idx) => (idx === round - 1 ? s : s + c.primary), 0);
+  const effCapYou = $derived(Math.max(0, Math.min(capYou, gameCapYou - otherPrimary(gameYou))));
+  const effCapOpp = $derived(Math.max(0, Math.min(capOpp, gameCapOpp - otherPrimary(gameOpp))));
 
   // --- side-bound state access (keeps the two columns DRY) ---
   const gameOf = (s: Side): PlayerGame => (s === "you" ? gameYou : gameOpp);
@@ -148,8 +159,13 @@
   function removeScoreFor(s: Side, index: number): void {
     setGame(s, removeScore(gameOf(s), index));
   }
-  function primaryFor(s: Side, r: number, value: number): void {
-    setGame(s, setPrimary(gameOf(s), r, value));
+  function scorePrimaryFor(s: Side, asserted: AssertedAward[]): void {
+    const roundCap = s === "you" ? capYou : capOpp;
+    const gameCap = s === "you" ? gameCapYou : gameCapOpp;
+    setGame(s, setPrimary(gameOf(s), round, scoreTurn(asserted), { roundCap, gameCap }));
+  }
+  function clearPrimaryFor(s: Side): void {
+    setGame(s, setPrimary(gameOf(s), round, 0));
   }
   function approachFor(s: Side, mode: ScoringMode): void {
     setGame(s, { ...gameOf(s), approach: mode });
@@ -318,7 +334,7 @@
         game={gameYou}
         activeId={activeYou}
         {round}
-        roundCap={capYou}
+        effectiveRoundCap={effCapYou}
         ownTotal={totalYou}
         oppTotal={totalOpp}
         onDraw={() => drawFor("you")}
@@ -327,7 +343,8 @@
         onDiscard={(id) => discardFor("you", id)}
         onScore={(a) => scoreFor("you", a)}
         onRemoveScore={(i) => removeScoreFor("you", i)}
-        onPrimary={(r, v) => primaryFor("you", r, v)}
+        onPrimaryScore={(a) => scorePrimaryFor("you", a)}
+        onClearPrimary={() => clearPrimaryFor("you")}
         onApproach={(m) => approachFor("you", m)}
       />
       <PlayerColumn
@@ -338,7 +355,7 @@
         game={gameOpp}
         activeId={activeOpp}
         {round}
-        roundCap={capOpp}
+        effectiveRoundCap={effCapOpp}
         ownTotal={totalOpp}
         oppTotal={totalYou}
         onDraw={() => drawFor("opp")}
@@ -347,7 +364,8 @@
         onDiscard={(id) => discardFor("opp", id)}
         onScore={(a) => scoreFor("opp", a)}
         onRemoveScore={(i) => removeScoreFor("opp", i)}
-        onPrimary={(r, v) => primaryFor("opp", r, v)}
+        onPrimaryScore={(a) => scorePrimaryFor("opp", a)}
+        onClearPrimary={() => clearPrimaryFor("opp")}
         onApproach={(m) => approachFor("opp", m)}
       />
     </div>

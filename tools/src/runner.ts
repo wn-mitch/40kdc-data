@@ -28,7 +28,26 @@ import { importRoster, tryImportRoster, REGISTERED_ADAPTERS } from "./import/imp
 import { selectAdapter } from "./import/adapter.js";
 import { createValidator } from "./schema-loader.js";
 import { attributeStages, crunch, type Buff, type EngineContext, type EngineInput } from "./cruncher/index.js";
-import { describeScoringCard } from "./translate/index.js";
+import { describeScoringCard, type ScoringMode } from "./translate/index.js";
+import {
+  awardsOf,
+  scoreTurn,
+  scoreCap,
+  scoreSecondaryEvent,
+  scorePrimaryEvent,
+  emptyPlayerGame,
+  addToHand,
+  scoreSecondary,
+  removeScore,
+  setPrimary,
+  playerPrimary,
+  playerSecondary,
+  playerTotal,
+  wtcResult,
+  type AssertedAward,
+  type PlayerGame,
+} from "./scoring/index.js";
+import type { SecondaryCard } from "./generated.js";
 import { resolveLayout, TerrainResolveError } from "./terrain/index.js";
 import type { TerrainTemplate, TerrainLayout } from "./terrain/resolve.js";
 import type Ajv from "ajv";
@@ -535,6 +554,174 @@ function handleTranslateScoring(state: RunnerState, args: unknown): RunnerRespon
   return ok({ awards: describeScoringCard(card) });
 }
 
+// -----------------------------------------------------------------------------
+// Scoring engine ops. Awards are referenced by index into the card's `awards`
+// array (never serialized over the wire) so both impls reconstruct the same
+// `AssertedAward` from the shared embedded dataset.
+// -----------------------------------------------------------------------------
+
+function isScoringMode(v: unknown): v is ScoringMode {
+  return v === "fixed" || v === "tactical";
+}
+
+interface AssertionRef {
+  index: number;
+  count?: number;
+}
+
+/**
+ * Resolve `[{index, count?}]` against a card's `awards`, or return a typed
+ * error. The index addresses the full `awards` array (approach filtering only
+ * affects the cap, not which indices are valid).
+ */
+function resolveAsserted(
+  card: SecondaryCard,
+  asserted: unknown,
+): { ok: true; value: AssertedAward[] } | { ok: false; response: RunnerResponse } {
+  if (!Array.isArray(asserted)) {
+    return { ok: false, response: err("INVALID_INPUT", { detail: "asserted must be an array" }) };
+  }
+  const awards = awardsOf(card);
+  const out: AssertedAward[] = [];
+  for (const raw of asserted) {
+    if (typeof raw !== "object" || raw === null) {
+      return { ok: false, response: err("INVALID_INPUT", { detail: "asserted entry must be an object" }) };
+    }
+    const a = raw as AssertionRef;
+    if (typeof a.index !== "number" || a.index < 0 || a.index >= awards.length) {
+      return { ok: false, response: err("INVALID_INPUT", { detail: `asserted.index out of range: ${String(a.index)}` }) };
+    }
+    out.push(a.count === undefined ? { award: awards[a.index] } : { award: awards[a.index], count: a.count });
+  }
+  return { ok: true, value: out };
+}
+
+function handleScoreEvent(state: RunnerState, args: unknown): RunnerResponse {
+  if (typeof args !== "object" || args === null) {
+    return err("INVALID_INPUT", { detail: "score_event args must be an object" });
+  }
+  const a = args as { cardId?: unknown; approach?: unknown; asserted?: unknown; roundCap?: unknown };
+  if (typeof a.cardId !== "string") {
+    return err("INVALID_INPUT", { detail: "score_event.cardId must be a string" });
+  }
+  if (!isScoringMode(a.approach)) {
+    return err("INVALID_INPUT", { detail: "score_event.approach must be 'fixed' or 'tactical'" });
+  }
+  const card = getDataset(state).missionCards.get(a.cardId);
+  if (!card) return err("UNKNOWN_ENTITY", { kind: "secondary-card", id: a.cardId });
+  const resolved = resolveAsserted(card, a.asserted);
+  if (!resolved.ok) return resolved.response;
+
+  const turn = scoreTurn(resolved.value);
+  const cap = scoreCap(card, a.approach);
+  const banked = scoreSecondaryEvent(resolved.value, card, a.approach);
+  const value: { turn: number; cap: number | null; banked: number; primaryBanked?: number } = {
+    turn,
+    // Infinity (uncapped fixed) has no JSON form — null means "no cap".
+    cap: cap === Infinity ? null : cap,
+    banked,
+  };
+  if (typeof a.roundCap === "number") {
+    value.primaryBanked = scorePrimaryEvent(resolved.value, a.roundCap);
+  }
+  return ok(value);
+}
+
+type ScoreStateOp =
+  | { kind: "draw"; cardId?: unknown }
+  | { kind: "score-secondary"; cardId?: unknown; round?: unknown; asserted?: unknown }
+  | { kind: "score-primary"; cardId?: unknown; round?: unknown; asserted?: unknown; roundCap?: unknown; gameCap?: unknown }
+  | { kind: "set-primary"; round?: unknown; vp?: unknown; roundCap?: unknown; gameCap?: unknown }
+  | { kind: "remove-score"; index?: unknown };
+
+function optionalCaps(o: { roundCap?: unknown; gameCap?: unknown }): { roundCap?: number; gameCap?: number } {
+  const caps: { roundCap?: number; gameCap?: number } = {};
+  if (typeof o.roundCap === "number") caps.roundCap = o.roundCap;
+  if (typeof o.gameCap === "number") caps.gameCap = o.gameCap;
+  return caps;
+}
+
+function handleScoreState(state: RunnerState, args: unknown): RunnerResponse {
+  if (typeof args !== "object" || args === null) {
+    return err("INVALID_INPUT", { detail: "score_state args must be an object" });
+  }
+  const a = args as { approach?: unknown; ops?: unknown };
+  if (!isScoringMode(a.approach)) {
+    return err("INVALID_INPUT", { detail: "score_state.approach must be 'fixed' or 'tactical'" });
+  }
+  if (!Array.isArray(a.ops)) {
+    return err("INVALID_INPUT", { detail: "score_state.ops must be an array" });
+  }
+  let pg: PlayerGame = emptyPlayerGame(a.approach);
+  const ds = getDataset(state);
+  for (const raw of a.ops as ScoreStateOp[]) {
+    switch (raw.kind) {
+      case "draw": {
+        if (typeof raw.cardId !== "string") return err("INVALID_INPUT", { detail: "draw.cardId must be a string" });
+        pg = addToHand(pg, raw.cardId);
+        break;
+      }
+      case "score-secondary": {
+        if (typeof raw.cardId !== "string" || typeof raw.round !== "number") {
+          return err("INVALID_INPUT", { detail: "score-secondary needs cardId and round" });
+        }
+        const card = ds.missionCards.get(raw.cardId);
+        if (!card) return err("UNKNOWN_ENTITY", { kind: "secondary-card", id: raw.cardId });
+        const resolved = resolveAsserted(card, raw.asserted);
+        if (!resolved.ok) return resolved.response;
+        const vp = scoreSecondaryEvent(resolved.value, card, pg.approach);
+        pg = scoreSecondary(pg, raw.round, raw.cardId, vp);
+        break;
+      }
+      case "score-primary": {
+        if (typeof raw.cardId !== "string" || typeof raw.round !== "number") {
+          return err("INVALID_INPUT", { detail: "score-primary needs cardId and round" });
+        }
+        const card = ds.missionCards.get(raw.cardId);
+        if (!card) return err("UNKNOWN_ENTITY", { kind: "secondary-card", id: raw.cardId });
+        const resolved = resolveAsserted(card, raw.asserted);
+        if (!resolved.ok) return resolved.response;
+        // The app path: compute the round's raw total, then clamp on store.
+        pg = setPrimary(pg, raw.round, scoreTurn(resolved.value), optionalCaps(raw));
+        break;
+      }
+      case "set-primary": {
+        if (typeof raw.round !== "number" || typeof raw.vp !== "number") {
+          return err("INVALID_INPUT", { detail: "set-primary needs round and vp" });
+        }
+        pg = setPrimary(pg, raw.round, raw.vp, optionalCaps(raw));
+        break;
+      }
+      case "remove-score": {
+        if (typeof raw.index !== "number") return err("INVALID_INPUT", { detail: "remove-score needs index" });
+        pg = removeScore(pg, raw.index);
+        break;
+      }
+      default:
+        return err("INVALID_INPUT", { detail: `unknown score_state op kind: ${String((raw as { kind?: unknown }).kind)}` });
+    }
+  }
+  return ok({
+    rounds: pg.rounds,
+    handIds: pg.handIds,
+    log: pg.log,
+    primary: playerPrimary(pg),
+    secondary: playerSecondary(pg),
+    total: playerTotal(pg),
+  });
+}
+
+function handleWtcResult(args: unknown): RunnerResponse {
+  if (typeof args !== "object" || args === null) {
+    return err("INVALID_INPUT", { detail: "wtc_result args must be an object" });
+  }
+  const a = args as { a?: unknown; b?: unknown };
+  if (typeof a.a !== "number" || typeof a.b !== "number") {
+    return err("INVALID_INPUT", { detail: "wtc_result needs numeric a and b" });
+  }
+  return ok(wtcResult(a.a, a.b));
+}
+
 function handleResolveTerrain(args: unknown): RunnerResponse {
   if (typeof args !== "object" || args === null) {
     return err("INVALID_INPUT", { detail: "resolve_terrain args must be an object" });
@@ -593,6 +780,12 @@ export function dispatch(state: RunnerState, req: { op: string; args?: unknown }
       return handleAttribution(state, req.args);
     case "translate_scoring":
       return handleTranslateScoring(state, req.args);
+    case "score_event":
+      return handleScoreEvent(state, req.args);
+    case "score_state":
+      return handleScoreState(state, req.args);
+    case "wtc_result":
+      return handleWtcResult(req.args);
     case "resolve_terrain":
       return handleResolveTerrain(req.args);
     case "shutdown":
