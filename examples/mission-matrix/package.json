@@ -2,7 +2,7 @@
   "name": "@40kdc/mission-matrix",
   "private": true,
   "homepage": "https://mission-matrix.alpacasoft.dev",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
