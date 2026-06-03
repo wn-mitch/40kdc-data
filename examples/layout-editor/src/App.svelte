@@ -12,6 +12,7 @@
     deletePiece,
     repairTwins,
     unpairTwins,
+    renameLayout,
     deploymentZones,
     defaultDeploymentFor,
     DEPLOYMENT_PATTERNS,
@@ -88,6 +89,26 @@
     if (selectedId === id || selectedId === twin) selectedId = null;
   }
 
+  // Delete/Backspace removes the selected piece — but never while the caret is
+  // in a text field (the title input, inspector fields), where those keys edit
+  // text.
+  function onKeydown(e: KeyboardEvent): void {
+    if (e.key !== "Delete" && e.key !== "Backspace") return;
+    if (!selectedId) return;
+    const t = e.target as HTMLElement | null;
+    if (
+      t &&
+      (t.tagName === "INPUT" ||
+        t.tagName === "TEXTAREA" ||
+        t.tagName === "SELECT" ||
+        t.isContentEditable)
+    ) {
+      return;
+    }
+    e.preventDefault();
+    remove(selectedId);
+  }
+
   let copied = $state(false);
   async function copyJson(): Promise<void> {
     await navigator.clipboard.writeText(exportText);
@@ -104,6 +125,8 @@
     URL.revokeObjectURL(url);
   }
 </script>
+
+<svelte:window onkeydown={onKeydown} />
 
 <div class="app">
   <header class="app-header">
@@ -143,6 +166,13 @@
     </aside>
 
     <section class="canvas">
+      <input
+        class="layout-title"
+        value={layout.name}
+        oninput={(e) => renameLayout(layout, e.currentTarget.value)}
+        aria-label="Layout title"
+        placeholder="Untitled layout"
+      />
       <Board
         {layout}
         {resolved}
@@ -250,6 +280,30 @@
   .canvas :global(.board) {
     flex: 1 1 auto;
     min-height: 0;
+  }
+  .layout-title {
+    flex: 0 0 auto;
+    margin: 0 0 0.5rem;
+    width: 100%;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 0.2rem 0.4rem;
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 1.35rem;
+    letter-spacing: 0.01em;
+  }
+  .layout-title:hover {
+    border-color: var(--rim);
+  }
+  .layout-title:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: var(--bg);
+  }
+  .layout-title::placeholder {
+    color: var(--text-mute);
   }
   h2 {
     font-family: "Barlow Condensed", sans-serif;

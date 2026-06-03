@@ -402,6 +402,23 @@ export function blankLayout(): EditLayout {
   return { id: "untitled-layout", name: "Untitled Layout", source: "custom", pieces: [] };
 }
 
+/** Kebab-case entity id from a title, matching the `entity-id` convention
+ *  (`^[a-z0-9][a-z0-9-]*[a-z0-9]$`). Empty titles fall back to a stable slug. */
+export function slugify(name: string): string {
+  const slug = name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return slug || "untitled-layout";
+}
+
+/** Rename the working layout, keeping its `id` a slug of the title so the
+ *  canonical export id and download filename track the title the author sees. */
+export function renameLayout(layout: EditLayout, name: string): void {
+  layout.name = name;
+  layout.id = slugify(name);
+}
+
 /** Deep-clone an embedded layout into the editable model, pairing symmetric twins. */
 export function loadEmbedded(id: string, symmetric = true): EditLayout | undefined {
   const raw = ds.terrainLayouts.get(id) as TerrainLayout | undefined;
