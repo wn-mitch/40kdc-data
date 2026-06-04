@@ -105,7 +105,7 @@
             <div class="flex items-center gap-1" class:opacity-40={!ticked}>
               <button
                 type="button"
-                class="focus-ring w-6 h-6 rounded bg-panel border border-border-strong text-text-muted hover:border-accent hover:text-accent"
+                class="focus-ring w-11 h-11 lg:w-6 lg:h-6 rounded bg-panel border border-border-strong text-text-muted hover:border-accent hover:text-accent"
                 disabled={!ticked}
                 aria-label="decrease count"
                 onclick={() => setCount(i, a, countFor(i, a) - 1)}>−</button
@@ -113,7 +113,7 @@
               <span class="font-mono tabular-nums text-sm w-5 text-center">{countFor(i, a)}</span>
               <button
                 type="button"
-                class="focus-ring w-6 h-6 rounded bg-panel border border-border-strong text-text-muted hover:border-accent hover:text-accent"
+                class="focus-ring w-11 h-11 lg:w-6 lg:h-6 rounded bg-panel border border-border-strong text-text-muted hover:border-accent hover:text-accent"
                 disabled={!ticked}
                 aria-label="increase count"
                 onclick={() => setCount(i, a, countFor(i, a) + 1)}>+</button

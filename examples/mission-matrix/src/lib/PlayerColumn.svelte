@@ -102,7 +102,7 @@
         {#each ["tactical", "fixed"] as const as m (m)}
           <button
             type="button"
-            class="focus-ring font-heading text-[10px] font-bold uppercase tracking-wide rounded border px-2 py-0.5 transition-colors {game.approach ===
+            class="focus-ring font-heading text-[10px] font-bold uppercase tracking-wide rounded border px-2 py-2 lg:py-0.5 transition-colors {game.approach ===
             m
               ? 'bg-accent text-accent-foreground border-accent'
               : 'bg-panel text-text-muted border-border-strong hover:border-accent hover:text-accent'}"

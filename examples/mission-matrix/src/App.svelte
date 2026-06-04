@@ -26,7 +26,7 @@
     secondariesByIds,
   } from "./lib/data.js";
   import PlayerColumn from "./lib/PlayerColumn.svelte";
-  import WtcResult from "./lib/WtcResult.svelte";
+  import Scoreboard from "./lib/Scoreboard.svelte";
   import MissionCard from "./lib/MissionCard.svelte";
   import Toast from "./lib/Toast.svelte";
   import PwaInstallPrompt from "./lib/PwaInstallPrompt.svelte";
@@ -101,6 +101,11 @@
   function notify(message: string): void {
     toast = message;
   }
+
+  // Which PlayerColumn shows below lg (mobile shows one at a time). Ephemeral:
+  // not worth persisting across reloads. Columns are CSS-hidden, never
+  // unmounted, so in-progress award ticks survive switching sides.
+  let activeSide = $state<Side>("you");
 
   $effect(() => {
     const blob: Saved = {
@@ -327,7 +332,7 @@
               <span class="block mb-2 font-heading text-[11px] font-bold uppercase tracking-wider text-text-muted">{group.label}</span>
               <div class="flex flex-wrap gap-2">
                 {#each DISPOSITIONS as d (d)}
-                  <button type="button" class="focus-ring font-heading text-[11px] font-bold uppercase tracking-wide rounded border px-3 py-2 transition-colors {group.cur === d ? 'bg-accent text-accent-foreground border-accent' : 'bg-panel text-text-muted border-border-strong hover:border-accent hover:text-accent'}" aria-pressed={group.cur === d} onclick={() => group.pick(d)}>
+                  <button type="button" class="focus-ring min-h-11 font-heading text-[11px] font-bold uppercase tracking-wide rounded border px-3 py-2 transition-colors {group.cur === d ? 'bg-accent text-accent-foreground border-accent' : 'bg-panel text-text-muted border-border-strong hover:border-accent hover:text-accent'}" aria-pressed={group.cur === d} onclick={() => group.pick(d)}>
                     {DISPOSITION_LABELS[d]}
                   </button>
                 {/each}
@@ -356,11 +361,25 @@
       {/if}
     </div>
 
-    <!-- WTC scoreboard: round, both totals, differential, 20-point result. -->
-    <WtcResult {totalYou} {totalOpp} {round} onRound={(r) => (round = r)} onReset={resetGame} />
+    <!-- Sticky WTC scoreboard: round, 20-point result, reset, and (mobile)
+         the You/Opponent switcher. -->
+    <Scoreboard
+      {totalYou}
+      {totalOpp}
+      {round}
+      onRound={(r) => (round = r)}
+      onReset={resetGame}
+      {activeSide}
+      onSide={(s) => (activeSide = s)}
+      dispYouLabel={dispYou ? DISPOSITION_LABELS[dispYou] : null}
+      dispOppLabel={dispOpp ? DISPOSITION_LABELS[dispOpp] : null}
+    />
 
-    <!-- Two players, side by side on wide screens. -->
+    <!-- Two players: side by side on wide screens, one at a time (switcher
+         above) on mobile. CSS-hidden, not {#if}: unmounting would drop
+         ScoringPanel's in-progress ticks. -->
     <div class="grid gap-4 lg:grid-cols-2">
+      <div class:hidden={activeSide !== "you"} class="lg:block min-w-0">
       <PlayerColumn
         label="You"
         disposition={dispYou ? DISPOSITION_LABELS[dispYou] : null}
@@ -385,6 +404,8 @@
         onClearPrimary={() => clearPrimaryFor("you")}
         onApproach={(m) => approachFor("you", m)}
       />
+      </div>
+      <div class:hidden={activeSide !== "opp"} class="lg:block min-w-0">
       <PlayerColumn
         label="Opponent"
         disposition={dispOpp ? DISPOSITION_LABELS[dispOpp] : null}
@@ -409,6 +430,7 @@
         onClearPrimary={() => clearPrimaryFor("opp")}
         onApproach={(m) => approachFor("opp", m)}
       />
+      </div>
     </div>
   </main>
 

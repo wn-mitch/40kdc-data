@@ -43,7 +43,7 @@
     </span>
     <div class="flex items-center gap-2">
       <select
-        class="focus-ring max-w-[10rem] bg-panel border border-border-strong rounded px-2 py-1 text-xs text-text-muted hover:border-accent disabled:opacity-40"
+        class="focus-ring max-w-[10rem] min-h-11 lg:min-h-0 bg-panel border border-border-strong rounded px-2 py-1 text-xs text-text-muted hover:border-accent disabled:opacity-40"
         disabled={available.length === 0}
         onchange={pick}
         aria-label="Add a specific secondary"
@@ -55,7 +55,7 @@
       </select>
       <button
         type="button"
-        class="focus-ring font-heading text-[11px] font-bold uppercase tracking-wide rounded px-3 py-1 bg-accent text-accent-foreground hover:bg-accent-hover disabled:opacity-40 disabled:hover:bg-accent"
+        class="focus-ring min-h-11 lg:min-h-0 font-heading text-[11px] font-bold uppercase tracking-wide rounded px-3 py-1 bg-accent text-accent-foreground hover:bg-accent-hover disabled:opacity-40 disabled:hover:bg-accent"
         disabled={!canDraw}
         onclick={onDraw}>Draw</button
       >
@@ -73,7 +73,7 @@
         <li class="flex items-stretch rounded border overflow-hidden {active ? 'border-accent' : 'border-panel-border'}">
           <button
             type="button"
-            class="focus-ring text-left px-2 py-1 transition-colors {active
+            class="focus-ring text-left px-2 py-2.5 lg:py-1 transition-colors {active
               ? 'bg-accent-dim'
               : 'bg-panel-surface hover:bg-panel-hover'}"
             aria-pressed={active}
@@ -83,7 +83,7 @@
           </button>
           <button
             type="button"
-            class="focus-ring px-1.5 bg-panel-surface border-l border-panel-border text-text-dim hover:text-danger"
+            class="focus-ring px-3 lg:px-1.5 bg-panel-surface border-l border-panel-border text-text-dim hover:text-danger"
             aria-label="discard {card.name}"
             title="Discard (out of the deck for the rest of the game)"
             onclick={() => onDiscard(card.id)}>×</button
