@@ -30,12 +30,26 @@
     zones: DeployZone[];
     divider: TerritoryDivider | null;
     markers: ObjectiveMarker[];
+    /** Draw the pinned keystone dimension lines (the pins themselves stay on the pieces). */
+    showKeystones?: boolean;
     onselect: (id: string | null) => void;
     onmove: (id: string, position: Vec2) => void;
     onorient: (id: string, patch: { rotation_degrees?: number; mirror?: Mirror }) => void;
   }
-  let { layout, resolved, selectedId, selectedPiece, solver, zones, divider, markers, onselect, onmove, onorient }: Props =
-    $props();
+  let {
+    layout,
+    resolved,
+    selectedId,
+    selectedPiece,
+    solver,
+    zones,
+    divider,
+    markers,
+    showKeystones = true,
+    onselect,
+    onmove,
+    onorient,
+  }: Props = $props();
 
   // The board is shown rotated 90° CW for portrait terrain cards. Board coords stay
   // 60×44 y-down; the content group carries the rotation, and we map pointers back
@@ -147,8 +161,9 @@
   // unmeasurable keystone (stale vertex index after a footprint change) draws
   // its anchor with a "?" label instead of crashing.
   const keystoneGuides = $derived.by(() => {
-    const byPiece = new Map(layout.pieces.map((p) => [p.id, p]));
     const out: { from: Vec2; to: Vec2; mid: Vec2; text: string; invalid: boolean }[] = [];
+    if (!showKeystones) return out;
+    const byPiece = new Map(layout.pieces.map((p) => [p.id, p]));
     for (const d of keystoneDisplays(layout)) {
       const p = byPiece.get(d.pieceId);
       if (!p) continue;

@@ -57,6 +57,9 @@
 
   const initialLayout = loadEmbedded("gw-11e-crucible", true) ?? blankLayout();
   let symmetric = $state(true);
+  // Board-only visibility of the pinned keystone dimension lines; the pins
+  // themselves stay on the pieces.
+  let showKeystones = $state(true);
   let layout = $state<EditLayout>(initialLayout);
   let libraryOpen = $state(false);
   let selectedId = $state<string | null>(null);
@@ -266,6 +269,14 @@
       >
         {symmetric ? "⟳ Symmetry on" : "⟳ Symmetry off"}
       </button>
+      <button
+        class="sym {showKeystones ? 'on' : ''}"
+        aria-pressed={showKeystones}
+        onclick={() => (showKeystones = !showKeystones)}
+        title="Show or hide the pinned keystone dimension lines on the board"
+      >
+        {showKeystones ? "⌖ Keystones on" : "⌖ Keystones off"}
+      </button>
       <button class="library-btn" onclick={() => (libraryOpen = true)} title="Browse layouts by mission pairing">
         ⊞ Library
       </button>
@@ -337,6 +348,7 @@
         {zones}
         {divider}
         {markers}
+        {showKeystones}
         onselect={(id) => (selectedId = id)}
         {onmove}
         {onorient}
