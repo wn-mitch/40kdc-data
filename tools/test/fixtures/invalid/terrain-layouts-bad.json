@@ -80,6 +80,30 @@
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   },
   {
+    "id": "bad-keystone-edge",
+    "name": "Bad Keystone Edge",
+    "pieces": [{ "template": "area-large", "position": { "x": 30, "y": 22 }, "keystones": [{ "edge": "north", "ref": { "kind": "vertex", "index": 0 } }] }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-keystone-ref-kind",
+    "name": "Bad Keystone Ref Kind",
+    "pieces": [{ "template": "area-large", "position": { "x": 30, "y": 22 }, "keystones": [{ "edge": "left", "ref": { "kind": "centroid" } }] }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-keystone-negative-index",
+    "name": "Bad Keystone Negative Index",
+    "pieces": [{ "template": "area-large", "position": { "x": 30, "y": 22 }, "keystones": [{ "edge": "left", "ref": { "kind": "vertex", "index": -1 } }] }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "bad-keystone-stored-distance",
+    "name": "Bad Keystone Stored Distance",
+    "pieces": [{ "template": "area-large", "position": { "x": 30, "y": 22 }, "keystones": [{ "edge": "left", "ref": { "kind": "vertex", "index": 0 }, "distance": 12 }] }],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
     "id": "bad-variant-zero",
     "name": "Bad Variant Zero",
     "variant": 0,

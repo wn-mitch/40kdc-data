@@ -20,7 +20,13 @@
         "terrain_area_keywords": ["obscuring", "hidden"],
         "link_group": "centre",
         "is_objective": true,
-        "objective": { "position": { "x": 30, "y": 24 }, "control_range_inches": 3 }
+        "objective": { "position": { "x": 30, "y": 24 }, "control_range_inches": 3 },
+        "keystones": [
+          { "edge": "left", "ref": { "kind": "vertex", "index": 0 } },
+          { "edge": "top", "ref": { "kind": "vertex", "index": 0 } },
+          { "edge": "right", "ref": { "kind": "face", "side": "max-x" } },
+          { "edge": "bottom", "ref": { "kind": "face", "side": "max-y" } }
+        ]
       },
       {
         "id": "central-ruin-wall",

@@ -15,7 +15,11 @@
         "terrain_area_keywords": ["obscuring", "hidden"],
         "link_group": "centre",
         "is_objective": true,
-        "objective": { "control_range_inches": 3 }
+        "objective": { "control_range_inches": 3 },
+        "keystones": [
+          { "edge": "left", "ref": { "kind": "vertex", "index": 0 } },
+          { "edge": "top", "ref": { "kind": "face", "side": "min-y" } }
+        ]
       },
       {
         "id": "centre-block-extra-rail",

@@ -96,6 +96,45 @@
             }
           },
           "additionalProperties": false
+        },
+        "keystones": {
+          "type": "array",
+          "description": "Measurement keystones: the author-selected dimension lines a reference card prints so a player can place this piece with a tape measure (board edge → a feature of the placed piece). Only the selection is stored — the distance is always DERIVED from the resolved geometry by the shared keystone resolver (pinned by the conformance corpus), so a keystone can never disagree with the layout. Vertex indices follow the resolver's pinned vertex order; re-authoring a template's footprint invalidates them, so review keystones when geometry changes.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "edge": {
+                "type": "string",
+                "enum": ["left", "right", "top", "bottom"],
+                "description": "The board edge the measurement runs from, in the y-down board frame (left/right pin x against board width; top/bottom pin y against board height)."
+              },
+              "ref": {
+                "description": "Which feature of the placed piece the measurement reaches: a footprint vertex (by resolver vertex order) or an axis-aligned bounding face of the placed footprint.",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": { "const": "vertex" },
+                      "index": { "type": "integer", "minimum": 0 }
+                    },
+                    "required": ["kind", "index"],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": { "const": "face" },
+                      "side": { "type": "string", "enum": ["min-x", "max-x", "min-y", "max-y"] }
+                    },
+                    "required": ["kind", "side"],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": ["edge", "ref"],
+            "additionalProperties": false
+          }
         }
       },
       "required": ["position"],
