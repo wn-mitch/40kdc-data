@@ -59,7 +59,8 @@ static RE_MD_SECTION: Lazy<Regex> = Lazy::new(|| Regex::new(r"^#{1,6}\s*(.+?)\s*
 /// ALL-CAPS role section (`CHARACTERS`, `OTHER DATASHEETS`, …).
 static RE_CAPS_SECTION: Lazy<Regex> = Lazy::new(|| Regex::new(r"^[A-Z][A-Z0-9 \-/&]+$").unwrap());
 /// `Title:` colon section (`Epic Hero:`, `Battleline:`).
-static RE_COLON_SECTION: Lazy<Regex> = Lazy::new(|| Regex::new(r"^([A-Za-z][\w /&-]*):\s*$").unwrap());
+static RE_COLON_SECTION: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"^([A-Za-z][\w /&-]*):\s*$").unwrap());
 /// Bullet line: leading indent, a `•` or `◦` marker, then the body.
 static RE_BULLET: Lazy<Regex> = Lazy::new(|| Regex::new(r"^([\t ]*)[•◦]\s*(.+?)\s*$").unwrap());
 static RE_NX_PREFIX: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?i)^(\d+)x\s+(.+)$").unwrap());
@@ -74,12 +75,7 @@ static RE_BULLET_ANYWHERE: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?m)^[\t ]*[�
 
 /// Battle-size labels that look like unit headers (`Strike Force (2,000 Points)`)
 /// but are army metadata, not datasheets.
-const BATTLE_SIZE_NAMES: &[&str] = &[
-    "combat patrol",
-    "incursion",
-    "strike force",
-    "onslaught",
-];
+const BATTLE_SIZE_NAMES: &[&str] = &["combat patrol", "incursion", "strike force", "onslaught"];
 
 fn parse_pts(raw: &str) -> Option<u64> {
     raw.replace(',', "").parse().ok()
@@ -523,7 +519,10 @@ Bloodletters (110 pts)
         assert!(kharn.wargear.iter().any(|w| w.raw_name == "Gorechild"));
 
         let moe = &p.units[1];
-        assert_eq!(moe.enhancement_raw_name.as_deref(), Some("Berzerker Glaive"));
+        assert_eq!(
+            moe.enhancement_raw_name.as_deref(),
+            Some("Berzerker Glaive")
+        );
 
         let zerks = &p.units[2];
         assert_eq!(zerks.model_count, 10); // 1 champion + 9
@@ -556,7 +555,10 @@ Bloodletters (110 pts)
         assert_eq!(p.units.len(), 2);
         let bloodmaster = &p.units[0];
         assert_eq!(bloodmaster.model_count, 1);
-        assert!(bloodmaster.wargear.iter().any(|w| w.raw_name == "Blade of blood"));
+        assert!(bloodmaster
+            .wargear
+            .iter()
+            .any(|w| w.raw_name == "Blade of blood"));
         let letters = &p.units[1];
         assert_eq!(letters.model_count, 10); // Bloodreaper + 9 Bloodletter
         assert!(letters.wargear.iter().any(|w| w.raw_name == "Hellblade"));

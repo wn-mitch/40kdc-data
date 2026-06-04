@@ -14,9 +14,8 @@ use flate2::Compression;
 use serde_json::Value;
 use wh40kdc::import::{
     try_import_roster, GwAdapter, GwHeaderlessAdapter, ImportFailureReason, ImportResult,
-    NewRecruitJsonAdapter,
-    NewRecruitSimpleAdapter, NewRecruitWtcCompactAdapter, NewRecruitWtcFullAdapter, RosterFormat,
-    RosterizerAdapter,
+    NewRecruitJsonAdapter, NewRecruitSimpleAdapter, NewRecruitWtcCompactAdapter,
+    NewRecruitWtcFullAdapter, RosterFormat, RosterizerAdapter,
 };
 use wh40kdc::import::{FormatAdapter, ListForgeAdapter};
 use wh40kdc::Dataset;
