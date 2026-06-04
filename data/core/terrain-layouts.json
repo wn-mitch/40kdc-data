@@ -7651,5 +7651,652 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     }
+  },
+  {
+    "id": "take-and-hold-vs-reconnaissance-3",
+    "name": "Take And Hold vs Reconnaissance 3",
+    "source": "custom",
+    "mission_matchup_id": "take-and-hold-vs-reconnaissance",
+    "variant": 3,
+    "deployment_pattern_id": "search-and-destroy",
+    "pieces": [
+      {
+        "id": "area-trapezoid-1",
+        "name": "Trapezoid Area",
+        "piece_type": "area",
+        "template": "area-trapezoid",
+        "position": {
+          "x": 28.85,
+          "y": 19.8
+        },
+        "rotation_degrees": 270,
+        "mirror": "horizontal",
+        "link_group": "Center",
+        "objective_role": "center",
+        "is_objective": true
+      },
+      {
+        "id": "area-trapezoid-2",
+        "name": "Trapezoid Area",
+        "piece_type": "area",
+        "template": "area-trapezoid",
+        "position": {
+          "x": 31.15,
+          "y": 24.2
+        },
+        "rotation_degrees": 90,
+        "mirror": "horizontal",
+        "link_group": "Center",
+        "objective_role": "center",
+        "is_objective": true
+      },
+      {
+        "id": "corner-ruin-balanced-left-3",
+        "name": "Corner Ruin (Balanced, Left)",
+        "piece_type": "feature",
+        "template": "corner-ruin-balanced-left",
+        "position": {
+          "x": -1.1,
+          "y": 4.93
+        },
+        "rotation_degrees": 270,
+        "parent_area_id": "area-trapezoid-1"
+      },
+      {
+        "id": "corner-ruin-balanced-left-4",
+        "name": "Corner Ruin (Balanced, Left)",
+        "piece_type": "feature",
+        "template": "corner-ruin-balanced-left",
+        "position": {
+          "x": -1.1,
+          "y": 4.93
+        },
+        "rotation_degrees": 270,
+        "parent_area_id": "area-trapezoid-2"
+      },
+      {
+        "id": "corner-tiny-5",
+        "name": "Tiny Corner L",
+        "piece_type": "feature",
+        "template": "corner-tiny",
+        "position": {
+          "x": -1.57,
+          "y": -3.47
+        },
+        "parent_area_id": "area-trapezoid-1"
+      },
+      {
+        "id": "corner-tiny-6",
+        "name": "Tiny Corner L",
+        "piece_type": "feature",
+        "template": "corner-tiny",
+        "position": {
+          "x": -1.57,
+          "y": -3.47
+        },
+        "parent_area_id": "area-trapezoid-2"
+      },
+      {
+        "id": "area-medium-7",
+        "name": "Medium Area",
+        "piece_type": "area",
+        "template": "area-medium",
+        "position": {
+          "x": 48,
+          "y": 24
+        },
+        "keystones": [
+          {
+            "edge": "top",
+            "ref": {
+              "kind": "face",
+              "side": "min-y"
+            }
+          },
+          {
+            "edge": "right",
+            "ref": {
+              "kind": "face",
+              "side": "max-x"
+            }
+          }
+        ]
+      },
+      {
+        "id": "area-medium-8",
+        "name": "Medium Area",
+        "piece_type": "area",
+        "template": "area-medium",
+        "position": {
+          "x": 12,
+          "y": 20
+        },
+        "rotation_degrees": 180
+      },
+      {
+        "id": "corner-short-9",
+        "name": "Short Corner L",
+        "piece_type": "feature",
+        "template": "corner-short",
+        "position": {
+          "x": -2.05,
+          "y": -0.6
+        },
+        "parent_area_id": "area-medium-7"
+      },
+      {
+        "id": "corner-short-10",
+        "name": "Short Corner L",
+        "piece_type": "feature",
+        "template": "corner-short",
+        "position": {
+          "x": -2.05,
+          "y": -0.6
+        },
+        "parent_area_id": "area-medium-8"
+      },
+      {
+        "id": "corner-short-11",
+        "name": "Short Corner L",
+        "piece_type": "feature",
+        "template": "corner-short",
+        "position": {
+          "x": 2.05,
+          "y": 0.6
+        },
+        "rotation_degrees": 180,
+        "parent_area_id": "area-medium-7"
+      },
+      {
+        "id": "corner-short-12",
+        "name": "Short Corner L",
+        "piece_type": "feature",
+        "template": "corner-short",
+        "position": {
+          "x": 2.05,
+          "y": 0.6
+        },
+        "rotation_degrees": 180,
+        "parent_area_id": "area-medium-8"
+      },
+      {
+        "id": "area-short-line-13",
+        "name": "Short Line Area",
+        "piece_type": "area",
+        "template": "area-short-line",
+        "position": {
+          "x": 44,
+          "y": 19
+        },
+        "rotation_degrees": 90,
+        "keystones": [
+          {
+            "edge": "top",
+            "ref": {
+              "kind": "face",
+              "side": "min-y"
+            }
+          },
+          {
+            "edge": "right",
+            "ref": {
+              "kind": "face",
+              "side": "max-x"
+            }
+          }
+        ]
+      },
+      {
+        "id": "area-short-line-14",
+        "name": "Short Line Area",
+        "piece_type": "area",
+        "template": "area-short-line",
+        "position": {
+          "x": 16,
+          "y": 25
+        },
+        "rotation_degrees": 270
+      },
+      {
+        "id": "catwalk-15",
+        "name": "Catwalk",
+        "piece_type": "feature",
+        "template": "catwalk",
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "parent_area_id": "area-short-line-13"
+      },
+      {
+        "id": "catwalk-16",
+        "name": "Catwalk",
+        "piece_type": "feature",
+        "template": "catwalk",
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "parent_area_id": "area-short-line-14"
+      },
+      {
+        "id": "area-large-17",
+        "name": "Large Area",
+        "piece_type": "area",
+        "template": "area-large",
+        "position": {
+          "x": 47.25,
+          "y": 8.5
+        },
+        "objective_role": "home",
+        "is_objective": true,
+        "keystones": [
+          {
+            "edge": "top",
+            "ref": {
+              "kind": "face",
+              "side": "min-y"
+            }
+          },
+          {
+            "edge": "right",
+            "ref": {
+              "kind": "face",
+              "side": "max-x"
+            }
+          }
+        ]
+      },
+      {
+        "id": "area-large-18",
+        "name": "Large Area",
+        "piece_type": "area",
+        "template": "area-large",
+        "position": {
+          "x": 12.75,
+          "y": 35.5
+        },
+        "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true
+      },
+      {
+        "id": "corner-short-19",
+        "name": "Short Corner L",
+        "piece_type": "feature",
+        "template": "corner-short",
+        "position": {
+          "x": 51.51,
+          "y": 11.04
+        },
+        "rotation_degrees": 90,
+        "mirror": "horizontal"
+      },
+      {
+        "id": "corner-short-20",
+        "name": "Short Corner L",
+        "piece_type": "feature",
+        "template": "corner-short",
+        "position": {
+          "x": 8.49,
+          "y": 32.96
+        },
+        "rotation_degrees": 270,
+        "mirror": "horizontal"
+      },
+      {
+        "id": "corner-ruin-left-21",
+        "name": "Corner Ruin (Left)",
+        "piece_type": "feature",
+        "template": "corner-ruin-left",
+        "position": {
+          "x": -2.98,
+          "y": 2.43
+        },
+        "rotation_degrees": 270,
+        "parent_area_id": "area-large-17"
+      },
+      {
+        "id": "corner-ruin-left-22",
+        "name": "Corner Ruin (Left)",
+        "piece_type": "feature",
+        "template": "corner-ruin-left",
+        "position": {
+          "x": -2.98,
+          "y": 2.43
+        },
+        "rotation_degrees": 270,
+        "parent_area_id": "area-large-18"
+      },
+      {
+        "id": "area-long-line-23",
+        "name": "Long Line Area",
+        "piece_type": "area",
+        "template": "area-long-line",
+        "position": {
+          "x": 37,
+          "y": 9.75
+        },
+        "rotation_degrees": 53.13,
+        "keystones": [
+          {
+            "edge": "right",
+            "ref": {
+              "kind": "vertex",
+              "index": 0
+            }
+          },
+          {
+            "edge": "top",
+            "ref": {
+              "kind": "vertex",
+              "index": 1
+            }
+          },
+          {
+            "edge": "top",
+            "ref": {
+              "kind": "vertex",
+              "index": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "area-long-line-24",
+        "name": "Long Line Area",
+        "piece_type": "area",
+        "template": "area-long-line",
+        "position": {
+          "x": 23,
+          "y": 34.25
+        },
+        "rotation_degrees": 233.13
+      },
+      {
+        "id": "gantry-25",
+        "name": "Gantry",
+        "piece_type": "feature",
+        "template": "gantry",
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "parent_area_id": "area-long-line-23"
+      },
+      {
+        "id": "gantry-26",
+        "name": "Gantry",
+        "piece_type": "feature",
+        "template": "gantry",
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "parent_area_id": "area-long-line-24"
+      },
+      {
+        "id": "barricade-27",
+        "name": "Barricade",
+        "piece_type": "feature",
+        "template": "barricade",
+        "position": {
+          "x": 2.93,
+          "y": 0
+        },
+        "rotation_degrees": 180,
+        "parent_area_id": "area-long-line-23"
+      },
+      {
+        "id": "barricade-28",
+        "name": "Barricade",
+        "piece_type": "feature",
+        "template": "barricade",
+        "position": {
+          "x": 2.93,
+          "y": 0
+        },
+        "rotation_degrees": 180,
+        "parent_area_id": "area-long-line-24"
+      },
+      {
+        "id": "barricade-29",
+        "name": "Barricade",
+        "piece_type": "feature",
+        "template": "barricade",
+        "position": {
+          "x": -2.93,
+          "y": 0
+        },
+        "rotation_degrees": 180,
+        "parent_area_id": "area-long-line-23"
+      },
+      {
+        "id": "barricade-30",
+        "name": "Barricade",
+        "piece_type": "feature",
+        "template": "barricade",
+        "position": {
+          "x": -2.93,
+          "y": 0
+        },
+        "rotation_degrees": 180,
+        "parent_area_id": "area-long-line-24"
+      },
+      {
+        "id": "area-medium-31",
+        "name": "Medium Area",
+        "piece_type": "area",
+        "template": "area-medium",
+        "position": {
+          "x": 27,
+          "y": 11
+        },
+        "keystones": [
+          {
+            "edge": "top",
+            "ref": {
+              "kind": "face",
+              "side": "min-y"
+            }
+          },
+          {
+            "edge": "left",
+            "ref": {
+              "kind": "face",
+              "side": "min-x"
+            }
+          }
+        ]
+      },
+      {
+        "id": "area-medium-32",
+        "name": "Medium Area",
+        "piece_type": "area",
+        "template": "area-medium",
+        "position": {
+          "x": 33,
+          "y": 33
+        },
+        "rotation_degrees": 180
+      },
+      {
+        "id": "generator-33",
+        "name": "Generator",
+        "piece_type": "feature",
+        "template": "generator",
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "rotation_degrees": 90,
+        "parent_area_id": "area-medium-31"
+      },
+      {
+        "id": "generator-34",
+        "name": "Generator",
+        "piece_type": "feature",
+        "template": "generator",
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "rotation_degrees": 90,
+        "parent_area_id": "area-medium-32"
+      },
+      {
+        "id": "area-short-line-35",
+        "name": "Short Line Area",
+        "piece_type": "area",
+        "template": "area-short-line",
+        "position": {
+          "x": 23,
+          "y": 8
+        },
+        "rotation_degrees": 90,
+        "keystones": [
+          {
+            "edge": "top",
+            "ref": {
+              "kind": "vertex",
+              "index": 3
+            }
+          },
+          {
+            "edge": "left",
+            "ref": {
+              "kind": "vertex",
+              "index": 3
+            }
+          }
+        ]
+      },
+      {
+        "id": "area-short-line-36",
+        "name": "Short Line Area",
+        "piece_type": "area",
+        "template": "area-short-line",
+        "position": {
+          "x": 37,
+          "y": 36
+        },
+        "rotation_degrees": 270
+      },
+      {
+        "id": "pipe-37",
+        "name": "Pipe",
+        "piece_type": "feature",
+        "template": "pipe",
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "parent_area_id": "area-short-line-35"
+      },
+      {
+        "id": "pipe-38",
+        "name": "Pipe",
+        "piece_type": "feature",
+        "template": "pipe",
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "parent_area_id": "area-short-line-36"
+      },
+      {
+        "id": "area-large-39",
+        "name": "Large Area",
+        "piece_type": "area",
+        "template": "area-large",
+        "position": {
+          "x": 48.25,
+          "y": 34.5
+        },
+        "objective_role": "expansion",
+        "is_objective": true,
+        "keystones": [
+          {
+            "edge": "bottom",
+            "ref": {
+              "kind": "face",
+              "side": "max-y"
+            }
+          },
+          {
+            "edge": "right",
+            "ref": {
+              "kind": "face",
+              "side": "max-x"
+            }
+          }
+        ]
+      },
+      {
+        "id": "area-large-40",
+        "name": "Large Area",
+        "piece_type": "area",
+        "template": "area-large",
+        "position": {
+          "x": 11.75,
+          "y": 9.5
+        },
+        "rotation_degrees": 180,
+        "objective_role": "expansion",
+        "is_objective": true
+      },
+      {
+        "id": "corner-ruin-balanced-right-41",
+        "name": "Corner Ruin (Balanced, Right)",
+        "piece_type": "feature",
+        "template": "corner-ruin-balanced-right",
+        "position": {
+          "x": -4.21,
+          "y": -1.8
+        },
+        "rotation_degrees": 270,
+        "parent_area_id": "area-large-39"
+      },
+      {
+        "id": "corner-ruin-balanced-right-42",
+        "name": "Corner Ruin (Balanced, Right)",
+        "piece_type": "feature",
+        "template": "corner-ruin-balanced-right",
+        "position": {
+          "x": -4.21,
+          "y": -1.8
+        },
+        "rotation_degrees": 270,
+        "parent_area_id": "area-large-40"
+      },
+      {
+        "id": "corner-ruin-right-43",
+        "name": "Corner Ruin (Right)",
+        "piece_type": "feature",
+        "template": "corner-ruin-right",
+        "position": {
+          "x": -39.43,
+          "y": -27.45
+        },
+        "rotation_degrees": 270,
+        "parent_area_id": "area-large-39"
+      },
+      {
+        "id": "corner-ruin-right-44",
+        "name": "Corner Ruin (Right)",
+        "piece_type": "feature",
+        "template": "corner-ruin-right",
+        "position": {
+          "x": -39.43,
+          "y": -27.45
+        },
+        "rotation_degrees": 270,
+        "parent_area_id": "area-large-40"
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   }
 ]
