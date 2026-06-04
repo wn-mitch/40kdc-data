@@ -20,6 +20,8 @@
     card,
     game,
     activeId,
+    excluded,
+    discards,
     round,
     effectiveRoundCap,
     ownTotal,
@@ -28,6 +30,7 @@
     onAdd,
     onSelect,
     onDiscard,
+    onRestore,
     onScore,
     onRemoveScore,
     onPrimaryScore,
@@ -40,6 +43,10 @@
     card: SecondaryCard | undefined;
     game: PlayerGame;
     activeId: string | null;
+    /** Every card id out of the deck for this side (hand + scored + discarded). */
+    excluded: string[];
+    /** Manually discarded (unscored) card ids — restorable. */
+    discards: string[];
     round: number;
     /** Primary VP still scorable this round, after the round and per-game caps. */
     effectiveRoundCap: number;
@@ -49,6 +56,7 @@
     onAdd: (id: string) => void;
     onSelect: (id: string) => void;
     onDiscard: (id: string) => void;
+    onRestore: (id: string) => void;
     onScore: (asserted: AssertedAward[]) => void;
     onRemoveScore: (index: number) => void;
     onPrimaryScore: (asserted: AssertedAward[]) => void;
@@ -58,7 +66,9 @@
 
   const hand = $derived(secondariesByIds(game.handIds));
   const activeCard = $derived(activeId ? secondariesByIds([activeId])[0] : undefined);
-  const available = $derived(SECONDARY_DECK.filter((c) => !game.handIds.includes(c.id)));
+  // Drawable/addable pool: anything that has never left the deck on this side.
+  const available = $derived(SECONDARY_DECK.filter((c) => !excluded.includes(c.id)));
+  const discardCards = $derived(secondariesByIds(discards));
   const diff = $derived(ownTotal - oppTotal);
   const diffLabel = $derived(
     diff === 0 ? "Level" : `${diff > 0 ? "+" : ""}${diff} vs opponent`,
@@ -167,11 +177,13 @@
     {hand}
     {available}
     {activeId}
-    canDraw={game.handIds.length < SECONDARY_DECK.length}
+    discards={discardCards}
+    canDraw={excluded.length < SECONDARY_DECK.length}
     {onDraw}
     {onAdd}
     {onSelect}
     {onDiscard}
+    {onRestore}
   />
   <div class="rounded border border-panel-border bg-panel-surface p-3">
     {#key activeCard?.id}

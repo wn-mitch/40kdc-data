@@ -4,6 +4,7 @@ import type {
   MissionMatchup,
   ForceDispositionId,
   SecondaryCard,
+  ScoreEntry,
 } from "@alpaca-software/40kdc-data";
 
 /** The embedded 40kdc dataset — the whole point of the demo is reading the
@@ -90,15 +91,33 @@ export function secondaryName(id: string): string {
 }
 
 /**
- * Draw one random secondary not already held. Returns `undefined` once the
- * whole deck is in hand. `rand` is injectable for determinism in tests.
+ * Every card id out of the deck for one player: held in hand, scored (the
+ * engine's log discards on score), or manually discarded. A card that leaves
+ * the hand never re-enters the pool — tactical-deck semantics. `removeScore`
+ * un-logs and returns the card to hand, so an undone score stays excluded via
+ * `handIds` and a restored discard via the same route.
+ */
+export function excludedIds(
+  handIds: readonly string[],
+  log: readonly ScoreEntry[],
+  discards: readonly string[],
+): string[] {
+  return [...new Set([...handIds, ...log.map((e) => e.cardId), ...discards])];
+}
+
+/**
+ * Draw one random secondary still in the deck. `excluded` is the full
+ * out-of-deck set (see `excludedIds`). Returns `undefined` once the deck is
+ * exhausted. `rand` is injectable and `deck` overridable for determinism in
+ * tests.
  */
 export function drawSecondary(
-  heldIds: readonly string[],
+  excluded: readonly string[],
   rand: () => number = Math.random,
+  deck: readonly SecondaryCard[] = SECONDARY_DECK,
 ): SecondaryCard | undefined {
-  const held = new Set(heldIds);
-  const pool = SECONDARY_DECK.filter((c) => !held.has(c.id));
+  const out = new Set(excluded);
+  const pool = deck.filter((c) => !out.has(c.id));
   if (pool.length === 0) return undefined;
   return pool[Math.floor(rand() * pool.length)];
 }

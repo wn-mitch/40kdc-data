@@ -22,6 +22,7 @@
     missionFor,
     scoringCardFor,
     drawSecondary,
+    excludedIds,
     secondariesByIds,
   } from "./lib/data.js";
   import PlayerColumn from "./lib/PlayerColumn.svelte";
@@ -57,6 +58,10 @@
     activeOpp: string | null;
     autoCollapse?: boolean;
     verbose?: boolean;
+    // Manual (unscored) discards, per side. Optional so pre-existing v3 blobs
+    // load unchanged. Scored discards live in each game's `log` already.
+    discardsYou?: string[];
+    discardsOpp?: string[];
   }
   function load(): Partial<Saved> {
     try {
@@ -76,6 +81,8 @@
   let gameOpp = $state<PlayerGame>(saved.gameOpp ?? emptyPlayerGame());
   let activeYou = $state<string | null>(saved.activeYou ?? null);
   let activeOpp = $state<string | null>(saved.activeOpp ?? null);
+  let discardsYou = $state<string[]>(saved.discardsYou ?? []);
+  let discardsOpp = $state<string[]>(saved.discardsOpp ?? []);
   // Matrix display preferences (persisted). `autoCollapse` keeps today's behavior
   // of folding the matrix once both dispositions are picked; `verbose` expands the
   // selected disposition's row into full mission cards for comparison.
@@ -91,6 +98,7 @@
   $effect(() => {
     const blob: Saved = {
       dispYou, dispOpp, round, gameYou, gameOpp, activeYou, activeOpp, autoCollapse, verbose,
+      discardsYou, discardsOpp,
     };
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(blob));
@@ -130,6 +138,17 @@
     if (s === "you") activeYou = id;
     else activeOpp = id;
   }
+  const discardsOf = (s: Side): string[] => (s === "you" ? discardsYou : discardsOpp);
+  function setDiscards(s: Side, ids: string[]): void {
+    if (s === "you") discardsYou = ids;
+    else discardsOpp = ids;
+  }
+
+  // Cards out of the deck per side: in hand, scored (game.log), or manually
+  // discarded. The single source of truth for the draw pool and "Add card…".
+  const excludedYou = $derived(excludedIds(gameYou.handIds, gameYou.log, discardsYou));
+  const excludedOpp = $derived(excludedIds(gameOpp.handIds, gameOpp.log, discardsOpp));
+  const excludedOf = (s: Side): string[] => (s === "you" ? excludedYou : excludedOpp);
 
   function addCard(s: Side, cardId: string): void {
     const g = gameOf(s);
@@ -137,13 +156,19 @@
     if (!activeOf(s)) setActive(s, cardId);
   }
   function drawFor(s: Side): void {
-    const card = drawSecondary(gameOf(s).handIds);
+    const card = drawSecondary(excludedOf(s));
     if (card) addCard(s, card.id);
   }
   function discardFor(s: Side, id: string): void {
     const g = removeFromHand(gameOf(s), id);
     setGame(s, g);
+    if (!discardsOf(s).includes(id)) setDiscards(s, [...discardsOf(s), id]);
     if (activeOf(s) === id) setActive(s, g.handIds[0] ?? null);
+  }
+  /** Undo a manual discard: the card leaves the pile and returns to hand. */
+  function restoreFor(s: Side, id: string): void {
+    setDiscards(s, discardsOf(s).filter((d) => d !== id));
+    addCard(s, id);
   }
   function scoreFor(s: Side, asserted: AssertedAward[]): void {
     const id = activeOf(s);
@@ -191,6 +216,8 @@
     gameOpp = emptyPlayerGame(gameOpp.approach);
     activeYou = null;
     activeOpp = null;
+    discardsYou = [];
+    discardsOpp = [];
     round = 1;
   }
 </script>
@@ -333,6 +360,8 @@
         card={cardYou}
         game={gameYou}
         activeId={activeYou}
+        excluded={excludedYou}
+        discards={discardsYou}
         {round}
         effectiveRoundCap={effCapYou}
         ownTotal={totalYou}
@@ -341,6 +370,7 @@
         onAdd={(id) => addCard("you", id)}
         onSelect={(id) => setActive("you", id)}
         onDiscard={(id) => discardFor("you", id)}
+        onRestore={(id) => restoreFor("you", id)}
         onScore={(a) => scoreFor("you", a)}
         onRemoveScore={(i) => removeScoreFor("you", i)}
         onPrimaryScore={(a) => scorePrimaryFor("you", a)}
@@ -354,6 +384,8 @@
         card={cardOpp}
         game={gameOpp}
         activeId={activeOpp}
+        excluded={excludedOpp}
+        discards={discardsOpp}
         {round}
         effectiveRoundCap={effCapOpp}
         ownTotal={totalOpp}
@@ -362,6 +394,7 @@
         onAdd={(id) => addCard("opp", id)}
         onSelect={(id) => setActive("opp", id)}
         onDiscard={(id) => discardFor("opp", id)}
+        onRestore={(id) => restoreFor("opp", id)}
         onScore={(a) => scoreFor("opp", a)}
         onRemoveScore={(i) => removeScoreFor("opp", i)}
         onPrimaryScore={(a) => scorePrimaryFor("opp", a)}
