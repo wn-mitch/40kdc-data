@@ -31,6 +31,8 @@ import type {
   TerrainTemplate,
   TerrainLayout,
 } from "@alpaca-software/40kdc-data";
+// Type-only circular dependency (sets.ts imports Vec2/Mirror back): erased at compile.
+import type { TerrainSetDef } from "./sets.js";
 
 export const BOARD = { width: 60, height: 44 } as const;
 export const BOARD_CENTER = { x: BOARD.width / 2, y: BOARD.height / 2 } as const;
@@ -698,6 +700,91 @@ export function addTemplate(
     layout.pieces.push(twin);
   }
   return primary;
+}
+
+/**
+ * Stamp a terrain set: the area piece (at `at` when given, else the default
+ * spot) plus its features parented to it at their area-local placements. In
+ * symmetric mode the area gets a board twin and every feature gets a twin
+ * parented to the area's twin at the IDENTICAL local placement — the same
+ * invariants `setParentArea` maintains (the +180° lives on the area twin).
+ * Returns the area piece for selection.
+ */
+export function addSet(
+  layout: EditLayout,
+  set: TerrainSetDef,
+  symmetric: boolean,
+  at?: Vec2,
+): EditPiece | null {
+  const areaTmpl = templateById(set.area.template);
+  if (!areaTmpl) return null;
+  const area = makePiece(
+    areaTmpl,
+    at ? clampToBoard(at) : { x: BOARD.width * 0.32, y: BOARD.height * 0.32 },
+  );
+  if (set.area.rotation) area.rotation_degrees = norm360(set.area.rotation);
+  layout.pieces.push(area);
+
+  let areaTwin: EditPiece | undefined;
+  if (symmetric && !isBoardCentre(area.position)) {
+    areaTwin = makePiece(areaTmpl, twinPosition(area.position));
+    areaTwin.rotation_degrees = twinRotation(area.rotation_degrees);
+    areaTwin.mirror = area.mirror;
+    area.twin_id = areaTwin.id;
+    areaTwin.twin_id = area.id;
+    layout.pieces.push(areaTwin);
+  }
+
+  for (const f of set.features) {
+    const ft = templateById(f.template);
+    if (!ft) continue;
+    const feat = makePiece(ft, { x: f.position.x, y: f.position.y });
+    feat.rotation_degrees = norm360(f.rotation);
+    feat.mirror = f.mirror ?? "none";
+    feat.parent_area_id = area.id;
+    layout.pieces.push(feat);
+    if (areaTwin) {
+      const featTwin = makePiece(ft, { x: f.position.x, y: f.position.y });
+      featTwin.rotation_degrees = feat.rotation_degrees;
+      featTwin.mirror = feat.mirror;
+      featTwin.parent_area_id = areaTwin.id;
+      feat.twin_id = featTwin.id;
+      featTwin.twin_id = feat.id;
+      layout.pieces.push(featTwin);
+    }
+  }
+  return area;
+}
+
+/**
+ * Stamp the near-universal centre objective: two trapezoid areas interlocked
+ * about the board centre, linked as one objective ("Center", role `center`).
+ * Placements are the consensus from the committed layouts; `rotated` is the
+ * same pair turned 90°. Always stamps both halves (the pair IS the object),
+ * regardless of the global symmetry toggle. Returns null — stamping nothing —
+ * when the layout already has a centre objective.
+ */
+export function addCenterRuin(layout: EditLayout, rotated = false): EditPiece | null {
+  if (layout.pieces.some((p) => p.objective_role === "center")) return null;
+  const tmpl = templateById("area-trapezoid");
+  if (!tmpl) return null;
+  const pos = rotated ? { x: 28.85, y: 19.8 } : { x: 32.2, y: 20.85 };
+  const rot = rotated ? 270 : 0;
+  const a = makePiece(tmpl, pos);
+  a.rotation_degrees = rot;
+  a.mirror = "horizontal";
+  const b = makePiece(tmpl, twinPosition(pos));
+  b.rotation_degrees = twinRotation(rot);
+  b.mirror = "horizontal";
+  a.twin_id = b.id;
+  b.twin_id = a.id;
+  for (const p of [a, b]) {
+    p.link_group = "Center";
+    p.objective_role = "center";
+    p.is_objective = true;
+  }
+  layout.pieces.push(a, b);
+  return a;
 }
 
 /**

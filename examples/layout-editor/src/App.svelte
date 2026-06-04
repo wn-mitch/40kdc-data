@@ -2,6 +2,8 @@
   import {
     CATALOG,
     addTemplate,
+    addSet,
+    addCenterRuin,
     blankLayout,
     blankLayoutFor,
     loadEmbedded,
@@ -36,11 +38,13 @@
     type ObjectiveRole,
   } from "./lib/model.js";
   import type { TerrainTemplate } from "@alpaca-software/40kdc-data";
+  import type { TerrainSetDef } from "./lib/sets.js";
   import Board from "./lib/Board.svelte";
   import Inspector from "./lib/Inspector.svelte";
   import Library from "./lib/Library.svelte";
   import Palette from "./lib/Palette.svelte";
   import Thumbnail from "./lib/Thumbnail.svelte";
+  import SetThumbnail from "./lib/SetThumbnail.svelte";
   import SupportModal from "../../_shared/SupportModal.svelte";
 
   const HOME_URL = "https://40kdc.alpacasoft.dev";
@@ -123,17 +127,28 @@
   function add(t: TerrainTemplate): void {
     selectedId = addTemplate(layout, t, symmetric).id;
   }
+  function addTerrainSet(s: TerrainSetDef): void {
+    selectedId = addSet(layout, s, symmetric)?.id ?? selectedId;
+  }
+  function addCenter(rotated: boolean): void {
+    selectedId = addCenterRuin(layout, rotated)?.id ?? selectedId;
+  }
+  const centerExists = $derived(layout.pieces.some((p) => p.objective_role === "center"));
 
   // ── palette drag-to-place ────────────────────────────────────────────────
   // The palette arms the drag (past a movement threshold); from there the app
   // tracks the pointer globally, floats a ghost thumbnail at the cursor, and
   // on release asks the board to map the point into board inches. Off-board
-  // release cancels.
+  // release cancels. The payload is a single template or a whole terrain set.
+  type DragPayload = { kind: "template"; template: TerrainTemplate } | { kind: "set"; set: TerrainSetDef };
   let boardRef = $state<{ clientToBoard: (x: number, y: number) => { x: number; y: number } | null } | null>(null);
-  let paletteDrag = $state<{ template: TerrainTemplate; x: number; y: number } | null>(null);
+  let paletteDrag = $state<{ payload: DragPayload; x: number; y: number } | null>(null);
 
   function onPaletteDragStart(t: TerrainTemplate, e: PointerEvent): void {
-    paletteDrag = { template: t, x: e.clientX, y: e.clientY };
+    paletteDrag = { payload: { kind: "template", template: t }, x: e.clientX, y: e.clientY };
+  }
+  function onPaletteDragStartSet(s: TerrainSetDef, e: PointerEvent): void {
+    paletteDrag = { payload: { kind: "set", set: s }, x: e.clientX, y: e.clientY };
   }
   function onDragPointerMove(e: PointerEvent): void {
     if (!paletteDrag) return;
@@ -143,7 +158,13 @@
   function onDragPointerUp(e: PointerEvent): void {
     if (!paletteDrag) return;
     const at = boardRef?.clientToBoard(e.clientX, e.clientY) ?? null;
-    if (at) selectedId = addTemplate(layout, paletteDrag.template, symmetric, at).id;
+    if (at) {
+      const p = paletteDrag.payload;
+      selectedId =
+        (p.kind === "template"
+          ? addTemplate(layout, p.template, symmetric, at).id
+          : addSet(layout, p.set, symmetric, at)?.id) ?? selectedId;
+    }
     paletteDrag = null;
   }
   function onDragCancel(): void {
@@ -279,7 +300,16 @@
 
   <main>
     <aside class="rail palette-rail">
-      <Palette {areas} {features} onadd={add} ondragstart={onPaletteDragStart} />
+      <Palette
+        {areas}
+        {features}
+        {centerExists}
+        onadd={add}
+        onaddset={addTerrainSet}
+        onaddcenter={addCenter}
+        ondragstart={onPaletteDragStart}
+        ondragstartset={onPaletteDragStartSet}
+      />
     </aside>
 
     <section class="canvas">
@@ -341,7 +371,11 @@
 
   {#if paletteDrag}
     <div class="drag-ghost" style:left="{paletteDrag.x}px" style:top="{paletteDrag.y}px">
-      <Thumbnail template={paletteDrag.template} size={48} />
+      {#if paletteDrag.payload.kind === "template"}
+        <Thumbnail template={paletteDrag.payload.template} size={48} />
+      {:else}
+        <SetThumbnail set={paletteDrag.payload.set} size={48} />
+      {/if}
     </div>
   {/if}
 

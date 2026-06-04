@@ -1,37 +1,58 @@
 <script lang="ts">
   import Thumbnail from "./Thumbnail.svelte";
+  import SetThumbnail from "./SetThumbnail.svelte";
   import type { TerrainTemplate } from "@alpaca-software/40kdc-data";
+  import { TERRAIN_SETS, type TerrainSetDef } from "./sets.js";
 
   interface Props {
     areas: TerrainTemplate[];
     features: TerrainTemplate[];
     onadd: (t: TerrainTemplate) => void;
+    onaddset: (s: TerrainSetDef) => void;
+    /** One-click centre-objective macro; disabled when the layout already has one. */
+    onaddcenter: (rotated: boolean) => void;
+    centerExists?: boolean;
     /** Fired once when a press travels past the drag threshold; the host owns the drag from there. */
     ondragstart?: (t: TerrainTemplate, e: PointerEvent) => void;
+    ondragstartset?: (s: TerrainSetDef, e: PointerEvent) => void;
   }
-  let { areas, features, onadd, ondragstart }: Props = $props();
+  let {
+    areas,
+    features,
+    onadd,
+    onaddset,
+    onaddcenter,
+    centerExists = false,
+    ondragstart,
+    ondragstartset,
+  }: Props = $props();
 
   // A press is "armed" until it either travels past the threshold (drag — the
   // host takes over via window listeners) or releases in place (click-to-add,
   // unchanged behavior). Pointer capture keeps move/up coming to the card even
   // after the cursor leaves it; captured events still bubble to window.
   const DRAG_THRESHOLD_PX = 4;
-  let armed: { t: TerrainTemplate; x: number; y: number; dragging: boolean } | null = null;
+  type Payload = { kind: "template"; t: TerrainTemplate } | { kind: "set"; s: TerrainSetDef };
+  let armed: { payload: Payload; x: number; y: number; dragging: boolean } | null = null;
 
-  function down(e: PointerEvent, t: TerrainTemplate): void {
+  function down(e: PointerEvent, payload: Payload): void {
     if (e.button !== 0) return;
     (e.currentTarget as Element).setPointerCapture(e.pointerId);
-    armed = { t, x: e.clientX, y: e.clientY, dragging: false };
+    armed = { payload, x: e.clientX, y: e.clientY, dragging: false };
   }
   function move(e: PointerEvent): void {
     if (!armed || armed.dragging) return;
     if (Math.hypot(e.clientX - armed.x, e.clientY - armed.y) > DRAG_THRESHOLD_PX) {
       armed.dragging = true;
-      ondragstart?.(armed.t, e);
+      if (armed.payload.kind === "template") ondragstart?.(armed.payload.t, e);
+      else ondragstartset?.(armed.payload.s, e);
     }
   }
   function up(): void {
-    if (armed && !armed.dragging) onadd(armed.t);
+    if (armed && !armed.dragging) {
+      if (armed.payload.kind === "template") onadd(armed.payload.t);
+      else onaddset(armed.payload.s);
+    }
     armed = null;
   }
   function cancel(): void {
@@ -42,13 +63,52 @@
 <div class="palette">
   <h2>Templates</h2>
 
+  <h4>Sets</h4>
+  <div class="center-row">
+    <button
+      class="center-btn"
+      disabled={centerExists}
+      title={centerExists
+        ? "This layout already has a centre objective"
+        : "Stamp the interlocked centre trapezoids as a linked centre objective"}
+      onclick={() => onaddcenter(false)}
+    >
+      ◎ Centre ruin
+    </button>
+    <button
+      class="center-btn"
+      disabled={centerExists}
+      title={centerExists
+        ? "This layout already has a centre objective"
+        : "Same centre pair, rotated 90°"}
+      onclick={() => onaddcenter(true)}
+    >
+      ◎ 90°
+    </button>
+  </div>
+  <div class="grid">
+    {#each TERRAIN_SETS as s (s.id)}
+      <button
+        class="card set"
+        title={s.name}
+        onpointerdown={(e) => down(e, { kind: "set", s })}
+        onpointermove={move}
+        onpointerup={up}
+        onpointercancel={cancel}
+      >
+        <SetThumbnail set={s} />
+        <span class="name">{s.name}</span>
+      </button>
+    {/each}
+  </div>
+
   <h4>Areas</h4>
   <div class="grid">
     {#each areas as t (t.id)}
       <button
         class="card area"
         title={t.name}
-        onpointerdown={(e) => down(e, t)}
+        onpointerdown={(e) => down(e, { kind: "template", t })}
         onpointermove={move}
         onpointerup={up}
         onpointercancel={cancel}
@@ -65,7 +125,7 @@
       <button
         class="card feature"
         title={t.name}
-        onpointerdown={(e) => down(e, t)}
+        onpointerdown={(e) => down(e, { kind: "template", t })}
         onpointermove={move}
         onpointerup={up}
         onpointercancel={cancel}
@@ -129,5 +189,33 @@
   }
   .card.area .name {
     color: var(--piece-area-stroke);
+  }
+  .card.set .name {
+    color: var(--text-dim);
+  }
+  .center-row {
+    display: flex;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+  }
+  .center-btn {
+    flex: 1 1 auto;
+    font: inherit;
+    font-size: 0.78rem;
+    background: var(--surface-2);
+    color: var(--text-dim);
+    border: 1px solid var(--rim);
+    border-radius: 6px;
+    padding: 0.35rem 0.4rem;
+    cursor: pointer;
+  }
+  .center-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: var(--accent-fill);
+    color: var(--text);
+  }
+  .center-btn:disabled {
+    opacity: 0.45;
+    cursor: default;
   }
 </style>
