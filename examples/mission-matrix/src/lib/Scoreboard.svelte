@@ -47,10 +47,12 @@
   $effect(() => () => clearTimeout(disarmTimer));
 </script>
 
-<!-- Full-bleed within <main>'s padding so scrolled content passes behind a
-     solid bar. Safe-area top padding keeps it clear of the notch when the PWA
-     runs standalone. -->
-<div class="sticky top-0 z-30 -mx-4 px-3 pt-[env(safe-area-inset-top)] bg-surface border-b border-border shadow-md">
+<!-- Below lg: full-bleed within <main>'s padding so scrolled content passes
+     behind a solid bar (main spans the viewport there). At lg+ main is a
+     centered max-width column, so the bar becomes a bordered panel matching
+     its Force Disposition / Terrain siblings instead. Safe-area top padding
+     keeps it clear of the notch when the PWA runs standalone. -->
+<div class="sticky top-0 z-30 -mx-4 px-3 pt-[env(safe-area-inset-top)] bg-surface border-b border-border shadow-md lg:mx-0 lg:rounded lg:border lg:border-border">
   <div class="flex items-center justify-between gap-2 py-2">
     <!-- Battle round selector -->
     <div class="flex items-center gap-1">
