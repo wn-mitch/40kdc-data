@@ -204,22 +204,22 @@ describe("PlayerGame round recording", () => {
   });
 
   it("removeScore undoes the VP and returns the card to hand", () => {
-    let pg = scoreSecondary(addToHand(emptyPlayerGame(), "beacon"), 1, "beacon", 5);
+    let pg = scoreSecondary(addToHand(emptyPlayerGame(), "centre-ground"), 1, "centre-ground", 5);
     pg = removeScore(pg, 0);
     expect(pg.rounds[0].secondary).toBe(0);
     expect(pg.log).toEqual([]);
-    expect(pg.handIds).toEqual(["beacon"]);
+    expect(pg.handIds).toEqual(["centre-ground"]);
   });
 
   it("removeScore is a no-op for an out-of-range index", () => {
-    const pg = scoreSecondary(addToHand(emptyPlayerGame(), "beacon"), 1, "beacon", 5);
+    const pg = scoreSecondary(addToHand(emptyPlayerGame(), "centre-ground"), 1, "centre-ground", 5);
     expect(removeScore(pg, 9)).toEqual(pg);
   });
 
   it("round-trips through JSON unchanged", () => {
     let pg = emptyPlayerGame("tactical");
     pg = setPrimary(pg, 1, 8);
-    pg = addToHand(pg, "beacon");
+    pg = addToHand(pg, "centre-ground");
     pg = recordSecondary(pg, 1, 5);
     expect(JSON.parse(JSON.stringify(pg))).toEqual(pg);
   });

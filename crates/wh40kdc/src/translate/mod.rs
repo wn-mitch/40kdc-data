@@ -283,15 +283,22 @@ fn describe_simple(s: &SimpleCondition) -> String {
             count(pu(p, "count_min", 1), "objective")
         ),
         T::DestroyedWhileOnObjective => {
+            let obj = match ps(p, "objective_role") {
+                Some(r) => format!("a {} objective", dekebab(r)),
+                None => "an objective".to_string(),
+            };
             let mut out = format!(
                 "{negate}{} destroyed",
                 count(pu(p, "count_min", 1), "enemy unit")
             );
             if pb(p, "destroyer_on_objective") {
-                out.push_str(" by a unit on an objective");
+                out.push_str(&format!(" by a unit on {obj}"));
             }
             if pb(p, "victim_on_objective") {
-                out.push_str(" while on an objective");
+                out.push_str(&format!(" while on {obj}"));
+            }
+            if pb(p, "victim_started_turn_on_objective") {
+                out.push_str(&format!(" that started the turn on {obj}"));
             }
             out
         }
@@ -301,11 +308,44 @@ fn describe_simple(s: &SimpleCondition) -> String {
             } else {
                 "while in"
             };
+            let terrain = match ps(p, "tag") {
+                Some(t) => format!("{} terrain", dekebab(t)),
+                None => "a terrain area".to_string(),
+            };
             format!(
-                "{negate}{} destroyed {where_} {} terrain",
-                count(pu(p, "count_min", 1), "enemy unit"),
-                dekebab(ps(p, "tag").unwrap_or(""))
+                "{negate}{} destroyed {where_} {terrain}",
+                count(pu(p, "count_min", 1), "enemy unit")
             )
+        }
+        T::OperationMarkers => {
+            let side = match ps(p, "side") {
+                Some(s) => format!("{s} "),
+                None => String::new(),
+            };
+            let min = p.get("count_min").and_then(Value::as_u64);
+            let max = p.get("count_max").and_then(Value::as_u64);
+            let mut out = if max == Some(0) {
+                format!("no {side}operation markers on the battlefield")
+            } else if min.is_some() && min == max {
+                let n = min.unwrap_or(1);
+                let plural = if n == 1 { "" } else { "s" };
+                format!("exactly {n} {side}operation marker{plural} on the battlefield")
+            } else {
+                format!(
+                    "{}+ {side}operation markers on the battlefield",
+                    min.unwrap_or(1)
+                )
+            };
+            if let Some(w) = ps(p, "within_range_of") {
+                out.push_str(&format!(" within range of {}", dekebab(w)));
+            }
+            if pb(p, "friendly_unit_in_same_terrain_area") {
+                out.push_str(" with a friendly unit in the same terrain area");
+            }
+            if pb(p, "no_enemy_in_terrain_area") {
+                out.push_str(" and no enemy units in that terrain area");
+            }
+            format!("{negate}{out}")
         }
         T::ActionCompleted => {
             let mut out = format!(

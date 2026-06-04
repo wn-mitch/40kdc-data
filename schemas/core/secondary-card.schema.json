@@ -138,6 +138,21 @@
             "$ref": "../defs/common.schema.json#/$defs/phase",
             "description": "Phase in which the action can be started."
           },
+          "timing": {
+            "type": "string",
+            "enum": ["start-of-battle", "start-of-turn", "end-of-turn"],
+            "description": "Non-phase moment the action happens, for card rules that are not started in a phase (Locate and Deny's start-of-battle marker placement, Punishment's start-of-turn condemnation, Consecrate's end-of-turn objective selection). Mutually informative with `starts` — a card action uses one or the other."
+          },
+          "battle_round": {
+            "type": "object",
+            "description": "Battle-round window in which the action can be started. Absent means any battle round. 'From the second battle round onwards' (Triangulate, Extract Intelligence) is { min: 2 }.",
+            "properties": {
+              "min": { "type": "integer", "minimum": 1, "maximum": 5 },
+              "max": { "type": "integer", "minimum": 1, "maximum": 5 }
+            },
+            "minProperties": 1,
+            "additionalProperties": false
+          },
           "player_turn": { "$ref": "../defs/common.schema.json#/$defs/player-turn" },
           "units": {
             "$ref": "../enrichment/ability-dsl/condition.schema.json",
@@ -161,6 +176,10 @@
           "effect": {
             "$ref": "../enrichment/ability-dsl/effect.schema.json",
             "description": "Effect applied when the action completes (e.g. terrain-area-tag, objective-tag, or unit-tag to mark transient state)."
+          },
+          "restrictions": {
+            "$ref": "../enrichment/ability-dsl/condition.schema.json",
+            "description": "Predicate that BLOCKS starting the action while it holds (Sensor Sweep: a unit cannot start this action if there is only one operation marker on the battlefield)."
           }
         },
         "additionalProperties": false

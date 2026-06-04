@@ -179,7 +179,7 @@ revealed yet, but the op works for any card present in the dataset).
 ### `score_event`
 
 ```json
-{"op":"score_event","args":{"cardId":"ground-control","approach":"tactical","asserted":[{"index":0},{"index":1,"count":3}],"roundCap":15}}
+{"op":"score_event","args":{"cardId":"battlefield-dominance","approach":"tactical","asserted":[{"index":0},{"index":1,"count":3}],"roundCap":15}}
 ```
 
 Scores one asserted set of a card's `awards` under `approach` (`"fixed"` or

@@ -487,8 +487,8 @@ mod tests {
 
     #[test]
     fn score_secondary_logs_and_discards_and_remove_undoes() {
-        let mut pg = add_to_hand(&empty_player_game(ScoringMode::Tactical), "beacon");
-        pg = score_secondary(&pg, 1, "beacon", 5);
+        let mut pg = add_to_hand(&empty_player_game(ScoringMode::Tactical), "centre-ground");
+        pg = score_secondary(&pg, 1, "centre-ground", 5);
         assert_eq!(pg.rounds[0].secondary, 5);
         assert!(pg.hand_ids.is_empty());
         assert_eq!(pg.log.len(), 1);
@@ -496,7 +496,7 @@ mod tests {
         pg = remove_score(&pg, 0);
         assert_eq!(pg.rounds[0].secondary, 0);
         assert!(pg.log.is_empty());
-        assert_eq!(pg.hand_ids, vec!["beacon".to_string()]);
+        assert_eq!(pg.hand_ids, vec!["centre-ground".to_string()]);
         // out-of-range is a no-op
         assert_eq!(remove_score(&pg, 9), pg);
     }
@@ -516,7 +516,7 @@ mod tests {
     fn player_game_round_trips_through_json() {
         let mut pg = empty_player_game(ScoringMode::Tactical);
         pg = set_primary(&pg, 1, 8, Some(15), Some(45));
-        pg = add_to_hand(&pg, "beacon");
+        pg = add_to_hand(&pg, "centre-ground");
         pg = record_secondary(&pg, 1, 5);
         let json = serde_json::to_string(&pg).unwrap();
         let back: PlayerGame = serde_json::from_str(&json).unwrap();

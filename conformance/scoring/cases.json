@@ -14,8 +14,8 @@
     },
     "expected": {
       "turn": 8,
-      "cap": 5,
-      "banked": 5
+      "cap": null,
+      "banked": 8
     }
   },
   {
@@ -26,13 +26,49 @@
       "approach": "tactical",
       "asserted": [
         {
-          "index": 0,
+          "index": 1,
           "count": 2
         }
       ]
     },
     "expected": {
-      "turn": 8,
+      "turn": 10,
+      "cap": 5,
+      "banked": 5
+    }
+  },
+  {
+    "name": "score_event/a-tempting-target/fixed",
+    "op": "score_event",
+    "args": {
+      "cardId": "a-tempting-target",
+      "approach": "fixed",
+      "asserted": [
+        {
+          "index": 0
+        }
+      ]
+    },
+    "expected": {
+      "turn": 5,
+      "cap": null,
+      "banked": 5
+    }
+  },
+  {
+    "name": "score_event/a-tempting-target/tactical",
+    "op": "score_event",
+    "args": {
+      "cardId": "a-tempting-target",
+      "approach": "tactical",
+      "asserted": [
+        {
+          "index": 0
+        }
+      ]
+    },
+    "expected": {
+      "turn": 5,
       "cap": 5,
       "banked": 5
     }
@@ -79,45 +115,59 @@
     }
   },
   {
-    "name": "score_event/beacon/fixed",
+    "name": "score_event/battlefield-dominance/fixed",
     "op": "score_event",
     "args": {
-      "cardId": "beacon",
+      "cardId": "battlefield-dominance",
       "approach": "fixed",
       "asserted": [
         {
           "index": 0
         },
         {
-          "index": 1
+          "index": 1,
+          "count": 2
+        },
+        {
+          "index": 2,
+          "count": 2
         }
-      ]
+      ],
+      "roundCap": 15
     },
     "expected": {
-      "turn": 5,
+      "turn": 12,
       "cap": null,
-      "banked": 5
+      "banked": 12,
+      "primaryBanked": 12
     }
   },
   {
-    "name": "score_event/beacon/tactical",
+    "name": "score_event/battlefield-dominance/tactical",
     "op": "score_event",
     "args": {
-      "cardId": "beacon",
+      "cardId": "battlefield-dominance",
       "approach": "tactical",
       "asserted": [
         {
           "index": 0
         },
         {
-          "index": 1
+          "index": 1,
+          "count": 2
+        },
+        {
+          "index": 2,
+          "count": 2
         }
-      ]
+      ],
+      "roundCap": 15
     },
     "expected": {
-      "turn": 5,
+      "turn": 12,
       "cap": 5,
-      "banked": 5
+      "banked": 5,
+      "primaryBanked": 12
     }
   },
   {
@@ -173,8 +223,8 @@
     },
     "expected": {
       "turn": 8,
-      "cap": 5,
-      "banked": 5
+      "cap": null,
+      "banked": 8
     }
   },
   {
@@ -319,10 +369,10 @@
     }
   },
   {
-    "name": "score_event/consecration/fixed",
+    "name": "score_event/consecrate/fixed",
     "op": "score_event",
     "args": {
-      "cardId": "consecration",
+      "cardId": "consecrate",
       "approach": "fixed",
       "asserted": [
         {
@@ -351,10 +401,10 @@
     }
   },
   {
-    "name": "score_event/consecration/tactical",
+    "name": "score_event/consecrate/tactical",
     "op": "score_event",
     "args": {
-      "cardId": "consecration",
+      "cardId": "consecrate",
       "approach": "tactical",
       "asserted": [
         {
@@ -445,10 +495,10 @@
     }
   },
   {
-    "name": "score_event/defend-bastion/fixed",
+    "name": "score_event/defend-stronghold/fixed",
     "op": "score_event",
     "args": {
-      "cardId": "defend-bastion",
+      "cardId": "defend-stronghold",
       "approach": "fixed",
       "asserted": [
         {
@@ -466,10 +516,10 @@
     }
   },
   {
-    "name": "score_event/defend-bastion/tactical",
+    "name": "score_event/defend-stronghold/tactical",
     "op": "score_event",
     "args": {
-      "cardId": "defend-bastion",
+      "cardId": "defend-stronghold",
       "approach": "tactical",
       "asserted": [
         {
@@ -699,66 +749,6 @@
     }
   },
   {
-    "name": "score_event/eliminate-and-secure/fixed",
-    "op": "score_event",
-    "args": {
-      "cardId": "eliminate-and-secure",
-      "approach": "fixed",
-      "asserted": [
-        {
-          "index": 0
-        },
-        {
-          "index": 1
-        },
-        {
-          "index": 2,
-          "count": 2
-        },
-        {
-          "index": 3
-        }
-      ],
-      "roundCap": 15
-    },
-    "expected": {
-      "turn": 14,
-      "cap": null,
-      "banked": 14,
-      "primaryBanked": 14
-    }
-  },
-  {
-    "name": "score_event/eliminate-and-secure/tactical",
-    "op": "score_event",
-    "args": {
-      "cardId": "eliminate-and-secure",
-      "approach": "tactical",
-      "asserted": [
-        {
-          "index": 0
-        },
-        {
-          "index": 1
-        },
-        {
-          "index": 2,
-          "count": 2
-        },
-        {
-          "index": 3
-        }
-      ],
-      "roundCap": 15
-    },
-    "expected": {
-      "turn": 14,
-      "cap": 5,
-      "banked": 5,
-      "primaryBanked": 14
-    }
-  },
-  {
     "name": "score_event/engage-on-all-fronts/fixed",
     "op": "score_event",
     "args": {
@@ -801,10 +791,10 @@
     }
   },
   {
-    "name": "score_event/find-and-deny/fixed",
+    "name": "score_event/extract-relic/fixed",
     "op": "score_event",
     "args": {
-      "cardId": "find-and-deny",
+      "cardId": "extract-relic",
       "approach": "fixed",
       "asserted": [
         {
@@ -818,22 +808,25 @@
         },
         {
           "index": 3
+        },
+        {
+          "index": 4
         }
       ],
       "roundCap": 15
     },
     "expected": {
-      "turn": 14,
+      "turn": 20,
       "cap": null,
-      "banked": 14,
-      "primaryBanked": 14
+      "banked": 20,
+      "primaryBanked": 15
     }
   },
   {
-    "name": "score_event/find-and-deny/tactical",
+    "name": "score_event/extract-relic/tactical",
     "op": "score_event",
     "args": {
-      "cardId": "find-and-deny",
+      "cardId": "extract-relic",
       "approach": "tactical",
       "asserted": [
         {
@@ -847,73 +840,18 @@
         },
         {
           "index": 3
+        },
+        {
+          "index": 4
         }
       ],
       "roundCap": 15
     },
     "expected": {
-      "turn": 14,
+      "turn": 20,
       "cap": 5,
       "banked": 5,
-      "primaryBanked": 14
-    }
-  },
-  {
-    "name": "score_event/find-and-eliminate/fixed",
-    "op": "score_event",
-    "args": {
-      "cardId": "find-and-eliminate",
-      "approach": "fixed",
-      "asserted": [
-        {
-          "index": 0
-        },
-        {
-          "index": 1
-        },
-        {
-          "index": 2
-        },
-        {
-          "index": 3
-        }
-      ],
-      "roundCap": 15
-    },
-    "expected": {
-      "turn": 14,
-      "cap": null,
-      "banked": 14,
-      "primaryBanked": 14
-    }
-  },
-  {
-    "name": "score_event/find-and-eliminate/tactical",
-    "op": "score_event",
-    "args": {
-      "cardId": "find-and-eliminate",
-      "approach": "tactical",
-      "asserted": [
-        {
-          "index": 0
-        },
-        {
-          "index": 1
-        },
-        {
-          "index": 2
-        },
-        {
-          "index": 3
-        }
-      ],
-      "roundCap": 15
-    },
-    "expected": {
-      "turn": 14,
-      "cap": 5,
-      "banked": 5,
-      "primaryBanked": 14
+      "primaryBanked": 15
     }
   },
   {
@@ -953,59 +891,69 @@
     }
   },
   {
-    "name": "score_event/ground-control/fixed",
+    "name": "score_event/gather-intel/fixed",
     "op": "score_event",
     "args": {
-      "cardId": "ground-control",
+      "cardId": "gather-intel",
       "approach": "fixed",
       "asserted": [
         {
           "index": 0
         },
         {
-          "index": 1,
-          "count": 2
+          "index": 1
         },
         {
           "index": 2,
           "count": 2
+        },
+        {
+          "index": 3
+        },
+        {
+          "index": 4
         }
       ],
       "roundCap": 15
     },
     "expected": {
-      "turn": 12,
+      "turn": 34,
       "cap": null,
-      "banked": 12,
-      "primaryBanked": 12
+      "banked": 34,
+      "primaryBanked": 15
     }
   },
   {
-    "name": "score_event/ground-control/tactical",
+    "name": "score_event/gather-intel/tactical",
     "op": "score_event",
     "args": {
-      "cardId": "ground-control",
+      "cardId": "gather-intel",
       "approach": "tactical",
       "asserted": [
         {
           "index": 0
         },
         {
-          "index": 1,
-          "count": 2
+          "index": 1
         },
         {
           "index": 2,
           "count": 2
+        },
+        {
+          "index": 3
+        },
+        {
+          "index": 4
         }
       ],
       "roundCap": 15
     },
     "expected": {
-      "turn": 12,
+      "turn": 34,
       "cap": 5,
       "banked": 5,
-      "primaryBanked": 12
+      "primaryBanked": 15
     }
   },
   {
@@ -1065,76 +1013,10 @@
     }
   },
   {
-    "name": "score_event/important-connection/fixed",
+    "name": "score_event/inescapable-dominion/fixed",
     "op": "score_event",
     "args": {
-      "cardId": "important-connection",
-      "approach": "fixed",
-      "asserted": [
-        {
-          "index": 0
-        },
-        {
-          "index": 1,
-          "count": 2
-        },
-        {
-          "index": 2
-        },
-        {
-          "index": 3
-        },
-        {
-          "index": 4
-        }
-      ],
-      "roundCap": 15
-    },
-    "expected": {
-      "turn": 22,
-      "cap": null,
-      "banked": 22,
-      "primaryBanked": 15
-    }
-  },
-  {
-    "name": "score_event/important-connection/tactical",
-    "op": "score_event",
-    "args": {
-      "cardId": "important-connection",
-      "approach": "tactical",
-      "asserted": [
-        {
-          "index": 0
-        },
-        {
-          "index": 1,
-          "count": 2
-        },
-        {
-          "index": 2
-        },
-        {
-          "index": 3
-        },
-        {
-          "index": 4
-        }
-      ],
-      "roundCap": 15
-    },
-    "expected": {
-      "turn": 22,
-      "cap": 5,
-      "banked": 5,
-      "primaryBanked": 15
-    }
-  },
-  {
-    "name": "score_event/information-gathering/fixed",
-    "op": "score_event",
-    "args": {
-      "cardId": "information-gathering",
+      "cardId": "inescapable-dominion",
       "approach": "fixed",
       "asserted": [
         {
@@ -1144,30 +1026,26 @@
           "index": 1
         },
         {
-          "index": 2,
-          "count": 2
+          "index": 2
         },
         {
           "index": 3
-        },
-        {
-          "index": 4
         }
       ],
       "roundCap": 15
     },
     "expected": {
-      "turn": 34,
+      "turn": 18,
       "cap": null,
-      "banked": 34,
+      "banked": 18,
       "primaryBanked": 15
     }
   },
   {
-    "name": "score_event/information-gathering/tactical",
+    "name": "score_event/inescapable-dominion/tactical",
     "op": "score_event",
     "args": {
-      "cardId": "information-gathering",
+      "cardId": "inescapable-dominion",
       "approach": "tactical",
       "asserted": [
         {
@@ -1177,30 +1055,26 @@
           "index": 1
         },
         {
-          "index": 2,
-          "count": 2
+          "index": 2
         },
         {
           "index": 3
-        },
-        {
-          "index": 4
         }
       ],
       "roundCap": 15
     },
     "expected": {
-      "turn": 34,
+      "turn": 18,
       "cap": 5,
       "banked": 5,
       "primaryBanked": 15
     }
   },
   {
-    "name": "score_event/meat-grinder/fixed",
+    "name": "score_event/locate-and-deny/fixed",
     "op": "score_event",
     "args": {
-      "cardId": "meat-grinder",
+      "cardId": "locate-and-deny",
       "approach": "fixed",
       "asserted": [
         {
@@ -1226,10 +1100,68 @@
     }
   },
   {
-    "name": "score_event/meat-grinder/tactical",
+    "name": "score_event/locate-and-deny/tactical",
     "op": "score_event",
     "args": {
-      "cardId": "meat-grinder",
+      "cardId": "locate-and-deny",
+      "approach": "tactical",
+      "asserted": [
+        {
+          "index": 0
+        },
+        {
+          "index": 1
+        },
+        {
+          "index": 2
+        },
+        {
+          "index": 3
+        }
+      ],
+      "roundCap": 15
+    },
+    "expected": {
+      "turn": 17,
+      "cap": 5,
+      "banked": 5,
+      "primaryBanked": 15
+    }
+  },
+  {
+    "name": "score_event/meatgrinder/fixed",
+    "op": "score_event",
+    "args": {
+      "cardId": "meatgrinder",
+      "approach": "fixed",
+      "asserted": [
+        {
+          "index": 0
+        },
+        {
+          "index": 1
+        },
+        {
+          "index": 2
+        },
+        {
+          "index": 3
+        }
+      ],
+      "roundCap": 15
+    },
+    "expected": {
+      "turn": 17,
+      "cap": null,
+      "banked": 17,
+      "primaryBanked": 15
+    }
+  },
+  {
+    "name": "score_event/meatgrinder/tactical",
+    "op": "score_event",
+    "args": {
+      "cardId": "meatgrinder",
       "approach": "tactical",
       "asserted": [
         {
@@ -1293,64 +1225,6 @@
     }
   },
   {
-    "name": "score_event/observe-enemy/fixed",
-    "op": "score_event",
-    "args": {
-      "cardId": "observe-enemy",
-      "approach": "fixed",
-      "asserted": [
-        {
-          "index": 0
-        },
-        {
-          "index": 1
-        },
-        {
-          "index": 2
-        },
-        {
-          "index": 3
-        }
-      ],
-      "roundCap": 15
-    },
-    "expected": {
-      "turn": 17,
-      "cap": null,
-      "banked": 17,
-      "primaryBanked": 15
-    }
-  },
-  {
-    "name": "score_event/observe-enemy/tactical",
-    "op": "score_event",
-    "args": {
-      "cardId": "observe-enemy",
-      "approach": "tactical",
-      "asserted": [
-        {
-          "index": 0
-        },
-        {
-          "index": 1
-        },
-        {
-          "index": 2
-        },
-        {
-          "index": 3
-        }
-      ],
-      "roundCap": 15
-    },
-    "expected": {
-      "turn": 17,
-      "cap": 5,
-      "banked": 5,
-      "primaryBanked": 15
-    }
-  },
-  {
     "name": "score_event/outflank/fixed",
     "op": "score_event",
     "args": {
@@ -1393,10 +1267,10 @@
     }
   },
   {
-    "name": "score_event/outmaneuver/fixed",
+    "name": "score_event/outmanoeuvre/fixed",
     "op": "score_event",
     "args": {
-      "cardId": "outmaneuver",
+      "cardId": "outmanoeuvre",
       "approach": "fixed",
       "asserted": [
         {
@@ -1425,10 +1299,10 @@
     }
   },
   {
-    "name": "score_event/outmaneuver/tactical",
+    "name": "score_event/outmanoeuvre/tactical",
     "op": "score_event",
     "args": {
-      "cardId": "outmaneuver",
+      "cardId": "outmanoeuvre",
       "approach": "tactical",
       "asserted": [
         {
@@ -1589,10 +1463,10 @@
     }
   },
   {
-    "name": "score_event/record-breaking-mission/fixed",
+    "name": "score_event/purge-and-secure/fixed",
     "op": "score_event",
     "args": {
-      "cardId": "record-breaking-mission",
+      "cardId": "purge-and-secure",
       "approach": "fixed",
       "asserted": [
         {
@@ -1606,8 +1480,7 @@
           "count": 2
         },
         {
-          "index": 3,
-          "count": 2
+          "index": 3
         }
       ],
       "roundCap": 15
@@ -1620,10 +1493,10 @@
     }
   },
   {
-    "name": "score_event/record-breaking-mission/tactical",
+    "name": "score_event/purge-and-secure/tactical",
     "op": "score_event",
     "args": {
-      "cardId": "record-breaking-mission",
+      "cardId": "purge-and-secure",
       "approach": "tactical",
       "asserted": [
         {
@@ -1637,8 +1510,7 @@
           "count": 2
         },
         {
-          "index": 3,
-          "count": 2
+          "index": 3
         }
       ],
       "roundCap": 15
@@ -1651,10 +1523,10 @@
     }
   },
   {
-    "name": "score_event/recover-the-relics/fixed",
+    "name": "score_event/reconnaissance-sweep/fixed",
     "op": "score_event",
     "args": {
-      "cardId": "recover-the-relics",
+      "cardId": "reconnaissance-sweep",
       "approach": "fixed",
       "asserted": [
         {
@@ -1664,29 +1536,27 @@
           "index": 1
         },
         {
-          "index": 2
+          "index": 2,
+          "count": 2
         },
         {
           "index": 3
-        },
-        {
-          "index": 4
         }
       ],
       "roundCap": 15
     },
     "expected": {
-      "turn": 20,
+      "turn": 11,
       "cap": null,
-      "banked": 20,
-      "primaryBanked": 15
+      "banked": 11,
+      "primaryBanked": 11
     }
   },
   {
-    "name": "score_event/recover-the-relics/tactical",
+    "name": "score_event/reconnaissance-sweep/tactical",
     "op": "score_event",
     "args": {
-      "cardId": "recover-the-relics",
+      "cardId": "reconnaissance-sweep",
       "approach": "tactical",
       "asserted": [
         {
@@ -1696,22 +1566,20 @@
           "index": 1
         },
         {
-          "index": 2
+          "index": 2,
+          "count": 2
         },
         {
           "index": 3
-        },
-        {
-          "index": 4
         }
       ],
       "roundCap": 15
     },
     "expected": {
-      "turn": 20,
+      "turn": 11,
       "cap": 5,
       "banked": 5,
-      "primaryBanked": 15
+      "primaryBanked": 11
     }
   },
   {
@@ -1768,6 +1636,66 @@
       "cap": 5,
       "banked": 5,
       "primaryBanked": 14
+    }
+  },
+  {
+    "name": "score_event/search-and-scour/fixed",
+    "op": "score_event",
+    "args": {
+      "cardId": "search-and-scour",
+      "approach": "fixed",
+      "asserted": [
+        {
+          "index": 0
+        },
+        {
+          "index": 1
+        },
+        {
+          "index": 2,
+          "count": 2
+        },
+        {
+          "index": 3
+        }
+      ],
+      "roundCap": 15
+    },
+    "expected": {
+      "turn": 18,
+      "cap": null,
+      "banked": 18,
+      "primaryBanked": 15
+    }
+  },
+  {
+    "name": "score_event/search-and-scour/tactical",
+    "op": "score_event",
+    "args": {
+      "cardId": "search-and-scour",
+      "approach": "tactical",
+      "asserted": [
+        {
+          "index": 0
+        },
+        {
+          "index": 1
+        },
+        {
+          "index": 2,
+          "count": 2
+        },
+        {
+          "index": 3
+        }
+      ],
+      "roundCap": 15
+    },
+    "expected": {
+      "turn": 18,
+      "cap": 5,
+      "banked": 5,
+      "primaryBanked": 15
     }
   },
   {
@@ -1927,39 +1855,61 @@
     }
   },
   {
-    "name": "score_event/tempting-target/fixed",
+    "name": "score_event/surveil-the-foe/fixed",
     "op": "score_event",
     "args": {
-      "cardId": "tempting-target",
+      "cardId": "surveil-the-foe",
       "approach": "fixed",
       "asserted": [
         {
           "index": 0
+        },
+        {
+          "index": 1
+        },
+        {
+          "index": 2
+        },
+        {
+          "index": 3
         }
-      ]
+      ],
+      "roundCap": 15
     },
     "expected": {
-      "turn": 4,
+      "turn": 17,
       "cap": null,
-      "banked": 4
+      "banked": 17,
+      "primaryBanked": 15
     }
   },
   {
-    "name": "score_event/tempting-target/tactical",
+    "name": "score_event/surveil-the-foe/tactical",
     "op": "score_event",
     "args": {
-      "cardId": "tempting-target",
+      "cardId": "surveil-the-foe",
       "approach": "tactical",
       "asserted": [
         {
+          "index": 0
+        },
+        {
           "index": 1
+        },
+        {
+          "index": 2
+        },
+        {
+          "index": 3
         }
-      ]
+      ],
+      "roundCap": 15
     },
     "expected": {
-      "turn": 5,
+      "turn": 17,
       "cap": 5,
-      "banked": 5
+      "banked": 5,
+      "primaryBanked": 15
     }
   },
   {
@@ -2087,64 +2037,6 @@
     }
   },
   {
-    "name": "score_event/unyielding-domination/fixed",
-    "op": "score_event",
-    "args": {
-      "cardId": "unyielding-domination",
-      "approach": "fixed",
-      "asserted": [
-        {
-          "index": 0
-        },
-        {
-          "index": 1
-        },
-        {
-          "index": 2
-        },
-        {
-          "index": 3
-        }
-      ],
-      "roundCap": 15
-    },
-    "expected": {
-      "turn": 18,
-      "cap": null,
-      "banked": 18,
-      "primaryBanked": 15
-    }
-  },
-  {
-    "name": "score_event/unyielding-domination/tactical",
-    "op": "score_event",
-    "args": {
-      "cardId": "unyielding-domination",
-      "approach": "tactical",
-      "asserted": [
-        {
-          "index": 0
-        },
-        {
-          "index": 1
-        },
-        {
-          "index": 2
-        },
-        {
-          "index": 3
-        }
-      ],
-      "roundCap": 15
-    },
-    "expected": {
-      "turn": 18,
-      "cap": 5,
-      "banked": 5,
-      "primaryBanked": 15
-    }
-  },
-  {
     "name": "score_event/vanguard-operation/fixed",
     "op": "score_event",
     "args": {
@@ -2197,6 +2089,72 @@
     },
     "expected": {
       "turn": 20,
+      "cap": 5,
+      "banked": 5,
+      "primaryBanked": 15
+    }
+  },
+  {
+    "name": "score_event/vital-link/fixed",
+    "op": "score_event",
+    "args": {
+      "cardId": "vital-link",
+      "approach": "fixed",
+      "asserted": [
+        {
+          "index": 0
+        },
+        {
+          "index": 1,
+          "count": 2
+        },
+        {
+          "index": 2
+        },
+        {
+          "index": 3
+        },
+        {
+          "index": 4
+        }
+      ],
+      "roundCap": 15
+    },
+    "expected": {
+      "turn": 22,
+      "cap": null,
+      "banked": 22,
+      "primaryBanked": 15
+    }
+  },
+  {
+    "name": "score_event/vital-link/tactical",
+    "op": "score_event",
+    "args": {
+      "cardId": "vital-link",
+      "approach": "tactical",
+      "asserted": [
+        {
+          "index": 0
+        },
+        {
+          "index": 1,
+          "count": 2
+        },
+        {
+          "index": 2
+        },
+        {
+          "index": 3
+        },
+        {
+          "index": 4
+        }
+      ],
+      "roundCap": 15
+    },
+    "expected": {
+      "turn": 22,
       "cap": 5,
       "banked": 5,
       "primaryBanked": 15
@@ -2276,7 +2234,7 @@
       "ops": [
         {
           "kind": "score-primary",
-          "cardId": "ground-control",
+          "cardId": "battlefield-dominance",
           "round": 2,
           "asserted": [
             {

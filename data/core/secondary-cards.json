@@ -1,7 +1,7 @@
 [
   {
-    "id": "ground-control",
-    "name": "Ground Control",
+    "id": "battlefield-dominance",
+    "name": "Battlefield Dominance",
     "card_type": "primary",
     "awards": [
       {
@@ -12,18 +12,18 @@
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
         "vp_per": 3,
-        "per": "controlled-objective-at-end-of-command-phase"
+        "per": "controlled-objective"
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "objective_role": "central", "count_min": 1 } },
+        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "objective": "your-home" } },
         "vp_per": 2,
-        "per": "controlled-central-objective-at-end-of-command-phase",
+        "per": "controlled-non-home-objective",
         "cumulative": true
       }
     ],
-    "text": "Take-and-Hold mirror. Early rounds reward holding the objective majority; from the second battle round, scoring shifts to per-objective control at end of Command Phase, with a linchpin bonus for each central objective controlled.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Take-and-Hold mirror. The first two battle rounds reward holding the objective majority at end of turn. From the second battle round, scoring shifts to per-objective control at the end of your Command phase (or end of your turn in the fifth battle round), with a per-objective bonus on your non-home objectives while you also hold your own home objective.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "determined-acquisition",
@@ -33,23 +33,22 @@
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
         "vp_per": 2,
-        "per": "new-objective-controlled-this-turn"
+        "per": "objective-newly-controlled-this-turn"
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
         "vp_per": 3,
-        "per": "controlled-objective-at-end-of-command-phase"
+        "per": "controlled-objective"
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "scope": "enemy-territory", "count_min": 1 } },
         "vp_per": 3,
-        "per": "controlled-objective-in-opponent-territory-at-end-of-command-phase",
+        "per": "controlled-objective-in-enemy-territory",
         "cumulative": true
       }
     ],
-    "text": "Take-and-Hold against a Disruption opponent. Scoring favors aggressive expansion: VP per newly-seized objective each turn, then from the second battle round per-objective control at end of Command Phase with a bonus per objective held in the opponent's territory.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Take-and-Hold against Disruption. Every turn pays per objective you took this turn that you did not control at its start. From the second battle round, per-objective control pays at the end of your Command phase, with a stacking per-objective bonus for those inside the opponent's territory.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "immovable-object",
@@ -64,20 +63,20 @@
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2, "max": 4 } },
         "vp_per": 5,
-        "per": "controlled-non-home-objective-at-end-of-command-phase"
+        "per": "controlled-non-home-objective"
       },
       {
-        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 5 } },
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 5, "max": 5 } },
         "vp_per": 5,
-        "per": "controlled-non-home-objective-at-end-of-turn"
+        "per": "controlled-non-home-objective"
       }
     ],
-    "text": "Take-and-Hold against a Purge-the-Foe opponent. A central-objective hold pays out each turn, then mid-game the per-objective hold scoring scales up at end of Command Phase. In the final battle round, scoring shifts to end-of-turn — reward for holding through your opponent's response.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Take-and-Hold against Purge-the-Foe. Central-objective control pays at the end of every one of your turns. Battle rounds two to four pay heavily per non-home objective at the end of your Command phase; the fifth battle round pays the same rate at the end of your turn instead.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "unyielding-domination",
-    "name": "Unyielding Domination",
+    "id": "inescapable-dominion",
+    "name": "Inescapable Dominion",
     "card_type": "primary",
     "awards": [
       {
@@ -93,8 +92,7 @@
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
         "when": { "type": "objective-majority", "parameters": { "relative_to": "opponent" } },
-        "vp": 4,
-        "cumulative": true
+        "vp": 4
       },
       {
         "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
@@ -102,36 +100,30 @@
         "vp": 5
       }
     ],
-    "text": "Take-and-Hold against a Priority-Assets opponent. A wide-board hold (3+ objectives) pays out each turn; from the second battle round, holding 2+ is the baseline and beating the opponent's count adds a bonus on top. Seizing the opponent's home objective pays out at the end of the battle.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Take-and-Hold against Priority-Assets. Holding three or more objectives pays at the end of your turn. From the second battle round, the Command-phase check pays once for holding two or more objectives and again for holding the objective majority. End of battle pays out for holding the opponent's home objective.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "eliminate-and-secure",
-    "name": "Eliminate and Secure",
+    "id": "purge-and-secure",
+    "name": "Purge and Secure",
     "card_type": "primary",
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": {
-          "type": "destroyed-while-on-objective",
-          "parameters": { "destroyer_on_objective": true, "count_min": 1 }
-        },
+        "when": { "type": "destroyed-while-on-objective", "parameters": { "destroyer_on_objective": true, "count_min": 1 } },
         "vp": 3,
-        "exclusive_group": "kill-on-objective-tier"
+        "exclusive_group": "purge-kill"
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": {
-          "type": "destroyed-while-on-objective",
-          "parameters": { "victim_on_objective": true, "count_min": 1 }
-        },
+        "when": { "type": "destroyed-while-on-objective", "parameters": { "victim_started_turn_on_objective": true, "count_min": 1 } },
         "vp": 3,
-        "exclusive_group": "kill-on-objective-tier"
+        "exclusive_group": "purge-kill"
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
         "vp_per": 4,
-        "per": "controlled-non-home-objective-at-end-of-command-phase"
+        "per": "controlled-non-home-objective"
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 2 } },
@@ -139,216 +131,8 @@
         "vp": 3
       }
     ],
-    "text": "Take-and-Hold against a Reconnaissance opponent. Killing while either you or the victim are standing on an objective pays out at end of turn (you only need one such kill — the two alternatives don't stack). From the second battle round, per-objective control at end of Command Phase becomes the workhorse, plus a bonus for taking a new objective during the turn.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
-  },
-  {
-    "id": "death-trap",
-    "name": "Death Trap",
-    "card_type": "primary",
-    "actions": [
-      {
-        "action_id": "mine-terrain",
-        "player_turn": "your-turn",
-        "completes": {
-          "operator": "and",
-          "operands": [
-            { "type": "action-completed", "parameters": { "target_kind": "terrain", "target_filter": { "in_enemy_territory": true }, "count_min": 1, "window": "this-turn" } }
-          ]
-        },
-        "effect": { "type": "terrain-area-tag", "target": "self", "modifier": { "tag": "mined", "source": "this-action", "clears_on": "never" } }
-      }
-    ],
-    "awards": [
-      {
-        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "vp_per": 2,
-        "per": "mining-action-completed-this-turn"
-      },
-      {
-        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "vp_per": 3,
-        "per": "mining-action-on-objective-terrain-completed-this-turn",
-        "cumulative": true
-      },
-      {
-        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "destroyed-in-tagged-terrain", "parameters": { "tag": "mined", "at_start_of_turn": true, "count_min": 1 } },
-        "vp": 3
-      },
-      {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
-        "vp": 4
-      }
-    ],
-    "text": "Disruption against Take-and-Hold. Mine terrain outside your own deployment zone with player actions — each mining pays out, with a bonus when the mined terrain is also an objective. Killing an enemy unit that started the turn in mined terrain pays out separately, and from the second battle round you also score for holding objectives outside your home.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
-  },
-  {
-    "id": "outmaneuver",
-    "name": "Outmaneuver",
-    "card_type": "primary",
-    "awards": [
-      {
-        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "objective": "opponent-home" } },
-        "vp": 10
-      },
-      {
-        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 1, "max": 1 } },
-        "vp_per": 4,
-        "per": "controlled-non-home-objective-at-end-of-turn"
-      },
-      {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2, "max": 3 } },
-        "vp_per": 5,
-        "per": "controlled-non-home-objective-at-end-of-command-phase"
-      },
-      {
-        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 4, "max": 5 } },
-        "vp_per": 6,
-        "per": "controlled-non-home-objective-at-end-of-turn"
-      }
-    ],
-    "text": "Disruption mirror. Scoring ramps by phase of the game — early rounds pay per-objective at end of turn, mid-game shifts to end of Command Phase with a bigger payout, and the final two rounds return to end of turn with the largest per-objective value. Seizing the opponent's home pays out 10 in any battle round.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
-  },
-  {
-    "id": "delaying-action",
-    "name": "Delaying Action",
-    "card_type": "primary",
-    "awards": [
-      {
-        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "vp_per": 2,
-        "per": "enemy-unit-destroyed-this-turn"
-      },
-      {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
-        "vp": 4
-      },
-      {
-        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": {
-          "operator": "and",
-          "operands": [
-            { "type": "controls-objective", "parameters": { "objective_role": "central", "count_min": 1 } },
-            { "type": "controls-objective", "parameters": { "objective_role": "expansion", "count_min": 1 } }
-          ]
-        },
-        "vp": 3
-      }
-    ],
-    "text": "Disruption against Purge-the-Foe. Take No Prisoners pays per enemy unit you destroy each turn. From the second battle round, holding objectives beyond your home pays out at end of Command Phase, and you score again at end of turn for spreading your hold across both Central and Expansion objectives.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
-  },
-  {
-    "id": "find-and-deny",
-    "name": "Find and Deny",
-    "card_type": "primary",
-    "actions": [
-      {
-        "action_id": "mark-terrain",
-        "use_limit": 5,
-        "use_limit_scope": "per-game",
-        "completes": {
-          "type": "action-completed",
-          "parameters": { "target_kind": "terrain", "target_filter": { "in_enemy_territory": true }, "count_min": 1, "window": "this-turn" }
-        },
-        "effect": { "type": "terrain-area-tag", "target": "self", "modifier": { "tag": "marked", "source": "this-action", "clears_on": "never" } }
-      },
-      {
-        "action_id": "unmark-terrain",
-        "player_turn": "opponent-turn",
-        "completes": {
-          "type": "action-completed",
-          "parameters": { "action_id": "unmark-terrain", "target_kind": "terrain", "count_min": 1, "window": "this-turn" }
-        },
-        "effect": { "type": "terrain-area-tag", "target": "self", "modifier": { "tag": "marked", "source": "this-action", "clears_on": "never" } }
-      }
-    ],
-    "awards": [
-      {
-        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": {
-          "operator": "and",
-          "operands": [
-            { "type": "terrain-has-tag", "parameters": { "tag": "marked" } },
-            { "type": "units-destroyed", "parameters": { "side": "enemy", "window": "this-turn", "count_min": 1 } }
-          ]
-        },
-        "vp": 3
-      },
-      {
-        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": {
-          "type": "terrain-has-tag",
-          "parameters": { "tag": "marked", "friendly_units_min": 1, "enemy_units_max": 0, "last_marked": true }
-        },
-        "vp": 2
-      },
-      {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
-        "vp": 4
-      },
-      {
-        "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
-        "when": {
-          "type": "terrain-has-tag",
-          "parameters": { "tag": "marked", "friendly_units_min": 1, "enemy_units_max": 0, "last_marked": true }
-        },
-        "vp": 5
-      }
-    ],
-    "text": "Disruption against Priority-Assets. Mark 5 terrain pieces outside your deployment zone at the start of the game; the opponent does actions on those pieces to un-mark them. You score for destroying enemy units in marked terrain, for owning the last remaining marked piece outright (you in, them out), and from the second battle round for holding objectives beyond your home. End of battle pays out again if you still own the last marked piece.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
-  },
-  {
-    "id": "smoke-and-mirrors",
-    "name": "Smoke and Mirrors",
-    "card_type": "primary",
-    "actions": [
-      {
-        "action_id": "bait-objective",
-        "player_turn": "your-turn",
-        "completes": {
-          "type": "action-completed",
-          "parameters": { "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" }
-        },
-        "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "baited", "source": "this-action", "clears_on": "never" } }
-      }
-    ],
-    "awards": [
-      {
-        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "vp_per": 2,
-        "per": "baited-objective"
-      },
-      {
-        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "vp_per": 2,
-        "per": "baited-objective-in-enemy-territory",
-        "cumulative": true
-      },
-      {
-        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
-        "vp": 4
-      },
-      {
-        "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
-        "when": {
-          "type": "objective-has-tag",
-          "parameters": { "tag": "baited", "count_min": 4 }
-        },
-        "vp": 10
-      }
-    ],
-    "text": "Disruption against Reconnaissance. Player actions on non-home objectives turn them Baited; the opponent (Reconnaissance, playing Observe Enemy) does actions to remove the Baited tag. You score per Baited objective standing at end of turn, with a per-objective bonus when the Baited objective is in the opponent's territory. End of battle pays out a large bonus if 4+ objectives are still Baited.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Take-and-Hold against Reconnaissance. End of turn pays once when a kill touched the objectives: either a friendly unit within range of an objective destroyed an enemy unit, or an enemy unit that started the turn within range of an objective was destroyed (one or the other, not both). From the second battle round, per-objective non-home control pays at the end of your Command phase, and freshly seized non-home objectives pay again at end of turn.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "unstoppable-force",
@@ -363,7 +147,7 @@
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
         "vp_per": 4,
-        "per": "controlled-non-home-objective-at-end-of-command-phase"
+        "per": "controlled-non-home-objective"
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 2 } },
@@ -376,8 +160,8 @@
         "vp": 5
       }
     ],
-    "text": "Purge-the-Foe against Take-and-Hold. Killing pays out at end of turn (any battle round). From the second battle round, scoring widens: per non-home objective at end of Command Phase, plus a flat bonus for taking a new objective during the turn. End of battle pays out for holding a central objective.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Purge-the-Foe against Take-and-Hold. Destroying any enemy unit pays at end of turn. From the second battle round, per-objective non-home control pays at the end of your Command phase, with a separate end-of-turn payout for seizing non-home objectives you did not control at the start of the turn. End of battle rewards holding a central objective.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "punishment",
@@ -385,24 +169,18 @@
     "card_type": "primary",
     "actions": [
       {
-        "action_id": "doom-units",
-        "starts": "command",
+        "action_id": "condemn",
+        "timing": "start-of-turn",
         "player_turn": "your-turn",
         "use_limit": 3,
-        "completes": {
-          "type": "action-completed",
-          "parameters": { "action_id": "doom-units", "target_kind": "enemy-unit", "count_min": 1, "window": "this-turn" }
-        },
-        "effect": { "type": "unit-tag", "target": "unit", "modifier": { "tag": "doomed", "source": "this-action", "clears_on": "turn-rollover" } }
+        "completes": { "type": "action-completed", "parameters": { "action_id": "condemn", "target_kind": "enemy-unit", "count_min": 1, "window": "this-turn" } },
+        "effect": { "type": "unit-tag", "target": "unit", "modifier": { "tag": "condemned", "source": "this-action", "clears_on": "turn-rollover" } }
       }
     ],
     "awards": [
       {
-        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": {
-          "type": "unit-has-tag",
-          "parameters": { "tag": "doomed", "side": "enemy", "count_min": 1, "window": "destroyed-this-turn" }
-        },
+        "trigger": { "timing": "end-of-turn", "player_turn": "either" },
+        "when": { "type": "unit-has-tag", "parameters": { "tag": "condemned", "side": "enemy", "count_min": 1, "window": "left-battlefield-this-turn" } },
         "vp": 5
       },
       {
@@ -413,8 +191,7 @@
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
         "when": { "type": "objective-majority", "parameters": { "relative_to": "opponent" } },
-        "vp": 5,
-        "cumulative": true
+        "vp": 5
       },
       {
         "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
@@ -422,12 +199,12 @@
         "vp": 8
       }
     ],
-    "text": "Purge-the-Foe against Disruption. Mark 1-3 enemy units as Doomed (either on objectives, or units that killed a friendly last turn) — destroying or pushing off-board any Doomed unit pays out at end of turn. From the second battle round, holding objectives beyond your home pays at end of Command Phase, with a stacked bonus for owning the objective majority. End of battle pays out for seizing the opponent's home.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Purge-the-Foe against Disruption. At the start of your turn, condemn one to three enemy units that are on objectives and/or destroyed a friendly unit last turn (or any one enemy unit if none qualify); the mark lasts until the start of your next turn. Any condemned unit leaving the battlefield pays at the end of either player's turn. From the second battle round, non-home control and the objective majority each pay at the end of your Command phase. End of battle pays a large bonus for holding the opponent's home objective.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "meat-grinder",
-    "name": "Meat Grinder",
+    "id": "meatgrinder",
+    "name": "Meatgrinder",
     "card_type": "primary",
     "awards": [
       {
@@ -442,14 +219,7 @@
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": {
-          "type": "units-destroyed-comparison",
-          "parameters": {
-            "subject": { "side": "enemy", "window": "this-turn" },
-            "comparator": "greater-than",
-            "reference": { "side": "friendly", "window": "previous-turn" }
-          }
-        },
+        "when": { "type": "units-destroyed-comparison", "parameters": { "subject": { "side": "enemy", "window": "this-turn" }, "comparator": "greater-than", "reference": { "side": "friendly", "window": "previous-turn" } } },
         "vp": 5
       },
       {
@@ -458,12 +228,12 @@
         "vp": 5
       }
     ],
-    "text": "Purge-the-Foe mirror. Killing pays out each turn (any battle round). From the second battle round, holding a non-home objective at end of Command Phase pays out, out-trading the opponent's previous-turn kill count adds a bonus, and holding the opponent's home pays out each turn it stays yours.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Purge-the-Foe mirror. Destroying any enemy unit pays at end of turn. From the second battle round, non-home control pays at the end of your Command phase, while end of turn pays separately for out-killing the opponent (more enemy units destroyed this turn than friendly units lost last turn) and for holding their home objective.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "destroyers-wrath",
-    "name": "Wrath of the Destroyer",
+    "name": "Destroyer's Wrath",
     "card_type": "primary",
     "awards": [
       {
@@ -479,37 +249,28 @@
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
         "when": { "type": "objective-majority", "parameters": { "relative_to": "opponent" } },
-        "vp": 6,
-        "cumulative": true
+        "vp": 6
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": {
-          "type": "units-destroyed-comparison",
-          "parameters": {
-            "subject": { "side": "enemy", "window": "this-turn" },
-            "comparator": "greater-than",
-            "reference": { "side": "friendly", "window": "previous-turn" }
-          }
-        },
+        "when": { "type": "units-destroyed-comparison", "parameters": { "subject": { "side": "enemy", "window": "this-turn" }, "comparator": "greater-than", "reference": { "side": "friendly", "window": "previous-turn" } } },
         "vp": 4
       }
     ],
-    "text": "Purge-the-Foe against Priority-Assets — the asymmetric counterpart a Purge player reads when the opponent plays Important Connection. Scores for destroying enemy units each turn, then from the second battle round adds objective control beyond your home and an objective-majority bonus, plus a reward for out-trading your opponent turn over turn.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Purge-the-Foe against Priority-Assets. Destroying any enemy unit pays at end of turn. From the second battle round, the Command-phase check pays for non-home control and pays well for the objective majority, while end of turn pays for out-killing the opponent (more enemy units destroyed this turn than friendly units lost last turn).",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "consecration",
-    "name": "Consecration",
+    "id": "consecrate",
+    "name": "Consecrate",
     "card_type": "primary",
     "actions": [
       {
-        "action_id": "consecrate-on-kill",
-        "completes": {
-          "type": "destroyed-while-on-objective",
-          "parameters": { "destroyer_on_objective": true, "count_min": 1 }
-        },
-        "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "consecrated", "source": "destroying-unit", "clears_on": "never" } }
+        "action_id": "consecrate",
+        "timing": "end-of-turn",
+        "player_turn": "your-turn",
+        "completes": { "type": "action-completed", "parameters": { "action_id": "consecrate", "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" } },
+        "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "consecrated", "source": "this-action", "clears_on": "never" } }
       }
     ],
     "awards": [
@@ -533,40 +294,219 @@
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
         "when": { "type": "objective-majority", "parameters": { "relative_to": "opponent" } },
-        "vp": 4,
-        "cumulative": true
+        "vp": 4
       },
       {
         "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
-        "when": {
-          "type": "objective-has-tag",
-          "parameters": { "tag": "consecrated", "objective": "opponent-home", "count_min": 1 }
-        },
+        "when": { "type": "objective-has-tag", "parameters": { "tag": "consecrated", "objective": "opponent-home", "count_min": 1 } },
         "vp": 5
       }
     ],
-    "text": "Purge-the-Foe against Reconnaissance. Destroying an enemy unit while the destroying friendly stands on a non-home objective Consecrates that objective. Per-turn scoring tiers on how many objectives are Consecrated (1-2 OR 3+). From the second battle round, classic control scoring stacks alongside. End of battle pays out if the opponent's home is Consecrated.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Purge-the-Foe against Reconnaissance. A friendly unit that destroys an enemy unit becomes a consecration unit; at the end of your turn each consecration unit may consecrate one unconsecrated non-home objective it is within range of, placing one of your operation markers within range. Scoring tiers on consecrated objectives at end of turn (one or two, OR three or more). From the second battle round, non-home control and the objective majority pay at the end of your Command phase. End of battle pays out if the opponent's home objective is consecrated.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "secure-asset",
-    "name": "Secure Object",
+    "id": "death-trap",
+    "name": "Death Trap",
+    "card_type": "primary",
+    "actions": [
+      {
+        "action_id": "booby-trap",
+        "starts": "shooting",
+        "player_turn": "your-turn",
+        "completes": { "type": "action-completed", "parameters": { "action_id": "booby-trap", "target_kind": "terrain", "count_min": 1, "window": "this-turn" } },
+        "effect": { "type": "terrain-area-tag", "target": "self", "modifier": { "tag": "trapped", "source": "this-action", "clears_on": "never" } }
+      }
+    ],
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "vp_per": 2,
+        "per": "terrain-area-trapped-this-turn"
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "vp_per": 3,
+        "per": "terrain-area-trapped-this-turn-that-is-an-objective",
+        "cumulative": true
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "when": { "type": "destroyed-in-tagged-terrain", "parameters": { "tag": "trapped", "at_start_of_turn": true, "count_min": 1 } },
+        "vp": 3
+      },
+      {
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "vp": 4
+      }
+    ],
+    "text": "Disruption against Take-and-Hold. The Booby Trap action (Shooting phase; a friendly unit within range of a non-home objective or within an untrapped terrain area outside your deployment zone; unlimited uses, one terrain area each; completes immediately) traps the terrain area and places one of your operation markers in it. Each terrain area trapped this turn pays out, with a stacking bonus when the trapped terrain is an objective, and a separate payout when an enemy unit that started the turn in trapped terrain was destroyed. From the second battle round, non-home control pays at the end of your Command phase.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
+  },
+  {
+    "id": "outmanoeuvre",
+    "name": "Outmanoeuvre",
     "card_type": "primary",
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": {
-          "type": "action-completed",
-          "parameters": { "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" }
-        },
+        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "objective": "opponent-home" } },
+        "vp": 10
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 1, "max": 1 } },
+        "vp_per": 4,
+        "per": "controlled-non-home-objective"
+      },
+      {
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2, "max": 3 } },
+        "vp_per": 5,
+        "per": "controlled-non-home-objective"
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 4 } },
+        "vp_per": 6,
+        "per": "controlled-non-home-objective"
+      }
+    ],
+    "text": "Disruption mirror. Holding the opponent's home objective pays a large amount at the end of any of your turns. Per-objective non-home control escalates as the game goes on: end of your first turn, then end of your Command phase in rounds two and three, then end of your turn from round four at the highest rate.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
+  },
+  {
+    "id": "delaying-action",
+    "name": "Delaying Action",
+    "card_type": "primary",
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "vp_per": 2,
+        "per": "enemy-unit-destroyed-this-turn"
+      },
+      {
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "vp": 4
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "when": { "operator": "and", "operands": [
+          { "type": "controls-objective", "parameters": { "objective_role": "central", "count_min": 1 } },
+          { "type": "controls-objective", "parameters": { "objective_role": "expansion", "count_min": 1 } }
+        ] },
+        "vp": 3
+      }
+    ],
+    "text": "Disruption against Purge-the-Foe. Every enemy unit destroyed pays at the end of your turn. From the second battle round, non-home control pays at the end of your Command phase, and holding at least one central objective together with at least one expansion objective pays again at end of turn.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
+  },
+  {
+    "id": "locate-and-deny",
+    "name": "Locate and Deny",
+    "card_type": "primary",
+    "actions": [
+      {
+        "action_id": "place-markers",
+        "timing": "start-of-battle",
+        "use_limit": 1,
+        "use_limit_scope": "per-game"
+      },
+      {
+        "action_id": "sensor-sweep",
+        "starts": "shooting",
+        "player_turn": "your-turn",
+        "use_limit": 1,
+        "units": { "type": "within-range-of-objective", "parameters": { "objective_role": "central" } },
+        "completes": { "type": "action-completed", "parameters": { "action_id": "sensor-sweep", "target_kind": "objective", "target_filter": { "objective_role": "central" }, "count_min": 1, "window": "this-turn" } },
+        "restrictions": { "type": "operation-markers", "parameters": { "count_min": 1, "count_max": 1 } }
+      }
+    ],
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "when": { "type": "destroyed-while-on-objective", "parameters": { "victim_started_turn_on_objective": true, "count_min": 1 } },
         "vp": 4
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": {
-          "type": "destroyed-while-on-objective",
-          "parameters": { "victim_on_objective": true, "count_min": 1 }
-        },
+        "when": { "type": "operation-markers", "parameters": { "side": "friendly", "count_min": 1, "count_max": 1, "friendly_unit_in_same_terrain_area": true, "no_enemy_in_terrain_area": true } },
+        "vp": 4
+      },
+      {
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "vp": 4
+      },
+      {
+        "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
+        "when": { "type": "operation-markers", "parameters": { "side": "friendly", "count_min": 1, "count_max": 1, "friendly_unit_in_same_terrain_area": true, "no_enemy_in_terrain_area": true } },
+        "vp": 5
+      }
+    ],
+    "text": "Disruption against Priority-Assets. At the start of the battle, place one of your operation markers in each of five terrain areas outside your deployment zone (or in every such terrain area if fewer than five). The opponent's Sensor Sweep removes them; your own Sensor Sweep (Shooting phase, a friendly unit within range of a central objective, once per turn, completes at end of turn if the unit controls that objective, cannot start while only one marker remains) also removes one marker. Kills on enemy units that started the turn on objectives pay at end of turn, as does being down to exactly one of your markers with a friendly unit alone in its terrain area - the same condition pays again at the end of the battle. From the second battle round, non-home control pays at the end of your Command phase.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
+  },
+  {
+    "id": "smoke-and-mirrors",
+    "name": "Smoke and Mirrors",
+    "card_type": "primary",
+    "actions": [
+      {
+        "action_id": "decoy",
+        "starts": "shooting",
+        "player_turn": "your-turn",
+        "completes": { "type": "action-completed", "parameters": { "action_id": "decoy", "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" } },
+        "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "decoyed", "source": "this-action", "clears_on": "never" } }
+      }
+    ],
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "vp_per": 2,
+        "per": "decoyed-objective"
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "vp_per": 2,
+        "per": "decoyed-objective-in-enemy-territory",
+        "cumulative": true
+      },
+      {
+        "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "vp": 4
+      },
+      {
+        "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
+        "when": { "type": "objective-has-tag", "parameters": { "tag": "decoyed", "count_min": 4 } },
+        "vp": 10
+      }
+    ],
+    "text": "Disruption against Reconnaissance. The Decoy action (Shooting phase; a friendly unit within range of an undecoyed non-home objective; unlimited uses, one objective each; completes at end of turn if the unit controls that objective) decoys the objective and places one of your operation markers within range of it. Each decoyed objective pays at the end of your turn, with a stacking per-objective bonus for those in the opponent's territory. From the second battle round, non-home control pays at the end of your Command phase. End of battle pays a large bonus if four or more objectives are decoyed.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
+  },
+  {
+    "id": "secure-asset",
+    "name": "Secure Asset",
+    "card_type": "primary",
+    "actions": [
+      {
+        "action_id": "secure-asset",
+        "starts": "shooting",
+        "player_turn": "your-turn",
+        "use_limit": 1,
+        "completes": { "type": "action-completed", "parameters": { "action_id": "secure-asset", "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" } }
+      }
+    ],
+    "awards": [
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "when": { "type": "action-completed", "parameters": { "action_id": "secure-asset", "count_min": 1, "window": "this-turn" } },
+        "vp": 4
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "when": { "type": "destroyed-while-on-objective", "parameters": { "victim_started_turn_on_objective": true, "objective_role": "central", "count_min": 1 } },
         "vp": 2
       },
       {
@@ -577,60 +517,41 @@
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
         "when": { "type": "controls-objective", "parameters": { "count_min": 3 } },
-        "vp": 4,
-        "cumulative": true
+        "vp": 4
       }
     ],
-    "text": "Priority-Assets against Take-and-Hold. Performing an action on a non-home objective and killing enemy units standing on no-man's-land objectives each pay out at end of turn. From the second battle round, per-objective hold at end of Command Phase plus a fat-board bonus (3+ objectives) layer the scoring.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Priority-Assets against Take-and-Hold. The Secure Asset action (Shooting phase; a friendly unit within range of a non-home objective; once per turn; completes at end of turn if the unit controls that objective) secures the asset and pays at end of turn, alongside a payout for destroying enemy units that started the turn on central objectives. From the second battle round, the Command-phase check pays for non-home control and again for holding three or more objectives.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "recover-the-relics",
-    "name": "Recover the Relics",
+    "id": "extract-relic",
+    "name": "Extract Relic",
     "card_type": "primary",
     "actions": [
       {
-        "action_id": "unmark-central-objective",
-        "completes": {
-          "type": "action-completed",
-          "parameters": { "action_id": "unmark-central-objective", "target_kind": "objective", "target_filter": { "objective_role": "central" }, "count_min": 1, "window": "this-turn" }
-        },
-        "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "marked", "source": "this-action", "clears_on": "never" } }
-      },
-      {
-        "action_id": "overwhelming-force",
+        "action_id": "sensor-sweep",
+        "starts": "shooting",
+        "player_turn": "your-turn",
         "use_limit": 1,
-        "use_limit_scope": "per-game",
-        "completes": {
-          "type": "action-completed",
-          "parameters": { "action_id": "overwhelming-force", "count_min": 1, "window": "this-turn" }
-        },
-        "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "marked", "source": "this-action", "clears_on": "never" } }
+        "units": { "type": "within-range-of-objective", "parameters": { "objective_role": "central" } },
+        "completes": { "type": "action-completed", "parameters": { "action_id": "sensor-sweep", "target_kind": "objective", "target_filter": { "objective_role": "central" }, "count_min": 1, "window": "this-turn" } },
+        "restrictions": { "type": "operation-markers", "parameters": { "count_min": 1, "count_max": 1 } }
       }
     ],
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": {
-          "type": "action-completed",
-          "parameters": { "action_id": "unmark-central-objective", "count_min": 1, "window": "this-turn" }
-        },
+        "when": { "type": "action-completed", "parameters": { "action_id": "sensor-sweep", "count_min": 1, "window": "this-turn" } },
         "vp": 4
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": {
-          "type": "action-completed",
-          "parameters": { "action_id": "overwhelming-force", "count_min": 1, "window": "cumulative" }
-        },
+        "when": { "type": "destroyed-while-on-objective", "parameters": { "victim_started_turn_on_objective": true, "count_min": 1 } },
         "vp": 3
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": {
-          "type": "objective-has-tag",
-          "parameters": { "tag": "marked", "count_min": 1, "last_marked": true }
-        },
+        "when": { "type": "operation-markers", "parameters": { "side": "opponent", "count_min": 1, "count_max": 1, "friendly_unit_in_same_terrain_area": true, "no_enemy_in_terrain_area": true } },
         "vp": 4
       },
       {
@@ -640,20 +561,27 @@
       },
       {
         "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
-        "when": {
-          "type": "objective-has-tag",
-          "parameters": { "tag": "marked", "count_min": 1, "last_marked": true }
-        },
+        "when": { "type": "operation-markers", "parameters": { "side": "opponent", "count_min": 1, "count_max": 1, "friendly_unit_in_same_terrain_area": true, "no_enemy_in_terrain_area": true } },
         "vp": 5
       }
     ],
-    "text": "Priority-Assets against Disruption. Do actions on central objectives to unmark them; an action completed each turn pays out, with a once-per-game Overwhelming Force bonus and a separate award for being the side that controls the last marked objective. From the second battle round, classic non-home control adds in, and end of battle pays out again for holding the last marked piece.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Priority-Assets against Disruption. Your Sensor Sweep action (Shooting phase, a friendly unit within range of a central objective, once per turn, completes at end of turn if the unit controls that objective, cannot start while only one operation marker remains on the battlefield) removes one of the opponent's operation markers and pays at end of turn. Kills on enemy units that started the turn on objectives also pay, as does whittling the opponent down to exactly one marker with a friendly unit alone in its terrain area - that condition pays again at the end of the battle. From the second battle round, non-home control pays at the end of your Command phase.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "important-connection",
-    "name": "Important Connection",
+    "id": "vital-link",
+    "name": "Vital Link",
     "card_type": "primary",
+    "actions": [
+      {
+        "action_id": "maintain-control",
+        "starts": "shooting",
+        "player_turn": "your-turn",
+        "use_limit": 1,
+        "units": { "type": "within-range-of-objective", "parameters": { "objective_role": "central" } },
+        "completes": { "type": "action-completed", "parameters": { "action_id": "maintain-control", "target_kind": "objective", "target_filter": { "objective_role": "central" }, "count_min": 1, "window": "this-turn" } }
+      }
+    ],
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
@@ -662,15 +590,9 @@
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": {
-          "operator": "and",
-          "operands": [
-            { "type": "controls-objective", "parameters": { "objective_role": "central", "count_min": 1 } },
-            { "type": "action-completed", "parameters": { "target_kind": "objective", "target_filter": { "objective_role": "central" }, "count_min": 1, "window": "cumulative" } }
-          ]
-        },
+        "when": { "type": "controls-objective", "parameters": { "objective_role": "central", "count_min": 1 } },
         "vp_per": 1,
-        "per": "controlled-central-objective-with-action-completed",
+        "per": "operation-marker-within-range-of-a-controlled-central-objective",
         "cumulative": true
       },
       {
@@ -690,8 +612,8 @@
         "vp": 10
       }
     ],
-    "text": "Priority-Assets against Purge-the-Foe. Early scoring rewards holding the central objectives, with a per-objective bonus when those central objectives have had an action completed on them. From the second battle round, scoring broadens to any objective beyond your home, with an additional bonus when the held objective is central. Seizing the opponent's home objective pays out at the end of the battle.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Priority-Assets against Purge-the-Foe. The Maintain Control action (Shooting phase, a friendly unit within range of a central objective, once per turn, completes at end of turn if the unit controls that objective) places one of your operation markers within range of that objective. Central control pays at end of turn with a stacking bonus per marker within range of a controlled central objective. From the second battle round, the Command-phase check pays for non-home control with a stacked bonus when one of those is a central objective. End of battle pays a large bonus for holding the opponent's home objective.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "sabotage",
@@ -699,24 +621,22 @@
     "card_type": "primary",
     "actions": [
       {
-        "action_id": "sabotage-objective",
-        "completes": {
-          "type": "action-completed",
-          "parameters": { "action_id": "sabotage-objective", "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" }
-        },
-        "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "sabotaged", "source": "this-action", "clears_on": "never" } }
+        "action_id": "sabotage",
+        "starts": "shooting",
+        "player_turn": "your-turn",
+        "completes": { "type": "action-completed", "parameters": { "action_id": "sabotage", "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" } }
       }
     ],
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
         "vp_per": 3,
-        "per": "sabotage-completed-this-turn"
+        "per": "friendly-unit-that-committed-sabotage-this-turn"
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
         "vp_per": 2,
-        "per": "sabotage-completed-this-turn-in-enemy-territory",
+        "per": "sabotaging-unit-within-range-of-an-objective-in-enemy-territory",
         "cumulative": true
       },
       {
@@ -725,8 +645,8 @@
         "vp": 4
       }
     ],
-    "text": "Priority-Assets mirror. Do actions on non-home objectives to Sabotage them — each Sabotage completed pays out, with a per-objective bonus when the Sabotage is in the opponent's territory. From the second battle round, classic non-home control fills out the scoring.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Priority-Assets mirror. The Sabotage action (Shooting phase; a unit within range of a non-home objective; unlimited uses, one objective each; completes at end of turn if that unit controls that objective) commits sabotage. Each saboteur pays at the end of your turn, with a stacking per-unit bonus for saboteurs within range of objectives in the opponent's territory. From the second battle round, non-home control pays at the end of your Command phase.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "vanguard-operation",
@@ -734,21 +654,17 @@
     "card_type": "primary",
     "actions": [
       {
-        "action_id": "vanguard-action",
-        "completes": {
-          "type": "action-completed",
-          "parameters": { "action_id": "vanguard-action", "target_kind": "terrain", "target_filter": { "in_enemy_territory": true }, "count_min": 1, "window": "this-turn" }
-        },
-        "effect": { "type": "terrain-area-tag", "target": "self", "modifier": { "tag": "vanguard", "source": "this-action", "clears_on": "never" } }
+        "action_id": "vanguard-operation",
+        "starts": "shooting",
+        "player_turn": "your-turn",
+        "use_limit": 1,
+        "completes": { "type": "action-completed", "parameters": { "action_id": "vanguard-operation", "target_kind": "terrain", "target_filter": { "in_enemy_territory": true }, "count_min": 1, "window": "this-turn" } }
       }
     ],
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": {
-          "type": "action-completed",
-          "parameters": { "action_id": "vanguard-action", "count_min": 1, "window": "this-turn" }
-        },
+        "when": { "type": "action-completed", "parameters": { "action_id": "vanguard-operation", "count_min": 1, "window": "this-turn" } },
         "vp": 4
       },
       {
@@ -767,25 +683,25 @@
         "vp": 10
       }
     ],
-    "text": "Priority-Assets against Reconnaissance. Do actions in terrain in the opponent's territory to complete a Vanguard Operation — each turn one such action pays out, with a separate award for killing an enemy unit during the same turn. From the second battle round, non-home control scoring kicks in, and end of battle pays out for seizing the opponent's home.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Priority-Assets against Reconnaissance. The Vanguard Operation action (Shooting phase; a friendly unit within one terrain area inside the opponent's territory; once per turn; completes at end of turn if no enemy units are within that terrain area) pays at end of turn, alongside a smaller payout for destroying any enemy unit. From the second battle round, non-home control pays at the end of your Command phase. End of battle pays a large bonus for holding the opponent's home objective.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "record-breaking-mission",
-    "name": "Record-Breaking Mission",
+    "id": "reconnaissance-sweep",
+    "name": "Reconnaissance Sweep",
     "card_type": "primary",
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
         "when": { "type": "engagement-fronts", "parameters": { "count_min": 3 } },
         "vp": 3,
-        "exclusive_group": "fronts-tier"
+        "exclusive_group": "quarters-tier"
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
         "when": { "type": "engagement-fronts", "parameters": { "count_min": 4 } },
         "vp": 6,
-        "exclusive_group": "fronts-tier"
+        "exclusive_group": "quarters-tier"
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
@@ -794,42 +710,34 @@
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "vp_per": 3,
-        "per": "controlled-non-home-objective-at-end-of-command-phase"
+        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
+        "vp": 3
       }
     ],
-    "text": "Reconnaissance against Take-and-Hold. Spread your engaged units across fronts of the battlefield — engaging on 3 fronts pays 3, OR 4 fronts pays 6 (only the higher tier scores). No Prisoners adds a flat VP per enemy unit destroyed. From the second battle round, per-objective control at end of Command Phase fills out the rest.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Reconnaissance against Take-and-Hold. Spread out: three or more friendly units wholly within three different table quarters (none within 6 inches of the battlefield centre) pays at end of turn, with a higher tier for four units across four quarters - only the better tier scores. Each enemy unit destroyed pays a small amount. From the second battle round, non-home control pays at the end of your Command phase.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "observe-enemy",
-    "name": "Observe Enemy",
+    "id": "surveil-the-foe",
+    "name": "Surveil the Foe",
     "card_type": "primary",
     "actions": [
       {
-        "action_id": "remove-baited",
-        "completes": {
-          "type": "action-completed",
-          "parameters": { "action_id": "remove-baited", "target_kind": "objective", "count_min": 1, "window": "this-turn" }
-        },
-        "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "baited", "source": "this-action", "clears_on": "never" } }
+        "action_id": "surveil",
+        "starts": "shooting",
+        "player_turn": "your-turn",
+        "completes": { "type": "action-completed", "parameters": { "action_id": "surveil", "target_kind": "enemy-unit", "count_min": 1, "window": "this-turn" } },
+        "effect": { "type": "unit-tag", "target": "unit", "modifier": { "tag": "surveilled", "source": "this-action", "clears_on": "turn-rollover" } }
       },
       {
-        "action_id": "spot-enemy",
-        "completes": {
-          "type": "action-completed",
-          "parameters": { "action_id": "spot-enemy", "target_kind": "enemy-unit", "count_min": 1, "window": "this-turn" }
-        },
-        "effect": { "type": "unit-tag", "target": "unit", "modifier": { "tag": "spotted", "source": "this-action", "clears_on": "turn-rollover" } }
+        "action_id": "clear-markers",
+        "completes": { "type": "action-completed", "parameters": { "action_id": "clear-markers", "target_kind": "objective", "count_min": 1, "window": "this-turn" } }
       }
     ],
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": {
-          "type": "unit-has-tag",
-          "parameters": { "tag": "spotted", "side": "enemy", "count_min": 1 }
-        },
+        "when": { "type": "unit-has-tag", "parameters": { "tag": "surveilled", "side": "enemy", "count_min": 1, "window": "this-turn" } },
         "vp": 4
       },
       {
@@ -840,20 +748,16 @@
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
         "when": { "type": "objective-majority", "parameters": { "relative_to": "opponent" } },
-        "vp": 4,
-        "cumulative": true
+        "vp": 4
       },
       {
-        "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
-        "when": {
-          "type": "objective-has-tag",
-          "parameters": { "tag": "baited", "count_min": 0, "count_max": 0 }
-        },
+        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 2 } },
+        "when": { "type": "operation-markers", "parameters": { "side": "opponent", "count_max": 0 } },
         "vp": 5
       }
     ],
-    "text": "Reconnaissance against Disruption. Two actions: end moves on Baited objectives to remove the Baited tag, and within 18\" of unique enemy units do an action to Spot them. Scoring rewards Spotted enemy units off Baited objectives, classic non-home control from battle round 2 with an objective-majority bonus, and an end-of-battle reward if no Baited objectives remain.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Reconnaissance against Disruption. Whenever a friendly unit ends a move within range of an objective that has any of the opponent's operation markers within range, those markers are removed. The Surveil the Foe action (Shooting phase, one friendly unit, unlimited uses, completes immediately) surveils one visible enemy unit within 18 inches that has not been surveilled this turn. Surveilled enemy units pay at end of turn - unless every one of them is within range of an objective shielded by operation markers. From the second battle round, the Command-phase check pays for non-home control and for the objective majority, and end of turn pays out while none of the opponent's markers remain on the battlefield.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "triangulation",
@@ -861,14 +765,12 @@
     "card_type": "primary",
     "actions": [
       {
-        "action_id": "triangulate-objective",
+        "action_id": "triangulate",
         "starts": "shooting",
         "player_turn": "your-turn",
+        "battle_round": { "min": 2 },
         "use_limit": 1,
-        "completes": {
-          "type": "action-completed",
-          "parameters": { "action_id": "triangulate-objective", "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" }
-        },
+        "completes": { "type": "action-completed", "parameters": { "action_id": "triangulate", "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" } },
         "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "triangulated", "source": "this-action", "clears_on": "never" } }
       }
     ],
@@ -902,12 +804,12 @@
         "vp": 10
       }
     ],
-    "text": "Reconnaissance against Purge-the-Foe. From battle round 2, one action per turn in your Shooting phase on a non-home objective triangulates it. Scoring tiers on how many objectives are Triangulated at end of turn (1, 2, or 3+ — only the highest tier scores). Classic non-home control fills out, and end of battle pays out for holding 4+ objectives.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Reconnaissance against Purge-the-Foe. The Triangulate action (Shooting phase from the second battle round onwards; a friendly unit within range of a non-home objective; once per turn; completes at end of turn if the unit controls that objective) triangulates the objective and places one of your operation markers within range. From the second battle round, non-home control pays at the end of your Command phase, and end of turn pays a tier on how many objectives are triangulated (one, two, OR three or more - only the highest tier scores). End of battle pays a large bonus for holding four or more objectives.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "find-and-eliminate",
-    "name": "Find and Eliminate",
+    "id": "search-and-scour",
+    "name": "Search and Scour",
     "card_type": "primary",
     "awards": [
       {
@@ -917,44 +819,34 @@
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": {
-          "operator": "and",
-          "operands": [
-            { "type": "units-destroyed", "parameters": { "side": "enemy", "window": "this-turn", "count_min": 1 } },
-            { "type": "terrain-area-control", "parameters": { "min_models": 1 } }
-          ]
-        },
+        "when": { "type": "destroyed-in-tagged-terrain", "parameters": { "at_start_of_turn": true, "count_min": 1 } },
         "vp": 2
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "player_turn": "your-turn", "battle_round": { "min": 2 } },
-        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "exclude": "home" } },
-        "vp": 4
+        "vp_per": 4,
+        "per": "controlled-non-home-objective"
       },
       {
         "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
-        "when": {
-          "type": "territory-control",
-          "parameters": { "territory_ref": "your-territory", "enemy_units_max": 0 }
-        },
+        "when": { "type": "territory-control", "parameters": { "territory_ref": "your-territory", "enemy_units_max": 0 } },
         "vp": 5
       }
     ],
-    "text": "Reconnaissance against Priority-Assets. Holding a central objective and destroying an enemy unit while one of your units stands in terrain each pay out at end of turn. From the second battle round, classic non-home control adds in. End of battle pays out if no enemy units are inside your own territory.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Reconnaissance against Priority-Assets. Central-objective control pays at end of turn, alongside a payout for destroying enemy units that started the turn inside a terrain area. From the second battle round, per-objective non-home control pays at the end of your Command phase. End of battle pays out if no enemy units are wholly within your territory.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "information-gathering",
-    "name": "Information Gathering",
+    "id": "gather-intel",
+    "name": "Gather Intel",
     "card_type": "primary",
     "actions": [
       {
-        "action_id": "mark-objective",
-        "completes": {
-          "type": "action-completed",
-          "parameters": { "action_id": "mark-objective", "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" }
-        },
-        "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "marked", "source": "this-action", "clears_on": "never" } }
+        "action_id": "extract-intelligence",
+        "starts": "shooting",
+        "player_turn": "your-turn",
+        "battle_round": { "min": 2 },
+        "completes": { "type": "action-completed", "parameters": { "action_id": "extract-intelligence", "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" } }
       }
     ],
     "awards": [
@@ -971,38 +863,39 @@
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn", "battle_round": { "min": 2 } },
         "vp_per": 7,
-        "per": "primary-action-completed-this-turn"
+        "per": "extract-intelligence-action-completed-this-turn"
       },
       {
         "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
-        "when": { "type": "objective-has-tag", "parameters": { "tag": "marked", "count_min": 3 } },
+        "when": { "type": "operation-markers", "parameters": { "side": "friendly", "count_min": 3 } },
         "vp": 5
       },
       {
         "trigger": { "timing": "end-of-battle", "player_turn": "your-turn" },
-        "when": {
-          "type": "objective-has-tag",
-          "parameters": { "tag": "marked", "objective": "opponent-home", "count_min": 1 }
-        },
+        "when": { "type": "operation-markers", "parameters": { "side": "friendly", "count_min": 1, "within_range_of": "opponent-home-objective" } },
         "vp": 5
       }
     ],
-    "text": "Reconnaissance mirror. Battle round 1 pays out for holding a central objective. From the second battle round, classic non-home control plus a per-action-completed scaling reward. End of battle pays out twice — once for 3+ Marked objectives, once if the opponent's home is Marked.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Reconnaissance mirror. The first battle round pays well for holding a central objective at end of turn. The Extract Intelligence action (Shooting phase from the second battle round onwards; a unit within range of a non-home objective with none of your operation markers within range of it; unlimited uses, one objective each; completes at end of turn if the unit controls that objective) places one of your operation markers within range of that objective, and each completed action pays heavily at end of turn. From the second battle round non-home control also pays at the end of your Command phase. End of battle pays twice: for three or more of your markers on the battlefield, and for a marker within range of the opponent's home objective.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "forward-position",
     "name": "Forward Position",
     "card_type": "secondary",
-    "when_drawn": { "operation": "redraw" },
+    "when_drawn": { "operation": "redraw", "battle_round": { "max": 1 } },
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "when": { "operator": "or", "operands": [
+          { "type": "controls-objective", "parameters": { "count_min": 1, "objective": "opponent-home" } },
+          { "type": "controls-objective", "parameters": { "objective_role": "expansion", "count_min": 1 } }
+        ] },
         "vp": 5
       }
     ],
-    "text": "Establish a forward position. Score the payout at the end of your turn while you hold the opponent's home objective or any expansion objective. If it is drawn in the first battle round, redraw and shuffle this card back.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Break through and hold forward ground. Score the payout at the end of your turn while you control the opponent's home objective and/or an expansion objective. If drawn in the first battle round, draw one new card and shuffle this card back into your deck.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "burden-of-trust",
@@ -1016,8 +909,8 @@
         "vp_max": 9
       }
     ],
-    "text": "On draw, assign a friendly unit to guard each objective it controls and remains in range of. Score per guarded objective at the end of the opponent's turn (or the fifth battle round). The fixed approach caps at 9 VP; tactical play caps at 5 VP.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "When drawn and at the start of each of your turns, you can select one friendly unit per objective to guard it; until the start of your next turn, while that unit is within range of the objective and you control it, the objective is guarded. Score per guarded objective at the end of your opponent's turn or the end of the fifth battle round, whichever comes first, up to a ceiling of 9 VP.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "display-of-might",
@@ -1033,8 +926,8 @@
         "vp": 5
       }
     ],
-    "text": "Dominate the centre with bodies. Score the smaller payout at the end of your turn, or the larger one at the end of the opponent's turn, while you have more non-aircraft, non-battle-shocked units than the enemy wholly within No Man's Land.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Dominate the middle of the table with bodies. Score the smaller payout at the end of your turn, or the larger one at the end of the opponent's turn, while more friendly units than enemy units (excluding AIRCRAFT and battle-shocked units) are wholly within No Man's Land.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "assassination",
@@ -1060,8 +953,8 @@
         "mode": "tactical"
       }
     ],
-    "text": "Hunt enemy leaders. Fixed play scores per enemy CHARACTER model destroyed each turn, with a bonus for each that had 4 or more wounds. Tactical play instead pays a flat amount for destroying any CHARACTER this turn, or for having destroyed them all by the end of the battle.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Hunt enemy leaders. Fixed play scores per enemy CHARACTER model destroyed each turn, with a stacking bonus for each that had a Wounds characteristic of 4 or more. Tactical play instead pays a flat amount when one or more enemy CHARACTER models were destroyed this turn, or when all enemy CHARACTER models have been destroyed during the battle.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "centre-ground",
@@ -1079,27 +972,8 @@
         "exclusive_group": "centre-hold"
       }
     ],
-    "text": "Own the middle. At the end of your turn, score the lower amount for holding near the centre of the battlefield with no enemy contesting it, or the higher amount for holding it more tightly. Only the better tier scores.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
-  },
-  {
-    "id": "beacon",
-    "name": "Beacon",
-    "card_type": "secondary",
-    "awards": [
-      {
-        "trigger": { "timing": "end-of-turn", "player_turn": "opponent-turn" },
-        "vp": 3,
-        "exclusive_group": "beacon-position"
-      },
-      {
-        "trigger": { "timing": "end-of-turn", "player_turn": "opponent-turn" },
-        "vp": 5,
-        "exclusive_group": "beacon-position"
-      }
-    ],
-    "text": "On draw, nominate a friendly beacon unit. At the end of the opponent's turn (or the fifth battle round), score the lower amount while the beacon survives outside your deployment zone, or the higher amount while it survives outside your territory. Only the better tier scores.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Own the middle. At the end of your turn, score the lower amount while one or more friendly units (excluding AIRCRAFT and battle-shocked units) are within 3 inches of the centre of the battlefield with no enemy units within 3 inches of it, or the higher amount when no enemy units are within 6 inches of the centre. Only the better tier scores.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "outflank",
@@ -1117,8 +991,8 @@
         "exclusive_group": "flank"
       }
     ],
-    "text": "Sweep the flanks. At the end of your turn, score the lower amount for non-aircraft, non-battle-shocked units near a battlefield edge outside your territory, or the higher amount for reaching opposite edges. Only the better tier scores.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Sweep the flanks. At the end of your turn, score the lower amount while one or more friendly units (excluding AIRCRAFT and battle-shocked units) are within 6 inches of one or more battlefield edges and not within your territory, or the higher amount when two or more such units are within 6 inches of opposite battlefield edges (edges parallel to each other) and at least one of them is not within your territory. Only the better tier scores.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "plunder",
@@ -1131,22 +1005,18 @@
         "starts": "shooting",
         "player_turn": "your-turn",
         "use_limit": 1,
-        "effect": {
-          "type": "terrain-area-tag",
-          "target": "self",
-          "modifier": { "tag": "plundered", "source": "this-action", "clears_on": "never" }
-        }
+        "effect": { "type": "terrain-area-tag", "target": "self", "modifier": { "tag": "plundered", "source": "this-action", "clears_on": "never" } }
       }
     ],
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "terrain-has-tag", "parameters": { "tag": "plundered" } },
+        "when": { "type": "action-completed", "parameters": { "action_id": "plunder", "count_min": 1, "window": "this-turn" } },
         "vp": 5
       }
     ],
-    "text": "A unit in a terrain area outside your territory can perform an action in your Shooting phase to plunder it. Score the payout at the end of your turn if a terrain area was plundered. If the Cleanse mission is active for you when this is drawn, redraw and shuffle this card back.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Strip the field of its prizes. The Plunder action (Shooting phase; one unit within a terrain area that is not within your territory; once per turn; completes immediately) plunders that terrain area. Score the payout at the end of your turn if a terrain area was plundered this turn. If the Cleanse mission is active for you when this is drawn, draw one new card and shuffle this card back into your deck.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "engage-on-all-fronts",
@@ -1182,8 +1052,8 @@
         "mode": "tactical"
       }
     ],
-    "text": "Spread your presence across the table. At the end of your turn, score by how many table quarters you have a presence in. Each mode has a three-quarter tier and a higher four-quarter tier, and only the better tier scores; tactical values are higher but cap at 5 VP.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Spread your presence across the table. You have a presence in a table quarter while one or more friendly units (excluding AIRCRAFT and battle-shocked units) are wholly within it and not within 6 inches of the centre of the battlefield. At the end of your turn, score by presence in three quarters or the higher tier for four; only the better tier scores. Tactical values are higher than fixed.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "secure-no-mans-land",
@@ -1192,11 +1062,12 @@
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "when": { "type": "controls-objective", "parameters": { "count_min": 2, "scope": "no-mans-land", "exclude": "home" } },
         "vp": 5
       }
     ],
     "text": "Seize the middle ground. Score the payout at the end of your turn while you control two or more objectives within No Man's Land, not counting your home objective.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "no-prisoners",
@@ -1211,22 +1082,18 @@
       }
     ],
     "text": "Give no quarter. Score per enemy unit destroyed this turn, evaluated at the end of a turn, up to a ceiling of 5 VP.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "bring-it-down",
     "name": "Bring It Down",
     "card_type": "secondary",
-    "when_drawn": {
-      "operation": "replace",
-      "condition": { "subject": "opponent", "quantifier": "none", "unit_filter": { "wounds_min": 10 } }
-    },
+    "when_drawn": { "operation": "replace", "condition": { "subject": "opponent", "quantifier": "none", "unit_filter": { "wounds_min": 10 } } },
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "either" },
         "vp_per": 4,
         "per": "enemy-model-with-wounds-10-or-more-destroyed-this-turn",
-        "vp_max": 5,
         "mode": "fixed"
       },
       {
@@ -1237,8 +1104,8 @@
         "mode": "tactical"
       }
     ],
-    "text": "Bring down the big targets. Score per enemy model with 10 or more wounds destroyed this turn, up to 5 VP. Tactical play scores more per kill than fixed. If there are no such enemy models on the battlefield when drawn, discard and draw a replacement.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Bring down the big targets. Score per enemy model with a Wounds characteristic of 10 or more destroyed this turn, evaluated at the end of a turn; tactical play scores more per kill but caps at 5 VP. If there are no such enemy models on the battlefield when drawn, you can discard this card and draw one new Secondary Mission card.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "overwhelming-force",
@@ -1246,14 +1113,14 @@
     "card_type": "secondary",
     "awards": [
       {
-        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
+        "trigger": { "timing": "end-of-turn", "player_turn": "either" },
         "vp_per": 3,
-        "per": "enemy-unit-destroyed-while-within-range-of-an-objective-this-turn",
+        "per": "enemy-unit-destroyed-that-started-the-turn-within-range-of-an-objective",
         "vp_max": 9
       }
     ],
-    "text": "Clear the objectives by force. Score per enemy unit that began the turn within range of one or more objectives and was destroyed, evaluated at the end of your turn. Fixed play caps at 9 VP; tactical play caps at 5 VP.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Clear the objectives by force. Score per enemy unit that started the turn within range of one or more objectives and was destroyed, evaluated at the end of a turn, up to a ceiling of 9 VP.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "cleanse",
@@ -1265,17 +1132,15 @@
         "action_id": "cleanse",
         "starts": "shooting",
         "player_turn": "your-turn",
-        "effect": {
-          "type": "objective-tag",
-          "target": "self",
-          "modifier": { "tag": "cleansed", "source": "this-action", "clears_on": "never" }
-        }
+        "units": { "type": "within-range-of-objective" },
+        "completes": { "type": "action-completed", "parameters": { "action_id": "cleanse", "target_kind": "objective", "target_filter": { "exclude": "home" }, "count_min": 1, "window": "this-turn" } },
+        "effect": { "type": "objective-tag", "target": "self", "modifier": { "tag": "cleansed", "source": "this-action", "clears_on": "turn-rollover" } }
       }
     ],
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "when": { "type": "objective-has-tag", "parameters": { "tag": "cleansed", "count_min": 1 } },
+        "when": { "type": "objective-has-tag", "parameters": { "tag": "cleansed", "count_min": 1, "count_max": 1 } },
         "vp": 2,
         "exclusive_group": "cleanse-count"
       },
@@ -1286,8 +1151,8 @@
         "exclusive_group": "cleanse-count"
       }
     ],
-    "text": "Purify objectives with a unit action in your Shooting phase while controlling them. At the end of your turn, score the lower amount for one objective cleansed this turn or the higher amount for two or more. Only the better tier scores. If the Plunder mission is active for you when this is drawn, redraw and shuffle this card back.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Purify tainted ground. The Cleanse action (Shooting phase; one friendly unit within range of a non-home objective; unlimited uses, one objective each; completes at end of turn if that unit is controlling that objective) cleanses that objective this turn. At the end of your turn, score the lower amount for one objective cleansed by your army this turn or the higher amount for two or more; only the better tier scores. If the Plunder mission is active for you when this is drawn, draw one new card and shuffle this card back into your deck.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "behind-enemy-lines",
@@ -1302,75 +1167,65 @@
         "vp_max": 9
       }
     ],
-    "text": "Push into the enemy backfield. Score per non-aircraft, non-battle-shocked friendly unit wholly within the opponent's deployment zone, evaluated at the end of your turn. Fixed play caps at 9 VP; tactical play caps at 5 VP. If drawn in the first battle round, redraw and shuffle this card back.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Push into the enemy backfield. Score per friendly unit (excluding AIRCRAFT and battle-shocked units) wholly within the opponent's deployment zone, evaluated at the end of your turn, up to a ceiling of 9 VP. If drawn in the first battle round, draw one new card and shuffle this card back into your deck.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "defend-bastion",
-    "name": "Defend Bastion",
+    "id": "defend-stronghold",
+    "name": "Defend Stronghold",
     "card_type": "secondary",
-    "when_drawn": { "operation": "redraw" },
+    "when_drawn": { "operation": "redraw", "battle_round": { "max": 1 } },
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "opponent-turn", "battle_round": { "min": 2 } },
+        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "objective": "your-home" } },
         "vp": 3
       },
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "opponent-turn", "battle_round": { "min": 2 } },
+        "when": { "type": "territory-control", "parameters": { "territory_ref": "your-deployment-zone", "enemy_units_max": 0 } },
         "vp": 2,
         "cumulative": true
       }
     ],
-    "text": "Protect a key position. From the second battle round, at the end of the opponent's turn (or the fifth battle round), score for controlling your home objective, with a bonus if there are no enemy units within your deployment zone. If drawn in the first battle round, redraw and shuffle this card back.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Hold what is yours. From the second battle round, at the end of your opponent's turn or the end of the fifth battle round (whichever comes first), score for controlling your home objective, with a stacking bonus while no enemy units are within your deployment zone. If drawn in the first battle round, draw one new card and shuffle this card back into your deck.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "tempting-target",
-    "name": "Tempting Target",
+    "id": "a-tempting-target",
+    "name": "A Tempting Target",
     "card_type": "secondary",
-    "actions": [
-      {
-        "action_id": "nominate-tempting-target",
-        "starts": "command",
-        "player_turn": "your-turn"
-      }
-    ],
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "vp": 4,
-        "mode": "fixed"
-      },
-      {
-        "trigger": { "timing": "end-of-turn", "player_turn": "your-turn" },
-        "vp": 5,
-        "mode": "tactical"
+        "when": { "type": "controls-objective", "parameters": { "count_min": 1, "objective": "tempting-target" } },
+        "vp": 5
       }
     ],
-    "text": "PROVISIONAL — values not yet verified against the printed 11e card. At the start of your Command phase nominate one objective marker you do not control; at the end of your turn, score if you control that nominated marker. The fixed and tactical tracks score different flat values. The VP figures here are placeholders pending the official card.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "When drawn, your opponent selects one objective (excluding home objectives) within No Man's Land to be your tempting target. Score the payout at the end of your turn while you control your tempting target.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "a-grievous-blow",
     "name": "A Grievous Blow",
     "card_type": "secondary",
-    "when_drawn": {
-      "operation": "redraw",
-      "condition": {
-        "subject": "opponent",
-        "quantifier": "none",
-        "unit_filter": { "model_count_min": 14 }
-      }
-    },
+    "when_drawn": { "operation": "replace", "condition": { "subject": "opponent", "quantifier": "none", "unit_filter": { "model_count_min": 13 } } },
     "awards": [
       {
         "trigger": { "timing": "end-of-turn", "player_turn": "either" },
         "vp_per": 4,
-        "per": "enemy-unit-of-14-or-more-starting-models-destroyed-this-turn",
-        "vp_max": 5
+        "per": "enemy-unit-of-13-or-more-starting-strength-destroyed-this-turn",
+        "mode": "fixed"
+      },
+      {
+        "trigger": { "timing": "end-of-turn", "player_turn": "either" },
+        "vp_per": 5,
+        "per": "enemy-unit-of-13-or-more-starting-strength-destroyed-this-turn",
+        "vp_max": 5,
+        "mode": "tactical"
       }
     ],
-    "text": "PROVISIONAL — values not yet verified against the printed 11e card. The 11e renaming of 10e 'Cull the Horde'. Score per destroyed enemy unit that began the battle at 14 or more models, evaluated at the end of a turn, up to a ceiling. If the opponent's army contains no unit of 14 or more models when this card is drawn, redraw and shuffle it back. The per-kill VP and ceiling here are placeholders pending the official card.",
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "text": "Shatter the horde. Score per enemy unit with a Starting Strength of 13 or more destroyed this turn, evaluated at the end of a turn; tactical play scores more per kill but caps at 5 VP. If there are no such enemy units on the battlefield when drawn, you can discard this card and draw one new Secondary Mission card.",
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   }
 ]

@@ -109,13 +109,13 @@ describe("describeAward", () => {
 describe("describeScoringCard against the embedded dataset", () => {
   const ds = Dataset.embedded();
 
-  it("translates ground-control's awards", () => {
-    const card = ds.missionCards.get("ground-control");
+  it("translates battlefield-dominance's awards", () => {
+    const card = ds.missionCards.get("battlefield-dominance");
     expect(card).toBeDefined();
     expect(describeScoringCard(card!)).toEqual([
       "End of your turn (rounds 1-2): 2 VP when you hold more objectives than the opponent",
-      "End of your Command phase (round 2+): 3 VP per controlled objective at end of command phase",
-      "+ End of your Command phase (round 2+): 2 VP per controlled central objective at end of command phase when you control 1+ central objectives",
+      "End of your Command phase (round 2+): 3 VP per controlled objective",
+      "+ End of your Command phase (round 2+): 2 VP per controlled non home objective when you control 1+ objectives (your home)",
     ]);
   });
 

@@ -22,7 +22,7 @@
     "id": "bad-extra-property",
     "disposition": "reconnaissance",
     "opponent_disposition": "priority-assets",
-    "mission_id": "find-and-eliminate",
+    "mission_id": "search-and-scour",
     "unexpected_field": true,
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   }

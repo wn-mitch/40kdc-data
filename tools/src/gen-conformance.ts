@@ -531,9 +531,9 @@ function genScoring(): void {
         ops: [
           {
             kind: "score-primary",
-            cardId: "ground-control",
+            cardId: "battlefield-dominance",
             round: 2,
-            asserted: awardsOf(ds.missionCards.get("ground-control")!).map((aw, index) =>
+            asserted: awardsOf(ds.missionCards.get("battlefield-dominance")!).map((aw, index) =>
               aw.vp_per != null ? { index, count: aw.per_max ?? 3 } : { index },
             ),
             roundCap: 15,

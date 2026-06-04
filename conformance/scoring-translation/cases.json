@@ -3,7 +3,16 @@
     "cardId": "a-grievous-blow",
     "expected": {
       "awards": [
-        "End of any turn: 4 VP per enemy unit of 14 or more starting models destroyed this turn"
+        "End of any turn: 4 VP per enemy unit of 13 or more starting strength destroyed this turn",
+        "End of any turn: 5 VP per enemy unit of 13 or more starting strength destroyed this turn"
+      ]
+    }
+  },
+  {
+    "cardId": "a-tempting-target",
+    "expected": {
+      "awards": [
+        "End of your turn: 5 VP when you control 1+ objectives (tempting target)"
       ]
     }
   },
@@ -18,11 +27,12 @@
     }
   },
   {
-    "cardId": "beacon",
+    "cardId": "battlefield-dominance",
     "expected": {
       "awards": [
-        "End of the opponent's turn: 3 VP [highest tier]",
-        "End of the opponent's turn: 5 VP [highest tier]"
+        "End of your turn (rounds 1-2): 2 VP when you hold more objectives than the opponent",
+        "End of your Command phase (round 2+): 3 VP per controlled objective",
+        "+ End of your Command phase (round 2+): 2 VP per controlled non home objective when you control 1+ objectives (your home)"
       ]
     }
   },
@@ -64,19 +74,19 @@
     "cardId": "cleanse",
     "expected": {
       "awards": [
-        "End of your turn: 2 VP when 1+ objectives tagged cleansed [highest tier]",
+        "End of your turn: 2 VP when 1+ objectives tagged cleansed (at most 1) [highest tier]",
         "End of your turn: 5 VP when 2+ objectives tagged cleansed [highest tier]"
       ]
     }
   },
   {
-    "cardId": "consecration",
+    "cardId": "consecrate",
     "expected": {
       "awards": [
         "End of your turn: 3 VP when 1+ objectives tagged consecrated (at most 2) [highest tier]",
         "End of your turn: 6 VP when 3+ objectives tagged consecrated [highest tier]",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
-        "+ End of your Command phase (round 2+): 4 VP when you hold more objectives than the opponent",
+        "End of your Command phase (round 2+): 4 VP when you hold more objectives than the opponent",
         "End of the battle: 5 VP when 1+ objectives tagged consecrated (opponent home)"
       ]
     }
@@ -85,19 +95,19 @@
     "cardId": "death-trap",
     "expected": {
       "awards": [
-        "End of your turn: 2 VP per mining action completed this turn",
-        "+ End of your turn: 3 VP per mining action on objective terrain completed this turn",
-        "End of your turn: 3 VP when 1+ enemy units destroyed that started the turn in mined terrain",
+        "End of your turn: 2 VP per terrain area trapped this turn",
+        "+ End of your turn: 3 VP per terrain area trapped this turn that is an objective",
+        "End of your turn: 3 VP when 1+ enemy units destroyed that started the turn in trapped terrain",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)"
       ]
     }
   },
   {
-    "cardId": "defend-bastion",
+    "cardId": "defend-stronghold",
     "expected": {
       "awards": [
-        "End of the opponent's turn (round 2+): 3 VP",
-        "+ End of the opponent's turn (round 2+): 2 VP"
+        "End of the opponent's turn (round 2+): 3 VP when you control 1+ objectives (your home)",
+        "+ End of the opponent's turn (round 2+): 2 VP when you control your deployment zone with at most 0 enemy units"
       ]
     }
   },
@@ -117,7 +127,7 @@
       "awards": [
         "End of your turn: 3 VP when 1+ enemy units destroyed this turn",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
-        "+ End of your Command phase (round 2+): 6 VP when you hold more objectives than the opponent",
+        "End of your Command phase (round 2+): 6 VP when you hold more objectives than the opponent",
         "End of your turn (round 2+): 4 VP when you destroyed more enemy units this turn than friendly units previous turn"
       ]
     }
@@ -126,9 +136,9 @@
     "cardId": "determined-acquisition",
     "expected": {
       "awards": [
-        "End of your turn: 2 VP per new objective controlled this turn",
-        "End of your Command phase (round 2+): 3 VP per controlled objective at end of command phase",
-        "+ End of your Command phase (round 2+): 3 VP per controlled objective in opponent territory at end of command phase when you control 1+ objectives in enemy territory"
+        "End of your turn: 2 VP per objective newly controlled this turn",
+        "End of your Command phase (round 2+): 3 VP per controlled objective",
+        "+ End of your Command phase (round 2+): 3 VP per controlled objective in enemy territory"
       ]
     }
   },
@@ -138,17 +148,6 @@
       "awards": [
         "End of your turn: 2 VP",
         "End of the opponent's turn: 5 VP"
-      ]
-    }
-  },
-  {
-    "cardId": "eliminate-and-secure",
-    "expected": {
-      "awards": [
-        "End of your turn: 3 VP when 1+ enemy units destroyed by a unit on an objective [highest tier]",
-        "End of your turn: 3 VP when 1+ enemy units destroyed while on an objective [highest tier]",
-        "End of your Command phase (round 2+): 4 VP per controlled non home objective at end of command phase",
-        "End of your turn (round 2+): 3 VP when you newly control 1+ objectives this turn"
       ]
     }
   },
@@ -164,24 +163,14 @@
     }
   },
   {
-    "cardId": "find-and-deny",
+    "cardId": "extract-relic",
     "expected": {
       "awards": [
-        "End of your turn: 3 VP when terrain tagged marked and 1+ enemy units destroyed this turn",
-        "End of your turn: 2 VP when terrain tagged marked with 1+ friendly units and at most 0 enemy units (most recently marked)",
+        "End of your turn: 4 VP when 1+ actions completed (sensor sweep) this turn",
+        "End of your turn: 3 VP when 1+ enemy units destroyed that started the turn on an objective",
+        "End of your turn: 4 VP when exactly 1 opponent operation marker on the battlefield with a friendly unit in the same terrain area and no enemy units in that terrain area",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
-        "End of the battle: 5 VP when terrain tagged marked with 1+ friendly units and at most 0 enemy units (most recently marked)"
-      ]
-    }
-  },
-  {
-    "cardId": "find-and-eliminate",
-    "expected": {
-      "awards": [
-        "End of your turn: 3 VP when you control 1+ central objectives",
-        "End of your turn: 2 VP when 1+ enemy units destroyed this turn and you control a terrain area with 1+ models",
-        "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
-        "End of the battle: 5 VP when you control your territory with at most 0 enemy units"
+        "End of the battle: 5 VP when exactly 1 opponent operation marker on the battlefield with a friendly unit in the same terrain area and no enemy units in that terrain area"
       ]
     }
   },
@@ -189,17 +178,19 @@
     "cardId": "forward-position",
     "expected": {
       "awards": [
-        "End of your turn: 5 VP"
+        "End of your turn: 5 VP when you control 1+ objectives (opponent home) or you control 1+ expansion objectives"
       ]
     }
   },
   {
-    "cardId": "ground-control",
+    "cardId": "gather-intel",
     "expected": {
       "awards": [
-        "End of your turn (rounds 1-2): 2 VP when you hold more objectives than the opponent",
-        "End of your Command phase (round 2+): 3 VP per controlled objective at end of command phase",
-        "+ End of your Command phase (round 2+): 2 VP per controlled central objective at end of command phase when you control 1+ central objectives"
+        "End of your turn (round 1): 6 VP when you control 1+ central objectives",
+        "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
+        "End of your turn (round 2+): 7 VP per extract intelligence action completed this turn",
+        "End of the battle: 5 VP when 3+ friendly operation markers on the battlefield",
+        "End of the battle: 5 VP when 1+ friendly operation markers on the battlefield within range of opponent home objective"
       ]
     }
   },
@@ -208,37 +199,35 @@
     "expected": {
       "awards": [
         "End of your turn: 3 VP when you control 1+ central objectives",
-        "End of your Command phase (rounds 2-4): 5 VP per controlled non home objective at end of command phase",
-        "End of your turn (round 5+): 5 VP per controlled non home objective at end of turn"
+        "End of your Command phase (rounds 2-4): 5 VP per controlled non home objective",
+        "End of your turn (round 5): 5 VP per controlled non home objective"
       ]
     }
   },
   {
-    "cardId": "important-connection",
+    "cardId": "inescapable-dominion",
     "expected": {
       "awards": [
-        "End of your turn: 2 VP when you control 1+ central objectives",
-        "+ End of your turn: 1 VP per controlled central objective with action completed when you control 1+ central objectives and 1+ actions completed on objective (central) cumulative",
-        "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
-        "+ End of your Command phase (round 2+): 4 VP when you control 1+ central objectives",
-        "End of the battle: 10 VP when you control 1+ objectives (opponent home)"
+        "End of your turn: 4 VP when you control 3+ objectives",
+        "End of your Command phase (round 2+): 5 VP when you control 2+ objectives",
+        "End of your Command phase (round 2+): 4 VP when you hold more objectives than the opponent",
+        "End of the battle: 5 VP when you control 1+ objectives (opponent home)"
       ]
     }
   },
   {
-    "cardId": "information-gathering",
+    "cardId": "locate-and-deny",
     "expected": {
       "awards": [
-        "End of your turn (round 1): 6 VP when you control 1+ central objectives",
+        "End of your turn: 4 VP when 1+ enemy units destroyed that started the turn on an objective",
+        "End of your turn: 4 VP when exactly 1 friendly operation marker on the battlefield with a friendly unit in the same terrain area and no enemy units in that terrain area",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
-        "End of your turn (round 2+): 7 VP per primary action completed this turn",
-        "End of the battle: 5 VP when 3+ objectives tagged marked",
-        "End of the battle: 5 VP when 1+ objectives tagged marked (opponent home)"
+        "End of the battle: 5 VP when exactly 1 friendly operation marker on the battlefield with a friendly unit in the same terrain area and no enemy units in that terrain area"
       ]
     }
   },
   {
-    "cardId": "meat-grinder",
+    "cardId": "meatgrinder",
     "expected": {
       "awards": [
         "End of your turn: 3 VP when 1+ enemy units destroyed this turn",
@@ -257,17 +246,6 @@
     }
   },
   {
-    "cardId": "observe-enemy",
-    "expected": {
-      "awards": [
-        "End of your turn: 4 VP when 1+ enemy units tagged spotted",
-        "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
-        "+ End of your Command phase (round 2+): 4 VP when you hold more objectives than the opponent",
-        "End of the battle: 5 VP when 0+ objectives tagged baited (at most 0)"
-      ]
-    }
-  },
-  {
     "cardId": "outflank",
     "expected": {
       "awards": [
@@ -277,13 +255,13 @@
     }
   },
   {
-    "cardId": "outmaneuver",
+    "cardId": "outmanoeuvre",
     "expected": {
       "awards": [
         "End of your turn: 10 VP when you control 1+ objectives (opponent home)",
-        "End of your turn (round 1): 4 VP per controlled non home objective at end of turn",
-        "End of your Command phase (rounds 2-3): 5 VP per controlled non home objective at end of command phase",
-        "End of your turn (rounds 4-5): 6 VP per controlled non home objective at end of turn"
+        "End of your turn (round 1): 4 VP per controlled non home objective",
+        "End of your Command phase (rounds 2-3): 5 VP per controlled non home objective",
+        "End of your turn (round 4+): 6 VP per controlled non home objective"
       ]
     }
   },
@@ -291,7 +269,7 @@
     "cardId": "overwhelming-force",
     "expected": {
       "awards": [
-        "End of your turn: 3 VP per enemy unit destroyed while within range of an objective this turn"
+        "End of any turn: 3 VP per enemy unit destroyed that started the turn within range of an objective"
       ]
     }
   },
@@ -299,7 +277,7 @@
     "cardId": "plunder",
     "expected": {
       "awards": [
-        "End of your turn: 5 VP when terrain tagged plundered"
+        "End of your turn: 5 VP when 1+ actions completed (plunder) this turn"
       ]
     }
   },
@@ -307,33 +285,32 @@
     "cardId": "punishment",
     "expected": {
       "awards": [
-        "End of your turn: 5 VP when 1+ enemy units tagged doomed (destroyed this turn)",
+        "End of any turn: 5 VP when 1+ enemy units tagged condemned (left battlefield this turn)",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
-        "+ End of your Command phase (round 2+): 5 VP when you hold more objectives than the opponent",
+        "End of your Command phase (round 2+): 5 VP when you hold more objectives than the opponent",
         "End of the battle: 8 VP when you control 1+ objectives (opponent home)"
       ]
     }
   },
   {
-    "cardId": "record-breaking-mission",
+    "cardId": "purge-and-secure",
+    "expected": {
+      "awards": [
+        "End of your turn: 3 VP when 1+ enemy units destroyed by a unit on an objective [highest tier]",
+        "End of your turn: 3 VP when 1+ enemy units destroyed that started the turn on an objective [highest tier]",
+        "End of your Command phase (round 2+): 4 VP per controlled non home objective",
+        "End of your turn (round 2+): 3 VP when you newly control 1+ objectives this turn"
+      ]
+    }
+  },
+  {
+    "cardId": "reconnaissance-sweep",
     "expected": {
       "awards": [
         "End of your turn: 3 VP when you are engaged on 3+ fronts [highest tier]",
         "End of your turn: 6 VP when you are engaged on 4+ fronts [highest tier]",
         "End of your turn: 1 VP per enemy unit destroyed this turn",
-        "End of your Command phase (round 2+): 3 VP per controlled non home objective at end of command phase"
-      ]
-    }
-  },
-  {
-    "cardId": "recover-the-relics",
-    "expected": {
-      "awards": [
-        "End of your turn: 4 VP when 1+ actions completed (unmark central objective) this turn",
-        "End of your turn: 3 VP when 1+ actions completed (overwhelming force) cumulative",
-        "End of your turn: 4 VP when 1+ objectives tagged marked (most recently marked)",
-        "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
-        "End of the battle: 5 VP when 1+ objectives tagged marked (most recently marked)"
+        "End of your Command phase (round 2+): 3 VP when you control 1+ objectives (excluding home)"
       ]
     }
   },
@@ -341,9 +318,20 @@
     "cardId": "sabotage",
     "expected": {
       "awards": [
-        "End of your turn: 3 VP per sabotage completed this turn",
-        "+ End of your turn: 2 VP per sabotage completed this turn in enemy territory",
+        "End of your turn: 3 VP per friendly unit that committed sabotage this turn",
+        "+ End of your turn: 2 VP per sabotaging unit within range of an objective in enemy territory",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)"
+      ]
+    }
+  },
+  {
+    "cardId": "search-and-scour",
+    "expected": {
+      "awards": [
+        "End of your turn: 3 VP when you control 1+ central objectives",
+        "End of your turn: 2 VP when 1+ enemy units destroyed that started the turn in a terrain area",
+        "End of your Command phase (round 2+): 4 VP per controlled non home objective",
+        "End of the battle: 5 VP when you control your territory with at most 0 enemy units"
       ]
     }
   },
@@ -351,10 +339,10 @@
     "cardId": "secure-asset",
     "expected": {
       "awards": [
-        "End of your turn: 4 VP when 1+ actions completed on objective (excluding home) this turn",
-        "End of your turn: 2 VP when 1+ enemy units destroyed while on an objective",
+        "End of your turn: 4 VP when 1+ actions completed (secure asset) this turn",
+        "End of your turn: 2 VP when 1+ enemy units destroyed that started the turn on a central objective",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
-        "+ End of your Command phase (round 2+): 4 VP when you control 3+ objectives"
+        "End of your Command phase (round 2+): 4 VP when you control 3+ objectives"
       ]
     }
   },
@@ -362,7 +350,7 @@
     "cardId": "secure-no-mans-land",
     "expected": {
       "awards": [
-        "End of your turn: 5 VP"
+        "End of your turn: 5 VP when you control 2+ objectives in no mans land (excluding home)"
       ]
     }
   },
@@ -370,19 +358,21 @@
     "cardId": "smoke-and-mirrors",
     "expected": {
       "awards": [
-        "End of your turn: 2 VP per baited objective",
-        "+ End of your turn: 2 VP per baited objective in enemy territory",
+        "End of your turn: 2 VP per decoyed objective",
+        "+ End of your turn: 2 VP per decoyed objective in enemy territory",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
-        "End of the battle: 10 VP when 4+ objectives tagged baited"
+        "End of the battle: 10 VP when 4+ objectives tagged decoyed"
       ]
     }
   },
   {
-    "cardId": "tempting-target",
+    "cardId": "surveil-the-foe",
     "expected": {
       "awards": [
-        "End of your turn: 4 VP",
-        "End of your turn: 5 VP"
+        "End of your turn: 4 VP when 1+ enemy units tagged surveilled (this turn)",
+        "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
+        "End of your Command phase (round 2+): 4 VP when you hold more objectives than the opponent",
+        "End of your turn (round 2+): 5 VP when no opponent operation markers on the battlefield"
       ]
     }
   },
@@ -403,20 +393,9 @@
     "expected": {
       "awards": [
         "End of your turn: 3 VP when 1+ enemy units destroyed this turn",
-        "End of your Command phase (round 2+): 4 VP per controlled non home objective at end of command phase",
+        "End of your Command phase (round 2+): 4 VP per controlled non home objective",
         "End of your turn (round 2+): 3 VP when you newly control 1+ objectives this turn",
         "End of the battle: 5 VP when you control 1+ central objectives"
-      ]
-    }
-  },
-  {
-    "cardId": "unyielding-domination",
-    "expected": {
-      "awards": [
-        "End of your turn: 4 VP when you control 3+ objectives",
-        "End of your Command phase (round 2+): 5 VP when you control 2+ objectives",
-        "+ End of your Command phase (round 2+): 4 VP when you hold more objectives than the opponent",
-        "End of the battle: 5 VP when you control 1+ objectives (opponent home)"
       ]
     }
   },
@@ -424,9 +403,21 @@
     "cardId": "vanguard-operation",
     "expected": {
       "awards": [
-        "End of your turn: 4 VP when 1+ actions completed (vanguard action) this turn",
+        "End of your turn: 4 VP when 1+ actions completed (vanguard operation) this turn",
         "End of your turn: 2 VP when 1+ enemy units destroyed this turn",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
+        "End of the battle: 10 VP when you control 1+ objectives (opponent home)"
+      ]
+    }
+  },
+  {
+    "cardId": "vital-link",
+    "expected": {
+      "awards": [
+        "End of your turn: 2 VP when you control 1+ central objectives",
+        "+ End of your turn: 1 VP per operation marker within range of a controlled central objective when you control 1+ central objectives",
+        "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
+        "+ End of your Command phase (round 2+): 4 VP when you control 1+ central objectives",
         "End of the battle: 10 VP when you control 1+ objectives (opponent home)"
       ]
     }

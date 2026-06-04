@@ -6745,6 +6745,24 @@ impl ::std::convert::TryFrom<::std::string::String> for ScoringTriggerTiming {
 ///            "maxLength": 64,
 ///            "minLength": 1
 ///          },
+///          "battle_round": {
+///            "description": "Battle-round window in which the action can be started. Absent means any battle round. 'From the second battle round onwards' (Triangulate, Extract Intelligence) is { min: 2 }.",
+///            "type": "object",
+///            "minProperties": 1,
+///            "properties": {
+///              "max": {
+///                "type": "integer",
+///                "maximum": 5.0,
+///                "minimum": 1.0
+///              },
+///              "min": {
+///                "type": "integer",
+///                "maximum": 5.0,
+///                "minimum": 1.0
+///              }
+///            },
+///            "additionalProperties": false
+///          },
 ///          "completes": {
 ///            "description": "Predicate for when the action is considered complete.",
 ///            "$ref": "#/$defs/condition"
@@ -6756,9 +6774,22 @@ impl ::std::convert::TryFrom<::std::string::String> for ScoringTriggerTiming {
 ///          "player_turn": {
 ///            "$ref": "#/$defs/player-turn"
 ///          },
+///          "restrictions": {
+///            "description": "Predicate that BLOCKS starting the action while it holds (Sensor Sweep: a unit cannot start this action if there is only one operation marker on the battlefield).",
+///            "$ref": "#/$defs/condition"
+///          },
 ///          "starts": {
 ///            "description": "Phase in which the action can be started.",
 ///            "$ref": "#/$defs/phase"
+///          },
+///          "timing": {
+///            "description": "Non-phase moment the action happens, for card rules that are not started in a phase (Locate and Deny's start-of-battle marker placement, Punishment's start-of-turn condemnation, Consecrate's end-of-turn objective selection). Mutually informative with `starts` — a card action uses one or the other.",
+///            "type": "string",
+///            "enum": [
+///              "start-of-battle",
+///              "start-of-turn",
+///              "end-of-turn"
+///            ]
 ///          },
 ///          "units": {
 ///            "description": "Eligibility predicate for which units may perform the action.",
@@ -6985,6 +7016,24 @@ pub struct SecondaryCard {
 ///      "maxLength": 64,
 ///      "minLength": 1
 ///    },
+///    "battle_round": {
+///      "description": "Battle-round window in which the action can be started. Absent means any battle round. 'From the second battle round onwards' (Triangulate, Extract Intelligence) is { min: 2 }.",
+///      "type": "object",
+///      "minProperties": 1,
+///      "properties": {
+///        "max": {
+///          "type": "integer",
+///          "maximum": 5.0,
+///          "minimum": 1.0
+///        },
+///        "min": {
+///          "type": "integer",
+///          "maximum": 5.0,
+///          "minimum": 1.0
+///        }
+///      },
+///      "additionalProperties": false
+///    },
 ///    "completes": {
 ///      "description": "Predicate for when the action is considered complete.",
 ///      "$ref": "#/$defs/condition"
@@ -6996,9 +7045,22 @@ pub struct SecondaryCard {
 ///    "player_turn": {
 ///      "$ref": "#/$defs/player-turn"
 ///    },
+///    "restrictions": {
+///      "description": "Predicate that BLOCKS starting the action while it holds (Sensor Sweep: a unit cannot start this action if there is only one operation marker on the battlefield).",
+///      "$ref": "#/$defs/condition"
+///    },
 ///    "starts": {
 ///      "description": "Phase in which the action can be started.",
 ///      "$ref": "#/$defs/phase"
+///    },
+///    "timing": {
+///      "description": "Non-phase moment the action happens, for card rules that are not started in a phase (Locate and Deny's start-of-battle marker placement, Punishment's start-of-turn condemnation, Consecrate's end-of-turn objective selection). Mutually informative with `starts` — a card action uses one or the other.",
+///      "type": "string",
+///      "enum": [
+///        "start-of-battle",
+///        "start-of-turn",
+///        "end-of-turn"
+///      ]
 ///    },
 ///    "units": {
 ///      "description": "Eligibility predicate for which units may perform the action.",
@@ -7029,6 +7091,8 @@ pub struct SecondaryCardActionsItem {
     ///Optional kebab-case identifier used to reference this action from `action-completed` conditions in `awards[].when`.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub action_id: ::std::option::Option<SecondaryCardActionsItemActionId>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub battle_round: ::std::option::Option<SecondaryCardActionsItemBattleRound>,
     ///Predicate for when the action is considered complete.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub completes: ::std::option::Option<Condition>,
@@ -7037,9 +7101,15 @@ pub struct SecondaryCardActionsItem {
     pub effect: ::std::option::Option<Effect>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub player_turn: ::std::option::Option<PlayerTurn>,
+    ///Predicate that BLOCKS starting the action while it holds (Sensor Sweep: a unit cannot start this action if there is only one operation marker on the battlefield).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub restrictions: ::std::option::Option<Condition>,
     ///Phase in which the action can be started.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub starts: ::std::option::Option<Phase>,
+    ///Non-phase moment the action happens, for card rules that are not started in a phase (Locate and Deny's start-of-battle marker placement, Punishment's start-of-turn condemnation, Consecrate's end-of-turn objective selection). Mutually informative with `starts` — a card action uses one or the other.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub timing: ::std::option::Option<SecondaryCardActionsItemTiming>,
     ///Eligibility predicate for which units may perform the action.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub units: ::std::option::Option<Condition>,
@@ -7054,10 +7124,13 @@ impl ::std::default::Default for SecondaryCardActionsItem {
     fn default() -> Self {
         Self {
             action_id: Default::default(),
+            battle_round: Default::default(),
             completes: Default::default(),
             effect: Default::default(),
             player_turn: Default::default(),
+            restrictions: Default::default(),
             starts: Default::default(),
+            timing: Default::default(),
             units: Default::default(),
             use_limit: Default::default(),
             use_limit_scope: defaults::secondary_card_actions_item_use_limit_scope(),
@@ -7141,6 +7214,129 @@ impl<'de> ::serde::Deserialize<'de> for SecondaryCardActionsItemActionId {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///Battle-round window in which the action can be started. Absent means any battle round. 'From the second battle round onwards' (Triangulate, Extract Intelligence) is { min: 2 }.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Battle-round window in which the action can be started. Absent means any battle round. 'From the second battle round onwards' (Triangulate, Extract Intelligence) is { min: 2 }.",
+///  "type": "object",
+///  "minProperties": 1,
+///  "properties": {
+///    "max": {
+///      "type": "integer",
+///      "maximum": 5.0,
+///      "minimum": 1.0
+///    },
+///    "min": {
+///      "type": "integer",
+///      "maximum": 5.0,
+///      "minimum": 1.0
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct SecondaryCardActionsItemBattleRound {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub max: ::std::option::Option<::std::num::NonZeroU64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub min: ::std::option::Option<::std::num::NonZeroU64>,
+}
+impl ::std::default::Default for SecondaryCardActionsItemBattleRound {
+    fn default() -> Self {
+        Self {
+            max: Default::default(),
+            min: Default::default(),
+        }
+    }
+}
+///Non-phase moment the action happens, for card rules that are not started in a phase (Locate and Deny's start-of-battle marker placement, Punishment's start-of-turn condemnation, Consecrate's end-of-turn objective selection). Mutually informative with `starts` — a card action uses one or the other.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Non-phase moment the action happens, for card rules that are not started in a phase (Locate and Deny's start-of-battle marker placement, Punishment's start-of-turn condemnation, Consecrate's end-of-turn objective selection). Mutually informative with `starts` — a card action uses one or the other.",
+///  "type": "string",
+///  "enum": [
+///    "start-of-battle",
+///    "start-of-turn",
+///    "end-of-turn"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum SecondaryCardActionsItemTiming {
+    #[serde(rename = "start-of-battle")]
+    StartOfBattle,
+    #[serde(rename = "start-of-turn")]
+    StartOfTurn,
+    #[serde(rename = "end-of-turn")]
+    EndOfTurn,
+}
+impl ::std::fmt::Display for SecondaryCardActionsItemTiming {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::StartOfBattle => f.write_str("start-of-battle"),
+            Self::StartOfTurn => f.write_str("start-of-turn"),
+            Self::EndOfTurn => f.write_str("end-of-turn"),
+        }
+    }
+}
+impl ::std::str::FromStr for SecondaryCardActionsItemTiming {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "start-of-battle" => Ok(Self::StartOfBattle),
+            "start-of-turn" => Ok(Self::StartOfTurn),
+            "end-of-turn" => Ok(Self::EndOfTurn),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for SecondaryCardActionsItemTiming {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for SecondaryCardActionsItemTiming {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for SecondaryCardActionsItemTiming {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///Whether `use_limit` is enforced per turn or once per game (e.g. Recover the Relics / Find and Deny 'Overwhelming Force' is once per game).
@@ -8368,11 +8564,12 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///        "new-objective-controlled",
 ///        "engagement-fronts",
 ///        "destroyed-while-on-objective",
-///        "destroyed-in-tagged-terrain"
+///        "destroyed-in-tagged-terrain",
+///        "operation-markers"
 ///      ]
 ///    }
 ///  },
-///  "$comment": "Board/meta-state and scoring predicates. `parameters` is intentionally open (additionalProperties: true); each type documents its own param convention. Scoring predicates added for mission cards: `units-destroyed` { side: 'enemy'|'friendly', window: 'this-turn'|'previous-turn', count_min: int } — at least count_min units of `side` were destroyed in `window`. `units-destroyed-comparison` { subject: {side, window}, comparator: 'greater-than'|'greater-or-equal', reference: {side, window} } — compares two destruction tallies (e.g. more enemy units destroyed this turn than friendly last turn). `objective-majority` { relative_to: 'opponent' } — you control more objectives than the named party. `controls-objective` params: { count_min: int, objective_role?: 'central'|'expansion'|'non-home'|'home', exclude?: 'home', objective?: 'opponent-home'|'your-home', scope?: 'enemy-territory'|'your-territory' }. Mission-card extensions (11e primary deck): `action-completed` { action_id?: string, target_kind?: 'objective'|'terrain'|'enemy-unit'|'self', target_filter?: { in_enemy_territory?: bool, objective_role?: 'central'|'non-home', exclude?: 'home' }, count_min: int, window?: 'this-turn'|'previous-turn'|'cumulative' } — at least count_min instances of a named action were completed in the window. `objective-has-tag` { tag: 'baited'|'cleansed'|'triangulated'|'consecrated'|'sabotaged'|'marked'|'vanguard'|'spotted', count_min: int, count_max?: int, objective?: 'opponent-home'|'your-home', scope?: 'enemy-territory'|'your-territory' } — at least count_min objectives carry the named transient tag. `unit-has-tag` { tag: 'doomed'|'spotted', side: 'enemy'|'friendly', count_min: int, window?: 'destroyed-this-turn'|'still-on-board' } — at least count_min units of `side` carry the tag (optionally with a destruction filter — Punishment scores when a Doomed unit was destroyed or left the battlefield). `terrain-has-tag` { tag: 'mined'|'marked'|'vanguard'|'plundered', friendly_units_min?: int, enemy_units_max?: int, last_marked?: bool, in_enemy_dz?: bool } — terrain piece state predicate; `last_marked` selects the most-recently-marked piece (Find and Deny / Recover the Relics' Overwhelming Force trigger). `new-objective-controlled` { count_min: int } — at least count_min objectives are controlled this turn that were not controlled in the previous command phase. `engagement-fronts` { count_min: int } — friendly units engage enemies in at least count_min distinct fronts; a 'front' is one of the four table quarters (board quadrants about the board's centre — each of the four areas formed by dividing the table along both centre lines). `destroyed-while-on-objective` { destroyer_on_objective?: bool, victim_on_objective?: bool, count_min: int } — count_min enemy units were destroyed this turn under the named spatial condition (the destroying friendly unit, the destroyed enemy unit, or both were standing on an objective at the moment of the kill). `destroyed-in-tagged-terrain` { tag: 'mined'|'marked'|'vanguard'|'plundered', at_start_of_turn?: bool, count_min: int } — count_min enemy units were destroyed this turn while in terrain carrying the named tag; with `at_start_of_turn` the victim must have been in that terrain at the start of the turn (Death Trap's Disruption kill bonus), otherwise the spatial test is at the moment of the kill (parallels `destroyed-while-on-objective`)."
+///  "$comment": "Board/meta-state and scoring predicates. `parameters` is intentionally open (additionalProperties: true); each type documents its own param convention. Scoring predicates added for mission cards: `units-destroyed` { side: 'enemy'|'friendly', window: 'this-turn'|'previous-turn', count_min: int } — at least count_min units of `side` were destroyed in `window`. `units-destroyed-comparison` { subject: {side, window}, comparator: 'greater-than'|'greater-or-equal', reference: {side, window} } — compares two destruction tallies (e.g. more enemy units destroyed this turn than friendly last turn). `objective-majority` { relative_to: 'opponent' } — you control more objectives than the named party. `controls-objective` params: { count_min: int, objective_role?: 'central'|'expansion'|'non-home'|'home', exclude?: 'home', objective?: 'opponent-home'|'your-home', scope?: 'enemy-territory'|'your-territory' }. Mission-card extensions (11e primary deck): `action-completed` { action_id?: string, target_kind?: 'objective'|'terrain'|'enemy-unit'|'self', target_filter?: { in_enemy_territory?: bool, objective_role?: 'central'|'non-home', exclude?: 'home' }, count_min: int, window?: 'this-turn'|'previous-turn'|'cumulative' } — at least count_min instances of a named action were completed in the window. `objective-has-tag` { tag: 'baited'|'decoyed'|'cleansed'|'triangulated'|'consecrated'|'sabotaged'|'marked'|'vanguard'|'spotted', count_min: int, count_max?: int, objective?: 'opponent-home'|'your-home', scope?: 'enemy-territory'|'your-territory' } — at least count_min objectives carry the named transient tag. `unit-has-tag` { tag: 'doomed'|'condemned'|'spotted'|'surveilled', side: 'enemy'|'friendly', count_min: int, window?: 'destroyed-this-turn'|'left-battlefield-this-turn'|'this-turn'|'still-on-board' } — at least count_min units of `side` carry the tag (optionally with an event window — Punishment scores when a condemned unit was destroyed or left the battlefield this turn; Surveil the Foe scores on units tagged this turn). `terrain-has-tag` { tag: 'mined'|'trapped'|'marked'|'vanguard'|'plundered', friendly_units_min?: int, enemy_units_max?: int, last_marked?: bool, in_enemy_dz?: bool } — terrain piece state predicate; `last_marked` selects the most-recently-marked piece (Find and Deny / Recover the Relics' Overwhelming Force trigger). `new-objective-controlled` { count_min: int } — at least count_min objectives are controlled this turn that were not controlled in the previous command phase. `engagement-fronts` { count_min: int } — friendly units engage enemies in at least count_min distinct fronts; a 'front' is one of the four table quarters (board quadrants about the board's centre — each of the four areas formed by dividing the table along both centre lines). `destroyed-while-on-objective` { destroyer_on_objective?: bool, victim_on_objective?: bool, victim_started_turn_on_objective?: bool, objective_role?: 'central', count_min: int } — count_min enemy units were destroyed this turn under the named spatial condition (the destroying friendly unit, the destroyed enemy unit, or both were within range of an objective at the moment of the kill; `victim_started_turn_on_objective` instead tests the victim's position at the start of the turn, and `objective_role` narrows which objectives count — Secure Asset's central-objective kill row). `destroyed-in-tagged-terrain` { tag?: 'mined'|'trapped'|'marked'|'vanguard'|'plundered', at_start_of_turn?: bool, count_min: int } — count_min enemy units were destroyed this turn while in terrain carrying the named tag; with `at_start_of_turn` the victim must have been in that terrain at the start of the turn (Death Trap's kill bonus), otherwise the spatial test is at the moment of the kill (parallels `destroyed-while-on-objective`). With `tag` omitted, any terrain area qualifies (Search and Scour). `operation-markers` { side?: 'friendly'|'opponent', count_min?: int, count_max?: int, within_range_of?: 'opponent-home-objective', friendly_unit_in_same_terrain_area?: bool, no_enemy_in_terrain_area?: bool } — counts operation markers on the battlefield (side omitted counts both sides' markers); count_max: 0 is 'none remain', count_min == count_max == 1 is 'exactly one'; the terrain-area flags add the co-location proviso used by Locate and Deny / Extract Relic ('one of your units is within the same terrain area as that marker, and no enemy units are within it')."
 ///}
 /// ```
 /// </details>
@@ -8429,7 +8626,8 @@ pub struct SimpleCondition {
 ///    "new-objective-controlled",
 ///    "engagement-fronts",
 ///    "destroyed-while-on-objective",
-///    "destroyed-in-tagged-terrain"
+///    "destroyed-in-tagged-terrain",
+///    "operation-markers"
 ///  ]
 ///}
 /// ```
@@ -8521,6 +8719,8 @@ pub enum SimpleConditionType {
     DestroyedWhileOnObjective,
     #[serde(rename = "destroyed-in-tagged-terrain")]
     DestroyedInTaggedTerrain,
+    #[serde(rename = "operation-markers")]
+    OperationMarkers,
 }
 impl ::std::fmt::Display for SimpleConditionType {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -8566,6 +8766,7 @@ impl ::std::fmt::Display for SimpleConditionType {
                 f.write_str("destroyed-while-on-objective")
             }
             Self::DestroyedInTaggedTerrain => f.write_str("destroyed-in-tagged-terrain"),
+            Self::OperationMarkers => f.write_str("operation-markers"),
         }
     }
 }
@@ -8612,6 +8813,7 @@ impl ::std::str::FromStr for SimpleConditionType {
             "engagement-fronts" => Ok(Self::EngagementFronts),
             "destroyed-while-on-objective" => Ok(Self::DestroyedWhileOnObjective),
             "destroyed-in-tagged-terrain" => Ok(Self::DestroyedInTaggedTerrain),
+            "operation-markers" => Ok(Self::OperationMarkers),
             _ => Err("invalid value".into()),
         }
     }

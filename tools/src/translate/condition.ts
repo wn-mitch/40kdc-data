@@ -118,14 +118,34 @@ export function describeCondition(c: Condition): string {
     case "new-objective-controlled":
       return `${negate}you newly control ${count(p.count_min ?? 1, "objective")} this turn`;
     case "destroyed-while-on-objective": {
+      const obj = p.objective_role ? `a ${dekebab(str(p.objective_role))} objective` : "an objective";
       let s = `${negate}${count(p.count_min ?? 1, "enemy unit")} destroyed`;
-      if (p.destroyer_on_objective) s += " by a unit on an objective";
-      if (p.victim_on_objective) s += " while on an objective";
+      if (p.destroyer_on_objective) s += ` by a unit on ${obj}`;
+      if (p.victim_on_objective) s += ` while on ${obj}`;
+      if (p.victim_started_turn_on_objective) s += ` that started the turn on ${obj}`;
       return s;
     }
     case "destroyed-in-tagged-terrain": {
       const where = p.at_start_of_turn ? "that started the turn in" : "while in";
-      return `${negate}${count(p.count_min ?? 1, "enemy unit")} destroyed ${where} ${dekebab(str(p.tag))} terrain`;
+      const terrain = p.tag != null ? `${dekebab(str(p.tag))} terrain` : "a terrain area";
+      return `${negate}${count(p.count_min ?? 1, "enemy unit")} destroyed ${where} ${terrain}`;
+    }
+    case "operation-markers": {
+      const side = p.side != null ? `${str(p.side)} ` : "";
+      const min = typeof p.count_min === "number" ? p.count_min : undefined;
+      const max = typeof p.count_max === "number" ? p.count_max : undefined;
+      let s: string;
+      if (max === 0) {
+        s = `no ${side}operation markers on the battlefield`;
+      } else if (min != null && max != null && min === max) {
+        s = `exactly ${min} ${side}operation marker${min === 1 ? "" : "s"} on the battlefield`;
+      } else {
+        s = `${str(min ?? 1)}+ ${side}operation markers on the battlefield`;
+      }
+      if (p.within_range_of != null) s += ` within range of ${dekebab(str(p.within_range_of))}`;
+      if (p.friendly_unit_in_same_terrain_area) s += " with a friendly unit in the same terrain area";
+      if (p.no_enemy_in_terrain_area) s += " and no enemy units in that terrain area";
+      return `${negate}${s}`;
     }
     case "action-completed": {
       let s = `${negate}${count(p.count_min ?? 1, "action")} completed`;

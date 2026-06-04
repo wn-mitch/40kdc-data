@@ -184,6 +184,10 @@ export type EffectNode =
   | ConditionalEffect
   | DicePoolAllocationEffect;
 export type AbilityCondition2 = SimpleCondition | CompoundCondition;
+/**
+ * Predicate that BLOCKS starting the action while it holds (Sensor Sweep: a unit cannot start this action if there is only one operation marker on the battlefield).
+ */
+export type AbilityCondition3 = SimpleCondition | CompoundCondition;
 export type AbilityEffect1 =
   | SingleEffect
   | ChoiceEffect
@@ -195,7 +199,7 @@ export type AbilityEffect1 =
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "condition".
  */
-export type AbilityCondition3 = SimpleCondition | CompoundCondition;
+export type AbilityCondition4 = SimpleCondition | CompoundCondition;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "effect".
@@ -585,6 +589,17 @@ export interface SecondaryCard {
        * The five official game phases. Unchanged between 10th and 11th edition — 11e reorders Pile In timing within the Fight phase but adds no top-level phase.
        */
       starts?: "command" | "movement" | "shooting" | "charge" | "fight";
+      /**
+       * Non-phase moment the action happens, for card rules that are not started in a phase (Locate and Deny's start-of-battle marker placement, Punishment's start-of-turn condemnation, Consecrate's end-of-turn objective selection). Mutually informative with `starts` — a card action uses one or the other.
+       */
+      timing?: "start-of-battle" | "start-of-turn" | "end-of-turn";
+      /**
+       * Battle-round window in which the action can be started. Absent means any battle round. 'From the second battle round onwards' (Triangulate, Extract Intelligence) is { min: 2 }.
+       */
+      battle_round?: {
+        min?: number;
+        max?: number;
+      };
       player_turn?: PlayerTurn;
       units?: AbilityCondition;
       /**
@@ -597,6 +612,7 @@ export interface SecondaryCard {
       use_limit_scope?: "per-turn" | "per-game";
       completes?: AbilityCondition1;
       effect?: AbilityEffect;
+      restrictions?: AbilityCondition3;
     },
     ...{
       /**
@@ -607,6 +623,17 @@ export interface SecondaryCard {
        * The five official game phases. Unchanged between 10th and 11th edition — 11e reorders Pile In timing within the Fight phase but adds no top-level phase.
        */
       starts?: "command" | "movement" | "shooting" | "charge" | "fight";
+      /**
+       * Non-phase moment the action happens, for card rules that are not started in a phase (Locate and Deny's start-of-battle marker placement, Punishment's start-of-turn condemnation, Consecrate's end-of-turn objective selection). Mutually informative with `starts` — a card action uses one or the other.
+       */
+      timing?: "start-of-battle" | "start-of-turn" | "end-of-turn";
+      /**
+       * Battle-round window in which the action can be started. Absent means any battle round. 'From the second battle round onwards' (Triangulate, Extract Intelligence) is { min: 2 }.
+       */
+      battle_round?: {
+        min?: number;
+        max?: number;
+      };
       player_turn?: PlayerTurn;
       units?: AbilityCondition;
       /**
@@ -619,6 +646,7 @@ export interface SecondaryCard {
       use_limit_scope?: "per-turn" | "per-game";
       completes?: AbilityCondition1;
       effect?: AbilityEffect;
+      restrictions?: AbilityCondition3;
     }[]
   ];
   /**
@@ -714,7 +742,8 @@ export interface SimpleCondition {
     | "new-objective-controlled"
     | "engagement-fronts"
     | "destroyed-while-on-objective"
-    | "destroyed-in-tagged-terrain";
+    | "destroyed-in-tagged-terrain"
+    | "operation-markers";
   parameters?: {
     [k: string]: unknown;
   };

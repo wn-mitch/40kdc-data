@@ -1,11 +1,11 @@
 [
   {
-    "id": "ground-control",
-    "name": "Ground Control",
+    "id": "battlefield-dominance",
+    "name": "Battlefield Dominance",
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "determined-acquisition",
@@ -13,7 +13,7 @@
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "immovable-object",
@@ -21,23 +21,23 @@
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "unyielding-domination",
-    "name": "Unyielding Domination",
+    "id": "inescapable-dominion",
+    "name": "Inescapable Dominion",
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "eliminate-and-secure",
-    "name": "Eliminate and Secure",
+    "id": "purge-and-secure",
+    "name": "Purge and Secure",
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "death-trap",
@@ -45,15 +45,15 @@
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "outmaneuver",
-    "name": "Outmaneuver",
+    "id": "outmanoeuvre",
+    "name": "Outmanoeuvre",
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "delaying-action",
@@ -61,15 +61,15 @@
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "find-and-deny",
-    "name": "Find and Deny",
+    "id": "locate-and-deny",
+    "name": "Locate and Deny",
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "smoke-and-mirrors",
@@ -77,7 +77,7 @@
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "unstoppable-force",
@@ -85,7 +85,7 @@
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "punishment",
@@ -93,55 +93,55 @@
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "meat-grinder",
-    "name": "Meat Grinder",
+    "id": "meatgrinder",
+    "name": "Meatgrinder",
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "destroyers-wrath",
-    "name": "Wrath of the Destroyer",
+    "name": "Destroyer's Wrath",
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "consecration",
-    "name": "Consecration",
+    "id": "consecrate",
+    "name": "Consecrate",
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "secure-asset",
-    "name": "Secure Object",
+    "name": "Secure Asset",
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "recover-the-relics",
-    "name": "Recover the Relics",
+    "id": "extract-relic",
+    "name": "Extract Relic",
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "important-connection",
-    "name": "Important Connection",
+    "id": "vital-link",
+    "name": "Vital Link",
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "sabotage",
@@ -149,7 +149,7 @@
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "vanguard-operation",
@@ -157,23 +157,23 @@
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "record-breaking-mission",
-    "name": "Record-Breaking Mission",
+    "id": "reconnaissance-sweep",
+    "name": "Reconnaissance Sweep",
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "observe-enemy",
-    "name": "Observe Enemy",
+    "id": "surveil-the-foe",
+    "name": "Surveil the Foe",
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
     "id": "triangulation",
@@ -181,22 +181,22 @@
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "find-and-eliminate",
-    "name": "Find and Eliminate",
+    "id": "search-and-scour",
+    "name": "Search and Scour",
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   },
   {
-    "id": "information-gathering",
-    "name": "Information Gathering",
+    "id": "gather-intel",
+    "name": "Gather Intel",
     "vp_per_game_cap": 45,
     "vp_per_round_cap": 15,
     "deployment_pattern_ids": [],
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "game_version": { "edition": "11th", "dataslate": "launch" }
   }
 ]

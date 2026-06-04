@@ -44,13 +44,13 @@ Each Force Disposition has community-authored description text (IP stance: origi
 
 - **VP caps**: 45 VP per game per Primary, 15 VP per battle round per Primary; same caps for Secondaries. *(Unconfirmed: stream commentary suggested a single 15/round cap combined across primary + secondary; schema keeps 45-game / 15-round defaults pending the printed pack.)* **Not in the core rules PDF** — §14 (Objectives) defines control of objectives but does not enumerate VP caps. VP caps are mission-card properties; the `mission.vp_per_game_cap` / `vp_per_round_cap` schema fields will be authored per-card when the mission pack lands.
 - **Asymmetric primaries**: when sides pick different dispositions, they get different primary objectives — each reads their own disposition card.
-- **Missions are per-cell, not five global primaries.** Each cell of the matrix names its own mission — **all 25 confirmed**, transcribed from the published mission text (see `_private/11th Edition Missions.xlsx`, gitignored). By disposition row, the missions are:
-  - **Take and Hold** row: `ground-control`, `determined-acquisition`, `immovable-object`, `unyielding-domination`, `eliminate-and-secure`.
-  - **Disruption** row: `death-trap`, `outmaneuver`, `delaying-action`, `find-and-deny`, `smoke-and-mirrors`.
-  - **Purge the Foe** row: `unstoppable-force`, `punishment`, `meat-grinder`, `destroyers-wrath`, `consecration`.
-  - **Priority Assets** row: `secure-asset`, `recover-the-relics`, `important-connection`, `sabotage`, `vanguard-operation`.
-  - **Reconnaissance** row: `record-breaking-mission`, `observe-enemy`, `triangulation`, `find-and-eliminate`, `information-gathering`.
-  - **Renames from the photo-derived first pass**: `vital-link → important-connection`, `extract-relic → recover-the-relics`, `reconnaissance-sweep → record-breaking-mission`, `surveil-the-foe → observe-enemy`, `search-and-scour → find-and-eliminate`, `gather-intel → information-gathering`. The published text supersedes the lower-fidelity photo transcriptions; no alias field — downstream consumers re-pin to the new slugs.
+- **Missions are per-cell, not five global primaries.** Each cell of the matrix names its own mission — **all 25 confirmed against the printed launch deck** (official English card photos, June 2026). By disposition row, the missions are:
+  - **Take and Hold** row: `battlefield-dominance`, `determined-acquisition`, `immovable-object`, `inescapable-dominion`, `purge-and-secure`.
+  - **Disruption** row: `death-trap`, `outmanoeuvre`, `delaying-action`, `locate-and-deny`, `smoke-and-mirrors`.
+  - **Purge the Foe** row: `unstoppable-force`, `punishment`, `meatgrinder`, `destroyers-wrath`, `consecrate`.
+  - **Priority Assets** row: `secure-asset`, `extract-relic`, `vital-link`, `sabotage`, `vanguard-operation`.
+  - **Reconnaissance** row: `reconnaissance-sweep`, `surveil-the-foe`, `triangulation`, `search-and-scour`, `gather-intel`.
+  - **Renames at launch (`dataslate: "launch"`)**: the printed cards superseded 13 provisional slugs — `ground-control → battlefield-dominance`, `unyielding-domination → inescapable-dominion`, `eliminate-and-secure → purge-and-secure`, `outmaneuver → outmanoeuvre`, `find-and-deny → locate-and-deny`, `meat-grinder → meatgrinder`, `consecration → consecrate`, `recover-the-relics → extract-relic`, `important-connection → vital-link`, `record-breaking-mission → reconnaissance-sweep`, `observe-enemy → surveil-the-foe`, `find-and-eliminate → search-and-scour`, `information-gathering → gather-intel`. No alias field — downstream consumers re-pin to the printed slugs.
 - **Encoding (landed).** Two normalized entities, linked by id (the cell→mission relationship is 1:1): `mission` (the objective — name, VP caps, deployment maps) and `mission-matchup` (one selector row — `disposition`, `opponent_disposition`, `mission_id`). The matchup is the thin lookup; mission-intrinsic detail lives once on the mission. **Scoring is not on the mission** — it lives on the matching `secondary-card` with `card_type: primary` (see Section 2), so the mission stays a pure objective record. All 25 cells are written to `data/core/mission-matchups.json`, all 25 missions to `data/core/missions.json`, and all 25 primary mission cards (full `awards`, mechanics-only, no GW prose) to `data/core/secondary-cards.json`.
 - **Launch deployment patterns**: Dawn of War, Hammer and Anvil, Tipping Point (the wider `deployment-pattern` reference set has 6). Stream framing implies ~3 maps per mission, tying deployment to the mission (carried via `mission.deployment_pattern_ids`).
 - Three recommended terrain layouts ship at launch.
@@ -59,13 +59,13 @@ Each Force Disposition has community-authored description text (IP stance: origi
 
 | Player ↓ \ Opponent → | take-and-hold | disruption | purge-the-foe | priority-assets | reconnaissance |
 |---|---|---|---|---|---|
-| **take-and-hold** | `ground-control` | `determined-acquisition` | `immovable-object` | `unyielding-domination` | `eliminate-and-secure` |
-| **disruption** | `death-trap` | `outmaneuver` | `delaying-action` | `find-and-deny` | `smoke-and-mirrors` |
-| **purge-the-foe** | `unstoppable-force` | `punishment` | `meat-grinder` | `destroyers-wrath` | `consecration` |
-| **priority-assets** | `secure-asset` | `recover-the-relics` | `important-connection` | `sabotage` | `vanguard-operation` |
-| **reconnaissance** | `record-breaking-mission` | `observe-enemy` | `triangulation` | `find-and-eliminate` | `information-gathering` |
+| **take-and-hold** | `battlefield-dominance` | `determined-acquisition` | `immovable-object` | `inescapable-dominion` | `purge-and-secure` |
+| **disruption** | `death-trap` | `outmanoeuvre` | `delaying-action` | `locate-and-deny` | `smoke-and-mirrors` |
+| **purge-the-foe** | `unstoppable-force` | `punishment` | `meatgrinder` | `destroyers-wrath` | `consecrate` |
+| **priority-assets** | `secure-asset` | `extract-relic` | `vital-link` | `sabotage` | `vanguard-operation` |
+| **reconnaissance** | `reconnaissance-sweep` | `surveil-the-foe` | `triangulation` | `search-and-scour` | `gather-intel` |
 
-Source: hand-transcribed from the published 11e mission text (`_private/11th Edition Missions.xlsx`, gitignored — original text not for distribution). The two photographed disposition cards (`priority-assets`, `reconnaissance`) and the separately-photographed Destroyer's Wrath mission card round-trip identically to the published text; the remaining 14 cells (the `take-and-hold`, `disruption`, and remaining `purge-the-foe` rows) are net-new from this transcription.
+Source: transcribed from photos of the official English launch deck (all 25 fronts plus the 11 objective-action backs; the 17-card secondary deck from `_private/11th secondary cards _ 17.docx`, gitignored — original text not for distribution). Every cell's opponent icon agrees with the provisional matrix structure; only names, scoring blocks, and actions changed.
 
 ### Secondaries
 
