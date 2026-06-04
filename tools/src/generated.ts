@@ -562,6 +562,13 @@ export interface SecondaryCard {
      */
     card_ids?: EntityId[];
     condition?: ArmyCompositionPredicate1;
+    /**
+     * Battle-round window in which the draw operation is eligible (e.g. { max: 1 } means 'only when drawn in the first battle round'). Absent means the operation fires regardless of round.
+     */
+    battle_round?: {
+      min?: number;
+      max?: number;
+    };
   };
   /**
    * Optional player actions the card enables. Most cards have a single action; a few (e.g. Observe Enemy, with separate Baited-removal and Spotted actions) have two distinct actions on the same card.
