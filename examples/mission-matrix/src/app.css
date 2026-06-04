@@ -65,6 +65,16 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Tailwind v4 preflight leaves buttons on `cursor: default`; restore the
+   pointer affordance on everything clickable (disabled controls keep the
+   arrow). */
+button:not(:disabled),
+select:not(:disabled),
+summary,
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
 /* Token-surfaced focus ring reused across interactive elements. */
 .focus-ring:focus-visible {
   outline: none;

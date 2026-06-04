@@ -112,6 +112,8 @@ button {
 }
 button:hover { border-color: var(--accent); color: var(--accent); }
 button:disabled { opacity: 0.45; cursor: not-allowed; }
+select:not(:disabled),
+summary { cursor: pointer; }
 button:disabled:hover { border-color: var(--border); color: var(--text); }
 button.primary {
   background: var(--accent);

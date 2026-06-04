@@ -55,3 +55,12 @@ textarea:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
 }
+
+/* Pointer affordance on everything clickable (disabled controls keep the
+   arrow). */
+button:not(:disabled),
+select:not(:disabled),
+summary,
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
