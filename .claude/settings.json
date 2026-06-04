@@ -9,6 +9,12 @@
             "command": "jq -r \".tool_input.file_path // empty\" | { read -r f; case \"$f\" in \"$CLAUDE_PROJECT_DIR\"/data/*.json) cd \"$CLAUDE_PROJECT_DIR/tools\" && npm run build;; esac; }",
             "timeout": 120,
             "statusMessage": "Rebuilding embedded dataset (data/ changed)..."
+          },
+          {
+            "type": "command",
+            "command": "jq -r \".tool_input.file_path // empty\" | { read -r f; case \"$f\" in *data/core/terrain-layouts.json) cd \"$CLAUDE_PROJECT_DIR\" && cargo run -p xtask -- bundle-data;; esac; }",
+            "timeout": 120,
+            "statusMessage": "Regenerating Rust data bundle (terrain-layouts changed)..."
           }
         ]
       }
