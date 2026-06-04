@@ -123,7 +123,7 @@
                       onclick={() => pick(e.id)}
                     >
                       <span class="num">{v}</span>
-                      <LayoutThumb layoutId={e.id} />
+                      <LayoutThumb layoutId={e.id} patternId={e.deploymentPatternId} />
                       <span class="name">{e.name}</span>
                     </button>
                   {/each}
@@ -138,7 +138,7 @@
                     onclick={() => pick(e.id)}
                   >
                     <span class="num">{v}</span>
-                    <LayoutThumb layoutId={e.id} />
+                    <LayoutThumb layoutId={e.id} patternId={e.deploymentPatternId} />
                     <span class="name">{e.name}</span>
                   </button>
                 {/each}
@@ -168,7 +168,7 @@
                 title={e.name}
                 onclick={() => pick(e.id)}
               >
-                <LayoutThumb layoutId={e.id} />
+                <LayoutThumb layoutId={e.id} patternId={e.deploymentPatternId} />
                 <span class="name">{e.name}</span>
               </button>
             {/each}
