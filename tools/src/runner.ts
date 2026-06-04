@@ -48,7 +48,13 @@ import {
   type PlayerGame,
 } from "./scoring/index.js";
 import type { SecondaryCard } from "./generated.js";
-import { resolveLayout, TerrainResolveError } from "./terrain/index.js";
+import {
+  resolveLayout,
+  TerrainResolveError,
+  keystoneMeasurements,
+  TerrainKeystoneError,
+  BOARD_INCHES,
+} from "./terrain/index.js";
 import type { TerrainTemplate, TerrainLayout } from "./terrain/resolve.js";
 import type Ajv from "ajv";
 
@@ -745,6 +751,41 @@ function handleResolveTerrain(args: unknown): RunnerResponse {
   }
 }
 
+function handleKeystones(args: unknown): RunnerResponse {
+  if (typeof args !== "object" || args === null) {
+    return err("INVALID_INPUT", { detail: "keystones args must be an object" });
+  }
+  const a = args as { layout?: unknown; templates?: unknown; board?: unknown };
+  if (typeof a.layout !== "object" || a.layout === null) {
+    return err("INVALID_INPUT", { detail: "keystones.layout must be an object" });
+  }
+  const templates = a.templates ?? [];
+  if (!Array.isArray(templates)) {
+    return err("INVALID_INPUT", { detail: "keystones.templates must be an array" });
+  }
+  let board: { width: number; height: number } = BOARD_INCHES;
+  if (a.board !== undefined) {
+    const b = a.board as { width?: unknown; height?: unknown } | null;
+    if (typeof b !== "object" || b === null || typeof b.width !== "number" || typeof b.height !== "number") {
+      return err("INVALID_INPUT", { detail: "keystones.board must be {width, height}" });
+    }
+    board = { width: b.width, height: b.height };
+  }
+  try {
+    const measurements = keystoneMeasurements(
+      a.layout as TerrainLayout,
+      templates as TerrainTemplate[],
+      board,
+    );
+    return ok({ measurements });
+  } catch (e) {
+    if (e instanceof TerrainKeystoneError || e instanceof TerrainResolveError) {
+      return err("INVALID_INPUT", { detail: e.message });
+    }
+    return err("INTERNAL_ERROR", { detail: (e as Error).message });
+  }
+}
+
 // -----------------------------------------------------------------------------
 // Dispatcher and per-line entry point.
 // -----------------------------------------------------------------------------
@@ -788,6 +829,8 @@ export function dispatch(state: RunnerState, req: { op: string; args?: unknown }
       return handleWtcResult(req.args);
     case "resolve_terrain":
       return handleResolveTerrain(req.args);
+    case "keystones":
+      return handleKeystones(req.args);
     case "shutdown":
       return ok(null);
     default:

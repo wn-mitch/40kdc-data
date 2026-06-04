@@ -25,12 +25,17 @@ export {
   solveCentroid,
   solveCentroidTriangulated,
   TerrainSolveError,
+  keystoneMeasurements,
+  BOARD_INCHES,
+  TerrainKeystoneError,
 } from "./terrain/index.js";
 export type {
   ResolvedPiece,
   ResolvedVec2,
   BoardEdge,
   FeatureRef,
+  Keystone,
+  KeystoneMeasurement,
   DimensionLine,
   SolveInput,
   TriangulationLine,

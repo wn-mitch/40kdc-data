@@ -119,7 +119,10 @@ pub use translate::{describe_award, describe_condition, describe_scoring_card, d
 /// Cross-impl pinned by the `terrain-resolver` conformance corpus.
 pub mod terrain;
 
-pub use terrain::{resolve_layout, ResolvedPiece, TerrainResolveError};
+pub use terrain::{
+    keystone_measurements, resolve_layout, Keystone, KeystoneError, KeystoneMeasurement,
+    ResolvedPiece, TerrainKeystoneError, TerrainResolveError, BOARD_INCHES,
+};
 
 /// Card-driven secondary-mission scoring engine: pure-function VP computation
 /// from asserted awards, plus per-round, per-player scoring state. Mirrors

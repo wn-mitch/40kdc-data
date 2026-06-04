@@ -40,6 +40,7 @@ import {
   type TerrainTemplate as ResolverTemplate,
   type TerrainLayout as ResolverLayout,
 } from "./terrain/resolve.js";
+import { keystoneMeasurements, BOARD_INCHES } from "./terrain/keystones.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, "../..");
@@ -758,6 +759,217 @@ function genTerrainResolver(): void {
   console.log(`terrain-resolver/cases.json: ${cases.length} cases`);
 }
 
+/**
+ * Terrain-keystones corpus: derive the printed distance of each authored
+ * keystone (board edge → piece feature) from resolved geometry. The TS helper
+ * is the oracle; the Rust port must reproduce every distance within 5e-4.
+ * Cases are self-contained like the resolver corpus. Coverage: all four
+ * edges, vertex and bounding-face refs, an oblique rotation, a mirrored
+ * asymmetric shape, a parented feature (composition through the parent
+ * frame), an inline footprint, and a custom board size.
+ */
+function genTerrainKeystones(): void {
+  mkdirSync(join(CONFORMANCE, "terrain-keystones"), { recursive: true });
+
+  const areaLarge: ResolverTemplate = {
+    id: "area-large",
+    name: "Large Area",
+    kind: "area",
+    footprint: { type: "rectangle", width: 11.5, height: 7 },
+  };
+  const areaTrapezoid: ResolverTemplate = {
+    id: "area-trapezoid",
+    name: "Trapezoid Area",
+    kind: "area",
+    footprint: {
+      type: "polygon",
+      points: [
+        { x: 0, y: 0 },
+        { x: 8, y: 0 },
+        { x: 2, y: 11.5 },
+        { x: 0, y: 11.5 },
+      ],
+    },
+  };
+  const wallLong: ResolverTemplate = {
+    id: "wall-long",
+    name: "Long Wall",
+    kind: "feature",
+    footprint: { type: "rectangle", width: 7, height: 0.25 },
+  };
+  const catalog = [areaLarge, areaTrapezoid, wallLong];
+
+  const keystoneCases: {
+    name: string;
+    templates: ResolverTemplate[];
+    layout: ResolverLayout;
+    board?: { width: number; height: number };
+  }[] = [
+    {
+      name: "identity-four-edges-vertices",
+      templates: catalog,
+      layout: {
+        id: "c",
+        name: "c",
+        pieces: [
+          {
+            id: "p",
+            template: "area-large",
+            position: { x: 30, y: 22 },
+            keystones: [
+              { edge: "left", ref: { kind: "vertex", index: 0 } },
+              { edge: "top", ref: { kind: "vertex", index: 1 } },
+              { edge: "right", ref: { kind: "vertex", index: 2 } },
+              { edge: "bottom", ref: { kind: "vertex", index: 3 } },
+            ],
+          },
+        ],
+      },
+    },
+    {
+      name: "identity-bounding-faces",
+      templates: catalog,
+      layout: {
+        id: "c",
+        name: "c",
+        pieces: [
+          {
+            id: "p",
+            template: "area-large",
+            position: { x: 20, y: 30 },
+            keystones: [
+              { edge: "left", ref: { kind: "face", side: "min-x" } },
+              { edge: "right", ref: { kind: "face", side: "max-x" } },
+              { edge: "top", ref: { kind: "face", side: "min-y" } },
+              { edge: "bottom", ref: { kind: "face", side: "max-y" } },
+            ],
+          },
+        ],
+      },
+    },
+    {
+      name: "oblique-rotation-vertex",
+      templates: catalog,
+      layout: {
+        id: "c",
+        name: "c",
+        pieces: [
+          {
+            id: "p",
+            template: "area-trapezoid",
+            position: { x: 35.75, y: 27 },
+            rotation_degrees: 235,
+            keystones: [
+              { edge: "left", ref: { kind: "vertex", index: 2 } },
+              { edge: "bottom", ref: { kind: "face", side: "max-y" } },
+            ],
+          },
+        ],
+      },
+    },
+    {
+      name: "mirrored-trapezoid-vertex",
+      templates: catalog,
+      layout: {
+        id: "c",
+        name: "c",
+        pieces: [
+          {
+            id: "p",
+            template: "area-trapezoid",
+            position: { x: 40, y: 18 },
+            mirror: "horizontal",
+            keystones: [
+              { edge: "right", ref: { kind: "vertex", index: 1 } },
+              { edge: "top", ref: { kind: "vertex", index: 0 } },
+            ],
+          },
+        ],
+      },
+    },
+    {
+      name: "parented-feature-keystone",
+      templates: catalog,
+      layout: {
+        id: "c",
+        name: "c",
+        pieces: [
+          {
+            id: "a1",
+            template: "area-large",
+            position: { x: 30, y: 22 },
+            rotation_degrees: 90,
+            mirror: "horizontal",
+            keystones: [{ edge: "left", ref: { kind: "vertex", index: 0 } }],
+          },
+          {
+            id: "back-wall",
+            template: "wall-long",
+            parent_area_id: "a1",
+            position: { x: 0, y: -3 },
+            keystones: [
+              { edge: "top", ref: { kind: "vertex", index: 1 } },
+              { edge: "right", ref: { kind: "face", side: "max-x" } },
+            ],
+          },
+        ],
+      },
+    },
+    {
+      name: "inline-footprint-keystone",
+      templates: [],
+      layout: {
+        id: "c",
+        name: "c",
+        pieces: [
+          {
+            id: "p",
+            footprint: { type: "polygon", points: [{ x: 0, y: 0 }, { x: 4, y: 0 }, { x: 2, y: 5 }] },
+            position: { x: 50, y: 40 },
+            rotation_degrees: 30,
+            keystones: [
+              { edge: "right", ref: { kind: "vertex", index: 0 } },
+              { edge: "bottom", ref: { kind: "vertex", index: 2 } },
+            ],
+          },
+        ],
+      },
+    },
+    {
+      name: "custom-board-extents",
+      templates: catalog,
+      layout: {
+        id: "c",
+        name: "c",
+        pieces: [
+          {
+            id: "p",
+            template: "area-large",
+            position: { x: 15, y: 15 },
+            keystones: [
+              { edge: "right", ref: { kind: "face", side: "max-x" } },
+              { edge: "bottom", ref: { kind: "face", side: "max-y" } },
+            ],
+          },
+        ],
+      },
+      board: { width: 30, height: 22.4 },
+    },
+  ];
+
+  const cases = keystoneCases.map((c) => ({
+    name: c.name,
+    templates: c.templates,
+    layout: c.layout,
+    ...(c.board ? { board: c.board } : {}),
+    expected: {
+      measurements: keystoneMeasurements(c.layout, c.templates, c.board ?? BOARD_INCHES),
+    },
+  }));
+  writeJson(join(CONFORMANCE, "terrain-keystones", "cases.json"), cases);
+  console.log(`terrain-keystones/cases.json: ${cases.length} cases`);
+}
+
 genNormalize();
 genRosters();
 genLinkedApi();
@@ -765,3 +977,4 @@ genAttribution();
 genScoringTranslation();
 genScoring();
 genTerrainResolver();
+genTerrainKeystones();

@@ -12,19 +12,18 @@
  * Because the centroid is rotation- and mirror-invariant, orientation is fixed
  * first; each dimension line then pins one axis of the centroid in closed form.
  */
-import { orientedOffsets, type Footprint, type Mirror, type Vec2 } from "./resolve.js";
+import {
+  orientedOffsets,
+  type BoardEdge,
+  type FeatureRef,
+  type Footprint,
+  type Mirror,
+  type Vec2,
+} from "./resolve.js";
 
-/** A board edge a card dimension is measured from. left/right pin x; top/bottom pin y. */
-export type BoardEdge = "left" | "right" | "top" | "bottom";
-
-/**
- * Which feature of the placed area a dimension line reaches: a specific
- * footprint vertex (by index, in {@link footprintVertices} order), or one of
- * the placed area's axis-aligned bounding faces ("the left face", etc.).
- */
-export type FeatureRef =
-  | { kind: "vertex"; index: number }
-  | { kind: "face"; side: "min-x" | "max-x" | "min-y" | "max-y" };
+// The edge/feature vocabulary lives in resolve.ts (shared with keystones);
+// re-exported here so existing solver imports keep working.
+export type { BoardEdge, FeatureRef } from "./resolve.js";
 
 /** One card dimension line: `distance` inches from `edge` to `feature`. */
 export interface DimensionLine {

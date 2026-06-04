@@ -35,6 +35,11 @@ import {
   type TerrainLayout as ResolverLayout,
   type ResolvedPiece,
 } from "../src/terrain/resolve.js";
+import {
+  keystoneMeasurements,
+  BOARD_INCHES,
+  type KeystoneMeasurement,
+} from "../src/terrain/keystones.js";
 
 const CONFORMANCE = join(dirname(fileURLToPath(import.meta.url)), "../../conformance");
 const readJson = (path: string): unknown => JSON.parse(readFileSync(path, "utf8"));
@@ -650,6 +655,43 @@ describe("terrain-resolver conformance corpus", () => {
           expect(Math.abs(a.vertices[j].x - e.vertices[j].x), `piece ${i} vert ${j} x`).toBeLessThanOrEqual(TERRAIN_TOLERANCE);
           expect(Math.abs(a.vertices[j].y - e.vertices[j].y), `piece ${i} vert ${j} y`).toBeLessThanOrEqual(TERRAIN_TOLERANCE);
         }
+      }
+    });
+  }
+});
+
+// Terrain-keystones conformance — pins the derivation of authored keystone
+// distances (board edge → piece feature) from resolved geometry. The Rust
+// port asserts against the same corpus
+// (crates/wh40kdc/tests/terrain_keystones_conformance.rs).
+
+interface KeystoneCase {
+  name: string;
+  templates: ResolverTemplate[];
+  layout: ResolverLayout;
+  board?: { width: number; height: number };
+  expected: { measurements: KeystoneMeasurement[] };
+}
+
+describe("terrain-keystones conformance corpus", () => {
+  const cases = readJson(join(CONFORMANCE, "terrain-keystones", "cases.json")) as KeystoneCase[];
+
+  it("the terrain-keystones corpus is non-empty", () => {
+    expect(cases.length).toBeGreaterThan(0);
+  });
+
+  for (const c of cases) {
+    it(`terrain-keystones/${c.name}: distances match within ${TERRAIN_TOLERANCE}`, () => {
+      const actual = keystoneMeasurements(c.layout, c.templates, c.board ?? BOARD_INCHES);
+      expect(actual.length, "measurement count").toBe(c.expected.measurements.length);
+      for (let i = 0; i < actual.length; i++) {
+        const a = actual[i];
+        const e = c.expected.measurements[i];
+        expect(a.piece_index, `measurement ${i} piece_index`).toBe(e.piece_index);
+        expect(a.piece_id, `measurement ${i} piece_id`).toBe(e.piece_id);
+        expect(a.edge, `measurement ${i} edge`).toBe(e.edge);
+        expect(a.ref, `measurement ${i} ref`).toEqual(e.ref);
+        expect(Math.abs(a.distance - e.distance), `measurement ${i} distance`).toBeLessThanOrEqual(TERRAIN_TOLERANCE);
       }
     });
   }

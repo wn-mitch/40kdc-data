@@ -45,6 +45,30 @@ export type Footprint =
 
 export type Mirror = "none" | "horizontal" | "vertical";
 
+/** A board edge a card dimension is measured from. left/right pin x; top/bottom pin y. */
+export type BoardEdge = "left" | "right" | "top" | "bottom";
+
+/**
+ * Which feature of the placed area a dimension line reaches: a specific
+ * footprint vertex (by index, in {@link footprintVertices} order), or one of
+ * the placed area's axis-aligned bounding faces ("the left face", etc.).
+ */
+export type FeatureRef =
+  | { kind: "vertex"; index: number }
+  | { kind: "face"; side: "min-x" | "max-x" | "min-y" | "max-y" };
+
+/**
+ * One authored measurement keystone: the dimension line a reference card
+ * prints so a player can place the piece with a tape measure. Only the
+ * selection is stored — the distance is always derived from resolved geometry
+ * (see `keystoneMeasurements`), so a keystone can never disagree with the
+ * layout.
+ */
+export interface Keystone {
+  edge: BoardEdge;
+  ref: FeatureRef;
+}
+
 export interface ComposedFeature {
   id?: string;
   template: string;
@@ -79,6 +103,7 @@ export interface LayoutPiece {
   height_inches?: number;
   terrain_area_keywords?: string[];
   link_group?: string;
+  keystones?: Keystone[];
 }
 
 export interface TerrainLayout {

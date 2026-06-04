@@ -252,6 +252,30 @@ The transform contract (mirror → rotate → translate about the footprint
 centroid; clockwise rotation in the y-down frame) is specified in CONFORMANCE.md
 under the `terrain-resolver` per-area invariants.
 
+### `keystones`
+
+```json
+{"op":"keystones","args":{"layout":{…TerrainLayout…},"templates":[{…TerrainTemplate…}, …],"board":{"width":60,"height":44}}}
+```
+
+Derives the printed distance of every authored measurement keystone in the
+layout (a keystone on a piece is `{"edge": "left"|"right"|"top"|"bottom",
+"ref": {"kind":"vertex","index":<int>} | {"kind":"face","side":
+"min-x"|"max-x"|"min-y"|"max-y"}}`). `board` is optional and defaults to the
+40kdc standard 60 × 44 inches. Response value is `{"measurements":
+[{"piece_index": <int>, "piece_id": <string|null>, "edge": <edge>, "ref":
+<ref>, "distance": <num>}, …]}`, in `layout.pieces` order then per-piece
+keystone order.
+
+The layout resolves through `resolve_terrain`'s pinned transform first; near
+edges (`left`/`top`) read the feature's board coordinate directly, far edges
+(`right`/`bottom`) read the remaining extent. Distances are rounded to 4 dp
+and compared with the `5e-4` float tolerance; identity fields exactly.
+Equivalent to TS `keystoneMeasurements(layout, templates, board)` / Rust
+`keystone_measurements(&layout, &templates, board)`. A vertex index out of
+range or a face whose axis disagrees with the edge returns `error_kind:
+"INVALID_INPUT"`, as do resolver failures.
+
 ### `shutdown`
 
 ```json

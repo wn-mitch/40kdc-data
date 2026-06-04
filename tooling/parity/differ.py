@@ -386,6 +386,25 @@ def iter_terrain_resolver_cases(corpus: Path) -> Iterator[Case]:
         )
 
 
+def iter_terrain_keystones_cases(corpus: Path) -> Iterator[Case]:
+    path = corpus / "terrain-keystones" / "cases.json"
+    cases = json.loads(path.read_text())
+    for entry in cases:
+        # Each case carries its own templates + layout (+ optional board); the
+        # op derives keystone distances from resolved geometry. Distances are
+        # floats, so compare with tolerance.
+        args = {"layout": entry["layout"], "templates": entry["templates"]}
+        if "board" in entry:
+            args["board"] = entry["board"]
+        yield Case(
+            area="terrain-keystones",
+            case_id=f"terrain-keystones/{entry['name']}",
+            op="keystones",
+            args=args,
+            compare_mode="floats",
+        )
+
+
 AREA_ITERATORS: dict[str, Any] = {
     "normalize": iter_normalize_cases,
     "roster": iter_roster_cases,
@@ -395,6 +414,7 @@ AREA_ITERATORS: dict[str, Any] = {
     "scoring-translation": iter_scoring_translation_cases,
     "scoring": iter_scoring_cases,
     "terrain-resolver": iter_terrain_resolver_cases,
+    "terrain-keystones": iter_terrain_keystones_cases,
 }
 
 

@@ -1027,6 +1027,60 @@ fn handle_resolve_terrain(args: &Value) -> Value {
     }
 }
 
+fn handle_keystones(args: &Value) -> Value {
+    let Some(layout_val) = args.get("layout") else {
+        return err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": "keystones.layout must be an object" })),
+        );
+    };
+    let templates_val = args.get("templates").cloned().unwrap_or_else(|| json!([]));
+    if !templates_val.is_array() {
+        return err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": "keystones.templates must be an array" })),
+        );
+    }
+    let layout: wh40kdc::terrain::TerrainLayout = match serde_json::from_value(layout_val.clone()) {
+        Ok(l) => l,
+        Err(e) => {
+            return err_value(
+                ErrorKind::InvalidInput,
+                Some(json!({ "detail": format!("keystones.layout: {e}") })),
+            )
+        }
+    };
+    let templates: Vec<wh40kdc::terrain::TerrainTemplate> =
+        match serde_json::from_value(templates_val) {
+            Ok(t) => t,
+            Err(e) => {
+                return err_value(
+                    ErrorKind::InvalidInput,
+                    Some(json!({ "detail": format!("keystones.templates: {e}") })),
+                )
+            }
+        };
+    let board: wh40kdc::terrain::BoardExtents = match args.get("board") {
+        None => wh40kdc::terrain::BOARD_INCHES,
+        Some(b) => match serde_json::from_value(b.clone()) {
+            Ok(b) => b,
+            Err(e) => {
+                return err_value(
+                    ErrorKind::InvalidInput,
+                    Some(json!({ "detail": format!("keystones.board: {e}") })),
+                )
+            }
+        },
+    };
+    match wh40kdc::terrain::keystone_measurements(&layout, &templates, board) {
+        Ok(measurements) => ok_value(json!({ "measurements": measurements })),
+        Err(e) => err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": e.to_string() })),
+        ),
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Dispatcher.
 // ---------------------------------------------------------------------------
@@ -1060,6 +1114,7 @@ fn dispatch(state: &mut RunnerState, op: &str, args: &Value) -> Value {
         "score_state" => handle_score_state(state, args),
         "wtc_result" => handle_wtc_result(args),
         "resolve_terrain" => handle_resolve_terrain(args),
+        "keystones" => handle_keystones(args),
         "shutdown" => ok_value(Value::Null),
         other => err_value(ErrorKind::UnknownOp, Some(json!({ "op": other }))),
     }

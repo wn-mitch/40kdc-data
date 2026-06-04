@@ -85,6 +85,45 @@ pub struct TerrainTemplate {
     pub features: Option<Vec<ComposedFeature>>,
 }
 
+/// A board edge a card dimension is measured from. left/right pin x;
+/// top/bottom pin y.
+#[derive(Deserialize, Serialize, Clone, Copy, Debug, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub enum BoardEdge {
+    Left,
+    Right,
+    Top,
+    Bottom,
+}
+
+/// Which feature of the placed piece a keystone measurement reaches: a
+/// footprint vertex (by resolver vertex order) or an axis-aligned bounding
+/// face of the placed footprint.
+#[derive(Deserialize, Serialize, Clone, Copy, Debug, PartialEq, Eq)]
+#[serde(tag = "kind", rename_all = "lowercase")]
+pub enum FeatureRef {
+    Vertex { index: usize },
+    Face { side: FaceSide },
+}
+
+/// An axis-aligned bounding face of a placed footprint.
+#[derive(Deserialize, Serialize, Clone, Copy, Debug, PartialEq, Eq)]
+#[serde(rename_all = "kebab-case")]
+pub enum FaceSide {
+    MinX,
+    MaxX,
+    MinY,
+    MaxY,
+}
+
+/// One authored measurement keystone (board edge → piece feature). Only the
+/// selection is stored; the distance is derived by [`keystone_measurements`].
+#[derive(Deserialize, Serialize, Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Keystone {
+    pub edge: BoardEdge,
+    pub r#ref: FeatureRef,
+}
+
 /// One placement in a layout.
 #[derive(Deserialize, Serialize, Clone, Debug)]
 pub struct LayoutPiece {
@@ -107,6 +146,8 @@ pub struct LayoutPiece {
     pub parent_area_id: Option<String>,
     #[serde(default)]
     pub floor: Option<u64>,
+    #[serde(default)]
+    pub keystones: Option<Vec<Keystone>>,
 }
 
 /// A terrain layout.
@@ -392,4 +433,237 @@ pub fn resolve_layout(
     }
 
     Ok(out)
+}
+
+// ── measurement keystones ────────────────────────────────────────────────────
+//
+// The Rust mirror of `tools/src/terrain/keystones.ts`, pinned by the
+// `conformance/terrain-keystones` corpus. A keystone stores only the author's
+// selection (board edge → piece feature); the printed distance is always
+// derived from the resolved geometry, so it can never disagree with the
+// layout. Distances are raw inches rounded to 4 dp; display formatting is
+// deliberately presentation, not part of this contract.
+
+/// The 40kdc standard board extents, in inches (x spans width, y height).
+pub const BOARD_INCHES: BoardExtents = BoardExtents {
+    width: 60.0,
+    height: 44.0,
+};
+
+/// Board extents for keystone derivation.
+#[derive(Deserialize, Serialize, Clone, Copy, Debug, PartialEq)]
+pub struct BoardExtents {
+    pub width: f64,
+    pub height: f64,
+}
+
+/// One derived dimension line, ready to print on a card. Field order matches
+/// the TS helper's emitted JSON (piece_index, piece_id, edge, ref, distance)
+/// so cross-impl byte comparison of the runner op holds.
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq)]
+pub struct KeystoneMeasurement {
+    pub piece_index: usize,
+    pub piece_id: Option<String>,
+    pub edge: BoardEdge,
+    pub r#ref: FeatureRef,
+    pub distance: f64,
+}
+
+/// Error raised for a keystone whose ref can't be measured (vertex index out
+/// of range, or a face whose axis disagrees with the edge).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TerrainKeystoneError(pub String);
+
+impl std::fmt::Display for TerrainKeystoneError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+impl std::error::Error for TerrainKeystoneError {}
+
+/// Keystone failures: the layout didn't resolve, or a keystone ref is invalid.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum KeystoneError {
+    Resolve(TerrainResolveError),
+    Keystone(TerrainKeystoneError),
+}
+
+impl std::fmt::Display for KeystoneError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            KeystoneError::Resolve(e) => write!(f, "{e}"),
+            KeystoneError::Keystone(e) => write!(f, "{e}"),
+        }
+    }
+}
+impl std::error::Error for KeystoneError {}
+
+fn axis_is_x(edge: BoardEdge) -> bool {
+    matches!(edge, BoardEdge::Left | BoardEdge::Right)
+}
+
+/// The measured board-space coordinate a keystone's ref resolves to.
+fn ref_coordinate(
+    rp: &ResolvedPiece,
+    k: &Keystone,
+    where_: &str,
+) -> Result<f64, TerrainKeystoneError> {
+    let on_x = axis_is_x(k.edge);
+    let coord = |v: &Vec2| if on_x { v.x } else { v.y };
+    match k.r#ref {
+        FeatureRef::Vertex { index } => rp.vertices.get(index).map(coord).ok_or_else(|| {
+            TerrainKeystoneError(format!(
+                "{where_}: keystone vertex index {index} out of range ({} vertices)",
+                rp.vertices.len()
+            ))
+        }),
+        FeatureRef::Face { side } => {
+            let side_is_x = matches!(side, FaceSide::MinX | FaceSide::MaxX);
+            if side_is_x != on_x {
+                return Err(TerrainKeystoneError(format!(
+                    "{where_}: face axis disagrees with the measured edge"
+                )));
+            }
+            let vals = rp.vertices.iter().map(coord);
+            Ok(match side {
+                FaceSide::MinX | FaceSide::MinY => vals.fold(f64::INFINITY, f64::min),
+                FaceSide::MaxX | FaceSide::MaxY => vals.fold(f64::NEG_INFINITY, f64::max),
+            })
+        }
+    }
+}
+
+/// Derive every keystone's printed distance for a layout. Pieces resolve via
+/// [`resolve_layout`] (the pinned transform contract); near edges
+/// (`left`/`top`) read the coordinate directly, far edges (`right`/`bottom`)
+/// read the remaining extent.
+pub fn keystone_measurements(
+    layout: &TerrainLayout,
+    templates: &[TerrainTemplate],
+    board: BoardExtents,
+) -> Result<Vec<KeystoneMeasurement>, KeystoneError> {
+    let resolved = resolve_layout(layout, templates).map_err(KeystoneError::Resolve)?;
+    let features_of: HashMap<&str, usize> = templates
+        .iter()
+        .map(|t| (t.id.as_str(), t.features.as_ref().map_or(0, Vec::len)))
+        .collect();
+
+    let mut out = Vec::new();
+    // Walk the emission contract: one entry per explicit piece, in order, with
+    // an unparented templated piece followed by its template's composed
+    // features.
+    let mut cursor = 0usize;
+    for (i, piece) in layout.pieces.iter().enumerate() {
+        let rp = resolved.get(cursor).ok_or_else(|| {
+            KeystoneError::Keystone(TerrainKeystoneError(format!(
+                "piece {i}: resolved emission shorter than layout.pieces"
+            )))
+        })?;
+        cursor += 1;
+        if piece.parent_area_id.is_none() {
+            if let Some(tid) = &piece.template {
+                cursor += features_of.get(tid.as_str()).copied().unwrap_or(0);
+            }
+        }
+
+        for k in piece.keystones.iter().flatten() {
+            let where_ = match &rp.id {
+                Some(id) => format!("piece {id}"),
+                None => format!("piece {i}"),
+            };
+            let c = ref_coordinate(rp, k, &where_).map_err(KeystoneError::Keystone)?;
+            let extent = if axis_is_x(k.edge) {
+                board.width
+            } else {
+                board.height
+            };
+            let distance = match k.edge {
+                BoardEdge::Left | BoardEdge::Top => c,
+                BoardEdge::Right | BoardEdge::Bottom => extent - c,
+            };
+            out.push(KeystoneMeasurement {
+                piece_index: i,
+                piece_id: piece.id.clone(),
+                edge: k.edge,
+                r#ref: k.r#ref,
+                distance: (distance * 10000.0 + 0.5).floor() / 10000.0,
+            });
+        }
+    }
+    Ok(out)
+}
+
+#[cfg(test)]
+mod keystone_tests {
+    use super::*;
+
+    fn templates() -> Vec<TerrainTemplate> {
+        vec![TerrainTemplate {
+            id: "area-medium".into(),
+            name: Some("Medium Area".into()),
+            kind: Some("area".into()),
+            footprint: Footprint::Rectangle {
+                width: 6.0,
+                height: 4.0,
+            },
+            features: None,
+        }]
+    }
+
+    fn layout_with(keystones: Vec<Keystone>) -> TerrainLayout {
+        TerrainLayout {
+            id: Some("c".into()),
+            name: Some("c".into()),
+            pieces: vec![LayoutPiece {
+                id: Some("p".into()),
+                name: None,
+                piece_type: None,
+                template: Some("area-medium".into()),
+                footprint: None,
+                position: Vec2 { x: 30.0, y: 22.0 },
+                rotation_degrees: None,
+                mirror: Mirror::None,
+                parent_area_id: None,
+                floor: None,
+                keystones: Some(keystones),
+            }],
+        }
+    }
+
+    #[test]
+    fn rejects_vertex_index_out_of_range() {
+        let layout = layout_with(vec![Keystone {
+            edge: BoardEdge::Left,
+            r#ref: FeatureRef::Vertex { index: 4 },
+        }]);
+        let err = keystone_measurements(&layout, &templates(), BOARD_INCHES).unwrap_err();
+        assert!(err.to_string().contains("index 4 out of range"), "{err}");
+    }
+
+    #[test]
+    fn rejects_face_axis_mismatch() {
+        let layout = layout_with(vec![Keystone {
+            edge: BoardEdge::Left,
+            r#ref: FeatureRef::Face {
+                side: FaceSide::MinY,
+            },
+        }]);
+        let err = keystone_measurements(&layout, &templates(), BOARD_INCHES).unwrap_err();
+        assert!(err.to_string().contains("axis"), "{err}");
+    }
+
+    #[test]
+    fn propagates_resolver_errors() {
+        let mut layout = layout_with(vec![]);
+        layout.pieces[0].template = Some("nope".into());
+        let err = keystone_measurements(&layout, &templates(), BOARD_INCHES).unwrap_err();
+        assert!(err.to_string().contains("unknown template"), "{err}");
+    }
+
+    #[test]
+    fn empty_when_no_keystones() {
+        let layout = layout_with(vec![]);
+        let out = keystone_measurements(&layout, &templates(), BOARD_INCHES).unwrap();
+        assert!(out.is_empty());
+    }
 }

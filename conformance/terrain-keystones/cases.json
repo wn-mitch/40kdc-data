@@ -1,0 +1,811 @@
+[
+  {
+    "name": "identity-four-edges-vertices",
+    "templates": [
+      {
+        "id": "area-large",
+        "name": "Large Area",
+        "kind": "area",
+        "footprint": {
+          "type": "rectangle",
+          "width": 11.5,
+          "height": 7
+        }
+      },
+      {
+        "id": "area-trapezoid",
+        "name": "Trapezoid Area",
+        "kind": "area",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 8,
+              "y": 0
+            },
+            {
+              "x": 2,
+              "y": 11.5
+            },
+            {
+              "x": 0,
+              "y": 11.5
+            }
+          ]
+        }
+      },
+      {
+        "id": "wall-long",
+        "name": "Long Wall",
+        "kind": "feature",
+        "footprint": {
+          "type": "rectangle",
+          "width": 7,
+          "height": 0.25
+        }
+      }
+    ],
+    "layout": {
+      "id": "c",
+      "name": "c",
+      "pieces": [
+        {
+          "id": "p",
+          "template": "area-large",
+          "position": {
+            "x": 30,
+            "y": 22
+          },
+          "keystones": [
+            {
+              "edge": "left",
+              "ref": {
+                "kind": "vertex",
+                "index": 0
+              }
+            },
+            {
+              "edge": "top",
+              "ref": {
+                "kind": "vertex",
+                "index": 1
+              }
+            },
+            {
+              "edge": "right",
+              "ref": {
+                "kind": "vertex",
+                "index": 2
+              }
+            },
+            {
+              "edge": "bottom",
+              "ref": {
+                "kind": "vertex",
+                "index": 3
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "expected": {
+      "measurements": [
+        {
+          "piece_index": 0,
+          "piece_id": "p",
+          "edge": "left",
+          "ref": {
+            "kind": "vertex",
+            "index": 0
+          },
+          "distance": 24.25
+        },
+        {
+          "piece_index": 0,
+          "piece_id": "p",
+          "edge": "top",
+          "ref": {
+            "kind": "vertex",
+            "index": 1
+          },
+          "distance": 18.5
+        },
+        {
+          "piece_index": 0,
+          "piece_id": "p",
+          "edge": "right",
+          "ref": {
+            "kind": "vertex",
+            "index": 2
+          },
+          "distance": 24.25
+        },
+        {
+          "piece_index": 0,
+          "piece_id": "p",
+          "edge": "bottom",
+          "ref": {
+            "kind": "vertex",
+            "index": 3
+          },
+          "distance": 18.5
+        }
+      ]
+    }
+  },
+  {
+    "name": "identity-bounding-faces",
+    "templates": [
+      {
+        "id": "area-large",
+        "name": "Large Area",
+        "kind": "area",
+        "footprint": {
+          "type": "rectangle",
+          "width": 11.5,
+          "height": 7
+        }
+      },
+      {
+        "id": "area-trapezoid",
+        "name": "Trapezoid Area",
+        "kind": "area",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 8,
+              "y": 0
+            },
+            {
+              "x": 2,
+              "y": 11.5
+            },
+            {
+              "x": 0,
+              "y": 11.5
+            }
+          ]
+        }
+      },
+      {
+        "id": "wall-long",
+        "name": "Long Wall",
+        "kind": "feature",
+        "footprint": {
+          "type": "rectangle",
+          "width": 7,
+          "height": 0.25
+        }
+      }
+    ],
+    "layout": {
+      "id": "c",
+      "name": "c",
+      "pieces": [
+        {
+          "id": "p",
+          "template": "area-large",
+          "position": {
+            "x": 20,
+            "y": 30
+          },
+          "keystones": [
+            {
+              "edge": "left",
+              "ref": {
+                "kind": "face",
+                "side": "min-x"
+              }
+            },
+            {
+              "edge": "right",
+              "ref": {
+                "kind": "face",
+                "side": "max-x"
+              }
+            },
+            {
+              "edge": "top",
+              "ref": {
+                "kind": "face",
+                "side": "min-y"
+              }
+            },
+            {
+              "edge": "bottom",
+              "ref": {
+                "kind": "face",
+                "side": "max-y"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "expected": {
+      "measurements": [
+        {
+          "piece_index": 0,
+          "piece_id": "p",
+          "edge": "left",
+          "ref": {
+            "kind": "face",
+            "side": "min-x"
+          },
+          "distance": 14.25
+        },
+        {
+          "piece_index": 0,
+          "piece_id": "p",
+          "edge": "right",
+          "ref": {
+            "kind": "face",
+            "side": "max-x"
+          },
+          "distance": 34.25
+        },
+        {
+          "piece_index": 0,
+          "piece_id": "p",
+          "edge": "top",
+          "ref": {
+            "kind": "face",
+            "side": "min-y"
+          },
+          "distance": 26.5
+        },
+        {
+          "piece_index": 0,
+          "piece_id": "p",
+          "edge": "bottom",
+          "ref": {
+            "kind": "face",
+            "side": "max-y"
+          },
+          "distance": 10.5
+        }
+      ]
+    }
+  },
+  {
+    "name": "oblique-rotation-vertex",
+    "templates": [
+      {
+        "id": "area-large",
+        "name": "Large Area",
+        "kind": "area",
+        "footprint": {
+          "type": "rectangle",
+          "width": 11.5,
+          "height": 7
+        }
+      },
+      {
+        "id": "area-trapezoid",
+        "name": "Trapezoid Area",
+        "kind": "area",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 8,
+              "y": 0
+            },
+            {
+              "x": 2,
+              "y": 11.5
+            },
+            {
+              "x": 0,
+              "y": 11.5
+            }
+          ]
+        }
+      },
+      {
+        "id": "wall-long",
+        "name": "Long Wall",
+        "kind": "feature",
+        "footprint": {
+          "type": "rectangle",
+          "width": 7,
+          "height": 0.25
+        }
+      }
+    ],
+    "layout": {
+      "id": "c",
+      "name": "c",
+      "pieces": [
+        {
+          "id": "p",
+          "template": "area-trapezoid",
+          "position": {
+            "x": 35.75,
+            "y": 27
+          },
+          "rotation_degrees": 235,
+          "keystones": [
+            {
+              "edge": "left",
+              "ref": {
+                "kind": "vertex",
+                "index": 2
+              }
+            },
+            {
+              "edge": "bottom",
+              "ref": {
+                "kind": "face",
+                "side": "max-y"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "expected": {
+      "measurements": [
+        {
+          "piece_index": 0,
+          "piece_id": "p",
+          "edge": "left",
+          "ref": {
+            "kind": "vertex",
+            "index": 2
+          },
+          "distance": 41.861
+        },
+        {
+          "piece_index": 0,
+          "piece_id": "p",
+          "edge": "bottom",
+          "ref": {
+            "kind": "face",
+            "side": "max-y"
+          },
+          "distance": 12.0679
+        }
+      ]
+    }
+  },
+  {
+    "name": "mirrored-trapezoid-vertex",
+    "templates": [
+      {
+        "id": "area-large",
+        "name": "Large Area",
+        "kind": "area",
+        "footprint": {
+          "type": "rectangle",
+          "width": 11.5,
+          "height": 7
+        }
+      },
+      {
+        "id": "area-trapezoid",
+        "name": "Trapezoid Area",
+        "kind": "area",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 8,
+              "y": 0
+            },
+            {
+              "x": 2,
+              "y": 11.5
+            },
+            {
+              "x": 0,
+              "y": 11.5
+            }
+          ]
+        }
+      },
+      {
+        "id": "wall-long",
+        "name": "Long Wall",
+        "kind": "feature",
+        "footprint": {
+          "type": "rectangle",
+          "width": 7,
+          "height": 0.25
+        }
+      }
+    ],
+    "layout": {
+      "id": "c",
+      "name": "c",
+      "pieces": [
+        {
+          "id": "p",
+          "template": "area-trapezoid",
+          "position": {
+            "x": 40,
+            "y": 18
+          },
+          "mirror": "horizontal",
+          "keystones": [
+            {
+              "edge": "right",
+              "ref": {
+                "kind": "vertex",
+                "index": 1
+              }
+            },
+            {
+              "edge": "top",
+              "ref": {
+                "kind": "vertex",
+                "index": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "expected": {
+      "measurements": [
+        {
+          "piece_index": 0,
+          "piece_id": "p",
+          "edge": "right",
+          "ref": {
+            "kind": "vertex",
+            "index": 1
+          },
+          "distance": 25.2
+        },
+        {
+          "piece_index": 0,
+          "piece_id": "p",
+          "edge": "top",
+          "ref": {
+            "kind": "vertex",
+            "index": 0
+          },
+          "distance": 13.4
+        }
+      ]
+    }
+  },
+  {
+    "name": "parented-feature-keystone",
+    "templates": [
+      {
+        "id": "area-large",
+        "name": "Large Area",
+        "kind": "area",
+        "footprint": {
+          "type": "rectangle",
+          "width": 11.5,
+          "height": 7
+        }
+      },
+      {
+        "id": "area-trapezoid",
+        "name": "Trapezoid Area",
+        "kind": "area",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 8,
+              "y": 0
+            },
+            {
+              "x": 2,
+              "y": 11.5
+            },
+            {
+              "x": 0,
+              "y": 11.5
+            }
+          ]
+        }
+      },
+      {
+        "id": "wall-long",
+        "name": "Long Wall",
+        "kind": "feature",
+        "footprint": {
+          "type": "rectangle",
+          "width": 7,
+          "height": 0.25
+        }
+      }
+    ],
+    "layout": {
+      "id": "c",
+      "name": "c",
+      "pieces": [
+        {
+          "id": "a1",
+          "template": "area-large",
+          "position": {
+            "x": 30,
+            "y": 22
+          },
+          "rotation_degrees": 90,
+          "mirror": "horizontal",
+          "keystones": [
+            {
+              "edge": "left",
+              "ref": {
+                "kind": "vertex",
+                "index": 0
+              }
+            }
+          ]
+        },
+        {
+          "id": "back-wall",
+          "template": "wall-long",
+          "parent_area_id": "a1",
+          "position": {
+            "x": 0,
+            "y": -3
+          },
+          "keystones": [
+            {
+              "edge": "top",
+              "ref": {
+                "kind": "vertex",
+                "index": 1
+              }
+            },
+            {
+              "edge": "right",
+              "ref": {
+                "kind": "face",
+                "side": "max-x"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "expected": {
+      "measurements": [
+        {
+          "piece_index": 0,
+          "piece_id": "a1",
+          "edge": "left",
+          "ref": {
+            "kind": "vertex",
+            "index": 0
+          },
+          "distance": 33.5
+        },
+        {
+          "piece_index": 1,
+          "piece_id": "back-wall",
+          "edge": "top",
+          "ref": {
+            "kind": "vertex",
+            "index": 1
+          },
+          "distance": 18.5
+        },
+        {
+          "piece_index": 1,
+          "piece_id": "back-wall",
+          "edge": "right",
+          "ref": {
+            "kind": "face",
+            "side": "max-x"
+          },
+          "distance": 26.875
+        }
+      ]
+    }
+  },
+  {
+    "name": "inline-footprint-keystone",
+    "templates": [],
+    "layout": {
+      "id": "c",
+      "name": "c",
+      "pieces": [
+        {
+          "id": "p",
+          "footprint": {
+            "type": "polygon",
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 4,
+                "y": 0
+              },
+              {
+                "x": 2,
+                "y": 5
+              }
+            ]
+          },
+          "position": {
+            "x": 50,
+            "y": 40
+          },
+          "rotation_degrees": 30,
+          "keystones": [
+            {
+              "edge": "right",
+              "ref": {
+                "kind": "vertex",
+                "index": 0
+              }
+            },
+            {
+              "edge": "bottom",
+              "ref": {
+                "kind": "vertex",
+                "index": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "expected": {
+      "measurements": [
+        {
+          "piece_index": 0,
+          "piece_id": "p",
+          "edge": "right",
+          "ref": {
+            "kind": "vertex",
+            "index": 0
+          },
+          "distance": 10.8987
+        },
+        {
+          "piece_index": 0,
+          "piece_id": "p",
+          "edge": "bottom",
+          "ref": {
+            "kind": "vertex",
+            "index": 2
+          },
+          "distance": 1.1132
+        }
+      ]
+    }
+  },
+  {
+    "name": "custom-board-extents",
+    "templates": [
+      {
+        "id": "area-large",
+        "name": "Large Area",
+        "kind": "area",
+        "footprint": {
+          "type": "rectangle",
+          "width": 11.5,
+          "height": 7
+        }
+      },
+      {
+        "id": "area-trapezoid",
+        "name": "Trapezoid Area",
+        "kind": "area",
+        "footprint": {
+          "type": "polygon",
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 8,
+              "y": 0
+            },
+            {
+              "x": 2,
+              "y": 11.5
+            },
+            {
+              "x": 0,
+              "y": 11.5
+            }
+          ]
+        }
+      },
+      {
+        "id": "wall-long",
+        "name": "Long Wall",
+        "kind": "feature",
+        "footprint": {
+          "type": "rectangle",
+          "width": 7,
+          "height": 0.25
+        }
+      }
+    ],
+    "layout": {
+      "id": "c",
+      "name": "c",
+      "pieces": [
+        {
+          "id": "p",
+          "template": "area-large",
+          "position": {
+            "x": 15,
+            "y": 15
+          },
+          "keystones": [
+            {
+              "edge": "right",
+              "ref": {
+                "kind": "face",
+                "side": "max-x"
+              }
+            },
+            {
+              "edge": "bottom",
+              "ref": {
+                "kind": "face",
+                "side": "max-y"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "board": {
+      "width": 30,
+      "height": 22.4
+    },
+    "expected": {
+      "measurements": [
+        {
+          "piece_index": 0,
+          "piece_id": "p",
+          "edge": "right",
+          "ref": {
+            "kind": "face",
+            "side": "max-x"
+          },
+          "distance": 9.25
+        },
+        {
+          "piece_index": 0,
+          "piece_id": "p",
+          "edge": "bottom",
+          "ref": {
+            "kind": "face",
+            "side": "max-y"
+          },
+          "distance": 3.9
+        }
+      ]
+    }
+  }
+]
