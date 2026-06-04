@@ -28,6 +28,7 @@
   import PlayerColumn from "./lib/PlayerColumn.svelte";
   import WtcResult from "./lib/WtcResult.svelte";
   import MissionCard from "./lib/MissionCard.svelte";
+  import Toast from "./lib/Toast.svelte";
   import PwaInstallPrompt from "./lib/PwaInstallPrompt.svelte";
   import TutorialModal from "./lib/TutorialModal.svelte";
   import SupportModal from "../../_shared/SupportModal.svelte";
@@ -94,6 +95,12 @@
   // support modal so the popups never stack.
   let pwaPromptOpen = $state<boolean>(false);
   let tutorialOpen = $state<boolean>(false);
+
+  // One-line action feedback (e.g. "Game reset"); Toast self-dismisses.
+  let toast = $state<string | null>(null);
+  function notify(message: string): void {
+    toast = message;
+  }
 
   $effect(() => {
     const blob: Saved = {
@@ -219,6 +226,7 @@
     discardsYou = [];
     discardsOpp = [];
     round = 1;
+    notify("Game reset");
   }
 </script>
 
@@ -420,4 +428,5 @@
   <TutorialModal bind:open={tutorialOpen} />
   <PwaInstallPrompt bind:open={pwaPromptOpen} suppressed={tutorialOpen} />
   <SupportModal patreonUrl={PATREON_URL} appName="Mission Matrix" enabled={!pwaPromptOpen && !tutorialOpen} />
+  <Toast message={toast} onDismiss={() => (toast = null)} />
 </div>
