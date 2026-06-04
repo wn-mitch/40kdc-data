@@ -3927,8 +3927,8 @@
     }
   },
   {
-    "id": "gw-11e-search-destroy",
-    "name": "Search and Destroy (Take and Hold vs Purge the Foe 2)",
+    "id": "take-and-hold-vs-purge-the-foe-2",
+    "name": "Take and Hold vs Purge the Foe 2",
     "source": "gw-11e",
     "description": "180°-rotationally symmetric.",
     "mission_matchup_id": "take-and-hold-vs-purge-the-foe",
@@ -7001,8 +7001,8 @@
     }
   },
   {
-    "id": "take-and-hold-vs-take-and-hold-3",
-    "name": "Take And Hold vs Take And Hold 3",
+    "id": "take-and-hold-mirror-3",
+    "name": "Take and Hold Mirror 3",
     "source": "custom",
     "mission_matchup_id": "take-and-hold-vs-take-and-hold",
     "variant": 3,
@@ -7654,7 +7654,7 @@
   },
   {
     "id": "take-and-hold-vs-reconnaissance-3",
-    "name": "Take And Hold vs Reconnaissance 3",
+    "name": "Take and Hold vs Reconnaissance 3",
     "source": "custom",
     "mission_matchup_id": "take-and-hold-vs-reconnaissance",
     "variant": 3,
@@ -8301,7 +8301,7 @@
   },
   {
     "id": "take-and-hold-vs-disruption-1",
-    "name": "Take And Hold vs Disruption 1",
+    "name": "Take and Hold vs Disruption 1",
     "source": "custom",
     "mission_matchup_id": "take-and-hold-vs-disruption",
     "variant": 1,
@@ -8964,7 +8964,7 @@
   },
   {
     "id": "take-and-hold-vs-disruption-2",
-    "name": "Take And Hold vs Disruption 2",
+    "name": "Take and Hold vs Disruption 2",
     "source": "custom",
     "mission_matchup_id": "take-and-hold-vs-disruption",
     "variant": 2,
@@ -9572,7 +9572,7 @@
   },
   {
     "id": "take-and-hold-vs-disruption-3",
-    "name": "Take And Hold vs Disruption 3",
+    "name": "Take and Hold vs Disruption 3",
     "source": "custom",
     "mission_matchup_id": "take-and-hold-vs-disruption",
     "variant": 3,
