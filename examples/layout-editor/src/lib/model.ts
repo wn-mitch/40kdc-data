@@ -506,6 +506,135 @@ export const MISSION_MATCHUPS: { id: string; label: string }[] = ds.missionMatch
   })
   .sort((a, b) => a.label.localeCompare(b.label));
 
+// ── layout library (matchup × variant coverage grid) ──────────────────────────
+
+/** The five force dispositions, in mission-matrix display order. */
+export const DISPOSITIONS = [
+  "take-and-hold",
+  "disruption",
+  "purge-the-foe",
+  "priority-assets",
+  "reconnaissance",
+] as const;
+
+export const dispositionLabel = titleize;
+
+const DISPOSITION_INDEX = new Map<string, number>(DISPOSITIONS.map((d, i) => [d, i]));
+
+interface MatchupRecord {
+  id: string;
+  disposition: string;
+  opponent_disposition: string;
+}
+const MATCHUPS: MatchupRecord[] = ds.missionMatchups.all.map((m) => m as MatchupRecord);
+const MATCHUP_BY_ID = new Map(MATCHUPS.map((m) => [m.id, m]));
+
+/** Unordered-pair key for a matchup grid cell: the two dispositions in DISPOSITIONS order. */
+export function pairKey(a: string, b: string): string {
+  const [lo, hi] = (DISPOSITION_INDEX.get(a) ?? 99) <= (DISPOSITION_INDEX.get(b) ?? 99) ? [a, b] : [b, a];
+  return `${lo}|${hi}`;
+}
+
+/**
+ * The canonical ordered matchup id for an unordered disposition pair (the form
+ * with the lower-index disposition first; all 25 ordered ids exist in the data).
+ */
+export function canonicalMatchupId(a: string, b: string): string | undefined {
+  const [lo, hi] = pairKey(a, b).split("|");
+  return MATCHUPS.find((m) => m.disposition === lo && m.opponent_disposition === hi)?.id;
+}
+
+/** One embedded layout's library card. */
+export interface LibraryEntry {
+  id: string;
+  name: string;
+  matchupId?: string;
+  variant?: number;
+  deploymentPatternId?: string;
+}
+
+export interface LibraryCell {
+  /** Layouts keyed by their variant number (collisions keep every claimant). */
+  byVariant: Map<number, LibraryEntry[]>;
+  /** Layouts tagged with this pairing but no variant number. */
+  unnumbered: LibraryEntry[];
+}
+
+export interface LibraryIndex {
+  /** pairKey → cell, only for pairings that have at least one layout. */
+  cells: Map<string, LibraryCell>;
+  /** Layouts with no mission_matchup_id (or one we can't place on the grid). */
+  unassigned: LibraryEntry[];
+}
+
+/** Index every embedded layout into the matchup × variant grid. */
+export function libraryIndex(): LibraryIndex {
+  const cells = new Map<string, LibraryCell>();
+  const unassigned: LibraryEntry[] = [];
+  for (const raw of ds.terrainLayouts.all) {
+    const l = raw as unknown as TerrainLayout;
+    const entry: LibraryEntry = {
+      id: l.id,
+      name: l.name,
+      matchupId: l.mission_matchup_id,
+      variant: l.variant ?? undefined,
+      deploymentPatternId: l.deployment_pattern_id,
+    };
+    const m = entry.matchupId ? MATCHUP_BY_ID.get(entry.matchupId) : undefined;
+    if (!m) {
+      unassigned.push(entry);
+      continue;
+    }
+    const key = pairKey(m.disposition, m.opponent_disposition);
+    const cell: LibraryCell = cells.get(key) ?? { byVariant: new Map(), unnumbered: [] };
+    cells.set(key, cell);
+    if (entry.variant && entry.variant >= 1) {
+      const claimants = cell.byVariant.get(entry.variant) ?? [];
+      claimants.push(entry);
+      cell.byVariant.set(entry.variant, claimants);
+    } else {
+      cell.unnumbered.push(entry);
+    }
+  }
+  const byName = (a: LibraryEntry, b: LibraryEntry): number => a.name.localeCompare(b.name);
+  for (const cell of cells.values()) cell.unnumbered.sort(byName);
+  unassigned.sort(byName);
+  return { cells, unassigned };
+}
+
+/**
+ * Resolved board geometry of an embedded layout, for library thumbnails.
+ * Memoized: dataset layouts are immutable for the life of the build.
+ */
+const thumbCache = new Map<string, ResolvedPiece[]>();
+export function resolveEmbedded(id: string): ResolvedPiece[] {
+  const hit = thumbCache.get(id);
+  if (hit) return hit;
+  const raw = ds.terrainLayouts.get(id) as TerrainLayout | undefined;
+  const resolved = raw
+    ? resolveLayout(
+        raw as unknown as Parameters<typeof resolveLayout>[0],
+        CATALOG as unknown as Parameters<typeof resolveLayout>[1],
+      )
+    : [];
+  thumbCache.set(id, resolved);
+  return resolved;
+}
+
+/** A blank layout pre-seeded for a grid slot (matchup pairing + variant number). */
+export function blankLayoutFor(matchupId: string, variant: number): EditLayout {
+  const layout = blankLayout();
+  const m = MATCHUP_BY_ID.get(matchupId);
+  const name = m
+    ? `${titleize(m.disposition)} vs ${titleize(m.opponent_disposition)} ${variant}`
+    : `Untitled Layout ${variant}`;
+  layout.name = name;
+  layout.id = slugify(name);
+  layout.mission_matchup_id = matchupId;
+  layout.variant = variant;
+  return layout;
+}
+
 // ── symmetry twins (180° rotation about board centre) ─────────────────────────
 
 const round2 = (n: number): number => Math.round(n * 100) / 100;

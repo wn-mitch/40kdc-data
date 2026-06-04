@@ -3,6 +3,7 @@
     CATALOG,
     addTemplate,
     blankLayout,
+    blankLayoutFor,
     loadEmbedded,
     resolve,
     toCanonicalJson,
@@ -37,6 +38,7 @@
   import type { TerrainTemplate } from "@alpaca-software/40kdc-data";
   import Board from "./lib/Board.svelte";
   import Inspector from "./lib/Inspector.svelte";
+  import Library from "./lib/Library.svelte";
   import Palette from "./lib/Palette.svelte";
   import SupportModal from "../../_shared/SupportModal.svelte";
 
@@ -45,15 +47,10 @@
   const PUBLISHER_URL = "https://alpacasoft.dev";
   const PATREON_URL = "https://www.patreon.com/c/AlpacaSoftware";
 
-  const EMBEDDED = [
-    { id: "gw-11e-crucible", label: "Crucible of Battle" },
-    { id: "gw-11e-hammer-anvil", label: "Hammer and Anvil" },
-    { id: "gw-11e-search-destroy", label: "Search and Destroy (draft)" },
-  ];
-
   const initialLayout = loadEmbedded("gw-11e-crucible", true) ?? blankLayout();
   let symmetric = $state(true);
   let layout = $state<EditLayout>(initialLayout);
+  let libraryOpen = $state(false);
   let selectedId = $state<string | null>(null);
   let deployment = $state<string | null>(
     initialLayout.deployment_pattern_id ?? defaultDeploymentFor(initialLayout.id),
@@ -102,10 +99,19 @@
   });
 
   function loadLayout(id: string): void {
-    layout = id === "__new__" ? blankLayout() : loadEmbedded(id, symmetric) ?? blankLayout();
+    layout = loadEmbedded(id, symmetric) ?? blankLayout();
     selectedId = null;
-    deployment =
-      id === "__new__" ? null : layout.deployment_pattern_id ?? defaultDeploymentFor(id);
+    deployment = layout.deployment_pattern_id ?? defaultDeploymentFor(id);
+  }
+  function newLayoutFor(matchupId: string, variant: number): void {
+    layout = blankLayoutFor(matchupId, variant);
+    selectedId = null;
+    deployment = null;
+  }
+  function newBlankLayout(): void {
+    layout = blankLayout();
+    selectedId = null;
+    deployment = null;
   }
   function toggleSymmetry(): void {
     symmetric = !symmetric;
@@ -152,7 +158,7 @@
   // text.
   function onKeydown(e: KeyboardEvent): void {
     if (e.key !== "Delete" && e.key !== "Backspace") return;
-    if (!selectedId) return;
+    if (!selectedId || libraryOpen) return;
     const t = e.target as HTMLElement | null;
     if (
       t &&
@@ -200,10 +206,9 @@
       >
         {symmetric ? "⟳ Symmetry on" : "⟳ Symmetry off"}
       </button>
-      <select aria-label="Load layout" onchange={(e) => loadLayout(e.currentTarget.value)} value={layout.id}>
-        <option value="__new__">＋ New layout</option>
-        {#each EMBEDDED as l (l.id)}<option value={l.id}>{l.label}</option>{/each}
-      </select>
+      <button class="library-btn" onclick={() => (libraryOpen = true)} title="Browse layouts by mission pairing">
+        ⊞ Library
+      </button>
       <select
         aria-label="Deployment overlay"
         value={deployment ?? ""}
@@ -301,6 +306,13 @@
     </aside>
   </main>
 
+  <Library
+    bind:open={libraryOpen}
+    currentId={layout.id}
+    onpick={loadLayout}
+    onnew={newLayoutFor}
+    onblank={newBlankLayout}
+  />
   <SupportModal patreonUrl={PATREON_URL} appName="Layout Editor" />
 </div>
 
@@ -425,6 +437,20 @@
     border: 1px solid var(--rim);
     border-radius: 4px;
     font-family: inherit;
+  }
+  .library-btn {
+    font: inherit;
+    font-size: 0.85rem;
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--rim);
+    border-radius: 4px;
+    padding: 0.25rem 0.6rem;
+    cursor: pointer;
+  }
+  .library-btn:hover {
+    border-color: var(--accent);
+    background: var(--accent-fill);
   }
   .sym {
     font: inherit;
