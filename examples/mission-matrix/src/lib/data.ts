@@ -5,6 +5,7 @@ import type {
   ForceDispositionId,
   SecondaryCard,
   ScoreEntry,
+  TerrainLayout,
 } from "@alpaca-software/40kdc-data";
 
 /** The embedded 40kdc dataset — the whole point of the demo is reading the
@@ -88,6 +89,52 @@ export function secondariesByIds(ids: readonly string[]): SecondaryCard[] {
 /** A secondary's display name, or the raw id if unknown. */
 export function secondaryName(id: string): string {
   return byId.get(id)?.name ?? id;
+}
+
+// ── terrain layouts per matchup ───────────────────────────────────────────────
+// Each matrix cell (an unordered disposition pair) gets three terrain layouts;
+// layouts carry `mission_matchup_id` (the canonical ordered pairing) plus a
+// `variant` number. 15 pairings × 3 variants = the full 45-card set.
+
+const DISPOSITION_INDEX = new Map(DISPOSITIONS.map((d, i) => [d, i] as const));
+
+/**
+ * The canonical ordered matchup id for an unordered disposition pair: the
+ * form with the lower-index disposition first (all 25 ordered ids exist in
+ * the data; layout cards are tagged with the canonical one).
+ */
+export function canonicalMatchupId(
+  a: ForceDispositionId,
+  b: ForceDispositionId,
+): string | undefined {
+  const [lo, hi] =
+    (DISPOSITION_INDEX.get(a) ?? 99) <= (DISPOSITION_INDEX.get(b) ?? 99) ? [a, b] : [b, a];
+  return matchupByPair.get(pairKey(lo, hi))?.id;
+}
+
+const layoutsByMatchup = new Map<string, TerrainLayout[]>();
+for (const l of ds.terrainLayouts.all) {
+  if (!l.mission_matchup_id) continue;
+  const list = layoutsByMatchup.get(l.mission_matchup_id) ?? [];
+  list.push(l);
+  layoutsByMatchup.set(l.mission_matchup_id, list);
+}
+for (const list of layoutsByMatchup.values()) {
+  list.sort((a, b) => (a.variant ?? 99) - (b.variant ?? 99));
+}
+
+/** The matchup's authored terrain layouts, ordered by variant number. */
+export function layoutsForMatchup(
+  a: ForceDispositionId,
+  b: ForceDispositionId,
+): TerrainLayout[] {
+  const id = canonicalMatchupId(a, b);
+  return id ? (layoutsByMatchup.get(id) ?? []) : [];
+}
+
+/** How many of the matchup's three layout variants are authored (cell dots). */
+export function layoutAvailability(a: ForceDispositionId, b: ForceDispositionId): number {
+  return layoutsForMatchup(a, b).length;
 }
 
 /**

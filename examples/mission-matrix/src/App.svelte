@@ -23,11 +23,14 @@
     scoringCardFor,
     drawSecondary,
     excludedIds,
+    layoutsForMatchup,
+    layoutAvailability,
     secondariesByIds,
   } from "./lib/data.js";
   import PlayerColumn from "./lib/PlayerColumn.svelte";
   import Scoreboard from "./lib/Scoreboard.svelte";
   import MissionCard from "./lib/MissionCard.svelte";
+  import TerrainSection from "./lib/TerrainSection.svelte";
   import Toast from "./lib/Toast.svelte";
   import PwaInstallPrompt from "./lib/PwaInstallPrompt.svelte";
   import TutorialModal from "./lib/TutorialModal.svelte";
@@ -131,6 +134,8 @@
   const gameCapOpp = $derived(missionOpp?.vp_per_game_cap ?? DEFAULT_GAME_CAP);
   const totalYou = $derived(playerTotal(gameYou));
   const totalOpp = $derived(playerTotal(gameOpp));
+  // The matchup's terrain layout cards (variant-ordered; empty until both picked).
+  const matchupLayouts = $derived(ready ? layoutsForMatchup(dispYou!, dispOpp!) : []);
 
   // Primary VP still scorable in the *current* round, after the per-round cap
   // and the remaining per-game primary room (other rounds' primary).
@@ -314,8 +319,15 @@
               {@const m = missionFor(row, col)}
               {@const state = cellState(row, col)}
               {@const expanded = verbose && row === dispYou}
+              {@const avail = layoutAvailability(row, col)}
               <div class="relative rounded border bg-panel text-text {expanded ? 'flex flex-col text-left px-2 pt-5 pb-2 text-xs leading-tight' : 'flex items-center justify-center text-center min-h-14 px-2 pt-3 pb-2 text-xs leading-tight'} {state === 'your' ? 'border-accent bg-accent-dim shadow-[0_0_0_2px_var(--color-accent)]' : state === 'opp' ? 'border-accent bg-accent-dim opacity-45' : 'border-border'}">
                 {#if state}<span class="absolute top-1 left-1.5 font-heading text-[9px] font-bold uppercase tracking-wide {state === 'your' ? 'text-text' : 'text-accent'}">{state === "your" ? (isMirror ? "YOU·OPP" : "YOU") : "OPP"}</span>{/if}
+                <!-- Terrain-layout coverage for this pairing: one dot per authored variant. -->
+                <span class="absolute bottom-1 right-1.5 flex gap-0.5" role="img" aria-label="{avail} of 3 terrain layouts authored" title="{avail} of 3 terrain layouts">
+                  {#each [1, 2, 3] as v (v)}
+                    <span class="w-1 h-1 rounded-full {v <= avail ? 'bg-accent' : 'bg-border-strong'}"></span>
+                  {/each}
+                </span>
                 {#if expanded}
                   <MissionCard mission={m} card={m ? scoringCardFor(m.id) : undefined} />
                 {:else}
@@ -360,6 +372,15 @@
         </div>
       {/if}
     </div>
+
+    <!-- Terrain layout cards for the picked matchup (setup step: see your
+         table before scoring starts). -->
+    {#if ready}
+      <TerrainSection
+        layouts={matchupLayouts}
+        matchupLabel="{DISPOSITION_LABELS[dispYou!]} vs {DISPOSITION_LABELS[dispOpp!]}"
+      />
+    {/if}
 
     <!-- Sticky WTC scoreboard: round, 20-point result, reset, and (mobile)
          the You/Opponent switcher. -->
