@@ -1,0 +1,74 @@
+"""Dataset linked queries against the shared conformance corpus.
+
+The dispatch here mirrors the runner's ``linked_query`` op (and is reused by
+it once the runner lands); comparison semantics (``scalar`` / ``ordered`` /
+``set``) follow CONFORMANCE.md.
+"""
+
+from __future__ import annotations
+
+from typing import Any
+
+import pytest
+
+from ..conftest import load_corpus_json
+
+
+def _cases() -> list[dict[str, Any]]:
+    return load_corpus_json("linked-api", "cases.json")
+
+
+def run_linked_query(ds: Any, query: str, args: dict[str, Any]) -> Any:
+    from wh40kdc.data.base import encode_base
+    from wh40kdc.data.loadout import maximal_loadout
+
+    if query == "find_unit":
+        u = ds.units.find(args.get("query", ""))
+        return u.id if u else None
+    if query == "find_weapon":
+        w = ds.weapons.find(args.get("query", ""))
+        return w.id if w else None
+    if query == "find_faction":
+        f = ds.factions.find(args.get("query", ""))
+        return f.id if f else None
+    if query == "find_ability":
+        a = ds.abilities.find(args.get("query", ""))
+        return a.id if a else None
+    if query == "abilities_of":
+        return [x.id for x in ds.units.get(args["unitId"]).abilities]
+    if query == "weapons_of":
+        return [x.id for x in ds.units.get(args["unitId"]).weapons]
+    if query == "wargear_options_of":
+        return [x["id"] for x in ds.units.get(args["unitId"]).wargear_options]
+    if query == "maximal_loadout":
+        unit = ds.units.get(args["unitId"])
+        lo = maximal_loadout(unit.raw, int(args["modelCount"]), ds.wargear_options_of(unit.raw))
+        return sorted(f"{id_}:{n}" for id_, n in lo.items())
+    if query == "phases_of":
+        return list(ds.abilities.get(args["abilityId"]).phases)
+    if query == "faction_of":
+        f = ds.units.get(args["unitId"]).faction
+        return f.id if f else None
+    if query == "base_size_of":
+        return encode_base(ds.units.get(args["unitId"]).raw.get("base_size_mm"))
+    if query == "model_bases_of":
+        unit_id = args["unitId"]
+        comp = next((c for c in ds.unit_compositions if c.get("unit_id") == unit_id), None)
+        models = (comp or {}).get("models") or []
+        return [f"{m['name']}={encode_base(m.get('base_size_mm')) or 'none'}" for m in models]
+    if query == "abilities_of_faction":
+        return [x.id for x in ds.abilities.by_faction(args["factionId"])]
+    if query == "weapons_of_faction":
+        return [x.id for x in ds.factions.get(args["factionId"]).weapons]
+    raise AssertionError(f"unknown linked_query: {query}")
+
+
+@pytest.mark.parametrize("case", _cases(), ids=lambda c: c["name"])
+def test_linked_api_case(dataset: Any, case: dict[str, Any]) -> None:
+    actual = run_linked_query(dataset, case["query"], case.get("args") or {})
+    expected = case["expected"]
+    comparison = case.get("comparison", "scalar")
+    if comparison == "set":
+        assert sorted(actual) == sorted(expected)
+    else:  # scalar and ordered both compare exactly
+        assert actual == expected
