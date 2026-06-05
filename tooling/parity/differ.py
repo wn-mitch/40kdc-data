@@ -59,9 +59,10 @@ class Runner:
     when N+1's request is the most recent thing sent.
     """
 
-    def __init__(self, cmd: list[str], cwd: Path):
+    def __init__(self, cmd: list[str], cwd: Path, env: dict[str, str] | None = None):
         self.cmd = cmd
         self.cwd = cwd
+        self.env = env
         self.proc: subprocess.Popen[str] | None = None
         self.impl: str = "?"
         self.impl_version: str = "?"
@@ -70,6 +71,7 @@ class Runner:
         self.proc = subprocess.Popen(
             self.cmd,
             cwd=str(self.cwd),
+            env={**os.environ, **self.env} if self.env else None,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -110,8 +112,8 @@ class Runner:
         return json.loads(out)
 
 
-def spawn_runner(cmd: list[str], cwd: Path) -> Runner:
-    return Runner(cmd, cwd)
+def spawn_runner(cmd: list[str], cwd: Path, env: dict[str, str] | None = None) -> Runner:
+    return Runner(cmd, cwd, env)
 
 
 def handshake(runner: Runner, spec_version: int) -> None:
@@ -421,6 +423,21 @@ def iter_terrain_keystones_cases(corpus: Path) -> Iterator[Case]:
         )
 
 
+def iter_validator_cases(corpus: Path) -> Iterator[Case]:
+    path = corpus / "validator" / "cases.json"
+    cases = json.loads(path.read_text())
+    for entry in cases:
+        # The contract is the closed-enum (path, code) signature with set
+        # semantics — both impls' outputs sort before comparing.
+        yield Case(
+            area="validator",
+            case_id=f"validator/{entry['name']}",
+            op="validate",
+            args={"target": entry["target"], "value": entry["input"]},
+            compare_mode="set",
+        )
+
+
 AREA_ITERATORS: dict[str, Any] = {
     "normalize": iter_normalize_cases,
     "roster": iter_roster_cases,
@@ -432,6 +449,7 @@ AREA_ITERATORS: dict[str, Any] = {
     "scoring": iter_scoring_cases,
     "terrain-resolver": iter_terrain_resolver_cases,
     "terrain-keystones": iter_terrain_keystones_cases,
+    "validator": iter_validator_cases,
 }
 
 
@@ -553,6 +571,9 @@ def run_corpus(
         "attribution": ["attribution"],
         "scoring-translation": ["translate_scoring"],
         "effect-translation": ["translate_effect"],
+        # Rust doesn't ship a validator yet — its runner answers UNKNOWN_OP
+        # and the area skips for rust pairings; ts↔py exercises it.
+        "validator": ["validate"],
     }
     probes: set[str] = set()
     for a in areas:
@@ -661,6 +682,26 @@ def default_rust_cmd() -> list[str]:
     return ["cargo", "run", "--quiet", "--release", "--bin", "wh40kdc-runner"]
 
 
+def default_py_cmd() -> list[str]:
+    # `-m` (not a console script) so the Python runner can't collide with the
+    # Rust `wh40kdc-runner` binary on PATH. The src tree is importable via the
+    # PYTHONPATH from `py_env()`, so no install step is needed — but the
+    # interpreter must have the package's runtime deps (jsonschema), so the
+    # package venv wins when present.
+    venv_python = REPO_ROOT / "python" / ".venv" / "bin" / "python"
+    interpreter = str(venv_python) if venv_python.exists() else sys.executable
+    return [interpreter, "-m", "wh40kdc.runner"]
+
+
+def py_env() -> dict[str, str]:
+    """Environment for the Python runner: prepend python/src to PYTHONPATH so
+    the in-repo source tree is importable without an editable install (an
+    installed wh40kdc still wins if PYTHONPATH ordering is overridden)."""
+    src = str(REPO_ROOT / "python" / "src")
+    existing = os.environ.get("PYTHONPATH")
+    return {"PYTHONPATH": f"{src}{os.pathsep}{existing}" if existing else src}
+
+
 def load_spec_version(corpus: Path) -> int:
     return int((corpus / "SPEC_VERSION").read_text().strip())
 
@@ -676,6 +717,13 @@ def main() -> int:
     )
     p.add_argument("--ts-cmd", help="shlex-split command line for the TS runner")
     p.add_argument("--rust-cmd", help="shlex-split command line for the Rust runner")
+    p.add_argument("--py-cmd", help="shlex-split command line for the Python runner")
+    p.add_argument(
+        "--pair",
+        choices=["ts,rust", "ts,py", "rust,py"],
+        default="ts,rust",
+        help="which two implementations to diff (default: ts,rust)",
+    )
     p.add_argument("--corpus", default=str(CORPUS_DEFAULT), help="path to the conformance corpus")
     p.add_argument(
         "--area",
@@ -702,12 +750,23 @@ def main() -> int:
 
     corpus = Path(args.corpus).resolve()
     spec_version = load_spec_version(corpus)
-    ts_cmd = shlex.split(args.ts_cmd) if args.ts_cmd else default_ts_cmd()
-    rust_cmd = shlex.split(args.rust_cmd) if args.rust_cmd else default_rust_cmd()
+
+    # Per-impl (command, env) resolution; --pair selects which two spawn.
+    impl_spawns: dict[str, tuple[list[str], dict[str, str] | None]] = {
+        "ts": (shlex.split(args.ts_cmd) if args.ts_cmd else default_ts_cmd(), None),
+        "rust": (shlex.split(args.rust_cmd) if args.rust_cmd else default_rust_cmd(), None),
+        "py": (shlex.split(args.py_cmd) if args.py_cmd else default_py_cmd(), py_env()),
+    }
+    lhs_name, rhs_name = args.pair.split(",")
+    lhs_cmd, lhs_env = impl_spawns[lhs_name]
+    rhs_cmd, rhs_env = impl_spawns[rhs_name]
 
     areas = args.area or list(AREA_ITERATORS.keys())
 
-    with spawn_runner(ts_cmd, REPO_ROOT) as ts, spawn_runner(rust_cmd, REPO_ROOT) as rs:
+    with (
+        spawn_runner(lhs_cmd, REPO_ROOT, lhs_env) as ts,
+        spawn_runner(rhs_cmd, REPO_ROOT, rhs_env) as rs,
+    ):
         try:
             handshake(ts, spec_version)
             handshake(rs, spec_version)
