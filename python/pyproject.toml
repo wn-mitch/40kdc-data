@@ -1,0 +1,79 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "wh40kdc"
+# Version lives in src/wh40kdc/_version.py (single source), kept in lockstep
+# with tools/package.json and crates/wh40kdc/Cargo.toml — CI hard-fails on
+# mismatch (.github/workflows/validate.yml).
+dynamic = ["version"]
+description = "Warhammer 40K dataset for the 40kdc-data schema layer: an embedded dataset behind a linked typed API, ListForge + NewRecruit roster importers and exporters, damage-projection cruncher, and a schema validator."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [{ name = "Alpaca Software" }]
+keywords = ["warhammer", "40k", "wargaming", "schema", "dataset"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Games/Entertainment :: Board Games",
+  "Typing :: Typed",
+]
+# The only runtime dependency. Everything else (base64, zlib, re, unicodedata,
+# math, json) is stdlib — keep it that way; see CONFORMANCE.md for why the
+# implementations stay dependency-light.
+dependencies = ["jsonschema>=4,<5"]
+
+[project.urls]
+Homepage = "https://40kdc.alpacasoft.dev"
+Repository = "https://github.com/wn-mitch/40kdc-data"
+
+# NOTE: deliberately no [project.scripts] console script. The conformance
+# runner is invoked as `python -m wh40kdc.runner` — a `wh40kdc-runner` script
+# would collide with the Rust binary of the same name on PATH in CI's parity
+# job (see conformance/RUNNER_PROTOCOL.md).
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "ruff>=0.8",
+  "mypy>=1.13",
+  "datamodel-code-generator>=0.26",
+  "build>=1.2",
+]
+
+[tool.hatch.version]
+path = "src/wh40kdc/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/wh40kdc"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/wh40kdc", "README.md", "codegen"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "RUF"]
+# Generated code is exempt from style rules (mirrors the TS/Rust generated
+# artifacts, which are also excluded from lint).
+exclude = ["src/wh40kdc/_types.py"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = false
+disallow_untyped_defs = true
+warn_unused_ignores = true
+no_implicit_optional = true
+exclude = ["_types\\.py$"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
