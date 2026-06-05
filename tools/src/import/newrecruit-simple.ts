@@ -28,12 +28,16 @@ import type { FormatAdapter } from "./adapter.js";
 import type { ParsedRoster, ParsedUnit, ParsedWargear } from "./types.js";
 import { classifyWargearList, splitWargearList } from "./newrecruit-text.js";
 
-const FIRST_LINE = /^(.+)\s-\s\[\s*(\d+)\s*pts?\s*\]\s*$/i;
-const ROSTER_HEADER = /^#\s*\+\+\s*Army Roster\s*\+\+\s*\[\s*(\d+)\s*pts?\s*\]\s*$/i;
-const SECTION_HEADER = /^##\s*(.+?)(?:\s*\[\s*(\d+)\s*pts?\s*\])?\s*$/;
-const UNIT_LINE = /^(.+?)\s*\[\s*(\d+)\s*pts?\s*\](?:\s*:\s*(.*))?$/i;
+// Point brackets may carry comma-separated faction resources after the pts
+// figure (e.g. `[4485pts, 29Cabal Points]`); the tail is recognized and
+// discarded — only the pts figure is consumed.
+const FIRST_LINE = /^(.+)\s-\s\[\s*(\d+)\s*pts?\s*(?:,[^\]]*)?\]\s*$/i;
+const ROSTER_HEADER =
+  /^#\s*\+\+\s*Army Roster\s*\+\+\s*\[\s*(\d+)\s*pts?\s*(?:,[^\]]*)?\]\s*$/i;
+const SECTION_HEADER = /^##\s*(.+?)(?:\s*\[\s*(\d+)\s*pts?\s*(?:,[^\]]*)?\])?\s*$/;
+const UNIT_LINE = /^(.+?)\s*\[\s*(\d+)\s*pts?\s*(?:,[^\]]*)?\](?:\s*:\s*(.*))?$/i;
 const BULLET =
-  /^\s*•\s*(\d+)x\s+(.+?)(?:\s*\[\s*(\d+)\s*pts?\s*\])?(?:\s*:\s*(.*))?\s*$/u;
+  /^\s*•\s*(\d+)x\s+(.+?)(?:\s*\[\s*(\d+)\s*pts?\s*(?:,[^\]]*)?\])?(?:\s*:\s*(.*))?\s*$/u;
 
 interface UnitBuilder {
   raw_name: string;
@@ -119,7 +123,12 @@ export const newRecruitSimpleAdapter: FormatAdapter = {
     const firstNonBlank = lines.find((l) => l.trim().length > 0);
     if (!firstNonBlank) return false;
     if (!FIRST_LINE.test(firstNonBlank)) return false;
-    return /^#\s*\+\+\s*Army Roster\s*\+\+/m.test(decoded);
+    // Some exports omit the `# ++ Army Roster ++` line and open straight with
+    // a `## Section` heading — accept either marker.
+    return (
+      /^#\s*\+\+\s*Army Roster\s*\+\+/m.test(decoded) ||
+      /^##\s+/m.test(decoded)
+    );
   },
 
   parse(decoded: unknown): ParsedRoster {
@@ -184,14 +193,20 @@ export const newRecruitSimpleAdapter: FormatAdapter = {
       }
 
       if (section === "configuration") {
-        const idx = line.indexOf(":");
-        if (idx > 0) {
-          const key = line.slice(0, idx).trim().toLowerCase();
-          const value = line.slice(idx + 1).trim();
-          if (key === "battle size") battle_size_raw = value;
-          else if (key === "detachment") detachment_raw_name = value;
+        // Some exports list units directly after Configuration with no units
+        // section heading; a `Name [N pts]` line ends the configuration block.
+        if (UNIT_LINE.test(line)) {
+          section = "units";
+        } else {
+          const idx = line.indexOf(":");
+          if (idx > 0) {
+            const key = line.slice(0, idx).trim().toLowerCase();
+            const value = line.slice(idx + 1).trim();
+            if (key === "battle size") battle_size_raw = value;
+            else if (key === "detachment") detachment_raw_name = value;
+          }
+          continue;
         }
-        continue;
       }
 
       // Unit section. A bullet line extends the *current* unit.

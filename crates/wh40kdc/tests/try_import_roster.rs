@@ -14,8 +14,8 @@ use flate2::Compression;
 use serde_json::Value;
 use wh40kdc::import::{
     try_import_roster, GwAdapter, GwHeaderlessAdapter, ImportFailureReason, ImportResult,
-    NewRecruitJsonAdapter, NewRecruitSimpleAdapter, NewRecruitWtcCompactAdapter,
-    NewRecruitWtcFullAdapter, RosterFormat, RosterizerAdapter,
+    ListForgeTextAdapter, NewRecruitJsonAdapter, NewRecruitSimpleAdapter,
+    NewRecruitWtcCompactAdapter, NewRecruitWtcFullAdapter, RosterFormat, RosterizerAdapter,
 };
 use wh40kdc::import::{FormatAdapter, ListForgeAdapter};
 use wh40kdc::Dataset;
@@ -74,6 +74,11 @@ fn fixtures() -> Vec<Fixture> {
             label: "GW app text (gw-chaos-knights)",
             input: conformance("gw-chaos-knights/input.gw.txt"),
             format: RosterFormat::Gw,
+        },
+        Fixture {
+            label: "ListForge text (cd-daemonic-incursion)",
+            input: conformance("cd-daemonic-incursion/input.listforge-text.txt"),
+            format: RosterFormat::ListforgeText,
         },
     ]
 }
@@ -162,7 +167,7 @@ fn rejects_unknown_json_shape() {
         ImportResult::Err { reason, trials, .. } => {
             assert_eq!(reason, ImportFailureReason::NoAdapterMatched);
             // Every adapter should have been polled.
-            assert_eq!(trials.len(), 8);
+            assert_eq!(trials.len(), 9);
             for t in trials {
                 assert!(!t.matched, "{:?} should not have matched", t.id);
             }
@@ -186,6 +191,7 @@ fn rejects_freeform_text() {
 fn adapter_matchers_are_disjoint_per_fixture() {
     // Greedy first-match dispatch relies on at most one adapter accepting a
     // given decoded payload. Guard the invariant against regressions.
+    // Registry order matches `try_import_roster`'s dispatch.
     let adapters: Vec<Box<dyn FormatAdapter>> = vec![
         Box::new(RosterizerAdapter),
         Box::new(NewRecruitJsonAdapter),
@@ -193,6 +199,7 @@ fn adapter_matchers_are_disjoint_per_fixture() {
         Box::new(NewRecruitWtcFullAdapter),
         Box::new(NewRecruitWtcCompactAdapter),
         Box::new(NewRecruitSimpleAdapter),
+        Box::new(ListForgeTextAdapter),
         Box::new(GwHeaderlessAdapter),
         Box::new(ListForgeAdapter),
     ];
@@ -210,6 +217,26 @@ fn adapter_matchers_are_disjoint_per_fixture() {
             .filter(|a| a.detect(&decoded))
             .map(|a| a.format())
             .collect();
+
+        // The bullet-text fallback `GwHeaderlessAdapter` legitimately also
+        // accepts a ListForge-text payload (same body grammar); the framed
+        // listforge-text matcher wins only by sitting ahead of it in the
+        // registry. For that fixture assert the order-decided winner rather
+        // than strict disjointness; every other fixture stays disjoint.
+        if f.format == RosterFormat::ListforgeText {
+            assert_eq!(
+                matched.first().copied(),
+                Some(RosterFormat::ListforgeText),
+                "listforge-text fixture: first matcher should be listforge-text, got {matched:?}"
+            );
+            assert!(
+                matched
+                    .iter()
+                    .all(|m| matches!(m, RosterFormat::ListforgeText | RosterFormat::Gw)),
+                "listforge-text fixture: unexpected extra matcher in {matched:?}"
+            );
+            continue;
+        }
 
         assert_eq!(
             matched.len(),

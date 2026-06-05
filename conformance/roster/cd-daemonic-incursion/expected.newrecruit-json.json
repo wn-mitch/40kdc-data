@@ -1,0 +1,343 @@
+{
+  "name": "all gas no breaks",
+  "generatedBy": "https://newrecruit.eu",
+  "roster": {
+    "name": "all gas no breaks",
+    "xmlns": "http://www.battlescribe.net/schema/rosterSchema",
+    "generatedBy": "https://newrecruit.eu",
+    "costs": [
+      {
+        "name": "pts",
+        "typeId": "pts-type",
+        "value": 795
+      }
+    ],
+    "forces": [
+      {
+        "id": "force-1",
+        "name": "Army Roster",
+        "catalogueName": "Chaos Daemons",
+        "selections": [
+          {
+            "id": "cfg-battle-size",
+            "name": "Battle Size",
+            "type": "upgrade",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Configuration",
+                "primary": true
+              }
+            ],
+            "selections": [
+              {
+                "id": "cfg-battle-size-val",
+                "name": "Strike Force (1995 Point limit)",
+                "type": "upgrade",
+                "number": 1
+              }
+            ]
+          },
+          {
+            "id": "cfg-detachment",
+            "name": "Detachment",
+            "type": "upgrade",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Configuration",
+                "primary": true
+              }
+            ],
+            "selections": [
+              {
+                "id": "cfg-detachment-val",
+                "name": "Daemonic Incursion",
+                "type": "upgrade",
+                "number": 1
+              }
+            ]
+          },
+          {
+            "id": "u-0",
+            "name": "Rotigus",
+            "type": "model",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Faction: Chaos Daemons",
+                "primary": false
+              }
+            ],
+            "costs": [
+              {
+                "name": "pts",
+                "typeId": "pts-type",
+                "value": 250
+              }
+            ],
+            "selections": [
+              {
+                "id": "w-0",
+                "name": "Gnarlrod",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "id": "w-1",
+                "name": "Streams of brackish filth",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "u-1",
+            "name": "Great Unclean One",
+            "type": "model",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Faction: Chaos Daemons",
+                "primary": false
+              }
+            ],
+            "costs": [
+              {
+                "name": "pts",
+                "typeId": "pts-type",
+                "value": 295
+              }
+            ],
+            "selections": [
+              {
+                "id": "u1-warlord",
+                "name": "Warlord",
+                "type": "upgrade",
+                "number": 1
+              },
+              {
+                "id": "u1-enh",
+                "name": "The Endless Gift",
+                "type": "upgrade",
+                "number": 1,
+                "group": "Enhancements"
+              },
+              {
+                "id": "w-0",
+                "name": "Putrid vomit",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "id": "w-1",
+                "name": "Bileblade",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "id": "w-2",
+                "name": "Bilesword",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "u-2",
+            "name": "Bloodmaster",
+            "type": "model",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Faction: Chaos Daemons",
+                "primary": false
+              }
+            ],
+            "costs": [
+              {
+                "name": "pts",
+                "typeId": "pts-type",
+                "value": 65
+              }
+            ],
+            "selections": [
+              {
+                "id": "w-0",
+                "name": "Blade of blood",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "u-3",
+            "name": "Bloodletters",
+            "type": "unit",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Faction: Chaos Daemons",
+                "primary": false
+              }
+            ],
+            "costs": [
+              {
+                "name": "pts",
+                "typeId": "pts-type",
+                "value": 110
+              }
+            ],
+            "selections": [
+              {
+                "id": "u3-model",
+                "name": "Bloodletters",
+                "type": "model",
+                "number": 10,
+                "selections": [
+                  {
+                    "id": "w-0",
+                    "name": "Hellblade",
+                    "type": "upgrade",
+                    "number": 10,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  },
+                  {
+                    "id": "w-1",
+                    "name": "Instrument of Chaos",
+                    "type": "upgrade",
+                    "number": 1,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  },
+                  {
+                    "id": "w-2",
+                    "name": "Daemonic Icon",
+                    "type": "upgrade",
+                    "number": 1,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "u-4",
+            "name": "Flesh Hounds",
+            "type": "unit",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Faction: Chaos Daemons",
+                "primary": false
+              }
+            ],
+            "costs": [
+              {
+                "name": "pts",
+                "typeId": "pts-type",
+                "value": 75
+              }
+            ],
+            "selections": [
+              {
+                "id": "u4-model",
+                "name": "Flesh Hounds",
+                "type": "model",
+                "number": 5,
+                "selections": [
+                  {
+                    "id": "w-0",
+                    "name": "Burning maw",
+                    "type": "upgrade",
+                    "number": 1,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  },
+                  {
+                    "id": "w-1",
+                    "name": "Collar of Khorne",
+                    "type": "upgrade",
+                    "number": 5,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  },
+                  {
+                    "id": "w-2",
+                    "name": "Gore-drenched fangs",
+                    "type": "upgrade",
+                    "number": 5,
+                    "categories": [
+                      {
+                        "name": "Ranged Weapon",
+                        "primary": false
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

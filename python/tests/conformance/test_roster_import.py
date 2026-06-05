@@ -24,7 +24,12 @@ from ..conftest import CORPUS
 _ROSTER_DIR = CORPUS / "roster"
 _CASES = sorted(p.name for p in _ROSTER_DIR.iterdir() if p.is_dir()) if _ROSTER_DIR.exists() else []
 
-_CANONICAL_SEEDS = ("input.json", "input.newrecruit-json.json", "input.gw.txt")
+_CANONICAL_SEEDS = (
+    "input.json",
+    "input.newrecruit-json.json",
+    "input.gw.txt",
+    "input.listforge-text.txt",
+)
 _NEWRECRUIT_INPUT = re.compile(r"^input\.(newrecruit-[a-z-]+)\.[a-z]+$")
 
 
@@ -42,6 +47,8 @@ def _expected_format_for(filename: str) -> str:
         return "rosterizer"
     if filename == "input.gw.txt":
         return "gw"
+    if filename == "input.listforge-text.txt":
+        return "listforge-text"
     match = _NEWRECRUIT_INPUT.match(filename)
     if not match:
         raise AssertionError(f"unrecognised input fixture filename: {filename}")

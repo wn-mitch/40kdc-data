@@ -55,14 +55,10 @@ export type {
 // module and pinned by the `conformance/scoring` corpus.
 export * from "./scoring/index.js";
 
-// Schema access + AJV validation (secondary: this package also validates data
-// against the canonical JSON Schemas).
-export {
-  createValidator,
-  findSchemaFiles,
-  listSchemaIds,
-  SCHEMAS_ROOT,
-} from "./schema-loader.js";
+// Schema access + AJV validation lives behind the `./validate` subpath export
+// (`@alpaca-software/40kdc-data/validate`), NOT the root barrel: it reads
+// schema files from disk at module load (node:fs/node:url), which breaks
+// browser bundles. The root barrel stays universal (Node + browser).
 
 // Army-list importer (ListForge → resolved 40kdc roster). Types are curated
 // rather than re-exported wholesale to avoid name clashes with generated types

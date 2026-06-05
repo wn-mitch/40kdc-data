@@ -21,6 +21,7 @@ from wh40kdc.imports.adapter import FormatAdapter, select_adapter
 from wh40kdc.imports.decode import decode_listforge
 from wh40kdc.imports.gw import gw_adapter
 from wh40kdc.imports.listforge import listforge_adapter
+from wh40kdc.imports.listforge_text import listforge_text_adapter
 from wh40kdc.imports.newrecruit_json import newrecruit_json_adapter
 from wh40kdc.imports.newrecruit_simple import newrecruit_simple_adapter
 from wh40kdc.imports.newrecruit_wtc import (
@@ -49,6 +50,7 @@ ADAPTERS: tuple[FormatAdapter, ...] = (
     newrecruit_wtc_full_adapter,
     newrecruit_wtc_compact_adapter,
     newrecruit_simple_adapter,
+    listforge_text_adapter,
     listforge_adapter,
 )
 

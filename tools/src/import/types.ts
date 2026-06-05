@@ -88,6 +88,7 @@ export interface RosterUnit {
  * extend this union; `roster.schema.json` keeps the canonical enum. */
 export type RosterFormat =
   | "listforge"
+  | "listforge-text"
   | "newrecruit-json"
   | "newrecruit-wtc-compact"
   | "newrecruit-wtc-full"

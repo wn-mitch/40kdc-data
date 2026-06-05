@@ -1,0 +1,116 @@
+{
+  "name": "all gas no breaks",
+  "generated_by": "List Forge",
+  "faction_raw_name": "Chaos Daemons",
+  "detachment_raw_name": "Daemonic Incursion",
+  "battle_size_raw": "Strike Force (2000 Point limit)",
+  "declared_limit": 1995,
+  "total_reported": 1995,
+  "total_computed": 795,
+  "units": [
+    {
+      "raw_name": "Rotigus",
+      "is_character": true,
+      "model_count": 1,
+      "points": 250,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Gnarlrod",
+          "count": 1
+        },
+        {
+          "raw_name": "Streams of brackish filth",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "Great Unclean One",
+      "is_character": true,
+      "model_count": 1,
+      "points": 295,
+      "is_warlord": true,
+      "enhancement_raw_name": "The Endless Gift",
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Putrid vomit",
+          "count": 1
+        },
+        {
+          "raw_name": "Bileblade",
+          "count": 1
+        },
+        {
+          "raw_name": "Bilesword",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "Bloodmaster",
+      "is_character": true,
+      "model_count": 1,
+      "points": 65,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Blade of blood",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "Bloodletters",
+      "is_character": false,
+      "model_count": 10,
+      "points": 110,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Hellblade",
+          "count": 10
+        },
+        {
+          "raw_name": "Instrument of Chaos",
+          "count": 1
+        },
+        {
+          "raw_name": "Daemonic Icon",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "raw_name": "Flesh Hounds",
+      "is_character": false,
+      "model_count": 5,
+      "points": 75,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "raw_name": "Burning maw",
+          "count": 1
+        },
+        {
+          "raw_name": "Collar of Khorne",
+          "count": 5
+        },
+        {
+          "raw_name": "Gore-drenched fangs",
+          "count": 5
+        }
+      ]
+    }
+  ],
+  "multi_force": false
+}

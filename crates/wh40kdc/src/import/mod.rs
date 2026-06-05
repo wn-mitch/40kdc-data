@@ -39,6 +39,8 @@ mod gw_headerless;
 #[cfg(feature = "import")]
 mod listforge;
 #[cfg(feature = "import")]
+mod listforge_text;
+#[cfg(feature = "import")]
 mod newrecruit_json;
 #[cfg(feature = "import")]
 mod newrecruit_simple;
@@ -67,6 +69,8 @@ pub use gw::GwAdapter;
 pub use gw_headerless::GwHeaderlessAdapter;
 #[cfg(feature = "import")]
 pub use listforge::ListForgeAdapter;
+#[cfg(feature = "import")]
+pub use listforge_text::ListForgeTextAdapter;
 #[cfg(feature = "import")]
 pub use newrecruit_json::NewRecruitJsonAdapter;
 #[cfg(feature = "import")]
@@ -137,6 +141,10 @@ fn adapters() -> Vec<Box<dyn FormatAdapter>> {
         Box::new(NewRecruitWtcFullAdapter),
         Box::new(NewRecruitWtcCompactAdapter),
         Box::new(NewRecruitSimpleAdapter),
+        // listforge-text requires the `name - faction - detachment (N Points)`
+        // first line none of the others accept; it runs right before the
+        // listforge (JSON) adapter, mirroring the TS ADAPTERS order.
+        Box::new(ListForgeTextAdapter),
         // Fallback for bullet-bearing plain text without a summary fence (GW app
         // export, NewRecruit copy-text, `##` markdown lists). Placed after the
         // framed text adapters so they win when their headers are present.

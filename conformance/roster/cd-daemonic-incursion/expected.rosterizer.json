@@ -1,0 +1,184 @@
+{
+  "slug": "",
+  "key": "",
+  "visible": "hidden",
+  "locked": false,
+  "rulebook": {
+    "name": "40kdc",
+    "game": "Warhammer 40,000",
+    "publisher": "Alpaca Software",
+    "url": "https://40kdc.dev",
+    "genre": "wargame"
+  },
+  "snapshot": {
+    "item": "Roster§Roster",
+    "name": "all gas no breaks",
+    "quantity": 1,
+    "stats": {
+      "Points": {
+        "value": 795
+      }
+    },
+    "assets": {
+      "included": [
+        {
+          "item": "Faction§Chaos Daemons",
+          "name": "Chaos Daemons",
+          "quantity": 1
+        },
+        {
+          "item": "Detachment§Daemonic Incursion",
+          "name": "Daemonic Incursion",
+          "quantity": 1
+        },
+        {
+          "item": "Battle Size§Strike Force (1995 Point limit)",
+          "name": "Strike Force (1995 Point limit)",
+          "quantity": 1
+        },
+        {
+          "item": "Unit§Rotigus",
+          "name": "Rotigus",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 250
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Gnarlrod",
+                "name": "Gnarlrod",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Streams of brackish filth",
+                "name": "Streams of brackish filth",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Great Unclean One",
+          "name": "Great Unclean One",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 295
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Enhancement§The Endless Gift",
+                "name": "The Endless Gift",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Putrid vomit",
+                "name": "Putrid vomit",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Bileblade",
+                "name": "Bileblade",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Bilesword",
+                "name": "Bilesword",
+                "quantity": 1
+              }
+            ],
+            "traits": [
+              {
+                "item": "Trait§Warlord",
+                "name": "Warlord",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Bloodmaster",
+          "name": "Bloodmaster",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 65
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Blade of blood",
+                "name": "Blade of blood",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Bloodletters",
+          "name": "Bloodletters",
+          "quantity": 10,
+          "stats": {
+            "Points": {
+              "value": 110
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Hellblade",
+                "name": "Hellblade",
+                "quantity": 10
+              },
+              {
+                "item": "Weapon§Instrument of Chaos",
+                "name": "Instrument of Chaos",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Daemonic Icon",
+                "name": "Daemonic Icon",
+                "quantity": 1
+              }
+            ]
+          }
+        },
+        {
+          "item": "Unit§Flesh Hounds",
+          "name": "Flesh Hounds",
+          "quantity": 5,
+          "stats": {
+            "Points": {
+              "value": 75
+            }
+          },
+          "assets": {
+            "included": [
+              {
+                "item": "Weapon§Burning maw",
+                "name": "Burning maw",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Collar of Khorne",
+                "name": "Collar of Khorne",
+                "quantity": 5
+              },
+              {
+                "item": "Weapon§Gore-drenched fangs",
+                "name": "Gore-drenched fangs",
+                "quantity": 5
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

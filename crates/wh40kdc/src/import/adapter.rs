@@ -82,5 +82,6 @@ pub fn format_id(fmt: RosterFormat) -> &'static str {
         RosterFormat::NewrecruitSimple => "newrecruit-simple",
         RosterFormat::Rosterizer => "rosterizer",
         RosterFormat::Gw => "gw",
+        RosterFormat::ListforgeText => "listforge-text",
     }
 }

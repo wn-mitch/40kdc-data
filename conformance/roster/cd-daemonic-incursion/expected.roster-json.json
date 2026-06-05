@@ -1,0 +1,260 @@
+{
+  "name": "all gas no breaks",
+  "source": {
+    "format": "listforge-text",
+    "generated_by": "List Forge"
+  },
+  "faction_id": "chaos-daemons",
+  "detachment_id": "daemonic-incursion",
+  "battle_size": "strike-force",
+  "points": {
+    "declared_limit": 1995,
+    "total_reported": 1995,
+    "total_computed": 795
+  },
+  "units": [
+    {
+      "ref": {
+        "id": "rotigus",
+        "raw_name": "Rotigus",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 250,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "gnarlrod",
+            "raw_name": "Gnarlrod",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "streams-of-brackish-filth",
+            "raw_name": "Streams of brackish filth",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "great-unclean-one",
+        "raw_name": "Great Unclean One",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 295,
+      "is_warlord": true,
+      "enhancement": {
+        "id": "the-endless-gift",
+        "raw_name": "The Endless Gift",
+        "resolved": true,
+        "candidates": []
+      },
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "putrid-vomit",
+            "raw_name": "Putrid vomit",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "bileblade",
+            "raw_name": "Bileblade",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "bilesword",
+            "raw_name": "Bilesword",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "bloodmaster",
+        "raw_name": "Bloodmaster",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 65,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "blade-of-blood",
+            "raw_name": "Blade of blood",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "leader_attachment": {
+        "bodyguard_ref": {
+          "id": "bloodletters",
+          "raw_name": "Bloodletters",
+          "resolved": true,
+          "candidates": []
+        },
+        "provisional": true
+      }
+    },
+    {
+      "ref": {
+        "id": "bloodletters",
+        "raw_name": "Bloodletters",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 10,
+      "points": 110,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": "hellblade",
+            "raw_name": "Hellblade",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 10
+        },
+        {
+          "ref": {
+            "id": null,
+            "raw_name": "Instrument of Chaos",
+            "resolved": false,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": null,
+            "raw_name": "Daemonic Icon",
+            "resolved": false,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "flesh-hounds",
+        "raw_name": "Flesh Hounds",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 5,
+      "points": 75,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [
+        {
+          "ref": {
+            "id": null,
+            "raw_name": "Burning maw",
+            "resolved": false,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": null,
+            "raw_name": "Collar of Khorne",
+            "resolved": false,
+            "candidates": []
+          },
+          "count": 5
+        },
+        {
+          "ref": {
+            "id": "gore-drenched-fangs",
+            "raw_name": "Gore-drenched fangs",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 5
+        }
+      ],
+      "leader_attachment": null
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "pre-launch-provisional"
+  },
+  "diagnostics": {
+    "resolved_units": 5,
+    "unresolved_units": 0,
+    "resolved_weapons": 8,
+    "unresolved_weapons": 4,
+    "warnings": [
+      {
+        "code": "weapon-unresolved",
+        "message": "Weapon name did not match any 40kdc weapon.",
+        "raw_name": "Instrument of Chaos"
+      },
+      {
+        "code": "weapon-unresolved",
+        "message": "Weapon name did not match any 40kdc weapon.",
+        "raw_name": "Daemonic Icon"
+      },
+      {
+        "code": "weapon-unresolved",
+        "message": "Weapon name did not match any 40kdc weapon.",
+        "raw_name": "Burning maw"
+      },
+      {
+        "code": "weapon-unresolved",
+        "message": "Weapon name did not match any 40kdc weapon.",
+        "raw_name": "Collar of Khorne"
+      },
+      {
+        "code": "leader-attachment-inferred",
+        "message": "Leader attachment was inferred from leader-attachment data and is provisional.",
+        "raw_name": "Bloodmaster"
+      },
+      {
+        "code": "points-mismatch",
+        "message": "Source-reported total (1995) differs from the sum of cost lines (795).",
+        "raw_name": null
+      }
+    ]
+  }
+}

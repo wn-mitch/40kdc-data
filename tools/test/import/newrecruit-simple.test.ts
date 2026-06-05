@@ -95,3 +95,61 @@ describe("newRecruitSimpleAdapter", () => {
     expect(JSON.stringify(parsed)).not.toMatch(/description/i);
   });
 });
+
+describe("newRecruitSimpleAdapter edge cases", () => {
+  it("parses points brackets carrying comma-separated faction resources", () => {
+    const cabal = `Chaos - Thousand Sons - Tester - [4485pts, 29Cabal Points]
+
+# ++ Army Roster ++ [4485pts, 29Cabal Points]
+## Epic Hero [895pts, 13Cabal Points]
+Ahriman [140pts, 3Cabal Points]: Black Staff of Ahriman, Inferno bolt pistol
+`;
+    expect(newRecruitSimpleAdapter.matches(cabal)).toBe(true);
+    const parsed = newRecruitSimpleAdapter.parse(cabal);
+    expect(parsed.declared_limit).toBe(4485);
+    expect(parsed.total_reported).toBe(4485);
+    expect(parsed.units.length).toBe(1);
+    expect(parsed.units[0].raw_name).toBe("Ahriman");
+    expect(parsed.units[0].points).toBe(140);
+  });
+
+  it("matches exports that omit the Army Roster line but carry ## sections", () => {
+    const headerless = `Chaos - World Eaters - Proxy List - [2000pts]
+
+## Epic Hero [675pts]
+Angron [435pts]: Samni'arius and Spinegrinder, Warlord
+`;
+    expect(newRecruitSimpleAdapter.matches(headerless)).toBe(true);
+    const parsed = newRecruitSimpleAdapter.parse(headerless);
+    expect(parsed.faction_raw_name).toBe("World Eaters");
+    expect(parsed.total_reported).toBeNull();
+    expect(parsed.units.length).toBe(1);
+    expect(parsed.units[0].is_warlord).toBe(true);
+  });
+
+  it("treats a unit line directly after Configuration as ending that section", () => {
+    const noUnitsHeader = `Xenos - T'au Empire - Base Tau - [2000pts]
+
+# ++ Army Roster ++ [2000pts]
+## Configuration
+Battle Size: Strike Force (2000 Point limit)
+Detachment: Auxiliary Cadre
+Show/Hide Options: Legends are visible
+
+Broadside Battlesuits [90pts]:
+• 1x Broadside Shas'vre: Crushing bulk, 2x Shield Drone, Heavy rail rifle
+Broadside Battlesuits [90pts]:
+• 1x Broadside Shas'vre: Crushing bulk, 2x Shield Drone, Heavy rail rifle
+`;
+    const parsed = newRecruitSimpleAdapter.parse(noUnitsHeader);
+    expect(parsed.detachment_raw_name).toBe("Auxiliary Cadre");
+    expect(parsed.units.length).toBe(2);
+    expect(parsed.units[0].raw_name).toBe("Broadside Battlesuits");
+    expect(parsed.units[0].model_count).toBe(1);
+    const gear = Object.fromEntries(
+      parsed.units[0].wargear.map((w) => [w.raw_name, w.count]),
+    );
+    expect(gear["Shield Drone"]).toBe(2);
+    expect(gear["Heavy rail rifle"]).toBe(1);
+  });
+});

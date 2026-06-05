@@ -37,6 +37,7 @@ pub enum RosterFormat {
     NewrecruitSimple,
     Rosterizer,
     Gw,
+    ListforgeText,
 }
 
 /// Diagnostic warning codes emitted during an import.

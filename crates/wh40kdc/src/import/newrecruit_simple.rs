@@ -29,19 +29,31 @@ use super::adapter::{FormatAdapter, ParseError};
 use super::newrecruit_text::{classify_wargear_list, split_wargear_list};
 use super::types::{ParsedRoster, ParsedUnit, ParsedWargear, RosterFormat};
 
+// Point brackets may carry comma-separated faction resources after the pts
+// figure (e.g. `[4485pts, 29Cabal Points]`); the `(?:,[^\]]*)?` tail is
+// recognized and discarded — only the pts figure is consumed.
 static RE_FIRST_LINE: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"(?i)^(.+)\s-\s\[\s*(\d+)\s*pts?\s*\]\s*$").unwrap());
+    Lazy::new(|| Regex::new(r"(?i)^(.+)\s-\s\[\s*(\d+)\s*pts?\s*(?:,[^\]]*)?\]\s*$").unwrap());
 static RE_ROSTER_HEADER: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"(?i)^#\s*\+\+\s*Army Roster\s*\+\+\s*\[\s*(\d+)\s*pts?\s*\]\s*$").unwrap()
+    Regex::new(r"(?i)^#\s*\+\+\s*Army Roster\s*\+\+\s*\[\s*(\d+)\s*pts?\s*(?:,[^\]]*)?\]\s*$")
+        .unwrap()
 });
 static RE_ROSTER_HEADER_SIG: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"(?im)^#\s*\+\+\s*Army Roster\s*\+\+").unwrap());
-static RE_SECTION_HEADER: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"^##\s*(.+?)(?:\s*\[\s*(\d+)\s*pts?\s*\])?\s*$").unwrap());
-static RE_UNIT_LINE: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"(?i)^(.+?)\s*\[\s*(\d+)\s*pts?\s*\](?:\s*:\s*(.*))?$").unwrap());
+// Some exports omit the `# ++ Army Roster ++` line and open straight with a
+// `## Section` heading — accept either marker in `detect`.
+static RE_SECTION_SIG: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?m)^##\s+").unwrap());
+static RE_SECTION_HEADER: Lazy<Regex> = Lazy::new(|| {
+    Regex::new(r"^##\s*(.+?)(?:\s*\[\s*(\d+)\s*pts?\s*(?:,[^\]]*)?\])?\s*$").unwrap()
+});
+static RE_UNIT_LINE: Lazy<Regex> = Lazy::new(|| {
+    Regex::new(r"(?i)^(.+?)\s*\[\s*(\d+)\s*pts?\s*(?:,[^\]]*)?\](?:\s*:\s*(.*))?$").unwrap()
+});
 static RE_BULLET: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"^\s*•\s*(\d+)x\s+(.+?)(?:\s*\[\s*(\d+)\s*pts?\s*\])?(?:\s*:\s*(.*))?\s*$").unwrap()
+    Regex::new(
+        r"^\s*•\s*(\d+)x\s+(.+?)(?:\s*\[\s*(\d+)\s*pts?\s*(?:,[^\]]*)?\])?(?:\s*:\s*(.*))?\s*$",
+    )
+    .unwrap()
 });
 
 #[derive(Default)]
@@ -190,7 +202,9 @@ impl FormatAdapter for NewRecruitSimpleAdapter {
         if !RE_FIRST_LINE.is_match(first) {
             return false;
         }
-        RE_ROSTER_HEADER_SIG.is_match(text)
+        // Some exports omit the `# ++ Army Roster ++` line and open straight
+        // with a `## Section` heading — accept either marker.
+        RE_ROSTER_HEADER_SIG.is_match(text) || RE_SECTION_SIG.is_match(text)
     }
 
     fn parse(&self, decoded: &Value) -> Result<ParsedRoster, ParseError> {
@@ -256,18 +270,25 @@ impl FormatAdapter for NewRecruitSimpleAdapter {
             }
 
             if section == Section::Configuration {
-                if let Some(idx) = line.find(':') {
-                    if idx > 0 {
-                        let key = line[..idx].trim().to_ascii_lowercase();
-                        let value = line[idx + 1..].trim();
-                        if key == "battle size" {
-                            battle_size_raw = Some(value.to_string());
-                        } else if key == "detachment" {
-                            detachment_raw_name = Some(value.to_string());
+                // Some exports list units directly after Configuration with no
+                // units section heading; a `Name [N pts]` line ends the
+                // configuration block and is processed as a unit below.
+                if RE_UNIT_LINE.is_match(line) {
+                    section = Section::Units;
+                } else {
+                    if let Some(idx) = line.find(':') {
+                        if idx > 0 {
+                            let key = line[..idx].trim().to_ascii_lowercase();
+                            let value = line[idx + 1..].trim();
+                            if key == "battle size" {
+                                battle_size_raw = Some(value.to_string());
+                            } else if key == "detachment" {
+                                detachment_raw_name = Some(value.to_string());
+                            }
                         }
                     }
+                    continue;
                 }
-                continue;
             }
 
             // Unit section.
@@ -321,5 +342,140 @@ impl FormatAdapter for NewRecruitSimpleAdapter {
             units,
             multi_force,
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    const SAMPLE: &str = "Chaos - Chaos Knights - Dog Kill God? - [2000 pts]
+
+# ++ Army Roster ++ [2000 pts]
+## Configuration
+Battle Size: Strike Force (2000 Point limit)
+Detachment: Houndpack Lance
+Show/Hide Options: Nurgle Daemons are visible
+
+## Battleline [1855 pts]
+War Dog Karnivore [165 pts]: Houndpack Lance Character, Preyslayer's Mantle [15 pts], Reaper chaintalon, Slaughterclaw, Havoc multi-launcher
+War Dog Karnivore [150 pts]: Reaper chaintalon, Slaughterclaw, Havoc multi-launcher
+War Dog Executioner [130 pts]: Houndpack Lance Character, Warlord, Armoured feet, 2x War Dog autocannon, Diabolus heavy stubber
+
+## Allied Units [145 pts]
+Nurglings [40 pts]:
+• 3x Nurgling Swarm: Diseased claws and teeth
+Beasts of Nurgle [65 pts]:
+• 1x Beast of Nurgle [65 pts]: Putrid appendages
+";
+
+    #[test]
+    fn matches_simple_text_only() {
+        assert!(NewRecruitSimpleAdapter.detect(&json!(SAMPLE)));
+        assert!(!NewRecruitSimpleAdapter.detect(&json!("+ FACTION KEYWORD: …")));
+        assert!(!NewRecruitSimpleAdapter.detect(&json!({ "roster": { "forces": [] } })));
+    }
+
+    #[test]
+    fn parses_name_faction_limit_and_units() {
+        let parsed = NewRecruitSimpleAdapter.parse(&json!(SAMPLE)).unwrap();
+        assert_eq!(parsed.name, "Dog Kill God?");
+        assert_eq!(parsed.faction_raw_name.as_deref(), Some("Chaos Knights"));
+        assert_eq!(parsed.declared_limit, Some(2000));
+        assert_eq!(parsed.total_reported, Some(2000));
+        assert_eq!(
+            parsed.battle_size_raw.as_deref(),
+            Some("Strike Force (2000 Point limit)")
+        );
+        assert_eq!(parsed.detachment_raw_name.as_deref(), Some("Houndpack Lance"));
+
+        let names: Vec<&str> = parsed.units.iter().map(|u| u.raw_name.as_str()).collect();
+        assert_eq!(
+            names,
+            vec![
+                "War Dog Karnivore",
+                "War Dog Karnivore",
+                "War Dog Executioner",
+                "Nurglings",
+                "Beasts of Nurgle",
+            ]
+        );
+
+        // Inline enhancement is recognised and its cost subtracted from points.
+        let kar = &parsed.units[0];
+        assert_eq!(kar.enhancement_raw_name.as_deref(), Some("Preyslayer's Mantle"));
+        assert_eq!(kar.points, Some(150)); // 165 − 15
+        assert!(kar.is_character);
+        assert!(!kar.is_warlord);
+
+        // 150 + 15 + 150 + 130 + 40 + 65 = 550
+        assert_eq!(parsed.total_computed, 550);
+        assert!(parsed.multi_force);
+    }
+
+    // --- edge cases (mirror of tools/test/import/newrecruit-simple.test.ts) ---
+
+    #[test]
+    fn parses_points_brackets_with_comma_separated_faction_resources() {
+        let cabal = "Chaos - Thousand Sons - Tester - [4485pts, 29Cabal Points]
+
+# ++ Army Roster ++ [4485pts, 29Cabal Points]
+## Epic Hero [895pts, 13Cabal Points]
+Ahriman [140pts, 3Cabal Points]: Black Staff of Ahriman, Inferno bolt pistol
+";
+        assert!(NewRecruitSimpleAdapter.detect(&json!(cabal)));
+        let parsed = NewRecruitSimpleAdapter.parse(&json!(cabal)).unwrap();
+        assert_eq!(parsed.declared_limit, Some(4485));
+        assert_eq!(parsed.total_reported, Some(4485));
+        assert_eq!(parsed.units.len(), 1);
+        assert_eq!(parsed.units[0].raw_name, "Ahriman");
+        assert_eq!(parsed.units[0].points, Some(140));
+    }
+
+    #[test]
+    fn matches_exports_that_omit_the_army_roster_line_but_carry_sections() {
+        let headerless = "Chaos - World Eaters - Proxy List - [2000pts]
+
+## Epic Hero [675pts]
+Angron [435pts]: Samni'arius and Spinegrinder, Warlord
+";
+        assert!(NewRecruitSimpleAdapter.detect(&json!(headerless)));
+        let parsed = NewRecruitSimpleAdapter.parse(&json!(headerless)).unwrap();
+        assert_eq!(parsed.faction_raw_name.as_deref(), Some("World Eaters"));
+        assert_eq!(parsed.total_reported, None);
+        assert_eq!(parsed.units.len(), 1);
+        assert!(parsed.units[0].is_warlord);
+    }
+
+    #[test]
+    fn treats_a_unit_line_directly_after_configuration_as_ending_that_section() {
+        let no_units_header = "Xenos - T'au Empire - Base Tau - [2000pts]
+
+# ++ Army Roster ++ [2000pts]
+## Configuration
+Battle Size: Strike Force (2000 Point limit)
+Detachment: Auxiliary Cadre
+Show/Hide Options: Legends are visible
+
+Broadside Battlesuits [90pts]:
+• 1x Broadside Shas'vre: Crushing bulk, 2x Shield Drone, Heavy rail rifle
+Broadside Battlesuits [90pts]:
+• 1x Broadside Shas'vre: Crushing bulk, 2x Shield Drone, Heavy rail rifle
+";
+        let parsed = NewRecruitSimpleAdapter.parse(&json!(no_units_header)).unwrap();
+        assert_eq!(parsed.detachment_raw_name.as_deref(), Some("Auxiliary Cadre"));
+        assert_eq!(parsed.units.len(), 2);
+        assert_eq!(parsed.units[0].raw_name, "Broadside Battlesuits");
+        assert_eq!(parsed.units[0].model_count, 1);
+        let gear = |n: &str| {
+            parsed.units[0]
+                .wargear
+                .iter()
+                .find(|w| w.raw_name == n)
+                .map(|w| w.count)
+        };
+        assert_eq!(gear("Shield Drone"), Some(2));
+        assert_eq!(gear("Heavy rail rifle"), Some(1));
     }
 }

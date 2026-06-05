@@ -24,8 +24,9 @@ use std::path::{Path, PathBuf};
 use serde_json::Value;
 use wh40kdc::import::{
     import_roster, import_roster_text, select_adapter, try_import_roster, FormatAdapter, GwAdapter,
-    ImportResult, ListForgeAdapter, NewRecruitJsonAdapter, NewRecruitSimpleAdapter,
-    NewRecruitWtcCompactAdapter, NewRecruitWtcFullAdapter, RosterFormat, RosterizerAdapter,
+    ImportResult, ListForgeAdapter, ListForgeTextAdapter, NewRecruitJsonAdapter,
+    NewRecruitSimpleAdapter, NewRecruitWtcCompactAdapter, NewRecruitWtcFullAdapter, RosterFormat,
+    RosterizerAdapter,
 };
 use wh40kdc::{normalize_name, Dataset};
 
@@ -40,6 +41,7 @@ fn conformance_adapters() -> Vec<Box<dyn FormatAdapter>> {
         Box::new(NewRecruitWtcFullAdapter),
         Box::new(NewRecruitWtcCompactAdapter),
         Box::new(NewRecruitSimpleAdapter),
+        Box::new(ListForgeTextAdapter),
         Box::new(ListForgeAdapter),
     ]
 }
@@ -130,6 +132,7 @@ fn expected_format_for(filename: &str) -> RosterFormat {
         "newrecruit-simple" => RosterFormat::NewrecruitSimple,
         "rosterizer" => RosterFormat::Rosterizer,
         "gw" => RosterFormat::Gw,
+        "listforge-text" => RosterFormat::ListforgeText,
         other => panic!("unmapped input fixture stem: {other}"),
     }
 }
@@ -204,7 +207,8 @@ fn imported_rosters_match_reference_goldens() {
 
             let is_canonical = filename == "input.json"
                 || filename == "input.newrecruit-json.json"
-                || filename == "input.gw.txt";
+                || filename == "input.gw.txt"
+                || filename == "input.listforge-text.txt";
             if is_canonical {
                 assert_eq!(
                     actual_value, expected,
@@ -251,6 +255,11 @@ fn parsed_stage_matches_reference_goldens() {
             (
                 Value::String(read_text(&case_dir.join("input.gw.txt"))),
                 "input.gw.txt",
+            )
+        } else if dir_entries.iter().any(|n| n == "input.listforge-text.txt") {
+            (
+                Value::String(read_text(&case_dir.join("input.listforge-text.txt"))),
+                "input.listforge-text.txt",
             )
         } else {
             panic!("roster/{case_name}: no canonical seed");
@@ -331,6 +340,11 @@ fn exported_rosters_match_reference_goldens() {
                     .find(|n| n.as_str() == "input.newrecruit-json.json")
             })
             .or_else(|| files.iter().find(|n| n.as_str() == "input.gw.txt"))
+            .or_else(|| {
+                files
+                    .iter()
+                    .find(|n| n.as_str() == "input.listforge-text.txt")
+            })
             .unwrap_or_else(|| {
                 panic!("roster/{case_name}: export goldens present but no canonical input")
             });

@@ -101,7 +101,8 @@ function genNormalize(): void {
 
 /** Locate the canonical input for a fixture dir: prefer `input.json` (legacy
  * ListForge), then `input.newrecruit-json.json` (NewRecruit), then the
- * text-only `input.gw.txt` (GW app export — import-only, like ListForge). */
+ * text-only `input.gw.txt` / `input.listforge-text.txt` (app text exports —
+ * import-only, like ListForge). */
 function seedRoster(caseDir: string, ds: Dataset): Roster {
   const decoded = decodeCanonicalSeed(caseDir);
   return importRoster(decoded, { dataset: ds });
@@ -122,6 +123,10 @@ function decodeCanonicalSeed(caseDir: string): unknown {
   const gwSeed = join(caseDir, "input.gw.txt");
   if (existsSync(gwSeed)) {
     return readFileSync(gwSeed, "utf8");
+  }
+  const lfTextSeed = join(caseDir, "input.listforge-text.txt");
+  if (existsSync(lfTextSeed)) {
+    return readFileSync(lfTextSeed, "utf8");
   }
   throw new Error(`no canonical input found in ${caseDir}`);
 }

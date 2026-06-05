@@ -12,11 +12,27 @@
  * - a bare base64 segment,
  * - an already-decoded JSON string (passed straight to `JSON.parse`).
  *
- * Only `node:zlib` is used — no third-party dependency.
+ * Decompression uses `fflate` (a tiny, dependency-free inflate) rather than
+ * `node:zlib` so the importer works in browsers as well as Node — this module
+ * is reachable from the package's root barrel and must stay universal.
  *
  * @packageDocumentation
  */
-import { gunzipSync } from "node:zlib";
+import { gunzipSync } from "fflate";
+
+/**
+ * Universal base64 → bytes. Node decodes via Buffer; browsers via atob.
+ * (`Uint8Array.fromBase64` is still too new to rely on.)
+ */
+function base64ToBytes(b64: string): Uint8Array {
+  if (typeof Buffer !== "undefined") {
+    return new Uint8Array(Buffer.from(b64, "base64"));
+  }
+  const binary = atob(b64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
 
 /** The base64 prefix every ListForge gzip payload begins with. */
 const GZIP_BASE64_PREFIX = "H4sIA";
@@ -70,8 +86,8 @@ export function decodeListForge(input: string): unknown {
 
   let json: string;
   try {
-    const bytes = Buffer.from(segment, "base64");
-    json = gunzipSync(bytes).toString("utf8");
+    const bytes = base64ToBytes(segment);
+    json = new TextDecoder().decode(gunzipSync(bytes));
   } catch (cause) {
     throw new Error("decodeListForge: failed to gunzip base64 payload", {
       cause,

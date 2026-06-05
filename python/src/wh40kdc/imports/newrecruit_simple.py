@@ -31,15 +31,26 @@ from typing import Any
 from wh40kdc.imports.adapter import FormatAdapter
 from wh40kdc.imports.newrecruit_text import classify_wargear_list, split_wargear_list
 
-_FIRST_LINE = re.compile(r"^(.+)\s-\s\[\s*(\d+)\s*pts?\s*\]\s*$", re.IGNORECASE)
+# Point brackets may carry comma-separated faction resources after the pts
+# figure (e.g. `[4485pts, 29Cabal Points]`); the tail is recognized and
+# discarded — only the pts figure is consumed.
+_FIRST_LINE = re.compile(
+    r"^(.+)\s-\s\[\s*(\d+)\s*pts?\s*(?:,[^\]]*)?\]\s*$", re.IGNORECASE
+)
 _ROSTER_HEADER = re.compile(
-    r"^#\s*\+\+\s*Army Roster\s*\+\+\s*\[\s*(\d+)\s*pts?\s*\]\s*$", re.IGNORECASE
+    r"^#\s*\+\+\s*Army Roster\s*\+\+\s*\[\s*(\d+)\s*pts?\s*(?:,[^\]]*)?\]\s*$",
+    re.IGNORECASE,
 )
 _ROSTER_HEADER_ANYWHERE = re.compile(r"^#\s*\+\+\s*Army Roster\s*\+\+", re.MULTILINE)
-_SECTION_HEADER = re.compile(r"^##\s*(.+?)(?:\s*\[\s*(\d+)\s*pts?\s*\])?\s*$")
-_UNIT_LINE = re.compile(r"^(.+?)\s*\[\s*(\d+)\s*pts?\s*\](?:\s*:\s*(.*))?$", re.IGNORECASE)
+# Some exports omit the `# ++ Army Roster ++` line and open straight with a
+# `## Section` heading — accept either marker.
+_SECTION_HEADER_ANYWHERE = re.compile(r"^##\s+", re.MULTILINE)
+_SECTION_HEADER = re.compile(r"^##\s*(.+?)(?:\s*\[\s*(\d+)\s*pts?\s*(?:,[^\]]*)?\])?\s*$")
+_UNIT_LINE = re.compile(
+    r"^(.+?)\s*\[\s*(\d+)\s*pts?\s*(?:,[^\]]*)?\](?:\s*:\s*(.*))?$", re.IGNORECASE
+)
 _BULLET = re.compile(
-    r"^\s*•\s*(\d+)x\s+(.+?)(?:\s*\[\s*(\d+)\s*pts?\s*\])?(?:\s*:\s*(.*))?\s*$"
+    r"^\s*•\s*(\d+)x\s+(.+?)(?:\s*\[\s*(\d+)\s*pts?\s*(?:,[^\]]*)?\])?(?:\s*:\s*(.*))?\s*$"
 )
 _SPLIT_LINES = re.compile(r"\r?\n")
 
@@ -115,7 +126,12 @@ def _matches(decoded: Any) -> bool:
         return False
     if not _FIRST_LINE.match(first_non_blank):
         return False
-    return _ROSTER_HEADER_ANYWHERE.search(decoded) is not None
+    # Some exports omit the `# ++ Army Roster ++` line and open straight with
+    # a `## Section` heading — accept either marker.
+    return (
+        _ROSTER_HEADER_ANYWHERE.search(decoded) is not None
+        or _SECTION_HEADER_ANYWHERE.search(decoded) is not None
+    )
 
 
 def _parse(decoded: Any) -> dict[str, Any]:
@@ -174,15 +190,20 @@ def _parse(decoded: Any) -> dict[str, Any]:
             continue
 
         if section == "configuration":
-            idx = line.find(":")
-            if idx > 0:
-                key = line[:idx].strip().lower()
-                value = line[idx + 1 :].strip()
-                if key == "battle size":
-                    battle_size_raw = value
-                elif key == "detachment":
-                    detachment_raw_name = value
-            continue
+            # Some exports list units directly after Configuration with no units
+            # section heading; a `Name [N pts]` line ends the configuration block.
+            if _UNIT_LINE.match(line):
+                section = "units"
+            else:
+                idx = line.find(":")
+                if idx > 0:
+                    key = line[:idx].strip().lower()
+                    value = line[idx + 1 :].strip()
+                    if key == "battle size":
+                        battle_size_raw = value
+                    elif key == "detachment":
+                        detachment_raw_name = value
+                continue
 
         # Unit section. A bullet line extends the *current* unit.
         bullet_match = _BULLET.match(raw)

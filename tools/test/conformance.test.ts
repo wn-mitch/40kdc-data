@@ -87,6 +87,7 @@ function expectedFormatFor(filename: string): RosterFormat {
   if (filename === "input.json") return "listforge";
   if (filename === "input.rosterizer.json") return "rosterizer";
   if (filename === "input.gw.txt") return "gw";
+  if (filename === "input.listforge-text.txt") return "listforge-text";
   const match = /^input\.(newrecruit-[a-z-]+)\.[a-z]+$/.exec(filename);
   if (!match) throw new Error(`unrecognised input fixture filename: ${filename}`);
   return match[1] as RosterFormat;
@@ -142,7 +143,8 @@ describe("conformance corpus (ties out with the Rust crate)", () => {
         const isCanonical =
           filename === "input.json" ||
           filename === "input.newrecruit-json.json" ||
-          filename === "input.gw.txt";
+          filename === "input.gw.txt" ||
+          filename === "input.listforge-text.txt";
         if (isCanonical) {
           // Canonical seed must reproduce the golden exactly.
           expect(
@@ -175,6 +177,8 @@ describe("conformance corpus (ties out with the Rust crate)", () => {
         decoded = readJson(join(caseDir, "input.newrecruit-json.json"));
       } else if (dirEntries.includes("input.gw.txt")) {
         decoded = readText(join(caseDir, "input.gw.txt"));
+      } else if (dirEntries.includes("input.listforge-text.txt")) {
+        decoded = readText(join(caseDir, "input.listforge-text.txt"));
       } else {
         throw new Error(`roster/${entry.name}: no canonical seed`);
       }
@@ -199,7 +203,8 @@ describe("conformance corpus (ties out with the Rust crate)", () => {
       const seed =
         dirEntries.find((n) => n === "input.json") ??
         dirEntries.find((n) => n === "input.newrecruit-json.json") ??
-        dirEntries.find((n) => n === "input.gw.txt");
+        dirEntries.find((n) => n === "input.gw.txt") ??
+        dirEntries.find((n) => n === "input.listforge-text.txt");
       if (!seed) throw new Error(`no canonical input in roster/${entry.name}`);
       const seedPath = join(caseDir, seed);
       const roster = importRoster(
