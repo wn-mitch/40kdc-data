@@ -24,15 +24,16 @@ jobs:
       # tarball file list, so a reviewer can eyeball what would ship.
       - name: npm pack dry-run
         run: cd tools && npm pack --dry-run
-      # The npm package version and the wh40kdc crate version are versioned in
-      # lockstep by convention; enforce that as a hard CI check so a bump in
-      # one without the other can't land.
-      - name: Check npm/crate version lockstep
+      # The npm package, the wh40kdc crate, and the Python package are
+      # versioned in lockstep by convention; enforce that as a hard CI check
+      # so a bump in one without the others can't land.
+      - name: Check npm/crate/python version lockstep
         run: |
           npm_ver=$(node -p "require('./tools/package.json').version")
           crate_ver=$(awk -F'"' '/^version[[:space:]]*=/ { print $2; exit }' crates/wh40kdc/Cargo.toml)
-          if [ "$npm_ver" != "$crate_ver" ]; then
-            echo "Version mismatch: tools/package.json=$npm_ver crates/wh40kdc/Cargo.toml=$crate_ver" >&2
+          py_ver=$(awk -F'"' '/^__version__/ { print $2; exit }' python/src/wh40kdc/_version.py)
+          if [ "$npm_ver" != "$crate_ver" ] || [ "$npm_ver" != "$py_ver" ]; then
+            echo "Version mismatch: tools/package.json=$npm_ver crates/wh40kdc/Cargo.toml=$crate_ver python/_version.py=$py_ver" >&2
             exit 1
           fi
           echo "Versions in sync: $npm_ver"
@@ -64,6 +65,38 @@ jobs:
         run: cargo publish -p wh40kdc --dry-run --locked
       - name: List crate tarball contents
         run: cargo package --list -p wh40kdc
+
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # Regenerate the Python package's embedded artifacts from their sources
+      # (the Rust bundle is the shared bundler — its file-walk order is the
+      # iteration-order contract all three impls share) and fail on drift.
+      - run: cd tools && npm ci
+      - run: cd tools && npm run bundle:schemas
+      - run: cargo run -p xtask -- bundle-data
+      - run: pip install datamodel-code-generator
+      - run: python3 python/codegen/sync_bundle.py
+      - run: python3 python/codegen/sync_spec.py
+      - run: python3 python/codegen/gen_typeddicts.py
+      - name: Check generated Python artifacts are up to date
+        run: git diff --exit-code python/src/wh40kdc/_bundle.json python/src/wh40kdc/_spec.py python/src/wh40kdc/_types.py python/src/wh40kdc/schemas/
+      - run: cd python && pip install -e ".[dev]"
+      - run: cd python && ruff check .
+      - run: cd python && mypy src
+      - run: cd python && pytest
+      # Catch malformed wheels on PRs instead of at publish time on main.
+      - name: Build sdist + wheel
+        run: cd python && python -m build
 
   conformance:
     # The tie-out gate: the Rust crate and the TS package must produce identical
@@ -111,7 +144,7 @@ jobs:
     # crate version: if this version is already on the registry the publish is
     # skipped, so the job is a no-op on every main push until Cargo.toml's
     # version is bumped. Requires the CARGO_REGISTRY_TOKEN repo secret.
-    needs: [validate, rust, conformance]
+    needs: [validate, rust, python, conformance]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
@@ -160,7 +193,7 @@ jobs:
     # token (these bypass 2FA — interactive OTP is impossible in CI), and the
     # alpaca-software org's publish setting must permit tokens. Provenance is
     # attached via OIDC, which needs `id-token: write` and a public repo.
-    needs: [validate, rust, conformance]
+    needs: [validate, rust, python, conformance]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
@@ -201,3 +234,60 @@ jobs:
           gh release create "$TAG" \
             --title "@alpaca-software/40kdc-data v${{ steps.ver.outputs.version }}" \
             --notes "Published to https://www.npmjs.com/package/@alpaca-software/40kdc-data/v/${{ steps.ver.outputs.version }}"
+
+  publish-pypi:
+    # Auto-publish wh40kdc to PyPI once main is green, via trusted publishing
+    # (OIDC — no token secret). Self-gates on the package version: if this
+    # version is already on the registry the publish is skipped, so the job
+    # is a no-op on every main push until _version.py is bumped.
+    #
+    # One-time setup on PyPI (Account → Publishing → Add a pending publisher,
+    # until the first publish creates the project): project `wh40kdc`,
+    # owner/repository matching this repo, workflow `validate.yml`,
+    # environment `pypi`. The `pypi` environment must also exist in the
+    # GitHub repo settings.
+    needs: [validate, rust, python, conformance]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Read package version
+        id: ver
+        run: echo "version=$(awk -F'"' '/^__version__/ { print $2; exit }' python/src/wh40kdc/_version.py)" >> "$GITHUB_OUTPUT"
+      - name: Skip if version already on PyPI
+        id: check
+        run: |
+          if curl -sfI "https://pypi.org/pypi/wh40kdc/${{ steps.ver.outputs.version }}/json" >/dev/null; then
+            echo "wh40kdc ${{ steps.ver.outputs.version }} already published; skipping."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Build sdist + wheel
+        if: steps.check.outputs.publish == 'true'
+        run: |
+          pip install build
+          cd python && python -m build
+      - name: Publish to PyPI
+        if: steps.check.outputs.publish == 'true'
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: python/dist
+      - name: Tag and create GitHub release
+        if: steps.check.outputs.publish == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: pypi-v${{ steps.ver.outputs.version }}
+        run: |
+          git tag "$TAG"
+          git push origin "$TAG"
+          gh release create "$TAG" \
+            --title "wh40kdc (PyPI) v${{ steps.ver.outputs.version }}" \
+            --notes "Published to https://pypi.org/project/wh40kdc/${{ steps.ver.outputs.version }}/"

@@ -159,13 +159,32 @@ validation. The crate also ships a `wh40kdc-runner` binary used by the
 cross-implementation parity differ — see [`CONFORMANCE.md`](CONFORMANCE.md).
 Crate types are MIT; the schema content they describe is CC0.
 
-### Python *(planned)*
+### Python
 
-A Python package mirroring the TypeScript API surface — Dataset linked queries,
-importers and exporters for all six roster formats, the damage-projection
-cruncher, and a schema validator — is planned. Types will be generated from the
-bundled JSON Schema via pydantic v2 or msgspec. Track progress in the
-implementation-status table in [`CONFORMANCE.md`](CONFORMANCE.md).
+The [`wh40kdc`](python/) package on PyPI mirrors the TypeScript API surface:
+Dataset linked queries, importers and exporters for all roster formats, the
+damage-projection cruncher and attribution, the abilities resolver, scoring,
+terrain geometry, the DSL/scoring describers, and a schema validator emitting
+the shared closed-enum error codes.
+
+```bash
+pip install wh40kdc
+```
+
+```python
+from wh40kdc import Dataset
+
+ds = Dataset.embedded()
+unit = ds.units.find("Khârn the Betrayer")
+print([w.name for w in unit.weapons])
+```
+
+Entities are plain dicts (mirroring the JSON the schemas describe) behind
+linked views; generated `TypedDict`s in `wh40kdc._types` provide static
+typing. The only runtime dependency is `jsonschema`. The package also ships
+the conformance runner (`python -m wh40kdc.runner`) used by the
+cross-implementation parity differ — see [`CONFORMANCE.md`](CONFORMANCE.md).
+Package code is MIT; the schema content it describes is CC0.
 
 ### R *(planned)*
 

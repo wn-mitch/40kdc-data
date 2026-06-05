@@ -36,7 +36,7 @@ The same person *can* author both the implementation change and the second-impl 
 |---|---|---|---|
 | TypeScript | [`@alpaca-software/40kdc-data`](./tools/) | Stable. Currently the corpus oracle (`npm run gen:conformance`). | `40kdc-runner` (built from `tools/src/runner.ts`) |
 | Rust | [`wh40kdc`](./crates/wh40kdc/) | Stable. Verifies the corpus in `crates/wh40kdc/tests/conformance.rs`, `cruncher_conformance.rs`, `linked_api_conformance.rs`, `attribution_conformance.rs`, `terrain_resolver_conformance.rs`, `scoring_conformance.rs`. | `wh40kdc-runner` (built from `crates/wh40kdc/src/bin/wh40kdc-runner.rs`) |
-| Python | TBD | Planned. | Will ship with the package. |
+| Python | [`wh40kdc`](./python/) (PyPI) | Stable. Verifies the full corpus in `python/tests/conformance/` (every area, including the validator and abilities-resolver, which Rust doesn't cover yet). | `python -m wh40kdc.runner` (no console script — avoids a PATH collision with the Rust binary) |
 | R | TBD | Planned. Likely an `extendr` wrapper around the Rust crate rather than a native port; see the FAQ. | Will ship with the package. |
 
 ## Per-area invariants
@@ -72,7 +72,7 @@ These notes document what is *currently load-bearing* about each corpus area. Fu
 - `eligibleAbilities(input, phase)` returns a list of `{source, ability}` entries; the conformance corpus pins the **set of ability ids per source kind**, not the order. Each fixture's `expected` is shaped `{<kind>: [sorted-ability-ids]}`. Tests group the actual result by `source.kind`, sort each group's ids alphabetically, and compare structurally.
 - This is deliberately weaker than "ordered list" — the resolver's internal iteration order is incidental (determined by dataset bundler iteration over data/ files) and forcing every port to reproduce it byte-for-byte would encode TS-bundler internals as a cross-language contract. A consumer that relies on a specific surface order must impose its own sort.
 - Source kinds drawn from the resolver's enum: `army`, `detachment`, `detachment-stratagem`, `unit`, `attached`, `support`. Empty kinds are omitted from the expected object.
-- Rust does not currently have an abilities-resolver port (it's planned as M2 — see `crates/wh40kdc/src/cruncher/from_keyword.rs`). The corpus is TS-only today; the second-impl rule activates for this area when Rust lands its resolver. Python and R ports must reproduce the corpus before merging.
+- Rust does not currently have an abilities-resolver port (it's planned as M2 — see `crates/wh40kdc/src/cruncher/from_keyword.rs`). Python ships one (`wh40kdc.abilities_resolver`), so the second-impl rule is **active** for this area: TS and Python verify each other via `python/tests/conformance/test_abilities_resolver.py`. The R port must reproduce the corpus before merging.
 - `from-dsl.json` and `defensive-from-dsl.json` pin the DSL effect-translation pipeline: each case asserts the `applied` buff list, the `unsupportedReasons` list, and (when present) the `activatable` lever projections. List order is part of the contract for these (unlike the eligibility ordering above) — the buffs are emitted as a sequence and re-ordering would change the engine's reduction order.
 
 ### `weapon-keywords/cases.json`
@@ -104,7 +104,7 @@ These notes document what is *currently load-bearing* about each corpus area. Fu
 - Each case names a `target` schema (one of `unit`, `weapon`, `faction`, `ability`, `wargear`, `wargear-option`), an `input` value, and the **closed-enum error codes** the validator must emit on `(path, code)` pairs. AJV's free-form error messages are intentionally not part of the contract — implementations that produce different wording for the same constraint must still emit the same code.
 - The closed enum is defined in `conformance/RUNNER_PROTOCOL.md` under the `validate` op. Adding a new code is a `SPEC_VERSION` bump.
 - Comparison is set-based and deduplicated by `(path, code)`. AJV emits both a leaf-level error and a containing schema error for nested oneOf/anyOf failures; deduplication keeps the contract focused on what's user-meaningful.
-- **Rust does not currently ship a validator** (the crate exposes `BUNDLED_SCHEMA` as a `&str` constant but no validation function). The corpus is verified by TS only today; the second-impl rule activates when Rust (or Python or R) ships a validator. Python pydantic and `jsonschema-rs` are the leading candidates; they will need to honor the same closed-enum mapping when they land.
+- **Rust does not currently ship a validator** (the crate exposes `BUNDLED_SCHEMA` as a `&str` constant but no validation function; its runner answers `validate` with `UNKNOWN_OP`, and the differ skips the area for rust pairings). Python ships one (`wh40kdc.validator`, built on the `jsonschema` library with the closed-enum mapping), so the second-impl rule is **active** for this area: the ts↔py differ pairing exercises it, plus `python/tests/conformance/test_validator.py`. `jsonschema-rs` remains the leading candidate for Rust.
 
 ### `scoring-translation/cases.json`
 

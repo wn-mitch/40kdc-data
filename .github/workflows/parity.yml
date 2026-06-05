@@ -2,11 +2,11 @@ name: Cross-impl parity
 
 on: [push, pull_request]
 
-# The cross-implementation differ at tooling/parity/differ.py drives the TS
-# and Rust NDJSON runners against the shared conformance corpus. It is the
-# mechanically-enforceable form of the second-impl-reproduces rule documented
-# in CONFORMANCE.md: a golden the runners disagree on fails CI in the same PR
-# that introduced it.
+# The cross-implementation differ at tooling/parity/differ.py drives the TS,
+# Rust, and Python NDJSON runners against the shared conformance corpus. It
+# is the mechanically-enforceable form of the second-impl-reproduces rule
+# documented in CONFORMANCE.md: a golden the runners disagree on fails CI in
+# the same PR that introduced it.
 #
 # Runs parallel to validate.yml — the existing `conformance` job tests each
 # impl against committed goldens; this workflow tests them against each
@@ -22,25 +22,40 @@ jobs:
           node-version: 22
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
-      # Build both runners up front; the differ's auto-detection picks them
-      # up from tools/dist/ and target/release/ without flag flips.
+      # Build all runners up front; the differ's auto-detection picks them up
+      # from tools/dist/ and target/release/ without flag flips. The Python
+      # runner imports straight from python/src via PYTHONPATH (the differ
+      # sets it), but its runtime deps must be importable by `python3`.
       - run: cd tools && npm ci
       - run: cd tools && npm run build
       - run: cargo build --release --bin wh40kdc-runner
+      - run: pip install jsonschema
 
-      # 1. Full corpus replay.
+      # 1. Full corpus replay, every pairing. The validator area only runs on
+      # ts↔py (Rust answers UNKNOWN_OP and the area skips).
       - name: Corpus parity (TS vs Rust)
         run: python3 tooling/parity/differ.py --json
+      - name: Corpus parity (TS vs Python)
+        run: python3 tooling/parity/differ.py --pair ts,py --json
+      - name: Corpus parity (Rust vs Python)
+        run: python3 tooling/parity/differ.py --pair rust,py --json
 
       # 2. Property-style fuzzing. Deterministic seeds make CI reproducible;
       # on any divergence the script writes full repros under
       # tooling/parity/regressions/, which we upload as a job artifact so the
       # PR author can grab them without rerunning locally.
-      - name: Fuzz normalize
+      - name: Fuzz normalize (TS vs Rust)
         run: python3 tooling/parity/differ.py --mode fuzz --fuzz-target normalize --fuzz-seed 1 --fuzz-count 1000
-      - name: Fuzz crunch
+      - name: Fuzz crunch (TS vs Rust)
         run: python3 tooling/parity/differ.py --mode fuzz --fuzz-target crunch --fuzz-seed 1 --fuzz-count 200
+      - name: Fuzz normalize (Rust vs Python)
+        run: python3 tooling/parity/differ.py --pair rust,py --mode fuzz --fuzz-target normalize --fuzz-seed 1 --fuzz-count 1000
+      - name: Fuzz crunch (TS vs Python)
+        run: python3 tooling/parity/differ.py --pair ts,py --mode fuzz --fuzz-target crunch --fuzz-seed 1 --fuzz-count 200
 
       - name: Upload regressions (only on failure)
         if: failure()

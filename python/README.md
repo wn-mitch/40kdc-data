@@ -14,10 +14,10 @@ pip install wh40kdc
 ```python
 from wh40kdc import Dataset
 
-ds = Dataset.bundled()
+ds = Dataset.embedded()
 unit = ds.units.find("Khârn the Betrayer")
-for weapon in ds.weapons_of(unit["id"]):
-    print(weapon["name"])
+for weapon in unit.weapons:
+    print(weapon.name)
 ```
 
 What ships:

@@ -111,6 +111,38 @@ This keeps the corpus from silently encoding any single implementation's quirks.
 4. Confirm every corpus case passes (`just conformance-verify --impl <your-lang>`) before opening the PR.
 5. Add the port to the "For Tool Developers" section in `README.md` and the implementation-status table in `CONFORMANCE.md`.
 
+### Python development
+
+The Python package lives in `python/` (src layout, hatchling, `uv` workflow):
+
+```bash
+cd python
+uv venv && uv pip install -e ".[dev]"
+pytest            # unit tests + the full conformance suite (reads ../conformance/)
+ruff check .
+mypy src
+```
+
+Three generated artifacts are committed and drift-checked in CI — regenerate
+after schema or data changes (the bundle comes from the Rust crate's
+`bundle.generated.json`, the shared bundler whose file-walk order all three
+implementations inherit):
+
+```bash
+cd tools && npm run bundle:schemas && cd ..
+cargo run -p xtask -- bundle-data
+python3 python/codegen/sync_bundle.py
+python3 python/codegen/sync_spec.py
+python3 python/codegen/gen_typeddicts.py
+```
+
+Cross-impl parity runs through the differ's pairings:
+
+```bash
+python3 tooling/parity/differ.py --pair ts,py
+python3 tooling/parity/differ.py --pair rust,py
+```
+
 ## Style
 
 - JSON files: 2-space indent

@@ -82,7 +82,7 @@ CI runs on every push and PR via `.github/workflows/validate.yml`.
 
 ## Cross-language parity
 
-This repo holds the TypeScript and Rust implementations in parity through the `conformance/` corpus, and the same mechanism extends to upcoming Python and R ports. Full strategy: [`CONFORMANCE.md`](CONFORMANCE.md). Contributor workflow: [`CONTRIBUTING.md`](CONTRIBUTING.md). Runner wire format: [`conformance/RUNNER_PROTOCOL.md`](conformance/RUNNER_PROTOCOL.md).
+This repo holds the TypeScript, Rust, and Python implementations in parity through the `conformance/` corpus, and the same mechanism extends to the upcoming R port. Full strategy: [`CONFORMANCE.md`](CONFORMANCE.md). Contributor workflow: [`CONTRIBUTING.md`](CONTRIBUTING.md). Runner wire format: [`conformance/RUNNER_PROTOCOL.md`](conformance/RUNNER_PROTOCOL.md).
 
 The load-bearing rule: **a new or changed golden in `conformance/` is not accepted until at least one implementation other than the one that produced it independently reproduces the same expected value.** A PR that touches the TS reference impl and the corpus in the same commit must also include the Rust (or Python, or R) test passing against the updated goldens. The same person can do both halves of the verification.
 
@@ -122,6 +122,13 @@ Tools can consume this repo via:
   `base64`/`flate2`/`regex`) for embedded targets. The Rust and TS
   implementations are pinned together by the shared `conformance/` corpus,
   including byte-identical export goldens.
+- the `wh40kdc` Python package (`python/`, PyPI) — the Python counterpart:
+  the same embedded dataset behind a `Dataset` linked API (plain dicts +
+  generated TypedDicts), all importers/exporters, cruncher + attribution,
+  abilities resolver, scoring, terrain, the DSL/scoring describers, and a
+  `jsonschema`-based validator with the closed-enum codes. Only runtime dep
+  is `jsonschema`; conformance-pinned with TS and Rust via the same corpus
+  (runner: `python -m wh40kdc.runner`).
 - Git submodule pointed at a tagged release (raw schemas + data)
 - Direct `$id` URL references for JSON Schema validators
 
