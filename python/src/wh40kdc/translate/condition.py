@@ -1,0 +1,263 @@
+"""Humanize an Ability-DSL / scoring ``condition`` into plain English.
+
+Shared by the effect describer and the scoring-card translator. Output is
+**ASCII-only** with a fixed clause and parameter order: it is pinned
+byte-for-byte across the TS, Rust, and Python ports by the
+``conformance/scoring-translation`` corpus, so any phrasing change here is a
+semantic corpus change (bump ``conformance/SPEC_VERSION``).
+
+Python mirror of ``tools/src/translate/condition.ts``.
+"""
+
+from __future__ import annotations
+
+from typing import Any
+
+Condition = dict[str, Any]
+
+
+def dekebab(s: str) -> str:
+    """kebab-case → space-separated words (``enemy-territory`` → ``enemy territory``)."""
+    return s.replace("-", " ")
+
+
+def _str(v: Any) -> str:
+    """TS ``str``: null/undefined → "?", else JS ``String(v)``."""
+    if v is None:
+        return "?"
+    if isinstance(v, str):
+        return v
+    if v is True:
+        return "true"
+    if v is False:
+        return "false"
+    if isinstance(v, float) and v.is_integer():
+        return str(int(v))
+    return str(v)
+
+
+def _count(n: Any, noun: str) -> str:
+    """``2`` + ``objective`` → ``2+ objectives``. All regular plurals here."""
+    return f"{_str(n)}+ {noun}s"
+
+
+def describe_condition(c: Condition) -> str:
+    # Compound nodes first — join the operands with lowercase connectives.
+    operands = c.get("operands")
+    if c.get("operator") == "and" and operands:
+        return " and ".join(describe_condition(o) for o in operands)
+    if c.get("operator") == "or" and operands:
+        return " or ".join(describe_condition(o) for o in operands)
+    if c.get("operator") == "not" and operands:
+        return f"not ({', '.join(describe_condition(o) for o in operands)})"
+
+    negate = "not " if c.get("negated") else ""
+    p = c.get("parameters") or {}
+    ctype = c.get("type")
+
+    # ── Ability-DSL conditions ───────────────────────────────────────────────
+    if ctype == "phase-is":
+        return f"{negate}during the {_str(p.get('phase'))} phase"
+    if ctype == "timing-is":
+        return f"{negate}at {dekebab(_str(p.get('timing')))}"
+    if ctype == "player-turn-is":
+        turn = p.get("turn")
+        if turn == "your-turn":
+            whose = "your"
+        elif turn == "opponent-turn":
+            whose = "the opponent's"
+        else:
+            whose = "either player's"
+        return f"{negate}in {whose} turn"
+    if ctype == "charged-this-turn":
+        return f"{negate}the unit charged this turn"
+    if ctype == "advanced-this-turn":
+        return f"{negate}the unit advanced this turn"
+    if ctype == "remained-stationary":
+        return f"{negate}the unit remained stationary"
+    if ctype == "unit-below-starting-strength":
+        return f"{negate}the unit is below starting strength"
+    if ctype == "unit-below-half-strength":
+        return f"{negate}the unit is below half strength"
+    if ctype == "unit-has-keyword":
+        return f'{negate}the unit has "{_str(p.get("keyword"))}"'
+    if ctype == "target-has-keyword":
+        return f'{negate}the target has "{_str(p.get("keyword"))}"'
+    if ctype == "model-is-leader":
+        return f"{negate}the model is leading a unit"
+    if ctype == "is-attached":
+        kw = f"{_str(p.get('keyword'))} " if p.get("keyword") else ""
+        return f"{negate}attached to a {kw}unit"
+    if ctype == "attack-is-type":
+        return f"{negate}for {_str(p.get('attack_type'))} attacks"
+    if ctype == "is-battle-shocked":
+        return f"{negate}the unit is battle-shocked"
+    if ctype == "has-lost-wounds":
+        return f"{negate}the model has lost wounds"
+    if ctype == "was-hit-by-attack":
+        subject = "the target" if p.get("subject") == "target" else "the unit"
+        atk = f"{_str(p.get('attack_type'))} " if p.get("attack_type") else ""
+        weapon = f" by {_str(p.get('weapon_name'))}" if p.get("weapon_name") else ""
+        count_min = p.get("count_min")
+        n = count_min if count_min is not None else 1
+        if isinstance(n, (int, float)) and n > 1:
+            return f"{negate}{subject} was hit by {_str(n)}+ {atk}attacks{weapon} this phase"
+        article = "an attack" if atk == "" else f"a {atk}attack"
+        return f"{negate}{subject} was hit by {article}{weapon} this phase"
+    if ctype == "opponent-unit-within-range":
+        range_ = p.get("range")
+        within = "engagement range" if range_ == "engagement" else f'{_str(range_)}"'
+        return f"{negate}an enemy unit is within {within}"
+    if ctype == "unit-within-range-of":
+        target_type = p.get("target_type")
+        target = _str(target_type if target_type is not None else "target")
+        kw = f" ({_str(p.get('keyword'))})" if p.get("keyword") else ""
+        return f'{negate}within {_str(p.get("range"))}" of {target}{kw}'
+    if ctype == "within-range-of-objective":
+        return f"{negate}within range of an objective"
+    if ctype == "has-fought-this-phase":
+        return f"{negate}has fought this phase"
+    if ctype == "destroyed-by-attack-type":
+        return f"{negate}destroyed by a {_str(p.get('attack_type'))} attack"
+
+    # ── Scoring conditions (secondary-card award `when`) ─────────────────────
+    if ctype == "objective-majority":
+        rel = p.get("relative_to")
+        rel = rel if rel is not None else "opponent"
+        return f"{negate}you hold more objectives than the {dekebab(_str(rel))}"
+    if ctype == "controls-objective":
+        role = p.get("objective_role")
+        noun = f"{dekebab(_str(role))} objective" if role else "objective"
+        count_min = p.get("count_min")
+        s = f"{negate}you control {_count(count_min if count_min is not None else 1, noun)}"
+        if p.get("objective") is not None:
+            s += f" ({dekebab(_str(p['objective']))})"
+        if p.get("scope") is not None:
+            s += f" in {dekebab(_str(p['scope']))}"
+        if p.get("exclude") is not None:
+            s += f" (excluding {dekebab(_str(p['exclude']))})"
+        return s
+    if ctype == "units-destroyed":
+        count_min = p.get("count_min")
+        n = count_min if count_min is not None else 1
+        side_unit = f"{_str(p.get('side'))} unit"
+        return f"{negate}{_count(n, side_unit)} destroyed {dekebab(_str(p.get('window')))}"
+    if ctype == "units-destroyed-comparison":
+        subj = p.get("subject") or {}
+        ref = p.get("reference") or {}
+        gte = p.get("comparator") == "greater-or-equal"
+        cmp_ = "at least as many" if gte else "more"
+        link = "as" if gte else "than"
+        return (
+            f"{negate}you destroyed {cmp_} {_str(subj.get('side'))} units "
+            f"{dekebab(_str(subj.get('window')))} {link} {_str(ref.get('side'))} units "
+            f"{dekebab(_str(ref.get('window')))}"
+        )
+    if ctype == "new-objective-controlled":
+        count_min = p.get("count_min")
+        n = count_min if count_min is not None else 1
+        return f"{negate}you newly control {_count(n, 'objective')} this turn"
+    if ctype == "destroyed-while-on-objective":
+        role = p.get("objective_role")
+        obj = f"a {dekebab(_str(role))} objective" if role else "an objective"
+        count_min = p.get("count_min")
+        s = f"{negate}{_count(count_min if count_min is not None else 1, 'enemy unit')} destroyed"
+        if p.get("destroyer_on_objective"):
+            s += f" by a unit on {obj}"
+        if p.get("victim_on_objective"):
+            s += f" while on {obj}"
+        if p.get("victim_started_turn_on_objective"):
+            s += f" that started the turn on {obj}"
+        return s
+    if ctype == "destroyed-in-tagged-terrain":
+        where = "that started the turn in" if p.get("at_start_of_turn") else "while in"
+        tag = p.get("tag")
+        terrain = f"{dekebab(_str(tag))} terrain" if tag is not None else "a terrain area"
+        count_min = p.get("count_min")
+        n = count_min if count_min is not None else 1
+        return f"{negate}{_count(n, 'enemy unit')} destroyed {where} {terrain}"
+    if ctype == "operation-markers":
+        side = f"{_str(p['side'])} " if p.get("side") is not None else ""
+        min_ = p.get("count_min") if isinstance(p.get("count_min"), (int, float)) else None
+        max_ = p.get("count_max") if isinstance(p.get("count_max"), (int, float)) else None
+        if max_ == 0:
+            s = f"no {side}operation markers on the battlefield"
+        elif min_ is not None and max_ is not None and min_ == max_:
+            plural = "" if min_ == 1 else "s"
+            s = f"exactly {_str(min_)} {side}operation marker{plural} on the battlefield"
+        else:
+            n = _str(min_ if min_ is not None else 1)
+            s = f"{n}+ {side}operation markers on the battlefield"
+        if p.get("within_range_of") is not None:
+            s += f" within range of {dekebab(_str(p['within_range_of']))}"
+        if p.get("friendly_unit_in_same_terrain_area"):
+            s += " with a friendly unit in the same terrain area"
+        if p.get("no_enemy_in_terrain_area"):
+            s += " and no enemy units in that terrain area"
+        return f"{negate}{s}"
+    if ctype == "action-completed":
+        count_min = p.get("count_min")
+        s = f"{negate}{_count(count_min if count_min is not None else 1, 'action')} completed"
+        if p.get("action_id") is not None:
+            s += f" ({dekebab(_str(p['action_id']))})"
+        if p.get("target_kind") is not None:
+            s += f" on {dekebab(_str(p['target_kind']))}"
+        tf = p.get("target_filter") or {}
+        if tf.get("objective_role") is not None:
+            s += f" ({dekebab(_str(tf['objective_role']))})"
+        if tf.get("in_enemy_territory"):
+            s += " in enemy territory"
+        if tf.get("exclude") is not None:
+            s += f" (excluding {dekebab(_str(tf['exclude']))})"
+        if p.get("window") is not None:
+            s += f" {dekebab(_str(p['window']))}"
+        return s
+    if ctype == "objective-has-tag":
+        count_min = p.get("count_min")
+        n = count_min if count_min is not None else 1
+        s = f"{negate}{_count(n, 'objective')} tagged {dekebab(_str(p.get('tag')))}"
+        if p.get("count_max") is not None:
+            s += f" (at most {_str(p['count_max'])})"
+        if p.get("objective") is not None:
+            s += f" ({dekebab(_str(p['objective']))})"
+        if p.get("scope") is not None:
+            s += f" in {dekebab(_str(p['scope']))}"
+        if p.get("last_marked"):
+            s += " (most recently marked)"
+        return s
+    if ctype == "unit-has-tag":
+        count_min = p.get("count_min")
+        n = count_min if count_min is not None else 1
+        side_unit = f"{_str(p.get('side'))} unit"
+        s = f"{negate}{_count(n, side_unit)} tagged {dekebab(_str(p.get('tag')))}"
+        if p.get("window") is not None:
+            s += f" ({dekebab(_str(p['window']))})"
+        return s
+    if ctype == "terrain-has-tag":
+        s = f"{negate}terrain tagged {dekebab(_str(p.get('tag')))}"
+        if p.get("friendly_units_min") is not None:
+            s += f" with {_str(p['friendly_units_min'])}+ friendly units"
+        if p.get("enemy_units_max") is not None:
+            s += f" and at most {_str(p['enemy_units_max'])} enemy units"
+        if p.get("last_marked"):
+            s += " (most recently marked)"
+        if p.get("in_enemy_dz"):
+            s += " in the enemy deployment zone"
+        return s
+    if ctype == "terrain-area-control":
+        min_models = p.get("min_models")
+        n = min_models if min_models is not None else 1
+        return f"{negate}you control a terrain area with {_str(n)}+ models"
+    if ctype == "territory-control":
+        ref = p.get("territory_ref")
+        ref = ref if ref is not None else "your-territory"
+        s = f"{negate}you control {dekebab(_str(ref))}"
+        if p.get("enemy_units_max") is not None:
+            s += f" with at most {_str(p['enemy_units_max'])} enemy units"
+        return s
+    if ctype == "engagement-fronts":
+        count_min = p.get("count_min")
+        n = count_min if count_min is not None else 1
+        return f"{negate}you are engaged on {_str(n)}+ fronts"
+
+    return f"{negate}{dekebab(ctype if ctype is not None else 'unknown')}"
