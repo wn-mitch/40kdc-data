@@ -35,16 +35,12 @@
   import PwaInstallPrompt from "./lib/PwaInstallPrompt.svelte";
   import TutorialModal from "./lib/TutorialModal.svelte";
   import SupportModal from "../../_shared/SupportModal.svelte";
+  import AppHeader from "../../_shared/AppHeader.svelte";
+  import AppFooter from "../../_shared/AppFooter.svelte";
+  import { LAYOUT_EDITOR_URL, PATREON_URL, SALVO_URL } from "../../_shared/links.js";
   import { slide } from "svelte/transition";
   import { quintOut } from "svelte/easing";
 
-  const HOME_URL = "https://40kdc.alpacasoft.dev";
-  const REPO_URL = "https://github.com/wn-mitch/40kdc-data";
-  const PACKAGE_URL = "https://www.npmjs.com/package/@alpaca-software/40kdc-data";
-  const PUBLISHER_URL = "https://alpacasoft.dev";
-  const PATREON_URL = "https://www.patreon.com/c/AlpacaSoftware";
-  // Base-aware path to the Alpaca mark (also the PWA/favicon icon).
-  const ALPACA_ICON = `${import.meta.env.BASE_URL}favicon-32x32.png`;
   const DEFAULT_ROUND_CAP = 15;
   const DEFAULT_GAME_CAP = 45;
 
@@ -241,28 +237,11 @@
 </script>
 
 <div class="flex flex-col min-h-screen bg-bg">
-  <header class="flex items-center justify-between gap-4 h-11 px-4 bg-surface border-b border-border shrink-0">
-    <a class="flex items-baseline gap-3 no-underline text-inherit min-w-0" href={REPO_URL} target="_blank" rel="noreferrer noopener">
-      <h1 class="m-0 font-heading text-lg font-extrabold uppercase tracking-wider leading-none text-accent">
-        Mission Matrix
-      </h1>
-      <span class="hidden sm:inline truncate font-heading text-xs uppercase tracking-wide text-text-muted">
-        11e WTC scoresheet
-      </span>
-    </a>
-    <nav class="flex items-center gap-3 shrink-0">
+  <AppHeader title="Mission Matrix" tag="11e WTC scoresheet">
+    {#snippet nav()}
       <button type="button" class="inline-flex items-center justify-center w-6 h-6 rounded-full border border-border-strong text-text-muted hover:text-accent hover:border-accent font-heading text-xs font-bold" onclick={() => (tutorialOpen = true)} aria-label="How to use Mission Matrix">?</button>
-      <a class="font-heading text-[11px] font-bold uppercase tracking-wide text-text-muted hover:text-accent no-underline whitespace-nowrap" href={HOME_URL} aria-label="Back to 40kdc-data examples">← 40kdc-data</a>
-      <a class="inline-flex items-center text-text-muted hover:text-accent" href={REPO_URL} target="_blank" rel="noreferrer noopener" aria-label="GitHub repository">
-        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
-          <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-        </svg>
-      </a>
-      <a class="hidden md:inline text-text-muted hover:text-accent no-underline" href={PACKAGE_URL} target="_blank" rel="noreferrer noopener">
-        <code class="font-mono text-[11px]">@alpaca-software/40kdc-data</code>
-      </a>
-    </nav>
-  </header>
+    {/snippet}
+  </AppHeader>
 
   <main class="flex-1 w-full max-w-[1200px] mx-auto px-4 py-5 flex flex-col gap-5">
     <!-- Collapsible disposition matrix → both primaries. -->
@@ -455,20 +434,12 @@
     </div>
   </main>
 
-  <footer class="flex items-center gap-2 px-4 py-2 mt-auto bg-surface border-t border-border text-[11px] text-text-dim shrink-0">
-    <a class="text-text-muted hover:text-accent no-underline" href={REPO_URL} target="_blank" rel="noreferrer noopener">github.com/wn-mitch/40kdc-data</a>
-    <span aria-hidden="true">·</span>
-    <span class="inline-flex items-center gap-1.5">
-      <img src={ALPACA_ICON} alt="" width="16" height="16" class="rounded-[3px]" aria-hidden="true" />
-      powered by <a class="text-text-muted hover:text-accent no-underline" href={PACKAGE_URL} target="_blank" rel="noreferrer noopener"><code class="font-mono">@alpaca-software/40kdc-data</code></a>
-    </span>
-    <span aria-hidden="true">·</span>
-    <a class="text-text-muted hover:text-accent no-underline" href="https://layout-editor.alpacasoft.dev" target="_blank" rel="noreferrer noopener">Terrain layouts</a>
-    <span aria-hidden="true">·</span>
-    <a class="text-text-muted hover:text-accent no-underline" href={PUBLISHER_URL} target="_blank" rel="noreferrer noopener">alpacasoft.dev</a>
-    <span aria-hidden="true">·</span>
-    <a class="text-text-muted hover:text-accent no-underline" href={PATREON_URL} target="_blank" rel="noreferrer noopener">Support on Patreon</a>
-  </footer>
+  <AppFooter
+    links={[
+      { label: "Terrain layouts", href: LAYOUT_EDITOR_URL },
+      { label: "Salvo", href: SALVO_URL },
+    ]}
+  />
 
   <TutorialModal bind:open={tutorialOpen} />
   <PwaInstallPrompt bind:open={pwaPromptOpen} suppressed={tutorialOpen} />

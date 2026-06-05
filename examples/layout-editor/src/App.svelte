@@ -50,11 +50,9 @@
   import Thumbnail from "./lib/Thumbnail.svelte";
   import SetThumbnail from "./lib/SetThumbnail.svelte";
   import SupportModal from "../../_shared/SupportModal.svelte";
-
-  const HOME_URL = "https://40kdc.alpacasoft.dev";
-  const REPO_URL = "https://github.com/wn-mitch/40kdc-data";
-  const PUBLISHER_URL = "https://alpacasoft.dev";
-  const PATREON_URL = "https://www.patreon.com/c/AlpacaSoftware";
+  import AppHeader from "../../_shared/AppHeader.svelte";
+  import AppFooter from "../../_shared/AppFooter.svelte";
+  import { MISSION_MATRIX_URL, PATREON_URL, SALVO_URL } from "../../_shared/links.js";
 
   const initialLayout = loadEmbedded("gw-11e-crucible", true) ?? blankLayout();
   let symmetric = $state(true);
@@ -283,12 +281,8 @@
 />
 
 <div class="app">
-  <header class="app-header">
-    <a class="brand" href={REPO_URL} target="_blank" rel="noreferrer noopener">
-      <h1>Layout Editor</h1>
-      <span class="tag">11e terrain layouts · portrait</span>
-    </a>
-    <nav>
+  <AppHeader title="Layout Editor" tag="11e terrain layouts · portrait">
+    {#snippet nav()}
       <button
         class="sym {symmetric ? 'on' : ''}"
         onclick={toggleSymmetry}
@@ -308,6 +302,7 @@
         ⊞ Library
       </button>
       <select
+        class="ctrl"
         aria-label="Deployment overlay"
         value={deployment ?? ""}
         onchange={(e) => onDeploymentChange(e.currentTarget.value)}
@@ -316,6 +311,7 @@
         {#each DEPLOYMENT_PATTERNS as d (d.id)}<option value={d.id}>{d.name}</option>{/each}
       </select>
       <select
+        class="ctrl"
         aria-label="Mission pairing"
         value={layout.mission_matchup_id ?? ""}
         onchange={(e) => (layout.mission_matchup_id = e.currentTarget.value || undefined)}
@@ -337,11 +333,8 @@
           layout.variant = Number.isFinite(v) && v >= 1 ? Math.floor(v) : undefined;
         }}
       />
-      <a class="home" href={HOME_URL}>← 40kdc-data</a>
-      <a class="home" href={PUBLISHER_URL} target="_blank" rel="noreferrer noopener">alpacasoft.dev</a>
-      <a class="home" href={PATREON_URL} target="_blank" rel="noreferrer noopener">Patreon</a>
-    </nav>
-  </header>
+    {/snippet}
+  </AppHeader>
 
   <main>
     <aside class="rail palette-rail">
@@ -429,6 +422,13 @@
     </div>
   {/if}
 
+  <AppFooter
+    links={[
+      { label: "Salvo", href: SALVO_URL },
+      { label: "Mission Matrix", href: MISSION_MATRIX_URL },
+    ]}
+  />
+
   <Library
     bind:open={libraryOpen}
     currentId={layout.id}
@@ -444,43 +444,6 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
-    padding: 0.7rem 1rem 0.9rem;
-  }
-  .app-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--rim);
-    padding-bottom: 0.55rem;
-    margin-bottom: 0.8rem;
-    flex: 0 0 auto;
-  }
-  .brand {
-    display: flex;
-    align-items: baseline;
-    gap: 0.6rem;
-    text-decoration: none;
-    color: inherit;
-  }
-  h1 {
-    margin: 0;
-    font-family: "Barlow Condensed", sans-serif;
-    font-size: 1.7rem;
-    letter-spacing: 0.02em;
-  }
-  .tag {
-    color: var(--text-mute);
-    font-size: 0.85rem;
-  }
-  nav {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  .home {
-    color: var(--text-dim);
-    text-decoration: none;
-    font-size: 0.85rem;
   }
   main {
     flex: 1 1 auto;
@@ -489,6 +452,7 @@
     grid-template-columns: 240px minmax(0, 1fr) 380px;
     gap: 0.9rem;
     align-items: stretch;
+    padding: 0.7rem 1rem 0.9rem;
   }
   .rail {
     overflow-y: auto;
@@ -539,7 +503,7 @@
     margin: 0.4rem 0 0;
     flex: 0 0 auto;
   }
-  nav select,
+  select.ctrl,
   .export textarea {
     background: var(--bg);
     color: var(--text);
@@ -547,11 +511,11 @@
     border-radius: 4px;
     font: inherit;
   }
-  nav select {
+  select.ctrl {
     padding: 0.25rem 0.4rem;
     font-size: 0.85rem;
   }
-  nav .variant {
+  .variant {
     width: 3rem;
     padding: 0.25rem 0.4rem;
     font-size: 0.85rem;
