@@ -142,6 +142,17 @@
     if (side === "min-y") return [{ x: b.minX, y: b.minY }, { x: b.maxX, y: b.minY }];
     return [{ x: b.minX, y: b.maxY }, { x: b.maxX, y: b.maxY }];
   }
+  // Label anchor: near the dot end of a dimension line so each label reads as
+  // belonging to its line, but never past the midpoint (on short lines the
+  // text would sit on the dot itself).
+  function labelAnchor(from: Vec2, to: Vec2): Vec2 {
+    const dx = from.x - to.x;
+    const dy = from.y - to.y;
+    const len = Math.hypot(dx, dy);
+    if (len === 0) return to;
+    const back = Math.min(len / 2, 3);
+    return { x: to.x + (dx / len) * back, y: to.y + (dy / len) * back };
+  }
   function guide(o: OrientedFootprint, line: SolverViz["lines"][number]) {
     const t = refPoint(o, line.ref);
     const from: Vec2 =
@@ -152,7 +163,7 @@
           : line.edge === "top"
             ? { x: t.x, y: 0 }
             : { x: t.x, y: BOARD.height };
-    return { from, to: t, mid: { x: (from.x + t.x) / 2, y: (from.y + t.y) / 2 }, text: `${line.distance}″` };
+    return { from, to: t, labelAt: labelAnchor(from, t), text: `${line.distance}″` };
   }
 
   // Persisted keystones — the card's printed dimension lines — render for
@@ -161,7 +172,7 @@
   // unmeasurable keystone (stale vertex index after a footprint change) draws
   // its anchor with a "?" label instead of crashing.
   const keystoneGuides = $derived.by(() => {
-    const out: { from: Vec2; to: Vec2; mid: Vec2; text: string; invalid: boolean }[] = [];
+    const out: { from: Vec2; to: Vec2; labelAt: Vec2; text: string; invalid: boolean }[] = [];
     if (!showKeystones) return out;
     const byPiece = new Map(layout.pieces.map((p) => [p.id, p]));
     for (const d of keystoneDisplays(layout)) {
@@ -181,7 +192,7 @@
       out.push({
         from,
         to: t,
-        mid: { x: (from.x + t.x) / 2, y: (from.y + t.y) / 2 },
+        labelAt: labelAnchor(from, t),
         text: d.distance != null ? `${Math.round(d.distance * 100) / 100}″` : "?",
         invalid: d.distance == null,
       });
@@ -330,13 +341,13 @@
       {#each solver.lines as line, li (li)}
         {#if line.distance}
           {@const g = guide(selOriented, line)}
-          {@const d = toDisplay(g.mid)}
+          {@const d = toDisplay(g.labelAt)}
           <text x={d.x} y={d.y} class="measure-label">{g.text}</text>
         {/if}
       {/each}
     {/if}
     {#each keystoneGuides as g, gi (gi)}
-      {@const d = toDisplay(g.mid)}
+      {@const d = toDisplay(g.labelAt)}
       <text x={d.x} y={d.y} class="keystone-label {g.invalid ? 'invalid' : ''}">{g.text}</text>
     {/each}
   </g>
