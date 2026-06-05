@@ -13,8 +13,6 @@ tools/schemas/
 tools/src/data/bundle.generated.ts
 .DS_Store
 *.log
-scripts/model_output/
-scripts/faction_csvs/
 rube-goldberg-output.txt
 
 # _audit/ is the DSL-authoring worklist (#21). Keep the human-readable summaries
