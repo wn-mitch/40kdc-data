@@ -21,6 +21,25 @@ from wh40kdc.data.entities import (
 )
 
 
+def _buff_source_from_eligible(entry: dict[str, Any]) -> dict[str, Any]:
+    """Map an eligible-ability entry back to the BuffSource the translator
+    expects."""
+    ability_id = entry["ability"].id
+    kind = entry["source"]["kind"]
+    if kind == "attached":
+        return {
+            "kind": "ability",
+            "abilityId": ability_id,
+            "abilityKind": "attached",
+            "sourceUnitId": entry["source"]["unitId"],
+        }
+    if kind == "detachment-stratagem":
+        ability_kind = "detachment-stratagem"
+    else:
+        ability_kind = kind  # army / detachment / unit / support
+    return {"kind": "ability", "abilityId": ability_id, "abilityKind": ability_kind}
+
+
 class Dataset:
     """The whole dataset, with linked accessors over every entity collection."""
 
@@ -195,6 +214,137 @@ class Dataset:
         from wh40kdc.abilities_resolver import resolve_eligible_abilities
 
         return resolve_eligible_abilities(self, input, phase)
+
+    def buffs_for(self, input: dict[str, Any], context: dict[str, Any]) -> list[dict[str, Any]]:
+        """Attacker-perspective buff stack for a (unit, phase) combination.
+
+        Intrinsic weapon-profile keywords plus every eligible ability whose
+        DSL effect translates to an attacker-side buff. Only buffs the buff
+        layer can express are included — the ``unsupported`` half of the
+        translation is dropped here.
+        """
+        return self._collect_buffs(input, context, "attacker")
+
+    def defensive_buffs_for(
+        self, input: dict[str, Any], context: dict[str, Any]
+    ) -> list[dict[str, Any]]:
+        """Defender-perspective buff stack: walks the same eligible-abilities
+        set as :meth:`buffs_for` but translates each ability's DSL effect as
+        defensive (FNP, save/toughness mods, save rerolls, incoming hit
+        penalties). ``weaponProfiles`` are ignored under target perspective."""
+        return self._collect_buffs(input, context, "target")
+
+    def stackable_buffs_for(
+        self, input: dict[str, Any], context: dict[str, Any]
+    ) -> dict[str, Any]:
+        """Enumerate every attacker-side buff a unit could stack in
+        ``context`` as toggleable levers plus their activation groups.
+
+        Unlike :meth:`buffs_for` — which returns only the buffs that
+        auto-apply — this surfaces the *player decisions* too: stratagems and
+        the activatable gates the DSL models as dice-pool options, ``choice``
+        branches, or timing-gated activations. Returns
+        ``{"buffs": [StackableBuff], "groups": [StackableBuffGroup]}``.
+        """
+        buffs: list[dict[str, Any]] = []
+        groups: dict[str, dict[str, Any]] = {}
+        ctx = self._derived_context(input, context)
+
+        # Intrinsic weapon-profile keywords — always on.
+        for ref in input.get("weaponProfiles") or []:
+            weapon = self.weapons.get(ref["weaponId"])
+            if weapon is None:
+                continue
+            wk = weapon.profile_buffs(ref.get("profileIndex"), ctx)
+            if not wk:
+                continue
+            buffs.append(
+                {
+                    "id": f"weapon:{ref['weaponId']}:{ref['profileIndex']}",
+                    "label": f"{weapon.name} keywords",
+                    "buffs": wk,
+                    "enabled": True,
+                    "source": wk[0]["source"],
+                }
+            )
+
+        for entry in self.eligible_abilities(input, ctx["phase"]):
+            source = _buff_source_from_eligible(entry)
+            translation = entry["ability"].describe_buffs(source, ctx, "attacker")
+            # Stratagems cost CP — opt-in, not on by default.
+            is_stratagem = entry["source"]["kind"] == "detachment-stratagem"
+
+            if translation["applied"]:
+                buffs.append(
+                    {
+                        "id": f"{entry['source']['kind']}:{entry['ability'].id}",
+                        "label": entry["ability"].name,
+                        "buffs": translation["applied"],
+                        "enabled": not is_stratagem,
+                        "source": source,
+                    }
+                )
+
+            for act in translation["activatable"]:
+                group_id = None
+                if act.get("group"):
+                    group_id = act["group"]["id"]
+                    if group_id not in groups:
+                        groups[group_id] = {
+                            "id": group_id,
+                            "label": entry["ability"].name,
+                            "maxActivations": act["group"]["maxActivations"],
+                        }
+                lever = {
+                    "id": act["id"],
+                    "label": f"{entry['ability'].name} — {act['label']}",
+                    "buffs": act["buffs"],
+                    "enabled": False,
+                    "source": source,
+                }
+                if group_id is not None:
+                    lever["group"] = group_id
+                buffs.append(lever)
+
+        return {"buffs": buffs, "groups": list(groups.values())}
+
+    def _derived_context(
+        self, input: dict[str, Any], context: dict[str, Any]
+    ) -> dict[str, Any]:
+        """Clone the caller's context, deriving ``attackerAttached`` from a
+        non-empty ``attachedUnitIds`` when not explicitly set."""
+        ctx = dict(context)
+        if ctx.get("attackerAttached") is None:
+            ctx["attackerAttached"] = bool(input.get("attachedUnitIds"))
+        return ctx
+
+    def _collect_buffs(
+        self, input: dict[str, Any], context: dict[str, Any], perspective: str
+    ) -> list[dict[str, Any]]:
+        """Shared implementation for buffs_for / defensive_buffs_for."""
+        out: list[dict[str, Any]] = []
+        ctx = self._derived_context(input, context)
+
+        # Weapon-profile keywords are attacker-only.
+        if perspective == "attacker":
+            for ref in input.get("weaponProfiles") or []:
+                weapon = self.weapons.get(ref["weaponId"])
+                if weapon is None:
+                    continue
+                out.extend(weapon.profile_buffs(ref.get("profileIndex"), ctx))
+
+        opted_in = set(input.get("optedInStratagemIds") or [])
+        for entry in self.eligible_abilities(input, ctx["phase"]):
+            source_info = entry["source"]
+            if (
+                source_info["kind"] == "detachment-stratagem"
+                and source_info["stratagemId"] not in opted_in
+            ):
+                continue
+            source = _buff_source_from_eligible(entry)
+            out.extend(entry["ability"].get_buffs(source, ctx, perspective))
+
+        return out
 
     def _build_indexes(self, raw: RawData) -> None:
         for pm in raw["phase_mappings"]:
