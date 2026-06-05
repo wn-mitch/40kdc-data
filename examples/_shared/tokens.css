@@ -1,0 +1,155 @@
+/* Shadowboxing design tokens — the single source for the example apps
+   (salvo, layout-editor; mission-matrix mirrors these values in its Tailwind
+   `@theme` block, which needs the `--color-*` form).
+
+   The dialect: industrial near-black neutrals carrying a faint violet tint
+   (hue ~286, chroma 0.004–0.015 — never pure #000/#fff), a teal accent for
+   selection/focus/primary actions, and the inset rim-lit elevation treatment.
+   Values are oklch conversions of the original shadowboxing hex palette
+   (ported from ~/bevy-deploy-helper) and round-trip to the same sRGB values.
+
+   Two naming families are defined for the same ramp:
+   - canonical (salvo / mission-matrix): --bg --panel --border --muted --dim …
+   - layout-editor aliases:              --surface-1/2 --rim --text-dim/-mute …
+   Careful: the dim/mute naming is inverted between the families —
+   editor --text-dim (lighter) = --muted, editor --text-mute (darker) = --dim.
+   The aliases map by lightness, not by name. */
+
+:root {
+  color-scheme: dark;
+
+  /* ── Surfaces, recessed → raised ─────────────────────────────────────── */
+  --bg: oklch(0.169 0.004 286); /* #0f0f11 */
+  --bg-dark: oklch(0.146 0.004 286); /* #0a0a0c */
+  --panel: oklch(0.224 0.008 286); /* #1b1b1f — raised pane surface */
+  --panel-2: oklch(0.155 0.004 286); /* #0c0c0e — recessed nested (inputs, code) */
+  --panel-surface: oklch(0.197 0.004 286); /* #151517 — shallow nested (table head) */
+  --panel-hover: oklch(0.237 0.008 286); /* #1e1e22 — hovered row */
+  --surface-2: oklch(0.26 0.009 286); /* highest tier (editor selected chrome) */
+
+  /* ── Borders / rims — interactive-control outlines on --border-strong stay
+     ≥3:1 (WCAG 1.4.11) on every surface tier; containers use --border. ──── */
+  --border: oklch(0.304 0.011 286); /* #2e2e34 */
+  --border-strong: oklch(0.513 0.014 286); /* #66666f */
+  --border-subtle: oklch(0.27 0.005 286); /* #262629 */
+  --grid: oklch(0.3 0.005 286); /* editor board gridlines */
+
+  /* ── Text ────────────────────────────────────────────────────────────── */
+  --text: oklch(0.947 0.004 286); /* #ededf0 */
+  --muted: oklch(0.735 0.014 286); /* #a8a8b2 — AAA 7.9:1 on --bg */
+  --dim: oklch(0.637 0.015 286); /* #8a8a94 — AA 5.1:1 on --bg */
+
+  /* ── Teal accent — selection, focus, primary actions, active states ───── */
+  --accent: oklch(0.704 0.123 183); /* #14b8a6 */
+  --accent-foreground: oklch(0.221 0.028 183); /* #0a1f1c */
+  --accent-hover: oklch(0.6 0.104 185); /* #0d9488 */
+  --accent-dim: oklch(0.371 0.06 185); /* #0d4a44 — highlight backgrounds */
+  --accent-strong: oklch(0.8 0.14 183); /* lighter accent (editor selection) */
+  --accent-fill: oklch(0.704 0.123 183 / 0.16); /* translucent accent wash */
+
+  /* ── Semantic ────────────────────────────────────────────────────────── */
+  --good: oklch(0.723 0.192 150); /* #22c55e */
+  --warn: oklch(0.769 0.165 70); /* #f59e0b */
+  --danger: oklch(0.637 0.208 25); /* #ef4444 */
+  --danger-rim: oklch(0.45 0.1 25);
+
+  /* ── Layout-editor alias family (same ramp, editor's names) ─────────── */
+  --surface-1: var(--panel);
+  --rim: var(--border);
+  --rim-strong: var(--border-strong);
+  --text-dim: var(--muted);
+  --text-mute: var(--dim);
+
+  /* semantic piece fills — board geometry, kept distinct from the teal
+     chrome; LayoutDiagram.svelte hardcodes matching values */
+  --piece-area-fill: oklch(0.62 0.13 250 / 0.28);
+  --piece-area-stroke: oklch(0.62 0.15 250);
+  --piece-feature-fill: oklch(0.74 0.14 75 / 0.5);
+  --piece-feature-stroke: oklch(0.74 0.15 75);
+
+  /* ── Typography ──────────────────────────────────────────────────────── */
+  --font-heading: "Barlow Condensed", system-ui, sans-serif;
+  --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --text-2xs: 11px;
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-base: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 22px;
+  --text-2xl: 26px;
+  --text-display: 30px;
+  --tracking-wide: 0.05em;
+  --tracking-wider: 0.08em;
+
+  /* ── Spacing ─────────────────────────────────────────────────────────── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  /* ── Radius — angular, industrial ────────────────────────────────────── */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+
+  /* ── Elevation — the signature shadowboxing inset-rim-lit treatment ──── */
+  --shadow-sm:
+    0 1px 0 0 rgba(255, 255, 255, 0.04) inset,
+    0 1px 0 0 rgba(0, 0, 0, 0.6),
+    0 4px 8px -2px rgba(0, 0, 0, 0.8);
+  --shadow-md:
+    0 1px 0 0 rgba(255, 255, 255, 0.08) inset,
+    0 2px 0 0 rgba(0, 0, 0, 0.8),
+    0 10px 20px -4px rgba(0, 0, 0, 0.95);
+  --shadow-xl:
+    0 1px 0 0 rgba(255, 255, 255, 0.14) inset,
+    0 -1px 0 0 rgba(0, 0, 0, 0.6) inset,
+    0 4px 0 0 rgba(0, 0, 0, 0.9),
+    0 20px 30px -6px rgba(0, 0, 0, 0.95),
+    0 40px 80px -20px rgba(0, 0, 0, 0.8);
+  --shadow-focus: 0 0 0 2px var(--accent);
+}
+
+/* ── Shared base — only rules every host app already agrees on. Element
+   styling (buttons, inputs, links) stays per-app. ───────────────────────── */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+/* Thin, dark scrollbars matching the panel chrome. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-sm);
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Pointer affordance on everything clickable (disabled controls keep the
+   arrow). */
+button:not(:disabled),
+select:not(:disabled),
+summary,
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}

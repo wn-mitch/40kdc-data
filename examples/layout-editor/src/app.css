@@ -1,52 +1,8 @@
-:root {
-  color-scheme: dark;
-  font-family: "Barlow", system-ui, sans-serif;
-
-  /* ── Shadowboxing dialect: industrial near-black tinted toward teal (~195°),
-     a teal accent for chrome, and semantic piece fills kept distinct. No pure
-     #000/#fff — every neutral carries a faint teal chroma. ───────────────── */
-
-  /* surfaces, dim → raised */
-  --bg: oklch(0.18 0.012 200);
-  --surface-1: oklch(0.22 0.013 200);
-  --surface-2: oklch(0.26 0.015 200);
-  --rim: oklch(0.34 0.018 200);
-  /* Interactive-control outlines — ≥3:1 (WCAG 1.4.11) on surface-1/surface-2.
-     Structural panel rims stay on --rim. */
-  --rim-strong: oklch(0.54 0.018 200);
-  --grid: oklch(0.3 0.012 200);
-
-  /* text */
-  --text: oklch(0.93 0.01 210);
-  --text-dim: oklch(0.7 0.015 215);
-  --text-mute: oklch(0.58 0.015 215);
-
-  /* teal accent — selection, focus, primary actions, active states */
-  --accent: oklch(0.72 0.13 195);
-  --accent-strong: oklch(0.8 0.14 195);
-  --accent-fill: oklch(0.72 0.13 195 / 0.16);
-
-  /* semantic piece fills — kept distinct from the teal chrome */
-  --piece-area-fill: oklch(0.62 0.13 250 / 0.28);
-  --piece-area-stroke: oklch(0.62 0.15 250);
-  --piece-feature-fill: oklch(0.74 0.14 75 / 0.5);
-  --piece-feature-stroke: oklch(0.74 0.15 75);
-
-  /* danger (delete / errors) */
-  --danger: oklch(0.65 0.16 25);
-  --danger-rim: oklch(0.45 0.1 25);
-
-  background: var(--bg);
-  color: var(--text);
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-}
+/* Design tokens, base resets, scrollbars, cursor affordances: shared
+   shadowboxing dialect. The editor consumes the alias family defined there
+   (--surface-1/2, --rim, --rim-strong, --text-dim, --text-mute, --accent-*,
+   --piece-*, --grid, --danger-rim). */
+@import "../../_shared/tokens.css";
 
 /* Keyboard focus for form controls. Mouse focus on board pieces is handled in
    Board.svelte (the polygon's UA outline is suppressed there and replaced by a
@@ -57,13 +13,4 @@ input:focus-visible,
 textarea:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
-}
-
-/* Pointer affordance on everything clickable (disabled controls keep the
-   arrow). */
-button:not(:disabled),
-select:not(:disabled),
-summary,
-[role="button"]:not([aria-disabled="true"]) {
-  cursor: pointer;
 }
