@@ -84,13 +84,15 @@ jobs:
       - run: cd tools && npm ci
       - run: cd tools && npm run bundle:schemas
       - run: cargo run -p xtask -- bundle-data
-      - run: pip install datamodel-code-generator
+      # Install the dev env BEFORE codegen: gen_typeddicts.py needs the pinned
+      # datamodel-code-generator AND ruff (its --formatters ruff-format pass
+      # silently no-ops without ruff installed, drifting the quote style).
+      - run: cd python && pip install -e ".[dev]"
       - run: python3 python/codegen/sync_bundle.py
       - run: python3 python/codegen/sync_spec.py
       - run: python3 python/codegen/gen_typeddicts.py
       - name: Check generated Python artifacts are up to date
         run: git diff --exit-code python/src/wh40kdc/_bundle.json python/src/wh40kdc/_spec.py python/src/wh40kdc/_types.py python/src/wh40kdc/schemas/
-      - run: cd python && pip install -e ".[dev]"
       - run: cd python && ruff check .
       - run: cd python && mypy src
       - run: cd python && pytest

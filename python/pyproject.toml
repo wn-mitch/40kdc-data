@@ -41,10 +41,13 @@ Repository = "https://github.com/wn-mitch/40kdc-data"
 [project.optional-dependencies]
 dev = [
   "pytest>=8",
-  "ruff>=0.8",
   "mypy>=1.13",
   "types-jsonschema",
-  "datamodel-code-generator>=0.26",
+  # Pinned: gen_typeddicts.py output must be byte-stable for the CI drift
+  # check (generator or formatter version drift changes the emitted text;
+  # the generator shells out to ruff-format, so ruff pins too).
+  "ruff==0.15.16",
+  "datamodel-code-generator==0.60.0",
   "build>=1.2",
 ]
 
