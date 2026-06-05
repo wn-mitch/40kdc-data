@@ -43,6 +43,7 @@ dev = [
   "pytest>=8",
   "ruff>=0.8",
   "mypy>=1.13",
+  "types-jsonschema",
   "datamodel-code-generator>=0.26",
   "build>=1.2",
 ]
