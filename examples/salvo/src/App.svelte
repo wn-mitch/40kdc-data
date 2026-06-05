@@ -4,7 +4,7 @@
   import AbilitiesPane from "./lib/abilities-pane.svelte";
   import TargetPane from "./lib/target-pane.svelte";
   import OutputPane from "./lib/output-pane.svelte";
-  import Pane from "./lib/Pane.svelte";
+  import Pane from "../../_shared/Pane.svelte";
   import SupportModal from "../../_shared/SupportModal.svelte";
   import { salvo } from "./lib/store.svelte.js";
 
@@ -64,10 +64,10 @@
   </header>
 
   <section class="column input">
-    <Pane id="import" title="Import roster" defaultOpen={importOpen}><ImportPane /></Pane>
-    <Pane id="attacker" title="Attacker" defaultOpen={attackerOpen}><AttackerPane /></Pane>
-    <Pane id="target" title="Target" defaultOpen={targetOpen}><TargetPane /></Pane>
-    <Pane id="abilities" title="Abilities & buffs" defaultOpen={abilitiesOpen}><AbilitiesPane /></Pane>
+    <Pane id="import" storagePrefix="salvo" title="Import roster" defaultOpen={importOpen}><ImportPane /></Pane>
+    <Pane id="attacker" storagePrefix="salvo" title="Attacker" defaultOpen={attackerOpen}><AttackerPane /></Pane>
+    <Pane id="target" storagePrefix="salvo" title="Target" defaultOpen={targetOpen}><TargetPane /></Pane>
+    <Pane id="abilities" storagePrefix="salvo" title="Abilities & buffs" defaultOpen={abilitiesOpen}><AbilitiesPane /></Pane>
   </section>
 
   <main class="column output">
