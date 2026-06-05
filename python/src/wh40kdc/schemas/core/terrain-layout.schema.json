@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/terrain-layout.schema.json",
+  "title": "Terrain Layout",
+  "description": "A recommended arrangement of terrain pieces on the board, independent of the deployment map (a deployment-pattern references the layouts it recommends via recommended_terrain_layout_ids). Each piece draws its geometry from a catalog `template` (a terrain-template entity) or an inline `footprint`; geometry is the source of truth. Placement is template-centroid-anchored: `position` is the piece's centroid, which is invariant under rotation and mirror, so orientation and location are decoupled. Resolved board-space vertices are derived by the shared terrain resolver (pinned by the conformance corpus), never stored here. No layout data is authored yet beyond migrated examples.",
+  "type": "object",
+  "$defs": {
+    "piece": {
+      "type": "object",
+      "description": "One terrain piece placed on the board. Geometry comes from a catalog `template` or an inline `footprint` (if both are present, `footprint` is authoritative and `template` is provenance).",
+      "properties": {
+        "id": {
+          "$ref": "../defs/common.schema.json#/$defs/entity-id",
+          "description": "Layout-local id. Required for any piece referenced by another piece's `parent_area_id`."
+        },
+        "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "piece_type": {
+          "type": "string",
+          "enum": ["area", "feature"],
+          "default": "area",
+          "description": "An `area` is a gameplay terrain zone (the 11e 'terrain area'); a `feature` is physical scenery (walls, containers, pipes) placed on an area."
+        },
+        "template": {
+          "$ref": "../defs/common.schema.json#/$defs/entity-id",
+          "description": "Id of the terrain-template this piece instances. Footprint and defaults (height, blocking, keywords) are taken from that template unless overridden here."
+        },
+        "footprint": {
+          "$ref": "../defs/common.schema.json#/$defs/footprint",
+          "description": "Inline geometry, standing in for or overriding a template footprint. Authoritative when present."
+        },
+        "position": {
+          "$ref": "../defs/common.schema.json#/$defs/vec2",
+          "description": "Placement of the piece's CENTROID (the polygon area centroid of its footprint). Rotation- and mirror-invariant: changing `rotation_degrees` or `mirror` never moves this point. In board inches, unless the piece is a feature with `parent_area_id`, in which case it is in the parent area's centroid-local frame."
+        },
+        "rotation_degrees": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 360,
+          "description": "Clockwise rotation about the centroid in the y-down board frame. Absent or 0 means the template's natural orientation."
+        },
+        "mirror": {
+          "type": "string",
+          "enum": ["none", "horizontal", "vertical"],
+          "default": "none",
+          "description": "Reflection applied in the centroid-local frame before rotation: `horizontal` negates local x (left-right flip), `vertical` negates local y."
+        },
+        "parent_area_id": {
+          "$ref": "../defs/common.schema.json#/$defs/entity-id",
+          "description": "For a feature: the layout-local id of the area it sits on. The feature's `position`/`rotation_degrees`/`mirror` are composed with the parent area's placement, so moving, rotating, or mirroring the area carries the feature with it."
+        },
+        "floor": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "Ruin floor this piece occupies (0 = ground level)."
+        },
+        "height_inches": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Height of the piece in inches; overrides the template default. Gates Plunging Fire (a piece 3\" or taller confers +1 BS on ground-level targets)."
+        },
+        "terrain_area_keywords": {
+          "type": "array",
+          "uniqueItems": true,
+          "description": "Terrain-area keywords this piece's area carries; overrides the template default.",
+          "items": { "$ref": "../defs/common.schema.json#/$defs/terrain-area-keyword" }
+        },
+        "link_group": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "description": "Pieces sharing a `link_group` value are linked terrain — treated as a single terrain feature (and, where an objective sits among them, a single objective)."
+        },
+        "objective_role": {
+          "type": "string",
+          "enum": ["home", "expansion", "center"],
+          "description": "Designates this terrain area — or, when `link_group`'d, the union of linked areas (one objective for the set) — as carrying an objective of the given 11e role: `home` (inside a deployment zone), `center` (board middle), or `expansion` (no-man's-land). Implies `is_objective`."
+        },
+        "is_objective": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this piece carries an objective marker."
+        },
+        "objective": {
+          "type": "object",
+          "description": "Objective-marker metadata. Only meaningful when `is_objective` is true.",
+          "properties": {
+            "position": {
+              "$ref": "../defs/common.schema.json#/$defs/vec2",
+              "description": "Board-inch position of the marker. Absent means the piece's `position`."
+            },
+            "control_range_inches": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Range from the marker within which models contribute to control."
+            }
+          },
+          "additionalProperties": false
+        },
+        "keystones": {
+          "type": "array",
+          "description": "Measurement keystones: the author-selected dimension lines a reference card prints so a player can place this piece with a tape measure (board edge → a feature of the placed piece). Only the selection is stored — the distance is always DERIVED from the resolved geometry by the shared keystone resolver (pinned by the conformance corpus), so a keystone can never disagree with the layout. Vertex indices follow the resolver's pinned vertex order; re-authoring a template's footprint invalidates them, so review keystones when geometry changes.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "edge": {
+                "type": "string",
+                "enum": ["left", "right", "top", "bottom"],
+                "description": "The board edge the measurement runs from, in the y-down board frame (left/right pin x against board width; top/bottom pin y against board height)."
+              },
+              "ref": {
+                "description": "Which feature of the placed piece the measurement reaches: a footprint vertex (by resolver vertex order) or an axis-aligned bounding face of the placed footprint.",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": { "const": "vertex" },
+                      "index": { "type": "integer", "minimum": 0 }
+                    },
+                    "required": ["kind", "index"],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": { "const": "face" },
+                      "side": { "type": "string", "enum": ["min-x", "max-x", "min-y", "max-y"] }
+                    },
+                    "required": ["kind", "side"],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": ["edge", "ref"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["position"],
+      "if": { "not": { "required": ["template"] } },
+      "then": { "required": ["footprint"] },
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "source": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "description": "Mission pack or source the layout originates from."
+    },
+    "description": { "type": "string" },
+    "mission_matchup_id": {
+      "$ref": "../defs/common.schema.json#/$defs/entity-id",
+      "description": "The 11e Force Disposition matchup this layout's card is built for, named in the card's printed order (e.g. `take-and-hold-vs-purge-the-foe`). One of the enumerated mission-matchup ids. Optional: many cards are not yet classified."
+    },
+    "variant": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The card's trailing variant number within its mission matchup (1–3 at launch, since three layouts share each pairing). No hard maximum, to avoid a breaking change if more variants ship."
+    },
+    "deployment_pattern_id": {
+      "$ref": "../defs/common.schema.json#/$defs/entity-id",
+      "description": "Id of the deployment-pattern (map) this layout is built on (e.g. `search-and-destroy`). Optional until confirmed."
+    },
+    "pieces": {
+      "type": "array",
+      "description": "Terrain pieces composing the layout. May be empty while a layout is registered by name ahead of its confirmed geometry.",
+      "items": { "$ref": "#/$defs/piece" }
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
+  },
+  "required": ["id", "name", "game_version"],
+  "additionalProperties": false
+}

@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/deployment-pattern.schema.json",
+  "title": "Deployment Pattern",
+  "description": "A deployment map: per-side deployment zones, objective positions, and (11e) per-side territory polygons. Pattern geometry carries forward unchanged from 10th edition; downstream tooling (e.g. bevy-deploy-helper) consumes this as the canonical encoding.",
+  "type": "object",
+  "$defs": {
+    "zone-shape": {
+      "description": "A zone footprint, expressed as an axis-aligned rectangle or an explicit polygon. Vertices/extent are relative to the owning element's position.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "rectangle" },
+            "width": { "type": "number", "exclusiveMinimum": 0 },
+            "height": { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "required": ["type", "width", "height"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "polygon" },
+            "points": {
+              "type": "array",
+              "items": { "$ref": "../defs/common.schema.json#/$defs/vec2" },
+              "minItems": 3
+            }
+          },
+          "required": ["type", "points"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "side": {
+      "type": "string",
+      "enum": ["attacker", "defender"],
+      "description": "Which player a zone or territory belongs to."
+    }
+  },
+  "properties": {
+    "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "source": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "description": "Mission pack or source the pattern originates from (e.g. 'leviathan')."
+    },
+    "description": { "type": "string" },
+    "zones": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Per-side deployment zones.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "player": { "$ref": "#/$defs/side" },
+          "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "shape": { "$ref": "#/$defs/zone-shape" },
+          "position": { "$ref": "../defs/common.schema.json#/$defs/vec2" },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$",
+            "description": "Hex render color for the zone overlay."
+          }
+        },
+        "required": ["player", "shape", "position"],
+        "additionalProperties": false
+      }
+    },
+    "territories": {
+      "type": "array",
+      "description": "11e per-side territory polygons, mirroring the deployment-zone shape (e.g. the band between a deployment zone and the midline). Empty until authored.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "player": { "$ref": "#/$defs/side" },
+          "shape": { "$ref": "#/$defs/zone-shape" },
+          "position": { "$ref": "../defs/common.schema.json#/$defs/vec2" }
+        },
+        "required": ["player", "shape", "position"],
+        "additionalProperties": false
+      }
+    },
+    "objectives": {
+      "type": "array",
+      "description": "Objective-marker positions on the board.",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/vec2" }
+    },
+    "recommended_terrain_layout_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Ids of recommended terrain-layout entities (resolved once terrain-layout data is authored).",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" }
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
+  },
+  "required": ["id", "name", "zones", "game_version"],
+  "additionalProperties": false
+}
