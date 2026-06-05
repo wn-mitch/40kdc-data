@@ -287,8 +287,8 @@ impl FormatAdapter for ListForgeTextAdapter {
             units.push(finish_unit(unit));
         }
 
-        let header =
-            header.ok_or_else(|| ParseError("listforge-text: missing ListForge header line".into()))?;
+        let header = header
+            .ok_or_else(|| ParseError("listforge-text: missing ListForge header line".into()))?;
 
         let mut total_computed: u64 = 0;
         for u in &units {
@@ -440,7 +440,10 @@ Flesh Hounds (75 pts)
             .iter()
             .find(|u| u.raw_name == "Great Unclean One")
             .unwrap();
-        assert_eq!(guo.enhancement_raw_name.as_deref(), Some("The Endless Gift"));
+        assert_eq!(
+            guo.enhancement_raw_name.as_deref(),
+            Some("The Endless Gift")
+        );
         assert_eq!(guo.enhancement_points, None);
         assert_eq!(guo.points, Some(295)); // displayed points stay as-is
         assert!(guo.is_warlord);

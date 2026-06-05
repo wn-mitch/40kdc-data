@@ -43,9 +43,8 @@ static RE_ROSTER_HEADER_SIG: Lazy<Regex> =
 // Some exports omit the `# ++ Army Roster ++` line and open straight with a
 // `## Section` heading — accept either marker in `detect`.
 static RE_SECTION_SIG: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?m)^##\s+").unwrap());
-static RE_SECTION_HEADER: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"^##\s*(.+?)(?:\s*\[\s*(\d+)\s*pts?\s*(?:,[^\]]*)?\])?\s*$").unwrap()
-});
+static RE_SECTION_HEADER: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"^##\s*(.+?)(?:\s*\[\s*(\d+)\s*pts?\s*(?:,[^\]]*)?\])?\s*$").unwrap());
 static RE_UNIT_LINE: Lazy<Regex> = Lazy::new(|| {
     Regex::new(r"(?i)^(.+?)\s*\[\s*(\d+)\s*pts?\s*(?:,[^\]]*)?\](?:\s*:\s*(.*))?$").unwrap()
 });
@@ -388,7 +387,10 @@ Beasts of Nurgle [65 pts]:
             parsed.battle_size_raw.as_deref(),
             Some("Strike Force (2000 Point limit)")
         );
-        assert_eq!(parsed.detachment_raw_name.as_deref(), Some("Houndpack Lance"));
+        assert_eq!(
+            parsed.detachment_raw_name.as_deref(),
+            Some("Houndpack Lance")
+        );
 
         let names: Vec<&str> = parsed.units.iter().map(|u| u.raw_name.as_str()).collect();
         assert_eq!(
@@ -404,7 +406,10 @@ Beasts of Nurgle [65 pts]:
 
         // Inline enhancement is recognised and its cost subtracted from points.
         let kar = &parsed.units[0];
-        assert_eq!(kar.enhancement_raw_name.as_deref(), Some("Preyslayer's Mantle"));
+        assert_eq!(
+            kar.enhancement_raw_name.as_deref(),
+            Some("Preyslayer's Mantle")
+        );
         assert_eq!(kar.points, Some(150)); // 165 − 15
         assert!(kar.is_character);
         assert!(!kar.is_warlord);
@@ -463,8 +468,13 @@ Broadside Battlesuits [90pts]:
 Broadside Battlesuits [90pts]:
 • 1x Broadside Shas'vre: Crushing bulk, 2x Shield Drone, Heavy rail rifle
 ";
-        let parsed = NewRecruitSimpleAdapter.parse(&json!(no_units_header)).unwrap();
-        assert_eq!(parsed.detachment_raw_name.as_deref(), Some("Auxiliary Cadre"));
+        let parsed = NewRecruitSimpleAdapter
+            .parse(&json!(no_units_header))
+            .unwrap();
+        assert_eq!(
+            parsed.detachment_raw_name.as_deref(),
+            Some("Auxiliary Cadre")
+        );
         assert_eq!(parsed.units.len(), 2);
         assert_eq!(parsed.units[0].raw_name, "Broadside Battlesuits");
         assert_eq!(parsed.units[0].model_count, 1);
