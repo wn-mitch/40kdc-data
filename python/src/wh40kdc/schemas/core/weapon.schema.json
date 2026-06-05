@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/weapon.schema.json",
+  "title": "Weapon",
+  "description": "A weapon entry with one or more stat profiles (e.g., standard and overcharge modes).",
+  "type": "object",
+  "properties": {
+    "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "type": { "enum": ["ranged", "melee"] },
+    "profiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "range": {
+            "oneOf": [
+              { "type": "integer", "minimum": 0 },
+              { "type": "string", "const": "Melee" }
+            ]
+          },
+          "stats": {
+            "type": "object",
+            "properties": {
+              "A": { "$ref": "../defs/common.schema.json#/$defs/stat-value" },
+              "BS": {
+                "oneOf": [
+                  { "type": "integer", "minimum": 2, "maximum": 6 },
+                  { "type": "null" }
+                ]
+              },
+              "WS": {
+                "oneOf": [
+                  { "type": "integer", "minimum": 2, "maximum": 6 },
+                  { "type": "null" }
+                ]
+              },
+              "S": { "$ref": "../defs/common.schema.json#/$defs/stat-value" },
+              "AP": { "type": "integer" },
+              "D": { "$ref": "../defs/common.schema.json#/$defs/stat-value" }
+            },
+            "required": ["A", "S", "AP", "D"]
+          },
+          "keywords": {
+            "type": "array",
+            "description": "References into the weapon-keyword catalog. Each entry names the catalog id and supplies parameter values (e.g. `Sustained Hits 1` → `{keyword_id: 'sustained-hits', parameters: {value: 1}}`).",
+            "items": {
+              "type": "object",
+              "properties": {
+                "keyword_id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+                "parameters": {
+                  "type": "object",
+                  "description": "Reference-site parameters conforming to the catalog entry's required_parameters. Only the three documented keys are accepted; any other key is invalid.",
+                  "properties": {
+                    "value": { "$ref": "../defs/common.schema.json#/$defs/stat-value" },
+                    "target_keyword": { "type": "string", "minLength": 1, "maxLength": 64 },
+                    "threshold": { "type": "integer", "minimum": 2, "maximum": 6 }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "required": ["keyword_id"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["name", "stats"],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
+  },
+  "required": ["id", "name", "type", "profiles", "game_version"],
+  "additionalProperties": false
+}

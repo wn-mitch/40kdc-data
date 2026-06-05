@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/mission.schema.json",
+  "title": "Mission",
+  "description": "An 11e primary mission (the objective a player scores). Which mission a player plays is selected by the Force Disposition matchup matrix (see mission-matchup), keyed on the player's own disposition and their opponent's. Victory points are capped per game and per battle round.",
+  "type": "object",
+  "properties": {
+    "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "source": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "description": "Mission pack or source the mission originates from."
+    },
+    "description": {
+      "type": "string",
+      "description": "Community-authored mission/objective summary (original prose only — no reproduced rules text)."
+    },
+    "vp_per_game_cap": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 45,
+      "description": "Maximum primary VP scorable across the whole game. 11e default is 45."
+    },
+    "vp_per_round_cap": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 15,
+      "description": "Maximum primary VP scorable in a single battle round. 11e default is 15."
+    },
+    "deployment_pattern_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Ids of the deployment-pattern entities (maps) this mission can be played on. Empty until the per-mission maps are confirmed.",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" }
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
+  },
+  "required": ["id", "name", "game_version"],
+  "additionalProperties": false
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/weapon-keyword.schema.json",
+  "title": "Weapon Keyword",
+  "description": "Catalog entry for a weapon keyword (Lethal Hits, Sustained Hits N, Anti-X N+, etc.). Each weapon profile references entries here via {keyword_id, parameters?} instead of carrying free-text strings. The optional `effect` describes the keyword's game mechanic in the Ability DSL; null when the behaviour is faction-specific flavour not yet modelled.",
+  "type": "object",
+  "properties": {
+    "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "required_parameters": {
+      "type": "array",
+      "description": "Parameter keys that must be supplied at each reference site, in the order they would appear in a printed datasheet (e.g. Anti-INFANTRY 4+ → ['target_keyword', 'threshold']).",
+      "items": {
+        "type": "string",
+        "enum": ["value", "target_keyword", "threshold"]
+      },
+      "uniqueItems": true,
+      "maxItems": 3
+    },
+    "effect": {
+      "oneOf": [
+        { "$ref": "../enrichment/ability-dsl/effect.schema.json" },
+        { "type": "null" }
+      ],
+      "description": "Mechanical effect of this keyword. Null when the behaviour is faction-specific flavour not yet expressible in the DSL — engines treat such references as no-op buffs and may surface them as 'cannot auto-apply'."
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
+  },
+  "required": ["id", "name", "required_parameters", "effect", "game_version"],
+  "additionalProperties": false
+}

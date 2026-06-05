@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/wargear.schema.json",
+  "title": "Wargear",
+  "description": "A non-weapon item a model may carry — an icon, attachment, or other piece of equipment with no weapon profile. Weapons live in weapon.schema.json; this entity exists so wargear-option swaps and add-ons can reference equipment that is not a weapon.",
+  "type": "object",
+  "properties": {
+    "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "category": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Free-form grouping such as 'icon', 'upgrade', or 'equipment'."
+        },
+        { "type": "null" }
+      ]
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
+  },
+  "required": ["id", "name", "game_version"],
+  "additionalProperties": false
+}

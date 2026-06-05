@@ -11,14 +11,13 @@ dynamic = ["version"]
 description = "Warhammer 40K dataset for the 40kdc-data schema layer: an embedded dataset behind a linked typed API, ListForge + NewRecruit roster importers and exporters, damage-projection cruncher, and a schema validator."
 readme = "README.md"
 license = "MIT"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 authors = [{ name = "Alpaca Software" }]
 keywords = ["warhammer", "40k", "wargaming", "schema", "dataset"]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Intended Audience :: Developers",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
@@ -68,7 +67,7 @@ select = ["E", "F", "W", "I", "UP", "B", "RUF"]
 exclude = ["src/wh40kdc/_types.py"]
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.11"
 strict = false
 disallow_untyped_defs = true
 warn_unused_ignores = true

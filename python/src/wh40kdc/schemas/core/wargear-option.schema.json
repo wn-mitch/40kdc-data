@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/wargear-option.schema.json",
+  "title": "Wargear Option",
+  "description": "A wargear option available to models within a unit: a weapon/wargear swap, a pure add-on, or a choice between alternatives. Models start with the unit's base loadout; an option modifies that loadout for the number of models its `model_constraint` permits.",
+  "type": "object",
+  "properties": {
+    "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "unit_id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "model_constraint": {
+      "oneOf": [
+        {
+          "type": "object",
+          "description": "Limits how many models may take this option. The eligible-model count is: `any_number` ? model_count : `per_n_models` ? floor(model_count / per_n_models) : (`max_count` ?? 1); then clamped by `max_count` when both are set. `model_name` scopes the option to a specific model profile (e.g. the unit's champion); omit for single-profile units.",
+          "properties": {
+            "model_name": { "type": "string", "minLength": 1 },
+            "per_n_models": { "type": "integer", "minimum": 1 },
+            "max_count": { "type": "integer", "minimum": 1 },
+            "any_number": {
+              "type": "boolean",
+              "default": false,
+              "description": "When true, every model in the unit may take the option ('Any number of models can each ...'). Mutually exclusive in spirit with `per_n_models`."
+            }
+          },
+          "additionalProperties": false
+        },
+        { "type": "null" }
+      ]
+    },
+    "replaces": {
+      "type": "array",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+      "minItems": 1,
+      "description": "Weapon or wargear IDs removed from the model. Omit for a pure add-on (the option only equips new wargear)."
+    },
+    "replacement": {
+      "type": "array",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+      "minItems": 1,
+      "description": "Weapon or wargear IDs added to the model — all of them. Exactly one of `replacement` / `replacement_choice` is present."
+    },
+    "replacement_choice": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+        "minItems": 1
+      },
+      "minItems": 2,
+      "description": "A choice of replacements ('one of the following'): pick exactly one inner group; each group's IDs are all added together. Exactly one of `replacement` / `replacement_choice` is present."
+    },
+    "is_free": { "type": "boolean", "default": true },
+    "additional_cost": {
+      "oneOf": [
+        { "type": "integer", "minimum": 0 },
+        { "type": "null" }
+      ]
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
+  },
+  "required": ["id", "unit_id", "game_version"],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": { "required": ["replacement"] },
+      "then": { "not": { "required": ["replacement_choice"] } }
+    },
+    {
+      "if": { "not": { "required": ["replacement"] } },
+      "then": { "required": ["replacement_choice"] }
+    }
+  ]
+}
