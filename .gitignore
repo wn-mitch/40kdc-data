@@ -32,6 +32,13 @@ rube-goldberg-output.txt
 __pycache__/
 *.pyc
 
+# Python package dev artifacts (python/ is the wh40kdc PyPI package).
+/python/.venv/
+/python/dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
 # IP-sensitive working material (source PDFs of upstream rulebooks, extracted
 # prose, scratch notes) that must never be committed. Anything inside this
 # directory stays local.
