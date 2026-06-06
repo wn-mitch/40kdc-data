@@ -1,0 +1,236 @@
+[
+  {
+    "id": "command-re-roll",
+    "name": "COMMAND RE-ROLL",
+    "category": "core",
+    "type": "battle-tactic",
+    "detachment_id": null,
+    "cp_cost": 1,
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "counter-offensive",
+    "name": "COUNTER-OFFENSIVE",
+    "category": "core",
+    "type": "strategic-ploy",
+    "detachment_id": null,
+    "cp_cost": 2,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "epic-challenge",
+    "name": "EPIC CHALLENGE",
+    "category": "core",
+    "type": "epic-deed",
+    "detachment_id": null,
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Character"
+      ]
+    },
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "insane-bravery",
+    "name": "INSANE BRAVERY",
+    "category": "core",
+    "type": "battle-tactic",
+    "detachment_id": null,
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-battle",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "grenade",
+    "name": "GRENADE",
+    "category": "core",
+    "type": "wargear",
+    "detachment_id": null,
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Grenades"
+      ]
+    },
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "tank-shock",
+    "name": "TANK SHOCK",
+    "category": "core",
+    "type": "strategic-ploy",
+    "detachment_id": null,
+    "cp_cost": 1,
+    "phases": [
+      "charge"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Vehicle"
+      ]
+    },
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "rapid-ingress",
+    "name": "RAPID INGRESS",
+    "category": "core",
+    "type": "strategic-ploy",
+    "detachment_id": null,
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "fire-overwatch",
+    "name": "FIRE OVERWATCH",
+    "category": "core",
+    "type": "strategic-ploy",
+    "detachment_id": null,
+    "cp_cost": 1,
+    "phases": [
+      "movement",
+      "charge"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-turn",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "go-to-ground",
+    "name": "GO TO GROUND",
+    "category": "core",
+    "type": "battle-tactic",
+    "detachment_id": null,
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Infantry"
+      ]
+    },
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "smokescreen",
+    "name": "SMOKESCREEN",
+    "category": "core",
+    "type": "wargear",
+    "detachment_id": null,
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": {
+      "required_keywords": [
+        "Smoke"
+      ]
+    },
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "heroic-intervention",
+    "name": "HEROIC INTERVENTION",
+    "category": "core",
+    "type": "strategic-ploy",
+    "detachment_id": null,
+    "cp_cost": 2,
+    "phases": [
+      "charge"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-turn",
+    "target_restrictions": null,
+    "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]
