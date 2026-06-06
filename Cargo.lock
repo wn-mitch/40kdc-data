@@ -1890,7 +1890,7 @@ dependencies = [
 
 [[package]]
 name = "wh40kdc"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "base64",
  "chrono",
