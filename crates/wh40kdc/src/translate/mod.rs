@@ -51,6 +51,92 @@ fn count(n: u64, noun: &str) -> String {
     format!("{n}+ {noun}s")
 }
 
+/// Join compound-condition clauses: two read as `X and Y`, three or more as a
+/// serial-comma list (`X, Y, and Z`) so long chains don't read as a parser
+/// dump. Mirrors `joinClauses`.
+fn join_clauses(parts: &[String], connective: &str) -> String {
+    if parts.len() <= 2 {
+        return parts.join(&format!(" {connective} "));
+    }
+    format!(
+        "{}, {connective} {}",
+        parts[..parts.len() - 1].join(", "),
+        parts[parts.len() - 1]
+    )
+}
+
+/// Known timing values → readable clauses. Event-style timings (`on-*`) read
+/// as `when ...`; window-style timings read as `at ...`. Unmapped values fall
+/// back by prefix: `on-*` → `when <words>`, `after-*` → `after <words>`,
+/// anything else → `at <words>`. Mirrors `describeTiming`.
+fn describe_timing(timing: &str) -> String {
+    match timing {
+        "start-of-phase" | "start" => "at the start of the phase".to_string(),
+        "end-of-phase" | "end" => "at the end of the phase".to_string(),
+        "start-of-battle-round" => "at the start of the battle round".to_string(),
+        "on-destroyed" => "when destroyed".to_string(),
+        "on-unit-destroyed" => "when a unit is destroyed".to_string(),
+        "on-model-destroyed" | "model-destroyed" => "when a model is destroyed".to_string(),
+        "first-model-destroyed" => "when the first model is destroyed".to_string(),
+        "post-deployment" => "after deployment".to_string(),
+        "reinforcements" => "in the Reinforcements step".to_string(),
+        "declare-battle-formations" => "when declaring battle formations".to_string(),
+        "deep-strike-setup" => "when setting up by deep strike".to_string(),
+        "deep-strike" => "when deep striking".to_string(),
+        "once-per-battle" => "once per battle".to_string(),
+        "first-this-battle" => "the first time this battle".to_string(),
+        "normal-move" => "when making a normal move".to_string(),
+        "advance" | "advance-move" => "when advancing".to_string(),
+        "selected-to-advance" => "when selected to advance".to_string(),
+        "fall-back-selected" => "when selected to fall back".to_string(),
+        "making-normal-advance-or-fallback-move" => {
+            "when making a normal, advance, or fall back move".to_string()
+        }
+        "starts-in-strategic-reserves" => "when starting in strategic reserves".to_string(),
+        "arrives-from-strategic-reserves" => "when arriving from strategic reserves".to_string(),
+        "after-shooting" => "after shooting".to_string(),
+        "setup" => "during setup".to_string(),
+        other => {
+            if let Some(rest) = other.strip_prefix("on-") {
+                format!("when {}", dekebab(rest))
+            } else if let Some(rest) = other.strip_prefix("after-") {
+                format!("after {}", dekebab(rest))
+            } else {
+                format!("at {}", dekebab(other))
+            }
+        }
+    }
+}
+
+/// `closest-eligible` → `the closest eligible target`, etc. Mirrors
+/// `describeRangeTarget`.
+fn describe_range_target(target_type: &str, keyword: Option<&str>) -> String {
+    match target_type {
+        "friendly" => "a friendly unit".to_string(),
+        "friendly-keyword" => match keyword {
+            Some(k) => format!("a friendly {k} unit"),
+            None => "a friendly unit".to_string(),
+        },
+        "closest-eligible" => "the closest eligible target".to_string(),
+        "area-terrain" => "an area terrain feature".to_string(),
+        "character" => "a character".to_string(),
+        "fortification" => "a fortification".to_string(),
+        other => dekebab(other),
+    }
+}
+
+/// `this-phase`/`phase` → `this phase`, etc. — windows read as `this <span>`.
+/// Mirrors `describeWindow`.
+fn describe_window(window: &str) -> String {
+    match window {
+        "phase" | "this-phase" | "current" => "this phase".to_string(),
+        "turn" | "this-turn" => "this turn".to_string(),
+        "battle" => "this battle".to_string(),
+        "this-attack" => "this attack".to_string(),
+        other => dekebab(other),
+    }
+}
+
 fn phase_word(p: Phase) -> &'static str {
     match p {
         Phase::Command => "Command",
@@ -161,8 +247,8 @@ fn describe_node(n: &ConditionNode) -> String {
         ConditionNode::CompoundCondition(c) => {
             let parts: Vec<String> = c.operands.iter().map(describe_node).collect();
             match c.operator {
-                CompoundConditionOperator::And => parts.join(" and "),
-                CompoundConditionOperator::Or => parts.join(" or "),
+                CompoundConditionOperator::And => join_clauses(&parts, "and"),
+                CompoundConditionOperator::Or => join_clauses(&parts, "or"),
                 CompoundConditionOperator::Not => format!("not ({})", parts.join(", ")),
             }
         }
@@ -177,7 +263,7 @@ fn describe_simple(s: &SimpleCondition) -> String {
     match s.type_ {
         // ── Ability-DSL conditions ──────────────────────────────────────────
         T::PhaseIs => format!("{negate}during the {} phase", ps(p, "phase").unwrap_or("")),
-        T::TimingIs => format!("{negate}at {}", dekebab(ps(p, "timing").unwrap_or(""))),
+        T::TimingIs => format!("{negate}{}", describe_timing(ps(p, "timing").unwrap_or(""))),
         T::PlayerTurnIs => {
             let turn = match ps(p, "turn") {
                 Some("your-turn") => "your",
@@ -236,32 +322,33 @@ fn describe_simple(s: &SimpleCondition) -> String {
             }
         }
         T::OpponentUnitWithinRange => {
-            let r = if ps(p, "range") == Some("engagement") {
-                "engagement range".to_string()
+            if ps(p, "range") == Some("engagement") {
+                format!("{negate}an enemy unit is within engagement range")
+            } else if !matches!(p.get("range"), Some(v) if !v.is_null()) {
+                format!("{negate}an enemy unit is within range")
             } else {
-                format!("{}\"", pj(p, "range"))
-            };
-            format!("{negate}an enemy unit is within {r}")
+                format!("{negate}an enemy unit is within {}\"", pj(p, "range"))
+            }
         }
         T::UnitWithinRangeOf => {
+            let target_type = ps(p, "target_type").unwrap_or("target");
+            let target = describe_range_target(target_type, ps(p, "keyword"));
             let kw = match ps(p, "keyword") {
-                Some(k) => format!(" ({k})"),
-                None => String::new(),
+                Some(k) if target_type != "friendly-keyword" => format!(" ({k})"),
+                _ => String::new(),
             };
-            format!(
-                "{negate}within {}\" of {}{kw}",
-                pj(p, "range"),
-                ps(p, "target_type").unwrap_or("target")
-            )
+            if !matches!(p.get("range"), Some(v) if !v.is_null()) {
+                format!("{negate}within range of {target}{kw}")
+            } else {
+                format!("{negate}within {}\" of {target}{kw}", pj(p, "range"))
+            }
         }
         T::WithinRangeOfObjective => format!("{negate}within range of an objective"),
         T::HasFoughtThisPhase => format!("{negate}has fought this phase"),
-        T::DestroyedByAttackType => {
-            format!(
-                "{negate}destroyed by a {} attack",
-                ps(p, "attack_type").unwrap_or("")
-            )
-        }
+        T::DestroyedByAttackType => match ps(p, "attack_type") {
+            None | Some("any") => format!("{negate}destroyed by an attack"),
+            Some(t) => format!("{negate}destroyed by a {t} attack"),
+        },
 
         // ── Scoring conditions (secondary-card award `when`) ────────────────
         T::ObjectiveMajority => format!(
@@ -288,11 +375,16 @@ fn describe_simple(s: &SimpleCondition) -> String {
             }
             out
         }
-        T::UnitsDestroyed => format!(
-            "{negate}{} destroyed {}",
-            count(pu(p, "count_min", 1), &format!("{} unit", pj(p, "side"))),
-            dekebab(&pj(p, "window"))
-        ),
+        T::UnitsDestroyed => {
+            let mut out = format!(
+                "{negate}{} destroyed",
+                count(pu(p, "count_min", 1), &format!("{} unit", pj(p, "side")))
+            );
+            if let Some(w) = ps(p, "window") {
+                out.push_str(&format!(" {}", describe_window(w)));
+            }
+            out
+        }
         T::UnitsDestroyedComparison => {
             let empty = Map::new();
             let subj = po(p, "subject").unwrap_or(&empty);

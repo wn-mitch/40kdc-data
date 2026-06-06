@@ -37,14 +37,106 @@ function count(n: unknown, noun: string): string {
   return `${str(n)}+ ${noun}s`;
 }
 
+/**
+ * Join compound-condition clauses: two read as `X and Y`, three or more as a
+ * serial-comma list (`X, Y, and Z`) so long chains don't read as a parser dump.
+ */
+function joinClauses(parts: string[], connective: "and" | "or"): string {
+  if (parts.length <= 2) return parts.join(` ${connective} `);
+  return `${parts.slice(0, -1).join(", ")}, ${connective} ${parts[parts.length - 1]}`;
+}
+
+/**
+ * Known timing values → readable clauses. Event-style timings (`on-*`) read as
+ * `when ...`; window-style timings read as `at ...`/`during ...`. Unmapped
+ * values fall back by prefix: `on-*` → `when <words>`, `after-*` →
+ * `after <words>`, anything else → `at <words>`.
+ */
+const TIMING_PHRASES: Record<string, string> = {
+  "start-of-phase": "at the start of the phase",
+  start: "at the start of the phase",
+  "end-of-phase": "at the end of the phase",
+  end: "at the end of the phase",
+  "start-of-battle-round": "at the start of the battle round",
+  "on-destroyed": "when destroyed",
+  "on-unit-destroyed": "when a unit is destroyed",
+  "on-model-destroyed": "when a model is destroyed",
+  "model-destroyed": "when a model is destroyed",
+  "first-model-destroyed": "when the first model is destroyed",
+  "post-deployment": "after deployment",
+  reinforcements: "in the Reinforcements step",
+  "declare-battle-formations": "when declaring battle formations",
+  "deep-strike-setup": "when setting up by deep strike",
+  "deep-strike": "when deep striking",
+  "once-per-battle": "once per battle",
+  "first-this-battle": "the first time this battle",
+  "normal-move": "when making a normal move",
+  advance: "when advancing",
+  "advance-move": "when advancing",
+  "selected-to-advance": "when selected to advance",
+  "fall-back-selected": "when selected to fall back",
+  "making-normal-advance-or-fallback-move": "when making a normal, advance, or fall back move",
+  "starts-in-strategic-reserves": "when starting in strategic reserves",
+  "arrives-from-strategic-reserves": "when arriving from strategic reserves",
+  "after-shooting": "after shooting",
+  setup: "during setup",
+};
+
+function describeTiming(timing: string): string {
+  const mapped = TIMING_PHRASES[timing];
+  if (mapped) return mapped;
+  if (timing.startsWith("on-")) return `when ${dekebab(timing.slice(3))}`;
+  if (timing.startsWith("after-")) return `after ${dekebab(timing.slice(6))}`;
+  return `at ${dekebab(timing)}`;
+}
+
+/** `closest-eligible` → `the closest eligible target`, etc. */
+function describeRangeTarget(targetType: string, keyword: unknown): string {
+  switch (targetType) {
+    case "friendly":
+      return "a friendly unit";
+    case "friendly-keyword":
+      return keyword != null ? `a friendly ${str(keyword)} unit` : "a friendly unit";
+    case "closest-eligible":
+      return "the closest eligible target";
+    case "area-terrain":
+      return "an area terrain feature";
+    case "character":
+      return "a character";
+    case "fortification":
+      return "a fortification";
+    default:
+      return dekebab(targetType);
+  }
+}
+
+/** `this-phase`/`phase` → `this phase`, etc. — windows read as `this <span>`. */
+function describeWindow(window: string): string {
+  switch (window) {
+    case "phase":
+    case "this-phase":
+    case "current":
+      return "this phase";
+    case "turn":
+    case "this-turn":
+      return "this turn";
+    case "battle":
+      return "this battle";
+    case "this-attack":
+      return "this attack";
+    default:
+      return dekebab(window);
+  }
+}
+
 export function describeCondition(c: Condition): string {
   // Compound nodes first — join the operands with lowercase connectives so the
   // result reads naturally inside a "... when X and Y" clause.
   if (c.operator === "and" && c.operands) {
-    return c.operands.map(describeCondition).join(" and ");
+    return joinClauses(c.operands.map(describeCondition), "and");
   }
   if (c.operator === "or" && c.operands) {
-    return c.operands.map(describeCondition).join(" or ");
+    return joinClauses(c.operands.map(describeCondition), "or");
   }
   if (c.operator === "not" && c.operands) {
     return `not (${c.operands.map(describeCondition).join(", ")})`;
@@ -58,7 +150,7 @@ export function describeCondition(c: Condition): string {
     case "phase-is":
       return `${negate}during the ${str(p.phase)} phase`;
     case "timing-is":
-      return `${negate}at ${dekebab(str(p.timing))}`;
+      return `${negate}${describeTiming(str(p.timing))}`;
     case "player-turn-is":
       return `${negate}in ${p.turn === "your-turn" ? "your" : p.turn === "opponent-turn" ? "the opponent's" : "either player's"} turn`;
     case "charged-this-turn":
@@ -93,16 +185,25 @@ export function describeCondition(c: Condition): string {
       if (n > 1) return `${negate}${subject} was hit by ${n}+ ${atk}attacks${weapon} this phase`;
       return `${negate}${subject} was hit by ${atk === "" ? "an attack" : `a ${atk}attack`}${weapon} this phase`;
     }
-    case "opponent-unit-within-range":
-      return `${negate}an enemy unit is within ${p.range === "engagement" ? "engagement range" : `${str(p.range)}"`}`;
-    case "unit-within-range-of":
-      return `${negate}within ${str(p.range)}" of ${str(p.target_type ?? "target")}${p.keyword ? ` (${str(p.keyword)})` : ""}`;
+    case "opponent-unit-within-range": {
+      if (p.range === "engagement") return `${negate}an enemy unit is within engagement range`;
+      if (p.range == null) return `${negate}an enemy unit is within range`;
+      return `${negate}an enemy unit is within ${str(p.range)}"`;
+    }
+    case "unit-within-range-of": {
+      const target = describeRangeTarget(str(p.target_type ?? "target"), p.keyword);
+      const kw = p.keyword != null && p.target_type !== "friendly-keyword" ? ` (${str(p.keyword)})` : "";
+      if (p.range == null) return `${negate}within range of ${target}${kw}`;
+      return `${negate}within ${str(p.range)}" of ${target}${kw}`;
+    }
     case "within-range-of-objective":
       return `${negate}within range of an objective`;
     case "has-fought-this-phase":
       return `${negate}has fought this phase`;
-    case "destroyed-by-attack-type":
+    case "destroyed-by-attack-type": {
+      if (p.attack_type == null || p.attack_type === "any") return `${negate}destroyed by an attack`;
       return `${negate}destroyed by a ${str(p.attack_type)} attack`;
+    }
 
     // ── Scoring conditions (secondary-card award `when`) ────────────────────
     case "objective-majority":
@@ -115,8 +216,11 @@ export function describeCondition(c: Condition): string {
       if (p.exclude != null) s += ` (excluding ${dekebab(str(p.exclude))})`;
       return s;
     }
-    case "units-destroyed":
-      return `${negate}${count(p.count_min ?? 1, `${str(p.side)} unit`)} destroyed ${dekebab(str(p.window))}`;
+    case "units-destroyed": {
+      let s = `${negate}${count(p.count_min ?? 1, `${str(p.side)} unit`)} destroyed`;
+      if (p.window != null) s += ` ${describeWindow(str(p.window))}`;
+      return s;
+    }
     case "units-destroyed-comparison": {
       const subj = (p.subject ?? {}) as Record<string, unknown>;
       const ref = (p.reference ?? {}) as Record<string, unknown>;

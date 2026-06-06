@@ -41,13 +41,99 @@ def _count(n: Any, noun: str) -> str:
     return f"{_str(n)}+ {noun}s"
 
 
+def _join_clauses(parts: list[str], connective: str) -> str:
+    """Join compound-condition clauses: two read as ``X and Y``, three or more
+    as a serial-comma list (``X, Y, and Z``) so long chains don't read as a
+    parser dump."""
+    if len(parts) <= 2:
+        return f" {connective} ".join(parts)
+    return f"{', '.join(parts[:-1])}, {connective} {parts[-1]}"
+
+
+#: Known timing values → readable clauses. Event-style timings (``on-*``) read
+#: as ``when ...``; window-style timings read as ``at ...``.
+_TIMING_PHRASES = {
+    "start-of-phase": "at the start of the phase",
+    "start": "at the start of the phase",
+    "end-of-phase": "at the end of the phase",
+    "end": "at the end of the phase",
+    "start-of-battle-round": "at the start of the battle round",
+    "on-destroyed": "when destroyed",
+    "on-unit-destroyed": "when a unit is destroyed",
+    "on-model-destroyed": "when a model is destroyed",
+    "model-destroyed": "when a model is destroyed",
+    "first-model-destroyed": "when the first model is destroyed",
+    "post-deployment": "after deployment",
+    "reinforcements": "in the Reinforcements step",
+    "declare-battle-formations": "when declaring battle formations",
+    "deep-strike-setup": "when setting up by deep strike",
+    "deep-strike": "when deep striking",
+    "once-per-battle": "once per battle",
+    "first-this-battle": "the first time this battle",
+    "normal-move": "when making a normal move",
+    "advance": "when advancing",
+    "advance-move": "when advancing",
+    "selected-to-advance": "when selected to advance",
+    "fall-back-selected": "when selected to fall back",
+    "making-normal-advance-or-fallback-move": "when making a normal, advance, or fall back move",
+    "starts-in-strategic-reserves": "when starting in strategic reserves",
+    "arrives-from-strategic-reserves": "when arriving from strategic reserves",
+    "after-shooting": "after shooting",
+    "setup": "during setup",
+}
+
+
+def _describe_timing(timing: str) -> str:
+    """Unmapped values fall back by prefix: ``on-*`` → ``when <words>``,
+    ``after-*`` → ``after <words>``, anything else → ``at <words>``."""
+    mapped = _TIMING_PHRASES.get(timing)
+    if mapped is not None:
+        return mapped
+    if timing.startswith("on-"):
+        return f"when {dekebab(timing[3:])}"
+    if timing.startswith("after-"):
+        return f"after {dekebab(timing[6:])}"
+    return f"at {dekebab(timing)}"
+
+
+def _describe_range_target(target_type: str, keyword: Any) -> str:
+    """``closest-eligible`` → ``the closest eligible target``, etc."""
+    if target_type == "friendly":
+        return "a friendly unit"
+    if target_type == "friendly-keyword":
+        return f"a friendly {_str(keyword)} unit" if keyword is not None else "a friendly unit"
+    if target_type == "closest-eligible":
+        return "the closest eligible target"
+    if target_type == "area-terrain":
+        return "an area terrain feature"
+    if target_type == "character":
+        return "a character"
+    if target_type == "fortification":
+        return "a fortification"
+    return dekebab(target_type)
+
+
+def _describe_window(window: str) -> str:
+    """``this-phase``/``phase`` → ``this phase``, etc. — windows read as
+    ``this <span>``."""
+    if window in ("phase", "this-phase", "current"):
+        return "this phase"
+    if window in ("turn", "this-turn"):
+        return "this turn"
+    if window == "battle":
+        return "this battle"
+    if window == "this-attack":
+        return "this attack"
+    return dekebab(window)
+
+
 def describe_condition(c: Condition) -> str:
     # Compound nodes first — join the operands with lowercase connectives.
     operands = c.get("operands")
     if c.get("operator") == "and" and operands:
-        return " and ".join(describe_condition(o) for o in operands)
+        return _join_clauses([describe_condition(o) for o in operands], "and")
     if c.get("operator") == "or" and operands:
-        return " or ".join(describe_condition(o) for o in operands)
+        return _join_clauses([describe_condition(o) for o in operands], "or")
     if c.get("operator") == "not" and operands:
         return f"not ({', '.join(describe_condition(o) for o in operands)})"
 
@@ -59,7 +145,7 @@ def describe_condition(c: Condition) -> str:
     if ctype == "phase-is":
         return f"{negate}during the {_str(p.get('phase'))} phase"
     if ctype == "timing-is":
-        return f"{negate}at {dekebab(_str(p.get('timing')))}"
+        return f"{negate}{_describe_timing(_str(p.get('timing')))}"
     if ctype == "player-turn-is":
         turn = p.get("turn")
         if turn == "your-turn":
@@ -106,19 +192,32 @@ def describe_condition(c: Condition) -> str:
         return f"{negate}{subject} was hit by {article}{weapon} this phase"
     if ctype == "opponent-unit-within-range":
         range_ = p.get("range")
-        within = "engagement range" if range_ == "engagement" else f'{_str(range_)}"'
-        return f"{negate}an enemy unit is within {within}"
+        if range_ == "engagement":
+            return f"{negate}an enemy unit is within engagement range"
+        if range_ is None:
+            return f"{negate}an enemy unit is within range"
+        return f'{negate}an enemy unit is within {_str(range_)}"'
     if ctype == "unit-within-range-of":
         target_type = p.get("target_type")
-        target = _str(target_type if target_type is not None else "target")
-        kw = f" ({_str(p.get('keyword'))})" if p.get("keyword") else ""
+        target_type_str = _str(target_type if target_type is not None else "target")
+        target = _describe_range_target(target_type_str, p.get("keyword"))
+        kw = (
+            f" ({_str(p.get('keyword'))})"
+            if p.get("keyword") is not None and target_type_str != "friendly-keyword"
+            else ""
+        )
+        if p.get("range") is None:
+            return f"{negate}within range of {target}{kw}"
         return f'{negate}within {_str(p.get("range"))}" of {target}{kw}'
     if ctype == "within-range-of-objective":
         return f"{negate}within range of an objective"
     if ctype == "has-fought-this-phase":
         return f"{negate}has fought this phase"
     if ctype == "destroyed-by-attack-type":
-        return f"{negate}destroyed by a {_str(p.get('attack_type'))} attack"
+        attack_type = p.get("attack_type")
+        if attack_type is None or attack_type == "any":
+            return f"{negate}destroyed by an attack"
+        return f"{negate}destroyed by a {_str(attack_type)} attack"
 
     # ── Scoring conditions (secondary-card award `when`) ─────────────────────
     if ctype == "objective-majority":
@@ -141,7 +240,10 @@ def describe_condition(c: Condition) -> str:
         count_min = p.get("count_min")
         n = count_min if count_min is not None else 1
         side_unit = f"{_str(p.get('side'))} unit"
-        return f"{negate}{_count(n, side_unit)} destroyed {dekebab(_str(p.get('window')))}"
+        s = f"{negate}{_count(n, side_unit)} destroyed"
+        if p.get("window") is not None:
+            s += f" {_describe_window(_str(p['window']))}"
+        return s
     if ctype == "units-destroyed-comparison":
         subj = p.get("subject") or {}
         ref = p.get("reference") or {}
