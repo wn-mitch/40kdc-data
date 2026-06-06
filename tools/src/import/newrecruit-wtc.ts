@@ -13,6 +13,11 @@
  *   two-line unit blocks (`[CharN: ]Nx <Unit> (P pts)` then `N with <wargear>`),
  *   `Enhancement: <Name> (+P pts)` on its own line, and per-model-type
  *   breakdowns with `• Nx <ModelType>` + indented `N with <wargear>` lines.
+ *   Real exports also mix in compact-style lines: single-model units arrive as
+ *   `[CharN: ]Nx <Unit> (P pts): <wargear>` on one line, and a model-type
+ *   bullet may inline its loadout after a colon (`• 1x Champion: Chainblades`,
+ *   `• 5x Eightbound: 5 with Chainblades`). The full-body parser accepts all
+ *   of these.
  *
  * The {@link Roster} pivot stores units at unit granularity — per-model-type
  * wargear breakdowns and `CharN:` slot numbers aren't modelled, so this adapter
@@ -135,7 +140,11 @@ const UNIT_HEADER_FULL = /^(?:Char\d+:\s*)?(\d+)x\s+(.+?)\s*\(\s*(\d+)\s*pts?\s*
 const ENHANCEMENT_LINE =
   /^Enhancement:\s*(.+?)\s*\(\+\s*(\d+)\s*pts?\s*\)\s*$/i;
 const WITH_PREFIX = /^(\d+)\s+with\s+(.*)$/i;
-const MODEL_BREAKDOWN = /^\s*•\s*(\d+)x\s+(.+?)(?:\s*\[[^\]]*\])?\s*$/u;
+// Optional trailing `: <wargear>` — NewRecruit inlines a model group's loadout
+// after the model type (`• 1x Champion: Chainblades`, `• 5x Eightbound: 5 with
+// Chainblades`) instead of always breaking it onto `N with` continuation lines.
+const MODEL_BREAKDOWN =
+  /^\s*•\s*(\d+)x\s+([^:]+?)(?:\s*\[[^\]]*\])?\s*(?::\s*(.+))?$/u;
 const SECTION_HEADER = /^[A-Z][A-Z0-9 \-/&]+$/; // BATTLELINE, ALLIED UNITS, etc.
 const HEADER_LINE = /^\+/;
 
@@ -320,9 +329,27 @@ function parseFullBody(body: string): { units: ParsedUnit[]; enhancementPts: num
       continue;
     }
 
+    // Single-model units (characters, vehicles) appear compact-style even in
+    // full exports: `[CharN: ]Nx <Unit> (P pts): <wargear>` on one line.
+    // Without this branch they fall through every matcher and vanish.
+    const compactMatch = UNIT_HEADER_COMPACT.exec(line);
+    if (compactMatch) {
+      finalize();
+      const leading_count = Number.parseInt(compactMatch[1], 10);
+      const name = compactMatch[2].trim();
+      const pts = Number.parseInt(compactMatch[3], 10);
+      const is_character_prefix = /^Char\d+:/i.test(line);
+      current = newUnit(name, pts, leading_count, is_character_prefix);
+      applyWithGroup(current, compactMatch[4]);
+      continue;
+    }
+
     const breakdown = MODEL_BREAKDOWN.exec(raw);
     if (breakdown && current) {
       breakdownModels += Number.parseInt(breakdown[1], 10);
+      // Inline loadout after the model type; `N with` continuation lines for
+      // the same group still arrive separately and are handled below.
+      if (breakdown[3] !== undefined) applyWithGroup(current, breakdown[3]);
       continue;
     }
 

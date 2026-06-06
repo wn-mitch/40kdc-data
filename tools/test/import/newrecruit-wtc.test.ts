@@ -153,3 +153,111 @@ describe("newRecruitWtcFullAdapter", () => {
     expect(parsed.multi_force).toBe(true);
   });
 });
+
+// Real NewRecruit full exports mix compact-style lines into the full layout:
+// single-model units arrive as one `Unit (pts): wargear` line, and model-type
+// bullets may inline their loadout after a colon. A World Eaters tournament
+// list in this shape previously lost all seven of its single-line units.
+const MIXED_FULL_SAMPLE = `+++++++++++++++++++++++++++++++++++++++++++++++
++ FACTION KEYWORD: Chaos - World Eaters
++ DETACHMENT: Possessed Slaughterband (Brazen Fury)
++ TOTAL ARMY POINTS: 2000pts
++
++ WARLORD: Char1: Angron
++ ENHANCEMENT: 
++ NUMBER OF UNITS: 14
++ SECONDARY: - Bring It Down: (2x2) + (1x4) - Assassination: 5 Characters
++++++++++++++++++++++++++++++++++++++++++++++++
+
+Char1: 1x Angron (340 pts): Warlord, Samni'arius and Spinegrinder
+Char2: 1x Khârn the Betrayer (100 pts): Gorechild, Plasma pistol
+Char3: 1x Slaughterbound (100 pts): Lacerator and daemonic claw
+Char4: 1x Slaughterbound (100 pts): Lacerator and daemonic claw
+Char5: 1x Slaughterbound (100 pts): Lacerator and daemonic claw
+
+6x Eightbound (270 pts)
+• 1x Eightbound Champion: Chainblades
+• 5x Eightbound: 5 with Chainblades
+3x Eightbound (135 pts)
+• 1x Eightbound Champion: Chainblades
+• 2x Eightbound: 2 with Chainblades
+3x Eightbound (135 pts)
+• 1x Eightbound Champion: Chainblades
+• 2x Eightbound: 2 with Chainblades
+3x Exalted Eightbound (140 pts)
+• 1x Exalted Eightbound Champion: Chainblades
+• 2x Exalted Eightbound: 2 with Chainblades
+3x Exalted Eightbound (140 pts)
+• 1x Exalted Eightbound Champion: Chainblades
+• 2x Exalted Eightbound: 2 with Chainblades
+8x Goremongers (75 pts)
+• 1x Blood Herald: Autopistol, Chainblade, Close combat weapon
+• 7x Goremonger: 7 with Autopistol, Chainblade, Close combat weapon
+10x Jakhals (65 pts)
+• 8x Jakhal
+    6 with Autopistol, Chainblades
+    1 with Icon of Khorne, Autopistol, Chainblades
+    1 with Autopistol, Mauler chainblade
+• 1x Jakhal Pack Leader: Autopistol, Chainblades
+• 1x Dishonoured: Skullsmasher and mangler
+1x Maulerfiend (150 pts): Maulerfiend fists, Lasher tendrils
+1x Maulerfiend (150 pts): Maulerfiend fists, Lasher tendrils
+`;
+
+describe("newRecruitWtcFullAdapter with mixed compact-style lines", () => {
+  it("matches as full format", () => {
+    expect(newRecruitWtcFullAdapter.matches(MIXED_FULL_SAMPLE)).toBe(true);
+  });
+
+  const parsed = newRecruitWtcFullAdapter.parse(MIXED_FULL_SAMPLE);
+
+  it("keeps every unit, including single-line characters and vehicles", () => {
+    expect(parsed.units).toHaveLength(14);
+    const names = parsed.units.map((u) => u.raw_name);
+    expect(names.filter((n) => n === "Slaughterbound")).toHaveLength(3);
+    expect(names.filter((n) => n === "Maulerfiend")).toHaveLength(2);
+    expect(names).toContain("Angron");
+    expect(names).toContain("Khârn the Betrayer");
+  });
+
+  it("classifies single-line characters and strips the Warlord marker", () => {
+    const angron = parsed.units.find((u) => u.raw_name === "Angron");
+    expect(angron?.is_character).toBe(true);
+    expect(angron?.is_warlord).toBe(true);
+    expect(angron?.points).toBe(340);
+    expect(angron?.wargear).toEqual([
+      { raw_name: "Samni'arius and Spinegrinder", count: 1 },
+    ]);
+  });
+
+  it("captures inline loadouts on model-type bullets", () => {
+    const bigEightbound = parsed.units.find(
+      (u) => u.raw_name === "Eightbound" && u.model_count === 6,
+    );
+    expect(bigEightbound?.wargear).toEqual([{ raw_name: "Chainblades", count: 6 }]);
+
+    const goremongers = parsed.units.find((u) => u.raw_name === "Goremongers");
+    expect(goremongers?.model_count).toBe(8);
+    expect(goremongers?.wargear).toEqual([
+      { raw_name: "Autopistol", count: 8 },
+      { raw_name: "Chainblade", count: 8 },
+      { raw_name: "Close combat weapon", count: 8 },
+    ]);
+  });
+
+  it("still handles plain breakdowns with indented `N with` continuations", () => {
+    const jakhals = parsed.units.find((u) => u.raw_name === "Jakhals");
+    expect(jakhals?.model_count).toBe(10);
+    const byName = Object.fromEntries(
+      (jakhals?.wargear ?? []).map((w) => [w.raw_name, w.count]),
+    );
+    expect(byName["Autopistol"]).toBe(9); // 6 + 1 icon-bearer + 1 mauler + pack leader
+    expect(byName["Chainblades"]).toBe(8); // 6 + 1 icon-bearer + pack leader
+    expect(byName["Mauler chainblade"]).toBe(1);
+    expect(byName["Skullsmasher and mangler"]).toBe(1);
+  });
+
+  it("computes the full 2000-point total", () => {
+    expect(parsed.total_computed).toBe(2000);
+  });
+});
