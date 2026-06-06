@@ -968,8 +968,10 @@ export function setLinkGroup(layout: EditLayout, id: string, group: string | und
 // Authoring keeps only the {edge, ref} selection on the piece; distances are
 // always derived live through the package's `keystoneMeasurements` (the same
 // pinned helper the cards render with), so a keystone can never drift from the
-// geometry. Keystones are per-piece — they are NOT mirrored to the twin, since
-// each printed card draws its own dimension lines.
+// geometry. Add/remove sync the point-reflected mirror onto the piece's
+// symmetry twin (when paired), so every printed dimension has its counterpart
+// on the opposing piece. The vertex mapping is resolved geometrically — see
+// `mirrorKeystone` — because same-angle twins break index arithmetic.
 
 export const sameSolverRef = (a: SolverRef, b: SolverRef): boolean =>
   a.kind === "vertex" && b.kind === "vertex"
@@ -995,21 +997,79 @@ export function keystoneValid(piece: EditPiece, k: EditKeystone): boolean {
   return k.ref.index >= 0 && k.ref.index < footprintVertices(fp as never).length;
 }
 
-/** Pin a keystone on a piece (no-op for an exact duplicate). */
+const flipEdge = (e: EditKeystone["edge"]): EditKeystone["edge"] =>
+  e === "left" ? "right" : e === "right" ? "left" : e === "top" ? "bottom" : "top";
+const flipSide = (s: "min-x" | "max-x" | "min-y" | "max-y"): "min-x" | "max-x" | "min-y" | "max-y" =>
+  s === "min-x" ? "max-x" : s === "max-x" ? "min-x" : s === "min-y" ? "max-y" : "min-y";
+
+/** How close (inches) the point-reflected vertex must land to a twin vertex. */
+const MIRROR_VERT_EPS = 0.25;
+
+/**
+ * The keystone `k` point-reflected onto `twin`: edge and face refs flip
+ * axis-symmetrically; a vertex ref is resolved geometrically — reflect the
+ * primary's board-space vertex through the board centre and take the twin's
+ * nearest vertex. Index arithmetic is NOT safe here: migrated layouts often
+ * store the twin at the same angle (not θ+180), so index i on one side need
+ * not be index i on the other. Null when the reflection lands more than
+ * {@link MIRROR_VERT_EPS} from every twin vertex (a not-quite-symmetric pair)
+ * — the caller skips rather than pins the wrong corner.
+ */
+export function mirrorKeystone(
+  layout: EditLayout,
+  primary: EditPiece,
+  twin: EditPiece,
+  k: EditKeystone,
+): EditKeystone | null {
+  const edge = flipEdge(k.edge);
+  if (k.ref.kind === "face") return { edge, ref: { kind: "face", side: flipSide(k.ref.side) } };
+  const pf = orientedFootprint(primary, layout);
+  const tf = orientedFootprint(twin, layout);
+  const anchor = pf?.verticesBoard[k.ref.index];
+  if (!anchor || !tf) return null;
+  const reflected = { x: BOARD.width - anchor.x, y: BOARD.height - anchor.y };
+  let bestIndex = -1;
+  let best = Infinity;
+  tf.verticesBoard.forEach((v, i) => {
+    const d = Math.hypot(v.x - reflected.x, v.y - reflected.y);
+    if (d < best) {
+      best = d;
+      bestIndex = i;
+    }
+  });
+  if (bestIndex < 0 || best > MIRROR_VERT_EPS) return null;
+  return { edge, ref: { kind: "vertex", index: bestIndex } };
+}
+
+const hasKeystone = (p: EditPiece, k: EditKeystone): boolean =>
+  (p.keystones ?? []).some((e) => e.edge === k.edge && sameSolverRef(e.ref, k.ref));
+
+/** Pin a keystone on a piece (no-op for an exact duplicate), mirroring it onto the twin. */
 export function addKeystone(layout: EditLayout, id: string, k: EditKeystone): void {
   const p = byId(layout, id);
   if (!p) return;
-  const ks = p.keystones ?? [];
-  if (ks.some((e) => e.edge === k.edge && sameSolverRef(e.ref, k.ref))) return;
-  p.keystones = [...ks, k];
+  if (!hasKeystone(p, k)) p.keystones = [...(p.keystones ?? []), k];
+  const t = twinOf(layout, p);
+  if (!t || t.id === p.id) return;
+  const mk = mirrorKeystone(layout, p, t, k);
+  if (mk && !hasKeystone(t, mk)) t.keystones = [...(t.keystones ?? []), mk];
 }
 
-/** Remove the piece's keystone at `index`. */
+/** Remove the piece's keystone at `index`, and its mirror from the twin. */
 export function removeKeystone(layout: EditLayout, id: string, index: number): void {
   const p = byId(layout, id);
-  if (!p?.keystones) return;
-  const next = p.keystones.filter((_, i) => i !== index);
+  const k = p?.keystones?.[index];
+  if (!p || !k) return;
+  // Resolve the twin's mirror BEFORE mutating anything (it reads geometry only,
+  // but keeping the read-then-write order makes that explicit).
+  const t = twinOf(layout, p);
+  const mk = t && t.id !== p.id ? mirrorKeystone(layout, p, t, k) : null;
+  const next = p.keystones!.filter((_, i) => i !== index);
   p.keystones = next.length > 0 ? next : undefined;
+  if (t && mk) {
+    const tNext = (t.keystones ?? []).filter((e) => !(e.edge === mk.edge && sameSolverRef(e.ref, mk.ref)));
+    t.keystones = tNext.length > 0 ? tNext : undefined;
+  }
 }
 
 /** One keystone with its live derived distance (null when unmeasurable). */

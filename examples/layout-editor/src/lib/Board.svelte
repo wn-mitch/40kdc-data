@@ -21,6 +21,7 @@
     type ObjectiveMarker,
   } from "./model.js";
   import type { ResolvedPiece } from "@alpaca-software/40kdc-data";
+  import { facingAngle } from "../../../_shared/layout-geometry.js";
 
   interface Props {
     layout: EditLayout;
@@ -33,6 +34,8 @@
     markers: ObjectiveMarker[];
     /** Draw the pinned keystone dimension lines (the pins themselves stay on the pieces). */
     showKeystones?: boolean;
+    /** Rotate keystone labels to face the player whose half holds the piece (needs `divider`). */
+    keystoneFacing?: boolean;
     onselect: (id: string | null) => void;
     onmove: (id: string, position: Vec2) => void;
     onorient: (id: string, patch: { rotation_degrees?: number; mirror?: Mirror }) => void;
@@ -47,6 +50,7 @@
     divider,
     markers,
     showKeystones = true,
+    keystoneFacing = false,
     onselect,
     onmove,
     onorient,
@@ -197,7 +201,7 @@
   // unmeasurable keystone (stale vertex index after a footprint change) draws
   // its anchor with a "?" label instead of crashing.
   const keystoneGuides = $derived.by(() => {
-    const out: { from: Vec2; to: Vec2; labelAt: Vec2; text: string; invalid: boolean }[] = [];
+    const out: { from: Vec2; to: Vec2; labelAt: Vec2; text: string; invalid: boolean; angle: number }[] = [];
     if (!showKeystones) return out;
     const byPiece = new Map(layout.pieces.map((p) => [p.id, p]));
     for (const d of keystoneDisplays(layout)) {
@@ -220,6 +224,9 @@
         labelAt: labelAnchor(from, t),
         text: d.distance != null ? `${Math.round(d.distance * 100) / 100}″` : "?",
         invalid: d.distance == null,
+        // Face the piece's player when the toggle is on and an overlay divider
+        // exists; 0 keeps today's upright labels.
+        angle: keystoneFacing && divider ? facingAngle(divider, o.centroid) : 0,
       });
     }
     return out;
@@ -375,7 +382,7 @@
     {/each}
     {#each keystoneGuides as g, gi (gi)}
       {@const d = toDisplay(g.labelAt)}
-      <text x={d.x} y={d.y} class="keystone-label {g.invalid ? 'invalid' : ''}">{g.text}</text>
+      <text x={d.x} y={d.y} transform="rotate({g.angle}, {d.x}, {d.y})" class="keystone-label {g.invalid ? 'invalid' : ''}">{g.text}</text>
     {/each}
   </g>
 </svg>
@@ -552,6 +559,8 @@
     font-size: 1.5px;
     font-weight: 600;
     text-anchor: middle;
+    /* Centre the glyph box on the anchor so facing rotation pivots cleanly. */
+    dominant-baseline: central;
     font-family: "JetBrains Mono", monospace;
     paint-order: stroke;
     stroke: oklch(0.82 0.008 220);

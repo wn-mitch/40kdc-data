@@ -12,10 +12,13 @@
   let {
     layouts,
     matchupLabel,
+    playerFacing = $bindable(true),
   }: {
     /** Authored layouts for the current matchup, ordered by variant. */
     layouts: TerrainLayout[];
     matchupLabel: string;
+    /** Rotate keystone labels to face the player whose half holds the piece. */
+    playerFacing?: boolean;
   } = $props();
 
   const VARIANTS = [1, 2, 3] as const;
@@ -36,7 +39,7 @@
   });
 
   const active = $derived(layouts.find((l) => (l.variant ?? 0) === variant));
-  const model = $derived(active ? diagramModel(ds, active) : null);
+  const model = $derived(active ? diagramModel(ds, active, { playerFacing }) : null);
   const patternName = $derived(
     active?.deployment_pattern_id
       ? (ds.deploymentPatterns.get(active.deployment_pattern_id)?.name ??
@@ -78,6 +81,17 @@
             onclick={() => (variant = v)}>{v}</button
           >
         {/each}
+        <!-- rotate dimension labels toward each player (reads right-side-up
+             from both sides of the table instead of upright on the screen) -->
+        <button
+          type="button"
+          class="focus-ring ml-auto h-11 lg:h-7 px-2 rounded font-heading text-[10px] uppercase tracking-wide border transition-colors {playerFacing
+            ? 'bg-accent text-accent-foreground border-accent'
+            : 'bg-panel text-text-muted border-border-strong hover:border-accent hover:text-accent'}"
+          aria-pressed={playerFacing}
+          title="Rotate dimension labels to face each player"
+          onclick={() => (playerFacing = !playerFacing)}>Face players</button
+        >
       </div>
 
       {#if active && model}
