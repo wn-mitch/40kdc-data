@@ -1,0 +1,32 @@
+[
+  {
+    "id": "take-and-hold",
+    "name": "Take and Hold",
+    "text": "An army oriented toward seizing and controlling ground across the battlefield.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "disruption",
+    "name": "Disruption",
+    "text": "An army oriented toward unsettling the enemy and denying their plans.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "purge-the-foe",
+    "name": "Purge the Foe",
+    "text": "An army oriented toward the wholesale destruction of enemy forces.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "priority-assets",
+    "name": "Priority Assets",
+    "text": "An army oriented toward securing high-value positions and objectives.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "reconnaissance",
+    "name": "Reconnaissance",
+    "text": "An army oriented toward rapid scouting and battlefield intelligence.",
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]
