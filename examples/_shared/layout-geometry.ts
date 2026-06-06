@@ -49,6 +49,12 @@ export interface DiagramGuide {
   mid: Vec2;
   /** Display distance, rounded to 2 dp. */
   text: string;
+  /**
+   * Label rotation (degrees, display frame, about the label anchor): turns the
+   * text to face the player whose territory holds the owning piece. 0 when
+   * player-facing is off or the layout has no territory divider.
+   */
+  facingAngle: number;
 }
 
 export interface DiagramModel {
@@ -181,10 +187,41 @@ function resolvedByPieceIndex(ds: Dataset, layout: TerrainLayout, resolved: Reso
 
 const round2 = (n: number): string => String(Math.round(n * 100) / 100);
 
+/** Board (x,y) → display, matching the card's translate(44,0) rotate(90). */
+const toDisplay = (b: Vec2): Vec2 => ({ x: BOARD.height - b.y, y: b.x });
+
+/**
+ * Rotation (degrees, display frame) that turns a keystone label to face the
+ * player whose side of the territory divider holds `centroidBoard`: baseline
+ * parallel to the divider, descenders toward that player's table edge. Works
+ * for any divider angle — orthogonal deployments give 0/±90/180, diagonal
+ * ones the matching ~45°. 0 when the divider is degenerate.
+ */
+export function facingAngle(divider: { from: Vec2; to: Vec2 }, centroidBoard: Vec2): number {
+  const a = toDisplay(divider.from);
+  const b = toDisplay(divider.to);
+  const u = { x: b.x - a.x, y: b.y - a.y };
+  const len = Math.hypot(u.x, u.y);
+  if (len < 1e-6) return 0;
+  // Unit normal of the divider, sign-corrected to point at the owning piece's
+  // half — that direction is the text's "down" (toward the reading player).
+  let n = { x: -u.y / len, y: u.x / len };
+  const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+  const c = toDisplay(centroidBoard);
+  if (n.x * (c.x - mid.x) + n.y * (c.y - mid.y) < 0) n = { x: -n.x, y: -n.y };
+  // SVG rotate(a) sends local-down (0,1) to (−sin a, cos a); solve for a = n.
+  return (Math.atan2(-n.x, n.y) * 180) / Math.PI;
+}
+
 /** Everything the LayoutDiagram draws for one layout entity. */
-export function diagramModel(ds: Dataset, layout: TerrainLayout): DiagramModel {
+export function diagramModel(
+  ds: Dataset,
+  layout: TerrainLayout,
+  opts?: { playerFacing?: boolean },
+): DiagramModel {
   const pieces = ds.resolveTerrain(layout);
   const byIndex = resolvedByPieceIndex(ds, layout, pieces);
+  const divider = territoryDivider(ds, layout.deployment_pattern_id);
 
   const guides: DiagramGuide[] = [];
   let measurements: ReturnType<typeof keystoneMeasurements> = [];
@@ -231,13 +268,15 @@ export function diagramModel(ds: Dataset, layout: TerrainLayout): DiagramModel {
       to,
       mid: { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2 },
       text: `${round2(m.distance)}″`,
+      facingAngle:
+        opts?.playerFacing && divider ? facingAngle(divider, polyMean(rp.vertices)) : 0,
     });
   }
 
   return {
     pieces,
     zones: regions(ds, layout.deployment_pattern_id, "zones"),
-    divider: territoryDivider(ds, layout.deployment_pattern_id),
+    divider,
     markers: objectiveMarkers(layout),
     guides,
   };

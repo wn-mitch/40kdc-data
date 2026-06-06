@@ -83,7 +83,8 @@
     {/if}
     {#each guides as g, i (i)}
       {@const d = toDisplay(g.mid)}
-      <text x={d.x} y={d.y} class="keystone-label">{g.text}</text>
+      <!-- facingAngle turns the label toward its owning player (0 = upright) -->
+      <text x={d.x} y={d.y} transform="rotate({g.facingAngle}, {d.x}, {d.y})" class="keystone-label">{g.text}</text>
     {/each}
   </g>
 </svg>
@@ -158,6 +159,8 @@
     font-size: 1.7px;
     font-weight: 600;
     text-anchor: middle;
+    /* Centre the glyph box on the anchor so facing rotation pivots cleanly. */
+    dominant-baseline: central;
     font-family: ui-monospace, monospace;
     paint-order: stroke;
     stroke: oklch(0.85 0.008 220);

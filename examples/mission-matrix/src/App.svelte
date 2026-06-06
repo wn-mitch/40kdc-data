@@ -73,6 +73,9 @@
     // round primaries (the grid stays authoritative; re-tick to edit a round).
     primaryTicksYou?: PrimaryTicksByRound;
     primaryTicksOpp?: PrimaryTicksByRound;
+    // Terrain card: rotate keystone labels to face each player. Optional so
+    // pre-existing blobs load unchanged (defaults ON — it's a table aid).
+    keystoneFacing?: boolean;
   }
   function load(): Partial<Saved> {
     try {
@@ -101,6 +104,7 @@
   // selected disposition's row into full mission cards for comparison.
   let autoCollapse = $state<boolean>(saved.autoCollapse ?? true);
   let verbose = $state<boolean>(saved.verbose ?? false);
+  let keystoneFacing = $state<boolean>(saved.keystoneFacing ?? true);
   let matrixOpen = $state<boolean>(!(saved.autoCollapse ?? true) || !(saved.dispYou && saved.dispOpp));
 
   // When the PWA install prompt or first-run tutorial is showing, hold back the
@@ -122,7 +126,7 @@
   $effect(() => {
     const blob: Saved = {
       dispYou, dispOpp, round, gameYou, gameOpp, activeYou, activeOpp, autoCollapse, verbose,
-      discardsYou, discardsOpp, primaryTicksYou, primaryTicksOpp,
+      discardsYou, discardsOpp, primaryTicksYou, primaryTicksOpp, keystoneFacing,
     };
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(blob));
@@ -433,6 +437,7 @@
       <TerrainSection
         layouts={matchupLayouts}
         matchupLabel="{DISPOSITION_LABELS[dispYou!]} vs {DISPOSITION_LABELS[dispOpp!]}"
+        bind:playerFacing={keystoneFacing}
       />
     {/if}
 

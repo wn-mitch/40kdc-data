@@ -59,6 +59,8 @@
   // Board-only visibility of the pinned keystone dimension lines; the pins
   // themselves stay on the pieces.
   let showKeystones = $state(true);
+  // Rotate keystone labels to face each player (off: upright authoring view).
+  let keystoneFacing = $state(false);
   let layout = $state<EditLayout>(initialLayout);
   let libraryOpen = $state(false);
   let selectedId = $state<string | null>(null);
@@ -298,6 +300,14 @@
       >
         {showKeystones ? "⌖ Keystones on" : "⌖ Keystones off"}
       </button>
+      <button
+        class="sym {keystoneFacing ? 'on' : ''}"
+        aria-pressed={keystoneFacing}
+        onclick={() => (keystoneFacing = !keystoneFacing)}
+        title="Rotate keystone labels to face each player (needs a deployment overlay for the divider)"
+      >
+        {keystoneFacing ? "↻ Facing on" : "↻ Facing off"}
+      </button>
       <button class="library-btn" onclick={() => (libraryOpen = true)} title="Browse layouts by mission pairing">
         ⊞ Library
       </button>
@@ -369,6 +379,7 @@
         {divider}
         {markers}
         {showKeystones}
+        {keystoneFacing}
         onselect={(id) => (selectedId = id)}
         {onmove}
         {onorient}
