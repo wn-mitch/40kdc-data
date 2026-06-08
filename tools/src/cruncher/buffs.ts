@@ -99,6 +99,13 @@ export type BuffApplicability = {
   requiresTargetKeyword?: string;
   /** Attacker must carry this keyword (case-insensitive). */
   requiresAttackerKeyword?: string;
+  /**
+   * Range-gated abilities (DSL `scope.range_inches`, e.g. a "within 18\"" reroll):
+   * the buff applies only when the target is within this many inches. Gate is
+   * permissive when the caller leaves `EngineContext.distanceInches` undefined,
+   * so callers that don't track distance keep their current behavior.
+   */
+  maxRangeInches?: number;
 };
 
 /** A single buff: where it came from, when it applies, what it contributes. */
@@ -127,6 +134,12 @@ export type EngineContext = {
   attackerCharged?: boolean;
   /** Within half the weapon's range — Melta / Rapid Fire fire. */
   withinHalfRange?: boolean;
+  /**
+   * Distance to the target in inches. Drives `applicableWhen.maxRangeInches`
+   * for range-gated abilities. Undefined when the caller doesn't track distance
+   * — range gates then evaluate permissively (the buff applies).
+   */
+  distanceInches?: number;
   /** Attacker benefits from cover (mostly informational; cover applies to defenders). */
   attackerInCover?: boolean;
   /** Target is in cover — the resolver flips on `cover`, the engine applies +1 to save. */
@@ -223,6 +236,15 @@ function applies(buff: Buff, ctx: ResolveContext): boolean {
   if (w.requiresAttackerKeyword) {
     const attacker = ctx.attackerKeywords ?? [];
     if (!attacker.includes(w.requiresAttackerKeyword.toLowerCase())) return false;
+  }
+  // Range gate: drop only when the distance is known and exceeds the ability's
+  // range. Unknown distance is permissive (preserves callers that don't track it).
+  if (
+    w.maxRangeInches !== undefined &&
+    ctx.distanceInches !== undefined &&
+    ctx.distanceInches > w.maxRangeInches
+  ) {
+    return false;
   }
   return true;
 }

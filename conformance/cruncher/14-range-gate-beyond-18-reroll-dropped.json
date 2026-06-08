@@ -1,0 +1,44 @@
+{
+  "name": "bolt-rifle x5 vs cultists, reroll gated to 18\" \u2014 beyond range (30\"), reroll dropped",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 0
+  },
+  "modelsFiring": 5,
+  "target": {
+    "unitId": "cultist-mob",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting",
+    "distanceInches": 30
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "furious-onslaught",
+        "abilityKind": "unit"
+      },
+      "applicableWhen": {
+        "maxRangeInches": 18
+      },
+      "contribution": {
+        "type": "reroll",
+        "roll": "hit",
+        "subset": "all-failures"
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 6.6667,
+      "wounds": 4.4444,
+      "unsaved": 4.4444,
+      "damage": 4.4444,
+      "after-fnp": 4.4444,
+      "models-killed": 4.4444
+    }
+  }
+}

@@ -27,6 +27,7 @@
 //!         attacker_stationary: Some(false),
 //!         attacker_charged: None,
 //!         within_half_range: Some(false),
+//!         distance_inches: None,
 //!         attacker_in_cover: None,
 //!         target_in_cover: None,
 //!         attacker_keywords: None,

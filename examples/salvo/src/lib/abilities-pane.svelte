@@ -210,4 +210,20 @@
       <span class="chip manual">context</span>
     </label>
   {/each}
+  <label class="ability-row" class:active={salvo.targetDistance !== null}>
+    <span class="name">Distance to target (")</span>
+    <input
+      type="number"
+      min="0"
+      max="72"
+      style="width: 64px"
+      value={salvo.targetDistance ?? ""}
+      placeholder="—"
+      oninput={(e) => {
+        const v = (e.currentTarget as HTMLInputElement).value;
+        salvo.targetDistance = v === "" ? null : Number(v);
+      }}
+    />
+    <span class="chip manual">gates range abilities</span>
+  </label>
 </div>

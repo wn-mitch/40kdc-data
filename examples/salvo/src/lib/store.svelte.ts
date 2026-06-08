@@ -150,6 +150,12 @@ class SalvoState {
     withinHalfRange: false,
     attackerCharged: true,
   });
+  /**
+   * Distance to the target in inches. Feeds `EngineContext.distanceInches`,
+   * which gates range-limited abilities (e.g. Furious Onslaught rerolls within
+   * 18"). Null = unset → range gates stay permissive.
+   */
+  targetDistance = $state<number | null>(null);
 
   /** Effective on/off for a lever, honouring any user override of its default. */
   isBuffEnabled(id: string, defaultEnabled: boolean): boolean {

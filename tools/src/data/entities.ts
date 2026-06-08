@@ -149,7 +149,22 @@ export class AbilityView {
     perspective: TranslationPerspective = "attacker",
   ): EffectTranslation {
     const ctx: EngineContext = context ?? { phase: "shooting" };
-    return effectToBuffs(this.raw.effect, source, ctx, perspective);
+    const translated = effectToBuffs(this.raw.effect, source, ctx, perspective);
+    // A range-scoped ability (DSL `scope.range_inches`, e.g. a "within 18\""
+    // reroll) gates on distance to the target. Stamp it here rather than in the
+    // effect translator so the `effect-translation` corpus (bare effects) is
+    // unaffected; the gate is permissive until a caller sets `distanceInches`.
+    const range = (this.raw.scope as { range_inches?: number } | undefined)?.range_inches;
+    if (typeof range !== "number") return translated;
+    const gate = (b: Buff): Buff => ({
+      ...b,
+      applicableWhen: { ...b.applicableWhen, maxRangeInches: range },
+    });
+    return {
+      applied: translated.applied.map(gate),
+      unsupported: translated.unsupported,
+      activatable: translated.activatable.map((a) => ({ ...a, buffs: a.buffs.map(gate) })),
+    };
   }
 }
 

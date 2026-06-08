@@ -186,6 +186,11 @@ pub struct BuffApplicability {
     /// Attacker must carry this keyword (case-insensitive).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub requires_attacker_keyword: Option<String>,
+    /// Range-gated abilities (DSL `scope.range_inches`): the buff applies only
+    /// when the target is within this many inches. Permissive when the caller
+    /// leaves `EngineContext::distance_inches` unset.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub max_range_inches: Option<f64>,
 }
 
 /// A single buff: where it came from, when it applies, what it contributes.
@@ -213,6 +218,10 @@ pub struct EngineContext {
     /// Within half the weapon's range — Melta / Rapid Fire fire.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub within_half_range: Option<bool>,
+    /// Distance to the target in inches; drives `applicable_when.max_range_inches`.
+    /// Unset = range gates evaluate permissively.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub distance_inches: Option<f64>,
     /// Attacker benefits from cover (mostly informational).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attacker_in_cover: Option<bool>,
@@ -384,6 +393,13 @@ fn applies(buff: &Buff, ctx: &EngineContext) -> bool {
             .as_ref()
             .is_some_and(|kws| kws.iter().any(|k| k == &req_lower));
         if !ok {
+            return false;
+        }
+    }
+    // Range gate: drop only when the distance is known and exceeds the range.
+    // Unknown distance is permissive.
+    if let (Some(max), Some(dist)) = (w.max_range_inches, ctx.distance_inches) {
+        if dist > max {
             return false;
         }
     }

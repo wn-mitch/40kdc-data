@@ -140,7 +140,27 @@ class AbilityView:
         from wh40kdc.cruncher.from_dsl import effect_to_buffs
 
         ctx = context if context is not None else {"phase": "shooting"}
-        return effect_to_buffs(self.raw.get("effect"), source, ctx, perspective)
+        translated = effect_to_buffs(self.raw.get("effect"), source, ctx, perspective)
+        # A range-scoped ability (DSL scope.range_inches, e.g. a "within 18\""
+        # reroll) gates on distance to the target. Stamp it here, not in the
+        # effect translator, so the effect-translation corpus (bare effects) is
+        # unaffected; the gate is permissive until a caller sets distanceInches.
+        scope = self.raw.get("scope") or {}
+        rng = scope.get("range_inches")
+        if not isinstance(rng, (int, float)) or isinstance(rng, bool):
+            return translated
+
+        def gate(b: dict[str, Any]) -> dict[str, Any]:
+            return {**b, "applicableWhen": {**(b.get("applicableWhen") or {}), "maxRangeInches": rng}}
+
+        return {
+            "applied": [gate(b) for b in translated.get("applied", [])],
+            "unsupported": translated.get("unsupported", []),
+            "activatable": [
+                {**a, "buffs": [gate(b) for b in a.get("buffs", [])]}
+                for a in translated.get("activatable", [])
+            ],
+        }
 
 
 class WeaponView:

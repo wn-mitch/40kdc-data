@@ -3,4 +3,4 @@
 Mirrors conformance/SPEC_VERSION; CI fails on drift.
 """
 
-SPEC_VERSION = 24
+SPEC_VERSION = 25

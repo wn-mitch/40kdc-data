@@ -66,6 +66,12 @@ def _applies(buff: Buff, ctx: EngineContext) -> bool:
         attacker = ctx.get("attackerKeywords") or []
         if w["requiresAttackerKeyword"].lower() not in attacker:
             return False
+    # Range gate: drop only when the distance is known and exceeds the ability's
+    # range (DSL scope.range_inches). Unknown distance is permissive.
+    max_range = w.get("maxRangeInches")
+    distance = ctx.get("distanceInches")
+    if max_range is not None and distance is not None and distance > max_range:
+        return False
     return True
 
 

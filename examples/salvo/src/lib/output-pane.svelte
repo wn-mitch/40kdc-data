@@ -69,6 +69,9 @@
     attackerCharged: salvo.contextFlags.attackerCharged,
     targetInCover: salvo.manualBuffsActive.has("cover"),
     attackerAttached: salvo.attachedUnitIds.length > 0,
+    // Drives range-gated abilities (e.g. Furious Onslaught's 18" reroll). Unset
+    // → range gates stay permissive.
+    ...(salvo.targetDistance !== null ? { distanceInches: salvo.targetDistance } : {}),
   });
 
   // Ability/army/detachment/attached levers — weapon-independent, shared by
