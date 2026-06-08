@@ -187,7 +187,7 @@ function copyEntry(entry: SavedEntry) {
 </script>
 
 <div class="flex h-screen flex-col">
-	<AppHeader title="List Builder" tag="40kdc army list builder" />
+	<AppHeader title="List Builder" tag="40kdc army list builder" onBrand={handleCancel} />
 
 	<main class="min-h-0 flex-1 overflow-hidden p-3">
 		{#if view === "build"}

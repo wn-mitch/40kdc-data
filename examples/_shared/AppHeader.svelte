@@ -18,6 +18,7 @@
     homeUrl = HOME_URL,
     repoUrl = REPO_URL,
     packageUrl = PACKAGE_URL,
+    onBrand,
     nav,
   }: {
     title: string;
@@ -27,16 +28,29 @@
     homeUrl?: string;
     repoUrl?: string;
     packageUrl?: string;
+    /**
+     * In-app brand action. When set, clicking the brand calls this instead of
+     * navigating to `brandHref` — e.g. returning a single-page app to its home
+     * screen rather than opening the repo.
+     */
+    onBrand?: () => void;
     /** App-specific controls rendered between the brand and the link cluster. */
     nav?: Snippet;
   } = $props();
 </script>
 
 <header class="app-header">
-  <a class="brand" href={brandHref} target="_blank" rel="noreferrer noopener">
-    <h1>{title}</h1>
-    {#if tag}<span class="tag">{tag}</span>{/if}
-  </a>
+  {#if onBrand}
+    <button type="button" class="brand" onclick={onBrand}>
+      <h1>{title}</h1>
+      {#if tag}<span class="tag">{tag}</span>{/if}
+    </button>
+  {:else}
+    <a class="brand" href={brandHref} target="_blank" rel="noreferrer noopener">
+      <h1>{title}</h1>
+      {#if tag}<span class="tag">{tag}</span>{/if}
+    </a>
+  {/if}
   {#if nav}
     <nav class="app-nav" aria-label="App controls">{@render nav()}</nav>
   {/if}
@@ -71,6 +85,15 @@
     color: inherit;
     min-width: 0;
     flex: 0 1 auto;
+    /* reset for when `.brand` is a <button> (onBrand mode) */
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
   }
   h1 {
     margin: 0;

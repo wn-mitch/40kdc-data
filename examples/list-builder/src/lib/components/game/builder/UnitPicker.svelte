@@ -68,7 +68,7 @@ function toggleRole(role: string) {
 		</div>
 	{/if}
 
-	<div class="flex-1 overflow-y-auto">
+	<div class="min-h-0 flex-1 overflow-y-auto">
 		{#if !draft.factionId}
 			<p class="text-text-dim px-1 py-2 text-xs italic">Choose a faction to list its units.</p>
 		{:else if filtered.length === 0}

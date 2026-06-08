@@ -234,19 +234,21 @@ function save() {
 		</div>
 	{/if}
 
-	<!-- NR 3-column layout: picker (¼) | roster (½) | selected-unit detail (¼). -->
-	<div class="grid min-h-0 flex-1 grid-cols-[1fr_2fr_1fr] gap-2">
-		<div class="bg-panel border-panel-border rounded border p-2">
+	<!-- NR 3-column layout: picker (¼) | roster (½) | selected-unit detail (¼).
+	     `grid-rows-[minmax(0,1fr)]` bounds the single row to the grid height so each
+	     column's inner overflow-y-auto can scroll instead of stretching to content. -->
+	<div class="grid min-h-0 flex-1 grid-cols-[1fr_2fr_1fr] grid-rows-[minmax(0,1fr)] gap-2">
+		<div class="bg-panel border-panel-border min-h-0 overflow-hidden rounded border p-2">
 			<UnitPicker draft={draft} onadd={addUnit} />
 		</div>
 
-		<div class="bg-panel border-panel-border flex flex-col rounded border p-2">
+		<div class="bg-panel border-panel-border flex min-h-0 flex-col rounded border p-2">
 			{#if draft.units.length === 0}
 				<p class="text-text-dim m-auto text-sm italic">
 					{draft.factionId ? 'Add units from the left.' : 'Pick a faction to begin.'}
 				</p>
 			{:else}
-				<div class="flex flex-col gap-2 overflow-y-auto">
+				<div class="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto">
 					{#each draftGroups as group (group.key)}
 						<div class="flex flex-col gap-1">
 							<div
@@ -272,7 +274,7 @@ function save() {
 			{/if}
 		</div>
 
-		<div class="bg-panel border-panel-border flex flex-col rounded border p-2">
+		<div class="bg-panel border-panel-border flex min-h-0 flex-col rounded border p-2">
 			<UnitDetailPanel
 				unit={selected}
 				draft={draft}
