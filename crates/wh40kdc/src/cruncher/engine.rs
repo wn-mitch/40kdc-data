@@ -219,6 +219,14 @@ pub fn crunch(
     });
 
     // 2. Hits
+    // Cover (11e): the benefit of cover is -1 to the attacker's hit roll, not a
+    // save bonus. Ranged-only, negated by ignores-cover, moot for auto-hitting
+    // Torrent weapons (no hit roll).
+    let ignores_cover = find_extra_keyword(&resolved, "ignores-cover").is_some();
+    let covered = resolved.cover.active
+        && !ignores_cover
+        && input.attacker.weapon.type_ == WeaponType::Ranged;
+    let cover_hit_penalty = if covered { -1.0 } else { 0.0 };
     let hit_stat_opt = if is_melee {
         weapon_profile.stats.ws
     } else {
@@ -235,7 +243,7 @@ pub fn crunch(
         })?;
         let probs = check_probabilities(CheckArgs {
             unmodified_needed: hit_stat,
-            modifier: resolved.hit_mod.value,
+            modifier: resolved.hit_mod.value + cover_hit_penalty,
             reroll: resolved
                 .rerolls
                 .hit
@@ -249,10 +257,11 @@ pub fn crunch(
         let hits = attacks * probs.pass;
         let crits = attacks * probs.crit;
         let detail = format!(
-            "{}{}+ (mod {}, reroll {}) → P(hit)={:.4}, P(crit)={:.4}",
+            "{}{}+ (mod {}{}, reroll {}) → P(hit)={:.4}, P(crit)={:.4}",
             if is_melee { "WS" } else { "BS" },
             hit_stat,
             signed(resolved.hit_mod.value),
+            if covered { ", cover -1" } else { "" },
             resolved
                 .rerolls
                 .hit
@@ -366,20 +375,12 @@ pub fn crunch(
     let ap = weapon_profile.stats.ap as f64 + ap_mod;
     let save_mod = resolved.save_mod.value;
     let armor_target_raw = unit_profile.sv as f64 - ap - save_mod;
-    let ignores_cover = find_extra_keyword(&resolved, "ignores-cover").is_some();
-    let covered = resolved.cover.active
-        && !ignores_cover
-        && input.attacker.weapon.type_ == WeaponType::Ranged;
-    let armor_after_cover = if covered {
-        (armor_target_raw - 1.0).max(3.0)
-    } else {
-        armor_target_raw
-    };
-    let armor_final = clamp(armor_after_cover, 2.0, 7.0);
+    // Cover is a hit penalty (11e), applied in the hits stage above — it no
+    // longer touches the save here.
+    let armor_final = clamp(armor_target_raw, 2.0, 7.0);
     // The unit's printed invuln (from the profile) and any ability-granted
-    // invuln combine best-wins (lowest threshold). Invuln bypasses AP and
-    // cover — only the armor branch above is affected by those — so the final
-    // save is min(armor-after-AP-and-cover, effective-invuln).
+    // invuln combine best-wins (lowest threshold). Invuln bypasses AP, so the
+    // final save is min(armor-after-AP, effective-invuln).
     let printed_invuln = unit_profile.invuln_sv.map(|n| n as f64);
     let ability_invuln = resolved.invulnerable.as_ref().map(|i| i.threshold);
     let effective_invuln = match (printed_invuln, ability_invuln) {
@@ -416,7 +417,7 @@ pub fn crunch(
         name: StageName::Unsaved,
         expected: unsaved,
         detail: format!(
-            "Sv{}+, AP{}{}{}{}{} → effective {}+ (P(save)={:.4})",
+            "Sv{}+, AP{}{}{}{} → effective {}+ (P(save)={:.4})",
             unit_profile.sv,
             signed(ap),
             if ap_mod != 0.0 {
@@ -429,7 +430,6 @@ pub fn crunch(
             } else {
                 String::new()
             },
-            if covered { ", cover (+1, cap 3+)" } else { "" },
             match ability_invuln {
                 Some(inv) => format!(", invuln {inv}+ (ability)"),
                 None => String::new(),

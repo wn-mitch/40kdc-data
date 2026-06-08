@@ -1,0 +1,39 @@
+{
+  "name": "bolter x10 vs cultist mob, target in cover (-1 to hit)",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 0
+  },
+  "modelsFiring": 10,
+  "target": {
+    "unitId": "cultist-mob",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting",
+    "withinHalfRange": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "manual",
+        "label": "cover"
+      },
+      "applicableWhen": {},
+      "contribution": {
+        "type": "cover"
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 20,
+      "hits": 10.0,
+      "wounds": 6.6667,
+      "unsaved": 6.6667,
+      "damage": 6.6667,
+      "after-fnp": 6.6667,
+      "models-killed": 6.6667
+    }
+  }
+}

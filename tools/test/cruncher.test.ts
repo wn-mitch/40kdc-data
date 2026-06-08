@@ -157,8 +157,8 @@ describe("crunch: rerolls", () => {
   });
 });
 
-describe("crunch: cover", () => {
-  it("cover improves save by 1, capped at 3+", () => {
+describe("crunch: cover (11e — -1 to hit)", () => {
+  it("cover applies -1 to the hit roll, not a save bonus", () => {
     const baseline = crunch(
       inputFor("bolt-rifle", 0, 5, "intercessor-squad", { phase: "shooting" }),
     );
@@ -167,11 +167,16 @@ describe("crunch: cover", () => {
         { source: { kind: "manual", label: "in cover" }, contribution: { type: "cover" } },
       ]),
     );
-    // Intercessor Sv3+ already, AP-1 makes it 4+. Cover would normally be 3+
-    // (capped — Sv3+ doesn't improve past 3+). So cover takes 4+ → 3+.
-    const woundsBaseline = stage(baseline, "wounds");
-    const unsavedCovered = woundsBaseline * (1 - 4 / 6); // need 3+, P(save)=4/6
-    near(stage(covered, "unsaved"), unsavedCovered, "covered unsaved");
+    // BS3+ → with cover -1 the hit needs 4+: P(hit) drops 4/6 → 3/6. Attacks
+    // are unchanged, so covered hits = attacks × 3/6.
+    near(stage(covered, "hits"), stage(covered, "attacks") * (3 / 6), "covered hits");
+    expect(stage(covered, "hits")).toBeLessThan(stage(baseline, "hits"));
+    // The save is untouched: the unsaved-per-wound fraction is identical.
+    near(
+      stage(covered, "unsaved") / stage(covered, "wounds"),
+      stage(baseline, "unsaved") / stage(baseline, "wounds"),
+      "save fraction unchanged by cover",
+    );
   });
 });
 

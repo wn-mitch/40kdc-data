@@ -117,6 +117,14 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
     )
 
     # 2. Hits
+    # Cover (11e): the benefit of cover is -1 to the attacker's hit roll, not a
+    # save bonus, and it only applies to ranged attacks (ignored by ignores-cover
+    # and irrelevant to auto-hitting Torrent weapons, which take no hit roll).
+    ignores_cover = _find_keyword(resolved, "ignores-cover") is not None
+    covered = (
+        resolved["cover"]["active"] and not ignores_cover and weapon.get("type") == "ranged"
+    )
+    cover_hit_penalty = -1 if covered else 0
     hit_stat = stats.get("WS") if is_melee else stats.get("BS")
     torrent = _find_keyword(resolved, "torrent") is not None
     if torrent:
@@ -129,9 +137,10 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
                 f"crunch: weapon {weapon['id']} profile {profile_index} missing "
                 f"{'WS' if is_melee else 'BS'}"
             )
+        hit_modifier = resolved["hitMod"]["value"] + cover_hit_penalty
         probs = _check_probabilities(
             unmodified_needed=hit_stat,
-            modifier=resolved["hitMod"]["value"],
+            modifier=hit_modifier,
             reroll=(resolved["rerolls"].get("hit") or {}).get("subset", "none"),
             auto_fail_on_one=True,
             auto_pass_on_six=True,
@@ -140,9 +149,10 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
         hits = attacks * probs[0]
         crit_hits = attacks * probs[1]
         reroll_label = (resolved["rerolls"].get("hit") or {}).get("subset", "none")
+        cover_text = ", cover -1" if covered else ""
         hits_detail = (
             f"{'WS' if is_melee else 'BS'}{hit_stat}+ "
-            f"(mod {_signed(resolved['hitMod']['value'])}, reroll {reroll_label}) → "
+            f"(mod {_signed(resolved['hitMod']['value'])}{cover_text}, reroll {reroll_label}) → "
             f"P(hit)={probs[0]:.4f}, P(crit)={probs[1]:.4f}"
         )
     sustained = _find_keyword(resolved, "sustained-hits")
@@ -209,15 +219,12 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
     ap = stats["AP"] + ap_mod
     save_mod = resolved["saveMod"]["value"]
     armor_target_raw = unit_profile["Sv"] - ap - save_mod
-    ignores_cover = _find_keyword(resolved, "ignores-cover") is not None
-    covered = (
-        resolved["cover"]["active"] and not ignores_cover and weapon.get("type") == "ranged"
-    )
-    armor_after_cover = max(3, armor_target_raw - 1) if covered else armor_target_raw
-    armor_final = _clamp(armor_after_cover, 2, 7)
+    # Cover is a hit penalty (11e), applied in the hits stage above — it no
+    # longer touches the save here.
+    armor_final = _clamp(armor_target_raw, 2, 7)
     # The unit's printed invuln (from the profile) and any ability-granted
-    # invuln combine best-wins (lowest threshold). Invuln bypasses AP and
-    # cover, so the final save is min(armor-after-AP-and-cover, invuln).
+    # invuln combine best-wins (lowest threshold). Invuln bypasses AP, so the
+    # final save is min(armor-after-AP, invuln).
     printed_invuln = unit_profile.get("invuln_sv")
     invulnerable = resolved["invulnerable"]
     ability_invuln = invulnerable["threshold"] if invulnerable is not None else None
@@ -246,8 +253,6 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
         detail_parts.append(f" (apmod {_signed(ap_mod)})")
     if save_mod != 0:
         detail_parts.append(f", savemod {_signed(save_mod)}")
-    if covered:
-        detail_parts.append(", cover (+1, cap 3+)")
     if ability_invuln is not None:
         detail_parts.append(f", invuln {ability_invuln}+ (ability)")
     detail_parts.append(f" → effective {effective_save_target}+ (P(save)={p_saved:.4f})")

@@ -96,6 +96,13 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   });
 
   // 2. Hits
+  // Cover (11e): the benefit of cover is -1 to the attacker's hit roll, not a
+  // save bonus. Ranged-only, negated by ignores-cover, and moot for auto-hitting
+  // Torrent weapons (no hit roll).
+  const ignoresCover = !!findKeyword(resolved, "ignores-cover");
+  const covered =
+    resolved.cover.active && !ignoresCover && input.attacker.weapon.type === "ranged";
+  const coverHitPenalty = covered ? -1 : 0;
   const hitStat = isMelee ? weaponProfile.stats.WS : weaponProfile.stats.BS;
   const torrent = !!findKeyword(resolved, "torrent");
   let hits: number;
@@ -113,7 +120,7 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
     }
     const probs = checkProbabilities({
       unmodifiedNeeded: hitStat,
-      modifier: resolved.hitMod.value,
+      modifier: resolved.hitMod.value + coverHitPenalty,
       reroll: resolved.rerolls.hit?.subset ?? "none",
       autoFailOnOne: true,
       autoPassOnSix: true,
@@ -121,7 +128,7 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
     });
     hits = attacks * probs.pass;
     critHits = attacks * probs.crit;
-    hitsDetail = `${isMelee ? "WS" : "BS"}${hitStat}+ (mod ${signed(resolved.hitMod.value)}, reroll ${resolved.rerolls.hit?.subset ?? "none"}) → P(hit)=${probs.pass.toFixed(4)}, P(crit)=${probs.crit.toFixed(4)}`;
+    hitsDetail = `${isMelee ? "WS" : "BS"}${hitStat}+ (mod ${signed(resolved.hitMod.value)}${covered ? ", cover -1" : ""}, reroll ${resolved.rerolls.hit?.subset ?? "none"}) → P(hit)=${probs.pass.toFixed(4)}, P(crit)=${probs.crit.toFixed(4)}`;
   }
   const sustained = findKeyword(resolved, "sustained-hits");
   if (sustained) {
@@ -175,15 +182,12 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   const AP = weaponProfile.stats.AP + apMod;
   const saveMod = resolved.saveMod.value;
   const armorTargetRaw = unitProfile.Sv - AP - saveMod;
-  const ignoresCover = !!findKeyword(resolved, "ignores-cover");
-  const covered =
-    resolved.cover.active && !ignoresCover && input.attacker.weapon.type === "ranged";
-  const armorAfterCover = covered ? Math.max(3, armorTargetRaw - 1) : armorTargetRaw;
-  const armorFinal = clamp(armorAfterCover, 2, 7);
+  // Cover is a hit penalty (11e), applied in the hits stage above — it no
+  // longer touches the save here.
+  const armorFinal = clamp(armorTargetRaw, 2, 7);
   // The unit's printed invuln (from the profile) and any ability-granted
-  // invuln combine best-wins (lowest threshold). Invuln bypasses AP and cover
-  // — only the armor branch above is affected by those — so the final save is
-  // min(armor-after-AP-and-cover, effective-invuln).
+  // invuln combine best-wins (lowest threshold). Invuln bypasses AP, so the
+  // final save is min(armor-after-AP, effective-invuln).
   const printedInvuln = unitProfile.invuln_sv ?? null;
   const abilityInvuln = resolved.invulnerable?.threshold ?? null;
   const effectiveInvuln =
@@ -206,7 +210,7 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   stages.push({
     name: "unsaved",
     expected: unsaved,
-    detail: `Sv${unitProfile.Sv}+, AP${signed(AP)}${apMod !== 0 ? ` (apmod ${signed(apMod)})` : ""}${saveMod !== 0 ? `, savemod ${signed(saveMod)}` : ""}${covered ? ", cover (+1, cap 3+)" : ""}${abilityInvuln !== null ? `, invuln ${abilityInvuln}+ (ability)` : ""} → effective ${effectiveSaveTarget}+ (P(save)=${pSaved.toFixed(4)})`,
+    detail: `Sv${unitProfile.Sv}+, AP${signed(AP)}${apMod !== 0 ? ` (apmod ${signed(apMod)})` : ""}${saveMod !== 0 ? `, savemod ${signed(saveMod)}` : ""}${abilityInvuln !== null ? `, invuln ${abilityInvuln}+ (ability)` : ""} → effective ${effectiveSaveTarget}+ (P(save)=${pSaved.toFixed(4)})`,
   });
 
   // 5. Damage

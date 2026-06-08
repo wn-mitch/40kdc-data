@@ -1,0 +1,39 @@
+{
+  "name": "ectoplasma-cannon x1 vs cultist mob, target in cover (11e -1 to hit; AP-3 ignores any save bonus)",
+  "attacker": {
+    "weaponId": "ectoplasma-cannon",
+    "profileIndex": 0
+  },
+  "modelsFiring": 1,
+  "target": {
+    "unitId": "cultist-mob",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting",
+    "withinHalfRange": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "manual",
+        "label": "cover"
+      },
+      "applicableWhen": {},
+      "contribution": {
+        "type": "cover"
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 2.0,
+      "hits": 1.0,
+      "wounds": 0.8333,
+      "unsaved": 0.8333,
+      "damage": 2.5,
+      "after-fnp": 2.5,
+      "models-killed": 2.5
+    }
+  }
+}

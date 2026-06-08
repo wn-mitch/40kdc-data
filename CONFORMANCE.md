@@ -68,6 +68,7 @@ These notes document what is *currently load-bearing* about each corpus area. Fu
 - Tolerance `5e-4` is per-stage, not accumulated. Wide enough to absorb the rounded goldens; tight enough to catch any non-trivial engine drift.
 - **Reduction order invariant (load-bearing):** buffs apply in the order they appear in the input `buffs` array. Stages evaluate left-to-right in the order above; each stage consumes the previous stage's `expected` value. Implementations must not reorder, parallelize, or memoize in a way that changes float reduction order — `(1/3 + 1/3) + 1/3` is not always equal to `1/3 + (1/3 + 1/3)` at float precision, and a 7-stage chain can drift past tolerance.
 - All inputs reference entities by id (`weaponId`, `unitId`). The cruncher resolves them against the embedded dataset; no inline weapon/unit shapes today.
+- **Cover (11e contract):** the benefit of cover is **-1 to the hit roll**, applied in the `hits` stage — not a save bonus. It is ranged-only, negated by the `ignores-cover` keyword, and moot for auto-hitting `torrent` weapons. A `cover`-type buff in the stack drives it. (This replaced the 10e save-improvement rule; high-AP weapons that ignored the old save bump are now reduced by cover like everything else.) Pinned by `cruncher/11-*`, `cruncher/12-*`.
 
 ### `compare/`
 
