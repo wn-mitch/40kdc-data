@@ -195,6 +195,15 @@ class GameVersion(TypedDict):
     supersedes: NotRequired[DataslateVersion | None]
 
 
+class HullShape(TypedDict):
+    id: EntityId
+    name: str
+    points: list[Vec2]
+    bounds_width_in: float
+    bounds_height_in: float
+    game_version: GameVersionRef
+
+
 class LeaderAttachment(TypedDict):
     leader_id: EntityId
     eligible_bodyguard_ids: list[EntityId]
@@ -374,6 +383,7 @@ class Model(TypedDict):
     default_weapon_ids: NotRequired[list[EntityId]]
     is_leader_model: NotRequired[bool]
     base_size_mm: NotRequired[BaseSize]
+    hull_shape_id: NotRequired[EntityId | None]
 
 
 class UnitComposition(TypedDict):

@@ -15,6 +15,7 @@ import type {
   Faction,
   ForceDisposition,
   GameVersion,
+  HullShape,
   InteractionFlag,
   LeaderAttachment,
   Mission,
@@ -72,6 +73,8 @@ export interface RawData {
   terrainTemplates: TerrainTemplate[];
   /** Terrain layouts: arrangements of catalog/inline pieces on the board. */
   terrainLayouts: TerrainLayout[];
+  /** Reusable model collision hulls (polygon footprints) referenced by id. */
+  hullShapes: HullShape[];
   resourcePools: ResourcePool[];
   timingFlags: TimingFlag[];
   interactionFlags: InteractionFlag[];
@@ -102,6 +105,7 @@ export function emptyRawData(): RawData {
     forceDispositions: [],
     terrainTemplates: [],
     terrainLayouts: [],
+    hullShapes: [],
     resourcePools: [],
     timingFlags: [],
     interactionFlags: [],

@@ -13,9 +13,9 @@ use std::sync::OnceLock;
 
 use crate::generated::{
     Ability, DeploymentPattern, Detachment, Enhancement, Faction, ForceDisposition, GameVersion,
-    InteractionFlag, LeaderAttachment, Mission, MissionMatchup, Phase, PhaseMapping, ResourcePool,
-    SecondaryCard, Stratagem, TargetProfile, TerrainLayout, TerrainTemplate, TimingFlag, Unit,
-    UnitComposition, Wargear, WargearOption, Weapon, WeaponKeyword,
+    HullShape, InteractionFlag, LeaderAttachment, Mission, MissionMatchup, Phase, PhaseMapping,
+    ResourcePool, SecondaryCard, Stratagem, TargetProfile, TerrainLayout, TerrainTemplate,
+    TimingFlag, Unit, UnitComposition, Wargear, WargearOption, Weapon, WeaponKeyword,
 };
 
 use super::collection::Collection;
@@ -81,6 +81,9 @@ pub struct RawData {
     /// Terrain layouts: arrangements of catalog/inline pieces on the board.
     #[serde(default)]
     pub terrain_layouts: Vec<TerrainLayout>,
+    /// Reusable model collision hulls (polygon footprints) referenced by id.
+    #[serde(default)]
+    pub hull_shapes: Vec<HullShape>,
     #[serde(default)]
     pub resource_pools: Vec<ResourcePool>,
     #[serde(default)]
@@ -138,6 +141,7 @@ pub struct Dataset {
     pub force_dispositions: Collection<ForceDisposition>,
     pub terrain_templates: Collection<TerrainTemplate>,
     pub terrain_layouts: Collection<TerrainLayout>,
+    pub hull_shapes: Collection<HullShape>,
     pub resource_pools: Collection<ResourcePool>,
 
     // Id-less collections, exposed as plain slices.
@@ -276,6 +280,11 @@ impl Dataset {
             |l| l.id.to_string(),
             |l| Some(l.name.as_str()),
         );
+        let hull_shapes = id_name_collection(
+            raw.hull_shapes,
+            |h| h.id.to_string(),
+            |h| Some(h.name.as_str()),
+        );
         let resource_pools = Collection::build(
             raw.resource_pools,
             |r| r.id.to_string(),
@@ -313,6 +322,7 @@ impl Dataset {
             force_dispositions,
             terrain_templates,
             terrain_layouts,
+            hull_shapes,
             resource_pools,
             leader_attachments: raw.leader_attachments,
             unit_compositions: raw.unit_compositions,

@@ -421,6 +421,31 @@ export interface GameVersion {
   supersedes?: DataslateVersion | null;
 }
 /**
+ * A model's 2D collision footprint as an explicit polygon, used in place of a circular/oval base for vehicles and other hull-based models. Points are authored in local inches (y-down); a consumer re-centers the polygon on its area centroid before placement, so the local origin does not affect where the model lands — only its shape matters (mirrors the terrain-template footprint convention). A hull shape is faction-agnostic and reusable: one outline (e.g. a Rhino chassis) is authored once and referenced by `hull_shape_id` from every model that shares that hull, across factions. This entity stores geometry only — never an image, image URL, or any source-asset metadata.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "hull-shape".
+ */
+export interface HullShape {
+  id: EntityId;
+  name: string;
+  /**
+   * Polygon vertices in local inches (y-down), in order around the outline. A hull is always a polygon (never a rectangle/right-triangle), so the points are given directly rather than via the shared `footprint` oneOf.
+   *
+   * @minItems 3
+   */
+  points: [Vec2, Vec2, Vec2, ...Vec2[]];
+  /**
+   * Cached axis-aligned bounding-box width in inches (max x − min x). Derived from `points`; recorded so consumers can size/scale without recomputing.
+   */
+  bounds_width_in: number;
+  /**
+   * Cached axis-aligned bounding-box height in inches (max y − min y). Derived from `points`.
+   */
+  bounds_height_in: number;
+  game_version: GameVersionReference;
+}
+/**
  * Defines which character units can attach to which bodyguard units.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -1226,6 +1251,10 @@ export interface UnitComposition {
       default_weapon_ids?: EntityId[];
       is_leader_model?: boolean;
       base_size_mm?: BaseSize1;
+      /**
+       * Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to "hull".
+       */
+      hull_shape_id?: EntityId | null;
     },
     ...{
       name: string;
@@ -1235,6 +1264,10 @@ export interface UnitComposition {
       default_weapon_ids?: EntityId[];
       is_leader_model?: boolean;
       base_size_mm?: BaseSize1;
+      /**
+       * Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to "hull".
+       */
+      hull_shape_id?: EntityId | null;
     }[]
   ];
   game_version: GameVersionReference;

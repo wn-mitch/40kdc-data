@@ -111,5 +111,7 @@ export const forceDispositions = dataset.forceDispositions;
 export const terrainTemplates = dataset.terrainTemplates;
 /** All terrain layouts. */
 export const terrainLayouts = dataset.terrainLayouts;
+/** Reusable model collision hulls (polygon footprints) referenced by id. */
+export const hullShapes = dataset.hullShapes;
 /** All resource pools. */
 export const resourcePools = dataset.resourcePools;

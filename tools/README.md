@@ -61,6 +61,16 @@ as `normalizeName` so you can reproduce it in your own search UI.
 
 Auto-generated from the source: [`docs/api/`](docs/api/README.md).
 
+## See it in action
+
+Open-source example apps built on this package:
+
+- [List Builder](https://list-builder.alpacasoft.dev) — build an army list and export to ListForge / NewRecruit.
+- [Salvo](https://salvo.alpacasoft.dev) — damage calculator over the cruncher and abilities-resolver.
+- [Mission Matrix](https://mission-matrix.alpacasoft.dev) — the 11th-edition Force Disposition matchup grid.
+- [Layout Editor](https://layout-editor.alpacasoft.dev) — author terrain layouts on a board; exports terrain-layout JSON.
+- [Hull Tracer](https://hull-tracer.alpacasoft.dev) — trace a model's collision hull from a top-down photo; exports geometry-only hull-shape JSON.
+
 ## Also: schema validation
 
 This package also ships the canonical JSON Schemas and an AJV-based validator

@@ -1,0 +1,15 @@
+[
+  {
+    "id": "simple-square-hull",
+    "name": "Simple Square Hull",
+    "points": [
+      { "x": -1, "y": -1 },
+      { "x": 1, "y": -1 },
+      { "x": 1, "y": 1 },
+      { "x": -1, "y": 1 }
+    ],
+    "bounds_width_in": 2,
+    "bounds_height_in": 2,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

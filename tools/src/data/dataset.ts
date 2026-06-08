@@ -11,6 +11,7 @@ import type {
   Enhancement,
   ForceDisposition,
   GameVersion,
+  HullShape,
   InteractionFlag,
   LeaderAttachment,
   Mission,
@@ -102,6 +103,7 @@ export class Dataset {
   readonly forceDispositions: Collection<ForceDisposition, ForceDisposition>;
   readonly terrainTemplates: Collection<TerrainTemplate, TerrainTemplate>;
   readonly terrainLayouts: Collection<TerrainLayout, TerrainLayout>;
+  readonly hullShapes: Collection<HullShape, HullShape>;
   readonly resourcePools: Collection<ResourcePool, ResourcePool>;
 
   // Id-less collections, exposed as plain arrays.
@@ -173,6 +175,7 @@ export class Dataset {
     this.forceDispositions = idCollection(raw.forceDispositions);
     this.terrainTemplates = idCollection(raw.terrainTemplates);
     this.terrainLayouts = idCollection(raw.terrainLayouts);
+    this.hullShapes = idCollection(raw.hullShapes);
     this.resourcePools = idCollection(raw.resourcePools);
 
     this.leaderAttachments = raw.leaderAttachments;

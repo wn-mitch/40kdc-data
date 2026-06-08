@@ -101,6 +101,7 @@ class Dataset:
         self.force_dispositions = id_collection(raw["force_dispositions"])
         self.terrain_templates = id_collection(raw["terrain_templates"])
         self.terrain_layouts = id_collection(raw["terrain_layouts"])
+        self.hull_shapes = id_collection(raw["hull_shapes"])
         self.resource_pools = id_collection(raw["resource_pools"])
 
         # Id-less collections, exposed as plain lists.

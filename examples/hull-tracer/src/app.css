@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+/* Shadowboxing dialect — industrial near-black, teal accent, inset rim-lit
+   elevation. Tokens are the Tailwind v4 `@theme` form, so utilities (bg-bg,
+   text-text, bg-accent, font-heading, shadow-md, ...) generate straight from
+   the system. Values mirror examples/_shared/tokens.css (Tailwind needs the
+   `--color-*` form, so a direct @import is not possible — keep the two in
+   sync). Component styling lives in the Svelte files as utility classes. */
+@theme {
+  --color-bg: oklch(0.169 0.004 286); /* #0f0f11 */
+  --color-bg-dark: oklch(0.146 0.004 286); /* #0a0a0c */
+  --color-surface: oklch(0.224 0.008 286); /* #1b1b1f */
+  --color-border: oklch(0.304 0.011 286); /* #2e2e34 */
+  --color-border-subtle: oklch(0.27 0.005 286); /* #262629 */
+  /* Interactive-control outlines — ≥3:1 (WCAG 1.4.11) on every surface tier
+     (panel-surface 3.21, surface 3.02). Containers keep --color-border. */
+  --color-border-strong: oklch(0.513 0.014 286); /* #66666f */
+  --color-text: oklch(0.947 0.004 286); /* #ededf0 */
+  --color-text-muted: oklch(0.735 0.014 286); /* #a8a8b2 — AAA 7.9:1 on --color-bg */
+  --color-text-dim: oklch(0.637 0.015 286); /* #8a8a94 — AA 5.1:1 on --color-bg */
+  --color-accent: oklch(0.704 0.123 183); /* #14b8a6 */
+  --color-accent-foreground: oklch(0.221 0.028 183); /* #0a1f1c */
+  --color-accent-hover: oklch(0.6 0.104 185); /* #0d9488 */
+  --color-accent-dim: oklch(0.371 0.06 185); /* #0d4a44 — highlight backgrounds */
+
+  /* Darker tier for nested panes */
+  --color-panel: oklch(0.155 0.004 286); /* #0c0c0e */
+  --color-panel-surface: oklch(0.197 0.004 286); /* #151517 */
+  --color-panel-border: oklch(0.27 0.005 286); /* #262629 */
+  --color-panel-hover: oklch(0.237 0.008 286); /* #1e1e22 */
+
+  /* Semantic */
+  --color-success: oklch(0.723 0.192 150); /* #22c55e */
+  --color-warning: oklch(0.769 0.165 70); /* #f59e0b */
+  --color-danger: oklch(0.637 0.208 25); /* #ef4444 */
+
+  /* Typography */
+  --font-heading: "Barlow Condensed", system-ui, sans-serif;
+  --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Border radius — angular, industrial */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+
+  /* Tracking */
+  --tracking-wide: 0.05em;
+  --tracking-wider: 0.08em;
+
+  /* Elevation — the signature shadowboxing inset-rim-lit treatment */
+  --shadow-sm: 0 1px 0 0 rgba(255, 255, 255, 0.04) inset, 0 1px 0 0 rgba(0, 0, 0, 0.6),
+    0 4px 8px -2px rgba(0, 0, 0, 0.8);
+  --shadow-md: 0 1px 0 0 rgba(255, 255, 255, 0.08) inset, 0 2px 0 0 rgba(0, 0, 0, 0.8),
+    0 10px 20px -4px rgba(0, 0, 0, 0.95);
+  --shadow-focus: 0 0 0 2px var(--color-accent);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tailwind v4 preflight leaves buttons on `cursor: default`; restore the
+   pointer affordance on everything clickable (disabled controls keep the
+   arrow). */
+button:not(:disabled),
+select:not(:disabled),
+summary,
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
+/* Token-surfaced focus ring reused across interactive elements. */
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/* Thin, dark scrollbars matching the panel chrome */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-panel-border) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-sm);
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}

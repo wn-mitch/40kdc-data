@@ -1,0 +1,30 @@
+[
+  {
+    "id": "too-few-points",
+    "name": "Degenerate Hull",
+    "points": [
+      { "x": 0, "y": 0 },
+      { "x": 1, "y": 1 }
+    ],
+    "bounds_width_in": 1,
+    "bounds_height_in": 1,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "carries-forbidden-image-asset",
+    "name": "Hull With Leaked Asset",
+    "points": [
+      { "x": -1, "y": -1 },
+      { "x": 1, "y": -1 },
+      { "x": 1, "y": 1 },
+      { "x": -1, "y": 1 }
+    ],
+    "bounds_width_in": 2,
+    "bounds_height_in": 2,
+    "topdownAsset": {
+      "storageProvider": "supabase_storage",
+      "sourceUrl": "https://example.invalid/leaked.png"
+    },
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

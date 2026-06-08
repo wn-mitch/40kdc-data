@@ -4169,6 +4169,147 @@ pub struct GameVersionRef {
     pub dataslate: DataslateVersion,
     pub edition: Edition,
 }
+///A model's 2D collision footprint as an explicit polygon, used in place of a circular/oval base for vehicles and other hull-based models. Points are authored in local inches (y-down); a consumer re-centers the polygon on its area centroid before placement, so the local origin does not affect where the model lands — only its shape matters (mirrors the terrain-template footprint convention). A hull shape is faction-agnostic and reusable: one outline (e.g. a Rhino chassis) is authored once and referenced by `hull_shape_id` from every model that shares that hull, across factions. This entity stores geometry only — never an image, image URL, or any source-asset metadata.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "title": "Hull Shape",
+///  "description": "A model's 2D collision footprint as an explicit polygon, used in place of a circular/oval base for vehicles and other hull-based models. Points are authored in local inches (y-down); a consumer re-centers the polygon on its area centroid before placement, so the local origin does not affect where the model lands — only its shape matters (mirrors the terrain-template footprint convention). A hull shape is faction-agnostic and reusable: one outline (e.g. a Rhino chassis) is authored once and referenced by `hull_shape_id` from every model that shares that hull, across factions. This entity stores geometry only — never an image, image URL, or any source-asset metadata.",
+///  "type": "object",
+///  "required": [
+///    "bounds_height_in",
+///    "bounds_width_in",
+///    "game_version",
+///    "id",
+///    "name",
+///    "points"
+///  ],
+///  "properties": {
+///    "bounds_height_in": {
+///      "description": "Cached axis-aligned bounding-box height in inches (max y − min y). Derived from `points`.",
+///      "type": "number",
+///      "exclusiveMinimum": 0.0
+///    },
+///    "bounds_width_in": {
+///      "description": "Cached axis-aligned bounding-box width in inches (max x − min x). Derived from `points`; recorded so consumers can size/scale without recomputing.",
+///      "type": "number",
+///      "exclusiveMinimum": 0.0
+///    },
+///    "game_version": {
+///      "$ref": "#/$defs/game-version-ref"
+///    },
+///    "id": {
+///      "$ref": "#/$defs/entity-id"
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 128,
+///      "minLength": 1
+///    },
+///    "points": {
+///      "description": "Polygon vertices in local inches (y-down), in order around the outline. A hull is always a polygon (never a rectangle/right-triangle), so the points are given directly rather than via the shared `footprint` oneOf.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/vec2"
+///      },
+///      "minItems": 3
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct HullShape {
+    ///Cached axis-aligned bounding-box height in inches (max y − min y). Derived from `points`.
+    pub bounds_height_in: f64,
+    ///Cached axis-aligned bounding-box width in inches (max x − min x). Derived from `points`; recorded so consumers can size/scale without recomputing.
+    pub bounds_width_in: f64,
+    pub game_version: GameVersionRef,
+    pub id: EntityId,
+    pub name: HullShapeName,
+    ///Polygon vertices in local inches (y-down), in order around the outline. A hull is always a polygon (never a rectangle/right-triangle), so the points are given directly rather than via the shared `footprint` oneOf.
+    pub points: ::std::vec::Vec<Vec2>,
+}
+///`HullShapeName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 128,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct HullShapeName(::std::string::String);
+impl ::std::ops::Deref for HullShapeName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<HullShapeName> for ::std::string::String {
+    fn from(value: HullShapeName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for HullShapeName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 128usize {
+            return Err("longer than 128 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for HullShapeName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for HullShapeName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for HullShapeName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for HullShapeName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
 ///`InteractionFlag`
 ///
 /// <details><summary>JSON schema</summary>
@@ -11563,6 +11704,17 @@ impl ::std::convert::TryFrom<::std::string::String> for UnitAttachmentRole {
 ///              "$ref": "#/$defs/entity-id"
 ///            }
 ///          },
+///          "hull_shape_id": {
+///            "description": "Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to \"hull\".",
+///            "oneOf": [
+///              {
+///                "$ref": "#/$defs/entity-id"
+///              },
+///              {
+///                "type": "null"
+///              }
+///            ]
+///          },
 ///          "is_leader_model": {
 ///            "default": false,
 ///            "type": "boolean"
@@ -11633,6 +11785,17 @@ pub struct UnitComposition {
 ///        "$ref": "#/$defs/entity-id"
 ///      }
 ///    },
+///    "hull_shape_id": {
+///      "description": "Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to \"hull\".",
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/entity-id"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
 ///    "is_leader_model": {
 ///      "default": false,
 ///      "type": "boolean"
@@ -11673,6 +11836,9 @@ pub struct UnitCompositionModelsItem {
     pub base_size_mm: ::std::option::Option<BaseSize>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub default_weapon_ids: ::std::vec::Vec<EntityId>,
+    ///Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to "hull".
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub hull_shape_id: ::std::option::Option<EntityId>,
     #[serde(default)]
     pub is_leader_model: bool,
     pub max: ::std::num::NonZeroU64,

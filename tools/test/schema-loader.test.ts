@@ -32,6 +32,7 @@ describe("schema-loader", () => {
     expect(ids).toContain("https://40kdc.dev/schemas/core/secondary-card.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/core/terrain-template.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/core/terrain-layout.schema.json");
+    expect(ids).toContain("https://40kdc.dev/schemas/core/hull-shape.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/enrichment/phase-mapping.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/enrichment/timing-flag.schema.json");
     expect(ids).toContain("https://40kdc.dev/schemas/enrichment/interaction-flag.schema.json");

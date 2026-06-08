@@ -28,6 +28,13 @@
           "base_size_mm": {
             "description": "This model's base. Absent when no base could be resolved for the model.",
             "$ref": "../defs/common.schema.json#/$defs/base-size"
+          },
+          "hull_shape_id": {
+            "description": "Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to \"hull\".",
+            "oneOf": [
+              { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+              { "type": "null" }
+            ]
           }
         },
         "required": ["name", "min", "max"],

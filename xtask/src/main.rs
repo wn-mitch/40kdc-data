@@ -101,6 +101,7 @@ const FILE_TO_COLLECTION: &[(&str, &str)] = &[
     ("force-dispositions", "force_dispositions"),
     ("terrain-templates", "terrain_templates"),
     ("terrain-layouts", "terrain_layouts"),
+    ("hull-shapes", "hull_shapes"),
     ("resource-pools", "resource_pools"),
     ("timing-flags", "timing_flags"),
     ("interaction-flags", "interaction_flags"),

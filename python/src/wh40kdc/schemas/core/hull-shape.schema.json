@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/hull-shape.schema.json",
+  "title": "Hull Shape",
+  "description": "A model's 2D collision footprint as an explicit polygon, used in place of a circular/oval base for vehicles and other hull-based models. Points are authored in local inches (y-down); a consumer re-centers the polygon on its area centroid before placement, so the local origin does not affect where the model lands — only its shape matters (mirrors the terrain-template footprint convention). A hull shape is faction-agnostic and reusable: one outline (e.g. a Rhino chassis) is authored once and referenced by `hull_shape_id` from every model that shares that hull, across factions. This entity stores geometry only — never an image, image URL, or any source-asset metadata.",
+  "type": "object",
+  "properties": {
+    "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "points": {
+      "type": "array",
+      "description": "Polygon vertices in local inches (y-down), in order around the outline. A hull is always a polygon (never a rectangle/right-triangle), so the points are given directly rather than via the shared `footprint` oneOf.",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/vec2" },
+      "minItems": 3
+    },
+    "bounds_width_in": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Cached axis-aligned bounding-box width in inches (max x − min x). Derived from `points`; recorded so consumers can size/scale without recomputing."
+    },
+    "bounds_height_in": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Cached axis-aligned bounding-box height in inches (max y − min y). Derived from `points`."
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
+  },
+  "required": ["id", "name", "points", "bounds_width_in", "bounds_height_in", "game_version"],
+  "additionalProperties": false
+}
