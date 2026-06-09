@@ -149,14 +149,14 @@ def serialize_newrecruit_json(roster: Roster) -> str:
     faction_display = title_case_id(roster.get("faction_id"))
     if faction_display is None:
         faction_display = "Unknown"
-    detachment_display = title_case_id(roster.get("detachment_id"))
     battle_size = _battle_size_label(roster)
 
     config: list[dict[str, Any]] = []
     if battle_size:
         config.append(_config_selection("Battle Size", battle_size, "battle-size"))
-    if detachment_display:
-        config.append(_config_selection("Detachment", detachment_display, "detachment"))
+    for d in roster["detachments"]:
+        display = title_case_id(d["ref"]["id"]) or d["ref"]["raw_name"]
+        config.append(_config_selection("Detachment", display, "detachment"))
 
     force = {
         "id": "force-1",

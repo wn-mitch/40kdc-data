@@ -111,7 +111,7 @@ describe("listForgeTextAdapter.parse", () => {
   it("reads name, faction, detachment, and points from the first line", () => {
     expect(parsed.name).toBe("all gas no breaks");
     expect(parsed.faction_raw_name).toBe("Chaos Daemons");
-    expect(parsed.detachment_raw_name).toBe("Daemonic Incursion");
+    expect(parsed.detachment_raw_names).toEqual(["Daemonic Incursion"]);
     expect(parsed.total_reported).toBe(1995);
     // ListForge reports only the army total — it doubles as the limit.
     expect(parsed.declared_limit).toBe(1995);

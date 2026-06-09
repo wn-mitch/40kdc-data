@@ -421,7 +421,7 @@ impl FormatAdapter for GwHeaderlessAdapter {
             name,
             generated_by: None,
             faction_raw_name: None,
-            detachment_raw_name: None,
+            detachment_raw_names: Vec::new(),
             battle_size_raw,
             declared_limit,
             total_reported: None,

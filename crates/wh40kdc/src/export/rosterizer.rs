@@ -181,15 +181,22 @@ fn faction_asset(roster: &Roster) -> Option<Asset> {
     })
 }
 
-fn detachment_asset(roster: &Roster) -> Option<Asset> {
-    let display = title_case_id(roster.detachment_id.as_deref())?;
-    Some(Asset {
-        item: item_key(CLS_DETACHMENT, &display),
-        name: Some(display),
-        quantity: Some(1),
-        stats: None,
-        assets: None,
-    })
+fn detachment_assets(roster: &Roster) -> Vec<Asset> {
+    roster
+        .detachments
+        .iter()
+        .map(|d| {
+            let display =
+                title_case_id(d.ref_.id.as_deref()).unwrap_or_else(|| d.ref_.raw_name.clone());
+            Asset {
+                item: item_key(CLS_DETACHMENT, &display),
+                name: Some(display),
+                quantity: Some(1),
+                stats: None,
+                assets: None,
+            }
+        })
+        .collect()
 }
 
 fn battle_size_asset(roster: &Roster) -> Option<Asset> {
@@ -224,9 +231,7 @@ impl RosterSerializer for RosterizerSerializer {
         if let Some(f) = faction_asset(roster) {
             included.push(f);
         }
-        if let Some(d) = detachment_asset(roster) {
-            included.push(d);
-        }
+        included.extend(detachment_assets(roster));
         if let Some(b) = battle_size_asset(roster) {
             included.push(b);
         }

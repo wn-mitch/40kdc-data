@@ -51,6 +51,7 @@ pub enum WarningCode {
     WeaponUnresolved,
     EnhancementUnresolved,
     DetachmentUnresolved,
+    DetachmentPointsExceeded,
     BattleSizeUnmapped,
     PointsMismatch,
     LeaderAttachmentInferred,
@@ -94,6 +95,16 @@ pub struct RosterWargear {
     pub count: u64,
 }
 
+/// One detachment on the roster, paired with its resolved DP cost.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RosterDetachment {
+    #[serde(rename = "ref")]
+    pub ref_: ResolvedRef,
+    /// DP cost (1–3) from the resolved detachment entity; `None` when
+    /// unresolved or unrecorded.
+    pub dp_cost: Option<u64>,
+}
+
 /// An inferred, always-provisional leader→bodyguard attachment.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RosterLeaderAttachment {
@@ -134,6 +145,9 @@ pub struct RosterSource {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RosterPoints {
     pub declared_limit: Option<u64>,
+    /// 11e detachment-point budget from the battle size (strike-force 3,
+    /// incursion 2); `None` when the battle size is unknown.
+    pub detachment_cap: Option<u64>,
     pub total_reported: Option<u64>,
     pub total_computed: u64,
 }
@@ -169,7 +183,7 @@ pub struct Roster {
     pub name: String,
     pub source: RosterSource,
     pub faction_id: Option<String>,
-    pub detachment_id: Option<String>,
+    pub detachments: Vec<RosterDetachment>,
     pub battle_size: Option<BattleSize>,
     pub points: RosterPoints,
     pub units: Vec<RosterUnit>,
@@ -275,8 +289,9 @@ pub struct ParsedRoster {
     pub generated_by: Option<String>,
     /// Raw faction name from the source (e.g. "Grey Knights").
     pub faction_raw_name: Option<String>,
-    /// Raw detachment name (e.g. "Banishers").
-    pub detachment_raw_name: Option<String>,
+    /// Raw detachment names in source order (e.g. ["Gladius Task Force"]). 11e
+    /// lists may carry several; most formats and pre-11e lists carry zero or one.
+    pub detachment_raw_names: Vec<String>,
     /// Raw battle-size label (e.g. "2. Strike Force (2000 Point limit)").
     pub battle_size_raw: Option<String>,
     /// Points limit parsed from the battle-size label, if any.

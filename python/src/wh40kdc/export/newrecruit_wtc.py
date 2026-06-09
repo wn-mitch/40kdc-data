@@ -44,7 +44,12 @@ def _header(roster: Roster, units: list[RosterUnit], char_slots: list[int | None
     faction = title_case_id(roster.get("faction_id"))
     if faction is None:
         faction = "Unknown"
-    detachment = title_case_id(roster.get("detachment_id"))
+    detachments = roster["detachments"]
+    detachment = (
+        ", ".join(title_case_id(d["ref"]["id"]) or d["ref"]["raw_name"] for d in detachments)
+        if detachments
+        else None
+    )
     points = roster["points"]
     limit = points.get("declared_limit")
     if limit is None:

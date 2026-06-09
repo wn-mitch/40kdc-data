@@ -41,7 +41,13 @@ function formatPretty(roster: Roster): string {
   const lines: string[] = [];
   lines.push(`Roster: ${roster.name}`);
   lines.push(`  Faction:    ${roster.faction_id ?? "(unresolved)"}`);
-  lines.push(`  Detachment: ${roster.detachment_id ?? "(none/unresolved)"}`);
+  lines.push(
+    `  Detachments: ${
+      roster.detachments
+        .map((d) => `${d.ref.id ?? d.ref.raw_name}${d.dp_cost != null ? ` (${d.dp_cost} DP)` : ""}`)
+        .join(", ") || "(none/unresolved)"
+    }`,
+  );
   lines.push(`  Battle size: ${roster.battle_size ?? "(unmapped)"}`);
   lines.push(
     `  Points: computed ${roster.points.total_computed}` +

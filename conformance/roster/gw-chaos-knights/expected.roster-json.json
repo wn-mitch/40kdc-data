@@ -5,10 +5,21 @@
     "generated_by": null
   },
   "faction_id": "chaos-knights",
-  "detachment_id": "houndpack-lance",
+  "detachments": [
+    {
+      "ref": {
+        "id": "houndpack-lance",
+        "raw_name": "Houndpack Lance",
+        "resolved": true,
+        "candidates": []
+      },
+      "dp_cost": null
+    }
+  ],
   "battle_size": "strike-force",
   "points": {
     "declared_limit": 2000,
+    "detachment_cap": 3,
     "total_reported": 2000,
     "total_computed": 2000
   },

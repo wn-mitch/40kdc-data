@@ -2,7 +2,9 @@
   "name": "all gas no breaks",
   "generated_by": "List Forge",
   "faction_raw_name": "Chaos Daemons",
-  "detachment_raw_name": "Daemonic Incursion",
+  "detachment_raw_names": [
+    "Daemonic Incursion"
+  ],
   "battle_size_raw": "Strike Force (2000 Point limit)",
   "declared_limit": 1995,
   "total_reported": 1995,

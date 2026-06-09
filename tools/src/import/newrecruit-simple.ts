@@ -252,7 +252,7 @@ export const newRecruitSimpleAdapter: FormatAdapter = {
       name,
       generated_by: null,
       faction_raw_name,
-      detachment_raw_name,
+      detachment_raw_names: detachment_raw_name ? [detachment_raw_name] : [],
       battle_size_raw,
       declared_limit,
       total_reported,

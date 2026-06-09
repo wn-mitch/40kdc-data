@@ -338,7 +338,7 @@ export const rosterizerAdapter: FormatAdapter = {
     // same way. Walk the whole tree (rather than just root.assets.included)
     // so nested-force shapes still pick up the markers.
     let faction_raw_name: string | null = null;
-    let detachment_raw_name: string | null = null;
+    const detachment_raw_names: string[] = [];
     let battle_size_raw: string | null = null;
     const factions: string[] = [];
     walk(root, (a) => {
@@ -348,7 +348,7 @@ export const rosterizerAdapter: FormatAdapter = {
         if (!factions.includes(name)) factions.push(name);
         faction_raw_name ??= name;
       } else if (cls === CLS_DETACHMENT) {
-        detachment_raw_name ??= displayName(a);
+        detachment_raw_names.push(displayName(a));
       } else if (cls === CLS_BATTLE_SIZE) {
         battle_size_raw ??= displayName(a);
       }
@@ -404,7 +404,7 @@ export const rosterizerAdapter: FormatAdapter = {
       name,
       generated_by,
       faction_raw_name,
-      detachment_raw_name,
+      detachment_raw_names,
       battle_size_raw,
       declared_limit: parseLimit(battle_size_raw),
       total_reported,

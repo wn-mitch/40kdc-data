@@ -39,7 +39,7 @@ describe("newRecruitSimpleAdapter", () => {
 
   it("reads battle size and detachment from the Configuration section", () => {
     expect(parsed.battle_size_raw).toBe("Strike Force (2000 Point limit)");
-    expect(parsed.detachment_raw_name).toBe("Houndpack Lance");
+    expect(parsed.detachment_raw_names).toEqual(["Houndpack Lance"]);
   });
 
   it("captures units in declaration order", () => {
@@ -142,7 +142,7 @@ Broadside Battlesuits [90pts]:
 • 1x Broadside Shas'vre: Crushing bulk, 2x Shield Drone, Heavy rail rifle
 `;
     const parsed = newRecruitSimpleAdapter.parse(noUnitsHeader);
-    expect(parsed.detachment_raw_name).toBe("Auxiliary Cadre");
+    expect(parsed.detachment_raw_names).toEqual(["Auxiliary Cadre"]);
     expect(parsed.units.length).toBe(2);
     expect(parsed.units[0].raw_name).toBe("Broadside Battlesuits");
     expect(parsed.units[0].model_count).toBe(1);

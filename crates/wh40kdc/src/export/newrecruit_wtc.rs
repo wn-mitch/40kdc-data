@@ -38,7 +38,20 @@ fn wargear_list_text(unit: &RosterUnit, include_warlord_tag: bool) -> String {
 
 fn header(roster: &Roster, units: &[RosterUnit], char_slots: &[Option<u32>]) -> String {
     let faction = title_case_id(roster.faction_id.as_deref()).unwrap_or_else(|| "Unknown".into());
-    let detachment = title_case_id(roster.detachment_id.as_deref());
+    let detachment: Option<String> = if roster.detachments.is_empty() {
+        None
+    } else {
+        Some(
+            roster
+                .detachments
+                .iter()
+                .map(|d| {
+                    title_case_id(d.ref_.id.as_deref()).unwrap_or_else(|| d.ref_.raw_name.clone())
+                })
+                .collect::<Vec<_>>()
+                .join(", "),
+        )
+    };
     let limit = roster
         .points
         .declared_limit

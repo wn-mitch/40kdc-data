@@ -5,10 +5,21 @@
     "generated_by": "List Forge"
   },
   "faction_id": "grey-knights",
-  "detachment_id": "banishers",
+  "detachments": [
+    {
+      "ref": {
+        "id": "banishers",
+        "raw_name": "Banishers",
+        "resolved": true,
+        "candidates": []
+      },
+      "dp_cost": 2
+    }
+  ],
   "battle_size": "strike-force",
   "points": {
     "declared_limit": 2000,
+    "detachment_cap": 3,
     "total_reported": 585,
     "total_computed": 585
   },

@@ -107,7 +107,8 @@ function factionLabel(rosterJson: string): string {
 	// source of truth, this is display-only so a parse miss just shows nothing.
 	try {
 		const r = JSON.parse(rosterJson);
-		return [r.faction_id, r.detachment_id].filter(Boolean).join(" · ");
+		const dets = (r.detachments ?? []).map((d: any) => d?.ref?.id ?? d?.ref?.raw_name);
+		return [r.faction_id, ...dets].filter(Boolean).join(" · ");
 	} catch {
 		return "";
 	}

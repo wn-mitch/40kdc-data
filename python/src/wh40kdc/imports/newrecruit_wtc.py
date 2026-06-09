@@ -365,7 +365,9 @@ def _parse_with_format(text: str, format: str) -> dict[str, Any]:
         "name": header["name"],
         "generated_by": None,
         "faction_raw_name": header["faction_raw_name"],
-        "detachment_raw_name": header["detachment_raw_name"],
+        "detachment_raw_names": (
+            [header["detachment_raw_name"]] if header["detachment_raw_name"] else []
+        ),
         "battle_size_raw": header["battle_size_raw"],
         "declared_limit": header["declared_limit"],
         "total_reported": header["total_reported"],

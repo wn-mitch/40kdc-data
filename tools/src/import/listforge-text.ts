@@ -263,7 +263,7 @@ export const listForgeTextAdapter: FormatAdapter = {
       name: header.name,
       generated_by: "List Forge",
       faction_raw_name: header.faction_raw_name,
-      detachment_raw_name: header.detachment_raw_name,
+      detachment_raw_names: header.detachment_raw_name ? [header.detachment_raw_name] : [],
       battle_size_raw: inferBattleSizeRaw(declared_limit),
       declared_limit,
       total_reported: header.total_reported,

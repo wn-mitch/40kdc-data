@@ -278,7 +278,7 @@ def _parse(decoded: Any) -> dict[str, Any]:
     # Walk the whole tree so nested-force shapes still pick up the markers.
     meta_state: dict[str, Any] = {
         "faction_raw_name": None,
-        "detachment_raw_name": None,
+        "detachment_raw_names": [],
         "battle_size_raw": None,
     }
     factions: list[str] = []
@@ -292,8 +292,7 @@ def _parse(decoded: Any) -> dict[str, Any]:
             if meta_state["faction_raw_name"] is None:
                 meta_state["faction_raw_name"] = name
         elif cls == _CLS_DETACHMENT:
-            if meta_state["detachment_raw_name"] is None:
-                meta_state["detachment_raw_name"] = _display_name(a)
+            meta_state["detachment_raw_names"].append(_display_name(a))
         elif cls == _CLS_BATTLE_SIZE:
             if meta_state["battle_size_raw"] is None:
                 meta_state["battle_size_raw"] = _display_name(a)
@@ -347,7 +346,7 @@ def _parse(decoded: Any) -> dict[str, Any]:
         "name": name,
         "generated_by": generated_by,
         "faction_raw_name": meta_state["faction_raw_name"],
-        "detachment_raw_name": meta_state["detachment_raw_name"],
+        "detachment_raw_names": meta_state["detachment_raw_names"],
         "battle_size_raw": battle_size_raw,
         "declared_limit": _parse_limit(battle_size_raw),
         "total_reported": total_reported,

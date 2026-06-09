@@ -32,7 +32,8 @@ describe("share-link list round-trip", () => {
 	it("rebuilds the same list from its share link", () => {
 		const state = emptyBuilderState();
 		state.factionId = "adeptus-astartes";
-		state.detachmentId = detachmentsForFaction("adeptus-astartes")[0]?.id ?? null;
+		const firstDet = detachmentsForFaction("adeptus-astartes")[0]?.id;
+		state.detachmentIds = firstDet ? [firstDet] : [];
 		const unit = unitsForFaction("adeptus-astartes").find(
 			(u) => (u.points?.length ?? 0) > 0 && u.model_count != null,
 		)!;
@@ -56,7 +57,7 @@ describe("share-link list round-trip", () => {
 		const back = rosterTextToBuilderState(decoded!, "Shared list", null);
 		expect(back).not.toBeNull();
 		expect(back!.factionId).toBe(state.factionId);
-		expect(back!.detachmentId).toBe(state.detachmentId);
+		expect(back!.detachmentIds).toEqual(state.detachmentIds);
 		expect(back!.units).toHaveLength(1);
 		expect(back!.units[0].datasheetId).toBe(unit.id);
 	});

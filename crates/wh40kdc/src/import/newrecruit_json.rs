@@ -161,6 +161,24 @@ fn config_value(selections: &[Value], config_name: &str) -> Option<String> {
     Some(selection_name(child).to_string())
 }
 
+/// Every value under a named config, across repeated blocks and multiple
+/// children, in source order. Used for multi-detachment 11e lists.
+fn config_values(selections: &[Value], config_name: &str) -> Vec<String> {
+    let mut out = Vec::new();
+    for node in selections {
+        if selection_name(node) != config_name {
+            continue;
+        }
+        for child in child_selections(node) {
+            let name = selection_name(child);
+            if !name.is_empty() {
+                out.push(name.to_string());
+            }
+        }
+    }
+    out
+}
+
 fn parse_limit(label: Option<&str>) -> Option<u64> {
     let label = label?;
     let bytes = label.as_bytes();
@@ -263,14 +281,12 @@ impl FormatAdapter for NewRecruitJsonAdapter {
         })?;
         let forces = as_array(&roster["forces"]);
 
-        let mut detachment_raw_name: Option<String> = None;
+        let mut detachment_raw_names: Vec<String> = Vec::new();
         let mut battle_size_raw: Option<String> = None;
         let mut units: Vec<ParsedUnit> = Vec::new();
         for force in forces {
             let top = child_selections(force);
-            if detachment_raw_name.is_none() {
-                detachment_raw_name = config_value(top, "Detachment");
-            }
+            detachment_raw_names.extend(config_values(top, "Detachment"));
             if battle_size_raw.is_none() {
                 battle_size_raw = config_value(top, "Battle Size");
             }
@@ -310,7 +326,7 @@ impl FormatAdapter for NewRecruitJsonAdapter {
             name,
             generated_by,
             faction_raw_name: primary_faction,
-            detachment_raw_name,
+            detachment_raw_names,
             battle_size_raw: battle_size_raw.clone(),
             declared_limit: parse_limit(battle_size_raw.as_deref()),
             total_reported,

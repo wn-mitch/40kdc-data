@@ -22,7 +22,7 @@ interface Props {
 let { unit, draft, onchange, onwarlord }: Props = $props();
 
 const raw = $derived(unit ? unitRaw(unit.datasheetId) : undefined);
-const enhancements = $derived(unit ? eligibleEnhancements(draft.detachmentId, raw) : []);
+const enhancements = $derived(unit ? eligibleEnhancements(draft.detachmentIds, raw) : []);
 const points = $derived(unit ? unitPoints(unit) : 0);
 const modelRange = $derived(raw?.model_count ?? null);
 const issues = $derived(

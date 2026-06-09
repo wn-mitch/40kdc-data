@@ -44,7 +44,7 @@ fn parse_extracts_faction_detachment_and_battle_size() {
         .parse(&fixture("gk-banishers.payload.json"))
         .unwrap();
     assert_eq!(parsed.faction_raw_name.as_deref(), Some("Grey Knights"));
-    assert_eq!(parsed.detachment_raw_name.as_deref(), Some("Banishers"));
+    assert_eq!(parsed.detachment_raw_names, vec!["Banishers".to_string()]);
     assert!(parsed
         .battle_size_raw
         .as_deref()
@@ -134,7 +134,14 @@ fn parsed_output_leaks_no_prose_field_names() {
 fn resolves_faction_detachment_and_battle_size() {
     let roster = import("gk-banishers.payload.json");
     assert_eq!(roster.faction_id.as_deref(), Some("grey-knights"));
-    assert_eq!(roster.detachment_id.as_deref(), Some("banishers"));
+    assert_eq!(
+        roster
+            .detachments
+            .iter()
+            .map(|d| d.ref_.id.as_deref())
+            .collect::<Vec<_>>(),
+        vec![Some("banishers")]
+    );
     assert_eq!(
         roster.battle_size,
         Some(wh40kdc::import::BattleSize::StrikeForce)

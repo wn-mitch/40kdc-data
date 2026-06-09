@@ -17,8 +17,8 @@ use crate::data::{normalize_name, Dataset};
 
 use super::types::{
     BattleSize, Candidate, Diagnostics, ParsedRoster, ParsedUnit, ResolvedRef, Roster,
-    RosterFormat, RosterLeaderAttachment, RosterPoints, RosterSource, RosterUnit, RosterWargear,
-    Warning, WarningCode,
+    RosterDetachment, RosterFormat, RosterLeaderAttachment, RosterPoints, RosterSource, RosterUnit,
+    RosterWargear, Warning, WarningCode,
 };
 
 /// The dataset edition/dataslate stamped onto an imported roster.
@@ -87,6 +87,25 @@ fn map_battle_size(raw: Option<&str>) -> Option<BattleSize> {
     }
 }
 
+/// 11e detachment-point budget for a battle size; `None` when unknown.
+fn detachment_cap_for(battle_size: Option<BattleSize>) -> Option<u64> {
+    match battle_size {
+        Some(BattleSize::StrikeForce) => Some(3),
+        Some(BattleSize::Incursion) => Some(2),
+        None => None,
+    }
+}
+
+/// The kebab-case battle-size label used in the over-cap diagnostic message
+/// (matches the serialized enum form, so the message is byte-identical to TS).
+fn battle_size_label(battle_size: Option<BattleSize>) -> &'static str {
+    match battle_size {
+        Some(BattleSize::StrikeForce) => "strike-force",
+        Some(BattleSize::Incursion) => "incursion",
+        None => "",
+    }
+}
+
 /// Resolve a [`ParsedRoster`] against the dataset.
 ///
 /// # Examples
@@ -127,27 +146,44 @@ pub fn resolve(parsed: &ParsedRoster, ds: &Dataset, format: RosterFormat) -> Ros
         }
     }
 
-    // --- Detachment (scoped to faction, then global fallback). --------------
-    let mut detachment_id: Option<String> = None;
-    if let Some(raw) = &parsed.detachment_raw_name {
-        let key = normalize_name(raw);
-        let scoped = faction_id.as_deref().and_then(|f| {
-            ds.detachments
-                .by_faction(f)
-                .into_iter()
-                .find(|d| normalize_name(&d.name) == key)
-        });
-        let hit = scoped.or_else(|| ds.detachments.find(raw));
-        if let Some(hit) = hit {
-            detachment_id = Some(hit.id.as_str().to_string());
-        } else {
-            diag.warn(
-                WarningCode::DetachmentUnresolved,
-                "Detachment name did not match any 40kdc detachment.",
-                Some(raw),
-            );
-        }
-    }
+    // --- Detachments (each scoped to faction, then global fallback). --------
+    // 11e lists may field several detachments under a detachment-point cap; the
+    // list preserves source order. `dp_cost` is looked up from the resolved
+    // detachment entity (no source format reports it).
+    let detachments: Vec<RosterDetachment> = parsed
+        .detachment_raw_names
+        .iter()
+        .map(|raw| {
+            let key = normalize_name(raw);
+            let scoped = faction_id.as_deref().and_then(|f| {
+                ds.detachments
+                    .by_faction(f)
+                    .into_iter()
+                    .find(|d| normalize_name(&d.name) == key)
+            });
+            let hit = scoped.or_else(|| ds.detachments.find(raw));
+            if let Some(hit) = hit {
+                RosterDetachment {
+                    ref_: resolved(hit.id.as_str(), raw),
+                    dp_cost: hit.detachment_points.map(|n| n.get()),
+                }
+            } else {
+                diag.warn(
+                    WarningCode::DetachmentUnresolved,
+                    "Detachment name did not match any 40kdc detachment.",
+                    Some(raw),
+                );
+                RosterDetachment {
+                    ref_: unresolved(raw, detachment_candidates(&ds.detachments.find_all(raw))),
+                    dp_cost: None,
+                }
+            }
+        })
+        .collect();
+    let detachment_ids: Vec<String> = detachments
+        .iter()
+        .filter_map(|d| d.ref_.id.clone())
+        .collect();
 
     // --- Battle size. -------------------------------------------------------
     let battle_size = map_battle_size(parsed.battle_size_raw.as_deref());
@@ -158,20 +194,30 @@ pub fn resolve(parsed: &ParsedRoster, ds: &Dataset, format: RosterFormat) -> Ros
             parsed.battle_size_raw.as_deref(),
         );
     }
+    let detachment_cap = detachment_cap_for(battle_size);
+
+    // --- Detachment-point cap check (only when cap and every cost are known). -
+    if let Some(cap) = detachment_cap {
+        if !detachments.is_empty() && detachments.iter().all(|d| d.dp_cost.is_some()) {
+            let spent: u64 = detachments.iter().map(|d| d.dp_cost.unwrap_or(0)).sum();
+            if spent > cap {
+                diag.warn(
+                    WarningCode::DetachmentPointsExceeded,
+                    &format!(
+                        "Detachments cost {spent} detachment points but the {} budget is {cap}.",
+                        battle_size_label(battle_size),
+                    ),
+                    None,
+                );
+            }
+        }
+    }
 
     // --- Units (and their enhancements / wargear). --------------------------
     let mut units: Vec<RosterUnit> = parsed
         .units
         .iter()
-        .map(|u| {
-            resolve_unit(
-                u,
-                faction_id.as_deref(),
-                detachment_id.as_deref(),
-                ds,
-                &mut diag,
-            )
-        })
+        .map(|u| resolve_unit(u, faction_id.as_deref(), &detachment_ids, ds, &mut diag))
         .collect();
 
     // --- Leader attachments (second pass: needs all resolved unit ids). -----
@@ -198,10 +244,11 @@ pub fn resolve(parsed: &ParsedRoster, ds: &Dataset, format: RosterFormat) -> Ros
             generated_by: parsed.generated_by.clone(),
         },
         faction_id,
-        detachment_id,
+        detachments,
         battle_size,
         points: RosterPoints {
             declared_limit: parsed.declared_limit,
+            detachment_cap,
             total_reported: parsed.total_reported,
             total_computed: parsed.total_computed,
         },
@@ -217,7 +264,7 @@ pub fn resolve(parsed: &ParsedRoster, ds: &Dataset, format: RosterFormat) -> Ros
 fn resolve_unit(
     parsed: &ParsedUnit,
     faction_id: Option<&str>,
-    detachment_id: Option<&str>,
+    detachment_ids: &[String],
     ds: &Dataset,
     diag: &mut DiagnosticsBuilder,
 ) -> RosterUnit {
@@ -250,7 +297,7 @@ fn resolve_unit(
     let enhancement = parsed
         .enhancement_raw_name
         .as_deref()
-        .map(|name| resolve_enhancement(name, detachment_id, ds, diag));
+        .map(|name| resolve_enhancement(name, detachment_ids, ds, diag));
     let enhancement_points = if enhancement.is_some() {
         parsed.enhancement_points
     } else {
@@ -297,18 +344,21 @@ fn resolve_unit(
 
 fn resolve_enhancement(
     raw_name: &str,
-    detachment_id: Option<&str>,
+    detachment_ids: &[String],
     ds: &Dataset,
     diag: &mut DiagnosticsBuilder,
 ) -> ResolvedRef {
     let key = normalize_name(raw_name);
-    // Enhancements belong to a detachment, not a faction — scope by detachment_id.
-    let scoped = detachment_id.and_then(|det| {
-        ds.enhancements
-            .all()
-            .iter()
-            .find(|e| e.detachment_id.as_str() == det && normalize_name(&e.name) == key)
-    });
+    // Enhancements belong to a detachment, not a faction — scope to any of the
+    // roster's resolved detachments.
+    let scoped = if detachment_ids.is_empty() {
+        None
+    } else {
+        ds.enhancements.all().iter().find(|e| {
+            detachment_ids.iter().any(|d| d == e.detachment_id.as_str())
+                && normalize_name(&e.name) == key
+        })
+    };
     let hit = scoped.or_else(|| ds.enhancements.find(raw_name));
     if let Some(hit) = hit {
         return resolved(hit.id.as_str(), raw_name);
@@ -414,6 +464,17 @@ fn weapon_candidates(records: &[&crate::Weapon]) -> Vec<Candidate> {
         .map(|w| Candidate {
             id: w.id.as_str().to_string(),
             name: w.name.to_string(),
+        })
+        .collect()
+}
+
+fn detachment_candidates(records: &[&crate::Detachment]) -> Vec<Candidate> {
+    records
+        .iter()
+        .take(MAX_CANDIDATES)
+        .map(|d| Candidate {
+            id: d.id.as_str().to_string(),
+            name: d.name.to_string(),
         })
         .collect()
 }

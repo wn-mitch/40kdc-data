@@ -64,7 +64,7 @@ describe("newRecruitWtcCompactAdapter", () => {
 
   it("extracts faction, detachment, and inferred battle size", () => {
     expect(parsed.faction_raw_name).toBe("Chaos Knights"); // last segment after " - "
-    expect(parsed.detachment_raw_name).toBe("Houndpack Lance"); // parenthetical stripped
+    expect(parsed.detachment_raw_names).toEqual(["Houndpack Lance"]); // parenthetical stripped
     expect(parsed.declared_limit).toBe(2000);
     expect(parsed.total_reported).toBe(2000);
     expect(parsed.battle_size_raw).toContain("Strike Force");

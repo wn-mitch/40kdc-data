@@ -20,10 +20,11 @@ describe("resolve (against embedded grey-knights data)", () => {
 
   it("resolves faction, detachment, and battle size", () => {
     expect(roster.faction_id).toBe("grey-knights");
-    expect(roster.detachment_id).toBe("banishers");
+    expect(roster.detachments.map((d) => d.ref.id)).toEqual(["banishers"]);
     expect(roster.battle_size).toBe("strike-force");
     expect(roster.points).toEqual({
       declared_limit: 2000,
+      detachment_cap: 3,
       total_reported: 585,
       total_computed: 585,
     });

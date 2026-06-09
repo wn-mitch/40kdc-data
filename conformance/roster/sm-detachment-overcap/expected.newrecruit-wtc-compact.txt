@@ -1,0 +1,14 @@
++++++++++++++++++++++++++++++++++++++++++++++++
++ LIST NAME: Over-Cap Detachment List
++ FACTION KEYWORD: Adeptus Astartes
++ DETACHMENT: Gladius Task Force, 1st Company Task Force
++ TOTAL ARMY POINTS: 365pts
++ POINTS LIMIT: 2000pts
++
++ WARLORD: —
++ ENHANCEMENT: —
++ NUMBER OF UNITS: 2
++++++++++++++++++++++++++++++++++++++++++++++++
+
+1x Gladiator Lancer (160 pts): 
+1x Redemptor Dreadnought (205 pts): 

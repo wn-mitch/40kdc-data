@@ -176,6 +176,23 @@ function configValue(
   return child ? selectionName(child) : null;
 }
 
+/**
+ * Every value selected under a named config — across repeated config nodes
+ * (one `Detachment` block per detachment) and multiple children of a single
+ * block. Source order is preserved. Used for multi-detachment 11e lists.
+ */
+function configValues(selections: RawSelection[], configName: string): string[] {
+  const out: string[] = [];
+  for (const node of selections) {
+    if (selectionName(node) !== configName) continue;
+    for (const child of childSelections(node)) {
+      const name = selectionName(child);
+      if (name) out.push(name);
+    }
+  }
+  return out;
+}
+
 function parseLimit(label: string | null): number | null {
   if (!label) return null;
   const match = POINTS_LIMIT.exec(label);
@@ -264,12 +281,12 @@ export const newRecruitJsonAdapter: FormatAdapter = {
 
     const forces = asArray(roster.forces) as RawSelection[];
 
-    let detachment_raw_name: string | null = null;
+    const detachment_raw_names: string[] = [];
     let battle_size_raw: string | null = null;
     const units: ParsedUnit[] = [];
     for (const force of forces) {
       const top = childSelections(force);
-      detachment_raw_name ??= configValue(top, "Detachment");
+      detachment_raw_names.push(...configValues(top, "Detachment"));
       battle_size_raw ??= configValue(top, "Battle Size");
       for (const sel of top) {
         if (isUnitSelection(sel)) units.push(parseUnit(sel));
@@ -297,7 +314,7 @@ export const newRecruitJsonAdapter: FormatAdapter = {
       name: asString(payload.name) ?? asString(roster.name) ?? "Imported roster",
       generated_by,
       faction_raw_name: primaryFaction,
-      detachment_raw_name,
+      detachment_raw_names,
       battle_size_raw,
       declared_limit: parseLimit(battle_size_raw),
       total_reported,

@@ -60,7 +60,7 @@ fn accepts_history_only_envelope() {
 fn parse_extracts_faction_detachment_and_battle_size() {
     let parsed = RosterizerAdapter.parse(&payload()).unwrap();
     assert_eq!(parsed.faction_raw_name.as_deref(), Some("Grey Knights"));
-    assert_eq!(parsed.detachment_raw_name.as_deref(), Some("Banishers"));
+    assert_eq!(parsed.detachment_raw_names, vec!["Banishers".to_string()]);
     assert!(parsed
         .battle_size_raw
         .as_deref()
@@ -156,7 +156,14 @@ fn resolves_faction_detachment_and_battle_size() {
         wh40kdc::import::RosterFormat::Rosterizer
     );
     assert_eq!(roster.faction_id.as_deref(), Some("grey-knights"));
-    assert_eq!(roster.detachment_id.as_deref(), Some("banishers"));
+    assert_eq!(
+        roster
+            .detachments
+            .iter()
+            .map(|d| d.ref_.id.as_deref())
+            .collect::<Vec<_>>(),
+        vec![Some("banishers")]
+    );
     assert_eq!(roster.battle_size, Some(BattleSize::StrikeForce));
     assert_eq!(roster.points.declared_limit, Some(2000));
     assert_eq!(roster.points.total_reported, Some(585));
@@ -238,7 +245,7 @@ fn round_trip_export_then_import_preserves_resolved_ids() {
         wh40kdc::import::RosterFormat::Rosterizer
     );
     assert_eq!(reparsed.faction_id, seed.faction_id);
-    assert_eq!(reparsed.detachment_id, seed.detachment_id);
+    assert_eq!(reparsed.detachments, seed.detachments);
     assert_eq!(reparsed.battle_size, seed.battle_size);
 
     let seed_ids: Vec<&str> = seed

@@ -7,7 +7,7 @@
  * Faction configs are registered via side-effect imports from ./converters/configs/.
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { nameToId, parseStratagemType, parsePlayerTurn, mapPhases } from "./converters/id-generator.js";
@@ -433,6 +433,20 @@ export function convertFaction(
     factionStratagems = factionStratagems.filter((s) => allowedDetachments.has(s.detachment));
   }
 
+  // `detachment_points` (11e DP cost) and `force_dispositions` are maintained
+  // by hand — army-assist doesn't carry them — so a re-run must NOT drop them.
+  // Carry both forward by id from the existing on-disk file.
+  const existingDetPath = resolve(ROOT, `data/core/${factionId}/detachments.json`);
+  const preservedById = new Map<string, Record<string, unknown>>();
+  if (existsSync(existingDetPath)) {
+    const existing = JSON.parse(readFileSync(existingDetPath, "utf-8")) as Array<
+      Record<string, unknown>
+    >;
+    for (const d of existing) {
+      if (typeof d.id === "string") preservedById.set(d.id, d);
+    }
+  }
+
   const detachments = detachmentNames.map((detName) => {
     const detId = nameToId(detName);
     const detEnhIds = factionEnhancements
@@ -442,7 +456,7 @@ export function convertFaction(
       .filter((s) => s.detachment === detName)
       .map((s) => nameToId(s.name));
 
-    return {
+    const record: Record<string, unknown> = {
       id: detId,
       name: detName,
       faction_id: factionId,
@@ -451,6 +465,14 @@ export function convertFaction(
       stratagem_ids: detStratIds,
       game_version: GAME_VERSION,
     };
+    const preserved = preservedById.get(detId);
+    if (preserved && "detachment_points" in preserved) {
+      record.detachment_points = preserved.detachment_points;
+    }
+    if (preserved && "force_dispositions" in preserved) {
+      record.force_dispositions = preserved.force_dispositions;
+    }
+    return record;
   });
 
   // ─── Build enhancements ───

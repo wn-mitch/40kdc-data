@@ -244,7 +244,7 @@ def _parse(decoded: Any) -> dict[str, Any]:
         "name": name,
         "generated_by": None,
         "faction_raw_name": faction_raw_name,
-        "detachment_raw_name": detachment_raw_name,
+        "detachment_raw_names": [detachment_raw_name] if detachment_raw_name else [],
         "battle_size_raw": battle_size_raw,
         "declared_limit": declared_limit,
         "total_reported": total_reported,

@@ -24,6 +24,7 @@ import type {
   ParsedUnit,
   ResolvedRef,
   Roster,
+  RosterDetachment,
   RosterFormat,
   RosterUnit,
   Warning,
@@ -84,6 +85,18 @@ function mapBattleSize(raw: string | null): BattleSize | null {
   return null;
 }
 
+/** 11e detachment-point budget for a battle size; null when the size is unknown. */
+function detachmentCap(battle_size: BattleSize | null): number | null {
+  switch (battle_size) {
+    case "strike-force":
+      return 3;
+    case "incursion":
+      return 2;
+    default:
+      return null;
+  }
+}
+
 export function resolve(
   parsed: ParsedRoster,
   ds: Dataset,
@@ -109,29 +122,47 @@ export function resolve(
     }
   }
 
-  // --- Detachment (scoped to faction, then global fallback). ----------------
-  let detachment_id: string | null = null;
-  if (parsed.detachment_raw_name) {
-    const key = normalizeName(parsed.detachment_raw_name);
+  // --- Detachments (each scoped to faction, then global fallback). ----------
+  // 11e lists may field several detachments under a detachment-point cap; the
+  // list preserves source order. `dp_cost` is looked up from the resolved
+  // detachment entity (no source format reports it).
+  const detachments: RosterDetachment[] = parsed.detachment_raw_names.map((raw_name) => {
+    const key = normalizeName(raw_name);
     const scoped = faction_id
       ? ds.detachments.byFaction(faction_id).find((d) => normalizeName(d.name ?? "") === key)
       : undefined;
-    const hit = scoped ?? ds.detachments.find(parsed.detachment_raw_name);
+    const hit = scoped ?? ds.detachments.find(raw_name);
     if (hit) {
-      detachment_id = hit.id;
-    } else {
-      diag.warn("detachment-unresolved", "Detachment name did not match any 40kdc detachment.", parsed.detachment_raw_name);
+      return { ref: resolved(hit.id, raw_name), dp_cost: hit.detachment_points ?? null };
     }
-  }
+    diag.warn("detachment-unresolved", "Detachment name did not match any 40kdc detachment.", raw_name);
+    return {
+      ref: unresolved(raw_name, toCandidates(ds.detachments.findAll(raw_name) as NamedRecord[])),
+      dp_cost: null,
+    };
+  });
+  const detachmentIds = detachments.map((d) => d.ref.id).filter((id): id is string => id !== null);
 
   // --- Battle size. ---------------------------------------------------------
   const battle_size = mapBattleSize(parsed.battle_size_raw);
   if (parsed.battle_size_raw && battle_size === null) {
     diag.warn("battle-size-unmapped", "Battle size label could not be mapped.", parsed.battle_size_raw);
   }
+  const detachment_cap = detachmentCap(battle_size);
+
+  // --- Detachment-point cap check (only when cap and every cost are known). --
+  if (detachment_cap !== null && detachments.length > 0 && detachments.every((d) => d.dp_cost !== null)) {
+    const spent = detachments.reduce((sum, d) => sum + (d.dp_cost ?? 0), 0);
+    if (spent > detachment_cap) {
+      diag.warn(
+        "detachment-points-exceeded",
+        `Detachments cost ${spent} detachment points but the ${battle_size} budget is ${detachment_cap}.`,
+      );
+    }
+  }
 
   // --- Units (and their enhancements / wargear). ----------------------------
-  const units = parsed.units.map((u) => resolveUnit(u, faction_id, detachment_id, ds, diag));
+  const units = parsed.units.map((u) => resolveUnit(u, faction_id, detachmentIds, ds, diag));
 
   // --- Leader attachments (second pass: needs all resolved unit ids). -------
   inferLeaderAttachments(parsed.units, units, ds, diag);
@@ -148,10 +179,11 @@ export function resolve(
     name: parsed.name,
     source: { format, generated_by: parsed.generated_by },
     faction_id,
-    detachment_id,
+    detachments,
     battle_size,
     points: {
       declared_limit: parsed.declared_limit,
+      detachment_cap,
       total_reported: parsed.total_reported,
       total_computed: parsed.total_computed,
     },
@@ -164,7 +196,7 @@ export function resolve(
 function resolveUnit(
   parsed: ParsedUnit,
   faction_id: string | null,
-  detachment_id: string | null,
+  detachmentIds: string[],
   ds: Dataset,
   diag: DiagnosticsBuilder,
 ): RosterUnit {
@@ -188,7 +220,7 @@ function resolveUnit(
   }
 
   const enhancement = parsed.enhancement_raw_name
-    ? resolveEnhancement(parsed.enhancement_raw_name, detachment_id, ds, diag)
+    ? resolveEnhancement(parsed.enhancement_raw_name, detachmentIds, ds, diag)
     : null;
   const enhancement_points = enhancement === null ? null : parsed.enhancement_points;
 
@@ -217,15 +249,22 @@ function resolveUnit(
 
 function resolveEnhancement(
   raw_name: string,
-  detachment_id: string | null,
+  detachmentIds: string[],
   ds: Dataset,
   diag: DiagnosticsBuilder,
 ): ResolvedRef {
   const key = normalizeName(raw_name);
-  // Enhancements belong to a detachment, not a faction — scope by detachment_id.
-  const scoped = detachment_id
-    ? ds.enhancements.all.find((e) => e.detachment_id === detachment_id && normalizeName(e.name ?? "") === key)
-    : undefined;
+  // Enhancements belong to a detachment, not a faction — scope to any of the
+  // roster's resolved detachments.
+  const scoped =
+    detachmentIds.length > 0
+      ? ds.enhancements.all.find(
+          (e) =>
+            e.detachment_id != null &&
+            detachmentIds.includes(e.detachment_id) &&
+            normalizeName(e.name ?? "") === key,
+        )
+      : undefined;
   const hit = scoped ?? ds.enhancements.find(raw_name);
   if (hit) {
     return resolved(hit.id, raw_name);

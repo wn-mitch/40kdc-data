@@ -39,12 +39,10 @@
       ],
       "description": "Resolved primary faction; null when the source faction could not be matched."
     },
-    "detachment_id": {
-      "oneOf": [
-        { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
-        { "type": "null" }
-      ],
-      "description": "Resolved detachment; null when absent or unmatched."
+    "detachments": {
+      "type": "array",
+      "description": "Resolved detachments. 11e lists may field several detachments under a detachment-point cap; pre-11e lists carry zero or one. Order is load-bearing (source/parse order). Empty when the source declared no detachment.",
+      "items": { "$ref": "#/$defs/roster-detachment" }
     },
     "battle_size": {
       "oneOf": [
@@ -61,6 +59,10 @@
           "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }],
           "description": "Points ceiling parsed from the battle size (e.g. 2000), if known."
         },
+        "detachment_cap": {
+          "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }],
+          "description": "11e detachment-point budget derived from the battle size (strike-force 3, incursion 2); null when the battle size is unknown. The sum of each detachment's `dp_cost` is meant to fit within this cap."
+        },
         "total_reported": {
           "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }],
           "description": "Total points as reported by the source roster's cost block."
@@ -71,7 +73,7 @@
           "description": "Sum of this roster's per-unit point values."
         }
       },
-      "required": ["declared_limit", "total_reported", "total_computed"],
+      "required": ["declared_limit", "detachment_cap", "total_reported", "total_computed"],
       "additionalProperties": false
     },
     "units": {
@@ -81,7 +83,7 @@
     "game_version": { "$ref": "../defs/game-version-ref.schema.json" },
     "diagnostics": { "$ref": "#/$defs/roster-diagnostics" }
   },
-  "required": ["name", "source", "faction_id", "detachment_id", "battle_size", "points", "units", "game_version", "diagnostics"],
+  "required": ["name", "source", "faction_id", "detachments", "battle_size", "points", "units", "game_version", "diagnostics"],
   "additionalProperties": false,
   "$defs": {
     "roster-resolved-ref": {
@@ -120,6 +122,19 @@
         }
       },
       "required": ["id", "raw_name", "resolved", "candidates"],
+      "additionalProperties": false
+    },
+    "roster-detachment": {
+      "type": "object",
+      "description": "One detachment selected on the roster, paired with its resolved detachment-point cost.",
+      "properties": {
+        "ref": { "$ref": "#/$defs/roster-resolved-ref" },
+        "dp_cost": {
+          "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }],
+          "description": "Detachment-point cost (1–3) looked up from the resolved detachment entity's `detachment_points`. Null when the detachment is unresolved or the entity records no cost."
+        }
+      },
+      "required": ["ref", "dp_cost"],
       "additionalProperties": false
     },
     "roster-unit": {
@@ -193,6 +208,7 @@
                   "weapon-unresolved",
                   "enhancement-unresolved",
                   "detachment-unresolved",
+                  "detachment-points-exceeded",
                   "battle-size-unmapped",
                   "points-mismatch",
                   "leader-attachment-inferred",

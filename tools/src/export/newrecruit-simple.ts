@@ -78,7 +78,7 @@ export const newRecruitSimpleSerializer: RosterSerializer = {
 
   serialize(roster: Roster): string {
     const faction = titleCaseId(roster.faction_id) ?? "Unknown";
-    const detachment = titleCaseId(roster.detachment_id);
+    const detachments = roster.detachments.map((d) => titleCaseId(d.ref.id) ?? d.ref.raw_name);
     const battle = battleSizeLabel(roster);
     const total = totalArmyPoints(roster);
 
@@ -92,7 +92,7 @@ export const newRecruitSimpleSerializer: RosterSerializer = {
     lines.push(`# ++ Army Roster ++ [${total} pts]`);
     lines.push("## Configuration");
     if (battle) lines.push(`Battle Size: ${battle}`);
-    if (detachment) lines.push(`Detachment: ${detachment}`);
+    for (const detachment of detachments) lines.push(`Detachment: ${detachment}`);
     lines.push("");
 
     // The Roster doesn't tag allied vs. battleline per unit; emit one section.

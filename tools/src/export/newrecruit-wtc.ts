@@ -36,7 +36,9 @@ function wargearListText(unit: RosterUnit, includeWarlordTag: boolean): string {
 
 function header(roster: Roster, units: readonly RosterUnit[], charSlots: readonly (number | null)[]): string {
   const faction = titleCaseId(roster.faction_id) ?? "Unknown";
-  const detachment = titleCaseId(roster.detachment_id);
+  const detachment = roster.detachments.length
+    ? roster.detachments.map((d) => titleCaseId(d.ref.id) ?? d.ref.raw_name).join(", ")
+    : null;
   const limit = roster.points.declared_limit ?? totalArmyPoints(roster);
   const total = roster.points.total_reported ?? totalArmyPoints(roster);
 

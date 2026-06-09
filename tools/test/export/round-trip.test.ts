@@ -30,7 +30,7 @@ function stable(r: Roster) {
   return {
     name: r.name,
     faction_id: r.faction_id,
-    detachment_id: r.detachment_id,
+    detachments: r.detachments,
     battle_size: r.battle_size,
     points: r.points,
     units: r.units,

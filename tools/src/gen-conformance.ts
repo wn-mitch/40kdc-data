@@ -128,6 +128,15 @@ function decodeCanonicalSeed(caseDir: string): unknown {
   if (existsSync(lfTextSeed)) {
     return readFileSync(lfTextSeed, "utf8");
   }
+  // A hand-authored canonical Roster (roster-json) — the lossless carrier used
+  // for cases that no upstream format can yet express, e.g. multi-detachment
+  // 11e lists. Like the legacy seeds it is import-only (no derived round-trip
+  // inputs are generated), since the text/header exporters print every
+  // detachment but their importers read only one.
+  const rosterJsonSeed = join(caseDir, "input.roster-json.json");
+  if (existsSync(rosterJsonSeed)) {
+    return JSON.parse(readFileSync(rosterJsonSeed, "utf8"));
+  }
   throw new Error(`no canonical input found in ${caseDir}`);
 }
 
@@ -190,10 +199,15 @@ function genRosters(): void {
     // exporters can't fully preserve, so the round-trip would fail
     // structurally rather than uncover a parser bug.
     const isNewRecruitSeed = existsSync(join(caseDir, "input.newrecruit-json.json"));
+    // The header text formats (wtc-compact/full, simple) print every detachment
+    // but their parsers read only one, so a multi-detachment roster can't
+    // round-trip through them — emit the export golden but not the derived
+    // round-trip input (the same reasoning as the legacy-ListForge skip).
+    const textRoundTrippable = isNewRecruitSeed && seed.detachments.length <= 1;
     for (const { format, inputName, goldenName } of TEXT_FORMATS) {
       const out = exportRoster(seed, format);
       writeText(join(caseDir, goldenName), out);
-      if (isNewRecruitSeed) {
+      if (textRoundTrippable) {
         writeText(join(caseDir, inputName), out);
       }
     }
