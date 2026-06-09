@@ -416,7 +416,7 @@ function parseWith(text: string, format: "wtc-compact" | "wtc-full"): ParsedRost
     name: header.name,
     generated_by: null,
     faction_raw_name: header.faction_raw_name,
-    detachment_raw_name: header.detachment_raw_name,
+    detachment_raw_names: header.detachment_raw_name ? [header.detachment_raw_name] : [],
     battle_size_raw: header.battle_size_raw,
     declared_limit: header.declared_limit,
     total_reported: header.total_reported,

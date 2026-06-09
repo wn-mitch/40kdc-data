@@ -1,0 +1,36 @@
+{
+  "name": "Dual Detachment Strike Force",
+  "generated_by": "https://newrecruit.eu",
+  "faction_raw_name": "Adeptus Astartes",
+  "detachment_raw_names": [
+    "1st Company Task Force",
+    "Librarius Conclave"
+  ],
+  "battle_size_raw": "Strike Force (2000 Point limit)",
+  "declared_limit": 2000,
+  "total_reported": 310,
+  "total_computed": 310,
+  "units": [
+    {
+      "raw_name": "Gladiator Lancer",
+      "is_character": false,
+      "model_count": 1,
+      "points": 160,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": []
+    },
+    {
+      "raw_name": "Ballistus Dreadnought",
+      "is_character": false,
+      "model_count": 1,
+      "points": 150,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": []
+    }
+  ],
+  "multi_force": false
+}

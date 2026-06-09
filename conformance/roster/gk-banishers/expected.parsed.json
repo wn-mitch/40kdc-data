@@ -2,7 +2,9 @@
   "name": "Banishers Test List",
   "generated_by": "List Forge",
   "faction_raw_name": "Grey Knights",
-  "detachment_raw_name": "Banishers",
+  "detachment_raw_names": [
+    "Banishers"
+  ],
   "battle_size_raw": "2. Strike Force (2000 Point limit)",
   "declared_limit": 2000,
   "total_reported": 585,

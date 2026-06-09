@@ -1,0 +1,11 @@
+Adeptus Astartes - Dual Detachment Strike Force - [2000 pts]
+
+# ++ Army Roster ++ [310 pts]
+## Configuration
+Battle Size: Strike Force (2000 Point limit)
+Detachment: 1st Company Task Force
+Detachment: Librarius Conclave
+
+## Battleline [310 pts]
+Gladiator Lancer [160 pts]: 
+Ballistus Dreadnought [150 pts]: 

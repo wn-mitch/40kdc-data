@@ -44,9 +44,9 @@ function rosterOf(units: RosterUnit[]): Roster {
     name: "Test Roster",
     source: { format: "listforge", generated_by: null },
     faction_id: "adepta-sororitas",
-    detachment_id: null,
+    detachments: [],
     battle_size: null,
-    points: { declared_limit: null, total_reported: null, total_computed: 0 },
+    points: { declared_limit: null, detachment_cap: null, total_reported: null, total_computed: 0 },
     units,
     game_version: { edition: "11th", dataslate: "pre-launch-provisional" },
     diagnostics: {

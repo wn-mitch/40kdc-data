@@ -34,6 +34,12 @@ export const BATTLE_SIZE_LIMITS = {
 } as const;
 export type BattleSize = keyof typeof BATTLE_SIZE_LIMITS;
 
+/** 11e detachment-point budgets per battle size. */
+export const DETACHMENT_POINT_CAPS = {
+	incursion: 2,
+	'strike-force': 3,
+} as const;
+
 /** One unit in the working draft. `loadout` is weapon/wargear id → count. */
 export interface BuilderUnit {
 	/** Stable per-row key (units of the same datasheet can repeat). */
@@ -48,7 +54,8 @@ export interface BuilderUnit {
 export interface BuilderState {
 	name: string;
 	factionId: string | null;
-	detachmentId: string | null;
+	/** Selected detachments (11e lists may field several under a DP cap). */
+	detachmentIds: string[];
 	battleSize: BattleSize;
 	disposition: string | null;
 	units: BuilderUnit[];
@@ -58,7 +65,7 @@ export function emptyBuilderState(): BuilderState {
 	return {
 		name: '',
 		factionId: null,
-		detachmentId: null,
+		detachmentIds: [],
 		battleSize: 'strike-force',
 		disposition: null,
 		units: [],
@@ -86,34 +93,55 @@ export function detachmentsForFaction(factionId: string | null): Detachment[] {
 	return ds.detachments.byFaction(factionId).slice().sort((a, b) => a.name.localeCompare(b.name));
 }
 
+/** DP cost of a detachment (1–3), or 0 when the entity records none. */
+export function detachmentPointCost(detachmentId: string): number {
+	return ds.detachments.get(detachmentId)?.detachment_points ?? 0;
+}
+
+/** Total DP spent by the selected detachments. */
+export function totalDetachmentPoints(state: BuilderState): number {
+	return state.detachmentIds.reduce((sum, id) => sum + detachmentPointCost(id), 0);
+}
+
+/** The 11e detachment-point budget for the draft's battle size. */
+export function detachmentPointCap(state: BuilderState): number {
+	return DETACHMENT_POINT_CAPS[state.battleSize];
+}
+
 /**
- * Enhancements legal for `unit` under the chosen detachment: scoped to the
- * detachment, then filtered by the enhancement's keyword restrictions /
- * exclusions against the unit's keywords. Characters only.
+ * Enhancements legal for `unit` under any selected detachment: scoped to the
+ * detachments, then filtered by the enhancement's keyword restrictions /
+ * exclusions against the unit's keywords. Characters only. Deduped by id,
+ * preserving detachment order.
  */
 export function eligibleEnhancements(
-	detachmentId: string | null,
+	detachmentIds: string[],
 	unit: Unit | undefined,
 ): Enhancement[] {
-	if (!detachmentId || !unit) return [];
+	if (detachmentIds.length === 0 || !unit) return [];
 	const isCharacter = (unit.keywords ?? []).some((k) => k.toLowerCase() === 'character');
 	if (!isCharacter) return [];
-	const det = ds.detachments.get(detachmentId);
-	if (!det) return [];
 	const unitKeywords = new Set((unit.keywords ?? []).map((k) => k.toLowerCase()));
-	return (det.enhancement_ids ?? [])
-		.map((id) => ds.enhancements.get(id))
-		.filter((e): e is Enhancement => !!e)
-		.filter((e) => {
+	const seen = new Set<string>();
+	const out: Enhancement[] = [];
+	for (const detachmentId of detachmentIds) {
+		const det = ds.detachments.get(detachmentId);
+		if (!det) continue;
+		for (const id of det.enhancement_ids ?? []) {
+			if (seen.has(id)) continue;
+			const e = ds.enhancements.get(id);
+			if (!e) continue;
 			const restrict = e.keyword_restrictions ?? [];
 			if (restrict.length > 0 && !restrict.some((k) => unitKeywords.has(k.toLowerCase()))) {
-				return false;
+				continue;
 			}
 			const exclude = e.exclusion_keywords ?? [];
-			if (exclude.some((k) => unitKeywords.has(k.toLowerCase()))) return false;
-			return true;
-		})
-		.sort((a, b) => a.name.localeCompare(b.name));
+			if (exclude.some((k) => unitKeywords.has(k.toLowerCase()))) continue;
+			seen.add(id);
+			out.push(e);
+		}
+	}
+	return out.sort((a, b) => a.name.localeCompare(b.name));
 }
 
 // ── Grouping & display (NR-style roster/picker) ───────────────────────────────
@@ -431,6 +459,11 @@ export function builderViolations(state: BuilderState): BuilderViolation[] {
 	if (total > limit) {
 		out.push({ unitKey: null, message: `${total} pts over the ${limit} pt limit` });
 	}
+	const dp = totalDetachmentPoints(state);
+	const dpCap = detachmentPointCap(state);
+	if (dp > dpCap) {
+		out.push({ unitKey: null, message: `${dp} DP over the ${dpCap} DP budget` });
+	}
 	for (const bu of state.units) {
 		const unit = unitRaw(bu.datasheetId);
 		if (!unit) {
@@ -474,9 +507,10 @@ export function builderToRoster(state: BuilderState): Roster {
 	const factionName = state.factionId
 		? (ds.factions.get(state.factionId)?.name ?? state.factionId)
 		: null;
-	const detachmentName = state.detachmentId
-		? (ds.detachments.get(state.detachmentId)?.name ?? state.detachmentId)
-		: null;
+	const detachments = state.detachmentIds.map((id) => {
+		const det = ds.detachments.get(id);
+		return { ref: ref(id, det?.name ?? id), dp_cost: det?.detachment_points ?? null };
+	});
 
 	const units = state.units.map((bu) => {
 		const unit = unitRaw(bu.datasheetId);
@@ -505,9 +539,14 @@ export function builderToRoster(state: BuilderState): Roster {
 		name: state.name || 'Untitled',
 		source: { format: 'roster-json', generated_by: 'Shadowboxing builder' },
 		faction_id: factionName,
-		detachment_id: detachmentName,
+		detachments,
 		battle_size: state.battleSize,
-		points: { declared_limit: pointsLimit(state), total_reported: total, total_computed: total },
+		points: {
+			declared_limit: pointsLimit(state),
+			detachment_cap: detachmentPointCap(state),
+			total_reported: total,
+			total_computed: total,
+		},
 		units,
 		game_version: { edition: '11th', dataslate: 'pre-launch-provisional' },
 		diagnostics: {
@@ -568,7 +607,7 @@ export function rosterTextToBuilderState(
 	return {
 		name,
 		factionId: roster.faction_id,
-		detachmentId: roster.detachment_id,
+		detachmentIds: roster.detachments.flatMap((d) => (d.ref.id ? [d.ref.id] : [])),
 		battleSize,
 		disposition,
 		units,

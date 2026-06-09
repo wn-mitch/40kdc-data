@@ -117,7 +117,6 @@ impl RosterSerializer for NewRecruitSimpleSerializer {
     fn serialize(&self, roster: &Roster) -> String {
         let faction =
             title_case_id(roster.faction_id.as_deref()).unwrap_or_else(|| "Unknown".to_string());
-        let detachment = title_case_id(roster.detachment_id.as_deref());
         let battle = battle_size_label(roster);
         let total = total_army_points(roster);
         let limit = roster.points.declared_limit.unwrap_or(total);
@@ -130,8 +129,10 @@ impl RosterSerializer for NewRecruitSimpleSerializer {
         if let Some(b) = battle {
             lines.push(format!("Battle Size: {b}"));
         }
-        if let Some(d) = detachment {
-            lines.push(format!("Detachment: {d}"));
+        for d in &roster.detachments {
+            let display =
+                title_case_id(d.ref_.id.as_deref()).unwrap_or_else(|| d.ref_.raw_name.clone());
+            lines.push(format!("Detachment: {display}"));
         }
         lines.push(String::new());
 

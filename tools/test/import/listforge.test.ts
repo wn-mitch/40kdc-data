@@ -18,7 +18,7 @@ describe("listForgeAdapter.parse", () => {
 
   it("extracts faction, detachment, and battle size", () => {
     expect(parsed.faction_raw_name).toBe("Grey Knights");
-    expect(parsed.detachment_raw_name).toBe("Banishers");
+    expect(parsed.detachment_raw_names).toEqual(["Banishers"]);
     expect(parsed.battle_size_raw).toContain("Strike Force");
     expect(parsed.declared_limit).toBe(2000);
   });

@@ -56,7 +56,7 @@ describe("rosterizerAdapter.parse", () => {
 
   it("extracts faction, detachment, and battle size from Classification§Designation children", () => {
     expect(parsed.faction_raw_name).toBe("Grey Knights");
-    expect(parsed.detachment_raw_name).toBe("Banishers");
+    expect(parsed.detachment_raw_names).toEqual(["Banishers"]);
     expect(parsed.battle_size_raw).toContain("Strike Force");
     expect(parsed.declared_limit).toBe(2000);
   });
@@ -123,7 +123,7 @@ describe("rosterizer resolution against the embedded dataset", () => {
 
   it("resolves faction and detachment", () => {
     expect(roster.faction_id).toBe("grey-knights");
-    expect(roster.detachment_id).toBe("banishers");
+    expect(roster.detachments.map((d) => d.ref.id)).toEqual(["banishers"]);
     expect(roster.battle_size).toBe("strike-force");
   });
 

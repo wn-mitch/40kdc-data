@@ -173,6 +173,20 @@ def config_value(selections: list[Any], config_name: str) -> str | None:
     return None
 
 
+def config_values(selections: list[Any], config_name: str) -> list[str]:
+    """Every value under a named config, across repeated blocks and multiple
+    children, in source order. Used for multi-detachment 11e lists."""
+    out: list[str] = []
+    for s in selections:
+        if selection_name(s) != config_name:
+            continue
+        for child in child_selections(s):
+            name = selection_name(child)
+            if name:
+                out.append(name)
+    return out
+
+
 def parse_limit(label: str | None) -> int | None:
     if not label:
         return None

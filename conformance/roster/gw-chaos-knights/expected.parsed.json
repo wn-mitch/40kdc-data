@@ -2,7 +2,9 @@
   "name": "Imported roster",
   "generated_by": null,
   "faction_raw_name": "Chaos Knights",
-  "detachment_raw_name": "Houndpack Lance",
+  "detachment_raw_names": [
+    "Houndpack Lance"
+  ],
   "battle_size_raw": "Strike Force (2000 Point limit)",
   "declared_limit": 2000,
   "total_reported": 2000,

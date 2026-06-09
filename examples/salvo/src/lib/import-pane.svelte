@@ -24,7 +24,7 @@
       if (firstResolved) {
         salvo.selectedUnitId = firstResolved.ref.id;
         salvo.selectedFactionId = roster.faction_id;
-        salvo.selectedDetachmentId = roster.detachment_id;
+        salvo.selectedDetachmentId = roster.detachments[0]?.ref.id ?? null;
       }
     }
   }

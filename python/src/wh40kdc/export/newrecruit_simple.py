@@ -81,7 +81,9 @@ def serialize_newrecruit_simple(roster: Roster) -> str:
     faction = title_case_id(roster.get("faction_id"))
     if faction is None:
         faction = "Unknown"
-    detachment = title_case_id(roster.get("detachment_id"))
+    detachments = [
+        title_case_id(d["ref"]["id"]) or d["ref"]["raw_name"] for d in roster["detachments"]
+    ]
     battle = _battle_size_label(roster)
     total = total_army_points(roster)
 
@@ -98,7 +100,7 @@ def serialize_newrecruit_simple(roster: Roster) -> str:
     lines.append("## Configuration")
     if battle:
         lines.append(f"Battle Size: {battle}")
-    if detachment:
+    for detachment in detachments:
         lines.append(f"Detachment: {detachment}")
     lines.append("")
 

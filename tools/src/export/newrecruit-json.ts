@@ -169,12 +169,14 @@ export const newRecruitJsonSerializer: RosterSerializer = {
   serialize(roster: Roster): string {
     const faction = factionCategory(roster);
     const factionDisplay = titleCaseId(roster.faction_id) ?? "Unknown";
-    const detachmentDisplay = titleCaseId(roster.detachment_id);
     const battleSize = battleSizeLabel(roster);
 
     const config: JsonSelection[] = [];
     if (battleSize) config.push(configSelection("Battle Size", battleSize, "battle-size"));
-    if (detachmentDisplay) config.push(configSelection("Detachment", detachmentDisplay, "detachment"));
+    for (const d of roster.detachments) {
+      const display = titleCaseId(d.ref.id) ?? d.ref.raw_name;
+      config.push(configSelection("Detachment", display, "detachment"));
+    }
 
     const force: JsonForce = {
       id: "force-1",

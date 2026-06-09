@@ -96,7 +96,7 @@ describe('builder enhancements', () => {
 			(u) => !(u.keywords ?? []).some((k) => k.toLowerCase() === 'character'),
 		);
 		if (squad) {
-			expect(eligibleEnhancements(det.id, squad)).toHaveLength(0);
+			expect(eligibleEnhancements([det.id], squad)).toHaveLength(0);
 		}
 	});
 });

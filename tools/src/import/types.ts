@@ -27,6 +27,7 @@ export type WarningCode =
   | "weapon-unresolved"
   | "enhancement-unresolved"
   | "detachment-unresolved"
+  | "detachment-points-exceeded"
   | "battle-size-unmapped"
   | "points-mismatch"
   | "leader-attachment-inferred"
@@ -62,6 +63,13 @@ export interface ResolvedRef {
 export interface RosterWargear {
   ref: ResolvedRef;
   count: number;
+}
+
+/** One detachment on the roster, paired with its resolved DP cost. */
+export interface RosterDetachment {
+  ref: ResolvedRef;
+  /** DP cost (1–3) from the resolved detachment entity; null when unresolved or unrecorded. */
+  dp_cost: number | null;
 }
 
 /** An inferred, always-provisional leader→bodyguard attachment. */
@@ -106,6 +114,8 @@ export interface RosterSource {
 /** Point totals; reported and computed are kept distinct, never reconciled. */
 export interface RosterPoints {
   declared_limit: number | null;
+  /** 11e detachment-point budget from the battle size (strike-force 3, incursion 2); null when unknown. */
+  detachment_cap: number | null;
   total_reported: number | null;
   total_computed: number;
 }
@@ -137,7 +147,7 @@ export interface Roster {
   name: string;
   source: RosterSource;
   faction_id: string | null;
-  detachment_id: string | null;
+  detachments: RosterDetachment[];
   battle_size: BattleSize | null;
   points: RosterPoints;
   units: RosterUnit[];
@@ -180,8 +190,11 @@ export interface ParsedRoster {
   generated_by: string | null;
   /** Raw faction name from the source (e.g. "Grey Knights"). */
   faction_raw_name: string | null;
-  /** Raw detachment name (e.g. "Banishers"). */
-  detachment_raw_name: string | null;
+  /**
+   * Raw detachment names in source order (e.g. ["Gladius Task Force"]). 11e lists may
+   * carry several; most formats and pre-11e lists carry zero or one.
+   */
+  detachment_raw_names: string[];
   /** Raw battle-size label (e.g. "2. Strike Force (2000 Point limit)"). */
   battle_size_raw: string | null;
   /** Points limit parsed from the battle-size label, if any. */

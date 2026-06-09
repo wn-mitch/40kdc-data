@@ -5,10 +5,21 @@
     "generated_by": "List Forge"
   },
   "faction_id": "chaos-daemons",
-  "detachment_id": "daemonic-incursion",
+  "detachments": [
+    {
+      "ref": {
+        "id": "daemonic-incursion",
+        "raw_name": "Daemonic Incursion",
+        "resolved": true,
+        "candidates": []
+      },
+      "dp_cost": null
+    }
+  ],
   "battle_size": "strike-force",
   "points": {
     "declared_limit": 1995,
+    "detachment_cap": 3,
     "total_reported": 1995,
     "total_computed": 795
   },

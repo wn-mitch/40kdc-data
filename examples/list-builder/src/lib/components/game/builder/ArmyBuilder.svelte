@@ -3,6 +3,9 @@ import { ds } from '$lib/data/dataset';
 import {
 	emptyBuilderState,
 	detachmentsForFaction,
+	detachmentPointCost,
+	totalDetachmentPoints,
+	detachmentPointCap,
 	defaultLoadout,
 	totalPoints,
 	pointsLimit,
@@ -54,8 +57,10 @@ const dispositions = $derived(ds.forceDispositions.all);
 
 // Disposition as the locked spine: a detachment that grants dispositions
 // constrains the choice to that set (empty upstream today → manual fallback).
-const detachment = $derived(draft.detachmentId ? ds.detachments.get(draft.detachmentId) : undefined);
-const forcedDispositions = $derived(detachment?.force_dispositions ?? []);
+// With several detachments the constraint is the union of what they grant.
+const forcedDispositions = $derived(
+	[...new Set(draft.detachmentIds.flatMap((id) => ds.detachments.get(id)?.force_dispositions ?? []))],
+);
 $effect(() => {
 	if (
 		forcedDispositions.length > 0 &&
@@ -71,6 +76,9 @@ function dispositionName(id: string | null): string {
 const total = $derived(totalPoints(draft));
 const limit = $derived(pointsLimit(draft));
 const overLimit = $derived(total > limit);
+const dpSpent = $derived(totalDetachmentPoints(draft));
+const dpCap = $derived(detachmentPointCap(draft));
+const overDp = $derived(dpSpent > dpCap);
 const armyIssues = $derived(builderViolations(draft).filter((v) => v.unitKey === null));
 const draftGroups = $derived(groupDraftByRole(draft));
 const selected = $derived(draft.units.find((u) => u.key === selectedKey) ?? null);
@@ -84,8 +92,25 @@ function setFaction(id: string) {
 	// factions. The detachment is faction-scoped, so it (and any
 	// detachment-scoped enhancements) reset; selections otherwise stay.
 	draft.factionId = id || null;
-	draft.detachmentId = null;
+	draft.detachmentIds = [];
 	draft.units = draft.units.map((u) => ({ ...u, enhancementId: null }));
+}
+
+/** Toggle a detachment in/out of the selection, preserving pick order. */
+function toggleDetachment(id: string, on: boolean) {
+	if (on) {
+		if (!draft.detachmentIds.includes(id)) draft.detachmentIds = [...draft.detachmentIds, id];
+	} else {
+		draft.detachmentIds = draft.detachmentIds.filter((d) => d !== id);
+		// Dropping a detachment can orphan its enhancements — clear any that no
+		// longer belong to a selected detachment.
+		const allowed = new Set(
+			draft.detachmentIds.flatMap((d) => ds.detachments.get(d)?.enhancement_ids ?? []),
+		);
+		draft.units = draft.units.map((u) =>
+			u.enhancementId && !allowed.has(u.enhancementId) ? { ...u, enhancementId: null } : u,
+		);
+	}
 }
 
 function addUnit(datasheetId: string) {
@@ -158,18 +183,38 @@ function save() {
 			</select>
 		</label>
 		<label class="flex flex-col text-[10px] uppercase tracking-wider text-text-dim">
-			Detachment
+			Detachments <span class="normal-case {overDp ? 'text-amber-400' : 'text-text-dim/70'}">({dpSpent}/{dpCap} DP)</span>
 			<select
 				class="bg-panel border-panel-border text-text mt-0.5 rounded border px-1.5 py-1 text-sm disabled:opacity-40"
-				value={draft.detachmentId ?? ''}
+				value=""
 				disabled={!draft.factionId}
-				onchange={(e) => (draft.detachmentId = (e.target as HTMLSelectElement).value || null)}
+				onchange={(e) => {
+					const v = (e.target as HTMLSelectElement).value;
+					if (v) toggleDetachment(v, true);
+					(e.target as HTMLSelectElement).value = '';
+				}}
 			>
-				<option value="">— select —</option>
-				{#each detachments as d (d.id)}
-					<option value={d.id}>{d.name}</option>
+				<option value="">+ add detachment</option>
+				{#each detachments.filter((d) => !draft.detachmentIds.includes(d.id)) as d (d.id)}
+					<option value={d.id}>{d.name} ({detachmentPointCost(d.id)} DP)</option>
 				{/each}
 			</select>
+			{#if draft.detachmentIds.length > 0}
+				<div class="mt-1 flex flex-wrap gap-1">
+					{#each draft.detachmentIds as id (id)}
+						<span class="bg-panel border-panel-border text-text flex items-center gap-1 rounded border px-1.5 py-0.5 text-xs normal-case">
+							{ds.detachments.get(id)?.name ?? id} ({detachmentPointCost(id)} DP)
+							<button
+								type="button"
+								class="text-text-dim hover:text-amber-400"
+								title="Remove detachment"
+								aria-label="Remove detachment"
+								onclick={() => toggleDetachment(id, false)}>×</button
+							>
+						</span>
+					{/each}
+				</div>
+			{/if}
 		</label>
 		<label class="flex flex-col text-[10px] uppercase tracking-wider text-text-dim">
 			Battle size

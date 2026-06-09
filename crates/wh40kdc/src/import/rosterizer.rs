@@ -333,7 +333,7 @@ impl FormatAdapter for RosterizerAdapter {
         })?;
 
         let mut faction_raw_name: Option<String> = None;
-        let mut detachment_raw_name: Option<String> = None;
+        let mut detachment_raw_names: Vec<String> = Vec::new();
         let mut battle_size_raw: Option<String> = None;
         let mut factions: Vec<String> = Vec::new();
         walk(root, &mut |a| {
@@ -347,9 +347,7 @@ impl FormatAdapter for RosterizerAdapter {
                     faction_raw_name = Some(name);
                 }
             } else if cls == CLS_DETACHMENT {
-                if detachment_raw_name.is_none() {
-                    detachment_raw_name = Some(display_name(a));
-                }
+                detachment_raw_names.push(display_name(a));
             } else if cls == CLS_BATTLE_SIZE {
                 if battle_size_raw.is_none() {
                     battle_size_raw = Some(display_name(a));
@@ -387,7 +385,7 @@ impl FormatAdapter for RosterizerAdapter {
             name,
             generated_by,
             faction_raw_name,
-            detachment_raw_name,
+            detachment_raw_names,
             battle_size_raw: battle_size_raw.clone(),
             declared_limit: parse_limit(battle_size_raw.as_deref()),
             total_reported,

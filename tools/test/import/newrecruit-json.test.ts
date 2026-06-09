@@ -24,7 +24,7 @@ describe("newRecruitJsonAdapter.parse", () => {
 
   it("takes the primary faction from catalogueName, not the first Faction: X", () => {
     expect(parsed.faction_raw_name).toBe("Chaos Knights");
-    expect(parsed.detachment_raw_name).toBe("Houndpack Lance");
+    expect(parsed.detachment_raw_names).toEqual(["Houndpack Lance"]);
     expect(parsed.battle_size_raw).toContain("Strike Force");
     expect(parsed.declared_limit).toBe(2000);
   });

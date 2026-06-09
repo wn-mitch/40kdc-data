@@ -113,7 +113,7 @@ describe("rosterizerSerializer", () => {
     const reparsed = importRoster(JSON.parse(json), { dataset: ds });
     expect(reparsed.source.format).toBe("rosterizer");
     expect(reparsed.faction_id).toBe(seed.faction_id);
-    expect(reparsed.detachment_id).toBe(seed.detachment_id);
+    expect(reparsed.detachments).toEqual(seed.detachments);
     expect(reparsed.battle_size).toBe(seed.battle_size);
     expect(reparsed.units.map((u) => u.ref.id)).toEqual(seed.units.map((u) => u.ref.id));
     expect(reparsed.units.map((u) => u.model_count)).toEqual(seed.units.map((u) => u.model_count));

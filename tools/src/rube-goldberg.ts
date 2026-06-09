@@ -66,7 +66,11 @@ function walkLinkedApi(label: string, roster: Roster, ds: Dataset): void {
   rule(`${label}: walking the linked Dataset API`);
   console.log(`Roster: ${roster.name} (${roster.units.length} units)`);
   console.log(`  faction_id     = ${roster.faction_id ?? "—"}`);
-  console.log(`  detachment_id  = ${roster.detachment_id ?? "—"}`);
+  console.log(
+    `  detachments    = ${
+      roster.detachments.map((d) => d.ref.id ?? d.ref.raw_name).join(", ") || "—"
+    }`,
+  );
   console.log(`  total_computed = ${roster.points.total_computed}`);
 
   for (const u of roster.units) {

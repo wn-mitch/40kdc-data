@@ -1,0 +1,67 @@
+{
+  "slug": "",
+  "key": "",
+  "visible": "hidden",
+  "locked": false,
+  "rulebook": {
+    "name": "40kdc",
+    "game": "Warhammer 40,000",
+    "publisher": "Alpaca Software",
+    "url": "https://40kdc.dev",
+    "genre": "wargame"
+  },
+  "snapshot": {
+    "item": "Roster§Roster",
+    "name": "Dual Detachment Strike Force",
+    "quantity": 1,
+    "stats": {
+      "Points": {
+        "value": 310
+      }
+    },
+    "assets": {
+      "included": [
+        {
+          "item": "Faction§Adeptus Astartes",
+          "name": "Adeptus Astartes",
+          "quantity": 1
+        },
+        {
+          "item": "Detachment§1st Company Task Force",
+          "name": "1st Company Task Force",
+          "quantity": 1
+        },
+        {
+          "item": "Detachment§Librarius Conclave",
+          "name": "Librarius Conclave",
+          "quantity": 1
+        },
+        {
+          "item": "Battle Size§Strike Force (2000 Point limit)",
+          "name": "Strike Force (2000 Point limit)",
+          "quantity": 1
+        },
+        {
+          "item": "Unit§Gladiator Lancer",
+          "name": "Gladiator Lancer",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 160
+            }
+          }
+        },
+        {
+          "item": "Unit§Ballistus Dreadnought",
+          "name": "Ballistus Dreadnought",
+          "quantity": 1,
+          "stats": {
+            "Points": {
+              "value": 150
+            }
+          }
+        }
+      ]
+    }
+  }
+}

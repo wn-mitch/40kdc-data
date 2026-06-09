@@ -104,7 +104,7 @@ describe("gwAdapter.parse", () => {
 
   it("reads the header (faction strips the super-prefix, detachment strips the rule)", () => {
     expect(parsed.faction_raw_name).toBe("Chaos Knights");
-    expect(parsed.detachment_raw_name).toBe("Houndpack Lance");
+    expect(parsed.detachment_raw_names).toEqual(["Houndpack Lance"]);
     expect(parsed.total_reported).toBe(2000);
     // GW carries no separate POINTS LIMIT line — the total is the limit.
     expect(parsed.declared_limit).toBe(2000);
@@ -156,7 +156,7 @@ describe("gwAdapter resolves against the embedded dataset", () => {
 
   it("resolves the faction and detachment ids", () => {
     expect(roster.faction_id).toBe("chaos-knights");
-    expect(roster.detachment_id).toBe("houndpack-lance");
+    expect(roster.detachments.map((d) => d.ref.id)).toEqual(["houndpack-lance"]);
   });
 
   it("carries the warlord and the enhancement", () => {

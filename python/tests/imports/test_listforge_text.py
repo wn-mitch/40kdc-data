@@ -121,7 +121,7 @@ class TestParse:
     def test_reads_header_fields(self) -> None:
         assert self.parsed["name"] == "all gas no breaks"
         assert self.parsed["faction_raw_name"] == "Chaos Daemons"
-        assert self.parsed["detachment_raw_name"] == "Daemonic Incursion"
+        assert self.parsed["detachment_raw_names"] == ["Daemonic Incursion"]
         assert self.parsed["total_reported"] == 1995
         # ListForge reports only the army total — it doubles as the limit.
         assert self.parsed["declared_limit"] == 1995

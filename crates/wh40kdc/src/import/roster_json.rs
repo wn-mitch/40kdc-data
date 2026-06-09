@@ -11,9 +11,10 @@
 //! Lowering notes:
 //! - Unit/wargear/enhancement rows lower to their `ref.raw_name` — the same
 //!   raw-display-name path every other adapter takes.
-//! - `faction_id`/`detachment_id` have no raw name in the canonical shape, so
-//!   the id slug is passed through as the raw name; `Collection::find` does an
-//!   exact-id match before any name lookup, so resolution is exact.
+//! - `faction_id` has no raw name in the canonical shape, so the id slug is
+//!   passed through as the raw name; `Collection::find` does an exact-id match
+//!   before any name lookup, so resolution is exact. Detachments carry a
+//!   `ref.raw_name`, so (like units) that lowers directly and round-trips.
 //! - `is_character` isn't stored on the canonical shape (it's an inference
 //!   input, not an output). It lowers as `leader_attachment.is_some()`, which
 //!   reproduces the original (deterministic) attachment inference on
@@ -96,10 +97,15 @@ fn lower(roster: &Roster) -> ParsedRoster {
     ParsedRoster {
         name: roster.name.clone(),
         generated_by: roster.source.generated_by.clone(),
-        // Id slugs pass through as raw names — `Collection::find` id-matches
-        // exactly before any name lookup.
+        // `faction_id` has no raw name in the canonical shape, so the id slug
+        // passes through (id-match before any name lookup). Detachments carry a
+        // `ref.raw_name`, so (like units) that lowers directly and round-trips.
         faction_raw_name: roster.faction_id.clone(),
-        detachment_raw_name: roster.detachment_id.clone(),
+        detachment_raw_names: roster
+            .detachments
+            .iter()
+            .map(|d| d.ref_.raw_name.clone())
+            .collect(),
         battle_size_raw: roster.battle_size.map(|b| {
             match b {
                 BattleSize::Incursion => "Incursion",

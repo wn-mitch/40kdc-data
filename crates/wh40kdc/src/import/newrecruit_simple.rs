@@ -333,7 +333,7 @@ impl FormatAdapter for NewRecruitSimpleAdapter {
             name,
             generated_by: None,
             faction_raw_name,
-            detachment_raw_name,
+            detachment_raw_names: detachment_raw_name.into_iter().collect(),
             battle_size_raw,
             declared_limit,
             total_reported,
@@ -388,8 +388,8 @@ Beasts of Nurgle [65 pts]:
             Some("Strike Force (2000 Point limit)")
         );
         assert_eq!(
-            parsed.detachment_raw_name.as_deref(),
-            Some("Houndpack Lance")
+            parsed.detachment_raw_names,
+            vec!["Houndpack Lance".to_string()]
         );
 
         let names: Vec<&str> = parsed.units.iter().map(|u| u.raw_name.as_str()).collect();
@@ -472,8 +472,8 @@ Broadside Battlesuits [90pts]:
             .parse(&json!(no_units_header))
             .unwrap();
         assert_eq!(
-            parsed.detachment_raw_name.as_deref(),
-            Some("Auxiliary Cadre")
+            parsed.detachment_raw_names,
+            vec!["Auxiliary Cadre".to_string()]
         );
         assert_eq!(parsed.units.len(), 2);
         assert_eq!(parsed.units[0].raw_name, "Broadside Battlesuits");

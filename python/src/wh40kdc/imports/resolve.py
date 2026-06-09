@@ -89,6 +89,15 @@ def _map_battle_size(raw: str | None) -> str | None:
     return None
 
 
+def _detachment_cap(battle_size: str | None) -> int | None:
+    """11e detachment-point budget for a battle size; ``None`` when unknown."""
+    if battle_size == "strike-force":
+        return 3
+    if battle_size == "incursion":
+        return 2
+    return None
+
+
 def resolve(parsed: dict[str, Any], ds: Dataset, format: str = "listforge") -> dict[str, Any]:
     diag = _DiagnosticsBuilder()
 
@@ -112,10 +121,13 @@ def resolve(parsed: dict[str, Any], ds: Dataset, format: str = "listforge") -> d
                 parsed["faction_raw_name"],
             )
 
-    # --- Detachment (scoped to faction, then global fallback). ---------------
-    detachment_id: str | None = None
-    if parsed["detachment_raw_name"]:
-        key = normalize_name(parsed["detachment_raw_name"])
+    # --- Detachments (each scoped to faction, then global fallback). ---------
+    # 11e lists may field several detachments under a detachment-point cap; the
+    # list preserves source order. ``dp_cost`` is looked up from the resolved
+    # detachment entity (no source format reports it).
+    detachments: list[dict[str, Any]] = []
+    for raw_name in parsed["detachment_raw_names"]:
+        key = normalize_name(raw_name)
         scoped = None
         if faction_id:
             scoped = next(
@@ -126,15 +138,24 @@ def resolve(parsed: dict[str, Any], ds: Dataset, format: str = "listforge") -> d
                 ),
                 None,
             )
-        hit = scoped if scoped is not None else ds.detachments.find(parsed["detachment_raw_name"])
+        hit = scoped if scoped is not None else ds.detachments.find(raw_name)
         if hit is not None:
-            detachment_id = hit["id"]
+            detachments.append(
+                {"ref": _resolved(hit["id"], raw_name), "dp_cost": hit.get("detachment_points")}
+            )
         else:
             diag.warn(
                 "detachment-unresolved",
                 "Detachment name did not match any 40kdc detachment.",
-                parsed["detachment_raw_name"],
+                raw_name,
             )
+            detachments.append(
+                {
+                    "ref": _unresolved(raw_name, _to_candidates(ds.detachments.find_all(raw_name))),
+                    "dp_cost": None,
+                }
+            )
+    detachment_ids = [d["ref"]["id"] for d in detachments if d["ref"]["id"] is not None]
 
     # --- Battle size. ---------------------------------------------------------
     battle_size = _map_battle_size(parsed["battle_size_raw"])
@@ -144,9 +165,24 @@ def resolve(parsed: dict[str, Any], ds: Dataset, format: str = "listforge") -> d
             "Battle size label could not be mapped.",
             parsed["battle_size_raw"],
         )
+    detachment_cap = _detachment_cap(battle_size)
+
+    # --- Detachment-point cap check (only when cap and every cost are known). -
+    if (
+        detachment_cap is not None
+        and detachments
+        and all(d["dp_cost"] is not None for d in detachments)
+    ):
+        spent = sum(d["dp_cost"] for d in detachments)
+        if spent > detachment_cap:
+            diag.warn(
+                "detachment-points-exceeded",
+                f"Detachments cost {spent} detachment points but the {battle_size} "
+                f"budget is {detachment_cap}.",
+            )
 
     # --- Units (and their enhancements / wargear). ----------------------------
-    units = [_resolve_unit(u, faction_id, detachment_id, ds, diag) for u in parsed["units"]]
+    units = [_resolve_unit(u, faction_id, detachment_ids, ds, diag) for u in parsed["units"]]
 
     # --- Leader attachments (second pass: needs all resolved unit ids). -------
     _infer_leader_attachments(parsed["units"], units, ds, diag)
@@ -165,10 +201,11 @@ def resolve(parsed: dict[str, Any], ds: Dataset, format: str = "listforge") -> d
         "name": parsed["name"],
         "source": {"format": format, "generated_by": parsed["generated_by"]},
         "faction_id": faction_id,
-        "detachment_id": detachment_id,
+        "detachments": detachments,
         "battle_size": battle_size,
         "points": {
             "declared_limit": parsed["declared_limit"],
+            "detachment_cap": detachment_cap,
             "total_reported": parsed["total_reported"],
             "total_computed": parsed["total_computed"],
         },
@@ -181,7 +218,7 @@ def resolve(parsed: dict[str, Any], ds: Dataset, format: str = "listforge") -> d
 def _resolve_unit(
     parsed: dict[str, Any],
     faction_id: str | None,
-    detachment_id: str | None,
+    detachment_ids: list[str],
     ds: Dataset,
     diag: _DiagnosticsBuilder,
 ) -> dict[str, Any]:
@@ -206,7 +243,7 @@ def _resolve_unit(
         diag.warn("unit-unresolved", "Unit name did not match any 40kdc unit.", parsed["raw_name"])
 
     enhancement = (
-        _resolve_enhancement(parsed["enhancement_raw_name"], detachment_id, ds, diag)
+        _resolve_enhancement(parsed["enhancement_raw_name"], detachment_ids, ds, diag)
         if parsed["enhancement_raw_name"]
         else None
     )
@@ -243,19 +280,20 @@ def _resolve_unit(
 
 def _resolve_enhancement(
     raw_name: str,
-    detachment_id: str | None,
+    detachment_ids: list[str],
     ds: Dataset,
     diag: _DiagnosticsBuilder,
 ) -> dict[str, Any]:
     key = normalize_name(raw_name)
-    # Enhancements belong to a detachment, not a faction — scope by detachment_id.
+    # Enhancements belong to a detachment, not a faction — scope to any of the
+    # roster's resolved detachments.
     scoped = None
-    if detachment_id:
+    if detachment_ids:
         scoped = next(
             (
                 e
                 for e in ds.enhancements.all
-                if e.get("detachment_id") == detachment_id
+                if e.get("detachment_id") in detachment_ids
                 and normalize_name(e.get("name") or "") == key
             ),
             None,

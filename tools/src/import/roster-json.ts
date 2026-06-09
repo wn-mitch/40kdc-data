@@ -12,9 +12,11 @@
  * Lowering notes:
  * - Unit/wargear/enhancement rows lower to their `ref.raw_name` — the same
  *   raw-display-name path every other adapter takes.
- * - `faction_id`/`detachment_id` have no raw name in the canonical shape, so
- *   the id slug is passed through as the raw name; collection lookup does an
- *   exact-id match before any name lookup, so resolution is exact.
+ * - `faction_id` has no raw name in the canonical shape, so the id slug is
+ *   passed through as the raw name; collection lookup does an exact-id match
+ *   before any name lookup, so resolution is exact. Detachments do carry a
+ *   `ref.raw_name`, so (like units/enhancements) that lowers directly and
+ *   round-trips the display name.
  * - `is_character` isn't stored on the canonical shape (it's an inference
  *   input, not an output). It lowers as `leader_attachment != null`, which
  *   reproduces the original (deterministic) attachment inference on
@@ -85,7 +87,9 @@ export const rosterJsonAdapter: FormatAdapter = {
       // Id slugs pass through as raw names — collection lookup id-matches
       // exactly before any name lookup.
       faction_raw_name: roster.faction_id,
-      detachment_raw_name: roster.detachment_id,
+      // Each detachment carries its own raw name (like units/enhancements), so
+      // lower that — it round-trips the display name and re-resolves exactly.
+      detachment_raw_names: roster.detachments.map((d) => d.ref.raw_name),
       battle_size_raw:
         roster.battle_size != null ? (BATTLE_SIZE_LABELS[roster.battle_size] ?? null) : null,
       declared_limit: roster.points.declared_limit,

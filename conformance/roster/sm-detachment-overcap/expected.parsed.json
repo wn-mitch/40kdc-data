@@ -1,0 +1,36 @@
+{
+  "name": "Over-Cap Detachment List",
+  "generated_by": "https://newrecruit.eu",
+  "faction_raw_name": "Adeptus Astartes",
+  "detachment_raw_names": [
+    "Gladius Task Force",
+    "1st Company Task Force"
+  ],
+  "battle_size_raw": "Strike Force (2000 Point limit)",
+  "declared_limit": 2000,
+  "total_reported": 365,
+  "total_computed": 365,
+  "units": [
+    {
+      "raw_name": "Gladiator Lancer",
+      "is_character": false,
+      "model_count": 1,
+      "points": 160,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": []
+    },
+    {
+      "raw_name": "Redemptor Dreadnought",
+      "is_character": false,
+      "model_count": 1,
+      "points": 205,
+      "is_warlord": false,
+      "enhancement_raw_name": null,
+      "enhancement_points": null,
+      "wargear": []
+    }
+  ],
+  "multi_force": false
+}

@@ -130,10 +130,11 @@ function factionAsset(roster: Roster): Asset | null {
   return { item: key(CLS_FACTION, display), name: display, quantity: 1 };
 }
 
-function detachmentAsset(roster: Roster): Asset | null {
-  const display = titleCaseId(roster.detachment_id);
-  if (display === null) return null;
-  return { item: key(CLS_DETACHMENT, display), name: display, quantity: 1 };
+function detachmentAssets(roster: Roster): Asset[] {
+  return roster.detachments.map((d) => {
+    const display = titleCaseId(d.ref.id) ?? d.ref.raw_name;
+    return { item: key(CLS_DETACHMENT, display), name: display, quantity: 1 };
+  });
 }
 
 function battleSizeAsset(roster: Roster): Asset | null {
@@ -157,8 +158,7 @@ export const rosterizerSerializer: RosterSerializer = {
     const included: Asset[] = [];
     const faction = factionAsset(roster);
     if (faction) included.push(faction);
-    const detachment = detachmentAsset(roster);
-    if (detachment) included.push(detachment);
+    for (const detachment of detachmentAssets(roster)) included.push(detachment);
     const battleSize = battleSizeAsset(roster);
     if (battleSize) included.push(battleSize);
     for (const u of roster.units) included.push(unitAsset(u));

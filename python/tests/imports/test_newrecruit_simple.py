@@ -63,7 +63,7 @@ def test_unit_line_directly_after_configuration_ends_that_section() -> None:
         "• 1x Broadside Shas'vre: Crushing bulk, 2x Shield Drone, Heavy rail rifle\n"
     )
     parsed = newrecruit_simple_adapter.parse(no_units_header)
-    assert parsed["detachment_raw_name"] == "Auxiliary Cadre"
+    assert parsed["detachment_raw_names"] == ["Auxiliary Cadre"]
     assert len(parsed["units"]) == 2
     assert parsed["units"][0]["raw_name"] == "Broadside Battlesuits"
     assert parsed["units"][0]["model_count"] == 1

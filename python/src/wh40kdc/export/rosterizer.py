@@ -125,9 +125,11 @@ def serialize_rosterizer(roster: Roster) -> str:
     faction = _named_asset(_CLS_FACTION, title_case_id(roster.get("faction_id")))
     if faction:
         included.append(faction)
-    detachment = _named_asset(_CLS_DETACHMENT, title_case_id(roster.get("detachment_id")))
-    if detachment:
-        included.append(detachment)
+    for d in roster["detachments"]:
+        display = title_case_id(d["ref"]["id"]) or d["ref"]["raw_name"]
+        asset = _named_asset(_CLS_DETACHMENT, display)
+        if asset:
+            included.append(asset)
     battle_size = _battle_size_asset(roster)
     if battle_size:
         included.append(battle_size)

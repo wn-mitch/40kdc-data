@@ -1,0 +1,78 @@
+{
+  "name": "Dual Detachment Strike Force",
+  "source": {
+    "format": "newrecruit-json",
+    "generated_by": "https://newrecruit.eu"
+  },
+  "faction_id": "adeptus-astartes",
+  "detachments": [
+    {
+      "ref": {
+        "id": "1st-company-task-force",
+        "raw_name": "1st Company Task Force",
+        "resolved": true,
+        "candidates": []
+      },
+      "dp_cost": 2
+    },
+    {
+      "ref": {
+        "id": "librarius-conclave",
+        "raw_name": "Librarius Conclave",
+        "resolved": true,
+        "candidates": []
+      },
+      "dp_cost": 1
+    }
+  ],
+  "battle_size": "strike-force",
+  "points": {
+    "declared_limit": 2000,
+    "detachment_cap": 3,
+    "total_reported": 310,
+    "total_computed": 310
+  },
+  "units": [
+    {
+      "ref": {
+        "id": "gladiator-lancer",
+        "raw_name": "Gladiator Lancer",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 160,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "ballistus-dreadnought",
+        "raw_name": "Ballistus Dreadnought",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 150,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [],
+      "leader_attachment": null
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "pre-launch-provisional"
+  },
+  "diagnostics": {
+    "resolved_units": 2,
+    "unresolved_units": 0,
+    "resolved_weapons": 0,
+    "unresolved_weapons": 0,
+    "warnings": []
+  }
+}

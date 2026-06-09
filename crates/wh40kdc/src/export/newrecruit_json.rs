@@ -256,15 +256,16 @@ impl RosterSerializer for NewRecruitJsonSerializer {
         let faction = faction_category(roster);
         let faction_display =
             title_case_id(roster.faction_id.as_deref()).unwrap_or_else(|| "Unknown".to_string());
-        let detachment_display = title_case_id(roster.detachment_id.as_deref());
         let battle_size = battle_size_label(roster);
 
         let mut config: Vec<Selection> = Vec::new();
         if let Some(b) = battle_size {
             config.push(config_selection("Battle Size", b, "battle-size"));
         }
-        if let Some(d) = detachment_display {
-            config.push(config_selection("Detachment", d, "detachment"));
+        for d in &roster.detachments {
+            let display =
+                title_case_id(d.ref_.id.as_deref()).unwrap_or_else(|| d.ref_.raw_name.clone());
+            config.push(config_selection("Detachment", display, "detachment"));
         }
 
         let mut force_selections: Vec<Selection> = config;

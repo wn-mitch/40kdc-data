@@ -235,7 +235,9 @@ def _parse(decoded: Any) -> dict[str, Any]:
         "name": header["name"],
         "generated_by": "List Forge",
         "faction_raw_name": header["faction_raw_name"],
-        "detachment_raw_name": header["detachment_raw_name"],
+        "detachment_raw_names": (
+            [header["detachment_raw_name"]] if header["detachment_raw_name"] else []
+        ),
         "battle_size_raw": infer_battle_size_raw(declared_limit),
         "declared_limit": declared_limit,
         "total_reported": header["total_reported"],

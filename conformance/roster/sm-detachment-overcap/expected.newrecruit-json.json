@@ -1,0 +1,125 @@
+{
+  "name": "Over-Cap Detachment List",
+  "generatedBy": "https://newrecruit.eu",
+  "roster": {
+    "name": "Over-Cap Detachment List",
+    "xmlns": "http://www.battlescribe.net/schema/rosterSchema",
+    "generatedBy": "https://newrecruit.eu",
+    "costs": [
+      {
+        "name": "pts",
+        "typeId": "pts-type",
+        "value": 365
+      }
+    ],
+    "forces": [
+      {
+        "id": "force-1",
+        "name": "Army Roster",
+        "catalogueName": "Adeptus Astartes",
+        "selections": [
+          {
+            "id": "cfg-battle-size",
+            "name": "Battle Size",
+            "type": "upgrade",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Configuration",
+                "primary": true
+              }
+            ],
+            "selections": [
+              {
+                "id": "cfg-battle-size-val",
+                "name": "Strike Force (2000 Point limit)",
+                "type": "upgrade",
+                "number": 1
+              }
+            ]
+          },
+          {
+            "id": "cfg-detachment",
+            "name": "Detachment",
+            "type": "upgrade",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Configuration",
+                "primary": true
+              }
+            ],
+            "selections": [
+              {
+                "id": "cfg-detachment-val",
+                "name": "Gladius Task Force",
+                "type": "upgrade",
+                "number": 1
+              }
+            ]
+          },
+          {
+            "id": "cfg-detachment",
+            "name": "Detachment",
+            "type": "upgrade",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Configuration",
+                "primary": true
+              }
+            ],
+            "selections": [
+              {
+                "id": "cfg-detachment-val",
+                "name": "1st Company Task Force",
+                "type": "upgrade",
+                "number": 1
+              }
+            ]
+          },
+          {
+            "id": "u-0",
+            "name": "Gladiator Lancer",
+            "type": "model",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Faction: Adeptus Astartes",
+                "primary": false
+              }
+            ],
+            "costs": [
+              {
+                "name": "pts",
+                "typeId": "pts-type",
+                "value": 160
+              }
+            ],
+            "selections": []
+          },
+          {
+            "id": "u-1",
+            "name": "Redemptor Dreadnought",
+            "type": "model",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Faction: Adeptus Astartes",
+                "primary": false
+              }
+            ],
+            "costs": [
+              {
+                "name": "pts",
+                "typeId": "pts-type",
+                "value": 205
+              }
+            ],
+            "selections": []
+          }
+        ]
+      }
+    ]
+  }
+}

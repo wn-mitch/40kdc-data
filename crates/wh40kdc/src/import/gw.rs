@@ -332,7 +332,7 @@ impl FormatAdapter for GwAdapter {
             name: header.name,
             generated_by: None,
             faction_raw_name: header.faction_raw_name,
-            detachment_raw_name: header.detachment_raw_name,
+            detachment_raw_names: header.detachment_raw_name.into_iter().collect(),
             battle_size_raw: header.battle_size_raw,
             declared_limit: header.declared_limit,
             total_reported: header.total_reported,
@@ -394,8 +394,8 @@ Nurglings (40 pts)
         let parsed = GwAdapter.parse(&json!(SAMPLE)).unwrap();
         assert_eq!(parsed.faction_raw_name.as_deref(), Some("Chaos Knights"));
         assert_eq!(
-            parsed.detachment_raw_name.as_deref(),
-            Some("Houndpack Lance")
+            parsed.detachment_raw_names,
+            vec!["Houndpack Lance".to_string()]
         );
         assert_eq!(parsed.total_reported, Some(2000));
         assert_eq!(parsed.declared_limit, Some(2000));

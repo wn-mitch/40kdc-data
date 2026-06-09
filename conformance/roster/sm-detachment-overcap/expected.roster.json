@@ -1,0 +1,84 @@
+{
+  "name": "Over-Cap Detachment List",
+  "source": {
+    "format": "newrecruit-json",
+    "generated_by": "https://newrecruit.eu"
+  },
+  "faction_id": "adeptus-astartes",
+  "detachments": [
+    {
+      "ref": {
+        "id": "gladius-task-force",
+        "raw_name": "Gladius Task Force",
+        "resolved": true,
+        "candidates": []
+      },
+      "dp_cost": 3
+    },
+    {
+      "ref": {
+        "id": "1st-company-task-force",
+        "raw_name": "1st Company Task Force",
+        "resolved": true,
+        "candidates": []
+      },
+      "dp_cost": 2
+    }
+  ],
+  "battle_size": "strike-force",
+  "points": {
+    "declared_limit": 2000,
+    "detachment_cap": 3,
+    "total_reported": 365,
+    "total_computed": 365
+  },
+  "units": [
+    {
+      "ref": {
+        "id": "gladiator-lancer",
+        "raw_name": "Gladiator Lancer",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 160,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [],
+      "leader_attachment": null
+    },
+    {
+      "ref": {
+        "id": "redemptor-dreadnought",
+        "raw_name": "Redemptor Dreadnought",
+        "resolved": true,
+        "candidates": []
+      },
+      "model_count": 1,
+      "points": 205,
+      "is_warlord": false,
+      "enhancement": null,
+      "enhancement_points": null,
+      "wargear": [],
+      "leader_attachment": null
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "pre-launch-provisional"
+  },
+  "diagnostics": {
+    "resolved_units": 2,
+    "unresolved_units": 0,
+    "resolved_weapons": 0,
+    "unresolved_weapons": 0,
+    "warnings": [
+      {
+        "code": "detachment-points-exceeded",
+        "message": "Detachments cost 5 detachment points but the strike-force budget is 3.",
+        "raw_name": null
+      }
+    ]
+  }
+}

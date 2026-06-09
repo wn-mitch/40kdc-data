@@ -304,7 +304,7 @@ impl FormatAdapter for ListForgeTextAdapter {
             name: header.name,
             generated_by: Some("List Forge".to_string()),
             faction_raw_name: header.faction_raw_name,
-            detachment_raw_name: header.detachment_raw_name,
+            detachment_raw_names: header.detachment_raw_name.into_iter().collect(),
             battle_size_raw: infer_battle_size_raw(declared_limit),
             declared_limit,
             total_reported: header.total_reported,
@@ -396,8 +396,8 @@ Flesh Hounds (75 pts)
         assert_eq!(parsed.name, "all gas no breaks");
         assert_eq!(parsed.faction_raw_name.as_deref(), Some("Chaos Daemons"));
         assert_eq!(
-            parsed.detachment_raw_name.as_deref(),
-            Some("Daemonic Incursion")
+            parsed.detachment_raw_names,
+            vec!["Daemonic Incursion".to_string()]
         );
         assert_eq!(parsed.total_reported, Some(1995));
         // ListForge reports only the army total — it doubles as the limit.

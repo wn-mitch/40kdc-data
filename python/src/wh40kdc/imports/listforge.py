@@ -14,6 +14,7 @@ from wh40kdc.imports.battlescribe import (
     as_string,
     collect_factions,
     config_value,
+    config_values,
     has_newrecruit_signature,
     is_unit_selection,
     iter_force_tops,
@@ -40,12 +41,11 @@ def _parse(decoded: Any) -> dict[str, Any]:
         raise ValueError("listforge: payload has no roster.forces array")
 
     # Configuration lives among each force's top-level selections.
-    detachment_raw_name: str | None = None
+    detachment_raw_names: list[str] = []
     battle_size_raw: str | None = None
     units: list[dict[str, Any]] = []
     for _force, top in iter_force_tops(roster):
-        if detachment_raw_name is None:
-            detachment_raw_name = config_value(top, "Detachment")
+        detachment_raw_names.extend(config_values(top, "Detachment"))
         if battle_size_raw is None:
             battle_size_raw = config_value(top, "Battle Size")
         for sel in top:
@@ -65,7 +65,7 @@ def _parse(decoded: Any) -> dict[str, Any]:
         "name": name if name is not None else "Imported roster",
         "generated_by": generated_by,
         "faction_raw_name": factions[0] if factions else None,
-        "detachment_raw_name": detachment_raw_name,
+        "detachment_raw_names": detachment_raw_names,
         "battle_size_raw": battle_size_raw,
         "declared_limit": parse_limit(battle_size_raw),
         "total_reported": total_reported,

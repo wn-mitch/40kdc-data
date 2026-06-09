@@ -5,10 +5,11 @@
     "generated_by": "List Forge"
   },
   "faction_id": "grey-knights",
-  "detachment_id": null,
+  "detachments": [],
   "battle_size": null,
   "points": {
     "declared_limit": null,
+    "detachment_cap": null,
     "total_reported": 315,
     "total_computed": 315
   },
