@@ -36,7 +36,9 @@
     imageUrl: string;
     imageWidth: number;
     imageHeight: number;
-    mode: "scale" | "trace";
+    // "preview" never reaches this component (App swaps in TerrainPreview), but
+    // the prop accepts the full mode union so the binding type-checks.
+    mode: "scale" | "trace" | "preview";
     showRuler: boolean;
     points: Vec2[];
     closed: boolean;
@@ -340,8 +342,10 @@
   .canvas-wrap {
     display: flex;
     flex-direction: column;
+    /* Fill the bounded .canvas column and let the SVG flex/shrink within it
+       (height:100% would add the hint bar's height on top and overflow). */
+    flex: 1 1 auto;
     min-height: 0;
-    height: 100%;
   }
   svg {
     flex: 1 1 auto;

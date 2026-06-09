@@ -116,6 +116,37 @@ export function screenToUserRadius(targetPx: number, scale: number): number {
   return targetPx / scale;
 }
 
+/**
+ * Rotate a point about the origin by `degrees`. Coordinates are y-down (image /
+ * board convention), so a positive angle reads as clockwise on screen.
+ */
+export function rotatePoint(p: Vec2, degrees: number): Vec2 {
+  const r = (degrees * Math.PI) / 180;
+  const cos = Math.cos(r);
+  const sin = Math.sin(r);
+  return { x: p.x * cos - p.y * sin, y: p.x * sin + p.y * cos };
+}
+
+/** Rotate every point about the origin (see {@link rotatePoint}). A whole-turn
+ * angle returns a copy unchanged (avoids floating-point drift at 0/360). */
+export function rotatePoints(points: readonly Vec2[], degrees: number): Vec2[] {
+  if (degrees % 360 === 0) return points.map((p) => ({ x: p.x, y: p.y }));
+  return points.map((p) => rotatePoint(p, degrees));
+}
+
+/**
+ * Scale traced pixel points to inches and recenter them on the polygon's area
+ * centroid — the same origin convention `export.ts` uses for the stored hull,
+ * so the preview's model matches what gets exported. A non-positive
+ * `pxPerInch` returns the points unchanged (caller gates on a real scale).
+ */
+export function toCenteredInches(pixelPoints: readonly Vec2[], pxPerInch: number): Vec2[] {
+  if (!(pxPerInch > 0)) return pixelPoints.map((p) => ({ x: p.x, y: p.y }));
+  const inches = pixelPoints.map((p) => ({ x: p.x / pxPerInch, y: p.y / pxPerInch }));
+  const c = polygonCentroid(inches);
+  return inches.map((p) => ({ x: p.x - c.x, y: p.y - c.y }));
+}
+
 /** The entity-id contract: kebab-case, 2–128 chars, no leading/trailing dash. */
 const ENTITY_ID_RE = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/;
 

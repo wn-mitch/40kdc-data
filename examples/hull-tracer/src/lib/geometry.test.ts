@@ -7,6 +7,9 @@ import {
   distance,
   displayScale,
   screenToUserRadius,
+  rotatePoint,
+  rotatePoints,
+  toCenteredInches,
   isValidEntityId,
   slugify,
 } from "./geometry.js";
@@ -125,6 +128,61 @@ describe("screenToUserRadius", () => {
     expect(screenToUserRadius(5, 0)).toBe(5);
     expect(screenToUserRadius(5, -1)).toBe(5);
     expect(screenToUserRadius(5, NaN)).toBe(5);
+  });
+});
+
+describe("rotatePoint / rotatePoints", () => {
+  it("rotates 90° clockwise in the y-down frame", () => {
+    const r = rotatePoint({ x: 1, y: 0 }, 90);
+    expect(r.x).toBeCloseTo(0);
+    expect(r.y).toBeCloseTo(1);
+  });
+
+  it("rotates 180° to the antipode", () => {
+    const r = rotatePoint({ x: 2, y: -3 }, 180);
+    expect(r.x).toBeCloseTo(-2);
+    expect(r.y).toBeCloseTo(3);
+  });
+
+  it("returns an unchanged copy for whole-turn angles", () => {
+    const pts: Vec2[] = [
+      { x: 1, y: 2 },
+      { x: -3, y: 4 },
+    ];
+    expect(rotatePoints(pts, 0)).toEqual(pts);
+    expect(rotatePoints(pts, 360)).toEqual(pts);
+    expect(rotatePoints(pts, 0)).not.toBe(pts); // a copy, not the same array
+  });
+
+  it("round-trips rotate(θ) then rotate(−θ) back to the original", () => {
+    const back = rotatePoint(rotatePoint({ x: 1.5, y: -0.7 }, 37), -37);
+    expect(back.x).toBeCloseTo(1.5);
+    expect(back.y).toBeCloseTo(-0.7);
+  });
+});
+
+describe("toCenteredInches", () => {
+  it("scales pixels to inches and centers on the area centroid", () => {
+    // A 100px square at pxPerInch=50 → a 2-inch square; centered → symmetric
+    // about the origin.
+    const pixels: Vec2[] = [
+      { x: 0, y: 0 },
+      { x: 100, y: 0 },
+      { x: 100, y: 100 },
+      { x: 0, y: 100 },
+    ];
+    const out = toCenteredInches(pixels, 50);
+    expect(out).toEqual([
+      { x: -1, y: -1 },
+      { x: 1, y: -1 },
+      { x: 1, y: 1 },
+      { x: -1, y: 1 },
+    ]);
+  });
+
+  it("returns points unchanged for a non-positive scale", () => {
+    const pts: Vec2[] = [{ x: 3, y: 4 }];
+    expect(toCenteredInches(pts, 0)).toEqual(pts);
   });
 });
 

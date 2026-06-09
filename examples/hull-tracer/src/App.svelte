@@ -5,6 +5,7 @@
   import ImageDrop from "./lib/ImageDrop.svelte";
   import Calibrate from "./lib/Calibrate.svelte";
   import Canvas from "./lib/Canvas.svelte";
+  import TerrainPreview from "./lib/TerrainPreview.svelte";
   import ExportPanel from "./lib/ExportPanel.svelte";
   import NotesPanel from "./lib/NotesPanel.svelte";
   import { boundsSize } from "./lib/geometry.js";
@@ -25,7 +26,7 @@
 
   // Canvas mode + calibration. The ruler endpoints live here so they render on
   // the main canvas (large, grabbable) while Calibrate owns only the math.
-  let mode = $state<"scale" | "trace">("scale");
+  let mode = $state<"scale" | "trace" | "preview">("scale");
   let method = $state<"width" | "ruler">("width");
   let rulerA = $state<Vec2>({ x: 0, y: 0 });
   let rulerB = $state<Vec2>({ x: 0, y: 0 });
@@ -35,6 +36,8 @@
   let id = $state("");
 
   const showRuler = $derived(mode === "scale" && method === "ruler");
+  // Preview needs a real scale and a footprint to place the model at true size.
+  const canPreview = $derived(pxPerInch !== null && pxPerInch > 0 && points.length >= 3);
 
   // Live footprint in inches, for the notes block (null until scaled / traced).
   const liveSize = $derived.by(() => {
@@ -132,24 +135,39 @@
                 class="focus-ring"
                 onclick={() => (mode = "trace")}>2 · Trace</button
               >
+              <button
+                role="tab"
+                aria-selected={mode === "preview"}
+                class:active={mode === "preview"}
+                class="focus-ring"
+                disabled={!canPreview}
+                title={canPreview
+                  ? "Preview the model on a random terrain layout"
+                  : "Calibrate a scale and trace at least 3 points first"}
+                onclick={() => (mode = "preview")}>3 · Preview</button
+              >
             </div>
             <div class="status">
               {points.length} pt{points.length === 1 ? "" : "s"} · {closed ? "closed" : "open"} · {scaleLabel}
             </div>
           </div>
 
-          <Canvas
-            imageUrl={image.url}
-            imageWidth={image.width}
-            imageHeight={image.height}
-            {mode}
-            {showRuler}
-            bind:points
-            bind:closed
-            bind:selectedIndex
-            bind:rulerA
-            bind:rulerB
-          />
+          {#if mode === "preview"}
+            <TerrainPreview pixelPoints={points} {pxPerInch} />
+          {:else}
+            <Canvas
+              imageUrl={image.url}
+              imageWidth={image.width}
+              imageHeight={image.height}
+              {mode}
+              {showRuler}
+              bind:points
+              bind:closed
+              bind:selectedIndex
+              bind:rulerA
+              bind:rulerB
+            />
+          {/if}
         </div>
 
         <aside class="rail">
@@ -250,7 +268,11 @@
   }
   .canvas {
     min-width: 0;
+    /* Grid items default to min-height:auto, which would let the SVG's
+       intrinsic height push the row past the viewport and force a scroll.
+       Pin it to 0 so the canvas clamps to the available row height. */
     min-height: 0;
+    overflow: hidden;
     padding: 12px;
     display: flex;
     flex-direction: column;
@@ -281,6 +303,10 @@
     background: var(--color-accent-dim);
     border-color: var(--color-accent);
     color: var(--color-text);
+  }
+  .seg button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
   .status {
     margin-left: auto;
