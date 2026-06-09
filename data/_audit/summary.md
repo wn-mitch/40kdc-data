@@ -11,51 +11,51 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 | adeptus-astartes | 348 | 109 | 39 | 215 | 6 | 19 | 0 | 7 |
 | adeptus-custodes | 65 | 13 | 11 | 45 | 0 | 3 | 0 | 3 |
 | adeptus-mechanicus | 71 | 13 | 10 | 51 | 1 | 1 | 0 | 2 |
-| aeldari | 151 | 33 | 13 | 110 | 6 | 13 | 0 | 5 |
+| aeldari | 168 | 33 | 13 | 127 | 23 | 13 | 0 | 5 |
 | agents-of-the-imperium | 92 | 23 | 8 | 63 | 2 | 2 | 0 | 2 |
 | astra-militarum | 151 | 36 | 14 | 104 | 0 | 3 | 0 | 5 |
 | chaos-daemons | 129 | 35 | 14 | 86 | 1 | 7 | 0 | 4 |
 | chaos-knights | 41 | 18 | 1 | 23 | 2 | 3 | 0 | 0 |
 | chaos-space-marines | 182 | 47 | 16 | 126 | 7 | 21 | 0 | 6 |
 | death-guard | 89 | 19 | 7 | 66 | 4 | 8 | 0 | 3 |
-| drukhari | 76 | 21 | 6 | 51 | 2 | 7 | 0 | 1 |
+| drukhari | 94 | 21 | 6 | 69 | 20 | 7 | 0 | 1 |
 | emperors-children | 61 | 13 | 3 | 46 | 3 | 8 | 0 | 1 |
-| genestealer-cults | 63 | 13 | 6 | 46 | 2 | 2 | 0 | 1 |
+| genestealer-cults | 81 | 13 | 6 | 64 | 20 | 2 | 0 | 1 |
 | grey-knights | 52 | 14 | 5 | 34 | 1 | 3 | 0 | 1 |
 | imperial-knights | 45 | 21 | 3 | 23 | 1 | 5 | 0 | 1 |
-| leagues-of-votann | 54 | 13 | 7 | 36 | 0 | 0 | 0 | 1 |
-| necrons | 130 | 22 | 23 | 93 | 6 | 6 | 0 | 1 |
-| orks | 121 | 29 | 12 | 84 | 3 | 6 | 0 | 3 |
-| tau-empire | 116 | 32 | 7 | 80 | 3 | 6 | 0 | 3 |
+| leagues-of-votann | 69 | 13 | 7 | 51 | 15 | 0 | 0 | 1 |
+| necrons | 148 | 24 | 23 | 109 | 21 | 6 | 0 | 1 |
+| orks | 143 | 29 | 12 | 106 | 25 | 6 | 0 | 3 |
+| tau-empire | 122 | 32 | 7 | 86 | 9 | 6 | 0 | 3 |
 | thousand-sons | 95 | 25 | 8 | 67 | 10 | 17 | 0 | 2 |
-| tyranids | 90 | 19 | 7 | 67 | 1 | 5 | 0 | 6 |
+| tyranids | 102 | 19 | 7 | 79 | 13 | 5 | 0 | 6 |
 | world-eaters | 122 | 14 | 6 | 102 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **2425** | **604** | **235** | **1670** | **63** | **154** | **0** | **59** |
+| **TOTAL** | **2551** | **606** | **235** | **1794** | **186** | **154** | **0** | **59** |
 
 `stub*` = structural (empty-modifier placeholder node) — the authoring worklist. `notes-stub` = flagged in community_notes.
 
 ## Unsupported-effect reasons (offensive walk)
 
-- `376` — effect type "ability-grant" is not modelled by the buff layer
+- `377` — effect type "ability-grant" is not modelled by the buff layer
+- `181` — stat-modifier: operation "undefined" not supported
 - `153` — effect type "movement-modifier" is not modelled by the buff layer
 - `121` — effect type "mortal-wounds" is not modelled by the buff layer
 - `86` — dice-gated effect: stochastic; not expressible as a buff
 - `86` — effect type "attack-restriction" is not modelled by the buff layer
 - `66` — effect type "leadership-modifier" is not modelled by the buff layer
-- `58` — stat-modifier: operation "undefined" not supported
 - `54` — effect type "resurrection" is not modelled by the buff layer
 - `47` — conditional: cannot evaluate condition "undefined" against current context
 - `45` — effect type "cp-refund" is not modelled by the buff layer
 - `37` — stat-modifier: operation "set" not supported
 - `37` — effect type "objective-control-modifier" is not modelled by the buff layer
 - `35` — effect type "cp-gain" is not modelled by the buff layer
+- `33` — effect type "deep-strike" is not modelled by the buff layer
 - `33` — re-roll on "charge" (subset …) is outside the damage path
-- `32` — effect type "deep-strike" is not modelled by the buff layer
 - `26` — effect type "fallback-and-act" is not modelled by the buff layer
 - `22` — effect type "fight-on-death" is not modelled by the buff layer
 - `18` — effect type "fight-first" is not modelled by the buff layer
 - `18` — roll-modifier: operation "set" not supported
-- `14` — stat-modifier on "M" is outside the damage path
+- `15` — stat-modifier on "M" is outside the damage path
 - `13` — roll-modifier: operation "ignore-modifiers" not supported
 - `11` — roll-modifier on "charge" is outside the damage path
 - `11` — conditional: cannot evaluate condition "unit-below-starting-strength" against current context

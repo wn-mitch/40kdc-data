@@ -574,5 +574,77 @@
     "points_provisional": true,
     "upgrade_tag": false,
     "max_targets": 1
+  },
+  {
+    "id": "encircling-horrors",
+    "name": "Encircling Horrors",
+    "detachment_id": "ambush-predators",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Tyranids"
+    ],
+    "ability_id": "encircling-horrors",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "cryptophotaic-camouflage",
+    "name": "Cryptophotaic Camouflage",
+    "detachment_id": "ambush-predators",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Tyranids"
+    ],
+    "ability_id": "cryptophotaic-camouflage",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "destabilising-predation",
+    "name": "Destabilising Predation",
+    "detachment_id": "talons-of-the-norn-queen",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Tyranids"
+    ],
+    "ability_id": "destabilising-predation",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "synaptoprescience",
+    "name": "Synaptoprescience",
+    "detachment_id": "talons-of-the-norn-queen",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Tyranids"
+    ],
+    "ability_id": "synaptoprescience",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
   }
 ]

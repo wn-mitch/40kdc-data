@@ -1,0 +1,227 @@
+{
+  "faction_id": "drukhari",
+  "source_pack": "eng_09-06_warhammer40000_faction_pack_drukhari-wp9pdv8x9l-dhoh0i94sx.pdf",
+  "detachments": [
+    {
+      "id": "exhibition-of-slaughter",
+      "name": "Exhibition of Slaughter",
+      "detachment_rule_name": "Exacting Cruelty",
+      "stratagems": [
+        {
+          "id": "planned-strikes",
+          "name": "Planned Strikes",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "fight"
+          ],
+          "player_turn": "either",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "sculpting-the-stage",
+          "name": "Sculpting the Stage",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "movement"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "exhibition-of-slaughter-acrobatic-display",
+          "name": "Acrobatic Display",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "opponent-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "exhibition-of-slaughter-periapt-of-torments",
+          "name": "Periapt of Torments",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        },
+        {
+          "id": "hyperstimm-trafficker",
+          "name": "Hyperstimm Trafficker",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
+      "id": "kabalite-agonysts",
+      "name": "Kabalite Agonysts",
+      "detachment_rule_name": "Contracted Harvest",
+      "stratagems": [
+        {
+          "id": "prioritised-victim",
+          "name": "Prioritised Victim",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting",
+            "fight"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "shadows-reach",
+          "name": "Shadows’ Reach",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "killers-from-the-dark-spires",
+          "name": "Killers From the Dark Spires",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "kabalite-agonysts-towering-arrogance",
+          "name": "Towering Arrogance",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        },
+        {
+          "id": "contempt-for-rivals",
+          "name": "Contempt for Rivals",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
+      "id": "tools-of-torment",
+      "name": "Tools of Torment",
+      "detachment_rule_name": "Darkest Artifice",
+      "stratagems": [
+        {
+          "id": "salting-the-wound",
+          "name": "Salting the Wound",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "fight"
+          ],
+          "player_turn": "either",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "dividends-of-agony",
+          "name": "Dividends of Agony",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "fight"
+          ],
+          "player_turn": "either",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "urgent-metamorphosis",
+          "name": "Urgent Metamorphosis",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "movement"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "gnarlskin-experimentor",
+          "name": "Gnarlskin Experimentor",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        },
+        {
+          "id": "elixir-of-the-corpse-courts",
+          "name": "Elixir of the Corpse Courts",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        }
+      ],
+      "flags": []
+    }
+  ]
+}

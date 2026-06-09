@@ -22,8 +22,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "biosanctic-broodsurge",
@@ -48,8 +50,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "outlander-claw",
@@ -74,8 +78,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "reconnaissance"
+    ]
   },
   {
     "id": "final-day",
@@ -100,8 +106,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "xenocreed-congregation",
@@ -126,8 +134,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "host-of-ascension",
@@ -152,7 +162,87 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "take-and-hold"
+    ],
+    "tags": [
+      "hosts"
+    ]
+  },
+  {
+    "id": "heroes-of-the-uprising",
+    "name": "Heroes of the Uprising",
+    "faction_id": "genestealer-cults",
+    "detachment_rule_id": "killer-reputation",
+    "enhancement_ids": [
+      "gene-tailored-toxins",
+      "contraband-munitions"
+    ],
+    "stratagem_ids": [
+      "living-up-to-legend",
+      "surging-broodworship",
+      "loyal-to-the-end"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
+  },
+  {
+    "id": "purestrain-broodswarm",
+    "name": "Purestrain Broodswarm",
+    "faction_id": "genestealer-cults",
+    "detachment_rule_id": "enemy-within",
+    "enhancement_ids": [
+      "mark-of-the-star-children",
+      "talons-of-the-sire"
+    ],
+    "stratagem_ids": [
+      "lurk-and-strike",
+      "crawling-horror",
+      "inhuman-reactions"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ],
+    "tags": [
+      "purestrain"
+    ]
+  },
+  {
+    "id": "xenocult-masses",
+    "name": "Xenocult Masses",
+    "faction_id": "genestealer-cults",
+    "detachment_rule_id": "hordes-of-the-faithful",
+    "enhancement_ids": [
+      "inspired-to-greatness",
+      "devious-disguises"
+    ],
+    "stratagem_ids": [
+      "eyes-of-the-cult",
+      "fanatical-hail",
+      "slunk-from-the-underbelly"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "disruption"
+    ],
+    "tags": [
+      "hosts"
+    ]
   }
 ]

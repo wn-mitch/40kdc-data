@@ -430,5 +430,113 @@
     "points_provisional": true,
     "upgrade_tag": false,
     "max_targets": 1
+  },
+  {
+    "id": "exhibition-of-slaughter-periapt-of-torments",
+    "name": "Periapt of Torments",
+    "detachment_id": "exhibition-of-slaughter",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Drukhari"
+    ],
+    "ability_id": "exhibition-of-slaughter-periapt-of-torments",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "hyperstimm-trafficker",
+    "name": "Hyperstimm Trafficker",
+    "detachment_id": "exhibition-of-slaughter",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Drukhari"
+    ],
+    "ability_id": "hyperstimm-trafficker",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "kabalite-agonysts-towering-arrogance",
+    "name": "Towering Arrogance",
+    "detachment_id": "kabalite-agonysts",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Drukhari"
+    ],
+    "ability_id": "kabalite-agonysts-towering-arrogance",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "contempt-for-rivals",
+    "name": "Contempt for Rivals",
+    "detachment_id": "kabalite-agonysts",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Drukhari"
+    ],
+    "ability_id": "contempt-for-rivals",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "gnarlskin-experimentor",
+    "name": "Gnarlskin Experimentor",
+    "detachment_id": "tools-of-torment",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Drukhari"
+    ],
+    "ability_id": "gnarlskin-experimentor",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "elixir-of-the-corpse-courts",
+    "name": "Elixir of the Corpse Courts",
+    "detachment_id": "tools-of-torment",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Drukhari"
+    ],
+    "ability_id": "elixir-of-the-corpse-courts",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
   }
 ]

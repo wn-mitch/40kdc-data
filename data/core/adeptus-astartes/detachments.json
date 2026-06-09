@@ -130,7 +130,6 @@
     },
     "detachment_points": 1,
     "force_dispositions": [
-      "disruption",
       "reconnaissance"
     ]
   },
@@ -159,7 +158,7 @@
     },
     "detachment_points": 2,
     "force_dispositions": [
-      "disruption"
+      "reconnaissance"
     ]
   },
   {
@@ -213,7 +212,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 2,
-    "force_dispositions": []
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "firestorm-assault-force",
@@ -343,7 +344,7 @@
     },
     "detachment_points": 1,
     "force_dispositions": [
-      "disruption"
+      "reconnaissance"
     ]
   },
   {
@@ -370,7 +371,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 3,
-    "force_dispositions": []
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "bastion-task-force",

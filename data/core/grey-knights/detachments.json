@@ -23,7 +23,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 2,
-    "force_dispositions": []
+    "force_dispositions": [
+      "reconnaissance"
+    ]
   },
   {
     "id": "banishers",
@@ -49,7 +51,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 2,
-    "force_dispositions": []
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "warpbane-task-force",
@@ -75,7 +79,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 3,
-    "force_dispositions": []
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "brotherhood-strike",
@@ -101,7 +107,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 2,
-    "force_dispositions": []
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "hallowed-conclave",
@@ -127,7 +135,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 2,
-    "force_dispositions": []
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "sanctic-spearhead",
@@ -153,7 +163,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 2,
-    "force_dispositions": []
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "argent-assault",
@@ -174,7 +186,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 1,
-    "force_dispositions": []
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "fires-of-purgation",
@@ -195,7 +209,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 1,
-    "force_dispositions": []
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "immaterial-interdiction",
@@ -216,6 +232,8 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 1,
-    "force_dispositions": []
+    "force_dispositions": [
+      "priority-assets"
+    ]
   }
 ]

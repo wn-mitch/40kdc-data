@@ -430,5 +430,113 @@
     "points_provisional": true,
     "upgrade_tag": false,
     "max_targets": 1
+  },
+  {
+    "id": "gene-tailored-toxins",
+    "name": "Gene-tailored Toxins",
+    "detachment_id": "heroes-of-the-uprising",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Genestealer Cults"
+    ],
+    "ability_id": "gene-tailored-toxins",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "contraband-munitions",
+    "name": "Contraband Munitions",
+    "detachment_id": "heroes-of-the-uprising",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Genestealer Cults"
+    ],
+    "ability_id": "contraband-munitions",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "mark-of-the-star-children",
+    "name": "Mark of the Star Children",
+    "detachment_id": "purestrain-broodswarm",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Genestealer Cults"
+    ],
+    "ability_id": "mark-of-the-star-children",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "talons-of-the-sire",
+    "name": "Talons of the Sire",
+    "detachment_id": "purestrain-broodswarm",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Genestealer Cults"
+    ],
+    "ability_id": "talons-of-the-sire",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "inspired-to-greatness",
+    "name": "Inspired to Greatness",
+    "detachment_id": "xenocult-masses",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Genestealer Cults"
+    ],
+    "ability_id": "inspired-to-greatness",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "devious-disguises",
+    "name": "Devious Disguises",
+    "detachment_id": "xenocult-masses",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Genestealer Cults"
+    ],
+    "ability_id": "devious-disguises",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
   }
 ]

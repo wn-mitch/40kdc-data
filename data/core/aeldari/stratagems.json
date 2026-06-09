@@ -1389,5 +1389,167 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     }
+  },
+  {
+    "id": "fateful-performance-exit-the-stage",
+    "name": "Exit the Stage",
+    "category": "detachment",
+    "detachment_id": "fateful-performance",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "fateful-performance-exit-the-stage",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "fateful-performance-heroes-fall",
+    "name": "Heroes’ Fall",
+    "category": "detachment",
+    "detachment_id": "fateful-performance",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "fateful-performance-heroes-fall",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "deceptive-feint",
+    "name": "Deceptive Feint",
+    "category": "detachment",
+    "detachment_id": "fateful-performance",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "deceptive-feint",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "eldritch-suppression",
+    "name": "Eldritch Suppression",
+    "category": "detachment",
+    "detachment_id": "path-of-the-outcast",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "eldritch-suppression",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "casting-back-the-veil",
+    "name": "Casting Back the Veil",
+    "category": "detachment",
+    "detachment_id": "path-of-the-outcast",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "casting-back-the-veil",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "nomads-of-the-hidden-way",
+    "name": "Nomads of the Hidden Way",
+    "category": "detachment",
+    "detachment_id": "path-of-the-outcast",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "nomads-of-the-hidden-way",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "presaged-rehearsal",
+    "name": "Presaged Rehearsal",
+    "category": "detachment",
+    "detachment_id": "twilight-flickers",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "presaged-rehearsal",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "captivating-performance",
+    "name": "Captivating Performance",
+    "category": "detachment",
+    "detachment_id": "twilight-flickers",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "captivating-performance",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "phantasmal-mirage",
+    "name": "Phantasmal Mirage",
+    "category": "detachment",
+    "detachment_id": "twilight-flickers",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "phantasmal-mirage",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   }
 ]

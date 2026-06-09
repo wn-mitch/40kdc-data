@@ -57,12 +57,12 @@
     },
     {
       "faction": "aeldari",
-      "total": 151,
+      "total": 168,
       "offensive": 33,
       "defensive": 13,
-      "inert": 110,
+      "inert": 127,
       "stub": 13,
-      "stubStructural": 6,
+      "stubStructural": 23,
       "gwTextLeak": 0,
       "defensiveSkipped": 5
     },
@@ -134,12 +134,12 @@
     },
     {
       "faction": "drukhari",
-      "total": 76,
+      "total": 94,
       "offensive": 21,
       "defensive": 6,
-      "inert": 51,
+      "inert": 69,
       "stub": 7,
-      "stubStructural": 2,
+      "stubStructural": 20,
       "gwTextLeak": 0,
       "defensiveSkipped": 1
     },
@@ -156,12 +156,12 @@
     },
     {
       "faction": "genestealer-cults",
-      "total": 63,
+      "total": 81,
       "offensive": 13,
       "defensive": 6,
-      "inert": 46,
+      "inert": 64,
       "stub": 2,
-      "stubStructural": 2,
+      "stubStructural": 20,
       "gwTextLeak": 0,
       "defensiveSkipped": 1
     },
@@ -189,45 +189,45 @@
     },
     {
       "faction": "leagues-of-votann",
-      "total": 54,
+      "total": 69,
       "offensive": 13,
       "defensive": 7,
-      "inert": 36,
+      "inert": 51,
       "stub": 0,
-      "stubStructural": 0,
+      "stubStructural": 15,
       "gwTextLeak": 0,
       "defensiveSkipped": 1
     },
     {
       "faction": "necrons",
-      "total": 130,
-      "offensive": 22,
+      "total": 148,
+      "offensive": 24,
       "defensive": 23,
-      "inert": 93,
+      "inert": 109,
       "stub": 6,
-      "stubStructural": 6,
+      "stubStructural": 21,
       "gwTextLeak": 0,
       "defensiveSkipped": 1
     },
     {
       "faction": "orks",
-      "total": 121,
+      "total": 143,
       "offensive": 29,
       "defensive": 12,
-      "inert": 84,
+      "inert": 106,
       "stub": 6,
-      "stubStructural": 3,
+      "stubStructural": 25,
       "gwTextLeak": 0,
       "defensiveSkipped": 3
     },
     {
       "faction": "tau-empire",
-      "total": 116,
+      "total": 122,
       "offensive": 32,
       "defensive": 7,
-      "inert": 80,
+      "inert": 86,
       "stub": 6,
-      "stubStructural": 3,
+      "stubStructural": 9,
       "gwTextLeak": 0,
       "defensiveSkipped": 3
     },
@@ -244,12 +244,12 @@
     },
     {
       "faction": "tyranids",
-      "total": 90,
+      "total": 102,
       "offensive": 19,
       "defensive": 7,
-      "inert": 67,
+      "inert": 79,
       "stub": 5,
-      "stubStructural": 1,
+      "stubStructural": 13,
       "gwTextLeak": 0,
       "defensiveSkipped": 6
     },
@@ -266,19 +266,23 @@
     }
   ],
   "totals": {
-    "total": 2425,
-    "offensive": 604,
+    "total": 2551,
+    "offensive": 606,
     "defensive": 235,
-    "inert": 1670,
+    "inert": 1794,
     "stub": 154,
-    "stubStructural": 63,
+    "stubStructural": 186,
     "gwTextLeak": 0,
     "defensiveSkipped": 59
   },
   "unsupportedReasons": [
     {
       "reason": "effect type \"ability-grant\" is not modelled by the buff layer",
-      "count": 376
+      "count": 377
+    },
+    {
+      "reason": "stat-modifier: operation \"undefined\" not supported",
+      "count": 181
     },
     {
       "reason": "effect type \"movement-modifier\" is not modelled by the buff layer",
@@ -299,10 +303,6 @@
     {
       "reason": "effect type \"leadership-modifier\" is not modelled by the buff layer",
       "count": 66
-    },
-    {
-      "reason": "stat-modifier: operation \"undefined\" not supported",
-      "count": 58
     },
     {
       "reason": "effect type \"resurrection\" is not modelled by the buff layer",
@@ -329,12 +329,12 @@
       "count": 35
     },
     {
-      "reason": "re-roll on \"charge\" (subset …) is outside the damage path",
+      "reason": "effect type \"deep-strike\" is not modelled by the buff layer",
       "count": 33
     },
     {
-      "reason": "effect type \"deep-strike\" is not modelled by the buff layer",
-      "count": 32
+      "reason": "re-roll on \"charge\" (subset …) is outside the damage path",
+      "count": 33
     },
     {
       "reason": "effect type \"fallback-and-act\" is not modelled by the buff layer",
@@ -354,7 +354,7 @@
     },
     {
       "reason": "stat-modifier on \"M\" is outside the damage path",
-      "count": 14
+      "count": 15
     },
     {
       "reason": "roll-modifier: operation \"ignore-modifiers\" not supported",
@@ -7652,6 +7652,176 @@
       "faction": "aeldari",
       "ability_id": "battle-focus",
       "name": "Battle Focus",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "aeldari",
+      "ability_id": "acrobatic-onslaught",
+      "name": "Acrobatic Onslaught",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "aeldari",
+      "ability_id": "fateful-performance-exit-the-stage",
+      "name": "Exit the Stage",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "aeldari",
+      "ability_id": "fateful-performance-heroes-fall",
+      "name": "Heroes’ Fall",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "aeldari",
+      "ability_id": "deceptive-feint",
+      "name": "Deceptive Feint",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "aeldari",
+      "ability_id": "a-foot-in-the-future",
+      "name": "A Foot in the Future",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "aeldari",
+      "ability_id": "fateful-performance-mistweave",
+      "name": "Mistweave",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "aeldari",
+      "ability_id": "far-reaching-doom",
+      "name": "Far-reaching Doom",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "aeldari",
+      "ability_id": "eldritch-suppression",
+      "name": "Eldritch Suppression",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "aeldari",
+      "ability_id": "casting-back-the-veil",
+      "name": "Casting Back the Veil",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "aeldari",
+      "ability_id": "nomads-of-the-hidden-way",
+      "name": "Nomads of the Hidden Way",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "aeldari",
+      "ability_id": "camouflaged-snipers",
+      "name": "Camouflaged Snipers",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "aeldari",
+      "ability_id": "dance-of-distortion",
+      "name": "Dance of Distortion",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "aeldari",
+      "ability_id": "presaged-rehearsal",
+      "name": "Presaged Rehearsal",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "aeldari",
+      "ability_id": "captivating-performance",
+      "name": "Captivating Performance",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "aeldari",
+      "ability_id": "phantasmal-mirage",
+      "name": "Phantasmal Mirage",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "aeldari",
+      "ability_id": "shadowfall-masks",
+      "name": "Shadowfall Masks",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "aeldari",
+      "ability_id": "prelude-performer",
+      "name": "Prelude Performer",
       "shape": "stat-modifier",
       "stub": true,
       "offensive": false,
@@ -15259,6 +15429,186 @@
       "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
     },
     {
+      "faction": "drukhari",
+      "ability_id": "exacting-cruelty",
+      "name": "Exacting Cruelty",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "drukhari",
+      "ability_id": "planned-strikes",
+      "name": "Planned Strikes",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "drukhari",
+      "ability_id": "sculpting-the-stage",
+      "name": "Sculpting the Stage",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "drukhari",
+      "ability_id": "exhibition-of-slaughter-acrobatic-display",
+      "name": "Acrobatic Display",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "drukhari",
+      "ability_id": "exhibition-of-slaughter-periapt-of-torments",
+      "name": "Periapt of Torments",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "drukhari",
+      "ability_id": "hyperstimm-trafficker",
+      "name": "Hyperstimm Trafficker",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "drukhari",
+      "ability_id": "contracted-harvest",
+      "name": "Contracted Harvest",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "drukhari",
+      "ability_id": "prioritised-victim",
+      "name": "Prioritised Victim",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "drukhari",
+      "ability_id": "shadows-reach",
+      "name": "Shadows’ Reach",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "drukhari",
+      "ability_id": "killers-from-the-dark-spires",
+      "name": "Killers From the Dark Spires",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "drukhari",
+      "ability_id": "kabalite-agonysts-towering-arrogance",
+      "name": "Towering Arrogance",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "drukhari",
+      "ability_id": "contempt-for-rivals",
+      "name": "Contempt for Rivals",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "drukhari",
+      "ability_id": "darkest-artifice",
+      "name": "Darkest Artifice",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "drukhari",
+      "ability_id": "salting-the-wound",
+      "name": "Salting the Wound",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "drukhari",
+      "ability_id": "dividends-of-agony",
+      "name": "Dividends of Agony",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "drukhari",
+      "ability_id": "urgent-metamorphosis",
+      "name": "Urgent Metamorphosis",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "drukhari",
+      "ability_id": "gnarlskin-experimentor",
+      "name": "Gnarlskin Experimentor",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "drukhari",
+      "ability_id": "elixir-of-the-corpse-courts",
+      "name": "Elixir of the Corpse Courts",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
       "faction": "emperors-children",
       "ability_id": "deadly-demise-d6",
       "name": "Deadly Demise D6",
@@ -16497,6 +16847,186 @@
       "offensive": false,
       "defensive": false,
       "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "genestealer-cults",
+      "ability_id": "killer-reputation",
+      "name": "Killer Reputation",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "genestealer-cults",
+      "ability_id": "living-up-to-legend",
+      "name": "Living Up to Legend",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "genestealer-cults",
+      "ability_id": "surging-broodworship",
+      "name": "Surging Broodworship",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "genestealer-cults",
+      "ability_id": "loyal-to-the-end",
+      "name": "Loyal to the End",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "genestealer-cults",
+      "ability_id": "gene-tailored-toxins",
+      "name": "Gene-tailored Toxins",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "genestealer-cults",
+      "ability_id": "contraband-munitions",
+      "name": "Contraband Munitions",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "genestealer-cults",
+      "ability_id": "enemy-within",
+      "name": "Enemy Within",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "genestealer-cults",
+      "ability_id": "lurk-and-strike",
+      "name": "Lurk and Strike",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "genestealer-cults",
+      "ability_id": "crawling-horror",
+      "name": "Crawling Horror",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "genestealer-cults",
+      "ability_id": "inhuman-reactions",
+      "name": "Inhuman Reactions",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "genestealer-cults",
+      "ability_id": "mark-of-the-star-children",
+      "name": "Mark of the Star Children",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "genestealer-cults",
+      "ability_id": "talons-of-the-sire",
+      "name": "Talons of the Sire",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "genestealer-cults",
+      "ability_id": "hordes-of-the-faithful",
+      "name": "Hordes of the Faithful",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "genestealer-cults",
+      "ability_id": "eyes-of-the-cult",
+      "name": "Eyes of the Cult",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "genestealer-cults",
+      "ability_id": "fanatical-hail",
+      "name": "Fanatical Hail",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "genestealer-cults",
+      "ability_id": "slunk-from-the-underbelly",
+      "name": "Slunk From the Underbelly",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "genestealer-cults",
+      "ability_id": "inspired-to-greatness",
+      "name": "Inspired to Greatness",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "genestealer-cults",
+      "ability_id": "devious-disguises",
+      "name": "Devious Disguises",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
     },
     {
       "faction": "grey-knights",
@@ -18009,6 +18539,156 @@
       "gap": "re-roll on \"charge\" (subset …) is outside the damage path"
     },
     {
+      "faction": "leagues-of-votann",
+      "ability_id": "sagitaur-spearhead",
+      "name": "Sagitaur Spearhead",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "leagues-of-votann",
+      "ability_id": "coordinated-crossfire",
+      "name": "Coordinated Crossfire",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "leagues-of-votann",
+      "ability_id": "outflanking-armour",
+      "name": "Outflanking Armour",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "leagues-of-votann",
+      "ability_id": "built-to-last",
+      "name": "Built to Last",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "leagues-of-votann",
+      "ability_id": "saturation-rounds",
+      "name": "Saturation Rounds",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "leagues-of-votann",
+      "ability_id": "optimised-attack-lines",
+      "name": "Optimised Attack Lines",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "leagues-of-votann",
+      "ability_id": "eye-of-the-hunt",
+      "name": "Eye of the Hunt",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "leagues-of-votann",
+      "ability_id": "no-shot-wasted",
+      "name": "No Shot Wasted",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "leagues-of-votann",
+      "ability_id": "scornful-analysis",
+      "name": "Scornful Analysis",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "leagues-of-votann",
+      "ability_id": "economy-of-motion",
+      "name": "Economy of Motion",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "leagues-of-votann",
+      "ability_id": "pan-spectral-lockons",
+      "name": "Pan-spectral Lockons",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "leagues-of-votann",
+      "ability_id": "avatars-of-the-ancestors",
+      "name": "Avatars of the Ancestors",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "leagues-of-votann",
+      "ability_id": "hearthguard-covenant-fury-of-the-hearth",
+      "name": "Fury of the Hearth",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "leagues-of-votann",
+      "ability_id": "hearthguard-covenant-materialisation-matrices",
+      "name": "Materialisation Matrices",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "leagues-of-votann",
+      "ability_id": "hearthguard-covenant-ironskein",
+      "name": "Ironskein",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
       "faction": "necrons",
       "ability_id": "deadly-demise-d3",
       "name": "Deadly Demise D3",
@@ -19309,6 +19989,186 @@
       "gap": "effect type \"attack-restriction\" is not modelled by the buff layer"
     },
     {
+      "faction": "necrons",
+      "ability_id": "hypermotility-protocols",
+      "name": "Hypermotility Protocols",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "necrons",
+      "ability_id": "transdimensional-deployment",
+      "name": "Transdimensional Deployment",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": "effect type \"deep-strike\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "necrons",
+      "ability_id": "empowered-engines",
+      "name": "Empowered Engines",
+      "shape": "stat-modifier",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier on \"M\" is outside the damage path"
+    },
+    {
+      "faction": "necrons",
+      "ability_id": "dominance-protocols",
+      "name": "Dominance Protocols",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "necrons",
+      "ability_id": "will-of-the-conqueror",
+      "name": "Will of the Conqueror",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "necrons",
+      "ability_id": "nanosaturation",
+      "name": "Nanosaturation",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "necrons",
+      "ability_id": "enlivened-sentinels",
+      "name": "Enlivened Sentinels",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "necrons",
+      "ability_id": "tools-of-dominion",
+      "name": "Tools of Dominion",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "necrons",
+      "ability_id": "omnilocked-strafing",
+      "name": "Omnilocked Strafing",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "necrons",
+      "ability_id": "swift-as-death",
+      "name": "Swift As Death",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "necrons",
+      "ability_id": "evasive-protocols",
+      "name": "Evasive Protocols",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "necrons",
+      "ability_id": "recursive-reanimation",
+      "name": "Recursive Reanimation",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "necrons",
+      "ability_id": "deepening-madness",
+      "name": "Deepening Madness",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "necrons",
+      "ability_id": "subsurface-quantumweave",
+      "name": "Subsurface Quantumweave",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "necrons",
+      "ability_id": "particle-pulse",
+      "name": "Particle Pulse",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "necrons",
+      "ability_id": "cosmic-storm",
+      "name": "Cosmic Storm",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "necrons",
+      "ability_id": "prelocational-optimiser",
+      "name": "Prelocational Optimiser",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "necrons",
+      "ability_id": "mortality-shroud-aura",
+      "name": "Mortality Shroud (aura)",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
       "faction": "orks",
       "ability_id": "deadly-demise-d3",
       "name": "Deadly Demise D3",
@@ -20519,6 +21379,226 @@
       "gap": "stat-modifier: operation \"undefined\" not supported"
     },
     {
+      "faction": "orks",
+      "ability_id": "thundering-wagons",
+      "name": "Thundering Wagons",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "brutal-broadside",
+      "name": "Brutal Broadside",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "impending-crunch",
+      "name": "Impending Crunch",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "devastating-drift",
+      "name": "Devastating Drift",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "rollin-deff-long-uncontrolled-bursts",
+      "name": "Long, Uncontrolled Bursts",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "rollin-deff-speshul-shells",
+      "name": "Speshul Shells",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "boarding-ramps",
+      "name": "Boarding Ramps",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "targetin-gizmos",
+      "name": "Targetin’ Gizmos",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "dakka-dakka-dakka",
+      "name": "Dakka! Dakka! Dakka!",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "rollin-deff-dead-shiny-shootas",
+      "name": "Dead Shiny Shootas",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "rollin-deff-da-gobshot-thunderbuss",
+      "name": "Da Gobshot Thunderbuss",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "eager-for-the-fight",
+      "name": "Eager for the Fight",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "mount-up-ladz",
+      "name": "Mount Up, Ladz",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "armoured-duellists",
+      "name": "Armoured Duellists",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "impervious",
+      "name": "Impervious",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "mekanised-brutality",
+      "name": "Mekanised Brutality",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "run-em-down",
+      "name": "Run ’em Down",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "yooz-in-trouble-now",
+      "name": "Yooz in Trouble Now",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "runnin-boots",
+      "name": "Runnin’ Boots",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "blitzkaptin",
+      "name": "Blitzkaptin",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "supercharged-squig-oil",
+      "name": "Supercharged Squig Oil",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "orks",
+      "ability_id": "tuff-git",
+      "name": "Tuff Git",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
       "faction": "tau-empire",
       "ability_id": "scouts-7",
       "name": "Scouts 7\"",
@@ -21677,6 +22757,66 @@
       "offensive": false,
       "defensive": false,
       "gap": "effect type \"movement-modifier\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "tau-empire",
+      "ability_id": "expert-fieldcraft",
+      "name": "Expert Fieldcraft",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "tau-empire",
+      "ability_id": "marker-beacon",
+      "name": "Marker Beacon",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "tau-empire",
+      "ability_id": "microdrone-support",
+      "name": "Microdrone Support",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "tau-empire",
+      "ability_id": "autoreactive-camouflage",
+      "name": "Autoreactive Camouflage",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "tau-empire",
+      "ability_id": "negation-emitters",
+      "name": "Negation Emitters",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "tau-empire",
+      "ability_id": "unmasking-suite",
+      "name": "Unmasking Suite",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
     },
     {
       "faction": "thousand-sons",
@@ -23527,6 +24667,126 @@
       "offensive": false,
       "defensive": false,
       "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "tyranids",
+      "ability_id": "mindhunger",
+      "name": "Mindhunger",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "tyranids",
+      "ability_id": "counterpredation",
+      "name": "Counterpredation",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "tyranids",
+      "ability_id": "hypersensory-adaptations",
+      "name": "Hypersensory Adaptations",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "tyranids",
+      "ability_id": "scanner-gheist",
+      "name": "Scanner Gheist",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "tyranids",
+      "ability_id": "encircling-horrors",
+      "name": "Encircling Horrors",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "tyranids",
+      "ability_id": "cryptophotaic-camouflage",
+      "name": "Cryptophotaic Camouflage",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "tyranids",
+      "ability_id": "higher-imperatives",
+      "name": "Higher Imperatives",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "tyranids",
+      "ability_id": "catalytic-biofortification",
+      "name": "Catalytic Biofortification",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "tyranids",
+      "ability_id": "lesser-prey",
+      "name": "Lesser Prey",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "tyranids",
+      "ability_id": "tanglestrike-rounds",
+      "name": "Tanglestrike Rounds",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "tyranids",
+      "ability_id": "destabilising-predation",
+      "name": "Destabilising Predation",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
+    },
+    {
+      "faction": "tyranids",
+      "ability_id": "synaptoprescience",
+      "name": "Synaptoprescience",
+      "shape": "stat-modifier",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier: operation \"undefined\" not supported"
     },
     {
       "faction": "world-eaters",

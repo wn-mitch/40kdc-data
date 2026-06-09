@@ -51,7 +51,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 2,
-    "force_dispositions": []
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "lions-blade-task-force",
@@ -151,7 +153,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 1,
-    "force_dispositions": []
+    "force_dispositions": [
+      "reconnaissance"
+    ]
   },
   {
     "id": "interrogation-conclave",

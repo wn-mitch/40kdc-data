@@ -335,6 +335,10 @@ export interface Detachment {
    * 11e: ids of the Force Disposition entities this detachment grants. Empty until assigned.
    */
   force_dispositions?: EntityId[];
+  /**
+   * 11e: detachment-type tags (e.g. 'dynasty', 'kabal'). A roster may include at most one detachment per shared tag — the 'you can only take one of X type of detachment' rule. Empty when the detachment carries no UNIQUE tag.
+   */
+  tags?: string[];
   enhancement_ids?: EntityId[];
   stratagem_ids?: EntityId[];
   restrictions?: {

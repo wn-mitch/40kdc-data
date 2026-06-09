@@ -22,8 +22,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "windrider-host",
@@ -48,8 +50,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "serpents-brood",
@@ -74,8 +78,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "spirit-conclave",
@@ -100,8 +106,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "devoted-of-ynnead",
@@ -126,8 +134,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "guardian-battlehost",
@@ -152,8 +162,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "armoured-warhost",
@@ -178,8 +190,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 1,
+    "force_dispositions": [
+      "reconnaissance"
+    ]
   },
   {
     "id": "corsair-coterie",
@@ -204,8 +218,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "eldritch-raiders",
@@ -230,8 +246,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "seer-council",
@@ -257,7 +275,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 2,
-    "force_dispositions": []
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "warhost",
@@ -282,8 +302,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "aspect-host",
@@ -308,21 +330,83 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "path-of-the-outcast",
     "name": "Path of the Outcast",
     "faction_id": "aeldari",
-    "detachment_rule_id": null,
-    "enhancement_ids": [],
-    "stratagem_ids": [],
+    "detachment_rule_id": "far-reaching-doom",
+    "enhancement_ids": [
+      "camouflaged-snipers"
+    ],
+    "stratagem_ids": [
+      "eldritch-suppression",
+      "casting-back-the-veil",
+      "nomads-of-the-hidden-way"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 1,
-    "force_dispositions": []
+    "force_dispositions": [
+      "reconnaissance"
+    ]
+  },
+  {
+    "id": "fateful-performance",
+    "name": "Fateful Performance",
+    "faction_id": "aeldari",
+    "detachment_rule_id": "acrobatic-onslaught",
+    "enhancement_ids": [
+      "a-foot-in-the-future",
+      "fateful-performance-mistweave"
+    ],
+    "stratagem_ids": [
+      "fateful-performance-exit-the-stage",
+      "fateful-performance-heroes-fall",
+      "deceptive-feint"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "disruption"
+    ],
+    "tags": [
+      "acrobatic"
+    ]
+  },
+  {
+    "id": "twilight-flickers",
+    "name": "Twilight Flickers",
+    "faction_id": "aeldari",
+    "detachment_rule_id": "dance-of-distortion",
+    "enhancement_ids": [
+      "shadowfall-masks",
+      "prelude-performer"
+    ],
+    "stratagem_ids": [
+      "presaged-rehearsal",
+      "captivating-performance",
+      "phantasmal-mirage"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ],
+    "tags": [
+      "acrobatic"
+    ]
   }
 ]

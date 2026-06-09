@@ -700,5 +700,59 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     }
+  },
+  {
+    "id": "marker-beacon",
+    "name": "Marker Beacon",
+    "category": "detachment",
+    "detachment_id": "advanced-acquisition-cadre",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "marker-beacon",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "microdrone-support",
+    "name": "Microdrone Support",
+    "category": "detachment",
+    "detachment_id": "advanced-acquisition-cadre",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "microdrone-support",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "autoreactive-camouflage",
+    "name": "Autoreactive Camouflage",
+    "category": "detachment",
+    "detachment_id": "advanced-acquisition-cadre",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "autoreactive-camouflage",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   }
 ]

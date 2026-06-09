@@ -22,8 +22,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "subterranean-assault",
@@ -48,8 +50,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "warrior-bioform-onslaught",
@@ -74,8 +78,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "crusher-stampede",
@@ -100,8 +106,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "unending-swarm",
@@ -126,8 +134,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "vanguard-onslaught",
@@ -152,8 +162,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "reconnaissance"
+    ]
   },
   {
     "id": "invasion-fleet",
@@ -178,8 +190,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "assimilation-swarm",
@@ -204,7 +218,55 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "priority-assets"
+    ]
+  },
+  {
+    "id": "ambush-predators",
+    "name": "Ambush Predators",
+    "faction_id": "tyranids",
+    "detachment_rule_id": "mindhunger",
+    "enhancement_ids": [
+      "encircling-horrors",
+      "cryptophotaic-camouflage"
+    ],
+    "stratagem_ids": [
+      "counterpredation",
+      "hypersensory-adaptations",
+      "scanner-gheist"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "disruption"
+    ]
+  },
+  {
+    "id": "talons-of-the-norn-queen",
+    "name": "Talons of the Norn Queen",
+    "faction_id": "tyranids",
+    "detachment_rule_id": "higher-imperatives",
+    "enhancement_ids": [
+      "destabilising-predation",
+      "synaptoprescience"
+    ],
+    "stratagem_ids": [
+      "catalytic-biofortification",
+      "lesser-prey",
+      "tanglestrike-rounds"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   }
 ]

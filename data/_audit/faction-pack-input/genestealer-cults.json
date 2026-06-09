@@ -1,0 +1,229 @@
+{
+  "faction_id": "genestealer-cults",
+  "source_pack": "eng_09-06_warhammer40000_faction_pack_genestealer_cults-ee2tg004ty-lfbh6g1gr7.pdf",
+  "detachments": [
+    {
+      "id": "heroes-of-the-uprising",
+      "name": "Heroes of the Uprising",
+      "detachment_rule_name": "Killer Reputation",
+      "stratagems": [
+        {
+          "id": "living-up-to-legend",
+          "name": "Living Up to Legend",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting",
+            "fight"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "surging-broodworship",
+          "name": "Surging Broodworship",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting",
+            "fight"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "loyal-to-the-end",
+          "name": "Loyal to the End",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "fight"
+          ],
+          "player_turn": "either",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "gene-tailored-toxins",
+          "name": "Gene-tailored Toxins",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        },
+        {
+          "id": "contraband-munitions",
+          "name": "Contraband Munitions",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
+      "id": "purestrain-broodswarm",
+      "name": "Purestrain Broodswarm",
+      "detachment_rule_name": "Enemy Within",
+      "stratagems": [
+        {
+          "id": "lurk-and-strike",
+          "name": "Lurk and Strike",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "movement"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "crawling-horror",
+          "name": "Crawling Horror",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "movement"
+          ],
+          "player_turn": "opponent-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "inhuman-reactions",
+          "name": "Inhuman Reactions",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "movement"
+          ],
+          "player_turn": "opponent-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "mark-of-the-star-children",
+          "name": "Mark of the Star Children",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        },
+        {
+          "id": "talons-of-the-sire",
+          "name": "Talons of the Sire",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
+      "id": "xenocult-masses",
+      "name": "Xenocult Masses",
+      "detachment_rule_name": "Hordes of the Faithful",
+      "stratagems": [
+        {
+          "id": "eyes-of-the-cult",
+          "name": "Eyes of the Cult",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "fanatical-hail",
+          "name": "Fanatical Hail",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "slunk-from-the-underbelly",
+          "name": "Slunk From the Underbelly",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "opponent-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "inspired-to-greatness",
+          "name": "Inspired to Greatness",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        },
+        {
+          "id": "devious-disguises",
+          "name": "Devious Disguises",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        }
+      ],
+      "flags": []
+    }
+  ]
+}

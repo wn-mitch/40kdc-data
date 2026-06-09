@@ -1,0 +1,81 @@
+{
+  "faction_id": "tau-empire",
+  "source_pack": "eng_09-06_warhammer40000_faction_pack_tau_empire-avmkx2gg8i-jezqgeb55k.pdf",
+  "detachments": [
+    {
+      "id": "advanced-acquisition-cadre",
+      "name": "Advanced Acquisition Cadre",
+      "detachment_rule_name": "Expert Fieldcraft",
+      "stratagems": [
+        {
+          "id": "marker-beacon",
+          "name": "Marker Beacon",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "movement"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "microdrone-support",
+          "name": "Microdrone Support",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "autoreactive-camouflage",
+          "name": "Autoreactive Camouflage",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "opponent-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "negation-emitters",
+          "name": "Negation Emitters",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        },
+        {
+          "id": "unmasking-suite",
+          "name": "Unmasking Suite",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        }
+      ],
+      "flags": []
+    }
+  ]
+}

@@ -1,0 +1,161 @@
+{
+  "faction_id": "tyranids",
+  "source_pack": "eng_09-06_warhammer40000_faction_pack_tyranids-avhhzmcte8-j0kseag7td.pdf",
+  "detachments": [
+    {
+      "id": "ambush-predators",
+      "name": "Ambush Predators",
+      "detachment_rule_name": "Mindhunger",
+      "stratagems": [
+        {
+          "id": "counterpredation",
+          "name": "Counterpredation",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "fight"
+          ],
+          "player_turn": "either",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "hypersensory-adaptations",
+          "name": "Hypersensory Adaptations",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "scanner-gheist",
+          "name": "Scanner Gheist",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "fight"
+          ],
+          "player_turn": "opponent-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "encircling-horrors",
+          "name": "Encircling Horrors",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        },
+        {
+          "id": "cryptophotaic-camouflage",
+          "name": "Cryptophotaic Camouflage",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
+      "id": "talons-of-the-norn-queen",
+      "name": "Talons of the Norn Queen",
+      "detachment_rule_name": "Higher Imperatives",
+      "stratagems": [
+        {
+          "id": "catalytic-biofortification",
+          "name": "Catalytic Biofortification",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "command",
+            "movement",
+            "shooting",
+            "charge",
+            "fight"
+          ],
+          "player_turn": null,
+          "timing": null,
+          "flags": [
+            "phase-review",
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "lesser-prey",
+          "name": "Lesser Prey",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "fight"
+          ],
+          "player_turn": "either",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "tanglestrike-rounds",
+          "name": "Tanglestrike Rounds",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "destabilising-predation",
+          "name": "Destabilising Predation",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        },
+        {
+          "id": "synaptoprescience",
+          "name": "Synaptoprescience",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        }
+      ],
+      "flags": []
+    }
+  ]
+}

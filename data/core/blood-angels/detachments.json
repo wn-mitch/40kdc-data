@@ -23,7 +23,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 2,
-    "force_dispositions": []
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "angelic-inheritors",
@@ -77,7 +79,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 2,
-    "force_dispositions": []
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "rage-cursed-onslaught",
@@ -126,7 +130,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 1,
-    "force_dispositions": []
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "legacy-of-grace",
@@ -146,7 +152,12 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 1,
-    "force_dispositions": []
+    "force_dispositions": [
+      "priority-assets"
+    ],
+    "tags": [
+      "grace"
+    ]
   },
   {
     "id": "wrath-of-the-doomed",
@@ -167,6 +178,9 @@
     "detachment_points": 1,
     "force_dispositions": [
       "purge-the-foe"
+    ],
+    "tags": [
+      "doomed"
     ]
   },
   {

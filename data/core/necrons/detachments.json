@@ -22,8 +22,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "starshatter-arsenal",
@@ -48,8 +50,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "cursed-legion",
@@ -74,8 +78,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "annihilation-legion",
@@ -100,8 +106,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "hypercrypt-legion",
@@ -126,8 +134,13 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "reconnaissance"
+    ],
+    "tags": [
+      "hypercrypt"
+    ]
   },
   {
     "id": "pantheon-of-woe",
@@ -147,8 +160,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "obeisance-phalanx",
@@ -173,8 +188,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "canoptek-court",
@@ -199,8 +216,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "awakened-dynasty",
@@ -225,7 +244,87 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "take-and-hold"
+    ],
+    "tags": [
+      "dynasty"
+    ]
+  },
+  {
+    "id": "hand-of-the-dynasty",
+    "name": "Hand of the Dynasty",
+    "faction_id": "necrons",
+    "detachment_rule_id": "hypermotility-protocols",
+    "enhancement_ids": [
+      "enlivened-sentinels",
+      "tools-of-dominion"
+    ],
+    "stratagem_ids": [
+      "dominance-protocols",
+      "will-of-the-conqueror",
+      "nanosaturation"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ],
+    "tags": [
+      "dynasty"
+    ]
+  },
+  {
+    "id": "skyshroud-spearhead",
+    "name": "Skyshroud Spearhead",
+    "faction_id": "necrons",
+    "detachment_rule_id": "transdimensional-deployment",
+    "enhancement_ids": [
+      "recursive-reanimation",
+      "deepening-madness"
+    ],
+    "stratagem_ids": [
+      "omnilocked-strafing",
+      "swift-as-death",
+      "evasive-protocols"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "reconnaissance"
+    ]
+  },
+  {
+    "id": "the-phaerons-armoury",
+    "name": "The Phaeron’s Armoury",
+    "faction_id": "necrons",
+    "detachment_rule_id": "empowered-engines",
+    "enhancement_ids": [
+      "prelocational-optimiser",
+      "mortality-shroud-aura"
+    ],
+    "stratagem_ids": [
+      "subsurface-quantumweave",
+      "particle-pulse",
+      "cosmic-storm"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ],
+    "tags": [
+      "hypercrypt"
+    ]
   }
 ]

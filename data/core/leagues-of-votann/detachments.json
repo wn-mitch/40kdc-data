@@ -22,8 +22,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "persecution-prospect",
@@ -48,8 +50,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "needgaard-oathband",
@@ -74,8 +78,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "delve-assault-shift",
@@ -100,8 +106,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "hearthband",
@@ -126,8 +134,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "mercenary-oathband",
@@ -152,8 +162,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "brandfast-oathband",
@@ -178,7 +190,78 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
+  },
+  {
+    "id": "armoured-trailblazers",
+    "name": "Armoured Trailblazers",
+    "faction_id": "leagues-of-votann",
+    "detachment_rule_id": "sagitaur-spearhead",
+    "enhancement_ids": [
+      "saturation-rounds",
+      "optimised-attack-lines"
+    ],
+    "stratagem_ids": [
+      "coordinated-crossfire",
+      "outflanking-armour",
+      "built-to-last"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "disruption"
+    ]
+  },
+  {
+    "id": "farseekers",
+    "name": "Farseekers",
+    "faction_id": "leagues-of-votann",
+    "detachment_rule_id": "eye-of-the-hunt",
+    "enhancement_ids": [
+      "pan-spectral-lockons"
+    ],
+    "stratagem_ids": [
+      "no-shot-wasted",
+      "scornful-analysis",
+      "economy-of-motion"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "reconnaissance"
+    ]
+  },
+  {
+    "id": "hearthguard-covenant",
+    "name": "Hearthguard Covenant",
+    "faction_id": "leagues-of-votann",
+    "detachment_rule_id": "avatars-of-the-ancestors",
+    "enhancement_ids": [
+      "hearthguard-covenant-ironskein"
+    ],
+    "stratagem_ids": [
+      "hearthguard-covenant-fury-of-the-hearth",
+      "hearthguard-covenant-materialisation-matrices"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ],
+    "tags": [
+      "hearthguard"
+    ]
   }
 ]

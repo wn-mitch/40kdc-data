@@ -23,6 +23,8 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 3,
-    "force_dispositions": []
+    "force_dispositions": [
+      "priority-assets"
+    ]
   }
 ]

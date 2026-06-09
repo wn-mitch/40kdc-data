@@ -16,6 +16,7 @@ import {
 	defaultLoadout,
 	totalPoints,
 	builderViolations,
+	detachmentTagConflicts,
 	builderToRosterJson,
 	rosterTextToBuilderState,
 	unitRaw,
@@ -177,6 +178,60 @@ describe('builder violations are advisory', () => {
 			],
 		};
 		expect(builderViolations(state).some((v) => /warlord/.test(v.message))).toBe(true);
+	});
+});
+
+describe('detachment tag conflicts', () => {
+	it('flags two detachments that share a tag (only one of that type)', () => {
+		// Necrons Awakened Dynasty + Hand of the Dynasty both carry the `dynasty` tag.
+		const a = ds.detachments.get('awakened-dynasty');
+		const b = ds.detachments.get('hand-of-the-dynasty');
+		expect((a?.tags ?? []).includes('dynasty')).toBe(true);
+		expect((b?.tags ?? []).includes('dynasty')).toBe(true);
+		const state: BuilderState = {
+			...emptyBuilderState(),
+			factionId: 'necrons',
+			detachmentIds: ['awakened-dynasty', 'hand-of-the-dynasty'],
+		};
+		const conflicts = detachmentTagConflicts(state);
+		expect(conflicts).toHaveLength(1);
+		expect(conflicts[0].tag).toBe('dynasty');
+		// Named in selection order.
+		expect(conflicts[0].detachmentNames).toEqual([a!.name, b!.name]);
+		// Surfaces as an army-level advisory chip (never blocks save).
+		expect(
+			builderViolations(state).some((v) => v.unitKey === null && /dynasty/.test(v.message)),
+		).toBe(true);
+	});
+
+	it('does not flag a single detachment, or two with no shared tag', () => {
+		const single: BuilderState = {
+			...emptyBuilderState(),
+			factionId: 'necrons',
+			detachmentIds: ['awakened-dynasty'],
+		};
+		expect(detachmentTagConflicts(single)).toHaveLength(0);
+		// awakened-dynasty (dynasty) + cryptek-conclave (no tag) → no shared tag.
+		const mixed: BuilderState = {
+			...emptyBuilderState(),
+			factionId: 'necrons',
+			detachmentIds: ['awakened-dynasty', 'cryptek-conclave'],
+		};
+		expect(detachmentTagConflicts(mixed)).toHaveLength(0);
+	});
+
+	it('names every detachment carrying a conflicting tag in one entry', () => {
+		// Synthetic 3-way share isn't in the dataset; verify the grouping collapses
+		// repeated ids of a tagged detachment into a single entry naming each pick.
+		const state: BuilderState = {
+			...emptyBuilderState(),
+			factionId: 'necrons',
+			detachmentIds: ['awakened-dynasty', 'hand-of-the-dynasty', 'the-phaerons-armoury'],
+		};
+		// dynasty: awakened-dynasty + hand-of-the-dynasty; hypercrypt: only phaeron → not a conflict.
+		const conflicts = detachmentTagConflicts(state);
+		expect(conflicts.map((c) => c.tag)).toEqual(['dynasty']);
+		expect(conflicts[0].detachmentNames).toHaveLength(2);
 	});
 });
 

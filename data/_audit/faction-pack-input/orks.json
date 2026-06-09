@@ -1,0 +1,269 @@
+{
+  "faction_id": "orks",
+  "source_pack": "eng_09-06_warhammer40000_faction_pack_orks-agh9kwrtno-0xarrl5fjj.pdf",
+  "detachments": [
+    {
+      "id": "rollin-deff",
+      "name": "Rollin’ Deff",
+      "detachment_rule_name": "Thundering Wagons",
+      "stratagems": [
+        {
+          "id": "brutal-broadside",
+          "name": "Brutal Broadside",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "impending-crunch",
+          "name": "Impending Crunch",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "charge"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "devastating-drift",
+          "name": "Devastating Drift",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "fight"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "rollin-deff-long-uncontrolled-bursts",
+          "name": "Long, Uncontrolled Bursts",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "rollin-deff-speshul-shells",
+          "name": "Speshul Shells",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "boarding-ramps",
+          "name": "Boarding Ramps",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        },
+        {
+          "id": "targetin-gizmos",
+          "name": "Targetin’ Gizmos",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        },
+        {
+          "id": "dakka-dakka-dakka",
+          "name": "Dakka! Dakka! Dakka!",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        },
+        {
+          "id": "rollin-deff-dead-shiny-shootas",
+          "name": "Dead Shiny Shootas",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        },
+        {
+          "id": "rollin-deff-da-gobshot-thunderbuss",
+          "name": "Da Gobshot Thunderbuss",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
+      "id": "blitz-brigade",
+      "name": "Blitz Brigade",
+      "detachment_rule_name": "Eager for the Fight",
+      "stratagems": [
+        {
+          "id": "mount-up-ladz",
+          "name": "Mount Up, Ladz",
+          "type": "strategic-ploy",
+          "cp_cost": 1,
+          "phases": [
+            "fight"
+          ],
+          "player_turn": "either",
+          "timing": null,
+          "flags": [
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "armoured-duellists",
+          "name": "Armoured Duellists",
+          "type": "battle-tactic",
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "impervious",
+          "name": "Impervious",
+          "type": "strategic-ploy",
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "opponent-turn",
+          "timing": null,
+          "flags": [
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "mekanised-brutality",
+          "name": "Mekanised Brutality",
+          "type": "strategic-ploy",
+          "cp_cost": 1,
+          "phases": [
+            "movement"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "run-em-down",
+          "name": "Run ’em Down",
+          "type": "strategic-ploy",
+          "cp_cost": 1,
+          "phases": [
+            "movement"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "yooz-in-trouble-now",
+          "name": "Yooz in Trouble Now",
+          "type": "strategic-ploy",
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "opponent-turn",
+          "timing": null,
+          "flags": [
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "runnin-boots",
+          "name": "Runnin’ Boots",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        },
+        {
+          "id": "blitzkaptin",
+          "name": "Blitzkaptin",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        },
+        {
+          "id": "supercharged-squig-oil",
+          "name": "Supercharged Squig Oil",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        },
+        {
+          "id": "tuff-git",
+          "name": "Tuff Git",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        }
+      ],
+      "flags": []
+    }
+  ]
+}

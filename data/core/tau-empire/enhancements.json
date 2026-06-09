@@ -430,5 +430,41 @@
     "points_provisional": true,
     "upgrade_tag": false,
     "max_targets": 1
+  },
+  {
+    "id": "negation-emitters",
+    "name": "Negation Emitters",
+    "detachment_id": "advanced-acquisition-cadre",
+    "cost": 0,
+    "keyword_restrictions": [
+      "T’au Empire"
+    ],
+    "ability_id": "negation-emitters",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "unmasking-suite",
+    "name": "Unmasking Suite",
+    "detachment_id": "advanced-acquisition-cadre",
+    "cost": 0,
+    "keyword_restrictions": [
+      "T’au Empire"
+    ],
+    "ability_id": "unmasking-suite",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
   }
 ]

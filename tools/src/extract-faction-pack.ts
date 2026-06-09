@@ -31,10 +31,22 @@
  *   npx tsx tools/src/extract-faction-pack.ts <pdf-path> --faction <faction-id>
  *   npx tsx tools/src/extract-faction-pack.ts --all --dir <pack-pdf-dir>
  */
-import { execFileSync } from "node:child_process";
 import { readdirSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve, basename } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  type Block,
+  runPdftotext,
+  allBlocks,
+  slug,
+  titleCase,
+  normCaps,
+  isCapsHeader,
+  sameColumn,
+  stripCp,
+} from "./pack-blocks.js";
+
+export { slug, titleCase } from "./pack-blocks.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const DATA_ROOT = resolve(__dirname, "../../data");
@@ -59,7 +71,6 @@ const STRAT_TYPE: Record<string, string> = {
 };
 const TYPE_RE = /(BATTLE TACTIC|STRATEGIC PLOY|EPIC DEED|WARGEAR)\s+STRATAGEM$/;
 const PHASES = ["command", "movement", "shooting", "charge", "fight"] as const;
-const SECTION_WORDS = /^(DETACHMENT RULES?|ENHANCEMENTS?|STRATAGEMS?|KEYWORDS?|RESTRICTIONS?)$/;
 // Note: "Legends Datasheets" (not bare "Legends") — else it eats the detachment
 // "Legends of Saga and Song".
 const SECTION_TERMINATORS = /^(Datasheets|Rules Updates|Legends Datasheets|Imperial Armour|Index)\b/i;
@@ -94,76 +105,6 @@ export interface PackExtract {
   detachments: ExtractedDetachment[];
 }
 
-/** A positioned text block from `pdftotext -bbox-layout`. `gy` is page-globalised y. */
-interface Block {
-  x: number;
-  gy: number;
-  text: string;
-}
-
-/** Title/caps name → kebab id, matching existing entity-id conventions. */
-export function slug(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[’']/g, "")
-    .replace(/&/g, " and ")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
-/** Title-case a pack ALL-CAPS header for storage as a display name. */
-export function titleCase(raw: string): string {
-  const small = new Set(["of", "the", "and", "to", "a", "in", "for"]);
-  return raw
-    .trim()
-    .toLowerCase()
-    .split(/\s+/)
-    .map((w, i) => (i > 0 && small.has(w) ? w : w.charAt(0).toUpperCase() + w.slice(1)))
-    .join(" ");
-}
-
-function runPdftotext(args: string[]): string {
-  try {
-    return execFileSync("pdftotext", args, { encoding: "utf-8", maxBuffer: 128 * 1024 * 1024 });
-  } catch (err: unknown) {
-    if ((err as { code?: string }).code === "ENOENT") {
-      throw new Error("pdftotext not found — install poppler (e.g. `brew install poppler`).");
-    }
-    throw err;
-  }
-}
-
-const decodeEntities = (s: string): string =>
-  s
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&#39;/g, "'")
-    .replace(/&quot;/g, '"');
-
-/**
- * Parse the whole pack's bbox-layout HTML into positioned blocks. `gy` globalises
- * y across pages (pageIndex × 100000 + y) so blocks sort in reading order without
- * relying on printed page numbers (which drift from physical pages on later pages
- * when full-bleed art is inserted).
- */
-function allBlocks(pdf: string): Block[] {
-  const html = runPdftotext(["-bbox-layout", pdf, "-"]);
-  const blocks: Block[] = [];
-  html.split(/<page\b/).slice(1).forEach((pageHtml, pageIdx) => {
-    const offset = pageIdx * 100000;
-    for (const m of pageHtml.matchAll(/<block\b([^>]*)>([\s\S]*?)<\/block>/g)) {
-      const x = Number(/xMin="([\d.]+)"/.exec(m[1])?.[1] ?? "0");
-      const y = Number(/yMin="([\d.]+)"/.exec(m[1])?.[1] ?? "0");
-      const words = [...m[2].matchAll(/<word[^>]*>([^<]*)<\/word>/g)].map((w) => decodeEntities(w[1]));
-      const text = words.join(" ").replace(/\s+/g, " ").trim();
-      if (text) blocks.push({ x, gy: offset + y, text });
-    }
-  });
-  return blocks;
-}
-
-const normCaps = (s: string): string => s.toUpperCase().replace(/[’']/g, "'").replace(/\s+/g, " ").trim();
 /** Datasheet/table headers that can masquerade as caps "enhancement" names. */
 const DATASHEET_NOISE = new Set([
   "RANGED WEAPONS", "MELEE WEAPONS", "RANGE", "WARGEAR OPTIONS", "UNIT COMPOSITION",
@@ -171,22 +112,6 @@ const DATASHEET_NOISE = new Set([
 ]);
 /** Non-detachment section headers that bound the last detachment's content. */
 const SECTION_MARKER = /^(DATASHEETS|RULES UPDATES|LEGENDS DATASHEETS|IMPERIAL ARMOUR|INDEX)\b/;
-
-const isCapsHeader = (t: string): boolean =>
-  /^[A-Z0-9][A-Z0-9'’.,!&/()\- ]*$/.test(t) &&
-  /[A-Z]{3,}/.test(t) && // a real word, not a "1CP"/"D6" token
-  t.length >= 3 &&
-  t.length <= 46 &&
-  t.split(" ").length <= 7 &&
-  !SECTION_WORDS.test(t) &&
-  !/^\d+\s?CP$/.test(t) &&
-  !/\bSTRATAGEM$/.test(t);
-
-const sameColumn = (a: number, b: number): boolean => Math.abs(a - b) < 46;
-const stripCp = (t: string): { name: string; cp: number | null } => {
-  const m = t.match(/^(.*?)[\s]+(\d+)\s?CP$/);
-  return m ? { name: m[1].trim(), cp: Number(m[2]) } : { name: t, cp: null };
-};
 
 /** Derive phases / player-turn from a `WHEN:` line (the prose itself is discarded). */
 function parseWhen(when: string): { phases: string[]; player_turn: string | null; flag?: string } {
@@ -336,8 +261,21 @@ export function parseToc(tocText: string): Array<{ name: string; page: number; s
   return rows;
 }
 
-export function extractPack(pdf: string, faction: string): PackExtract {
-  // detachment names (ordered) from the TOC; content boundaries from block positions
+/** One detachment's slice of the pack: its id, display name, and bounded blocks. */
+export interface DetachmentSegment {
+  id: string;
+  name: string;
+  blocks: Block[];
+}
+
+/**
+ * Segment a pack into per-detachment block slices. Detachment names come (ordered)
+ * from the TOC; content boundaries come from block positions: each detachment runs
+ * from its title block to the next detachment, the next non-detachment section
+ * marker, or a ~2-page backstop — whichever comes first. Shared by `extractPack`
+ * (names/metadata) and `author-input-pack` (rule bodies) so both segment identically.
+ */
+export function detachmentSegments(pdf: string): DetachmentSegment[] {
   const names = parseToc(runPdftotext(["-f", "1", "-l", "2", pdf, "-"]))
     .filter((t) => !t.section)
     .map((t) => t.name);
@@ -355,7 +293,7 @@ export function extractPack(pdf: string, faction: string): PackExtract {
     .sort((a, b) => a.gy - b.gy);
   const sectionGys = blocks.filter((b) => SECTION_MARKER.test(normCaps(b.text))).map((b) => b.gy).sort((a, b) => a - b);
 
-  const detachments: ExtractedDetachment[] = [];
+  const segments: DetachmentSegment[] = [];
   for (let i = 0; i < starts.length; i++) {
     const start = starts[i].gy;
     const nextDet = starts[i + 1]?.gy ?? Infinity;
@@ -364,13 +302,21 @@ export function extractPack(pdf: string, faction: string): PackExtract {
     // Bounds the last detachment when no datasheets/section divider block is
     // detected, so it can't bleed into the datasheet pages that follow.
     const end = Math.min(nextDet, nextSection, start + 200000);
-    const id = slug(starts[i].name);
-    const body = parseDetachmentBlocks(
-      blocks.filter((b) => b.gy >= start && b.gy < end),
-      id,
-    );
-    detachments.push({ id, name: starts[i].name, ...body });
+    segments.push({
+      id: slug(starts[i].name),
+      name: starts[i].name,
+      blocks: blocks.filter((b) => b.gy >= start && b.gy < end),
+    });
   }
+  return segments;
+}
+
+export function extractPack(pdf: string, faction: string): PackExtract {
+  const detachments: ExtractedDetachment[] = detachmentSegments(pdf).map((seg) => ({
+    id: seg.id,
+    name: seg.name,
+    ...parseDetachmentBlocks(seg.blocks, seg.id),
+  }));
   return { faction_id: faction, source_pack: basename(pdf), detachments };
 }
 

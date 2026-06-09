@@ -862,5 +862,95 @@
     "points_provisional": true,
     "upgrade_tag": false,
     "max_targets": 1
+  },
+  {
+    "id": "a-foot-in-the-future",
+    "name": "A Foot in the Future",
+    "detachment_id": "fateful-performance",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Aeldari"
+    ],
+    "ability_id": "a-foot-in-the-future",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "fateful-performance-mistweave",
+    "name": "Mistweave",
+    "detachment_id": "fateful-performance",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Aeldari"
+    ],
+    "ability_id": "fateful-performance-mistweave",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "camouflaged-snipers",
+    "name": "Camouflaged Snipers",
+    "detachment_id": "path-of-the-outcast",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Aeldari"
+    ],
+    "ability_id": "camouflaged-snipers",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "shadowfall-masks",
+    "name": "Shadowfall Masks",
+    "detachment_id": "twilight-flickers",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Aeldari"
+    ],
+    "ability_id": "shadowfall-masks",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "prelude-performer",
+    "name": "Prelude Performer",
+    "detachment_id": "twilight-flickers",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Aeldari"
+    ],
+    "ability_id": "prelude-performer",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
   }
 ]

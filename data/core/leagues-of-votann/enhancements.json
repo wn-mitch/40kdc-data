@@ -502,5 +502,77 @@
     "points_provisional": true,
     "upgrade_tag": false,
     "max_targets": 1
+  },
+  {
+    "id": "saturation-rounds",
+    "name": "Saturation Rounds",
+    "detachment_id": "armoured-trailblazers",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": "saturation-rounds",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "optimised-attack-lines",
+    "name": "Optimised Attack Lines",
+    "detachment_id": "armoured-trailblazers",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": "optimised-attack-lines",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "pan-spectral-lockons",
+    "name": "Pan-spectral Lockons",
+    "detachment_id": "farseekers",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": "pan-spectral-lockons",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "hearthguard-covenant-ironskein",
+    "name": "Ironskein",
+    "detachment_id": "hearthguard-covenant",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Leagues of Votann"
+    ],
+    "ability_id": "hearthguard-covenant-ironskein",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
   }
 ]

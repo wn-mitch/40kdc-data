@@ -705,5 +705,169 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     }
+  },
+  {
+    "id": "living-up-to-legend",
+    "name": "Living Up to Legend",
+    "category": "detachment",
+    "detachment_id": "heroes-of-the-uprising",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "living-up-to-legend",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "surging-broodworship",
+    "name": "Surging Broodworship",
+    "category": "detachment",
+    "detachment_id": "heroes-of-the-uprising",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "surging-broodworship",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "loyal-to-the-end",
+    "name": "Loyal to the End",
+    "category": "detachment",
+    "detachment_id": "heroes-of-the-uprising",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "loyal-to-the-end",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "lurk-and-strike",
+    "name": "Lurk and Strike",
+    "category": "detachment",
+    "detachment_id": "purestrain-broodswarm",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "lurk-and-strike",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "crawling-horror",
+    "name": "Crawling Horror",
+    "category": "detachment",
+    "detachment_id": "purestrain-broodswarm",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "crawling-horror",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "inhuman-reactions",
+    "name": "Inhuman Reactions",
+    "category": "detachment",
+    "detachment_id": "purestrain-broodswarm",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "inhuman-reactions",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "eyes-of-the-cult",
+    "name": "Eyes of the Cult",
+    "category": "detachment",
+    "detachment_id": "xenocult-masses",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "eyes-of-the-cult",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "fanatical-hail",
+    "name": "Fanatical Hail",
+    "category": "detachment",
+    "detachment_id": "xenocult-masses",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "fanatical-hail",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "slunk-from-the-underbelly",
+    "name": "Slunk From the Underbelly",
+    "category": "detachment",
+    "detachment_id": "xenocult-masses",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "slunk-from-the-underbelly",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   }
 ]

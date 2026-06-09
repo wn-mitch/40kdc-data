@@ -807,5 +807,149 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     }
+  },
+  {
+    "id": "coordinated-crossfire",
+    "name": "Coordinated Crossfire",
+    "category": "detachment",
+    "detachment_id": "armoured-trailblazers",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "coordinated-crossfire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "outflanking-armour",
+    "name": "Outflanking Armour",
+    "category": "detachment",
+    "detachment_id": "armoured-trailblazers",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "outflanking-armour",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "built-to-last",
+    "name": "Built to Last",
+    "category": "detachment",
+    "detachment_id": "armoured-trailblazers",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "built-to-last",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "no-shot-wasted",
+    "name": "No Shot Wasted",
+    "category": "detachment",
+    "detachment_id": "farseekers",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "no-shot-wasted",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "scornful-analysis",
+    "name": "Scornful Analysis",
+    "category": "detachment",
+    "detachment_id": "farseekers",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "scornful-analysis",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "economy-of-motion",
+    "name": "Economy of Motion",
+    "category": "detachment",
+    "detachment_id": "farseekers",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "economy-of-motion",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "hearthguard-covenant-fury-of-the-hearth",
+    "name": "Fury of the Hearth",
+    "category": "detachment",
+    "detachment_id": "hearthguard-covenant",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "hearthguard-covenant-fury-of-the-hearth",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "hearthguard-covenant-materialisation-matrices",
+    "name": "Materialisation Matrices",
+    "category": "detachment",
+    "detachment_id": "hearthguard-covenant",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "hearthguard-covenant-materialisation-matrices",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   }
 ]

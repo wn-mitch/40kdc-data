@@ -46,7 +46,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 1,
-    "force_dispositions": []
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "saga-of-the-hunter",
@@ -72,7 +74,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 2,
-    "force_dispositions": []
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "saga-of-the-great-wolf",
@@ -127,7 +131,9 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 2,
-    "force_dispositions": []
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "legends-of-saga-and-song",

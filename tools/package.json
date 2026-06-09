@@ -1,6 +1,6 @@
 {
   "name": "@alpaca-software/40kdc-data",
-  "version": "0.5.12",
+  "version": "0.5.14",
   "type": "module",
   "description": "The 40kdc Warhammer 40K dataset behind a linked, typed API — find units, follow them to their weapons, abilities, phases, and factions. Also validates data against the canonical JSON Schemas.",
   "keywords": [
@@ -53,6 +53,7 @@
   },
   "scripts": {
     "build": "npm run codegen:data && tsc",
+    "postbuild": "npm run audit:coverage",
     "codegen:data": "tsx src/codegen-data.ts",
     "gen:conformance": "tsx src/gen-conformance.ts",
     "docs:api": "typedoc",

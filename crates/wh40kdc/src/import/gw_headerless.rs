@@ -316,6 +316,12 @@ impl FormatAdapter for GwHeaderlessAdapter {
         let mut section: Option<String> = None;
         let mut allied = 0u64;
         let mut consumed_title = false;
+        // The GW app export lists faction then detachment as bare lines between
+        // the title and the first section (`World Eaters` / `Berzerker Warband`).
+        // Capture the first two so `resolve` can scope to them; later bare lines
+        // (stray notes) are ignored.
+        let mut faction_raw_name: Option<String> = None;
+        let mut detachment_raw_names: Vec<String> = Vec::new();
 
         let flush = |current: &mut Option<UnitAcc>, units: &mut Vec<ParsedUnit>| {
             if let Some(u) = current.take() {
@@ -398,12 +404,19 @@ impl FormatAdapter for GwHeaderlessAdapter {
                 continue;
             }
 
-            // Anything else (faction/detachment preamble, stray notes): skip,
-            // but treat it as the title if we haven't taken one yet and it's the
-            // very first content line.
+            // Anything else (faction/detachment preamble, stray notes).
             if !consumed_title && current.is_none() && units.is_empty() {
+                // Very first content line with no `(N pts)` title → use as name.
                 consumed_title = true;
                 name = line.to_string();
+            } else if current.is_none() && units.is_empty() {
+                // Preamble after the title, before the first unit: faction then
+                // detachment. Names are resolved (and warned on miss) downstream.
+                if faction_raw_name.is_none() {
+                    faction_raw_name = Some(line.to_string());
+                } else if detachment_raw_names.is_empty() {
+                    detachment_raw_names.push(line.to_string());
+                }
             }
         }
         flush(&mut current, &mut units);
@@ -420,8 +433,8 @@ impl FormatAdapter for GwHeaderlessAdapter {
         Ok(ParsedRoster {
             name,
             generated_by: None,
-            faction_raw_name: None,
-            detachment_raw_names: Vec::new(),
+            faction_raw_name,
+            detachment_raw_names,
             battle_size_raw,
             declared_limit,
             total_reported: None,
@@ -509,6 +522,9 @@ Bloodletters (110 pts)
     fn parses_gw_app_export() {
         let p = GwHeaderlessAdapter.parse(&json!(GW_APP)).unwrap();
         assert_eq!(p.name, "Ding dong");
+        // Faction / detachment are read from the bare preamble lines.
+        assert_eq!(p.faction_raw_name.as_deref(), Some("World Eaters"));
+        assert_eq!(p.detachment_raw_names, vec!["Berzerker Warband".to_string()]);
         assert_eq!(p.units.len(), 3);
 
         let kharn = &p.units[0];

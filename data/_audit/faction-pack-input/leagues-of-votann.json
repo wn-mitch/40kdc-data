@@ -1,0 +1,195 @@
+{
+  "faction_id": "leagues-of-votann",
+  "source_pack": "eng_09-06_warhammer40000_faction_pack_leagues_of_votann-awex3qmdiz-clwoaoyyos.pdf",
+  "detachments": [
+    {
+      "id": "armoured-trailblazers",
+      "name": "Armoured Trailblazers",
+      "detachment_rule_name": "Sagitaur Spearhead",
+      "stratagems": [
+        {
+          "id": "coordinated-crossfire",
+          "name": "Coordinated Crossfire",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "outflanking-armour",
+          "name": "Outflanking Armour",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "movement"
+          ],
+          "player_turn": "opponent-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "built-to-last",
+          "name": "Built to Last",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "opponent-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "saturation-rounds",
+          "name": "Saturation Rounds",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        },
+        {
+          "id": "optimised-attack-lines",
+          "name": "Optimised Attack Lines",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
+      "id": "farseekers",
+      "name": "Farseekers",
+      "detachment_rule_name": "Eye of the Hunt",
+      "stratagems": [
+        {
+          "id": "no-shot-wasted",
+          "name": "No Shot Wasted",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "scornful-analysis",
+          "name": "Scornful Analysis",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "economy-of-motion",
+          "name": "Economy of Motion",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "movement"
+          ],
+          "player_turn": "opponent-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "pan-spectral-lockons",
+          "name": "Pan-spectral Lockons",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
+      "id": "hearthguard-covenant",
+      "name": "Hearthguard Covenant",
+      "detachment_rule_name": "Avatars of the Ancestors",
+      "stratagems": [
+        {
+          "id": "hearthguard-covenant-fury-of-the-hearth",
+          "name": "Fury of the Hearth",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "hearthguard-covenant-materialisation-matrices",
+          "name": "Materialisation Matrices",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "movement"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "hearthguard-covenant-ironskein",
+          "name": "Ironskein",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        }
+      ],
+      "flags": []
+    }
+  ]
+}

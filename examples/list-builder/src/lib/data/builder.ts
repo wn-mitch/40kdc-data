@@ -108,6 +108,37 @@ export function detachmentPointCap(state: BuilderState): number {
 	return DETACHMENT_POINT_CAPS[state.battleSize];
 }
 
+/** A detachment-tag carried by two or more selected detachments. */
+export interface TagConflict {
+	tag: string;
+	detachmentNames: string[];
+}
+
+/**
+ * Detachment-tag conflicts in the draft. 11e lets a roster field several
+ * detachments under the DP cap, but only one of any given *type* — a detachment
+ * may carry a `UNIQUE` tag (e.g. `dynasty`) and "cannot be taken with another
+ * detachment of that tag". Returns one entry per tag shared by ≥2 selected
+ * detachments, naming them in selection order (deterministic).
+ */
+export function detachmentTagConflicts(state: BuilderState): TagConflict[] {
+	const byTag = new Map<string, string[]>();
+	for (const id of state.detachmentIds) {
+		const det = ds.detachments.get(id);
+		if (!det) continue;
+		for (const tag of det.tags ?? []) {
+			const names = byTag.get(tag);
+			if (names) names.push(det.name);
+			else byTag.set(tag, [det.name]);
+		}
+	}
+	const out: TagConflict[] = [];
+	for (const [tag, detachmentNames] of byTag) {
+		if (detachmentNames.length >= 2) out.push({ tag, detachmentNames });
+	}
+	return out;
+}
+
 /**
  * Enhancements legal for `unit` under any selected detachment: scoped to the
  * detachments, then filtered by the enhancement's keyword restrictions /
@@ -463,6 +494,12 @@ export function builderViolations(state: BuilderState): BuilderViolation[] {
 	const dpCap = detachmentPointCap(state);
 	if (dp > dpCap) {
 		out.push({ unitKey: null, message: `${dp} DP over the ${dpCap} DP budget` });
+	}
+	for (const conflict of detachmentTagConflicts(state)) {
+		out.push({
+			unitKey: null,
+			message: `only one ‘${conflict.tag}’ detachment allowed: ${conflict.detachmentNames.join(', ')}`,
+		});
 	}
 	for (const bu of state.units) {
 		const unit = unitRaw(bu.datasheetId);

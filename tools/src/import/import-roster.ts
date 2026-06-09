@@ -15,6 +15,7 @@ import type { FormatAdapter } from "./adapter.js";
 import { selectAdapter } from "./adapter.js";
 import { decodeListForge } from "./decode.js";
 import { gwAdapter } from "./gw.js";
+import { gwHeaderlessAdapter } from "./gw-headerless.js";
 import { listForgeAdapter } from "./listforge.js";
 import { listForgeTextAdapter } from "./listforge-text.js";
 import { newRecruitJsonAdapter } from "./newrecruit-json.js";
@@ -56,7 +57,14 @@ const ADAPTERS: readonly FormatAdapter[] = [
   newRecruitWtcFullAdapter,
   newRecruitWtcCompactAdapter,
   newRecruitSimpleAdapter,
+  // listforge-text requires the `name - faction - detachment (N Points)` first
+  // line none of the others accept; it runs right before the headerless
+  // fallback so its framed header wins when present.
   listForgeTextAdapter,
+  // Fallback for bullet-bearing plain text without a summary fence (GW app
+  // export, NewRecruit copy-text, `##` markdown lists). Placed after the framed
+  // text adapters so they win when their headers are present.
+  gwHeaderlessAdapter,
   listForgeAdapter,
 ];
 

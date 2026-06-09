@@ -22,8 +22,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "da-big-hunt",
@@ -48,8 +50,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "dread-mob",
@@ -74,8 +78,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "war-horde",
@@ -100,8 +106,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "bully-boyz",
@@ -126,8 +134,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "green-tide",
@@ -152,8 +162,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "taktikal-brigade",
@@ -178,8 +190,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 1,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "more-dakka",
@@ -204,8 +218,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 1,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "freebooter-krew",
@@ -230,7 +246,84 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
+  },
+  {
+    "id": "rollin-deff",
+    "name": "Rollin’ Deff",
+    "faction_id": "orks",
+    "detachment_rule_id": "thundering-wagons",
+    "enhancement_ids": [
+      "boarding-ramps",
+      "targetin-gizmos",
+      "dakka-dakka-dakka",
+      "rollin-deff-dead-shiny-shootas",
+      "rollin-deff-da-gobshot-thunderbuss"
+    ],
+    "stratagem_ids": [
+      "brutal-broadside",
+      "impending-crunch",
+      "devastating-drift",
+      "rollin-deff-long-uncontrolled-bursts",
+      "rollin-deff-speshul-shells"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ],
+    "tags": [
+      "wagons"
+    ]
+  },
+  {
+    "id": "blitz-brigade",
+    "name": "Blitz Brigade",
+    "faction_id": "orks",
+    "detachment_rule_id": "eager-for-the-fight",
+    "enhancement_ids": [
+      "runnin-boots",
+      "blitzkaptin",
+      "supercharged-squig-oil",
+      "tuff-git"
+    ],
+    "stratagem_ids": [
+      "mount-up-ladz",
+      "armoured-duellists",
+      "impervious",
+      "mekanised-brutality",
+      "run-em-down",
+      "yooz-in-trouble-now"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 2,
+    "force_dispositions": [
+      "reconnaissance"
+    ]
+  },
+  {
+    "id": "speedwaaagh",
+    "name": "Speedwaaagh!",
+    "faction_id": "orks",
+    "detachment_rule_id": null,
+    "enhancement_ids": [],
+    "stratagem_ids": [],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 2,
+    "force_dispositions": [
+      "reconnaissance"
+    ]
   }
 ]

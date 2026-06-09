@@ -22,8 +22,13 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ],
+    "tags": [
+      "retaliation"
+    ]
   },
   {
     "id": "montka",
@@ -48,8 +53,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "kroot-hunting-pack",
@@ -74,8 +81,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "experimental-prototype-cadre",
@@ -100,8 +109,13 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ],
+    "tags": [
+      "retaliation"
+    ]
   },
   {
     "id": "kauyon",
@@ -126,8 +140,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "auxiliary-cadre",
@@ -152,7 +168,35 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 1,
+    "force_dispositions": [
+      "disruption"
+    ],
+    "tags": [
+      "auxiliaries"
+    ]
+  },
+  {
+    "id": "advanced-acquisition-cadre",
+    "name": "Advanced Acquisition Cadre",
+    "faction_id": "tau-empire",
+    "detachment_rule_id": "expert-fieldcraft",
+    "enhancement_ids": [
+      "negation-emitters",
+      "unmasking-suite"
+    ],
+    "stratagem_ids": [
+      "marker-beacon",
+      "microdrone-support",
+      "autoreactive-camouflage"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "reconnaissance"
+    ]
   }
 ]

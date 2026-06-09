@@ -2327,6 +2327,14 @@ impl<'de> ::serde::Deserialize<'de> for DeploymentPatternZonesItemName {
 ///      "items": {
 ///        "$ref": "#/$defs/entity-id"
 ///      }
+///    },
+///    "tags": {
+///      "description": "11e: detachment-type tags (e.g. 'dynasty', 'kabal'). A roster may include at most one detachment per shared tag — the 'you can only take one of X type of detachment' rule. Empty when the detachment carries no UNIQUE tag.",
+///      "type": "array",
+///      "items": {
+///        "type": "string"
+///      },
+///      "uniqueItems": true
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -2354,6 +2362,9 @@ pub struct Detachment {
     pub restrictions: ::std::option::Option<DetachmentRestrictions>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub stratagem_ids: ::std::vec::Vec<EntityId>,
+    ///11e: detachment-type tags (e.g. 'dynasty', 'kabal'). A roster may include at most one detachment per shared tag — the 'you can only take one of X type of detachment' rule. Empty when the detachment carries no UNIQUE tag.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<Vec<::std::string::String>>,
 }
 ///`DetachmentName`
 ///

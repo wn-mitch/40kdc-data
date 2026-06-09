@@ -574,5 +574,113 @@
     "points_provisional": true,
     "upgrade_tag": false,
     "max_targets": 1
+  },
+  {
+    "id": "enlivened-sentinels",
+    "name": "Enlivened Sentinels",
+    "detachment_id": "hand-of-the-dynasty",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Necrons"
+    ],
+    "ability_id": "enlivened-sentinels",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "tools-of-dominion",
+    "name": "Tools of Dominion",
+    "detachment_id": "hand-of-the-dynasty",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Necrons"
+    ],
+    "ability_id": "tools-of-dominion",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "recursive-reanimation",
+    "name": "Recursive Reanimation",
+    "detachment_id": "skyshroud-spearhead",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Necrons"
+    ],
+    "ability_id": "recursive-reanimation",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "deepening-madness",
+    "name": "Deepening Madness",
+    "detachment_id": "skyshroud-spearhead",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Necrons"
+    ],
+    "ability_id": "deepening-madness",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "prelocational-optimiser",
+    "name": "Prelocational Optimiser",
+    "detachment_id": "the-phaerons-armoury",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Necrons"
+    ],
+    "ability_id": "prelocational-optimiser",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "mortality-shroud-aura",
+    "name": "Mortality Shroud (aura)",
+    "detachment_id": "the-phaerons-armoury",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Necrons"
+    ],
+    "ability_id": "mortality-shroud-aura",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
   }
 ]

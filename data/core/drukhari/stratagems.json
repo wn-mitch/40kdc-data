@@ -694,5 +694,168 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     }
+  },
+  {
+    "id": "planned-strikes",
+    "name": "Planned Strikes",
+    "category": "detachment",
+    "detachment_id": "exhibition-of-slaughter",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "planned-strikes",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "sculpting-the-stage",
+    "name": "Sculpting the Stage",
+    "category": "detachment",
+    "detachment_id": "exhibition-of-slaughter",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "sculpting-the-stage",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "exhibition-of-slaughter-acrobatic-display",
+    "name": "Acrobatic Display",
+    "category": "detachment",
+    "detachment_id": "exhibition-of-slaughter",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "exhibition-of-slaughter-acrobatic-display",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "prioritised-victim",
+    "name": "Prioritised Victim",
+    "category": "detachment",
+    "detachment_id": "kabalite-agonysts",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "prioritised-victim",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "shadows-reach",
+    "name": "Shadows’ Reach",
+    "category": "detachment",
+    "detachment_id": "kabalite-agonysts",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "shadows-reach",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "killers-from-the-dark-spires",
+    "name": "Killers From the Dark Spires",
+    "category": "detachment",
+    "detachment_id": "kabalite-agonysts",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "killers-from-the-dark-spires",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "salting-the-wound",
+    "name": "Salting the Wound",
+    "category": "detachment",
+    "detachment_id": "tools-of-torment",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "salting-the-wound",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "dividends-of-agony",
+    "name": "Dividends of Agony",
+    "category": "detachment",
+    "detachment_id": "tools-of-torment",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "dividends-of-agony",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "urgent-metamorphosis",
+    "name": "Urgent Metamorphosis",
+    "category": "detachment",
+    "detachment_id": "tools-of-torment",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "urgent-metamorphosis",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   }
 ]

@@ -646,5 +646,167 @@
     "points_provisional": true,
     "upgrade_tag": false,
     "max_targets": 1
+  },
+  {
+    "id": "boarding-ramps",
+    "name": "Boarding Ramps",
+    "detachment_id": "rollin-deff",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Orks"
+    ],
+    "ability_id": "boarding-ramps",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "targetin-gizmos",
+    "name": "Targetin’ Gizmos",
+    "detachment_id": "rollin-deff",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Orks"
+    ],
+    "ability_id": "targetin-gizmos",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "dakka-dakka-dakka",
+    "name": "Dakka! Dakka! Dakka!",
+    "detachment_id": "rollin-deff",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Orks"
+    ],
+    "ability_id": "dakka-dakka-dakka",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "rollin-deff-dead-shiny-shootas",
+    "name": "Dead Shiny Shootas",
+    "detachment_id": "rollin-deff",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Orks"
+    ],
+    "ability_id": "rollin-deff-dead-shiny-shootas",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "rollin-deff-da-gobshot-thunderbuss",
+    "name": "Da Gobshot Thunderbuss",
+    "detachment_id": "rollin-deff",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Orks"
+    ],
+    "ability_id": "rollin-deff-da-gobshot-thunderbuss",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "runnin-boots",
+    "name": "Runnin’ Boots",
+    "detachment_id": "blitz-brigade",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Orks"
+    ],
+    "ability_id": "runnin-boots",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "blitzkaptin",
+    "name": "Blitzkaptin",
+    "detachment_id": "blitz-brigade",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Orks"
+    ],
+    "ability_id": "blitzkaptin",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "supercharged-squig-oil",
+    "name": "Supercharged Squig Oil",
+    "detachment_id": "blitz-brigade",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Orks"
+    ],
+    "ability_id": "supercharged-squig-oil",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "tuff-git",
+    "name": "Tuff Git",
+    "detachment_id": "blitz-brigade",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Orks"
+    ],
+    "ability_id": "tuff-git",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
   }
 ]

@@ -1,0 +1,231 @@
+{
+  "faction_id": "necrons",
+  "source_pack": "eng_09-06_warhammer40000_faction_pack_necrons-qodfthk7tt-bzeqy07okc.pdf",
+  "detachments": [
+    {
+      "id": "hand-of-the-dynasty",
+      "name": "Hand of the Dynasty",
+      "detachment_rule_name": "Hypermotility Protocols",
+      "stratagems": [
+        {
+          "id": "dominance-protocols",
+          "name": "Dominance Protocols",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "command"
+          ],
+          "player_turn": "either",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "will-of-the-conqueror",
+          "name": "Will of the Conqueror",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "movement"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "nanosaturation",
+          "name": "Nanosaturation",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "opponent-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "enlivened-sentinels",
+          "name": "Enlivened Sentinels",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        },
+        {
+          "id": "tools-of-dominion",
+          "name": "Tools of Dominion",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
+      "id": "skyshroud-spearhead",
+      "name": "Skyshroud Spearhead",
+      "detachment_rule_name": "Transdimensional Deployment",
+      "stratagems": [
+        {
+          "id": "omnilocked-strafing",
+          "name": "Omnilocked Strafing",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "movement"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "swift-as-death",
+          "name": "Swift As Death",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "movement"
+          ],
+          "player_turn": "opponent-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "evasive-protocols",
+          "name": "Evasive Protocols",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "opponent-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "recursive-reanimation",
+          "name": "Recursive Reanimation",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        },
+        {
+          "id": "deepening-madness",
+          "name": "Deepening Madness",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
+      "id": "the-phaerons-armoury",
+      "name": "The Phaeron's Armoury",
+      "detachment_rule_name": "Empowered Engines",
+      "stratagems": [
+        {
+          "id": "subsurface-quantumweave",
+          "name": "Subsurface Quantumweave",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting",
+            "fight"
+          ],
+          "player_turn": "opponent-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "particle-pulse",
+          "name": "Particle Pulse",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "cosmic-storm",
+          "name": "Cosmic Storm",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "prelocational-optimiser",
+          "name": "Prelocational Optimiser",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        },
+        {
+          "id": "mortality-shroud-aura",
+          "name": "Mortality Shroud (aura)",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        }
+      ],
+      "flags": []
+    }
+  ]
+}

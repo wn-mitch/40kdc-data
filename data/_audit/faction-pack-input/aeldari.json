@@ -1,0 +1,218 @@
+{
+  "faction_id": "aeldari",
+  "source_pack": "eng_09-06_warhammer40000_faction_pack_aeldari-glkjirbhiw-9udkry7xbr.pdf",
+  "detachments": [
+    {
+      "id": "fateful-performance",
+      "name": "Fateful Performance",
+      "detachment_rule_name": "Acrobatic Onslaught",
+      "stratagems": [
+        {
+          "id": "fateful-performance-exit-the-stage",
+          "name": "Exit the Stage",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "fight"
+          ],
+          "player_turn": "opponent-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "fateful-performance-heroes-fall",
+          "name": "Heroes’ Fall",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "fight"
+          ],
+          "player_turn": "either",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "deceptive-feint",
+          "name": "Deceptive Feint",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "movement"
+          ],
+          "player_turn": "opponent-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "a-foot-in-the-future",
+          "name": "A Foot in the Future",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        },
+        {
+          "id": "fateful-performance-mistweave",
+          "name": "Mistweave",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
+      "id": "path-of-the-outcast",
+      "name": "Path of the Outcast",
+      "detachment_rule_name": "Far-reaching Doom",
+      "stratagems": [
+        {
+          "id": "eldritch-suppression",
+          "name": "Eldritch Suppression",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "casting-back-the-veil",
+          "name": "Casting Back the Veil",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "nomads-of-the-hidden-way",
+          "name": "Nomads of the Hidden Way",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "camouflaged-snipers",
+          "name": "Camouflaged Snipers",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        }
+      ],
+      "flags": []
+    },
+    {
+      "id": "twilight-flickers",
+      "name": "Twilight Flickers",
+      "detachment_rule_name": "Dance of Distortion",
+      "stratagems": [
+        {
+          "id": "presaged-rehearsal",
+          "name": "Presaged Rehearsal",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "fight"
+          ],
+          "player_turn": "either",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "captivating-performance",
+          "name": "Captivating Performance",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "movement"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        },
+        {
+          "id": "phantasmal-mirage",
+          "name": "Phantasmal Mirage",
+          "type": null,
+          "cp_cost": 1,
+          "phases": [
+            "shooting"
+          ],
+          "player_turn": "your-turn",
+          "timing": null,
+          "flags": [
+            "type-missing",
+            "timing-missing"
+          ]
+        }
+      ],
+      "enhancements": [
+        {
+          "id": "shadowfall-masks",
+          "name": "Shadowfall Masks",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review",
+            "upgrade-tag?"
+          ]
+        },
+        {
+          "id": "prelude-performer",
+          "name": "Prelude Performer",
+          "cost": null,
+          "flags": [
+            "cost-missing",
+            "name-needs-review"
+          ]
+        }
+      ],
+      "flags": []
+    }
+  ]
+}

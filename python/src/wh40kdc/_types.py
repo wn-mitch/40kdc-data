@@ -149,6 +149,7 @@ class Detachment(TypedDict):
     detachment_rule_id: NotRequired[EntityId | None]
     detachment_points: NotRequired[int | None]
     force_dispositions: NotRequired[list[EntityId]]
+    tags: NotRequired[list[str]]
     enhancement_ids: NotRequired[list[EntityId]]
     stratagem_ids: NotRequired[list[EntityId]]
     restrictions: NotRequired[Restrictions | None]
