@@ -9,6 +9,8 @@ import {
 	canBeWarlord,
 	isLeader,
 	attachableBodyguards,
+	selectableGrantsFor,
+	grantSelectionCount,
 	type BuilderState,
 	type BuilderUnit,
 } from '$lib/data/builder';
@@ -25,11 +27,29 @@ interface Props {
 let { unit, draft, onchange, onwarlord }: Props = $props();
 
 const raw = $derived(unit ? unitRaw(unit.datasheetId, unit.factionId) : undefined);
-const enhancements = $derived(unit ? eligibleEnhancements(draft.detachmentIds, raw) : []);
+const enhancements = $derived(
+	unit ? eligibleEnhancements(draft.detachmentIds, raw, unit.selectedGrants ?? []) : [],
+);
 const points = $derived(unit ? unitPoints(unit) : 0);
 const modelRange = $derived(raw?.model_count ?? null);
-const warlordEligible = $derived(unit ? canBeWarlord(unit) : false);
+const warlordEligible = $derived(unit ? canBeWarlord(unit, draft.detachmentIds) : false);
 const leader = $derived(!!raw && isLeader(raw));
+/** Count-limited detachment grants this unit can take (e.g. Houndpack CHARACTER). */
+const grants = $derived(
+	raw
+		? selectableGrantsFor(raw, draft.detachmentIds).map((g) => ({
+				...g,
+				on: (unit?.selectedGrants ?? []).some((k) => k.toLowerCase() === g.keyword.toLowerCase()),
+				picked: grantSelectionCount(draft, g.keyword),
+			}))
+		: [],
+);
+
+function toggleGrant(keyword: string, on: boolean) {
+	if (!unit) return;
+	const others = (unit.selectedGrants ?? []).filter((k) => k.toLowerCase() !== keyword.toLowerCase());
+	onchange({ ...unit, selectedGrants: on ? [...others, keyword] : others });
+}
 /** Bodyguard rows this leader can attach to, with display names. */
 const bodyguards = $derived(
 	unit && leader
@@ -94,6 +114,22 @@ function setAttachment(key: string) {
 					{/each}
 				</div>
 			{/if}
+
+			<!-- Count-limited detachment grants (e.g. select War Dogs as CHARACTER under
+			     Houndpack Lance — which is what lets them take Enhancements / be Warlord). -->
+			{#each grants as g (g.keyword)}
+				<div class="flex items-center gap-2 text-sm">
+					<button
+						class="btn btn-toggle"
+						aria-pressed={g.on}
+						disabled={!g.on && g.picked >= g.maxSelected}
+						onclick={() => toggleGrant(g.keyword, !g.on)}
+					>
+						{g.on ? `★ ${g.keyword}` : `Make ${g.keyword}`}
+					</button>
+					<span class="text-text-muted text-xs">{g.picked}/{g.maxSelected} · {g.detachmentName}</span>
+				</div>
+			{/each}
 
 			<!-- Warlord — only for units that can actually be Warlord. -->
 			{#if warlordEligible}

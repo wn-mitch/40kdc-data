@@ -62,6 +62,12 @@ export interface BuilderUnit {
 	 * the leader is unattached or the unit isn't a leader.
 	 */
 	attachedToKey?: string;
+	/**
+	 * Keywords the player has selected this unit to receive from a count-limited
+	 * detachment grant (e.g. picking this War Dog as one of Houndpack Lance's
+	 * three CHARACTER units). Stored as authored (e.g. `["Character"]`).
+	 */
+	selectedGrants?: string[];
 	modelCount: number;
 	loadout: Map<string, number>;
 	enhancementId: string | null;
@@ -170,17 +176,19 @@ export function detachmentTagConflicts(state: BuilderState): TagConflict[] {
 /**
  * Enhancements legal for `unit` under any selected detachment: scoped to the
  * detachments, then filtered by the enhancement's keyword restrictions /
- * exclusions against the unit's keywords. Characters only. Deduped by id,
- * preserving detachment order.
+ * exclusions against the unit's *effective* keywords. Characters only — including
+ * units granted CHARACTER by the detachment (pass `selected` = the unit's
+ * `selectedGrants`, e.g. a chosen Houndpack War Dog). Deduped by id, preserving
+ * detachment order.
  */
 export function eligibleEnhancements(
 	detachmentIds: string[],
 	unit: Unit | undefined,
+	selected: string[] = [],
 ): Enhancement[] {
 	if (detachmentIds.length === 0 || !unit) return [];
-	const isCharacter = (unit.keywords ?? []).some((k) => k.toLowerCase() === 'character');
-	if (!isCharacter) return [];
-	const unitKeywords = new Set((unit.keywords ?? []).map((k) => k.toLowerCase()));
+	const unitKeywords = effectiveKeywords(unit, detachmentIds, selected);
+	if (!unitKeywords.has('character')) return [];
 	const seen = new Set<string>();
 	const out: Enhancement[] = [];
 	for (const detachmentId of detachmentIds) {
@@ -622,39 +630,78 @@ export function attachedLeaders(state: BuilderState, bodyguard: BuilderUnit): Bu
 	return state.units.filter((u) => u.attachedToKey === bodyguard.key);
 }
 
-// ── Warlord eligibility ──────────────────────────────────────────────────────────
-
-/**
- * Whether a unit may be the army Warlord: a CHARACTER that isn't barred by the
- * ally rule it was included under (`cannot_be_warlord`). The detail panel only
- * shows the Warlord control when this is true.
- */
-export function canBeWarlord(bu: BuilderUnit): boolean {
-	const raw = buRaw(bu);
-	if (!raw) return false;
-	if (!(raw.keywords ?? []).some((k) => k.toLowerCase() === 'character')) return false;
-	if (bu.allyRuleId && ds.alliedRules.get(bu.allyRuleId)?.cannot_be_warlord) return false;
-	return true;
-}
-
 // ── Effective keywords (detachment grants) ───────────────────────────────────────
 
 /**
- * A unit's keywords plus any its selected detachments grant it (e.g. Houndpack
- * Lance grants 'Battleline' to 'War Dog' units), lowercased. Used for the
- * datasheet-count cap and battlefield-role checks so a granted Battleline raises
- * the cap from 3 to 6.
+ * A unit's keywords plus any its selected detachments grant it, lowercased.
+ * Blanket grants (no `max_selected`) apply to every matching unit (e.g. Houndpack
+ * Lance grants Battleline to all War Dogs). Count-limited grants (`max_selected`,
+ * e.g. the three War Dogs that become CHARACTER) apply only when the player has
+ * picked this unit — pass `selected` (the unit's `selectedGrants`). Used for the
+ * datasheet cap, Warlord eligibility, and enhancement eligibility.
  */
-export function effectiveKeywords(unit: Unit, detachmentIds: string[]): Set<string> {
+export function effectiveKeywords(
+	unit: Unit,
+	detachmentIds: string[],
+	selected: string[] = [],
+): Set<string> {
 	const have = keywordSet(unit);
+	const picked = new Set(selected.map((k) => k.toLowerCase()));
 	for (const id of detachmentIds) {
 		for (const grant of ds.detachments.get(id)?.granted_keywords ?? []) {
-			if ((grant.to_keywords ?? []).some((k) => have.has(k.toLowerCase()))) {
-				have.add(grant.keyword.toLowerCase());
-			}
+			if (!(grant.to_keywords ?? []).some((k) => have.has(k.toLowerCase()))) continue;
+			// Count-limited grants require an explicit per-unit selection.
+			if (grant.max_selected != null && !picked.has(grant.keyword.toLowerCase())) continue;
+			have.add(grant.keyword.toLowerCase());
 		}
 	}
 	return have;
+}
+
+/**
+ * The count-limited keyword grants a unit is *eligible to receive* under the
+ * selected detachments (e.g. CHARACTER for a War Dog under Houndpack Lance), each
+ * with its selection cap. Drives the detail panel's "make Character" toggles.
+ */
+export interface SelectableGrant {
+	keyword: string;
+	maxSelected: number;
+	detachmentName: string;
+}
+export function selectableGrantsFor(unit: Unit, detachmentIds: string[]): SelectableGrant[] {
+	const have = keywordSet(unit);
+	const out: SelectableGrant[] = [];
+	for (const id of detachmentIds) {
+		const det = ds.detachments.get(id);
+		for (const grant of det?.granted_keywords ?? []) {
+			if (grant.max_selected == null) continue;
+			if (!(grant.to_keywords ?? []).some((k) => have.has(k.toLowerCase()))) continue;
+			out.push({ keyword: grant.keyword, maxSelected: grant.max_selected, detachmentName: det?.name ?? id });
+		}
+	}
+	return out;
+}
+
+/** How many units in the draft have been selected to receive `keyword` from a grant. */
+export function grantSelectionCount(state: BuilderState, keyword: string): number {
+	const k = keyword.toLowerCase();
+	return state.units.filter((u) => (u.selectedGrants ?? []).some((g) => g.toLowerCase() === k)).length;
+}
+
+// ── Warlord eligibility ──────────────────────────────────────────────────────────
+
+/**
+ * Whether a unit may be the army Warlord: an *effective* CHARACTER (innate or
+ * granted, e.g. a selected Houndpack War Dog) that isn't barred by the ally rule
+ * it was included under (`cannot_be_warlord`). The detail panel shows the Warlord
+ * control only when this is true.
+ */
+export function canBeWarlord(bu: BuilderUnit, detachmentIds: string[] = []): boolean {
+	const raw = buRaw(bu);
+	if (!raw) return false;
+	if (!effectiveKeywords(raw, detachmentIds, bu.selectedGrants ?? []).has('character')) return false;
+	if (bu.allyRuleId && ds.alliedRules.get(bu.allyRuleId)?.cannot_be_warlord) return false;
+	return true;
 }
 
 // ── Validation summary (advisory) ──────────────────────────────────────────────
@@ -790,6 +837,23 @@ function constructionViolations(state: BuilderState): BuilderViolation[] {
 	}
 	for (const { count, name } of epic.values()) {
 		if (count > 1) out.push({ unitKey: null, message: `${name} included ${count}× (Epic Heroes are unique)` });
+	}
+
+	// Count-limited detachment grants (e.g. Houndpack Lance: ≤3 CHARACTER War Dogs).
+	const seenGrant = new Set<string>();
+	for (const id of state.detachmentIds) {
+		const det = ds.detachments.get(id);
+		for (const grant of det?.granted_keywords ?? []) {
+			if (grant.max_selected == null || seenGrant.has(grant.keyword.toLowerCase())) continue;
+			seenGrant.add(grant.keyword.toLowerCase());
+			const picked = grantSelectionCount(state, grant.keyword);
+			if (picked > grant.max_selected) {
+				out.push({
+					unitKey: null,
+					message: `${det?.name ?? id}: ${picked} ${grant.keyword} selected (max ${grant.max_selected})`,
+				});
+			}
+		}
 	}
 
 	return out;

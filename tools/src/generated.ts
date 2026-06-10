@@ -410,7 +410,7 @@ export interface DeploymentPattern {
   game_version: GameVersionReference;
 }
 /**
- * A construction keyword a detachment grants to units matching a keyword filter.
+ * A construction keyword a detachment grants to units matching a keyword filter. Blanket by default (every matching unit gains it); when `max_selected` is set, the keyword is instead granted to up to that many matching units of the player's choice (e.g. Houndpack Lance: 'select three WAR DOG units; they gain CHARACTER').
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "granted-keyword".
@@ -418,6 +418,10 @@ export interface DeploymentPattern {
 export interface GrantedKeyword {
   keyword: Keyword;
   to_keywords: KeywordList;
+  /**
+   * When present, the grant is not blanket: the player selects up to this many matching units to receive `keyword` (e.g. 3 WAR DOG units gain CHARACTER under Houndpack Lance). Absent = every matching unit gains it.
+   */
+  max_selected?: number;
 }
 /**
  * A detachment option within a faction, providing a detachment rule, enhancements, and stratagems.

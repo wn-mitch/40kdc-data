@@ -37,6 +37,7 @@ import {
 	isLeader,
 	attachableBodyguards,
 	effectiveKeywords,
+	selectableGrantsFor,
 	type BuilderState,
 	type BuilderUnit,
 } from './builder';
@@ -564,5 +565,54 @@ describe('detachment-granted Battleline + reconcile-on-add', () => {
 		};
 		const issues = builderViolations({ ...emptyBuilderState(), factionId: 'chaos-knights', units: [bu] });
 		expect(issues.some((v) => v.unitKey === 'c' && /below min/.test(v.message))).toBe(false);
+	});
+});
+
+describe('Houndpack Lance: select War Dogs as CHARACTER', () => {
+	const houndpack = ['houndpack-lance'];
+	const warDog = (key: string, selected?: string[]): BuilderUnit => ({
+		...makeUnit('war-dog-karnivore', 1),
+		key,
+		...(selected ? { selectedGrants: selected } : {}),
+	});
+
+	it('offers the CHARACTER grant to War Dogs under Houndpack, capped at 3', () => {
+		const grants = selectableGrantsFor(unitRaw('war-dog-karnivore')!, houndpack);
+		expect(grants).toHaveLength(1);
+		expect(grants[0]).toMatchObject({ keyword: 'Character', maxSelected: 3 });
+		// No such grant without the detachment.
+		expect(selectableGrantsFor(unitRaw('war-dog-karnivore')!, [])).toHaveLength(0);
+	});
+
+	it('grants CHARACTER only to selected units, enabling Warlord', () => {
+		const wd = unitRaw('war-dog-karnivore')!;
+		// Blanket Battleline always; CHARACTER only when selected.
+		expect(effectiveKeywords(wd, houndpack).has('battleline')).toBe(true);
+		expect(effectiveKeywords(wd, houndpack).has('character')).toBe(false);
+		expect(effectiveKeywords(wd, houndpack, ['Character']).has('character')).toBe(true);
+
+		expect(canBeWarlord(warDog('a'), houndpack)).toBe(false);
+		expect(canBeWarlord(warDog('a', ['Character']), houndpack)).toBe(true);
+	});
+
+	it('flags selecting more than three CHARACTER War Dogs', () => {
+		const four = ['a', 'b', 'c', 'd'].map((k) => warDog(k, ['Character']));
+		const issues = builderViolations({
+			...emptyBuilderState(),
+			factionId: 'chaos-knights',
+			detachmentIds: houndpack,
+			units: four,
+		});
+		expect(issues.some((v) => /Character selected \(max 3\)/.test(v.message))).toBe(true);
+		// Three is fine.
+		const three = ['a', 'b', 'c'].map((k) => warDog(k, ['Character']));
+		expect(
+			builderViolations({
+				...emptyBuilderState(),
+				factionId: 'chaos-knights',
+				detachmentIds: houndpack,
+				units: three,
+			}).some((v) => /Character selected/.test(v.message)),
+		).toBe(false);
 	});
 });

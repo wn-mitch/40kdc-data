@@ -4579,13 +4579,13 @@ pub struct GameVersionRef {
     pub dataslate: DataslateVersion,
     pub edition: Edition,
 }
-///A construction keyword a detachment grants to units matching a keyword filter.
+///A construction keyword a detachment grants to units matching a keyword filter. Blanket by default (every matching unit gains it); when `max_selected` is set, the keyword is instead granted to up to that many matching units of the player's choice (e.g. Houndpack Lance: 'select three WAR DOG units; they gain CHARACTER').
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "A construction keyword a detachment grants to units matching a keyword filter.",
+///  "description": "A construction keyword a detachment grants to units matching a keyword filter. Blanket by default (every matching unit gains it); when `max_selected` is set, the keyword is instead granted to up to that many matching units of the player's choice (e.g. Houndpack Lance: 'select three WAR DOG units; they gain CHARACTER').",
 ///  "type": "object",
 ///  "required": [
 ///    "keyword",
@@ -4594,6 +4594,11 @@ pub struct GameVersionRef {
 ///  "properties": {
 ///    "keyword": {
 ///      "$ref": "#/$defs/keyword"
+///    },
+///    "max_selected": {
+///      "description": "When present, the grant is not blanket: the player selects up to this many matching units to receive `keyword` (e.g. 3 WAR DOG units gain CHARACTER under Houndpack Lance). Absent = every matching unit gains it.",
+///      "type": "integer",
+///      "minimum": 1.0
 ///    },
 ///    "to_keywords": {
 ///      "$ref": "#/$defs/keyword-list"
@@ -4607,6 +4612,9 @@ pub struct GameVersionRef {
 #[serde(deny_unknown_fields)]
 pub struct GrantedKeyword {
     pub keyword: Keyword,
+    ///When present, the grant is not blanket: the player selects up to this many matching units to receive `keyword` (e.g. 3 WAR DOG units gain CHARACTER under Houndpack Lance). Absent = every matching unit gains it.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_selected: ::std::option::Option<::std::num::NonZeroU64>,
     pub to_keywords: KeywordList,
 }
 ///A model's 2D collision footprint as an explicit polygon, used in place of a circular/oval base for vehicles and other hull-based models. Points are authored in local inches (y-down); a consumer re-centers the polygon on its area centroid before placement, so the local origin does not affect where the model lands — only its shape matters (mirrors the terrain-template footprint convention). A hull shape is faction-agnostic and reusable: one outline (e.g. a Rhino chassis) is authored once and referenced by `hull_shape_id` from every model that shares that hull, across factions. This entity stores geometry only — never an image, image URL, or any source-asset metadata.

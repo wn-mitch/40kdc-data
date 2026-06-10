@@ -111,6 +111,11 @@
       {
         "keyword": "Battleline",
         "to_keywords": ["War Dog"]
+      },
+      {
+        "keyword": "Character",
+        "to_keywords": ["War Dog"],
+        "max_selected": 3
       }
     ]
   },

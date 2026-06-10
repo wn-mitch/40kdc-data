@@ -166,6 +166,7 @@ class DeploymentPattern(TypedDict):
 class GrantedKeyword(TypedDict):
     keyword: Keyword
     to_keywords: KeywordList
+    max_selected: NotRequired[int]
 
 
 class Restrictions(TypedDict):
