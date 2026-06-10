@@ -163,6 +163,11 @@ class DeploymentPattern(TypedDict):
     game_version: GameVersionRef
 
 
+class GrantedKeyword(TypedDict):
+    keyword: Keyword
+    to_keywords: KeywordList
+
+
 class Restrictions(TypedDict):
     required_keywords: NotRequired[KeywordList]
     excluded_keywords: NotRequired[KeywordList]
@@ -180,6 +185,7 @@ class Detachment(TypedDict):
     enhancement_ids: NotRequired[list[EntityId]]
     stratagem_ids: NotRequired[list[EntityId]]
     restrictions: NotRequired[Restrictions | None]
+    granted_keywords: NotRequired[list[GrantedKeyword]]
     game_version: GameVersionRef
 
 

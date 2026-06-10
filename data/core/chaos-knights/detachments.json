@@ -106,6 +106,12 @@
     "detachment_points": 2,
     "force_dispositions": [
       "reconnaissance"
+    ],
+    "granted_keywords": [
+      {
+        "keyword": "Battleline",
+        "to_keywords": ["War Dog"]
+      }
     ]
   },
   {

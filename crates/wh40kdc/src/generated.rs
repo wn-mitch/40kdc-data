@@ -2681,6 +2681,13 @@ impl<'de> ::serde::Deserialize<'de> for DeploymentPatternZonesItemName {
 ///    "game_version": {
 ///      "$ref": "#/$defs/game-version-ref"
 ///    },
+///    "granted_keywords": {
+///      "description": "Construction keywords this detachment grants to matching units while it is selected (e.g. Houndpack Lance grants 'Battleline' to 'War Dog' units). A unit carrying any keyword in a grant's `to_keywords` gains that grant's `keyword` for army-construction purposes (datasheet-count caps, battlefield role). Empty/absent when the detachment grants no construction keywords. Distinct from combat keywords, which live in the ability DSL.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/granted-keyword"
+///      }
+///    },
 ///    "id": {
 ///      "$ref": "#/$defs/entity-id"
 ///    },
@@ -2745,6 +2752,9 @@ pub struct Detachment {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub force_dispositions: ::std::option::Option<Vec<EntityId>>,
     pub game_version: GameVersionRef,
+    ///Construction keywords this detachment grants to matching units while it is selected (e.g. Houndpack Lance grants 'Battleline' to 'War Dog' units). A unit carrying any keyword in a grant's `to_keywords` gains that grant's `keyword` for army-construction purposes (datasheet-count caps, battlefield role). Empty/absent when the detachment grants no construction keywords. Distinct from combat keywords, which live in the ability DSL.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub granted_keywords: ::std::vec::Vec<GrantedKeyword>,
     pub id: EntityId,
     pub name: DetachmentName,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -4568,6 +4578,36 @@ pub struct GameVersion {
 pub struct GameVersionRef {
     pub dataslate: DataslateVersion,
     pub edition: Edition,
+}
+///A construction keyword a detachment grants to units matching a keyword filter.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "A construction keyword a detachment grants to units matching a keyword filter.",
+///  "type": "object",
+///  "required": [
+///    "keyword",
+///    "to_keywords"
+///  ],
+///  "properties": {
+///    "keyword": {
+///      "$ref": "#/$defs/keyword"
+///    },
+///    "to_keywords": {
+///      "$ref": "#/$defs/keyword-list"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct GrantedKeyword {
+    pub keyword: Keyword,
+    pub to_keywords: KeywordList,
 }
 ///A model's 2D collision footprint as an explicit polygon, used in place of a circular/oval base for vehicles and other hull-based models. Points are authored in local inches (y-down); a consumer re-centers the polygon on its area centroid before placement, so the local origin does not affect where the model lands — only its shape matters (mirrors the terrain-template footprint convention). A hull shape is faction-agnostic and reusable: one outline (e.g. a Rhino chassis) is authored once and referenced by `hull_shape_id` from every model that shares that hull, across factions. This entity stores geometry only — never an image, image URL, or any source-asset metadata.
 ///

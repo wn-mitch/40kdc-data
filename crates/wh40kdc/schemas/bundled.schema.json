@@ -580,6 +580,23 @@
       ],
       "additionalProperties": false
     },
+    "granted-keyword": {
+      "type": "object",
+      "description": "A construction keyword a detachment grants to units matching a keyword filter.",
+      "properties": {
+        "keyword": {
+          "$ref": "#/$defs/keyword"
+        },
+        "to_keywords": {
+          "$ref": "#/$defs/keyword-list"
+        }
+      },
+      "required": [
+        "keyword",
+        "to_keywords"
+      ],
+      "additionalProperties": false
+    },
     "detachment": {
       "title": "Detachment",
       "description": "A detachment option within a faction, providing a detachment rule, enhancements, and stratagems.",
@@ -668,6 +685,13 @@
               "type": "null"
             }
           ]
+        },
+        "granted_keywords": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/granted-keyword"
+          },
+          "description": "Construction keywords this detachment grants to matching units while it is selected (e.g. Houndpack Lance grants 'Battleline' to 'War Dog' units). A unit carrying any keyword in a grant's `to_keywords` gains that grant's `keyword` for army-construction purposes (datasheet-count caps, battlefield role). Empty/absent when the detachment grants no construction keywords. Distinct from combat keywords, which live in the ability DSL."
         },
         "game_version": {
           "$ref": "#/$defs/game-version-ref"

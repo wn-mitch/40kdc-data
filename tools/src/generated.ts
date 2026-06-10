@@ -410,6 +410,16 @@ export interface DeploymentPattern {
   game_version: GameVersionReference;
 }
 /**
+ * A construction keyword a detachment grants to units matching a keyword filter.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "granted-keyword".
+ */
+export interface GrantedKeyword {
+  keyword: Keyword;
+  to_keywords: KeywordList;
+}
+/**
  * A detachment option within a faction, providing a detachment rule, enhancements, and stratagems.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -439,6 +449,10 @@ export interface Detachment {
     excluded_keywords?: KeywordList;
     notes?: string;
   } | null;
+  /**
+   * Construction keywords this detachment grants to matching units while it is selected (e.g. Houndpack Lance grants 'Battleline' to 'War Dog' units). A unit carrying any keyword in a grant's `to_keywords` gains that grant's `keyword` for army-construction purposes (datasheet-count caps, battlefield role). Empty/absent when the detachment grants no construction keywords. Distinct from combat keywords, which live in the ability DSL.
+   */
+  granted_keywords?: GrantedKeyword[];
   game_version: GameVersionReference;
 }
 /**
