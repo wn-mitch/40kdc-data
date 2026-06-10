@@ -87,6 +87,7 @@ const FILE_TO_COLLECTION: &[(&str, &str)] = &[
     ("abilities", "abilities"),
     ("phase-mappings", "phase_mappings"),
     ("detachments", "detachments"),
+    ("allies", "allied_rules"),
     ("stratagems", "stratagems"),
     ("enhancements", "enhancements"),
     ("leader-attachments", "leader_attachments"),

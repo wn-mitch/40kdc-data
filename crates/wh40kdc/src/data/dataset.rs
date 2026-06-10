@@ -12,10 +12,11 @@ use std::collections::HashMap;
 use std::sync::OnceLock;
 
 use crate::generated::{
-    Ability, DeploymentPattern, Detachment, Enhancement, Faction, ForceDisposition, GameVersion,
-    HullShape, InteractionFlag, LeaderAttachment, Mission, MissionMatchup, Phase, PhaseMapping,
-    ResourcePool, SecondaryCard, Stratagem, TargetProfile, TerrainLayout, TerrainTemplate,
-    TimingFlag, Unit, UnitComposition, Wargear, WargearOption, Weapon, WeaponKeyword,
+    Ability, AlliedRule, DeploymentPattern, Detachment, Enhancement, Faction, ForceDisposition,
+    GameVersion, HullShape, InteractionFlag, KeywordList, LeaderAttachment, Mission,
+    MissionMatchup, Phase, PhaseMapping, ResourcePool, SecondaryCard, Stratagem, TargetProfile,
+    TerrainLayout, TerrainTemplate, TimingFlag, Unit, UnitComposition, Wargear, WargearOption,
+    Weapon, WeaponKeyword,
 };
 
 use super::collection::Collection;
@@ -50,6 +51,9 @@ pub struct RawData {
     pub phase_mappings: Vec<PhaseMapping>,
     #[serde(default)]
     pub detachments: Vec<Detachment>,
+    /// Allied-detachment / 'soup' rules: how units lacking the army faction keyword may be included.
+    #[serde(default)]
+    pub allied_rules: Vec<AlliedRule>,
     #[serde(default)]
     pub stratagems: Vec<Stratagem>,
     #[serde(default)]
@@ -130,6 +134,7 @@ pub struct Dataset {
     // Id-bearing passthrough collections.
     pub target_profiles: Collection<TargetProfile>,
     pub detachments: Collection<Detachment>,
+    pub allied_rules: Collection<AlliedRule>,
     pub enhancements: Collection<Enhancement>,
     pub stratagems: Collection<Stratagem>,
     pub wargear_options: Collection<WargearOption>,
@@ -158,6 +163,8 @@ pub struct Dataset {
     units_by_ability: HashMap<String, Vec<usize>>,
     /// weapon id → indices of units that list it (into `units`).
     units_by_weapon: HashMap<String, Vec<usize>>,
+    /// lowercased keyword → indices of units carrying it (into `units`).
+    units_by_keyword: HashMap<String, Vec<usize>>,
     /// unit id → indices of wargear options for it (into `wargear_options`).
     wargear_options_by_unit: HashMap<String, Vec<usize>>,
 }
@@ -233,6 +240,11 @@ impl Dataset {
             |d| Some(d.faction_id.as_str()),
             |d| d.id.to_string(),
         );
+        let allied_rules = id_name_collection(
+            raw.allied_rules,
+            |r| r.id.to_string(),
+            |r| Some(r.name.as_str()),
+        );
         let enhancements = id_name_collection(
             raw.enhancements,
             |e| e.id.to_string(),
@@ -294,7 +306,7 @@ impl Dataset {
         );
 
         let phase_index = build_phase_index(&raw.phase_mappings);
-        let (units_by_ability, units_by_weapon) = build_reverse_indexes(&units);
+        let (units_by_ability, units_by_weapon, units_by_keyword) = build_reverse_indexes(&units);
         let mut wargear_options_by_unit: HashMap<String, Vec<usize>> = HashMap::new();
         for (idx, option) in wargear_options.all().iter().enumerate() {
             wargear_options_by_unit
@@ -311,6 +323,7 @@ impl Dataset {
             abilities,
             target_profiles,
             detachments,
+            allied_rules,
             enhancements,
             stratagems,
             wargear_options,
@@ -333,6 +346,7 @@ impl Dataset {
             phase_index,
             units_by_ability,
             units_by_weapon,
+            units_by_keyword,
             wargear_options_by_unit,
         }
     }
@@ -457,6 +471,111 @@ impl Dataset {
             .unwrap_or_default()
     }
 
+    /// Units carrying the given keyword, matched case-insensitively against the
+    /// union of each unit's `keywords` and `faction_keywords`. Powers a list
+    /// builder's keyword search bar across the whole dataset (so it also
+    /// surfaces cross-faction ally pools). Mirror of TS `unitsWithKeyword`;
+    /// pinned by the `units_with_keyword` conformance query.
+    pub fn units_with_keyword(&self, keyword: &str) -> Vec<&Unit> {
+        self.units_by_keyword
+            .get(&keyword.to_lowercase())
+            .map(|idxs| idxs.iter().map(|&i| self.units.at(i)).collect())
+            .unwrap_or_default()
+    }
+
+    /// The allied-rules offered for an army of `faction_id` running the given
+    /// detachments. A rule applies when both gates pass: the army gate
+    /// (`army_keywords_any` empty, or intersecting the faction's keywords) and
+    /// the detachment gate (`detachment_id` null, or among `detachment_ids`).
+    /// Order follows the allied-rules data. Mirror of TS `alliesFor`; pinned by
+    /// the `allies_for` conformance query.
+    pub fn allies_for(&self, faction_id: &str, detachment_ids: &[&str]) -> Vec<&AlliedRule> {
+        let Some(faction) = self.factions.get(faction_id) else {
+            return Vec::new();
+        };
+        let faction_keywords: std::collections::HashSet<String> = faction
+            .keywords
+            .iter()
+            .flat_map(|k| k.0.iter())
+            .map(|k| k.to_lowercase())
+            .collect();
+        self.allied_rules
+            .all()
+            .iter()
+            .filter(|rule| {
+                let army_gate = match &rule.army_keywords_any {
+                    None => true,
+                    Some(kws) if kws.0.is_empty() => true,
+                    Some(kws) => kws
+                        .0
+                        .iter()
+                        .any(|k| faction_keywords.contains(&k.to_lowercase())),
+                };
+                let detachment_gate = match &rule.detachment_id {
+                    None => true,
+                    Some(id) => detachment_ids.contains(&id.as_str()),
+                };
+                army_gate && detachment_gate
+            })
+            .collect()
+    }
+
+    /// The unit pool an allied-rule grants, sorted by name. Starts from the
+    /// rule's `source_faction_id` (if set) or the whole dataset, narrows to
+    /// units carrying any `source_keywords`, then applies `required_keywords`
+    /// (all present), `excluded_keywords` (none present), and `roles`. Empty for
+    /// an unknown rule id. Mirror of TS `allyUnitsFor`; pinned by the
+    /// `ally_units_for` conformance query.
+    pub fn ally_units_for(&self, rule_id: &str) -> Vec<&Unit> {
+        let Some(rule) = self.allied_rules.get(rule_id) else {
+            return Vec::new();
+        };
+        let base: Vec<&Unit> = match &rule.source_faction_id {
+            Some(fid) => self.units.by_faction(fid.as_str()),
+            None => self.units.all().iter().collect(),
+        };
+        let lower = |kws: &Option<KeywordList>| -> Vec<String> {
+            kws.iter()
+                .flat_map(|k| k.0.iter())
+                .map(|k| k.to_lowercase())
+                .collect()
+        };
+        let source_keywords = lower(&rule.source_keywords);
+        let required = lower(&rule.required_keywords);
+        let excluded = lower(&rule.excluded_keywords);
+        let roles: std::collections::HashSet<String> =
+            rule.roles.iter().flatten().map(|r| r.to_string()).collect();
+        let mut out: Vec<&Unit> = base
+            .into_iter()
+            .filter(|u| {
+                let have = unit_keyword_set(u);
+                if !source_keywords.is_empty() && !source_keywords.iter().any(|k| have.contains(k))
+                {
+                    return false;
+                }
+                if !required.is_empty() && !required.iter().all(|k| have.contains(k)) {
+                    return false;
+                }
+                if excluded.iter().any(|k| have.contains(k)) {
+                    return false;
+                }
+                if !roles.is_empty() {
+                    match &u.role {
+                        Some(role) => {
+                            if !roles.contains(&role.to_string()) {
+                                return false;
+                            }
+                        }
+                        None => return false,
+                    }
+                }
+                true
+            })
+            .collect();
+        out.sort_by(|a, b| a.name.cmp(&b.name));
+        out
+    }
+
     /// Leaders whose leader-attachment data lists `bodyguard_unit_id` among its
     /// eligible body units, sorted by name. The attachment is stored on the
     /// leader pointing down to its bodyguards, so answering "which leaders can
@@ -547,13 +666,32 @@ fn build_phase_index(phase_mappings: &[PhaseMapping]) -> HashMap<String, Vec<Pha
     index
 }
 
-/// Build ability-id→units and weapon-id→units reverse indexes (values are
-/// positions into the deduplicated units collection).
+/// The lowercased union of a unit's `keywords` and `faction_keywords`, for
+/// membership tests in `ally_units_for`.
+fn unit_keyword_set(unit: &Unit) -> std::collections::HashSet<String> {
+    unit.keywords
+        .iter()
+        .flat_map(|k| k.0.iter())
+        .chain(unit.faction_keywords.iter().flat_map(|k| k.0.iter()))
+        .map(|k| k.to_lowercase())
+        .collect()
+}
+
+/// Build ability-id→units, weapon-id→units, and keyword→units reverse indexes
+/// (values are positions into the deduplicated units collection). Keywords are
+/// the lowercased union of a unit's `keywords` and `faction_keywords`, deduped
+/// per unit so an overlap doesn't list the unit twice.
+#[allow(clippy::type_complexity)]
 fn build_reverse_indexes(
     units: &Collection<Unit>,
-) -> (HashMap<String, Vec<usize>>, HashMap<String, Vec<usize>>) {
+) -> (
+    HashMap<String, Vec<usize>>,
+    HashMap<String, Vec<usize>>,
+    HashMap<String, Vec<usize>>,
+) {
     let mut by_ability: HashMap<String, Vec<usize>> = HashMap::new();
     let mut by_weapon: HashMap<String, Vec<usize>> = HashMap::new();
+    let mut by_keyword: HashMap<String, Vec<usize>> = HashMap::new();
     for (idx, unit) in units.all().iter().enumerate() {
         for ability_id in &unit.ability_ids {
             by_ability
@@ -567,6 +705,15 @@ fn build_reverse_indexes(
                 .or_default()
                 .push(idx);
         }
+        let mut seen: std::collections::HashSet<String> = std::collections::HashSet::new();
+        let keywords = unit.keywords.iter().flat_map(|k| k.0.iter());
+        let faction_keywords = unit.faction_keywords.iter().flat_map(|k| k.0.iter());
+        for kw in keywords.chain(faction_keywords) {
+            let key = kw.to_lowercase();
+            if seen.insert(key.clone()) {
+                by_keyword.entry(key).or_default().push(idx);
+            }
+        }
     }
-    (by_ability, by_weapon)
+    (by_ability, by_weapon, by_keyword)
 }

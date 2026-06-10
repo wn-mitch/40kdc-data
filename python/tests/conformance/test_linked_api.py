@@ -60,6 +60,12 @@ def run_linked_query(ds: Any, query: str, args: dict[str, Any]) -> Any:
         return [x.id for x in ds.abilities.by_faction(args["factionId"])]
     if query == "weapons_of_faction":
         return [x.id for x in ds.factions.get(args["factionId"]).weapons]
+    if query == "units_with_keyword":
+        return [u.id for u in ds.units_with_keyword(args["keyword"])]
+    if query == "allies_for":
+        return [r["id"] for r in ds.allies_for(args["factionId"], args.get("detachmentIds") or [])]
+    if query == "ally_units_for":
+        return [u.id for u in ds.ally_units_for(args["ruleId"])]
     raise AssertionError(f"unknown linked_query: {query}")
 
 

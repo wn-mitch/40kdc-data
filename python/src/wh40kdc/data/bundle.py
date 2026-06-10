@@ -27,6 +27,7 @@ COLLECTION_KEYS = (
     "abilities",
     "phase_mappings",
     "detachments",
+    "allied_rules",
     "stratagems",
     "enhancements",
     "leader_attachments",

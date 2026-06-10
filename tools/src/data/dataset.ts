@@ -6,6 +6,7 @@
  * @packageDocumentation
  */
 import type {
+  AlliedRule,
   DeploymentPattern,
   Detachment,
   Enhancement,
@@ -92,6 +93,7 @@ export class Dataset {
   // Id-bearing collections without bespoke views (records returned as-is).
   readonly targetProfiles: Collection<TargetProfile, TargetProfile>;
   readonly detachments: Collection<Detachment, Detachment>;
+  readonly alliedRules: Collection<AlliedRule, AlliedRule>;
   readonly enhancements: Collection<Enhancement, Enhancement>;
   readonly stratagems: Collection<Stratagem, Stratagem>;
   readonly wargearOptions: Collection<WargearOption, WargearOption>;
@@ -122,6 +124,8 @@ export class Dataset {
   private readonly unitsByWeapon = new Map<string, Unit[]>();
   /** weapon-keyword id → weapons whose profiles reference it. */
   private readonly weaponsByKeyword = new Map<string, RawData["weapons"][number][]>();
+  /** lowercased keyword → units carrying it (in `keywords` or `faction_keywords`). */
+  private readonly unitsByKeyword = new Map<string, Unit[]>();
   /** unit id → wargear options authored for it (declared order preserved). */
   private readonly wargearOptionsByUnit = new Map<string, WargearOption[]>();
 
@@ -164,6 +168,9 @@ export class Dataset {
 
     this.targetProfiles = idCollection(raw.targetProfiles, (p) => p.faction_id);
     this.detachments = idCollection(raw.detachments, (d) => d.faction_id);
+    // Allied rules aren't owned by one faction (Daemonic Pact is shared by
+    // Chaos Knights and CSM); `alliesFor` matches on `army_keywords_any` instead.
+    this.alliedRules = idCollection(raw.alliedRules);
     this.enhancements = idCollection(raw.enhancements);
     this.stratagems = idCollection(raw.stratagems);
     this.wargearOptions = idCollection(raw.wargearOptions);
@@ -233,6 +240,72 @@ export class Dataset {
   /** Weapons whose profiles reference the given weapon-keyword id. */
   weaponsWithKeyword(keywordId: string): WeaponView[] {
     return (this.weaponsByKeyword.get(keywordId) ?? []).map((w) => new WeaponView(w, this));
+  }
+
+  /**
+   * Units carrying the given keyword, matched case-insensitively against the
+   * union of each unit's `keywords` and `faction_keywords`. Powers a list
+   * builder's keyword search bar (type "Khorne" to find every Khorne unit),
+   * across the whole dataset — so it also surfaces cross-faction ally pools.
+   * Returns each faction's copy of a shared unit id separately.
+   */
+  unitsWithKeyword(keyword: string): UnitView[] {
+    return (this.unitsByKeyword.get(keyword.toLowerCase()) ?? []).map((u) => new UnitView(u, this));
+  }
+
+  /**
+   * The allied-rules **offered** for an army of `factionId` running the given
+   * detachments. A rule applies when both its gates pass: the **army gate**
+   * (`army_keywords_any` empty, or intersecting the faction's keywords) and the
+   * **detachment gate** (`detachment_id` null, or among `detachmentIds`). Order
+   * follows the allied-rules data file. The strict "every *model* carries an
+   * army keyword" check (for soup lists) is a builder/validation concern — this
+   * offers the candidate rules a faction qualifies for. Mirror of Rust
+   * `Dataset::allies_for`; pinned by the `allies_for` conformance query.
+   */
+  alliesFor(factionId: string, detachmentIds: string[] = []): AlliedRule[] {
+    const faction = this.factions.get(factionId);
+    if (!faction) return [];
+    const factionKeywords = new Set((faction.raw.keywords ?? []).map((k) => k.toLowerCase()));
+    const detachmentSet = new Set(detachmentIds);
+    return this.alliedRules.all.filter((rule) => {
+      const armyGate =
+        (rule.army_keywords_any ?? []).length === 0 ||
+        (rule.army_keywords_any ?? []).some((k) => factionKeywords.has(k.toLowerCase()));
+      const detachmentGate =
+        rule.detachment_id == null || detachmentSet.has(rule.detachment_id);
+      return armyGate && detachmentGate;
+    });
+  }
+
+  /**
+   * The unit pool an allied-rule grants, sorted by name. Starts from the rule's
+   * `source_faction_id` (if set, to keep that faction's copy of shared ids) or
+   * the whole dataset, narrows to units carrying any `source_keywords`, then
+   * applies `required_keywords` (all present), `excluded_keywords` (none
+   * present), and `roles`. Empty for an unknown rule id or a pool that resolves
+   * to nothing. Mirror of Rust `Dataset::ally_units_for`; pinned by the
+   * `ally_units_for` conformance query.
+   */
+  allyUnitsFor(ruleId: string): UnitView[] {
+    const rule = this.alliedRules.get(ruleId);
+    if (!rule) return [];
+    const base = rule.source_faction_id
+      ? this.units.byFaction(rule.source_faction_id)
+      : this.units.all;
+    const sourceKeywords = (rule.source_keywords ?? []).map((k) => k.toLowerCase());
+    const required = (rule.required_keywords ?? []).map((k) => k.toLowerCase());
+    const excluded = (rule.excluded_keywords ?? []).map((k) => k.toLowerCase());
+    const roles = new Set(rule.roles ?? []);
+    const out = base.filter((u) => {
+      const have = unitKeywordSet(u.raw);
+      if (sourceKeywords.length > 0 && !sourceKeywords.some((k) => have.has(k))) return false;
+      if (required.length > 0 && !required.every((k) => have.has(k))) return false;
+      if (excluded.some((k) => have.has(k))) return false;
+      if (roles.size > 0 && !(u.raw.role && roles.has(u.raw.role))) return false;
+      return true;
+    });
+    return out.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   /**
@@ -481,6 +554,15 @@ export class Dataset {
     for (const unit of raw.units) {
       for (const abilityId of unit.ability_ids ?? []) push(this.unitsByAbility, abilityId, unit);
       for (const weaponId of unit.weapon_ids ?? []) push(this.unitsByWeapon, weaponId, unit);
+      // Index every keyword the unit carries (unit keywords ∪ faction keywords),
+      // lowercased, deduped per-unit so an overlap doesn't list the unit twice.
+      const seenKw = new Set<string>();
+      for (const kw of [...(unit.keywords ?? []), ...(unit.faction_keywords ?? [])]) {
+        const key = kw.toLowerCase();
+        if (seenKw.has(key)) continue;
+        seenKw.add(key);
+        push(this.unitsByKeyword, key, unit);
+      }
     }
     for (const option of raw.wargearOptions) {
       push(this.wargearOptionsByUnit, option.unit_id, option);
@@ -521,6 +603,14 @@ function push<T>(map: Map<string, T[]>, key: string, value: T): void {
   const existing = map.get(key);
   if (existing) existing.push(value);
   else map.set(key, [value]);
+}
+
+/** Lowercased union of a unit's `keywords` and `faction_keywords`, for membership tests. */
+function unitKeywordSet(unit: Unit): Set<string> {
+  const out = new Set<string>();
+  for (const k of unit.keywords ?? []) out.add(k.toLowerCase());
+  for (const k of unit.faction_keywords ?? []) out.add(k.toLowerCase());
+  return out;
 }
 
 /** Map an EligibleAbility back to the BuffSource the translator expects. */

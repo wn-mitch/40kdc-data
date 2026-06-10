@@ -278,6 +278,17 @@ def _handle_linked_query(state: RunnerState, args: Any) -> Response:
             if f is None:
                 return _err("UNKNOWN_ENTITY", {"kind": "faction", "id": input_.get("factionId")})
             return _ok([x.id for x in f.weapons])
+        if query == "units_with_keyword":
+            return _ok([u.id for u in ds.units_with_keyword(input_.get("keyword") or "")])
+        if query == "allies_for":
+            detachment_ids = input_.get("detachmentIds")
+            if not isinstance(detachment_ids, list):
+                detachment_ids = []
+            return _ok(
+                [r["id"] for r in ds.allies_for(input_.get("factionId") or "", detachment_ids)]
+            )
+        if query == "ally_units_for":
+            return _ok([u.id for u in ds.ally_units_for(input_.get("ruleId") or "")])
         return _err("INVALID_INPUT", {"detail": f"unknown linked_query: {query}"})
     except Exception as e:
         return _err("INTERNAL_ERROR", {"detail": str(e)})

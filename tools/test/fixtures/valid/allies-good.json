@@ -1,0 +1,31 @@
+[
+  {
+    "id": "test-daemonic-pact",
+    "name": "Test Daemonic Pact",
+    "label": "Daemons",
+    "army_keywords_any": ["Chaos Knights", "Heretic Astartes"],
+    "source_faction_id": "chaos-daemons",
+    "source_keywords": ["Legiones Daemonica"],
+    "points_limits": [
+      { "battle_size": "incursion", "max_points": 250 },
+      { "battle_size": "strike-force", "max_points": 500 },
+      { "battle_size": "onslaught", "max_points": 750 }
+    ],
+    "cannot_be_warlord": true,
+    "cannot_take_enhancements": true,
+    "battleline_ratio_keywords": ["Khorne", "Tzeentch", "Nurgle", "Slaanesh"],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  },
+  {
+    "id": "test-detachment-scoped",
+    "name": "Test Detachment-Scoped Allies",
+    "detachment_id": "test-detachment",
+    "source_faction_id": "test-faction",
+    "source_keywords": ["Damned"],
+    "excluded_keywords": ["Aircraft", "Epic Hero"],
+    "max_units": 2,
+    "warlord_required_keyword": "Test Faction",
+    "removes_ability_ids": ["test-ability"],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

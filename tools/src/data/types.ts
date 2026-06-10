@@ -9,6 +9,7 @@
  */
 import type {
   AbilityDSLEntry,
+  AlliedRule,
   DeploymentPattern,
   Detachment,
   Enhancement,
@@ -56,6 +57,8 @@ export interface RawData {
   /** Phase assignments, joined to abilities/stratagems/etc. via `source_id`. */
   phaseMappings: PhaseMapping[];
   detachments: Detachment[];
+  /** Allied-detachment / 'soup' rules: how units lacking the army faction keyword may be included. */
+  alliedRules: AlliedRule[];
   stratagems: Stratagem[];
   enhancements: Enhancement[];
   leaderAttachments: LeaderAttachment[];
@@ -91,6 +94,7 @@ export function emptyRawData(): RawData {
     abilities: [],
     phaseMappings: [],
     detachments: [],
+    alliedRules: [],
     stratagems: [],
     enhancements: [],
     leaderAttachments: [],

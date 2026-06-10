@@ -582,6 +582,395 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityInteractionsItemT
         value.parse()
     }
 }
+///The combined points cap for units included via an allied rule at one battle size.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The combined points cap for units included via an allied rule at one battle size.",
+///  "type": "object",
+///  "required": [
+///    "battle_size",
+///    "max_points"
+///  ],
+///  "properties": {
+///    "battle_size": {
+///      "description": "Battle size this cap applies at. Includes 'onslaught' (3000 pts), which ally rules reference even though the core roster battle-size enum lists only incursion/strike-force.",
+///      "type": "string",
+///      "enum": [
+///        "incursion",
+///        "strike-force",
+///        "onslaught"
+///      ]
+///    },
+///    "max_points": {
+///      "description": "Maximum combined points of units included via the rule at this battle size.",
+///      "type": "integer",
+///      "minimum": 0.0
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct AlliedPointsLimit {
+    ///Battle size this cap applies at. Includes 'onslaught' (3000 pts), which ally rules reference even though the core roster battle-size enum lists only incursion/strike-force.
+    pub battle_size: AlliedPointsLimitBattleSize,
+    ///Maximum combined points of units included via the rule at this battle size.
+    pub max_points: u64,
+}
+///Battle size this cap applies at. Includes 'onslaught' (3000 pts), which ally rules reference even though the core roster battle-size enum lists only incursion/strike-force.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Battle size this cap applies at. Includes 'onslaught' (3000 pts), which ally rules reference even though the core roster battle-size enum lists only incursion/strike-force.",
+///  "type": "string",
+///  "enum": [
+///    "incursion",
+///    "strike-force",
+///    "onslaught"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum AlliedPointsLimitBattleSize {
+    #[serde(rename = "incursion")]
+    Incursion,
+    #[serde(rename = "strike-force")]
+    StrikeForce,
+    #[serde(rename = "onslaught")]
+    Onslaught,
+}
+impl ::std::fmt::Display for AlliedPointsLimitBattleSize {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Incursion => f.write_str("incursion"),
+            Self::StrikeForce => f.write_str("strike-force"),
+            Self::Onslaught => f.write_str("onslaught"),
+        }
+    }
+}
+impl ::std::str::FromStr for AlliedPointsLimitBattleSize {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "incursion" => Ok(Self::Incursion),
+            "strike-force" => Ok(Self::StrikeForce),
+            "onslaught" => Ok(Self::Onslaught),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for AlliedPointsLimitBattleSize {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for AlliedPointsLimitBattleSize {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for AlliedPointsLimitBattleSize {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by two optional, AND-combined conditions: an army-wide keyword condition (`army_keywords_any`) and/or a selected detachment (`detachment_id`).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "title": "AlliedRule",
+///  "description": "A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by two optional, AND-combined conditions: an army-wide keyword condition (`army_keywords_any`) and/or a selected detachment (`detachment_id`).",
+///  "type": "object",
+///  "required": [
+///    "game_version",
+///    "id",
+///    "name"
+///  ],
+///  "properties": {
+///    "army_keywords_any": {
+///      "description": "Army gate: every model in the army must carry at least one of these keywords for the rule to apply (e.g. ['Chaos Knights', 'Heretic Astartes'] for Daemonic Pact). Empty = no army-level gate (the rule is then gated only by `detachment_id`, whose detachment is itself faction-locked).",
+///      "$ref": "#/$defs/keyword-list"
+///    },
+///    "battleline_ratio_keywords": {
+///      "description": "Per-keyword Battleline ratio constraint: for each keyword listed, the number of non-BATTLELINE units with that keyword included via this rule cannot exceed the number of BATTLELINE units with that keyword included via this rule (e.g. Daemonic Pact's per-god ['Khorne','Tzeentch','Nurgle','Slaanesh']).",
+///      "$ref": "#/$defs/keyword-list"
+///    },
+///    "cannot_be_warlord": {
+///      "description": "True when units included via this rule cannot be the army's Warlord (e.g. Daemonic Pact, Star Children's Blessings).",
+///      "default": false,
+///      "type": "boolean"
+///    },
+///    "cannot_take_enhancements": {
+///      "description": "True when units included via this rule cannot be given Enhancements (e.g. Daemonic Pact).",
+///      "default": false,
+///      "type": "boolean"
+///    },
+///    "detachment_id": {
+///      "description": "Detachment gate: this exact detachment must be selected for the rule to apply (e.g. 'iconoclast-fiefdom'). null = no detachment-level gate. Independent of the detachment's combat rule (`detachment_rule_id`).",
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/entity-id"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "excluded_keywords": {
+///      "description": "A unit carrying ANY of these cannot be included via this rule (e.g. Brood Brothers bans 'Aircraft', 'Epic Hero', 'Ogryn', ...).",
+///      "$ref": "#/$defs/keyword-list"
+///    },
+///    "game_version": {
+///      "$ref": "#/$defs/game-version-ref"
+///    },
+///    "id": {
+///      "$ref": "#/$defs/entity-id"
+///    },
+///    "label": {
+///      "description": "Short panel/category heading a list builder groups this pool under (e.g. 'Daemons', 'Imperial Agents', 'Titanic Allies'). Defaults to `name` when omitted.",
+///      "type": "string"
+///    },
+///    "max_units": {
+///      "description": "Optional cap on the number of units included via this rule, independent of points. null = no unit-count cap.",
+///      "oneOf": [
+///        {
+///          "type": "integer",
+///          "minimum": 0.0
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 128,
+///      "minLength": 1
+///    },
+///    "notes": {
+///      "type": "string"
+///    },
+///    "points_limits": {
+///      "description": "Absolute points cap on the combined cost of units included via this rule, per battle size. Empty = no points cap. A rule lists at most one entry per battle size.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/allied-points-limit"
+///      },
+///      "uniqueItems": true
+///    },
+///    "removes_ability_ids": {
+///      "description": "Abilities that included units lose under this rule (e.g. Astra Militarum units lose 'voice-of-command' under Brood Brothers). A display/effect hint, not a construction constraint.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "uniqueItems": true
+///    },
+///    "required_keywords": {
+///      "description": "Additional filter: a unit must carry ALL of these to be included via this rule (e.g. the matching god ['Khorne'] for a per-god Daemon pool).",
+///      "$ref": "#/$defs/keyword-list"
+///    },
+///    "roles": {
+///      "description": "Optional battlefield-role filter (matched against a unit's `role`). Empty = no role restriction.",
+///      "type": "array",
+///      "items": {
+///        "type": "string"
+///      },
+///      "uniqueItems": true
+///    },
+///    "source_faction_id": {
+///      "description": "Faction the ally pool is drawn from, when scoping by faction is needed to disambiguate units whose id is shared across factions. Optional hint; `source_keywords` is the primary filter.",
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/entity-id"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "source_keywords": {
+///      "description": "A unit qualifies for this pool when it carries any of these keywords (e.g. ['Legiones Daemonica'], ['Damned'], ['Vanguard Invader']). Empty = the whole `source_faction_id` is the pool.",
+///      "$ref": "#/$defs/keyword-list"
+///    },
+///    "warlord_required_keyword": {
+///      "description": "Host-Warlord requirement: a model carrying this keyword must be the army's Warlord (e.g. Brood Brothers requires a 'Genestealer Cults' Warlord). null = no such requirement.",
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/keyword"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct AlliedRule {
+    ///Army gate: every model in the army must carry at least one of these keywords for the rule to apply (e.g. ['Chaos Knights', 'Heretic Astartes'] for Daemonic Pact). Empty = no army-level gate (the rule is then gated only by `detachment_id`, whose detachment is itself faction-locked).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub army_keywords_any: ::std::option::Option<KeywordList>,
+    ///Per-keyword Battleline ratio constraint: for each keyword listed, the number of non-BATTLELINE units with that keyword included via this rule cannot exceed the number of BATTLELINE units with that keyword included via this rule (e.g. Daemonic Pact's per-god ['Khorne','Tzeentch','Nurgle','Slaanesh']).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub battleline_ratio_keywords: ::std::option::Option<KeywordList>,
+    ///True when units included via this rule cannot be the army's Warlord (e.g. Daemonic Pact, Star Children's Blessings).
+    #[serde(default)]
+    pub cannot_be_warlord: bool,
+    ///True when units included via this rule cannot be given Enhancements (e.g. Daemonic Pact).
+    #[serde(default)]
+    pub cannot_take_enhancements: bool,
+    ///Detachment gate: this exact detachment must be selected for the rule to apply (e.g. 'iconoclast-fiefdom'). null = no detachment-level gate. Independent of the detachment's combat rule (`detachment_rule_id`).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub detachment_id: ::std::option::Option<EntityId>,
+    ///A unit carrying ANY of these cannot be included via this rule (e.g. Brood Brothers bans 'Aircraft', 'Epic Hero', 'Ogryn', ...).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub excluded_keywords: ::std::option::Option<KeywordList>,
+    pub game_version: GameVersionRef,
+    pub id: EntityId,
+    ///Short panel/category heading a list builder groups this pool under (e.g. 'Daemons', 'Imperial Agents', 'Titanic Allies'). Defaults to `name` when omitted.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub label: ::std::option::Option<::std::string::String>,
+    ///Optional cap on the number of units included via this rule, independent of points. null = no unit-count cap.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_units: ::std::option::Option<u64>,
+    pub name: AlliedRuleName,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub notes: ::std::option::Option<::std::string::String>,
+    ///Absolute points cap on the combined cost of units included via this rule, per battle size. Empty = no points cap. A rule lists at most one entry per battle size.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub points_limits: ::std::option::Option<Vec<AlliedPointsLimit>>,
+    ///Abilities that included units lose under this rule (e.g. Astra Militarum units lose 'voice-of-command' under Brood Brothers). A display/effect hint, not a construction constraint.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub removes_ability_ids: ::std::option::Option<Vec<EntityId>>,
+    ///Additional filter: a unit must carry ALL of these to be included via this rule (e.g. the matching god ['Khorne'] for a per-god Daemon pool).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub required_keywords: ::std::option::Option<KeywordList>,
+    ///Optional battlefield-role filter (matched against a unit's `role`). Empty = no role restriction.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub roles: ::std::option::Option<Vec<::std::string::String>>,
+    ///Faction the ally pool is drawn from, when scoping by faction is needed to disambiguate units whose id is shared across factions. Optional hint; `source_keywords` is the primary filter.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub source_faction_id: ::std::option::Option<EntityId>,
+    ///A unit qualifies for this pool when it carries any of these keywords (e.g. ['Legiones Daemonica'], ['Damned'], ['Vanguard Invader']). Empty = the whole `source_faction_id` is the pool.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub source_keywords: ::std::option::Option<KeywordList>,
+    ///Host-Warlord requirement: a model carrying this keyword must be the army's Warlord (e.g. Brood Brothers requires a 'Genestealer Cults' Warlord). null = no such requirement.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub warlord_required_keyword: ::std::option::Option<Keyword>,
+}
+///`AlliedRuleName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 128,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct AlliedRuleName(::std::string::String);
+impl ::std::ops::Deref for AlliedRuleName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<AlliedRuleName> for ::std::string::String {
+    fn from(value: AlliedRuleName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for AlliedRuleName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 128usize {
+            return Err("longer than 128 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for AlliedRuleName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for AlliedRuleName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for AlliedRuleName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for AlliedRuleName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
 ///A draw-time predicate over an army list (not runtime board state, so deliberately NOT the Ability DSL condition). Used to gate when_drawn operations such as redraws. Example: a card that is void unless the opponent fields a large unit (10e 'Cull the Horde' redrew when the opponent had no unit of 14+ models) is { subject: 'opponent', quantifier: 'none', unit_filter: { model_count_min: 14 } } with operation 'redraw'.
 ///
 /// <details><summary>JSON schema</summary>

@@ -93,6 +93,33 @@ class GameVersionRef(TypedDict):
     dataslate: DataslateVersion
 
 
+class AlliedPointsLimit(TypedDict):
+    battle_size: Literal["incursion", "strike-force", "onslaught"]
+    max_points: int
+
+
+class AlliedRule(TypedDict):
+    id: EntityId
+    name: str
+    label: NotRequired[str]
+    army_keywords_any: NotRequired[KeywordList]
+    detachment_id: NotRequired[EntityId | None]
+    source_faction_id: NotRequired[EntityId | None]
+    source_keywords: NotRequired[KeywordList]
+    required_keywords: NotRequired[KeywordList]
+    excluded_keywords: NotRequired[KeywordList]
+    roles: NotRequired[list[str]]
+    points_limits: NotRequired[list[AlliedPointsLimit]]
+    max_units: NotRequired[int | None]
+    cannot_be_warlord: NotRequired[bool]
+    cannot_take_enhancements: NotRequired[bool]
+    warlord_required_keyword: NotRequired[Keyword | None]
+    removes_ability_ids: NotRequired[list[EntityId]]
+    battleline_ratio_keywords: NotRequired[KeywordList]
+    game_version: GameVersionRef
+    notes: NotRequired[str]
+
+
 class ZoneShape1(TypedDict):
     type: Literal["rectangle"]
     width: float

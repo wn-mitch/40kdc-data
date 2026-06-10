@@ -527,6 +527,14 @@ function runLinkedApi(ds: Dataset, c: LinkedApiCase): string | null | string[] {
       const comp = ds.unitCompositions.find((cc) => cc.unit_id === c.args.unitId);
       return (comp?.models ?? []).map((m) => `${m.name}=${encodeBase(m.base_size_mm) ?? "none"}`);
     }
+    case "units_with_keyword":
+      return ds.unitsWithKeyword(c.args.keyword).map((u) => u.id);
+    case "allies_for": {
+      const detachmentIds = (c.args.detachmentIds as unknown as string[] | undefined) ?? [];
+      return ds.alliesFor(c.args.factionId, detachmentIds).map((r) => r.id);
+    }
+    case "ally_units_for":
+      return ds.allyUnitsFor(c.args.ruleId).map((u) => u.id);
     default:
       throw new Error(`unknown linked-api query: ${c.query}`);
   }

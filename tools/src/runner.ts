@@ -371,6 +371,15 @@ function handleLinkedQuery(state: RunnerState, args: unknown): RunnerResponse {
         if (!f) return err("UNKNOWN_ENTITY", { kind: "faction", id: input.factionId });
         return ok(f.weapons.map((x) => x.id));
       }
+      case "units_with_keyword":
+        return ok(ds.unitsWithKeyword(input.keyword ?? "").map((u) => u.id));
+      case "allies_for": {
+        const raw = (input as Record<string, unknown>).detachmentIds;
+        const detachmentIds = Array.isArray(raw) ? (raw as string[]) : [];
+        return ok(ds.alliesFor(input.factionId ?? "", detachmentIds).map((r) => r.id));
+      }
+      case "ally_units_for":
+        return ok(ds.allyUnitsFor(input.ruleId ?? "").map((u) => u.id));
       default:
         return err("INVALID_INPUT", { detail: `unknown linked_query: ${a.query}` });
     }

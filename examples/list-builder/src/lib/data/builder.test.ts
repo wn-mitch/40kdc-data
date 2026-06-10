@@ -29,6 +29,9 @@ import {
 	reconcileLoadout,
 	itemName,
 	unitTypeKeywords,
+	alliesForState,
+	allyPointsLimit,
+	unitMatchesQuery,
 	type BuilderState,
 	type BuilderUnit,
 } from './builder';
@@ -350,5 +353,82 @@ describe('builder loadout reconciliation', () => {
 			units: [bu],
 		}).filter((v) => v.unitKey === 'k' && /kroot-pistol/.test(v.message));
 		expect(issues).toHaveLength(0);
+	});
+});
+
+describe('valid allies (soup)', () => {
+	it('alliesForState offers Daemonic Pact for Chaos Knights with a non-empty pool', () => {
+		const groups = alliesForState({ ...emptyBuilderState(), factionId: 'chaos-knights' });
+		const pact = groups.find((g) => g.rule.id === 'daemonic-pact');
+		expect(pact).toBeDefined();
+		expect(pact!.label).toBe('Daemons');
+		expect(pact!.units.length).toBeGreaterThan(0);
+	});
+
+	it('alliesForState gates detachment-scoped rules on the selected detachment', () => {
+		const base = { ...emptyBuilderState(), factionId: 'chaos-knights' };
+		const without = alliesForState(base).map((g) => g.rule.id);
+		expect(without).not.toContain('iconoclast-fiefdom-damned');
+		const withDet = alliesForState({ ...base, detachmentIds: ['iconoclast-fiefdom'] }).map(
+			(g) => g.rule.id,
+		);
+		expect(withDet).toContain('iconoclast-fiefdom-damned');
+	});
+
+	it('allyPointsLimit reads the per-battle-size cap', () => {
+		const pact = ds.alliedRules.get('daemonic-pact')!;
+		expect(allyPointsLimit(pact, 'incursion')).toBe(250);
+		expect(allyPointsLimit(pact, 'strike-force')).toBe(500);
+	});
+
+	it('unitMatchesQuery matches on name substring and exact keyword', () => {
+		const bloodletters = unitRaw('bloodletters', 'chaos-daemons')!;
+		expect(unitMatchesQuery(bloodletters, 'blood')).toBe(true); // name
+		expect(unitMatchesQuery(bloodletters, 'Khorne')).toBe(true); // keyword
+		expect(unitMatchesQuery(bloodletters, 'tyranids')).toBe(false);
+		expect(unitMatchesQuery(bloodletters, '')).toBe(true);
+	});
+
+	it('flags an allied unit marked Warlord or given an Enhancement', () => {
+		const ally: BuilderUnit = {
+			key: 'a',
+			datasheetId: 'bloodletters',
+			factionId: 'chaos-daemons',
+			allyRuleId: 'daemonic-pact',
+			modelCount: 10,
+			loadout: new Map(),
+			enhancementId: null,
+			isWarlord: true,
+		};
+		const issues = builderViolations({
+			...emptyBuilderState(),
+			factionId: 'chaos-knights',
+			units: [ally],
+		});
+		expect(issues.some((v) => /cannot be Warlord/.test(v.message))).toBe(true);
+	});
+
+	it('flags more than three of a non-Battleline datasheet', () => {
+		const wl = unitsForFaction('adeptus-astartes').find(
+			(u) =>
+				(u.points?.length ?? 0) > 0 &&
+				!(u.keywords ?? []).map((k) => k.toLowerCase()).includes('battleline') &&
+				u.role !== 'dedicated-transport' &&
+				u.role !== 'epic-hero',
+		)!;
+		const mk = (i: number): BuilderUnit => ({
+			key: `c${i}`,
+			datasheetId: wl.id,
+			modelCount: wl.model_count?.min ?? 1,
+			loadout: new Map(),
+			enhancementId: null,
+			isWarlord: false,
+		});
+		const issues = builderViolations({
+			...emptyBuilderState(),
+			factionId: 'adeptus-astartes',
+			units: [mk(0), mk(1), mk(2), mk(3)],
+		});
+		expect(issues.some((v) => /max \d+ of a datasheet/.test(v.message))).toBe(true);
 	});
 });

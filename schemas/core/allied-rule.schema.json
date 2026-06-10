@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/allied-rule.schema.json",
+  "title": "AlliedRule",
+  "description": "A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by two optional, AND-combined conditions: an army-wide keyword condition (`army_keywords_any`) and/or a selected detachment (`detachment_id`).",
+  "type": "object",
+  "properties": {
+    "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "label": {
+      "type": "string",
+      "description": "Short panel/category heading a list builder groups this pool under (e.g. 'Daemons', 'Imperial Agents', 'Titanic Allies'). Defaults to `name` when omitted."
+    },
+    "army_keywords_any": {
+      "$ref": "../defs/common.schema.json#/$defs/keyword-list",
+      "description": "Army gate: every model in the army must carry at least one of these keywords for the rule to apply (e.g. ['Chaos Knights', 'Heretic Astartes'] for Daemonic Pact). Empty = no army-level gate (the rule is then gated only by `detachment_id`, whose detachment is itself faction-locked)."
+    },
+    "detachment_id": {
+      "oneOf": [
+        { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+        { "type": "null" }
+      ],
+      "description": "Detachment gate: this exact detachment must be selected for the rule to apply (e.g. 'iconoclast-fiefdom'). null = no detachment-level gate. Independent of the detachment's combat rule (`detachment_rule_id`)."
+    },
+    "source_faction_id": {
+      "oneOf": [
+        { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+        { "type": "null" }
+      ],
+      "description": "Faction the ally pool is drawn from, when scoping by faction is needed to disambiguate units whose id is shared across factions. Optional hint; `source_keywords` is the primary filter."
+    },
+    "source_keywords": {
+      "$ref": "../defs/common.schema.json#/$defs/keyword-list",
+      "description": "A unit qualifies for this pool when it carries any of these keywords (e.g. ['Legiones Daemonica'], ['Damned'], ['Vanguard Invader']). Empty = the whole `source_faction_id` is the pool."
+    },
+    "required_keywords": {
+      "$ref": "../defs/common.schema.json#/$defs/keyword-list",
+      "description": "Additional filter: a unit must carry ALL of these to be included via this rule (e.g. the matching god ['Khorne'] for a per-god Daemon pool)."
+    },
+    "excluded_keywords": {
+      "$ref": "../defs/common.schema.json#/$defs/keyword-list",
+      "description": "A unit carrying ANY of these cannot be included via this rule (e.g. Brood Brothers bans 'Aircraft', 'Epic Hero', 'Ogryn', ...)."
+    },
+    "roles": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "description": "Optional battlefield-role filter (matched against a unit's `role`). Empty = no role restriction."
+    },
+    "points_limits": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/allied-points-limit" },
+      "description": "Absolute points cap on the combined cost of units included via this rule, per battle size. Empty = no points cap. A rule lists at most one entry per battle size.",
+      "uniqueItems": true
+    },
+    "max_units": {
+      "oneOf": [
+        { "type": "integer", "minimum": 0 },
+        { "type": "null" }
+      ],
+      "description": "Optional cap on the number of units included via this rule, independent of points. null = no unit-count cap."
+    },
+    "cannot_be_warlord": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when units included via this rule cannot be the army's Warlord (e.g. Daemonic Pact, Star Children's Blessings)."
+    },
+    "cannot_take_enhancements": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when units included via this rule cannot be given Enhancements (e.g. Daemonic Pact)."
+    },
+    "warlord_required_keyword": {
+      "oneOf": [
+        { "$ref": "../defs/common.schema.json#/$defs/keyword" },
+        { "type": "null" }
+      ],
+      "description": "Host-Warlord requirement: a model carrying this keyword must be the army's Warlord (e.g. Brood Brothers requires a 'Genestealer Cults' Warlord). null = no such requirement."
+    },
+    "removes_ability_ids": {
+      "type": "array",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+      "uniqueItems": true,
+      "description": "Abilities that included units lose under this rule (e.g. Astra Militarum units lose 'voice-of-command' under Brood Brothers). A display/effect hint, not a construction constraint."
+    },
+    "battleline_ratio_keywords": {
+      "$ref": "../defs/common.schema.json#/$defs/keyword-list",
+      "description": "Per-keyword Battleline ratio constraint: for each keyword listed, the number of non-BATTLELINE units with that keyword included via this rule cannot exceed the number of BATTLELINE units with that keyword included via this rule (e.g. Daemonic Pact's per-god ['Khorne','Tzeentch','Nurgle','Slaanesh'])."
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" },
+    "notes": { "type": "string" }
+  },
+  "required": ["id", "name", "game_version"],
+  "additionalProperties": false,
+  "$defs": {
+    "allied-points-limit": {
+      "type": "object",
+      "description": "The combined points cap for units included via an allied rule at one battle size.",
+      "properties": {
+        "battle_size": {
+          "type": "string",
+          "enum": ["incursion", "strike-force", "onslaught"],
+          "description": "Battle size this cap applies at. Includes 'onslaught' (3000 pts), which ally rules reference even though the core roster battle-size enum lists only incursion/strike-force."
+        },
+        "max_points": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Maximum combined points of units included via the rule at this battle size."
+        }
+      },
+      "required": ["battle_size", "max_points"],
+      "additionalProperties": false
+    }
+  }
+}

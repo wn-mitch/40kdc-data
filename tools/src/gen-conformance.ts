@@ -259,7 +259,15 @@ type LinkedApiQuery =
   | { name: string; query: "abilities_of_faction"; args: { factionId: string }; comparison: "set" }
   | { name: string; query: "weapons_of_faction"; args: { factionId: string }; comparison: "set" }
   | { name: string; query: "base_size_of"; args: { unitId: string }; comparison: "scalar" }
-  | { name: string; query: "model_bases_of"; args: { unitId: string }; comparison: "ordered" };
+  | { name: string; query: "model_bases_of"; args: { unitId: string }; comparison: "ordered" }
+  | { name: string; query: "units_with_keyword"; args: { keyword: string }; comparison: "set" }
+  | {
+      name: string;
+      query: "allies_for";
+      args: { factionId: string; detachmentIds?: string[] };
+      comparison: "ordered";
+    }
+  | { name: string; query: "ally_units_for"; args: { ruleId: string }; comparison: "set" };
 
 const LINKED_API_QUERIES: LinkedApiQuery[] = [
   // find_unit: diacritic-insensitive lookup, miss returns null.
@@ -291,6 +299,18 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
   { name: "base_size_of windriders (draft flying base)", query: "base_size_of", args: { unitId: "windriders" }, comparison: "scalar" },
   // model_bases_of(unit): ordered per-model bases; jakhals mixes 28.5mm bodies with a 40mm Dishonoured.
   { name: "model_bases_of jakhals (mixed)", query: "model_bases_of", args: { unitId: "jakhals" }, comparison: "ordered" },
+  // units_with_keyword: case-insensitive over keywords ∪ faction_keywords; compared as set.
+  { name: "units_with_keyword Khorne", query: "units_with_keyword", args: { keyword: "Khorne" }, comparison: "set" },
+  { name: "units_with_keyword damned (lowercase)", query: "units_with_keyword", args: { keyword: "damned" }, comparison: "set" },
+  // allies_for: two-gate offer; ordered (allied-rules data-file order, locale-independent).
+  { name: "allies_for chaos-knights (no detachment)", query: "allies_for", args: { factionId: "chaos-knights" }, comparison: "ordered" },
+  { name: "allies_for chaos-knights with iconoclast-fiefdom", query: "allies_for", args: { factionId: "chaos-knights", detachmentIds: ["iconoclast-fiefdom"] }, comparison: "ordered" },
+  { name: "allies_for world-eaters (two pools)", query: "allies_for", args: { factionId: "world-eaters" }, comparison: "ordered" },
+  { name: "allies_for genestealer-cults with final-day", query: "allies_for", args: { factionId: "genestealer-cults", detachmentIds: ["final-day"] }, comparison: "ordered" },
+  // ally_units_for: resolved pool; compared as set (accessor sorts by name, locale-dependent).
+  { name: "ally_units_for iconoclast-fiefdom-damned", query: "ally_units_for", args: { ruleId: "iconoclast-fiefdom-damned" }, comparison: "set" },
+  { name: "ally_units_for world-eaters-khorne-daemons", query: "ally_units_for", args: { ruleId: "world-eaters-khorne-daemons" }, comparison: "set" },
+  { name: "ally_units_for star-childrens-blessings (excludes broodlord/genestealers)", query: "ally_units_for", args: { ruleId: "star-childrens-blessings" }, comparison: "set" },
 ];
 
 function genLinkedApi(): void {
@@ -355,6 +375,13 @@ function runLinkedQuery(ds: Dataset, q: LinkedApiQuery): string | null | string[
       const comp = ds.unitCompositions.find((c) => c.unit_id === q.args.unitId);
       return (comp?.models ?? []).map((m) => `${m.name}=${encodeBase(m.base_size_mm) ?? "none"}`);
     }
+    case "units_with_keyword":
+      return ds.unitsWithKeyword(q.args.keyword).map((u) => u.id).sort();
+    case "allies_for":
+      // Ordered: allied-rules data-file order (deterministic across impls).
+      return ds.alliesFor(q.args.factionId, q.args.detachmentIds ?? []).map((r) => r.id);
+    case "ally_units_for":
+      return ds.allyUnitsFor(q.args.ruleId).map((u) => u.id).sort();
   }
 }
 

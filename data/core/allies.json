@@ -1,0 +1,177 @@
+[
+  {
+    "id": "daemonic-pact",
+    "name": "Daemonic Pact",
+    "label": "Daemons",
+    "army_keywords_any": ["Chaos Knights", "Heretic Astartes"],
+    "source_faction_id": "chaos-daemons",
+    "source_keywords": ["Legiones Daemonica"],
+    "points_limits": [
+      { "battle_size": "incursion", "max_points": 250 },
+      { "battle_size": "strike-force", "max_points": 500 },
+      { "battle_size": "onslaught", "max_points": 750 }
+    ],
+    "cannot_be_warlord": true,
+    "cannot_take_enhancements": true,
+    "battleline_ratio_keywords": ["Khorne", "Tzeentch", "Nurgle", "Slaanesh"],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "notes": "Shared by Chaos Knights and Heretic Astartes armies (and CK+CSM soup). Per-god Battleline ratio: non-Battleline units of a god included this way cannot exceed Battleline units of that god included this way. Points values provisional pending dataslate."
+  },
+  {
+    "id": "iconoclast-fiefdom-damned",
+    "name": "Iconoclast Fiefdom — Wretched Thralls",
+    "label": "Damned",
+    "army_keywords_any": ["Chaos Knights"],
+    "detachment_id": "iconoclast-fiefdom",
+    "source_faction_id": "chaos-space-marines",
+    "source_keywords": ["Damned"],
+    "cannot_be_warlord": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "notes": "The Iconoclast Fiefdom detachment lets a Chaos Knights army include Chaos Space Marines DAMNED units. Points limit provisional pending dataslate."
+  },
+  {
+    "id": "brood-brothers",
+    "name": "Brood Brothers",
+    "label": "Brood Brothers",
+    "army_keywords_any": ["Genestealer Cults"],
+    "source_faction_id": "astra-militarum",
+    "excluded_keywords": [
+      "Aircraft",
+      "Commissar",
+      "Epic Hero",
+      "Militarum Tempestus",
+      "Ogryn",
+      "Ratling",
+      "Tech-Priest Enginseer",
+      "Ministorum Priest"
+    ],
+    "points_limits": [
+      { "battle_size": "incursion", "max_points": 500 },
+      { "battle_size": "strike-force", "max_points": 1000 },
+      { "battle_size": "onslaught", "max_points": 1500 }
+    ],
+    "warlord_required_keyword": "Genestealer Cults",
+    "removes_ability_ids": ["voice-of-command"],
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "notes": "A Genestealer Cults army may include ASTRA MILITARUM units. A GENESTEALER CULTS model must be Warlord; included Astra Militarum models lose Voice of Command."
+  },
+  {
+    "id": "star-childrens-blessings",
+    "name": "The Star Children's Blessings",
+    "label": "Tyranids",
+    "detachment_id": "final-day",
+    "source_faction_id": "tyranids",
+    "source_keywords": ["Vanguard Invader"],
+    "excluded_keywords": ["Aircraft", "Broodlord", "Genestealers"],
+    "points_limits": [
+      { "battle_size": "incursion", "max_points": 500 },
+      { "battle_size": "strike-force", "max_points": 1000 },
+      { "battle_size": "onslaught", "max_points": 1500 }
+    ],
+    "cannot_be_warlord": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "notes": "The Final Day detachment lets a Genestealer Cults army include TYRANIDS VANGUARD INVADER units (excluding Aircraft, Broodlord, Genestealers). No Tyranids model can be Warlord."
+  },
+  {
+    "id": "world-eaters-chaos-knights",
+    "name": "World Eaters — Chaos Knights Allies",
+    "label": "Chaos Knights",
+    "army_keywords_any": ["World Eaters"],
+    "source_faction_id": "chaos-knights",
+    "cannot_be_warlord": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "notes": "World Eaters may ally in Chaos Knights. Points limit provisional pending dataslate."
+  },
+  {
+    "id": "world-eaters-khorne-daemons",
+    "name": "World Eaters — Khorne Daemons Allies",
+    "label": "Daemons of Khorne",
+    "army_keywords_any": ["World Eaters"],
+    "source_faction_id": "chaos-daemons",
+    "source_keywords": ["Legiones Daemonica"],
+    "required_keywords": ["Khorne"],
+    "cannot_be_warlord": true,
+    "cannot_take_enhancements": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "notes": "World Eaters may ally in KHORNE Daemons. Points limit provisional pending dataslate."
+  },
+  {
+    "id": "death-guard-chaos-knights",
+    "name": "Death Guard — Chaos Knights Allies",
+    "label": "Chaos Knights",
+    "army_keywords_any": ["Death Guard"],
+    "source_faction_id": "chaos-knights",
+    "cannot_be_warlord": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "notes": "Death Guard may ally in Chaos Knights. Points limit provisional pending dataslate."
+  },
+  {
+    "id": "death-guard-nurgle-daemons",
+    "name": "Death Guard — Nurgle Daemons Allies",
+    "label": "Daemons of Nurgle",
+    "army_keywords_any": ["Death Guard"],
+    "source_faction_id": "chaos-daemons",
+    "source_keywords": ["Legiones Daemonica"],
+    "required_keywords": ["Nurgle"],
+    "cannot_be_warlord": true,
+    "cannot_take_enhancements": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "notes": "Death Guard may ally in NURGLE Daemons. Points limit provisional pending dataslate."
+  },
+  {
+    "id": "thousand-sons-chaos-knights",
+    "name": "Thousand Sons — Chaos Knights Allies",
+    "label": "Chaos Knights",
+    "army_keywords_any": ["Thousand Sons"],
+    "source_faction_id": "chaos-knights",
+    "cannot_be_warlord": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "notes": "Thousand Sons may ally in Chaos Knights. Points limit provisional pending dataslate."
+  },
+  {
+    "id": "thousand-sons-tzeentch-daemons",
+    "name": "Thousand Sons — Tzeentch Daemons Allies",
+    "label": "Daemons of Tzeentch",
+    "army_keywords_any": ["Thousand Sons"],
+    "source_faction_id": "chaos-daemons",
+    "source_keywords": ["Legiones Daemonica"],
+    "required_keywords": ["Tzeentch"],
+    "cannot_be_warlord": true,
+    "cannot_take_enhancements": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "notes": "Thousand Sons may ally in TZEENTCH Daemons. Points limit provisional pending dataslate."
+  },
+  {
+    "id": "emperors-children-chaos-knights",
+    "name": "Emperor's Children — Chaos Knights Allies",
+    "label": "Chaos Knights",
+    "army_keywords_any": ["Emperor’s Children"],
+    "source_faction_id": "chaos-knights",
+    "cannot_be_warlord": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "notes": "Emperor's Children may ally in Chaos Knights. Points limit provisional pending dataslate."
+  },
+  {
+    "id": "emperors-children-slaanesh-daemons",
+    "name": "Emperor's Children — Slaanesh Daemons Allies",
+    "label": "Daemons of Slaanesh",
+    "army_keywords_any": ["Emperor’s Children"],
+    "source_faction_id": "chaos-daemons",
+    "source_keywords": ["Legiones Daemonica"],
+    "required_keywords": ["Slaanesh"],
+    "cannot_be_warlord": true,
+    "cannot_take_enhancements": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "notes": "Emperor's Children may ally in SLAANESH Daemons. Points limit provisional pending dataslate."
+  },
+  {
+    "id": "chaos-space-marines-chaos-knights",
+    "name": "Chaos Space Marines — Chaos Knights Allies",
+    "label": "Chaos Knights",
+    "army_keywords_any": ["Heretic Astartes"],
+    "source_faction_id": "chaos-knights",
+    "cannot_be_warlord": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" },
+    "notes": "Chaos Space Marines may ally in Chaos Knights (their Daemon access is the shared Daemonic Pact rule). Points limit provisional pending dataslate."
+  }
+]

@@ -325,5 +325,202 @@
       "Dishonoured=round:40",
       "Jakhal=round:28.5"
     ]
+  },
+  {
+    "name": "units_with_keyword Khorne",
+    "query": "units_with_keyword",
+    "args": {
+      "keyword": "Khorne"
+    },
+    "comparison": "set",
+    "expected": [
+      "anggrath-the-unbound",
+      "angron",
+      "blood-slaughterer",
+      "bloodcrushers",
+      "bloodletters",
+      "bloodmaster",
+      "bloodthirster",
+      "chaos-land-raider",
+      "chaos-land-raider",
+      "chaos-lord-on-juggernaut",
+      "chaos-predator-annihilator",
+      "chaos-predator-annihilator",
+      "chaos-predator-destructor",
+      "chaos-predator-destructor",
+      "chaos-rhino",
+      "chaos-rhino",
+      "chaos-spawn",
+      "chaos-spawn",
+      "chaos-terminators",
+      "daemon-prince-of-khorne",
+      "daemon-prince-of-khorne-with-wings",
+      "defiler",
+      "defiler",
+      "eightbound",
+      "exalted-eightbound",
+      "flesh-hounds",
+      "forgefiend",
+      "forgefiend",
+      "goremongers",
+      "greater-brass-scorpion",
+      "helbrute",
+      "helbrute",
+      "heldrake",
+      "heldrake",
+      "jakhals",
+      "karanak",
+      "kharn-the-betrayer",
+      "khorne-berzerkers",
+      "khorne-lord-of-skulls",
+      "khorne-lord-of-skulls",
+      "kytan-ravager",
+      "lord-invocatus",
+      "lord-on-juggernaut",
+      "master-of-executions",
+      "master-of-executions",
+      "maulerfiend",
+      "maulerfiend",
+      "rendmaster-on-blood-throne",
+      "skarbrand",
+      "skull-altar",
+      "skull-cannon",
+      "skullmaster",
+      "skulltaker",
+      "slaughterbound"
+    ]
+  },
+  {
+    "name": "units_with_keyword damned (lowercase)",
+    "query": "units_with_keyword",
+    "args": {
+      "keyword": "damned"
+    },
+    "comparison": "set",
+    "expected": [
+      "accursed-cultists",
+      "cultist-firebrand",
+      "cultist-mob",
+      "dark-commune",
+      "fellgor-beastmen",
+      "traitor-enforcer",
+      "traitor-guardsmen-squad"
+    ]
+  },
+  {
+    "name": "allies_for chaos-knights (no detachment)",
+    "query": "allies_for",
+    "args": {
+      "factionId": "chaos-knights"
+    },
+    "comparison": "ordered",
+    "expected": [
+      "daemonic-pact"
+    ]
+  },
+  {
+    "name": "allies_for chaos-knights with iconoclast-fiefdom",
+    "query": "allies_for",
+    "args": {
+      "factionId": "chaos-knights",
+      "detachmentIds": [
+        "iconoclast-fiefdom"
+      ]
+    },
+    "comparison": "ordered",
+    "expected": [
+      "daemonic-pact",
+      "iconoclast-fiefdom-damned"
+    ]
+  },
+  {
+    "name": "allies_for world-eaters (two pools)",
+    "query": "allies_for",
+    "args": {
+      "factionId": "world-eaters"
+    },
+    "comparison": "ordered",
+    "expected": [
+      "world-eaters-chaos-knights",
+      "world-eaters-khorne-daemons"
+    ]
+  },
+  {
+    "name": "allies_for genestealer-cults with final-day",
+    "query": "allies_for",
+    "args": {
+      "factionId": "genestealer-cults",
+      "detachmentIds": [
+        "final-day"
+      ]
+    },
+    "comparison": "ordered",
+    "expected": [
+      "brood-brothers",
+      "star-childrens-blessings"
+    ]
+  },
+  {
+    "name": "ally_units_for iconoclast-fiefdom-damned",
+    "query": "ally_units_for",
+    "args": {
+      "ruleId": "iconoclast-fiefdom-damned"
+    },
+    "comparison": "set",
+    "expected": [
+      "accursed-cultists",
+      "cultist-firebrand",
+      "cultist-mob",
+      "dark-commune",
+      "fellgor-beastmen",
+      "traitor-enforcer",
+      "traitor-guardsmen-squad"
+    ]
+  },
+  {
+    "name": "ally_units_for world-eaters-khorne-daemons",
+    "query": "ally_units_for",
+    "args": {
+      "ruleId": "world-eaters-khorne-daemons"
+    },
+    "comparison": "set",
+    "expected": [
+      "anggrath-the-unbound",
+      "bloodcrushers",
+      "bloodletters",
+      "bloodmaster",
+      "bloodthirster",
+      "flesh-hounds",
+      "karanak",
+      "rendmaster-on-blood-throne",
+      "skarbrand",
+      "skull-altar",
+      "skull-cannon",
+      "skullmaster",
+      "skulltaker"
+    ]
+  },
+  {
+    "name": "ally_units_for star-childrens-blessings (excludes broodlord/genestealers)",
+    "query": "ally_units_for",
+    "args": {
+      "ruleId": "star-childrens-blessings"
+    },
+    "comparison": "set",
+    "expected": [
+      "deathleaper",
+      "gargoyles",
+      "hyperadapted-raveners",
+      "lictor",
+      "mawloc",
+      "neurolictor",
+      "parasite-of-mortrex",
+      "raveners",
+      "trygon",
+      "tyrannocyte",
+      "von-ryans-leapers",
+      "winged-hive-tyrant",
+      "winged-tyranid-prime"
+    ]
   }
 ]

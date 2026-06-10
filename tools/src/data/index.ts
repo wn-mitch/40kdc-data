@@ -91,6 +91,8 @@ export const factions = dataset.factions;
 export const abilities = dataset.abilities;
 /** All detachments. */
 export const detachments = dataset.detachments;
+/** All allied-detachment / 'soup' rules. */
+export const alliedRules = dataset.alliedRules;
 /** All enhancements. */
 export const enhancements = dataset.enhancements;
 /** All stratagems. */

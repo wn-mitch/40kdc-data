@@ -35,6 +35,7 @@ const FILE_TO_COLLECTION: Record<string, keyof RawData> = {
   abilities: "abilities",
   "phase-mappings": "phaseMappings",
   detachments: "detachments",
+  allies: "alliedRules",
   stratagems: "stratagems",
   enhancements: "enhancements",
   "leader-attachments": "leaderAttachments",

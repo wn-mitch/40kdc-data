@@ -113,13 +113,15 @@ function toggleDetachment(id: string, on: boolean) {
 	}
 }
 
-function addUnit(datasheetId: string) {
-	const raw = unitRaw(datasheetId);
+function addUnit(datasheetId: string, factionId?: string, allyRuleId?: string) {
+	const raw = unitRaw(datasheetId, factionId);
 	if (!raw) return;
 	const modelCount = raw.model_count?.min ?? 1;
 	const bu: BuilderUnit = {
 		key: nextKey(),
 		datasheetId,
+		...(factionId ? { factionId } : {}),
+		...(allyRuleId ? { allyRuleId } : {}),
 		modelCount,
 		loadout: defaultLoadout(raw, modelCount),
 		enhancementId: null,

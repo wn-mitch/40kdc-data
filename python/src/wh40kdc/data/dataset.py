@@ -90,6 +90,8 @@ class Dataset:
             raw["target_profiles"], lambda p: p.get("faction_id")
         )
         self.detachments = id_collection(raw["detachments"], lambda d: d.get("faction_id"))
+        # Allied rules aren't owned by one faction; allies_for matches on army_keywords_any.
+        self.allied_rules = id_collection(raw["allied_rules"])
         self.enhancements = id_collection(raw["enhancements"])
         self.stratagems = id_collection(raw["stratagems"])
         self.wargear_options = id_collection(raw["wargear_options"])
@@ -120,6 +122,8 @@ class Dataset:
         self._units_by_weapon: dict[str, list[dict[str, Any]]] = {}
         # weapon-keyword id → weapons whose profiles reference it.
         self._weapons_by_keyword: dict[str, list[dict[str, Any]]] = {}
+        # lowercased keyword → units carrying it (keywords ∪ faction_keywords).
+        self._units_by_keyword: dict[str, list[dict[str, Any]]] = {}
         # unit id → wargear options authored for it (declared order preserved).
         self._wargear_options_by_unit: dict[str, list[dict[str, Any]]] = {}
 
@@ -168,6 +172,85 @@ class Dataset:
     def weapons_with_keyword(self, keyword_id: str) -> list[WeaponView]:
         """Weapons whose profiles reference the given weapon-keyword id."""
         return [WeaponView(w, self) for w in self._weapons_by_keyword.get(keyword_id, [])]
+
+    def units_with_keyword(self, keyword: str) -> list[UnitView]:
+        """Units carrying the given keyword (case-insensitive).
+
+        Matched against the union of each unit's ``keywords`` and
+        ``faction_keywords``. Powers a list builder's keyword search bar across
+        the whole dataset (so it also surfaces cross-faction ally pools). Mirror
+        of TS ``unitsWithKeyword``; pinned by the ``units_with_keyword``
+        conformance query.
+        """
+        return [UnitView(u, self) for u in self._units_by_keyword.get(keyword.lower(), [])]
+
+    def allies_for(
+        self, faction_id: str, detachment_ids: list[str] | None = None
+    ) -> list[dict[str, Any]]:
+        """Allied-rules offered for an army of ``faction_id`` running the given detachments.
+
+        A rule applies when both gates pass: the army gate
+        (``army_keywords_any`` empty, or intersecting the faction's keywords) and
+        the detachment gate (``detachment_id`` null, or among ``detachment_ids``).
+        Order follows the allied-rules data. Mirror of TS ``alliesFor``; pinned by
+        the ``allies_for`` conformance query.
+        """
+        faction = self.factions.get(faction_id)
+        if faction is None:
+            return []
+        faction_keywords = {k.lower() for k in (faction.raw.get("keywords") or [])}
+        detachment_set = set(detachment_ids or [])
+        out: list[dict[str, Any]] = []
+        for rule in self.allied_rules.all:
+            army_any = rule.get("army_keywords_any") or []
+            army_gate = not army_any or any(k.lower() in faction_keywords for k in army_any)
+            det = rule.get("detachment_id")
+            detachment_gate = det is None or det in detachment_set
+            if army_gate and detachment_gate:
+                out.append(rule)
+        return out
+
+    def ally_units_for(self, rule_id: str) -> list[UnitView]:
+        """The unit pool an allied-rule grants, sorted by name.
+
+        Starts from the rule's ``source_faction_id`` (if set) or the whole
+        dataset, narrows to units carrying any ``source_keywords``, then applies
+        ``required_keywords`` (all present), ``excluded_keywords`` (none
+        present), and ``roles``. Empty for an unknown rule id. Mirror of TS
+        ``allyUnitsFor``; pinned by the ``ally_units_for`` conformance query.
+        """
+        rule = self.allied_rules.get(rule_id)
+        if rule is None:
+            return []
+        source_faction = rule.get("source_faction_id")
+        base = (
+            [v.raw for v in self.units.by_faction(source_faction)]
+            if source_faction
+            else [v.raw for v in self.units.all]
+        )
+        source_keywords = [k.lower() for k in (rule.get("source_keywords") or [])]
+        required = [k.lower() for k in (rule.get("required_keywords") or [])]
+        excluded = [k.lower() for k in (rule.get("excluded_keywords") or [])]
+        roles = set(rule.get("roles") or [])
+
+        def matches(unit: dict[str, Any]) -> bool:
+            have = {
+                k.lower()
+                for k in (unit.get("keywords") or []) + (unit.get("faction_keywords") or [])
+            }
+            if source_keywords and not any(k in have for k in source_keywords):
+                return False
+            if required and not all(k in have for k in required):
+                return False
+            if any(k in have for k in excluded):
+                return False
+            if roles and unit.get("role") not in roles:
+                return False
+            return True
+
+        pool = [u for u in base if matches(u)]
+        pool.sort(key=lambda u: u["name"])
+        return [UnitView(u, self) for u in pool]
 
     def wargear_options_of(self, unit: dict[str, Any]) -> list[dict[str, Any]]:
         """Wargear options authored for the given unit, in declared order.
@@ -362,6 +445,13 @@ class Dataset:
                 self._units_by_ability.setdefault(ability_id, []).append(unit)
             for weapon_id in unit.get("weapon_ids") or []:
                 self._units_by_weapon.setdefault(weapon_id, []).append(unit)
+            seen_kw: set[str] = set()
+            for kw in (unit.get("keywords") or []) + (unit.get("faction_keywords") or []):
+                key = kw.lower()
+                if key in seen_kw:
+                    continue
+                seen_kw.add(key)
+                self._units_by_keyword.setdefault(key, []).append(unit)
         for option in raw["wargear_options"]:
             self._wargear_options_by_unit.setdefault(option["unit_id"], []).append(option)
         seen_by_keyword: dict[str, set[str]] = {}

@@ -17,6 +17,7 @@ import {
 	tryImportRoster,
 	validateLoadout,
 	weaponBounds,
+	type AlliedRule,
 	type Detachment,
 	type Enhancement,
 	type Roster,
@@ -45,6 +46,15 @@ export interface BuilderUnit {
 	/** Stable per-row key (units of the same datasheet can repeat). */
 	key: string;
 	datasheetId: string;
+	/**
+	 * Source faction of an *allied* unit, when it differs from the army faction.
+	 * The same datasheet id can exist under several factions (e.g. a Daemon
+	 * unit), so allied rows carry their source faction to resolve the right copy
+	 * via `getInFaction`. Undefined for the army's own units (the default copy).
+	 */
+	factionId?: string;
+	/** The allied-rule id this unit was included under, if it's an ally. */
+	allyRuleId?: string;
 	modelCount: number;
 	loadout: Map<string, number>;
 	enhancementId: string | null;
@@ -74,8 +84,19 @@ export function emptyBuilderState(): BuilderState {
 
 // ── Dataset lookups ──────────────────────────────────────────────────────────
 
-export function unitRaw(datasheetId: string): Unit | undefined {
+export function unitRaw(datasheetId: string, factionId?: string): Unit | undefined {
+	// Allied units come from another faction; the same id may exist under several
+	// factions, so resolve that faction's copy and fall back to the default.
+	if (factionId) {
+		const scoped = ds.units.getInFaction(datasheetId, factionId);
+		if (scoped) return scoped.raw;
+	}
 	return ds.units.get(datasheetId)?.raw;
+}
+
+/** Resolve a builder unit's datasheet, honouring its (possibly allied) faction. */
+export function buRaw(bu: BuilderUnit): Unit | undefined {
+	return unitRaw(bu.datasheetId, bu.factionId);
 }
 
 /** Units in a faction, sorted by name; empty when factionId is null. */
@@ -302,7 +323,7 @@ export interface DraftGroup extends Section {
 export function groupDraftByRole(state: BuilderState): DraftGroup[] {
 	const buckets = new Map<string, { section: Section; units: BuilderUnit[] }>();
 	for (const bu of state.units) {
-		const raw = unitRaw(bu.datasheetId);
+		const raw = buRaw(bu);
 		const s: Section = raw
 			? sectionOf(raw)
 			: { key: 'other', label: ROLE_LABELS.other, order: ROLE_INDEX.other + UNIT_TYPE_KEYWORDS.length };
@@ -373,7 +394,7 @@ export function reconcileLoadout(
  * builder's right panel show the selected unit's live datacard.
  */
 export function builderUnitToDatacardData(bu: BuilderUnit): DatacardData {
-	const unit = unitRaw(bu.datasheetId);
+	const unit = buRaw(bu);
 	const equipped = [...bu.loadout.entries()].filter(([, c]) => c > 0).map(([id]) => id);
 	const ranged: string[] = [];
 	const melee: string[] = [];
@@ -401,7 +422,7 @@ export function builderUnitToDatacardData(bu: BuilderUnit): DatacardData {
  * violation rather than guessing).
  */
 export function unitPoints(bu: BuilderUnit): number {
-	const unit = unitRaw(bu.datasheetId);
+	const unit = buRaw(bu);
 	if (!unit) return 0;
 	const base = baseUnitPoints(unit, bu.modelCount);
 	const enh = bu.enhancementId ? (ds.enhancements.get(bu.enhancementId)?.cost ?? 0) : 0;
@@ -449,7 +470,7 @@ export function wargearOptionsFor(datasheetId: string): WargearOption[] {
 
 /** Inclusive [min,max] count range per weapon/wargear id, for stepper bounds. */
 export function loadoutBounds(bu: BuilderUnit): Map<string, WeaponBound> {
-	const unit = unitRaw(bu.datasheetId);
+	const unit = buRaw(bu);
 	if (!unit) return new Map();
 	return weaponBounds(unit, bu.modelCount, ds.wargearOptionsOf(unit));
 }
@@ -470,9 +491,58 @@ export function itemName(id: string): string {
 
 /** Loadout-rule violations for a builder unit (empty = legal). */
 export function loadoutViolations(bu: BuilderUnit) {
-	const unit = unitRaw(bu.datasheetId);
+	const unit = buRaw(bu);
 	if (!unit) return [];
 	return validateLoadout(unit, bu.modelCount, ds.wargearOptionsOf(unit), bu.loadout);
+}
+
+// ── Allies ("soup") ────────────────────────────────────────────────────────────
+
+/** A valid-allies pool: an allied rule and the eligible units it grants. */
+export interface AllyGroup {
+	rule: AlliedRule;
+	/** Panel heading (the rule's `label`, falling back to its name). */
+	label: string;
+	units: Unit[];
+}
+
+/**
+ * The ally pools offered for the draft's faction and selected detachments — one
+ * group per allied rule whose gates pass, each carrying its eligible units. This
+ * is the data behind the "valid allies" panel; especially load-bearing for soup
+ * factions (Chaos Knights, the Chaos cults, Genestealer Cults).
+ */
+export function alliesForState(state: BuilderState): AllyGroup[] {
+	if (!state.factionId) return [];
+	return ds.alliesFor(state.factionId, state.detachmentIds).map((rule) => ({
+		rule,
+		label: rule.label ?? rule.name,
+		units: ds.allyUnitsFor(rule.id).map((v) => v.raw),
+	}));
+}
+
+/** The combined-points cap an allied rule imposes at a battle size, or null. */
+export function allyPointsLimit(rule: AlliedRule, battleSize: BattleSize): number | null {
+	return (rule.points_limits ?? []).find((l) => l.battle_size === battleSize)?.max_points ?? null;
+}
+
+/** Lowercased union of a unit's `keywords` and `faction_keywords`. */
+function keywordSet(unit: Unit): Set<string> {
+	return new Set(
+		[...(unit.keywords ?? []), ...(unit.faction_keywords ?? [])].map((k) => k.toLowerCase()),
+	);
+}
+
+/**
+ * Whether a unit matches a free-text picker query: a name substring match OR an
+ * exact keyword match (so typing "Khorne" surfaces every Khorne unit, the
+ * screenshot's `Keywords:` filter). Empty query matches everything.
+ */
+export function unitMatchesQuery(unit: Unit, query: string): boolean {
+	const q = query.trim().toLowerCase();
+	if (!q) return true;
+	if (unit.name.toLowerCase().includes(q)) return true;
+	return keywordSet(unit).has(q);
 }
 
 // ── Validation summary (advisory) ──────────────────────────────────────────────
@@ -480,6 +550,135 @@ export function loadoutViolations(bu: BuilderUnit) {
 export interface BuilderViolation {
 	unitKey: string | null;
 	message: string;
+}
+
+/**
+ * Allied-rule advisory checks for every active ally pool: per-battle-size points
+ * cap, unit-count cap, warlord/enhancement locks, the per-god Battleline ratio,
+ * the army-wide keyword condition (every *own* model must qualify — allied units
+ * are the granted exception), and any host-Warlord-keyword requirement.
+ */
+function allyViolations(state: BuilderState): BuilderViolation[] {
+	const out: BuilderViolation[] = [];
+	for (const { rule, label } of alliesForState(state)) {
+		const allyUnits = state.units.filter((u) => u.allyRuleId === rule.id);
+		if (allyUnits.length === 0) continue;
+
+		const cap = allyPointsLimit(rule, state.battleSize);
+		if (cap != null) {
+			const spent = allyUnits.reduce((s, u) => s + unitPoints(u), 0);
+			if (spent > cap) {
+				out.push({ unitKey: null, message: `${label}: ${spent} allied pts over the ${cap} pt limit` });
+			}
+		}
+		if (rule.max_units != null && allyUnits.length > rule.max_units) {
+			out.push({
+				unitKey: null,
+				message: `${label}: ${allyUnits.length} allied units over the ${rule.max_units} allowed`,
+			});
+		}
+		if (rule.cannot_be_warlord) {
+			for (const u of allyUnits) {
+				if (u.isWarlord) out.push({ unitKey: u.key, message: `${label}: allied units cannot be Warlord` });
+			}
+		}
+		if (rule.cannot_take_enhancements) {
+			for (const u of allyUnits) {
+				if (u.enhancementId) {
+					out.push({ unitKey: u.key, message: `${label}: allied units cannot take Enhancements` });
+				}
+			}
+		}
+		for (const kw of rule.battleline_ratio_keywords ?? []) {
+			const lk = kw.toLowerCase();
+			let bl = 0;
+			let nonBl = 0;
+			for (const u of allyUnits) {
+				const raw = buRaw(u);
+				if (!raw || !keywordSet(raw).has(lk)) continue;
+				if (keywordSet(raw).has('battleline')) bl += 1;
+				else nonBl += 1;
+			}
+			if (nonBl > bl) {
+				out.push({ unitKey: null, message: `${label}: ${kw} non-Battleline (${nonBl}) exceeds Battleline (${bl})` });
+			}
+		}
+		const armyAny = (rule.army_keywords_any ?? []).map((k) => k.toLowerCase());
+		if (armyAny.length > 0) {
+			for (const u of state.units) {
+				if (u.allyRuleId) continue; // allied units are the granted exception
+				const raw = buRaw(u);
+				if (!raw) continue;
+				if (!armyAny.some((k) => keywordSet(raw).has(k))) {
+					out.push({
+						unitKey: u.key,
+						message: `${label}: every army model must have ${(rule.army_keywords_any ?? []).join(' or ')}`,
+					});
+				}
+			}
+		}
+		if (rule.warlord_required_keyword) {
+			const wk = rule.warlord_required_keyword.toLowerCase();
+			const warlord = state.units.find((u) => u.isWarlord);
+			const raw = warlord ? buRaw(warlord) : undefined;
+			if (warlord && raw && !keywordSet(raw).has(wk)) {
+				out.push({ unitKey: null, message: `${label}: Warlord must have ${rule.warlord_required_keyword}` });
+			}
+		}
+	}
+	return out;
+}
+
+/**
+ * Core 10e army-construction caps (advisory): datasheet-name limits (≤3 of a
+ * datasheet, ≤6 for Battleline / Dedicated Transport), Enhancement caps (≤3
+ * total, each unique, none on Epic Heroes), and Epic Hero uniqueness.
+ */
+function constructionViolations(state: BuilderState): BuilderViolation[] {
+	const out: BuilderViolation[] = [];
+
+	// Datasheet-name caps.
+	const counts = new Map<string, { count: number; cap: number; name: string }>();
+	for (const u of state.units) {
+		const raw = buRaw(u);
+		if (!raw) continue;
+		const kw = keywordSet(raw);
+		const cap = kw.has('battleline') || raw.role === 'dedicated-transport' ? 6 : 3;
+		const e = counts.get(u.datasheetId);
+		if (e) e.count += 1;
+		else counts.set(u.datasheetId, { count: 1, cap, name: raw.name });
+	}
+	for (const { count, cap, name } of counts.values()) {
+		if (count > cap) out.push({ unitKey: null, message: `${count}× ${name} (max ${cap} of a datasheet)` });
+	}
+
+	// Enhancements: ≤3 total, each unique, none on Epic Heroes.
+	const enhUsed = state.units.flatMap((u) => (u.enhancementId ? [u.enhancementId] : []));
+	if (enhUsed.length > 3) out.push({ unitKey: null, message: `${enhUsed.length} Enhancements (max 3)` });
+	const dupes = new Set(enhUsed.filter((id, i) => enhUsed.indexOf(id) !== i));
+	for (const id of dupes) {
+		out.push({ unitKey: null, message: `Enhancement '${ds.enhancements.get(id)?.name ?? id}' used more than once` });
+	}
+	for (const u of state.units) {
+		if (u.enhancementId && buRaw(u)?.role === 'epic-hero') {
+			out.push({ unitKey: u.key, message: 'Epic Heroes cannot take Enhancements' });
+		}
+	}
+
+	// Epic Hero uniqueness.
+	const epic = new Map<string, { count: number; name: string }>();
+	for (const u of state.units) {
+		const raw = buRaw(u);
+		if (raw?.role !== 'epic-hero') continue;
+		const e = epic.get(u.datasheetId);
+		if (e) e.count += 1;
+		else epic.set(u.datasheetId, { count: 1, name: raw.name });
+	}
+	for (const { count, name } of epic.values()) {
+		if (count > 1) out.push({ unitKey: null, message: `${name} included ${count}× (Epic Heroes are unique)` });
+	}
+
+	return out;
 }
 
 /** Every advisory issue in the draft: points overrun, model-count, loadout. */
@@ -502,7 +701,7 @@ export function builderViolations(state: BuilderState): BuilderViolation[] {
 		});
 	}
 	for (const bu of state.units) {
-		const unit = unitRaw(bu.datasheetId);
+		const unit = buRaw(bu);
 		if (!unit) {
 			out.push({ unitKey: bu.key, message: 'unresolved datasheet' });
 			continue;
@@ -524,6 +723,8 @@ export function builderViolations(state: BuilderState): BuilderViolation[] {
 	// At most one warlord.
 	const warlords = state.units.filter((u) => u.isWarlord).length;
 	if (warlords > 1) out.push({ unitKey: null, message: `${warlords} warlords (pick one)` });
+	// Allied-rule limits and core army-construction caps (advisory).
+	out.push(...allyViolations(state), ...constructionViolations(state));
 	return out;
 }
 
@@ -550,7 +751,7 @@ export function builderToRoster(state: BuilderState): Roster {
 	});
 
 	const units = state.units.map((bu) => {
-		const unit = unitRaw(bu.datasheetId);
+		const unit = buRaw(bu);
 		const name = unit?.name ?? bu.datasheetId;
 		const enh = bu.enhancementId ? ds.enhancements.get(bu.enhancementId) : undefined;
 		const wargear = [...bu.loadout.entries()]

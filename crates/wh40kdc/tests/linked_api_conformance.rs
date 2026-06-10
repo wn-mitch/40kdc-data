@@ -170,6 +170,32 @@ fn run_query(ds: &Dataset, query: &str, args: &Value) -> Value {
                 .unwrap_or_default();
             Value::Array(pairs)
         }
+        "units_with_keyword" => Value::Array(
+            ds.units_with_keyword(arg_str("keyword"))
+                .into_iter()
+                .map(|u| Value::String(u.id.to_string()))
+                .collect(),
+        ),
+        "allies_for" => {
+            let faction_id = arg_str("factionId");
+            let detachment_ids: Vec<&str> = args
+                .get("detachmentIds")
+                .and_then(Value::as_array)
+                .map(|arr| arr.iter().filter_map(Value::as_str).collect())
+                .unwrap_or_default();
+            Value::Array(
+                ds.allies_for(faction_id, &detachment_ids)
+                    .into_iter()
+                    .map(|r| Value::String(r.id.to_string()))
+                    .collect(),
+            )
+        }
+        "ally_units_for" => Value::Array(
+            ds.ally_units_for(arg_str("ruleId"))
+                .into_iter()
+                .map(|u| Value::String(u.id.to_string()))
+                .collect(),
+        ),
         other => panic!("unknown linked-api query: {other}"),
     }
 }

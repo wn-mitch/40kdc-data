@@ -1,0 +1,12 @@
+[
+  {
+    "id": "missing-name-and-bad-fields",
+    "army_keywords_any": ["Chaos Knights"],
+    "points_limits": [
+      { "battle_size": "apocalypse", "max_points": -10 }
+    ],
+    "cannot_be_warlord": "yes",
+    "unexpected_field": true,
+    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+  }
+]

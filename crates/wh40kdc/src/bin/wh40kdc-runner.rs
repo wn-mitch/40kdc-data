@@ -531,6 +531,38 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
                     .collect(),
             ))
         }
+        "units_with_keyword" => {
+            let kw = str_arg("keyword");
+            ok_value(Value::Array(
+                ds.units_with_keyword(kw)
+                    .into_iter()
+                    .map(|u| Value::String(u.id.to_string()))
+                    .collect(),
+            ))
+        }
+        "allies_for" => {
+            let faction_id = str_arg("factionId");
+            let detachment_ids: Vec<&str> = input
+                .get("detachmentIds")
+                .and_then(Value::as_array)
+                .map(|arr| arr.iter().filter_map(Value::as_str).collect())
+                .unwrap_or_default();
+            ok_value(Value::Array(
+                ds.allies_for(faction_id, &detachment_ids)
+                    .into_iter()
+                    .map(|r| Value::String(r.id.to_string()))
+                    .collect(),
+            ))
+        }
+        "ally_units_for" => {
+            let rule_id = str_arg("ruleId");
+            ok_value(Value::Array(
+                ds.ally_units_for(rule_id)
+                    .into_iter()
+                    .map(|u| Value::String(u.id.to_string()))
+                    .collect(),
+            ))
+        }
         other => err_value(
             ErrorKind::InvalidInput,
             Some(json!({ "detail": format!("unknown linked_query: {other}") })),
