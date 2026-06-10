@@ -281,7 +281,7 @@
     "detachment_rule_id": null,
     "enhancement_ids": [
       "greyveil-hex",
-      "warp-fuelled-thrusters",
+      "warp-fuelled-thrusters-nightmare-hunt",
       "terrorglut-parasite",
       "sorrowscent-vulture"
     ],
@@ -290,7 +290,7 @@
       "prey-on-the-weak",
       "sadistic-display",
       "malicious-surge",
-      "relentless-terror",
+      "relentless-terror-nightmare-hunt",
       "horrific-incursion"
     ],
     "game_version": {
