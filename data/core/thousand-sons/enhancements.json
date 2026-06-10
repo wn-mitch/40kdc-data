@@ -430,5 +430,113 @@
     "points_provisional": true,
     "upgrade_tag": false,
     "max_targets": 1
+  },
+  {
+    "id": "eruption-of-vitality",
+    "name": "Eruption of Vitality",
+    "detachment_id": "ritual-of-regeneration",
+    "cost": 20,
+    "keyword_restrictions": [
+      "Thousand Sons"
+    ],
+    "ability_id": "eruption-of-vitality",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "curse-of-life",
+    "name": "Curse of Life",
+    "detachment_id": "ritual-of-regeneration",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Thousand Sons"
+    ],
+    "ability_id": "curse-of-life",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "walking-rampart",
+    "name": "Walking Rampart",
+    "detachment_id": "sekhetar-cohort",
+    "cost": 25,
+    "keyword_restrictions": [
+      "Thousand Sons"
+    ],
+    "ability_id": "walking-rampart",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "occulus-infernum",
+    "name": "Occulus Infernum",
+    "detachment_id": "sekhetar-cohort",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Thousand Sons"
+    ],
+    "ability_id": "occulus-infernum",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "unravelled-fates",
+    "name": "Unravelled Fates",
+    "detachment_id": "servants-of-change",
+    "cost": 20,
+    "keyword_restrictions": [
+      "Thousand Sons"
+    ],
+    "ability_id": "unravelled-fates",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "thicket-of-bladed-bone",
+    "name": "Thicket of Bladed Bone",
+    "detachment_id": "servants-of-change",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Spawn"
+    ],
+    "ability_id": "thicket-of-bladed-bone",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
   }
 ]

@@ -3114,5 +3114,675 @@
     "faction_id": "death-guard",
     "ability_type": "faction",
     "behavior": "passive"
+  },
+  {
+    "ability_id": "warped-and-rusted-animus",
+    "name": "Warped and Rusted Animus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "contagion-engines",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "keyword-grant",
+          "target": "all-friendly",
+          "modifier": {
+            "keywords": [
+              "Contagion Engine"
+            ],
+            "applies_to_keywords": [
+              "Foetid Bloat-drone",
+              "Helbrute",
+              "Myphitic Blight-hauler"
+            ],
+            "purpose": "combat"
+          }
+        },
+        {
+          "type": "keyword-grant",
+          "target": "all-friendly",
+          "modifier": {
+            "keywords": [
+              "Assault"
+            ],
+            "applies_to_keyword": "Contagion Engine",
+            "scope": "weapon",
+            "attack_type": "ranged"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Death Guard"
+      ]
+    }
+  },
+  {
+    "ability_id": "verminous-haze",
+    "name": "Verminous Haze",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "flyblown-host",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "ability-grant",
+      "target": "all-friendly",
+      "modifier": {
+        "ability_id": "infiltrators",
+        "timing": "declare-battle-formations",
+        "max_selected": 2
+      }
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Death Guard",
+        "Plague Marines"
+      ]
+    }
+  },
+  {
+    "ability_id": "hypervirulent-strains",
+    "name": "Hypervirulent Strains",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "paragons-of-putrescence",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "ability-grant",
+      "target": "all-friendly",
+      "modifier": {
+        "grant_type": "contagion-range-modifier",
+        "operation": "add",
+        "value": 3,
+        "unit": "inches",
+        "max_total": 12
+      }
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Death Guard",
+        "Character"
+      ]
+    }
+  },
+  {
+    "ability_id": "insectile-murmuration",
+    "name": "Insectile Murmuration",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "flyblown-host",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "re-roll",
+      "target": "unit",
+      "modifier": {
+        "roll": "wound",
+        "subset": "ones",
+        "condition": "target-within-contagion-range-of-friendly"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Plague Marines"
+      ]
+    }
+  },
+  {
+    "ability_id": "plagueveil",
+    "name": "Plagueveil",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "flyblown-host",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "detection-range-modifier",
+        "operation": "subtract",
+        "value": 3,
+        "unit": "inches"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Plague Marines"
+      ]
+    }
+  },
+  {
+    "ability_id": "rejuvenating-swarm",
+    "name": "Rejuvenating Swarm",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "paragons-of-putrescence",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "unit",
+      "modifier": {
+        "roll": "wound",
+        "operation": "subtract",
+        "value": 1,
+        "incoming": true,
+        "applies_when": "attacker-strength-greater-than-target-toughness"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Death Guard",
+        "Infantry"
+      ],
+      "excluded_keywords": [
+        "Terminator"
+      ]
+    }
+  },
+  {
+    "ability_id": "parasitic-woe-reaper",
+    "name": "Parasitic Woe-Reaper",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "contagion-engines",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "has-fought-this-phase"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "bearer",
+        "modifier": {
+          "grant_type": "heal-wounds",
+          "amount": "D3",
+          "models": 1
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Contagion Engine"
+      ]
+    }
+  },
+  {
+    "ability_id": "lancet-of-the-worldsore",
+    "name": "Lancet of the Worldsore",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "contagion-engines",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "ability_id": "mobile"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Helbrute"
+      ]
+    }
+  },
+  {
+    "ability_id": "host-of-the-hybridised-pox",
+    "name": "Host of the Hybridised Pox",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "paragons-of-putrescence",
+    "ability_type": "enhancement",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "grant_type": "apply-additional-plague",
+        "timing": "command-phase",
+        "frequency": "once-per-battle-per-army",
+        "range": "contagion"
+      }
+    },
+    "scope": {
+      "range": "aura-custom",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Death Guard",
+        "Infantry"
+      ]
+    }
+  },
+  {
+    "ability_id": "nauseating-paroxysms",
+    "name": "Nauseating Paroxysms",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "flyblown-host",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "leadership-modifier",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "test": "battle-shock",
+        "result_modifier": -1,
+        "target_scope": "one-engaged-enemy"
+      }
+    },
+    "scope": {
+      "range": "engagement-range",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Plague Marines"
+      ]
+    }
+  },
+  {
+    "ability_id": "droning-horror",
+    "name": "Droning Horror",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "flyblown-host",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones",
+            "attack_type": "ranged"
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "unit",
+          "modifier": {
+            "roll": "wound",
+            "subset": "ones",
+            "attack_type": "ranged",
+            "condition": "target-within-half-range"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Plague Marines"
+      ]
+    }
+  },
+  {
+    "ability_id": "eye-of-the-swarm",
+    "name": "Eye of the Swarm",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "flyblown-host",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Close-Quarters"
+        ],
+        "scope": "weapon",
+        "attack_type": "ranged"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Plague Marines"
+      ]
+    }
+  },
+  {
+    "ability_id": "fresh-vectors",
+    "name": "Fresh Vectors",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "contagion-engines",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "re-roll",
+      "target": "unit",
+      "modifier": {
+        "roll": "wound",
+        "subset": "ones"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Contagion Engine"
+      ]
+    }
+  },
+  {
+    "ability_id": "bloodrust-deluge",
+    "name": "Bloodrust Deluge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "contagion-engines",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "unit-tag",
+      "target": "unit",
+      "modifier": {
+        "tag": "afflicted",
+        "applies_to": "one-visible-enemy",
+        "clears_on": "turn-rollover"
+      }
+    },
+    "scope": {
+      "range": "any-visible",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Contagion Engine"
+      ]
+    }
+  },
+  {
+    "ability_id": "soulrot-flux",
+    "name": "Soulrot Flux",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "contagion-engines",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "dice": "D6",
+        "table": {
+          "1": 1,
+          "2-5": "D3",
+          "6": 3
+        },
+        "trigger": "fall-back-while-engaged"
+      }
+    },
+    "scope": {
+      "range": "engagement-range",
+      "duration": "phase"
+    }
+  },
+  {
+    "ability_id": "territorial-infection",
+    "name": "Territorial Infection",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "paragons-of-putrescence",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "objective-control-modifier",
+      "target": "unit",
+      "modifier": {
+        "stat": "OC",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Death Guard",
+        "Character"
+      ]
+    }
+  },
+  {
+    "ability_id": "aggravus-spasms",
+    "name": "Aggravus Spasms",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "paragons-of-putrescence",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "all-enemy",
+      "modifier": {
+        "grant_type": "detection-range-modifier",
+        "value": 6,
+        "unit": "inches",
+        "target_scope": "one-visible-enemy",
+        "range": "contagion"
+      }
+    },
+    "scope": {
+      "range": "any-visible",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Death Guard",
+        "Character"
+      ]
+    }
+  },
+  {
+    "ability_id": "simultaneous-contamination",
+    "name": "Simultaneous Contamination",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "death-guard",
+    "detachment_id": "paragons-of-putrescence",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "shoot-after-action"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Death Guard",
+        "Character"
+      ]
+    }
   }
 ]

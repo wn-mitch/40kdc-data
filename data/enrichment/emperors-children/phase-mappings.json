@@ -1315,5 +1315,228 @@
       "dataslate": "pre-launch-provisional"
     },
     "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "eager-to-kill",
+    "source_type": "ability",
+    "phases": [
+      "charge"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "frantic-focus",
+    "source_type": "ability",
+    "phases": [
+      "movement",
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "entitled-to-victory",
+    "source_type": "ability",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "cacophonic-accompaniment",
+    "source_type": "ability",
+    "phases": [
+      "movement",
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "frenzied-ferocity",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "euphoric-crown",
+    "source_type": "ability",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "howling-plate",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "eager-patrons",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "beguiling-grotesquerie",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "delight-in-agony",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "psychedelic-soulflame",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "warp-plunge",
+    "source_type": "ability",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "possessive-mania",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "agonised-cacophony",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "absolute-sensory-overload",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "honour-is-for-fools",
+    "source_type": "ability",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "single-minded-strike",
+    "source_type": "ability",
+    "phases": [
+      "charge"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "intoxicated-by-triumph",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
   }
 ]

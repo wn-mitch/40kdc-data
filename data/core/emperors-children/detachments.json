@@ -22,8 +22,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "carnival-of-excess",
@@ -48,8 +50,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "peerless-bladesmen",
@@ -74,8 +78,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "rapid-evisceration",
@@ -100,8 +106,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "mercurial-host",
@@ -126,8 +134,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "reconnaissance"
+    ]
   },
   {
     "id": "court-of-the-phoenician",
@@ -152,8 +162,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "coterie-of-the-conceited",
@@ -178,7 +190,84 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
+  },
+  {
+    "id": "elegant-brutes",
+    "name": "Elegant Brutes",
+    "faction_id": "emperors-children",
+    "detachment_rule_id": "eager-to-kill",
+    "enhancement_ids": [
+      "cacophonic-accompaniment",
+      "frenzied-ferocity"
+    ],
+    "stratagem_ids": [
+      "delight-in-agony",
+      "psychedelic-soulflame",
+      "warp-plunge"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "take-and-hold"
+    ],
+    "tags": [
+      "host"
+    ]
+  },
+  {
+    "id": "frenzied-host",
+    "name": "Frenzied Host",
+    "faction_id": "emperors-children",
+    "detachment_rule_id": "frantic-focus",
+    "enhancement_ids": [
+      "euphoric-crown",
+      "howling-plate"
+    ],
+    "stratagem_ids": [
+      "possessive-mania",
+      "agonised-cacophony",
+      "absolute-sensory-overload"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "disruption"
+    ],
+    "tags": [
+      "host"
+    ]
+  },
+  {
+    "id": "spectacle-of-slaughter",
+    "name": "Spectacle of Slaughter",
+    "faction_id": "emperors-children",
+    "detachment_rule_id": "entitled-to-victory",
+    "enhancement_ids": [
+      "eager-patrons",
+      "beguiling-grotesquerie"
+    ],
+    "stratagem_ids": [
+      "honour-is-for-fools",
+      "single-minded-strike",
+      "intoxicated-by-triumph"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   }
 ]

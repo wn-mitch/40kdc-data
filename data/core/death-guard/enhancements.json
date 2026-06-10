@@ -72,24 +72,6 @@
     "max_targets": 1
   },
   {
-    "id": "droning-chorus",
-    "name": "Droning Chorus",
-    "detachment_id": "flyblown-host",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Death Guard"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
     "id": "eye-of-affliction",
     "name": "Eye of Affliction",
     "detachment_id": "mortarions-hammer",
@@ -133,7 +115,7 @@
     "keyword_restrictions": [
       "Death Guard"
     ],
-    "ability_id": null,
+    "ability_id": "insectile-murmuration",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -146,12 +128,12 @@
   {
     "id": "rejuvenating-swarm",
     "name": "Rejuvenating Swarm",
-    "detachment_id": "flyblown-host",
+    "detachment_id": "paragons-of-putrescence",
     "cost": 10,
     "keyword_restrictions": [
       "Death Guard"
     ],
-    "ability_id": null,
+    "ability_id": "rejuvenating-swarm",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -187,7 +169,7 @@
     "keyword_restrictions": [
       "Death Guard"
     ],
-    "ability_id": null,
+    "ability_id": "plagueveil",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -494,6 +476,61 @@
       "Death Guard"
     ],
     "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "parasitic-woe-reaper",
+    "name": "Parasitic Woe-Reaper",
+    "detachment_id": "contagion-engines",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Contagion Engine"
+    ],
+    "ability_id": "parasitic-woe-reaper",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "lancet-of-the-worldsore",
+    "name": "Lancet of the Worldsore",
+    "detachment_id": "contagion-engines",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Helbrute"
+    ],
+    "ability_id": "lancet-of-the-worldsore",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "host-of-the-hybridised-pox",
+    "name": "Host of the Hybridised Pox",
+    "detachment_id": "paragons-of-putrescence",
+    "cost": 20,
+    "keyword_restrictions": [
+      "Death Guard",
+      "Infantry"
+    ],
+    "ability_id": "host-of-the-hybridised-pox",
     "is_unique": true,
     "game_version": {
       "edition": "11th",

@@ -806,5 +806,170 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     }
+  },
+  {
+    "id": "delight-in-agony",
+    "name": "DELIGHT IN AGONY",
+    "category": "detachment",
+    "detachment_id": "elegant-brutes",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "delight-in-agony",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "psychedelic-soulflame",
+    "name": "PSYCHEDELIC SOULFLAME",
+    "category": "detachment",
+    "detachment_id": "elegant-brutes",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "psychedelic-soulflame",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "warp-plunge",
+    "name": "WARP PLUNGE",
+    "category": "detachment",
+    "detachment_id": "elegant-brutes",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "warp-plunge",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "possessive-mania",
+    "name": "POSSESSIVE MANIA",
+    "category": "detachment",
+    "detachment_id": "frenzied-host",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "possessive-mania",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "agonised-cacophony",
+    "name": "AGONISED CACOPHONY",
+    "category": "detachment",
+    "detachment_id": "frenzied-host",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "agonised-cacophony",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "absolute-sensory-overload",
+    "name": "ABSOLUTE SENSORY OVERLOAD",
+    "category": "detachment",
+    "detachment_id": "frenzied-host",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "absolute-sensory-overload",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "honour-is-for-fools",
+    "name": "HONOUR IS FOR FOOLS",
+    "category": "detachment",
+    "detachment_id": "spectacle-of-slaughter",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "honour-is-for-fools",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "single-minded-strike",
+    "name": "SINGLE-MINDED STRIKE",
+    "category": "detachment",
+    "detachment_id": "spectacle-of-slaughter",
+    "cp_cost": 1,
+    "phases": [
+      "charge"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "single-minded-strike",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "intoxicated-by-triumph",
+    "name": "INTOXICATED BY TRIUMPH",
+    "category": "detachment",
+    "detachment_id": "spectacle-of-slaughter",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "intoxicated-by-triumph",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   }
 ]

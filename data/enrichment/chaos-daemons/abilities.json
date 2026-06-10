@@ -4417,5 +4417,732 @@
     "ability_type": "unit",
     "behavior": "passive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+  },
+  {
+    "ability_id": "unholy-avalanche",
+    "name": "Unholy Avalanche",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "cavalcade-of-chaos",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "advanced-this-turn",
+        "parameters": {
+          "move": "fall-back"
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "all-friendly",
+        "modifier": {
+          "grant_type": "act-after-move",
+          "moves": [
+            "fall-back"
+          ],
+          "acts": [
+            "shoot",
+            "charge"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Mounted"
+      ]
+    }
+  },
+  {
+    "ability_id": "loci-of-power",
+    "name": "Loci of Power",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "lords-of-the-warp",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "all-friendly",
+          "modifier": {
+            "stat": "Ld",
+            "operation": "add",
+            "value": 1
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "all-friendly",
+          "modifier": {
+            "stat": "OC",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Character"
+      ],
+      "excluded_keywords": [
+        "Monster"
+      ]
+    }
+  },
+  {
+    "ability_id": "shudderblink",
+    "name": "Shudderblink",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "warptide",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "advanced-this-turn",
+        "parameters": {
+          "move": "advance"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "keyword-grant",
+            "target": "all-friendly",
+            "modifier": {
+              "keywords": [
+                "Assault"
+              ],
+              "scope": "weapon",
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "ability-grant",
+            "target": "all-friendly",
+            "modifier": {
+              "grant_type": "act-after-move",
+              "moves": [
+                "advance"
+              ],
+              "acts": [
+                "charge"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Battleline"
+      ]
+    }
+  },
+  {
+    "ability_id": "apocalyptic-steeds",
+    "name": "Apocalyptic Steeds",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "cavalcade-of-chaos",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "bearer",
+      "modifier": {
+        "stat": "M",
+        "operation": "add",
+        "value": 1,
+        "unit": "inches"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Mounted"
+      ]
+    }
+  },
+  {
+    "ability_id": "soul-shattering-charge",
+    "name": "Soul-Shattering Charge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "cavalcade-of-chaos",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "charged-this-turn"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "bearer",
+        "modifier": {
+          "grant_type": "extended-fight-eligibility",
+          "range_inches": 3
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Mounted"
+      ]
+    }
+  },
+  {
+    "ability_id": "swollen-with-power",
+    "name": "Swollen with Power",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "lords-of-the-warp",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "bearer",
+      "modifier": {
+        "stat": "W",
+        "operation": "add",
+        "value": 2
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Character"
+      ],
+      "excluded_keywords": [
+        "Monster"
+      ]
+    }
+  },
+  {
+    "ability_id": "bane-forged-weapons",
+    "name": "Bane-Forged Weapons",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "warptide",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "bearer",
+      "modifier": {
+        "stat": "S",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Battleline"
+      ]
+    }
+  },
+  {
+    "ability_id": "soul-hungry-slaughterers",
+    "name": "Soul-Hungry Slaughterers",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "warptide",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "ability-grant",
+      "target": "bearer",
+      "modifier": {
+        "grant_type": "stratagem-cost-reduction",
+        "stratagems": [
+          "heroic-intervention",
+          "fire-overwatch"
+        ],
+        "amount": 1
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Battleline"
+      ]
+    }
+  },
+  {
+    "ability_id": "from-beyond-the-veil",
+    "name": "From Beyond the Veil",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "cavalcade-of-chaos",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "ingress-move",
+        "from": "strategic-reserves"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Mounted"
+      ]
+    }
+  },
+  {
+    "ability_id": "warp-riders",
+    "name": "Warp-Riders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "cavalcade-of-chaos",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "ability_id": "mobile"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Mounted"
+      ]
+    }
+  },
+  {
+    "ability_id": "inescapable-manifestations",
+    "name": "Inescapable Manifestations",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "cavalcade-of-chaos",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "ability-grant",
+      "target": "all-enemy",
+      "modifier": {
+        "grant_type": "force-desperate-escape",
+        "trigger": "fall-back-while-engaged",
+        "hazard_modifier_if_battle_shocked": -1
+      }
+    },
+    "scope": {
+      "range": "engagement-range",
+      "duration": "phase"
+    }
+  },
+  {
+    "ability_id": "carnival-of-excess",
+    "name": "Carnival of Excess",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "lords-of-the-warp",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "fight-first",
+      "target": "unit",
+      "modifier": {
+        "must_fight_next": true
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Character",
+        "Slaanesh"
+      ],
+      "excluded_keywords": [
+        "Monster"
+      ]
+    }
+  },
+  {
+    "ability_id": "call-to-murder",
+    "name": "Call to Murder",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "lords-of-the-warp",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "charged-this-turn"
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "unit",
+        "modifier": {
+          "stat": "A",
+          "operation": "add",
+          "value": 1,
+          "attack_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Character",
+        "Khorne"
+      ],
+      "excluded_keywords": [
+        "Monster"
+      ]
+    }
+  },
+  {
+    "ability_id": "bilious-blessing",
+    "name": "Bilious Blessing",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "lords-of-the-warp",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "dice": "7D6",
+        "threshold": 4,
+        "comparison": "gte",
+        "mortal_per_success": 1,
+        "range_inches": 8,
+        "target_scope": "one-visible-enemy"
+      }
+    },
+    "scope": {
+      "range": "aura-custom",
+      "duration": "phase",
+      "range_inches": 8
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Character",
+        "Nurgle"
+      ],
+      "excluded_keywords": [
+        "Monster"
+      ]
+    }
+  },
+  {
+    "ability_id": "skirling-magicks",
+    "name": "Skirling Magicks",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "lords-of-the-warp",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Lethal Hits"
+        ],
+        "scope": "weapon",
+        "attack_type": "ranged"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Character",
+        "Tzeentch"
+      ],
+      "excluded_keywords": [
+        "Monster"
+      ]
+    }
+  },
+  {
+    "ability_id": "daemonic-infestation",
+    "name": "Daemonic Infestation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "warptide",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "heal-wounds",
+        "amount": 3
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Battleline"
+      ],
+      "excluded_keywords": [
+        "Pink Horrors"
+      ]
+    }
+  },
+  {
+    "ability_id": "soulseeing",
+    "name": "Soulseeing",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "warptide",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "all-enemy",
+      "modifier": {
+        "grant_type": "detection-range-modifier",
+        "value": 6,
+        "unit": "inches",
+        "target_scope": "one-visible-enemy",
+        "range_inches": 12
+      }
+    },
+    "scope": {
+      "range": "any-visible",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Battleline"
+      ]
+    }
+  },
+  {
+    "ability_id": "incorporeal-entities",
+    "name": "Incorporeal Entities",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-daemons",
+    "detachment_id": "warptide",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "unit",
+      "modifier": {
+        "roll": "wound",
+        "operation": "subtract",
+        "value": 1,
+        "incoming": true,
+        "applies_when": "attacker-strength-greater-than-target-toughness",
+        "attack_type": "ranged"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Legiones Daemonica",
+        "Battleline"
+      ]
+    }
   }
 ]

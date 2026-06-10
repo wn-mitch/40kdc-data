@@ -22,34 +22,33 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "cabal-of-chaos",
     "name": "Cabal of Chaos",
     "faction_id": "chaos-space-marines",
-    "detachment_rule_id": null,
+    "detachment_rule_id": "empyric-wellspring",
     "enhancement_ids": [
       "touched-by-the-warp",
-      "eye-of-zdesh",
-      "mind-blade",
-      "infernal-avatar"
+      "conduit-of-chaos"
     ],
     "stratagem_ids": [
-      "shroud-of-chaos",
-      "baleful-blessing",
-      "unholy-haste",
-      "no-rest-in-death",
-      "mutations-curse",
-      "soulseekers"
+      "infernal-vigour",
+      "fleshy-curse",
+      "wreathed-in-warpflame"
     ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 1,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "renegade-raiders",
@@ -74,8 +73,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "reconnaissance"
+    ]
   },
   {
     "id": "fellhammer-siege-host",
@@ -100,8 +101,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "deceptors",
@@ -126,8 +129,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "soulforged-warpack",
@@ -152,8 +157,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "renegade-warband",
@@ -178,8 +185,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "dread-talons",
@@ -204,8 +213,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "chaos-cult",
@@ -230,8 +241,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "veterans-of-the-long-war",
@@ -256,8 +269,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "nightmare-hunt",
@@ -282,8 +297,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "pactbound-zealots",
@@ -308,8 +325,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "creations-of-bile",
@@ -334,7 +353,117 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
+  },
+  {
+    "id": "devotees-of-destruction",
+    "name": "Devotees of Destruction",
+    "faction_id": "chaos-space-marines",
+    "detachment_rule_id": "rain-of-ruin",
+    "enhancement_ids": [
+      "pact-of-destruction",
+      "eye-of-oblivion"
+    ],
+    "stratagem_ids": [
+      "ruinations-bounty",
+      "snare-of-fire",
+      "undying-hatred-devotees"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ],
+    "tags": [
+      "nightmare"
+    ]
+  },
+  {
+    "id": "murdertalon-raiders",
+    "name": "Murdertalon Raiders",
+    "faction_id": "chaos-space-marines",
+    "detachment_rule_id": "prey-on-the-weak-raiders",
+    "enhancement_ids": [
+      "shadowcowl-talisman",
+      "pact-of-cursed-pinions"
+    ],
+    "stratagem_ids": [
+      "plunging-talons",
+      "raking-pass",
+      "warp-twisted-terrors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "purge-the-foe"
+    ],
+    "tags": [
+      "nightmare"
+    ]
+  },
+  {
+    "id": "warpstrike-champions",
+    "name": "Warpstrike Champions",
+    "faction_id": "chaos-space-marines",
+    "detachment_rule_id": "warp-portals",
+    "enhancement_ids": [
+      "infernal-fulgurite",
+      "eye-of-the-warp",
+      "akshurs-binding-runes",
+      "tzagulla"
+    ],
+    "stratagem_ids": [
+      "empyric-dislocation",
+      "warp-tainted",
+      "siegebreaker-strike",
+      "armour-of-corruption",
+      "warp-flicker",
+      "portal-of-spite"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 2,
+    "force_dispositions": [
+      "disruption"
+    ]
+  },
+  {
+    "id": "cult-of-the-arkifane",
+    "name": "Cult of the Arkifane",
+    "faction_id": "chaos-space-marines",
+    "detachment_rule_id": "soul-forge-boons",
+    "enhancement_ids": [
+      "wyredjinn",
+      "cybinfernal-font",
+      "mark-of-the-soul-forges",
+      "crown-of-worms"
+    ],
+    "stratagem_ids": [
+      "touch-of-the-arkifane",
+      "balefire-boon",
+      "soul-tally-offering",
+      "biomechanoid-regeneration",
+      "forge-fire-surge",
+      "unholy-fortitude"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 2,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   }
 ]

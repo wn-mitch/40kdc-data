@@ -2109,5 +2109,228 @@
       "dataslate": "pre-launch-provisional"
     },
     "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "unholy-avalanche",
+    "source_type": "ability",
+    "phases": [
+      "movement",
+      "shooting",
+      "charge"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "loci-of-power",
+    "source_type": "ability",
+    "phases": [
+      "command",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "shudderblink",
+    "source_type": "ability",
+    "phases": [
+      "movement",
+      "shooting",
+      "charge"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "apocalyptic-steeds",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "soul-shattering-charge",
+    "source_type": "ability",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "swollen-with-power",
+    "source_type": "ability",
+    "phases": [
+      "command"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "bane-forged-weapons",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "soul-hungry-slaughterers",
+    "source_type": "ability",
+    "phases": [
+      "fight",
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "from-beyond-the-veil",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "warp-riders",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "inescapable-manifestations",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "carnival-of-excess",
+    "source_type": "ability",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "call-to-murder",
+    "source_type": "ability",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "bilious-blessing",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "skirling-magicks",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "daemonic-infestation",
+    "source_type": "ability",
+    "phases": [
+      "command"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "soulseeing",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "incorporeal-entities",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
   }
 ]

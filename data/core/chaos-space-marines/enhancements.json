@@ -655,61 +655,7 @@
     "keyword_restrictions": [
       "Chaos Space Marines"
     ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "eye-of-zdesh",
-    "name": "Eye of Z’Desh",
-    "detachment_id": "cabal-of-chaos",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Chaos Space Marines"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "mind-blade",
-    "name": "Mind Blade",
-    "detachment_id": "cabal-of-chaos",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Chaos Space Marines"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "infernal-avatar",
-    "name": "Infernal Avatar",
-    "detachment_id": "cabal-of-chaos",
-    "cost": 20,
-    "keyword_restrictions": [
-      "Chaos Space Marines"
-    ],
-    "ability_id": null,
+    "ability_id": "touched-by-the-warp",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -926,6 +872,241 @@
       "Chaos Space Marines"
     ],
     "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "conduit-of-chaos",
+    "name": "Conduit of Chaos",
+    "detachment_id": "cabal-of-chaos",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Heretic Astartes",
+      "Daemon"
+    ],
+    "ability_id": "conduit-of-chaos",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "pact-of-destruction",
+    "name": "Pact of Destruction",
+    "detachment_id": "devotees-of-destruction",
+    "cost": 20,
+    "keyword_restrictions": [
+      "Warpsmith"
+    ],
+    "ability_id": "pact-of-destruction",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "eye-of-oblivion",
+    "name": "Eye of Oblivion",
+    "detachment_id": "devotees-of-destruction",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Warpsmith"
+    ],
+    "ability_id": "eye-of-oblivion",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "shadowcowl-talisman",
+    "name": "Shadowcowl Talisman",
+    "detachment_id": "murdertalon-raiders",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Chaos Lord with Jump Pack"
+    ],
+    "ability_id": "shadowcowl-talisman",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "pact-of-cursed-pinions",
+    "name": "Pact of Cursed Pinions",
+    "detachment_id": "murdertalon-raiders",
+    "cost": 20,
+    "keyword_restrictions": [
+      "Chaos Lord with Jump Pack"
+    ],
+    "ability_id": "pact-of-cursed-pinions",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "infernal-fulgurite",
+    "name": "Infernal Fulgurite",
+    "detachment_id": "warpstrike-champions",
+    "cost": 20,
+    "keyword_restrictions": [
+      "Heretic Astartes"
+    ],
+    "ability_id": "infernal-fulgurite",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "eye-of-the-warp",
+    "name": "Eye of the Warp",
+    "detachment_id": "warpstrike-champions",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Heretic Astartes"
+    ],
+    "ability_id": "eye-of-the-warp",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "akshurs-binding-runes",
+    "name": "Akshur's Binding Runes",
+    "detachment_id": "warpstrike-champions",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Heretic Astartes"
+    ],
+    "ability_id": "akshurs-binding-runes",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "tzagulla",
+    "name": "Tzagulla",
+    "detachment_id": "warpstrike-champions",
+    "cost": 30,
+    "keyword_restrictions": [
+      "Heretic Astartes"
+    ],
+    "ability_id": "tzagulla",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "wyredjinn",
+    "name": "Wyredjinn",
+    "detachment_id": "cult-of-the-arkifane",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Heretic Astartes"
+    ],
+    "ability_id": "wyredjinn",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "cybinfernal-font",
+    "name": "Cybinfernal Font",
+    "detachment_id": "cult-of-the-arkifane",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Heretic Astartes"
+    ],
+    "ability_id": "cybinfernal-font",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "mark-of-the-soul-forges",
+    "name": "Mark of the Soul Forges",
+    "detachment_id": "cult-of-the-arkifane",
+    "cost": 20,
+    "keyword_restrictions": [
+      "Heretic Astartes"
+    ],
+    "ability_id": "mark-of-the-soul-forges",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "crown-of-worms",
+    "name": "Crown of Worms",
+    "detachment_id": "cult-of-the-arkifane",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Warpsmith"
+    ],
+    "ability_id": "crown-of-worms",
     "is_unique": true,
     "game_version": {
       "edition": "11th",

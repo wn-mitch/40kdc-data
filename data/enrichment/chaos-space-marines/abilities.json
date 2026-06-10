@@ -6035,5 +6035,1694 @@
     "ability_type": "faction",
     "behavior": "passive",
     "unit_ids": []
+  },
+  {
+    "ability_id": "empyric-wellspring",
+    "name": "Empyric Wellspring",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "cabal-of-chaos",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "all-friendly",
+            "modifier": {
+              "stat": "S",
+              "operation": "add",
+              "value": 1,
+              "attack_type": "ranged",
+              "requires": "dark-pact"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "all-friendly",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 2,
+                  "attack_type": "melee",
+                  "requires": "dark-pact"
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "all-friendly",
+                "modifier": {
+                  "stat": "AP",
+                  "operation": "improve",
+                  "value": 1,
+                  "attack_type": "melee",
+                  "requires": "dark-pact"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Khorne"
+      ]
+    }
+  },
+  {
+    "ability_id": "touched-by-the-warp",
+    "name": "Touched by the Warp",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "cabal-of-chaos",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "keyword-grant",
+          "target": "bearer",
+          "modifier": {
+            "keywords": [
+              "Psyker"
+            ]
+          }
+        },
+        {
+          "type": "keyword-grant",
+          "target": "bearer",
+          "modifier": {
+            "keywords": [
+              "Psychic"
+            ],
+            "scope": "weapon"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Khorne"
+      ]
+    }
+  },
+  {
+    "ability_id": "conduit-of-chaos",
+    "name": "Conduit of Chaos",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "cabal-of-chaos",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "bearer",
+      "modifier": {
+        "keywords": [
+          "Lance"
+        ],
+        "scope": "weapon",
+        "attack_type": "melee"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Daemon"
+      ],
+      "excluded_keywords": [
+        "Khorne"
+      ]
+    }
+  },
+  {
+    "ability_id": "infernal-vigour",
+    "name": "Infernal Vigour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "cabal-of-chaos",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "heal-wounds",
+        "amount": "D3+1"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Khorne"
+      ]
+    }
+  },
+  {
+    "ability_id": "fleshy-curse",
+    "name": "Fleshy Curse",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "cabal-of-chaos",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "dice": "D6",
+        "table": {
+          "1": 1,
+          "2-4": "D3",
+          "5-6": "2D3"
+        },
+        "is_psychic": true,
+        "range_inches": 12,
+        "target_scope": "one-visible-enemy"
+      }
+    },
+    "scope": {
+      "range": "aura-custom",
+      "duration": "phase",
+      "range_inches": 12
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Psyker"
+      ]
+    }
+  },
+  {
+    "ability_id": "wreathed-in-warpflame",
+    "name": "Wreathed in Warpflame",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "cabal-of-chaos",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Ignores Cover"
+        ],
+        "scope": "weapon",
+        "attack_type": "ranged"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Psyker"
+      ]
+    }
+  },
+  {
+    "ability_id": "rain-of-ruin",
+    "name": "Rain of Ruin",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "devotees-of-destruction",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "all-friendly",
+      "modifier": {
+        "keywords": [
+          "Heavy"
+        ],
+        "scope": "weapon",
+        "attack_type": "ranged",
+        "applies_to_keywords": [
+          "Havocs",
+          "Obliterators"
+        ]
+      }
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ]
+    }
+  },
+  {
+    "ability_id": "pact-of-destruction",
+    "name": "Pact of Destruction",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "devotees-of-destruction",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "unit",
+          "modifier": {
+            "roll": "leadership",
+            "subset": "all-failures",
+            "context": "dark-pact"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "destroyed-by-attack-type",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          "effect": {
+            "type": "ability-grant",
+            "target": "unit",
+            "modifier": {
+              "grant_type": "heal-wounds",
+              "amount": 3,
+              "requires": "dark-pact"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Warpsmith"
+      ]
+    }
+  },
+  {
+    "ability_id": "eye-of-oblivion",
+    "name": "Eye of Oblivion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "devotees-of-destruction",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "ability-grant",
+      "target": "all-enemy",
+      "modifier": {
+        "grant_type": "detection-range-modifier",
+        "value": 6,
+        "unit": "inches",
+        "target_scope": "one-enemy",
+        "range_inches": 24
+      }
+    },
+    "scope": {
+      "range": "any-visible",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Warpsmith"
+      ]
+    }
+  },
+  {
+    "ability_id": "ruinations-bounty",
+    "name": "Ruination's Bounty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "devotees-of-destruction",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Lethal Hits",
+          "Sustained Hits 1"
+        ],
+        "scope": "weapon",
+        "attack_type": "ranged",
+        "requires": "dark-pact"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ]
+    }
+  },
+  {
+    "ability_id": "snare-of-fire",
+    "name": "Snare of Fire",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "devotees-of-destruction",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "movement-modifier",
+      "target": "unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": "D3+3",
+        "unit": "inches"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Havocs"
+      ]
+    }
+  },
+  {
+    "ability_id": "undying-hatred-devotees",
+    "name": "Undying Hatred",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "devotees-of-destruction",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "unit",
+      "modifier": {
+        "roll": "wound",
+        "operation": "subtract",
+        "value": 1,
+        "incoming": true,
+        "applies_when": "attacker-strength-greater-than-target-toughness"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ]
+    }
+  },
+  {
+    "ability_id": "prey-on-the-weak-raiders",
+    "name": "Prey on the Weak",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "murdertalon-raiders",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "target-has-keyword",
+            "parameters": {
+              "keyword": "battle-shocked-or-below-half"
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "all-friendly",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          }
+        },
+        {
+          "type": "roll-modifier",
+          "target": "all-friendly",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1,
+            "incoming": true,
+            "applies_when": "attacker-battle-shocked-or-below-half"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Infantry",
+        "Fly"
+      ]
+    }
+  },
+  {
+    "ability_id": "shadowcowl-talisman",
+    "name": "Shadowcowl Talisman",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "murdertalon-raiders",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "invulnerable-save",
+      "target": "unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Chaos Lord with Jump Pack"
+      ]
+    }
+  },
+  {
+    "ability_id": "pact-of-cursed-pinions",
+    "name": "Pact of Cursed Pinions",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "murdertalon-raiders",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "keyword-grant",
+          "target": "bearer",
+          "modifier": {
+            "keywords": [
+              "Daemon"
+            ]
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "bearer",
+          "modifier": {
+            "stat": "A",
+            "operation": "add",
+            "value": 1,
+            "attack_type": "melee"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Chaos Lord with Jump Pack"
+      ]
+    }
+  },
+  {
+    "ability_id": "plunging-talons",
+    "name": "Plunging Talons",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "murdertalon-raiders",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Lance"
+        ],
+        "scope": "weapon",
+        "attack_type": "melee"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Infantry",
+        "Fly"
+      ]
+    }
+  },
+  {
+    "ability_id": "raking-pass",
+    "name": "Raking Pass",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "murdertalon-raiders",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "act-after-move",
+        "moves": [
+          "fall-back"
+        ],
+        "acts": [
+          "charge"
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes",
+        "Infantry",
+        "Fly"
+      ]
+    }
+  },
+  {
+    "ability_id": "warp-twisted-terrors",
+    "name": "Warp-Twisted Terrors",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "murdertalon-raiders",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "leadership-modifier",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "test": "battle-shock",
+        "result_modifier": -1,
+        "target_scope": "one-visible-enemy",
+        "range_inches": 9,
+        "excludes": [
+          "Monster",
+          "Vehicle"
+        ]
+      }
+    },
+    "scope": {
+      "range": "aura-custom",
+      "duration": "phase",
+      "range_inches": 9
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Warp Talons"
+      ]
+    }
+  },
+  {
+    "ability_id": "warp-portals",
+    "name": "Warp Portals",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "warpstrike-champions",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "ability-grant",
+      "target": "all-friendly",
+      "modifier": {
+        "grant_type": "redeploy-to-reserves",
+        "timing": "end-of-opponent-turn",
+        "max_units_by_battle_size": {
+          "incursion": 1,
+          "strike-force": 2,
+          "onslaught": 3
+        },
+        "excludes": [
+          "in-engagement-range"
+        ]
+      }
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ]
+    }
+  },
+  {
+    "ability_id": "infernal-fulgurite",
+    "name": "Infernal Fulgurite",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "warpstrike-champions",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "ability-grant",
+      "target": "bearer",
+      "modifier": {
+        "grant_type": "stratagem-for-0cp",
+        "stratagem": "rapid-ingress",
+        "frequency": "once-per-battle"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Damned"
+      ]
+    }
+  },
+  {
+    "ability_id": "eye-of-the-warp",
+    "name": "Eye of the Warp",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "warpstrike-champions",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "unit-set-up"
+        }
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "unit",
+        "modifier": {
+          "roll": "charge",
+          "subset": "all-failures"
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ]
+    }
+  },
+  {
+    "ability_id": "akshurs-binding-runes",
+    "name": "Akshur's Binding Runes",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "warpstrike-champions",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "deep-strike",
+      "target": "bearer",
+      "modifier": {
+        "turns": [
+          1,
+          2,
+          3
+        ],
+        "ignores_mission_rules": true
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ]
+    }
+  },
+  {
+    "ability_id": "tzagulla",
+    "name": "Tzagulla",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "warpstrike-champions",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "bearer",
+          "modifier": {
+            "stat": "A",
+            "operation": "add",
+            "value": 1
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "bearer",
+          "modifier": {
+            "stat": "S",
+            "operation": "add",
+            "value": 1
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "bearer",
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "set-up-from-reserves"
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "bearer",
+            "modifier": {
+              "stat": "D",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ]
+    }
+  },
+  {
+    "ability_id": "empyric-dislocation",
+    "name": "Empyric Dislocation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "warpstrike-champions",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "unit",
+      "modifier": {
+        "stat": "AP",
+        "operation": "worsen",
+        "value": 1,
+        "incoming": true
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Damned"
+      ]
+    }
+  },
+  {
+    "ability_id": "warp-tainted",
+    "name": "Warp-Tainted",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "warpstrike-champions",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "objective-tag",
+      "target": "unit",
+      "modifier": {
+        "tag": "held",
+        "source": "this-action",
+        "clears_on": "never"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ]
+    }
+  },
+  {
+    "ability_id": "siegebreaker-strike",
+    "name": "Siegebreaker Strike",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "warpstrike-champions",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Ignores Cover"
+        ],
+        "scope": "weapon",
+        "attack_type": "ranged",
+        "max_units": 2
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ]
+    }
+  },
+  {
+    "ability_id": "armour-of-corruption",
+    "name": "Armour of Corruption",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "warpstrike-champions",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "damage-reduction",
+      "target": "unit",
+      "modifier": {
+        "value": 1,
+        "incoming": true
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ]
+    }
+  },
+  {
+    "ability_id": "warp-flicker",
+    "name": "Warp Flicker",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "warpstrike-champions",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "act-after-move",
+        "moves": [
+          "advance"
+        ],
+        "acts": [
+          "shoot",
+          "charge"
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ]
+    }
+  },
+  {
+    "ability_id": "portal-of-spite",
+    "name": "Portal of Spite",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "warpstrike-champions",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "charge-roll-modifier",
+      "target": "unit",
+      "modifier": {
+        "operation": "add",
+        "value": 2
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ]
+    }
+  },
+  {
+    "ability_id": "soul-forge-boons",
+    "name": "Soul Forge Boons",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "cult-of-the-arkifane",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "keyword-grant",
+          "target": "all-friendly",
+          "modifier": {
+            "keywords": [
+              "Daemon"
+            ],
+            "applies_to_keyword": "Vehicle"
+          }
+        },
+        {
+          "type": "keyword-grant",
+          "target": "all-friendly",
+          "modifier": {
+            "keywords": [
+              "Soul Forge"
+            ],
+            "applies_to_keywords": [
+              "Vehicle",
+              "Lord Discordant",
+              "Vashtorr the Arkifane"
+            ]
+          }
+        },
+        {
+          "type": "invulnerable-save",
+          "target": "all-friendly",
+          "modifier": {
+            "threshold": 5,
+            "applies_to_keyword": "Soul Forge"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ]
+    }
+  },
+  {
+    "ability_id": "wyredjinn",
+    "name": "Wyredjinn",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "cult-of-the-arkifane",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 4,
+        "comparison": "gte",
+        "on_success": {
+          "type": "cp-gain",
+          "target": "self",
+          "modifier": {
+            "amount": 1
+          }
+        },
+        "on_fail": null
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Damned"
+      ]
+    }
+  },
+  {
+    "ability_id": "cybinfernal-font",
+    "name": "Cybinfernal Font",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "cult-of-the-arkifane",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Soul Forge"
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Damned"
+      ]
+    }
+  },
+  {
+    "ability_id": "mark-of-the-soul-forges",
+    "name": "Mark of the Soul Forges",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "cult-of-the-arkifane",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "ability-grant",
+      "target": "bearer",
+      "modifier": {
+        "grant_type": "critical-hit-on",
+        "value": 5
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Damned"
+      ]
+    }
+  },
+  {
+    "ability_id": "crown-of-worms",
+    "name": "Crown of Worms",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "cult-of-the-arkifane",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "ability-grant",
+      "target": "bearer",
+      "modifier": {
+        "grant_type": "ability-range-modifier",
+        "value": 3,
+        "unit": "inches",
+        "abilities": [
+          "warpsmith",
+          "master-of-mechanisms",
+          "enrage-machine-spirits"
+        ]
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Warpsmith"
+      ]
+    }
+  },
+  {
+    "ability_id": "touch-of-the-arkifane",
+    "name": "Touch of the Arkifane",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "cult-of-the-arkifane",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "dark-pact-both-abilities"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ],
+      "excluded_keywords": [
+        "Damned"
+      ]
+    }
+  },
+  {
+    "ability_id": "balefire-boon",
+    "name": "Balefire Boon",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "cult-of-the-arkifane",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "unit",
+      "modifier": {
+        "stat": "AP",
+        "operation": "improve",
+        "value": 1
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Soul Forge"
+      ]
+    }
+  },
+  {
+    "ability_id": "soul-tally-offering",
+    "name": "Soul-Tally Offering",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "cult-of-the-arkifane",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "target-has-keyword",
+        "parameters": {
+          "keyword": "character-monster-or-vehicle"
+        }
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "unit",
+        "modifier": {
+          "roll": "wound",
+          "subset": "all-failures"
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Soul Forge"
+      ]
+    }
+  },
+  {
+    "ability_id": "biomechanoid-regeneration",
+    "name": "Biomechanoid Regeneration",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "cult-of-the-arkifane",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "heal-wounds",
+        "amount": "D3",
+        "amount_if_soul_forge": 3,
+        "models": 1
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ]
+    }
+  },
+  {
+    "ability_id": "forge-fire-surge",
+    "name": "Forge-Fire Surge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "cult-of-the-arkifane",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "act-after-move",
+        "moves": [
+          "advance"
+        ],
+        "acts": [
+          "shoot"
+        ],
+        "acts_if_soul_forge": [
+          "shoot",
+          "charge"
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Heretic Astartes"
+      ]
+    }
+  },
+  {
+    "ability_id": "unholy-fortitude",
+    "name": "Unholy Fortitude",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": "cult-of-the-arkifane",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "unit",
+      "modifier": {
+        "stat": "T",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Soul Forge"
+      ]
+    }
   }
 ]

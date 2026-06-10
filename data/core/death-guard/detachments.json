@@ -23,33 +23,35 @@
       "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 3,
-    "force_dispositions": ["take-and-hold"]
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "flyblown-host",
     "name": "Flyblown Host",
     "faction_id": "death-guard",
-    "detachment_rule_id": null,
+    "detachment_rule_id": "verminous-haze",
     "enhancement_ids": [
-      "droning-chorus",
       "insectile-murmuration",
-      "rejuvenating-swarm",
       "plagueveil"
     ],
     "stratagem_ids": [
-      "droning-horror",
-      "myphitic-invigoration",
-      "vermin-cloud",
-      "enervating-onslaught",
       "nauseating-paroxysms",
+      "droning-horror",
       "eye-of-the-swarm"
     ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 1,
+    "force_dispositions": [
+      "reconnaissance"
+    ],
+    "tags": [
+      "flyblown"
+    ]
   },
   {
     "id": "tallyband-summoners",
@@ -74,8 +76,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "champions-of-contagion",
@@ -100,8 +104,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "mortarions-hammer",
@@ -126,8 +132,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "shamblerot-vectorium",
@@ -152,8 +160,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "death-lords-chosen",
@@ -178,7 +188,58 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "priority-assets"
+    ]
+  },
+  {
+    "id": "contagion-engines",
+    "name": "Contagion Engines",
+    "faction_id": "death-guard",
+    "detachment_rule_id": "warped-and-rusted-animus",
+    "enhancement_ids": [
+      "parasitic-woe-reaper",
+      "lancet-of-the-worldsore"
+    ],
+    "stratagem_ids": [
+      "fresh-vectors",
+      "bloodrust-deluge",
+      "soulrot-flux"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "purge-the-foe"
+    ],
+    "tags": [
+      "engines"
+    ]
+  },
+  {
+    "id": "paragons-of-putrescence",
+    "name": "Paragons of Putrescence",
+    "faction_id": "death-guard",
+    "detachment_rule_id": "hypervirulent-strains",
+    "enhancement_ids": [
+      "rejuvenating-swarm",
+      "host-of-the-hybridised-pox"
+    ],
+    "stratagem_ids": [
+      "territorial-infection",
+      "aggravus-spasms",
+      "simultaneous-contamination"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   }
 ]

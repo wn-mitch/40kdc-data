@@ -2080,5 +2080,667 @@
     "faction_id": "emperors-children",
     "ability_type": "faction",
     "behavior": "passive"
+  },
+  {
+    "ability_id": "eager-to-kill",
+    "name": "Eager to Kill",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "elegant-brutes",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "unit-set-up"
+        }
+      },
+      "effect": {
+        "type": "charge-roll-modifier",
+        "target": "unit",
+        "modifier": {
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Emperor's Children",
+        "Terminator"
+      ]
+    }
+  },
+  {
+    "ability_id": "frantic-focus",
+    "name": "Frantic Focus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "frenzied-host",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "advanced-this-turn",
+        "parameters": {
+          "move": "advance-or-fall-back"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "all-friendly",
+        "modifier": {
+          "stat": "S",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Emperor's Children",
+        "Battleline"
+      ]
+    }
+  },
+  {
+    "ability_id": "entitled-to-victory",
+    "name": "Entitled to Victory",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "spectacle-of-slaughter",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "fight-first",
+      "target": "all-friendly",
+      "modifier": {}
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Emperor's Children",
+        "Flawless Blades"
+      ]
+    }
+  },
+  {
+    "ability_id": "cacophonic-accompaniment",
+    "name": "Cacophonic Accompaniment",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "elegant-brutes",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "deep-strike",
+          "target": "bearer",
+          "modifier": {}
+        },
+        {
+          "type": "keyword-grant",
+          "target": "bearer",
+          "modifier": {
+            "keywords": [
+              "Ignores Cover"
+            ],
+            "scope": "weapon",
+            "attack_type": "ranged"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Emperor's Children",
+        "Lord Kakophonist"
+      ]
+    }
+  },
+  {
+    "ability_id": "frenzied-ferocity",
+    "name": "Frenzied Ferocity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "elegant-brutes",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "bearer",
+      "modifier": {
+        "keywords": [
+          "Sustained Hits 1"
+        ],
+        "scope": "weapon"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Emperor's Children",
+        "Terminator Squad"
+      ]
+    }
+  },
+  {
+    "ability_id": "euphoric-crown",
+    "name": "Euphoric Crown",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "frenzied-host",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "bearer",
+      "modifier": {
+        "stat": "S",
+        "operation": "add",
+        "value": 1,
+        "attack_type": "melee"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Emperor's Children",
+        "Lord Exultant"
+      ]
+    }
+  },
+  {
+    "ability_id": "howling-plate",
+    "name": "Howling Plate",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "frenzied-host",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "unit",
+      "modifier": {
+        "stat": "AP",
+        "operation": "improve",
+        "value": 1,
+        "attack_type": "ranged"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Emperor's Children",
+        "Lord Exultant"
+      ]
+    }
+  },
+  {
+    "ability_id": "eager-patrons",
+    "name": "Eager Patrons",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "spectacle-of-slaughter",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "bearer",
+      "modifier": {
+        "stat": "M",
+        "operation": "add",
+        "value": 2,
+        "unit": "inches"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Emperor's Children",
+        "Flawless Blades"
+      ]
+    }
+  },
+  {
+    "ability_id": "beguiling-grotesquerie",
+    "name": "Beguiling Grotesquerie",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "spectacle-of-slaughter",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "attack-restriction",
+      "target": "bearer",
+      "modifier": {
+        "restriction": "cannot-be-targeted",
+        "by": "all-enemy"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Emperor's Children",
+        "Flawless Blades"
+      ]
+    }
+  },
+  {
+    "ability_id": "delight-in-agony",
+    "name": "Delight in Agony",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "elegant-brutes",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "unit",
+      "modifier": {
+        "roll": "wound",
+        "operation": "subtract",
+        "value": 1,
+        "incoming": true,
+        "applies_when": "attacker-strength-greater-than-target-toughness"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Emperor's Children",
+        "Terminator"
+      ]
+    }
+  },
+  {
+    "ability_id": "psychedelic-soulflame",
+    "name": "Psychedelic Soulflame",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "elegant-brutes",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "unit",
+      "modifier": {
+        "stat": "S",
+        "operation": "add",
+        "value": 2
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Emperor's Children",
+        "Terminator"
+      ]
+    }
+  },
+  {
+    "ability_id": "warp-plunge",
+    "name": "Warp Plunge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "elegant-brutes",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "place-in-strategic-reserves"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Emperor's Children",
+        "Terminator"
+      ]
+    }
+  },
+  {
+    "ability_id": "possessive-mania",
+    "name": "Possessive Mania",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "frenzied-host",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "unit",
+      "modifier": {
+        "stat": "AP",
+        "operation": "worsen",
+        "value": 1,
+        "incoming": true,
+        "until": "attacker-has-attacked"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Emperor's Children",
+        "Battleline"
+      ]
+    }
+  },
+  {
+    "ability_id": "agonised-cacophony",
+    "name": "Agonised Cacophony",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "frenzied-host",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "all-enemy",
+      "modifier": {
+        "grant_type": "detection-range-modifier",
+        "value": 6,
+        "unit": "inches",
+        "target_scope": "one-visible-enemy",
+        "range_inches": 12
+      }
+    },
+    "scope": {
+      "range": "any-visible",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Emperor's Children",
+        "Battleline"
+      ]
+    }
+  },
+  {
+    "ability_id": "absolute-sensory-overload",
+    "name": "Absolute Sensory Overload",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "frenzied-host",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "remain-hidden-after-shooting"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Emperor's Children",
+        "Battleline"
+      ]
+    }
+  },
+  {
+    "ability_id": "honour-is-for-fools",
+    "name": "Honour is for Fools",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "spectacle-of-slaughter",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Precision"
+        ],
+        "scope": "weapon",
+        "attack_type": "melee"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Flawless Blades"
+      ]
+    }
+  },
+  {
+    "ability_id": "single-minded-strike",
+    "name": "Single-Minded Strike",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "spectacle-of-slaughter",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "move-through-models",
+        "excludes": [
+          "Monster",
+          "Vehicle"
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Flawless Blades"
+      ]
+    }
+  },
+  {
+    "ability_id": "intoxicated-by-triumph",
+    "name": "Intoxicated by Triumph",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "emperors-children",
+    "detachment_id": "spectacle-of-slaughter",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "movement-modifier",
+      "target": "unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": "D3+3",
+        "unit": "inches",
+        "trigger": "enemy-fell-back-from-engagement"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Flawless Blades"
+      ]
+    }
   }
 ]

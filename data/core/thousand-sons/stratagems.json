@@ -45,13 +45,19 @@
     "category": "detachment",
     "type": "battle-tactic",
     "detachment_id": "warpforged-cabal",
-    "cp_cost": 1,
+    "cp_cost": 2,
     "phases": [
       "shooting"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Thousand Sons",
+        "Vehicle"
+      ],
+      "notes": "Has not been selected to shoot this phase; within 6\" of one or more friendly THOUSAND SONS PSYKER units."
+    },
     "ability_id": null,
     "game_version": {
       "edition": "11th",
@@ -693,6 +699,172 @@
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "relentless-rebirth",
+    "name": "RELENTLESS REBIRTH",
+    "category": "detachment",
+    "detachment_id": "ritual-of-regeneration",
+    "cp_cost": 1,
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "relentless-rebirth",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "mutagenic-magicks",
+    "name": "MUTAGENIC MAGICKS",
+    "category": "detachment",
+    "detachment_id": "ritual-of-regeneration",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "mutagenic-magicks",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "multitudinous-limbs",
+    "name": "MULTITUDINOUS LIMBS",
+    "category": "detachment",
+    "detachment_id": "ritual-of-regeneration",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "multitudinous-limbs",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "arcane-venting",
+    "name": "ARCANE VENTING",
+    "category": "detachment",
+    "detachment_id": "sekhetar-cohort",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "arcane-venting",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "ectoplasmic-extrusion",
+    "name": "ECTOPLASMIC EXTRUSION",
+    "category": "detachment",
+    "detachment_id": "sekhetar-cohort",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "ectoplasmic-extrusion",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "warp-fields",
+    "name": "WARP FIELDS",
+    "category": "detachment",
+    "detachment_id": "sekhetar-cohort",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "warp-fields",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "prismatic-displacement",
+    "name": "PRISMATIC DISPLACEMENT",
+    "category": "detachment",
+    "detachment_id": "servants-of-change",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "prismatic-displacement",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "temporal-instability",
+    "name": "TEMPORAL INSTABILITY",
+    "category": "detachment",
+    "detachment_id": "servants-of-change",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "temporal-instability",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "the-land-writhes",
+    "name": "THE LAND WRITHES",
+    "category": "detachment",
+    "detachment_id": "servants-of-change",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "the-land-writhes",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

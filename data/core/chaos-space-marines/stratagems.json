@@ -57,25 +57,6 @@
     }
   },
   {
-    "id": "shroud-of-chaos",
-    "name": "SHROUD OF CHAOS",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "cabal-of-chaos",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "opponent-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
     "id": "unfailingly-obdurate",
     "name": "UNFAILINGLY OBDURATE",
     "category": "detachment",
@@ -503,48 +484,6 @@
     }
   },
   {
-    "id": "baleful-blessing",
-    "name": "BALEFUL BLESSING",
-    "category": "detachment",
-    "type": "epic-deed",
-    "detachment_id": "cabal-of-chaos",
-    "cp_cost": 1,
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "unholy-haste",
-    "name": "UNHOLY HASTE",
-    "category": "detachment",
-    "type": "epic-deed",
-    "detachment_id": "cabal-of-chaos",
-    "cp_cost": 1,
-    "phases": [
-      "charge"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
     "id": "brutal-attrition",
     "name": "BRUTAL ATTRITION",
     "category": "detachment",
@@ -688,7 +627,7 @@
     "category": "detachment",
     "type": "epic-deed",
     "detachment_id": "veterans-of-the-long-war",
-    "cp_cost": 2,
+    "cp_cost": 1,
     "phases": [
       "fight"
     ],
@@ -750,63 +689,6 @@
       "fight"
     ],
     "player_turn": "opponent-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "no-rest-in-death",
-    "name": "NO REST IN DEATH",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "cabal-of-chaos",
-    "cp_cost": 1,
-    "phases": [
-      "movement"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "mutations-curse",
-    "name": "MUTATION’S CURSE",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "cabal-of-chaos",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "soulseekers",
-    "name": "SOULSEEKERS",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "cabal-of-chaos",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": null,
@@ -1500,6 +1382,391 @@
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "infernal-vigour",
+    "name": "INFERNAL VIGOUR",
+    "category": "detachment",
+    "detachment_id": "cabal-of-chaos",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "infernal-vigour",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "fleshy-curse",
+    "name": "FLESHY CURSE",
+    "category": "detachment",
+    "detachment_id": "cabal-of-chaos",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "fleshy-curse",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "wreathed-in-warpflame",
+    "name": "WREATHED IN WARPFLAME",
+    "category": "detachment",
+    "detachment_id": "cabal-of-chaos",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "wreathed-in-warpflame",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "ruinations-bounty",
+    "name": "RUINATION'S BOUNTY",
+    "category": "detachment",
+    "detachment_id": "devotees-of-destruction",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "ruinations-bounty",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "snare-of-fire",
+    "name": "SNARE OF FIRE",
+    "category": "detachment",
+    "detachment_id": "devotees-of-destruction",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "snare-of-fire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "undying-hatred-devotees",
+    "name": "UNDYING HATRED",
+    "category": "detachment",
+    "detachment_id": "devotees-of-destruction",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "undying-hatred-devotees",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "plunging-talons",
+    "name": "PLUNGING TALONS",
+    "category": "detachment",
+    "detachment_id": "murdertalon-raiders",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "plunging-talons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "raking-pass",
+    "name": "RAKING PASS",
+    "category": "detachment",
+    "detachment_id": "murdertalon-raiders",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "raking-pass",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "warp-twisted-terrors",
+    "name": "WARP-TWISTED TERRORS",
+    "category": "detachment",
+    "detachment_id": "murdertalon-raiders",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "warp-twisted-terrors",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "empyric-dislocation",
+    "name": "EMPYRIC DISLOCATION",
+    "category": "detachment",
+    "detachment_id": "warpstrike-champions",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "empyric-dislocation",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "warp-tainted",
+    "name": "WARP-TAINTED",
+    "category": "detachment",
+    "detachment_id": "warpstrike-champions",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "warp-tainted",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "siegebreaker-strike",
+    "name": "SIEGEBREAKER STRIKE",
+    "category": "detachment",
+    "detachment_id": "warpstrike-champions",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "siegebreaker-strike",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "armour-of-corruption",
+    "name": "ARMOUR OF CORRUPTION",
+    "category": "detachment",
+    "detachment_id": "warpstrike-champions",
+    "cp_cost": 2,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "armour-of-corruption",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "warp-flicker",
+    "name": "WARP FLICKER",
+    "category": "detachment",
+    "detachment_id": "warpstrike-champions",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "warp-flicker",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "portal-of-spite",
+    "name": "PORTAL OF SPITE",
+    "category": "detachment",
+    "detachment_id": "warpstrike-champions",
+    "cp_cost": 1,
+    "phases": [
+      "charge"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "portal-of-spite",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "touch-of-the-arkifane",
+    "name": "TOUCH OF THE ARKIFANE",
+    "category": "detachment",
+    "detachment_id": "cult-of-the-arkifane",
+    "cp_cost": 1,
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "touch-of-the-arkifane",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "balefire-boon",
+    "name": "BALEFIRE BOON",
+    "category": "detachment",
+    "detachment_id": "cult-of-the-arkifane",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "balefire-boon",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "soul-tally-offering",
+    "name": "SOUL-TALLY OFFERING",
+    "category": "detachment",
+    "detachment_id": "cult-of-the-arkifane",
+    "cp_cost": 2,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "soul-tally-offering",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "biomechanoid-regeneration",
+    "name": "BIOMECHANOID REGENERATION",
+    "category": "detachment",
+    "detachment_id": "cult-of-the-arkifane",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "biomechanoid-regeneration",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "forge-fire-surge",
+    "name": "FORGE-FIRE SURGE",
+    "category": "detachment",
+    "detachment_id": "cult-of-the-arkifane",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "forge-fire-surge",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "unholy-fortitude",
+    "name": "UNHOLY FORTITUDE",
+    "category": "detachment",
+    "detachment_id": "cult-of-the-arkifane",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "unholy-fortitude",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

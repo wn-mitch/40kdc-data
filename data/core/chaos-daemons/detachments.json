@@ -22,8 +22,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "daemonic-incursion",
@@ -48,8 +50,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "plague-legion",
@@ -74,8 +78,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "shadow-legion",
@@ -100,8 +106,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "scintillating-legion",
@@ -126,8 +134,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "legion-of-excess",
@@ -152,7 +162,78 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "priority-assets"
+    ]
+  },
+  {
+    "id": "cavalcade-of-chaos",
+    "name": "Cavalcade of Chaos",
+    "faction_id": "chaos-daemons",
+    "detachment_rule_id": "unholy-avalanche",
+    "enhancement_ids": [
+      "apocalyptic-steeds",
+      "soul-shattering-charge"
+    ],
+    "stratagem_ids": [
+      "from-beyond-the-veil",
+      "warp-riders",
+      "inescapable-manifestations"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "disruption"
+    ]
+  },
+  {
+    "id": "lords-of-the-warp",
+    "name": "Lords of the Warp",
+    "faction_id": "chaos-daemons",
+    "detachment_rule_id": "loci-of-power",
+    "enhancement_ids": [
+      "swollen-with-power"
+    ],
+    "stratagem_ids": [
+      "carnival-of-excess",
+      "call-to-murder",
+      "bilious-blessing",
+      "skirling-magicks"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
+  },
+  {
+    "id": "warptide",
+    "name": "Warptide",
+    "faction_id": "chaos-daemons",
+    "detachment_rule_id": "shudderblink",
+    "enhancement_ids": [
+      "bane-forged-weapons",
+      "soul-hungry-slaughterers"
+    ],
+    "stratagem_ids": [
+      "daemonic-infestation",
+      "soulseeing",
+      "incorporeal-entities"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "reconnaissance"
+    ]
   }
 ]

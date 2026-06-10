@@ -687,30 +687,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "myphitic-invigoration",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "vermin-cloud",
-    "source_type": "stratagem",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "clutching-corruption",
     "source_type": "stratagem",
     "phases": [
@@ -871,18 +847,6 @@
       "shooting",
       "charge",
       "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "enervating-onslaught",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
     ],
     "game_version": {
       "edition": "11th",
@@ -1235,18 +1199,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "droning-chorus",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "eye-of-affliction",
     "source_type": "enhancement",
     "phases": [
@@ -1537,6 +1489,142 @@
     "phases": [
       "command",
       "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "warped-and-rusted-animus",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "hypervirulent-strains",
+    "source_type": "ability",
+    "phases": [
+      "command",
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "parasitic-woe-reaper",
+    "source_type": "ability",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "lancet-of-the-worldsore",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "host-of-the-hybridised-pox",
+    "source_type": "ability",
+    "phases": [
+      "command"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "fresh-vectors",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "bloodrust-deluge",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "soulrot-flux",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "territorial-infection",
+    "source_type": "ability",
+    "phases": [
+      "command"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "aggravus-spasms",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "simultaneous-contamination",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
     ],
     "game_version": {
       "edition": "11th",

@@ -702,5 +702,185 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     }
+  },
+  {
+    "id": "from-beyond-the-veil",
+    "name": "FROM BEYOND THE VEIL",
+    "category": "detachment",
+    "detachment_id": "cavalcade-of-chaos",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "from-beyond-the-veil",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "warp-riders",
+    "name": "WARP-RIDERS",
+    "category": "detachment",
+    "detachment_id": "cavalcade-of-chaos",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "warp-riders",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "inescapable-manifestations",
+    "name": "INESCAPABLE MANIFESTATIONS",
+    "category": "detachment",
+    "detachment_id": "cavalcade-of-chaos",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "inescapable-manifestations",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "carnival-of-excess",
+    "name": "CARNIVAL OF EXCESS",
+    "category": "detachment",
+    "detachment_id": "lords-of-the-warp",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "carnival-of-excess",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "call-to-murder",
+    "name": "CALL TO MURDER",
+    "category": "detachment",
+    "detachment_id": "lords-of-the-warp",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "call-to-murder",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "bilious-blessing",
+    "name": "BILIOUS BLESSING",
+    "category": "detachment",
+    "detachment_id": "lords-of-the-warp",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "bilious-blessing",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "skirling-magicks",
+    "name": "SKIRLING MAGICKS",
+    "category": "detachment",
+    "detachment_id": "lords-of-the-warp",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "skirling-magicks",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "daemonic-infestation",
+    "name": "DAEMONIC INFESTATION",
+    "category": "detachment",
+    "detachment_id": "warptide",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "daemonic-infestation",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "soulseeing",
+    "name": "SOULSEEING",
+    "category": "detachment",
+    "detachment_id": "warptide",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "soulseeing",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "incorporeal-entities",
+    "name": "INCORPOREAL ENTITIES",
+    "category": "detachment",
+    "detachment_id": "warptide",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "incorporeal-entities",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   }
 ]

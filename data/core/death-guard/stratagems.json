@@ -12,45 +12,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "myphitic-invigoration",
-    "name": "MYPHITIC INVIGORATION",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "flyblown-host",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "opponent-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "vermin-cloud",
-    "name": "VERMIN CLOUD",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "flyblown-host",
-    "cp_cost": 1,
-    "phases": [
-      "fight"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "droning-horror",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -316,25 +278,6 @@
     }
   },
   {
-    "id": "enervating-onslaught",
-    "name": "ENERVATING ONSLAUGHT",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "flyblown-host",
-    "cp_cost": 1,
-    "phases": [
-      "charge"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
     "id": "nauseating-paroxysms",
     "name": "NAUSEATING PAROXYSMS",
     "category": "detachment",
@@ -347,7 +290,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "nauseating-paroxysms",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -366,7 +309,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "eye-of-the-swarm",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -810,6 +753,115 @@
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "fresh-vectors",
+    "name": "FRESH VECTORS",
+    "category": "detachment",
+    "detachment_id": "contagion-engines",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "fresh-vectors",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "bloodrust-deluge",
+    "name": "BLOODRUST DELUGE",
+    "category": "detachment",
+    "detachment_id": "contagion-engines",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "bloodrust-deluge",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "soulrot-flux",
+    "name": "SOULROT FLUX",
+    "category": "detachment",
+    "detachment_id": "contagion-engines",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "soulrot-flux",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "territorial-infection",
+    "name": "TERRITORIAL INFECTION",
+    "category": "detachment",
+    "detachment_id": "paragons-of-putrescence",
+    "cp_cost": 1,
+    "phases": [
+      "command"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "territorial-infection",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "aggravus-spasms",
+    "name": "AGGRAVUS SPASMS",
+    "category": "detachment",
+    "detachment_id": "paragons-of-putrescence",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "aggravus-spasms",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "simultaneous-contamination",
+    "name": "SIMULTANEOUS CONTAMINATION",
+    "category": "detachment",
+    "detachment_id": "paragons-of-putrescence",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "simultaneous-contamination",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

@@ -22,8 +22,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "reconnaissance"
+    ]
   },
   {
     "id": "warpforged-cabal",
@@ -48,8 +50,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "disruption"
+    ]
   },
   {
     "id": "hexwarp-thrallband",
@@ -74,8 +78,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
   },
   {
     "id": "grand-coven",
@@ -100,8 +106,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "warpmeld-pact",
@@ -126,8 +134,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "rubricae-phalanx",
@@ -152,7 +162,92 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
+  },
+  {
+    "id": "ritual-of-regeneration",
+    "name": "Ritual of Regeneration",
+    "faction_id": "thousand-sons",
+    "detachment_rule_id": "sorcerous-invigoration",
+    "enhancement_ids": [
+      "eruption-of-vitality",
+      "curse-of-life"
+    ],
+    "stratagem_ids": [
+      "relentless-rebirth",
+      "mutagenic-magicks",
+      "multitudinous-limbs"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
+  },
+  {
+    "id": "sekhetar-cohort",
+    "name": "Sekhetar Cohort",
+    "faction_id": "thousand-sons",
+    "detachment_rule_id": "ensorcelled-animus",
+    "enhancement_ids": [
+      "walking-rampart",
+      "occulus-infernum"
+    ],
+    "stratagem_ids": [
+      "arcane-venting",
+      "ectoplasmic-extrusion",
+      "warp-fields"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ],
+    "tags": [
+      "mutant"
+    ]
+  },
+  {
+    "id": "servants-of-change",
+    "name": "Servants of Change",
+    "faction_id": "thousand-sons",
+    "detachment_rule_id": "all-seeing-mutant-hordes",
+    "enhancement_ids": [
+      "unravelled-fates",
+      "thicket-of-bladed-bone"
+    ],
+    "stratagem_ids": [
+      "prismatic-displacement",
+      "temporal-instability",
+      "the-land-writhes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "reconnaissance"
+    ],
+    "tags": [
+      "mutant"
+    ],
+    "granted_keywords": [
+      {
+        "keyword": "Battleline",
+        "to_keywords": [
+          "Tzaangors"
+        ]
+      }
+    ]
   }
 ]

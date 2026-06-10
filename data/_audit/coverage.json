@@ -90,10 +90,10 @@
     },
     {
       "faction": "chaos-daemons",
-      "total": 129,
-      "offensive": 35,
+      "total": 147,
+      "offensive": 39,
       "defensive": 14,
-      "inert": 86,
+      "inert": 100,
       "stub": 7,
       "stubStructural": 1,
       "gwTextLeak": 0,
@@ -112,10 +112,10 @@
     },
     {
       "faction": "chaos-space-marines",
-      "total": 182,
-      "offensive": 47,
-      "defensive": 16,
-      "inert": 126,
+      "total": 222,
+      "offensive": 63,
+      "defensive": 17,
+      "inert": 149,
       "stub": 21,
       "stubStructural": 7,
       "gwTextLeak": 0,
@@ -123,10 +123,10 @@
     },
     {
       "faction": "death-guard",
-      "total": 89,
-      "offensive": 19,
+      "total": 107,
+      "offensive": 25,
       "defensive": 7,
-      "inert": 66,
+      "inert": 78,
       "stub": 8,
       "stubStructural": 4,
       "gwTextLeak": 0,
@@ -145,10 +145,10 @@
     },
     {
       "faction": "emperors-children",
-      "total": 61,
-      "offensive": 13,
+      "total": 79,
+      "offensive": 21,
       "defensive": 3,
-      "inert": 46,
+      "inert": 56,
       "stub": 8,
       "stubStructural": 3,
       "gwTextLeak": 0,
@@ -233,10 +233,10 @@
     },
     {
       "faction": "thousand-sons",
-      "total": 95,
-      "offensive": 25,
-      "defensive": 8,
-      "inert": 67,
+      "total": 113,
+      "offensive": 30,
+      "defensive": 9,
+      "inert": 79,
       "stub": 17,
       "stubStructural": 10,
       "gwTextLeak": 0,
@@ -266,10 +266,10 @@
     }
   ],
   "totals": {
-    "total": 2631,
-    "offensive": 623,
-    "defensive": 244,
-    "inert": 1848,
+    "total": 2743,
+    "offensive": 662,
+    "defensive": 246,
+    "inert": 1919,
     "stub": 154,
     "stubStructural": 188,
     "gwTextLeak": 0,
@@ -278,7 +278,7 @@
   "unsupportedReasons": [
     {
       "reason": "effect type \"ability-grant\" is not modelled by the buff layer",
-      "count": 388
+      "count": 426
     },
     {
       "reason": "stat-modifier: operation \"undefined\" not supported",
@@ -286,27 +286,27 @@
     },
     {
       "reason": "effect type \"movement-modifier\" is not modelled by the buff layer",
-      "count": 157
+      "count": 159
     },
     {
       "reason": "effect type \"mortal-wounds\" is not modelled by the buff layer",
-      "count": 123
+      "count": 127
     },
     {
       "reason": "effect type \"attack-restriction\" is not modelled by the buff layer",
-      "count": 88
+      "count": 89
     },
     {
       "reason": "dice-gated effect: stochastic; not expressible as a buff",
-      "count": 87
+      "count": 88
     },
     {
       "reason": "effect type \"leadership-modifier\" is not modelled by the buff layer",
-      "count": 71
+      "count": 73
     },
     {
       "reason": "effect type \"resurrection\" is not modelled by the buff layer",
-      "count": 54
+      "count": 55
     },
     {
       "reason": "effect type \"cp-refund\" is not modelled by the buff layer",
@@ -318,19 +318,19 @@
     },
     {
       "reason": "effect type \"objective-control-modifier\" is not modelled by the buff layer",
-      "count": 42
+      "count": 43
     },
     {
       "reason": "stat-modifier: operation \"set\" not supported",
       "count": 39
     },
     {
-      "reason": "re-roll on \"charge\" (subset …) is outside the damage path",
-      "count": 35
+      "reason": "effect type \"deep-strike\" is not modelled by the buff layer",
+      "count": 36
     },
     {
-      "reason": "effect type \"deep-strike\" is not modelled by the buff layer",
-      "count": 34
+      "reason": "re-roll on \"charge\" (subset …) is outside the damage path",
+      "count": 35
     },
     {
       "reason": "effect type \"cp-gain\" is not modelled by the buff layer",
@@ -346,7 +346,7 @@
     },
     {
       "reason": "effect type \"fight-first\" is not modelled by the buff layer",
-      "count": 20
+      "count": 22
     },
     {
       "reason": "roll-modifier: operation \"set\" not supported",
@@ -354,7 +354,7 @@
     },
     {
       "reason": "stat-modifier on \"M\" is outside the damage path",
-      "count": 16
+      "count": 18
     },
     {
       "reason": "roll-modifier: operation \"ignore-modifiers\" not supported",
@@ -381,15 +381,27 @@
       "count": 7
     },
     {
+      "reason": "stat-modifier T: defender-side stat; applies when the buffed unit is the target",
+      "count": 6
+    },
+    {
       "reason": "stat-modifier AP on the attacker: defender-side AP reduction is not modelled by the buff layer",
       "count": 5
     },
     {
-      "reason": "stat-modifier T: defender-side stat; applies when the buffed unit is the target",
-      "count": 5
+      "reason": "stat-modifier on \"W\" is outside the damage path",
+      "count": 4
     },
     {
       "reason": "re-roll on \"advance\" (subset …) is outside the damage path",
+      "count": 4
+    },
+    {
+      "reason": "stat-modifier on \"Ld\" is outside the damage path",
+      "count": 4
+    },
+    {
+      "reason": "conditional: cannot evaluate condition \"advanced-this-turn\" against current context",
       "count": 4
     },
     {
@@ -413,15 +425,11 @@
       "count": 3
     },
     {
-      "reason": "stat-modifier on \"W\" is outside the damage path",
-      "count": 3
-    },
-    {
       "reason": "conditional: cannot evaluate condition \"opponent-unit-within-range\" against current context",
       "count": 3
     },
     {
-      "reason": "stat-modifier on \"Ld\" is outside the damage path",
+      "reason": "effect type \"charge-roll-modifier\" is not modelled by the buff layer",
       "count": 3
     },
     {
@@ -437,11 +445,23 @@
       "count": 2
     },
     {
-      "reason": "effect type \"charge-roll-modifier\" is not modelled by the buff layer",
+      "reason": "re-roll on \"leadership\" (subset …) is outside the damage path",
+      "count": 2
+    },
+    {
+      "reason": "stat-modifier on \"WS\" is outside the damage path",
       "count": 2
     },
     {
       "reason": "re-roll on \"blood-surge\" (subset …) is outside the damage path",
+      "count": 2
+    },
+    {
+      "reason": "conditional: cannot evaluate condition \"destroyed-by-attack-type\" against current context",
+      "count": 2
+    },
+    {
+      "reason": "effect type \"objective-tag\" is not modelled by the buff layer",
       "count": 2
     },
     {
@@ -461,11 +481,11 @@
       "count": 1
     },
     {
-      "reason": "conditional: cannot evaluate condition \"advanced-this-turn\" against current context",
+      "reason": "stat-modifier: narrows by \"weapon_filter\" which the cruncher can't resolve here",
       "count": 1
     },
     {
-      "reason": "stat-modifier: narrows by \"weapon_filter\" which the cruncher can't resolve here",
+      "reason": "stat-modifier on \"OC\" is outside the damage path",
       "count": 1
     },
     {
@@ -477,19 +497,15 @@
       "count": 1
     },
     {
-      "reason": "re-roll on \"leadership\" (subset …) is outside the damage path",
-      "count": 1
-    },
-    {
-      "reason": "stat-modifier on \"WS\" is outside the damage path",
-      "count": 1
-    },
-    {
       "reason": "re-roll on \"dread-ability-selection\" (subset …) is outside the damage path",
       "count": 1
     },
     {
-      "reason": "conditional: cannot evaluate condition \"destroyed-by-attack-type\" against current context",
+      "reason": "conditional: cannot evaluate condition \"has-fought-this-phase\" against current context",
+      "count": 1
+    },
+    {
+      "reason": "effect type \"unit-tag\" is not modelled by the buff layer",
       "count": 1
     },
     {
@@ -506,6 +522,10 @@
     },
     {
       "reason": "stat-modifier AP: operation \"set-on-crit-wound\" not supported",
+      "count": 1
+    },
+    {
+      "reason": "stat-modifier on \"BS\" is outside the damage path",
       "count": 1
     },
     {
@@ -11573,6 +11593,186 @@
       "gap": "effect type \"leadership-modifier\" is not modelled by the buff layer"
     },
     {
+      "faction": "chaos-daemons",
+      "ability_id": "unholy-avalanche",
+      "name": "Unholy Avalanche",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "conditional: cannot evaluate condition \"advanced-this-turn\" against current context"
+    },
+    {
+      "faction": "chaos-daemons",
+      "ability_id": "loci-of-power",
+      "name": "Loci of Power",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier on \"Ld\" is outside the damage path"
+    },
+    {
+      "faction": "chaos-daemons",
+      "ability_id": "shudderblink",
+      "name": "Shudderblink",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "conditional: cannot evaluate condition \"advanced-this-turn\" against current context"
+    },
+    {
+      "faction": "chaos-daemons",
+      "ability_id": "apocalyptic-steeds",
+      "name": "Apocalyptic Steeds",
+      "shape": "stat-modifier",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier on \"M\" is outside the damage path"
+    },
+    {
+      "faction": "chaos-daemons",
+      "ability_id": "soul-shattering-charge",
+      "name": "Soul-Shattering Charge",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-daemons",
+      "ability_id": "swollen-with-power",
+      "name": "Swollen with Power",
+      "shape": "stat-modifier",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier on \"W\" is outside the damage path"
+    },
+    {
+      "faction": "chaos-daemons",
+      "ability_id": "bane-forged-weapons",
+      "name": "Bane-Forged Weapons",
+      "shape": "stat-modifier",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-daemons",
+      "ability_id": "soul-hungry-slaughterers",
+      "name": "Soul-Hungry Slaughterers",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-daemons",
+      "ability_id": "from-beyond-the-veil",
+      "name": "From Beyond the Veil",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-daemons",
+      "ability_id": "warp-riders",
+      "name": "Warp-Riders",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-daemons",
+      "ability_id": "inescapable-manifestations",
+      "name": "Inescapable Manifestations",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-daemons",
+      "ability_id": "carnival-of-excess",
+      "name": "Carnival of Excess",
+      "shape": "fight-first",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"fight-first\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-daemons",
+      "ability_id": "call-to-murder",
+      "name": "Call to Murder",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-daemons",
+      "ability_id": "bilious-blessing",
+      "name": "Bilious Blessing",
+      "shape": "mortal-wounds",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"mortal-wounds\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-daemons",
+      "ability_id": "skirling-magicks",
+      "name": "Skirling Magicks",
+      "shape": "keyword-grant",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-daemons",
+      "ability_id": "daemonic-infestation",
+      "name": "Daemonic Infestation",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-daemons",
+      "ability_id": "soulseeing",
+      "name": "Soulseeing",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-daemons",
+      "ability_id": "incorporeal-entities",
+      "name": "Incorporeal Entities",
+      "shape": "roll-modifier",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
       "faction": "chaos-knights",
       "ability_id": "deadly-demise-d3",
       "name": "Deadly Demise D3",
@@ -14543,6 +14743,406 @@
       "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
     },
     {
+      "faction": "chaos-space-marines",
+      "ability_id": "empyric-wellspring",
+      "name": "Empyric Wellspring",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "touched-by-the-warp",
+      "name": "Touched by the Warp",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "conduit-of-chaos",
+      "name": "Conduit of Chaos",
+      "shape": "keyword-grant",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "infernal-vigour",
+      "name": "Infernal Vigour",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "fleshy-curse",
+      "name": "Fleshy Curse",
+      "shape": "mortal-wounds",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"mortal-wounds\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "wreathed-in-warpflame",
+      "name": "Wreathed in Warpflame",
+      "shape": "keyword-grant",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "rain-of-ruin",
+      "name": "Rain of Ruin",
+      "shape": "keyword-grant",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "pact-of-destruction",
+      "name": "Pact of Destruction",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "re-roll on \"leadership\" (subset …) is outside the damage path"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "eye-of-oblivion",
+      "name": "Eye of Oblivion",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "ruinations-bounty",
+      "name": "Ruination's Bounty",
+      "shape": "keyword-grant",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "snare-of-fire",
+      "name": "Snare of Fire",
+      "shape": "movement-modifier",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"movement-modifier\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "undying-hatred-devotees",
+      "name": "Undying Hatred",
+      "shape": "roll-modifier",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "prey-on-the-weak-raiders",
+      "name": "Prey on the Weak",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "shadowcowl-talisman",
+      "name": "Shadowcowl Talisman",
+      "shape": "invulnerable-save",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "pact-of-cursed-pinions",
+      "name": "Pact of Cursed Pinions",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "plunging-talons",
+      "name": "Plunging Talons",
+      "shape": "keyword-grant",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "raking-pass",
+      "name": "Raking Pass",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "warp-twisted-terrors",
+      "name": "Warp-Twisted Terrors",
+      "shape": "leadership-modifier",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"leadership-modifier\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "warp-portals",
+      "name": "Warp Portals",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "infernal-fulgurite",
+      "name": "Infernal Fulgurite",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "eye-of-the-warp",
+      "name": "Eye of the Warp",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "akshurs-binding-runes",
+      "name": "Akshur's Binding Runes",
+      "shape": "deep-strike",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"deep-strike\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "tzagulla",
+      "name": "Tzagulla",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "empyric-dislocation",
+      "name": "Empyric Dislocation",
+      "shape": "stat-modifier",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "warp-tainted",
+      "name": "Warp-Tainted",
+      "shape": "objective-tag",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"objective-tag\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "siegebreaker-strike",
+      "name": "Siegebreaker Strike",
+      "shape": "keyword-grant",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "armour-of-corruption",
+      "name": "Armour of Corruption",
+      "shape": "damage-reduction",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "warp-flicker",
+      "name": "Warp Flicker",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "portal-of-spite",
+      "name": "Portal of Spite",
+      "shape": "charge-roll-modifier",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"charge-roll-modifier\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "soul-forge-boons",
+      "name": "Soul Forge Boons",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "wyredjinn",
+      "name": "Wyredjinn",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "dice-gated effect: stochastic; not expressible as a buff"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "cybinfernal-font",
+      "name": "Cybinfernal Font",
+      "shape": "keyword-grant",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "mark-of-the-soul-forges",
+      "name": "Mark of the Soul Forges",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "crown-of-worms",
+      "name": "Crown of Worms",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "touch-of-the-arkifane",
+      "name": "Touch of the Arkifane",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "balefire-boon",
+      "name": "Balefire Boon",
+      "shape": "stat-modifier",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "soul-tally-offering",
+      "name": "Soul-Tally Offering",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "biomechanoid-regeneration",
+      "name": "Biomechanoid Regeneration",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "forge-fire-surge",
+      "name": "Forge-Fire Surge",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-space-marines",
+      "ability_id": "unholy-fortitude",
+      "name": "Unholy Fortitude",
+      "shape": "stat-modifier",
+      "stub": false,
+      "offensive": false,
+      "defensive": true,
+      "gap": "stat-modifier T: defender-side stat; applies when the buffed unit is the target"
+    },
+    {
       "faction": "death-guard",
       "ability_id": "leader",
       "name": "Leader",
@@ -15431,6 +16031,186 @@
       "offensive": false,
       "defensive": false,
       "gap": "effect type \"attack-restriction\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "warped-and-rusted-animus",
+      "name": "Warped and Rusted Animus",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "verminous-haze",
+      "name": "Verminous Haze",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "hypervirulent-strains",
+      "name": "Hypervirulent Strains",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "insectile-murmuration",
+      "name": "Insectile Murmuration",
+      "shape": "re-roll",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "plagueveil",
+      "name": "Plagueveil",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "rejuvenating-swarm",
+      "name": "Rejuvenating Swarm",
+      "shape": "roll-modifier",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "parasitic-woe-reaper",
+      "name": "Parasitic Woe-Reaper",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "conditional: cannot evaluate condition \"has-fought-this-phase\" against current context"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "lancet-of-the-worldsore",
+      "name": "Lancet of the Worldsore",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "host-of-the-hybridised-pox",
+      "name": "Host of the Hybridised Pox",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "nauseating-paroxysms",
+      "name": "Nauseating Paroxysms",
+      "shape": "leadership-modifier",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"leadership-modifier\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "droning-horror",
+      "name": "Droning Horror",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "eye-of-the-swarm",
+      "name": "Eye of the Swarm",
+      "shape": "keyword-grant",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "fresh-vectors",
+      "name": "Fresh Vectors",
+      "shape": "re-roll",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "bloodrust-deluge",
+      "name": "Bloodrust Deluge",
+      "shape": "unit-tag",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"unit-tag\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "soulrot-flux",
+      "name": "Soulrot Flux",
+      "shape": "mortal-wounds",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"mortal-wounds\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "territorial-infection",
+      "name": "Territorial Infection",
+      "shape": "objective-control-modifier",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"objective-control-modifier\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "aggravus-spasms",
+      "name": "Aggravus Spasms",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "simultaneous-contamination",
+      "name": "Simultaneous Contamination",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
     },
     {
       "faction": "drukhari",
@@ -16981,6 +17761,186 @@
       "offensive": false,
       "defensive": false,
       "gap": "effect type \"attack-restriction\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "eager-to-kill",
+      "name": "Eager to Kill",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "frantic-focus",
+      "name": "Frantic Focus",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "conditional: cannot evaluate condition \"advanced-this-turn\" against current context"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "entitled-to-victory",
+      "name": "Entitled to Victory",
+      "shape": "fight-first",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"fight-first\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "cacophonic-accompaniment",
+      "name": "Cacophonic Accompaniment",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": "effect type \"deep-strike\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "frenzied-ferocity",
+      "name": "Frenzied Ferocity",
+      "shape": "keyword-grant",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "euphoric-crown",
+      "name": "Euphoric Crown",
+      "shape": "stat-modifier",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "howling-plate",
+      "name": "Howling Plate",
+      "shape": "stat-modifier",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "eager-patrons",
+      "name": "Eager Patrons",
+      "shape": "stat-modifier",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier on \"M\" is outside the damage path"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "beguiling-grotesquerie",
+      "name": "Beguiling Grotesquerie",
+      "shape": "attack-restriction",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"attack-restriction\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "delight-in-agony",
+      "name": "Delight in Agony",
+      "shape": "roll-modifier",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "psychedelic-soulflame",
+      "name": "Psychedelic Soulflame",
+      "shape": "stat-modifier",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "warp-plunge",
+      "name": "Warp Plunge",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "possessive-mania",
+      "name": "Possessive Mania",
+      "shape": "stat-modifier",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "agonised-cacophony",
+      "name": "Agonised Cacophony",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "absolute-sensory-overload",
+      "name": "Absolute Sensory Overload",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "honour-is-for-fools",
+      "name": "Honour is for Fools",
+      "shape": "keyword-grant",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "single-minded-strike",
+      "name": "Single-Minded Strike",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "intoxicated-by-triumph",
+      "name": "Intoxicated by Triumph",
+      "shape": "movement-modifier",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"movement-modifier\" is not modelled by the buff layer"
     },
     {
       "faction": "genestealer-cults",
@@ -24521,6 +25481,186 @@
       "offensive": false,
       "defensive": false,
       "gap": "effect type \"attack-restriction\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "sorcerous-invigoration",
+      "name": "Sorcerous Invigoration",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "ensorcelled-animus",
+      "name": "Ensorcelled Animus",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": "stat-modifier on \"WS\" is outside the damage path"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "all-seeing-mutant-hordes",
+      "name": "All-Seeing Mutant Hordes",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "eruption-of-vitality",
+      "name": "Eruption of Vitality",
+      "shape": "resurrection",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"resurrection\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "curse-of-life",
+      "name": "Curse of Life",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "walking-rampart",
+      "name": "Walking Rampart",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "occulus-infernum",
+      "name": "Occulus Infernum",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier on \"BS\" is outside the damage path"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "unravelled-fates",
+      "name": "Unravelled Fates",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "thicket-of-bladed-bone",
+      "name": "Thicket of Bladed Bone",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "relentless-rebirth",
+      "name": "Relentless Rebirth",
+      "shape": "feel-no-pain",
+      "stub": false,
+      "offensive": false,
+      "defensive": true,
+      "gap": null
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "mutagenic-magicks",
+      "name": "Mutagenic Magicks",
+      "shape": "mortal-wounds",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"mortal-wounds\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "multitudinous-limbs",
+      "name": "Multitudinous Limbs",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "arcane-venting",
+      "name": "Arcane Venting",
+      "shape": "objective-tag",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"objective-tag\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "ectoplasmic-extrusion",
+      "name": "Ectoplasmic Extrusion",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "warp-fields",
+      "name": "Warp Fields",
+      "shape": "roll-modifier",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "prismatic-displacement",
+      "name": "Prismatic Displacement",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "temporal-instability",
+      "name": "Temporal Instability",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "the-land-writhes",
+      "name": "The Land Writhes",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
     },
     {
       "faction": "tyranids",

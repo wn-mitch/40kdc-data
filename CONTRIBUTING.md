@@ -76,16 +76,16 @@ on `npm run build` (postbuild), which also refreshes the snapshot below.
 | genestealer-cults | 81 | 13 | 6 | 64 | 20 |
 | leagues-of-votann | 69 | 13 | 7 | 51 | 15 |
 | tyranids | 102 | 19 | 7 | 79 | 13 |
-| thousand-sons | 95 | 25 | 8 | 67 | 10 |
+| thousand-sons | 113 | 30 | 9 | 79 | 10 |
 | tau-empire | 122 | 32 | 7 | 86 | 9 |
-| chaos-space-marines | 182 | 47 | 16 | 126 | 7 |
+| chaos-space-marines | 222 | 63 | 17 | 149 | 7 |
 | adeptus-astartes | 348 | 109 | 39 | 215 | 6 |
 | chaos-knights | 115 | 29 | 9 | 78 | 4 |
-| death-guard | 89 | 19 | 7 | 66 | 4 |
-| emperors-children | 61 | 13 | 3 | 46 | 3 |
+| death-guard | 107 | 25 | 7 | 78 | 4 |
+| emperors-children | 79 | 21 | 3 | 56 | 3 |
 | agents-of-the-imperium | 92 | 23 | 8 | 63 | 2 |
 | adepta-sororitas | 80 | 22 | 8 | 52 | 2 |
-| chaos-daemons | 129 | 35 | 14 | 86 | 1 |
+| chaos-daemons | 147 | 39 | 14 | 100 | 1 |
 | adeptus-mechanicus | 71 | 13 | 10 | 51 | 1 |
 | grey-knights | 52 | 14 | 5 | 34 | 1 |
 | imperial-knights | 44 | 21 | 3 | 22 | 1 |
@@ -93,7 +93,7 @@ on `npm run build` (postbuild), which also refreshes the snapshot below.
 | world-eaters | 129 | 20 | 7 | 102 | 0 |
 | adeptus-custodes | 65 | 13 | 11 | 45 | 0 |
 | _core | 1 | 0 | 1 | 0 | 0 |
-| **TOTAL** | **2631** | **623** | **244** | **1848** | **188** |
+| **TOTAL** | **2743** | **662** | **246** | **1919** | **188** |
 
 `stub*` = empty-modifier placeholders — the authoring worklist (highest need first). Full report + unsupported-effect histogram: [`data/_audit/summary.md`](data/_audit/summary.md).
 <!-- coverage:end -->

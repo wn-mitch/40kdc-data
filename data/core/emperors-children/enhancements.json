@@ -502,5 +502,116 @@
     "points_provisional": true,
     "upgrade_tag": false,
     "max_targets": 1
+  },
+  {
+    "id": "cacophonic-accompaniment",
+    "name": "Cacophonic Accompaniment",
+    "detachment_id": "elegant-brutes",
+    "cost": 25,
+    "keyword_restrictions": [
+      "Emperor's Children"
+    ],
+    "ability_id": "cacophonic-accompaniment",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "frenzied-ferocity",
+    "name": "Frenzied Ferocity",
+    "detachment_id": "elegant-brutes",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Emperor's Children",
+      "Terminator Squad"
+    ],
+    "ability_id": "frenzied-ferocity",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "euphoric-crown",
+    "name": "Euphoric Crown",
+    "detachment_id": "frenzied-host",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Emperor's Children"
+    ],
+    "ability_id": "euphoric-crown",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "howling-plate",
+    "name": "Howling Plate",
+    "detachment_id": "frenzied-host",
+    "cost": 20,
+    "keyword_restrictions": [
+      "Emperor's Children"
+    ],
+    "ability_id": "howling-plate",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "eager-patrons",
+    "name": "Eager Patrons",
+    "detachment_id": "spectacle-of-slaughter",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Emperor's Children",
+      "Flawless Blades"
+    ],
+    "ability_id": "eager-patrons",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "beguiling-grotesquerie",
+    "name": "Beguiling Grotesquerie",
+    "detachment_id": "spectacle-of-slaughter",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Emperor's Children",
+      "Flawless Blades"
+    ],
+    "ability_id": "beguiling-grotesquerie",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
   }
 ]

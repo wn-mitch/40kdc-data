@@ -1569,18 +1569,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "shroud-of-chaos",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "unfailingly-obdurate",
     "source_type": "stratagem",
     "phases": [
@@ -1854,34 +1842,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "baleful-blessing",
-    "source_type": "stratagem",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "unholy-haste",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "brutal-attrition",
     "source_type": "stratagem",
     "phases": [
@@ -2011,42 +1971,6 @@
     "source_type": "stratagem",
     "phases": [
       "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "no-rest-in-death",
-    "source_type": "stratagem",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "mutations-curse",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "soulseekers",
-    "source_type": "stratagem",
-    "phases": [
-      "shooting"
     ],
     "game_version": {
       "edition": "11th",
@@ -2846,31 +2770,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "mind-blade",
-    "source_type": "enhancement",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "infernal-avatar",
-    "source_type": "enhancement",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "greyveil-hex",
     "source_type": "enhancement",
     "phases": [
@@ -3138,6 +3037,491 @@
       "movement",
       "shooting",
       "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "touched-by-the-warp",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "conduit-of-chaos",
+    "source_type": "ability",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "infernal-vigour",
+    "source_type": "ability",
+    "phases": [
+      "command"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "fleshy-curse",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "wreathed-in-warpflame",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "rain-of-ruin",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "pact-of-destruction",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "eye-of-oblivion",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "ruinations-bounty",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "snare-of-fire",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "undying-hatred-devotees",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "prey-on-the-weak-raiders",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "shadowcowl-talisman",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "pact-of-cursed-pinions",
+    "source_type": "ability",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "plunging-talons",
+    "source_type": "ability",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "raking-pass",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "warp-twisted-terrors",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "warp-portals",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "infernal-fulgurite",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "eye-of-the-warp",
+    "source_type": "ability",
+    "phases": [
+      "movement",
+      "charge"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "akshurs-binding-runes",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "tzagulla",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "empyric-dislocation",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "warp-tainted",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "siegebreaker-strike",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "armour-of-corruption",
+    "source_type": "ability",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "warp-flicker",
+    "source_type": "ability",
+    "phases": [
+      "movement",
+      "shooting",
+      "charge"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "portal-of-spite",
+    "source_type": "ability",
+    "phases": [
+      "charge"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "soul-forge-boons",
+    "source_type": "ability",
+    "phases": [
+      "movement",
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "wyredjinn",
+    "source_type": "ability",
+    "phases": [
+      "command"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "cybinfernal-font",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "mark-of-the-soul-forges",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "crown-of-worms",
+    "source_type": "ability",
+    "phases": [
+      "command",
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "touch-of-the-arkifane",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "balefire-boon",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "soul-tally-offering",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "biomechanoid-regeneration",
+    "source_type": "ability",
+    "phases": [
+      "command"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "forge-fire-surge",
+    "source_type": "ability",
+    "phases": [
+      "movement",
+      "shooting",
+      "charge"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "unholy-fortitude",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
     ],
     "game_version": {
       "edition": "11th",

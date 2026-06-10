@@ -3178,5 +3178,780 @@
     "faction_id": "thousand-sons",
     "ability_type": "faction",
     "behavior": "passive"
+  },
+  {
+    "ability_id": "sorcerous-invigoration",
+    "name": "Sorcerous Invigoration",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "thousand-sons",
+    "detachment_id": "ritual-of-regeneration",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "ritual-manifested"
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "unit",
+        "modifier": {
+          "grant_type": "heal-wounds",
+          "amount": "D3",
+          "frequency": "once-per-turn-per-unit"
+        }
+      }
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Thousand Sons",
+        "Psyker"
+      ],
+      "excluded_keywords": [
+        "Monster"
+      ]
+    }
+  },
+  {
+    "ability_id": "ensorcelled-animus",
+    "name": "Ensorcelled Animus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "thousand-sons",
+    "detachment_id": "sekhetar-cohort",
+    "ability_type": "detachment",
+    "behavior": "aura",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "keyword-grant",
+          "target": "all-friendly",
+          "modifier": {
+            "keywords": [
+              "Psychic"
+            ],
+            "applies_to_keyword": "Sekhetar Robots",
+            "scope": "weapon"
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "friendly-within-aura",
+          "modifier": {
+            "stat": "WS",
+            "operation": "add",
+            "value": 1,
+            "attack_type": "melee",
+            "aura_source_keyword": "Thousand Sons Psyker",
+            "aura_target_keyword": "Sekhetar Robots"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "aura-12",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Thousand Sons"
+      ]
+    }
+  },
+  {
+    "ability_id": "all-seeing-mutant-hordes",
+    "name": "All-Seeing Mutant Hordes",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "thousand-sons",
+    "detachment_id": "servants-of-change",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "keyword-grant",
+          "target": "all-friendly",
+          "modifier": {
+            "keywords": [
+              "Battleline"
+            ],
+            "applies_to_keyword": "Tzaangors",
+            "purpose": "construction"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          "effect": {
+            "type": "ability-grant",
+            "target": "all-enemy",
+            "modifier": {
+              "grant_type": "detection-range-modifier",
+              "value": 6,
+              "unit": "inches",
+              "while": "friendly-mutant-shooting"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Thousand Sons"
+      ]
+    }
+  },
+  {
+    "ability_id": "eruption-of-vitality",
+    "name": "Eruption of Vitality",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "thousand-sons",
+    "detachment_id": "ritual-of-regeneration",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "resurrection",
+      "target": "self",
+      "modifier": {
+        "count": 1,
+        "trigger": "first-destruction",
+        "threshold": 2,
+        "comparison": "gte",
+        "timing": "end-of-phase",
+        "wounds_remaining": 3,
+        "placement": "unengaged"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Thousand Sons",
+        "Psyker"
+      ],
+      "excluded_keywords": [
+        "Monster"
+      ]
+    }
+  },
+  {
+    "ability_id": "curse-of-life",
+    "name": "Curse of Life",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "thousand-sons",
+    "detachment_id": "ritual-of-regeneration",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "ability-grant",
+      "target": "bearer",
+      "modifier": {
+        "grant_type": "heal-bonus",
+        "amount": 3,
+        "source_ability": "sorcerous-invigoration"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Thousand Sons",
+        "Psyker"
+      ],
+      "excluded_keywords": [
+        "Monster"
+      ]
+    },
+    "interactions": [
+      {
+        "ability_ref": "sorcerous-invigoration",
+        "type": "combos-with"
+      }
+    ]
+  },
+  {
+    "ability_id": "walking-rampart",
+    "name": "Walking Rampart",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "thousand-sons",
+    "detachment_id": "sekhetar-cohort",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          "effect": {
+            "type": "ability-grant",
+            "target": "friendly-within-aura",
+            "modifier": {
+              "grant_type": "heal-wounds",
+              "amount": "D3+1",
+              "aura_target_keyword": "Sekhetar Robots",
+              "range_inches": 3
+            }
+          }
+        },
+        {
+          "type": "ability-grant",
+          "target": "self",
+          "modifier": {
+            "ability_id": "lone-operative",
+            "condition": "within-3in-of-sekhetar-robots"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "aura-custom",
+      "duration": "battle",
+      "range_inches": 3
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Thousand Sons",
+        "Sorcerer"
+      ]
+    }
+  },
+  {
+    "ability_id": "occulus-infernum",
+    "name": "Occulus Infernum",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "thousand-sons",
+    "detachment_id": "sekhetar-cohort",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "movement"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "friendly-within-aura",
+        "modifier": {
+          "stat": "BS",
+          "operation": "add",
+          "value": 1,
+          "attack_type": "ranged",
+          "aura_target_keyword": "Sekhetar Robots"
+        }
+      }
+    },
+    "scope": {
+      "range": "aura-6",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Thousand Sons",
+        "Sorcerer"
+      ]
+    }
+  },
+  {
+    "ability_id": "unravelled-fates",
+    "name": "Unravelled Fates",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "thousand-sons",
+    "detachment_id": "servants-of-change",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "movement"
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "friendly-within-aura",
+        "modifier": {
+          "grant_type": "remove-battle-shock",
+          "aura_target_keyword": "Mutant",
+          "range_inches": 6
+        }
+      }
+    },
+    "scope": {
+      "range": "aura-6",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Thousand Sons",
+        "Tzaangor Shaman"
+      ]
+    }
+  },
+  {
+    "ability_id": "thicket-of-bladed-bone",
+    "name": "Thicket of Bladed Bone",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "thousand-sons",
+    "detachment_id": "servants-of-change",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "bearer",
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1,
+            "attack_type": "melee"
+          }
+        },
+        {
+          "type": "keyword-grant",
+          "target": "bearer",
+          "modifier": {
+            "keywords": [
+              "Cleave 1"
+            ],
+            "scope": "weapon",
+            "attack_type": "melee"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Spawn"
+      ]
+    }
+  },
+  {
+    "ability_id": "relentless-rebirth",
+    "name": "Relentless Rebirth",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "thousand-sons",
+    "detachment_id": "ritual-of-regeneration",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "unit",
+      "modifier": {
+        "threshold": 5,
+        "scope": "mortal"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Thousand Sons",
+        "Psyker"
+      ]
+    }
+  },
+  {
+    "ability_id": "mutagenic-magicks",
+    "name": "Mutagenic Magicks",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "thousand-sons",
+    "detachment_id": "ritual-of-regeneration",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "dice": "6D6",
+        "threshold": 4,
+        "comparison": "gte",
+        "mortal_per_success": 1,
+        "target_scope": "one-engaged-enemy"
+      }
+    },
+    "scope": {
+      "range": "engagement-range",
+      "duration": "phase"
+    }
+  },
+  {
+    "ability_id": "multitudinous-limbs",
+    "name": "Multitudinous Limbs",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "thousand-sons",
+    "detachment_id": "ritual-of-regeneration",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "act-after-move",
+        "moves": [
+          "advance",
+          "fall-back"
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Thousand Sons",
+        "Psyker"
+      ]
+    }
+  },
+  {
+    "ability_id": "arcane-venting",
+    "name": "Arcane Venting",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "thousand-sons",
+    "detachment_id": "sekhetar-cohort",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "objective-tag",
+      "target": "unit",
+      "modifier": {
+        "tag": "secured",
+        "source": "this-action"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Sekhetar Robots"
+      ]
+    }
+  },
+  {
+    "ability_id": "ectoplasmic-extrusion",
+    "name": "Ectoplasmic Extrusion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "thousand-sons",
+    "detachment_id": "sekhetar-cohort",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "shoot-after-action"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Sekhetar Robots"
+      ]
+    }
+  },
+  {
+    "ability_id": "warp-fields",
+    "name": "Warp Fields",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "thousand-sons",
+    "detachment_id": "sekhetar-cohort",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "unit",
+      "modifier": {
+        "roll": "wound",
+        "operation": "subtract",
+        "value": 1,
+        "incoming": true,
+        "applies_when": "attacker-strength-greater-than-target-toughness",
+        "attack_type": "ranged"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Sekhetar Robots"
+      ]
+    }
+  },
+  {
+    "ability_id": "prismatic-displacement",
+    "name": "Prismatic Displacement",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "thousand-sons",
+    "detachment_id": "servants-of-change",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "keyword-grant",
+          "target": "unit",
+          "modifier": {
+            "keywords": [
+              "Assault"
+            ],
+            "scope": "weapon",
+            "attack_type": "ranged"
+          }
+        },
+        {
+          "type": "ability-grant",
+          "target": "unit",
+          "modifier": {
+            "grant_type": "act-after-move",
+            "moves": [
+              "advance",
+              "fall-back"
+            ],
+            "acts": [
+              "shoot",
+              "charge"
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Mutant"
+      ]
+    }
+  },
+  {
+    "ability_id": "temporal-instability",
+    "name": "Temporal Instability",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "thousand-sons",
+    "detachment_id": "servants-of-change",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "act-after-move",
+        "moves": [
+          "advance",
+          "fall-back"
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Mutant"
+      ]
+    }
+  },
+  {
+    "ability_id": "the-land-writhes",
+    "name": "The Land Writhes",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "thousand-sons",
+    "detachment_id": "servants-of-change",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "ability_id": "mobile"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Monster",
+        "Mutant"
+      ]
+    }
   }
 ]

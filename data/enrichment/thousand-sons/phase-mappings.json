@@ -1232,5 +1232,230 @@
       "dataslate": "pre-launch-provisional"
     },
     "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "sorcerous-invigoration",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "ensorcelled-animus",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "all-seeing-mutant-hordes",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "eruption-of-vitality",
+    "source_type": "ability",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "curse-of-life",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "walking-rampart",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "occulus-infernum",
+    "source_type": "ability",
+    "phases": [
+      "movement",
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "unravelled-fates",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "thicket-of-bladed-bone",
+    "source_type": "ability",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "relentless-rebirth",
+    "source_type": "ability",
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "mutagenic-magicks",
+    "source_type": "ability",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "multitudinous-limbs",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "arcane-venting",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "ectoplasmic-extrusion",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "warp-fields",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "prismatic-displacement",
+    "source_type": "ability",
+    "phases": [
+      "movement",
+      "shooting",
+      "charge"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "temporal-instability",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "the-land-writhes",
+    "source_type": "ability",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
   }
 ]

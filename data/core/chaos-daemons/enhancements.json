@@ -430,5 +430,100 @@
     "points_provisional": true,
     "upgrade_tag": false,
     "max_targets": 1
+  },
+  {
+    "id": "apocalyptic-steeds",
+    "name": "Apocalyptic Steeds",
+    "detachment_id": "cavalcade-of-chaos",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Legiones Daemonica",
+      "Mounted"
+    ],
+    "ability_id": "apocalyptic-steeds",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "soul-shattering-charge",
+    "name": "Soul-Shattering Charge",
+    "detachment_id": "cavalcade-of-chaos",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Legiones Daemonica",
+      "Mounted"
+    ],
+    "ability_id": "soul-shattering-charge",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "swollen-with-power",
+    "name": "Swollen with Power",
+    "detachment_id": "lords-of-the-warp",
+    "cost": 15,
+    "keyword_restrictions": [
+      "Legiones Daemonica",
+      "Character"
+    ],
+    "ability_id": "swollen-with-power",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "bane-forged-weapons",
+    "name": "Bane-Forged Weapons",
+    "detachment_id": "warptide",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Legiones Daemonica",
+      "Battleline"
+    ],
+    "ability_id": "bane-forged-weapons",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "soul-hungry-slaughterers",
+    "name": "Soul-Hungry Slaughterers",
+    "detachment_id": "warptide",
+    "cost": 10,
+    "keyword_restrictions": [
+      "Legiones Daemonica",
+      "Battleline"
+    ],
+    "ability_id": "soul-hungry-slaughterers",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
   }
 ]
