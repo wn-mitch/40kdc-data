@@ -38,25 +38,6 @@
     }
   },
   {
-    "id": "brazen-contempt",
-    "name": "BRAZEN CONTEMPT",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "vessels-of-wrath",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "opponent-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "brazen-contempt",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
     "id": "aspire-to-infamy",
     "name": "ASPIRE TO INFAMY",
     "category": "detachment",
@@ -70,25 +51,6 @@
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": "aspire-to-infamy",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "overshadowed-by-none",
-    "name": "OVERSHADOWED BY NONE",
-    "category": "detachment",
-    "type": "battle-tactic",
-    "detachment_id": "vessels-of-wrath",
-    "cp_cost": 1,
-    "phases": [
-      "fight"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "overshadowed-by-none",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -429,44 +391,6 @@
     }
   },
   {
-    "id": "meet-force-with-force",
-    "name": "MEET FORCE WITH FORCE",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "vessels-of-wrath",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "opponent-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "meet-force-with-force",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "gory-dedication",
-    "name": "GORY DEDICATION",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "vessels-of-wrath",
-    "cp_cost": 1,
-    "phases": [
-      "fight"
-    ],
-    "player_turn": "either",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": "gory-dedication",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
     "id": "summoned-by-slaughter",
     "name": "SUMMONED BY SLAUGHTER",
     "category": "detachment",
@@ -698,6 +622,137 @@
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": "drawn-to-the-slaughter",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "apoplectic-clarity",
+    "name": "APOPLECTIC CLARITY",
+    "category": "detachment",
+    "detachment_id": "brazen-engines",
+    "cp_cost": 1,
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "apoplectic-clarity",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "trail-of-destruction",
+    "name": "TRAIL OF DESTRUCTION",
+    "category": "detachment",
+    "detachment_id": "brazen-engines",
+    "cp_cost": 1,
+    "phases": [
+      "movement"
+    ],
+    "player_turn": "your-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "trail-of-destruction",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "goaded-to-fury",
+    "name": "GOADED TO FURY",
+    "category": "detachment",
+    "detachment_id": "brazen-engines",
+    "cp_cost": 1,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "goaded-to-fury",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "focused-ferocity",
+    "name": "FOCUSED FEROCITY",
+    "category": "detachment",
+    "detachment_id": "butchers-of-khorne",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "focused-ferocity",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "a-trophy-for-the-throne",
+    "name": "A TROPHY FOR THE THRONE",
+    "category": "detachment",
+    "detachment_id": "butchers-of-khorne",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "a-trophy-for-the-throne",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "wrath-beyond-reason",
+    "name": "WRATH BEYOND REASON",
+    "category": "detachment",
+    "detachment_id": "butchers-of-khorne",
+    "cp_cost": 2,
+    "phases": [
+      "shooting"
+    ],
+    "player_turn": "opponent-turn",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "wrath-beyond-reason",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  },
+  {
+    "id": "scorn-the-witch",
+    "name": "SCORN THE WITCH",
+    "category": "detachment",
+    "detachment_id": "vessels-of-wrath",
+    "cp_cost": 1,
+    "phases": [
+      "command",
+      "movement",
+      "shooting",
+      "charge",
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "scorn-the-witch",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

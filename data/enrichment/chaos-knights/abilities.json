@@ -1120,21 +1120,30 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "mortal-wounds",
-      "target": "defender",
-      "modifier": {
-        "count": "d3"
-      }
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 3,
+      "comparison": "gte",
+      "on_success": {
+        "type": "mortal-wounds",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "amount": "D3",
+          "range_inches": 9
+        }
+      },
+      "on_fail": null
     },
     "scope": {
       "range": "aura-9",
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
       "knight-abominant"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "reactive",
+    "community_notes": "At the end of your Movement phase, roll one D6 for each enemy unit within 9\" of a model with this ability; on a 3+ that unit suffers D3 mortal wounds."
   },
   {
     "ability_id": "preysight-aura",
@@ -1188,54 +1197,6 @@
     "ability_type": "unit",
     "behavior": "passive",
     "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
-  },
-  {
-    "ability_id": "code-chivalric",
-    "name": "Code Chivalric",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "version": "2025-q3",
-    "effect": {
-      "type": "cp-gain",
-      "target": "self",
-      "modifier": {
-        "amount": 2
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "faction_id": "chaos-knights",
-    "ability_type": "faction",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "bondsman",
-    "name": "Bondsman",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "version": "2025-q3",
-    "effect": {
-      "type": "attack-restriction",
-      "target": "self",
-      "modifier": {
-        "restriction": "army-composition-rule"
-      }
-    },
-    "scope": {
-      "range": "aura-12",
-      "duration": "until-next-command-phase"
-    },
-    "faction_id": "chaos-knights",
-    "ability_type": "faction",
-    "behavior": "passive"
   },
   {
     "ability_id": "super-heavy-walker",
@@ -1319,27 +1280,2587 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "freeblades",
-    "name": "Freeblades",
+    "ability_id": "annihilate-the-unworthy",
+    "name": "Annihilate the Unworthy",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
     "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "bastions-of-tyranny",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "is-battle-shocked",
+        "parameters": {
+          "subject": "target"
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "unit",
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Knight Tyrant"
+      ]
+    },
+    "community_notes": "Friendly KNIGHT TYRANT units' attacks that target a battle-shocked unit have +1 to the Hit roll."
+  },
+  {
+    "ability_id": "pterrorshade-rookery",
+    "name": "Pterrorshade Rookery",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "bastions-of-tyranny",
+    "ability_type": "enhancement",
+    "behavior": "activated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      },
+      "effect": {
+        "type": "keyword-grant",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "keyword": "Surveilled",
+          "detection_range_bonus": 6
+        }
+      }
+    },
+    "scope": {
+      "range": "any-visible",
+      "duration": "phase"
+    },
+    "community_notes": "KNIGHT TYRANT only. When selected to shoot, one enemy unit within 24\" gains +6\" detection range until this unit has shot."
+  },
+  {
+    "ability_id": "hate-filled-dominion",
+    "name": "Hate-Filled Dominion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "bastions-of-tyranny",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "re-roll",
+      "target": "self",
+      "modifier": {
+        "roll": "attacks-characteristic",
+        "subset": "all-failures"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "community_notes": "KNIGHT TYRANT only. Re-roll rolls to determine the Attacks characteristic of a weapon."
+  },
+  {
+    "ability_id": "rune-cursed-stronghold",
+    "name": "Rune-Cursed Stronghold",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "bastions-of-tyranny",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "unit",
+      "modifier": {
+        "threshold": 5,
+        "scope": "mortal"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    }
+  },
+  {
+    "ability_id": "pitiless-focus",
+    "name": "Pitiless Focus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "bastions-of-tyranny",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "fallback-and-act",
+      "target": "unit",
+      "modifier": {
+        "act": "shoot"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "A fall-back move does not prevent the KNIGHT TYRANT from being eligible to shoot."
+  },
+  {
+    "ability_id": "intimidating-reminder",
+    "name": "Intimidating Reminder",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "bastions-of-tyranny",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "keyword-grant",
+          "target": "enemy-within-aura",
+          "modifier": {
+            "keyword": "Suppressed"
+          }
+        },
+        {
+          "type": "roll-modifier",
+          "target": "enemy-within-aura",
+          "modifier": {
+            "roll": "hit",
+            "operation": "subtract",
+            "value": 1,
+            "marker": "suppressed"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "any-visible",
+      "duration": "until-next-command-phase"
+    },
+    "community_notes": "One enemy unit hit by the KNIGHT TYRANT's attacks is suppressed until your next Command phase: while suppressed, its attacks have -1 to Hit rolls."
+  },
+  {
+    "ability_id": "scenting-fear",
+    "name": "Scenting Fear",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "hunting-warpack",
+    "ability_type": "detachment",
+    "behavior": "activated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      },
+      "effect": {
+        "type": "keyword-grant",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "keyword": "Surveilled",
+          "detection_range_bonus": 6
+        }
+      }
+    },
+    "scope": {
+      "range": "aura-12",
+      "duration": "phase"
+    },
+    "community_notes": "Once per battle round, per army. In your Shooting phase, one visible enemy unit within 12\" of a friendly WAR DOG gains +6\" detection range. WAR DOGS detachment."
+  },
+  {
+    "ability_id": "soul-spoor-auspicator",
+    "name": "Soul-Spoor Auspicator",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "hunting-warpack",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "self",
+      "modifier": {
+        "stat": "Range",
+        "operation": "add",
+        "value": 6,
+        "attack_type": "ranged"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "community_notes": "HUNTSMAN only. Ranged attacks have +6\" Range."
+  },
+  {
+    "ability_id": "snarling-rivalry",
+    "name": "Snarling Rivalry",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "hunting-warpack",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "self",
+      "modifier": {
+        "keyword": "Ignores Cover",
+        "weapon_type": "ranged"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "community_notes": "EXECUTIONER only. Ranged attacks gain [IGNORES COVER]."
+  },
+  {
+    "ability_id": "insensate-bloodthirst",
+    "name": "Insensate Bloodthirst",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "hunting-warpack",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    }
+  },
+  {
+    "ability_id": "leash-of-the-masters",
+    "name": "Leash of the Masters",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "hunting-warpack",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "act-after-shooting"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "Shooting does not prevent the WAR DOG unit from being eligible to start an Action."
+  },
+  {
+    "ability_id": "stalking-focus",
+    "name": "Stalking Focus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "hunting-warpack",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "attacker",
+      "modifier": {
+        "stat": "AP",
+        "operation": "worsen",
+        "value": 1,
+        "attack_type": "ranged"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "Ranged attacks that target your WAR DOG unit (within range of an objective) have -1 AP until that enemy unit has attacked."
+  },
+  {
+    "ability_id": "wretched-thralls",
+    "name": "Wretched Thralls",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "iconoclast-fiefdom",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "re-roll",
+      "target": "all-friendly",
+      "modifier": {
+        "roll": "leadership",
+        "subset": "all-failures"
+      }
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Damned"
+      ]
+    },
+    "community_notes": "You can include DAMNED units (Codex: Chaos Space Marines), combined cost <= 500 pts. Friendly DAMNED units can re-roll Leadership rolls."
+  },
+  {
+    "ability_id": "cruel-lashmaster",
+    "name": "Cruel Lashmaster",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "iconoclast-fiefdom",
+    "ability_type": "enhancement",
+    "behavior": "aura",
+    "effect": {
+      "type": "movement-modifier",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "move_type": "move-bonus",
+        "value": 2,
+        "replaces_default": false
+      }
+    },
+    "scope": {
+      "range": "aura-6",
+      "duration": "phase"
+    },
+    "community_notes": "CHAOS KNIGHTS model only. While a friendly DAMNED unit is within 6\", that unit gets +2\" M when it makes a Normal/Advance/Fall Back move (until end of phase)."
+  },
+  {
+    "ability_id": "iconoclast-idol",
+    "name": "Iconoclast Idol",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "iconoclast-fiefdom",
+    "ability_type": "enhancement",
+    "behavior": "aura",
+    "effect": {
+      "type": "cp-refund",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "amount": 1,
+        "trigger": "heroic-intervention"
+      }
+    },
+    "scope": {
+      "range": "aura-6",
+      "duration": "permanent"
+    },
+    "community_notes": "CHAOS KNIGHTS model only. While a friendly DAMNED unit is within 6\", the Heroic Intervention stratagem targeting that unit costs -1 CP."
+  },
+  {
+    "ability_id": "avenge-the-masters",
+    "name": "Avenge the Masters!",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "iconoclast-fiefdom",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "keyword-grant",
+          "target": "all-enemy",
+          "modifier": {
+            "keyword": "Marked"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "target-has-keyword",
+            "parameters": {
+              "keyword": "Marked"
+            }
+          },
+          "effect": {
+            "type": "keyword-grant",
+            "target": "all-friendly",
+            "modifier": {
+              "keyword": "Lethal Hits"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "battle"
+    },
+    "community_notes": "When a friendly CHAOS KNIGHTS unit is destroyed by an enemy unit, that enemy unit is Marked until the end of the battle. Friendly DAMNED units' attacks targeting a Marked unit have [LETHAL HITS]."
+  },
+  {
+    "ability_id": "dark-sacrifice",
+    "name": "Dark Sacrifice",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "iconoclast-fiefdom",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "mortal-wounds",
+          "target": "self",
+          "modifier": {
+            "amount": "D3+3"
+          }
+        },
+        {
+          "type": "ability-grant",
+          "target": "unit",
+          "modifier": {
+            "grant_type": "heal-wounds",
+            "amount": "D3+3"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "one-use"
+    },
+    "community_notes": "In your Command phase: a friendly DAMNED unit (excluding ACCURSED CULTISTS) within 9\" of a CHAOS KNIGHTS model suffers D3+3 mortal wounds; a CHAOS KNIGHTS model within 9\" heals that many wounds."
+  },
+  {
+    "ability_id": "coursing-thralls",
+    "name": "Coursing Thralls",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "iconoclast-fiefdom",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      },
+      "effect": {
+        "type": "keyword-grant",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "keyword": "Hunted",
+          "detection_range_bonus": 6
+        }
+      }
+    },
+    "scope": {
+      "range": "any-visible",
+      "duration": "phase"
+    },
+    "community_notes": "Start of your Shooting phase: a friendly DAMNED unit marks one visible enemy unit within 12\" as Hunted (+6\" detection range)."
+  },
+  {
+    "ability_id": "masters-of-the-pack",
+    "name": "Masters of the Pack",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "helhunt-lance",
+    "ability_type": "detachment",
+    "behavior": "passive",
     "effect": {
       "type": "ability-grant",
       "target": "self",
       "modifier": {
-        "ability_id": "faction-metadata"
+        "grant_type": "titanic-self-aura-inclusion"
+      }
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "permanent"
+    },
+    "community_notes": "If a Titanic Chaos Knights unit has an Aura ability affecting friendly War Dog units, while two or more friendly War Dog models are within range of that aura, the Titanic unit is also affected by that aura."
+  },
+  {
+    "ability_id": "hunters-helm",
+    "name": "Hunter's Helm",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "helhunt-lance",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "self",
+          "modifier": {
+            "roll": "advance",
+            "subset": "all-failures"
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "self",
+          "modifier": {
+            "roll": "charge",
+            "subset": "all-failures"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "community_notes": "Chaos Knights model only. Re-roll Advance and Charge rolls for the bearer's unit."
+  },
+  {
+    "ability_id": "octagram-of-conjuration",
+    "name": "Octagram of Conjuration",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "helhunt-lance",
+    "ability_type": "enhancement",
+    "behavior": "aura",
+    "effect": {
+      "type": "leadership-modifier",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "test": "battle-shock"
+      }
+    },
+    "scope": {
+      "range": "aura-9",
+      "duration": "phase"
+    },
+    "community_notes": "Knight Abominant only. While a friendly War Dog model is within 9\", after that War Dog shoots, one enemy unit it hit must take a Battle-shock test."
+  },
+  {
+    "ability_id": "throne-tyrannicus",
+    "name": "Throne Tyrannicus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "helhunt-lance",
+    "ability_type": "enhancement",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "grant_type": "share-war-dog-auras"
+      }
+    },
+    "scope": {
+      "range": "aura-9",
+      "duration": "until-next-command-phase"
+    },
+    "community_notes": "Titanic Chaos Knights only. In your Command phase, one other Chaos Knights Character within 9\" is also affected by the bearer's Auras that affect friendly War Dog units, until your next Command phase."
+  },
+  {
+    "ability_id": "aspect-of-the-beast",
+    "name": "Aspect of the Beast",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "helhunt-lance",
+    "ability_type": "enhancement",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "activate-dread-ability"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "until-next-command-phase"
+    },
+    "community_notes": "Chaos Knights model only. At the start of your Command phase, one Dread ability is active for the bearer until your next Command phase, in addition to your army's active Dread abilities."
+  },
+  {
+    "ability_id": "feral-arrogance",
+    "name": "Feral Arrogance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "helhunt-lance",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "unit",
+      "modifier": {
+        "threshold": 5,
+        "scope": "mortal"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    }
+  },
+  {
+    "ability_id": "merciless-fusillade",
+    "name": "Merciless Fusillade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "helhunt-lance",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keyword": "Sustained Hits 1"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "One Titanic Chaos Knights unit and up to two friendly War Dog units must each focus one eligible enemy target; those attacks gain [SUSTAINED HITS 1]."
+  },
+  {
+    "ability_id": "beasthide-manifestation",
+    "name": "Beasthide Manifestation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "helhunt-lance",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "attacker",
+      "modifier": {
+        "stat": "AP",
+        "operation": "worsen",
+        "value": 1
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "Until the attacking unit finishes its attacks, each attack targeting your Chaos Knights unit worsens its Armour Penetration by 1."
+  },
+  {
+    "ability_id": "flush-the-quarry",
+    "name": "Flush the Quarry",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "helhunt-lance",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "engagement-passthrough",
+      "target": "unit",
+      "modifier": {}
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "Start of your Movement phase: up to three friendly War Dog units within 6\" of a Titanic Chaos Knights unit can move through models and terrain (and within Engagement Range, not ending there); Desperate Escape tests are auto-passed."
+  },
+  {
+    "ability_id": "contemptuous-volleys",
+    "name": "Contemptuous Volleys",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "helhunt-lance",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "fallback-and-act",
+      "target": "unit",
+      "modifier": {
+        "act": "shoot-and-charge"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "community_notes": "After a Chaos Knights unit Falls Back, it is eligible to shoot and declare a charge this turn."
+  },
+  {
+    "ability_id": "goaded-beast",
+    "name": "Goaded Beast",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "helhunt-lance",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "movement-modifier",
+      "target": "unit",
+      "modifier": {
+        "move_type": "surge-move",
+        "value": "D6",
+        "replaces_default": false
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "In your opponent's Shooting phase, after an enemy unit shoots, a Chaos Knights unit that lost wounds can make a D6\" surge move."
+  },
+  {
+    "ability_id": "harbingers-of-dread",
+    "name": "Harbingers of Dread",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "ability_type": "faction",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "enemy-within-aura",
+          "modifier": {
+            "stat": "Ld",
+            "operation": "subtract",
+            "value": 1
+          }
+        },
+        {
+          "type": "choice",
+          "choice_label": "dread-ability",
+          "options": [
+            {
+              "type": "stat-modifier",
+              "target": "enemy-within-aura",
+              "modifier": {
+                "stat": "Ld",
+                "operation": "subtract",
+                "value": 1
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "is-battle-shocked",
+                "parameters": {
+                  "subject": "target"
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": "unit",
+                "modifier": {
+                  "roll": "wound",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            },
+            {
+              "type": "ability-grant",
+              "target": "self",
+              "modifier": {
+                "grant_type": "Stealth"
+              }
+            },
+            {
+              "type": "leadership-modifier",
+              "target": "enemy-within-aura",
+              "modifier": {
+                "test": "battle-shock"
+              }
+            },
+            {
+              "type": "mortal-wounds",
+              "target": "enemy-within-aura",
+              "modifier": {
+                "count": "D3",
+                "range": 9
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "self",
+              "modifier": {
+                "stat": "aura-range",
+                "operation": "add",
+                "value": 3
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "scope": {
+      "range": "aura-9",
+      "duration": "battle"
+    },
+    "community_notes": "Harbingers of Dread army rule. Deathly Terror is always active: worsen the Ld of enemy units within 9\" by 1. At the start of battle rounds 1, 3 and 5, select one further Dread ability (or roll 2D6 for two) to stay active for the battle: (1) a further -1 Ld within 9\" (cumulative); (2) +1 to Wound vs Battle-shocked targets; (3) Darkness = this model has Stealth (Faction Pack v1.0 update, was -1 to be hit by Battle-shocked/>18\" attackers); (4) below-Starting-Strength enemies within 9\" take a Battle-shock test in the opponent's Command phase; (5) D3 mortal wounds when a Below Half-strength enemy within 9\" fails a Battle-shock test; (6) +3\" to this model's Aura range."
+  },
+  {
+    "ability_id": "dreadblades",
+    "name": "Dreadblades",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "ability_type": "faction",
+    "behavior": "passive",
+    "effect": {
+      "type": "attack-restriction",
+      "target": "self",
+      "modifier": {
+        "restriction": "army-composition-rule"
       }
     },
     "scope": {
       "range": "unit",
       "duration": "permanent"
     },
+    "community_notes": "Dreadblades: if every model in your army has the CHAOS keyword, you may include 1 TITANIC CHAOS KNIGHTS model or up to 3 WAR DOG models that lack the chosen Faction keyword. They cannot be your Warlord and cannot take Enhancements."
+  },
+  {
+    "ability_id": "tyrannical-court",
+    "name": "Tyrannical Court",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
     "faction_id": "chaos-knights",
-    "ability_type": "faction",
-    "behavior": "passive"
+    "detachment_id": "lords-of-dread",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "objective-control-modifier",
+      "target": "all-friendly",
+      "modifier": {
+        "stat": "OC",
+        "operation": "add",
+        "value": 2
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "community_notes": "Improve the OC of CHAOS KNIGHTS CHARACTER models by 2. Once per battle round, if your Warlord is on the battlefield, use Claimed for the Dark Gods for 0CP."
+  },
+  {
+    "ability_id": "claimed-for-the-dark-gods",
+    "name": "Claimed for the Dark Gods",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "lords-of-dread",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "objective-control-modifier",
+      "target": "unit",
+      "modifier": {
+        "sticky": true
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "battle"
+    },
+    "community_notes": "1CP. Start of your Command phase (Faction Pack v1.0). A CHAOS KNIGHTS CHARACTER within range of an objective you control keeps that objective (Level of Control 5) until your opponent's control exceeds yours at the end of a phase."
+  },
+  {
+    "ability_id": "spiteful-demise",
+    "name": "Spiteful Demise",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "lords-of-dread",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "self",
+      "modifier": {
+        "stat": "deadly-demise-threshold",
+        "operation": "set",
+        "value": 4
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "phase"
+    },
+    "community_notes": "1CP. Just after a CHAOS KNIGHTS CHARACTER is destroyed: its Deadly Demise inflicts mortal wounds on a 4+ instead of a 6."
+  },
+  {
+    "ability_id": "titanic-duel",
+    "name": "Titanic Duel",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "lords-of-dread",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones",
+            "context": "vs-selected-keyword"
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "unit",
+          "modifier": {
+            "roll": "wound",
+            "subset": "ones",
+            "context": "vs-selected-keyword"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "1CP. Your Shooting or Fight phase. Vs one enemy MONSTER or VEHICLE: re-roll Hit and Wound rolls of 1 (full re-rolls if that unit is TITANIC)."
+  },
+  {
+    "ability_id": "trophy-hunter",
+    "name": "Trophy Hunter",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "lords-of-dread",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "movement-modifier",
+      "target": "unit",
+      "modifier": {
+        "move_type": "consolidate",
+        "bonus": 3
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "1CP. Before a CHAOS KNIGHTS CHARACTER consolidates: it can Consolidate up to an extra 3\", provided it ends within Engagement Range of an enemy unit."
+  },
+  {
+    "ability_id": "crushed-like-vermin",
+    "name": "Crushed Like Vermin",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "lords-of-dread",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "all-enemy",
+      "modifier": {
+        "count": "6D6",
+        "per_roll": "4+"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "1CP. After a CHAOS KNIGHTS CHARACTER ends a Normal move: pick a non-MONSTER/VEHICLE enemy it moved over and roll 6D6 — each 4+ deals 1 mortal wound; if any model dies, that unit takes a Battle-shock test."
+  },
+  {
+    "ability_id": "runes-of-disdain",
+    "name": "Runes of Disdain",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "lords-of-dread",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "damage-reduction",
+      "target": "unit",
+      "modifier": {
+        "reduction": 1
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "2CP. Reactive, after an enemy selects targets: subtract 1 from the Damage characteristic of each attack allocated to your CHAOS KNIGHTS CHARACTER unit."
+  },
+  {
+    "ability_id": "throne-mechanicum-of-skulls",
+    "name": "Throne Mechanicum of Skulls",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "lords-of-dread",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "unit",
+          "modifier": {
+            "roll": "charge",
+            "subset": "all-failures"
+          }
+        },
+        {
+          "type": "movement-modifier",
+          "target": "unit",
+          "modifier": {
+            "move_type": "advance-and-charge"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "community_notes": "25pts. Re-roll Charge rolls for the bearer's unit. Once per battle, the unit can declare a charge in a turn in which it Advanced."
+  },
+  {
+    "ability_id": "blade-of-celerity",
+    "name": "Blade of Celerity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "lords-of-dread",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "keyword-grant",
+          "target": "unit",
+          "modifier": {
+            "keywords": [
+              "Assault"
+            ],
+            "weapon_type": "ranged"
+          }
+        },
+        {
+          "type": "fight-first",
+          "target": "unit",
+          "modifier": {}
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "community_notes": "35pts. The bearer's ranged weapons have [ASSAULT]. Once per battle, in the Fight phase, the bearer's unit has Fights First."
+  },
+  {
+    "ability_id": "warp-borne-stalker",
+    "name": "Warp-borne Stalker",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "lords-of-dread",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "deep-strike",
+      "target": "self",
+      "modifier": {}
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "community_notes": "25pts. The bearer has Deep Strike. Once per battle, at the end of the opponent's turn, if not in Engagement Range, it can be placed into Strategic Reserves."
+  },
+  {
+    "ability_id": "putrid-carapace",
+    "name": "Putrid Carapace",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "lords-of-dread",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "self",
+      "modifier": {
+        "stat": "Sv",
+        "operation": "set",
+        "value": 2
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "community_notes": "30pts. The bearer has a Save of 2+. Once per battle, at the start of either Command phase, it regains up to D6 lost wounds."
+  },
+  {
+    "ability_id": "mirror-of-fates",
+    "name": "Mirror of Fates",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "lords-of-dread",
+    "ability_type": "enhancement",
+    "behavior": "reactive",
+    "effect": {
+      "type": "cp-refund",
+      "target": "self",
+      "modifier": {
+        "amount": 1
+      }
+    },
+    "scope": {
+      "range": "aura-12",
+      "duration": "turn"
+    },
+    "community_notes": "30pts (Faction Pack v1.0). Once per turn, when your opponent targets a unit within 12\" of this model with a Stratagem, increase the CP cost of that use by 1CP. (Also lets the bearer use Command Re-roll for 0CP once per battle round.)"
+  },
+  {
+    "ability_id": "blessing-of-the-dark-master",
+    "name": "Blessing of the Dark Master",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "lords-of-dread",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "Stealth"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "community_notes": "20pts. The bearer has Stealth. Once per battle, after a saving throw for the bearer, change that attack's Damage to 0."
+  },
+  {
+    "ability_id": "malefic-surge",
+    "name": "Malefic Surge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "infernal-lance",
+    "ability_type": "detachment",
+    "behavior": "activated",
+    "effect": {
+      "type": "choice",
+      "choice_label": "malefic-surge",
+      "options": [
+        {
+          "type": "movement-modifier",
+          "target": "unit",
+          "modifier": {
+            "move_type": "normal-advance-fallback",
+            "bonus": 3
+          }
+        },
+        {
+          "type": "choice",
+          "choice_label": "diabolic-power",
+          "options": [
+            {
+              "type": "keyword-grant",
+              "target": "unit",
+              "modifier": {
+                "keywords": [
+                  "Lethal Hits"
+                ]
+              }
+            },
+            {
+              "type": "keyword-grant",
+              "target": "unit",
+              "modifier": {
+                "keywords": [
+                  "Sustained Hits 1"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "choice_label": "unnatural-fortitude",
+          "options": [
+            {
+              "type": "invulnerable-save",
+              "target": "unit",
+              "modifier": {
+                "invuln_sv": 5
+              }
+            },
+            {
+              "type": "feel-no-pain",
+              "target": "unit",
+              "modifier": {
+                "threshold": 6
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "until-next-command-phase"
+    },
+    "community_notes": "In your Command phase, CHAOS KNIGHTS units can make a Malefic Surge: take a Ld test (D3 mortal wounds on a fail), then become Empowered until your next Command phase. An Empowered unit may use one Malefic Surge ability once: Unholy Hunger (+3\" Move on a Normal/Advance/Fall Back move), Diabolic Power ([LETHAL HITS] or [SUSTAINED HITS 1]), or Unnatural Fortitude (5+ invulnerable save OR Feel No Pain 6+ — Faction Pack v1.0)."
+  },
+  {
+    "ability_id": "profane-symbiosis",
+    "name": "Profane Symbiosis",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "infernal-lance",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "ability_id": "malefic-surge"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "1CP. End of any phase: a non-Empowered CHAOS KNIGHTS unit makes a Malefic Surge. Not the same unit more than once per battle round."
+  },
+  {
+    "ability_id": "hellforged-construction",
+    "name": "Hellforged Construction",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "infernal-lance",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "attack-restriction",
+      "target": "unit",
+      "modifier": {
+        "restriction": "worsen-incoming-ap",
+        "value": 1
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "1CP (Faction Pack v1.0). Reactive in the Fight phase: until the attacking unit finishes, worsen by 1 the Armour Penetration of each attack targeting your unit."
+  },
+  {
+    "ability_id": "corrupting-taint",
+    "name": "Corrupting Taint",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "infernal-lance",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "objective-control-modifier",
+      "target": "unit",
+      "modifier": {
+        "sticky": true
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "battle"
+    },
+    "community_notes": "1CP. After a CHAOS KNIGHTS CHARACTER makes a Malefic Surge: an objective it controls stays yours until the opponent's control exceeds yours at the end of a phase."
+  },
+  {
+    "ability_id": "unleash-balefire",
+    "name": "Unleash Balefire",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "infernal-lance",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "leadership-modifier",
+          "target": "all-enemy",
+          "modifier": {
+            "test": "battle-shock"
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "all-enemy",
+          "modifier": {
+            "stat": "M",
+            "operation": "subtract",
+            "value": 2
+          }
+        },
+        {
+          "type": "charge-roll-modifier",
+          "target": "all-enemy",
+          "modifier": {
+            "operation": "subtract",
+            "value": 2
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "community_notes": "1CP. After your unit shoots, a unit it hit takes a Battle-shock test; if failed it is aflame until the end of the opponent's next turn (-2\" Move and -2 to Charge rolls)."
+  },
+  {
+    "ability_id": "warp-vision",
+    "name": "Warp Vision",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "infernal-lance",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Ignores Cover"
+        ],
+        "weapon_type": "ranged"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "1CP. Your Shooting phase: ranged weapons in your unit have [IGNORES COVER]."
+  },
+  {
+    "ability_id": "diabolic-bulwark",
+    "name": "Diabolic Bulwark",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "infernal-lance",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "invulnerable-save",
+      "target": "unit",
+      "modifier": {
+        "invuln_sv": 4
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "1CP. Reactive in the opponent's Shooting phase: models in your unit have a 4+ invulnerable save."
+  },
+  {
+    "ability_id": "knight-diabolus",
+    "name": "Knight Diabolus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "infernal-lance",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "self",
+          "modifier": {
+            "stat": "WS",
+            "operation": "improve",
+            "value": 1,
+            "weapon_type": "melee"
+          }
+        },
+        {
+          "type": "keyword-grant",
+          "target": "self",
+          "modifier": {
+            "keywords": [
+              "Lance"
+            ],
+            "weapon_type": "melee"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "community_notes": "25pts. Improve the WS of the bearer's melee weapons by 1; while using Diabolic Power they also have [LANCE]."
+  },
+  {
+    "ability_id": "blasphemous-engine",
+    "name": "Blasphemous Engine",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "infernal-lance",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "self",
+      "modifier": {
+        "stat": "W",
+        "operation": "add",
+        "value": 2
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "community_notes": "35pts. +2 Wounds. Re-roll the Leadership test when the bearer's unit makes a Malefic Surge."
+  },
+  {
+    "ability_id": "fleshmetal-fusion",
+    "name": "Fleshmetal Fusion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "infernal-lance",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "self",
+      "modifier": {
+        "stat": "T",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "community_notes": "35pts. +1 Toughness. While using Unnatural Fortitude, +1 to armour saves against Damage-1 attacks."
+  },
+  {
+    "ability_id": "bestial-aspect",
+    "name": "Bestial Aspect",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "infernal-lance",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "self",
+      "modifier": {
+        "keywords": [
+          "Assault"
+        ],
+        "weapon_type": "ranged"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "community_notes": "20pts. The bearer's ranged weapons have [ASSAULT]. While using Unholy Hunger it can ignore Move/Advance modifiers."
+  },
+  {
+    "ability_id": "marked-prey",
+    "name": "Marked Prey",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "houndpack-lance",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Sustained Hits 1"
+        ],
+        "context": "vs-marked-enemy"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "until-next-command-phase"
+    },
+    "community_notes": "At the start of your Command phase, mark one enemy unit. Until your next Command phase, WAR DOG attacks targeting that visible enemy unit have [SUSTAINED HITS 1]."
+  },
+  {
+    "ability_id": "hungry-for-combat",
+    "name": "Hungry for Combat",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "houndpack-lance",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "unit",
+      "modifier": {
+        "roll": "hit",
+        "operation": "crit-on",
+        "value": 5
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "1CP. When 2+ WAR DOG units are in Engagement Range of the same enemy: they can only target that enemy, and their Hit rolls of 5+ score Critical Hits."
+  },
+  {
+    "ability_id": "animalistic-rage",
+    "name": "Animalistic Rage",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "houndpack-lance",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "choice",
+      "choice_label": "rage-attack",
+      "options": [
+        {
+          "type": "shoot-on-death",
+          "target": "unit",
+          "modifier": {}
+        },
+        {
+          "type": "fight-on-death",
+          "target": "unit",
+          "modifier": {}
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "1CP (Faction Pack v1.0). Just after a WAR DOG unit that has not been selected to attack this phase is destroyed: before its Deadly Demise resolves, it can shoot or fight, targeting only the unit that destroyed it."
+  },
+  {
+    "ability_id": "vox-howl",
+    "name": "Vox-Howl",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "houndpack-lance",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "leadership-modifier",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "test": "battle-shock"
+      }
+    },
+    "scope": {
+      "range": "aura-6",
+      "duration": "phase"
+    },
+    "community_notes": "2CP, once per turn. Enemy units within 6\" of your WAR DOG CHARACTER take a Battle-shock test; friendly WAR DOG units within 6\" can pass a Ld test to lose Battle-shock."
+  },
+  {
+    "ability_id": "cunning-hunter",
+    "name": "Cunning Hunter",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "houndpack-lance",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "fallback-and-act",
+      "target": "unit",
+      "modifier": {}
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "community_notes": "1CP. After a WAR DOG unit Falls Back: it is eligible to shoot and to declare a charge this turn."
+  },
+  {
+    "ability_id": "harrying-hounds",
+    "name": "Harrying Hounds",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "houndpack-lance",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "movement-modifier",
+      "target": "unit",
+      "modifier": {
+        "move_type": "normal-move",
+        "distance": 6
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "1CP (Faction Pack v1.0). Reactive, after an enemy ends a move within 8\" of your WAR DOG unit (was 9\"): your unit makes a Normal move of up to 6\"."
+  },
+  {
+    "ability_id": "encircling-pack",
+    "name": "Encircling Pack",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "houndpack-lance",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "movement-modifier",
+      "target": "unit",
+      "modifier": {
+        "move_type": "to-strategic-reserves"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "community_notes": "1CP. End of the opponent's Fight phase: a WAR DOG unit wholly within 12\" of a battlefield edge and not in Engagement Range is placed into Strategic Reserves."
+  },
+  {
+    "ability_id": "preyslayers-mantle",
+    "name": "Preyslayer's Mantle",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "houndpack-lance",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "Super-heavy Walker"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "community_notes": "15pts. The WAR DOG bearer has the Super-heavy Walker ability."
+  },
+  {
+    "ability_id": "final-howl-aura",
+    "name": "Final Howl (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "houndpack-lance",
+    "ability_type": "enhancement",
+    "behavior": "aura",
+    "effect": {
+      "type": "re-roll",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "roll": "wound",
+        "subset": "ones"
+      }
+    },
+    "scope": {
+      "range": "aura-6",
+      "duration": "permanent"
+    },
+    "community_notes": "20pts. Aura: while a friendly WAR DOG is within 6\" of the bearer, re-roll its Wound rolls of 1."
+  },
+  {
+    "ability_id": "loping-predator",
+    "name": "Loping Predator",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "houndpack-lance",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "self",
+      "modifier": {
+        "keywords": [
+          "Assault"
+        ],
+        "weapon_type": "ranged"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "community_notes": "10pts. The WAR DOG bearer's ranged weapons have [ASSAULT]."
+  },
+  {
+    "ability_id": "panoply-of-the-cursed-knights",
+    "name": "Panoply of the Cursed Knights",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "houndpack-lance",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "attack-restriction",
+      "target": "self",
+      "modifier": {
+        "restriction": "worsen-incoming-ap",
+        "value": 1
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "community_notes": "15pts. Each attack targeting the WAR DOG bearer has its Armour Penetration worsened by 1."
+  },
+  {
+    "ability_id": "paragons-of-terror",
+    "name": "Paragons of Terror",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "traitoris-lance",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "ability-grant",
+      "target": "all-friendly",
+      "modifier": {
+        "ability_id": "harbingers-of-dread",
+        "bonus": "one-extra-dread-ability"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "battle"
+    },
+    "community_notes": "At the start of the first battle round, after selecting Dread abilities, select one additional Dread ability to be active for your army (cannot be randomly selected)."
+  },
+  {
+    "ability_id": "conquerors-without-mercy",
+    "name": "Conquerors Without Mercy",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "traitoris-lance",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "self",
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1,
+            "weapon_type": "melee"
+          }
+        },
+        {
+          "type": "leadership-modifier",
+          "target": "enemy-within-aura",
+          "modifier": {
+            "test": "battle-shock"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "aura-6",
+      "duration": "phase"
+    },
+    "community_notes": "1CP. Fight phase, a CHAOS KNIGHTS model that charged this turn: improve the AP of its melee weapons by 1; if it destroys a unit this phase, enemy units within 6\" take a Battle-shock test."
+  },
+  {
+    "ability_id": "imperious-advance",
+    "name": "Imperious Advance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "traitoris-lance",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "engagement-passthrough",
+      "target": "unit",
+      "modifier": {}
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "1CP (Faction Pack v1.0). Movement or Charge phase, up to two WAR DOG units or one TITANIC CHAOS KNIGHTS unit: models can move through models and terrain; any Desperate Escape test is automatically passed (Super-heavy Walker does not apply while using this)."
+  },
+  {
+    "ability_id": "disdain-for-the-weak",
+    "name": "Disdain for the Weak",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "traitoris-lance",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "feel-no-pain",
+          "target": "unit",
+          "modifier": {
+            "threshold": 6
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "is-battle-shocked",
+            "parameters": {
+              "subject": "attacker"
+            }
+          },
+          "effect": {
+            "type": "feel-no-pain",
+            "target": "unit",
+            "modifier": {
+              "threshold": 5
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "1CP. Reactive in the Fight phase: your unit has Feel No Pain 6+, and Feel No Pain 5+ against attacks made by Battle-shocked models."
+  },
+  {
+    "ability_id": "a-long-leash",
+    "name": "A Long Leash",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "traitoris-lance",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant": "aura-coverage",
+        "source": "abhorrent"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "until-next-command-phase"
+    },
+    "community_notes": "1CP. Your Command phase: up to two friendly WAR DOG units are treated as within range of your ABHORRENT model's Aura abilities until your next Command phase."
+  },
+  {
+    "ability_id": "storm-of-darkness",
+    "name": "Storm of Darkness",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "traitoris-lance",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "unit",
+          "modifier": {
+            "grant_type": "Stealth"
+          }
+        },
+        {
+          "type": "ability-grant",
+          "target": "unit",
+          "modifier": {
+            "grant_type": "Benefit of Cover"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "1CP. Reactive in the opponent's Shooting phase: models in your unit have Stealth and the Benefit of Cover."
+  },
+  {
+    "ability_id": "pterrorshades",
+    "name": "Pterrorshades",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "traitoris-lance",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "all-enemy",
+      "modifier": {
+        "count": "6D6",
+        "per_roll": "4+"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "1CP, once per battle round. After an enemy fails a Battle-shock test: a CHAOS KNIGHTS unit within 12\" rolls 6D6 — each 4+ deals 1 mortal wound and heals 1 wound on your unit."
+  },
+  {
+    "ability_id": "nightmares-master",
+    "name": "Nightmare's Master",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "traitoris-lance",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "leadership-modifier",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "test": "battle-shock"
+      }
+    },
+    "scope": {
+      "range": "engagement-range",
+      "duration": "permanent"
+    },
+    "community_notes": "20pts. At the start of the Fight phase, each enemy unit in Engagement Range of the bearer takes a Battle-shock test."
+  },
+  {
+    "ability_id": "tyrants-shadow",
+    "name": "Tyrant's Shadow",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "traitoris-lance",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "objective-control-modifier",
+      "target": "unit",
+      "modifier": {
+        "sticky": true
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "community_notes": "25pts. At the end of your Command phase, an objective the bearer controls stays yours until the opponent's control exceeds yours; while held it has the Deathly Terror ability."
+  },
+  {
+    "ability_id": "malevolent-heraldry",
+    "name": "Malevolent Heraldry",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "traitoris-lance",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "re-roll",
+      "target": "self",
+      "modifier": {
+        "roll": "dread-ability-selection",
+        "subset": "all-failures"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "community_notes": "30pts. When you roll to randomly select active Dread abilities, you can re-roll one or both results."
+  },
+  {
+    "ability_id": "veil-of-medrengard",
+    "name": "Veil of Medrengard",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "chaos-knights",
+    "detachment_id": "traitoris-lance",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "invulnerable-save",
+          "target": "self",
+          "modifier": {
+            "invuln_sv": 4,
+            "context": "vs-ranged"
+          }
+        },
+        {
+          "type": "invulnerable-save",
+          "target": "self",
+          "modifier": {
+            "invuln_sv": 5,
+            "context": "vs-melee"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "community_notes": "35pts. The bearer has a 4+ invulnerable save against ranged attacks and a 5+ invulnerable save against melee attacks."
   }
 ]

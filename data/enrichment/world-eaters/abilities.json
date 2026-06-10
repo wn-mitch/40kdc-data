@@ -37,11 +37,11 @@
               "min_value": 1
             },
             "effect": {
-              "type": "re-roll",
+              "type": "charge-roll-modifier",
               "target": "all-friendly",
               "modifier": {
-                "roll": "charge",
-                "subset": "all-failures"
+                "operation": "add",
+                "value": 1
               }
             }
           },
@@ -1114,9 +1114,21 @@
         "operator": "and",
         "operands": [
           {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          },
+          {
             "type": "opponent-unit-within-range",
             "parameters": {
-              "range": 9
+              "range": 8
             }
           },
           {
@@ -1488,15 +1500,7 @@
             }
           },
           {
-            "type": "is-battle-shocked",
-            "negated": true
-          },
-          {
-            "type": "opponent-unit-within-range",
-            "parameters": {
-              "range": "engagement"
-            },
-            "negated": true
+            "type": "has-lost-wounds"
           }
         ]
       },
@@ -1772,47 +1776,34 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          }
-        ]
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
       },
       "effect": {
-        "type": "choice",
-        "options": [
+        "type": "sequence",
+        "steps": [
           {
-            "type": "shoot-on-death",
+            "type": "ability-grant",
             "target": "self",
             "modifier": {
-              "restriction": "attacker-only"
+              "grant_type": "eligible-to-fight-again"
             }
           },
           {
-            "type": "fight-on-death",
+            "type": "fight-first",
             "target": "self",
-            "modifier": {
-              "restriction": "attacker-only"
-            }
+            "modifier": {}
           }
-        ],
-        "choice_label": "Shoot or fight back"
+        ]
       }
     },
     "scope": {
       "range": "self",
       "duration": "phase"
-    }
+    },
+    "community_notes": "Once per turn, per unit. In the Fight phase, after an enemy unit that targeted this unit resolves its attacks, this unit is eligible to fight again and must be selected to fight next."
   },
   {
     "ability_id": "super-heavy-war-engine",
@@ -1879,33 +1870,42 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-below-starting-strength"
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
+        "operator": "and",
+        "operands": [
           {
-            "type": "roll-modifier",
-            "target": "self",
-            "modifier": {
-              "roll": "charge",
-              "operation": "add",
-              "value": 1
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
             }
           },
           {
-            "type": "conditional",
-            "condition": {
-              "type": "unit-below-half-strength"
-            },
-            "effect": {
-              "type": "roll-modifier",
-              "target": "self",
-              "modifier": {
-                "roll": "charge",
-                "operation": "add",
-                "value": 1
-              }
+            "type": "opponent-unit-within-range",
+            "parameters": {
+              "range": 9
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "choice",
+        "choice_label": "Enemy weakness within 9\"",
+        "options": [
+          {
+            "type": "charge-roll-modifier",
+            "target": "self",
+            "modifier": {
+              "operation": "add",
+              "value": 1,
+              "requires": "enemy-below-starting-strength"
+            }
+          },
+          {
+            "type": "charge-roll-modifier",
+            "target": "self",
+            "modifier": {
+              "operation": "add",
+              "value": 2,
+              "requires": "enemy-below-half-strength"
             }
           }
         ]
@@ -1914,7 +1914,8 @@
     "scope": {
       "range": "self",
       "duration": "permanent"
-    }
+    },
+    "community_notes": "In the Charge phase when this unit declares a charge: +1 to charge rolls if an enemy unit below starting strength is within 9\", or +2 if an enemy unit below half strength is within 9\". (Enemy-strength predicate carried on the option modifier; no dedicated condition type exists.)"
   },
   {
     "ability_id": "savage-exaltation",
@@ -2183,7 +2184,7 @@
           {
             "type": "opponent-unit-within-range",
             "parameters": {
-              "range": 9
+              "range": 8
             }
           }
         ]
@@ -2789,6 +2790,9 @@
             "parameters": {
               "keyword": "Possessed"
             }
+          },
+          {
+            "type": "has-lost-wounds"
           }
         ]
       },
@@ -2806,8 +2810,11 @@
       "range": "unit",
       "duration": "phase"
     },
+    "community_notes": "In your opponent's Shooting phase, when an enemy unit has shot, if a model in this unit was destroyed, the unit can make a D6\" Brazen Fury surge move.",
     "applies_to": {
-      "required_keywords": ["Possessed"]
+      "required_keywords": [
+        "Possessed"
+      ]
     }
   },
   {
@@ -2828,23 +2835,41 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "timing-is",
+        "type": "phase-is",
         "parameters": {
-          "timing": "start-of-phase"
+          "phase": "fight"
         }
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "all-friendly",
-        "modifier": {
-          "grant_type": "vessel-of-wrath-selection"
-        }
+        "type": "choice",
+        "choice_label": "Boon of martial might",
+        "options": [
+          {
+            "type": "keyword-grant",
+            "target": "unit",
+            "modifier": {
+              "keyword": "Cleave 1",
+              "weapon_type": "melee"
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "unit",
+            "modifier": {
+              "stat": "AP",
+              "operation": "improve",
+              "value": 1,
+              "attack_type": "melee"
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "range": "any-on-battlefield",
-      "duration": "battle-round"
-    }
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "When a friendly WORLD EATERS CHARACTER (excluding EPIC HERO) is selected to fight, its CHARACTER models' melee attacks gain [CLEAVE 1] or +1 AP."
   },
   {
     "ability_id": "blood-tithe",
@@ -3737,138 +3762,28 @@
     "faction_id": "world-eaters",
     "detachment_id": "vessels-of-wrath",
     "ability_type": "enhancement",
-    "behavior": "passive",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "stat-modifier",
-          "target": "self",
-          "modifier": {
-            "stat": "AP",
-            "operation": "improve",
-            "value": 1,
-            "attack_type": "melee"
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "Vessel of Wrath"
-            }
-          },
-          "effect": {
-            "type": "stat-modifier",
-            "target": "self",
-            "modifier": {
-              "stat": "D",
-              "operation": "add",
-              "value": 1,
-              "attack_type": "melee"
-            }
-          }
-        }
-      ]
-    },
-    "scope": {
-      "range": "self",
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "vox-diabolus",
-    "name": "Vox-Diabolus",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "world-eaters",
-    "detachment_id": "vessels-of-wrath",
-    "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "activated",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "timing-is",
+        "type": "phase-is",
         "parameters": {
-          "timing": "on-unit-destroyed"
+          "phase": "command"
         }
       },
       "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 4,
-        "comparison": "gte",
-        "on_success": {
-          "type": "cp-gain",
-          "target": "self",
-          "modifier": {
-            "amount": 1
-          }
-        },
-        "on_fail": null
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    }
-  },
-  {
-    "ability_id": "avengers-crown",
-    "name": "Avenger's Crown",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "world-eaters",
-    "detachment_id": "vessels-of-wrath",
-    "ability_type": "enhancement",
-    "behavior": "passive",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "destroyed-by-attack-type",
-            "parameters": {
-              "attack_type": "melee"
-            }
-          },
-          {
-            "type": "has-fought-this-phase",
-            "negated": true
-          }
-        ]
-      },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 2,
-        "comparison": "gte",
-        "on_success": {
-          "type": "fight-on-death",
-          "target": "self",
-          "modifier": {}
-        },
-        "on_fail": null
+        "type": "ability-grant",
+        "target": "self",
+        "modifier": {
+          "grant_type": "all-blessings-of-khorne-active"
+        }
       }
     },
     "scope": {
       "range": "self",
-      "duration": "phase"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "community_notes": "WORLD EATERS model only. Once per battle, per army, in your Command phase: every Blessing of Khorne is active for this unit until the start of your next turn."
   },
   {
     "ability_id": "gateways-to-glory",
@@ -3886,18 +3801,30 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "movement-modifier",
-      "target": "self",
-      "modifier": {
-        "move_type": "move-through",
-        "value": 0,
-        "replaces_default": false
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "keyword-grant",
+          "target": "self",
+          "modifier": {
+            "keyword": "Mobile"
+          }
+        },
+        {
+          "type": "charge-roll-modifier",
+          "target": "self",
+          "modifier": {
+            "operation": "add",
+            "value": 1
+          }
+        }
+      ]
     },
     "scope": {
       "range": "self",
       "duration": "permanent"
-    }
+    },
+    "community_notes": "WORLD EATERS DAEMON PRINCE model only: the model gains MOBILE and +1 to charge rolls."
   },
   {
     "ability_id": "hack-and-slash",
@@ -4783,33 +4710,6 @@
     }
   },
   {
-    "ability_id": "brazen-contempt",
-    "name": "Brazen Contempt",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "world-eaters",
-    "detachment_id": "vessels-of-wrath",
-    "ability_type": "stratagem",
-    "behavior": "activated",
-    "effect": {
-      "type": "damage-reduction",
-      "target": "unit",
-      "modifier": {
-        "amount": 1
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "phase"
-    }
-  },
-  {
     "ability_id": "aspire-to-infamy",
     "name": "Aspire to Infamy",
     "authored_by": "40kdc-community",
@@ -4828,63 +4728,26 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "roll-modifier",
+          "type": "stat-modifier",
           "target": "unit",
           "modifier": {
-            "roll": "hit",
+            "stat": "A",
             "operation": "add",
             "value": 1,
             "attack_type": "melee"
           }
         },
         {
-          "type": "keyword-grant",
+          "type": "stat-modifier",
           "target": "unit",
           "modifier": {
-            "keyword": "Lance",
-            "weapon_type": "melee"
+            "stat": "S",
+            "operation": "add",
+            "value": 2,
+            "attack_type": "melee"
           }
         }
       ]
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "phase"
-    }
-  },
-  {
-    "ability_id": "overshadowed-by-none",
-    "name": "Overshadowed by None",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "world-eaters",
-    "detachment_id": "vessels-of-wrath",
-    "ability_type": "stratagem",
-    "behavior": "activated",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "unit-within-range-of",
-        "parameters": {
-          "range": "engagement",
-          "target_type": "character"
-        }
-      },
-      "effect": {
-        "type": "re-roll",
-        "target": "unit",
-        "modifier": {
-          "roll": "wound",
-          "attack_type": "melee",
-          "subset": "all-failures"
-        }
-      }
     },
     "scope": {
       "range": "unit",
@@ -4905,12 +4768,153 @@
     "faction_id": "world-eaters",
     "detachment_id": "vessels-of-wrath",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
       "type": "ability-grant",
+      "target": "all-enemy",
+      "modifier": {
+        "grant_type": "forced-desperate-escape",
+        "battle_shock_hazard_penalty": -1
+      }
+    },
+    "scope": {
+      "range": "engagement-range",
+      "duration": "phase"
+    },
+    "community_notes": "An enemy unit engaged with your WORLD EATERS CHARACTER that falls back must use desperate escape; if it is battle-shocked, -1 to those hazard rolls."
+  },
+  {
+    "ability_id": "rampaging-terrors",
+    "name": "Rampaging Terrors",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": "brazen-engines",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "start-of-phase"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "leadership-modifier",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "test": "battle-shock",
+          "penalty": -1
+        }
+      }
+    },
+    "scope": {
+      "range": "engagement-range",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Daemon",
+        "Vehicle"
+      ]
+    },
+    "community_notes": "Grants friendly DAEMON VEHICLE units the Terror of Khorne ability: at the start of the Fight phase, force a battle-shock test at -1 on one engaged enemy unit (once per enemy per phase). ONSLAUGHT detachment."
+  },
+  {
+    "ability_id": "talons-of-butchery",
+    "name": "Talons of Butchery",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": "brazen-engines",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "self",
+      "modifier": {
+        "keyword": "Cleave 2",
+        "weapon_name": "Maulerfiend Fists"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "murder-forged-entity",
+    "name": "Murder-Forged Entity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": "brazen-engines",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "self",
+      "modifier": {
+        "keyword": "Daemon"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "community_notes": "WORLD EATERS VEHICLE model only: the unit gains the DAEMON keyword."
+  },
+  {
+    "ability_id": "apoplectic-clarity",
+    "name": "Apoplectic Clarity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": "brazen-engines",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "roll-modifier",
       "target": "unit",
       "modifier": {
-        "grant_type": "heroic-intervention-on-fallback"
+        "operation": "ignore-modifiers",
+        "roll": "BS, WS, Hit and Wound"
       }
     },
     "scope": {
@@ -4919,8 +4923,305 @@
     }
   },
   {
-    "ability_id": "meet-force-with-force",
-    "name": "Meet Force with Force",
+    "ability_id": "trail-of-destruction",
+    "name": "Trail of Destruction",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": "brazen-engines",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keyword": "Mobile"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    }
+  },
+  {
+    "ability_id": "goaded-to-fury",
+    "name": "Goaded to Fury",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": "brazen-engines",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "movement-modifier",
+        "target": "unit",
+        "modifier": {
+          "move_type": "surge-move",
+          "value": "D6",
+          "replaces_default": false
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "When an enemy unit that targeted a friendly unengaged DAEMON VEHICLE (excluding TITANIC) has shot, that unit can make a surge move of up to D6\"."
+  },
+  {
+    "ability_id": "adamantine-avalanche",
+    "name": "Adamantine Avalanche",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": "butchers-of-khorne",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "start-of-phase"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "all-friendly",
+        "modifier": {
+          "grant_type": "activate-blessing-of-khorne"
+        }
+      }
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Terminator Squad"
+      ]
+    },
+    "community_notes": "At the start of the Fight phase, if a friendly TERMINATOR SQUAD is engaged, make a Blessings of Khorne roll and activate one Blessing of Khorne for friendly TERMINATOR SQUAD units (in addition to any already active)."
+  },
+  {
+    "ability_id": "sanctified-in-slaughter",
+    "name": "Sanctified in Slaughter",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": "butchers-of-khorne",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "objective-control-modifier",
+      "target": "self",
+      "modifier": {
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "gore-stained-veterans",
+    "name": "Gore-Stained Veterans",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": "butchers-of-khorne",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "self",
+      "modifier": {
+        "roll": "hit",
+        "operation": "add",
+        "value": 1,
+        "attack_type": "melee"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "community_notes": "+1 WS on melee attacks (modeled as +1 to melee Hit rolls)."
+  },
+  {
+    "ability_id": "focused-ferocity",
+    "name": "Focused Ferocity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": "butchers-of-khorne",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "unit",
+      "modifier": {
+        "stat": "A",
+        "operation": "add",
+        "value": 1,
+        "attack_type": "melee"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    }
+  },
+  {
+    "ability_id": "a-trophy-for-the-throne",
+    "name": "A Trophy for the Throne",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": "butchers-of-khorne",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "target-has-keyword",
+            "parameters": {
+              "keyword": "Monster"
+            }
+          },
+          {
+            "type": "target-has-keyword",
+            "parameters": {
+              "keyword": "Vehicle"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "unit",
+        "modifier": {
+          "roll": "wound",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    }
+  },
+  {
+    "ability_id": "wrath-beyond-reason",
+    "name": "Wrath Beyond Reason",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "world-eaters",
+    "detachment_id": "butchers-of-khorne",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "damage-reduction",
+      "target": "self",
+      "modifier": {
+        "amount": 1,
+        "attack_type": "ranged"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "community_notes": "Ranged attacks that target your TERMINATOR SQUAD have -1 D until that enemy unit has attacked."
+  },
+  {
+    "ability_id": "scorn-the-witch",
+    "name": "Scorn the Witch",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -4932,46 +5233,19 @@
     "faction_id": "world-eaters",
     "detachment_id": "vessels-of-wrath",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "movement-modifier",
+      "type": "feel-no-pain",
       "target": "unit",
       "modifier": {
-        "move_type": "pile-in-special",
-        "value": "D6+2",
-        "replaces_default": true
+        "threshold": 4,
+        "scope": "mortal"
       }
     },
     "scope": {
       "range": "unit",
       "duration": "phase"
-    }
-  },
-  {
-    "ability_id": "gory-dedication",
-    "name": "Gory Dedication",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
     },
-    "version": "2025-q3",
-    "supersedes": null,
-    "unit_ids": [],
-    "faction_id": "world-eaters",
-    "detachment_id": "vessels-of-wrath",
-    "ability_type": "stratagem",
-    "behavior": "activated",
-    "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "grant_type": "sticky-objective-melee-kill"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "phase"
-    }
+    "community_notes": "Friendly WORLD EATERS CHARACTER (excluding EPIC HERO) gains Feel No Pain 4+ against mortal wounds when it suffers a mortal wound."
   }
 ]

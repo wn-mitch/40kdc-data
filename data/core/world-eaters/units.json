@@ -462,7 +462,8 @@
       "Nurgle",
       "Slaanesh",
       "Tzeentch",
-      "Khorne"
+      "Khorne",
+      "Frame"
     ],
     "faction_keywords": [
       "Heretic Astartes",
@@ -575,9 +576,9 @@
     "profiles": [
       {
         "name": "Defiler",
-        "M": 10,
-        "T": 10,
-        "W": 14,
+        "M": 14,
+        "T": 11,
+        "W": 18,
         "Sv": 3,
         "invuln_sv": 5,
         "Ld": 6,
@@ -587,24 +588,18 @@
     "points": [
       {
         "models": 1,
-        "cost": 180
+        "cost": 250
       }
     ],
     "keywords": [
       "Vehicle",
       "Walker",
-      "Smoke",
       "Chaos",
+      "Khorne",
       "Daemon",
-      "Defiler",
-      "Nurgle",
-      "Tzeentch",
-      "Khorne"
+      "Defiler"
     ],
     "faction_keywords": [
-      "Heretic Astartes",
-      "Death Guard",
-      "Thousand Sons",
       "World Eaters"
     ],
     "base_size_mm": {
@@ -616,23 +611,19 @@
       "max": 1
     },
     "weapon_ids": [
-      "combi-bolter",
-      "combi-weapon",
-      "defiler-cannon",
-      "defiler-claws",
-      "defiler-scourge",
-      "havoc-launcher",
-      "reaper-autocannon",
-      "twin-heavy-bolter",
-      "twin-heavy-flamer",
-      "twin-lascannon"
+      "ectoplasma-destructor",
+      "excruciator-cannon",
+      "heavy-baleflamer",
+      "hades-battle-cannon",
+      "hades-lascannon",
+      "heavy-missile-launcher",
+      "heavy-reaper-autocannon",
+      "magma-cutters",
+      "electroscourge",
+      "shearing-claws"
     ],
     "ability_ids": [
-      "barrage-of-filth",
-      "daemonforge",
-      "deadly-demise-d3",
-      "destroyer-of-futures",
-      "feel-no-pain-6",
+      "deadly-demise-d6",
       "scuttling-walker",
       "unleash-wrath"
     ],
@@ -641,7 +632,7 @@
       "dataslate": "pre-launch-provisional"
     },
     "is_legend": false,
-    "points_provisional": true
+    "points_provisional": false
   },
   {
     "id": "heldrake",
@@ -650,7 +641,7 @@
     "profiles": [
       {
         "name": "Heldrake",
-        "M": 20,
+        "M": 12,
         "T": 9,
         "W": 12,
         "Sv": 3,
@@ -668,7 +659,6 @@
     "keywords": [
       "Vehicle",
       "Fly",
-      "Aircraft",
       "Chaos",
       "Daemon",
       "Heldrake",
@@ -1043,7 +1033,8 @@
       "Nurgle",
       "Slaanesh",
       "Tzeentch",
-      "Khorne"
+      "Khorne",
+      "Frame"
     ],
     "faction_keywords": [
       "Heretic Astartes",
@@ -1189,7 +1180,8 @@
       "Predator Destructor",
       "Nurgle",
       "Tzeentch",
-      "Khorne"
+      "Khorne",
+      "Frame"
     ],
     "faction_keywords": [
       "Heretic Astartes",
@@ -1319,7 +1311,8 @@
       "Predator Annihilator",
       "Nurgle",
       "Tzeentch",
-      "Khorne"
+      "Khorne",
+      "Frame"
     ],
     "faction_keywords": [
       "Heretic Astartes",
@@ -1451,7 +1444,8 @@
       "Chaos",
       "Khorne",
       "Daemon",
-      "Lord of Skulls"
+      "Lord of Skulls",
+      "Frame"
     ],
     "faction_keywords": [
       "Heretic Astartes",

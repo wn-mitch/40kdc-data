@@ -700,115 +700,6 @@
     ]
   },
   {
-    "id": "defiler-swap-1",
-    "unit_id": "defiler",
-    "is_free": true,
-    "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
-    },
-    "replaces": [
-      "twin-heavy-flamer"
-    ],
-    "replacement_choice": [
-      [
-        "defiler-scourge"
-      ],
-      [
-        "havoc-launcher"
-      ]
-    ]
-  },
-  {
-    "id": "defiler-swap-1",
-    "unit_id": "defiler",
-    "is_free": true,
-    "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
-    },
-    "replaces": [
-      "twin-heavy-flamer"
-    ],
-    "replacement_choice": [
-      [
-        "havoc-launcher"
-      ],
-      [
-        "defiler-scourge"
-      ]
-    ]
-  },
-  {
-    "id": "defiler-swap-2",
-    "unit_id": "defiler",
-    "is_free": true,
-    "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
-    },
-    "replaces": [
-      "reaper-autocannon"
-    ],
-    "replacement_choice": [
-      [
-        "twin-heavy-bolter"
-      ],
-      [
-        "twin-lascannon"
-      ]
-    ]
-  },
-  {
-    "id": "defiler-swap-2",
-    "unit_id": "defiler",
-    "is_free": true,
-    "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
-    },
-    "replaces": [
-      "reaper-autocannon"
-    ],
-    "replacement_choice": [
-      [
-        "twin-lascannon"
-      ],
-      [
-        "twin-inferno-heavy-bolter"
-      ]
-    ]
-  },
-  {
-    "id": "defiler-addon-3",
-    "unit_id": "defiler",
-    "is_free": true,
-    "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
-    },
-    "replacement_choice": [
-      [
-        "combi-bolter"
-      ],
-      [
-        "combi-weapon"
-      ]
-    ]
-  },
-  {
-    "id": "defiler-addon-3",
-    "unit_id": "defiler",
-    "is_free": true,
-    "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
-    },
-    "replacement": [
-      "inferno-combi-weapon"
-    ]
-  },
-  {
     "id": "khorne-lord-of-skulls-swap-1",
     "unit_id": "khorne-lord-of-skulls",
     "is_free": true,
@@ -1077,6 +968,82 @@
     ],
     "replacement": [
       "blood-harpoon"
+    ]
+  },
+  {
+    "id": "defiler-swap-hades-cannon",
+    "unit_id": "defiler",
+    "is_free": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "replaces": [
+      "hades-battle-cannon"
+    ],
+    "replacement": [
+      "ectoplasma-destructor"
+    ]
+  },
+  {
+    "id": "defiler-swap-excruciator",
+    "unit_id": "defiler",
+    "is_free": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "replaces": [
+      "excruciator-cannon"
+    ],
+    "replacement": [
+      "magma-cutters"
+    ]
+  },
+  {
+    "id": "defiler-swap-baleflamer",
+    "unit_id": "defiler",
+    "is_free": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "replaces": [
+      "heavy-baleflamer"
+    ],
+    "replacement_choice": [
+      [
+        "hades-lascannon"
+      ],
+      [
+        "heavy-reaper-autocannon"
+      ],
+      [
+        "electroscourge"
+      ]
+    ]
+  },
+  {
+    "id": "defiler-swap-missile",
+    "unit_id": "defiler",
+    "is_free": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "replaces": [
+      "heavy-missile-launcher"
+    ],
+    "replacement_choice": [
+      [
+        "hades-lascannon"
+      ],
+      [
+        "heavy-reaper-autocannon"
+      ],
+      [
+        "electroscourge"
+      ]
     ]
   }
 ]

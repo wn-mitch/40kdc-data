@@ -15,7 +15,7 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 | agents-of-the-imperium | 92 | 23 | 8 | 63 | 2 | 2 | 0 | 2 |
 | astra-militarum | 151 | 36 | 14 | 104 | 0 | 3 | 0 | 5 |
 | chaos-daemons | 129 | 35 | 14 | 86 | 1 | 7 | 0 | 4 |
-| chaos-knights | 41 | 18 | 1 | 23 | 2 | 3 | 0 | 0 |
+| chaos-knights | 70 | 20 | 4 | 47 | 3 | 3 | 0 | 0 |
 | chaos-space-marines | 182 | 47 | 16 | 126 | 7 | 21 | 0 | 6 |
 | death-guard | 89 | 19 | 7 | 66 | 4 | 8 | 0 | 3 |
 | drukhari | 94 | 21 | 6 | 69 | 20 | 7 | 0 | 1 |
@@ -29,53 +29,53 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 | tau-empire | 122 | 32 | 7 | 86 | 9 | 6 | 0 | 3 |
 | thousand-sons | 95 | 25 | 8 | 67 | 10 | 17 | 0 | 2 |
 | tyranids | 102 | 19 | 7 | 79 | 13 | 5 | 0 | 6 |
-| world-eaters | 122 | 14 | 6 | 102 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **2551** | **606** | **235** | **1794** | **186** | **154** | **0** | **59** |
+| world-eaters | 129 | 20 | 7 | 102 | 0 | 0 | 0 | 0 |
+| **TOTAL** | **2587** | **614** | **239** | **1818** | **187** | **154** | **0** | **59** |
 
 `stub*` = structural (empty-modifier placeholder node) — the authoring worklist. `notes-stub` = flagged in community_notes.
 
 ## Unsupported-effect reasons (offensive walk)
 
-- `377` — effect type "ability-grant" is not modelled by the buff layer
+- `383` — effect type "ability-grant" is not modelled by the buff layer
 - `181` — stat-modifier: operation "undefined" not supported
 - `153` — effect type "movement-modifier" is not modelled by the buff layer
 - `121` — effect type "mortal-wounds" is not modelled by the buff layer
-- `86` — dice-gated effect: stochastic; not expressible as a buff
+- `87` — dice-gated effect: stochastic; not expressible as a buff
 - `86` — effect type "attack-restriction" is not modelled by the buff layer
-- `66` — effect type "leadership-modifier" is not modelled by the buff layer
+- `67` — effect type "leadership-modifier" is not modelled by the buff layer
 - `54` — effect type "resurrection" is not modelled by the buff layer
-- `47` — conditional: cannot evaluate condition "undefined" against current context
-- `45` — effect type "cp-refund" is not modelled by the buff layer
+- `48` — conditional: cannot evaluate condition "undefined" against current context
+- `46` — effect type "cp-refund" is not modelled by the buff layer
+- `38` — effect type "objective-control-modifier" is not modelled by the buff layer
 - `37` — stat-modifier: operation "set" not supported
-- `37` — effect type "objective-control-modifier" is not modelled by the buff layer
 - `35` — effect type "cp-gain" is not modelled by the buff layer
+- `34` — re-roll on "charge" (subset …) is outside the damage path
 - `33` — effect type "deep-strike" is not modelled by the buff layer
-- `33` — re-roll on "charge" (subset …) is outside the damage path
-- `26` — effect type "fallback-and-act" is not modelled by the buff layer
+- `28` — effect type "fallback-and-act" is not modelled by the buff layer
 - `22` — effect type "fight-on-death" is not modelled by the buff layer
-- `18` — effect type "fight-first" is not modelled by the buff layer
+- `19` — effect type "fight-first" is not modelled by the buff layer
 - `18` — roll-modifier: operation "set" not supported
 - `15` — stat-modifier on "M" is outside the damage path
-- `13` — roll-modifier: operation "ignore-modifiers" not supported
+- `14` — roll-modifier: operation "ignore-modifiers" not supported
 - `11` — roll-modifier on "charge" is outside the damage path
-- `11` — conditional: cannot evaluate condition "unit-below-starting-strength" against current context
 - `10` — stat-modifier on "D" is outside the damage path
-- `10` — conditional: cannot evaluate condition "unit-within-range-of" against current context
+- `10` — conditional: cannot evaluate condition "unit-below-starting-strength" against current context
+- `9` — conditional: cannot evaluate condition "unit-within-range-of" against current context
 - `6` — roll-modifier: operation "crit-on" not supported
+- `5` — stat-modifier AP on the attacker: defender-side AP reduction is not modelled by the buff layer
+- `4` — re-roll on "advance" (subset …) is outside the damage path
 - `4` — stat-modifier T: defender-side stat; applies when the buffed unit is the target
 - `3` — roll-modifier: operation "guarantee-crit" not supported
 - `3` — effect type "shoot-on-death" is not modelled by the buff layer
 - `3` — roll-modifier: operation "ignore-engagement-penalty" not supported
-- `3` — stat-modifier AP on the attacker: defender-side AP reduction is not modelled by the buff layer
 - `3` — conditional: cannot evaluate condition "opponent-unit-within-range" against current context
-- `3` — re-roll on "advance" (subset …) is outside the damage path
+- `3` — conditional: cannot evaluate condition "is-battle-shocked" against current context
+- `3` — effect type "engagement-passthrough" is not modelled by the buff layer
 - `2` — stat-modifier on "aura-range" is outside the damage path
 - `2` — stat-modifier on "W" is outside the damage path
 - `2` — stat-modifier on "Ld" is outside the damage path
 - `2` — conditional: cannot evaluate condition "attack-is-type" against current context
 - `2` — effect type "terrain-area-tag" is not modelled by the buff layer
-- `2` — conditional: cannot evaluate condition "is-battle-shocked" against current context
-- `2` — effect type "engagement-passthrough" is not modelled by the buff layer
 - `2` — re-roll on "blood-surge" (subset …) is outside the damage path
 - `2` — effect type "resource-spend" is not modelled by the buff layer
 - `2` — conditional: cannot evaluate condition "unit-below-half-strength" against current context
@@ -83,6 +83,9 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 - `1` — stat-modifier: operation "improve-vs-D1" not supported
 - `1` — conditional: cannot evaluate condition "advanced-this-turn" against current context
 - `1` — stat-modifier: narrows by "weapon_filter" which the cruncher can't resolve here
+- `1` — re-roll on "attacks-characteristic" (subset …) is outside the damage path
+- `1` — stat-modifier on "Range" is outside the damage path
+- `1` — re-roll on "leadership" (subset …) is outside the damage path
 - `1` — conditional: cannot evaluate condition "destroyed-by-attack-type" against current context
 - `1` — conditional: cannot evaluate condition "units-destroyed" against current context
 - `1` — stat-modifier: operation "multiply" not supported
@@ -91,3 +94,4 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 - `1` — stat-modifier on "blessings-dice" is outside the damage path
 - `1` — re-roll on "blessings" (subset …) is outside the damage path
 - `1` — roll-modifier: operation "undefined" not supported
+- `1` — effect type "charge-roll-modifier" is not modelled by the buff layer

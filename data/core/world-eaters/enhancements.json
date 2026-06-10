@@ -90,42 +90,6 @@
     "max_targets": 1
   },
   {
-    "id": "vox-diabolus",
-    "name": "Vox-Diabolus",
-    "detachment_id": "vessels-of-wrath",
-    "cost": 20,
-    "keyword_restrictions": [
-      "World Eaters"
-    ],
-    "ability_id": "vox-diabolus",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "avengers-crown",
-    "name": "Avenger’s Crown",
-    "detachment_id": "vessels-of-wrath",
-    "cost": 15,
-    "keyword_restrictions": [
-      "World Eaters"
-    ],
-    "ability_id": "avengers-crown",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
     "id": "gateways-to-glory",
     "name": "Gateways to Glory",
     "detachment_id": "vessels-of-wrath",
@@ -429,6 +393,78 @@
     },
     "points_provisional": true,
     "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "talons-of-butchery",
+    "name": "Talons of Butchery",
+    "detachment_id": "brazen-engines",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Maulerfiend"
+    ],
+    "ability_id": "talons-of-butchery",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "murder-forged-entity",
+    "name": "Murder-Forged Entity",
+    "detachment_id": "brazen-engines",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Vehicle"
+    ],
+    "ability_id": "murder-forged-entity",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "sanctified-in-slaughter",
+    "name": "Sanctified in Slaughter",
+    "detachment_id": "butchers-of-khorne",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Terminator Squad"
+    ],
+    "ability_id": "sanctified-in-slaughter",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "gore-stained-veterans",
+    "name": "Gore-Stained Veterans",
+    "detachment_id": "butchers-of-khorne",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Terminator Squad"
+    ],
+    "ability_id": "gore-stained-veterans",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
     "max_targets": 1
   }
 ]

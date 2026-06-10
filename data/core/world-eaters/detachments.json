@@ -22,8 +22,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 3,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "possessed-slaughterband",
@@ -48,8 +50,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "purge-the-foe"
+    ]
   },
   {
     "id": "vessels-of-wrath",
@@ -58,24 +62,21 @@
     "detachment_rule_id": "wrath-of-khorne",
     "enhancement_ids": [
       "archslaughterer",
-      "vox-diabolus",
-      "avengers-crown",
       "gateways-to-glory"
     ],
     "stratagem_ids": [
-      "brazen-contempt",
+      "scorn-the-witch",
       "aspire-to-infamy",
-      "overshadowed-by-none",
-      "punish-the-craven",
-      "meet-force-with-force",
-      "gory-dedication"
+      "punish-the-craven"
     ],
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 1,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "khorne-daemonkin",
@@ -100,8 +101,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "reconnaissance"
+    ]
   },
   {
     "id": "cult-of-blood",
@@ -126,8 +129,10 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "priority-assets"
+    ]
   },
   {
     "id": "goretrack-onslaught",
@@ -152,7 +157,58 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": null,
-    "force_dispositions": []
+    "detachment_points": 2,
+    "force_dispositions": [
+      "take-and-hold"
+    ]
+  },
+  {
+    "id": "brazen-engines",
+    "name": "Brazen Engines",
+    "faction_id": "world-eaters",
+    "detachment_rule_id": "rampaging-terrors",
+    "enhancement_ids": [
+      "talons-of-butchery",
+      "murder-forged-entity"
+    ],
+    "stratagem_ids": [
+      "apoplectic-clarity",
+      "trail-of-destruction",
+      "goaded-to-fury"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "purge-the-foe"
+    ],
+    "tags": [
+      "onslaught"
+    ]
+  },
+  {
+    "id": "butchers-of-khorne",
+    "name": "Butchers of Khorne",
+    "faction_id": "world-eaters",
+    "detachment_rule_id": "adamantine-avalanche",
+    "enhancement_ids": [
+      "sanctified-in-slaughter",
+      "gore-stained-veterans"
+    ],
+    "stratagem_ids": [
+      "focused-ferocity",
+      "a-trophy-for-the-throne",
+      "wrath-beyond-reason"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "detachment_points": 1,
+    "force_dispositions": [
+      "disruption"
+    ]
   }
 ]

@@ -130,7 +130,7 @@ export function describeEffectInline(e: Effect): string {
     case "ward":
       return `${target} gains Ward ${jstr(m.threshold ?? m.value)}+`;
     case "invulnerable-save":
-      return `${target} gains a ${jstr(m.value)}+ invulnerable save`;
+      return `${target} gains a ${jstr(m.invuln_sv ?? m.value)}+ invulnerable save`;
     case "keyword-grant": {
       const kw = Array.isArray(m.keywords) ? m.keywords.map(jstr).join(", ") : jstr(m.keyword ?? "keywords");
       if (m.weapon_name != null) return `${target}'s ${jstr(m.weapon_name)} gains ${kw}`;

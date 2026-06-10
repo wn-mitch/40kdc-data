@@ -101,12 +101,12 @@
     },
     {
       "faction": "chaos-knights",
-      "total": 41,
-      "offensive": 18,
-      "defensive": 1,
-      "inert": 23,
+      "total": 70,
+      "offensive": 20,
+      "defensive": 4,
+      "inert": 47,
       "stub": 3,
-      "stubStructural": 2,
+      "stubStructural": 3,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     },
@@ -255,9 +255,9 @@
     },
     {
       "faction": "world-eaters",
-      "total": 122,
-      "offensive": 14,
-      "defensive": 6,
+      "total": 129,
+      "offensive": 20,
+      "defensive": 7,
       "inert": 102,
       "stub": 0,
       "stubStructural": 0,
@@ -266,19 +266,19 @@
     }
   ],
   "totals": {
-    "total": 2551,
-    "offensive": 606,
-    "defensive": 235,
-    "inert": 1794,
+    "total": 2587,
+    "offensive": 614,
+    "defensive": 239,
+    "inert": 1818,
     "stub": 154,
-    "stubStructural": 186,
+    "stubStructural": 187,
     "gwTextLeak": 0,
     "defensiveSkipped": 59
   },
   "unsupportedReasons": [
     {
       "reason": "effect type \"ability-grant\" is not modelled by the buff layer",
-      "count": 377
+      "count": 383
     },
     {
       "reason": "stat-modifier: operation \"undefined\" not supported",
@@ -294,7 +294,7 @@
     },
     {
       "reason": "dice-gated effect: stochastic; not expressible as a buff",
-      "count": 86
+      "count": 87
     },
     {
       "reason": "effect type \"attack-restriction\" is not modelled by the buff layer",
@@ -302,7 +302,7 @@
     },
     {
       "reason": "effect type \"leadership-modifier\" is not modelled by the buff layer",
-      "count": 66
+      "count": 67
     },
     {
       "reason": "effect type \"resurrection\" is not modelled by the buff layer",
@@ -310,18 +310,18 @@
     },
     {
       "reason": "conditional: cannot evaluate condition \"undefined\" against current context",
-      "count": 47
+      "count": 48
     },
     {
       "reason": "effect type \"cp-refund\" is not modelled by the buff layer",
-      "count": 45
-    },
-    {
-      "reason": "stat-modifier: operation \"set\" not supported",
-      "count": 37
+      "count": 46
     },
     {
       "reason": "effect type \"objective-control-modifier\" is not modelled by the buff layer",
+      "count": 38
+    },
+    {
+      "reason": "stat-modifier: operation \"set\" not supported",
       "count": 37
     },
     {
@@ -329,16 +329,16 @@
       "count": 35
     },
     {
+      "reason": "re-roll on \"charge\" (subset …) is outside the damage path",
+      "count": 34
+    },
+    {
       "reason": "effect type \"deep-strike\" is not modelled by the buff layer",
       "count": 33
     },
     {
-      "reason": "re-roll on \"charge\" (subset …) is outside the damage path",
-      "count": 33
-    },
-    {
       "reason": "effect type \"fallback-and-act\" is not modelled by the buff layer",
-      "count": 26
+      "count": 28
     },
     {
       "reason": "effect type \"fight-on-death\" is not modelled by the buff layer",
@@ -346,7 +346,7 @@
     },
     {
       "reason": "effect type \"fight-first\" is not modelled by the buff layer",
-      "count": 18
+      "count": 19
     },
     {
       "reason": "roll-modifier: operation \"set\" not supported",
@@ -358,14 +358,10 @@
     },
     {
       "reason": "roll-modifier: operation \"ignore-modifiers\" not supported",
-      "count": 13
+      "count": 14
     },
     {
       "reason": "roll-modifier on \"charge\" is outside the damage path",
-      "count": 11
-    },
-    {
-      "reason": "conditional: cannot evaluate condition \"unit-below-starting-strength\" against current context",
       "count": 11
     },
     {
@@ -373,12 +369,24 @@
       "count": 10
     },
     {
-      "reason": "conditional: cannot evaluate condition \"unit-within-range-of\" against current context",
+      "reason": "conditional: cannot evaluate condition \"unit-below-starting-strength\" against current context",
       "count": 10
+    },
+    {
+      "reason": "conditional: cannot evaluate condition \"unit-within-range-of\" against current context",
+      "count": 9
     },
     {
       "reason": "roll-modifier: operation \"crit-on\" not supported",
       "count": 6
+    },
+    {
+      "reason": "stat-modifier AP on the attacker: defender-side AP reduction is not modelled by the buff layer",
+      "count": 5
+    },
+    {
+      "reason": "re-roll on \"advance\" (subset …) is outside the damage path",
+      "count": 4
     },
     {
       "reason": "stat-modifier T: defender-side stat; applies when the buffed unit is the target",
@@ -397,15 +405,15 @@
       "count": 3
     },
     {
-      "reason": "stat-modifier AP on the attacker: defender-side AP reduction is not modelled by the buff layer",
-      "count": 3
-    },
-    {
       "reason": "conditional: cannot evaluate condition \"opponent-unit-within-range\" against current context",
       "count": 3
     },
     {
-      "reason": "re-roll on \"advance\" (subset …) is outside the damage path",
+      "reason": "conditional: cannot evaluate condition \"is-battle-shocked\" against current context",
+      "count": 3
+    },
+    {
+      "reason": "effect type \"engagement-passthrough\" is not modelled by the buff layer",
       "count": 3
     },
     {
@@ -426,14 +434,6 @@
     },
     {
       "reason": "effect type \"terrain-area-tag\" is not modelled by the buff layer",
-      "count": 2
-    },
-    {
-      "reason": "conditional: cannot evaluate condition \"is-battle-shocked\" against current context",
-      "count": 2
-    },
-    {
-      "reason": "effect type \"engagement-passthrough\" is not modelled by the buff layer",
       "count": 2
     },
     {
@@ -462,6 +462,18 @@
     },
     {
       "reason": "stat-modifier: narrows by \"weapon_filter\" which the cruncher can't resolve here",
+      "count": 1
+    },
+    {
+      "reason": "re-roll on \"attacks-characteristic\" (subset …) is outside the damage path",
+      "count": 1
+    },
+    {
+      "reason": "stat-modifier on \"Range\" is outside the damage path",
+      "count": 1
+    },
+    {
+      "reason": "re-roll on \"leadership\" (subset …) is outside the damage path",
       "count": 1
     },
     {
@@ -494,6 +506,10 @@
     },
     {
       "reason": "roll-modifier: operation \"undefined\" not supported",
+      "count": 1
+    },
+    {
+      "reason": "effect type \"charge-roll-modifier\" is not modelled by the buff layer",
       "count": 1
     }
   ],
@@ -11892,11 +11908,11 @@
       "faction": "chaos-knights",
       "ability_id": "warp-storms-psychic",
       "name": "Warp Storms (Psychic)",
-      "shape": "mortal-wounds",
+      "shape": "dice-gated",
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"mortal-wounds\" is not modelled by the buff layer"
+      "gap": "dice-gated effect: stochastic; not expressible as a buff"
     },
     {
       "faction": "chaos-knights",
@@ -11957,6 +11973,296 @@
       "offensive": false,
       "defensive": false,
       "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "annihilate-the-unworthy",
+      "name": "Annihilate the Unworthy",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "conditional: cannot evaluate condition \"is-battle-shocked\" against current context"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "pterrorshade-rookery",
+      "name": "Pterrorshade Rookery",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "hate-filled-dominion",
+      "name": "Hate-Filled Dominion",
+      "shape": "re-roll",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "re-roll on \"attacks-characteristic\" (subset …) is outside the damage path"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "rune-cursed-stronghold",
+      "name": "Rune-Cursed Stronghold",
+      "shape": "feel-no-pain",
+      "stub": false,
+      "offensive": false,
+      "defensive": true,
+      "gap": null
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "pitiless-focus",
+      "name": "Pitiless Focus",
+      "shape": "fallback-and-act",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"fallback-and-act\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "intimidating-reminder",
+      "name": "Intimidating Reminder",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "scenting-fear",
+      "name": "Scenting Fear",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "soul-spoor-auspicator",
+      "name": "Soul-Spoor Auspicator",
+      "shape": "stat-modifier",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier on \"Range\" is outside the damage path"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "snarling-rivalry",
+      "name": "Snarling Rivalry",
+      "shape": "keyword-grant",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "insensate-bloodthirst",
+      "name": "Insensate Bloodthirst",
+      "shape": "feel-no-pain",
+      "stub": false,
+      "offensive": false,
+      "defensive": true,
+      "gap": null
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "leash-of-the-masters",
+      "name": "Leash of the Masters",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "stalking-focus",
+      "name": "Stalking Focus",
+      "shape": "stat-modifier",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier AP on the attacker: defender-side AP reduction is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "wretched-thralls",
+      "name": "Wretched Thralls",
+      "shape": "re-roll",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "re-roll on \"leadership\" (subset …) is outside the damage path"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "cruel-lashmaster",
+      "name": "Cruel Lashmaster",
+      "shape": "movement-modifier",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"movement-modifier\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "iconoclast-idol",
+      "name": "Iconoclast Idol",
+      "shape": "cp-refund",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"cp-refund\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "avenge-the-masters",
+      "name": "Avenge the Masters!",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "dark-sacrifice",
+      "name": "Dark Sacrifice",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"mortal-wounds\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "coursing-thralls",
+      "name": "Coursing Thralls",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "masters-of-the-pack",
+      "name": "Masters of the Pack",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "hunters-helm",
+      "name": "Hunter's Helm",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "re-roll on \"advance\" (subset …) is outside the damage path"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "octagram-of-conjuration",
+      "name": "Octagram of Conjuration",
+      "shape": "leadership-modifier",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"leadership-modifier\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "throne-tyrannicus",
+      "name": "Throne Tyrannicus",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "aspect-of-the-beast",
+      "name": "Aspect of the Beast",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "feral-arrogance",
+      "name": "Feral Arrogance",
+      "shape": "feel-no-pain",
+      "stub": false,
+      "offensive": false,
+      "defensive": true,
+      "gap": null
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "merciless-fusillade",
+      "name": "Merciless Fusillade",
+      "shape": "keyword-grant",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "beasthide-manifestation",
+      "name": "Beasthide Manifestation",
+      "shape": "stat-modifier",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier AP on the attacker: defender-side AP reduction is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "flush-the-quarry",
+      "name": "Flush the Quarry",
+      "shape": "engagement-passthrough",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"engagement-passthrough\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "contemptuous-volleys",
+      "name": "Contemptuous Volleys",
+      "shape": "fallback-and-act",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"fallback-and-act\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "chaos-knights",
+      "ability_id": "goaded-beast",
+      "name": "Goaded Beast",
+      "shape": "movement-modifier",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"movement-modifier\" is not modelled by the buff layer"
     },
     {
       "faction": "chaos-space-marines",
@@ -25176,7 +25482,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": null
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
     },
     {
       "faction": "world-eaters",
@@ -25196,7 +25502,7 @@
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"unit-below-starting-strength\" against current context"
+      "gap": "conditional: cannot evaluate condition \"undefined\" against current context"
     },
     {
       "faction": "world-eaters",
@@ -25374,7 +25680,7 @@
       "name": "Wrath of Khorne",
       "shape": "conditional",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
       "gap": null
     },
@@ -25612,41 +25918,21 @@
       "faction": "world-eaters",
       "ability_id": "archslaughterer",
       "name": "Archslaughterer",
-      "shape": "sequence",
-      "stub": false,
-      "offensive": true,
-      "defensive": false,
-      "gap": null
-    },
-    {
-      "faction": "world-eaters",
-      "ability_id": "vox-diabolus",
-      "name": "Vox-Diabolus",
       "shape": "conditional",
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": null
-    },
-    {
-      "faction": "world-eaters",
-      "ability_id": "avengers-crown",
-      "name": "Avenger's Crown",
-      "shape": "conditional",
-      "stub": false,
-      "offensive": false,
-      "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"undefined\" against current context"
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
     },
     {
       "faction": "world-eaters",
       "ability_id": "gateways-to-glory",
       "name": "Gateways to Glory",
-      "shape": "movement-modifier",
+      "shape": "sequence",
       "stub": false,
-      "offensive": false,
+      "offensive": true,
       "defensive": false,
-      "gap": "effect type \"movement-modifier\" is not modelled by the buff layer"
+      "gap": "effect type \"charge-roll-modifier\" is not modelled by the buff layer"
     },
     {
       "faction": "world-eaters",
@@ -25950,16 +26236,6 @@
     },
     {
       "faction": "world-eaters",
-      "ability_id": "brazen-contempt",
-      "name": "Brazen Contempt",
-      "shape": "damage-reduction",
-      "stub": false,
-      "offensive": false,
-      "defensive": false,
-      "gap": null
-    },
-    {
-      "faction": "world-eaters",
       "ability_id": "aspire-to-infamy",
       "name": "Aspire to Infamy",
       "shape": "sequence",
@@ -25967,16 +26243,6 @@
       "offensive": true,
       "defensive": false,
       "gap": null
-    },
-    {
-      "faction": "world-eaters",
-      "ability_id": "overshadowed-by-none",
-      "name": "Overshadowed by None",
-      "shape": "conditional",
-      "stub": false,
-      "offensive": false,
-      "defensive": false,
-      "gap": "conditional: cannot evaluate condition \"unit-within-range-of\" against current context"
     },
     {
       "faction": "world-eaters",
@@ -25990,23 +26256,133 @@
     },
     {
       "faction": "world-eaters",
-      "ability_id": "meet-force-with-force",
-      "name": "Meet Force with Force",
-      "shape": "movement-modifier",
+      "ability_id": "rampaging-terrors",
+      "name": "Rampaging Terrors",
+      "shape": "conditional",
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"movement-modifier\" is not modelled by the buff layer"
+      "gap": null
     },
     {
       "faction": "world-eaters",
-      "ability_id": "gory-dedication",
-      "name": "Gory Dedication",
-      "shape": "ability-grant",
+      "ability_id": "talons-of-butchery",
+      "name": "Talons of Butchery",
+      "shape": "keyword-grant",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "murder-forged-entity",
+      "name": "Murder-Forged Entity",
+      "shape": "keyword-grant",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "apoplectic-clarity",
+      "name": "Apoplectic Clarity",
+      "shape": "roll-modifier",
       "stub": false,
       "offensive": false,
       "defensive": false,
-      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+      "gap": "roll-modifier: operation \"ignore-modifiers\" not supported"
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "trail-of-destruction",
+      "name": "Trail of Destruction",
+      "shape": "keyword-grant",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "goaded-to-fury",
+      "name": "Goaded to Fury",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "conditional: cannot evaluate condition \"undefined\" against current context"
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "adamantine-avalanche",
+      "name": "Adamantine Avalanche",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "sanctified-in-slaughter",
+      "name": "Sanctified in Slaughter",
+      "shape": "objective-control-modifier",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"objective-control-modifier\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "gore-stained-veterans",
+      "name": "Gore-Stained Veterans",
+      "shape": "roll-modifier",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "focused-ferocity",
+      "name": "Focused Ferocity",
+      "shape": "stat-modifier",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "a-trophy-for-the-throne",
+      "name": "A Trophy for the Throne",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "wrath-beyond-reason",
+      "name": "Wrath Beyond Reason",
+      "shape": "damage-reduction",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "scorn-the-witch",
+      "name": "Scorn the Witch",
+      "shape": "feel-no-pain",
+      "stub": false,
+      "offensive": false,
+      "defensive": true,
+      "gap": null
     }
   ]
 }

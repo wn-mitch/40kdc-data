@@ -107,7 +107,7 @@ def describe_effect_inline(e: Effect) -> str:
             threshold = m.get("value")
         return f"{target} gains Ward {_jstr(threshold)}+"
     if etype == "invulnerable-save":
-        return f"{target} gains a {_jstr(m.get('value'))}+ invulnerable save"
+        return f"{target} gains a {_jstr(m.get('invuln_sv', m.get('value')))}+ invulnerable save"
     if etype == "keyword-grant":
         if isinstance(m.get("keywords"), list):
             kw = ", ".join(_jstr(k) for k in m["keywords"])

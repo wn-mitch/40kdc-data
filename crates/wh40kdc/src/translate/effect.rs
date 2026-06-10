@@ -247,7 +247,10 @@ fn describe_single(e: &SingleEffect) -> String {
                 .unwrap_or_else(|| "?".to_string());
             format!("{target} gains Ward {th}+")
         }
-        T::InvulnerableSave => format!("{target} gains a {}+ invulnerable save", jv(m, "value")),
+        T::InvulnerableSave => format!(
+            "{target} gains a {}+ invulnerable save",
+            jv(m, if notnull(m, "invuln_sv") { "invuln_sv" } else { "value" })
+        ),
         T::KeywordGrant => {
             let kw = match m.get("keywords") {
                 Some(Value::Array(a)) => a.iter().map(jval).collect::<Vec<_>>().join(", "),

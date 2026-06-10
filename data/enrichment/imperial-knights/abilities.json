@@ -1414,59 +1414,6 @@
     "community_notes": "auto-generated, partial"
   },
   {
-    "ability_id": "harbingers-of-dread",
-    "name": "Harbingers of Dread",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "unit-below-starting-strength"
-          },
-          {
-            "type": "unit-below-half-strength"
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "roll-modifier",
-            "target": "unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
-            }
-          },
-          {
-            "type": "mortal-wounds",
-            "target": "defender",
-            "modifier": {
-              "count": "d3"
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "range": "aura-9",
-      "duration": "permanent"
-    },
-    "faction_id": "imperial-knights",
-    "ability_type": "faction",
-    "behavior": "passive",
-    "community_notes": "auto-generated from faction rule"
-  },
-  {
     "ability_id": "super-heavy-walker",
     "name": "Super-heavy Walker",
     "authored_by": "40kdc-community",

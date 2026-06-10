@@ -1,77 +1,5 @@
 [
   {
-    "id": "profane-altar",
-    "name": "Profane Altar",
-    "detachment_id": "iconoclast-fiefdom",
-    "cost": 20,
-    "keyword_restrictions": [
-      "Chaos Knights"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "pave-the-way",
-    "name": "Pave The Way",
-    "detachment_id": "iconoclast-fiefdom",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Chaos Knights"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "tyrants-banner",
-    "name": "Tyrant’s Banner",
-    "detachment_id": "iconoclast-fiefdom",
-    "cost": 5,
-    "keyword_restrictions": [
-      "Chaos Knights"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "diabolical-resilience",
-    "name": "Diabolical Resilience",
-    "detachment_id": "iconoclast-fiefdom",
-    "cost": 35,
-    "keyword_restrictions": [
-      "Chaos Knights"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
     "id": "nightmares-master",
     "name": "Nightmare’s Master",
     "detachment_id": "traitoris-lance",
@@ -79,7 +7,7 @@
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": null,
+    "ability_id": "nightmares-master",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -97,7 +25,7 @@
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": null,
+    "ability_id": "tyrants-shadow",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -115,7 +43,7 @@
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": null,
+    "ability_id": "malevolent-heraldry",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -133,7 +61,7 @@
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": null,
+    "ability_id": "veil-of-medrengard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -151,7 +79,7 @@
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": null,
+    "ability_id": "knight-diabolus",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -169,7 +97,7 @@
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": null,
+    "ability_id": "blasphemous-engine",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -187,7 +115,7 @@
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": null,
+    "ability_id": "fleshmetal-fusion",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -205,7 +133,7 @@
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": null,
+    "ability_id": "bestial-aspect",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -223,7 +151,7 @@
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": null,
+    "ability_id": "throne-mechanicum-of-skulls",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -241,7 +169,7 @@
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": null,
+    "ability_id": "blade-of-celerity",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -259,7 +187,7 @@
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": null,
+    "ability_id": "warp-borne-stalker",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -277,7 +205,7 @@
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": null,
+    "ability_id": "putrid-carapace",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -295,7 +223,7 @@
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": null,
+    "ability_id": "mirror-of-fates",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -313,7 +241,7 @@
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": null,
+    "ability_id": "blessing-of-the-dark-master",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -331,7 +259,7 @@
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": null,
+    "ability_id": "preyslayers-mantle",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -349,7 +277,7 @@
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": null,
+    "ability_id": "final-howl-aura",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -367,7 +295,7 @@
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": null,
+    "ability_id": "loping-predator",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -385,7 +313,7 @@
     "keyword_restrictions": [
       "Chaos Knights"
     ],
-    "ability_id": null,
+    "ability_id": "panoply-of-the-cursed-knights",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -393,6 +321,186 @@
     },
     "points_provisional": true,
     "upgrade_tag": false,
+    "max_targets": 1
+  },
+  {
+    "id": "pterrorshade-rookery",
+    "name": "Pterrorshade Rookery",
+    "detachment_id": "bastions-of-tyranny",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Knight Tyrant"
+    ],
+    "ability_id": "pterrorshade-rookery",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "hate-filled-dominion",
+    "name": "Hate-Filled Dominion",
+    "detachment_id": "bastions-of-tyranny",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Knight Tyrant"
+    ],
+    "ability_id": "hate-filled-dominion",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "soul-spoor-auspicator",
+    "name": "Soul-Spoor Auspicator",
+    "detachment_id": "hunting-warpack",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Huntsman"
+    ],
+    "ability_id": "soul-spoor-auspicator",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "snarling-rivalry",
+    "name": "Snarling Rivalry",
+    "detachment_id": "hunting-warpack",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Executioner"
+    ],
+    "ability_id": "snarling-rivalry",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "cruel-lashmaster",
+    "name": "Cruel Lashmaster",
+    "detachment_id": "iconoclast-fiefdom",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Chaos Knights"
+    ],
+    "ability_id": "cruel-lashmaster",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "iconoclast-idol",
+    "name": "Iconoclast Idol",
+    "detachment_id": "iconoclast-fiefdom",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Chaos Knights"
+    ],
+    "ability_id": "iconoclast-idol",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "hunters-helm",
+    "name": "Hunter's Helm",
+    "detachment_id": "helhunt-lance",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Chaos Knights"
+    ],
+    "ability_id": "hunters-helm",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "octagram-of-conjuration",
+    "name": "Octagram of Conjuration",
+    "detachment_id": "helhunt-lance",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Knight Abominant"
+    ],
+    "ability_id": "octagram-of-conjuration",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "throne-tyrannicus",
+    "name": "Throne Tyrannicus",
+    "detachment_id": "helhunt-lance",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Chaos Knights"
+    ],
+    "ability_id": "throne-tyrannicus",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
+    "max_targets": 1
+  },
+  {
+    "id": "aspect-of-the-beast",
+    "name": "Aspect of the Beast",
+    "detachment_id": "helhunt-lance",
+    "cost": 0,
+    "keyword_restrictions": [
+      "Chaos Knights"
+    ],
+    "ability_id": "aspect-of-the-beast",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "points_provisional": true,
+    "upgrade_tag": true,
     "max_targets": 1
   }
 ]
