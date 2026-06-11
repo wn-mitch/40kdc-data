@@ -35,6 +35,12 @@ from wh40kdc.imports import (
 )
 from wh40kdc.scope import ability_applies_to_unit, unit_matches_applies_to
 from wh40kdc.scoring import score_turn, wtc_result
+from wh40kdc.share import (
+    SHARE_FORMAT_VERSION,
+    decode_share_token,
+    encode_share_token,
+    share_registry_version,
+)
 from wh40kdc.terrain import BOARD_INCHES, keystone_measurements, resolve_layout
 from wh40kdc.translate import describe_ability, describe_condition, describe_scoring_card
 from wh40kdc.validator import VALIDATOR_TARGETS, SchemaValidator, create_validator
@@ -43,6 +49,7 @@ __all__ = [
     "BOARD_INCHES",
     "EXPORT_FORMATS",
     "REGISTERED_ADAPTERS",
+    "SHARE_FORMAT_VERSION",
     "VALIDATOR_TARGETS",
     "Collection",
     "Dataset",
@@ -55,10 +62,12 @@ __all__ = [
     "create_validator",
     "crunch",
     "decode_listforge",
+    "decode_share_token",
     "describe_ability",
     "describe_condition",
     "describe_scoring_card",
     "effect_to_buffs",
+    "encode_share_token",
     "export_roster",
     "import_listforge",
     "import_newrecruit",
@@ -71,6 +80,7 @@ __all__ = [
     "resolve_eligible_abilities",
     "resolve_layout",
     "score_turn",
+    "share_registry_version",
     "try_import_roster",
     "unit_matches_applies_to",
     "validate_loadout",

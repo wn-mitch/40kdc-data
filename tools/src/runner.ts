@@ -24,6 +24,7 @@ import { Dataset } from "./data/dataset.js";
 import { normalizeName } from "./data/normalize.js";
 import { maximalLoadout } from "./data/loadout.js";
 import { exportRoster, type ExportFormat } from "./export/index.js";
+import { decodeShareToken, encodeShareToken, type ShareList } from "./share/index.js";
 import { importRoster, tryImportRoster, REGISTERED_ADAPTERS } from "./import/import-roster.js";
 import { selectAdapter } from "./import/adapter.js";
 import { createValidator } from "./schema-loader.js";
@@ -274,6 +275,35 @@ function handleExport(args: unknown): RunnerResponse {
   } catch (e) {
     return err("EXPORT_FAILED", { detail: (e as Error).message });
   }
+}
+
+function handleShareEncode(args: unknown): RunnerResponse {
+  if (typeof args !== "object" || args === null) {
+    return err("INVALID_INPUT", { detail: "share_encode args must be an object" });
+  }
+  const a = args as { list?: unknown };
+  if (typeof a.list !== "object" || a.list === null) {
+    return err("INVALID_INPUT", { detail: "share_encode.list must be an object" });
+  }
+  try {
+    return ok(encodeShareToken(a.list as ShareList));
+  } catch (e) {
+    // An id absent from the embedded registry is the only expected throw.
+    return err("INVALID_INPUT", { detail: (e as Error).message });
+  }
+}
+
+function handleShareDecode(args: unknown): RunnerResponse {
+  if (typeof args !== "object" || args === null) {
+    return err("INVALID_INPUT", { detail: "share_decode args must be an object" });
+  }
+  const a = args as { token?: unknown };
+  if (typeof a.token !== "string") {
+    return err("INVALID_INPUT", { detail: "share_decode.token must be a string" });
+  }
+  // The DecodeResult ({ ok, list } | { ok, reason }) is the compared value;
+  // a malformed/stale token is a normal result, not a protocol error.
+  return ok(decodeShareToken(a.token));
 }
 
 /**
@@ -973,6 +1003,10 @@ export function dispatch(state: RunnerState, req: { op: string; args?: unknown }
       return handleResolveTerrain(req.args);
     case "keystones":
       return handleKeystones(req.args);
+    case "share_encode":
+      return handleShareEncode(req.args);
+    case "share_decode":
+      return handleShareDecode(req.args);
     case "shutdown":
       return ok(null);
     default:

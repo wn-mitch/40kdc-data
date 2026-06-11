@@ -21,6 +21,7 @@ import {
 	type Detachment,
 	type Enhancement,
 	type Roster,
+	type ShareList,
 	type Unit,
 	type WargearOption,
 	type WeaponBound,
@@ -1026,7 +1027,7 @@ export function rosterTextToBuilderState(
 	if (!result.ok) return null;
 	const roster = result.roster;
 
-	const battleSize: BattleSize =
+	const battleSizeFromRoster: BattleSize =
 		roster.battle_size === 'incursion' ? 'incursion' : 'strike-force';
 
 	const resolvable = roster.units.filter((ru) => ru.ref.id != null);
@@ -1061,8 +1062,76 @@ export function rosterTextToBuilderState(
 		name,
 		factionId: roster.faction_id,
 		detachmentIds: roster.detachments.flatMap((d) => (d.ref.id ? [d.ref.id] : [])),
-		battleSize,
+		battleSize: battleSizeFromRoster,
 		disposition,
+		units,
+	};
+}
+
+// ── Compact share tokens (registry-indexed `share-v1`) ─────────────────────────
+
+/**
+ * Lower a draft to a {@link ShareList} — the lossless essential subset the
+ * `share-v1` codec encodes. Unlike the roster-json round-trip, this preserves an
+ * allied unit's source faction + rule, its `selectedGrants`, the draft
+ * `disposition`, and the exact leader→bodyguard binding (as an ordinal into the
+ * unit list, robust to repeated datasheets).
+ */
+export function builderStateToShareList(state: BuilderState): ShareList {
+	const ordinalOf = new Map(state.units.map((u, i) => [u.key, i]));
+	return {
+		name: state.name,
+		factionId: state.factionId,
+		detachmentIds: state.detachmentIds,
+		battleSize: state.battleSize,
+		disposition: state.disposition,
+		units: state.units.map((bu) => ({
+			datasheetId: bu.datasheetId,
+			modelCount: bu.modelCount,
+			isWarlord: bu.isWarlord,
+			enhancementId: bu.enhancementId,
+			allyFactionId: bu.factionId ?? null,
+			allyRuleId: bu.allyRuleId ?? null,
+			attachedToOrdinal:
+				bu.attachedToKey != null ? (ordinalOf.get(bu.attachedToKey) ?? null) : null,
+			grants: bu.selectedGrants ?? [],
+			loadout: [...bu.loadout.entries()].filter(([, count]) => count > 0),
+		})),
+	};
+}
+
+/**
+ * Rebuild a draft from a decoded {@link ShareList}. The loadout is restored
+ * verbatim (the share format is lossless, so — unlike an import — there are no
+ * under-recorded base weapons to repair). Attachments are re-bound from their
+ * stored ordinals after every row has a key.
+ */
+export function shareListToBuilderState(list: ShareList): BuilderState {
+	const battleSize: BattleSize = list.battleSize === 'incursion' ? 'incursion' : 'strike-force';
+	const units: BuilderUnit[] = list.units.map((su) => ({
+		key: `seed${seedCounter++}`,
+		datasheetId: su.datasheetId,
+		factionId: su.allyFactionId ?? undefined,
+		allyRuleId: su.allyRuleId ?? undefined,
+		selectedGrants: su.grants.length > 0 ? [...su.grants] : undefined,
+		modelCount: su.modelCount,
+		loadout: new Map(su.loadout),
+		enhancementId: su.enhancementId,
+		isWarlord: su.isWarlord,
+	}));
+
+	list.units.forEach((su, i) => {
+		if (su.attachedToOrdinal != null && units[su.attachedToOrdinal]) {
+			units[i].attachedToKey = units[su.attachedToOrdinal].key;
+		}
+	});
+
+	return {
+		name: list.name,
+		factionId: list.factionId,
+		detachmentIds: [...list.detachmentIds],
+		battleSize,
+		disposition: list.disposition,
 		units,
 	};
 }

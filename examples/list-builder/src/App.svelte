@@ -4,8 +4,10 @@ import { ds } from "$lib/data/dataset";
 import ArmyBuilder from "$lib/components/game/builder/ArmyBuilder.svelte";
 import {
 	rosterTextToBuilderState,
+	shareListToBuilderState,
 	type BuilderState,
 } from "$lib/data/builder";
+import { decodeShareToken } from "@alpaca-software/40kdc-data";
 import { decodeShareLink } from "$lib/data/share-link";
 import AppHeader from "../../_shared/AppHeader.svelte";
 import AppFooter from "../../_shared/AppFooter.svelte";
@@ -73,18 +75,32 @@ let toast = $state<string | null>(null);
 
 const sorted = $derived(entries.slice().sort((a, b) => b.modified - a.modified));
 
-// Open a shared list from the URL: `#list=<compressed roster-json>`. Decoded
-// client-side (no backend), then the hash is cleared so refresh/save can't
-// re-trigger the import.
+// Open a shared list from the URL. The current format is `#l=<share-v1 token>`
+// (compact, registry-indexed); `#list=<gzip roster-json>` is the legacy form,
+// still honoured so old links keep working. Decoded client-side (no backend),
+// then the hash is cleared so refresh/save can't re-trigger the import.
 onMount(() => {
-	const match = location.hash.match(/^#list=(.+)$/);
-	if (!match) return;
-	const json = decodeShareLink(match[1]);
-	const state = json ? rosterTextToBuilderState(json, "Shared list", null) : null;
+	const compact = location.hash.match(/^#l=(.+)$/);
+	const legacy = location.hash.match(/^#list=(.+)$/);
+	if (!compact && !legacy) return;
+
+	let state: BuilderState | null = null;
+	let staleLink = false;
+	if (compact) {
+		const result = decodeShareToken(compact[1]);
+		if (result.ok) state = shareListToBuilderState(result.list);
+		else staleLink = result.reason === "stale-registry";
+	} else if (legacy) {
+		const json = decodeShareLink(legacy[1]);
+		state = json ? rosterTextToBuilderState(json, "Shared list", null) : null;
+	}
+
 	if (state) {
 		seed = state;
 		editingId = null;
 		view = "build";
+	} else if (staleLink) {
+		flash("That share link was made with a newer dataset — update to open it.");
 	} else {
 		flash("That share link couldn't be opened.");
 	}

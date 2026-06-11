@@ -173,6 +173,22 @@ fn bundle_data() -> Result<()> {
         .collect::<Vec<_>>()
         .join(", ");
     println!("Wrote {}\n  {counts}", out_path.display());
+
+    // Mirror the committed share-token registry into the crate, so the share
+    // codec can embed it via include_str! (a published crate can't reach the
+    // repo-root data/ tree). This is the Rust analogue of the TS codegen step
+    // that emits src/share/registry.generated.ts.
+    let reg_src = root.join("data/share-registry.json");
+    let reg_out = root.join("crates/wh40kdc/src/share/registry.generated.json");
+    if reg_src.exists() {
+        if let Some(parent) = reg_out.parent() {
+            std::fs::create_dir_all(parent)
+                .with_context(|| format!("creating {}", parent.display()))?;
+        }
+        std::fs::copy(&reg_src, &reg_out)
+            .with_context(|| format!("copying {} → {}", reg_src.display(), reg_out.display()))?;
+        println!("Wrote {}", reg_out.display());
+    }
     Ok(())
 }
 

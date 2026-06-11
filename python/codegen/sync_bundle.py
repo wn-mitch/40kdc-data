@@ -23,8 +23,10 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 RUST_BUNDLE = REPO_ROOT / "crates" / "wh40kdc" / "src" / "data" / "bundle.generated.json"
 SCHEMAS_ROOT = REPO_ROOT / "schemas"
+SHARE_REGISTRY = REPO_ROOT / "data" / "share-registry.json"
 PKG_ROOT = REPO_ROOT / "python" / "src" / "wh40kdc"
 PKG_BUNDLE = PKG_ROOT / "_bundle.json"
+PKG_SHARE_REGISTRY = PKG_ROOT / "_share_registry.json"
 PKG_SCHEMAS = PKG_ROOT / "schemas"
 
 
@@ -38,6 +40,12 @@ def main() -> int:
 
     PKG_BUNDLE.write_bytes(RUST_BUNDLE.read_bytes())
     print(f"wrote {PKG_BUNDLE} ({PKG_BUNDLE.stat().st_size} bytes)")
+
+    # The committed share-token id registry, embedded so the share codec works
+    # in published wheels (which don't ship the repo's data/ tree).
+    if SHARE_REGISTRY.exists():
+        PKG_SHARE_REGISTRY.write_bytes(SHARE_REGISTRY.read_bytes())
+        print(f"wrote {PKG_SHARE_REGISTRY} ({PKG_SHARE_REGISTRY.stat().st_size} bytes)")
 
     if PKG_SCHEMAS.exists():
         shutil.rmtree(PKG_SCHEMAS)

@@ -368,5 +368,5 @@ function save() {
 		</div>
 	</div>
 
-	<ShareModal bind:open={shareOpen} roster={shareRoster} />
+	<ShareModal bind:open={shareOpen} roster={shareRoster} draft={shareOpen ? draft : null} />
 </div>

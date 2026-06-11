@@ -11,6 +11,7 @@ tools/docs/api-html/
 /rust_analyzer/
 tools/schemas/
 tools/src/data/bundle.generated.ts
+tools/src/share/registry.generated.ts
 .DS_Store
 *.log
 rube-goldberg-output.txt
@@ -43,3 +44,4 @@ __pycache__/
 # prose, scratch notes) that must never be committed. Anything inside this
 # directory stays local.
 /_private/
+.env

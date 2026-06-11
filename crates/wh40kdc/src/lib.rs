@@ -39,6 +39,11 @@ mod generated;
 
 pub use generated::*;
 
+/// Compact, URL-safe list-share tokens — the Rust mirror of the TS `share`
+/// module. Standalone (embeds its own id registry); gated by feature `share`.
+#[cfg(feature = "share")]
+pub mod share;
+
 /// Canonical string encoding of a base size, shared by the conformance runner and
 /// its tests so both sides of the cross-impl contract agree byte-for-byte. Mirrors
 /// the TS `encodeBase`. Examples: round 32 → `"round:32"`; oval 75×42 →

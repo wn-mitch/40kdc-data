@@ -33,6 +33,7 @@ from wh40kdc.data.normalize import normalize_name
 from wh40kdc.export import EXPORT_FORMATS, export_roster
 from wh40kdc.imports import import_roster, try_import_roster
 from wh40kdc.scope import unit_matches_applies_to
+from wh40kdc.share import decode_share_token, encode_share_token
 from wh40kdc.scoring import (
     add_to_hand,
     awards_of,
@@ -196,6 +197,27 @@ def _handle_export(args: Any) -> Response:
         return _ok(export_roster(args["roster"], fmt))
     except Exception as e:
         return _err("EXPORT_FAILED", {"detail": str(e)})
+
+
+def _handle_share_encode(args: Any) -> Response:
+    if not isinstance(args, dict):
+        return _err("INVALID_INPUT", {"detail": "share_encode args must be an object"})
+    if not isinstance(args.get("list"), dict):
+        return _err("INVALID_INPUT", {"detail": "share_encode.list must be an object"})
+    try:
+        return _ok(encode_share_token(args["list"]))
+    except Exception as e:
+        # An id absent from the embedded registry is the only expected throw.
+        return _err("INVALID_INPUT", {"detail": str(e)})
+
+
+def _handle_share_decode(args: Any) -> Response:
+    if not isinstance(args, dict):
+        return _err("INVALID_INPUT", {"detail": "share_decode args must be an object"})
+    if not isinstance(args.get("token"), str):
+        return _err("INVALID_INPUT", {"detail": "share_decode.token must be a string"})
+    # A malformed/stale token is a normal result (the inner ``ok`` carries it).
+    return _ok(decode_share_token(args["token"]))
 
 
 def _handle_linked_query(state: RunnerState, args: Any) -> Response:
@@ -748,6 +770,10 @@ def dispatch(state: RunnerState, req: dict[str, Any]) -> Response:
         return _handle_resolve_terrain(args)
     if op == "keystones":
         return _handle_keystones(args)
+    if op == "share_encode":
+        return _handle_share_encode(args)
+    if op == "share_decode":
+        return _handle_share_decode(args)
     if op == "shutdown":
         return _ok(None)
     return _err("UNKNOWN_OP", {"op": op})

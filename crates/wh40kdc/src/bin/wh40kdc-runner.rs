@@ -22,6 +22,7 @@ use wh40kdc::import::{
     import_roster, try_import_roster, AdapterTrial, ImportFailureReason, ImportResult, Roster,
     RosterFormat,
 };
+use wh40kdc::share::{decode_share_token, encode_share_token, ShareList};
 use wh40kdc::scoring::{
     add_to_hand, empty_player_game, player_primary, player_secondary, player_total, remove_score,
     score_cap, score_primary_event, score_secondary, score_secondary_event, score_turn,
@@ -344,6 +345,44 @@ fn handle_export(state: &mut RunnerState, args: &Value) -> Value {
             ErrorKind::ExportFailed,
             Some(json!({ "detail": "exporter panicked" })),
         ),
+    }
+}
+
+fn handle_share_encode(args: &Value) -> Value {
+    let Some(list_v) = args.get("list") else {
+        return err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": "share_encode.list must be present" })),
+        );
+    };
+    let list: ShareList = match serde_json::from_value(list_v.clone()) {
+        Ok(l) => l,
+        Err(e) => {
+            return err_value(
+                ErrorKind::InvalidInput,
+                Some(json!({ "detail": format!("share_encode.list is not a valid ShareList: {e}") })),
+            );
+        }
+    };
+    match encode_share_token(&list) {
+        Ok(token) => ok_value(Value::String(token)),
+        // The only expected failure is an id absent from the embedded registry.
+        Err(e) => err_value(ErrorKind::InvalidInput, Some(json!({ "detail": e.to_string() }))),
+    }
+}
+
+fn handle_share_decode(args: &Value) -> Value {
+    let Some(token) = args.get("token").and_then(Value::as_str) else {
+        return err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": "share_decode.token must be a string" })),
+        );
+    };
+    // A malformed/stale token is a normal result (the inner `ok` carries it),
+    // not a protocol error — mirror the TS handler.
+    match serde_json::to_value(decode_share_token(token)) {
+        Ok(v) => ok_value(v),
+        Err(e) => err_value(ErrorKind::InternalError, Some(json!({ "detail": e.to_string() }))),
     }
 }
 
@@ -1210,6 +1249,8 @@ fn dispatch(state: &mut RunnerState, op: &str, args: &Value) -> Value {
         "wtc_result" => handle_wtc_result(args),
         "resolve_terrain" => handle_resolve_terrain(args),
         "keystones" => handle_keystones(args),
+        "share_encode" => handle_share_encode(args),
+        "share_decode" => handle_share_decode(args),
         "shutdown" => ok_value(Value::Null),
         other => err_value(ErrorKind::UnknownOp, Some(json!({ "op": other }))),
     }

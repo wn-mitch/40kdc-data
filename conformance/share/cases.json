@@ -1,0 +1,139 @@
+[
+  {
+    "name": "minimal",
+    "list": {
+      "name": "",
+      "factionId": "adeptus-astartes",
+      "detachmentIds": [],
+      "battleSize": "strike-force",
+      "disposition": null,
+      "units": []
+    },
+    "token": "AQEAAgEAAAA"
+  },
+  {
+    "name": "warlord-enhancement-grants",
+    "list": {
+      "name": "Strîke Force 🔨",
+      "factionId": "adeptus-astartes",
+      "detachmentIds": [
+        "1st-company-task-force"
+      ],
+      "battleSize": "strike-force",
+      "disposition": "disruption",
+      "units": [
+        {
+          "datasheetId": "adrax-agatone",
+          "modelCount": 5,
+          "isWarlord": true,
+          "enhancementId": "a-chink-in-their-armour",
+          "allyFactionId": null,
+          "allyRuleId": null,
+          "attachedToOrdinal": null,
+          "grants": [
+            "Character"
+          ],
+          "loadout": [
+            [
+              "aberrant-weapons",
+              2
+            ],
+            [
+              "absolver-bolt-pistol",
+              1
+            ]
+          ]
+        },
+        {
+          "datasheetId": "aethon-shaan",
+          "modelCount": 10,
+          "isWarlord": false,
+          "enhancementId": null,
+          "allyFactionId": null,
+          "allyRuleId": null,
+          "attachedToOrdinal": null,
+          "grants": [],
+          "loadout": [
+            [
+              "absolvor-bolt-pistol",
+              10
+            ]
+          ]
+        }
+      ]
+    },
+    "token": "AQESU3Ryw65rZSBGb3JjZSDwn5SoAgEBAQACCgUTAAEJQ2hhcmFjdGVyAg8CEAEOCgABEQo"
+  },
+  {
+    "name": "allies-attachment",
+    "list": {
+      "name": "Soup",
+      "factionId": "adeptus-astartes",
+      "detachmentIds": [
+        "1st-company-task-force",
+        "anvil-siege-force"
+      ],
+      "battleSize": "incursion",
+      "disposition": "disruption",
+      "units": [
+        {
+          "datasheetId": "adrax-agatone",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "allyFactionId": null,
+          "allyRuleId": null,
+          "attachedToOrdinal": 1,
+          "grants": [],
+          "loadout": []
+        },
+        {
+          "datasheetId": "aethon-shaan",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "allyFactionId": null,
+          "allyRuleId": null,
+          "attachedToOrdinal": null,
+          "grants": [],
+          "loadout": []
+        },
+        {
+          "datasheetId": "aggressor-squad",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "allyFactionId": "chaos-daemons",
+          "allyRuleId": "brood-brothers",
+          "attachedToOrdinal": null,
+          "grants": [
+            "Battleline"
+          ],
+          "loadout": [
+            [
+              "abyssal-lance",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    "token": "AQEEU291cAIAAQIABQMKAQUBAA4FAAAQARgKAQEKQmF0dGxlbGluZQESAQ"
+  },
+  {
+    "name": "malformed-bad-format-byte",
+    "decode_token": "AA",
+    "expected_decode": {
+      "ok": false,
+      "reason": "malformed"
+    }
+  },
+  {
+    "name": "stale-future-index",
+    "decode_token": "AQEAgIl6",
+    "expected_decode": {
+      "ok": false,
+      "reason": "stale-registry"
+    }
+  }
+]

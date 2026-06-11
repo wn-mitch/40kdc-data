@@ -1,16 +1,18 @@
 <script lang="ts">
 	import Modal from "../../../../_shared/Modal.svelte";
-	import { exportRoster, type Roster, type ExportFormat } from "@alpaca-software/40kdc-data";
-	import { encodeShareLink } from "../data/share-link";
+	import { exportRoster, encodeShareToken, type Roster, type ExportFormat } from "@alpaca-software/40kdc-data";
+	import { builderStateToShareList, type BuilderState } from "../data/builder";
 
 	interface Props {
 		/** Bindable visibility, driven by the host. */
 		open?: boolean;
 		/** The list to share; null while the modal is closed / no draft. */
 		roster: Roster | null;
+		/** The working draft — the share link encodes this (lossless), not the roster. */
+		draft: BuilderState | null;
 		onClose?: () => void;
 	}
-	let { open = $bindable(false), roster, onClose }: Props = $props();
+	let { open = $bindable(false), roster, draft, onClose }: Props = $props();
 
 	const FORMATS: { id: ExportFormat; label: string }[] = [
 		{ id: "newrecruit-wtc-compact", label: "WTC — compact" },
@@ -33,8 +35,8 @@
 
 	const exportText = $derived(roster ? safeExport(roster, format) : "");
 	const shareLink = $derived(
-		roster
-			? `${location.origin}${location.pathname}#list=${encodeShareLink(exportRoster(roster, "roster-json"))}`
+		draft
+			? `${location.origin}${location.pathname}#l=${encodeShareToken(builderStateToShareList(draft))}`
 			: "",
 	);
 

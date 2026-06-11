@@ -62,6 +62,25 @@ export type {
 // The eligible-abilities resolver (also reachable as Dataset.eligibleAbilities).
 export * from "../abilities-resolver/index.js";
 
+// Compact, URL-safe list sharing (registry-indexed `share-v1` tokens).
+export {
+  encodeShareToken,
+  decodeShareToken,
+  shareRegistryVersion,
+  ShareRegistryIndex,
+  SHARE_FORMAT_VERSION,
+  SHARE_KINDS,
+} from "../share/index.js";
+export type {
+  DecodeResult,
+  ShareBattleSize,
+  ShareList,
+  ShareLoadoutEntry,
+  ShareUnit,
+  ShareKind,
+  ShareRegistry,
+} from "../share/index.js";
+
 // Bridge helpers from the importer's RosterUnit → linked views.
 export {
   resolveRosterUnit,

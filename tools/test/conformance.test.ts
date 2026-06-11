@@ -20,6 +20,12 @@ import { Dataset } from "../src/data/dataset.js";
 import { normalizeName } from "../src/data/normalize.js";
 import { maximalLoadout } from "../src/data/loadout.js";
 import { exportRoster, type ExportFormat } from "../src/export/index.js";
+import {
+  decodeShareToken,
+  encodeShareToken,
+  type DecodeResult,
+  type ShareList,
+} from "../src/share/index.js";
 import { importRoster, tryImportRoster, REGISTERED_ADAPTERS } from "../src/import/import-roster.js";
 import { selectAdapter } from "../src/import/adapter.js";
 import type { RosterFormat } from "../src/import/types.js";
@@ -915,5 +921,37 @@ describe("cruncher conformance corpus", () => {
         ).toBe(true);
       }
     });
+  }
+});
+
+describe("share conformance corpus (ties out with the Rust crate and Python)", () => {
+  interface ShareCase {
+    name: string;
+    list?: ShareList;
+    token?: string;
+    decode_token?: string;
+    expected_decode?: DecodeResult;
+  }
+  const cases = readJson(join(CONFORMANCE, "share", "cases.json")) as ShareCase[];
+
+  it("the share corpus is non-empty", () => {
+    expect(cases.length).toBeGreaterThan(0);
+  });
+
+  for (const c of cases) {
+    if (c.list !== undefined && c.token !== undefined) {
+      it(`share/${c.name}: encodes to the golden token`, () => {
+        expect(encodeShareToken(c.list!)).toBe(c.token);
+      });
+      it(`share/${c.name}: the golden token decodes back to the list`, () => {
+        const result = decodeShareToken(c.token!);
+        expect(result.ok).toBe(true);
+        if (result.ok) expect(result.list).toEqual(c.list);
+      });
+    } else if (c.decode_token !== undefined) {
+      it(`share/${c.name}: decode verdict matches`, () => {
+        expect(decodeShareToken(c.decode_token!)).toEqual(c.expected_decode);
+      });
+    }
   }
 });

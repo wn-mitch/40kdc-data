@@ -55,6 +55,7 @@
     "build": "npm run codegen:data && tsc",
     "postbuild": "npm run audit:coverage",
     "codegen:data": "tsx src/codegen-data.ts",
+    "registry:build": "tsx src/build-share-registry.ts",
     "gen:conformance": "tsx src/gen-conformance.ts",
     "docs:api": "typedoc",
     "docs:api:html": "typedoc --options typedoc.html.json",

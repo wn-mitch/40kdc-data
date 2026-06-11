@@ -168,6 +168,13 @@ These notes document what is *currently load-bearing* about each corpus area. Fu
 - **The two empty forms are distinct and pinned.** `applies_to: null` (or absent) is "no resolvable scope" and matches **nothing** (the app renders no highlight rather than guess); a present `applies_to: {}` constrains nothing and matches **every** unit. Changing either is a `SPEC_VERSION` bump.
 - **`matchedIds` order is load-bearing:** ids are emitted in input-unit order, not sorted. The differ compares structurally (exact, no sort), so a reordering would be caught.
 
+### `share/cases.json`
+
+- Each case is either a **round-trip** case `{name, list, token}` or a **negative decode** case `{name, decode_token, expected_decode}`. The `share_encode` op must turn `list` into exactly `token`; the `share_decode` op must turn `token` back into `list` (round-trip) or yield `expected_decode` (a `{ok:false, reason}` verdict). Input lists are derived from the embedded dataset deterministically (sorted, first-N) so the goldens are stable.
+- **The token bytes are pinned exactly.** `share_encode` is compared as a string (no tolerance), so the entire `share-v1` wire layout — the format-version byte, LEB128 varints, registry indices, flag bitfield, and length-prefixed UTF-8 for `name`/`grants` — is load-bearing. The wire format and registry are specified in [`tools/docs/share-token.md`](tools/docs/share-token.md). The codec is deliberately gzip-free so the buffer is byte-identical across implementations without depending on a shared deflate.
+- **Encode field order is load-bearing** and matches the doc: faction, battle size, disposition, detachments (count + indices), then per unit `unitIdx, modelCount, flags, [enh], [attachOrdinal], [allyFaction, allyRule], [grants], loadout`. `attachedToOrdinal` is an index into the case's own `units` array, never a datasheet id.
+- **Registry indices are append-only.** Adding entities appends new ids (preserving existing indices), so older tokens keep decoding; a renamed id is carried in the registry `aliases` map (old slot → current id) and a removed id becomes a `tombstone`. A token that references a slot the decoder's registry lacks is `stale-registry`, never a silent misresolve. Regenerating `data/share-registry.json` (`npm run registry:build`) is a deliberate migration step and bumps its `version`.
+
 ## Tolerances and comparison rules
 
 - **Text export comparison:** raw byte equality after both implementations have produced their output. No trailing-whitespace tolerance, no CRLF normalization at this layer.

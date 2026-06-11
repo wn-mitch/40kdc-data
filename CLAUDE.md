@@ -135,6 +135,14 @@ Tools can consume this repo via:
 Entity IDs are the interoperability contract. If two tools use
 `"space-marines"` as a faction ID, they can exchange data.
 
+For exchanging a *whole list* compactly (e.g. a share URL another tool can
+import), the three packages also expose the `share-v1` codec —
+`encodeShareToken` / `decodeShareToken` (TS/Python) and
+`encode_share_token` / `decode_share_token` (Rust) — which packs a list into a
+short, URL-safe token over a versioned id registry. The wire format is
+documented in [`tools/docs/share-token.md`](tools/docs/share-token.md) and pinned
+across implementations by the `conformance/share/` corpus.
+
 ## Related Repositories
 
 - **40kdc-editor**: Web-based UI for authoring enrichment data. Imports schemas

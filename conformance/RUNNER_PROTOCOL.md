@@ -317,6 +317,40 @@ Equivalent to TS `keystoneMeasurements(layout, templates, board)` / Rust
 range or a face whose axis disagrees with the edge returns `error_kind:
 "INVALID_INPUT"`, as do resolver failures.
 
+### `share_encode`
+
+```json
+{"op":"share_encode","args":{"list":{…ShareList…}}}
+```
+
+Encodes a `ShareList` into a `share-v1` compact share token (registry-indexed
+varints, base64url; see `tools/docs/share-token.md`). Response value is the
+token **string** — the differ asserts byte-for-byte string equality across
+implementations. A `ShareList` is `{name, factionId, detachmentIds, battleSize,
+disposition, units}` where each unit is `{datasheetId, modelCount, isWarlord,
+enhancementId, allyFactionId, allyRuleId, attachedToOrdinal, grants, loadout}`
+and `loadout` is an array of `[wargearId, count]` pairs. An id absent from the
+embedded share registry returns `error_kind: "INVALID_INPUT"`. Equivalent to TS
+`encodeShareToken(list)` / Rust `encode_share_token(&list)` / Python
+`encode_share_token(list)`.
+
+### `share_decode`
+
+```json
+{"op":"share_decode","args":{"token":"AQESU3Ry…"}}
+```
+
+Decodes a `share-v1` token against the embedded registry. Response value is the
+decode result — `{"ok":true,"list":{…ShareList…}}` or
+`{"ok":false,"reason":"malformed"|"stale-registry"}`. A malformed or stale token
+is a normal result, **not** a protocol error (so the inner `ok` is part of the
+compared value). `stale-registry` means the token references a slot this
+package's registry doesn't have (a token written by a newer registry);
+`malformed` covers truncation, a bad format byte, or non-base64url input. The
+differ compares the value structurally. Equivalent to TS
+`decodeShareToken(token)` / Rust `decode_share_token(token)` / Python
+`decode_share_token(token)`.
+
 ### `shutdown`
 
 ```json

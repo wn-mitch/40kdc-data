@@ -29,6 +29,12 @@ import { describeScoringCard, describeAbility, type Effect } from "./translate/i
 import { awardsOf } from "./scoring/index.js";
 import { createRunnerState, dispatch } from "./runner.js";
 import { exportRoster, type ExportFormat } from "./export/index.js";
+import {
+  decodeShareToken,
+  encodeShareToken,
+  shareRegistryVersion,
+  type ShareList,
+} from "./share/index.js";
 import { importRoster, REGISTERED_ADAPTERS } from "./import/import-roster.js";
 import { selectAdapter } from "./import/adapter.js";
 import type { ParsedRoster, Roster } from "./import/types.js";
@@ -1084,6 +1090,164 @@ function genEffectTranslation(): void {
   console.log(`effect-translation/cases.json: ${cases.length} cases (${seen.size} node types)`);
 }
 
+/** Unsigned LEB128 of a small non-negative integer (for hand-built tokens). */
+function leb128(value: number): number[] {
+  const out: number[] = [];
+  let v = value;
+  while (v >= 0x80) {
+    out.push((v & 0x7f) | 0x80);
+    v = Math.floor(v / 0x80);
+  }
+  out.push(v);
+  return out;
+}
+
+/** base64url (no padding) of a raw byte array — for negative decode goldens. */
+function bytesToBase64url(bytes: number[]): string {
+  return Buffer.from(bytes)
+    .toString("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+}
+
+/**
+ * The share-token corpus. Each positive case pins `encodeShareToken(list)` to an
+ * exact `token` and asserts `decodeShareToken(token)` round-trips to `list`;
+ * negative cases pin the decoder's `malformed` / `stale-registry` verdicts. The
+ * input lists are derived from the embedded dataset deterministically (sorted,
+ * first-N) so the goldens are stable and self-maintaining. Rust and Python must
+ * reproduce every `token` byte-for-byte and every decode verdict.
+ */
+function genShare(): void {
+  mkdirSync(join(CONFORMANCE, "share"), { recursive: true });
+  const ds = Dataset.embedded();
+  const f = "adeptus-astartes";
+  const dets = ds.detachments.all
+    .filter((d) => d.faction_id === f)
+    .map((d) => d.id)
+    .sort();
+  const units = ds.units
+    .byFaction(f)
+    .map((u) => u.id)
+    .sort();
+  const weapons = ds.weapons.all.map((w) => w.id).sort();
+  const enhancement = ds.enhancements.all.map((e) => e.id).sort()[0];
+  const disposition = ds.forceDispositions.all.map((d) => d.id).sort()[0];
+  const allyFactionId = "chaos-daemons";
+  const allyRuleId = ds.alliedRules.all.map((r) => r.id).sort()[0];
+
+  const plainUnit = (id: string): ShareList["units"][number] => ({
+    datasheetId: id,
+    modelCount: 1,
+    isWarlord: false,
+    enhancementId: null,
+    allyFactionId: null,
+    allyRuleId: null,
+    attachedToOrdinal: null,
+    grants: [],
+    loadout: [],
+  });
+
+  const lists: { name: string; list: ShareList }[] = [
+    {
+      name: "minimal",
+      list: {
+        name: "",
+        factionId: f,
+        detachmentIds: [],
+        battleSize: "strike-force",
+        disposition: null,
+        units: [],
+      },
+    },
+    {
+      name: "warlord-enhancement-grants",
+      list: {
+        name: "Strîke Force 🔨",
+        factionId: f,
+        detachmentIds: [dets[0]],
+        battleSize: "strike-force",
+        disposition,
+        units: [
+          {
+            ...plainUnit(units[0]),
+            modelCount: 5,
+            isWarlord: true,
+            enhancementId: enhancement,
+            grants: ["Character"],
+            loadout: [
+              [weapons[0], 2],
+              [weapons[1], 1],
+            ],
+          },
+          { ...plainUnit(units[1]), modelCount: 10, loadout: [[weapons[2], 10]] },
+        ],
+      },
+    },
+    {
+      name: "allies-attachment",
+      list: {
+        name: "Soup",
+        factionId: f,
+        detachmentIds: [dets[0], dets[1]],
+        battleSize: "incursion",
+        disposition,
+        units: [
+          { ...plainUnit(units[0]), isWarlord: true, attachedToOrdinal: 1 }, // leader → bodyguard
+          { ...plainUnit(units[1]), modelCount: 5 },
+          {
+            ...plainUnit(units[2]),
+            allyFactionId,
+            allyRuleId,
+            grants: ["Battleline"],
+            loadout: [[weapons[3], 1]],
+          },
+        ],
+      },
+    },
+  ];
+
+  interface ShareCase {
+    name: string;
+    list?: ShareList;
+    token?: string;
+    decode_token?: string;
+    expected_decode?: ReturnType<typeof decodeShareToken>;
+  }
+
+  const cases: ShareCase[] = lists.map(({ name, list }) => {
+    const token = encodeShareToken(list);
+    const decoded = decodeShareToken(token);
+    if (!decoded.ok) throw new Error(`share case ${name} failed to round-trip: ${decoded.reason}`);
+    // Sanity: the generator's own round-trip must reproduce the input exactly.
+    if (JSON.stringify(decoded.list) !== JSON.stringify(list)) {
+      throw new Error(`share case ${name} did not round-trip losslessly`);
+    }
+    return { name, list, token };
+  });
+
+  // Negative decode cases (deterministic hand-built tokens).
+  cases.push({
+    name: "malformed-bad-format-byte",
+    decode_token: bytesToBase64url([0x00]),
+    expected_decode: { ok: false, reason: "malformed" },
+  });
+  cases.push({
+    name: "stale-future-index",
+    // Valid header (format 1, registry version, empty name) then a faction
+    // index no committed registry will ever hold → stale-registry.
+    decode_token: bytesToBase64url([0x01, ...leb128(shareRegistryVersion), 0x00, ...leb128(2_000_000)]),
+    expected_decode: { ok: false, reason: "stale-registry" },
+  });
+
+  writeJson(join(CONFORMANCE, "share", "cases.json"), cases);
+  console.log(
+    `share/cases.json: ${cases.length} cases (registry v${shareRegistryVersion}, ` +
+      `${cases.filter((c) => c.token).length} round-trip + ${cases.filter((c) => c.decode_token).length} negative)`,
+  );
+}
+
 genNormalize();
 genRosters();
 genLinkedApi();
@@ -1093,3 +1257,4 @@ genEffectTranslation();
 genScoring();
 genTerrainResolver();
 genTerrainKeystones();
+genShare();

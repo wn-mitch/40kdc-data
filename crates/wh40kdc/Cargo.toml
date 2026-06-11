@@ -22,7 +22,7 @@ all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
 [features]
-default = ["bundled-data", "import", "export", "cruncher"]
+default = ["bundled-data", "import", "export", "cruncher", "share"]
 # The embedded dataset + the linked, typed data API (Dataset/Collection/
 # normalize_name). default-features = false drops both for a types-only crate.
 bundled-data = ["dep:unicode-normalization"]
@@ -40,6 +40,10 @@ export = []
 # stack; needs the embedded dataset to look up weapon-keyword catalog
 # effects. No additional deps — the dice-notation parser is hand-rolled.
 cruncher = ["bundled-data"]
+# Compact, URL-safe list-share tokens (registry-indexed varints + base64url).
+# Standalone: embeds its own committed id registry and needs only base64 +
+# serde, no dataset, deflate, or regex.
+share = ["dep:base64"]
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }

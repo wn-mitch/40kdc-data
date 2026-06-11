@@ -496,6 +496,41 @@ def iter_validator_cases(corpus: Path) -> Iterator[Case]:
         )
 
 
+def iter_share_cases(corpus: Path) -> Iterator[Case]:
+    path = corpus / "share" / "cases.json"
+    cases = json.loads(path.read_text())
+    for entry in cases:
+        name = entry["name"]
+        if "token" in entry:
+            # Round-trip: encode must reproduce the golden token byte-for-byte
+            # (string equality), and decode of that token must round-trip to the
+            # input list (structural).
+            yield Case(
+                area="share",
+                case_id=f"share/{name}/encode",
+                op="share_encode",
+                args={"list": entry["list"]},
+                compare_mode="bytes",
+            )
+            yield Case(
+                area="share",
+                case_id=f"share/{name}/decode",
+                op="share_decode",
+                args={"token": entry["token"]},
+                compare_mode="struct",
+            )
+        elif "decode_token" in entry:
+            # Negative decode: both impls must agree on the malformed /
+            # stale-registry verdict.
+            yield Case(
+                area="share",
+                case_id=f"share/{name}/decode",
+                op="share_decode",
+                args={"token": entry["decode_token"]},
+                compare_mode="struct",
+            )
+
+
 AREA_ITERATORS: dict[str, Any] = {
     "normalize": iter_normalize_cases,
     "roster": iter_roster_cases,
@@ -511,6 +546,7 @@ AREA_ITERATORS: dict[str, Any] = {
     "terrain-resolver": iter_terrain_resolver_cases,
     "terrain-keystones": iter_terrain_keystones_cases,
     "validator": iter_validator_cases,
+    "share": iter_share_cases,
 }
 
 
