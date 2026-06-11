@@ -30,7 +30,6 @@
       "Khorne"
     ],
     "faction_keywords": [
-      "Heretic Astartes",
       "World Eaters"
     ],
     "base_size_mm": {
@@ -153,7 +152,6 @@
       "Khorne"
     ],
     "faction_keywords": [
-      "Heretic Astartes",
       "World Eaters"
     ],
     "base_size_mm": {
@@ -171,9 +169,7 @@
     "ability_ids": [
       "a-worthy-skull",
       "forwards-for-blood",
-      "leader",
-      "trophy-taker",
-      "warp-sighted-butcher"
+      "leader"
     ],
     "game_version": {
       "edition": "11th",
@@ -460,8 +456,6 @@
       "Frame"
     ],
     "faction_keywords": [
-      "Heretic Astartes",
-      "Emperor’s Children",
       "World Eaters"
     ],
     "base_size_mm": {
@@ -525,8 +519,6 @@
       "Khorne"
     ],
     "faction_keywords": [
-      "Heretic Astartes",
-      "Emperor’s Children",
       "World Eaters"
     ],
     "base_size_mm": {
@@ -651,8 +643,6 @@
       "Khorne"
     ],
     "faction_keywords": [
-      "Heretic Astartes",
-      "Emperor’s Children",
       "World Eaters"
     ],
     "base_size_mm": {
@@ -1016,8 +1006,6 @@
       "Frame"
     ],
     "faction_keywords": [
-      "Heretic Astartes",
-      "Emperor’s Children",
       "World Eaters"
     ],
     "base_size_mm": {
@@ -1035,13 +1023,9 @@
       "havoc-launcher"
     ],
     "ability_ids": [
-      "assault-vehicle",
       "deadly-demise-d3",
-      "fire-support",
       "firing-deck-2",
-      "meet-any-challenge",
-      "self-repair",
-      "sorcerous-support"
+      "meet-any-challenge"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -1083,7 +1067,6 @@
       "Khorne"
     ],
     "faction_keywords": [
-      "Heretic Astartes",
       "World Eaters"
     ],
     "base_size_mm": {
@@ -1151,7 +1134,6 @@
       "Frame"
     ],
     "faction_keywords": [
-      "Heretic Astartes",
       "World Eaters"
     ],
     "base_size_mm": {
@@ -1173,9 +1155,6 @@
     ],
     "ability_ids": [
       "deadly-demise-d3",
-      "destructor",
-      "ensorcelled-destruction",
-      "hail-of-corrosive-disease",
       "punishing-suppression"
     ],
     "game_version": {
@@ -1278,7 +1257,6 @@
       "Frame"
     ],
     "faction_keywords": [
-      "Heretic Astartes",
       "World Eaters"
     ],
     "base_size_mm": {
@@ -1299,11 +1277,8 @@
       "predator-twin-lascannon"
     ],
     "ability_ids": [
-      "annihilator",
       "blood-hungry-annihilator",
-      "deadly-demise-d3",
-      "ensorcelled-annihilation",
-      "metalophagic-infection"
+      "deadly-demise-d3"
     ],
     "game_version": {
       "edition": "11th",
@@ -1342,7 +1317,6 @@
       "Khorne"
     ],
     "faction_keywords": [
-      "Emperor’s Children",
       "World Eaters"
     ],
     "base_size_mm": {
@@ -1365,8 +1339,7 @@
     ],
     "ability_ids": [
       "bloody-fury",
-      "deep-strike",
-      "lethal-obsession"
+      "deep-strike"
     ],
     "game_version": {
       "edition": "11th",
@@ -1408,7 +1381,6 @@
       "Frame"
     ],
     "faction_keywords": [
-      "Heretic Astartes",
       "World Eaters"
     ],
     "base_size_mm": {
@@ -1428,10 +1400,8 @@
       "skullhurler"
     ],
     "ability_ids": [
-      "deadly-demise-d6-2",
       "deadly-demise-d6-plus-2",
       "idol-of-blessed-blood",
-      "plough-through-the-enemy",
       "super-heavy-war-engine"
     ],
     "game_version": {
@@ -1472,8 +1442,6 @@
       "Khorne"
     ],
     "faction_keywords": [
-      "Heretic Astartes",
-      "Emperor’s Children",
       "World Eaters"
     ],
     "base_size_mm": {
@@ -1488,15 +1456,8 @@
       "hideous-mutations"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "feel-no-pain-5",
       "feel-no-pain-5-plus",
-      "lethal-ichor",
-      "mind-breaking-mutations-aura",
-      "regenerating-monstrosities",
-      "scouts-6",
       "scouts-8",
-      "scuttling-horrors",
       "to-slake-its-rage"
     ],
     "game_version": {

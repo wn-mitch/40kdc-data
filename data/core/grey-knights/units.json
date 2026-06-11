@@ -1372,8 +1372,7 @@
     ],
     "ability_ids": [
       "assault-ramp",
-      "deadly-demise-d6",
-      "oath-of-moment"
+      "deadly-demise-d6"
     ],
     "transport_capacity": {
       "capacity": 12
