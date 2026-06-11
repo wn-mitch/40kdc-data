@@ -19,7 +19,7 @@
     type Player,
     type PrefTier,
   } from "./coverage";
-  import { DISPOSITION_ABBR, DISPOSITIONS } from "../../../_shared/matchup-grid.js";
+  import { DISPOSITION_ABBR, DISPOSITION_LABELS, DISPOSITIONS } from "../../../_shared/matchup-grid.js";
   import { DISPOSITION_COLORS, TIER_SYMBOL } from "./dispositions";
   import DispoPill from "./DispoPill.svelte";
 
@@ -360,7 +360,11 @@
                   >
                     <option value="">+ detachment…</option>
                     {#each addableDetachments(army) as d (d.id)}
-                      <option value={d.id}>{d.name} ({d.detachment_points ?? "?"} DP)</option>
+                      <option value={d.id}
+                        >{d.name} ({d.detachment_points ?? "?"} DP{(d.force_dispositions ?? []).length
+                          ? " — " + (d.force_dispositions ?? []).map((fd) => DISPOSITION_LABELS[fd as ForceDispositionId]).join("/")
+                          : ""})</option
+                      >
                     {/each}
                   </select>
                 {/if}
