@@ -331,6 +331,33 @@ export function detachmentName(id: string): string {
   return ds.detachments.get(id)?.name ?? id;
 }
 
+/** The force dispositions a single detachment grants. */
+export function detachmentDispositions(id: string): ForceDispositionId[] {
+  return (ds.detachments.get(id)?.force_dispositions ?? []) as ForceDispositionId[];
+}
+
+/** The auto name for a combo: its detachment names joined with " / ". */
+export function autoArmyName(detachmentIds: string[]): string {
+  return detachmentIds.map(detachmentName).join(" / ");
+}
+
+/**
+ * Reconcile an army's name when its detachment combo changes from `oldIds` to
+ * `newIds`. The detachment-derived prefix stays in sync; anything the player
+ * appended after it (notes) is preserved. A fully hand-written name — one that
+ * doesn't start with the old auto-name — is left untouched. Empty `current`
+ * (a brand-new army) auto-fills cleanly.
+ */
+export function reconcileArmyName(current: string, oldIds: string[], newIds: string[]): string {
+  const oldAuto = autoArmyName(oldIds);
+  const newAuto = autoArmyName(newIds);
+  if (current === oldAuto) return newAuto; // pure auto, no notes (covers "")
+  if (oldAuto !== "" && current.startsWith(oldAuto)) {
+    return (newAuto + current.slice(oldAuto.length)).trimStart();
+  }
+  return current; // custom name — leave it alone
+}
+
 /** A faction id is usable iff it resolves to a known faction with detachments. */
 export function isKnownFaction(id: string): boolean {
   return ds.detachments.byFaction(id).length > 0;

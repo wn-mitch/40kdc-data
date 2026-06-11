@@ -2,7 +2,10 @@ import { describe, expect, it } from "vitest";
 import {
   armyDetachmentPoints,
   armyDispositions,
+  autoArmyName,
   columnFull,
+  detachmentName,
+  reconcileArmyName,
   effectivePlacement,
   factionOptions,
   LOCK_CAP,
@@ -307,6 +310,42 @@ describe("reorderPlacements / setPlacementTier", () => {
 
   it("leaves the list unchanged for an unknown key", () => {
     expect(setPlacementTier(prefs, "ghost x", "want")).toBe(prefs);
+  });
+});
+
+describe("autoArmyName / reconcileArmyName", () => {
+  const a = "goretrack-onslaught";
+  const b = "butchers-of-khorne";
+  const nameA = detachmentName(a);
+  const nameB = detachmentName(b);
+
+  it("joins detachment names with ' / '", () => {
+    expect(autoArmyName([a, b])).toBe(`${nameA} / ${nameB}`);
+    expect(autoArmyName([a])).toBe(nameA);
+    expect(autoArmyName([])).toBe("");
+  });
+
+  it("auto-fills a brand-new (empty) name", () => {
+    expect(reconcileArmyName("", [], [a])).toBe(nameA);
+  });
+
+  it("keeps the prefix in sync when the name was pure auto", () => {
+    expect(reconcileArmyName(nameA, [a], [a, b])).toBe(`${nameA} / ${nameB}`);
+  });
+
+  it("preserves appended notes across a combo change", () => {
+    const current = `${nameA} (aggressive)`;
+    expect(reconcileArmyName(current, [a], [a, b])).toBe(`${nameA} / ${nameB} (aggressive)`);
+  });
+
+  it("preserves notes when a detachment is removed", () => {
+    const current = `${nameA} / ${nameB} (note)`;
+    expect(reconcileArmyName(current, [a, b], [a])).toBe(`${nameA} (note)`);
+  });
+
+  it("leaves a fully hand-written name untouched", () => {
+    expect(reconcileArmyName("My Custom Build", [], [a])).toBe("My Custom Build");
+    expect(reconcileArmyName("Totally Different", [a], [a, b])).toBe("Totally Different");
   });
 });
 

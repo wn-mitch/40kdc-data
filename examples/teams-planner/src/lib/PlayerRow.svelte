@@ -3,6 +3,8 @@
   import {
     armyDetachmentPoints,
     armyDispositions,
+    detachmentDispositions,
+    reconcileArmyName,
     detachmentName,
     detachmentsForFactions,
     effectivePlacement,
@@ -88,8 +90,10 @@
   }
 
   // ── Armies ────────────────────────────────────────────────────────────────
+  // Armies start unnamed; the name auto-fills from the detachment combo (see
+  // `setDetachments`) and the player can append notes after it.
   function addArmy() {
-    const army: Army = { id: uid("army"), name: `Army ${player.armies.length + 1}`, detachmentIds: [] };
+    const army: Army = { id: uid("army"), name: "", detachmentIds: [] };
     patch({ armies: [...player.armies, army] });
   }
 
@@ -101,6 +105,16 @@
     patch({ armies: player.armies.filter((a) => a.id !== id) });
   }
 
+  /** Set an army's detachment combo, auto-syncing its name (notes preserved). */
+  function setDetachments(armyId: string, newIds: string[]) {
+    const army = findArmy(player, armyId);
+    if (!army) return;
+    updateArmy(armyId, {
+      detachmentIds: newIds,
+      name: reconcileArmyName(army.name, army.detachmentIds, newIds),
+    });
+  }
+
   function addDetachment(armyId: string, e: Event) {
     const sel = e.currentTarget as HTMLSelectElement;
     const detId = sel.value;
@@ -108,13 +122,13 @@
     sel.value = "";
     const army = findArmy(player, armyId);
     if (!army || army.detachmentIds.includes(detId)) return;
-    updateArmy(armyId, { detachmentIds: [...army.detachmentIds, detId] });
+    setDetachments(armyId, [...army.detachmentIds, detId]);
   }
 
   function removeDetachment(armyId: string, detId: string) {
     const army = findArmy(player, armyId);
     if (!army) return;
-    updateArmy(armyId, { detachmentIds: army.detachmentIds.filter((d) => d !== detId) });
+    setDetachments(armyId, army.detachmentIds.filter((d) => d !== detId));
   }
 
   /** Detachments not yet in this army, for its "+ detachment" picker. */
@@ -239,7 +253,7 @@
               <div class="flex items-center gap-2">
                 <input
                   class="focus-ring min-w-0 flex-1 rounded border border-border-strong bg-panel-surface px-2 py-1 text-sm text-text placeholder:text-text-dim"
-                  placeholder="Army name"
+                  placeholder="Army name (auto-fills from detachments)"
                   value={army.name}
                   oninput={(e) => updateArmy(army.id, { name: (e.currentTarget as HTMLInputElement).value })}
                 />
@@ -261,14 +275,18 @@
               {#if over}
                 <p class="mt-1 text-[11px] text-danger">Over budget — Strike Force allows {DP_CAP} DP.</p>
               {/if}
-              <!-- Detachment chips -->
+              <!-- Detachment chips: each carries its own disposition pills + a
+                   roomy remove button. -->
               <div class="mt-1.5 flex flex-wrap items-center gap-1">
                 {#each army.detachmentIds as detId (detId)}
-                  <span class="inline-flex items-center gap-1 rounded bg-panel-surface px-1.5 py-0.5 text-xs text-text">
+                  <span class="inline-flex items-center gap-1.5 rounded bg-panel-surface py-0.5 pl-2 pr-1 text-xs text-text">
                     {detachmentName(detId)}
+                    {#each detachmentDispositions(detId) as fd}
+                      <DispoPill disposition={fd} tier="tag" />
+                    {/each}
                     <button
                       type="button"
-                      class="focus-ring text-text-muted hover:text-danger"
+                      class="focus-ring rounded px-1.5 py-0.5 text-sm leading-none text-text-muted hover:bg-danger/15 hover:text-danger"
                       onclick={() => removeDetachment(army.id, detId)}
                       aria-label={`Remove ${detachmentName(detId)}`}>×</button
                     >
@@ -286,14 +304,6 @@
                   </select>
                 {/if}
               </div>
-              <!-- Dispositions this combo can field -->
-              {#if army.detachmentIds.length > 0}
-                <div class="mt-1.5 flex flex-wrap items-center gap-1.5">
-                  {#each [...armyDispositions(army)] as fd}
-                    <DispoPill disposition={fd as ForceDispositionId} tier="tag" />
-                  {/each}
-                </div>
-              {/if}
             </div>
           {/each}
           <button
