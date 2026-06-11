@@ -4,18 +4,27 @@
  * list-builder uses for `#list=` links. Opening the link decodes it client-side
  * with no server. Browser-only (btoa/atob); fflate is already a dependency.
  *
- * Decoding is defensive: malformed input yields `null`, and faction/detachment
- * ids the current dataset no longer knows are dropped (and reported), so an old
- * link made against a newer dataset still opens with whatever remains valid.
+ * Decoding is defensive: malformed input yields `null`; faction/detachment ids
+ * the current dataset no longer knows are dropped (and reported); and plans from
+ * the *old* (pre-army) model are migrated forward instead of discarded, so an
+ * old link or a stale localStorage entry still opens with whatever remains valid.
  */
 import { gzipSync, gunzipSync, strToU8, strFromU8 } from "fflate";
 import type { ForceDispositionId } from "@alpaca-software/40kdc-data";
-import type { IntentTier, Player, TeamPlan } from "./coverage";
-import { detachmentsForFactions, isKnownFaction, playerCoverage } from "./coverage";
+import type { Army, Placement, Player, PrefTier, TeamPlan } from "./coverage";
+import {
+  armyDispositions,
+  detachmentsForFactions,
+  isKnownDetachment,
+  isKnownFaction,
+  syncPreferences,
+} from "./coverage";
 import { DISPOSITIONS } from "../../../_shared/matchup-grid.js";
 
 const KNOWN_DISPOSITIONS = new Set<string>(DISPOSITIONS);
-const KNOWN_TIERS = new Set<IntentTier>(["leaning", "prefer"]);
+const KNOWN_TIERS = new Set<PrefTier>(["could", "pref", "want"]);
+/** Old (pre-army) intent tier → new desire tier. */
+const LEGACY_TIER: Record<string, PrefTier> = { prefer: "want", leaning: "pref" };
 
 function bytesToBase64url(bytes: Uint8Array): string {
   let bin = "";
@@ -42,7 +51,7 @@ export function encodePlan(plan: TeamPlan): string {
 
 export interface DecodeResult {
   plan: TeamPlan;
-  /** Faction/detachment ids dropped because the dataset no longer knows them. */
+  /** Faction/detachment/disposition ids dropped because they no longer resolve. */
   dropped: string[];
 }
 
@@ -61,11 +70,139 @@ export function decodePlan(token: string): DecodeResult | null {
   return sanitizePlan(parsed);
 }
 
+/** A best-effort id for a migrated/legacy army when the source had none. */
+let synthCounter = 0;
+function synthId(seed: string): string {
+  synthCounter += 1;
+  return `mig-${seed}-${synthCounter}`;
+}
+
 /**
- * Validate + repair an already-parsed plan object: drop unknown faction and
- * detachment ids (reporting them), coerce fields to safe defaults. Returns
- * `null` when the value isn't a plan-shaped object. Shared by the URL decoder
- * and the localStorage loader.
+ * Build a player's army pool from a raw entry. Handles both the current shape
+ * (`armies: Army[]`) and the legacy pre-army shape (`detachmentIds` + `intent`),
+ * which becomes a single "Army 1" of the old selection (or every faction
+ * detachment when the old plan wasn't narrowed). Unknown detachment ids are
+ * dropped (and reported); empty armies are discarded.
+ */
+function sanitizeArmies(
+  raw: Record<string, unknown>,
+  factionIds: string[],
+  dropped: string[],
+): Army[] {
+  const valid = new Set(detachmentsForFactions(factionIds).map((d) => d.id));
+  const keepIds = (ids: unknown): string[] =>
+    (Array.isArray(ids) ? ids : [])
+      .filter((d): d is string => typeof d === "string")
+      .filter((d) => {
+        if (valid.has(d) && isKnownDetachment(d)) return true;
+        dropped.push(d);
+        return false;
+      });
+
+  if (Array.isArray(raw.armies)) {
+    return raw.armies
+      .map((entry, i) => {
+        const a = (entry ?? {}) as Record<string, unknown>;
+        return {
+          id: asString(a.id) || synthId(`a${i}`),
+          name: asString(a.name) || `Army ${i + 1}`,
+          detachmentIds: keepIds(a.detachmentIds),
+        };
+      })
+      .filter((a) => a.detachmentIds.length > 0);
+  }
+
+  // Legacy: `detachmentIds` array = the old narrowed selection; null/absent =
+  // "covered all faction detachments", which we materialize explicitly.
+  if ("detachmentIds" in raw || "intent" in raw) {
+    const ids = Array.isArray(raw.detachmentIds)
+      ? keepIds(raw.detachmentIds)
+      : [...valid];
+    if (ids.length === 0) return [];
+    return [{ id: synthId("legacy"), name: "Army 1", detachmentIds: ids }];
+  }
+
+  return [];
+}
+
+/**
+ * Provided placements (current shape), sanitized to valid `(army, disposition,
+ * tier)` triples in their original order. `syncPreferences` later prunes any
+ * that the pool can't actually field and appends missing capabilities as
+ * `could`, so this only needs to coerce types and report unknown dispositions.
+ */
+function sanitizePlacements(raw: unknown, dropped: string[]): Placement[] {
+  if (!Array.isArray(raw)) return [];
+  const out: Placement[] = [];
+  for (const entry of raw) {
+    const pl = (entry ?? {}) as Record<string, unknown>;
+    const armyId = asString(pl.armyId);
+    const disposition = asString(pl.disposition);
+    const tier = asString(pl.tier);
+    if (!armyId) continue;
+    if (!KNOWN_DISPOSITIONS.has(disposition)) {
+      if (disposition) dropped.push(disposition);
+      continue;
+    }
+    if (!KNOWN_TIERS.has(tier as PrefTier)) continue;
+    out.push({ armyId, disposition: disposition as ForceDispositionId, tier: tier as PrefTier });
+  }
+  return out;
+}
+
+/**
+ * Apply the legacy `intent` map onto freshly-synced placements: an old
+ * `prefer` → `want`, `leaning` → `pref`. The legacy model had a single army, so
+ * the disposition alone identifies the placement to retier.
+ */
+function applyLegacyIntent(prefs: Placement[], rawIntent: unknown, dropped: string[]): Placement[] {
+  if (!rawIntent || typeof rawIntent !== "object") return prefs;
+  const intent = rawIntent as Record<string, unknown>;
+  const tierFor = new Map<string, PrefTier>();
+  for (const [key, val] of Object.entries(intent)) {
+    if (!KNOWN_DISPOSITIONS.has(key)) {
+      dropped.push(key);
+      continue;
+    }
+    const mapped = typeof val === "string" ? LEGACY_TIER[val] : undefined;
+    if (mapped) tierFor.set(key, mapped);
+  }
+  if (tierFor.size === 0) return prefs;
+  return prefs.map((pl) => {
+    const t = tierFor.get(pl.disposition);
+    return t ? { ...pl, tier: t } : pl;
+  });
+}
+
+/** Keep only locks for a disposition the player covers whose army still exists. */
+function sanitizeLocked(
+  raw: unknown,
+  armies: Army[],
+  dropped: string[],
+): Partial<Record<ForceDispositionId, string>> {
+  const locked: Partial<Record<ForceDispositionId, string>> = {};
+  if (!raw || typeof raw !== "object") return locked;
+  const byId = new Map(armies.map((a) => [a.id, a]));
+  for (const [key, val] of Object.entries(raw as Record<string, unknown>)) {
+    if (!KNOWN_DISPOSITIONS.has(key)) {
+      dropped.push(key);
+      continue;
+    }
+    const armyId = asString(val);
+    const army = byId.get(armyId);
+    if (army && armyDispositions(army).has(key as ForceDispositionId)) {
+      locked[key as ForceDispositionId] = armyId;
+    }
+  }
+  return locked;
+}
+
+/**
+ * Validate + repair an already-parsed plan object into the current model: build
+ * each player's army pool (migrating the legacy shape forward), reconcile
+ * preferences against it, and keep only resolvable locks. Returns `null` when
+ * the value isn't a plan-shaped object. Shared by the URL decoder and the
+ * localStorage loader.
  */
 export function sanitizePlan(parsed: unknown): DecodeResult | null {
   if (!parsed || typeof parsed !== "object") return null;
@@ -84,44 +221,25 @@ export function sanitizePlan(parsed: unknown): DecodeResult | null {
         return false;
       });
 
-    // Narrowed detachments must resolve within the (surviving) factions.
-    let detachmentIds: string[] | null = null;
-    if (Array.isArray(p.detachmentIds)) {
-      const valid = new Set(detachmentsForFactions(factionIds).map((d) => d.id));
-      detachmentIds = p.detachmentIds
-        .filter((d): d is string => typeof d === "string")
-        .filter((d) => {
-          if (valid.has(d)) return true;
-          dropped.push(d);
-          return false;
-        });
-    }
+    const armies = sanitizeArmies(p, factionIds, dropped);
+    const isLegacy = !Array.isArray(p.armies) && ("detachmentIds" in p || "intent" in p);
 
-    // Intent: keep only known dispositions, with a valid tier, that this
-    // (repaired) player can actually field. Unknown disposition keys are
-    // reported; invalid tiers / unfieldable dispositions are dropped quietly.
-    const intent: Partial<Record<ForceDispositionId, IntentTier>> = {};
-    if (p.intent && typeof p.intent === "object") {
-      const fieldable = playerCoverage({ id: "", name: "", factionIds, detachmentIds, intent: {} });
-      for (const [key, val] of Object.entries(p.intent as Record<string, unknown>)) {
-        if (!KNOWN_DISPOSITIONS.has(key)) {
-          dropped.push(key);
-          continue;
-        }
-        const d = key as ForceDispositionId;
-        if (typeof val === "string" && KNOWN_TIERS.has(val as IntentTier) && fieldable.has(d)) {
-          intent[d] = val as IntentTier;
-        }
-      }
-    }
-
-    return {
+    // Seed preferences from the provided placements (current shape) or empty
+    // (legacy), then sync against the pool to prune/backfill, then — for legacy —
+    // fold the old intent onto the resulting placements.
+    const base: Player = {
       id: asString(p.id) || `p${i}`,
       name: asString(p.name),
       factionIds,
-      detachmentIds,
-      intent,
+      armies,
+      preferences: isLegacy ? [] : sanitizePlacements(p.preferences, dropped),
+      locked: {},
     };
+    base.preferences = syncPreferences(base);
+    if (isLegacy) base.preferences = applyLegacyIntent(base.preferences, p.intent, dropped);
+    base.locked = isLegacy ? {} : sanitizeLocked(p.locked, armies, dropped);
+
+    return base;
   });
 
   const size = raw.size === 8 ? 8 : 5;

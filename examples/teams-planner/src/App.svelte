@@ -16,7 +16,10 @@
    * survives across sessions; a captain can also pack the whole plan into a
    * `#t=` URL fragment to share it (decoded client-side, no backend).
    */
-  const STORAGE_KEY = "teams-planner.v1";
+  const STORAGE_KEY = "teams-planner.v2";
+  // The pre-army model lived here; we still read it and migrate forward (then
+  // resave under v2) so an upgrade never strands a saved plan.
+  const LEGACY_STORAGE_KEY = "teams-planner.v1";
 
   function emptyPlan(): TeamPlan {
     return { teamName: "", size: 5, players: [] };
@@ -24,7 +27,8 @@
 
   function loadPlan(): TeamPlan {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw =
+        localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);
       if (!raw) return emptyPlan();
       const result = sanitizePlan(JSON.parse(raw));
       return result ? result.plan : emptyPlan();
@@ -77,7 +81,7 @@
 
   function addPlayer() {
     const id = crypto.randomUUID?.() ?? `p-${plan.players.length}-${Date.now()}`;
-    const next: Player = { id, name: "", factionIds: [], detachmentIds: null, intent: {} };
+    const next: Player = { id, name: "", factionIds: [], armies: [], preferences: [], locked: {} };
     plan = { ...plan, players: [...plan.players, next] };
   }
 
@@ -158,7 +162,7 @@
 
     <!-- Coverage summary -->
     <div class="mb-4">
-      <CoverageMatrix {plan} {coverage} />
+      <CoverageMatrix {plan} {coverage} onchange={updatePlayer} />
     </div>
 
     <!-- Players -->

@@ -14,7 +14,7 @@
    */
   let {
     disposition,
-    tier = "can",
+    tier = "could",
     interactive = false,
     size = "sm",
     onclick,
@@ -45,7 +45,7 @@
       : `rounded ${sizeCls} font-medium uppercase tracking-wide ` +
           (tier === "uncovered"
             ? "bg-panel text-text-dim line-through"
-            : tier === "prefer"
+            : tier === "want"
               ? "font-bold"
               : ""),
   );
@@ -57,7 +57,7 @@
     class="focus-ring {cls}"
     {style}
     title={tip}
-    aria-pressed={tier === "leaning" || tier === "prefer"}
+    aria-pressed={tier === "pref" || tier === "want"}
     onclick={onclick}
   >
     {text}

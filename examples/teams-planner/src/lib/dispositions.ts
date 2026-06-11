@@ -22,8 +22,12 @@ export const DISPOSITION_COLORS: Record<ForceDispositionId, string> = {
   reconnaissance: "#22c55e", // green
 };
 
-/** Pill appearance tiers. `can`/`leaning`/`prefer` are the intent ladder. */
-export type PillTier = "can" | "leaning" | "prefer" | "uncovered" | "tag";
+/** Pill appearance tiers. `could`/`pref`/`want` are the desire ladder (○ ● ★). */
+export type PillTier = "could" | "pref" | "want" | "uncovered" | "tag";
+
+/** The desire ladder rendered as bare glyphs (matrix cells, band headers). */
+export const TIER_SYMBOL = { could: "○", pref: "●", want: "★" } as const;
+export const TIER_LABEL = { could: "could", pref: "pref", want: "want" } as const;
 
 /** "#rrggbb" → `[r, g, b]` (0–255). Assumes a 6-digit hex from the table above. */
 function hexToRgb(hex: string): [number, number, number] {
@@ -49,19 +53,19 @@ function rgba(hex: string, alpha: number): string {
 /**
  * The inline `style` string for a pill of the given disposition + tier. Returns
  * `""` for `uncovered` (the component styles that neutrally with classes).
- *   can     → faint hue tint, hue text + border
- *   leaning → transparent, solid hue outline + hue text
- *   prefer  → solid hue fill, contrast-checked dark/light text
- *   tag     → hue text only (tiny fd badges)
+ *   could → faint hue tint, hue text + border (○)
+ *   pref  → transparent, solid hue outline + hue text (●)
+ *   want  → solid hue fill, contrast-checked dark/light text (★)
+ *   tag   → hue text only (tiny fd badges)
  */
 export function pillStyle(disposition: ForceDispositionId, tier: PillTier): string {
   const hue = DISPOSITION_COLORS[disposition];
   switch (tier) {
-    case "can":
+    case "could":
       return `background:${rgba(hue, 0.16)};color:${hue};border:1px solid ${rgba(hue, 0.4)};`;
-    case "leaning":
+    case "pref":
       return `background:transparent;color:${hue};border:1px solid ${hue};`;
-    case "prefer":
+    case "want":
       return `background:${hue};color:${readableFg(hue)};border:1px solid ${hue};`;
     case "tag":
       return `color:${hue};`;

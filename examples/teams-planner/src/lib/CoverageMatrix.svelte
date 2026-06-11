@@ -1,13 +1,41 @@
 <script lang="ts">
   import type { ForceDispositionId } from "@alpaca-software/40kdc-data";
-  import type { TeamCoverage, TeamPlan } from "./coverage";
+  import {
+    columnFull,
+    effectivePlacement,
+    findArmy,
+    LOCK_CAP,
+    type Player,
+    type TeamCoverage,
+    type TeamPlan,
+  } from "./coverage";
   import { DISPOSITION_LABELS, DISPOSITIONS } from "../../../_shared/matchup-grid.js";
-  import { DISPOSITION_COLORS } from "./dispositions";
+  import { DISPOSITION_COLORS, TIER_SYMBOL } from "./dispositions";
   import DispoPill from "./DispoPill.svelte";
 
-  let { plan, coverage }: { plan: TeamPlan; coverage: TeamCoverage } = $props();
+  let {
+    plan,
+    coverage,
+    onchange,
+  }: {
+    plan: TeamPlan;
+    coverage: TeamCoverage;
+    onchange: (next: Player) => void;
+  } = $props();
 
   const filled = $derived(plan.players.filter((p) => p.factionIds.length > 0).length);
+
+  // Toggle the captain's lock for a player on a disposition. Pins the player's
+  // *effective* army (the one the cell shows) so a later preference reshuffle
+  // can't silently re-point the committed assignment.
+  function toggleLock(p: Player, d: ForceDispositionId) {
+    const eff = effectivePlacement(p, d);
+    if (!eff) return;
+    const locked = { ...p.locked };
+    if (locked[d]) delete locked[d];
+    else locked[d] = eff.armyId;
+    onchange({ ...p, locked });
+  }
 </script>
 
 <section class="rounded-md border border-panel-border bg-panel-surface shadow-sm">
@@ -36,7 +64,7 @@
 
   {#if plan.players.length === 0}
     <p class="px-3 py-6 text-center text-sm text-text-dim">
-      Add players to see disposition coverage.
+      Add players, then build each one an army pool to see disposition coverage.
     </p>
   {:else}
     <div class="overflow-x-auto">
@@ -48,7 +76,7 @@
             </th>
             {#each DISPOSITIONS as d (d)}
               <th class="px-2 py-2 text-center">
-                <DispoPill disposition={d} tier="can" />
+                <DispoPill disposition={d} tier="could" />
               </th>
             {/each}
           </tr>
@@ -62,16 +90,41 @@
               </td>
               {#each DISPOSITIONS as d (d)}
                 {@const can = cov?.has(d) ?? false}
-                {@const tier = can ? (p.intent?.[d] ?? "can") : null}
-                <td class="px-2 py-1.5 text-center">
-                  {#if !can}
-                    <span class="text-text-dim" aria-label="does not cover {DISPOSITION_LABELS[d]}">·</span>
-                  {:else if tier === "prefer"}
-                    <span style="color:{DISPOSITION_COLORS[d]}" aria-label="prefers {DISPOSITION_LABELS[d]}">★</span>
-                  {:else if tier === "leaning"}
-                    <span style="color:{DISPOSITION_COLORS[d]}" aria-label="leaning toward {DISPOSITION_LABELS[d]}">☆</span>
+                {@const eff = can ? effectivePlacement(p, d) : null}
+                {@const army = eff ? findArmy(p, eff.armyId) : null}
+                {@const locked = !!p.locked?.[d]}
+                {@const blocked = !locked && columnFull(coverage, d)}
+                <td
+                  class="px-2 py-1.5 text-center align-top {locked ? 'bg-accent-dim' : ''} {blocked ? 'opacity-40' : ''}"
+                >
+                  {#if !eff}
+                    <span class="text-text-dim" aria-label="cannot field {DISPOSITION_LABELS[d]}">·</span>
                   {:else}
-                    <span class="text-accent" aria-label="can cover {DISPOSITION_LABELS[d]}">✓</span>
+                    <div class="flex flex-col items-center gap-0.5">
+                      <span
+                        style="color:{DISPOSITION_COLORS[d]}"
+                        title="{eff.tier} — {DISPOSITION_LABELS[d]}"
+                        aria-label="{eff.tier} {DISPOSITION_LABELS[d]}"
+                      >
+                        {TIER_SYMBOL[eff.tier]}
+                      </span>
+                      <span class="max-w-[6rem] truncate text-[10px] leading-tight text-text-muted" title={army?.name}>
+                        {army?.name}
+                      </span>
+                      <input
+                        type="checkbox"
+                        class="focus-ring h-3 w-3 cursor-pointer disabled:cursor-not-allowed"
+                        checked={locked}
+                        disabled={blocked}
+                        onchange={() => toggleLock(p, d)}
+                        title={locked
+                          ? `Locked in for ${DISPOSITION_LABELS[d]}`
+                          : blocked
+                            ? `${DISPOSITION_LABELS[d]} already has ${LOCK_CAP} locked players`
+                            : `Lock ${p.name || "player"} into ${DISPOSITION_LABELS[d]}`}
+                        aria-label="Lock {p.name || 'player'} into {DISPOSITION_LABELS[d]}"
+                      />
+                    </div>
                   {/if}
                 </td>
               {/each}
@@ -85,17 +138,24 @@
             </td>
             {#each DISPOSITIONS as d (d)}
               {@const n = coverage.byDisposition[d].length}
-              {@const roll = coverage.intentByDisposition[d]}
+              {@const roll = coverage.tierByDisposition[d]}
+              {@const lockedN = coverage.lockedByDisposition[d].length}
               <td
                 class="px-2 py-1.5 text-center align-top font-mono text-xs font-bold
                        {n === 0 ? 'bg-danger/20 text-danger' : 'text-text'}"
                 title={n === 0 ? `GAP — no player covers ${DISPOSITION_LABELS[d]}` : `${n} player(s) can field ${DISPOSITION_LABELS[d]}`}
               >
                 {n === 0 ? "GAP" : n}
-                {#if roll.prefer.length > 0 || roll.leaning.length > 0}
+                {#if roll.want.length > 0 || roll.pref.length > 0 || roll.could.length > 0}
                   <div class="mt-0.5 font-sans text-[10px] font-normal" style="color:{DISPOSITION_COLORS[d]}">
-                    {#if roll.prefer.length > 0}<span title="{roll.prefer.length} prefer">★{roll.prefer.length}</span>{/if}
-                    {#if roll.leaning.length > 0}<span title="{roll.leaning.length} leaning">{roll.prefer.length > 0 ? " " : ""}☆{roll.leaning.length}</span>{/if}
+                    {#if roll.want.length > 0}<span title="{roll.want.length} want">{TIER_SYMBOL.want}{roll.want.length}</span>{/if}
+                    {#if roll.pref.length > 0}<span title="{roll.pref.length} pref"> {TIER_SYMBOL.pref}{roll.pref.length}</span>{/if}
+                    {#if roll.could.length > 0}<span title="{roll.could.length} could"> {TIER_SYMBOL.could}{roll.could.length}</span>{/if}
+                  </div>
+                {/if}
+                {#if lockedN > 0}
+                  <div class="mt-0.5 font-sans text-[10px] font-normal text-text-muted" title="{lockedN} of {LOCK_CAP} locked">
+                    🔒 {lockedN}/{LOCK_CAP}
                   </div>
                 {/if}
               </td>

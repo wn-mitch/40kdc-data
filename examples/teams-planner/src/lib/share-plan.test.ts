@@ -1,55 +1,47 @@
 import { describe, expect, it } from "vitest";
-import { decodePlan, encodePlan } from "./share-plan";
-import type { TeamPlan } from "./coverage";
+import { decodePlan, encodePlan, sanitizePlan } from "./share-plan";
+import type { Placement, TeamPlan } from "./coverage";
 
 const plan: TeamPlan = {
   teamName: "The Houndpack",
   size: 8,
   players: [
-    { id: "a", name: "Will", factionIds: ["world-eaters"], detachmentIds: null, intent: {} },
+    {
+      id: "a",
+      name: "Will",
+      factionIds: ["world-eaters"],
+      armies: [{ id: "hil", name: "Houndpack + Infernal Lance", detachmentIds: ["khorne-daemonkin", "goretrack-onslaught"] }],
+      preferences: [
+        { armyId: "hil", disposition: "reconnaissance", tier: "want" },
+        { armyId: "hil", disposition: "take-and-hold", tier: "pref" },
+      ],
+      locked: { reconnaissance: "hil" },
+    },
     {
       id: "b",
       name: "Matt",
       factionIds: ["world-eaters"],
-      detachmentIds: ["goretrack-onslaught"],
-      intent: { "take-and-hold": "prefer" },
+      armies: [{ id: "w", name: "Warband", detachmentIds: ["berzerker-warband"] }],
+      preferences: [{ armyId: "w", disposition: "purge-the-foe", tier: "could" }],
+      locked: {},
     },
   ],
 };
 
 describe("encode/decode round trip", () => {
-  it("round-trips a plan losslessly with nothing dropped", () => {
+  it("round-trips armies, preferences, and locks losslessly", () => {
     const result = decodePlan(encodePlan(plan));
     expect(result).not.toBeNull();
     expect(result!.plan).toEqual(plan);
     expect(result!.dropped).toEqual([]);
   });
 
-  it("preserves detachment rank order and intent across a round trip", () => {
-    // Rank order is the reverse of name order, so a naive re-sort would corrupt it.
-    const ranked: TeamPlan = {
-      teamName: "T",
-      size: 5,
-      players: [
-        {
-          id: "a",
-          name: "P",
-          factionIds: ["world-eaters"],
-          detachmentIds: ["khorne-daemonkin", "goretrack-onslaught"],
-          intent: { reconnaissance: "leaning", "take-and-hold": "prefer" },
-        },
-      ],
-    };
-    const result = decodePlan(encodePlan(ranked))!;
-    expect(result.plan.players[0].detachmentIds).toEqual([
-      "khorne-daemonkin",
-      "goretrack-onslaught",
+  it("preserves preference band + rank order across a round trip", () => {
+    const result = decodePlan(encodePlan(plan))!;
+    expect(result.plan.players[0].preferences).toEqual([
+      { armyId: "hil", disposition: "reconnaissance", tier: "want" },
+      { armyId: "hil", disposition: "take-and-hold", tier: "pref" },
     ]);
-    expect(result.plan.players[0].intent).toEqual({
-      reconnaissance: "leaning",
-      "take-and-hold": "prefer",
-    });
-    expect(result.dropped).toEqual([]);
   });
 });
 
@@ -68,13 +60,7 @@ describe("defensive decode", () => {
       teamName: "T",
       size: 5,
       players: [
-        {
-          id: "a",
-          name: "P",
-          factionIds: ["world-eaters", "squats-1998"],
-          detachmentIds: null,
-          intent: {},
-        },
+        { id: "a", name: "P", factionIds: ["world-eaters", "squats-1998"], armies: [], preferences: [], locked: {} },
       ],
     };
     const result = decodePlan(encodePlan(stale))!;
@@ -82,7 +68,7 @@ describe("defensive decode", () => {
     expect(result.dropped).toContain("squats-1998");
   });
 
-  it("drops narrowed detachment ids that don't resolve in the surviving factions", () => {
+  it("drops army detachments that don't resolve, then prunes empty armies", () => {
     const stale: TeamPlan = {
       teamName: "T",
       size: 5,
@@ -91,35 +77,23 @@ describe("defensive decode", () => {
           id: "a",
           name: "P",
           factionIds: ["world-eaters"],
-          detachmentIds: ["goretrack-onslaught", "made-up-detachment"],
-          intent: {},
+          armies: [
+            { id: "a1", name: "Mix", detachmentIds: ["goretrack-onslaught", "made-up-detachment"] },
+            { id: "a2", name: "Empty", detachmentIds: ["also-fake"] },
+          ],
+          preferences: [],
+          locked: {},
         },
       ],
     };
     const result = decodePlan(encodePlan(stale))!;
-    expect(result.plan.players[0].detachmentIds).toEqual(["goretrack-onslaught"]);
-    expect(result.dropped).toContain("made-up-detachment");
+    expect(result.plan.players[0].armies).toEqual([
+      { id: "a1", name: "Mix", detachmentIds: ["goretrack-onslaught"] },
+    ]);
+    expect(result.dropped).toEqual(expect.arrayContaining(["made-up-detachment", "also-fake"]));
   });
 
-  it("drops intent for a disposition the narrowed detachments can't field", () => {
-    const stale: TeamPlan = {
-      teamName: "T",
-      size: 5,
-      players: [
-        {
-          id: "a",
-          name: "P",
-          factionIds: ["world-eaters"],
-          detachmentIds: ["goretrack-onslaught"], // take-and-hold only
-          intent: { "take-and-hold": "prefer", reconnaissance: "prefer" },
-        },
-      ],
-    };
-    const result = decodePlan(encodePlan(stale))!;
-    expect(result.plan.players[0].intent).toEqual({ "take-and-hold": "prefer" });
-  });
-
-  it("drops invalid intent tiers and reports unknown disposition keys", () => {
+  it("backfills missing placements and drops stale ones via syncPreferences", () => {
     const raw = {
       teamName: "T",
       size: 5,
@@ -128,13 +102,99 @@ describe("defensive decode", () => {
           id: "a",
           name: "P",
           factionIds: ["world-eaters"],
-          detachmentIds: null,
-          intent: { "take-and-hold": "bogus", "not-a-disposition": "prefer" },
+          armies: [{ id: "a1", name: "A", detachmentIds: ["khorne-daemonkin", "goretrack-onslaught"] }],
+          // Only one of the two capabilities placed; the other must be backfilled.
+          preferences: [{ armyId: "a1", disposition: "reconnaissance", tier: "want" }],
+          locked: {},
+        },
+      ],
+    };
+    const prefs = decodePlan(encodePlan(raw as unknown as TeamPlan))!.plan.players[0].preferences;
+    expect(prefs).toContainEqual({ armyId: "a1", disposition: "reconnaissance", tier: "want" });
+    expect(prefs).toContainEqual({ armyId: "a1", disposition: "take-and-hold", tier: "could" });
+  });
+
+  it("drops a lock whose army can't field the disposition", () => {
+    const raw = {
+      teamName: "T",
+      size: 5,
+      players: [
+        {
+          id: "a",
+          name: "P",
+          factionIds: ["world-eaters"],
+          armies: [{ id: "a1", name: "A", detachmentIds: ["goretrack-onslaught"] }], // take-and-hold only
+          preferences: [],
+          locked: { "take-and-hold": "a1", reconnaissance: "a1" }, // recon lock is invalid
         },
       ],
     };
     const result = decodePlan(encodePlan(raw as unknown as TeamPlan))!;
-    expect(result.plan.players[0].intent).toEqual({});
+    expect(result.plan.players[0].locked).toEqual({ "take-and-hold": "a1" });
+  });
+
+  it("drops invalid placement tiers and reports unknown disposition keys", () => {
+    const raw = {
+      teamName: "T",
+      size: 5,
+      players: [
+        {
+          id: "a",
+          name: "P",
+          factionIds: ["world-eaters"],
+          armies: [{ id: "a1", name: "A", detachmentIds: ["goretrack-onslaught"] }],
+          preferences: [
+            { armyId: "a1", disposition: "take-and-hold", tier: "bogus" },
+            { armyId: "a1", disposition: "not-a-disposition", tier: "want" },
+          ],
+          locked: {},
+        },
+      ],
+    };
+    const result = decodePlan(encodePlan(raw as unknown as TeamPlan))!;
+    // bogus tier dropped; syncPreferences backfills take-and-hold as could.
+    expect(result.plan.players[0].preferences).toEqual([
+      { armyId: "a1", disposition: "take-and-hold", tier: "could" },
+    ]);
     expect(result.dropped).toContain("not-a-disposition");
+  });
+});
+
+describe("legacy migration (pre-army v1 plans)", () => {
+  it("turns an unnarrowed legacy player into one army covering every faction detachment", () => {
+    const legacy = {
+      teamName: "Old",
+      size: 5,
+      players: [{ id: "a", name: "P", factionIds: ["world-eaters"], detachmentIds: null, intent: {} }],
+    };
+    const result = sanitizePlan(legacy)!;
+    const p = result.plan.players[0];
+    expect(p.armies).toHaveLength(1);
+    expect(p.armies[0].name).toBe("Army 1");
+    // World Eaters span all five dispositions, so the migrated army does too.
+    const dispos = new Set(p.preferences.map((pl) => pl.disposition));
+    expect(dispos.size).toBe(5);
+  });
+
+  it("maps legacy intent (prefer→want, leaning→pref) onto the migrated army", () => {
+    const legacy = {
+      teamName: "Old",
+      size: 5,
+      players: [
+        {
+          id: "a",
+          name: "P",
+          factionIds: ["world-eaters"],
+          detachmentIds: ["khorne-daemonkin", "goretrack-onslaught"],
+          intent: { reconnaissance: "prefer", "take-and-hold": "leaning" },
+        },
+      ],
+    };
+    const p = sanitizePlan(legacy)!.plan.players[0];
+    const byDispo = Object.fromEntries(p.preferences.map((pl: Placement) => [pl.disposition, pl.tier]));
+    expect(byDispo["reconnaissance"]).toBe("want");
+    expect(byDispo["take-and-hold"]).toBe("pref");
+    expect(p.armies[0].detachmentIds).toEqual(["khorne-daemonkin", "goretrack-onslaught"]);
+    expect(p.locked).toEqual({});
   });
 });
