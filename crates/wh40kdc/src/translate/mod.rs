@@ -191,15 +191,9 @@ fn describe_simple(s: &SimpleCondition) -> String {
         T::RemainedStationary => format!("{negate}the unit remained stationary"),
         T::UnitBelowStartingStrength => format!("{negate}the unit is below starting strength"),
         T::UnitBelowHalfStrength => format!("{negate}the unit is below half strength"),
-        T::UnitHasKeyword => format!(
-            "{negate}the unit has \"{}\"",
-            pj(p, "keyword")
-        ),
+        T::UnitHasKeyword => format!("{negate}the unit has \"{}\"", pj(p, "keyword")),
         T::TargetHasKeyword => {
-            format!(
-                "{negate}the target has \"{}\"",
-                pj(p, "keyword")
-            )
+            format!("{negate}the target has \"{}\"", pj(p, "keyword"))
         }
         T::ModelIsLeader => format!("{negate}the model is leading a unit"),
         T::IsAttached => {
@@ -257,10 +251,7 @@ fn describe_simple(s: &SimpleCondition) -> String {
         T::WithinRangeOfObjective => format!("{negate}within range of an objective"),
         T::HasFoughtThisPhase => format!("{negate}has fought this phase"),
         T::DestroyedByAttackType => {
-            format!(
-                "{negate}destroyed by a {} attack",
-                pj(p, "attack_type")
-            )
+            format!("{negate}destroyed by a {} attack", pj(p, "attack_type"))
         }
 
         // ── Scoring conditions (secondary-card award `when`) ────────────────
@@ -429,10 +420,7 @@ fn describe_simple(s: &SimpleCondition) -> String {
         T::UnitHasTag => {
             let mut out = format!(
                 "{negate}{} tagged {}",
-                count(
-                    pu(p, "count_min", 1),
-                    &format!("{} unit", pj(p, "side"))
-                ),
+                count(pu(p, "count_min", 1), &format!("{} unit", pj(p, "side"))),
                 dekebab(&pj(p, "tag"))
             );
             if let Some(w) = ps(p, "window") {
@@ -441,10 +429,7 @@ fn describe_simple(s: &SimpleCondition) -> String {
             out
         }
         T::TerrainHasTag => {
-            let mut out = format!(
-                "{negate}terrain tagged {}",
-                dekebab(&pj(p, "tag"))
-            );
+            let mut out = format!("{negate}terrain tagged {}", dekebab(&pj(p, "tag")));
             if let Some(fm) = p.get("friendly_units_min").and_then(Value::as_u64) {
                 out.push_str(&format!(" with {fm}+ friendly units"));
             }
