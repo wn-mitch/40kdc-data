@@ -77,7 +77,7 @@
 
   function addPlayer() {
     const id = crypto.randomUUID?.() ?? `p-${plan.players.length}-${Date.now()}`;
-    const next: Player = { id, name: "", factionIds: [], detachmentIds: null };
+    const next: Player = { id, name: "", factionIds: [], detachmentIds: null, intent: {} };
     plan = { ...plan, players: [...plan.players, next] };
   }
 

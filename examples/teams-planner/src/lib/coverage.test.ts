@@ -8,6 +8,17 @@ import {
   type TeamPlan,
 } from "./coverage";
 
+function player(over: Partial<Player>): Player {
+  return {
+    id: "x",
+    name: "P",
+    factionIds: ["world-eaters"],
+    detachmentIds: null,
+    intent: {},
+    ...over,
+  };
+}
+
 // World Eaters span all five dispositions across their detachments, so they're
 // a stable fixture for both "covers everything" and "narrowed to a gap".
 //   goretrack-onslaught → take-and-hold
@@ -15,10 +26,6 @@ import {
 //   khorne-daemonkin    → reconnaissance
 //   vessels-of-wrath    → priority-assets
 //   berzerker-warband   → purge-the-foe
-
-function player(over: Partial<Player>): Player {
-  return { id: "x", name: "P", factionIds: ["world-eaters"], detachmentIds: null, ...over };
-}
 
 describe("playerCoverage", () => {
   it("covers every disposition a faction's detachments grant when unnarrowed", () => {
@@ -51,6 +58,15 @@ describe("candidateDetachments", () => {
       player({ detachmentIds: ["goretrack-onslaught", "not-a-real-detachment"] }),
     );
     expect(cand.map((d) => d.id)).toEqual(["goretrack-onslaught"]);
+  });
+
+  it("returns narrowed detachments in the player's rank order, not name order", () => {
+    // Name order would be [butchers-of-khorne, goretrack-onslaught]; the rank
+    // (detachmentIds order) is the reverse, and that's what must come back.
+    const cand = candidateDetachments(
+      player({ detachmentIds: ["goretrack-onslaught", "butchers-of-khorne"] }),
+    );
+    expect(cand.map((d) => d.id)).toEqual(["goretrack-onslaught", "butchers-of-khorne"]);
   });
 });
 
@@ -93,6 +109,42 @@ describe("teamCoverage", () => {
     const cov = teamCoverage(plan);
     expect(cov.byDisposition["take-and-hold"].map((p) => p.id).sort()).toEqual(["a", "b"]);
     expect(cov.byDisposition["disruption"].map((p) => p.id)).toEqual(["b"]);
+  });
+});
+
+describe("teamCoverage intent rollup", () => {
+  it("groups players by stated intent per disposition", () => {
+    const plan: TeamPlan = {
+      teamName: "T",
+      size: 5,
+      players: [
+        player({ id: "a", intent: { "take-and-hold": "prefer", disruption: "leaning" } }),
+        player({ id: "b", intent: { "take-and-hold": "leaning" } }),
+      ],
+    };
+    const r = teamCoverage(plan).intentByDisposition;
+    expect(r["take-and-hold"].prefer.map((p) => p.id)).toEqual(["a"]);
+    expect(r["take-and-hold"].leaning.map((p) => p.id)).toEqual(["b"]);
+    expect(r["disruption"].leaning.map((p) => p.id)).toEqual(["a"]);
+    expect(r["reconnaissance"]).toEqual({ prefer: [], leaning: [] });
+  });
+
+  it("ignores intent for a disposition the player can't actually field", () => {
+    const plan: TeamPlan = {
+      teamName: "T",
+      size: 5,
+      players: [
+        // Narrowed to take-and-hold only, but states a reconnaissance preference.
+        player({
+          id: "a",
+          detachmentIds: ["goretrack-onslaught"],
+          intent: { "take-and-hold": "prefer", reconnaissance: "prefer" },
+        }),
+      ],
+    };
+    const r = teamCoverage(plan).intentByDisposition;
+    expect(r["take-and-hold"].prefer.map((p) => p.id)).toEqual(["a"]);
+    expect(r["reconnaissance"].prefer).toEqual([]);
   });
 });
 

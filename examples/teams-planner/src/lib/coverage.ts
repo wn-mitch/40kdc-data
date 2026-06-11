@@ -13,16 +13,31 @@ import type { Detachment, ForceDispositionId } from "@alpaca-software/40kdc-data
 import { DISPOSITIONS } from "../../../_shared/matchup-grid.js";
 import { ds } from "./dataset";
 
+/**
+ * Stated intent for a disposition the player *can* field, layered above bare
+ * capability. `"leaning"` = tentatively planning to cover it; `"prefer"` = a top
+ * pick. The absence of a key means "can" — capable, no stated intent.
+ */
+export type IntentTier = "leaning" | "prefer";
+
 export interface Player {
   id: string;
   name: string;
   /** Factions this player is willing to bring (one or more). */
   factionIds: string[];
   /**
-   * Detachment narrowing. `null` = cover every detachment in `factionIds`
-   * (the default). A list = restrict coverage to exactly those detachment ids.
+   * Detachment narrowing *and* preference ranking. `null` = cover every
+   * detachment in `factionIds` (the default, unranked). A list = restrict
+   * coverage to exactly those detachment ids, where the **array order is the
+   * preference ranking** (index 0 = top pick).
    */
   detachmentIds: string[] | null;
+  /**
+   * Per-disposition stated intent. Keys must be dispositions the player can
+   * field (an entry on an unfieldable disposition is ignored); an absent key
+   * means "can".
+   */
+  intent: Partial<Record<ForceDispositionId, IntentTier>>;
 }
 
 export interface TeamPlan {
@@ -32,9 +47,17 @@ export interface TeamPlan {
   players: Player[];
 }
 
+/** Players who stated each intent tier for a disposition (subsets of the capable). */
+export interface IntentRollup {
+  prefer: Player[];
+  leaning: Player[];
+}
+
 export interface TeamCoverage {
   /** Players able to field each disposition, keyed by disposition id. */
   byDisposition: Record<ForceDispositionId, Player[]>;
+  /** Players who stated a "prefer"/"leaning" intent for each disposition. */
+  intentByDisposition: Record<ForceDispositionId, IntentRollup>;
   /** Each player's covered disposition set, keyed by player id. */
   perPlayer: Map<string, Set<ForceDispositionId>>;
   /** Dispositions no player can field. */
@@ -45,13 +68,17 @@ export interface TeamCoverage {
 
 /**
  * The detachments a player might field: every detachment across their factions,
- * restricted to the narrowed ids when narrowing is on.
+ * restricted to the narrowed ids when narrowing is on. When narrowed, the result
+ * follows the player's `detachmentIds` **rank order** (index 0 = top pick), not
+ * name order — the ranking the UI exposes. Unnarrowed stays name-sorted.
  */
 export function candidateDetachments(p: Player): Detachment[] {
   const all = detachmentsForFactions(p.factionIds);
-  return p.detachmentIds == null
-    ? all
-    : all.filter((d) => p.detachmentIds!.includes(d.id));
+  if (p.detachmentIds == null) return all;
+  const byId = new Map(all.map((d) => [d.id, d]));
+  return p.detachmentIds
+    .map((id) => byId.get(id))
+    .filter((d): d is Detachment => d != null);
 }
 
 /** Union of force dispositions a player can field. */
@@ -71,17 +98,25 @@ export function teamCoverage(plan: TeamPlan): TeamCoverage {
   const byDisposition = Object.fromEntries(
     DISPOSITIONS.map((d) => [d, [] as Player[]]),
   ) as Record<ForceDispositionId, Player[]>;
+  const intentByDisposition = Object.fromEntries(
+    DISPOSITIONS.map((d) => [d, { prefer: [], leaning: [] } as IntentRollup]),
+  ) as Record<ForceDispositionId, IntentRollup>;
 
   for (const p of plan.players) {
     const cov = playerCoverage(p);
     perPlayer.set(p.id, cov);
     for (const d of DISPOSITIONS) {
-      if (cov.has(d)) byDisposition[d].push(p);
+      if (!cov.has(d)) continue;
+      byDisposition[d].push(p);
+      // Intent only counts for a disposition the player can actually field.
+      const tier = p.intent?.[d];
+      if (tier === "prefer") intentByDisposition[d].prefer.push(p);
+      else if (tier === "leaning") intentByDisposition[d].leaning.push(p);
     }
   }
 
   const gaps = DISPOSITIONS.filter((d) => byDisposition[d].length === 0);
-  return { byDisposition, perPlayer, gaps, ready: gaps.length === 0 };
+  return { byDisposition, intentByDisposition, perPlayer, gaps, ready: gaps.length === 0 };
 }
 
 export interface FactionOption {
@@ -109,6 +144,28 @@ export function detachmentsForFactions(factionIds: string[]): Detachment[] {
     }
   }
   return out.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export interface FactionDetachments {
+  faction: FactionOption;
+  detachments: Detachment[];
+}
+
+/**
+ * Detachments grouped under their faction, in the player's faction order — the
+ * shape the narrowing checklist renders. Factions with no detachments are
+ * omitted.
+ */
+export function detachmentsByFaction(factionIds: string[]): FactionDetachments[] {
+  return factionIds
+    .map((id) => ({
+      faction: { id, name: ds.factions.get(id)?.name ?? id },
+      detachments: ds.detachments
+        .byFaction(id)
+        .slice()
+        .sort((a, b) => a.name.localeCompare(b.name)),
+    }))
+    .filter((g) => g.detachments.length > 0);
 }
 
 /** A faction id is usable iff it resolves to a known faction with detachments. */

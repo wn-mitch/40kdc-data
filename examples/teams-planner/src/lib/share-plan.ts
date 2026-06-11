@@ -9,8 +9,13 @@
  * link made against a newer dataset still opens with whatever remains valid.
  */
 import { gzipSync, gunzipSync, strToU8, strFromU8 } from "fflate";
-import type { Player, TeamPlan } from "./coverage";
-import { detachmentsForFactions, isKnownFaction } from "./coverage";
+import type { ForceDispositionId } from "@alpaca-software/40kdc-data";
+import type { IntentTier, Player, TeamPlan } from "./coverage";
+import { detachmentsForFactions, isKnownFaction, playerCoverage } from "./coverage";
+import { DISPOSITIONS } from "../../../_shared/matchup-grid.js";
+
+const KNOWN_DISPOSITIONS = new Set<string>(DISPOSITIONS);
+const KNOWN_TIERS = new Set<IntentTier>(["leaning", "prefer"]);
 
 function bytesToBase64url(bytes: Uint8Array): string {
   let bin = "";
@@ -92,11 +97,30 @@ export function sanitizePlan(parsed: unknown): DecodeResult | null {
         });
     }
 
+    // Intent: keep only known dispositions, with a valid tier, that this
+    // (repaired) player can actually field. Unknown disposition keys are
+    // reported; invalid tiers / unfieldable dispositions are dropped quietly.
+    const intent: Partial<Record<ForceDispositionId, IntentTier>> = {};
+    if (p.intent && typeof p.intent === "object") {
+      const fieldable = playerCoverage({ id: "", name: "", factionIds, detachmentIds, intent: {} });
+      for (const [key, val] of Object.entries(p.intent as Record<string, unknown>)) {
+        if (!KNOWN_DISPOSITIONS.has(key)) {
+          dropped.push(key);
+          continue;
+        }
+        const d = key as ForceDispositionId;
+        if (typeof val === "string" && KNOWN_TIERS.has(val as IntentTier) && fieldable.has(d)) {
+          intent[d] = val as IntentTier;
+        }
+      }
+    }
+
     return {
       id: asString(p.id) || `p${i}`,
       name: asString(p.name),
       factionIds,
       detachmentIds,
+      intent,
     };
   });
 
