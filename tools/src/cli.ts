@@ -6,6 +6,7 @@ import { validateAllCommand } from "./commands/validate-all.js";
 import { translateCommand } from "./commands/translate.js";
 import { importCommand } from "./commands/import.js";
 import { auditCoverageCommand } from "./audit-coverage.js";
+import { auditPhrasingCommand } from "./audit-phrasing.js";
 import { populateBaseSizesCommand } from "./commands/populate-base-sizes.js";
 
 const program = new Command();
@@ -45,6 +46,13 @@ program
   .option("--reporter <mode>", "Output format: pretty or json", "pretty")
   .option("--write", "Also write data/_audit/coverage.json + summary.md", false)
   .action((opts) => auditCoverageCommand({ reporter: opts.reporter, write: opts.write }));
+
+program
+  .command("audit-phrasing")
+  .description("Catalogue every ability's generated English text and flag phrasing defects, per faction")
+  .option("--reporter <mode>", "Output format: pretty or json", "pretty")
+  .option("--write", "Also write data/_audit/phrasing.csv + phrasing.json", false)
+  .action((opts) => auditPhrasingCommand({ reporter: opts.reporter, write: opts.write }));
 
 program
   .command("import")
