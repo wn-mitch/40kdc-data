@@ -215,6 +215,7 @@
     "comparison": "set",
     "expected": [
       "accursed-weapon",
+      "armoured-limbs",
       "armoured-tracks",
       "autopistol",
       "axe-of-dismemberment",
@@ -234,7 +235,6 @@
       "ectoplasma-destructor",
       "electroscourge",
       "exalted-chainblade",
-      "armoured-limbs",
       "excruciator-cannon",
       "forgefiend-jaws",
       "gorechild",

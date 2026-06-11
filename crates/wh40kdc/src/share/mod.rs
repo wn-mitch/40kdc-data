@@ -75,7 +75,13 @@ impl ShareRegistryIndex {
             for (i, id) in ids.iter().enumerate() {
                 map.insert(id.clone(), i);
                 // Decode resolves a slot to its current id (rewriting a rename).
-                out.push(registry.aliases.get(id).cloned().unwrap_or_else(|| id.clone()));
+                out.push(
+                    registry
+                        .aliases
+                        .get(id)
+                        .cloned()
+                        .unwrap_or_else(|| id.clone()),
+                );
             }
             // Encode must also find the current id at a renamed slot.
             for (old_id, new_id) in &registry.aliases {
@@ -87,7 +93,11 @@ impl ShareRegistryIndex {
             from_index.insert(kind.to_string(), out);
         }
 
-        Self { version: registry.version, to_index, from_index }
+        Self {
+            version: registry.version,
+            to_index,
+            from_index,
+        }
     }
 
     /// The package's embedded registry index, parsed once.
@@ -106,7 +116,10 @@ impl ShareRegistryIndex {
     }
 
     fn id(&self, kind: &str, index: usize) -> Option<&str> {
-        self.from_index.get(kind).and_then(|v| v.get(index)).map(String::as_str)
+        self.from_index
+            .get(kind)
+            .and_then(|v| v.get(index))
+            .map(String::as_str)
     }
 }
 
@@ -251,7 +264,10 @@ impl<'a> Reader<'a> {
     fn str(&mut self) -> Result<String, DecodeError> {
         let len = self.varint()? as usize;
         let end = self.pos.checked_add(len).ok_or(DecodeError::Malformed)?;
-        let slice = self.bytes.get(self.pos..end).ok_or(DecodeError::Malformed)?;
+        let slice = self
+            .bytes
+            .get(self.pos..end)
+            .ok_or(DecodeError::Malformed)?;
         self.pos = end;
         String::from_utf8(slice.to_vec()).map_err(|_| DecodeError::Malformed)
     }
@@ -263,9 +279,15 @@ fn base64url() -> base64::engine::GeneralPurpose {
 
 // ── encode ───────────────────────────────────────────────────────────────────────
 
-fn require_index(idx: &ShareRegistryIndex, kind: &str, id: &str) -> Result<usize, ShareEncodeError> {
-    idx.index(kind, id)
-        .ok_or_else(|| ShareEncodeError { kind: kind.to_string(), id: id.to_string() })
+fn require_index(
+    idx: &ShareRegistryIndex,
+    kind: &str,
+    id: &str,
+) -> Result<usize, ShareEncodeError> {
+    idx.index(kind, id).ok_or_else(|| ShareEncodeError {
+        kind: kind.to_string(),
+        id: id.to_string(),
+    })
 }
 
 /// Encode a [`ShareList`] into a URL-safe `share-v1` token using `registry`.
@@ -282,11 +304,17 @@ pub fn encode_share_list(
         None => write_varint(&mut out, 0),
         Some(id) => write_varint(&mut out, require_index(registry, "faction", id)? as u64 + 1),
     }
-    let bs = BATTLE_SIZES.iter().position(|&b| b == list.battle_size).unwrap_or(0);
+    let bs = BATTLE_SIZES
+        .iter()
+        .position(|&b| b == list.battle_size)
+        .unwrap_or(0);
     write_varint(&mut out, bs as u64);
     match &list.disposition {
         None => write_varint(&mut out, 0),
-        Some(id) => write_varint(&mut out, require_index(registry, "disposition", id)? as u64 + 1),
+        Some(id) => write_varint(
+            &mut out,
+            require_index(registry, "disposition", id)? as u64 + 1,
+        ),
     }
 
     write_varint(&mut out, list.detachment_ids.len() as u64);
@@ -296,16 +324,34 @@ pub fn encode_share_list(
 
     write_varint(&mut out, list.units.len() as u64);
     for u in &list.units {
-        write_varint(&mut out, require_index(registry, "unit", &u.datasheet_id)? as u64);
+        write_varint(
+            &mut out,
+            require_index(registry, "unit", &u.datasheet_id)? as u64,
+        );
         write_varint(&mut out, u.model_count);
         let flags = (if u.is_warlord { FLAG_WARLORD } else { 0 })
-            | (if u.enhancement_id.is_some() { FLAG_ENH } else { 0 })
-            | (if u.attached_to_ordinal.is_some() { FLAG_ATTACH } else { 0 })
-            | (if u.ally_rule_id.is_some() || u.ally_faction_id.is_some() { FLAG_ALLY } else { 0 })
+            | (if u.enhancement_id.is_some() {
+                FLAG_ENH
+            } else {
+                0
+            })
+            | (if u.attached_to_ordinal.is_some() {
+                FLAG_ATTACH
+            } else {
+                0
+            })
+            | (if u.ally_rule_id.is_some() || u.ally_faction_id.is_some() {
+                FLAG_ALLY
+            } else {
+                0
+            })
             | (if !u.grants.is_empty() { FLAG_GRANTS } else { 0 });
         write_varint(&mut out, flags);
         if let Some(enh) = &u.enhancement_id {
-            write_varint(&mut out, require_index(registry, "enhancement", enh)? as u64);
+            write_varint(
+                &mut out,
+                require_index(registry, "enhancement", enh)? as u64,
+            );
         }
         if let Some(ord) = u.attached_to_ordinal {
             write_varint(&mut out, ord);
@@ -313,11 +359,16 @@ pub fn encode_share_list(
         if flags & FLAG_ALLY != 0 {
             match &u.ally_faction_id {
                 None => write_varint(&mut out, 0),
-                Some(id) => write_varint(&mut out, require_index(registry, "faction", id)? as u64 + 1),
+                Some(id) => {
+                    write_varint(&mut out, require_index(registry, "faction", id)? as u64 + 1)
+                }
             }
             match &u.ally_rule_id {
                 None => write_varint(&mut out, 0),
-                Some(id) => write_varint(&mut out, require_index(registry, "ally_rule", id)? as u64 + 1),
+                Some(id) => write_varint(
+                    &mut out,
+                    require_index(registry, "ally_rule", id)? as u64 + 1,
+                ),
             }
         }
         if !u.grants.is_empty() {
@@ -344,12 +395,19 @@ pub fn encode_share_token(list: &ShareList) -> Result<String, ShareEncodeError> 
 // ── decode ───────────────────────────────────────────────────────────────────────
 
 fn require_id(idx: &ShareRegistryIndex, kind: &str, slot: usize) -> Result<String, DecodeError> {
-    idx.id(kind, slot).map(str::to_string).ok_or(DecodeError::StaleRegistry)
+    idx.id(kind, slot)
+        .map(str::to_string)
+        .ok_or(DecodeError::StaleRegistry)
 }
 
 fn decode_inner(token: &str, registry: &ShareRegistryIndex) -> Result<ShareList, DecodeError> {
-    let bytes = base64url().decode(token).map_err(|_| DecodeError::Malformed)?;
-    let mut r = Reader { bytes: &bytes, pos: 0 };
+    let bytes = base64url()
+        .decode(token)
+        .map_err(|_| DecodeError::Malformed)?;
+    let mut r = Reader {
+        bytes: &bytes,
+        pos: 0,
+    };
 
     if r.byte()? != SHARE_FORMAT_VERSION {
         return Err(DecodeError::Malformed);
@@ -363,13 +421,20 @@ fn decode_inner(token: &str, registry: &ShareRegistryIndex) -> Result<ShareList,
     } else {
         Some(require_id(registry, "faction", (faction_ref - 1) as usize)?)
     };
-    let battle_size =
-        BATTLE_SIZES.get(r.varint()? as usize).copied().unwrap_or("strike-force").to_string();
+    let battle_size = BATTLE_SIZES
+        .get(r.varint()? as usize)
+        .copied()
+        .unwrap_or("strike-force")
+        .to_string();
     let disposition_ref = r.varint()?;
     let disposition = if disposition_ref == 0 {
         None
     } else {
-        Some(require_id(registry, "disposition", (disposition_ref - 1) as usize)?)
+        Some(require_id(
+            registry,
+            "disposition",
+            (disposition_ref - 1) as usize,
+        )?)
     };
 
     let det_count = r.varint()?;
@@ -389,7 +454,11 @@ fn decode_inner(token: &str, registry: &ShareRegistryIndex) -> Result<ShareList,
         } else {
             None
         };
-        let attached_to_ordinal = if flags & FLAG_ATTACH != 0 { Some(r.varint()?) } else { None };
+        let attached_to_ordinal = if flags & FLAG_ATTACH != 0 {
+            Some(r.varint()?)
+        } else {
+            None
+        };
         let (mut ally_faction_id, mut ally_rule_id) = (None, None);
         if flags & FLAG_ALLY != 0 {
             let f_ref = r.varint()?;
@@ -431,7 +500,14 @@ fn decode_inner(token: &str, registry: &ShareRegistryIndex) -> Result<ShareList,
         });
     }
 
-    Ok(ShareList { name, faction_id, detachment_ids, battle_size, disposition, units })
+    Ok(ShareList {
+        name,
+        faction_id,
+        detachment_ids,
+        battle_size,
+        disposition,
+        units,
+    })
 }
 
 /// Decode a `share-v1` token against `registry`.
