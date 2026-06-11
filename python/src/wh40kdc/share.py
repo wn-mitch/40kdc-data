@@ -206,7 +206,9 @@ def encode_share_list(list_: ShareList, registry: _RegistryIndex) -> str:
     _write_str(out, list_.get("name", "") or "")
 
     faction_id = list_.get("factionId")
-    _write_varint(out, 0 if faction_id is None else _require_index(registry, "faction", faction_id) + 1)
+    _write_varint(
+        out, 0 if faction_id is None else _require_index(registry, "faction", faction_id) + 1
+    )
     battle = list_.get("battleSize", "strike-force")
     _write_varint(out, _BATTLE_SIZES.index(battle) if battle in _BATTLE_SIZES else 0)
     disposition = list_.get("disposition")
@@ -244,10 +246,14 @@ def encode_share_list(list_: ShareList, registry: _RegistryIndex) -> str:
             _write_varint(out, attached)
         if flags & _FLAG_ALLY:
             _write_varint(
-                out, 0 if ally_faction is None else _require_index(registry, "faction", ally_faction) + 1
+                out,
+                0
+                if ally_faction is None
+                else _require_index(registry, "faction", ally_faction) + 1,
             )
             _write_varint(
-                out, 0 if ally_rule is None else _require_index(registry, "ally_rule", ally_rule) + 1
+                out,
+                0 if ally_rule is None else _require_index(registry, "ally_rule", ally_rule) + 1,
             )
         if grants:
             _write_varint(out, len(grants))
@@ -315,7 +321,9 @@ def _decode_inner(token: str, registry: _RegistryIndex) -> ShareList:
             f_ref = r.varint()
             ally_faction_id = None if f_ref == 0 else _require_id(registry, "faction", f_ref - 1)
             rule_ref = r.varint()
-            ally_rule_id = None if rule_ref == 0 else _require_id(registry, "ally_rule", rule_ref - 1)
+            ally_rule_id = (
+                None if rule_ref == 0 else _require_id(registry, "ally_rule", rule_ref - 1)
+            )
         grants: list[str] = []
         if flags & _FLAG_GRANTS:
             for _ in range(r.varint()):

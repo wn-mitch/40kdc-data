@@ -33,7 +33,6 @@ from wh40kdc.data.normalize import normalize_name
 from wh40kdc.export import EXPORT_FORMATS, export_roster
 from wh40kdc.imports import import_roster, try_import_roster
 from wh40kdc.scope import unit_matches_applies_to
-from wh40kdc.share import decode_share_token, encode_share_token
 from wh40kdc.scoring import (
     add_to_hand,
     awards_of,
@@ -50,6 +49,7 @@ from wh40kdc.scoring import (
     set_primary,
     wtc_result,
 )
+from wh40kdc.share import decode_share_token, encode_share_token
 from wh40kdc.terrain import (
     BOARD_INCHES,
     TerrainKeystoneError,
