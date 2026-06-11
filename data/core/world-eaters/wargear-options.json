@@ -671,6 +671,39 @@
     ]
   },
   {
+    "id": "forgefiend-swap-1",
+    "unit_id": "forgefiend",
+    "is_free": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "replaces": [
+      "hades-autocannon",
+      "hades-autocannon"
+    ],
+    "replacement": [
+      "ectoplasma-cannon",
+      "ectoplasma-cannon"
+    ]
+  },
+  {
+    "id": "forgefiend-swap-2",
+    "unit_id": "forgefiend",
+    "is_free": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "replaces": [
+      "forgefiend-jaws"
+    ],
+    "replacement": [
+      "ectoplasma-cannon",
+      "forgefiend-claws"
+    ]
+  },
+  {
     "id": "maulerfiend-swap-1",
     "unit_id": "maulerfiend",
     "is_free": true,

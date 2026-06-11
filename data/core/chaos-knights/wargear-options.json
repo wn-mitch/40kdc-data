@@ -4,8 +4,8 @@
     "unit_id": "chaos-questoris-knight-magaera",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "reaper-chainsword"
@@ -20,8 +20,8 @@
     "unit_id": "chaos-acastus-knight-porphyrion",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "acastus-autocannons"
@@ -43,8 +43,8 @@
     "unit_id": "chaos-acastus-knight-porphyrion",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "acastus-ironstorm-missile-pod"
@@ -58,8 +58,8 @@
     "unit_id": "chaos-questoris-knight-styrix",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "reaper-chainsword"
@@ -74,8 +74,8 @@
     "unit_id": "knight-despoiler",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "daemonbreath-meltagun"
@@ -89,8 +89,8 @@
     "unit_id": "knight-despoiler",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "reaper-chainsword"
@@ -118,8 +118,8 @@
     "unit_id": "knight-despoiler",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "warpstrike-claw"
@@ -147,8 +147,8 @@
     "unit_id": "knight-despoiler",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replacement_choice": [
       [
@@ -167,8 +167,8 @@
     "unit_id": "knight-tyrant",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "gheiststrike-missile-launchers",
@@ -184,8 +184,8 @@
     "unit_id": "knight-tyrant",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "brimstone-volcano-lance",
@@ -201,8 +201,8 @@
     "unit_id": "knight-desecrator",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "reaper-chainsword"
@@ -216,8 +216,8 @@
     "unit_id": "war-dog-moirax",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "graviton-pulsar"
@@ -245,8 +245,8 @@
     "unit_id": "war-dog-moirax",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "volkite-veuglaire"
@@ -274,8 +274,8 @@
     "unit_id": "war-dog-executioner",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "diabolus-heavy-stubber"
@@ -289,8 +289,8 @@
     "unit_id": "war-dog-stalker",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "avenger-chaincannon"
@@ -304,8 +304,8 @@
     "unit_id": "war-dog-stalker",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "diabolus-heavy-stubber"
@@ -319,8 +319,8 @@
     "unit_id": "war-dog-stalker",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "slaughterclaw"
@@ -334,8 +334,8 @@
     "unit_id": "war-dog-karnivore",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "diabolus-heavy-stubber"
@@ -349,8 +349,8 @@
     "unit_id": "war-dog-brigand",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "diabolus-heavy-stubber"
@@ -364,8 +364,8 @@
     "unit_id": "war-dog-huntsman",
     "is_free": true,
     "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
     },
     "replaces": [
       "diabolus-heavy-stubber"
