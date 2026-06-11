@@ -16,3 +16,4 @@ export const MISSION_MATRIX_URL = "https://mission-matrix.alpacasoft.dev";
 export const LAYOUT_EDITOR_URL = "https://layout-editor.alpacasoft.dev";
 export const LIST_BUILDER_URL = "https://list-builder.alpacasoft.dev";
 export const HULL_TRACER_URL = "https://hull-tracer.alpacasoft.dev";
+export const TEAMS_PLANNER_URL = "https://teams-planner.alpacasoft.dev";
