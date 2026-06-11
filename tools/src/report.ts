@@ -3,14 +3,18 @@ import type { ValidationResult } from "./validate.js";
 
 export type ReporterMode = "pretty" | "json";
 
-export function formatReport(result: ValidationResult, mode: ReporterMode): string {
+export function formatReport(
+  result: ValidationResult,
+  mode: ReporterMode,
+  title = "40kdc Data Validation Report",
+): string {
   if (mode === "json") {
     return JSON.stringify(result, null, 2);
   }
 
   const lines: string[] = [];
   lines.push("");
-  lines.push(chalk.bold("40kdc Data Validation Report"));
+  lines.push(chalk.bold(title));
   lines.push(chalk.gray("─".repeat(40)));
   lines.push(`Files scanned:  ${result.totalFiles}`);
   lines.push(`Items validated: ${result.totalItems}`);
