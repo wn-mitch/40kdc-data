@@ -7,6 +7,10 @@
   import AppHeader from "../../_shared/AppHeader.svelte";
   import AppFooter from "../../_shared/AppFooter.svelte";
   import PwaInstallPrompt from "../../_shared/PwaInstallPrompt.svelte";
+  import EntitlementGate from "../../_shared/EntitlementGate.svelte";
+  import CloudSavesPane from "../../_shared/CloudSavesPane.svelte";
+  import { maybeCaptureEntitlement } from "../../_shared/entitlement.svelte";
+  import { resolveLink } from "../../_shared/sync-api";
   import {
     LIST_BUILDER_URL,
     MISSION_MATRIX_URL,
@@ -41,6 +45,24 @@
   let plan = $state<TeamPlan>(loadPlan());
   let toast = $state<string | null>(null);
   let pwaPromptOpen = $state<boolean>(false);
+  let gateOpen = $state<boolean>(false);
+
+  /** What the cloud pane can upload: the current plan, under its team name. */
+  const cloudItems = $derived([
+    { name: plan.teamName.trim() || "Team plan", payload: plan as unknown },
+  ]);
+
+  /** Every inbound payload — cloud load, shortlink, (later) session welcome —
+   *  passes through sanitizePlan, the same defensive gate the #t= path uses. */
+  function adoptPlan(payload: unknown, source: string): void {
+    const result = sanitizePlan(payload);
+    if (result) {
+      plan = result.plan;
+      flash(`Opened ${source}.`);
+    } else {
+      flash(`That ${source} couldn't be opened.`);
+    }
+  }
 
   const coverage = $derived(teamCoverage(plan));
 
@@ -58,20 +80,41 @@
   // Open a shared plan from `#t=<token>`. Decoded client-side; the hash is then
   // cleared so a refresh or save can't re-trigger the import.
   onMount(() => {
+    // The OAuth callback may have delivered an entitlement token in the same
+    // fragment slot — capture it before any gated UI reads the stored state.
+    maybeCaptureEntitlement();
+
     const m = location.hash.match(/^#t=(.+)$/);
-    if (!m) return;
-    const result = decodePlan(m[1]);
-    if (result) {
-      plan = result.plan;
-      if (result.dropped.length > 0) {
-        flash(`Opened shared plan — dropped ${result.dropped.length} unknown id(s) from a different dataset.`);
+    if (m) {
+      const result = decodePlan(m[1]);
+      if (result) {
+        plan = result.plan;
+        if (result.dropped.length > 0) {
+          flash(`Opened shared plan — dropped ${result.dropped.length} unknown id(s) from a different dataset.`);
+        } else {
+          flash("Opened shared plan.");
+        }
       } else {
-        flash("Opened shared plan.");
+        flash("That share link couldn't be opened.");
       }
-    } else {
-      flash("That share link couldn't be opened.");
+      history.replaceState(null, "", location.pathname + location.search);
     }
-    history.replaceState(null, "", location.pathname + location.search);
+
+    // Open a `?s=CODE` shortlink (server-resolved; opening is free).
+    const code = new URLSearchParams(location.search).get("s");
+    if (code) {
+      void resolveLink(code).then((res) => {
+        if (res.ok && res.value.kind === "team-plan") {
+          adoptPlan(res.value.payload, "shared plan");
+        } else {
+          flash(res.ok ? "That link isn't a team plan." : "That short link couldn't be opened.");
+        }
+      });
+      const params = new URLSearchParams(location.search);
+      params.delete("s");
+      const qs = params.toString();
+      history.replaceState(null, "", location.pathname + (qs ? `?${qs}` : ""));
+    }
   });
 
   function flash(msg: string) {
@@ -166,6 +209,17 @@
       </div>
     </div>
 
+    <!-- Cloud sync + short links (patron feature; opening links is free) -->
+    <div class="mb-4">
+      <CloudSavesPane
+        kind="team-plan"
+        localItems={cloudItems}
+        onOpen={(_name, payload) => adoptPlan(payload, "cloud plan")}
+        onFlash={flash}
+        onNeedEntitlement={() => (gateOpen = true)}
+      />
+    </div>
+
     <!-- Coverage summary -->
     <div class="mb-4">
       <CoverageMatrix {plan} {coverage} onchange={updatePlayer} />
@@ -215,4 +269,6 @@
     storageKey="teams-planner.pwa-install-prompt.version"
     bind:open={pwaPromptOpen}
   />
+
+  <EntitlementGate bind:open={gateOpen} feature="cloud sync and short links" />
 </div>

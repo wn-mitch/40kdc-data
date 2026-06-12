@@ -11,6 +11,10 @@ import { decodeShareToken } from "@alpaca-software/40kdc-data";
 import { decodeShareLink } from "$lib/data/share-link";
 import AppHeader from "../../_shared/AppHeader.svelte";
 import AppFooter from "../../_shared/AppFooter.svelte";
+import EntitlementGate from "../../_shared/EntitlementGate.svelte";
+import CloudSavesPane from "../../_shared/CloudSavesPane.svelte";
+import { maybeCaptureEntitlement } from "../../_shared/entitlement.svelte";
+import { resolveLink } from "../../_shared/sync-api";
 import {
 	SALVO_URL,
 	MISSION_MATRIX_URL,
@@ -72,14 +76,59 @@ let editingId = $state<string | null>(null);
 let importText = $state("");
 let importError = $state<string | null>(null);
 let toast = $state<string | null>(null);
+let gateOpen = $state(false);
 
 const sorted = $derived(entries.slice().sort((a, b) => b.modified - a.modified));
+
+/** Saved lists as cloud-uploadable items (payload = parsed roster-json, the
+ *  same canonical object a shortlink consumer feeds back into an importer). */
+const cloudItems = $derived(
+	sorted.flatMap((e) => {
+		try {
+			return [{ name: e.name, payload: JSON.parse(e.rosterJson) as unknown }];
+		} catch {
+			return [];
+		}
+	}),
+);
+
+/** Open a canonical roster payload (cloud doc or shortlink) in the builder. */
+function openRosterPayload(payload: unknown, name: string): void {
+	const state = rosterTextToBuilderState(JSON.stringify(payload), name, null);
+	if (!state) {
+		flash("That roster couldn't be opened.");
+		return;
+	}
+	seed = state;
+	editingId = null;
+	view = "build";
+}
 
 // Open a shared list from the URL. The current format is `#l=<share-v1 token>`
 // (compact, registry-indexed); `#list=<gzip roster-json>` is the legacy form,
 // still honoured so old links keep working. Decoded client-side (no backend),
 // then the hash is cleared so refresh/save can't re-trigger the import.
 onMount(() => {
+	// The OAuth callback may have delivered an entitlement token in the
+	// fragment — capture it before any gated UI reads the stored state.
+	maybeCaptureEntitlement();
+
+	// Open a `?s=CODE` shortlink (server-resolved; opening is free).
+	const code = new URLSearchParams(location.search).get("s");
+	if (code) {
+		void resolveLink(code).then((res) => {
+			if (res.ok && res.value.kind === "list") {
+				openRosterPayload(res.value.payload, "Shared list");
+			} else {
+				flash(res.ok ? "That link isn't an army list." : "That short link couldn't be opened.");
+			}
+		});
+		const params = new URLSearchParams(location.search);
+		params.delete("s");
+		const qs = params.toString();
+		history.replaceState(null, "", location.pathname + (qs ? `?${qs}` : "") + location.hash);
+	}
+
 	const compact = location.hash.match(/^#l=(.+)$/);
 	const legacy = location.hash.match(/^#list=(.+)$/);
 	if (!compact && !legacy) return;
@@ -278,6 +327,15 @@ function copyEntry(entry: SavedEntry) {
 					</ul>
 				{/if}
 
+				<!-- Cloud sync + short links (patron feature; opening links is free). -->
+				<CloudSavesPane
+					kind="list"
+					localItems={cloudItems}
+					onOpen={(name, payload) => openRosterPayload(payload, name)}
+					onFlash={flash}
+					onNeedEntitlement={() => (gateOpen = true)}
+				/>
+
 				<!-- Import an existing roster (roster-json or any supported format). -->
 				<div class="border-panel-border/50 mt-2 flex flex-col gap-2 border-t pt-4">
 					<label class="text-text-dim text-[10px] font-semibold uppercase tracking-wider" for="import-box">
@@ -322,4 +380,6 @@ function copyEntry(entry: SavedEntry) {
 		version={__DATA_VERSION__}
 		build={__BUILD_SHA__}
 	/>
+
+	<EntitlementGate bind:open={gateOpen} feature="cloud sync and short links" />
 </div>
