@@ -2,12 +2,20 @@
 import { onMount } from "svelte";
 import { ds } from "$lib/data/dataset";
 import ArmyBuilder from "$lib/components/game/builder/ArmyBuilder.svelte";
+import DoublesBuilder from "$lib/components/game/builder/DoublesBuilder.svelte";
 import {
+	builderToRosterJson,
 	emptyBuilderState,
 	rosterTextToBuilderState,
 	shareListToBuilderState,
 	type BuilderState,
 } from "$lib/data/builder";
+import {
+	decodeDoublesShare,
+	soloToDoubles,
+	type DoublesDraft,
+	type DoublesSide,
+} from "$lib/data/doubles";
 import { decodeShareToken } from "@alpaca-software/40kdc-data";
 import { decodeShareLink } from "$lib/data/share-link";
 import AppHeader from "../../_shared/AppHeader.svelte";
@@ -54,12 +62,24 @@ import {
  * untouched — it still just calls `onsave(rosterJson, name, disposition)`.
  */
 
+/** The doubles payload riding beside the back-compat top-level fields. */
+interface SavedDoublesData {
+	teamName: string;
+	pointsPerPlayer: number;
+	/** Each army's canonical roster-json + display name. */
+	armies: [{ name: string; rosterJson: string }, { name: string; rosterJson: string }];
+	teamDisposition: { side: DoublesSide; id: string } | null;
+}
+
 interface SavedEntry {
 	id: string;
 	name: string;
-	/** Canonical roster-json the builder emitted — round-trips back via import. */
+	/** Canonical roster-json the builder emitted — round-trips back via import.
+	 *  For a doubles entry this is Army A's roster (older clients still open it). */
 	rosterJson: string;
 	disposition: string | null;
+	/** Present iff this entry is a Doubles team. */
+	doubles?: SavedDoublesData;
 	/** Epoch ms of the last save, for display + sort. */
 	modified: number;
 }
@@ -92,9 +112,11 @@ function persist(next: SavedEntry[]) {
 }
 
 let entries = $state<SavedEntry[]>(loadEntries());
-let view = $state<"list" | "build">("list");
+let view = $state<"list" | "build" | "doubles">("list");
 /** Seed for "Edit"; undefined for a from-scratch build. */
 let seed = $state<BuilderState | undefined>(undefined);
+/** Seed for the doubles workspace (always present while view === "doubles"). */
+let doublesSeed = $state<DoublesDraft | undefined>(undefined);
 /** The entry being edited (null = new build → save creates a row). */
 let editingId = $state<string | null>(null);
 let importText = $state("");
@@ -262,6 +284,23 @@ onMount(() => {
 		history.replaceState(null, "", location.pathname + (qs ? `?${qs}` : "") + location.hash);
 	}
 
+	// Doubles team link: a meta segment + two ordinary share-v1 tokens.
+	const dbl = location.hash.match(/^#dbl=(.+)$/);
+	if (dbl) {
+		const result = decodeDoublesShare(dbl[1]);
+		if (result.ok) {
+			doublesSeed = result.draft;
+			editingId = null;
+			view = "doubles";
+		} else if (result.reason === "stale-registry") {
+			flash("That share link was made with a newer dataset — update to open it.");
+		} else {
+			flash("That doubles link couldn't be opened.");
+		}
+		history.replaceState(null, "", location.pathname + location.search);
+		return;
+	}
+
 	const compact = location.hash.match(/^#l=(.+)$/);
 	const legacy = location.hash.match(/^#list=(.+)$/);
 	if (!compact && !legacy) return;
@@ -322,6 +361,25 @@ function newList() {
 }
 
 function editEntry(entry: SavedEntry) {
+	if (entry.doubles) {
+		const d = entry.doubles;
+		const armies = d.armies.map((a) =>
+			rosterTextToBuilderState(a.rosterJson, a.name, null, d.pointsPerPlayer),
+		);
+		if (!armies[0] || !armies[1]) {
+			flash(`"${entry.name}" couldn't be re-opened (an army's roster text won't import).`);
+			return;
+		}
+		doublesSeed = {
+			teamName: d.teamName,
+			pointsPerPlayer: d.pointsPerPlayer,
+			armies: [armies[0], armies[1]],
+			teamDisposition: d.teamDisposition,
+		};
+		editingId = entry.id;
+		view = "doubles";
+		return;
+	}
 	const state = rosterTextToBuilderState(entry.rosterJson, entry.name, entry.disposition);
 	if (!state) {
 		flash(`"${entry.name}" couldn't be re-opened (its roster text won't import).`);
@@ -329,6 +387,19 @@ function editEntry(entry: SavedEntry) {
 	}
 	seed = state;
 	editingId = entry.id;
+	view = "build";
+}
+
+/** Solo header's Doubles toggle: the current draft becomes Army A. */
+function enterDoubles(draft: BuilderState) {
+	doublesSeed = soloToDoubles(draft);
+	view = "doubles";
+}
+
+/** Doubles toggle off: back to a solo build of Army A. */
+function exitDoubles(army: BuilderState) {
+	seed = army;
+	doublesSeed = undefined;
 	view = "build";
 }
 
@@ -353,12 +424,50 @@ function deleteEntry(id: string) {
 
 // ── Builder callbacks ───────────────────────────────────────────────────────────
 
+function handleSaveDoubles(draft: DoublesDraft) {
+	const now = Date.now();
+	const name = draft.teamName.trim() || "Untitled team";
+	const armyEntries = draft.armies.map((a, i) => ({
+		name: a.name.trim() || `${name} — Army ${i === 0 ? "A" : "B"}`,
+		rosterJson: builderToRosterJson(a),
+	})) as SavedDoublesData["armies"];
+	const doubles: SavedDoublesData = {
+		teamName: name,
+		pointsPerPlayer: draft.pointsPerPlayer,
+		armies: armyEntries,
+		teamDisposition: draft.teamDisposition,
+	};
+	const base = {
+		name,
+		rosterJson: armyEntries[0].rosterJson,
+		disposition: draft.teamDisposition?.id ?? null,
+		doubles,
+		modified: now,
+	};
+	if (editingId) {
+		persist(entries.map((e) => (e.id === editingId ? { ...e, ...base } : e)));
+	} else {
+		const id =
+			typeof crypto !== "undefined" && crypto.randomUUID
+				? crypto.randomUUID()
+				: `list-${now}-${Math.floor(Math.random() * 1e6)}`;
+		persist([...entries, { id, ...base }]);
+	}
+	for (const army of armyEntries) downloadJson(army.rosterJson, army.name);
+	flash(`Saved “${name}” — both armies' roster-json downloaded.`);
+	view = "list";
+	doublesSeed = undefined;
+	editingId = null;
+}
+
 function handleSave(rosterJson: string, name: string, disposition: string | null) {
 	const now = Date.now();
 	if (editingId) {
 		persist(
 			entries.map((e) =>
-				e.id === editingId ? { ...e, name, rosterJson, disposition, modified: now } : e,
+				e.id === editingId
+					? { ...e, name, rosterJson, disposition, doubles: undefined, modified: now }
+					: e,
 			),
 		);
 	} else {
@@ -379,6 +488,7 @@ function handleSave(rosterJson: string, name: string, disposition: string | null
 function handleCancel() {
 	view = "list";
 	seed = undefined;
+	doublesSeed = undefined;
 	editingId = null;
 }
 
@@ -435,9 +545,20 @@ function copyEntry(entry: SavedEntry) {
 						onsave={handleSave}
 						oncancel={handleCancel}
 						ondraftchange={handleBuilderDraft}
+						ondoubles={enterDoubles}
 					/>
 				</div>
 			</div>
+		{:else if view === "doubles" && doublesSeed}
+			<!-- Doubles team workspace. Live sessions stay solo-only for now, so
+			     there is no Go-live strip here. -->
+			<DoublesBuilder
+				initial={doublesSeed}
+				onsave={handleSaveDoubles}
+				oncancel={handleCancel}
+				onsolo={exitDoubles}
+				onflash={flash}
+			/>
 		{:else}
 			<div class="mx-auto flex h-full max-w-3xl flex-col gap-4 overflow-y-auto">
 				<div class="flex items-center justify-between">
@@ -462,9 +583,17 @@ function copyEntry(entry: SavedEntry) {
 								class="bg-panel-surface border-panel-border flex items-center gap-2 rounded border px-3 py-2"
 							>
 								<button class="flex min-w-0 flex-1 flex-col text-left" onclick={() => editEntry(entry)}>
-									<span class="text-text truncate text-sm font-medium">{entry.name}</span>
+									<span class="text-text flex items-center gap-1.5 truncate text-sm font-medium">
+										{entry.name}
+										{#if entry.doubles}
+											<span class="bg-panel border-panel-border text-text-muted rounded border px-1 py-px text-[10px] font-normal uppercase tracking-wider">
+												Doubles · {entry.doubles.pointsPerPlayer}/player
+											</span>
+										{/if}
+									</span>
 									<span class="text-text-dim/70 truncate text-[11px]">
 										{factionLabel(entry.rosterJson)}
+										{#if entry.doubles}· {factionLabel(entry.doubles.armies[1].rosterJson)}{/if}
 										{#if entry.disposition}· {dispositionName(entry.disposition)}{/if}
 									</span>
 								</button>

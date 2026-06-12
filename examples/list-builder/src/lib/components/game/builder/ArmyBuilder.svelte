@@ -38,8 +38,17 @@ interface Props {
 	 * diff is empty).
 	 */
 	ondraftchange?: (draft: BuilderState) => void;
+	/**
+	 * Embedded as one army of a Doubles team: the team owner renders the
+	 * battle-size/points level, the (team) disposition, the toggle, and the
+	 * footer — so those controls hide here and the points ceiling comes from
+	 * the draft's `pointsLimitOverride`.
+	 */
+	doubles?: boolean;
+	/** Solo header's "Doubles" toggle — hands the current draft to the host. */
+	ondoubles?: (draft: BuilderState) => void;
 }
-let { initial, onsave, oncancel, ondraftchange }: Props = $props();
+let { initial, onsave, oncancel, ondraftchange, doubles = false, ondoubles }: Props = $props();
 
 // Deep-copy the seed without structuredClone — `initial` is a Svelte $state
 // proxy (uncloneable by structuredClone), and the per-unit loadout is a Map
@@ -259,6 +268,7 @@ function save() {
 				</div>
 			{/if}
 		</label>
+		{#if !doubles}
 		<label class="flex flex-col text-xs uppercase tracking-wider text-text-muted">
 			Battle size
 			<select
@@ -270,6 +280,15 @@ function save() {
 				<option value="strike-force">Strike Force</option>
 			</select>
 		</label>
+		{#if ondoubles}
+			<label
+				class="border-panel-border bg-panel flex items-center gap-1.5 self-end rounded border px-2 py-1.5 text-xs uppercase tracking-wider text-text-muted"
+				title="Build a Doubles team — two armies fighting as one force"
+			>
+				<input type="checkbox" checked={false} onchange={() => ondoubles?.(draft)} />
+				Doubles
+			</label>
+		{/if}
 		<label class="flex flex-col text-xs uppercase tracking-wider text-text-muted">
 			Disposition
 			{#if forcedDispositions.length > 1}
@@ -309,6 +328,7 @@ function save() {
 				</select>
 			{/if}
 		</label>
+		{/if}
 		<div class="ml-auto text-right">
 			<div
 				class="font-heading text-lg font-bold tabular-nums {overLimit
@@ -381,24 +401,27 @@ function save() {
 		</div>
 	</div>
 
-	<!-- Footer. Save is never disabled — violations are advisory. -->
-	<div class="flex shrink-0 items-center justify-between">
-		<button class="text-text-muted hover:text-text text-xs" onclick={oncancel}>Cancel</button>
-		<div class="flex items-center gap-2">
-			<button
-				class="border-panel-border text-text hover:border-panel-border/80 rounded border px-3 py-1.5 text-sm font-medium transition-colors"
-				onclick={() => (shareOpen = true)}
-			>
-				Share
-			</button>
-			<button
-				class="bg-accent text-accent-foreground hover:bg-accent-hover rounded px-4 py-1.5 text-sm font-semibold transition-colors"
-				onclick={save}
-			>
-				Save to Library
-			</button>
+	<!-- Footer. Save is never disabled — violations are advisory. A doubles
+	     army defers save/cancel/share to the team workspace. -->
+	{#if !doubles}
+		<div class="flex shrink-0 items-center justify-between">
+			<button class="text-text-muted hover:text-text text-xs" onclick={oncancel}>Cancel</button>
+			<div class="flex items-center gap-2">
+				<button
+					class="border-panel-border text-text hover:border-panel-border/80 rounded border px-3 py-1.5 text-sm font-medium transition-colors"
+					onclick={() => (shareOpen = true)}
+				>
+					Share
+				</button>
+				<button
+					class="bg-accent text-accent-foreground hover:bg-accent-hover rounded px-4 py-1.5 text-sm font-semibold transition-colors"
+					onclick={save}
+				>
+					Save to Library
+				</button>
+			</div>
 		</div>
-	</div>
 
-	<ShareModal bind:open={shareOpen} roster={shareRoster} draft={shareOpen ? draft : null} />
+		<ShareModal bind:open={shareOpen} roster={shareRoster} draft={shareOpen ? draft : null} />
+	{/if}
 </div>
