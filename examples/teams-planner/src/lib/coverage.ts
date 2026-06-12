@@ -71,11 +71,25 @@ export interface Player {
   locked: Partial<Record<ForceDispositionId, string>>;
 }
 
+/**
+ * Team sizes sanctioned by the Teams Event Companion (3–8 players). The size
+ * picks the pairing modules and the per-disposition cap ({@link dispositionCap}).
+ */
+export type TeamSize = 3 | 4 | 5 | 6 | 7 | 8;
+
+/** All selectable team sizes, in dropdown order. */
+export const TEAM_SIZES: TeamSize[] = [3, 4, 5, 6, 7, 8];
+
+/** Coerce an untrusted value to a {@link TeamSize}; anything else falls back to 5. */
+export function sanitizeTeamSize(v: unknown): TeamSize {
+  return typeof v === "number" && Number.isInteger(v) && v >= 3 && v <= 8 ? (v as TeamSize) : 5;
+}
+
 export interface TeamPlan {
   teamName: string;
   /** Roster size for the event — drives the "slots filled" hint, not the rule.
    *  6 is the European Team Championship roster size. */
-  size: 5 | 6 | 8;
+  size: TeamSize;
   players: Player[];
 }
 
@@ -102,10 +116,14 @@ export interface TeamCoverage {
 }
 
 /**
- * A disposition is "spoken for" once this many players lock an army into it; the
- * matrix then dims that column's still-open cells for everyone else.
+ * The Companion's Force Disposition cap: within a team, for every 5 players
+ * (rounding up) only one player can select each disposition — so teams of 3–5
+ * field each disposition at most once, teams of 6–8 at most twice. A column is
+ * "spoken for" once this many players lock an army into it.
  */
-export const LOCK_CAP = 2;
+export function dispositionCap(size: TeamSize): number {
+  return Math.ceil(size / 5);
+}
 
 /** Detachment-point cost of one detachment (0 when unassigned/unknown). */
 export function detachmentPointCost(detachmentId: string): number {
@@ -275,9 +293,105 @@ export function teamCoverage(plan: TeamPlan): TeamCoverage {
   return { byDisposition, tierByDisposition, lockedByDisposition, perPlayer, gaps, ready: gaps.length === 0 };
 }
 
-/** A disposition is "full" once `LOCK_CAP` players have locked an army into it. */
-export function columnFull(coverage: TeamCoverage, d: ForceDispositionId): boolean {
-  return coverage.lockedByDisposition[d].length >= LOCK_CAP;
+/** A disposition is "full" once {@link dispositionCap} players have locked an army into it. */
+export function columnFull(size: TeamSize, coverage: TeamCoverage, d: ForceDispositionId): boolean {
+  return coverage.lockedByDisposition[d].length >= dispositionCap(size);
+}
+
+/**
+ * The identity behind "only one player per faction keyword": successor chapters
+ * and other sub-factions share their parent's faction keyword, so they collapse
+ * onto `parent_faction_id` when present.
+ */
+export function factionKeywordIdentity(factionId: string): string {
+  return ds.factions.get(factionId)?.raw.parent_faction_id ?? factionId;
+}
+
+export interface TeamLegalityIssue {
+  kind: "duplicate-faction-keyword" | "fd-over-cap" | "fd-doubles-before-coverage";
+  detail: string;
+}
+
+/**
+ * Companion legality of a *final* disposition assignment (one entry per
+ * player): each disposition at most {@link dispositionCap} times, and the
+ * number of dispositions taken twice can't exceed `size − 5` — which at 8
+ * players forces every disposition to be covered once before any repeats.
+ * Pure; the pairings simulator uses it to assert generated teams are legal.
+ */
+export function fdAssignmentIssues(size: TeamSize, fds: ForceDispositionId[]): TeamLegalityIssue[] {
+  const issues: TeamLegalityIssue[] = [];
+  const cap = dispositionCap(size);
+  const counts = new Map<ForceDispositionId, number>();
+  for (const fd of fds) counts.set(fd, (counts.get(fd) ?? 0) + 1);
+
+  for (const [fd, n] of counts) {
+    if (n > cap) {
+      issues.push({
+        kind: "fd-over-cap",
+        detail: `${fd} selected by ${n} players (max ${cap} for a ${size}-player team)`,
+      });
+    }
+  }
+  // "A 2nd instance only after every disposition is selected once" ⇔ the
+  // number of repeat selections (Σ count−1) can't exceed size − 5. This also
+  // catches a triple that the per-disposition cap alone would let slide at
+  // smaller sizes.
+  const repeats = [...counts.values()].reduce((sum, n) => sum + (n - 1), 0);
+  const allowedRepeats = Math.max(0, size - 5);
+  if (repeats > allowedRepeats) {
+    issues.push({
+      kind: "fd-doubles-before-coverage",
+      detail:
+        allowedRepeats === 0
+          ? `a ${size}-player team can't field any disposition twice`
+          : `${repeats} repeat selections (max ${allowedRepeats} for a ${size}-player team — every disposition must be covered before repeats)`,
+    });
+  }
+  return issues;
+}
+
+/**
+ * Advisory plan-level legality: locked dispositions over the cap, and pairs of
+ * players whose faction pools collapse onto one shared faction keyword (only
+ * one of them may field it at the event). Non-blocking — planning is allowed
+ * to explore.
+ */
+export function teamLegalityIssues(plan: TeamPlan): TeamLegalityIssue[] {
+  const issues: TeamLegalityIssue[] = [];
+  const cap = dispositionCap(plan.size);
+
+  const coverage = teamCoverage(plan);
+  for (const d of DISPOSITIONS) {
+    const locked = coverage.lockedByDisposition[d];
+    if (locked.length > cap) {
+      issues.push({
+        kind: "fd-over-cap",
+        detail: `${locked.length} players locked into ${d} (max ${cap} for a ${plan.size}-player team)`,
+      });
+    }
+  }
+
+  // Two players are in conflict when each can ONLY bring the same single
+  // faction keyword — a player still exploring several keywords isn't flagged.
+  const committedTo = new Map<string, string[]>(); // identity → player names
+  for (const p of plan.players) {
+    const identities = new Set(p.factionIds.map(factionKeywordIdentity));
+    if (identities.size !== 1) continue;
+    const [identity] = identities;
+    const names = committedTo.get(identity) ?? [];
+    names.push(p.name || "(unnamed)");
+    committedTo.set(identity, names);
+  }
+  for (const [identity, names] of committedTo) {
+    if (names.length > 1) {
+      issues.push({
+        kind: "duplicate-faction-keyword",
+        detail: `${names.join(" and ")} can only field the ${ds.factions.get(identity)?.name ?? identity} faction keyword — only one player per faction keyword`,
+      });
+    }
+  }
+  return issues;
 }
 
 export interface FactionOption {

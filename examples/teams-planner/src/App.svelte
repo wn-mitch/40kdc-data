@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { teamCoverage, type Player, type TeamPlan } from "./lib/coverage";
+  import { sanitizeTeamSize, teamCoverage, TEAM_SIZES, type Player, type TeamPlan } from "./lib/coverage";
   import { decodePlan, encodePlan, sanitizePlan } from "./lib/share-plan";
   import PlayerRow from "./lib/PlayerRow.svelte";
   import CoverageMatrix from "./lib/CoverageMatrix.svelte";
@@ -306,12 +306,12 @@
           value={String(plan.size)}
           onchange={(e) => {
             const v = Number((e.currentTarget as HTMLSelectElement).value);
-            plan = { ...plan, size: v === 8 ? 8 : v === 6 ? 6 : 5 };
+            plan = { ...plan, size: sanitizeTeamSize(v) };
           }}
         >
-          <option value="5">5 players</option>
-          <option value="6">6 players</option>
-          <option value="8">8 players</option>
+          {#each TEAM_SIZES as n (n)}
+            <option value={String(n)}>{n} players</option>
+          {/each}
         </select>
       </label>
       <div class="ml-auto flex gap-2">

@@ -2,9 +2,10 @@
   import type { ForceDispositionId } from "@alpaca-software/40kdc-data";
   import {
     columnFull,
+    dispositionCap,
     effectivePlacement,
     findArmy,
-    LOCK_CAP,
+    teamLegalityIssues,
     type Player,
     type TeamCoverage,
     type TeamPlan,
@@ -24,6 +25,8 @@
   } = $props();
 
   const filled = $derived(plan.players.filter((p) => p.factionIds.length > 0).length);
+  const lockCap = $derived(dispositionCap(plan.size));
+  const legality = $derived(teamLegalityIssues(plan));
 
   // Toggle the captain's lock for a player on a disposition. Pins the player's
   // *effective* army (the one the cell shows) so a later preference reshuffle
@@ -62,6 +65,17 @@
     {filled} of {plan.size} slots have a faction.
   </div>
 
+  {#if legality.length > 0}
+    <!-- Advisory only — planning is allowed to explore illegal shapes. -->
+    <div class="mx-2 mb-1 flex flex-col gap-1">
+      {#each legality as issue (issue.detail)}
+        <div class="rounded border border-warning/40 bg-warning/10 px-2 py-1 text-[11px] text-warning" role="note">
+          ⚠ {issue.detail}
+        </div>
+      {/each}
+    </div>
+  {/if}
+
   {#if plan.players.length === 0}
     <p class="px-3 py-6 text-center text-sm text-text-dim">
       Add players, then build each one an army pool to see disposition coverage.
@@ -93,7 +107,7 @@
                 {@const eff = can ? effectivePlacement(p, d) : null}
                 {@const army = eff ? findArmy(p, eff.armyId) : null}
                 {@const locked = !!p.locked?.[d]}
-                {@const blocked = !locked && columnFull(coverage, d)}
+                {@const blocked = !locked && columnFull(plan.size, coverage, d)}
                 <td
                   class="px-2 py-1.5 text-center align-top {locked ? 'bg-accent-dim' : ''} {blocked ? 'opacity-40' : ''}"
                 >
@@ -120,7 +134,7 @@
                         title={locked
                           ? `Locked in for ${DISPOSITION_LABELS[d]}`
                           : blocked
-                            ? `${DISPOSITION_LABELS[d]} already has ${LOCK_CAP} locked players`
+                            ? `${DISPOSITION_LABELS[d]} already has ${lockCap} locked player${lockCap === 1 ? "" : "s"}`
                             : `Lock ${p.name || "player"} into ${DISPOSITION_LABELS[d]}`}
                         aria-label="Lock {p.name || 'player'} into {DISPOSITION_LABELS[d]}"
                       />
@@ -154,8 +168,8 @@
                   </div>
                 {/if}
                 {#if lockedN > 0}
-                  <div class="mt-0.5 font-sans text-[10px] font-normal text-text-muted" title="{lockedN} of {LOCK_CAP} locked">
-                    🔒 {lockedN}/{LOCK_CAP}
+                  <div class="mt-0.5 font-sans text-[10px] font-normal text-text-muted" title="{lockedN} of {lockCap} locked">
+                    🔒 {lockedN}/{lockCap}
                   </div>
                 {/if}
               </td>

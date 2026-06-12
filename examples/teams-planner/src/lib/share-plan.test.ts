@@ -46,6 +46,28 @@ describe("encode/decode round trip", () => {
   });
 });
 
+describe("team size decode", () => {
+  it("round-trips every size 3-8", () => {
+    for (const size of [3, 4, 7] as const) {
+      const result = decodePlan(encodePlan({ ...plan, size }))!;
+      expect(result.plan.size).toBe(size);
+    }
+  });
+
+  it("legacy tokens (5/6/8) decode unchanged", () => {
+    for (const size of [5, 6, 8] as const) {
+      expect(decodePlan(encodePlan({ ...plan, size }))!.plan.size).toBe(size);
+    }
+  });
+
+  it("out-of-range or non-integer sizes fall back to 5", () => {
+    for (const size of [9, 2, "6", null] as const) {
+      const result = sanitizePlan({ ...plan, size })!;
+      expect(result.plan.size).toBe(5);
+    }
+  });
+});
+
 describe("defensive decode", () => {
   it("returns null on a garbage token", () => {
     expect(decodePlan("this-is-not-a-valid-token!!!")).toBeNull();

@@ -6,12 +6,17 @@ import {
   columnFull,
   detachmentName,
   detachmentsForFactions,
+  dispositionCap,
   factionFieldsDetachment,
+  factionKeywordIdentity,
+  fdAssignmentIssues,
   reconcileArmyName,
   effectivePlacement,
   factionOptions,
-  LOCK_CAP,
   placementKey,
+  sanitizeTeamSize,
+  teamLegalityIssues,
+  TEAM_SIZES,
   playerCoverage,
   reorder,
   reorderPlacements,
@@ -246,12 +251,121 @@ describe("locks and column capacity", () => {
     expect(cov.lockedByDisposition["take-and-hold"].map((p) => p.id)).toEqual(["a"]);
   });
 
-  it("marks a column full once LOCK_CAP players have locked it", () => {
-    const players = Array.from({ length: LOCK_CAP }, (_, i) => locker(`p${i}`));
-    const cov = teamCoverage({ teamName: "T", size: 5, players });
-    expect(cov.lockedByDisposition["take-and-hold"]).toHaveLength(LOCK_CAP);
-    expect(columnFull(cov, "take-and-hold")).toBe(true);
-    expect(columnFull(cov, "reconnaissance")).toBe(false);
+  it("marks a column full once dispositionCap players have locked it", () => {
+    // Size 5 → cap 1: a single lock fills the column.
+    const one = teamCoverage({ teamName: "T", size: 5, players: [locker("p0")] });
+    expect(columnFull(5, one, "take-and-hold")).toBe(true);
+    // Size 6 → cap 2: one lock leaves the column open, two fill it.
+    expect(columnFull(6, one, "take-and-hold")).toBe(false);
+    const two = teamCoverage({ teamName: "T", size: 6, players: [locker("p0"), locker("p1")] });
+    expect(columnFull(6, two, "take-and-hold")).toBe(true);
+    expect(columnFull(6, two, "reconnaissance")).toBe(false);
+  });
+});
+
+describe("team sizes", () => {
+  it("offers 3 through 8 and caps dispositions at ceil(size/5)", () => {
+    expect(TEAM_SIZES).toEqual([3, 4, 5, 6, 7, 8]);
+    expect(TEAM_SIZES.map(dispositionCap)).toEqual([1, 1, 1, 2, 2, 2]);
+  });
+
+  it("sanitizes untrusted sizes (legacy 5/6/8 unchanged, junk falls back to 5)", () => {
+    for (const n of TEAM_SIZES) expect(sanitizeTeamSize(n)).toBe(n);
+    expect(sanitizeTeamSize(9)).toBe(5);
+    expect(sanitizeTeamSize(2)).toBe(5);
+    expect(sanitizeTeamSize(6.5)).toBe(5);
+    expect(sanitizeTeamSize("6")).toBe(5);
+    expect(sanitizeTeamSize(undefined)).toBe(5);
+  });
+});
+
+describe("fdAssignmentIssues", () => {
+  it("accepts a distinct assignment at any size", () => {
+    expect(fdAssignmentIssues(5, ["take-and-hold", "disruption", "purge-the-foe", "priority-assets", "reconnaissance"])).toEqual([]);
+    expect(fdAssignmentIssues(3, ["take-and-hold", "disruption", "reconnaissance"])).toEqual([]);
+  });
+
+  it("rejects any repeat on a 3-5 player team", () => {
+    const issues = fdAssignmentIssues(5, ["take-and-hold", "take-and-hold", "disruption", "purge-the-foe", "reconnaissance"]);
+    expect(issues.map((i) => i.kind).sort()).toEqual(["fd-doubles-before-coverage", "fd-over-cap"]);
+  });
+
+  it("allows exactly size-5 repeats on a 6-8 player team", () => {
+    const six = ["take-and-hold", "take-and-hold", "disruption", "purge-the-foe", "priority-assets", "reconnaissance"] as const;
+    expect(fdAssignmentIssues(6, [...six])).toEqual([]);
+    // Two doubles at 6 players means a disposition went uncovered before a repeat.
+    const twoDoubles = ["take-and-hold", "take-and-hold", "disruption", "disruption", "purge-the-foe", "reconnaissance"] as const;
+    expect(fdAssignmentIssues(6, [...twoDoubles]).map((i) => i.kind)).toEqual(["fd-doubles-before-coverage"]);
+  });
+
+  it("at 8 players forces full coverage before repeats", () => {
+    const legal = [
+      "take-and-hold", "disruption", "purge-the-foe", "priority-assets", "reconnaissance",
+      "take-and-hold", "disruption", "purge-the-foe",
+    ] as const;
+    expect(fdAssignmentIssues(8, [...legal])).toEqual([]);
+    // Reconnaissance uncovered while take-and-hold is tripled: both rules fire.
+    const illegal = [
+      "take-and-hold", "take-and-hold", "take-and-hold", "disruption", "disruption",
+      "purge-the-foe", "purge-the-foe", "priority-assets",
+    ] as const;
+    const kinds = fdAssignmentIssues(8, [...illegal]).map((i) => i.kind);
+    expect(kinds).toContain("fd-over-cap");
+    expect(kinds).toContain("fd-doubles-before-coverage");
+  });
+});
+
+describe("factionKeywordIdentity / teamLegalityIssues", () => {
+  it("collapses sub-factions onto the parent faction keyword", () => {
+    expect(factionKeywordIdentity("crimson-fists")).toBe("adeptus-astartes");
+    expect(factionKeywordIdentity("adeptus-astartes")).toBe("adeptus-astartes");
+    expect(factionKeywordIdentity("world-eaters")).toBe("world-eaters");
+  });
+
+  it("flags two players committed to the same faction keyword", () => {
+    const plan: TeamPlan = {
+      teamName: "T",
+      size: 5,
+      players: [
+        player({ id: "a", name: "Ann", factionIds: ["crimson-fists"] }),
+        player({ id: "b", name: "Bob", factionIds: ["adeptus-astartes"] }),
+        player({ id: "c", name: "Cid", factionIds: ["world-eaters"] }),
+      ],
+    };
+    const issues = teamLegalityIssues(plan);
+    expect(issues).toHaveLength(1);
+    expect(issues[0].kind).toBe("duplicate-faction-keyword");
+    expect(issues[0].detail).toContain("Ann");
+    expect(issues[0].detail).toContain("Bob");
+  });
+
+  it("does not flag a player still exploring several keywords", () => {
+    const plan: TeamPlan = {
+      teamName: "T",
+      size: 5,
+      players: [
+        player({ id: "a", name: "Ann", factionIds: ["crimson-fists", "world-eaters"] }),
+        player({ id: "b", name: "Bob", factionIds: ["adeptus-astartes"] }),
+      ],
+    };
+    expect(teamLegalityIssues(plan)).toEqual([]);
+  });
+
+  it("flags locked dispositions over the size cap", () => {
+    const lockers = ["a", "b"].map((id) =>
+      player({
+        id,
+        name: id,
+        armies: [army({ id: `${id}-army`, detachmentIds: ["goretrack-onslaught"] })],
+        locked: { "take-and-hold": `${id}-army` },
+      }),
+    );
+    // Distinct factions would still clash on keyword; keep it to the FD issue.
+    lockers[1].factionIds = ["chaos-daemons"];
+    const issues = teamLegalityIssues({ teamName: "T", size: 5, players: lockers });
+    expect(issues.some((i) => i.kind === "fd-over-cap" && i.detail.includes("take-and-hold"))).toBe(true);
+    // The same locks are legal on a 6-player team (cap 2).
+    expect(teamLegalityIssues({ teamName: "T", size: 6, players: lockers }).some((i) => i.kind === "fd-over-cap")).toBe(false);
   });
 });
 

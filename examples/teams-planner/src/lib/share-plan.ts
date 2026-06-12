@@ -19,6 +19,7 @@ import {
   detachmentsForFactions,
   isKnownDetachment,
   isKnownFaction,
+  sanitizeTeamSize,
   syncPreferences,
 } from "./coverage";
 import { DISPOSITIONS } from "../../../_shared/matchup-grid.js";
@@ -267,7 +268,7 @@ export function sanitizePlan(parsed: unknown): DecodeResult | null {
     return base;
   });
 
-  const size = raw.size === 8 ? 8 : raw.size === 6 ? 6 : 5;
+  const size = sanitizeTeamSize(raw.size);
   return {
     plan: { teamName: asString(raw.teamName), size, players },
     dropped,
