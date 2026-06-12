@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { flip } from "svelte/animate";
   import type { ForceDispositionId } from "@alpaca-software/40kdc-data";
   import { DISPOSITION_LABELS, DISPOSITIONS } from "../../../../_shared/matchup-grid.js";
   import {
@@ -12,15 +13,18 @@
     type TeamSize,
   } from "../coverage";
   import { ds } from "../dataset";
-  import DispoPill from "../DispoPill.svelte";
   import { generateCpuTeam } from "./archetypes";
+  import CardRow from "./CardRow.svelte";
+  import FactionCard from "./FactionCard.svelte";
+  import { CARD_MS, receiveCard, sendCard } from "./transitions";
   import type { Round, SimPlayer } from "./types";
 
   /**
-   * Pre-sim screen: pick which plan players take the table this round and the
-   * disposition each fields, set the event round (drives the refused/champion
-   * layout cycle), and roll the CPU opposition. Legality issues are shown but
-   * never block — it's a practice tool.
+   * Pre-sim setup, in the mat's own card language: your plan players sit on
+   * a bench; click (or drag toward the roster) to move one onto your pool
+   * row, where its card grows a disposition picker. The opposition is dealt
+   * as face-up cards. Legality issues are shown but never block — it's a
+   * practice tool.
    */
   let {
     plan,
@@ -71,8 +75,19 @@
   }
 
   const selected = $derived(plan.players.filter((p) => included.has(p.id)));
+  const bench = $derived(plan.players.filter((p) => !included.has(p.id)));
   const size = $derived(sanitizeTeamSize(selected.length));
   const sizeOk = $derived(selected.length >= 3 && selected.length <= 8);
+
+  /** A plan player as a sim card (factionless players go neutral). */
+  function asSimPlayer(p: Player, i: number): SimPlayer {
+    return {
+      id: p.id,
+      name: p.name || `Player ${i + 1}`,
+      factionId: p.factionIds[0] ?? "",
+      fd: fdByPlayer[p.id] ?? DISPOSITIONS[0],
+    };
+  }
 
   const issues = $derived.by(() => {
     if (!sizeOk) return [];
@@ -116,13 +131,7 @@
 
   function start() {
     if (!sizeOk || cpuTeam.length !== size) return;
-    const user: SimPlayer[] = selected.map((p, i) => ({
-      id: p.id,
-      name: p.name || `Player ${i + 1}`,
-      factionId: p.factionIds[0] ?? "",
-      fd: fdByPlayer[p.id] ?? DISPOSITIONS[0],
-    }));
-    onstart(user, cpuTeam, size, round);
+    onstart(selected.map(asSimPlayer), cpuTeam, size, round);
   }
 
   function coveredOptions(p: Player): ForceDispositionId[] {
@@ -141,40 +150,42 @@
         Add at least 3 players on the Plan tab to practice pairings.
       </p>
     {:else}
-      <div class="flex flex-col gap-1.5">
-        {#each plan.players as p (p.id)}
-          <label
-            class="flex flex-wrap items-center gap-2 rounded border px-2 py-1.5
-                   {included.has(p.id) ? 'border-border-strong bg-panel' : 'border-transparent opacity-50'}"
+      <!-- Active roster: card + on-card disposition picker. Click to bench. -->
+      <div class="roster" role="list" aria-label="Playing this round">
+        {#each selected as p, i (p.id)}
+          <div
+            class="roster-cell"
+            animate:flip={{ duration: CARD_MS }}
+            in:receiveCard={{ key: `setup-${p.id}` }}
+            out:sendCard={{ key: `setup-${p.id}` }}
           >
-            <input
-              type="checkbox"
-              class="focus-ring h-3.5 w-3.5"
-              checked={included.has(p.id)}
-              onchange={() => toggle(p.id)}
+            <FactionCard
+              player={asSimPlayer(p, i)}
+              size="lg"
+              selectable
+              onpick={() => toggle(p.id)}
+              title="{p.name || 'player'} — click to move to the bench"
             />
-            <span class="min-w-[8rem] flex-1 truncate text-sm text-text">{p.name || "(unnamed)"}</span>
-            <span class="truncate text-xs text-text-dim">
-              {p.factionIds.map((f) => ds.factions.get(f)?.name ?? f).join(", ") || "no faction"}
-            </span>
-            {#if included.has(p.id)}
-              <select
-                class="focus-ring rounded border border-border-strong bg-panel px-1.5 py-1 text-xs text-text"
-                value={fdByPlayer[p.id]}
-                onchange={(e) => {
-                  fdByPlayer = {
-                    ...fdByPlayer,
-                    [p.id]: (e.currentTarget as HTMLSelectElement).value as ForceDispositionId,
-                  };
-                }}
-              >
-                {#each coveredOptions(p) as d (d)}
-                  <option value={d}>{DISPOSITION_LABELS[d]}</option>
-                {/each}
-              </select>
-            {/if}
-          </label>
+            <select
+              class="focus-ring fd-pick"
+              value={fdByPlayer[p.id]}
+              aria-label="Disposition for {p.name || 'player'}"
+              onchange={(e) => {
+                fdByPlayer = {
+                  ...fdByPlayer,
+                  [p.id]: (e.currentTarget as HTMLSelectElement).value as ForceDispositionId,
+                };
+              }}
+            >
+              {#each coveredOptions(p) as d (d)}
+                <option value={d}>{DISPOSITION_LABELS[d]}</option>
+              {/each}
+            </select>
+          </div>
         {/each}
+        {#if selected.length === 0}
+          <p class="self-center text-sm italic text-text-dim">Pick players from the bench below.</p>
+        {/if}
       </div>
       <p class="mt-2 text-[11px] text-text-dim">
         {selected.length} selected — pairing modules need 3–8 players.
@@ -184,6 +195,30 @@
           ⚠ {issue}
         </div>
       {/each}
+
+      {#if bench.length > 0}
+        <div class="mt-3 border-t border-dashed border-panel-border pt-2">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-text-dim">Bench — click to add</span>
+          <div class="roster mt-1" role="list" aria-label="Bench">
+            {#each bench as p, i (p.id)}
+              <div
+                class="roster-cell"
+                animate:flip={{ duration: CARD_MS }}
+                in:receiveCard={{ key: `setup-${p.id}` }}
+                out:sendCard={{ key: `setup-${p.id}` }}
+              >
+                <FactionCard
+                  player={asSimPlayer(p, i)}
+                  size="sm"
+                  selectable
+                  onpick={() => toggle(p.id)}
+                  title="{p.name || 'player'} — click to add to the roster"
+                />
+              </div>
+            {/each}
+          </div>
+        </div>
+      {/if}
     {/if}
   </section>
 
@@ -206,15 +241,7 @@
     {:else if cpuTeam.length === 0}
       <p class="text-sm text-text-dim">Select 3–8 players to roll an opposing team.</p>
     {:else}
-      <ul class="flex flex-col gap-1">
-        {#each cpuTeam as p (p.id)}
-          <li class="flex items-center gap-2 rounded border border-border-subtle bg-panel px-2 py-1.5">
-            <span class="min-w-[10rem] flex-1 truncate text-sm text-text">{p.name}</span>
-            <span class="truncate text-xs text-text-dim">{ds.factions.get(p.factionId)?.name ?? p.factionId}</span>
-            <DispoPill disposition={p.fd} tier="could" />
-          </li>
-        {/each}
-      </ul>
+      <CardRow label="" players={cpuTeam} size="md" />
     {/if}
   </section>
 
@@ -243,3 +270,28 @@
     </button>
   </div>
 </div>
+
+<style>
+  .roster {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: flex-start;
+    min-height: 3rem;
+  }
+  .roster-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    align-items: center;
+  }
+  .fd-pick {
+    width: 7.25rem;
+    border-radius: 0.25rem;
+    border: 1px solid var(--color-border-strong, #66666f);
+    background: var(--color-panel, #16171c);
+    color: var(--color-text, #ececf0);
+    font-size: 0.68rem;
+    padding: 0.25rem;
+  }
+</style>

@@ -1,22 +1,22 @@
 /**
  * Manifest integrity: every faction the pairing mat can show — the archetype
  * pool's factions plus every dataset faction with detachments — must resolve
- * to a style whose icon file actually exists in public/faction-icons. Runs
- * node-side so it can stat the files (same pattern as the pool-integrity
- * test resolving against the embedded dataset).
+ * to a style whose icon file actually exists in public/faction-icons.
+ * Enumerated with Vite's import.meta.glob so the test stays free of node
+ * builtins (no @types/node in this workspace).
  */
-import { describe, expect, it, vi } from "vitest";
-import { existsSync } from "node:fs";
-import { resolve, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { describe, expect, it } from "vitest";
 import { ds } from "../dataset";
 import { ARCHETYPE_POOL } from "./archetype-pool";
 import { factionStyle, NEUTRAL_STYLE } from "./factions";
 
-const ICONS_DIR = resolve(dirname(fileURLToPath(import.meta.url)), "../../../public/faction-icons");
+/** Basenames of every committed icon (glob keys are /public-rooted paths). */
+const ICON_FILES = new Set(
+  Object.keys(import.meta.glob("/public/faction-icons/*.svg")).map((p) => p.split("/").pop()!),
+);
 
-function iconPath(style: { icon: string }): string {
-  return resolve(ICONS_DIR, style.icon.split("/").pop()!);
+function iconFile(style: { icon: string }): string {
+  return style.icon.split("/").pop()!;
 }
 
 describe("faction style manifest", () => {
@@ -35,8 +35,11 @@ describe("faction style manifest", () => {
   });
 
   it("every resolved icon file exists on disk", () => {
+    expect(ICON_FILES.size).toBeGreaterThan(0);
     for (const id of factionIds) {
-      expect(existsSync(iconPath(factionStyle(id))), `${id} → ${factionStyle(id).icon}`).toBe(true);
+      expect(ICON_FILES.has(iconFile(factionStyle(id))), `${id} → ${factionStyle(id).icon}`).toBe(
+        true,
+      );
     }
   });
 
