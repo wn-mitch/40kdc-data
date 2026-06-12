@@ -10,7 +10,8 @@ import {
   parseEntitlementFragment,
   tokenLive,
 } from "../../../_shared/entitlement-core";
-import { parseShortlink, shortlinkUrl } from "../../../_shared/sync-api";
+import { docInviteUrl, parseDocInvite, parseShortlink, shortlinkUrl } from "../../../_shared/sync-api";
+import { normalizeNickname } from "../../../_shared/nickname";
 
 function fakeToken(claims: unknown): string {
   const payload = btoa(JSON.stringify(claims)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
@@ -78,5 +79,43 @@ describe("shortlink helpers", () => {
     expect(parseShortlink("AB2KQ7X0")).toBeNull(); // 0 not in alphabet
     expect(parseShortlink("https://example.com/?x=1")).toBeNull();
     expect(parseShortlink("not a url or code")).toBeNull();
+  });
+});
+
+describe("live doc-link helpers", () => {
+  it("builds and re-parses ?d=&token= invites, round-tripping odd ids", () => {
+    const url = docInviteUrl(
+      "https://teams-planner.alpacasoft.dev",
+      "/",
+      "0c5cbd06-aaaa-bbbb-cccc-1234567890ab",
+      "tok-uuid",
+    );
+    expect(url).toBe(
+      "https://teams-planner.alpacasoft.dev/?d=0c5cbd06-aaaa-bbbb-cccc-1234567890ab&token=tok-uuid",
+    );
+    expect(parseDocInvite(new URL(url).search)).toEqual({
+      docId: "0c5cbd06-aaaa-bbbb-cccc-1234567890ab",
+      token: "tok-uuid",
+    });
+    // Characters that need escaping survive the round trip.
+    const odd = docInviteUrl("https://x.dev", "/", "a&b=c", "t/k+");
+    expect(parseDocInvite(new URL(odd).search)).toEqual({ docId: "a&b=c", token: "t/k+" });
+  });
+
+  it("rejects invites missing either half, ignores unrelated queries", () => {
+    expect(parseDocInvite("?d=abc")).toBeNull();
+    expect(parseDocInvite("?token=xyz")).toBeNull();
+    expect(parseDocInvite("?s=AB2KQ7XM")).toBeNull();
+    expect(parseDocInvite("")).toBeNull();
+    // A legacy session invite is NOT a doc invite (no ?d=).
+    expect(parseDocInvite("?session=AB2KQ7&token=xyz")).toBeNull();
+  });
+});
+
+describe("normalizeNickname", () => {
+  it("trims, caps at 40 chars, and empties whitespace-only input", () => {
+    expect(normalizeNickname("  Alice  ")).toBe("Alice");
+    expect(normalizeNickname("x".repeat(60))).toHaveLength(40);
+    expect(normalizeNickname("   ")).toBe("");
   });
 });
