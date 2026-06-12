@@ -19,11 +19,9 @@ import { SyncRegistry } from "./sync-registry";
 export { DocRoom, SyncRegistry };
 
 export interface Env extends VerifyEntitlementEnv, DocRoomEnv {
-  DB: D1Database;
   DOC_ROOM: DurableObjectNamespace<DocRoom>;
   MAX_DOCS_PER_OWNER?: string;
   MAX_LINKS_PER_OWNER?: string;
-  MAX_PAYLOAD_BYTES?: string;
 }
 
 export const DOC_KINDS = ["list", "team-plan", "sb-save"] as const;
@@ -133,7 +131,7 @@ function shareRole(
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
     if (request.method === "OPTIONS") {
@@ -198,6 +196,18 @@ export default {
       if (!code) return json({ error: "bad_code" }, 400);
       // getByName → the same code always reaches the same room instance.
       return env.DOC_ROOM.get(env.DOC_ROOM.idFromName(code)).fetch(request);
+    }
+
+    // GET /docs/:id/ws → live editing of a cloud doc (doc-bound room). Free
+    // to join like sessions — the durable share token is the auth; the room
+    // itself validates it against the D1 row. The `doc` param is server-set
+    // here so a client can never point the room at a different row.
+    const docWsMatch = url.pathname.match(/^\/docs\/([^/]+)\/ws$/);
+    if (request.method === "GET" && docWsMatch) {
+      const id = decodeURIComponent(docWsMatch[1]);
+      const fwd = new URL(request.url);
+      fwd.searchParams.set("doc", id);
+      return env.DOC_ROOM.get(env.DOC_ROOM.idFromName(`doc:${id}`)).fetch(new Request(fwd, request));
     }
 
     // ── Everything below requires an owner identity ──────────────────────────
@@ -363,6 +373,14 @@ export default {
           .first<{ name: string; updated_at: number }>();
         if (!row) return json({ error: "not_found" }, 404);
 
+        // While a live room holds this doc, the room is the source of truth —
+        // a snapshot PUT would be clobbered by its next persist. Refuse
+        // honestly and steer the client to the live session instead.
+        const registry = env.SYNC_REGISTRY.get(env.SYNC_REGISTRY.idFromName("global"));
+        if (await registry.has(`doc:${id}`)) {
+          return json({ error: "doc_live" }, 409);
+        }
+
         // Optimistic-concurrency hint: a stale ifUpdatedAt means another
         // device wrote since this client last read — surface, don't clobber.
         if (typeof body.ifUpdatedAt === "number" && body.ifUpdatedAt !== row.updated_at) {
@@ -382,7 +400,10 @@ export default {
         const result = await env.DB.prepare("DELETE FROM documents WHERE id = ? AND owner = ?")
           .bind(id, owner)
           .run();
-        return result.meta.changes > 0 ? json({ deleted: true }) : json({ error: "not_found" }, 404);
+        if (result.meta.changes === 0) return json({ error: "not_found" }, 404);
+        // Delete always wins over a live room: tear it down (no-op when cold).
+        ctx.waitUntil(env.DOC_ROOM.get(env.DOC_ROOM.idFromName(`doc:${id}`)).docDeleted());
+        return json({ deleted: true });
       }
 
       return json({ error: "method_not_allowed" }, 405);

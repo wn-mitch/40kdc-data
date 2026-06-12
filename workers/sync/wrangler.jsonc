@@ -36,6 +36,8 @@
     "MAX_DOC_SESSIONS": "20",
     "DOC_SESSION_TTL_MINUTES": "120",
     "MAX_EDITORS": "10",
-    "MAX_VIEWERS": "20"
+    "MAX_VIEWERS": "20",
+    // Debounce window for doc-bound rooms writing edits back to D1.
+    "DOC_PERSIST_SECONDS": "15"
   }
 }

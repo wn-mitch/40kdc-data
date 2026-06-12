@@ -6,7 +6,7 @@ export default defineWorkersConfig(async () => {
   const migrations = await readD1Migrations(path.join(__dirname, "migrations"));
   return {
     test: {
-      setupFiles: ["./test/apply-migrations.ts"],
+      setupFiles: ["./test/apply-migrations.ts", "./test/reset-registry.ts"],
       poolOptions: {
         workers: {
           // Per-test isolated storage doesn't pop cleanly while a test holds

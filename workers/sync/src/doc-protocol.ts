@@ -38,6 +38,7 @@ export interface Participant {
 
 export type ClientMessage =
   | { t: "hello"; nickname?: string; lastSeq: number }
+  | { t: "nick"; nickname: string }
   | { t: "op"; clientSeq: number; ops: DocOp[] };
 
 export type ServerMessage =
@@ -46,6 +47,8 @@ export type ServerMessage =
       participantId: string;
       role: "editor" | "viewer";
       kind: string;
+      /** Doc name (doc-bound rooms only — ephemeral sessions have none). */
+      name?: string;
       doc: unknown;
       seq: number;
       participants: Participant[];

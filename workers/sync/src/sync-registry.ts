@@ -72,6 +72,26 @@ export class SyncRegistry extends DurableObject<SyncRegistryEnv> {
     this.ctx.storage.sql.exec("DELETE FROM active WHERE code = ?", code);
   }
 
+  /** Is this room currently registered? (e.g. "is this doc live right now") */
+  async has(code: string): Promise<boolean> {
+    return (
+      this.ctx.storage.sql
+        .exec<{ n: number }>("SELECT COUNT(*) AS n FROM active WHERE code = ?", code)
+        .toArray()[0].n > 0
+    );
+  }
+
+  /** Re-stamp an active room's registration so the sweep can't reap a room
+   *  that is still alive past the TTL horizon. Deliberately NOT an acquire:
+   *  no capacity check, and a missing row stays missing. */
+  async refresh(code: string): Promise<void> {
+    this.ctx.storage.sql.exec(
+      "UPDATE active SET created_at = ? WHERE code = ?",
+      Date.now(),
+      code,
+    );
+  }
+
   /** Current active-room count (ops/tests). */
   async activeCount(): Promise<number> {
     return this.ctx.storage.sql

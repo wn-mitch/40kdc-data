@@ -175,6 +175,25 @@ describe("live editing", () => {
     expect(again).toBeNull();
   });
 
+  it("broadcasts a nickname change to everyone, sender included", async () => {
+    const { code, editorToken } = await createSession();
+    const a = await connect(code, editorToken, "Alice");
+    await a.next(); // welcome
+    const b = await connect(code, editorToken, "guest");
+    await b.next(); // welcome
+    await a.next(); // presence: B joined
+
+    b.ws.send(JSON.stringify({ t: "nick", nickname: "  Bob the Builder  " }));
+    const atA = await a.next();
+    const atB = await b.next();
+    for (const msg of [atA, atB]) {
+      expect(msg.t).toBe("presence");
+      if (msg.t !== "presence") continue;
+      expect(msg.participants.map((p) => p.nickname)).toContain("Bob the Builder");
+      expect(msg.participants.map((p) => p.nickname)).not.toContain("guest");
+    }
+  });
+
   it("enforces the editor connection cap", async () => {
     const { code, editorToken } = await createSession();
     // Test env doesn't override MAX_EDITORS (default 10).
