@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { sanitizeTeamSize, teamCoverage, TEAM_SIZES, type Player, type TeamPlan } from "./lib/coverage";
+  import { teamCoverage, type Player, type TeamPlan } from "./lib/coverage";
   import { decodePlan, encodePlan, sanitizePlan } from "./lib/share-plan";
-  import PlayerRow from "./lib/PlayerRow.svelte";
-  import CoverageMatrix from "./lib/CoverageMatrix.svelte";
+  import PlanView from "./lib/PlanView.svelte";
+  import PairingsSimulator from "./lib/pairings/PairingsSimulator.svelte";
   import AppHeader from "../../_shared/AppHeader.svelte";
   import AppFooter from "../../_shared/AppFooter.svelte";
   import PwaInstallPrompt from "../../_shared/PwaInstallPrompt.svelte";
@@ -66,6 +66,9 @@
   }
 
   let plan = $state<TeamPlan>(loadPlan());
+  /** Plan vs pairings-simulator tab, mirrored to `#sim` so a refresh sticks.
+   *  Sim state itself is local to the simulator component (never synced). */
+  let view = $state<"plan" | "sim">(location.hash === "#sim" ? "sim" : "plan");
   let toast = $state<string | null>(null);
   let pwaPromptOpen = $state<boolean>(false);
   let gateOpen = $state<boolean>(false);
@@ -189,6 +192,11 @@
     // fragment slot — capture it before any gated UI reads the stored state.
     maybeCaptureEntitlement();
 
+    // Keep the tab in sync with back/forward navigation over `#sim`.
+    window.addEventListener("hashchange", () => {
+      view = location.hash === "#sim" ? "sim" : "plan";
+    });
+
     const m = location.hash.match(/^#t=(.+)$/);
     if (m) {
       const result = decodePlan(m[1]);
@@ -274,6 +282,13 @@
     if (plan.players.length > 0 && !confirm("Clear the whole team plan?")) return;
     plan = emptyPlan();
   }
+
+  function setView(next: "plan" | "sim") {
+    view = next;
+    // `#t=` import already cleared its hash in onMount; `#sim` is the only
+    // durable fragment, so plain replacement is safe.
+    history.replaceState(null, "", location.pathname + location.search + (next === "sim" ? "#sim" : ""));
+  }
 </script>
 
 <div class="flex min-h-screen flex-col">
@@ -288,84 +303,46 @@
   </AppHeader>
 
   <main class="mx-auto w-full max-w-6xl flex-1 px-3 py-4">
-    <!-- Team controls -->
-    <div class="mb-4 flex flex-wrap items-end gap-3">
-      <label class="flex flex-col gap-1">
-        <span class="font-heading text-[10px] font-bold uppercase tracking-wider text-text-dim">Team name</span>
-        <input
-          class="focus-ring rounded border border-border-strong bg-panel px-2 py-1.5 text-sm text-text placeholder:text-text-dim"
-          placeholder="Team name"
-          value={plan.teamName}
-          oninput={(e) => (plan = { ...plan, teamName: (e.currentTarget as HTMLInputElement).value })}
-        />
-      </label>
-      <label class="flex flex-col gap-1">
-        <span class="font-heading text-[10px] font-bold uppercase tracking-wider text-text-dim">Team size</span>
-        <select
-          class="focus-ring rounded border border-border-strong bg-panel px-2 py-1.5 text-sm text-text"
-          value={String(plan.size)}
-          onchange={(e) => {
-            const v = Number((e.currentTarget as HTMLSelectElement).value);
-            plan = { ...plan, size: sanitizeTeamSize(v) };
-          }}
-        >
-          {#each TEAM_SIZES as n (n)}
-            <option value={String(n)}>{n} players</option>
-          {/each}
-        </select>
-      </label>
-      <div class="ml-auto flex gap-2">
-        {#if docSession.status === "idle"}
-          <button
-            type="button"
-            class="focus-ring rounded bg-accent px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-accent-foreground hover:bg-accent-hover"
-            onclick={startLive}
-            title="Share a live link — everyone edits this plan together and changes save to the cloud"
-          >
-            ⦿ Go live
-          </button>
-        {/if}
-        <button
-          type="button"
-          class="focus-ring rounded border border-border-strong px-3 py-1.5 text-xs uppercase tracking-wide text-text-muted hover:border-accent hover:text-accent"
-          onclick={copyShareLink}
-        >
-          Copy share link
-        </button>
-        <button
-          type="button"
-          class="focus-ring rounded border border-border-strong px-3 py-1.5 text-xs uppercase tracking-wide text-text-muted hover:border-danger hover:text-danger"
-          onclick={resetPlan}
-        >
-          Reset
-        </button>
-      </div>
+    <!-- View tabs -->
+    <div class="mb-4 flex gap-1 border-b border-panel-border" role="tablist">
+      <button
+        type="button"
+        role="tab"
+        aria-selected={view === "plan"}
+        class="focus-ring rounded-t px-3 py-1.5 font-heading text-xs font-bold uppercase tracking-wider
+               {view === 'plan' ? 'bg-panel-surface text-text' : 'text-text-dim hover:text-text-muted'}"
+        onclick={() => setView("plan")}
+      >
+        Plan
+      </button>
+      <button
+        type="button"
+        role="tab"
+        aria-selected={view === "sim"}
+        class="focus-ring rounded-t px-3 py-1.5 font-heading text-xs font-bold uppercase tracking-wider
+               {view === 'sim' ? 'bg-panel-surface text-text' : 'text-text-dim hover:text-text-muted'}"
+        onclick={() => setView("sim")}
+      >
+        Pairings practice
+      </button>
     </div>
 
-    <!-- Coverage summary -->
-    <div class="mb-4">
-      <CoverageMatrix {plan} {coverage} onchange={updatePlayer} />
-    </div>
-
-    <!-- Players -->
-    <div class="flex flex-col gap-2">
-      {#each plan.players as p (p.id)}
-        <PlayerRow
-          player={p}
-          coverage={coverage.perPlayer.get(p.id) ?? new Set()}
-          onchange={updatePlayer}
-          onremove={() => removePlayer(p.id)}
-        />
-      {/each}
-    </div>
-
-    <button
-      type="button"
-      class="focus-ring mt-3 w-full rounded border border-dashed border-border-strong px-3 py-2 text-sm uppercase tracking-wide text-text-muted hover:border-accent hover:text-accent"
-      onclick={addPlayer}
-    >
-      + Add player
-    </button>
+    {#if view === "plan"}
+      <PlanView
+        {plan}
+        {coverage}
+        showGoLive={docSession.status === "idle"}
+        onPlanChange={(next) => (plan = next)}
+        onUpdatePlayer={updatePlayer}
+        onAddPlayer={addPlayer}
+        onRemovePlayer={removePlayer}
+        onCopyShare={copyShareLink}
+        onReset={resetPlan}
+        onGoLive={startLive}
+      />
+    {:else}
+      <PairingsSimulator {plan} />
+    {/if}
   </main>
 
   <AppFooter
