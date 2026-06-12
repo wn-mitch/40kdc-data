@@ -16,6 +16,7 @@ export {
   solveCentroid,
   solveCentroidTriangulated,
   solveCentroidAttached,
+  solveCentroidAgainstFixed,
   TerrainSolveError,
 } from "./solve.js";
 export type {
@@ -28,6 +29,10 @@ export type {
   AttachLine,
   AttachPiece,
   AttachInput,
+  FixedLockLine,
+  FixedAnchor,
+  MovingAttachPiece,
+  SolveAgainstFixedInput,
 } from "./solve.js";
 export { keystoneMeasurements, BOARD_INCHES, TerrainKeystoneError } from "./keystones.js";
 export type { KeystoneMeasurement } from "./keystones.js";

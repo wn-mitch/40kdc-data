@@ -491,3 +491,208 @@ export function solveCentroidAttached(input: AttachInput): {
   );
   return { a: attachPose(pa, best.thetaA), b: attachPose(pb, best.thetaB) };
 }
+
+/**
+ * One card dimension line in a fixed-anchor solve: `distance` inches from board
+ * `edge` to a specific footprint `vertex` of the moving piece. This single line
+ * pins the one degree of freedom the attachment to the fixed anchor leaves.
+ */
+export interface FixedLockLine {
+  edge: BoardEdge;
+  distance: number;
+  vertex: number;
+}
+
+/**
+ * The already-placed piece the moving piece attaches to. Its pose is taken as
+ * given — `vertices` are its resolved board-space polygon vertices (the
+ * orientation-only offsets from {@link orientedOffsets} added to the piece's
+ * board centroid) — and the solve never moves it.
+ */
+export interface FixedAnchor {
+  vertices: Vec2[];
+  /**
+   * The anchor feature the moving piece contacts: a specific vertex, or the
+   * footprint edge running from vertex `index` to vertex `index + 1` (wrapping).
+   */
+  attach: { kind: "vertex" | "edge"; index: number };
+}
+
+/** The piece being placed against a {@link FixedAnchor}. */
+export interface MovingAttachPiece {
+  footprint: Footprint;
+  mirror: Mirror;
+  /**
+   * The moving feature that meets the anchor: a vertex (coincides with the
+   * anchor vertex — the joint pivots), or the edge `index → index + 1` (lies
+   * flush on the anchor edge — the contact slides). Must match the anchor's kind.
+   */
+  attach: { kind: "vertex" | "edge"; index: number };
+  /** The single card line pinning the remaining freedom. */
+  line: FixedLockLine;
+  /** Current rotation in degrees, used to pick among the candidate roots. */
+  rotationHint?: number;
+}
+
+export interface SolveAgainstFixedInput {
+  /** Board extents in inches (40kdc standard is 60 × 44). */
+  board: { width: number; height: number };
+  moving: MovingAttachPiece;
+  fixed: FixedAnchor;
+}
+
+/** The board coordinate (and axis) a single edge measurement pins. */
+function edgeTarget(
+  edge: BoardEdge,
+  distance: number,
+  board: { width: number; height: number },
+): { axis: "x" | "y"; value: number } {
+  switch (edge) {
+    case "left":
+      return { axis: "x", value: distance };
+    case "right":
+      return { axis: "x", value: board.width - distance };
+    case "top":
+      return { axis: "y", value: distance };
+    case "bottom":
+      return { axis: "y", value: board.height - distance };
+  }
+}
+
+/**
+ * Back-solve the centroid AND rotation of ONE piece against an already-placed
+ * anchor. The attachment removes two degrees of freedom — corners coincide
+ * (the joint pivots) or edges lie flush (the contact slides) — so a single card
+ * dimension line pins what remains. The anchor is given by its resolved
+ * board-space `vertices` and never moves.
+ *
+ * Closed form:
+ * - **vertex mode** — the moving attach vertex equals the fixed point `P`, so
+ *   `centroid = P − R(θ)·o_att`. The lock line to vertex `j` resolves to
+ *   `P + R(θ)·(o_j − o_att)`; pinning one axis gives `A·cosθ + B·sinθ = C`,
+ *   solved `θ = atan2(B,A) ± acos(C/√(A²+B²))`, the root nearest `rotationHint`.
+ * - **edge mode** — flush forces the moving edge parallel to the anchor edge
+ *   (two senses → two θ), and for each θ the centroid solves from a 2×2 linear
+ *   system: the flush line equation plus the single lock line. The candidate
+ *   nearest `rotationHint` wins.
+ */
+export function solveCentroidAgainstFixed(
+  input: SolveAgainstFixedInput,
+): { x: number; y: number; rotation: number } {
+  const { moving, fixed, board } = input;
+  if (moving.attach.kind !== fixed.attach.kind) {
+    throw new TerrainSolveError(
+      "attachment kinds must match: a vertex pins to a vertex, an edge lies flush on an edge — no mixing",
+    );
+  }
+  // Mirror-applied, pre-rotation offsets (θ is the unknown we solve for).
+  const offsets = orientedOffsets(moving.footprint, 0, moving.mirror);
+  const n = offsets.length;
+  const m = fixed.vertices.length;
+  if (moving.attach.index < 0 || moving.attach.index >= n) {
+    throw new TerrainSolveError(`moving attach ${moving.attach.kind} index ${moving.attach.index} out of range`);
+  }
+  if (fixed.attach.index < 0 || fixed.attach.index >= m) {
+    throw new TerrainSolveError(`fixed attach ${fixed.attach.kind} index ${fixed.attach.index} out of range`);
+  }
+  const oj = offsets[moving.line.vertex];
+  if (!oj) throw new TerrainSolveError(`lock line vertex index ${moving.line.vertex} out of range`);
+  const hint = ((moving.rotationHint ?? 0) * Math.PI) / 180;
+  const target = edgeTarget(moving.line.edge, moving.line.distance, board);
+
+  const pose = (theta: number, centroid: Vec2): { x: number; y: number; rotation: number } => ({
+    x: centroid.x,
+    y: centroid.y,
+    rotation: ((((theta * 180) / Math.PI) % 360) + 360) % 360,
+  });
+
+  if (moving.attach.kind === "vertex") {
+    const P = fixed.vertices[fixed.attach.index];
+    const oAtt = offsets[moving.attach.index];
+    const rel = { x: oj.x - oAtt.x, y: oj.y - oAtt.y };
+    if (Math.hypot(rel.x, rel.y) < 1e-9) {
+      throw new TerrainSolveError("the lock line must measure to a different vertex than the attach corner");
+    }
+    // P.axis + (R(θ)·rel).axis = target → A·cosθ + B·sinθ = C.
+    const A = target.axis === "x" ? rel.x : rel.y;
+    const B = target.axis === "x" ? -rel.y : rel.x;
+    const C = target.value - (target.axis === "x" ? P.x : P.y);
+    const R = Math.hypot(A, B);
+    const ratio = C / R;
+    if (ratio > 1 + 1e-6 || ratio < -1 - 1e-6) {
+      throw new TerrainSolveError(
+        `the locked corner is only ${round2(R)}″ from the attach corner — it cannot reach that measurement`,
+      );
+    }
+    const phi = Math.atan2(B, A);
+    const baseAcos = Math.acos(Math.max(-1, Math.min(1, ratio)));
+    const theta = [phi + baseAcos, phi - baseAcos].reduce((best, c) =>
+      angularGap(c, hint) < angularGap(best, hint) ? c : best,
+    );
+    const cos = Math.cos(theta);
+    const sin = Math.sin(theta);
+    // centroid = P − R(θ)·o_att.
+    const centroid = {
+      x: P.x - (cos * oAtt.x - sin * oAtt.y),
+      y: P.y - (sin * oAtt.x + cos * oAtt.y),
+    };
+    return pose(theta, centroid);
+  }
+
+  // Edge mode: the moving edge ei→ei+1 lies flush on the anchor edge fi→fi+1.
+  const ei = moving.attach.index;
+  const oe = offsets[ei];
+  const oe1 = offsets[(ei + 1) % n];
+  const u = { x: oe1.x - oe.x, y: oe1.y - oe.y };
+  if (Math.hypot(u.x, u.y) < 1e-9) {
+    throw new TerrainSolveError(`moving edge ${ei} is degenerate (zero length)`);
+  }
+  const fi = fixed.attach.index;
+  const F0 = fixed.vertices[fi];
+  const F1 = fixed.vertices[(fi + 1) % m];
+  const t = { x: F1.x - F0.x, y: F1.y - F0.y };
+  const tLen = Math.hypot(t.x, t.y);
+  if (tLen < 1e-9) {
+    throw new TerrainSolveError(`anchor edge ${fi} is degenerate (zero length)`);
+  }
+  const tHat = { x: t.x / tLen, y: t.y / tLen };
+  const uAng = angle(u);
+  const tAng = angle(tHat);
+  // angle(R(θ)·u) = angle(u) + θ, so parallel ⇒ θ = tAng − uAng (same sense) or +π (opposite).
+  const candidates = [tAng - uAng, tAng + Math.PI - uAng];
+
+  let best: { theta: number; centroid: Vec2 } | null = null;
+  for (const theta of candidates) {
+    const cos = Math.cos(theta);
+    const sin = Math.sin(theta);
+    const rot = (v: Vec2): Vec2 => ({ x: cos * v.x - sin * v.y, y: sin * v.x + cos * v.y });
+    // Flush: cross(t̂, c + R(θ)·o_e − F0) = 0.
+    //   (−t̂.y)·cx + (t̂.x)·cy = t̂.y·q.x − t̂.x·q.y,  q = R(θ)·o_e − F0
+    const q = rot(oe);
+    q.x -= F0.x;
+    q.y -= F0.y;
+    const a1 = -tHat.y;
+    const b1 = tHat.x;
+    const d1 = tHat.y * q.x - tHat.x * q.y;
+    // Lock line: pins one axis of (c + R(θ)·o_j).
+    const rj = rot(oj);
+    const a2 = target.axis === "x" ? 1 : 0;
+    const b2 = target.axis === "x" ? 0 : 1;
+    const d2 = target.value - (target.axis === "x" ? rj.x : rj.y);
+    const det = a1 * b2 - b1 * a2;
+    if (Math.abs(det) < 1e-9) continue; // lock line parallel to the contact edge for this θ
+    const centroid = {
+      x: (d1 * b2 - b1 * d2) / det,
+      y: (a1 * d2 - d1 * a2) / det,
+    };
+    if (best === null || angularGap(theta, hint) < angularGap(best.theta, hint)) {
+      best = { theta, centroid };
+    }
+  }
+  if (best === null) {
+    throw new TerrainSolveError(
+      "the lock line is parallel to the contact edge — measure to the other axis (left/right vs top/bottom)",
+    );
+  }
+  return pose(best.theta, best.centroid);
+}

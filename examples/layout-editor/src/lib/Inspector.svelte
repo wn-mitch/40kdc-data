@@ -3,9 +3,11 @@
     BOARD,
     footprintOf,
     footprintVertices,
+    orientedOffsets,
     solveCentroid,
     solveCentroidTriangulated,
     solveCentroidAttached,
+    solveCentroidAgainstFixed,
     templateById,
     type EditPiece,
     type EditKeystone,
@@ -128,9 +130,16 @@
   // Attachment (lock + attach) state — the cluster-card pattern: each piece's
   // card pins ONE corner with two dimension lines; the attachment to the
   // neighbouring area supplies both rotations. The solve re-poses BOTH pieces.
+  // "both" re-solves both pieces from cards (solveCentroidAttached); "fixed"
+  // treats the attached-to area as already placed and solves only this piece
+  // (solveCentroidAgainstFixed) — the contact removes 2 DOF, so a single lock
+  // line pins the rest.
+  let anchorMode = $state<"both" | "fixed">("both");
   let aLockVertex = $state(0);
   let aLockH = $state<{ edge: "left" | "right"; dist: number }>({ edge: "left", dist: 0 });
   let aLockV = $state<{ edge: "top" | "bottom"; dist: number }>({ edge: "top", dist: 0 });
+  // The single lock line used in "fixed" anchor mode (any of the four edges).
+  let aFixedLine = $state<{ edge: CardEdge; dist: number; vertex: number }>({ edge: "left", dist: 0, vertex: 0 });
   let attachKind = $state<"vertex" | "edge">("vertex");
   let aAttach = $state(0);
   let attachTargetId = $state("");
@@ -169,17 +178,24 @@
         })),
       );
     } else if (solverMode === "attach") {
-      const lines: SolverLine[] = [
-        { edge: toBoardEdge(aLockH.edge), distance: aLockH.dist, ref: { kind: "vertex", index: aLockVertex } },
-        { edge: toBoardEdge(aLockV.edge), distance: aLockV.dist, ref: { kind: "vertex", index: aLockVertex } },
-      ];
-      if (targetPiece) {
-        lines.push(
-          { edge: toBoardEdge(bLockH.edge), distance: bLockH.dist, ref: { kind: "vertex", index: bLockVertex }, pieceId: targetPiece.id },
-          { edge: toBoardEdge(bLockV.edge), distance: bLockV.dist, ref: { kind: "vertex", index: bLockVertex }, pieceId: targetPiece.id },
-        );
+      if (anchorMode === "fixed") {
+        // One lock line for this piece; the anchor is fixed (no card lines).
+        onsolverlines([
+          { edge: toBoardEdge(aFixedLine.edge), distance: aFixedLine.dist, ref: { kind: "vertex", index: aFixedLine.vertex } },
+        ]);
+      } else {
+        const lines: SolverLine[] = [
+          { edge: toBoardEdge(aLockH.edge), distance: aLockH.dist, ref: { kind: "vertex", index: aLockVertex } },
+          { edge: toBoardEdge(aLockV.edge), distance: aLockV.dist, ref: { kind: "vertex", index: aLockVertex } },
+        ];
+        if (targetPiece) {
+          lines.push(
+            { edge: toBoardEdge(bLockH.edge), distance: bLockH.dist, ref: { kind: "vertex", index: bLockVertex }, pieceId: targetPiece.id },
+            { edge: toBoardEdge(bLockV.edge), distance: bLockV.dist, ref: { kind: "vertex", index: bLockVertex }, pieceId: targetPiece.id },
+          );
+        }
+        onsolverlines(lines);
       }
-      onsolverlines(lines);
     } else {
       onsolverlines([
         { edge: toBoardEdge(hEdge), distance: hDist, ref: hRef },
@@ -297,6 +313,54 @@
     } catch (e) {
       solveError = (e as Error).message;
     }
+  }
+
+  // Solve THIS piece alone against an already-placed anchor area. The anchor's
+  // resolved board vertices come from its current placement (a top-level area's
+  // `position` is its board centroid). The contact (corner coincides / edge
+  // flush) removes two DOF; the single lock line pins what remains. Only this
+  // piece moves — the anchor is left exactly where it is.
+  function solveAgainstFixedPlace(): void {
+    solveError = null;
+    if (!piece) return;
+    const target = targetPiece;
+    if (!target) {
+      solveError = "pick the area this piece attaches to";
+      return;
+    }
+    const fpA = footprintOf(piece);
+    const fpB = footprintOf(target);
+    if (!fpA || !fpB) {
+      solveError = "both pieces need a footprint to solve against";
+      return;
+    }
+    const anchorVerts = orientedOffsets(fpB as never, target.rotation_degrees, target.mirror).map((o) => ({
+      x: o.x + target.position.x,
+      y: o.y + target.position.y,
+    }));
+    try {
+      const res = solveCentroidAgainstFixed({
+        board: { width: BOARD.width, height: BOARD.height },
+        moving: {
+          footprint: fpA as never,
+          mirror: piece.mirror,
+          attach: { kind: attachKind, index: aAttach },
+          line: { edge: toBoardEdge(aFixedLine.edge), distance: aFixedLine.dist, vertex: aFixedLine.vertex },
+          rotationHint: piece.rotation_degrees,
+        },
+        fixed: { vertices: anchorVerts, attach: { kind: attachKind, index: bAttach } },
+      });
+      onorient(piece.id, { rotation_degrees: Math.round(res.rotation * 100) / 100 });
+      onmove(piece.id, { x: Math.round(res.x * 1e4) / 1e4, y: Math.round(res.y * 1e4) / 1e4 });
+    } catch (e) {
+      solveError = (e as Error).message;
+    }
+  }
+
+  /** Persist this piece's single lock line as a printed card measurement. */
+  function pinFixedKeystone(): void {
+    if (!piece) return;
+    onaddkeystone(piece.id, { edge: toBoardEdge(aFixedLine.edge), ref: { kind: "vertex", index: aFixedLine.vertex } });
   }
 
   /** Persist all four lock lines as printed card measurements, two per piece. */
@@ -554,40 +618,31 @@
         <button class="primary" onclick={solveTriangulatedPlace}>Triangulate &amp; place</button>
       {:else}
         <p class="hint">
-          For a cluster the card pins by single corners: lock one corner of this
-          piece with its two card lines, attach a corner or edge to the
-          neighbouring area, then lock that area's keystone corner the same way.
-          Solves position <em>and</em> rotation of <em>both</em> pieces — corners
-          pivot, edges slide. Rough both rotations in first; they pick the fit.
+          {#if anchorMode === "fixed"}
+            The area is already placed: lock it, attach a corner or edge of this
+            piece to it, and pin just <em>one</em> dimension line — the contact
+            removes the rest. Only this piece moves. Rough its rotation in first;
+            it picks the fit.
+          {:else}
+            For a cluster the card pins by single corners: lock one corner of this
+            piece with its two card lines, attach a corner or edge to the
+            neighbouring area, then lock that area's keystone corner the same way.
+            Solves position <em>and</em> rotation of <em>both</em> pieces — corners
+            pivot, edges slide. Rough both rotations in first; they pick the fit.
+          {/if}
         </p>
 
-        <span class="sub">This piece — locked corner</span>
-        <div class="features">
-          {#each Array.from({ length: vertexCount }, (_, vi) => vi) as vi (vi)}
-            <button
-              class="feat {aLockVertex === vi ? 'on' : ''}"
-              onpointerenter={() => onsolverhover({ ref: { kind: "vertex", index: vi } })}
-              onpointerleave={() => onsolverhover(null)}
-              onclick={() => (aLockVertex = vi)}>v{vi}</button
-            >
-          {/each}
-        </div>
-        <div class="line">
-          <select value={aLockH.edge} onchange={(e) => (aLockH.edge = (e.currentTarget as HTMLSelectElement).value as "left" | "right")}>
-            <option value="left">from left edge</option>
-            <option value="right">from right edge</option>
-          </select>
-          <input type="number" step="0.05" value={aLockH.dist} oninput={(e) => (aLockH.dist = num(e))} aria-label="this piece's lock distance from left/right edge" />″
-        </div>
-        <div class="line">
-          <select value={aLockV.edge} onchange={(e) => (aLockV.edge = (e.currentTarget as HTMLSelectElement).value as "top" | "bottom")}>
-            <option value="top">from top edge</option>
-            <option value="bottom">from bottom edge</option>
-          </select>
-          <input type="number" step="0.05" value={aLockV.dist} oninput={(e) => (aLockV.dist = num(e))} aria-label="this piece's lock distance from top/bottom edge" />″
+        <span class="sub">Attachment anchor</span>
+        <div class="mode">
+          <button class="feat {anchorMode === 'both' ? 'on' : ''}" onclick={() => (anchorMode = "both")}
+            >solve both from cards</button
+          >
+          <button class="feat {anchorMode === 'fixed' ? 'on' : ''}" onclick={() => (anchorMode = "fixed")}
+            >area already placed (lock it)</button
+          >
         </div>
 
-        <span class="sub">Attachment</span>
+        <span class="sub">Attachment kind</span>
         <div class="mode">
           <button class="feat {attachKind === 'vertex' ? 'on' : ''}" onclick={() => (attachKind = "vertex")}
             >corner ↔ corner</button
@@ -609,6 +664,55 @@
             {/each}
           </span>
         </div>
+
+        {#if anchorMode === "fixed"}
+          <span class="sub">This piece — lock line</span>
+          <div class="line">
+            <select value={aFixedLine.edge} onchange={(e) => (aFixedLine.edge = (e.currentTarget as HTMLSelectElement).value as CardEdge)}>
+              <option value="left">from left edge</option>
+              <option value="right">from right edge</option>
+              <option value="top">from top edge</option>
+              <option value="bottom">from bottom edge</option>
+            </select>
+            <input type="number" step="0.05" value={aFixedLine.dist} oninput={(e) => (aFixedLine.dist = num(e))} aria-label="this piece's lock line distance" />″ to
+            <span class="features inline">
+              {#each Array.from({ length: vertexCount }, (_, vi) => vi) as vi (vi)}
+                <button
+                  class="feat {aFixedLine.vertex === vi ? 'on' : ''}"
+                  onpointerenter={() => onsolverhover({ ref: { kind: "vertex", index: vi } })}
+                  onpointerleave={() => onsolverhover(null)}
+                  onclick={() => (aFixedLine.vertex = vi)}>v{vi}</button
+                >
+              {/each}
+            </span>
+          </div>
+        {:else}
+          <span class="sub">This piece — locked corner</span>
+          <div class="features">
+            {#each Array.from({ length: vertexCount }, (_, vi) => vi) as vi (vi)}
+              <button
+                class="feat {aLockVertex === vi ? 'on' : ''}"
+                onpointerenter={() => onsolverhover({ ref: { kind: "vertex", index: vi } })}
+                onpointerleave={() => onsolverhover(null)}
+                onclick={() => (aLockVertex = vi)}>v{vi}</button
+              >
+            {/each}
+          </div>
+          <div class="line">
+            <select value={aLockH.edge} onchange={(e) => (aLockH.edge = (e.currentTarget as HTMLSelectElement).value as "left" | "right")}>
+              <option value="left">from left edge</option>
+              <option value="right">from right edge</option>
+            </select>
+            <input type="number" step="0.05" value={aLockH.dist} oninput={(e) => (aLockH.dist = num(e))} aria-label="this piece's lock distance from left/right edge" />″
+          </div>
+          <div class="line">
+            <select value={aLockV.edge} onchange={(e) => (aLockV.edge = (e.currentTarget as HTMLSelectElement).value as "top" | "bottom")}>
+              <option value="top">from top edge</option>
+              <option value="bottom">from bottom edge</option>
+            </select>
+            <input type="number" step="0.05" value={aLockV.dist} oninput={(e) => (aLockV.dist = num(e))} aria-label="this piece's lock distance from top/bottom edge" />″
+          </div>
+        {/if}
 
         <span class="sub">Attached-to area</span>
         <label
@@ -634,40 +738,51 @@
               {/each}
             </span>
           </div>
-          <span class="sub">Its keystone anchor corner</span>
-          <div class="features">
-            {#each Array.from({ length: targetVertexCount }, (_, vi) => vi) as vi (vi)}
-              <button
-                class="feat {bLockVertex === vi ? 'on' : ''}"
-                onpointerenter={() => onsolverhover({ pieceId: targetPiece.id, ref: { kind: "vertex", index: vi } })}
-                onpointerleave={() => onsolverhover(null)}
-                onclick={() => (bLockVertex = vi)}>v{vi}</button
-              >
-            {/each}
-          </div>
-          <div class="line">
-            <select value={bLockH.edge} onchange={(e) => (bLockH.edge = (e.currentTarget as HTMLSelectElement).value as "left" | "right")}>
-              <option value="left">from left edge</option>
-              <option value="right">from right edge</option>
-            </select>
-            <input type="number" step="0.05" value={bLockH.dist} oninput={(e) => (bLockH.dist = num(e))} aria-label="target area's lock distance from left/right edge" />″
-          </div>
-          <div class="line">
-            <select value={bLockV.edge} onchange={(e) => (bLockV.edge = (e.currentTarget as HTMLSelectElement).value as "top" | "bottom")}>
-              <option value="top">from top edge</option>
-              <option value="bottom">from bottom edge</option>
-            </select>
-            <input type="number" step="0.05" value={bLockV.dist} oninput={(e) => (bLockV.dist = num(e))} aria-label="target area's lock distance from top/bottom edge" />″
-          </div>
+          {#if anchorMode === "both"}
+            <span class="sub">Its keystone anchor corner</span>
+            <div class="features">
+              {#each Array.from({ length: targetVertexCount }, (_, vi) => vi) as vi (vi)}
+                <button
+                  class="feat {bLockVertex === vi ? 'on' : ''}"
+                  onpointerenter={() => onsolverhover({ pieceId: targetPiece.id, ref: { kind: "vertex", index: vi } })}
+                  onpointerleave={() => onsolverhover(null)}
+                  onclick={() => (bLockVertex = vi)}>v{vi}</button
+                >
+              {/each}
+            </div>
+            <div class="line">
+              <select value={bLockH.edge} onchange={(e) => (bLockH.edge = (e.currentTarget as HTMLSelectElement).value as "left" | "right")}>
+                <option value="left">from left edge</option>
+                <option value="right">from right edge</option>
+              </select>
+              <input type="number" step="0.05" value={bLockH.dist} oninput={(e) => (bLockH.dist = num(e))} aria-label="target area's lock distance from left/right edge" />″
+            </div>
+            <div class="line">
+              <select value={bLockV.edge} onchange={(e) => (bLockV.edge = (e.currentTarget as HTMLSelectElement).value as "top" | "bottom")}>
+                <option value="top">from top edge</option>
+                <option value="bottom">from bottom edge</option>
+              </select>
+              <input type="number" step="0.05" value={bLockV.dist} oninput={(e) => (bLockV.dist = num(e))} aria-label="target area's lock distance from top/bottom edge" />″
+            </div>
+          {/if}
         {/if}
 
         <div class="snaps">
-          <button class="primary" onclick={solveAttachedPlace}>Attach &amp; place both</button>
-          <button
-            class="feat"
-            title="Persist all four lock lines as printed card measurements, two on each piece (distances always derived from geometry)"
-            onclick={pinAttachKeystones}>Pin keystones</button
-          >
+          {#if anchorMode === "fixed"}
+            <button class="primary" onclick={solveAgainstFixedPlace}>Attach &amp; place this piece</button>
+            <button
+              class="feat"
+              title="Persist this piece's single lock line as a printed card measurement. The contact (flush/touch) is a physical placement instruction, not a keystone."
+              onclick={pinFixedKeystone}>Pin keystone</button
+            >
+          {:else}
+            <button class="primary" onclick={solveAttachedPlace}>Attach &amp; place both</button>
+            <button
+              class="feat"
+              title="Persist all four lock lines as printed card measurements, two on each piece (distances always derived from geometry)"
+              onclick={pinAttachKeystones}>Pin keystones</button
+            >
+          {/if}
         </div>
       {/if}
       {#if solveError}<p class="error">{solveError}</p>{/if}

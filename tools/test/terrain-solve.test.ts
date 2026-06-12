@@ -10,6 +10,7 @@ import {
   solveCentroid,
   solveCentroidTriangulated,
   solveCentroidAttached,
+  solveCentroidAgainstFixed,
   type AttachLine,
   type BoardEdge,
   type FeatureRef,
@@ -410,5 +411,209 @@ describe("solveCentroidAttached (two-body lock + attach)", () => {
         },
       }),
     ).toThrow(/common line/);
+  });
+});
+
+const DEG = Math.PI / 180;
+/** Signed perpendicular distance of point X from the line through F0 with unit dir t̂. */
+const offLine = (tHat: Vec2, F0: Vec2, X: Vec2): number =>
+  tHat.x * (X.y - F0.y) - tHat.y * (X.x - F0.x);
+
+describe("solveCentroidAgainstFixed (one piece against an already-placed anchor)", () => {
+  /**
+   * Vertex-mode round-trip. Place the anchor at a known pose, then place the
+   * moving piece so its attach corner coincides with the anchor's attach
+   * corner. Derive the single lock line from where a chosen moving vertex
+   * actually sits, then assert the solver recovers the moving pose alone.
+   */
+  function vertexRoundTrip(opts: {
+    movFp: Footprint;
+    rotM: number;
+    mirM?: Mirror;
+    movAttach: number;
+    lineVertex: number;
+    lineEdge: BoardEdge;
+    hintM?: number;
+  }) {
+    const mirM = opts.mirM ?? "none";
+    const fixedVerts = poseVerts(RECT, 18, "none", { x: 40, y: 28 });
+    const fixedAttach = 2;
+    const P = fixedVerts[fixedAttach];
+    const offM = orientedOffsets(opts.movFp, opts.rotM, mirM);
+    const cM = { x: P.x - offM[opts.movAttach].x, y: P.y - offM[opts.movAttach].y };
+    const vertsM = poseVerts(opts.movFp, opts.rotM, mirM, cM);
+    const vj = vertsM[opts.lineVertex];
+    const distance =
+      opts.lineEdge === "left" ? vj.x
+      : opts.lineEdge === "right" ? BOARD.width - vj.x
+      : opts.lineEdge === "top" ? vj.y
+      : BOARD.height - vj.y;
+    const res = solveCentroidAgainstFixed({
+      board: BOARD,
+      moving: {
+        footprint: opts.movFp,
+        mirror: mirM,
+        attach: { kind: "vertex", index: opts.movAttach },
+        line: { edge: opts.lineEdge, distance, vertex: opts.lineVertex },
+        rotationHint: opts.hintM ?? opts.rotM,
+      },
+      fixed: { vertices: fixedVerts, attach: { kind: "vertex", index: fixedAttach } },
+    });
+    return { res, cM, P };
+  }
+
+  it("recovers a rotated piece whose corner pins to the anchor's corner", () => {
+    const { res, cM, P } = vertexRoundTrip({
+      movFp: TRAP, rotM: 312, movAttach: 1, lineVertex: 3, lineEdge: "left",
+    });
+    expect(close(res.x, cM.x) && close(res.y, cM.y) && closeAng(res.rotation, 312)).toBe(true);
+    // The attach corner really lands on the anchor point.
+    const v = poseVerts(TRAP, res.rotation, "none", { x: res.x, y: res.y })[1];
+    expect(close(v.x, P.x) && close(v.y, P.y)).toBe(true);
+  });
+
+  it("recovers a mirrored piece (vertex mode) using a top-edge lock line", () => {
+    const { res, cM } = vertexRoundTrip({
+      movFp: RECT, rotM: 64, mirM: "horizontal", movAttach: 3, lineVertex: 1, lineEdge: "top",
+    });
+    expect(close(res.x, cM.x) && close(res.y, cM.y) && closeAng(res.rotation, 64)).toBe(true);
+  });
+
+  it("the rotation hint picks between the two roots", () => {
+    // Same geometry, hint near the mirror-image root → a different rotation that
+    // still pins the attach corner to the anchor (a genuine alternative pose).
+    const truth = vertexRoundTrip({ movFp: RECT, rotM: 25, movAttach: 1, lineVertex: 3, lineEdge: "left" });
+    const flipped = vertexRoundTrip({
+      movFp: RECT, rotM: 25, movAttach: 1, lineVertex: 3, lineEdge: "left", hintM: -150,
+    });
+    expect(closeAng(flipped.res.rotation, truth.res.rotation)).toBe(false);
+    const v = poseVerts(RECT, flipped.res.rotation, "none", { x: flipped.res.x, y: flipped.res.y })[1];
+    expect(close(v.x, truth.P.x) && close(v.y, truth.P.y)).toBe(true);
+  });
+
+  /**
+   * Edge-mode round-trip. Place the anchor, take one of its edges as the contact
+   * line, then place the moving piece with its chosen edge flush on that line at
+   * some slide offset. Derive one lock line and assert the moving pose recovers.
+   */
+  function edgeRoundTrip(opts: {
+    rotF: number;
+    fixedEdge: number;
+    movEdge: number;
+    antiParallel: boolean;
+    slide: number;
+    lineVertex: number;
+    hintNudge?: number;
+  }) {
+    const fixedVerts = poseVerts(RECT, opts.rotF, "none", { x: 38, y: 24 });
+    const F0 = fixedVerts[opts.fixedEdge];
+    const F1 = fixedVerts[(opts.fixedEdge + 1) % fixedVerts.length];
+    const t = { x: F1.x - F0.x, y: F1.y - F0.y };
+    const tLen = Math.hypot(t.x, t.y);
+    const tHat = { x: t.x / tLen, y: t.y / tLen };
+    const psiDeg = (Math.atan2(t.y, t.x) / DEG);
+    const off0 = orientedOffsets(TRAP, 0, "none");
+    const u0 = {
+      x: off0[(opts.movEdge + 1) % off0.length].x - off0[opts.movEdge].x,
+      y: off0[(opts.movEdge + 1) % off0.length].y - off0[opts.movEdge].y,
+    };
+    const u0Deg = Math.atan2(u0.y, u0.x) / DEG;
+    const rotM = ((psiDeg - u0Deg + (opts.antiParallel ? 180 : 0)) % 360 + 360) % 360;
+    const offM = orientedOffsets(TRAP, rotM, "none");
+    // Slide the moving edge's start vertex along the line from F0.
+    const cM = {
+      x: F0.x + opts.slide * tHat.x - offM[opts.movEdge].x,
+      y: F0.y + opts.slide * tHat.y - offM[opts.movEdge].y,
+    };
+    const vertsM = poseVerts(TRAP, rotM, "none", cM);
+    const vj = vertsM[opts.lineVertex];
+    const distance = vj.x; // left-edge lock line; fixed edge is oblique, never x-parallel
+    const res = solveCentroidAgainstFixed({
+      board: BOARD,
+      moving: {
+        footprint: TRAP,
+        mirror: "none",
+        attach: { kind: "edge", index: opts.movEdge },
+        line: { edge: "left", distance, vertex: opts.lineVertex },
+        rotationHint: rotM + (opts.hintNudge ?? 0),
+      },
+      fixed: { vertices: fixedVerts, attach: { kind: "edge", index: opts.fixedEdge } },
+    });
+    return { res, cM, rotM, tHat, F0 };
+  }
+
+  it("recovers a piece whose edge lies flush on the anchor edge", () => {
+    const { res, cM, rotM, tHat, F0 } = edgeRoundTrip({
+      rotF: 23, fixedEdge: 0, movEdge: 2, antiParallel: true, slide: 4, lineVertex: 0,
+    });
+    expect(close(res.x, cM.x) && close(res.y, cM.y) && closeAng(res.rotation, rotM)).toBe(true);
+    // The moving attach edge's endpoints sit on the anchor edge line.
+    const vm = poseVerts(TRAP, res.rotation, "none", { x: res.x, y: res.y });
+    expect(Math.abs(offLine(tHat, F0, vm[2])) <= 1e-3).toBe(true);
+    expect(Math.abs(offLine(tHat, F0, vm[3])) <= 1e-3).toBe(true);
+  });
+
+  it("recovers edge-flush with the same-sense parallel and a rough hint", () => {
+    const { res, cM, rotM } = edgeRoundTrip({
+      rotF: 41, fixedEdge: 1, movEdge: 0, antiParallel: false, slide: 2, lineVertex: 2, hintNudge: 9,
+    });
+    expect(close(res.x, cM.x) && close(res.y, cM.y) && closeAng(res.rotation, rotM)).toBe(true);
+  });
+
+  const SQUARE_ANCHOR: Vec2[] = [
+    { x: 10, y: 10 }, { x: 14, y: 10 }, { x: 14, y: 14 }, { x: 10, y: 14 },
+  ];
+
+  it("rejects mixed attachment kinds", () => {
+    expect(() =>
+      solveCentroidAgainstFixed({
+        board: BOARD,
+        moving: { footprint: RECT, mirror: "none", attach: { kind: "vertex", index: 1 }, line: { edge: "left", distance: 10, vertex: 0 } },
+        fixed: { vertices: SQUARE_ANCHOR, attach: { kind: "edge", index: 0 } },
+      }),
+    ).toThrow(/kinds must match/);
+  });
+
+  it("rejects a lock line that measures to the attach corner (vertex mode)", () => {
+    expect(() =>
+      solveCentroidAgainstFixed({
+        board: BOARD,
+        moving: { footprint: RECT, mirror: "none", attach: { kind: "vertex", index: 1 }, line: { edge: "left", distance: 10, vertex: 1 } },
+        fixed: { vertices: SQUARE_ANCHOR, attach: { kind: "vertex", index: 0 } },
+      }),
+    ).toThrow(/different vertex/);
+  });
+
+  it("rejects a measurement the pinned corner cannot reach (vertex mode)", () => {
+    // RECT v0↔v1 are 11.5″ apart; demand a 20″ x-gap from the anchor point → infeasible.
+    expect(() =>
+      solveCentroidAgainstFixed({
+        board: BOARD,
+        moving: { footprint: RECT, mirror: "none", attach: { kind: "vertex", index: 1 }, line: { edge: "left", distance: 30, vertex: 0 } },
+        fixed: { vertices: SQUARE_ANCHOR, attach: { kind: "vertex", index: 0 } }, // P.x = 10
+      }),
+    ).toThrow(/cannot reach/);
+  });
+
+  it("rejects a lock line parallel to the contact edge (edge mode singular)", () => {
+    // Anchor edge 0→1 is horizontal; flush already pins y, so a top/bottom line
+    // (also y) is redundant and leaves x — the slide — undetermined.
+    expect(() =>
+      solveCentroidAgainstFixed({
+        board: BOARD,
+        moving: { footprint: RECT, mirror: "none", attach: { kind: "edge", index: 0 }, line: { edge: "top", distance: 10, vertex: 2 } },
+        fixed: { vertices: SQUARE_ANCHOR, attach: { kind: "edge", index: 0 } },
+      }),
+    ).toThrow(/parallel to the contact edge/);
+  });
+
+  it("rejects an out-of-range fixed attach index", () => {
+    expect(() =>
+      solveCentroidAgainstFixed({
+        board: BOARD,
+        moving: { footprint: RECT, mirror: "none", attach: { kind: "vertex", index: 1 }, line: { edge: "left", distance: 10, vertex: 0 } },
+        fixed: { vertices: SQUARE_ANCHOR, attach: { kind: "vertex", index: 9 } },
+      }),
+    ).toThrow(/out of range/);
   });
 });

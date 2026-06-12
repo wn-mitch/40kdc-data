@@ -21,6 +21,7 @@ import {
   solveCentroid,
   solveCentroidTriangulated,
   solveCentroidAttached,
+  solveCentroidAgainstFixed,
   footprintVertices,
   orientedOffsets,
   polygonCentroid,
@@ -31,6 +32,7 @@ import type {
   ResolvedVec2,
   SolveInput,
   AttachInput,
+  SolveAgainstFixedInput,
   TerrainTemplate,
   TerrainLayout,
 } from "@alpaca-software/40kdc-data";
@@ -1350,8 +1352,9 @@ export {
   solveCentroid,
   solveCentroidTriangulated,
   solveCentroidAttached,
+  solveCentroidAgainstFixed,
   footprintVertices,
   orientedOffsets,
   polygonCentroid,
 };
-export type { SolveInput, AttachInput };
+export type { SolveInput, AttachInput, SolveAgainstFixedInput };
