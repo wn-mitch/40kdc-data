@@ -1,6 +1,7 @@
 <script lang="ts">
   import Modal from "./Modal.svelte";
   import { connectPatreon, entitlement, redeemKey } from "./entitlement.svelte";
+  import { PATREON_URL } from "./links.js";
 
   /**
    * The "become entitled" modal: Connect Patreon (primary) or paste a
@@ -36,6 +37,11 @@
       {feature.charAt(0).toUpperCase() + feature.slice(1)} is a patron feature — connect your
       Patreon to unlock it. Opening links others share with you is always free.
     </p>
+    <p class="cta">
+      Not a patron yet?
+      <a href={PATREON_URL} target="_blank" rel="noreferrer noopener">It's $1/month</a>
+      — three years of support costs less than one character model.
+    </p>
     <button type="button" class="primary" onclick={connectPatreon}>Connect Patreon</button>
     <div class="divider"><span>or</span></div>
     <label for="access-key">Have an access key?</label>
@@ -52,6 +58,10 @@
         {redeeming ? "…" : "Redeem"}
       </button>
     </div>
+    <p class="fineprint">
+      Access keys are handed out personally and are yours alone — everyone using the same key
+      shares one cloud space, so please don't redistribute them.
+    </p>
     {#if entitlement.error}
       <p class="error">{entitlement.error}</p>
     {/if}
@@ -70,6 +80,17 @@
     margin: 0;
     color: #a8a8b2;
     font-size: 0.9rem;
+  }
+  .cta {
+    font-size: 0.85rem;
+  }
+  .cta a {
+    color: #14b8a6;
+    font-weight: 600;
+  }
+  .fineprint {
+    font-size: 0.75rem;
+    color: #66666f;
   }
   .primary {
     align-self: flex-start;

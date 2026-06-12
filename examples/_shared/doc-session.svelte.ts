@@ -52,6 +52,8 @@ export interface DocSessionState {
   /** Cloud doc name, from the welcome (or the snapshot fallback). */
   docName: string | null;
   role: "editor" | "viewer" | null;
+  /** Our own participant id, for "(you)" in rosters. */
+  participantId: string | null;
   participants: Participant[];
   /** Share links for inviting others (both set for the creator; joiners get
    *  the one their own token can mint). */
@@ -68,6 +70,7 @@ export const docSession = $state<DocSessionState>({
   docId: null,
   docName: null,
   role: null,
+  participantId: null,
   participants: [],
   editorLink: null,
   viewerLink: null,
@@ -298,6 +301,7 @@ export function leaveDocSession(): void {
   docSession.docId = null;
   docSession.docName = null;
   docSession.role = null;
+  docSession.participantId = null;
   docSession.participants = [];
   docSession.editorLink = null;
   docSession.viewerLink = null;
@@ -354,6 +358,7 @@ function connect(t: Target, token: string, nickname: string): void {
       welcomed = true;
       docSession.status = "connected";
       docSession.role = msg.role;
+      docSession.participantId = msg.participantId;
       docSession.participants = msg.participants;
       docSession.docName = msg.name ?? docSession.docName;
       docSession.error = null;

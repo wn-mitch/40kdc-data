@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { entitlement, storedEntitlement } from "./entitlement.svelte";
+  import { disconnect, entitlement, storedEntitlement } from "./entitlement.svelte";
   import {
     createDoc,
     deleteDoc,
@@ -14,9 +14,11 @@
 
   /**
    * Generic cloud-documents pane (patron feature): list/open/delete the
-   * owner's docs of one kind, upload local items, and mint `?s=CODE`
-   * shortlinks. Kind-agnostic — the host supplies the local items and decides
-   * what "open" means. Cross-device conflicts surface via the worker's 409
+   * owner's docs of one kind, upload local items, and share them — live doc
+   * links via the host's ShareLinksModal (`onShare`), or the legacy
+   * mint-a-snapshot-shortlink fallback when the host hasn't wired one yet.
+   * Kind-agnostic — the host supplies the local items and decides what
+   * "open" means. Cross-device conflicts surface via the worker's 409
    * (ifUpdatedAt) as an explicit prompt, never a silent clobber.
    */
   interface LocalItem {
@@ -29,12 +31,14 @@
     localItems: LocalItem[];
     /** Open a cloud doc into the app. */
     onOpen: (name: string, payload: unknown) => void;
+    /** Open the host's share dialog (live + snapshot links) for a doc. */
+    onShare?: (doc: DocMeta) => void;
     /** Surface a transient message (host owns the toast). */
     onFlash: (msg: string) => void;
     /** Ask the host to show the entitlement gate. */
     onNeedEntitlement: () => void;
   }
-  let { kind, localItems, onOpen, onFlash, onNeedEntitlement }: Props = $props();
+  let { kind, localItems, onOpen, onShare, onFlash, onNeedEntitlement }: Props = $props();
 
   let docs = $state<DocMeta[]>([]);
   let loaded = $state(false);
@@ -88,10 +92,10 @@
           );
           if (overwrite) {
             const forced = await putDoc(token, existing.id, { payload: item.payload });
-            onFlash(forced.ok ? `Overwrote “${item.name}” in the cloud.` : "Cloud save failed.");
+            onFlash(forced.ok ? `Overwrote “${item.name}” in the cloud.` : uploadError(forced));
           }
         } else {
-          onFlash(res.ok ? `Updated “${item.name}” in the cloud.` : `Cloud save failed.`);
+          onFlash(res.ok ? `Updated “${item.name}” in the cloud.` : uploadError(res));
         }
       } else {
         const res = await createDoc(token, { kind, name: item.name, payload: item.payload });
@@ -107,6 +111,13 @@
     } finally {
       busy = false;
     }
+  }
+
+  /** Honest copy for a refused snapshot upload — doc_live gets steering. */
+  function uploadError(res: { ok: boolean; error?: string }): string {
+    return !res.ok && res.error === "doc_live"
+      ? "This save is being edited live right now — join the live session to change it."
+      : "Cloud save failed.";
   }
 
   async function open(doc: DocMeta): Promise<void> {
@@ -128,6 +139,12 @@
   async function share(doc: DocMeta): Promise<void> {
     const token = requireToken();
     if (!token) return;
+    // The host's dialog (live links + copyable URLs) is the real share UX.
+    if (onShare) {
+      onShare(doc);
+      return;
+    }
+    // Legacy fallback: mint a fresh snapshot shortlink straight to clipboard.
     const full = await getDoc(token, doc.id);
     if (!full.ok) {
       onFlash(`Couldn't read “${doc.name}” (${full.error}).`);
@@ -192,8 +209,13 @@
             <button type="button" class="name" onclick={() => open(doc)} title="Open">
               {doc.name}
             </button>
+            {#if doc.shared}
+              <span class="badge" title="This save has live share links.">shared</span>
+            {/if}
             <span class="when">{new Date(doc.updated_at).toLocaleDateString()}</span>
-            <button type="button" class="action" onclick={() => share(doc)}>Link</button>
+            <button type="button" class="action" onclick={() => share(doc)}>
+              {onShare ? "Share" : "Link"}
+            </button>
             <button type="button" class="action danger" onclick={() => remove(doc)} aria-label="delete">
               ×
             </button>
@@ -201,6 +223,15 @@
         {/each}
       </ul>
     {/if}
+
+    <footer>
+      <span class="identity" title={entitlement.sub ?? undefined}>
+        {entitlement.shared && entitlement.sub
+          ? `key: ${entitlement.sub.slice("key:".length)}`
+          : "Patreon"}
+      </span>
+      <button type="button" class="linkish" onclick={disconnect}>Sign out</button>
+    </footer>
   {/if}
 </section>
 
@@ -323,6 +354,38 @@
   .when {
     color: #66666f;
     font-size: 0.7rem;
+  }
+  .badge {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #2dd4bf;
+    border: 1px solid #1f3d3a;
+    border-radius: 999px;
+    padding: 0 0.4rem;
+  }
+  footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #232327;
+  }
+  .identity {
+    color: #66666f;
+    font-size: 0.7rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  footer .linkish {
+    font-size: 0.75rem;
+    color: #a8a8b2;
+  }
+  footer .linkish:hover {
+    color: #f87171;
   }
   .action {
     background: none;
