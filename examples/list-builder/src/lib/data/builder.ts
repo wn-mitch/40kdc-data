@@ -81,6 +81,13 @@ export interface BuilderState {
 	/** Selected detachments (11e lists may field several under a DP cap). */
 	detachmentIds: string[];
 	battleSize: BattleSize;
+	/**
+	 * Event-chosen points ceiling that replaces the battle-size limit — set for
+	 * each army of a Doubles team (the Doubles Companion fixes no level; events
+	 * commonly play 500/750/1000 per player). Rules keyed by battle size (DP
+	 * caps, ally points caps) band through {@link effectiveBattleSize}.
+	 */
+	pointsLimitOverride?: number | null;
 	disposition: string | null;
 	units: BuilderUnit[];
 }
@@ -138,9 +145,9 @@ export function totalDetachmentPoints(state: BuilderState): number {
 	return state.detachmentIds.reduce((sum, id) => sum + detachmentPointCost(id), 0);
 }
 
-/** The 11e detachment-point budget for the draft's battle size. */
+/** The 11e detachment-point budget for the draft's effective battle size. */
 export function detachmentPointCap(state: BuilderState): number {
-	return DETACHMENT_POINT_CAPS[state.battleSize];
+	return DETACHMENT_POINT_CAPS[effectiveBattleSize(state)];
 }
 
 /** A detachment-tag carried by two or more selected detachments. */
@@ -469,7 +476,18 @@ export function totalPoints(state: BuilderState): number {
 }
 
 export function pointsLimit(state: BuilderState): number {
-	return BATTLE_SIZE_LIMITS[state.battleSize];
+	return state.pointsLimitOverride ?? BATTLE_SIZE_LIMITS[state.battleSize];
+}
+
+/**
+ * The battle size whose size-keyed restrictions apply. With a points override
+ * (a Doubles army), "rules that have restrictions based on the size of the
+ * army are based on the points limit of that individual player's army" — so
+ * the override picks its band: ≤1000 plays under Incursion-band caps.
+ */
+export function effectiveBattleSize(state: BuilderState): BattleSize {
+	if (state.pointsLimitOverride == null) return state.battleSize;
+	return state.pointsLimitOverride <= BATTLE_SIZE_LIMITS.incursion ? 'incursion' : 'strike-force';
 }
 
 // ── Loadout ───────────────────────────────────────────────────────────────────
@@ -710,6 +728,8 @@ export function canBeWarlord(bu: BuilderUnit, detachmentIds: string[] = []): boo
 export interface BuilderViolation {
 	unitKey: string | null;
 	message: string;
+	/** `info` renders neutrally (team-coordination notes); default is `warn`. */
+	severity?: 'warn' | 'info';
 }
 
 /**
@@ -724,7 +744,7 @@ function allyViolations(state: BuilderState): BuilderViolation[] {
 		const allyUnits = state.units.filter((u) => u.allyRuleId === rule.id);
 		if (allyUnits.length === 0) continue;
 
-		const cap = allyPointsLimit(rule, state.battleSize);
+		const cap = allyPointsLimit(rule, effectiveBattleSize(state));
 		if (cap != null) {
 			const spent = allyUnits.reduce((s, u) => s + unitPoints(u), 0);
 			if (spent > cap) {
@@ -1022,6 +1042,7 @@ export function rosterTextToBuilderState(
 	text: string,
 	name: string,
 	disposition: string | null,
+	pointsLimitOverride: number | null = null,
 ): BuilderState | null {
 	const result = tryImportRoster(text);
 	if (!result.ok) return null;
@@ -1063,6 +1084,7 @@ export function rosterTextToBuilderState(
 		factionId: roster.faction_id,
 		detachmentIds: roster.detachments.flatMap((d) => (d.ref.id ? [d.ref.id] : [])),
 		battleSize: battleSizeFromRoster,
+		...(pointsLimitOverride != null ? { pointsLimitOverride } : {}),
 		disposition,
 		units,
 	};
