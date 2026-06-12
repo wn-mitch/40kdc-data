@@ -141,6 +141,19 @@ jobs:
       - run: npm test --workspace @40kdc/salvo --workspace @40kdc/mission-matrix
       - run: npm run build --workspace @40kdc/salvo --workspace @40kdc/mission-matrix --workspace @40kdc/layout-editor
 
+  sync-worker:
+    # The cloud-sync worker (workers/sync): typecheck + vitest workers pool
+    # (docs CRUD, shortlinks, Ed25519 entitlement gate against D1/miniflare).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm run typecheck --workspace @alpaca-software/40kdc-sync-worker
+      - run: npm test --workspace @alpaca-software/40kdc-sync-worker
+
   publish-crate:
     # Auto-publish wh40kdc to crates.io once main is green. Self-gates on the
     # crate version: if this version is already on the registry the publish is

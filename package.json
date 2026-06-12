@@ -3,7 +3,8 @@
   "private": true,
   "workspaces": [
     "tools",
-    "examples/*"
+    "examples/*",
+    "workers/*"
   ],
   "devDependencies": {
     "wrangler": "^4.97.0"

@@ -75,3 +75,16 @@ jobs:
               echo "::endgroup::"
             fi
           done
+
+      # The sync worker deploys only once its D1 database id is real (the
+      # placeholder is all-zeros until the operator runs `wrangler d1 create
+      # 40kdc_sync` and commits the id). Token additionally needs D1:Edit.
+      - name: Deploy sync worker (docs + shortlinks)
+        run: |
+          set -euo pipefail
+          if grep -q "00000000-0000-0000-0000-000000000000" workers/sync/wrangler.jsonc; then
+            echo "::notice::workers/sync: D1 database_id still placeholder — skipping deploy"
+            exit 0
+          fi
+          npx wrangler d1 migrations apply 40kdc_sync --remote --config workers/sync/wrangler.jsonc
+          npx wrangler deploy --config workers/sync/wrangler.jsonc

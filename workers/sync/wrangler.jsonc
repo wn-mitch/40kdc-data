@@ -1,0 +1,30 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "40kdc-sync",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-09-01",
+  // Required by @cloudflare/vitest-pool-workers (and harmless in production).
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+  "routes": [{ "pattern": "sync.alpacasoft.dev", "custom_domain": true }],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "40kdc_sync",
+      // Filled after `wrangler d1 create 40kdc_sync` (CI applies migrations).
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // This worker holds NO secrets: the only auth material is the Ed25519
+  // PUBLIC key below. Patron-gated routes 501 until it is set.
+  "vars": {
+    // Raw Ed25519 public key(s) from keys.alpacasoft.dev (base64url, comma-
+    // separated for rotation). Fill from `GET keys.alpacasoft.dev/auth/public-key`.
+    "ENTITLEMENT_PUBLIC_KEYS": "",
+    // Cost/abuse levers.
+    "MAX_DOCS_PER_OWNER": "100",
+    "MAX_LINKS_PER_OWNER": "200",
+    "MAX_PAYLOAD_BYTES": "262144"
+  }
+}
