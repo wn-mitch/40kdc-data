@@ -117,7 +117,10 @@ all_rows = []  # (label, totals_list)
 # ── Forgefiend ──────────────────────────────────────────────────────────────
 FF_LOADOUTS = [
     ("FF-A 2×Hades",           [(we_weapons["hades-autocannon"], 2)]),
-    ("FF-B 1×Ecto+2×Hades",    [(we_weapons["ectoplasma-cannon"], 1), (we_weapons["hades-autocannon"], 2)]),
+    ("FF-B 1×Ecto+2×Hades",    [
+        (we_weapons["ectoplasma-cannon"], 1),
+        (we_weapons["hades-autocannon"], 2),
+    ]),
     ("FF-C 3×Ecto",            [(we_weapons["ectoplasma-cannon"], 3)]),
 ]
 FF_SCENARIOS = [
@@ -155,10 +158,24 @@ for loadout_label, weapons in WDB_LOADOUTS:
         all_rows.append((f"Brigand 140pts — {loadout_label} — {sc_label}", tots))
 
 # ── WE Defiler (all 36 permutations) ─────────────────────────────────────────
-SLOT_A = [("Hades-BC", we_weapons["hades-battle-cannon"]),    ("Ecto-D",  we_weapons["ectoplasma-destructor"])]
-SLOT_B = [("Excru",    we_weapons["excruciator-cannon"]),     ("Magma",   we_weapons["magma-cutters"])]
-SLOT_C = [("Flamer",   we_weapons["heavy-baleflamer"]),       ("Las",     we_weapons["hades-lascannon"]),        ("Reaper", we_weapons["heavy-reaper-autocannon"])]
-SLOT_D = [("Missile",  we_weapons["heavy-missile-launcher"]), ("Las",     we_weapons["hades-lascannon"]),        ("Reaper", we_weapons["heavy-reaper-autocannon"])]
+SLOT_A = [
+    ("Hades-BC", we_weapons["hades-battle-cannon"]),
+    ("Ecto-D", we_weapons["ectoplasma-destructor"]),
+]
+SLOT_B = [
+    ("Excru", we_weapons["excruciator-cannon"]),
+    ("Magma", we_weapons["magma-cutters"]),
+]
+SLOT_C = [
+    ("Flamer", we_weapons["heavy-baleflamer"]),
+    ("Las", we_weapons["hades-lascannon"]),
+    ("Reaper", we_weapons["heavy-reaper-autocannon"]),
+]
+SLOT_D = [
+    ("Missile", we_weapons["heavy-missile-launcher"]),
+    ("Las", we_weapons["hades-lascannon"]),
+    ("Reaper", we_weapons["heavy-reaper-autocannon"]),
+]
 
 for (al, aw), (bl, bw), (cl, cw), (dl, dw) in itertools.product(SLOT_A, SLOT_B, SLOT_C, SLOT_D):
     _, tots = row_damage([(aw, 1), (bw, 1), (cw, 1), (dw, 1)], [COVER], 30)
@@ -171,8 +188,14 @@ all_rows.sort(key=lambda r: r[1][meq_i], reverse=True)
 out = []
 out.append("# WE Forgefiend vs War Dog Brigand vs WE Defiler — Damage Comparison")
 out.append("")
-out.append("> All targets **in cover** (11th ed: −1 to hit). Damage = wounds after FNP. Sorted by MEQ.")
-out.append("> Points provisional where noted. FO reroll at dist <18\". Defiler slots: A=main cannon B=secondary C=baleflamer-slot D=missile-slot.")
+out.append(
+    "> All targets **in cover** (11th ed: −1 to hit). Damage = wounds after FNP. "
+    "Sorted by MEQ."
+)
+out.append(
+    "> Points provisional where noted. FO reroll at dist <18\". "
+    "Defiler slots: A=main cannon B=secondary C=baleflamer-slot D=missile-slot."
+)
 out.append("")
 out.append("Targets: GEQ T3/5+  ·  MEQ T4/3+  ·  TEQ T5/2+/4++  ·  Rhino T9/3+  ·  T10V T10/3+")
 out.append("")

@@ -15,7 +15,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from wh40kdc.translate.condition import dekebab, describe_condition, describe_timing
+from wh40kdc.translate.condition import Condition, dekebab, describe_condition, describe_timing
 
 Effect = dict[str, Any]
 Ctx = dict[str, Any]
@@ -221,7 +221,7 @@ def _duration_clauses(duration: str | None) -> tuple[str, str]:
     return ("", "")
 
 
-def _condition_lead_in(c: Condition) -> str:  # noqa: F821 (Condition is dict alias)
+def _condition_lead_in(c: Condition) -> str:
     operands = c.get("operands")
     if c.get("operator") == "and" and operands:
         return ", ".join(_condition_lead_in(o) for o in operands)
@@ -292,14 +292,25 @@ def _condition_lead_in(c: Condition) -> str:  # noqa: F821 (Condition is dict al
 
 
 def _describe_attack_restriction(m: dict[str, Any], subj: str) -> str:
-    """Per-slug GW-prose for ``attack-restriction`` (reads ``restriction`` or ``restriction_type``)."""
-    if m.get("restriction") is None and m.get("restriction_type") is None and m.get("attack_type") is not None:
+    """Per-slug GW-prose for ``attack-restriction`` (reads ``restriction`` or
+    ``restriction_type``)."""
+    if (
+        m.get("restriction") is None
+        and m.get("restriction_type") is None
+        and m.get("attack_type") is not None
+    ):
         return f"{subj} cannot {_jstr(m.get('attack_type'))}"
-    slug = _jstr(m.get("restriction") if m.get("restriction") is not None else m.get("restriction_type"))
+    raw = m.get("restriction")
+    if raw is None:
+        raw = m.get("restriction_type")
+    slug = _jstr(raw)
     rng = _jstr(m.get("range")) if m.get("range") is not None else None
     if slug == "worsen-incoming-ap":
         amount = _jstr(m.get("value")) if m.get("value") is not None else "1"
-        return f"each time an attack targets {subj}, worsen the Armour Penetration of that attack by {amount}"
+        return (
+            f"each time an attack targets {subj}, "
+            f"worsen the Armour Penetration of that attack by {amount}"
+        )
     if slug == "cannot-be-targeted-unless-closest-or-within-12":
         return f'{subj} can only be targeted if it is the closest eligible target or within 12"'
     if slug == "targeting-range-limit":
@@ -330,26 +341,36 @@ def describe_effect_inline(e: Effect, ctx: Ctx | None = None) -> str:
         if m.get("stat") is None:
             return f"modify {_possessive(subj)} characteristics{scope}"
         if m.get("operation") == "set":
-            return f"modify {_possessive(subj)} {_stat_name(m['stat'])} characteristic to {_jstr(m.get('value'))}{scope}"
+            stat = _stat_name(m["stat"])
+            set_val = _jstr(m.get("value"))
+            return f"modify {_possessive(subj)} {stat} characteristic to {set_val}{scope}"
         val = m.get("value")
         verb = "subtract" if m.get("operation") in ("subtract", "worsen") else "add"
-        try:
-            n = float(val)
-            if n < 0:
-                verb = "subtract" if verb == "add" else "add"
-                val = int(abs(n)) if float(abs(n)).is_integer() else abs(n)
-        except (TypeError, ValueError):
-            pass
+        # `val is not None` guard replaces relying on float(None) raising
+        # TypeError — same outcome (verb/val untouched), but typed.
+        if val is not None:
+            try:
+                n = float(val)
+                if n < 0:
+                    verb = "subtract" if verb == "add" else "add"
+                    val = int(abs(n)) if float(abs(n)).is_integer() else abs(n)
+            except (TypeError, ValueError):
+                pass
         prep = "to" if verb == "add" else "from"
-        return f"{verb} {_jstr(val)} {prep} {_possessive(subj)} {_stat_name(m['stat'])} characteristic{scope}"
+        stat = _stat_name(m["stat"])
+        return f"{verb} {_jstr(val)} {prep} {_possessive(subj)} {stat} characteristic{scope}"
     if etype == "roll-modifier":
         ctx_note = f" ({_jstr(m['context'])})" if m.get("context") else ""
+        roll = _roll_name(m.get("roll"))
         if m.get("critical_on") is not None:
             crit = "Critical Wounds" if m.get("roll") == "wound" else "Critical Hits"
-            return f"{subj} {_v(subj, 'scores')} {crit} on {_roll_name(m.get('roll'))} rolls of {_jstr(m['critical_on'])}+"
+            crit_on = _jstr(m["critical_on"])
+            return f"{subj} {_v(subj, 'scores')} {crit} on {roll} rolls of {crit_on}+"
         if m.get("value") is None:
-            return f"{dekebab(_jstr(m.get('operation')))} {_possessive(subj)} {_roll_name(m.get('roll'))} rolls{ctx_note}"
-        return f"{subj} {_v(subj, 'gets')} {_signed(m.get('operation'), m['value'])} to {_roll_name(m.get('roll'))} rolls{ctx_note}"
+            op = dekebab(_jstr(m.get("operation")))
+            return f"{op} {_possessive(subj)} {roll} rolls{ctx_note}"
+        sgn = _signed(m.get("operation"), m["value"])
+        return f"{subj} {_v(subj, 'gets')} {sgn} to {roll} rolls{ctx_note}"
     if etype == "re-roll":
         noun = _roll_name(m.get("roll"))
         which = f"a {noun} roll of 1" if m.get("subset") == "ones" else f"the {noun} roll"
@@ -376,7 +397,8 @@ def describe_effect_inline(e: Effect, ctx: Ctx | None = None) -> str:
         else:
             a = None
         if a is None and m.get("trigger") is not None:
-            return f"when this model is destroyed, {subj_mw} {verb} mortal wounds ({_title_case(_jstr(m.get('trigger')))})"
+            trig = _title_case(_jstr(m.get("trigger")))
+            return f"when this model is destroyed, {subj_mw} {verb} mortal wounds ({trig})"
         amt = a if a is not None else "?"
         noun = "mortal wound" if amt == "1" else "mortal wounds"
         return f"{subj_mw} {verb} {amt} {noun}"
@@ -440,7 +462,8 @@ def describe_effect_inline(e: Effect, ctx: Ctx | None = None) -> str:
         count = _dice_case(m.get("count")) if m.get("count") is not None else "1"
         noun = "destroyed model" if count == "1" else "destroyed models"
         wounds = m.get("wounds_remaining")
-        return f"return {count} {noun} to {subj} with {_jstr(wounds if wounds is not None else 'full')} wounds"
+        w = _jstr(wounds if wounds is not None else "full")
+        return f"return {count} {noun} to {subj} with {w} wounds"
     if etype == "model-destruction":
         count = _dice_case(m.get("count")) if m.get("count") is not None else "1"
         noun = "model" if count == "1" else "models"
@@ -470,7 +493,8 @@ def describe_effect_inline(e: Effect, ctx: Ctx | None = None) -> str:
         if test is not None and m.get("value") is not None:
             verb = "add" if m.get("operation") == "add" else "subtract"
             prep = "to" if m.get("operation") == "add" else "from"
-            return f"{verb} {_jstr(m['value'])} {prep} the {_test_name(m.get('test'))} test of {subj}"
+            tn = _test_name(m.get("test"))
+            return f"{verb} {_jstr(m['value'])} {prep} the {tn} test of {subj}"
         if m.get("operation") is not None and m.get("value") is not None:
             positive = m.get("operation") in ("add", "improve")
             verb = "add" if positive else "subtract"
@@ -484,31 +508,48 @@ def describe_effect_inline(e: Effect, ctx: Ctx | None = None) -> str:
     if etype == "fight-on-death":
         if subj == "this model":
             return "each time this model is destroyed, it can fight before being removed from play"
-        return f"each time a model in {subj} is destroyed, it can fight before being removed from play"
+        return (
+            f"each time a model in {subj} is destroyed, "
+            "it can fight before being removed from play"
+        )
     if etype == "shoot-on-death":
         if subj == "this model":
             return "each time this model is destroyed, it can shoot before being removed from play"
-        return f"each time a model in {subj} is destroyed, it can shoot before being removed from play"
+        return (
+            f"each time a model in {subj} is destroyed, "
+            "it can shoot before being removed from play"
+        )
     if etype == "deep-strike":
         return f"{subj} {_v(subj, 'has')} the Deep Strike ability"
     if etype == "fallback-and-act":
-        return f"{subj} {_v(subj, 'is')} eligible to shoot and declare a charge in a turn in which it Fell Back"
+        return (
+            f"{subj} {_v(subj, 'is')} eligible to shoot and declare a charge "
+            "in a turn in which it Fell Back"
+        )
     if etype == "engagement-passthrough":
         return f"{subj} can move through enemy models"
     if etype == "attack-restriction":
         return _describe_attack_restriction(m, subj)
     if etype == "objective-control-modifier":
         if m.get("sticky"):
-            return f"{subj} {_v(subj, 'retains')} control of objective markers even after no models remain in range, until the enemy retakes them (sticky objectives)"
+            return (
+                f"{subj} {_v(subj, 'retains')} control of objective markers "
+                "even after no models remain in range, "
+                "until the enemy retakes them (sticky objectives)"
+            )
         if m.get("operation") == "halve":
             return f"halve the Objective Control characteristic of {subj}"
         if m.get("operation") is not None:
-            return f"{subj} {_v(subj, 'gets')} {_signed(m['operation'], m.get('value'))} to {_pronoun(subj)} Objective Control characteristic"
+            sgn = _signed(m["operation"], m.get("value"))
+            pron = _pronoun(subj)
+            return f"{subj} {_v(subj, 'gets')} {sgn} to {pron} Objective Control characteristic"
         return f"modify {_possessive(subj)} Objective Control characteristic"
     if etype == "bs-modifier":
-        return f"{subj} {_v(subj, 'gets')} {_signed(m.get('operation'), m.get('value'))} to Ballistic Skill"
+        sgn = _signed(m.get("operation"), m.get("value"))
+        return f"{subj} {_v(subj, 'gets')} {sgn} to Ballistic Skill"
     if etype == "charge-roll-modifier":
-        return f"{subj} {_v(subj, 'gets')} {_signed(m.get('operation'), m.get('value'))} to Charge rolls"
+        sgn = _signed(m.get("operation"), m.get("value"))
+        return f"{subj} {_v(subj, 'gets')} {sgn} to Charge rolls"
     if etype == "terrain-area-tag":
         return f"the terrain area is marked as {dekebab(_jstr(m.get('tag')))}"
     if etype == "objective-tag":
@@ -518,7 +559,8 @@ def describe_effect_inline(e: Effect, ctx: Ctx | None = None) -> str:
 
     # Container types — inline forms.
     if etype == "conditional":
-        return f"{_condition_lead_in(e.get('condition') or {})}, {describe_effect_inline(e.get('effect') or {}, ctx)}"
+        lead = _condition_lead_in(e.get("condition") or {})
+        return f"{lead}, {describe_effect_inline(e.get('effect') or {}, ctx)}"
     if etype == "sequence":
         return "; ".join(describe_effect_inline(s, ctx) for s in e.get("steps") or [])
     if etype == "choice":
@@ -527,8 +569,10 @@ def describe_effect_inline(e: Effect, ctx: Ctx | None = None) -> str:
         return f"select one of the following{label}: {options}"
     if etype == "dice-gated":
         comp = _format_comparison(e.get("comparison") or "gte", e.get("threshold"))
-        success = describe_effect_inline(e["on_success"], ctx) if e.get("on_success") else "nothing happens"
-        fail = f"; otherwise, {describe_effect_inline(e['on_fail'], ctx)}" if e.get("on_fail") else ""
+        on_success = e.get("on_success")
+        success = describe_effect_inline(on_success, ctx) if on_success else "nothing happens"
+        on_fail = e.get("on_fail")
+        fail = f"; otherwise, {describe_effect_inline(on_fail, ctx)}" if on_fail else ""
         return f"roll one {_dice_case(e.get('dice'))}: on {comp}, {success}{fail}"
     if etype == "dice-pool-allocation":
         pool = e.get("pool")
@@ -557,7 +601,8 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
                 f"{indent}{_capitalize(_condition_lead_in(e.get('condition') or {}))}:\n"
                 + describe_effect(inner, depth + 1, ctx)
             )
-        return f"{indent}{arrow}{_capitalize(_condition_lead_in(e.get('condition') or {}))}, {describe_effect_inline(inner, ctx)}."
+        lead = _capitalize(_condition_lead_in(e.get("condition") or {}))
+        return f"{indent}{arrow}{lead}, {describe_effect_inline(inner, ctx)}."
     if etype == "sequence":
         return "\n".join(describe_effect(s, depth, ctx) for s in e.get("steps") or [])
     if etype == "choice":
@@ -569,8 +614,10 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         return f"{indent}Select one of the following{label}:\n{options}"
     if etype == "dice-gated":
         comp = _format_comparison(e.get("comparison") or "gte", e.get("threshold"))
-        success = describe_effect_inline(e["on_success"], ctx) if e.get("on_success") else "nothing happens"
-        fail = f"; otherwise, {describe_effect_inline(e['on_fail'], ctx)}" if e.get("on_fail") else ""
+        on_success = e.get("on_success")
+        success = describe_effect_inline(on_success, ctx) if on_success else "nothing happens"
+        on_fail = e.get("on_fail")
+        fail = f"; otherwise, {describe_effect_inline(on_fail, ctx)}" if on_fail else ""
         return f"{indent}{arrow}Roll one {_dice_case(e.get('dice'))}: on {comp}, {success}{fail}."
     if etype == "dice-pool-allocation":
         pool = e.get("pool")
