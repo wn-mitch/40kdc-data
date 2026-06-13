@@ -413,6 +413,7 @@ class TerrainTemplate(TypedDict):
     upper_floor: NotRequired[UpperFloor]
     default_terrain_area_keywords: NotRequired[list[TerrainAreaKeyword]]
     features: NotRequired[list[ComposedFeature]]
+    terrain_category: NotRequired[Literal["exposed", "light", "dense"]]
     game_version: GameVersionRef
 
 

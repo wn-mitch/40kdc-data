@@ -1953,6 +1953,15 @@
             "$ref": "#/$defs/composed-feature"
           }
         },
+        "terrain_category": {
+          "type": "string",
+          "enum": [
+            "exposed",
+            "light",
+            "dense"
+          ],
+          "description": "11e terrain category (§13.02–13.05). Applies to kind: \"feature\". Dense features enable the Hidden rule; light features provide cover but not obscuring."
+        },
         "game_version": {
           "$ref": "#/$defs/game-version-ref"
         }

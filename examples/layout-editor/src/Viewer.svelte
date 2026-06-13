@@ -157,6 +157,7 @@
             >
               <LayoutDiagram
                 pieces={model.pieces}
+                pieceCategories={model.pieceCategories}
                 zones={model.zones}
                 divider={model.divider}
                 markers={model.markers}

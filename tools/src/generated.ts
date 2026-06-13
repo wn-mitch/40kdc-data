@@ -1358,6 +1358,10 @@ export interface TerrainTemplate {
    * Composed scenery features, in the area's centroid-local frame. Only meaningful for `kind: "area"`.
    */
   features?: ComposedFeature[];
+  /**
+   * 11e terrain category (§13.02–13.05). Applies to kind: "feature". Dense features enable the Hidden rule; light features provide cover but not obscuring.
+   */
+  terrain_category?: "exposed" | "light" | "dense";
   game_version: GameVersionReference;
 }
 /**

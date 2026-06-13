@@ -105,6 +105,7 @@
           <div class="max-w-100 mx-auto w-full">
             <LayoutDiagram
               pieces={model.pieces}
+              pieceCategories={model.pieceCategories}
               zones={model.zones}
               divider={model.divider}
               markers={model.markers}

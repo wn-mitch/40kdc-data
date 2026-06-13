@@ -61,6 +61,8 @@ export interface DiagramGuide {
 
 export interface DiagramModel {
   pieces: ResolvedPiece[];
+  /** Maps layout piece id → terrain_category ("dense" | "light" | "exposed"). */
+  pieceCategories: Map<string, string>;
   zones: DiagramZone[];
   divider: DiagramDivider | null;
   markers: DiagramMarker[];
@@ -276,8 +278,16 @@ export function diagramModel(
     });
   }
 
+  const pieceCategories = new Map<string, string>();
+  for (const piece of layout.pieces ?? []) {
+    if (!piece.id || !piece.template) continue;
+    const tpl = ds.terrainTemplates.get(piece.template) as { terrain_category?: string } | undefined;
+    if (tpl?.terrain_category) pieceCategories.set(piece.id, tpl.terrain_category);
+  }
+
   return {
     pieces,
+    pieceCategories,
     zones: regions(ds, layout.deployment_pattern_id, "zones"),
     divider,
     markers: objectiveMarkers(layout),

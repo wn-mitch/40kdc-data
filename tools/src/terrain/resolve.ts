@@ -87,6 +87,7 @@ export interface TerrainTemplate {
   default_blocking?: boolean;
   default_terrain_area_keywords?: string[];
   features?: ComposedFeature[];
+  terrain_category?: string;
 }
 
 export interface LayoutPiece {

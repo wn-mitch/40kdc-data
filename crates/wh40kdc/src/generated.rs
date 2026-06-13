@@ -11228,6 +11228,15 @@ impl<'de> ::serde::Deserialize<'de> for TerrainLayoutSource {
 ///      "maxLength": 64,
 ///      "minLength": 1
 ///    },
+///    "terrain_category": {
+///      "description": "11e terrain category (§13.02–13.05). Applies to kind: \"feature\". Dense features enable the Hidden rule; light features provide cover but not obscuring.",
+///      "type": "string",
+///      "enum": [
+///        "exposed",
+///        "light",
+///        "dense"
+///      ]
+///    },
 ///    "upper_floor": {
 ///      "description": "An elevated platform carried by this feature (e.g. a ruin's second storey). Its footprint is authored in the SAME local frame as `footprint` and re-centered on the GROUND footprint's polygon area centroid, so the two floors stay registered when the piece is placed, rotated, or mirrored. Non-resolved metadata: the terrain resolver does not emit it; authoring/visualization tools render it as an overlay. Meaningful for `kind: \"feature\"`.",
 ///      "type": "object",
@@ -11279,6 +11288,9 @@ pub struct TerrainTemplate {
     ///Catalog or mission pack the template originates from.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub source: ::std::option::Option<TerrainTemplateSource>,
+    ///11e terrain category (§13.02–13.05). Applies to kind: "feature". Dense features enable the Hidden rule; light features provide cover but not obscuring.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub terrain_category: ::std::option::Option<TerrainTemplateTerrainCategory>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub upper_floor: ::std::option::Option<TerrainTemplateUpperFloor>,
 }
@@ -11510,6 +11522,88 @@ impl<'de> ::serde::Deserialize<'de> for TerrainTemplateSource {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///11e terrain category (§13.02–13.05). Applies to kind: "feature". Dense features enable the Hidden rule; light features provide cover but not obscuring.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "11e terrain category (§13.02–13.05). Applies to kind: \"feature\". Dense features enable the Hidden rule; light features provide cover but not obscuring.",
+///  "type": "string",
+///  "enum": [
+///    "exposed",
+///    "light",
+///    "dense"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum TerrainTemplateTerrainCategory {
+    #[serde(rename = "exposed")]
+    Exposed,
+    #[serde(rename = "light")]
+    Light,
+    #[serde(rename = "dense")]
+    Dense,
+}
+impl ::std::fmt::Display for TerrainTemplateTerrainCategory {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Exposed => f.write_str("exposed"),
+            Self::Light => f.write_str("light"),
+            Self::Dense => f.write_str("dense"),
+        }
+    }
+}
+impl ::std::str::FromStr for TerrainTemplateTerrainCategory {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "exposed" => Ok(Self::Exposed),
+            "light" => Ok(Self::Light),
+            "dense" => Ok(Self::Dense),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for TerrainTemplateTerrainCategory {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for TerrainTemplateTerrainCategory {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for TerrainTemplateTerrainCategory {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///An elevated platform carried by this feature (e.g. a ruin's second storey). Its footprint is authored in the SAME local frame as `footprint` and re-centered on the GROUND footprint's polygon area centroid, so the two floors stay registered when the piece is placed, rotated, or mirrored. Non-resolved metadata: the terrain resolver does not emit it; authoring/visualization tools render it as an overlay. Meaningful for `kind: "feature"`.

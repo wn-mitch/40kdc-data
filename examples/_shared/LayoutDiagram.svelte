@@ -18,12 +18,14 @@
   // chrome) so the component works in any host app, Tailwind or not.
   let {
     pieces,
+    pieceCategories = new Map(),
     zones = [],
     divider = null,
     markers = [],
     guides = [],
   }: {
     pieces: ResolvedPiece[];
+    pieceCategories?: Map<string, string>;
     zones?: DiagramZone[];
     divider?: DiagramDivider | null;
     markers?: DiagramMarker[];
@@ -58,7 +60,7 @@
     {/if}
 
     {#each pieces as p, i (p.id ?? i)}
-      <polygon points={pts(p.vertices)} class="piece {p.piece_type}" />
+      <polygon points={pts(p.vertices)} class="piece {p.piece_type} {pieceCategories.get(p.id ?? '') ?? ''}" />
     {/each}
 
     {#each markers as m, i (i)}
@@ -125,6 +127,10 @@
   .piece.feature {
     fill: oklch(0.74 0.14 75 / 0.5);
     stroke: oklch(0.74 0.15 75);
+  }
+  .piece.feature.light {
+    fill: oklch(0.70 0.14 145 / 0.45);
+    stroke: oklch(0.52 0.15 145);
   }
   .obj-ring {
     fill: none;

@@ -8,6 +8,7 @@
     isGroundBlocked,
     bbox,
     keystoneDisplays,
+    templateById,
     type EditLayout,
     type EditPiece,
     type Mirror,
@@ -287,9 +288,10 @@
 
     {#each resolved as p (p.id ?? p.name)}
       {@const ep = p.id ? editById.get(p.id) : undefined}
+      {@const tplCat = templateById(ep?.template)?.terrain_category ?? ''}
       <polygon
         points={pts(p)}
-        class="piece {p.piece_type} {p.id === selectedId ? 'selected' : ''} {p.id === twinId
+        class="piece {p.piece_type} {tplCat} {p.id === selectedId ? 'selected' : ''} {p.id === twinId
           ? 'twin'
           : ''} {ep && isGroundBlocked(ep) ? 'blocked' : ''}"
         role="button"
@@ -483,6 +485,10 @@
   .piece.feature {
     fill: oklch(0.68 0.15 62 / 0.55);
     stroke: oklch(0.5 0.16 58);
+  }
+  .piece.feature.light {
+    fill: oklch(0.62 0.15 145 / 0.45);
+    stroke: oklch(0.45 0.16 145);
   }
   .piece.blocked {
     stroke-dasharray: 0.5 0.4;
