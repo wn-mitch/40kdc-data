@@ -24,7 +24,7 @@ export interface Env extends VerifyEntitlementEnv, DocRoomEnv {
   MAX_LINKS_PER_OWNER?: string;
 }
 
-export const DOC_KINDS = ["list", "team-plan", "sb-save"] as const;
+export const DOC_KINDS = ["list", "team-plan", "sb-save", "mission-matrix"] as const;
 export type DocKind = (typeof DOC_KINDS)[number];
 
 /** Same spoken-friendly alphabet as shadowboxing session codes (no 0/O/1/I/L). */

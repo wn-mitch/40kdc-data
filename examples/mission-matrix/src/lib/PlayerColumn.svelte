@@ -44,6 +44,8 @@
     onPrimaryTicksChange,
     onClearPrimary,
     onApproach,
+    cp,
+    onCpChange,
   }: {
     label: string;
     disposition: string | null;
@@ -75,6 +77,10 @@
     onPrimaryTicksChange: (ticks: PrimaryTicks) => void;
     onClearPrimary: () => void;
     onApproach: (mode: ScoringMode) => void;
+    /** Command Points for this side — a plain counter (not rules-enforced). */
+    cp: number;
+    /** Adjust CP by a delta (App clamps at a 0 floor). */
+    onCpChange: (delta: number) => void;
   } = $props();
 
   const hand = $derived(secondariesByIds(game.handIds));
@@ -127,6 +133,28 @@
       </div>
     </div>
   </header>
+
+  <!-- Command Points: a plain manual counter (not rules-enforced — no auto-gain
+       at the command phase, no stratagem deduction). -->
+  <div class="flex items-center justify-between gap-2 rounded border border-panel-border bg-panel-surface px-3 py-1.5">
+    <span class="font-heading text-[11px] font-bold uppercase tracking-wider text-text-muted">Command Points</span>
+    <div class="flex items-center gap-2">
+      <button
+        type="button"
+        class="focus-ring flex items-center justify-center min-w-11 min-h-11 lg:min-w-8 lg:min-h-8 rounded border border-border-strong bg-panel text-text-muted text-lg leading-none hover:border-accent hover:text-accent disabled:opacity-40"
+        aria-label="Decrease {label} command points"
+        disabled={cp <= 0}
+        onclick={() => onCpChange(-1)}>−</button
+      >
+      <span class="font-mono tabular-nums text-xl text-text w-7 text-center" aria-live="polite">{cp}</span>
+      <button
+        type="button"
+        class="focus-ring flex items-center justify-center min-w-11 min-h-11 lg:min-w-8 lg:min-h-8 rounded border border-border-strong bg-panel text-text-muted text-lg leading-none hover:border-accent hover:text-accent"
+        aria-label="Increase {label} command points"
+        onclick={() => onCpChange(1)}>+</button
+      >
+    </div>
+  </div>
 
   <!-- Per-round WTC grid (read-only; primary is scored via the panel below). -->
   <WtcGrid rounds={game.rounds} current={round} />

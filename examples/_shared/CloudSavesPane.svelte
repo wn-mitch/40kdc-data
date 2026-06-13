@@ -29,8 +29,10 @@
     kind: DocKind;
     /** Local items uploadable to the cloud (current plan, saved lists, …). */
     localItems: LocalItem[];
-    /** Open a cloud doc into the app. */
-    onOpen: (name: string, payload: unknown) => void;
+    /** Open a cloud doc into the app. The doc meta is passed last so a host can
+     *  bind subsequent saves to that doc (id) and detect cross-device conflicts
+     *  (updatedAt); 2-arg callers stay valid. */
+    onOpen: (name: string, payload: unknown, doc?: { id: string; updatedAt: number }) => void;
     /** Open the host's share dialog (live + snapshot links) for a doc. */
     onShare?: (doc: DocMeta) => void;
     /** Surface a transient message (host owns the toast). */
@@ -124,7 +126,7 @@
     const token = requireToken();
     if (!token) return;
     const res = await getDoc(token, doc.id);
-    if (res.ok) onOpen(res.value.name, res.value.payload);
+    if (res.ok) onOpen(res.value.name, res.value.payload, { id: res.value.id, updatedAt: res.value.updated_at });
     else onFlash(`Couldn't open “${doc.name}” (${res.error}).`);
   }
 

@@ -14,7 +14,8 @@
   },
   "dependencies": {
     "@alpaca-software/40kdc-data": "*",
-    "fflate": "^0.8.3"
+    "fflate": "^0.8.3",
+    "qrcode-generator": "^1.5.2"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^5.0.0",

@@ -32,7 +32,7 @@
     type PrimaryTicks,
     type PrimaryTicksByRound,
   } from "./lib/data.js";
-  import { untrack } from "svelte";
+  import { onMount, untrack } from "svelte";
   import PlayerColumn from "./lib/PlayerColumn.svelte";
   import Scoreboard from "./lib/Scoreboard.svelte";
   import MissionCard from "./lib/MissionCard.svelte";
@@ -46,37 +46,51 @@
   import { LAYOUT_EDITOR_URL, PATREON_URL, SALVO_URL } from "../../_shared/links.js";
   import { slide } from "svelte/transition";
   import { quintOut } from "svelte/easing";
+  // Cloud saves + live shared sessions (patron-gated), reusing the shared
+  // backbone the list-builder and teams-planner examples already ride.
+  import AccountChip from "../../_shared/AccountChip.svelte";
+  import CloudSavesPane from "../../_shared/CloudSavesPane.svelte";
+  import EntitlementGate from "../../_shared/EntitlementGate.svelte";
+  import ShareLinksModal from "../../_shared/ShareLinksModal.svelte";
+  import LiveSessionWidget from "../../_shared/LiveSessionWidget.svelte";
+  import Modal from "../../_shared/Modal.svelte";
+  import LiveShareModal from "./lib/LiveShareModal.svelte";
+  import { maybeCaptureEntitlement, storedEntitlement } from "../../_shared/entitlement.svelte";
+  import {
+    createDoc,
+    putDoc,
+    resolveLink,
+    parseDocInvite,
+    type DocMeta,
+  } from "../../_shared/sync-api";
+  import {
+    docSession,
+    goLive,
+    joinDocSession,
+    parseSessionInvite,
+    registerDocSession,
+    requestDocJoin,
+    sendOps,
+  } from "../../_shared/doc-session.svelte";
+  import { applyDocOps } from "../../_shared/doc-protocol";
+  import { STORAGE_KEY, autoSaveName, type Saved } from "./lib/save.js";
+  import {
+    savedToSessionDoc,
+    sessionDocToSaved,
+    fromCloudPayload,
+    toSnapshotPayload,
+    diffSessionDocs,
+    isSessionShaped,
+    type SessionDoc,
+  } from "./lib/session-doc.js";
 
   const DEFAULT_ROUND_CAP = 15;
   const DEFAULT_GAME_CAP = 45;
 
   type Side = "you" | "opp";
 
-  // Persisted match — v2 (the v1 single-player blob is intentionally ignored).
-  const STORAGE_KEY = "mission-matrix.play-aid.v3";
-  interface Saved {
-    dispYou: ForceDispositionId | null;
-    dispOpp: ForceDispositionId | null;
-    round: number;
-    gameYou: PlayerGame;
-    gameOpp: PlayerGame;
-    activeYou: string | null;
-    activeOpp: string | null;
-    autoCollapse?: boolean;
-    verbose?: boolean;
-    // Manual (unscored) discards, per side. Optional so pre-existing v3 blobs
-    // load unchanged. Scored discards live in each game's `log` already.
-    discardsYou?: string[];
-    discardsOpp?: string[];
-    // Persistent per-round primary award ticks, per side. Optional like the
-    // discards. A pre-existing blob loads with no ticks but keeps its stored
-    // round primaries (the grid stays authoritative; re-tick to edit a round).
-    primaryTicksYou?: PrimaryTicksByRound;
-    primaryTicksOpp?: PrimaryTicksByRound;
-    // Terrain card: rotate keystone labels to face each player. Optional so
-    // pre-existing blobs load unchanged (defaults ON — it's a table aid).
-    keystoneFacing?: boolean;
-  }
+  // Persisted match shape (`Saved`) + storage key now live in ./lib/save.ts so
+  // the cloud/live-session adapter can share the type.
   function load(): Partial<Saved> {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -107,6 +121,30 @@
   let keystoneFacing = $state<boolean>(saved.keystoneFacing ?? true);
   let matrixOpen = $state<boolean>(!(saved.autoCollapse ?? true) || !(saved.dispYou && saved.dispOpp));
 
+  // Command Points per side — a plain counter (see PlayerColumn), not enforced.
+  let cpYou = $state<number>(saved.cpYou ?? 0);
+  let cpOpp = $state<number>(saved.cpOpp ?? 0);
+
+  // Cloud-save state. `cloudDocId` binds this game to one cloud doc so re-saves
+  // overwrite it (rather than spawning a doc per round); `cloudName` is the
+  // editable save name (null → use the auto-name); `cloudUpdatedAt` powers the
+  // cross-device conflict prompt.
+  let cloudDocId = $state<string | null>(saved.cloudDocId ?? null);
+  let cloudName = $state<string | null>(saved.cloudName ?? null);
+  let cloudUpdatedAt = $state<number | null>(null);
+  let cloudOpen = $state<boolean>(false);
+  let gateOpen = $state<boolean>(false);
+  let cloudBusy = $state<boolean>(false);
+  let nameField = $state<string>("");
+  let cloudPane = $state<{ refresh: () => Promise<void> } | null>(null);
+  // Per-doc live/snapshot share dialog.
+  let shareTarget = $state<DocMeta | null>(null);
+  let shareOpen = $state<boolean>(false);
+  // The cloud doc the live session reuses across "Go live" clicks.
+  let liveDocId = $state<string | null>(null);
+  // Opponent-facing QR/link sheet (shown after Go live).
+  let liveShareOpen = $state<boolean>(false);
+
   // When the PWA install prompt or first-run tutorial is showing, hold back the
   // support modal so the popups never stack.
   let pwaPromptOpen = $state<boolean>(false);
@@ -123,13 +161,47 @@
   // unmounted, so in-progress award ticks survive switching sides.
   let activeSide = $state<Side>("you");
 
-  $effect(() => {
-    const blob: Saved = {
+  /** The whole match as the persisted/uploadable `Saved` blob. */
+  function currentSaved(): Saved {
+    return {
       dispYou, dispOpp, round, gameYou, gameOpp, activeYou, activeOpp, autoCollapse, verbose,
       discardsYou, discardsOpp, primaryTicksYou, primaryTicksOpp, keystoneFacing,
+      cpYou, cpOpp, cloudDocId, cloudName,
     };
+  }
+
+  /**
+   * Replace all match state from a loaded/received blob (cloud open, live
+   * welcome/op, shortlink). Re-baselines `lastPrimaryId` so the mission-change
+   * guard below treats the load as a fresh baseline instead of wiping the
+   * primary scoring it just restored. Cloud-binding fields are intentionally
+   * left to the caller (a live peer must not adopt our cloud doc id).
+   */
+  function adoptSaved(s: Saved): void {
+    dispYou = s.dispYou ?? null;
+    dispOpp = s.dispOpp ?? null;
+    round = s.round ?? 1;
+    gameYou = s.gameYou ?? emptyPlayerGame();
+    gameOpp = s.gameOpp ?? emptyPlayerGame();
+    activeYou = s.activeYou ?? null;
+    activeOpp = s.activeOpp ?? null;
+    discardsYou = s.discardsYou ?? [];
+    discardsOpp = s.discardsOpp ?? [];
+    primaryTicksYou = s.primaryTicksYou ?? {};
+    primaryTicksOpp = s.primaryTicksOpp ?? {};
+    cpYou = s.cpYou ?? 0;
+    cpOpp = s.cpOpp ?? 0;
+    keystoneFacing = s.keystoneFacing ?? true;
+    autoCollapse = s.autoCollapse ?? true;
+    verbose = s.verbose ?? false;
+    matrixOpen = !(s.autoCollapse ?? true) || !(s.dispYou && s.dispOpp);
+    lastPrimaryId.you = undefined;
+    lastPrimaryId.opp = undefined;
+  }
+
+  $effect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(blob));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(currentSaved()));
     } catch {
       /* non-fatal */
     }
@@ -310,15 +382,223 @@
     discardsOpp = [];
     primaryTicksYou = {};
     primaryTicksOpp = {};
+    cpYou = 0;
+    cpOpp = 0;
     round = 1;
+    // A new match is a new cloud save — unbind so the next save creates a fresh
+    // doc instead of overwriting the previous game.
+    cloudDocId = null;
+    cloudName = null;
+    cloudUpdatedAt = null;
     notify("Game reset");
   }
+
+  function cpChangeFor(s: Side, delta: number): void {
+    if (s === "you") cpYou = Math.max(0, cpYou + delta);
+    else cpOpp = Math.max(0, cpOpp + delta);
+  }
+
+  // ── Cloud saves + live sessions ──────────────────────────────────────────────
+
+  // The intelligent default save name (matchup + missions + scoreline + date).
+  const autoName = $derived(
+    autoSaveName({
+      dispYou,
+      dispOpp,
+      missionYouName: missionYou?.name ?? null,
+      missionOppName: missionOpp?.name ?? null,
+      totalYou,
+      totalOpp,
+      round,
+      now: new Date(),
+    }),
+  );
+
+  // Seed the editable name field each time the cloud modal opens: the saved
+  // override if one exists, else the live auto-name. Reading `autoName` only
+  // inside the open transition keeps it from re-seeding mid-edit.
+  let cloudModalWasOpen = false;
+  $effect(() => {
+    if (cloudOpen && !cloudModalWasOpen) nameField = (cloudName ?? "").trim() || autoName;
+    cloudModalWasOpen = cloudOpen;
+  });
+
+  // A refused create/goLive (no/lapsed entitlement) pops the gate.
+  $effect(() => {
+    if (docSession.entitlementRequired) gateOpen = true;
+  });
+
+  /** Save (or overwrite) the current game in the cloud, bound to `cloudDocId`. */
+  async function saveToCloud(): Promise<void> {
+    const token = storedEntitlement();
+    if (!token) {
+      gateOpen = true;
+      return;
+    }
+    const name = nameField.trim() || autoName;
+    const payload = savedToSessionDoc(currentSaved());
+    cloudBusy = true;
+    try {
+      if (cloudDocId) {
+        let res = await putDoc(token, cloudDocId, {
+          name,
+          payload,
+          ifUpdatedAt: cloudUpdatedAt ?? undefined,
+        });
+        if (!res.ok && "conflict" in res) {
+          const overwrite = confirm(
+            `“${res.conflict.name}” changed in the cloud since this device last saved it ` +
+              `(${new Date(res.conflict.updated_at).toLocaleString()}). Overwrite it?`,
+          );
+          if (!overwrite) return;
+          res = await putDoc(token, cloudDocId, { name, payload });
+        }
+        if (res.ok) {
+          cloudUpdatedAt = res.updated_at;
+          cloudName = name;
+          notify(`Updated “${name}” in the cloud.`);
+        } else if ("error" in res && res.error === "doc_live") {
+          notify("This game is live right now — changes save automatically.");
+        } else if ("error" in res && res.status === 404) {
+          // Deleted on another device — drop the stale binding and recreate.
+          cloudDocId = null;
+          cloudUpdatedAt = null;
+          await saveToCloud();
+          return;
+        } else {
+          notify("Cloud save failed.");
+        }
+      } else {
+        const res = await createDoc(token, { kind: "mission-matrix", name, payload });
+        if (res.ok) {
+          cloudDocId = res.value.id;
+          cloudUpdatedAt = res.value.updated_at;
+          cloudName = name;
+          notify(`Saved “${name}” to the cloud.`);
+        } else if (res.error === "doc_quota_exceeded") {
+          notify("Cloud is full — delete some saves first.");
+        } else if (res.status === 401 || res.status === 403) {
+          gateOpen = true;
+        } else {
+          notify("Cloud save failed.");
+        }
+      }
+      await cloudPane?.refresh();
+    } finally {
+      cloudBusy = false;
+    }
+  }
+
+  /** Make this game a live shared cloud doc and join it as editor. Reuses the
+   *  bound cloud doc when there is one, so the live session and the saved game
+   *  are the same document. */
+  async function startLive(): Promise<void> {
+    const name = (cloudName ?? "").trim() || autoName;
+    const id = await goLive("mission-matrix", name, savedToSessionDoc(currentSaved()), {
+      docId: liveDocId ?? cloudDocId,
+    });
+    if (id) {
+      liveDocId = id;
+      cloudDocId = id;
+      // Hand the phone across the table: show the opponent the QR right away.
+      cloudOpen = false;
+      liveShareOpen = true;
+    }
+  }
+
+  /** ShareLinksModal's "Open live": join the doc's room as editor. */
+  function openLive(docId: string, editorToken: string): void {
+    liveDocId = docId;
+    requestDocJoin(docId, editorToken);
+  }
+
+  // Live replication: the match rides as a side-keyed SessionDoc. `lastSessionDoc`
+  // is the last state this client knows the server holds; local edits diff
+  // against it, remote ops/welcomes replace it then adopt into the UI. Adopting
+  // re-bases `lastSessionDoc` first, so the push effect sees an empty diff and
+  // nothing echoes.
+  let lastSessionDoc: SessionDoc | null = null;
+
+  registerDocSession({
+    onDoc(doc) {
+      if (isSessionShaped(doc)) {
+        lastSessionDoc = doc;
+      } else {
+        // A storage-shaped doc (uploaded snapshot opened live): bridge it to the
+        // side-keyed session shape. An editor replaces the room's doc so the
+        // session proper runs side-keyed; viewers just convert locally.
+        lastSessionDoc = savedToSessionDoc(fromCloudPayload(doc) as Saved);
+        if (docSession.role === "editor") {
+          sendOps([{ o: "set", p: [], v: lastSessionDoc }]);
+        }
+      }
+      adoptSaved(sessionDocToSaved(lastSessionDoc));
+    },
+    onRemoteOps(ops) {
+      if (!lastSessionDoc) return;
+      try {
+        lastSessionDoc = applyDocOps(lastSessionDoc, ops) as SessionDoc;
+      } catch {
+        // Divergence — the next reconnect's welcome restores exact state.
+        return;
+      }
+      adoptSaved(sessionDocToSaved(lastSessionDoc));
+    },
+  });
+
+  // Push local edits while live (editors only). When the change came from the
+  // session itself the diff is empty, so this is a no-op.
+  $effect(() => {
+    const next = savedToSessionDoc(currentSaved());
+    if (docSession.status !== "connected" || docSession.role !== "editor" || !lastSessionDoc) {
+      return;
+    }
+    const ops = diffSessionDocs(lastSessionDoc, next);
+    if (ops.length > 0) {
+      lastSessionDoc = next;
+      sendOps(ops);
+    }
+  });
+
+  onMount(() => {
+    // The OAuth callback may have delivered an entitlement token in the URL
+    // fragment — capture it before any gated UI reads the stored state.
+    maybeCaptureEntitlement();
+
+    // Join a live cloud doc from a durable link (?d=<docId>&token=…).
+    const docInvite = parseDocInvite(location.search);
+    if (docInvite) requestDocJoin(docInvite.docId, docInvite.token);
+
+    // Legacy ephemeral invite links (?session=CODE&token=…).
+    const invite = parseSessionInvite(location.search);
+    if (invite && !docInvite) joinDocSession(invite.code, invite.token, "guest");
+
+    // Open a `?s=CODE` snapshot shortlink (server-resolved; opening is free).
+    const code = new URLSearchParams(location.search).get("s");
+    if (code) {
+      void resolveLink(code).then((res) => {
+        if (res.ok && res.value.kind === "mission-matrix") {
+          adoptSaved(fromCloudPayload(res.value.payload) as Saved);
+          notify("Opened shared game.");
+        } else {
+          notify(res.ok ? "That link isn't a Mission Matrix game." : "That short link couldn't be opened.");
+        }
+      });
+      const params = new URLSearchParams(location.search);
+      params.delete("s");
+      const qs = params.toString();
+      history.replaceState(null, "", location.pathname + (qs ? `?${qs}` : "") + location.hash);
+    }
+  });
 </script>
 
 <div class="flex flex-col min-h-screen bg-bg">
   <AppHeader title="Mission Matrix" tag="11e WTC scoresheet">
     {#snippet nav()}
-      <button type="button" class="inline-flex items-center justify-center w-6 h-6 rounded-full border border-border-strong text-text-muted hover:text-accent hover:border-accent font-heading text-xs font-bold" onclick={() => (tutorialOpen = true)} aria-label="How to use Mission Matrix">?</button>
+      <div class="flex items-center gap-2">
+        <AccountChip onSignIn={() => (gateOpen = true)} onOpenCloud={() => (cloudOpen = true)} />
+        <button type="button" class="inline-flex items-center justify-center w-6 h-6 rounded-full border border-border-strong text-text-muted hover:text-accent hover:border-accent font-heading text-xs font-bold" onclick={() => (tutorialOpen = true)} aria-label="How to use Mission Matrix">?</button>
+      </div>
     {/snippet}
   </AppHeader>
 
@@ -485,6 +765,8 @@
         onPrimaryTicksChange={(t) => primaryTicksChangeFor("you", t)}
         onClearPrimary={() => clearPrimaryFor("you")}
         onApproach={(m) => approachFor("you", m)}
+        cp={cpYou}
+        onCpChange={(d) => cpChangeFor("you", d)}
       />
       </div>
       <div class:hidden={activeSide !== "opp"} class="lg:block min-w-0">
@@ -513,6 +795,8 @@
         onPrimaryTicksChange={(t) => primaryTicksChangeFor("opp", t)}
         onClearPrimary={() => clearPrimaryFor("opp")}
         onApproach={(m) => approachFor("opp", m)}
+        cp={cpOpp}
+        onCpChange={(d) => cpChangeFor("opp", d)}
       />
       </div>
     </div>
@@ -535,5 +819,94 @@
     suppressed={tutorialOpen}
   />
   <SupportModal patreonUrl={PATREON_URL} appName="Mission Matrix" enabled={!pwaPromptOpen && !tutorialOpen} />
+
+  <!-- Cloud saves live behind the header chip (patron feature; opening links is
+       free). Saving is bound to one doc per game (overwrite on re-save); the
+       pane below lists/opens/deletes/shares every saved game. -->
+  <Modal bind:open={cloudOpen} title="Cloud saves">
+    <div class="flex flex-col gap-2">
+      <label class="font-heading text-[10px] font-bold uppercase tracking-wider text-text-muted" for="cloud-name">
+        Save name
+      </label>
+      <input
+        id="cloud-name"
+        class="min-h-11 w-full rounded border border-border-strong bg-panel px-3 py-2 font-body text-sm text-text placeholder:text-text-dim focus-ring"
+        bind:value={nameField}
+        placeholder={autoName}
+        aria-label="Cloud save name"
+      />
+      <div class="flex gap-2">
+        <button
+          type="button"
+          class="focus-ring min-h-11 flex-1 rounded bg-accent px-3 py-2 font-heading text-xs font-bold uppercase tracking-wide text-accent-foreground transition-colors hover:bg-accent-hover disabled:opacity-40"
+          disabled={cloudBusy}
+          onclick={saveToCloud}
+        >
+          ↑ {cloudDocId ? "Update cloud save" : "Save to cloud"}
+        </button>
+        {#if docSession.status === "idle"}
+          <button
+            type="button"
+            class="focus-ring min-h-11 rounded border border-border-strong bg-panel px-3 py-2 font-heading text-xs font-bold uppercase tracking-wide text-text-muted transition-colors hover:border-accent hover:text-accent"
+            onclick={startLive}
+            title="Share a live link — score this game together with your opponent in real time"
+          >
+            ⦿ Go live
+          </button>
+        {:else}
+          <button
+            type="button"
+            class="focus-ring min-h-11 rounded border border-border-strong bg-panel px-3 py-2 font-heading text-xs font-bold uppercase tracking-wide text-text-muted transition-colors hover:border-accent hover:text-accent"
+            onclick={() => {
+              cloudOpen = false;
+              liveShareOpen = true;
+            }}
+            title="Show the QR code to share this live game with your opponent"
+          >
+            ▦ Share QR
+          </button>
+        {/if}
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <CloudSavesPane
+        bind:this={cloudPane}
+        kind="mission-matrix"
+        localItems={[]}
+        onOpen={(name, payload, doc) => {
+          cloudOpen = false;
+          adoptSaved(fromCloudPayload(payload) as Saved);
+          cloudDocId = doc?.id ?? null;
+          cloudUpdatedAt = doc?.updatedAt ?? null;
+          cloudName = name;
+          notify(`Opened “${name}”.`);
+        }}
+        onShare={(doc) => {
+          shareTarget = doc;
+          shareOpen = true;
+        }}
+        onFlash={notify}
+        onNeedEntitlement={() => (gateOpen = true)}
+      />
+    </div>
+  </Modal>
+
+  <ShareLinksModal
+    bind:open={shareOpen}
+    doc={shareTarget}
+    exportPayload={toSnapshotPayload}
+    onOpenLive={openLive}
+    onFlash={notify}
+  />
+
+  <!-- Floating live-session presence: roster, nickname, links, snapshot fallback. -->
+  <LiveSessionWidget onFlash={notify} />
+
+  <!-- Opponent-facing QR + link for the live session. -->
+  <LiveShareModal bind:open={liveShareOpen} onFlash={notify} />
+
+  <EntitlementGate bind:open={gateOpen} feature="cloud sync and live sharing" />
+
   <Toast message={toast} onDismiss={() => (toast = null)} />
 </div>

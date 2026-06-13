@@ -9,7 +9,7 @@ export const SYNC_URL: string =
   (import.meta.env as Record<string, string | undefined>).VITE_SYNC_URL ??
   "https://sync.alpacasoft.dev";
 
-export type DocKind = "list" | "team-plan" | "sb-save";
+export type DocKind = "list" | "team-plan" | "sb-save" | "mission-matrix";
 
 export interface DocMeta {
   id: string;

@@ -51,6 +51,23 @@ describe("docs CRUD", () => {
     expect((await api(`/docs/${id}`, { token })).status).toBe(404);
   });
 
+  it("accepts the mission-matrix kind (cloud saves for the scoresheet)", async () => {
+    const token = await mintToken("mm-player");
+    const game = { round: 3, sides: { you: { cp: 2 }, opp: { cp: 1 } } };
+    const created = await api("/docs", {
+      method: "POST",
+      token,
+      body: { kind: "mission-matrix", name: "Take and Hold vs Purge the Foe", payload: game },
+    });
+    expect(created.status).toBe(200);
+
+    const list = await api("/docs?kind=mission-matrix", { token });
+    expect(list.status).toBe(200);
+    const entry = list.body.docs.find((d: any) => d.id === created.body.id);
+    expect(entry.name).toBe("Take and Hold vs Purge the Foe");
+    expect((await api(`/docs/${created.body.id}`, { token })).body.payload).toEqual(game);
+  });
+
   it("isolates owners: bob cannot read, update, or delete alice's doc", async () => {
     const alice = await mintToken("alice-iso");
     const bob = await mintToken("bob-iso");
