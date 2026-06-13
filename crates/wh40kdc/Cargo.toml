@@ -22,7 +22,7 @@ all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
 [features]
-default = ["bundled-data", "import", "export", "cruncher", "share"]
+default = ["bundled-data", "import", "export", "cruncher", "share", "validate"]
 # The embedded dataset + the linked, typed data API (Dataset/Collection/
 # normalize_name). default-features = false drops both for a types-only crate.
 bundled-data = ["dep:unicode-normalization"]
@@ -44,6 +44,9 @@ cruncher = ["bundled-data"]
 # Standalone: embeds its own committed id registry and needs only base64 +
 # serde, no dataset, deflate, or regex.
 share = ["dep:base64"]
+# Hand-rolled schema validator emitting the closed-enum (path, code) errors over
+# the embedded BUNDLED_SCHEMA. Self-contained — needs only serde_json.
+validate = []
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }

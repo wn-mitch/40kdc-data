@@ -160,3 +160,11 @@ pub use scoring::{
 /// data before deserializing; the canonical validation CLI lives in the
 /// `@alpaca-software/40kdc-data` npm package.
 pub const BUNDLED_SCHEMA: &str = include_str!("../schemas/bundled.schema.json");
+
+/// Hand-rolled schema validator emitting the closed cross-implementation
+/// `(path, code)` enum over [`BUNDLED_SCHEMA`]; pinned by `conformance/validator`.
+#[cfg(feature = "validate")]
+pub mod validator;
+
+#[cfg(feature = "validate")]
+pub use validator::{has_target as validator_has_target, validate_target, VALIDATOR_TARGETS};

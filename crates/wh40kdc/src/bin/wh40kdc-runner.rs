@@ -629,17 +629,23 @@ fn phase_str(p: Phase) -> &'static str {
 
 use wh40kdc::encode_base_size as encode_base;
 
-/// Rust has no validator yet (the crate exposes `BUNDLED_SCHEMA` as a string
-/// constant but no validation function). Return UNKNOWN_OP so the differ can
-/// negotiate the area off; do not silently succeed.
-fn handle_validate(_args: &Value) -> Value {
-    err_value(
-        ErrorKind::UnknownOp,
-        Some(json!({
-            "op": "validate",
-            "detail": "validator not implemented in this impl",
-        })),
-    )
+/// Validate `args.value` against the named schema `args.target`, returning the
+/// closed-enum `(path, code)` errors (empty list = valid).
+fn handle_validate(args: &Value) -> Value {
+    let Some(target) = args.get("target").and_then(Value::as_str) else {
+        return err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": "validate.target must be a string" })),
+        );
+    };
+    if !wh40kdc::validator_has_target(target) {
+        return err_value(
+            ErrorKind::InvalidInput,
+            Some(json!({ "detail": format!("unknown validator target: {target}") })),
+        );
+    }
+    let value = args.get("value").cloned().unwrap_or(Value::Null);
+    ok_value(Value::Array(wh40kdc::validate_target(target, &value)))
 }
 
 /// Wire shape for the `crunch` and `attribution` args. Both ops take the same
