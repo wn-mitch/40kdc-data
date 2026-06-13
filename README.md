@@ -186,6 +186,24 @@ the conformance runner (`python -m wh40kdc.runner`) used by the
 cross-implementation parity differ — see [`CONFORMANCE.md`](CONFORMANCE.md).
 Package code is MIT; the schema content it describes is CC0.
 
+### Go
+
+The [`wh40kdc`](go/) Go module mirrors the same surface — the embedded dataset
+behind a linked `Dataset` API, all roster importers/exporters, the cruncher and
+attribution, the abilities resolver, scoring, terrain geometry, the DSL/scoring
+describers, and a schema validator emitting the shared closed-enum error codes.
+
+```bash
+go get github.com/wn-mitch/40kdc-data/go@latest
+```
+
+Records are modelled as plain `map[string]any` (mirroring the JSON the schemas
+describe) behind linked views; the only external dependency is
+`golang.org/x/text` (Unicode normalization for diacritic-insensitive lookup).
+The module ships the conformance runner (`go/cmd/wh40kdc-runner`) used by the
+cross-implementation parity differ — see [`CONFORMANCE.md`](CONFORMANCE.md).
+Module code is MIT; the schema content it describes is CC0.
+
 ### R *(planned)*
 
 An R package is planned, likely as an `extendr` wrapper around the Rust crate

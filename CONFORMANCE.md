@@ -39,7 +39,8 @@ The same person *can* author both the implementation change and the second-impl 
 |---|---|---|---|
 | TypeScript | [`@alpaca-software/40kdc-data`](./tools/) | Stable. Currently the corpus oracle (`npm run gen:conformance`). | `40kdc-runner` (built from `tools/src/runner.ts`) |
 | Rust | [`wh40kdc`](./crates/wh40kdc/) | Stable. Verifies the corpus in `crates/wh40kdc/tests/conformance.rs`, `cruncher_conformance.rs`, `linked_api_conformance.rs`, `attribution_conformance.rs`, `terrain_resolver_conformance.rs`, `scoring_conformance.rs`, `applies_to_conformance.rs`. | `wh40kdc-runner` (built from `crates/wh40kdc/src/bin/wh40kdc-runner.rs`) |
-| Python | [`wh40kdc`](./python/) (PyPI) | Stable. Verifies the full corpus in `python/tests/conformance/` (every area, including the validator and abilities-resolver, which Rust doesn't cover yet). | `python -m wh40kdc.runner` (no console script — avoids a PATH collision with the Rust binary) |
+| Python | [`wh40kdc`](./python/) (PyPI) | Stable. Verifies the full corpus in `python/tests/conformance/` (every area, including the validator and abilities-resolver). | `python -m wh40kdc.runner` (no console script — avoids a PATH collision with the Rust binary) |
+| Go | [`wh40kdc`](./go/) (Go module `github.com/wn-mitch/40kdc-data/go`) | Stable. Verifies the full corpus via the cross-impl differ (`--pair ts,go \| rust,go \| py,go`) plus Go-native tests in `go/conformance_test.go` (weapon-keywords, abilities-resolver, from-dsl). | `wh40kdc-runner` (built from `go/cmd/wh40kdc-runner`) |
 | R | TBD | Planned. Likely an `extendr` wrapper around the Rust crate rather than a native port; see the FAQ. | Will ship with the package. |
 
 ## Per-area invariants

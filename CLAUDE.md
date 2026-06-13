@@ -91,12 +91,15 @@ commands don't touch. Regenerate after the matching kind of change:
   cargo run -p xtask -- codegen        # crates/.../generated.rs (only drifts if schemas/ changed)
   cargo run -p xtask -- bundle-data    # crates/.../data/bundle.generated.json
   python3 python/codegen/sync_bundle.py  # python/.../_bundle.json
+  bash go/codegen/sync.sh                 # go/{bundle.json,share_registry.json,schemas/,spec.go}
   ```
   (`npm run build`/`test` regenerate the TS bundle via `codegen:data`, but
-  **not** the Rust/Python ones.)
+  **not** the Rust/Python/Go ones.)
 - **Edited any Rust** → run `cargo fmt --all` (CI runs `cargo fmt --all -- --check`).
-- **Changed `schemas/`** → also `npm run codegen:types` (TS `generated.ts`) and
-  the Python `gen_typeddicts.py`; CI diff-checks both.
+- **Edited any Go** → run `gofmt -w go/` (CI runs `gofmt -l go/`).
+- **Changed `schemas/`** → also `npm run codegen:types` (TS `generated.ts`),
+  the Python `gen_typeddicts.py`, and `bash go/codegen/sync.sh` (copies the
+  schema tree the Go validator embeds); CI diff-checks all.
 
 Referential integrity beyond JSON Schema (unit `ability_id`s must resolve in the
 same faction's enrichment; `faction_keywords` must match the faction's home
@@ -105,7 +108,7 @@ keyword) is enforced by `tools/src/integrity.ts`, run as part of
 
 ## Cross-language parity
 
-This repo holds the TypeScript, Rust, and Python implementations in parity through the `conformance/` corpus, and the same mechanism extends to the upcoming R port. Full strategy: [`CONFORMANCE.md`](CONFORMANCE.md). Contributor workflow: [`CONTRIBUTING.md`](CONTRIBUTING.md). Runner wire format: [`conformance/RUNNER_PROTOCOL.md`](conformance/RUNNER_PROTOCOL.md).
+This repo holds the TypeScript, Rust, Python, and Go implementations in parity through the `conformance/` corpus, and the same mechanism extends to the upcoming R port. Full strategy: [`CONFORMANCE.md`](CONFORMANCE.md). Contributor workflow: [`CONTRIBUTING.md`](CONTRIBUTING.md). Runner wire format: [`conformance/RUNNER_PROTOCOL.md`](conformance/RUNNER_PROTOCOL.md).
 
 The load-bearing rule: **a new or changed golden in `conformance/` is not accepted until at least one implementation other than the one that produced it independently reproduces the same expected value.** A PR that touches the TS reference impl and the corpus in the same commit must also include the Rust (or Python, or R) test passing against the updated goldens. The same person can do both halves of the verification.
 
@@ -152,6 +155,13 @@ Tools can consume this repo via:
   `jsonschema`-based validator with the closed-enum codes. Only runtime dep
   is `jsonschema`; conformance-pinned with TS and Rust via the same corpus
   (runner: `python -m wh40kdc.runner`).
+- the `wh40kdc` Go module (`go/`, `github.com/wn-mitch/40kdc-data/go`) — the Go
+  counterpart: the same embedded dataset behind a `Dataset` linked API (records
+  as plain `map[string]any`), all importers/exporters, cruncher + attribution,
+  abilities resolver, scoring, terrain, the DSL/scoring describers, and a
+  hand-rolled draft-2020-12 validator with the closed-enum codes. Only external
+  dep is `golang.org/x/text`; conformance-pinned with TS/Rust/Python via the
+  same corpus (runner: `go/cmd/wh40kdc-runner`).
 - Git submodule pointed at a tagged release (raw schemas + data)
 - Direct `$id` URL references for JSON Schema validators
 
