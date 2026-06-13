@@ -21,10 +21,8 @@ func (s *RunnerState) handleImport(args any) map[string]any           { return u
 func (s *RunnerState) handleTryImport(args any) map[string]any        { return unimplemented() }
 func (s *RunnerState) handleExport(args any) map[string]any           { return unimplemented() }
 func (s *RunnerState) handleValidate(args any) map[string]any         { return unimplemented() }
-func (s *RunnerState) handleCrunch(args any) map[string]any           { return unimplemented() }
 func (s *RunnerState) handleCompare(args any) map[string]any          { return unimplemented() }
 func (s *RunnerState) handleLoadout(args any) map[string]any          { return unimplemented() }
-func (s *RunnerState) handleAttribution(args any) map[string]any      { return unimplemented() }
 func (s *RunnerState) handleTranslateScoring(args any) map[string]any { return unimplemented() }
 func (s *RunnerState) handleTranslateEffect(args any) map[string]any  { return unimplemented() }
 
