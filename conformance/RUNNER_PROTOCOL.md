@@ -7,11 +7,12 @@ This document is the protocol contract. Changes to it bump [`SPEC_VERSION`](./SP
 ## Status
 
 The protocol is implemented in TypeScript (`tools/src/runner.ts`), Rust
-(`crates/wh40kdc/src/bin/wh40kdc-runner.rs`), and Python
-(`python/src/wh40kdc/runner.py`, invoked as `python -m wh40kdc.runner`); all
-report the `spec_version` in [`SPEC_VERSION`](./SPEC_VERSION). The cross-impl
-differ in `tooling/parity/` drives any pair of runners against the corpus
-(`--pair ts,rust | ts,py | rust,py`).
+(`crates/wh40kdc/src/bin/wh40kdc-runner.rs`), Python
+(`python/src/wh40kdc/runner.py`, invoked as `python -m wh40kdc.runner`), and Go
+(`go/cmd/wh40kdc-runner`); all report the `spec_version` in
+[`SPEC_VERSION`](./SPEC_VERSION). The cross-impl differ in `tooling/parity/`
+drives any pair of runners against the corpus
+(`--pair ts,rust | ts,py | rust,py | ts,go | rust,go | py,go`).
 
 ## Wire format
 
