@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/mission-matchup.schema.json",
+  "title": "Mission Matchup",
+  "description": "One cell of the 11e Force Disposition matrix: given the player's own Force Disposition and their opponent's, the mission that player plays. Mirrors a single row on a physical Force Disposition card. The (disposition, opponent_disposition) pair is the conceptual key; compound uniqueness across entries is a data convention, not enforced by this schema.",
+  "type": "object",
+  "properties": {
+    "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "disposition": {
+      "$ref": "../defs/common.schema.json#/$defs/force-disposition-id",
+      "description": "The player's own Force Disposition."
+    },
+    "opponent_disposition": {
+      "$ref": "../defs/common.schema.json#/$defs/force-disposition-id",
+      "description": "The opponent's Force Disposition."
+    },
+    "mission_id": {
+      "$ref": "../defs/common.schema.json#/$defs/entity-id",
+      "description": "Id of the mission entity the player plays for this disposition pairing."
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
+  },
+  "required": ["id", "disposition", "opponent_disposition", "mission_id", "game_version"],
+  "additionalProperties": false
+}

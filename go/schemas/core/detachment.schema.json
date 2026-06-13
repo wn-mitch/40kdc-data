@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/detachment.schema.json",
+  "title": "Detachment",
+  "description": "A detachment option within a faction, providing a detachment rule, enhancements, and stratagems.",
+  "type": "object",
+  "properties": {
+    "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "faction_id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "detachment_rule_id": {
+      "oneOf": [
+        { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+        { "type": "null" }
+      ]
+    },
+    "detachment_points": {
+      "oneOf": [
+        { "type": "integer", "minimum": 1, "maximum": 3 },
+        { "type": "null" }
+      ],
+      "description": "11e: the detachment-point cost (1–3) charged against the army's detachment-point budget. null when not yet assigned."
+    },
+    "force_dispositions": {
+      "type": "array",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+      "uniqueItems": true,
+      "description": "11e: ids of the Force Disposition entities this detachment grants. Empty until assigned."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "description": "11e: detachment-type tags (e.g. 'dynasty', 'kabal'). A roster may include at most one detachment per shared tag — the 'you can only take one of X type of detachment' rule. Empty when the detachment carries no UNIQUE tag."
+    },
+    "enhancement_ids": {
+      "type": "array",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" }
+    },
+    "stratagem_ids": {
+      "type": "array",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" }
+    },
+    "restrictions": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "required_keywords": { "$ref": "../defs/common.schema.json#/$defs/keyword-list" },
+            "excluded_keywords": { "$ref": "../defs/common.schema.json#/$defs/keyword-list" },
+            "notes": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        { "type": "null" }
+      ]
+    },
+    "granted_keywords": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/granted-keyword" },
+      "description": "Construction keywords this detachment grants to matching units while it is selected (e.g. Houndpack Lance grants 'Battleline' to 'War Dog' units). A unit carrying any keyword in a grant's `to_keywords` gains that grant's `keyword` for army-construction purposes (datasheet-count caps, battlefield role). Empty/absent when the detachment grants no construction keywords. Distinct from combat keywords, which live in the ability DSL."
+    },
+    "unit_minimums": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/unit-minimum" },
+      "description": "Minimum unit counts the detachment requires while selected (e.g. Houndpack Lance: 'your army must include three or more WAR DOG units'). Each entry requires at least `min` units carrying `keyword`. Empty/absent when the detachment imposes no minimum."
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
+  },
+  "required": ["id", "name", "faction_id", "game_version"],
+  "additionalProperties": false,
+  "$defs": {
+    "granted-keyword": {
+      "type": "object",
+      "description": "A construction keyword a detachment grants to units matching a keyword filter. Blanket by default (every matching unit gains it); when `max_selected` is set, the keyword is instead granted to up to that many matching units of the player's choice (e.g. Houndpack Lance: 'select three WAR DOG units; they gain CHARACTER').",
+      "properties": {
+        "keyword": { "$ref": "../defs/common.schema.json#/$defs/keyword" },
+        "to_keywords": { "$ref": "../defs/common.schema.json#/$defs/keyword-list" },
+        "max_selected": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "When present, the grant is not blanket: the player selects up to this many matching units to receive `keyword` (e.g. 3 WAR DOG units gain CHARACTER under Houndpack Lance). Absent = every matching unit gains it."
+        }
+      },
+      "required": ["keyword", "to_keywords"],
+      "additionalProperties": false
+    },
+    "unit-minimum": {
+      "type": "object",
+      "description": "A minimum number of units carrying a keyword that the detachment requires.",
+      "properties": {
+        "keyword": { "$ref": "../defs/common.schema.json#/$defs/keyword" },
+        "min": { "type": "integer", "minimum": 1 }
+      },
+      "required": ["keyword", "min"],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/terrain-template.schema.json",
+  "title": "Terrain Template",
+  "description": "A reusable terrain piece in the standard catalog: a gameplay area (the 11e terrain-area templates) or a scenery feature (walls, containers, pipes, floor segments). Footprints are authored in natural local inches; the terrain resolver derives each footprint's polygon area centroid and re-centers on it, so a layout piece that instances a template places its centroid via the layout's `position`. An `area` template may carry an embedded `features` list — scenery placed in the area's centroid-local frame — making the template a reusable composition (e.g. a ruin with its walls). Placing such a template places all of its features, transformed by the area's own placement.",
+  "type": "object",
+  "$defs": {
+    "composed-feature": {
+      "type": "object",
+      "description": "A feature placed on an area template, positioned in the area's centroid-local frame (y-down inches). When the area is placed, rotated, or mirrored, its composed features are carried along.",
+      "properties": {
+        "id": {
+          "$ref": "../defs/common.schema.json#/$defs/entity-id",
+          "description": "Composition-local id for this feature instance."
+        },
+        "template": {
+          "$ref": "../defs/common.schema.json#/$defs/entity-id",
+          "description": "Id of the feature-kind terrain-template to place."
+        },
+        "position": {
+          "$ref": "../defs/common.schema.json#/$defs/vec2",
+          "description": "The feature's centroid in the area's centroid-local frame (origin at the area centroid, y-down inches)."
+        },
+        "rotation_degrees": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 360,
+          "description": "Clockwise rotation of the feature about its own centroid, within the area-local frame."
+        },
+        "mirror": {
+          "type": "string",
+          "enum": ["none", "horizontal", "vertical"],
+          "default": "none"
+        },
+        "floor": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "Ruin floor this feature occupies (0 = ground level)."
+        }
+      },
+      "required": ["template", "position"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "kind": {
+      "type": "string",
+      "enum": ["area", "feature"],
+      "description": "`area` = a gameplay terrain zone; `feature` = physical scenery placed on an area."
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "description": "Catalog or mission pack the template originates from."
+    },
+    "footprint": { "$ref": "../defs/common.schema.json#/$defs/footprint" },
+    "default_height_inches": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Default height in inches for pieces instancing this template. Gates Plunging Fire (>= 3\")."
+    },
+    "default_blocking": {
+      "type": "boolean",
+      "description": "Whether the template blocks line of sight / movement by default."
+    },
+    "ground_accessible": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether models may be placed on the ground footprint. `false` marks an elevated-only piece (a platform reachable only on its `upper_floor`, e.g. a gantry/catwalk) or a solid obstacle with no valid placement (e.g. a generator). Meaningful for `kind: \"feature\"`."
+    },
+    "upper_floor": {
+      "type": "object",
+      "description": "An elevated platform carried by this feature (e.g. a ruin's second storey). Its footprint is authored in the SAME local frame as `footprint` and re-centered on the GROUND footprint's polygon area centroid, so the two floors stay registered when the piece is placed, rotated, or mirrored. Non-resolved metadata: the terrain resolver does not emit it; authoring/visualization tools render it as an overlay. Meaningful for `kind: \"feature\"`.",
+      "properties": {
+        "footprint": { "$ref": "../defs/common.schema.json#/$defs/footprint" },
+        "floor": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "description": "Ruin floor this platform occupies (1 = first floor above ground)."
+        }
+      },
+      "required": ["footprint"],
+      "additionalProperties": false
+    },
+    "default_terrain_area_keywords": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Terrain-area keywords areas of this template carry by default. Meaningful for `kind: \"area\"`.",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/terrain-area-keyword" }
+    },
+    "features": {
+      "type": "array",
+      "description": "Composed scenery features, in the area's centroid-local frame. Only meaningful for `kind: \"area\"`.",
+      "items": { "$ref": "#/$defs/composed-feature" }
+    },
+    "terrain_category": {
+      "type": "string",
+      "enum": ["exposed", "light", "dense"],
+      "description": "11e terrain category (§13.02–13.05). Applies to kind: \"feature\". Dense features enable the Hidden rule; light features provide cover but not obscuring."
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
+  },
+  "required": ["id", "name", "kind", "footprint", "game_version"],
+  "additionalProperties": false
+}

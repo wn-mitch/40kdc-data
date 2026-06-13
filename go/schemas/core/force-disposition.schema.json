@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/force-disposition.schema.json",
+  "title": "Force Disposition",
+  "description": "A 11e strategic-intent tag granted by detachments. Players compare dispositions at game start to determine the shared mission; asymmetric primary objectives result.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../defs/common.schema.json#/$defs/force-disposition-id",
+      "description": "One of the five confirmed launch Force Dispositions."
+    },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Community-authored description of the disposition's effect (original prose only — no reproduced rules text)."
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
+  },
+  "required": ["id", "name", "game_version"],
+  "additionalProperties": false
+}

@@ -1,0 +1,236 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/roster.schema.json",
+  "title": "Roster",
+  "description": "An army list imported from an external list-builder, resolved onto 40kdc entity IDs. Lenient: unresolved entries are retained with their raw name and candidate suggestions rather than dropped, and a diagnostics block summarises the import. Contains only permitted facts (entity IDs, display names, model counts, points, keywords) — never reproduced rules or ability text.",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "source": {
+      "type": "object",
+      "description": "Provenance of the imported list. `format` identifies which adapter parsed the source payload; new adapters extend this enum.",
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": [
+            "listforge",
+            "listforge-text",
+            "newrecruit-json",
+            "newrecruit-wtc-compact",
+            "newrecruit-wtc-full",
+            "newrecruit-simple",
+            "rosterizer",
+            "gw",
+            "roster-json"
+          ]
+        },
+        "generated_by": {
+          "oneOf": [{ "type": "string" }, { "type": "null" }],
+          "description": "The `generatedBy` field reported by the source payload (e.g. 'List Forge', 'https://newrecruit.eu'), if present."
+        }
+      },
+      "required": ["format", "generated_by"],
+      "additionalProperties": false
+    },
+    "faction_id": {
+      "oneOf": [
+        { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+        { "type": "null" }
+      ],
+      "description": "Resolved primary faction; null when the source faction could not be matched."
+    },
+    "detachments": {
+      "type": "array",
+      "description": "Resolved detachments. 11e lists may field several detachments under a detachment-point cap; pre-11e lists carry zero or one. Order is load-bearing (source/parse order). Empty when the source declared no detachment.",
+      "items": { "$ref": "#/$defs/roster-detachment" }
+    },
+    "battle_size": {
+      "oneOf": [
+        { "$ref": "../defs/common.schema.json#/$defs/battle-size" },
+        { "type": "null" }
+      ],
+      "description": "Resolved battle size; null when the source value could not be mapped."
+    },
+    "points": {
+      "type": "object",
+      "description": "Point totals. `total_reported` (from the source payload) and `total_computed` (summed from this roster's units) are kept distinct and never reconciled — a mismatch is surfaced as a diagnostic.",
+      "properties": {
+        "declared_limit": {
+          "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }],
+          "description": "Points ceiling parsed from the battle size (e.g. 2000), if known."
+        },
+        "detachment_cap": {
+          "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }],
+          "description": "11e detachment-point budget derived from the battle size (strike-force 3, incursion 2); null when the battle size is unknown. The sum of each detachment's `dp_cost` is meant to fit within this cap."
+        },
+        "total_reported": {
+          "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }],
+          "description": "Total points as reported by the source roster's cost block."
+        },
+        "total_computed": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Sum of this roster's per-unit point values."
+        }
+      },
+      "required": ["declared_limit", "detachment_cap", "total_reported", "total_computed"],
+      "additionalProperties": false
+    },
+    "units": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/roster-unit" }
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" },
+    "diagnostics": { "$ref": "#/$defs/roster-diagnostics" }
+  },
+  "required": ["name", "source", "faction_id", "detachments", "battle_size", "points", "units", "game_version", "diagnostics"],
+  "additionalProperties": false,
+  "$defs": {
+    "roster-resolved-ref": {
+      "type": "object",
+      "description": "A reference to a 40kdc entity that may or may not have resolved. Retains the source's raw name so the import is lossless even on a miss.",
+      "properties": {
+        "id": {
+          "oneOf": [
+            { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+            { "type": "null" }
+          ],
+          "description": "Resolved entity id, or null when no match was found."
+        },
+        "raw_name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The display name exactly as it appeared in the source payload."
+        },
+        "resolved": {
+          "type": "boolean",
+          "description": "True iff `id` is non-null."
+        },
+        "candidates": {
+          "type": "array",
+          "maxItems": 5,
+          "description": "Best-guess alternatives offered when resolution failed (empty when resolved or when no near-matches exist).",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+              "name": { "type": "string" }
+            },
+            "required": ["id", "name"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["id", "raw_name", "resolved", "candidates"],
+      "additionalProperties": false
+    },
+    "roster-detachment": {
+      "type": "object",
+      "description": "One detachment selected on the roster, paired with its resolved detachment-point cost.",
+      "properties": {
+        "ref": { "$ref": "#/$defs/roster-resolved-ref" },
+        "dp_cost": {
+          "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }],
+          "description": "Detachment-point cost (1–3) looked up from the resolved detachment entity's `detachment_points`. Null when the detachment is unresolved or the entity records no cost."
+        }
+      },
+      "required": ["ref", "dp_cost"],
+      "additionalProperties": false
+    },
+    "roster-unit": {
+      "type": "object",
+      "properties": {
+        "ref": { "$ref": "#/$defs/roster-resolved-ref" },
+        "model_count": { "type": "integer", "minimum": 1 },
+        "points": {
+          "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }],
+          "description": "Per-unit point value from the source, or null when absent."
+        },
+        "is_warlord": { "type": "boolean", "default": false },
+        "enhancement": {
+          "oneOf": [{ "$ref": "#/$defs/roster-resolved-ref" }, { "type": "null" }],
+          "description": "Attached enhancement, or null when none."
+        },
+        "enhancement_points": {
+          "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }],
+          "description": "Points cost of the attached enhancement when the source reported one. Null when there is no enhancement or when the source didn't carry a cost line for it. Lets a Roster round-trip cleanly through formats that print enhancements as a separate `+N pts` line."
+        },
+        "wargear": {
+          "type": "array",
+          "description": "Weapons/wargear selected on the unit. Always lists the raw name and count; `ref.id` is null when the weapon could not be matched.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ref": { "$ref": "#/$defs/roster-resolved-ref" },
+              "count": { "type": "integer", "minimum": 1 }
+            },
+            "required": ["ref", "count"],
+            "additionalProperties": false
+          }
+        },
+        "leader_attachment": {
+          "oneOf": [
+            {
+              "type": "object",
+              "description": "Inferred leader→bodyguard attachment. Always provisional: the source format does not encode attachment unambiguously, so this is a heuristic match against leader-attachment data.",
+              "properties": {
+                "bodyguard_ref": { "$ref": "#/$defs/roster-resolved-ref" },
+                "provisional": { "type": "boolean" }
+              },
+              "required": ["bodyguard_ref", "provisional"],
+              "additionalProperties": false
+            },
+            { "type": "null" }
+          ]
+        }
+      },
+      "required": ["ref", "model_count", "points", "is_warlord", "enhancement", "enhancement_points", "wargear", "leader_attachment"],
+      "additionalProperties": false
+    },
+    "roster-diagnostics": {
+      "type": "object",
+      "description": "A summary of what resolved and what did not during the import.",
+      "properties": {
+        "resolved_units": { "type": "integer", "minimum": 0 },
+        "unresolved_units": { "type": "integer", "minimum": 0 },
+        "resolved_weapons": { "type": "integer", "minimum": 0 },
+        "unresolved_weapons": { "type": "integer", "minimum": 0 },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "faction-unresolved",
+                  "unit-unresolved",
+                  "weapon-unresolved",
+                  "enhancement-unresolved",
+                  "detachment-unresolved",
+                  "detachment-points-exceeded",
+                  "battle-size-unmapped",
+                  "points-mismatch",
+                  "leader-attachment-inferred",
+                  "multi-force",
+                  "unknown-field"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "description": "Generated, IP-free explanatory text."
+              },
+              "raw_name": {
+                "oneOf": [{ "type": "string" }, { "type": "null" }]
+              }
+            },
+            "required": ["code", "message", "raw_name"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["resolved_units", "unresolved_units", "resolved_weapons", "unresolved_weapons", "warnings"],
+      "additionalProperties": false
+    }
+  }
+}
