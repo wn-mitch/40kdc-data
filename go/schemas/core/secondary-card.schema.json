@@ -1,0 +1,256 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/secondary-card.schema.json",
+  "title": "Secondary Card",
+  "description": "An 11e mission card. The deck-level rule (draw 2 per turn, keep unscored cards) is separate and not modelled here. This is the per-card shape: an optional on-draw deck operation, an optional player action, and zero or more VP-award blocks. Primary mission cards reuse this shape via card_type. Mechanic blocks reference the Ability DSL; prose is community-authored (no reproduced rules text).",
+  "type": "object",
+  "$defs": {
+    "scoring-trigger": {
+      "type": "object",
+      "description": "When a VP award is evaluated. A bare `phase` is the legacy shorthand for 'during this phase'; richer triggers add `timing` (the moment within a phase/turn/game), `player_turn`, and a `battle_round` window. A card's section headers map onto these: 'ANY BATTLE ROUND' omits `battle_round`; 'SECOND BATTLE ROUND ONWARDS' is { min: 2 }; 'END OF THE BATTLE' is timing: end-of-battle.",
+      "properties": {
+        "phase": {
+          "$ref": "../defs/common.schema.json#/$defs/phase",
+          "description": "The phase the trigger is relative to. Required when `timing` is start-of-phase or end-of-phase; omitted for turn- or battle-level timings."
+        },
+        "timing": {
+          "type": "string",
+          "enum": ["start-of-turn", "end-of-turn", "start-of-phase", "end-of-phase", "end-of-battle"],
+          "description": "The moment the award is checked. 'End of your turn' = end-of-turn; 'End of your Command phase' = end-of-phase with phase: command; 'End of the battle' = end-of-battle."
+        },
+        "player_turn": { "$ref": "../defs/common.schema.json#/$defs/player-turn" },
+        "battle_round": {
+          "type": "object",
+          "description": "Battle-round window in which the trigger is active. Absent means any battle round (1-5). 'Second battle round onwards' is { min: 2 }.",
+          "properties": {
+            "min": { "type": "integer", "minimum": 1, "maximum": 5 },
+            "max": { "type": "integer", "minimum": 1, "maximum": 5 }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
+        }
+      },
+      "minProperties": 1,
+      "allOf": [
+        {
+          "if": {
+            "required": ["timing"],
+            "properties": { "timing": { "enum": ["start-of-phase", "end-of-phase"] } }
+          },
+          "then": { "required": ["phase"] }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "army-composition-predicate": {
+      "type": "object",
+      "description": "A draw-time predicate over an army list (not runtime board state, so deliberately NOT the Ability DSL condition). Used to gate when_drawn operations such as redraws. Example: a card that is void unless the opponent fields a large unit (10e 'Cull the Horde' redrew when the opponent had no unit of 14+ models) is { subject: 'opponent', quantifier: 'none', unit_filter: { model_count_min: 14 } } with operation 'redraw'.",
+      "properties": {
+        "subject": {
+          "type": "string",
+          "enum": ["self", "opponent"],
+          "description": "Whose army list the predicate inspects."
+        },
+        "quantifier": {
+          "type": "string",
+          "enum": ["any", "none"],
+          "description": "Whether the army must contain ('any') or lack ('none') a unit matching unit_filter for the predicate to hold."
+        },
+        "unit_filter": {
+          "type": "object",
+          "description": "Criteria a unit in the army must satisfy to match. All present criteria must hold (logical AND).",
+          "properties": {
+            "model_count_min": { "type": "integer", "minimum": 1 },
+            "model_count_max": { "type": "integer", "minimum": 1 },
+            "wounds_min": { "type": "integer", "minimum": 1 },
+            "keywords": { "$ref": "../defs/common.schema.json#/$defs/keyword-list" }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
+        }
+      },
+      "required": ["subject", "quantifier", "unit_filter"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "card_type": {
+      "type": "string",
+      "enum": ["secondary", "primary"],
+      "default": "secondary",
+      "description": "Whether this is a secondary card or a primary mission card (which reuses this shape)."
+    },
+    "subtype": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "description": "Finer classification within the deck (e.g. a category or tactical/fixed split). Free-form — not enum-locked until 11e categories are confirmed."
+    },
+    "when_drawn": {
+      "type": "object",
+      "description": "Optional deck operation performed when this card is drawn (e.g. redraw, swap). Distinct from combat effects — deck operations have no combat target, so they are not modelled via the Ability DSL effect language. If `condition` is present, the operation fires only when the predicate holds.",
+      "properties": {
+        "operation": {
+          "type": "string",
+          "enum": ["reshuffle", "replace", "redraw", "draw-extra", "swap"],
+          "description": "The deck manipulation this card triggers on draw."
+        },
+        "card_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "description": "Other cards this operation references, by id.",
+          "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" }
+        },
+        "condition": {
+          "$ref": "#/$defs/army-composition-predicate",
+          "description": "Draw-time army-composition predicate gating the operation (e.g. redraw when the opponent lacks a qualifying unit)."
+        },
+        "battle_round": {
+          "type": "object",
+          "description": "Battle-round window in which the draw operation is eligible (e.g. { max: 1 } means 'only when drawn in the first battle round'). Absent means the operation fires regardless of round.",
+          "properties": {
+            "min": { "type": "integer", "minimum": 1, "maximum": 5 },
+            "max": { "type": "integer", "minimum": 1, "maximum": 5 }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
+        }
+      },
+      "required": ["operation"],
+      "additionalProperties": false
+    },
+    "actions": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Optional player actions the card enables. Most cards have a single action; a few (e.g. Observe Enemy, with separate Baited-removal and Spotted actions) have two distinct actions on the same card.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "action_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Optional kebab-case identifier used to reference this action from `action-completed` conditions in `awards[].when`."
+          },
+          "starts": {
+            "$ref": "../defs/common.schema.json#/$defs/phase",
+            "description": "Phase in which the action can be started."
+          },
+          "timing": {
+            "type": "string",
+            "enum": ["start-of-battle", "start-of-turn", "end-of-turn"],
+            "description": "Non-phase moment the action happens, for card rules that are not started in a phase (Locate and Deny's start-of-battle marker placement, Punishment's start-of-turn condemnation, Consecrate's end-of-turn objective selection). Mutually informative with `starts` — a card action uses one or the other."
+          },
+          "battle_round": {
+            "type": "object",
+            "description": "Battle-round window in which the action can be started. Absent means any battle round. 'From the second battle round onwards' (Triangulate, Extract Intelligence) is { min: 2 }.",
+            "properties": {
+              "min": { "type": "integer", "minimum": 1, "maximum": 5 },
+              "max": { "type": "integer", "minimum": 1, "maximum": 5 }
+            },
+            "minProperties": 1,
+            "additionalProperties": false
+          },
+          "player_turn": { "$ref": "../defs/common.schema.json#/$defs/player-turn" },
+          "units": {
+            "$ref": "../enrichment/ability-dsl/condition.schema.json",
+            "description": "Eligibility predicate for which units may perform the action."
+          },
+          "use_limit": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum number of times the action may be performed (per turn unless `use_limit_scope` says otherwise)."
+          },
+          "use_limit_scope": {
+            "type": "string",
+            "enum": ["per-turn", "per-game"],
+            "default": "per-turn",
+            "description": "Whether `use_limit` is enforced per turn or once per game (e.g. Recover the Relics / Find and Deny 'Overwhelming Force' is once per game)."
+          },
+          "completes": {
+            "$ref": "../enrichment/ability-dsl/condition.schema.json",
+            "description": "Predicate for when the action is considered complete."
+          },
+          "effect": {
+            "$ref": "../enrichment/ability-dsl/effect.schema.json",
+            "description": "Effect applied when the action completes (e.g. terrain-area-tag, objective-tag, or unit-tag to mark transient state)."
+          },
+          "restrictions": {
+            "$ref": "../enrichment/ability-dsl/condition.schema.json",
+            "description": "Predicate that BLOCKS starting the action while it holds (Sensor Sweep: a unit cannot start this action if there is only one operation marker on the battlefield)."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "awards": {
+      "type": "array",
+      "minItems": 1,
+      "description": "VP-award blocks: each scores when `trigger` fires and the optional `when` condition holds. An award scores either a flat `vp` or a count-scaled `vp_per` (VP per instance of the thing named by `per`). Awards accrue independently and sum; a card's '+ ... CUMULATIVE' rows are modelled as separate awards flagged `cumulative` for faithful round-trip. Awards sharing the same `exclusive_group` value within a card resolve as the highest-scoring single award fires (the card's literal 'OR' rows between tier breakpoints, e.g. Record-Breaking Mission's 3-Fronts vs 4-Fronts).",
+      "items": {
+        "type": "object",
+        "properties": {
+          "trigger": { "$ref": "#/$defs/scoring-trigger" },
+          "when": { "$ref": "../enrichment/ability-dsl/condition.schema.json" },
+          "vp": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Flat VP scored when the award fires."
+          },
+          "vp_per": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "VP scored per instance of the thing named by `per` (e.g. 1 VP per operation marker within range of a controlled objective)."
+          },
+          "per": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "What `vp_per` counts, as a kebab-case descriptor (e.g. 'operation-marker-within-range-of-controlled-central-objective'). Required when `vp_per` is present."
+          },
+          "per_max": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Optional cap on how many instances `vp_per` counts."
+          },
+          "vp_max": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Optional cap on the total VP this award can contribute over the game — the card's 'UP TO N VP' ceiling. Distinct from `per_max`, which caps the instance count; use `vp_max` when the printed ceiling is not a multiple of `vp_per` (e.g. Burden of Trust's '2VP per guarded objective, up to 9VP')."
+          },
+          "mode": {
+            "type": "string",
+            "enum": ["fixed", "tactical"],
+            "description": "Which scoring track this award belongs to on cards that print both. Fixed missions are chosen for the whole game and score the (usually lower) `fixed` values; Tactical missions are drawn each turn and score the `tactical` values. Omitted on cards that score the same regardless of approach. A card may carry parallel `fixed` and `tactical` awards for the same condition; a consumer scores only the awards matching the player's chosen approach."
+          },
+          "cumulative": {
+            "type": "boolean",
+            "default": false,
+            "description": "Marks an award the card shows as an additive '+' bonus to the preceding award in the same trigger block (the card's CUMULATIVE rows). Purely descriptive — all awards accrue independently and are summed."
+          },
+          "exclusive_group": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Awards sharing this kebab-case group key resolve as 'score only the highest, not the sum' (the card's literal OR between tier rows). Awards with different `exclusive_group` values, or no value, accrue independently."
+          }
+        },
+        "oneOf": [
+          { "required": ["vp"] },
+          { "required": ["vp_per", "per"] }
+        ],
+        "required": ["trigger"],
+        "additionalProperties": false
+      }
+    },
+    "text": {
+      "type": "string",
+      "description": "Community-authored card description (original prose only — no reproduced rules text)."
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
+  },
+  "required": ["id", "name", "game_version"],
+  "additionalProperties": false
+}

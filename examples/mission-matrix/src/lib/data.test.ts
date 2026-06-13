@@ -93,11 +93,14 @@ describe("terrain layouts per matchup", () => {
     for (const l of a) expect(l.mission_matchup_id).toBe("take-and-hold-vs-purge-the-foe");
   });
 
-  it("layoutAvailability counts authored variants and is 0 for untagged pairings", () => {
+  it("layoutAvailability counts the authored variants for a pairing", () => {
     expect(layoutAvailability("take-and-hold", "take-and-hold")).toBe(
       layoutsForMatchup("take-and-hold", "take-and-hold").length,
     );
-    // No layouts are tagged for this pairing yet.
-    expect(layoutAvailability("disruption", "reconnaissance")).toBe(0);
+    // Availability equals the authored-variant count; assert it data-driven so
+    // the test stays correct as more layouts get tagged.
+    expect(layoutAvailability("disruption", "reconnaissance")).toBe(
+      layoutsForMatchup("disruption", "reconnaissance").length,
+    );
   });
 });

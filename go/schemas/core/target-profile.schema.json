@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/target-profile.schema.json",
+  "title": "TargetProfile",
+  "description": "A named target archetype for damage comparison. References a real dataset unit (faction_id + unit_id) rather than copying its stat line, so the profile stays in sync with dataset updates. Stats, keywords, and defensive abilities are resolved from the referenced unit at use time.",
+  "type": "object",
+  "properties": {
+    "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "description": { "type": "string" },
+    "faction_id": {
+      "$ref": "../defs/common.schema.json#/$defs/entity-id",
+      "description": "Scopes the unit lookup. Required because shared units (Rhino, Forgefiend, Predator) reuse one unit id across factions; resolution must be faction-scoped."
+    },
+    "unit_id": {
+      "$ref": "../defs/common.schema.json#/$defs/entity-id",
+      "description": "The dataset unit this archetype stands in for, resolved within faction_id. Its profile[0] supplies T/Sv/invuln/W; its keywords and defensive abilities are read at use time."
+    },
+    "model_count_override": {
+      "oneOf": [
+        { "type": "integer", "minimum": 1 },
+        { "type": "null" }
+      ],
+      "description": "Optional non-default squad size for the comparison. When null/absent, the referenced unit's model_count.min is used."
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
+  },
+  "required": ["id", "name", "faction_id", "unit_id", "game_version"],
+  "additionalProperties": false
+}

@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/enrichment/ability-dsl/ability.schema.json",
+  "title": "Ability DSL Entry",
+  "description": "Community-authored structured representation of what a game ability does. NOT GW text.",
+  "type": "object",
+  "properties": {
+    "ability_id": { "$ref": "../../defs/common.schema.json#/$defs/entity-id" },
+    "name": { "type": "string" },
+    "authored_by": { "$ref": "../../defs/common.schema.json#/$defs/contributor-ref" },
+    "game_version": { "$ref": "../../defs/game-version-ref.schema.json" },
+    "version": { "$ref": "../../defs/common.schema.json#/$defs/dataslate-version" },
+    "supersedes": {
+      "oneOf": [
+        { "$ref": "../../defs/common.schema.json#/$defs/dataslate-version" },
+        { "type": "null" }
+      ]
+    },
+    "unit_ids": { "type": "array", "items": { "$ref": "../../defs/common.schema.json#/$defs/entity-id" } },
+    "faction_id": {
+      "oneOf": [
+        { "$ref": "../../defs/common.schema.json#/$defs/entity-id" },
+        { "type": "null" }
+      ],
+      "description": "For faction-type abilities, the faction this rule belongs to"
+    },
+    "detachment_id": {
+      "oneOf": [
+        { "$ref": "../../defs/common.schema.json#/$defs/entity-id" },
+        { "type": "null" }
+      ],
+      "description": "For detachment/enhancement/stratagem-type abilities, the associated detachment"
+    },
+    "ability_type": { "type": "string", "enum": ["core", "faction", "detachment", "unit", "enhancement", "stratagem"] },
+    "behavior": {
+      "type": "string",
+      "enum": ["passive", "activated", "reactive", "aura"],
+      "description": "How this ability interacts with the game flow — not a runtime predicate"
+    },
+    "effect": { "$ref": "effect.schema.json" },
+    "scope": { "$ref": "scope.schema.json" },
+    "applies_to": {
+      "description": "Static, human-curated keyword filter naming which datasheet units this ability benefits, for roster-side highlighting. A unit matches when it carries every keyword in `required_keywords` (across its `keywords` + `faction_keywords`) and none in `excluded_keywords`. This is a denormalized projection distinct from the runtime `effect` condition tree (which mixes static class, runtime-granted markers, and timing gates and must not be scraped for scope). Absent/null means no resolvable unit scope — consumers render no highlight rather than guess.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "required_keywords": { "$ref": "../../defs/common.schema.json#/$defs/keyword-list" },
+            "excluded_keywords": { "$ref": "../../defs/common.schema.json#/$defs/keyword-list" }
+          },
+          "additionalProperties": false
+        },
+        { "type": "null" }
+      ]
+    },
+    "interactions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ability_ref": { "$ref": "../../defs/common.schema.json#/$defs/entity-id" },
+          "type": { "type": "string", "enum": ["conflicts-with", "combos-with", "superseded-by", "requires", "replaces"] },
+          "notes": { "type": "string" }
+        },
+        "required": ["ability_ref", "type"]
+      }
+    },
+    "disputed": { "type": "boolean", "default": false },
+    "dispute_notes": { "type": "string" },
+    "community_notes": { "type": "string" }
+  },
+  "required": ["ability_id", "name", "authored_by", "game_version", "effect", "scope"],
+  "additionalProperties": false
+}

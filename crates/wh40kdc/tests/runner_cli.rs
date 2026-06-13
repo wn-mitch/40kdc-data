@@ -182,11 +182,33 @@ fn linked_query_unknown_unit_returns_unknown_entity() {
 }
 
 #[test]
-fn validate_returns_unknown_op_until_validator_lands() {
-    let responses = drive_post_init(vec![json!({
-        "op": "validate", "args": {"target": "unit", "value": {}}
-    })]);
-    assert_eq!(responses[0]["error_kind"], "UNKNOWN_OP");
+fn validate_emits_closed_enum_errors() {
+    // A wargear item missing its required `name` reports the closed-enum code;
+    // a complete one validates clean.
+    let responses = drive_post_init(vec![
+        json!({
+            "op": "validate",
+            "args": {"target": "wargear", "value": {"id": "icon-of-khorne"}}
+        }),
+        json!({
+            "op": "validate",
+            "args": {"target": "wargear", "value": {
+                "id": "icon-of-khorne",
+                "name": "Icon of Khorne",
+                "category": "icon",
+                "game_version": {"edition": "10th", "dataslate": "2025-q3"}
+            }}
+        }),
+    ]);
+    assert_eq!(responses[0]["ok"], true);
+    let errs = responses[0]["value"].as_array().expect("errors array");
+    assert!(
+        errs.iter()
+            .any(|e| e["path"] == "/name" && e["code"] == "REQUIRED_MISSING"),
+        "expected a REQUIRED_MISSING at /name, got {errs:?}"
+    );
+    assert_eq!(responses[1]["ok"], true);
+    assert_eq!(responses[1]["value"], json!([]));
 }
 
 #[test]

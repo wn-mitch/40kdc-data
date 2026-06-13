@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/unit-composition.schema.json",
+  "title": "Unit Composition",
+  "description": "Describes the internal model-type breakdown of a unit.",
+  "type": "object",
+  "properties": {
+    "unit_id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "models": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "profile_name": {
+            "oneOf": [
+              { "type": "string", "minLength": 1 },
+              { "type": "null" }
+            ]
+          },
+          "min": { "type": "integer", "minimum": 0 },
+          "max": { "type": "integer", "minimum": 1 },
+          "default_weapon_ids": {
+            "type": "array",
+            "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" }
+          },
+          "is_leader_model": { "type": "boolean", "default": false },
+          "base_size_mm": {
+            "description": "This model's base. Absent when no base could be resolved for the model.",
+            "$ref": "../defs/common.schema.json#/$defs/base-size"
+          },
+          "hull_shape_id": {
+            "description": "Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to \"hull\".",
+            "oneOf": [
+              { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+              { "type": "null" }
+            ]
+          }
+        },
+        "required": ["name", "min", "max"],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
+  },
+  "required": ["unit_id", "models", "game_version"],
+  "additionalProperties": false
+}

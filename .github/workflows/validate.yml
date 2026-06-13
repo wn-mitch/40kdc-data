@@ -32,8 +32,9 @@ jobs:
           npm_ver=$(node -p "require('./tools/package.json').version")
           crate_ver=$(awk -F'"' '/^version[[:space:]]*=/ { print $2; exit }' crates/wh40kdc/Cargo.toml)
           py_ver=$(awk -F'"' '/^__version__/ { print $2; exit }' python/src/wh40kdc/_version.py)
-          if [ "$npm_ver" != "$crate_ver" ] || [ "$npm_ver" != "$py_ver" ]; then
-            echo "Version mismatch: tools/package.json=$npm_ver crates/wh40kdc/Cargo.toml=$crate_ver python/_version.py=$py_ver" >&2
+          go_ver=$(awk -F'"' '/^const Version/ { print $2; exit }' go/version.go)
+          if [ "$npm_ver" != "$crate_ver" ] || [ "$npm_ver" != "$py_ver" ] || [ "$npm_ver" != "$go_ver" ]; then
+            echo "Version mismatch: tools/package.json=$npm_ver crates/wh40kdc/Cargo.toml=$crate_ver python/_version.py=$py_ver go/version.go=$go_ver" >&2
             exit 1
           fi
           echo "Versions in sync: $npm_ver"
@@ -99,6 +100,40 @@ jobs:
       # Catch malformed wheels on PRs instead of at publish time on main.
       - name: Build sdist + wheel
         run: cd python && python -m build
+
+  go:
+    # The Go port (go/): build, vet, gofmt, unit + Go-native conformance tests,
+    # and a drift check on the committed embedded assets (bundle / share
+    # registry / schema tree / spec.go), mirroring the rust/python jobs.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.24"
+      # Regenerate the embedded assets and fail if they drifted. The bundle is
+      # produced by the Rust crate's xtask (the shared bundler); regenerate it
+      # first so the copy the Go module embeds is byte-current.
+      - run: cd tools && npm ci
+      - run: cd tools && npm run bundle:schemas
+      - run: cargo run -p xtask -- bundle-data
+      - run: bash go/codegen/sync.sh
+      - name: Check embedded Go assets are up to date
+        run: git diff --exit-code go/bundle.json go/share_registry.json go/schemas go/spec.go
+      - name: gofmt
+        run: test -z "$(gofmt -l go/)" || { gofmt -l go/; exit 1; }
+      - run: cd go && go vet ./...
+      - run: cd go && go build ./...
+      - run: cd go && go test ./...
+      - run: cd go && go mod verify
+      # Dry-run analogue of npm pack / cargo publish --dry-run: prove the runner
+      # builds and the module is self-consistent.
+      - run: cd go && go build -o wh40kdc-runner ./cmd/wh40kdc-runner
 
   conformance:
     # The tie-out gate: the Rust crate and the TS package must produce identical
@@ -168,7 +203,7 @@ jobs:
     # crate version: if this version is already on the registry the publish is
     # skipped, so the job is a no-op on every main push until Cargo.toml's
     # version is bumped. Requires the CARGO_REGISTRY_TOKEN repo secret.
-    needs: [validate, rust, python, conformance]
+    needs: [validate, rust, python, go, conformance]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
@@ -217,7 +252,7 @@ jobs:
     # token (these bypass 2FA — interactive OTP is impossible in CI), and the
     # alpaca-software org's publish setting must permit tokens. Provenance is
     # attached via OIDC, which needs `id-token: write` and a public repo.
-    needs: [validate, rust, python, conformance]
+    needs: [validate, rust, python, go, conformance]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
@@ -270,7 +305,7 @@ jobs:
     # owner/repository matching this repo, workflow `validate.yml`,
     # environment `pypi`. The `pypi` environment must also exist in the
     # GitHub repo settings.
-    needs: [validate, rust, python, conformance]
+    needs: [validate, rust, python, go, conformance]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: pypi
@@ -315,3 +350,55 @@ jobs:
           gh release create "$TAG" \
             --title "wh40kdc (PyPI) v${{ steps.ver.outputs.version }}" \
             --notes "Published to https://pypi.org/project/wh40kdc/${{ steps.ver.outputs.version }}/"
+
+  publish-go:
+    # Publish the Go module (go/) once main is green. Go modules publish via a
+    # VCS tag; because the module lives in the go/ subdirectory the tag MUST be
+    # `go/vX.Y.Z` for `go get github.com/wn-mitch/40kdc-data/go@vX.Y.Z` to
+    # resolve. No registry/token needed — publishing is just the tag + a proxy
+    # warm. Self-gates on the proxy so it's a no-op until go/version.go bumps.
+    needs: [validate, rust, python, go, conformance]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.24"
+      - name: Read module version
+        id: ver
+        run: echo "version=$(awk -F'\"' '/^const Version/ { print $2; exit }' go/version.go)" >> "$GITHUB_OUTPUT"
+      - name: Skip if version already on the Go module proxy
+        id: check
+        run: |
+          if curl -sfI "https://proxy.golang.org/github.com/wn-mitch/40kdc-data/go/@v/v${{ steps.ver.outputs.version }}.info" >/dev/null; then
+            echo "go module v${{ steps.ver.outputs.version }} already published; skipping."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Cross-compile runner binaries
+        if: steps.check.outputs.publish == 'true'
+        run: |
+          cd go
+          mkdir -p dist
+          for target in linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64 windows/arm64; do
+            os="${target%/*}"; arch="${target#*/}"
+            ext=""; [ "$os" = "windows" ] && ext=".exe"
+            GOOS="$os" GOARCH="$arch" go build -o "dist/wh40kdc-runner-$os-$arch$ext" ./cmd/wh40kdc-runner
+          done
+      - name: Tag, release, and warm the module proxy
+        if: steps.check.outputs.publish == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: go/v${{ steps.ver.outputs.version }}
+        run: |
+          git tag "$TAG"
+          git push origin "$TAG"
+          gh release create "$TAG" go/dist/* \
+            --title "wh40kdc Go module v${{ steps.ver.outputs.version }}" \
+            --notes "go get github.com/wn-mitch/40kdc-data/go@v${{ steps.ver.outputs.version }}"
+          GOPROXY=https://proxy.golang.org GO111MODULE=on \
+            go list -m "github.com/wn-mitch/40kdc-data/go@v${{ steps.ver.outputs.version }}" || true

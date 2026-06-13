@@ -679,6 +679,14 @@ def run_corpus(
         # Rust doesn't ship a validator yet — its runner answers UNKNOWN_OP
         # and the area skips for rust pairings; ts↔py exercises it.
         "validator": ["validate"],
+        # These areas weren't in needed_ops historically because every shipped
+        # runner supported them; listing them lets a *partially* implemented
+        # runner (e.g. a new port mid-build) skip the area on UNKNOWN_OP instead
+        # of diffing on the ok flag.
+        "scoring": ["score_event", "score_state", "wtc_result"],
+        "terrain-resolver": ["resolve_terrain"],
+        "terrain-keystones": ["keystones"],
+        "share": ["share_encode", "share_decode"],
     }
     probes: set[str] = set()
     for a in areas:
@@ -787,6 +795,15 @@ def default_rust_cmd() -> list[str]:
     return ["cargo", "run", "--quiet", "--release", "--bin", "wh40kdc-runner"]
 
 
+def default_go_cmd() -> list[str]:
+    # Prefer a prebuilt binary at go/wh40kdc-runner (CI builds it up front);
+    # otherwise `go run -C go` so the in-repo module is used without an install.
+    built = REPO_ROOT / "go" / "wh40kdc-runner"
+    if built.exists():
+        return [str(built)]
+    return ["go", "run", "-C", "go", "./cmd/wh40kdc-runner"]
+
+
 def default_py_cmd() -> list[str]:
     # `-m` (not a console script) so the Python runner can't collide with the
     # Rust `wh40kdc-runner` binary on PATH. The src tree is importable via the
@@ -823,9 +840,10 @@ def main() -> int:
     p.add_argument("--ts-cmd", help="shlex-split command line for the TS runner")
     p.add_argument("--rust-cmd", help="shlex-split command line for the Rust runner")
     p.add_argument("--py-cmd", help="shlex-split command line for the Python runner")
+    p.add_argument("--go-cmd", help="shlex-split command line for the Go runner")
     p.add_argument(
         "--pair",
-        choices=["ts,rust", "ts,py", "rust,py"],
+        choices=["ts,rust", "ts,py", "rust,py", "ts,go", "rust,go", "py,go"],
         default="ts,rust",
         help="which two implementations to diff (default: ts,rust)",
     )
@@ -861,6 +879,7 @@ def main() -> int:
         "ts": (shlex.split(args.ts_cmd) if args.ts_cmd else default_ts_cmd(), None),
         "rust": (shlex.split(args.rust_cmd) if args.rust_cmd else default_rust_cmd(), None),
         "py": (shlex.split(args.py_cmd) if args.py_cmd else default_py_cmd(), py_env()),
+        "go": (shlex.split(args.go_cmd) if args.go_cmd else default_go_cmd(), None),
     }
     lhs_name, rhs_name = args.pair.split(",")
     lhs_cmd, lhs_env = impl_spawns[lhs_name]

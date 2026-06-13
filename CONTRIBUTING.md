@@ -225,6 +225,37 @@ python3 tooling/parity/differ.py --pair ts,py
 python3 tooling/parity/differ.py --pair rust,py
 ```
 
+### Go development
+
+The Go module lives in `go/` (`github.com/wn-mitch/40kdc-data/go`):
+
+```bash
+cd go
+go test ./...          # unit + Go-native conformance tests (reads ../conformance)
+go vet ./...
+gofmt -l .             # must print nothing
+go build -o wh40kdc-runner ./cmd/wh40kdc-runner
+```
+
+Four embedded assets are committed and drift-checked in CI — regenerate after a
+schema or data change (the bundle comes from the Rust crate's
+`bundle.generated.json`, the shared bundler):
+
+```bash
+cd tools && npm run bundle:schemas && cd ..
+cargo run -p xtask -- bundle-data
+bash go/codegen/sync.sh   # go/{bundle.json,share_registry.json,schemas/,spec.go}
+```
+
+Cross-impl parity runs through the differ's Go pairings:
+
+```bash
+( cd go && go build -o wh40kdc-runner ./cmd/wh40kdc-runner )
+python3 tooling/parity/differ.py --pair ts,go
+python3 tooling/parity/differ.py --pair rust,go
+python3 tooling/parity/differ.py --pair py,go
+```
+
 ## Style
 
 - JSON files: 2-space indent

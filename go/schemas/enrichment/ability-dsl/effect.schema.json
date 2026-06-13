@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json",
+  "title": "Ability Effect",
+  "$defs": {
+    "effect-node": {
+      "oneOf": [
+        { "$ref": "#/$defs/single-effect" },
+        { "$ref": "#/$defs/choice-effect" },
+        { "$ref": "#/$defs/sequence-effect" },
+        { "$ref": "#/$defs/dice-gated-effect" },
+        { "$ref": "#/$defs/conditional-effect" },
+        { "$ref": "#/$defs/dice-pool-allocation-effect" }
+      ]
+    },
+    "single-effect": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "stat-modifier", "roll-modifier", "re-roll",
+            "mortal-wounds", "feel-no-pain", "invulnerable-save", "ward",
+            "keyword-grant", "movement-modifier", "deep-strike",
+            "fallback-and-act", "fight-first", "fight-last",
+            "shoot-on-death", "fight-on-death",
+            "objective-control-modifier", "leadership-modifier",
+            "damage-reduction", "attack-restriction",
+            "ability-grant", "cp-gain", "cp-refund",
+            "model-destruction", "resurrection",
+            "resource-gain", "resource-spend",
+            "charge-roll-modifier", "terrain-area-tag",
+            "objective-tag", "unit-tag",
+            "bs-modifier", "engagement-passthrough"
+          ]
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "self", "bearer", "unit", "attached-unit",
+            "attacker", "defender",
+            "friendly-within-aura", "enemy-within-aura",
+            "all-friendly", "all-enemy"
+          ]
+        },
+        "modifier": { "type": "object", "additionalProperties": true }
+      },
+      "required": ["type", "target"],
+      "$comment": "When `type` is `re-roll`, `modifier` must carry `roll` (string) and `subset` (`ones` | `all-failures`). Rerolls always target failures; the subset decides whether only 1s are rerolled or every failed die. The constraint is enforced by AJV at validation time and stripped from the codegen bundle (typify can't model if/then/else) — the generated TS/Rust types therefore see `modifier` as an open object, matching its other-`type` callers. When `type` is `feel-no-pain`, `modifier` carries `threshold` (the FNP save target) and optionally `scope` ∈ {`all`, `mortal`}; an absent scope defaults to `all` (fires on every unsaved wound). The two scopes compose independently against the mortal-wound stream. Tag effects (`terrain-area-tag`, `objective-tag`, `unit-tag`) set a transient marker on the named subject; `modifier` carries `tag` (string) and optionally `source` ('this-action'|'destroying-unit') and `clears_on` ('turn-rollover'|'never'). `target` for tag effects names the kind of entity the tag is applied to ('unit', 'self') — a placeholder, since the marker target is the objective/terrain/unit specified by the action context, not a combat target.",
+      "allOf": [
+        {
+          "if": {
+            "properties": { "type": { "const": "re-roll" } },
+            "required": ["type"]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "type": "object",
+                "properties": {
+                  "roll": { "type": "string", "minLength": 1 },
+                  "subset": { "type": "string", "enum": ["ones", "all-failures"] }
+                },
+                "required": ["roll", "subset"]
+              }
+            },
+            "required": ["modifier"]
+          }
+        }
+      ]
+    },
+    "choice-effect": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "choice" },
+        "options": { "type": "array", "items": { "$ref": "#/$defs/effect-node" }, "minItems": 2 },
+        "choice_label": { "type": "string" }
+      },
+      "required": ["type", "options"]
+    },
+    "sequence-effect": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "sequence" },
+        "steps": { "type": "array", "items": { "$ref": "#/$defs/effect-node" }, "minItems": 1 }
+      },
+      "required": ["type", "steps"]
+    },
+    "dice-gated-effect": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "dice-gated" },
+        "dice": { "type": "string", "description": "Dice expression, e.g. 'D6', '2D6'" },
+        "threshold": {
+          "oneOf": [
+            { "type": "integer" },
+            { "type": "string", "enum": ["leadership", "toughness", "save"] }
+          ],
+          "description": "Fixed threshold or model characteristic to compare against"
+        },
+        "comparison": {
+          "type": "string",
+          "enum": ["gte", "lte", "gt", "lt", "eq"],
+          "default": "gte"
+        },
+        "on_success": {
+          "oneOf": [
+            { "$ref": "#/$defs/effect-node" },
+            { "type": "null" }
+          ]
+        },
+        "on_fail": {
+          "oneOf": [
+            { "$ref": "#/$defs/effect-node" },
+            { "type": "null" }
+          ]
+        }
+      },
+      "required": ["type", "dice", "threshold"]
+    },
+    "conditional-effect": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "conditional" },
+        "condition": { "$ref": "condition.schema.json" },
+        "effect": { "$ref": "#/$defs/effect-node" }
+      },
+      "required": ["type", "condition", "effect"]
+    },
+    "dice-pool-allocation-effect": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "dice-pool-allocation" },
+        "pool": {
+          "type": "object",
+          "properties": {
+            "count": { "type": "integer", "minimum": 1 },
+            "die": { "type": "string" }
+          },
+          "required": ["count", "die"]
+        },
+        "max_activations": { "type": "integer", "minimum": 1 },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "requirement": {
+                "type": "object",
+                "properties": {
+                  "type": { "type": "string", "enum": ["pair", "triple", "single", "run"] },
+                  "min_value": { "type": "integer", "minimum": 1, "maximum": 6 }
+                },
+                "required": ["type", "min_value"]
+              },
+              "effect": { "$ref": "#/$defs/effect-node" }
+            },
+            "required": ["name", "requirement", "effect"]
+          },
+          "minItems": 1
+        }
+      },
+      "required": ["type", "pool", "max_activations", "options"]
+    }
+  },
+  "$ref": "#/$defs/effect-node"
+}
