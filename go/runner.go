@@ -18,7 +18,7 @@ import (
 
 const implName = "go"
 
-func ok(value any) map[string]any {
+func okResp(value any) map[string]any {
 	return map[string]any{"ok": true, "value": value}
 }
 
@@ -86,7 +86,7 @@ func (s *RunnerState) handleInit(args any) map[string]any {
 	s.locale = "C"
 	s.tz = "UTC"
 	s.seed, _ = num(a["seed"])
-	return ok(map[string]any{"impl": implName, "spec_version": SpecVersion, "impl_version": Version})
+	return okResp(map[string]any{"impl": implName, "spec_version": SpecVersion, "impl_version": Version})
 }
 
 // Dispatch applies one decoded request to the runner state and returns the
@@ -101,7 +101,7 @@ func (s *RunnerState) Dispatch(req map[string]any) map[string]any {
 	case "init":
 		return s.handleInit(args)
 	case "version":
-		return ok(map[string]any{"impl": implName, "spec_version": SpecVersion, "impl_version": Version})
+		return okResp(map[string]any{"impl": implName, "spec_version": SpecVersion, "impl_version": Version})
 	case "normalize":
 		return s.handleNormalize(args)
 	case "import":
@@ -143,7 +143,7 @@ func (s *RunnerState) Dispatch(req map[string]any) map[string]any {
 	case "share_decode":
 		return s.handleShareDecode(args)
 	case "shutdown":
-		return ok(nil)
+		return okResp(nil)
 	default:
 		return errResp("UNKNOWN_OP", map[string]any{"op": op})
 	}
@@ -158,7 +158,7 @@ func (s *RunnerState) handleNormalize(args any) map[string]any {
 	if !ok3 {
 		return errResp("INVALID_INPUT", detail("normalize.input must be a string"))
 	}
-	return ok(NormalizeName(in))
+	return okResp(NormalizeName(in))
 }
 
 // processRequest processes one line of stdin and returns the line to write to
