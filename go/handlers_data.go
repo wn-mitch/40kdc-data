@@ -155,8 +155,6 @@ func (s *RunnerState) handleLinkedQuery(args any) map[string]any {
 			out = append(out, u.ID())
 		}
 		return okResp(out)
-	case "eligible_abilities":
-		return s.handleEligibleAbilities(in)
 	default:
 		return errResp("INVALID_INPUT", detail("unknown linked_query: "+query))
 	}

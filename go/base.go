@@ -46,5 +46,11 @@ func numStr(v any) string {
 	if s, ok := v.(string); ok {
 		return s
 	}
+	switch n := v.(type) {
+	case int:
+		return strconv.Itoa(n)
+	case int64:
+		return strconv.FormatInt(n, 10)
+	}
 	return ""
 }
