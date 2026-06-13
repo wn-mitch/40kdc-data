@@ -24,8 +24,8 @@ SPEC_VERSION = {version}
 
 
 def main() -> int:
-    version = int(SPEC_FILE.read_text().strip())
-    OUT.write_text(TEMPLATE.format(version=version))
+    version = int(SPEC_FILE.read_text(encoding="utf-8").strip())
+    OUT.write_text(TEMPLATE.format(version=version), encoding="utf-8")
     print(f"wrote {OUT} (SPEC_VERSION = {version})")
     return 0
 

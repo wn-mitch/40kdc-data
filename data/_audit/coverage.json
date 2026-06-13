@@ -35,10 +35,10 @@
     },
     {
       "faction": "adeptus-custodes",
-      "total": 65,
-      "offensive": 13,
-      "defensive": 11,
-      "inert": 45,
+      "total": 106,
+      "offensive": 26,
+      "defensive": 13,
+      "inert": 71,
       "stub": 3,
       "stubStructural": 0,
       "gwTextLeak": 0,
@@ -266,10 +266,10 @@
     }
   ],
   "totals": {
-    "total": 2743,
-    "offensive": 662,
-    "defensive": 246,
-    "inert": 1919,
+    "total": 2784,
+    "offensive": 675,
+    "defensive": 248,
+    "inert": 1945,
     "stub": 154,
     "stubStructural": 188,
     "gwTextLeak": 0,
@@ -278,7 +278,7 @@
   "unsupportedReasons": [
     {
       "reason": "effect type \"ability-grant\" is not modelled by the buff layer",
-      "count": 426
+      "count": 432
     },
     {
       "reason": "stat-modifier: operation \"undefined\" not supported",
@@ -306,14 +306,14 @@
     },
     {
       "reason": "effect type \"resurrection\" is not modelled by the buff layer",
-      "count": 55
-    },
-    {
-      "reason": "effect type \"cp-refund\" is not modelled by the buff layer",
-      "count": 47
+      "count": 56
     },
     {
       "reason": "conditional: cannot evaluate condition \"undefined\" against current context",
+      "count": 54
+    },
+    {
+      "reason": "effect type \"cp-refund\" is not modelled by the buff layer",
       "count": 47
     },
     {
@@ -349,11 +349,11 @@
       "count": 22
     },
     {
-      "reason": "roll-modifier: operation \"set\" not supported",
-      "count": 18
+      "reason": "stat-modifier on \"M\" is outside the damage path",
+      "count": 19
     },
     {
-      "reason": "stat-modifier on \"M\" is outside the damage path",
+      "reason": "roll-modifier: operation \"set\" not supported",
       "count": 18
     },
     {
@@ -362,15 +362,15 @@
     },
     {
       "reason": "roll-modifier on \"charge\" is outside the damage path",
-      "count": 11
+      "count": 12
     },
     {
       "reason": "stat-modifier on \"D\" is outside the damage path",
-      "count": 10
+      "count": 12
     },
     {
       "reason": "conditional: cannot evaluate condition \"unit-below-starting-strength\" against current context",
-      "count": 10
+      "count": 11
     },
     {
       "reason": "conditional: cannot evaluate condition \"unit-within-range-of\" against current context",
@@ -382,7 +382,7 @@
     },
     {
       "reason": "stat-modifier T: defender-side stat; applies when the buffed unit is the target",
-      "count": 6
+      "count": 7
     },
     {
       "reason": "stat-modifier AP on the attacker: defender-side AP reduction is not modelled by the buff layer",
@@ -422,6 +422,10 @@
     },
     {
       "reason": "roll-modifier: operation \"ignore-engagement-penalty\" not supported",
+      "count": 3
+    },
+    {
+      "reason": "conditional: cannot evaluate condition \"unit-below-half-strength\" against current context",
       "count": 3
     },
     {
@@ -469,15 +473,27 @@
       "count": 2
     },
     {
-      "reason": "conditional: cannot evaluate condition \"unit-below-half-strength\" against current context",
-      "count": 2
-    },
-    {
       "reason": "effect type \"resource-gain\" is not modelled by the buff layer",
       "count": 2
     },
     {
       "reason": "stat-modifier: operation \"improve-vs-D1\" not supported",
+      "count": 1
+    },
+    {
+      "reason": "roll-modifier on \"advance\" is outside the damage path",
+      "count": 1
+    },
+    {
+      "reason": "stat-modifier: narrows by \"weapon_name\" which the cruncher can't resolve here",
+      "count": 1
+    },
+    {
+      "reason": "conditional: cannot evaluate condition \"made-ingress-move-this-turn\" against current context",
+      "count": 1
+    },
+    {
+      "reason": "conditional: cannot evaluate condition \"attack-stat-compare\" against current context",
       "count": 1
     },
     {
@@ -542,16 +558,6 @@
     }
   ],
   "worklist": [
-    {
-      "faction": "_core",
-      "ability_id": "benefit-of-cover",
-      "name": "Benefit of Cover",
-      "shape": "bs-modifier",
-      "stub": false,
-      "offensive": false,
-      "defensive": true,
-      "gap": null
-    },
     {
       "faction": "adepta-sororitas",
       "ability_id": "sworn-protectors",
@@ -5477,6 +5483,416 @@
       "ability_id": "martial-ka-tah",
       "name": "Martial Ka’tah",
       "shape": "choice",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "march-of-the-honoured-dead",
+      "name": "March of the Honoured Dead",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "stat-modifier on \"M\" is outside the damage path"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "interred-expertise-upgrade",
+      "name": "Interred Expertise Upgrade",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "auramite-sarcophagus-upgrade",
+      "name": "Auramite Sarcophagus Upgrade",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "flawless-construction-moritoi",
+      "name": "Flawless Construction (Moritoi)",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "conditional: cannot evaluate condition \"undefined\" against current context"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "unstoppable-advance",
+      "name": "Unstoppable Advance",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "prioritised-eradication",
+      "name": "Prioritised Eradication",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "skin-crawling-disorientation",
+      "name": "Skin-Crawling Disorientation",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "encircling-hunter",
+      "name": "Encircling Hunter",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "psyk-out-grenades-upgrade",
+      "name": "Psyk-Out Grenades Upgrade",
+      "shape": "keyword-grant",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "deathsong-scythes",
+      "name": "Deathsong Scythes",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "umbral-prosecution",
+      "name": "Umbral Prosecution",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": "stat-modifier: narrows by \"weapon_name\" which the cruncher can't resolve here"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "synchronised-inferno",
+      "name": "Synchronised Inferno",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "the-hammer-falls",
+      "name": "The Hammer Falls",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "conditional: cannot evaluate condition \"made-ingress-move-this-turn\" against current context"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "mnemo-locked-shrine-cipher",
+      "name": "Mnemo-Locked Shrine Cipher",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "conditional: cannot evaluate condition \"undefined\" against current context"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "efficient-aggression",
+      "name": "Efficient Aggression",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "conditional: cannot evaluate condition \"undefined\" against current context"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "hardened-resolve",
+      "name": "Hardened Resolve",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": true,
+      "gap": "conditional: cannot evaluate condition \"undefined\" against current context"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "unleash-the-lions-hammerblow",
+      "name": "Unleash the Lions (Hammerblow)",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "electroexorcist-saturation",
+      "name": "Electroexorcist Saturation",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "unleash-the-lions",
+      "name": "Unleash the Lions",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "against-all-odds",
+      "name": "Against All Odds",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "conditional: cannot evaluate condition \"undefined\" against current context"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "superior-creation",
+      "name": "Superior Creation",
+      "shape": "resurrection",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"resurrection\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "praesidius",
+      "name": "Praesidius",
+      "shape": "keyword-grant",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "fierce-conqueror",
+      "name": "Fierce Conqueror",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "admonimortis",
+      "name": "Admonimortis",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": "stat-modifier on \"D\" is outside the damage path"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "gilded-champion",
+      "name": "Gilded Champion",
+      "shape": "ability-grant",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"ability-grant\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "defiant-to-the-last",
+      "name": "Defiant to the Last",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "peerless-warrior",
+      "name": "Peerless Warrior",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "manoeuvre-and-fire",
+      "name": "Manoeuvre and Fire",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "swift-as-the-eagle",
+      "name": "Swift as the Eagle",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "auric-armour",
+      "name": "Auric Armour",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "conditional: cannot evaluate condition \"undefined\" against current context"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "moritoi-ancients",
+      "name": "Moritoi Ancients",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "adamantine-talisman",
+      "name": "Adamantine Talisman",
+      "shape": "sequence",
+      "stub": false,
+      "offensive": true,
+      "defensive": false,
+      "gap": "stat-modifier on \"D\" is outside the damage path"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "augury-uplink",
+      "name": "Augury Uplink",
+      "shape": "feel-no-pain",
+      "stub": false,
+      "offensive": false,
+      "defensive": true,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "honoured-fallen",
+      "name": "Honoured Fallen",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "veteran-of-the-kataphraktoi",
+      "name": "Veteran of the Kataphraktoi",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "flawless-construction-solar-spearhead",
+      "name": "Flawless Construction (Solar Spearhead)",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "conditional: cannot evaluate condition \"attack-stat-compare\" against current context"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "emperors-vengeance",
+      "name": "Emperor's Vengeance",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": "conditional: cannot evaluate condition \"undefined\" against current context"
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "wrathful-advance",
+      "name": "Wrathful Advance",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "unstoppable",
+      "name": "Unstoppable",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "relentless-persecution",
+      "name": "Relentless Persecution",
+      "shape": "conditional",
+      "stub": false,
+      "offensive": false,
+      "defensive": false,
+      "gap": null
+    },
+    {
+      "faction": "adeptus-custodes",
+      "ability_id": "punishment-inescapable",
+      "name": "Punishment Inescapable",
+      "shape": "conditional",
       "stub": false,
       "offensive": true,
       "defensive": false,
@@ -27967,6 +28383,16 @@
       "ability_id": "scorn-the-witch",
       "name": "Scorn the Witch",
       "shape": "feel-no-pain",
+      "stub": false,
+      "offensive": false,
+      "defensive": true,
+      "gap": null
+    },
+    {
+      "faction": "_core",
+      "ability_id": "benefit-of-cover",
+      "name": "Benefit of Cover",
+      "shape": "bs-modifier",
       "stub": false,
       "offensive": false,
       "defensive": true,

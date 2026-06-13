@@ -12,7 +12,7 @@
  * build/test/pack.
  */
 import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { emptyRawData, type RawData } from "./data/types.js";
@@ -77,7 +77,9 @@ function collectFiles(dir: string): string[] {
 }
 
 function baseName(file: string): string {
-  return file.slice(file.lastIndexOf("/") + 1, -".json".length);
+  // Use node:path basename so this works on Windows (backslash) paths too — a bare
+  // lastIndexOf("/") returns the whole path on Windows, so nothing bundles.
+  return basename(file, ".json");
 }
 
 function build(): RawData {

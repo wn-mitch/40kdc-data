@@ -485,6 +485,13 @@ fn describe_simple(s: &SimpleCondition) -> String {
         T::EngagementState => format!("{negate}engagement state"),
         T::FightsFirst => format!("{negate}fights first"),
         T::DispositionMatches => format!("{negate}disposition matches"),
+        T::AttackStatCompare => format!(
+            "{negate}the attack's {} is {} the target's {}",
+            ps(p, "attacker_stat").unwrap_or(""),
+            dekebab(ps(p, "comparison").unwrap_or("")),
+            ps(p, "target_stat").unwrap_or(""),
+        ),
+        T::MadeIngressMoveThisTurn => format!("{negate}the unit made an ingress move this turn"),
     }
 }
 

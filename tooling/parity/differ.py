@@ -76,6 +76,7 @@ class Runner:
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
+            encoding="utf-8",  # runners speak UTF-8 NDJSON; don't decode as the host locale
             bufsize=1,  # line-buffered
         )
         return self
@@ -230,7 +231,7 @@ ROSTER_EXPORT_FORMATS = (
 
 def iter_normalize_cases(corpus: Path) -> Iterator[Case]:
     path = corpus / "normalize.json"
-    data = json.loads(path.read_text())
+    data = json.loads(path.read_text(encoding="utf-8"))
     for i, entry in enumerate(data):
         yield Case(
             area="normalize",
@@ -252,7 +253,7 @@ def iter_roster_cases(corpus: Path) -> Iterator[Case]:
         for input_path in sorted(fixture.iterdir()):
             if not input_path.name.startswith("input."):
                 continue
-            raw = input_path.read_text()
+            raw = input_path.read_text(encoding="utf-8")
             yield Case(
                 area="roster",
                 case_id=f"roster/{fixture.name}/{input_path.name}",
@@ -266,7 +267,7 @@ def iter_roster_cases(corpus: Path) -> Iterator[Case]:
         roster_path = fixture / "expected.roster.json"
         if not roster_path.exists():
             continue
-        roster = json.loads(roster_path.read_text())
+        roster = json.loads(roster_path.read_text(encoding="utf-8"))
         for fmt, _expected_filename in ROSTER_EXPORT_FORMATS:
             yield Case(
                 area="roster",
@@ -280,7 +281,7 @@ def iter_roster_cases(corpus: Path) -> Iterator[Case]:
 def iter_cruncher_cases(corpus: Path) -> Iterator[Case]:
     root = corpus / "cruncher"
     for case_path in sorted(root.glob("*.json")):
-        case = json.loads(case_path.read_text())
+        case = json.loads(case_path.read_text(encoding="utf-8"))
         yield Case(
             area="cruncher",
             case_id=f"cruncher/{case_path.name}",
@@ -299,7 +300,7 @@ def iter_cruncher_cases(corpus: Path) -> Iterator[Case]:
 def iter_compare_cases(corpus: Path) -> Iterator[Case]:
     root = corpus / "compare"
     for case_path in sorted(root.glob("*.json")):
-        case = json.loads(case_path.read_text())
+        case = json.loads(case_path.read_text(encoding="utf-8"))
         yield Case(
             area="compare",
             case_id=f"compare/{case_path.name}",
@@ -320,7 +321,7 @@ def iter_compare_cases(corpus: Path) -> Iterator[Case]:
 def iter_loadout_cases(corpus: Path) -> Iterator[Case]:
     root = corpus / "loadout"
     for case_path in sorted(root.glob("*.json")):
-        case = json.loads(case_path.read_text())
+        case = json.loads(case_path.read_text(encoding="utf-8"))
         yield Case(
             area="loadout",
             case_id=f"loadout/{case_path.name}",
@@ -337,7 +338,7 @@ def iter_loadout_cases(corpus: Path) -> Iterator[Case]:
 
 def iter_linked_api_cases(corpus: Path) -> Iterator[Case]:
     path = corpus / "linked-api" / "cases.json"
-    cases = json.loads(path.read_text())
+    cases = json.loads(path.read_text(encoding="utf-8"))
     for i, entry in enumerate(cases):
         comparison = entry.get("comparison", "struct")
         if comparison == "set":
@@ -361,9 +362,9 @@ def iter_linked_api_cases(corpus: Path) -> Iterator[Case]:
 def iter_attribution_cases(corpus: Path) -> Iterator[Case]:
     cases_path = corpus / "attribution" / "cases.json"
     cruncher_dir = corpus / "cruncher"
-    cases = json.loads(cases_path.read_text())
+    cases = json.loads(cases_path.read_text(encoding="utf-8"))
     for entry in cases:
-        crunch_case = json.loads((cruncher_dir / entry["cruncher_case"]).read_text())
+        crunch_case = json.loads((cruncher_dir / entry["cruncher_case"]).read_text(encoding="utf-8"))
         yield Case(
             area="attribution",
             case_id=f"attribution/{entry['name']}",
@@ -381,7 +382,7 @@ def iter_attribution_cases(corpus: Path) -> Iterator[Case]:
 
 def iter_scoring_translation_cases(corpus: Path) -> Iterator[Case]:
     path = corpus / "scoring-translation" / "cases.json"
-    cases = json.loads(path.read_text())
+    cases = json.loads(path.read_text(encoding="utf-8"))
     for entry in cases:
         # The op echoes the awards verbatim; the goldens encode the expected
         # strings, but parity only needs the two impls to agree, so we compare
@@ -397,7 +398,7 @@ def iter_scoring_translation_cases(corpus: Path) -> Iterator[Case]:
 
 def iter_effect_translation_cases(corpus: Path) -> Iterator[Case]:
     path = corpus / "effect-translation" / "cases.json"
-    cases = json.loads(path.read_text())
+    cases = json.loads(path.read_text(encoding="utf-8"))
     for entry in cases:
         args = {"effect": entry["effect"]}
         if entry.get("scope") is not None:
@@ -415,7 +416,7 @@ def iter_effect_translation_cases(corpus: Path) -> Iterator[Case]:
 
 def iter_applies_to_cases(corpus: Path) -> Iterator[Case]:
     path = corpus / "applies-to" / "cases.json"
-    cases = json.loads(path.read_text())
+    cases = json.loads(path.read_text(encoding="utf-8"))
     for entry in cases:
         # The op intersects the `applies_to` keyword filter with each unit's
         # keywords + faction_keywords and returns the matched ids in input
@@ -432,7 +433,7 @@ def iter_applies_to_cases(corpus: Path) -> Iterator[Case]:
 
 def iter_scoring_cases(corpus: Path) -> Iterator[Case]:
     path = corpus / "scoring" / "cases.json"
-    cases = json.loads(path.read_text())
+    cases = json.loads(path.read_text(encoding="utf-8"))
     for entry in cases:
         # Each case carries its own op (score_event | score_state | wtc_result)
         # and args; the goldens are integers, so the two impls must agree
@@ -448,7 +449,7 @@ def iter_scoring_cases(corpus: Path) -> Iterator[Case]:
 
 def iter_terrain_resolver_cases(corpus: Path) -> Iterator[Case]:
     path = corpus / "terrain-resolver" / "cases.json"
-    cases = json.loads(path.read_text())
+    cases = json.loads(path.read_text(encoding="utf-8"))
     for entry in cases:
         # Each case carries its own templates + layout; the op resolves them to
         # board-space vertices. Vertices are floats, so compare with tolerance
@@ -464,7 +465,7 @@ def iter_terrain_resolver_cases(corpus: Path) -> Iterator[Case]:
 
 def iter_terrain_keystones_cases(corpus: Path) -> Iterator[Case]:
     path = corpus / "terrain-keystones" / "cases.json"
-    cases = json.loads(path.read_text())
+    cases = json.loads(path.read_text(encoding="utf-8"))
     for entry in cases:
         # Each case carries its own templates + layout (+ optional board); the
         # op derives keystone distances from resolved geometry. Distances are
@@ -483,7 +484,7 @@ def iter_terrain_keystones_cases(corpus: Path) -> Iterator[Case]:
 
 def iter_validator_cases(corpus: Path) -> Iterator[Case]:
     path = corpus / "validator" / "cases.json"
-    cases = json.loads(path.read_text())
+    cases = json.loads(path.read_text(encoding="utf-8"))
     for entry in cases:
         # The contract is the closed-enum (path, code) signature with set
         # semantics — both impls' outputs sort before comparing.
@@ -772,7 +773,7 @@ def py_env() -> dict[str, str]:
 
 
 def load_spec_version(corpus: Path) -> int:
-    return int((corpus / "SPEC_VERSION").read_text().strip())
+    return int((corpus / "SPEC_VERSION").read_text(encoding="utf-8").strip())
 
 
 # ----------------------------------------------------------------------------
@@ -947,7 +948,7 @@ def load_fuzz_dataset(corpus: Path) -> tuple[list[str], dict[str, list[int]]]:
     unit_profiles: dict[str, list[int]] = {}
     for path in sorted((data_root / "core").rglob("weapons.json")):
         try:
-            arr = json.loads(path.read_text())
+            arr = json.loads(path.read_text(encoding="utf-8"))
         except Exception:
             continue
         for w in arr:
@@ -955,7 +956,7 @@ def load_fuzz_dataset(corpus: Path) -> tuple[list[str], dict[str, list[int]]]:
                 weapons.append(w["id"])
     for path in sorted((data_root / "core").rglob("units.json")):
         try:
-            arr = json.loads(path.read_text())
+            arr = json.loads(path.read_text(encoding="utf-8"))
         except Exception:
             continue
         for u in arr:

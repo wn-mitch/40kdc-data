@@ -600,9 +600,25 @@ class SimpleCondition(TypedDict):
         "destroyed-while-on-objective",
         "destroyed-in-tagged-terrain",
         "operation-markers",
+        "attack-stat-compare",
+        "made-ingress-move-this-turn",
     ]
     parameters: NotRequired[dict[str, Any]]
     negated: NotRequired[bool]
+
+
+class Scaling(TypedDict):
+    per: int
+    of: Literal[
+        "enemy-models-in-range",
+        "friendly-models-in-range",
+        "models-in-bearer-unit",
+        "enemy-units-in-range",
+        "wounds-lost",
+    ]
+    within_inches: NotRequired[float]
+    round: NotRequired[Literal["down", "up"]]
+    max_value: NotRequired[int]
 
 
 class SingleEffect(TypedDict):
@@ -653,6 +669,7 @@ class SingleEffect(TypedDict):
         "all-enemy",
     ]
     modifier: NotRequired[dict[str, Any]]
+    scaling: NotRequired[Scaling]
 
 
 class Pool(TypedDict):

@@ -898,7 +898,9 @@ export interface SimpleCondition {
     | "engagement-fronts"
     | "destroyed-while-on-objective"
     | "destroyed-in-tagged-terrain"
-    | "operation-markers";
+    | "operation-markers"
+    | "attack-stat-compare"
+    | "made-ingress-move-this-turn";
   parameters?: {
     [k: string]: unknown;
   };
@@ -969,7 +971,26 @@ export interface SingleEffect {
   modifier?: {
     [k: string]: unknown;
   };
+  scaling?: Scaling;
   [k: string]: unknown;
+}
+/**
+ * Scales the effect's numeric `modifier.value`: it applies once per `per` of `of` (rounding `round`, default down), optionally capped at `max_value`. E.g. '+2 to the Attacks characteristic for every 5 enemy models within 6\"' → modifier.value 2 with scaling { per: 5, of: 'enemy-models-in-range', within_inches: 6 }.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "scaling".
+ */
+export interface Scaling {
+  per: number;
+  of:
+    | "enemy-models-in-range"
+    | "friendly-models-in-range"
+    | "models-in-bearer-unit"
+    | "enemy-units-in-range"
+    | "wounds-lost";
+  within_inches?: number;
+  round?: "down" | "up";
+  max_value?: number;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema

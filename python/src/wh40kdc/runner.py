@@ -778,6 +778,13 @@ def process_request(state: RunnerState, line: str) -> str | None:
 def main() -> int:
     """CLI loop: wire stdin/stdout. The differ pipelines requests and expects
     responses in order, flushed per line."""
+    # The NDJSON protocol is UTF-8 on every platform; pin the streams so a child
+    # process on a non-UTF-8 host locale (e.g. Windows cp1252) doesn't mangle
+    # non-ASCII data (unit names like "Khârn") in or out.
+    for stream in (sys.stdin, sys.stdout):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            reconfigure(encoding="utf-8")
     state = create_runner_state()
     for line in sys.stdin:
         out = process_request(state, line)
