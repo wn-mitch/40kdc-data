@@ -76,7 +76,7 @@
       class="focus-ring rounded border border-border-strong px-3 py-1.5 text-xs uppercase tracking-wide text-text-muted hover:border-accent hover:text-accent"
       onclick={onCopyShare}
     >
-      Copy share link
+      Share
     </button>
     <button
       type="button"

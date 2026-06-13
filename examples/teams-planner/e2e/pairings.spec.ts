@@ -180,14 +180,11 @@ test("setup bench: removing a player moves their card to the bench", async ({ pa
   await expect(roster.getByRole("button")).toHaveCount(5);
 });
 
-test("team size widens to 3-8 and the plan round-trips through a share link", async ({ page }) => {
+test("team size widens to 3-8", async ({ page }) => {
   await page.goto("/");
   const size = page.locator("select").first();
   await expect(size.locator("option")).toHaveCount(6);
   await size.selectOption("3");
   await expect(size).toHaveValue("3");
   await expect(page.getByText("of 3 slots have a faction")).toBeVisible();
-
-  await page.getByRole("button", { name: "Copy share link" }).click();
-  await expect(page.locator('[role="status"]')).toBeVisible();
 });

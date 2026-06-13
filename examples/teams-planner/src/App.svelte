@@ -1,8 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { teamCoverage, type Player, type TeamPlan } from "./lib/coverage";
-  import { decodePlan, encodePlan, sanitizePlan } from "./lib/share-plan";
+  import { decodePlan, sanitizePlan } from "./lib/share-plan";
   import PlanView from "./lib/PlanView.svelte";
+  import SharePlanModal from "./lib/SharePlanModal.svelte";
   import PairingsSimulator from "./lib/pairings/PairingsSimulator.svelte";
   import AppHeader from "../../_shared/AppHeader.svelte";
   import AppFooter from "../../_shared/AppFooter.svelte";
@@ -274,18 +275,8 @@
     plan = { ...plan, players: plan.players.filter((p) => p.id !== id) };
   }
 
-  async function copyShareLink() {
-    const url = `${location.origin}${location.pathname}#t=${encodePlan(plan)}`;
-    try {
-      await navigator.clipboard.writeText(url);
-      flash("Share link copied to clipboard.");
-    } catch {
-      // Clipboard blocked (e.g. insecure context) — drop it into the hash so it
-      // can still be copied from the address bar.
-      history.replaceState(null, "", url);
-      flash("Couldn't reach the clipboard — link is in the address bar.");
-    }
-  }
+  /** The Share dialog (quick `#t=` link + patron short link, side by side). */
+  let sharePlanOpen = $state(false);
 
   function resetPlan() {
     if (plan.players.length > 0 && !confirm("Clear the whole team plan?")) return;
@@ -345,7 +336,7 @@
         onUpdatePlayer={updatePlayer}
         onAddPlayer={addPlayer}
         onRemovePlayer={removePlayer}
-        onCopyShare={copyShareLink}
+        onCopyShare={() => (sharePlanOpen = true)}
         onReset={resetPlan}
         onGoLive={startLive}
       />
@@ -403,6 +394,16 @@
     exportPayload={toSnapshotPayload}
     onOpenLive={openLive}
     onFlash={flash}
+  />
+
+  <SharePlanModal
+    bind:open={sharePlanOpen}
+    {plan}
+    onFlash={flash}
+    onNeedEntitlement={() => {
+      sharePlanOpen = false;
+      gateOpen = true;
+    }}
   />
 
   <!-- Floating live-session presence: roster, nickname, links, snapshot fallback. -->
