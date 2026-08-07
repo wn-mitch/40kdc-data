@@ -34,7 +34,6 @@ Impeccable setup documents a repo-local .claude loader path, but this repository
 ## 2026-08-06T20:55:48Z — gpt-5.6-sol
 
 The campaign skill and agent outputs referenced tools/src/translate/cli.ts, but that path does not exist; attempting the documented translation validation command failed before validation and required locating the current CLI.
-
 ## 2026-08-07T15:27:24Z — openai-codex/gpt-5.6-sol
 
 jq was invoked over multiple faction JSON files without slurping, producing one report per file and exiting 5 instead of one corpus-wide enum summary; use jq -s/add for this lookup.

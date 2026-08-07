@@ -44,7 +44,7 @@ export function buildAbilityCatalog(repoRoot, repositoryVersionId) {
   const factions = new Map()
   const coreRoot = join(repoRoot, 'data', 'core')
   if (existsSync(coreRoot)) {
-    for (const entry of readdirSync(coreRoot, { withFileTypes: true }).filter(entry => entry.isDirectory() && (entry.name === '_core' || !entry.name.startsWith('_'))).sort((a, b) => a.name.localeCompare(b.name))) {
+    for (const entry of readdirSync(coreRoot, { withFileTypes: true }).filter(entry => entry.isDirectory() && !entry.name.startsWith('_')).sort((a, b) => a.name.localeCompare(b.name))) {
       for (const faction of jsonArray(join(coreRoot, entry.name, 'factions.json'))) {
         if (typeof faction?.id === 'string' && typeof faction?.name === 'string') factions.set(faction.id, faction.name)
       }
@@ -53,7 +53,7 @@ export function buildAbilityCatalog(repoRoot, repositoryVersionId) {
   const catalog = []
   const enrichmentRoot = join(repoRoot, 'data', 'enrichment')
   if (existsSync(enrichmentRoot)) {
-    for (const entry of readdirSync(enrichmentRoot, { withFileTypes: true }).filter(entry => entry.isDirectory() && (entry.name === '_core' || !entry.name.startsWith('_'))).sort((a, b) => a.name.localeCompare(b.name))) {
+    for (const entry of readdirSync(enrichmentRoot, { withFileTypes: true }).filter(entry => entry.isDirectory() && !entry.name.startsWith('_')).sort((a, b) => a.name.localeCompare(b.name))) {
       const factionId = entry.name
       for (const ability of jsonArray(join(enrichmentRoot, factionId, 'abilities.json'))) {
         if (typeof ability?.ability_id !== 'string' || typeof ability?.name !== 'string') continue
@@ -88,18 +88,30 @@ function addRef(refs, nodeId, factionId, abilityId, sourceKind, distance) {
 
 function directRefs(payload) {
   const found = new Map()
-  const visit = (value, inheritedFaction = null) => {
+  const visit = (value, inMultiFaction = false) => {
     if (!value || typeof value !== 'object') return
     if (Array.isArray(value)) {
-      for (const child of value) visit(child, inheritedFaction)
+      for (const child of value) visit(child, inMultiFaction)
       return
     }
-    const factionId = typeof value.faction_id === 'string' ? value.faction_id : inheritedFaction
-    if (factionId && typeof value.ability_id === 'string') found.set(refKey(factionId, value.ability_id), { faction_id: factionId, ability_id: value.ability_id })
-    if (factionId && Array.isArray(value.ability_ids)) {
-      for (const abilityId of value.ability_ids) if (typeof abilityId === 'string') found.set(refKey(factionId, abilityId), { faction_id: factionId, ability_id: abilityId })
+    const ownFaction = typeof value.faction_id === 'string' ? value.faction_id : null
+    const multiFaction = inMultiFaction || ownFaction === 'multi-faction'
+    const addAbility = abilityId => {
+      if (typeof abilityId !== 'string') return
+      if (ownFaction && ownFaction !== 'multi-faction') {
+        found.set(refKey(ownFaction, abilityId), { faction_id: ownFaction, ability_id: abilityId })
+        return
+      }
+      if (multiFaction) {
+        const ref = compositeRef(abilityId)
+        if (ref) found.set(refKey(ref.faction_id, ref.ability_id), ref)
+      }
     }
-    for (const child of Object.values(value)) visit(child, factionId)
+    if (typeof value.ability_id === 'string') addAbility(value.ability_id)
+    if (Array.isArray(value.ability_ids)) {
+      for (const abilityId of value.ability_ids) addAbility(abilityId)
+    }
+    for (const child of Object.values(value)) visit(child, multiFaction)
   }
   visit(payload)
   return [...found.values()].sort((a, b) => a.faction_id.localeCompare(b.faction_id) || a.ability_id.localeCompare(b.ability_id))
@@ -111,6 +123,10 @@ function compositeRef(value) {
   return { faction_id: value.slice(0, separator), ability_id: value.slice(separator + 1) }
 }
 
+function datasetAbilityRef(ref) {
+  return ref && ref.faction_id !== '_core' ? ref : null
+}
+
 function projectionOwnershipRefs(store) {
   const ownership = []
   const visit = (value, nodeId) => {
@@ -119,30 +135,28 @@ function projectionOwnershipRefs(store) {
       for (const child of value) visit(child, nodeId)
       return
     }
-    const ref = compositeRef(value.ability_key)
+    const ref = datasetAbilityRef(compositeRef(value.ability_key))
     if (ref) ownership.push({ node_id: nodeId, ...ref })
     if (typeof value.subject_ref === 'string' && value.subject_ref.startsWith('ability:')) {
-      const ref = compositeRef(value.subject_ref.slice('ability:'.length))
+      const ref = datasetAbilityRef(compositeRef(value.subject_ref.slice('ability:'.length)))
       if (ref) ownership.push({ node_id: nodeId, ...ref })
     }
     if (Array.isArray(value.known_members)) {
       for (const member of value.known_members) {
-        const ref = compositeRef(member)
+        const ref = datasetAbilityRef(compositeRef(member))
         if (ref) ownership.push({ node_id: nodeId, ...ref })
       }
     }
     for (const child of Object.values(value)) visit(child, nodeId)
   }
-  for (const row of store.db.prepare('SELECT node_id,kind,payload_json FROM nodes ORDER BY node_id').all()) {
-    if (row.kind === 'workflow-output') continue
-    visit(JSON.parse(row.payload_json), row.node_id)
-  }
+  for (const row of store.db.prepare('SELECT node_id,payload_json FROM nodes ORDER BY node_id').all()) visit(JSON.parse(row.payload_json), row.node_id)
   for (const row of store.db.prepare('SELECT id,node_id FROM ability_evidence WHERE node_id IS NOT NULL ORDER BY id').all()) {
-    const ref = compositeRef(row.id)
+    const ref = datasetAbilityRef(compositeRef(row.id))
     if (ref) ownership.push({ node_id: row.node_id, ...ref })
   }
   return ownership.sort((a, b) => a.node_id.localeCompare(b.node_id) || a.faction_id.localeCompare(b.faction_id) || a.ability_id.localeCompare(b.ability_id))
 }
+
 
 function claimOwnershipRefs(store) {
   const rows = store.db.prepare(`
@@ -178,7 +192,8 @@ function claimOwnershipRefs(store) {
   return rows.flatMap(row => {
     if (typeof row.subject_ref !== 'string' || !row.subject_ref.startsWith('ability:')) return []
     const ref = compositeRef(row.subject_ref.slice('ability:'.length))
-    return ref ? [{ node_id: row.node_id, ...ref }] : []
+    if (!ref || ref.faction_id === '_core') return []
+    return [{ node_id: row.node_id, ...ref }]
   })
 }
 
@@ -235,8 +250,7 @@ function familyJoinTargets(store) {
 export function rebuildNodeAbilityRefs(store) {
   const existing = store.db.prepare("SELECT node_id,faction_id,ability_id,distance FROM node_ability_refs WHERE source_kind='explicit-ownership' ORDER BY node_id,faction_id,ability_id").all()
   const refs = new Map()
-  for (const row of store.db.prepare('SELECT node_id,kind,payload_json FROM nodes ORDER BY node_id').all()) {
-    if (row.kind === 'workflow-output') continue
+  for (const row of store.db.prepare('SELECT node_id,payload_json FROM nodes ORDER BY node_id').all()) {
     for (const ref of directRefs(JSON.parse(row.payload_json))) addRef(refs, row.node_id, ref.faction_id, ref.ability_id, 'direct', 0)
   }
   for (const ref of projectionOwnershipRefs(store)) addRef(refs, ref.node_id, ref.faction_id, ref.ability_id, 'ownership', 0)

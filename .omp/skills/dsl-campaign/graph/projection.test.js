@@ -19,14 +19,6 @@ function fixture() {
   const repoRoot = mkdtempSync(join(tmpdir(), 'mechanic-projection-repo-'))
   const graphRoot = join(repoRoot, 'graph')
   mkdirSync(join(repoRoot, 'data', 'core', 'fabricated-faction'), { recursive: true })
-  mkdirSync(join(repoRoot, 'data', 'enrichment', '_core'), { recursive: true })
-  mkdirSync(join(repoRoot, 'data', 'enrichment', '_ignored'), { recursive: true })
-  writeFileSync(join(repoRoot, 'data', 'enrichment', '_core', 'abilities.json'), JSON.stringify([
-    { ability_id: 'benefit-of-cover', name: 'Benefit of Cover' },
-  ]))
-  writeFileSync(join(repoRoot, 'data', 'enrichment', '_ignored', 'abilities.json'), JSON.stringify([
-    { ability_id: 'should-not-appear', name: 'Should Not Appear' },
-  ]))
   mkdirSync(join(repoRoot, 'data', 'enrichment', 'fabricated-faction'), { recursive: true })
   writeFileSync(join(repoRoot, 'data', 'core', 'fabricated-faction', 'factions.json'), JSON.stringify([
     { id: 'fabricated-faction', name: 'Fabricated Faction' },
@@ -46,10 +38,9 @@ test('global projection uses stable synthetic IDs and safe repository labels', (
   const { repoRoot, store } = fixture()
   const repository = store.createNode({ kind: 'repository-version', payload: { workspace_hash: 'a'.repeat(64), files: [], tool_versions: {}, runner_hashes: [], schema_version: 2, policy_version: 1 } })
   const result = reconcileAbilityCatalog(store, repoRoot, repository.node_id)
-  assert.equal(result.catalog_count, 3)
-  const core = store.db.prepare('SELECT * FROM ability_catalog WHERE faction_id=? AND ability_id=?').get('_core', 'benefit-of-cover')
-  assert.equal(core.ability_name, 'Benefit of Cover')
-  assert.equal(store.db.prepare('SELECT count(*) AS n FROM ability_catalog WHERE ability_id=?').get('should-not-appear').n, 0)
+  assert.equal(GLOBAL_ROOT_ID, 'root:mechanic-evidence')
+  assert.equal(abilityProjectionId('fabricated-faction', 'alpha'), 'ability:fabricated-faction:alpha')
+  assert.equal(result.catalog_count, 2)
   const alpha = store.db.prepare('SELECT * FROM ability_catalog WHERE faction_id=? AND ability_id=?').get('fabricated-faction', 'alpha')
   assert.equal(abilityProjectionLabel(alpha), 'Alpha — Fabricated Faction (fabricated-faction) · alpha')
   assert.equal(alpha.repository_version_id, repository.node_id)
@@ -76,7 +67,6 @@ test('refs are direct, forward-inherited, family-unioned, cycle-safe, and never 
     ],
   }, { aggregate_kind: 'family-template', aggregate_id: 'template', node_id: template.node_id })
 
-
   assert.deepEqual(refsFor(store, inherited.node_id).map(ref => ({ ...ref })), [{ faction_id: 'fabricated-faction', ability_id: 'alpha', source_kind: 'lineage', distance: 1 }])
   assert.deepEqual(refsFor(store, cycle.node_id).map(ref => ({ ...ref })), [{ faction_id: 'fabricated-faction', ability_id: 'alpha', source_kind: 'lineage', distance: 2 }])
   assert.deepEqual(refsFor(store, template.node_id).map(ref => ref.ability_id), ['alpha', 'beta'])
@@ -85,31 +75,77 @@ test('refs are direct, forward-inherited, family-unioned, cycle-safe, and never 
   assert.deepEqual(refsFor(store, repository.node_id), [])
   store.close()
 })
-test('workflow outputs inherit typed parent ownership without reading arbitrary payload refs', () => {
+test('direct refs isolate ordinary nested output and resolve multi-faction composites', () => {
   const { store } = fixture()
-  const parent = store.createNode({
+  const sameObject = store.createNode({
     kind: 'finding',
-    payload: { faction_id: 'fabricated-faction', ability_id: 'alpha' },
+    payload: { faction_id: 'fabricated-faction', ability_id: 'alpha', ability_ids: ['beta'], output: { ability_id: 'nested-pseudo' } },
   })
-  const output = store.createNode({
-    kind: 'workflow-output',
+  const multiFaction = store.createNode({
+    kind: 'finding',
     payload: {
-      result: {
-        faction_id: 'multi-faction',
-        ability_id: 'tyranids',
-        ability_key: 'multi-faction/tyranids',
-        subject_ref: 'ability:bounded-exact-unit-selector/bounded-exact-unit-selector',
-        known_members: ['multi-faction/tyranids'],
-        nested: { faction_id: 'bounded-exact-unit-selector', ability_id: 'bounded-exact-unit-selector' },
+      faction_id: 'multi-faction',
+      output: {
+        ability_id: 'fabricated-faction/alpha',
+        nested: { ability_ids: ['fabricated-faction/beta'] },
       },
     },
-    parents: [{ node_id: parent.node_id, edge_type: 'derived_from', authorizes_reuse: false, metadata: {} }],
   })
+  const shapeScoped = store.createNode({
+    kind: 'finding',
+    payload: { faction_id: 'bounded-exact-unit-selector', output: { ability_id: 'nested-pseudo' } },
+  })
+  const missingNormal = store.createNode({
+    kind: 'finding',
+    payload: { faction_id: 'fabricated-faction', ability_id: 'missing-normal' },
+  })
+  const syntheticOwnership = store.createNode({
+    kind: 'legacy-observation',
+    payload: {
+      campaign_id: 'fixture',
+      observation_type: 'legacy-ownership',
+      status: 'observed',
+      summary: {
+        ability_key: '_core/benefit-of-cover',
+        subject_ref: 'ability:_core/benefit-of-cover',
+        known_members: ['_core/benefit-of-cover'],
+      },
+      artifact_hashes: {},
+      known_members: [],
+      unknown_count: 0,
+      reason: 'synthetic namespace regression',
+    },
+  })
+
+  assert.ok(syntheticOwnership.node_id)
+
+  store.db.prepare('INSERT INTO ability_catalog(faction_id,ability_id,ability_name,faction_name,repository_version_id) VALUES (?,?,?,?,?)').run('fabricated-faction', 'alpha', 'Alpha', 'Fabricated Faction', 'fixture')
+  store.db.prepare('INSERT INTO ability_catalog(faction_id,ability_id,ability_name,faction_name,repository_version_id) VALUES (?,?,?,?,?)').run('fabricated-faction', 'beta', 'Beta', 'Fabricated Faction', 'fixture')
+
   rebuildNodeAbilityRefs(store)
 
-  assert.deepEqual(refsFor(store, output.node_id).map(ref => ({ ...ref })), [
-    { faction_id: 'fabricated-faction', ability_id: 'alpha', source_kind: 'lineage', distance: 1 },
+  const missingAbilityMetadata = store.db.prepare(`
+    SELECT DISTINCT refs.faction_id,refs.ability_id
+    FROM node_ability_refs AS refs
+    LEFT JOIN ability_catalog AS catalog
+      ON catalog.faction_id=refs.faction_id AND catalog.ability_id=refs.ability_id
+    WHERE catalog.ability_id IS NULL
+    ORDER BY refs.faction_id,refs.ability_id
+  `).all().map(ref => `${ref.faction_id}/${ref.ability_id}`)
+  assert.deepEqual(refsFor(store, syntheticOwnership.node_id), [])
+
+  assert.deepEqual(refsFor(store, missingNormal.node_id).map(ref => [ref.faction_id, ref.ability_id]), [['fabricated-faction', 'missing-normal']])
+  assert.deepEqual(missingAbilityMetadata, ['fabricated-faction/missing-normal'])
+  assert.deepEqual(refsFor(store, sameObject.node_id).map(ref => [ref.faction_id, ref.ability_id]), [
+    ['fabricated-faction', 'alpha'],
+    ['fabricated-faction', 'beta'],
   ])
+  assert.deepEqual(refsFor(store, multiFaction.node_id).map(ref => [ref.faction_id, ref.ability_id]), [
+    ['fabricated-faction', 'alpha'],
+    ['fabricated-faction', 'beta'],
+  ])
+  assert.deepEqual(refsFor(store, shapeScoped.node_id), [])
+  assert.equal(refsFor(store, multiFaction.node_id).some(ref => ref.faction_id === 'multi-faction'), false)
   store.close()
 })
 
@@ -118,6 +154,7 @@ test('normalized claim nodes and claim-set certificates project their subject ab
   const node = kind => store.createNode({ kind, payload: {} }).node_id
   const source = node('source-snapshot')
   const origin = store.createNode({ kind: 'claim-origin', payload: { origin_id: 'origin', subject_ref: 'ability:fabricated-faction/alpha', origin_kind: 'primary-source', source_snapshot_id: 'snapshot', current_state: 'current' }, parents: [{ node_id: source, edge_type: 'derived_from', authorizes_reuse: false, metadata: {} }] }).node_id
+  const coreOrigin = store.createNode({ kind: 'claim-origin', payload: { origin_id: 'core-origin', subject_ref: 'ability:_core/benefit-of-cover', origin_kind: 'primary-source', source_snapshot_id: 'snapshot', current_state: 'current' }, parents: [{ node_id: source, edge_type: 'derived_from', authorizes_reuse: false, metadata: {} }] }).node_id
   const extraction = node('extraction-identity')
   const semantic = node('semantic-claim')
   const occurrence = node('claim-occurrence')
@@ -127,6 +164,7 @@ test('normalized claim nodes and claim-set certificates project their subject ab
   const unresolved = node('unresolved-item')
   const certificate = node('claim-set-certificate')
   store.db.prepare('INSERT INTO source_snapshots(id,run_id,state,node_id,payload_json) VALUES (?,?,?,?,?)').run('snapshot', null, 'current', source, '{}')
+  store.db.prepare('INSERT INTO claim_origins(origin_id,subject_ref,origin_kind,source_snapshot_id,current_state,node_id) VALUES (?,?,?,?,?,?)').run('core-origin', 'ability:_core/benefit-of-cover', 'primary-source', 'snapshot', 'current', coreOrigin)
   store.db.prepare('INSERT INTO claim_origins(origin_id,subject_ref,origin_kind,source_snapshot_id,current_state,node_id) VALUES (?,?,?,?,?,?)').run('origin', 'ability:fabricated-faction/alpha', 'primary-source', 'snapshot', 'current', origin)
   store.db.prepare('INSERT INTO claim_extractions(extraction_id,origin_id,adapter_id,ontology_version,identity_json,node_id) VALUES (?,?,?,?,?,?)').run('extraction', 'origin', '40k-mechanic', '1', '{}', extraction)
   store.db.prepare('INSERT INTO semantic_claims(semantic_key,adapter_id,proposition_schema_id,proposition_schema_version,identity_ontology_version,polarity,modality,proposition_json,node_id) VALUES (?,?,?,?,?,?,?,?,?)').run('semantic', '40k-mechanic', '40k.mechanic-claim', '1', '1', 'affirms', 'asserted', '{"schema_id":"40k.mechanic-claim","schema_version":"1","value":{"predicate":"mechanic.trigger","arguments":[],"qualifiers":[]}}', semantic)
@@ -139,6 +177,7 @@ test('normalized claim nodes and claim-set certificates project their subject ab
   for (const nodeId of [origin, extraction, semantic, occurrence, assertion, evidence, unresolved, claimSet, certificate]) {
     assert.deepEqual(refsFor(store, nodeId).map(ref => [ref.faction_id, ref.ability_id]), [['fabricated-faction', 'alpha']])
   }
+  assert.deepEqual(refsFor(store, coreOrigin), [])
   store.close()
 })
 

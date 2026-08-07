@@ -79,23 +79,16 @@ const INQUISITOR_OUT = {
 }
 
 phase('Scout')
-const scoutPlans = (args.scout_shapes || [])
+const canonicalScouts = (args.scout_shapes || [])
   .map(shape => ({ shape, encoded: canonicalJson(shape) }))
   .sort((left, right) => left.encoded.localeCompare(right.encoded))
-const scoutLabels = scoutPlans.map(({ encoded }, index) =>
+const scoutLabels = canonicalScouts.map(({ encoded }, index) =>
   `prioritize:scout:${String(index + 1).padStart(2, '0')}:${sha256(encoded).slice(0, 12)}`)
-const scouts = (await parallel(scoutPlans.map(({ shape }, index) => () =>
+const scouts = (await parallel(canonicalScouts.map(({ shape }, index) => () =>
   graphAgent(PRE + `Scout the cross-faction family for this shape. estimated_family_size counts exact+near only ` +
-  `— stretches don't justify shapes. Input:\n` + JSON.stringify(shape),
-  {
-    agentType: 'swarmlord',
-    taskKind: 'prioritize-scout',
-    phase: 'Scout',
-    schema: SWARMLORD_OUT,
-    label: scoutLabels[index],
-    dependsOn: [],
-    taskPayload: { shape },
-  })
+  `— stretches don't justify shapes. Input:\n` + JSON.stringify({ shape }),
+  { agentType: 'swarmlord', taskKind: 'prioritize-scout', phase: 'Scout', schema: SWARMLORD_OUT,
+    label: scoutLabels[index], dependsOn: [], taskPayload: { shape } })
 ))).filter(Boolean)
 const scoutTargets = new Set(scouts.flatMap(output => (output.candidates || []).map(candidate =>
   `${candidate.faction}/${candidate.ability_id}`)))
@@ -121,7 +114,6 @@ const promptRanking = {
   view: scoutTargets.size ? 'scout-family-members' : 'first-100-eligible',
 }
 
-
 phase('Curate')
 const curationInput = {
   worklist_cap: CAP,
@@ -136,6 +128,7 @@ const curation = await graphAgent(PRE + `Curate the next campaign. Pick ONE cohe
 `or a real family. Reserve escalate_to_user for genuine maintainer calls. Input:\n` +
 JSON.stringify({
   mode: 'curate',
+  ...curationInput,
   artifacts: {
     ...args.artifacts,
     agent_outputs: scouts,
@@ -143,15 +136,8 @@ JSON.stringify({
     whole_graph_ranking: promptRanking,
   },
 }),
-{
-  agentType: 'inquisitor',
-  taskKind: 'prioritize-curate',
-  phase: 'Curate',
-  schema: INQUISITOR_OUT,
-  label: 'prioritize:curate',
-  dependsOn: scoutLabels,
-  taskPayload: curationInput,
-})
+{ agentType: 'inquisitor', taskKind: 'prioritize-curate', phase: 'Curate', schema: INQUISITOR_OUT,
+  label: 'prioritize:curate', dependsOn: scoutLabels, taskPayload: curationInput })
 if (!curation) throw new Error('inquisitor returned nothing — cannot pick a campaign')
 const excluded = new Set((args.excluded_claims || []).map(claim =>
   typeof claim === 'string' ? claim : `${claim.faction_id}/${claim.ability_id}`))
