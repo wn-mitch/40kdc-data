@@ -6,25 +6,29 @@ argument-hint: "[--worklist-cap N] [--dry-run] [optional targeting bias, e.g. 'f
 
 # Skill: dsl-campaign
 
-One launch = **one campaign**: prioritize → author in batches → apply+verify → close as a
-draft PR. The loop never self-terminates; relaunching is the human heartbeat, PR review is
-the second checkpoint. This file is the driver contract — a fresh session must be able to
-run a campaign from it alone.
+One launch = one campaign: prioritize → formalize → retrieve+plan → author → verify →
+apply+audit → close as a draft PR. `campaign-runner` drives the durable graph state
+machine through every non-terminal stage; PR review remains the second checkpoint. This
+file is the driver contract — a fresh session must be able to run a campaign from it alone.
 
-Companion files: `workflows/wf-prioritize.js`, `workflows/wf-author-batch.js`,
-`workflows/wf-verify-batch.js`, `workflows/wf-audit-batch.js`, and
-`workflows/wf-shape-scout.js` (invoke via `Workflow({scriptPath, args})`; each embeds
-the frozen agent Output contracts as JSON Schemas — never redesign those). Every workflow
-invocation must pass `repo_root: "/Users/will.mitchell/40kdc-dsl"`,
+Companion files: `workflows/wf-campaign-runner.js`, `workflows/wf-prioritize.js`,
+`workflows/wf-formalize-batch.js`, `workflows/wf-retrieve-plan-batch.js`,
+`workflows/wf-author-batch.js`, `workflows/wf-verify-batch.js`,
+`workflows/wf-audit-batch.js`, and `workflows/wf-shape-scout.js` (invoke agent-calling
+stages via `Workflow({scriptPath, args})`; each embeds the frozen agent Output contracts
+as JSON Schemas — never redesign those). Every
+agent-calling workflow invocation must pass
+`repo_root: "/Users/will.mitchell/40kdc-dsl"`,
 `graph_root: "/Users/will.mitchell/40kdc-dsl/_private/claim-graph"`, and
 `execution_envelopes: complete_graph_issued_execution_envelopes`. That variable means the
 complete scheduler-issued map for every agent label the workflow can invoke; every value
 must contain `run_id`, `task_id`, `attempt_id`, `lease_id`, `lease_expires_at`,
 `input_node_ids`, and `producer_contract_version`. A partial/sample map is invalid.
-Trusted output is not sealed or persisted without both `graph_root` and a matching active
-graph-issued envelope. `repo_root` pins subagents to this workspace even when the driver
-was launched elsewhere. The worked example of one converged campaign is
-`_private/loop-state/{roundtrip,inbox}-world-eaters.md`.
+`wf-retrieve-plan-batch.js` is deterministic and issues/completes only its registered
+graph tasks itself. Trusted agent output is not sealed or persisted without both
+`graph_root` and a matching active graph-issued envelope. `repo_root` pins subagents to
+this workspace even when the driver was launched elsewhere. The worked example of one
+converged campaign is `_private/loop-state/{roundtrip,inbox}-world-eaters.md`.
 
 ## Preconditions (fail loudly if unmet)
 
@@ -191,12 +195,31 @@ and registry projection. An overlap is rejected transactionally; rerun curation 
 new exclusion set. Never append or edit `registry.json` directly. Blocking escalations are
 answered as graph decisions before retrying readiness.
 
+
+### 1a — Autonomous runner checkpoint
+
+Immediately after `start-campaign`, and after every sealed workflow output or terminal
+agent verdict, call:
+
+```bash
+node .omp/skills/dsl-campaign/workflows/wf-campaign-runner.js \
+  --run c010 --graph /Users/will.mitchell/40kdc-dsl/_private/claim-graph
+```
+
+The runner records a hash-chained checkpoint and returns the earliest dependency-ready
+stage plus all ready task IDs. `campaign-runner` MUST invoke the workflow matching that
+returned stage, then checkpoint again; it MUST NOT ask an operator to select the next
+stage. `waiting`, `blocked`, and `terminal` selections carry no executable stage. A
+restart records no duplicate checkpoint unless a graph event changed the task-state digest.
+### 1b — Authoring prerequisites
+
 Before authoring each ability, complete its graph tasks in dependency order:
 `source-formalization certificate -> certified retrieval -> construction plan -> author`.
-Primitive/embedding similarity is discovery-only. Pass `wf-author-batch.js` only selected
-current certified ancestor node IDs, explicit unmatched claims, the construction-plan ID,
-and graph-issued execution envelopes. Never replay a transcript or use c007–c009 legacy
-observations as authority.
+Primitive/embedding similarity is discovery-only. Pass `wf-author-batch.js` only the
+source certificate, the exact construction-plan fields, and graph-issued execution
+envelopes. A direct source plan legitimately has no selected ancestor evidence; it still
+requires exact coverage of every current source occurrence. Never replay a transcript or
+use c007–c009 legacy observations as authority.
 
 ### 2 — Formalize source claims (per ready batch)
 
@@ -220,6 +243,26 @@ before any model call, then runs WHO/WHEN/WHAT against that source node and pers
 the formalizer's closed extraction-local propositions, evidence, derivation, unresolved,
 signature, and completeness output. There is no LLM source-binding confirmation and no
 default or `"unknown"` identity path.
+
+### 2b — Retrieve and plan certified claims
+
+After source formalization is certified, run the deterministic retrieval/planning stage
+before invoking an author. It resumes safely after a crash: an existing plan is reused and
+each registered retrieval/construction task is completed only when still pending or ready.
+
+```
+Workflow({ scriptPath: ".omp/skills/dsl-campaign/workflows/wf-retrieve-plan-batch.js", args: {
+  graph_root: "/Users/will.mitchell/40kdc-dsl/_private/claim-graph",
+  run_id: "cNNN",
+  abilities: […source-formalized worklist entries…],
+  candidates_by_ability: { /* optional current certified evidence only */ },
+} })
+```
+
+When no certified evidence covers every claim, a complete, represent-authorized source
+claim set creates a direct source plan: its selected evidence list is empty, but every
+current source occurrence remains required for author coverage. Imported or discovery-only
+material never covers a claim. Feed only `ready-for-authoring` results to the author batch.
 
 ### 3 — Author (per batch of 5–6)
 

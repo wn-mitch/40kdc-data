@@ -126,6 +126,52 @@ test('trusted agent persists and returns the scheduler-issued lineage-bound chil
   store.close()
 })
 
+test('trusted agent sanitizes deferred output without sealing its parent task', async () => {
+  const source = 'This fabricated source contains enough distinct words to prove deferred output never retains a copied source span.'
+  const { root } = activeRunFixture()
+  const graphAgent = createTrustedAgent({
+    driverArgs: { graph_root: root, run_id: 'run-1' },
+    invokeAgent: async prompt => ({
+      raw_text: source,
+      detail: 'own words only',
+      _lineage: returnedLineage(prompt),
+    }),
+  })
+  const result = await graphAgent('work', {
+    label: 'deferred',
+    agentType: 'formalizer',
+    completion: 'deferred',
+    graphSourceTexts: [source],
+    graphEphemeralKeys: ['raw_text'],
+    schema: { type: 'object', properties: {} },
+  })
+  assert.equal(Object.hasOwn(result, 'raw_text'), false)
+  assert.equal(result.detail, 'own words only')
+  const store = new GraphStore(root)
+  assert.equal(store.db.prepare("SELECT state FROM tasks WHERE id='run-1:deferred'").get().state, 'running')
+  assert.equal(store.db.prepare("SELECT count(*) AS n FROM nodes WHERE kind='workflow-output'").get().n, 0)
+  store.close()
+})
+
+test('trusted agent rejects a copied source span in deferred output', async () => {
+  const source = 'This fabricated source contains enough distinct words to prove deferred output never retains a copied source span.'
+  const { root } = activeRunFixture()
+  const graphAgent = createTrustedAgent({
+    driverArgs: { graph_root: root, run_id: 'run-1' },
+    invokeAgent: async prompt => ({
+      nested: { copied: source },
+      _lineage: returnedLineage(prompt),
+    }),
+  })
+  await assert.rejects(() => graphAgent('work', {
+    label: 'deferred-reject',
+    agentType: 'formalizer',
+    completion: 'deferred',
+    graphSourceTexts: [source],
+    schema: { type: 'object', properties: {} },
+  }), /contains 12-word source span/)
+})
+
 test('authoritative trusted agent fails closed before scheduling or model invocation when identity is absent', async () => {
   for (const missing of ['modelId', 'promptId', 'promptVersion', 'agentContractId']) {
     const { root, input } = activeRunFixture()

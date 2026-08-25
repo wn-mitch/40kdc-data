@@ -3,10 +3,10 @@ import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import test from 'node:test'
-import { compareDescriberScope, certifyShapeFamily, expandCampaignScope } from './scope.js'
+import { certifyAndExpandCampaignScope, compareDescriberScope, certifyShapeFamily, completeFamilyApply, expandCampaignScope } from './scope.js'
+import { completeTask, ensureTask, issueReadyTask } from './scheduler.js'
 import { GraphStore } from './store.js'
-
-function fixture() {
+function fixture({ certify = true } = {}) {
   const root = mkdtempSync(join(tmpdir(), 'scope-graph-'))
   const raw = join(root, 'raw')
   mkdirSync(raw)
@@ -29,8 +29,8 @@ function fixture() {
       { faction: 'fixture', ability_id: 'beta', fit: 'needs-param', match_strength: 'near' },
     ],
   }
-  const certified = certifyShapeFamily(store, { run_id: 'c012', shape_package: shapePackage, shape_package_node_id: packageNode.node_id })
-  return { store, raw, repository, certified }
+  const certified = certify ? certifyShapeFamily(store, { run_id: 'c012', shape_package: shapePackage, shape_package_node_id: packageNode.node_id }) : null
+  return { store, raw, repository, certified, packageNode, shapePackage }
 }
 
 test('certified family scope expands claims, fresh DAGs, and apply atomically', () => {
@@ -53,6 +53,87 @@ test('certified family scope expands claims, fresh DAGs, and apply atomically', 
   assert.deepEqual(edgeTypes, ['derived_from', 'satisfies', 'satisfies'])
   assert.equal(value.store.db.prepare("SELECT count(*) AS n FROM events WHERE event_type='campaign-scope-expanded'").get().n, 1)
   value.store.close()
+})
+
+test('family certification and scope expansion roll back as one transaction', () => {
+  const value = fixture({ certify: false })
+  const before = {
+    events: value.store.sequence(),
+    nodes: value.store.db.prepare('SELECT count(*) AS n FROM nodes').get().n,
+    templates: value.store.db.prepare('SELECT count(*) AS n FROM family_templates').get().n,
+    instances: value.store.db.prepare('SELECT count(*) AS n FROM family_instances').get().n,
+    applyTransactions: value.store.db.prepare('SELECT count(*) AS n FROM apply_transactions').get().n,
+    claims: value.store.db.prepare('SELECT count(*) AS n FROM claims').get().n,
+    tasks: value.store.db.prepare('SELECT count(*) AS n FROM tasks').get().n,
+  }
+  assert.throws(() => certifyAndExpandCampaignScope(value.store, {
+    run_id: 'c012',
+    shape_package: value.shapePackage,
+    shape_package_node_id: value.packageNode.node_id,
+    expected_repository_hash: 'b'.repeat(64),
+    raw_store_root: value.raw,
+  }), /repository-hash-drift/)
+  assert.deepEqual({
+    events: value.store.sequence(),
+    nodes: value.store.db.prepare('SELECT count(*) AS n FROM nodes').get().n,
+    templates: value.store.db.prepare('SELECT count(*) AS n FROM family_templates').get().n,
+    instances: value.store.db.prepare('SELECT count(*) AS n FROM family_instances').get().n,
+    applyTransactions: value.store.db.prepare('SELECT count(*) AS n FROM apply_transactions').get().n,
+    claims: value.store.db.prepare('SELECT count(*) AS n FROM claims').get().n,
+    tasks: value.store.db.prepare('SELECT count(*) AS n FROM tasks').get().n,
+  }, before)
+  value.store.close()
+})
+
+test('family apply atomically verifies the transaction after every member audit', () => {
+  const { store } = fixture()
+  const auditNodes = ['alpha', 'beta'].map(label => {
+    const audit = ensureTask(store, { run_id: 'c012', label: `fixture:${label}:audit`, kind: 'audit' })
+    const issued = issueReadyTask(store, { run_id: 'c012', label: audit.payload.label, now: 1_800_000_000_000 })
+    const node = store.createNode({ kind: 'finding', payload: { state: 'resolved', label } })
+    completeTask(store, { envelope: issued.envelope, output_node_id: node.node_id, now: 1_800_000_000_001 })
+    return { task: audit, node }
+  })
+  const transactionNode = store.createNode({
+    kind: 'apply-transaction',
+    payload: {
+      run_id: 'c012',
+      apply_transaction_id: 'c012:fixture-apply',
+      family_template_node_id: 'fixture-template',
+      authorized_keys: ['fixture/alpha', 'fixture/beta'],
+    },
+  })
+  store.appendEvent('apply-planned', {
+    row: {
+      id: 'c012:fixture-apply',
+      run_id: 'c012',
+      state: 'planned',
+      node_id: transactionNode.node_id,
+      payload: transactionNode.payload,
+    },
+  }, { aggregate_kind: 'apply-transaction', aggregate_id: 'c012:fixture-apply', node_id: transactionNode.node_id })
+  const apply = ensureTask(store, {
+    run_id: 'c012',
+    label: 'family:fixture:apply',
+    kind: 'family-apply',
+    depends_on: auditNodes.map(audit => audit.task.id),
+    payload: { apply_transaction_id: 'c012:fixture-apply' },
+  })
+  const issued = issueReadyTask(store, { run_id: 'c012', label: apply.payload.label, now: 1_800_000_000_002 })
+  const result = completeFamilyApply(store, {
+    run_id: 'c012',
+    apply_transaction_id: 'c012:fixture-apply',
+    envelope: issued.envelope,
+  })
+  assert.equal(result.idempotent, false)
+  assert.equal(store.db.prepare('SELECT state FROM apply_transactions WHERE id=?').get('c012:fixture-apply').state, 'verified')
+  assert.equal(store.db.prepare('SELECT state FROM tasks WHERE id=?').get(apply.id).state, 'succeeded')
+  assert.equal(store.db.prepare("SELECT count(*) AS n FROM events WHERE event_type='apply-verified'").get().n, 1)
+  assert.deepEqual(
+    store.db.prepare('SELECT node_id FROM tasks WHERE id=?').get(apply.id).node_id,
+    store.db.prepare('SELECT node_id FROM apply_transactions WHERE id=?').get('c012:fixture-apply').node_id,
+  )
+  store.close()
 })
 
 test('scope expansion failure leaves claims, tasks, nodes, and events unchanged', () => {

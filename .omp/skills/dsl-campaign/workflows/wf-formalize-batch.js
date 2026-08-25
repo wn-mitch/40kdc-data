@@ -7,7 +7,7 @@ import {
   resolveSourceBinding,
 } from '../graph/formalization.js'
 import { MECHANIC_REGISTRY, mechanicClaimAdapter } from '../graph/mechanic-claims.js'
-import { failTask, ensureTask, issueReadyTask } from '../graph/scheduler.js'
+import { failTask, ensureTask, issueReadyTask, recordRetryableFailure } from '../graph/scheduler.js'
 import { GraphStore } from '../graph/store.js'
 import { createTrustedAgent } from '../graph/workflow-runtime.js'
 
@@ -127,11 +127,144 @@ function entryFor(factionId, abilityId) {
   return rows.find(row => (row.ability_id ?? row.id) === abilityId) || null
 }
 
+function taskRow(store, runId, label) {
+  if (!store.db?.prepare) return null
+  return store.db.prepare('SELECT * FROM tasks WHERE id=? AND run_id=?').get(`${runId}:${label}`, runId) || null
+}
+function registeredTaskKind(row) {
+  if (typeof row?.kind === 'string') return row.kind
+  if (typeof row?.payload_json !== 'string') return null
+  try { return JSON.parse(row.payload_json || '{}').kind || null } catch { return null }
+}
+function registeredTaskPayload(row) {
+  if (typeof row?.payload_json !== 'string') return null
+  let registered
+  try { registered = JSON.parse(row.payload_json || '{}') } catch { throw new Error('recovered task payload malformed') }
+  const payload = registered?.payload
+  if (!payload || Object.getPrototypeOf(payload) !== Object.prototype) throw new Error('recovered task payload invalid')
+  return payload
+}
+
+function recoveredSourceBinding(row, common, { allowNull = false } = {}) {
+  if (registeredTaskKind(row) !== 'source-retrieval') throw new Error('recovered source task definition invalid')
+  const payload = registeredTaskPayload(row)
+  if (payload.faction_id !== common.faction_id || payload.ability_id !== common.ability_id || payload.generation !== common.generation) {
+    throw new Error('recovered source task definition invalid')
+  }
+  const binding = payload.source_binding
+  if (binding === null && allowNull) return null
+  if (!binding || Object.getPrototypeOf(binding) !== Object.prototype ||
+      Object.keys(binding).some(key => !['store_key', 'byte_hash'].includes(key)) ||
+      typeof binding.store_key !== 'string' || binding.store_key !== `${common.faction_id}/${common.ability_id}` ||
+      typeof binding.byte_hash !== 'string' || !/^[a-f0-9]{64}$/.test(binding.byte_hash)) {
+    throw new Error('recovered source task binding invalid')
+  }
+  return { store_key: binding.store_key, byte_hash: binding.byte_hash }
+}
+
+function nodeRow(store, nodeId) {
+  if (typeof nodeId !== 'string' || !nodeId) throw new Error('recovered task output node required')
+  const row = store.db.prepare('SELECT kind,payload_json FROM nodes WHERE node_id=?').get(nodeId)
+  if (!row) throw new Error(`recovered task output node missing: ${nodeId}`)
+  let payload
+  try { payload = JSON.parse(row.payload_json || '{}') } catch { throw new Error(`recovered task output payload malformed: ${nodeId}`) }
+  if (!payload || Object.getPrototypeOf(payload) !== Object.prototype) throw new Error(`recovered task output payload must be an object: ${nodeId}`)
+  return { ...row, node_id: nodeId, payload }
+}
+
+function recoveredSourceSnapshot(store, row, common, binding) {
+  if (!row || row.state !== 'succeeded') return null
+  if (registeredTaskKind(row) !== 'source-retrieval' || typeof row.node_id !== 'string' || !row.node_id) throw new Error('recovered source task definition invalid')
+  const node = nodeRow(store, row.node_id)
+  if (node.kind !== 'source-snapshot') throw new Error(`recovered source task output kind invalid: ${node.kind}`)
+  const source = node.payload
+  for (const key of ['source_snapshot_id', 'faction_id', 'ability_id', 'store_key', 'byte_hash']) {
+    if (typeof source[key] !== 'string' || !source[key]) throw new Error(`recovered source snapshot ${key} required`)
+  }
+  if (source.faction_id !== common.faction_id || source.ability_id !== common.ability_id ||
+      source.store_key !== binding.store_key || source.byte_hash !== binding.byte_hash) {
+    throw new Error('recovered source snapshot binding mismatch')
+  }
+  const projection = store.db.prepare('SELECT id,node_id FROM source_snapshots WHERE id=?').get(source.source_snapshot_id)
+  if (!projection || (projection.node_id && projection.node_id !== row.node_id)) throw new Error('recovered source snapshot projection mismatch')
+  return { source_snapshot_id: source.source_snapshot_id, source_node_id: row.node_id, idempotent: true }
+}
+
+function recoveredHelper(store, row, taskKind, outputKind) {
+  if (!row || row.state !== 'succeeded') return null
+  if (registeredTaskKind(row) !== taskKind || typeof row.node_id !== 'string' || !row.node_id) throw new Error('recovered helper task definition invalid')
+  const node = nodeRow(store, row.node_id)
+  if (node.kind !== 'workflow-output' || node.payload.output_kind !== outputKind) throw new Error(`recovered helper output kind invalid: ${node.kind}`)
+  const result = node.payload.result
+  if (!result || Object.getPrototypeOf(result) !== Object.prototype) throw new Error('recovered helper output result invalid')
+  return { ...result, sealed_output_node_id: row.node_id, ...(node.payload.execution_identity ? { execution_identity: node.payload.execution_identity } : {}) }
+}
+
+function recoveredFormalization(store, row, ability, sourceSnapshot) {
+  if (!row || row.state !== 'succeeded') return null
+  if (registeredTaskKind(row) !== 'source-formalization' || typeof row.node_id !== 'string' || !row.node_id) throw new Error('recovered formalization task definition invalid')
+  const node = nodeRow(store, row.node_id)
+  if (node.kind !== 'claim-set-certificate') throw new Error(`recovered formalization output kind invalid: ${node.kind}`)
+  const certificate = node.payload
+  for (const key of ['certificate_id', 'claim_set_id', 'extraction_id']) {
+    if (typeof certificate[key] !== 'string' || !certificate[key]) throw new Error(`recovered formalization ${key} required`)
+  }
+  if (!sourceSnapshot || typeof sourceSnapshot.source_snapshot_id !== 'string') throw new Error('recovered formalization source snapshot required')
+  const subjectRef = `ability:${ability.faction_id}/${ability.ability_id}`
+  const projection = store.db.prepare(`
+    SELECT cs.certificate_node_id,cs.subject_ref,cs.origin_id,co.subject_ref AS origin_subject_ref,
+      co.source_snapshot_id,co.current_state AS origin_state
+    FROM claim_sets cs
+    JOIN claim_origins co ON co.origin_id=cs.origin_id
+    WHERE cs.claim_set_id=? AND cs.state='current'
+  `).get(certificate.claim_set_id)
+  if (!projection || projection.certificate_node_id !== row.node_id || projection.subject_ref !== subjectRef ||
+      projection.origin_subject_ref !== subjectRef || projection.source_snapshot_id !== sourceSnapshot.source_snapshot_id ||
+      projection.origin_state !== 'current') throw new Error('recovered formalization current authority mismatch')
+  return {
+    ability,
+    status: 'certified',
+    extraction_id: certificate.extraction_id,
+    claim_set_id: certificate.claim_set_id,
+    certificate_node_id: row.node_id,
+    idempotent: true,
+  }
+}
+
+function registerTask(store, { run_id, label, kind, depends_on = [], payload = {} }) {
+  return ensureTask(store, { run_id, label, kind, depends_on, payload })
+}
+
 function issueSourceEnvelope(store, { run_id, label, payload }) {
-  ensureTask(store, { run_id, label, kind: 'source-retrieval', depends_on: [], payload })
+  registerTask(store, { run_id, label, kind: 'source-retrieval', depends_on: [], payload })
   const issued = issueReadyTask(store, { run_id, label, now: Date.now() })
   if (!issued.issued) throw new Error(issued.reason)
   return issued.envelope
+}
+
+export const SOURCE_RETRIEVAL_RETRY_LIMIT = 3
+
+function sourceFailure(store, { run_id, label, common, deterministic = false }) {
+  const task = taskRow(store, run_id, label)
+  if (!task || !['pending', 'ready', 'running'].includes(task.state)) throw new Error(`source task cannot retry: ${label}`)
+  const binding = recoveredSourceBinding(task, common, { allowNull: true })
+  registerTask(store, { run_id, label, kind: 'source-retrieval', depends_on: [], payload: { ...common, source_binding: binding } })
+  const issued = issueReadyTask(store, { run_id, label, now: Date.now() })
+  if (!issued.issued) throw new Error(issued.reason)
+  const attempts = Number(store.db.prepare(
+    "SELECT count(*) AS n FROM attempts WHERE run_id=? AND json_extract(payload_json,'$.task_id')=?",
+  ).get(run_id, task.id).n)
+  if (deterministic || attempts >= SOURCE_RETRIEVAL_RETRY_LIMIT) {
+    failTask(store, {
+      run_id,
+      label,
+      envelope: issued.envelope,
+      reason: deterministic ? 'source-entry-absent' : 'source-retry-limit-exhausted',
+    })
+    return { terminal: true }
+  }
+  recordRetryableFailure(store, { envelope: issued.envelope, reason: 'source-unavailable' })
+  return { terminal: false }
 }
 
 const results = await pipeline(args.abilities, async ability => {
@@ -142,26 +275,70 @@ const results = await pipeline(args.abilities, async ability => {
   const sourceStore = new GraphStore(args.graph_root)
   let sourceSnapshot
   try {
-    // The durable source task must exist even when the raw-store lookup itself fails.
-    const sourceEnvelope = issueSourceEnvelope(sourceStore, {
-      run_id: args.run_id, label: sourceLabel, payload: common,
-    })
-    let entry
-    let sourceText
+    let sourceText = null
     let binding
-    try {
-      entry = entryFor(ability.faction_id, ability.ability_id)
-      sourceText = canonicalSourceText(entry)
-      binding = resolveSourceBinding(rawStoreRoot, ability.faction_id, ability.ability_id)
-    } catch (error) {
-      failTask(sourceStore, { run_id: args.run_id, label: sourceLabel, reason: 'source-unavailable' })
-      return { ability, status: 'source-unavailable', reason: error.message }
+    const existingSourceTask = taskRow(sourceStore, args.run_id, sourceLabel)
+    if (existingSourceTask?.state === 'failed-final') {
+      binding = recoveredSourceBinding(existingSourceTask, common, { allowNull: true })
+      registerTask(sourceStore, {
+        run_id: args.run_id, label: sourceLabel, kind: 'source-retrieval', depends_on: [], payload: { ...common, source_binding: binding },
+      })
+      return { ability, status: 'source-unavailable', reason: 'source-unavailable' }
     }
-    sourceSnapshot = persistSourceSnapshot(sourceStore, {
-      run_id: args.run_id, ...common, envelope: sourceEnvelope, raw_store_root: rawStoreRoot,
-      source_binding: binding, parents: sourceEnvelope.input_node_ids,
+    if (existingSourceTask?.state === 'succeeded') {
+      binding = recoveredSourceBinding(existingSourceTask, common)
+    } else {
+      try {
+        const entry = entryFor(ability.faction_id, ability.ability_id)
+        if (!entry) {
+          const error = new Error('authoritative source entry is absent')
+          error.code = 'SOURCE_ENTRY_ABSENT'
+          throw error
+        }
+        sourceText = canonicalSourceText(entry)
+        binding = resolveSourceBinding(rawStoreRoot, ability.faction_id, ability.ability_id)
+      } catch (error) {
+        const failure = sourceFailure(sourceStore, {
+          run_id: args.run_id,
+          label: sourceLabel,
+          common,
+          deterministic: error?.code === 'SOURCE_ENTRY_ABSENT',
+        })
+        return { ability, status: failure.terminal ? 'source-unavailable' : 'source-retryable', reason: 'source-unavailable' }
+      }
+    }
+    const sourceTask = existingSourceTask || registerTask(sourceStore, {
+      run_id: args.run_id, label: sourceLabel, kind: 'source-retrieval', depends_on: [], payload: { ...common, source_binding: binding },
     })
+    sourceSnapshot = recoveredSourceSnapshot(sourceStore, sourceTask, common, binding)
+    if (!sourceSnapshot) {
+      const sourceEnvelope = issueSourceEnvelope(sourceStore, {
+        run_id: args.run_id, label: sourceLabel, payload: { ...common, source_binding: binding },
+      })
+      sourceSnapshot = persistSourceSnapshot(sourceStore, {
+        run_id: args.run_id, ...common, envelope: sourceEnvelope, raw_store_root: rawStoreRoot,
+        source_binding: binding, parents: sourceEnvelope.input_node_ids,
+      })
+    }
 
+    const formalizationLabel = `${prefix}:source-formalization`
+    const formalizationTask = registerTask(sourceStore, {
+      run_id: args.run_id, label: formalizationLabel, kind: 'source-formalization',
+      depends_on: [`${args.run_id}:${sourceLabel}`, `${args.run_id}:${prefix}:who`, `${args.run_id}:${prefix}:when`, `${args.run_id}:${prefix}:what`],
+      payload: common,
+    })
+    const resumed = recoveredFormalization(sourceStore, formalizationTask, ability, sourceSnapshot)
+    if (resumed) return resumed
+
+    if (sourceText === null) {
+      try {
+        sourceText = canonicalSourceText(entryFor(ability.faction_id, ability.ability_id))
+        const currentBinding = resolveSourceBinding(rawStoreRoot, ability.faction_id, ability.ability_id)
+        if (currentBinding.store_key !== binding.store_key || currentBinding.byte_hash !== binding.byte_hash) throw new Error('source byte hash changed')
+      } catch (error) {
+        return { ability, status: 'source-unavailable', reason: error.message }
+      }
+    }
     const basePrompt = JSON.stringify({
       ability_id: ability.ability_id, faction_id: ability.faction_id, source_snapshot_id: sourceSnapshot.source_snapshot_id, source_text: sourceText,
       mechanic_contract: MECHANIC_CONTRACT,
@@ -171,20 +348,24 @@ const results = await pipeline(args.abilities, async ability => {
       schema: DECOMPOSITION_OUT, taskPayload: common, graphSourceTexts: [sourceText], graphEphemeralKeys: ['raw_text', 'source_text'],
       authoritative: true, modelId, promptId, promptVersion, agentContractId: `${agentType}@${promptVersion}`, sourceSnapshotId: sourceSnapshot.source_snapshot_id,
     })
+    const helperCall = (agentType, taskKind, label, modelId, promptId, promptVersion, prompt) => {
+      const row = registerTask(sourceStore, {
+        run_id: args.run_id, label, kind: taskKind, depends_on: [`${args.run_id}:${sourceLabel}`], payload: common,
+      })
+      return recoveredHelper(sourceStore, row, taskKind, agentType) ||
+        graphAgent(prompt, helperOptions(agentType, taskKind, label, modelId, promptId, promptVersion))
+    }
     const [who, when, what] = await parallel([
-      () => graphAgent(`Decompose WHO into relational mechanic claims with no quoted source text. Input:\n${basePrompt}`,
-        helperOptions('target-dummy', 'target-decomposition', `${prefix}:who`, modelIdentities.who, 'formalize-who', WHO_PROMPT_VERSION)),
-      () => graphAgent(`Decompose WHEN into relational mechanic claims with no quoted source text. Input:\n${basePrompt}`,
-        helperOptions('chronomancer', 'timing-decomposition', `${prefix}:when`, modelIdentities.when, 'formalize-when', WHEN_PROMPT_VERSION)),
-      () => graphAgent(`Decompose WHAT into relational mechanic claims with no quoted source text. Input:\n${basePrompt}`,
-        helperOptions('vox-hound', 'effect-decomposition', `${prefix}:what`, modelIdentities.what, 'formalize-what', WHAT_PROMPT_VERSION)),
+      () => helperCall('target-dummy', 'target-decomposition', `${prefix}:who`, modelIdentities.who, 'formalize-who', WHO_PROMPT_VERSION, `Decompose WHO into relational mechanic claims with no quoted source text. Input:\n${basePrompt}`),
+      () => helperCall('chronomancer', 'timing-decomposition', `${prefix}:when`, modelIdentities.when, 'formalize-when', WHEN_PROMPT_VERSION, `Decompose WHEN into relational mechanic claims with no quoted source text. Input:\n${basePrompt}`),
+      () => helperCall('vox-hound', 'effect-decomposition', `${prefix}:what`, modelIdentities.what, 'formalize-what', WHAT_PROMPT_VERSION, `Decompose WHAT into relational mechanic claims with no quoted source text. Input:\n${basePrompt}`),
     ])
     const helperNodeIds = [who.sealed_output_node_id, when.sealed_output_node_id, what.sealed_output_node_id]
     const formalized = await graphAgent(`Aggregate sealed WHO/WHEN/WHAT analyses into closed, extraction-local mechanic propositions. Emit no source text and no semantic, occurrence, evidence-binding, extraction, assertion, unresolved, claim-set, certificate, or graph node IDs. Evidence locations are UTF-8 byte spans or derived local parents only. A complete output must check both retrieve and represent. Apply the supplied passive rule exactly. Input:\n${JSON.stringify({
       source_snapshot_id: sourceSnapshot.source_snapshot_id, source_text: sourceText, sealed_helper_node_ids: helperNodeIds, who, when, what,
       mechanic_contract: MECHANIC_CONTRACT,
     })}`, {
-      agentType: 'inquisitor', taskKind: 'source-formalization', phase: 'Formalize', label: `${prefix}:source-formalization`,
+      agentType: 'inquisitor', taskKind: 'source-formalization', phase: 'Formalize', label: formalizationLabel,
       dependsOn: [sourceLabel, `${prefix}:who`, `${prefix}:when`, `${prefix}:what`], inputNodeIds: helperNodeIds,
       completion: 'deferred', schema: FORMALIZATION_OUT, taskPayload: common, graphSourceTexts: [sourceText], graphEphemeralKeys: ['raw_text', 'source_text'],
       authoritative: true, modelId: modelIdentities.formalizer, promptId: 'formalize-claims', promptVersion: FORMALIZER_PROMPT_VERSION,
@@ -216,6 +397,5 @@ const results = await pipeline(args.abilities, async ability => {
     sourceStore.close()
   }
 })
-
 
 return { run_id: args.run_id, results }

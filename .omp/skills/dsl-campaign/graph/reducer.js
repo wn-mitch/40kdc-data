@@ -142,7 +142,7 @@ export function transition(aggregateKind, currentState, eventType, payload) {
       }
       return result('accepted', currentState, currentState, [], 'lease renewed')
     }
-    if (next === currentState) return result('idempotent', currentState, currentState, [], 'already applied')
+    if (next === currentState && !rule.checkpoint) return result('idempotent', currentState, currentState, [], 'already applied')
     return result('accepted', currentState, next, rule.emitted || [], 'transition accepted')
   } catch {
     return result('rejected', currentState, currentState, [], 'malformed payload')
@@ -599,7 +599,7 @@ function createAggregate(db, event, row) {
   const value = { ...row, id }
   const outcome = transition(kind, value.state, event.event_type, event.payload)
   if (!['accepted', 'idempotent'].includes(outcome.classification)) throw new Error(`${event.event_type}: ${outcome.reason}`)
-  upsertRow(db, table, value)
+    upsertRow(db, table, { ...value, state: outcome.next_state })
 }
 
 function updateAggregate(db, event) {

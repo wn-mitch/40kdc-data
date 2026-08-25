@@ -46,6 +46,21 @@ test('construction plan records occurrence ownership, substitutions, and seams',
   assert.equal(plan.composition_seams.length, 1)
   assert.equal(plan.rejected_conflicts.length, 1)
 })
+
+test('construction plan falls back to direct authorized source coverage', () => {
+  const plan = chooseConstructionPlan({
+    faction_id: 'fixture',
+    ability_id: 'novel-ability',
+    claim_set_id: claimSetId,
+    authorization: representAuthorization,
+    source_claims: [{ claim_occurrence_id: 'c1' }, { claim_occurrence_id: 'c2' }],
+    matches: [{ evidence_node_id: 'partial', match_type: 'exact-family-instance', covers_claim_occurrence_ids: ['c1'], bindings: [], rejected_reason: null }],
+  })
+  assert.equal(plan.state, 'ready')
+  assert.deepEqual(plan.selected_evidence_node_ids, [])
+  assert.deepEqual(plan.covered_claim_occurrence_ids, ['c1', 'c2'])
+  assert.deepEqual(plan.unmatched_claim_occurrence_ids, [])
+})
 test('construction plans reject missing or wrong-obligation authorization', () => {
   const input = { faction_id: 'fixture', ability_id: 'ability', claim_set_id: claimSetId, source_claims: [{ claim_occurrence_id: 'c1' }], matches: [] }
   assert.throws(() => chooseConstructionPlan(input), /requires full represent authorization/)

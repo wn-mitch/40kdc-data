@@ -11,7 +11,7 @@ import {
   renewLease,
 } from './scheduler.js'
 import { GraphStore } from './store.js'
-import { assertEnvelopeIdentity, assertInputEnvelope, sealOutput, trustedExecutionIdentity } from './workflow-lineage.js'
+import { assertEnvelopeIdentity, assertInputEnvelope, sanitizeGraphPayload, sealOutput, trustedExecutionIdentity } from './workflow-lineage.js'
 
 function lineageSchema() {
   return {
@@ -106,7 +106,7 @@ export function createTrustedAgent({
         label,
         kind: taskKind || agentOptions.agentType || 'agent',
         depends_on: dependencyTaskIds(driverArgs.run_id, dependsOn),
-        payload: taskPayload,
+        payload: { ...taskPayload, input_node_ids: inputNodeIds },
       })
       const issued = issueReadyTask(store, {
         run_id: driverArgs.run_id,
@@ -158,10 +158,13 @@ export function createTrustedAgent({
       assertEnvelopeIdentity(raw._lineage, envelope)
       assertActiveLease(store, envelope, now())
       const { _lineage, ...payload } = raw
-      const persistedPayload = omitEphemeral(payload, new Set(graphEphemeralKeys))
+      const persistedPayload = sanitizeGraphPayload(
+        omitEphemeral(payload, new Set(graphEphemeralKeys)),
+        { source_texts: graphSourceTexts },
+      )
       if (completion === 'deferred') {
         return {
-          ...payload,
+          ...persistedPayload,
           execution_envelope: envelope,
           ...(executionIdentity ? { execution_identity: executionIdentity } : {}),
         }

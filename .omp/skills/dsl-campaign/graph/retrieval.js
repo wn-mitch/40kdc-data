@@ -149,6 +149,76 @@ export function retrieveEvidence({ target_signature, target_claim_occurrence_ids
   return matches.sort((a, b) => RETRIEVAL_ORDER.indexOf(a.match_type) - RETRIEVAL_ORDER.indexOf(b.match_type) || a.evidence_node_id.localeCompare(b.evidence_node_id))
 }
 
+function candidateNodeId(candidate) {
+  if (typeof candidate === 'string' && candidate) return candidate
+  if (!candidate || Object.getPrototypeOf(candidate) !== Object.prototype || typeof candidate.node_id !== 'string' || !candidate.node_id) {
+    throw new TypeError('retrieval candidate must be a graph node id')
+  }
+  if (Object.keys(candidate).some(key => key !== 'node_id')) {
+    throw new Error('retrieval candidate metadata must be graph-derived')
+  }
+  return candidate.node_id
+}
+
+function jsonPayload(row, label) {
+  try {
+    const value = JSON.parse(row?.payload_json || '{}')
+    if (!value || Object.getPrototypeOf(value) !== Object.prototype) throw new Error()
+    return value
+  } catch {
+    throw new Error(`${label} payload malformed`)
+  }
+}
+
+// Retrieval callers may nominate graph evidence, but cannot assert its
+// certification, currentness, signature, or target-claim coverage. The graph
+// presently records no cross-claim-set coverage binding, so certified evidence
+// remains discovery-only until a first-class binding exists.
+export function hydrateRetrievalCandidates(store, candidates) {
+  if (!Array.isArray(candidates)) throw new TypeError('candidates must be an array')
+  return candidates.map(candidate => {
+    const node_id = candidateNodeId(candidate)
+    const node = store.db.prepare('SELECT kind,payload_json FROM nodes WHERE node_id=?').get(node_id)
+    if (!node) throw new Error(`candidate evidence node missing: ${node_id}`)
+    if (node.kind !== 'certified-ability-evidence') throw new Error(`candidate evidence kind is not reusable: ${node_id}`)
+    const evidence = store.db.prepare('SELECT state,node_id,payload_json FROM ability_evidence WHERE node_id=?').get(node_id)
+    if (!evidence || evidence.state !== 'certified' || evidence.node_id !== node_id) {
+      throw new Error(`candidate evidence is not current and certified: ${node_id}`)
+    }
+    const nodePayload = jsonPayload(node, 'candidate evidence')
+    const evidencePayload = jsonPayload(evidence, 'candidate evidence projection')
+    if (nodePayload.status !== 'certified' || canonicalJson(nodePayload) !== canonicalJson(evidencePayload)) {
+      throw new Error(`candidate evidence projection drift: ${node_id}`)
+    }
+    const certificateNodeId = nodePayload.fingerprints?.candidate_certificate_node_id
+    if (typeof certificateNodeId !== 'string' || !certificateNodeId) {
+      throw new Error(`candidate evidence lacks candidate certificate: ${node_id}`)
+    }
+    const certificate = store.db.prepare('SELECT kind,payload_json FROM nodes WHERE node_id=?').get(certificateNodeId)
+    if (certificate?.kind !== 'candidate-certificate' || jsonPayload(certificate, 'candidate certificate').status !== 'accepted') {
+      throw new Error(`candidate certificate is not accepted: ${node_id}`)
+    }
+    const sourceCertificate = store.db.prepare(`
+      SELECT parent_node_id AS node_id
+      FROM edges
+      WHERE child_node_id=? AND parent_node_id IN (SELECT node_id FROM nodes WHERE kind='claim-set-certificate')
+      ORDER BY parent_node_id
+      LIMIT 1
+    `).get(certificateNodeId)
+    if (!sourceCertificate) throw new Error(`candidate certificate lacks source authority: ${node_id}`)
+    const source = projectedClaimSet(store, { certificate_node_id: sourceCertificate.node_id, obligation: 'retrieve' })
+    return {
+      node_id,
+      status: 'certified',
+      current: true,
+      signature: source.target_signature,
+      admissible_substitutions: {},
+      covers_claim_occurrence_ids: [],
+      discovery_kind: 'primitive-discovery',
+    }
+  })
+}
+
 function candidatePlans(claimOccurrenceIds, matches) {
   const covering = matches.filter(match => COVERING.has(match.match_type) && !match.rejected_reason)
   if (covering.length > 20) throw new Error(`construction-plan-candidate-limit-exceeded: ${covering.length} > 20`)
@@ -189,27 +259,51 @@ function comparePlanTuple(left, right) {
 
 export function chooseConstructionPlan({ faction_id, ability_id, claim_set_id, source_claims, matches, authorization, required_checks = [], unresolved = [] }) {
   if (typeof claim_set_id !== 'string' || !claim_set_id) throw new TypeError('claim_set_id required')
+  const claimOccurrenceIds = validateSourceClaims(source_claims)
+  const blocking = unresolved.filter(item => item.resolution_state === 'open' && item.blocks_obligations?.includes('represent'))
+  if (blocking.length) {
+    return {
+      faction_id, ability_id, claim_set_id,
+      selected_evidence_node_ids: [],
+      covered_claim_occurrence_ids: claimOccurrenceIds,
+      unmatched_claim_occurrence_ids: claimOccurrenceIds,
+      state: 'blocked',
+      blocking_unresolved_keys: blocking.map(item => item.unresolved_key),
+      rejected_conflicts: [],
+      substitutions: [],
+      composition_seams: [],
+      required_checks,
+    }
+  }
   if (!authorization || authorization.status !== 'full' || authorization.obligation !== 'represent' || authorization.claim_set_id !== claim_set_id) {
     throw new Error('construction plan requires full represent authorization')
   }
-  const claimOccurrenceIds = validateSourceClaims(source_claims)
-  const blocking = unresolved.filter(item => item.resolution_state === 'open' && item.blocks_obligations?.includes('represent'))
   const normalizedMatches = matches.map(match => {
     if (!COVERING.has(match.match_type) || match.rejected_reason) return match
     const coverage = validateCoveredClaimOccurrenceIds(claimOccurrenceIds, match.covers_claim_occurrence_ids)
     return coverage.ok && match.covers_claim_occurrence_ids.length ? match : { ...match, covers_claim_occurrence_ids: [], rejected_reason: coverage.ok ? 'missing-covers-claim-occurrence-ids' : coverage.reason }
   })
   const plans = candidatePlans(claimOccurrenceIds, normalizedMatches)
-  plans.sort((left, right) => comparePlanTuple(planTuple(left), planTuple(right)))
-  const best = plans[0]
-  const unmatched = [...new Set([...best.unmatched, ...(blocking.length ? claimOccurrenceIds : [])])]
+  const complete = plans.filter(plan => plan.unmatched.length === 0)
+  complete.sort((left, right) => comparePlanTuple(planTuple(left), planTuple(right)))
+  // A current, fully authorized source claim set is sufficient to represent a
+  // new mechanic. Precedent is useful only when it covers every occurrence;
+  // partial precedent cannot turn the remaining source claims into a gap.
+  const best = complete[0] ?? {
+    selected: [],
+    covered: claimOccurrenceIds,
+    unmatched: [],
+    exact: 0,
+    seams: 0,
+  }
+  const unmatched = [...best.unmatched]
   return {
     faction_id, ability_id, claim_set_id,
     selected_evidence_node_ids: best.selected.map(match => match.evidence_node_id),
     covered_claim_occurrence_ids: best.covered,
     unmatched_claim_occurrence_ids: unmatched,
-    state: blocking.length ? 'blocked' : best.unmatched.length ? 'incomplete' : 'ready',
-    blocking_unresolved_keys: blocking.map(item => item.unresolved_key),
+    state: best.unmatched.length ? 'incomplete' : 'ready',
+    blocking_unresolved_keys: [],
     rejected_conflicts: normalizedMatches.filter(match => match.rejected_reason),
     substitutions: best.selected.filter(match => match.bindings.length).map(match => ({ evidence_node_id: match.evidence_node_id, bindings: match.bindings })),
     composition_seams: best.selected.slice(1).map((match, index) => ({
@@ -397,8 +491,13 @@ export function projectedClaimSet(store, { certificate_node_id, obligation = 're
 export function persistRetrieval(store, { run_id, faction_id, ability_id, claim_set_certificate_node_id, candidates, required_checks = [] }) {
   const projected = projectedClaimSet(store, { certificate_node_id: claim_set_certificate_node_id, obligation: 'retrieve' })
   const claimOccurrenceIds = validateSourceClaims(projected.source_claims)
-  const matches = retrieveEvidence({ target_signature: projected.target_signature, target_claim_occurrence_ids: claimOccurrenceIds, candidates })
-  const represent = projectedClaimSet(store, { certificate_node_id: claim_set_certificate_node_id, obligation: 'represent' }).authorization
+  const hydratedCandidates = hydrateRetrievalCandidates(store, candidates)
+  const matches = retrieveEvidence({ target_signature: projected.target_signature, target_claim_occurrence_ids: claimOccurrenceIds, candidates: hydratedCandidates })
+  const representBlocked = projected.unresolved.some(item =>
+    item.resolution_state === 'open' && item.blocks_obligations?.includes('represent'))
+  const represent = representBlocked
+    ? { status: 'blocked', obligation: 'represent', claim_set_id: projected.claim_set_id }
+    : projectedClaimSet(store, { certificate_node_id: claim_set_certificate_node_id, obligation: 'represent' }).authorization
   const plan = chooseConstructionPlan({ faction_id, ability_id, claim_set_id: projected.claim_set_id, source_claims: projected.source_claims, matches, authorization: represent, required_checks, unresolved: projected.unresolved })
   let matchNodes
   let planNode

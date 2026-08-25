@@ -201,6 +201,28 @@ export function prepareCampaign(store, { id, repoRoot, registryPath, prioritizeI
   return { prepared: true, run_id: id, state: 'planned', gate, dag, readiness_node_id: readinessNode.node_id }
 }
 
+function curationPriorityKeys(store, runId) {
+  const task = store.db.prepare('SELECT state,node_id FROM tasks WHERE id=?').get(`${runId}:prioritize:curate`)
+  if (task?.state !== 'succeeded' || typeof task.node_id !== 'string' || !task.node_id) {
+    throw new Error('campaign curation must succeed before start')
+  }
+  const output = store.db.prepare('SELECT kind,payload_json FROM nodes WHERE node_id=?').get(task.node_id)
+  if (output?.kind !== 'workflow-output') throw new Error('campaign curation output missing')
+  const priorities = JSON.parse(output.payload_json || '{}').result?.priorities
+  if (!Array.isArray(priorities) || !priorities.length) throw new Error('campaign curation priorities missing')
+  const keys = priorities.map(priority => priority?.target)
+  if (keys.some(key => typeof key !== 'string' || !/^[^/]+\/[^/]+$/u.test(key)) || new Set(keys).size !== keys.length) {
+    throw new Error('campaign curation priorities invalid')
+  }
+  return keys.sort()
+}
+
+function assertCuratedWorklist(store, runId, worklist) {
+  const curationKeys = curationPriorityKeys(store, runId)
+  const worklistKeys = worklist.map(entry => `${entry.faction_id}/${entry.ability_id}`).sort()
+  if (canonicalJson(curationKeys) !== canonicalJson(worklistKeys)) throw new Error('worklist differs from sealed campaign curation')
+}
+
 function campaignSourceBinding(repoRoot, entry) {
   try {
     return resolveSourceBinding(join(repoRoot, '..', '40kdc-abilities'), entry.faction_id, entry.ability_id)
@@ -214,8 +236,10 @@ export function startCampaign(store, { id, repoRoot, registryPath, worklist, dry
   const parsed = parseWorklist(worklist)
   const prepared = store.db.prepare("SELECT * FROM runs WHERE run_id=? AND campaign_id=? AND state='planned'").get(id, id)
   if (!prepared) throw new Error(`prepared campaign not found: ${id}`)
+  if (registryPath) projectRegistry(store, registryPath)
   const gate = readiness(store, { repoRoot, registryPath, worklist: parsed })
   if (!gate.ready) return { started: false, dry_run: dryRun, gate, dag: [] }
+  assertCuratedWorklist(store, id, parsed)
   if (id !== gate.next_campaign_id) throw new TypeError(`next campaign id is ${gate.next_campaign_id}`)
   const dag = parsed.flatMap(entry => abilityCampaignDag({
     faction_id: entry.faction_id,
@@ -239,4 +263,67 @@ export function startCampaign(store, { id, repoRoot, registryPath, worklist, dry
   })
   projectRegistry(store, registryPath)
   return { started: true, dry_run: false, gate, dag, run_id: id }
+}
+
+/**
+ * End an unschedulable campaign without rewriting its terminal task history.
+ * The released claims can then be claimed by a successor campaign with a fresh DAG.
+ */
+export function supersedeCampaign(store, { id, reason, expected_replay_checksum, registryPath = null, now = new Date().toISOString() }) {
+  if (typeof id !== 'string' || !/^c\d+$/.test(id)) throw new TypeError('id must be a campaign id')
+  if (typeof reason !== 'string' || !reason) throw new TypeError('supersession reason required')
+  if (typeof expected_replay_checksum !== 'string' || !/^[a-f0-9]{64}$/.test(expected_replay_checksum)) {
+    throw new TypeError('expected replay checksum required')
+  }
+  if (!Number.isFinite(Date.parse(now))) throw new TypeError('supersession time invalid')
+  const run = store.db.prepare('SELECT * FROM runs WHERE run_id=? AND campaign_id=?').get(id, id)
+  if (!run) throw new Error(`campaign not found: ${id}`)
+  if (run.state === 'superseded') return { run_id: id, superseded: false, idempotent: true, released_claims: 0 }
+  if (!['planned', 'active', 'paused', 'reconciliation-required'].includes(run.state)) throw new Error(`campaign cannot be superseded: ${run.state}`)
+  if (store.replayChecksum() !== expected_replay_checksum) throw new Error('campaign replay checksum changed')
+
+  const live = store.db.prepare(`
+    SELECT id FROM attempts
+    WHERE run_id=? AND state IN ('allocated','running')
+    UNION ALL
+    SELECT id FROM leases
+    WHERE run_id=? AND state IN ('allocated','active')
+    UNION ALL
+    SELECT id FROM tasks
+    WHERE run_id=? AND state='running'
+  `).all(id)
+  if (live.length) throw new Error(`campaign has ${live.length} live execution aggregate(s)`)
+
+  const repository = latestRepositoryNode(store)
+  if (!repository) throw new Error('repository-version node required for campaign supersession')
+  const decision = store.createNode({
+    kind: 'decision',
+    payload: {
+      campaign_id: id,
+      state: 'answered',
+      choice: 'supersede-unschedulable-campaign',
+      reason,
+      expected_replay_checksum,
+      authorizes_reuse: false,
+    },
+    parents: [{ node_id: repository.node_id, edge_type: 'derived_from', authorizes_reuse: false, metadata: {} }],
+  })
+
+  let released_claims
+  store.transaction(() => {
+    const releasedSequence = store.sequence() + 1
+    const released = store.db.prepare("SELECT * FROM claims WHERE run_id=? AND state='active' ORDER BY faction_id,ability_id").all(id)
+      .map(row => ({ ...row, state: 'released', released_sequence: releasedSequence }))
+    store.appendEvent('run-superseded', {
+      expected_state: run.state,
+      row: { finished: now },
+      reason,
+      supersession_decision_node_id: decision.node_id,
+      expected_replay_checksum,
+      rows: { claims: released },
+    }, { aggregate_kind: 'run', aggregate_id: id, node_id: decision.node_id })
+    released_claims = released.length
+  })
+  if (registryPath) projectRegistry(store, registryPath)
+  return { run_id: id, superseded: true, idempotent: false, released_claims, decision_node_id: decision.node_id }
 }

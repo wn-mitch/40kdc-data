@@ -89,3 +89,7 @@ The Bun-backed JS eval cannot import the graph runtime because it depends on Nod
 ## 2026-08-15T23:12:11Z — openai-codex/gpt-5.6-sol
 
 gh pr create in the jj workspace failed because the workspace has no .git directory. Pass --repo explicitly when opening PRs from /Users/will.mitchell/40kdc-dsl.
+
+## 2026-08-25T21:00:09Z — gpt-5.6
+
+The persistent Bun eval kernel cannot import node:sqlite, so graph workflow smoke tests require a separate Node invocation despite the workflow's Node runtime.

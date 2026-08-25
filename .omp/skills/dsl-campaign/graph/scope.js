@@ -1,6 +1,7 @@
 import { canonicalJson, sha256 } from './canonical.js'
 import { resolveSourceBinding } from './formalization.js'
 import { abilityCampaignDag } from './readiness.js'
+import { completeTask } from './scheduler.js'
 
 function requireString(value, name) {
   if (typeof value !== 'string' || !value) throw new TypeError(`${name} required`)
@@ -77,7 +78,7 @@ function assertFamilyProjection(store, templateNodeId, members) {
   }
 }
 
-export function certifyShapeFamily(store, { run_id, shape_package, shape_package_node_id }) {
+function certifyShapeFamilyUnchecked(store, { run_id, shape_package, shape_package_node_id }) {
   requireString(run_id, 'run_id')
   requireString(shape_package_node_id, 'shape_package_node_id')
   if (!store.hasNode(shape_package_node_id)) throw new Error('shape package node missing')
@@ -88,46 +89,50 @@ export function certifyShapeFamily(store, { run_id, shape_package, shape_package
     match_strength: member.match_strength,
     family_instance_node_id: 'pending',
   })))
-  let template
-  let instances
-  store.transaction(() => {
-    template = store.createNode({
-      kind: 'family-template',
-      payload: {
-        run_id,
-        name: shape_package.name,
-        kind: shape_package.kind,
-        parameters: shape_package.parameters,
-        schema_branch_hash: sha256(canonicalJson(shape_package.schema_branch)),
-        member_keys: family.map(memberKey),
-      },
-      parents: [{ node_id: shape_package_node_id, edge_type: 'derived_from', authorizes_reuse: false, metadata: {} }],
-    })
-    instances = family.map(member => store.createNode({
-      kind: 'family-instance',
-      payload: {
-        run_id,
-        faction_id: member.faction_id,
-        ability_id: member.ability_id,
-        fit: member.fit,
-        match_strength: member.match_strength,
-        family_template_node_id: template.node_id,
-      },
-      parents: [{ node_id: template.node_id, edge_type: 'generalizes', authorizes_reuse: true, metadata: { fit: member.fit, match_strength: member.match_strength } }],
-    }))
-    store.appendEvent('shape-family-certified', {
+  const template = store.createNode({
+    kind: 'family-template',
+    payload: {
       run_id,
-      template: { id: `${run_id}:family:${template.node_id.slice(0, 16)}`, run_id, state: 'current', node_id: template.node_id, payload: template.payload },
-      instances: instances.map((instance, index) => ({ id: `${run_id}:family-instance:${memberKey(family[index])}`, run_id, state: 'current', node_id: instance.node_id, payload: instance.payload })),
-    }, { aggregate_kind: 'family-template', aggregate_id: template.node_id, node_id: template.node_id })
+      name: shape_package.name,
+      kind: shape_package.kind,
+      parameters: shape_package.parameters,
+      schema_branch_hash: sha256(canonicalJson(shape_package.schema_branch)),
+      member_keys: family.map(memberKey),
+    },
+    parents: [{ node_id: shape_package_node_id, edge_type: 'derived_from', authorizes_reuse: false, metadata: {} }],
   })
+  const instances = family.map(member => store.createNode({
+    kind: 'family-instance',
+    payload: {
+      run_id,
+      faction_id: member.faction_id,
+      ability_id: member.ability_id,
+      fit: member.fit,
+      match_strength: member.match_strength,
+      family_template_node_id: template.node_id,
+    },
+    parents: [{ node_id: template.node_id, edge_type: 'generalizes', authorizes_reuse: true, metadata: { fit: member.fit, match_strength: member.match_strength } }],
+  }))
+  store.appendEvent('shape-family-certified', {
+    run_id,
+    template: { id: `${run_id}:family:${template.node_id.slice(0, 16)}`, run_id, state: 'current', node_id: template.node_id, payload: template.payload },
+    instances: instances.map((instance, index) => ({ id: `${run_id}:family-instance:${memberKey(family[index])}`, run_id, state: 'current', node_id: instance.node_id, payload: instance.payload })),
+  }, { aggregate_kind: 'family-template', aggregate_id: template.node_id, node_id: template.node_id })
   return {
     family_template_node_id: template.node_id,
     family_members: instances.map((instance, index) => ({ ...family[index], family_instance_node_id: instance.node_id })),
   }
 }
 
-export function expandCampaignScope(store, {
+export function certifyShapeFamily(store, args) {
+  let certified
+  store.transaction(() => {
+    certified = certifyShapeFamilyUnchecked(store, args)
+  })
+  return certified
+}
+
+function expandCampaignScopeUnchecked(store, {
   run_id,
   expected_repository_hash,
   raw_store_root,
@@ -197,33 +202,30 @@ export function expandCampaignScope(store, {
     state: 'active',
     claimed_sequence: sequence,
   }))
-  let applyNode
-  store.transaction(() => {
-    applyNode = store.createNode({
-      kind: 'apply-transaction',
-      payload: {
-        run_id,
-        apply_transaction_id,
-        expected_repository_hash,
-        family_template_node_id,
-        authorized_keys: members.map(memberKey),
-        source_bindings,
-      },
-      parents: [
-        { node_id: family_template_node_id, edge_type: 'derived_from', authorizes_reuse: false, metadata: {} },
-        ...members.map(member => ({ node_id: member.family_instance_node_id, edge_type: 'satisfies', authorizes_reuse: true, metadata: { key: memberKey(member) } })),
-      ],
-    })
-    store.appendEvent('campaign-scope-expanded', {
+  const applyNode = store.createNode({
+    kind: 'apply-transaction',
+    payload: {
       run_id,
+      apply_transaction_id,
+      expected_repository_hash,
       family_template_node_id,
-      family_members: members,
+      authorized_keys: members.map(memberKey),
       source_bindings,
-      apply_transaction: { id: apply_transaction_id, run_id, state: 'planned', node_id: applyNode.node_id, payload: applyNode.payload },
-      claims,
-      tasks: [...memberTaskRows, applyTask],
-    }, { aggregate_kind: 'run', aggregate_id: run_id, node_id: applyNode.node_id })
+    },
+    parents: [
+      { node_id: family_template_node_id, edge_type: 'derived_from', authorizes_reuse: false, metadata: {} },
+      ...members.map(member => ({ node_id: member.family_instance_node_id, edge_type: 'satisfies', authorizes_reuse: true, metadata: { key: memberKey(member) } })),
+    ],
   })
+  store.appendEvent('campaign-scope-expanded', {
+    run_id,
+    family_template_node_id,
+    family_members: members,
+    source_bindings,
+    apply_transaction: { id: apply_transaction_id, run_id, state: 'planned', node_id: applyNode.node_id, payload: applyNode.payload },
+    claims,
+    tasks: [...memberTaskRows, applyTask],
+  }, { aggregate_kind: 'run', aggregate_id: run_id, node_id: applyNode.node_id })
   return {
     run_id,
     family_template_node_id,
@@ -235,6 +237,105 @@ export function expandCampaignScope(store, {
   }
 }
 
+export function expandCampaignScope(store, args) {
+  let expansion
+  store.transaction(() => {
+    expansion = expandCampaignScopeUnchecked(store, args)
+  })
+  return expansion
+}
+
+export function certifyAndExpandCampaignScope(store, {
+  run_id,
+  shape_package,
+  shape_package_node_id,
+  expected_repository_hash,
+  raw_store_root,
+}) {
+  let result
+  store.transaction(() => {
+    const certified = certifyShapeFamilyUnchecked(store, { run_id, shape_package, shape_package_node_id })
+    const expansion = expandCampaignScopeUnchecked(store, {
+      run_id,
+      expected_repository_hash,
+      raw_store_root,
+      family_template_node_id: certified.family_template_node_id,
+      family_members: certified.family_members,
+      apply_transaction_id: `${run_id}:family-apply:${certified.family_template_node_id.slice(0, 16)}`,
+    })
+    result = { ...certified, expansion }
+  })
+  return result
+}
+
+
+export function findFamilyApplyTask(store, runId, applyTransactionId) {
+  const tasks = store.db.prepare('SELECT * FROM tasks WHERE run_id=? ORDER BY id').all(runId)
+    .filter(row => {
+      const definition = JSON.parse(row.payload_json || '{}')
+      return definition.kind === 'family-apply' && definition.payload?.apply_transaction_id === applyTransactionId
+    })
+  if (tasks.length !== 1) throw new Error(`family apply task missing or ambiguous: ${applyTransactionId}`)
+  return { ...tasks[0], definition: JSON.parse(tasks[0].payload_json) }
+}
+
+function successfulAuditOutputs(store, task) {
+  return task.definition.depends_on.map(id => {
+    const audit = store.db.prepare('SELECT * FROM tasks WHERE id=?').get(id)
+    if (!audit || audit.state !== 'succeeded' || typeof audit.node_id !== 'string' || !audit.node_id) {
+      throw new Error(`family apply audit dependency incomplete: ${id}`)
+    }
+    const definition = JSON.parse(audit.payload_json || '{}')
+    if (definition.kind !== 'audit') throw new Error(`family apply dependency is not an audit: ${id}`)
+    return audit.node_id
+  }).sort()
+}
+
+export function completeFamilyApply(store, { run_id, apply_transaction_id, envelope }) {
+  requireString(run_id, 'run_id')
+  requireString(apply_transaction_id, 'apply_transaction_id')
+  if (!envelope || envelope.run_id !== run_id) throw new Error('family apply envelope run mismatch')
+  const transaction = store.db.prepare('SELECT * FROM apply_transactions WHERE id=? AND run_id=?').get(apply_transaction_id, run_id)
+  if (!transaction) throw new Error(`family apply transaction missing: ${apply_transaction_id}`)
+  const task = findFamilyApplyTask(store, run_id, apply_transaction_id)
+  if (envelope.task_id !== task.id) throw new Error('family apply envelope task mismatch')
+  if (task.state === 'succeeded') {
+    if (transaction.state !== 'verified' || task.node_id !== transaction.node_id) throw new Error('family apply completion drift')
+    return { apply_transaction_id, node_id: transaction.node_id, idempotent: true }
+  }
+  if (task.state !== 'running' || transaction.state !== 'planned') throw new Error('family apply is not ready to complete')
+  const auditNodeIds = successfulAuditOutputs(store, task)
+  const payload = JSON.parse(transaction.payload_json || '{}')
+  let evidence
+  store.transaction(() => {
+    evidence = store.createNode({
+      kind: 'apply-transaction',
+      payload: {
+        run_id,
+        apply_transaction_id,
+        family_template_node_id: payload.family_template_node_id,
+        authorized_keys: payload.authorized_keys,
+        audit_node_ids: auditNodeIds,
+        state: 'verified',
+      },
+      parents: [
+        { node_id: transaction.node_id, edge_type: 'derived_from', authorizes_reuse: false, metadata: {} },
+        ...auditNodeIds.map(node_id => ({ node_id, edge_type: 'satisfies', authorizes_reuse: false, metadata: {} })),
+      ],
+    })
+    for (const event_type of ['apply-started', 'apply-recorded', 'apply-verified']) {
+      store.appendEvent(event_type, {}, {
+        aggregate_kind: 'apply-transaction',
+        aggregate_id: apply_transaction_id,
+        node_id: evidence.node_id,
+      })
+    }
+    // Kept in the same transaction as the state transitions: a completed
+    // family task always denotes a verified apply transaction.
+    completeTask(store, { envelope, output_node_id: evidence.node_id })
+  })
+  return { apply_transaction_id, node_id: evidence.node_id, idempotent: false }
+}
 function reportOutputs(report) {
   if (!report || !Array.isArray(report.abilities)) throw new TypeError('whole-corpus roundtrip report abilities required')
   const outputs = new Map()

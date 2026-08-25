@@ -244,15 +244,25 @@ export function loseHeartbeat(store, { envelope, reason, now = Date.now() }) {
   return { task_id: envelope.task_id, state: 'running', stale: true }
 }
 
-export function failTask(store, { run_id, label, reason, now = Date.now() }) {
+export function failTask(store, { run_id, label, reason, envelope = null, now = Date.now() }) {
   const id = taskId(run_id, label)
   const task = store.db.prepare('SELECT * FROM tasks WHERE id=? AND run_id=?').get(id, run_id)
   if (!task) throw new Error(`task not found: ${label}`)
+  if (envelope) {
+    if (envelope.run_id !== run_id || envelope.task_id !== id) throw new Error('terminal failure envelope task mismatch')
+    assertActiveLease(store, envelope, now)
+  }
   const timestamp = iso(now).value
   store.transaction(() => {
-    const attempt = store.db.prepare("SELECT * FROM attempts WHERE run_id=? AND state IN ('allocated','running','retryable-failure') AND json_extract(payload_json,'$.task_id')=? ORDER BY id DESC LIMIT 1").get(run_id, id)
-    if (attempt && attempt.state !== 'failed-final') store.appendEvent('attempt-failed-final', { expected_state: attempt.state, reason, at: timestamp }, { aggregate_kind: 'attempt', aggregate_id: attempt.id })
-    const lease = store.db.prepare("SELECT * FROM leases WHERE run_id=? AND state IN ('allocated','active') AND json_extract(payload_json,'$.task_id')=? ORDER BY id DESC LIMIT 1").get(run_id, id)
+    const attempt = envelope
+      ? store.db.prepare("SELECT * FROM attempts WHERE id=? AND run_id=? AND state='running'").get(envelope.attempt_id, run_id)
+      : store.db.prepare("SELECT * FROM attempts WHERE run_id=? AND state IN ('allocated','running','retryable-failure') AND json_extract(payload_json,'$.task_id')=? ORDER BY id DESC LIMIT 1").get(run_id, id)
+    if (envelope && !attempt) throw new Error('terminal failure attempt mismatch')
+    if (attempt) store.appendEvent('attempt-failed-final', { expected_state: attempt.state, reason, at: timestamp }, { aggregate_kind: 'attempt', aggregate_id: attempt.id })
+    const lease = envelope
+      ? store.db.prepare("SELECT * FROM leases WHERE id=? AND run_id=? AND state='active'").get(envelope.lease_id, run_id)
+      : store.db.prepare("SELECT * FROM leases WHERE run_id=? AND state IN ('allocated','active') AND json_extract(payload_json,'$.task_id')=? ORDER BY id DESC LIMIT 1").get(run_id, id)
+    if (envelope && !lease) throw new Error('terminal failure lease mismatch')
     if (lease) store.appendEvent('lease-released', { expected_state: lease.state, reason, at: timestamp }, { aggregate_kind: 'lease', aggregate_id: lease.id })
     store.appendEvent('task-failed-final', { expected_state: task.state, reason, at: timestamp }, { aggregate_kind: 'task', aggregate_id: id })
   })

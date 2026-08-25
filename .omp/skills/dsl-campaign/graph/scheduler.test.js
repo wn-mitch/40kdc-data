@@ -7,6 +7,7 @@ import {
   assertActiveLease,
   completeTask,
   ensureTask,
+  failTask,
   issueReadyTask,
   LEASE_TTL_MS,
   recordRetryableFailure,
@@ -104,5 +105,22 @@ test('retry preserves task while issuing next deterministic attempt', () => {
   assert.equal(second.envelope.attempt_id, `${runId}:retry:attempt:2`)
   assert.equal(second.envelope.input_hash, first.envelope.input_hash)
   assert.equal(store.db.prepare('SELECT state FROM tasks WHERE id=?').get(`${runId}:retry`).state, 'running')
+  store.close()
+})
+
+test('envelope-bound terminal failure cannot finalize another active attempt', () => {
+  const { store, runId } = fixture()
+  ensureTask(store, { run_id: runId, label: 'terminal', kind: 'fixture', payload: {} })
+  const issued = issueReadyTask(store, { run_id: runId, label: 'terminal', now: 1_800_000_000_000 })
+  assert.throws(() => failTask(store, {
+    run_id: runId,
+    label: 'terminal',
+    envelope: { ...issued.envelope, lease_id: `${issued.envelope.lease_id}-foreign` },
+    reason: 'fixture',
+    now: 1_800_000_000_001,
+  }), /active graph lease mismatch/)
+  assert.equal(store.db.prepare('SELECT state FROM tasks WHERE id=?').get(`${runId}:terminal`).state, 'running')
+  failTask(store, { run_id: runId, label: 'terminal', envelope: issued.envelope, reason: 'fixture', now: 1_800_000_000_001 })
+  assert.equal(store.db.prepare('SELECT state FROM tasks WHERE id=?').get(`${runId}:terminal`).state, 'failed-final')
   store.close()
 })

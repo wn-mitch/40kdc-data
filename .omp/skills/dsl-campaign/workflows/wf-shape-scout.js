@@ -1,5 +1,5 @@
 import { join } from 'node:path'
-import { certifyShapeFamily, expandCampaignScope } from '../graph/scope.js'
+import { certifyAndExpandCampaignScope } from '../graph/scope.js'
 import { GraphStore } from '../graph/store.js'
 import { createTrustedAgent } from '../graph/workflow-runtime.js'
 
@@ -476,22 +476,13 @@ for (let round = 0; round < MAX_ROUNDS; round++) {
     try {
       const repository = scopeStore.db.prepare("SELECT payload_json FROM nodes WHERE kind='repository-version' ORDER BY rowid DESC LIMIT 1").get()
       if (!repository) throw new Error('repository-version node missing before family scope expansion')
-      const certified = certifyShapeFamily(scopeStore, {
+      family_scope = certifyAndExpandCampaignScope(scopeStore, {
         run_id: args.run_id,
         shape_package,
         shape_package_node_id: war.sealed_output_node_id,
+        expected_repository_hash: JSON.parse(repository.payload_json).workspace_hash,
+        raw_store_root: join(args.repo_root, '..', '40kdc-abilities'),
       })
-      family_scope = {
-        ...certified,
-        expansion: expandCampaignScope(scopeStore, {
-          run_id: args.run_id,
-          expected_repository_hash: JSON.parse(repository.payload_json).workspace_hash,
-          raw_store_root: join(args.repo_root, '..', '40kdc-abilities'),
-          family_template_node_id: certified.family_template_node_id,
-          family_members: certified.family_members,
-          apply_transaction_id: `${args.run_id}:family-apply:${certified.family_template_node_id.slice(0, 16)}`,
-        }),
-      }
     } finally {
       scopeStore.close()
     }

@@ -7,7 +7,7 @@ import { migrateGraphRoot, replayProjectionCheck } from './migration.js'
 import { acceptIntake, intakeReport, prepareIntake } from './intake.js'
 import { bootstrapRegistry, campaignView, recoverLegacy } from './legacy.js'
 import { projectRegistry, reconcileAbilityCatalog, verifyProjection } from './projection.js'
-import { prepareCampaign, readiness, startCampaign } from './readiness.js'
+import { prepareCampaign, readiness, startCampaign, supersedeCampaign } from './readiness.js'
 import { GraphStore } from './store.js'
 import { createRepositoryVersion } from './versions.js'
 import { verifyGraphIpBoundary } from './workflow-lineage.js'
@@ -163,6 +163,14 @@ try {
       if (!result.started && !result.dry_run) process.exitCode = EXIT.negative
       break
     }
+    case 'supersede-campaign':
+      result = supersedeCampaign(store, {
+        id: requireOption(options, 'id'),
+        reason: requireOption(options, 'reason'),
+        expected_replay_checksum: requireOption(options, 'expected_replay_checksum'),
+        registryPath,
+      })
+      break
     default: throw new TypeError(`unknown command: ${command}`)
   }
   output(command, store, result, process.exitCode === undefined || process.exitCode === 0, result.errors || [])

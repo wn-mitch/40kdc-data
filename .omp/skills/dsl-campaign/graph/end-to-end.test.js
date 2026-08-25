@@ -6,10 +6,12 @@ import test from 'node:test'
 import { acceptIntake, prepareIntake } from './intake.js'
 import { bootstrapRegistry, recoverLegacy } from './legacy.js'
 import { projectRegistry, reconcileAbilityCatalog } from './projection.js'
-import { nextCampaignId, prepareCampaign, readiness, startCampaign } from './readiness.js'
+import { nextCampaignId, prepareCampaign, readiness, startCampaign, supersedeCampaign } from './readiness.js'
 import { wholeGraphPriorities } from './retrieval.js'
 import { GraphStore } from './store.js'
 import { repositoryVersionPayload } from './versions.js'
+import { completeTask, issueReadyTask } from './scheduler.js'
+import { sealOutput } from './workflow-lineage.js'
 
 const repoRoot = resolve('.')
 const manifest = JSON.parse(await (await import('node:fs/promises')).readFile('_private/loop-state/claim-graph-intake-c004-c006-c008.json', 'utf8'))
@@ -41,6 +43,22 @@ function completeFixture() {
   return { store, registryPath }
 }
 
+function sealCuration(store, campaignId, worklist = [{ faction_id: 'fixture-faction', ability_id: 'fixture-ability' }]) {
+  const task = store.db.prepare('SELECT payload_json FROM tasks WHERE id=?').get(`${campaignId}:prioritize:curate`)
+  const issued = issueReadyTask(store, { run_id: campaignId, label: JSON.parse(task.payload_json).label, now: 1_800_000_000_000 })
+  const sealed = sealOutput('prioritize-curate', {
+    mode: 'curate',
+    priorities: worklist.map(entry => ({ target: `${entry.faction_id}/${entry.ability_id}`, reason: 'fixture', expected_gain: 'fidelity' })),
+  }, issued.envelope)
+  const node = store.createNode({
+    kind: sealed.kind,
+    payload: sealed.payload,
+    parents: sealed.parents,
+    producer_contract_version: sealed.producer_contract_version,
+  })
+  completeTask(store, { envelope: issued.envelope, output_node_id: node.node_id, now: 1_800_000_000_001 })
+}
+
 function prepareFixtureCampaign(store, registryPath, campaignId) {
   const gate = readiness(store, { repoRoot, registryPath })
   assert.equal(gate.ready, true, gate.errors.join('; '))
@@ -51,6 +69,7 @@ function prepareFixtureCampaign(store, registryPath, campaignId) {
     prioritizeInput: { worklist_cap: 1, scout_shapes: [], excluded_claims: gate.excluded_claims, artifacts: {} },
   })
   assert.equal(result.prepared, true, result.gate?.errors?.join('; '))
+  sealCuration(store, campaignId)
   return result
 }
 
@@ -108,9 +127,54 @@ test('non-dry start claims worklist and creates mandatory task DAG atomically', 
   const campaignId = nextCampaignId(store)
   prepareFixtureCampaign(store, registryPath, campaignId)
   const started = startCampaign(store, { id: campaignId, repoRoot, registryPath, worklist, dryRun: false })
-  assert.equal(started.started, true)
+  assert.equal(started.started, true, started.gate?.errors?.join('; '))
   assert.equal(store.db.prepare("SELECT count(*) AS n FROM claims WHERE run_id=? AND state='active'").get(campaignId).n, 1)
   assert.equal(store.db.prepare('SELECT count(*) AS n FROM tasks WHERE run_id=?').get(campaignId).n, 11)
+  store.close()
+})
+
+
+test('start rejects a worklist that differs from sealed curation', () => {
+  const { store, registryPath } = completeFixture()
+  const campaignId = nextCampaignId(store)
+  prepareFixtureCampaign(store, registryPath, campaignId)
+  assert.throws(() => startCampaign(store, {
+    id: campaignId,
+    repoRoot,
+    registryPath,
+    worklist: [{ faction_id: 'fixture-faction', ability_id: 'other-ability' }],
+    dryRun: true,
+  }), /worklist differs from sealed campaign curation/)
+  store.close()
+})
+test('superseding an unschedulable campaign releases its claims for a fresh successor', () => {
+  const { store, registryPath } = completeFixture()
+  const worklist = [{ faction_id: 'fixture-faction', ability_id: 'fixture-ability' }]
+  const campaignId = nextCampaignId(store)
+  prepareFixtureCampaign(store, registryPath, campaignId)
+  assert.equal(startCampaign(store, { id: campaignId, repoRoot, registryPath, worklist, dryRun: false }).started, true)
+  const before = store.replayChecksum()
+  const superseded = supersedeCampaign(store, {
+    id: campaignId,
+    reason: 'source-formalization-terminal-invalid-output',
+    expected_replay_checksum: before,
+    registryPath,
+    now: '2026-08-25T00:00:00.000Z',
+  })
+  assert.deepEqual({ superseded: superseded.superseded, released_claims: superseded.released_claims }, { superseded: true, released_claims: 1 })
+  assert.equal(store.db.prepare('SELECT state FROM runs WHERE run_id=?').get(campaignId).state, 'superseded')
+  assert.equal(store.db.prepare('SELECT state FROM claims WHERE run_id=?').get(campaignId).state, 'released')
+  assert.equal(supersedeCampaign(store, {
+    id: campaignId,
+    reason: 'source-formalization-terminal-invalid-output',
+    expected_replay_checksum: store.replayChecksum(),
+    registryPath,
+  }).idempotent, true)
+
+  const successorId = nextCampaignId(store)
+  prepareFixtureCampaign(store, registryPath, successorId)
+  assert.equal(startCampaign(store, { id: successorId, repoRoot, registryPath, worklist, dryRun: false }).started, true)
+  assert.equal(store.db.prepare("SELECT count(*) AS n FROM claims WHERE run_id=? AND state='active'").get(successorId).n, 1)
   store.close()
 })
 
