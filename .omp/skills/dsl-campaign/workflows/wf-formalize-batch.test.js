@@ -158,7 +158,7 @@ async function runRealPersistenceWorkflow({
       }
       const input = JSON.parse(prompt.slice(prompt.lastIndexOf('Input:\n') + 'Input:\n'.length))
       formalizerInputs.push({
-        input_node_ids: [...options.inputNodeIds],
+        input_node_ids: [...(options.inputNodeIds || [])],
         source_snapshot_id: input.source_snapshot_id,
         sealed_helper_node_ids: [...input.sealed_helper_node_ids],
         helpers: { who: input.who, when: input.when, what: input.what },
@@ -314,10 +314,12 @@ describe('dsl formalize batch workflow', () => {
     const helpers = value.calls.slice(0, 3)
     assert.deepEqual(helpers.map(call => call.options.label.split(':').at(-1)), ['who', 'when', 'what'])
     assert.ok(helpers.every(call => call.options.dependsOn.includes('ability:fixture-faction/fixture-ability:initial:source-retrieval')))
-    assert.ok(helpers.every(call => call.options.inputNodeIds[0] === 'source-node'))
+    assert.ok(helpers.every(call => call.options.inputNodeIds === undefined))
+    assert.ok(helpers.every(call => call.options.orderedParentEvidenceNodeIds[0] === 'source-node'))
     assert.deepEqual(helpers.map(call => call.options.modelId), [model_identities.who, model_identities.when, model_identities.what])
     const formalizer = value.calls.at(-1)
-    assert.deepEqual(formalizer.options.inputNodeIds, ['who-node', 'when-node', 'what-node'])
+    assert.deepEqual(formalizer.options.inputNodeIds, undefined)
+    assert.deepEqual(formalizer.options.orderedParentEvidenceNodeIds, ['who-node', 'when-node', 'what-node'])
     assert.match(formalizer.prompt, /sealed_helper_node_ids/)
     assert.match(formalizer.prompt, /who-node/)
     assert.deepEqual(value.persisted[0].extraction_identity.ordered_parent_evidence_ids, ['who-node', 'when-node', 'what-node'])

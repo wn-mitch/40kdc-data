@@ -344,9 +344,10 @@ const results = await pipeline(args.abilities, async ability => {
       mechanic_contract: MECHANIC_CONTRACT,
     })
     const helperOptions = (agentType, taskKind, label, modelId, promptId, promptVersion) => ({
-      agentType, taskKind, phase: 'Formalize', label, dependsOn: [sourceLabel], inputNodeIds: [sourceSnapshot.source_node_id],
+      agentType, taskKind, phase: 'Formalize', label, dependsOn: [sourceLabel],
       schema: DECOMPOSITION_OUT, taskPayload: common, graphSourceTexts: [sourceText], graphEphemeralKeys: ['raw_text', 'source_text'],
       authoritative: true, modelId, promptId, promptVersion, agentContractId: `${agentType}@${promptVersion}`, sourceSnapshotId: sourceSnapshot.source_snapshot_id,
+      orderedParentEvidenceNodeIds: [sourceSnapshot.source_node_id],
     })
     const helperCall = (agentType, taskKind, label, modelId, promptId, promptVersion, prompt) => {
       const row = registerTask(sourceStore, {
@@ -366,7 +367,7 @@ const results = await pipeline(args.abilities, async ability => {
       mechanic_contract: MECHANIC_CONTRACT,
     })}`, {
       agentType: 'inquisitor', taskKind: 'source-formalization', phase: 'Formalize', label: formalizationLabel,
-      dependsOn: [sourceLabel, `${prefix}:who`, `${prefix}:when`, `${prefix}:what`], inputNodeIds: helperNodeIds,
+      dependsOn: [sourceLabel, `${prefix}:who`, `${prefix}:when`, `${prefix}:what`],
       completion: 'deferred', schema: FORMALIZATION_OUT, taskPayload: common, graphSourceTexts: [sourceText], graphEphemeralKeys: ['raw_text', 'source_text'],
       authoritative: true, modelId: modelIdentities.formalizer, promptId: 'formalize-claims', promptVersion: FORMALIZER_PROMPT_VERSION,
       agentContractId: `inquisitor@${FORMALIZER_PROMPT_VERSION}`, sourceSnapshotId: sourceSnapshot.source_snapshot_id,

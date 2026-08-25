@@ -7,6 +7,7 @@ import test from 'node:test'
 import { createTrustedAgent } from './workflow-runtime.js'
 import { GraphStore } from './store.js'
 import { assertInputEnvelope, createExecutionEnvelope, sanitizeGraphPayload, sealOutput, trustedExecutionIdentity, verifyGraphIpBoundary } from './workflow-lineage.js'
+import { completeTask, ensureTask, issueReadyTask } from './scheduler.js'
 
 function envelope(overrides = {}) {
   return createExecutionEnvelope({
@@ -124,6 +125,132 @@ test('trusted agent persists and returns the scheduler-issued lineage-bound chil
   assert.deepEqual(store.db.prepare('SELECT parent_node_id FROM edges WHERE child_node_id=?').all(result.sealed_output_node_id).map(row => ({ ...row })), [{ parent_node_id: input.node_id }])
   assert.equal(store.db.prepare("SELECT state FROM tasks WHERE id='run-1:child'").get().state, 'succeeded')
   store.close()
+})
+
+test('trusted agent completes a pre-registered empty-input task unchanged', async () => {
+  const { root } = activeRunFixture()
+  const prepared = new GraphStore(root)
+  ensureTask(prepared, {
+    run_id: 'run-1',
+    label: 'pre-registered',
+    kind: 'prioritize-curate',
+    payload: { worklist_cap: 30 },
+  })
+  prepared.close()
+  const graphAgent = createTrustedAgent({
+    driverArgs: { graph_root: root, run_id: 'run-1' },
+    invokeAgent: async prompt => ({ value: 1, _lineage: returnedLineage(prompt) }),
+  })
+  const result = await graphAgent('work', {
+    label: 'pre-registered',
+    agentType: 'inquisitor',
+    taskKind: 'prioritize-curate',
+    taskPayload: { worklist_cap: 30 },
+    schema: { type: 'object', required: ['value'], properties: { value: { type: 'number' } } },
+  })
+  assert.equal(result.value, 1)
+  const verified = new GraphStore(root)
+  assert.equal(verified.db.prepare("SELECT state FROM tasks WHERE id='run-1:pre-registered'").get().state, 'succeeded')
+  verified.close()
+})
+
+test('trusted agent preserves a pre-registered dependency task definition', async () => {
+  const { root, input } = activeRunFixture()
+  const prepared = new GraphStore(root)
+  ensureTask(prepared, { run_id: 'run-1', label: 'source', kind: 'source-retrieval', payload: {} })
+  const source = issueReadyTask(prepared, { run_id: 'run-1', label: 'source' })
+  completeTask(prepared, { envelope: source.envelope, output_node_id: input.node_id })
+  ensureTask(prepared, {
+    run_id: 'run-1',
+    label: 'dependent',
+    kind: 'target-decomposition',
+    depends_on: ['run-1:source'],
+    payload: { role: 'who' },
+  })
+  prepared.close()
+  const graphAgent = createTrustedAgent({
+    driverArgs: { graph_root: root, run_id: 'run-1' },
+    invokeAgent: async prompt => ({ value: 1, _lineage: returnedLineage(prompt) }),
+  })
+  const result = await graphAgent('work', {
+    label: 'dependent',
+    agentType: 'target-dummy',
+    taskKind: 'target-decomposition',
+    dependsOn: ['source'],
+    taskPayload: { role: 'who' },
+    schema: { type: 'object', required: ['value'], properties: { value: { type: 'number' } } },
+  })
+  const verified = new GraphStore(root)
+  const definition = JSON.parse(verified.db.prepare("SELECT payload_json FROM tasks WHERE id='run-1:dependent'").get().payload_json)
+  assert.deepEqual(definition.payload, { role: 'who' })
+  assert.deepEqual(
+    verified.db.prepare('SELECT parent_node_id FROM edges WHERE child_node_id=?').all(result.sealed_output_node_id).map(row => row.parent_node_id),
+    [input.node_id],
+  )
+  verified.close()
+})
+
+test('authoritative trusted agent separates dependency inputs from evidence order', async () => {
+  const { root, input: sourceNode } = activeRunFixture()
+  const prepared = new GraphStore(root)
+  const helperNodes = ['who', 'when', 'what'].map(label =>
+    prepared.createNode({ kind: 'workflow-output', payload: { output_kind: label } }).node_id)
+  const dependencies = [
+    { label: 'source', kind: 'source-retrieval', node_id: sourceNode.node_id },
+    { label: 'who', kind: 'target-decomposition', node_id: helperNodes[0] },
+    { label: 'when', kind: 'timing-decomposition', node_id: helperNodes[1] },
+    { label: 'what', kind: 'effect-decomposition', node_id: helperNodes[2] },
+  ]
+  for (const dependency of dependencies) {
+    ensureTask(prepared, { run_id: 'run-1', label: dependency.label, kind: dependency.kind, payload: {} })
+    const issued = issueReadyTask(prepared, { run_id: 'run-1', label: dependency.label })
+    completeTask(prepared, { envelope: issued.envelope, output_node_id: dependency.node_id })
+  }
+  ensureTask(prepared, {
+    run_id: 'run-1',
+    label: 'formalize',
+    kind: 'source-formalization',
+    depends_on: dependencies.map(dependency => `run-1:${dependency.label}`),
+    payload: { phase: 'formalize' },
+  })
+  prepared.close()
+  const calls = []
+  const graphAgent = createTrustedAgent({
+    driverArgs: { graph_root: root, run_id: 'run-1' },
+    invokeAgent: async (prompt, options) => {
+      calls.push({ prompt, schema: options.schema, lineage: returnedLineage(prompt) })
+      return { value: 1, _lineage: returnedLineage(prompt) }
+    },
+  })
+  const evidenceOrder = [helperNodes[2], helperNodes[0], helperNodes[1]]
+  const result = await graphAgent('formalize', {
+    label: 'formalize',
+    agentType: 'inquisitor',
+    taskKind: 'source-formalization',
+    dependsOn: dependencies.map(dependency => dependency.label),
+    taskPayload: { phase: 'formalize' },
+    schema: { type: 'object', required: ['value'], properties: { value: { type: 'number' } } },
+    authoritative: true,
+    modelId: 'provider/model-2026-08',
+    promptId: 'formalizer',
+    promptVersion: 1,
+    agentContractId: 'inquisitor@1',
+    sourceSnapshotId: 'snapshot-1',
+    orderedParentEvidenceNodeIds: evidenceOrder,
+  })
+  assert.deepEqual(calls[0].lineage.input_node_ids, dependencies.map(dependency => dependency.node_id).sort())
+  assert.deepEqual(result.execution_identity.ordered_parent_evidence_ids, evidenceOrder)
+  assert.deepEqual(result.execution_identity, trustedExecutionIdentity({
+    source_snapshot_id: 'snapshot-1',
+    agent_contract_id: 'inquisitor@1',
+    model_id: 'provider/model-2026-08',
+    prompt_id: 'formalizer',
+    prompt_version: 1,
+    prompt_sha256: sha256('formalize'),
+    invoked_prompt_sha256: sha256(calls[0].prompt),
+    output_schema_sha256: sha256(canonicalJson(calls[0].schema)),
+    ordered_parent_evidence_ids: evidenceOrder,
+  }))
 })
 
 test('trusted agent sanitizes deferred output without sealing its parent task', async () => {

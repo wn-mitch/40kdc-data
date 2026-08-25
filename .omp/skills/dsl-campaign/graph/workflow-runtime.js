@@ -101,12 +101,15 @@ export function createTrustedAgent({
     let raw
     let invocationError = null
     try {
+      const scheduledPayload = inputNodeIds.length
+        ? { ...taskPayload, input_node_ids: inputNodeIds }
+        : taskPayload
       ensureTask(store, {
         run_id: driverArgs.run_id,
         label,
         kind: taskKind || agentOptions.agentType || 'agent',
         depends_on: dependencyTaskIds(driverArgs.run_id, dependsOn),
-        payload: { ...taskPayload, input_node_ids: inputNodeIds },
+        payload: scheduledPayload,
       })
       const issued = issueReadyTask(store, {
         run_id: driverArgs.run_id,
