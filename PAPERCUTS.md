@@ -93,3 +93,4 @@ gh pr create in the jj workspace failed because the workspace has no .git direct
 ## 2026-08-25T21:00:09Z — gpt-5.6
 
 The persistent Bun eval kernel cannot import node:sqlite, so graph workflow smoke tests require a separate Node invocation despite the workflow's Node runtime.
+

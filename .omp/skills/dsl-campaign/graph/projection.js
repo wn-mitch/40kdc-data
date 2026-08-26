@@ -88,30 +88,30 @@ function addRef(refs, nodeId, factionId, abilityId, sourceKind, distance) {
 
 function directRefs(payload) {
   const found = new Map()
-  const visit = (value, inMultiFaction = false) => {
+  const visit = value => {
     if (!value || typeof value !== 'object') return
     if (Array.isArray(value)) {
-      for (const child of value) visit(child, inMultiFaction)
+      for (const child of value) visit(child)
       return
     }
     const ownFaction = typeof value.faction_id === 'string' ? value.faction_id : null
-    const multiFaction = inMultiFaction || ownFaction === 'multi-faction'
     const addAbility = abilityId => {
       if (typeof abilityId !== 'string') return
+      const ref = compositeRef(abilityId)
+      if (ref) {
+        found.set(refKey(ref.faction_id, ref.ability_id), ref)
+        return
+      }
       if (ownFaction && ownFaction !== 'multi-faction') {
         found.set(refKey(ownFaction, abilityId), { faction_id: ownFaction, ability_id: abilityId })
         return
-      }
-      if (multiFaction) {
-        const ref = compositeRef(abilityId)
-        if (ref) found.set(refKey(ref.faction_id, ref.ability_id), ref)
       }
     }
     if (typeof value.ability_id === 'string') addAbility(value.ability_id)
     if (Array.isArray(value.ability_ids)) {
       for (const abilityId of value.ability_ids) addAbility(abilityId)
     }
-    for (const child of Object.values(value)) visit(child, multiFaction)
+    for (const child of Object.values(value)) visit(child)
   }
   visit(payload)
   return [...found.values()].sort((a, b) => a.faction_id.localeCompare(b.faction_id) || a.ability_id.localeCompare(b.ability_id))
@@ -289,8 +289,8 @@ export function reconcileAbilityCatalog(store, repoRoot, repositoryVersionId) {
       node_id: repositoryVersionId,
     })
   }
-  const refCount = Number(store.db.prepare('SELECT count(*) AS n FROM node_ability_refs').get().n)
-  return { catalog_count: catalog.length, ref_count: refCount }
+  const refs = rebuildNodeAbilityRefs(store)
+  return { catalog_count: catalog.length, ref_count: refs.length }
 }
 
 function projectedCampaignStatus(state, fallback = 'open') {

@@ -47,6 +47,25 @@ test('global projection uses stable synthetic IDs and safe repository labels', (
   store.close()
 })
 
+test('catalog reconciliation rebuilds stale composite ability refs', () => {
+  const { repoRoot, store } = fixture()
+  const repository = store.createNode({ kind: 'repository-version', payload: { workspace_hash: 'a'.repeat(64), files: [], tool_versions: {}, runner_hashes: [], schema_version: 2, policy_version: 1 } })
+  const finding = store.createNode({
+    kind: 'finding',
+    payload: { faction_id: 'fabricated-faction', ability_id: 'fabricated-faction/alpha' },
+  })
+  store.db.prepare('DELETE FROM node_ability_refs WHERE node_id=?').run(finding.node_id)
+  store.db.prepare('INSERT INTO node_ability_refs(node_id,faction_id,ability_id,source_kind,distance) VALUES (?,?,?,?,?)')
+    .run(finding.node_id, 'fabricated-faction', 'fabricated-faction/alpha', 'direct', 0)
+
+  reconcileAbilityCatalog(store, repoRoot, repository.node_id)
+
+  assert.deepEqual(refsFor(store, finding.node_id).map(ref => [ref.faction_id, ref.ability_id]), [
+    ['fabricated-faction', 'alpha'],
+  ])
+  store.close()
+})
+
 test('refs are direct, forward-inherited, family-unioned, cycle-safe, and never backward-propagated', () => {
   const { store } = fixture()
   const repository = store.createNode({ kind: 'repository-version', payload: { workspace_hash: 'b'.repeat(64), files: [], tool_versions: {}, runner_hashes: [], schema_version: 2, policy_version: 1 } })
