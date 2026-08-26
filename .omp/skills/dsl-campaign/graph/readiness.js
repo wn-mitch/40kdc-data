@@ -46,6 +46,7 @@ export function nextCampaignId(store) {
 
 export function readiness(store, { repoRoot, registryPath, worklist = null } = {}) {
   const errors = []
+  const warnings = []
   let integrity
   try { integrity = store.reconcile() } catch (error) { errors.push(error.message) }
   const bootstrap = store.db.prepare("SELECT value FROM meta WHERE key='registry_bootstrap_hash'").get()
@@ -71,6 +72,8 @@ export function readiness(store, { repoRoot, registryPath, worklist = null } = {
   const liveLeases = Number(store.db.prepare("SELECT count(*) AS n FROM leases JOIN runs USING(run_id) WHERE leases.state='active' AND runs.state NOT IN ('completed','aborted','superseded','failed-final')").get().n)
   if (liveLeases) errors.push(`${liveLeases} live lease(s) remain`)
   const excluded_claims = store.db.prepare("SELECT faction_id,ability_id,run_id FROM claims WHERE state='active' ORDER BY faction_id,ability_id").all().map(row => ({ ...row }))
+  let parsed = null
+  try { parsed = parseWorklist(worklist) } catch (error) { errors.push(error.message) }
   const missing_ability_metadata = store.db.prepare(`
     SELECT DISTINCT refs.faction_id,refs.ability_id
     FROM node_ability_refs AS refs
@@ -79,9 +82,19 @@ export function readiness(store, { repoRoot, registryPath, worklist = null } = {
     WHERE catalog.ability_id IS NULL
     ORDER BY refs.faction_id,refs.ability_id
   `).all().map(row => `${row.faction_id}/${row.ability_id}`)
-  if (missing_ability_metadata.length) errors.push(`ability metadata missing: ${missing_ability_metadata.join(', ')}`)
-  let parsed = null
-  try { parsed = parseWorklist(worklist) } catch (error) { errors.push(error.message) }
+  const catalog_keys = new Set(store.db.prepare(`
+    SELECT faction_id,ability_id
+    FROM ability_catalog
+    ORDER BY faction_id,ability_id
+  `).all().map(row => `${row.faction_id}/${row.ability_id}`))
+  const required = new Set([
+    ...excluded_claims.map(claim => `${claim.faction_id}/${claim.ability_id}`),
+    ...(parsed || []).map(entry => `${entry.faction_id}/${entry.ability_id}`),
+  ])
+  const missing_required_ability_metadata = [...required].filter(key => !catalog_keys.has(key)).sort()
+  if (missing_required_ability_metadata.length) errors.push(`ability metadata missing: ${missing_required_ability_metadata.join(', ')}`)
+  const historical_gaps = missing_ability_metadata.filter(key => !required.has(key))
+  if (historical_gaps.length) warnings.push(`ability metadata unavailable for ${historical_gaps.length} historical reference(s)`)
   if (parsed) {
     const active = new Set(excluded_claims.map(claim => `${claim.faction_id}/${claim.ability_id}`))
     const overlaps = parsed.filter(entry => active.has(`${entry.faction_id}/${entry.ability_id}`))
@@ -89,7 +102,7 @@ export function readiness(store, { repoRoot, registryPath, worklist = null } = {
   }
   let next_campaign_id = null
   try { next_campaign_id = nextCampaignId(store) } catch (error) { errors.push(error.message) }
-  return { ready: errors.length === 0, next_campaign_id, graph_sequence: store.sequence(), replay_checksum: store.replayChecksum(), projection_checksum: store.projectionChecksum(), integrity, intake_outcomes: intakeCount, excluded_claims, missing_ability_metadata, worklist: parsed, errors }
+  return { ready: errors.length === 0, next_campaign_id, graph_sequence: store.sequence(), replay_checksum: store.replayChecksum(), projection_checksum: store.projectionChecksum(), integrity, intake_outcomes: intakeCount, excluded_claims, missing_ability_metadata, missing_required_ability_metadata, warnings, worklist: parsed, errors }
 }
 
 function task(label, kind, depends_on, payload) { return { label, kind, depends_on, payload } }

@@ -39,6 +39,13 @@ function completeFixture() {
   recoverLegacy(store, { repoRoot })
   const repository = store.db.prepare("SELECT node_id FROM nodes WHERE kind='repository-version' ORDER BY rowid DESC LIMIT 1").get()
   reconcileAbilityCatalog(store, repoRoot, repository.node_id)
+  const catalogVersion = store.db.prepare('SELECT repository_version_id FROM ability_catalog LIMIT 1').get()
+  store.db.prepare(`
+    INSERT INTO ability_catalog(faction_id,ability_id,ability_name,faction_name,repository_version_id)
+    VALUES
+      ('fixture-faction','fixture-ability','Fixture Ability','Fixture Faction',?),
+      ('fixture-faction','other-ability','Other Ability','Fixture Faction',?)
+  `).run(catalogVersion.repository_version_id, catalogVersion.repository_version_id)
   projectRegistry(store, registryPath)
   return { store, registryPath }
 }
@@ -110,14 +117,29 @@ test('campaign IDs advance after completed graph runs', () => {
   store.close()
 })
 
-test('readiness lists every referenced ability missing repository metadata', () => {
+test('readiness warns about historical metadata gaps but rejects an unavailable worklist ability', () => {
   const { store, registryPath } = completeFixture()
   const referenced = store.db.prepare('SELECT faction_id,ability_id FROM node_ability_refs ORDER BY faction_id,ability_id LIMIT 1').get()
   store.db.prepare('DELETE FROM ability_catalog WHERE faction_id=? AND ability_id=?').run(referenced.faction_id, referenced.ability_id)
   const key = `${referenced.faction_id}/${referenced.ability_id}`
-  const gate = readiness(store, { repoRoot, registryPath })
-  assert.equal(gate.ready, false)
-  assert.ok(gate.missing_ability_metadata.includes(key))
+
+  const historical = readiness(store, { repoRoot, registryPath })
+  assert.equal(historical.ready, true, historical.errors.join('; '))
+  assert.ok(historical.missing_ability_metadata.includes(key))
+  assert.deepEqual(historical.missing_required_ability_metadata, [])
+  assert.ok(historical.warnings.some(warning => warning.includes('historical reference')))
+
+  const required = readiness(store, { repoRoot, registryPath, worklist: [referenced] })
+  assert.equal(required.ready, false)
+  assert.ok(required.missing_required_ability_metadata.includes(key))
+  assert.ok(required.errors.some(error => error.includes(`ability metadata missing: ${key}`)))
+
+  const unavailable = { faction_id: 'missing-faction', ability_id: 'missing-ability' }
+  const unavailableKey = `${unavailable.faction_id}/${unavailable.ability_id}`
+  const unknown = readiness(store, { repoRoot, registryPath, worklist: [unavailable] })
+  assert.equal(unknown.ready, false)
+  assert.ok(unknown.missing_required_ability_metadata.includes(unavailableKey))
+  assert.ok(unknown.errors.some(error => error.includes(`ability metadata missing: ${unavailableKey}`)))
   store.close()
 })
 

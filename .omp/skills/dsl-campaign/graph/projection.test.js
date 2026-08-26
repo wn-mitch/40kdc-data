@@ -23,6 +23,12 @@ function fixture() {
   writeFileSync(join(repoRoot, 'data', 'core', 'fabricated-faction', 'factions.json'), JSON.stringify([
     { id: 'fabricated-faction', name: 'Fabricated Faction' },
   ]))
+  writeFileSync(join(repoRoot, 'data', 'core', 'fabricated-faction', 'enhancements.json'), JSON.stringify([
+    { id: 'core-enhancement', name: 'Core Enhancement' },
+  ]))
+  writeFileSync(join(repoRoot, 'data', 'core', 'fabricated-faction', 'stratagems.json'), JSON.stringify([
+    { id: 'core-stratagem', name: 'Core Stratagem' },
+  ]))
   writeFileSync(join(repoRoot, 'data', 'enrichment', 'fabricated-faction', 'abilities.json'), JSON.stringify([
     { ability_id: 'alpha', name: 'Alpha' },
     { ability_id: 'beta', name: 'Beta' },
@@ -40,9 +46,11 @@ test('global projection uses stable synthetic IDs and safe repository labels', (
   const result = reconcileAbilityCatalog(store, repoRoot, repository.node_id)
   assert.equal(GLOBAL_ROOT_ID, 'root:mechanic-evidence')
   assert.equal(abilityProjectionId('fabricated-faction', 'alpha'), 'ability:fabricated-faction:alpha')
-  assert.equal(result.catalog_count, 2)
+  assert.equal(result.catalog_count, 4)
   const alpha = store.db.prepare('SELECT * FROM ability_catalog WHERE faction_id=? AND ability_id=?').get('fabricated-faction', 'alpha')
+  const enhancement = store.db.prepare('SELECT * FROM ability_catalog WHERE faction_id=? AND ability_id=?').get('fabricated-faction', 'core-enhancement')
   assert.equal(abilityProjectionLabel(alpha), 'Alpha — Fabricated Faction (fabricated-faction) · alpha')
+  assert.equal(abilityProjectionLabel(enhancement), 'Core Enhancement — Fabricated Faction (fabricated-faction) · core-enhancement')
   assert.equal(alpha.repository_version_id, repository.node_id)
   store.close()
 })

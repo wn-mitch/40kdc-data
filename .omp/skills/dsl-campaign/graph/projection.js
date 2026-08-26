@@ -50,24 +50,30 @@ export function buildAbilityCatalog(repoRoot, repositoryVersionId) {
       }
     }
   }
-  const catalog = []
+  const catalog = new Map()
+  const add = (factionId, abilityId, abilityName) => {
+    if (typeof factionId !== 'string' || typeof abilityId !== 'string' || typeof abilityName !== 'string') return
+    catalog.set(`${factionId}\u0000${abilityId}`, {
+      faction_id: factionId,
+      ability_id: abilityId,
+      ability_name: abilityName,
+      faction_name: factions.get(factionId) || factionId,
+      repository_version_id: repositoryVersionId,
+    })
+  }
+  if (existsSync(coreRoot)) {
+    for (const entry of readdirSync(coreRoot, { withFileTypes: true }).filter(entry => entry.isDirectory() && !entry.name.startsWith('_')).sort((a, b) => a.name.localeCompare(b.name))) {
+      for (const entity of jsonArray(join(coreRoot, entry.name, 'enhancements.json'))) add(entry.name, entity?.id, entity?.name)
+      for (const entity of jsonArray(join(coreRoot, entry.name, 'stratagems.json'))) add(entry.name, entity?.id, entity?.name)
+    }
+  }
   const enrichmentRoot = join(repoRoot, 'data', 'enrichment')
   if (existsSync(enrichmentRoot)) {
     for (const entry of readdirSync(enrichmentRoot, { withFileTypes: true }).filter(entry => entry.isDirectory() && !entry.name.startsWith('_')).sort((a, b) => a.name.localeCompare(b.name))) {
-      const factionId = entry.name
-      for (const ability of jsonArray(join(enrichmentRoot, factionId, 'abilities.json'))) {
-        if (typeof ability?.ability_id !== 'string' || typeof ability?.name !== 'string') continue
-        catalog.push({
-          faction_id: factionId,
-          ability_id: ability.ability_id,
-          ability_name: ability.name,
-          faction_name: factions.get(factionId) || factionId,
-          repository_version_id: repositoryVersionId,
-        })
-      }
+      for (const ability of jsonArray(join(enrichmentRoot, entry.name, 'abilities.json'))) add(entry.name, ability?.ability_id, ability?.name)
     }
   }
-  return catalog.sort((a, b) => a.faction_id.localeCompare(b.faction_id) || a.ability_id.localeCompare(b.ability_id))
+  return [...catalog.values()].sort((a, b) => a.faction_id.localeCompare(b.faction_id) || a.ability_id.localeCompare(b.ability_id))
 }
 
 function refKey(factionId, abilityId) {
