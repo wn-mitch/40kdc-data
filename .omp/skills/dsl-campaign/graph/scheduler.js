@@ -128,34 +128,79 @@ function maybeReady(store, row) {
   return store.db.prepare('SELECT * FROM tasks WHERE id=?').get(row.id)
 }
 
-export function issueReadyTask(store, { run_id, label, now = Date.now() }) {
-  const run = runRow(store, run_id)
+function expireTaskLeases(store, runId, taskId, now) {
+  const current = iso(now)
+  const timestamp = current.value
+  const currentTime = current.timestamp
+  const activeLeases = store.db.prepare(
+    "SELECT * FROM leases WHERE run_id=? AND state IN ('allocated','active') AND json_extract(payload_json,'$.task_id')=? ORDER BY id",
+  ).all(runId, taskId)
+  for (const lease of activeLeases) {
+    const payload = JSON.parse(lease.payload_json || '{}')
+    const expiresAt = Date.parse(payload.expires_at)
+    if (!Number.isFinite(expiresAt)) throw new Error('active lease expiry invalid')
+    if (expiresAt > currentTime) continue
+    store.appendEvent('lease-heartbeat-lost', {
+      run_id: runId,
+      task_id: taskId,
+      attempt_id: payload.attempt_id,
+      lease_id: lease.id,
+      input_hash: payload.input_hash,
+      now: timestamp,
+      reason: 'lease-expired-before-issue',
+    }, { aggregate_kind: 'lease', aggregate_id: lease.id })
+  }
+}
+
+function activeExecution(store, runId, taskId) {
+  const activeAttempt = store.db.prepare(
+    "SELECT id FROM attempts WHERE run_id=? AND state IN ('allocated','running') AND json_extract(payload_json,'$.task_id')=?",
+  ).get(runId, taskId)
+  const activeLease = store.db.prepare(
+    "SELECT id FROM leases WHERE run_id=? AND state IN ('allocated','active') AND json_extract(payload_json,'$.task_id')=?",
+  ).get(runId, taskId)
+  return activeAttempt || activeLease
+}
+
+function schedulableRun(store, runId, label) {
+  const run = runRow(store, runId)
   if (run.state === 'planned' && !label.startsWith('prioritize:')) throw new Error('planned run permits only prioritize tasks')
   if (!['planned', 'active'].includes(run.state)) throw new Error(`run is not schedulable: ${run.state}`)
+  return run
+}
+
+
+
+export function issueReadyTask(store, { run_id, label, now = Date.now() }) {
+  schedulableRun(store, run_id, label)
   const id = taskId(run_id, label)
   let task = store.db.prepare('SELECT * FROM tasks WHERE id=?').get(id)
   if (!task) throw new Error(`task not registered: ${label}`)
   task = maybeReady(store, task)
   if (task.state === 'pending') return { issued: false, reason: 'task-dependencies-unsealed', task_id: id }
   if (!['ready', 'running'].includes(task.state)) return { issued: false, reason: `task-${task.state}`, task_id: id }
-  const activeAttempt = store.db.prepare("SELECT id FROM attempts WHERE run_id=? AND state IN ('allocated','running') AND json_extract(payload_json,'$.task_id')=?").get(run_id, id)
-  const activeLease = store.db.prepare("SELECT id FROM leases WHERE run_id=? AND state IN ('allocated','active') AND json_extract(payload_json,'$.task_id')=?").get(run_id, id)
-  if (activeAttempt || activeLease) return { issued: false, reason: 'task-attempt-active', task_id: id }
-  const definition = taskPayload(task)
-  const explicitInputs = uniqueSorted(definition.payload?.input_node_ids || [], 'input_node_ids')
-  validateExplicitInputs(store, run_id, explicitInputs)
-  const dependencies = dependencyRows(store, definition.depends_on || [])
-  if (!dependencies.every(row => row.state === 'succeeded' && row.node_id && store.hasNode(row.node_id))) {
-    return { issued: false, reason: 'task-dependencies-unsealed', task_id: id }
-  }
-  const inputNodeIds = [...new Set([...explicitInputs, ...dependencies.map(row => row.node_id)])].sort()
-  const inputHash = sha256(canonicalJson({ task_id: id, task_payload: definition.payload, input_node_ids: inputNodeIds }))
-  const attemptNumber = Number(store.db.prepare("SELECT count(*) AS n FROM attempts WHERE run_id=? AND json_extract(payload_json,'$.task_id')=?").get(run_id, id).n) + 1
-  const attemptId = `${id}:attempt:${attemptNumber}`
-  const leaseId = `${attemptId}:lease:1`
-  const issuedAt = iso(now)
-  const expiresAt = new Date(issuedAt.timestamp + LEASE_TTL_MS).toISOString()
-  store.transaction(() => {
+  store.transaction(() => expireTaskLeases(store, run_id, id, now))
+  return store.transaction(() => {
+    schedulableRun(store, run_id, label)
+    task = store.db.prepare('SELECT * FROM tasks WHERE id=?').get(id)
+    if (!task) throw new Error(`task not registered: ${label}`)
+    if (task.state === 'pending') return { issued: false, reason: 'task-dependencies-unsealed', task_id: id }
+    if (!['ready', 'running'].includes(task.state)) return { issued: false, reason: `task-${task.state}`, task_id: id }
+    if (activeExecution(store, run_id, id)) return { issued: false, reason: 'task-attempt-active', task_id: id }
+    const definition = taskPayload(task)
+    const explicitInputs = uniqueSorted(definition.payload?.input_node_ids || [], 'input_node_ids')
+    validateExplicitInputs(store, run_id, explicitInputs)
+    const dependencies = dependencyRows(store, definition.depends_on || [])
+    if (!dependencies.every(row => row.state === 'succeeded' && row.node_id && store.hasNode(row.node_id))) {
+      return { issued: false, reason: 'task-dependencies-unsealed', task_id: id }
+    }
+    const inputNodeIds = [...new Set([...explicitInputs, ...dependencies.map(row => row.node_id)])].sort()
+    const inputHash = sha256(canonicalJson({ task_id: id, task_payload: definition.payload, input_node_ids: inputNodeIds }))
+    const attemptNumber = Number(store.db.prepare("SELECT count(*) AS n FROM attempts WHERE run_id=? AND json_extract(payload_json,'$.task_id')=?").get(run_id, id).n) + 1
+    const attemptId = `${id}:attempt:${attemptNumber}`
+    const leaseId = `${attemptId}:lease:1`
+    const issuedAt = iso(now)
+    const expiresAt = new Date(issuedAt.timestamp + LEASE_TTL_MS).toISOString()
     if (task.state === 'ready') store.appendEvent('task-started', { expected_state: 'ready' }, { aggregate_kind: 'task', aggregate_id: id })
     store.appendEvent('attempt-allocated', {
       row: { id: attemptId, run_id, state: 'allocated', payload: { task_id: id, attempt_number: attemptNumber, input_hash: inputHash, input_node_ids: inputNodeIds } },
@@ -165,14 +210,14 @@ export function issueReadyTask(store, { run_id, label, now = Date.now() }) {
       row: { id: leaseId, run_id, state: 'allocated', payload: { task_id: id, attempt_id: attemptId, input_hash: inputHash, input_node_ids: inputNodeIds, issued_at: issuedAt.value, expires_at: expiresAt } },
     }, { aggregate_kind: 'lease', aggregate_id: leaseId })
     store.appendEvent('lease-activated', { expected_state: 'allocated' }, { aggregate_kind: 'lease', aggregate_id: leaseId })
+    return {
+      issued: true,
+      envelope: createExecutionEnvelope({
+        run_id, task_id: id, attempt_id: attemptId, lease_id: leaseId,
+        lease_expires_at: expiresAt, input_node_ids: inputNodeIds, input_hash: inputHash,
+      }),
+    }
   })
-  return {
-    issued: true,
-    envelope: createExecutionEnvelope({
-      run_id, task_id: id, attempt_id: attemptId, lease_id: leaseId,
-      lease_expires_at: expiresAt, input_node_ids: inputNodeIds, input_hash: inputHash,
-    }),
-  }
 }
 
 export function assertActiveLease(store, envelope, now = Date.now()) {

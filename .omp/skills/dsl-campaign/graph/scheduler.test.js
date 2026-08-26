@@ -96,6 +96,66 @@ test('renewal retains attempt and input hash beyond original expiry', () => {
   store.close()
 })
 
+test('expired lease becomes stale before the next task issue', () => {
+  const { store, runId } = fixture()
+  ensureTask(store, { run_id: runId, label: 'reclaim', kind: 'fixture', payload: {} })
+  const issuedAt = 1_800_000_000_000
+  const first = issueReadyTask(store, { run_id: runId, label: 'reclaim', now: issuedAt })
+  const second = issueReadyTask(store, { run_id: runId, label: 'reclaim', now: issuedAt + LEASE_TTL_MS + 1 })
+  assert.equal(second.issued, true)
+  assert.equal(second.envelope.attempt_id, `${runId}:reclaim:attempt:2`)
+  assert.equal(store.db.prepare('SELECT state FROM attempts WHERE id=?').get(first.envelope.attempt_id).state, 'stale')
+  assert.equal(store.db.prepare('SELECT state FROM leases WHERE id=?').get(first.envelope.lease_id).state, 'expired')
+  assert.equal(
+    store.db.prepare("SELECT count(*) AS n FROM events WHERE event_type='lease-heartbeat-lost' AND aggregate_id=?").get(first.envelope.lease_id).n,
+    1,
+  )
+  store.close()
+})
+
+test('competing issuer observes the replacement lease after reclamation', () => {
+  const { store, runId } = fixture()
+  ensureTask(store, { run_id: runId, label: 'competing-reclaim', kind: 'fixture', payload: {} })
+  const issuedAt = 1_800_000_000_000
+  const first = issueReadyTask(store, { run_id: runId, label: 'competing-reclaim', now: issuedAt })
+  const reissueAt = issuedAt + LEASE_TTL_MS + 1
+  const originalTransaction = store.transaction
+  let topLevelTransactions = 0
+  let competing
+  store.transaction = function transaction(callback) {
+    if (this.transactionDepth === 0 && ++topLevelTransactions === 2) {
+      competing = issueReadyTask(this, { run_id: runId, label: 'competing-reclaim', now: reissueAt })
+    }
+    return originalTransaction.call(this, callback)
+  }
+  try {
+    const primary = issueReadyTask(store, { run_id: runId, label: 'competing-reclaim', now: reissueAt })
+    assert.equal(competing.issued, true)
+    assert.deepEqual(primary, { issued: false, reason: 'task-attempt-active', task_id: `${runId}:competing-reclaim` })
+  } finally {
+    store.transaction = originalTransaction
+  }
+  assert.equal(store.db.prepare("SELECT count(*) AS n FROM attempts WHERE json_extract(payload_json,'$.task_id')=?").get(`${runId}:competing-reclaim`).n, 2)
+  assert.equal(store.db.prepare("SELECT count(*) AS n FROM leases WHERE state='active' AND json_extract(payload_json,'$.task_id')=?").get(`${runId}:competing-reclaim`).n, 1)
+  assert.equal(store.db.prepare('SELECT state FROM attempts WHERE id=?').get(first.envelope.attempt_id).state, 'stale')
+  store.close()
+})
+
+test('malformed active lease expiry fails closed before task issue', () => {
+  const { store, runId } = fixture()
+  ensureTask(store, { run_id: runId, label: 'malformed-expiry', kind: 'fixture', payload: {} })
+  const issuedAt = 1_800_000_000_000
+  const first = issueReadyTask(store, { run_id: runId, label: 'malformed-expiry', now: issuedAt })
+  store.db.prepare("UPDATE leases SET payload_json=json_set(payload_json, '$.expires_at', 'not-a-timestamp') WHERE id=?").run(first.envelope.lease_id)
+  assert.throws(
+    () => issueReadyTask(store, { run_id: runId, label: 'malformed-expiry', now: issuedAt + LEASE_TTL_MS + 1 }),
+    /active lease expiry invalid/,
+  )
+  assert.equal(store.db.prepare('SELECT state FROM attempts WHERE id=?').get(first.envelope.attempt_id).state, 'running')
+  assert.equal(store.db.prepare('SELECT state FROM leases WHERE id=?').get(first.envelope.lease_id).state, 'active')
+  store.close()
+})
+
 test('retry preserves task while issuing next deterministic attempt', () => {
   const { store, runId } = fixture()
   ensureTask(store, { run_id: runId, label: 'retry', kind: 'fixture', payload: {} })
