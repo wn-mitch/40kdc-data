@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { glob } from "glob";
 import { resolve, basename, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -143,6 +143,14 @@ interface CompLike {
 }
 interface AbilityLike {
   ability_id?: string;
+}
+interface MissionRef {
+  id?: string;
+}
+interface MissionCardRef {
+  id?: string;
+  card_type?: "primary" | "secondary";
+  awards?: unknown[];
 }
 
 /**
@@ -339,6 +347,138 @@ export function diceTableInvariantErrors(effect: unknown): string[] {
   collectDiceTableErrors(effect, errors);
   return errors;
 }
+
+function checkMissionCardLinks(root: string, result: ValidationResult): void {
+  const missionsFile = resolve(root, "core/missions.json");
+  const missionCardsFile = resolve(root, "core/mission-cards.json");
+  const hasMissions = existsSync(missionsFile);
+  const hasMissionCards = existsSync(missionCardsFile);
+  if (!hasMissions && !hasMissionCards) return;
+
+  let missions: MissionRef[] = [];
+  let missionCards: MissionCardRef[] = [];
+  try {
+    if (hasMissions) {
+      const parsed = readArray<MissionRef>(missionsFile);
+      if (!Array.isArray(parsed)) return;
+      missions = parsed;
+    }
+    if (hasMissionCards) {
+      const parsed = readArray<MissionCardRef>(missionCardsFile);
+      if (!Array.isArray(parsed)) return;
+      missionCards = parsed;
+    }
+  } catch {
+    // Structural failures belong to the AJV pass; do not duplicate them here.
+    return;
+  }
+
+  type IntegrityIssue = ValidationResult["errors"][number];
+  const issues = new Map<string, IntegrityIssue>();
+  const issueKey = (file: string, index: number) => `${file}\0${index}`;
+  const addIssue = (
+    file: string,
+    index: number,
+    path: string,
+    message: string,
+  ): void => {
+    const key = issueKey(file, index);
+    const issue = issues.get(key) ?? { file, index, errors: [] };
+    issue.errors.push({ path, message });
+    issues.set(key, issue);
+  };
+  const indexById = <T extends { id?: string }>(records: T[]) => {
+    const byId = new Map<string, number[]>();
+    for (let index = 0; index < records.length; index++) {
+      const id = records[index]?.id;
+      if (!id) continue;
+      const indices = byId.get(id) ?? [];
+      indices.push(index);
+      byId.set(id, indices);
+    }
+    return byId;
+  };
+
+  const missionIndices = indexById(missions);
+  const missionCardIndices = indexById(missionCards);
+
+  for (const [id, indices] of missionIndices) {
+    for (const index of indices.slice(1)) {
+      addIssue(
+        missionsFile,
+        index,
+        `/${index}/id`,
+        `duplicate mission id "${id}" — Collection is first-wins, so this mission is silently shadowed`,
+      );
+    }
+  }
+  for (const [id, indices] of missionCardIndices) {
+    for (const index of indices.slice(1)) {
+      addIssue(
+        missionCardsFile,
+        index,
+        `/${index}/id`,
+        `duplicate mission-card id "${id}" — Collection is first-wins, so this card is silently shadowed`,
+      );
+    }
+  }
+
+  for (const [id, indices] of missionIndices) {
+    const matches = missionCardIndices.get(id) ?? [];
+    if (
+      matches.length === 0 ||
+      (matches.length === 1 &&
+        missionCards[matches[0]]?.card_type !== "primary")
+    ) {
+      const index = indices[0]!;
+      addIssue(
+        missionsFile,
+        index,
+        `/${index}/id`,
+        `mission "${id}" has no same-id primary mission card`,
+      );
+    }
+  }
+
+  for (let index = 0; index < missionCards.length; index++) {
+    const card = missionCards[index]!;
+    if (card.card_type !== "primary" || !card.id) continue;
+    if (!missionIndices.has(card.id)) {
+      addIssue(
+        missionCardsFile,
+        index,
+        `/${index}/id`,
+        `primary mission-card "${card.id}" has no mission`,
+      );
+    }
+    if (!Array.isArray(card.awards) || card.awards.length === 0) {
+      addIssue(
+        missionCardsFile,
+        index,
+        `/${index}/awards`,
+        `primary mission-card "${card.id}" has no scoring awards`,
+      );
+    }
+  }
+
+  result.totalFiles += Number(hasMissions) + Number(hasMissionCards);
+  result.totalItems += missions.length + missionCards.length;
+  const finishRecord = (file: string, index: number): void => {
+    const issue = issues.get(issueKey(file, index));
+    if (issue) {
+      result.failed++;
+      result.errors.push(issue);
+    } else {
+      result.passed++;
+    }
+  };
+  for (let index = 0; index < missions.length; index++) {
+    finishRecord(missionsFile, index);
+  }
+  for (let index = 0; index < missionCards.length; index++) {
+    finishRecord(missionCardsFile, index);
+  }
+}
 /**
  * Cross-entity referential integrity that per-file JSON Schema validation cannot
  * express:
@@ -348,6 +488,8 @@ export function diceTableInvariantErrors(effect: unknown): string[] {
  *    Same-faction scoping is deliberate — a union check would pass shared-unit
  *    contaminants because they happen to be defined in some *other* faction's
  *    enrichment.
+ *  - every mission must resolve to a same-id primary mission card, and every
+ *    primary mission card must resolve back to a mission and define scoring awards.
  *  - every unit `faction_keywords` entry must be permitted for the unit's faction
  *    (see {@link FACTION_HOME_KEYWORD}).
  *
@@ -362,6 +504,8 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
     failed: 0,
     errors: [],
   };
+
+  checkMissionCardLinks(root, result);
 
   // Shared core ability pool, available to every faction (optional).
   const coreAbilities = new Set<string>();

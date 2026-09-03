@@ -1,0 +1,11 @@
+[
+  {
+    "id": "matched-mission",
+    "card_type": "primary",
+    "awards": [{}]
+  },
+  {
+    "id": "standalone-secondary",
+    "card_type": "secondary"
+  }
+]

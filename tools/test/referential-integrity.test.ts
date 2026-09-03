@@ -49,6 +49,32 @@ describe("referential integrity", () => {
     expect(result.passed).toBe(1);
   });
 
+  it("accepts same-id primary mission cards and standalone secondaries", async () => {
+    const result = await checkReferentialIntegrity(
+      resolve(FIXTURES, "integrity-mission-cards-good"),
+    );
+    expect(result.failed).toBe(0);
+    expect(result.passed).toBe(3);
+  });
+
+  it("rejects broken mission-to-primary-card relationships", async () => {
+    const result = await checkReferentialIntegrity(
+      resolve(FIXTURES, "integrity-mission-cards-bad"),
+    );
+    expect(result.failed).toBe(5);
+    expect(
+      result.errors.flatMap((entry) =>
+        entry.errors.map((error) => error.message),
+      ),
+    ).toEqual([
+      'mission "secondary-only" has no same-id primary mission card',
+      'duplicate mission id "duplicate-mission" — Collection is first-wins, so this mission is silently shadowed',
+      'duplicate mission-card id "duplicate-card" — Collection is first-wins, so this card is silently shadowed',
+      'primary mission-card "no-awards" has no scoring awards',
+      'primary mission-card "orphan-primary" has no mission',
+    ]);
+  });
+
   it("requires rules-bundle grants to resolve in their faction or the shared core pool", async () => {
     const result = await checkReferentialIntegrity(resolve(FIXTURES, "integrity-bundle-grant"));
     const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message));
