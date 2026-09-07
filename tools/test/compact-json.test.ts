@@ -15,7 +15,7 @@ const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const CORE = join(REPO_ROOT, "data", "core");
 
 const ROUND_TRIP_FILES = [
-  "secondary-cards.json",
+  "mission-cards.json",
   "missions.json",
   "mission-matchups.json",
   "force-dispositions.json",

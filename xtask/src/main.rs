@@ -98,7 +98,7 @@ const FILE_TO_COLLECTION: &[(&str, &str)] = &[
     ("game-versions", "game_versions"),
     ("missions", "missions"),
     ("mission-matchups", "mission_matchups"),
-    ("secondary-cards", "mission_cards"),
+    ("mission-cards", "mission_cards"),
     ("deployment-patterns", "deployment_patterns"),
     ("force-dispositions", "force_dispositions"),
     ("terrain-templates", "terrain_templates"),

@@ -45,7 +45,7 @@ const SCHEMA_MAP: Record<string, string> = {
   "deployment-patterns": "https://40kdc.dev/schemas/core/deployment-pattern.schema.json",
   "mission-matchups": "https://40kdc.dev/schemas/core/mission-matchup.schema.json",
   missions: "https://40kdc.dev/schemas/core/mission.schema.json",
-  "secondary-cards": "https://40kdc.dev/schemas/core/secondary-card.schema.json",
+  "mission-cards": "https://40kdc.dev/schemas/core/secondary-card.schema.json",
   "terrain-templates": "https://40kdc.dev/schemas/core/terrain-template.schema.json",
   "terrain-layouts": "https://40kdc.dev/schemas/core/terrain-layout.schema.json",
   "hull-shapes": "https://40kdc.dev/schemas/core/hull-shape.schema.json",

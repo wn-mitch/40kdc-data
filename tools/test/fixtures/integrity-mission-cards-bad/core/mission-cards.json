@@ -1,0 +1,30 @@
+[
+  {
+    "id": "secondary-only",
+    "card_type": "secondary"
+  },
+  {
+    "id": "duplicate-mission",
+    "card_type": "primary",
+    "awards": [{}]
+  },
+  {
+    "id": "duplicate-card",
+    "card_type": "primary",
+    "awards": [{}]
+  },
+  {
+    "id": "duplicate-card",
+    "card_type": "secondary"
+  },
+  {
+    "id": "no-awards",
+    "card_type": "primary",
+    "awards": []
+  },
+  {
+    "id": "orphan-primary",
+    "card_type": "primary",
+    "awards": [{}]
+  }
+]
