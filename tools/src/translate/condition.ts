@@ -167,6 +167,7 @@ const EVENT_PHRASES: Record<string, string> = {
   "after-hit-roll": "after a Hit roll is made",
   "before-wound-roll": "before a Wound roll is made",
   "after-wound-roll": "after a Wound roll is made",
+  "attack-scores-wound": "each time an attack scores a wound",
   "before-save-roll": "before a saving throw is made",
   "after-save-roll": "after a saving throw is made",
   "before-damage-roll": "before a Damage roll is made",
@@ -193,6 +194,15 @@ const EVENT_PHRASES: Record<string, string> = {
   "battle-shock-test": "when the unit takes a Battle-shock test",
   "leadership-test": "when the unit takes a Leadership test",
   "desperate-escape-test": "when the unit takes a Desperate Escape test",
+  "end-of-opponent-charge-phase": "at the end of the opponent's Charge phase",
+  "enemy-unit-completed-shooting-targeting-bearer": "after an enemy unit has shot and targeted this unit",
+  "enemy-unit-selects-bearer-as-charge-target": "when an enemy unit selects this unit as a charge target",
+  "enemy-unit-targets-bearer": "when an enemy unit targets this unit",
+  "enemy-unit-completed-fall-back-from-bearer": "after an enemy unit within Engagement Range of this unit completes a Fall Back move",
+  "act-of-faith-completed": "after an Act of Faith is completed",
+  "act-of-faith-performed": "when an Act of Faith is performed",
+  "miracle-die-generated": "when a Miracle die is generated",
+  "enemy-unit-selected-charge-targets-before-charge-move": "after an enemy unit selects targets for its charge but before it makes a Charge move",
 };
 
 export function eventClause(event: unknown): string {
@@ -253,6 +263,25 @@ export function describeCondition(c: Condition): string {
   const p = c.parameters ?? {};
 
   switch (c.type) {
+    case "target-of-triggering-charge":
+      return `${negate}the unit was selected as a target of that charge`;
+    case "every-model-within-range-of-bearer":
+      return `${negate}every model in the unit is within ${str(p.range)}\" of this Transport`;
+    case "roll-succeeded":
+      return `${negate}the triggering ${dekebab(str(p.roll))} roll succeeded`;
+    case "on-battlefield": {
+      const who = p.model_name != null ? `the ${str(p.model_name)} model` : p.subject === "unit" ? "the unit" : p.subject === "target" ? "the target unit" : "this model";
+      return `${negate}${who} is on the battlefield`;
+    }
+    case "target-within-half-weapon-range":
+      return `${negate}the target is within half the attacking weapon's range`;
+    case "has-destroyed": {
+      const who = p.subject === "unit" ? "the unit" : p.subject === "target" ? "the target unit" : "this model";
+      const keywords = Array.isArray(p.victim_keywords) ? ` ${p.victim_keywords.map(str).join(" ")}` : "";
+      const victims = count(p.count_min ?? 1, `${str(p.victim_owner)}${keywords} ${str(p.victim_kind)}`);
+      const window = p.window === "just-finished-attack-sequence" ? "with its just-resolved attacks" : `during ${dekebab(str(p.window))}`;
+      return `${negate}${who} has destroyed ${victims} ${window}`;
+    }
     // ── Ability-DSL conditions (ported from commands/translate.ts) ──────────
     case "phase-is":
       return str(p.phase) === "command" || str(p.phase) === "command-phase"
@@ -292,6 +321,8 @@ export function describeCondition(c: Condition): string {
       return `${negate}the target has "${str(p.keyword)}"`;
     case "model-is-leader":
       return `${negate}the model is leading a unit`;
+    case "unit-is-led-by":
+      return `${negate}this unit is being led by an ${str(p.keyword)} model`;
     case "is-attached":
       return `${negate}the model is leading a ${p.keyword ? `${str(p.keyword)} ` : ""}unit`;
     case "attack-is-type":
@@ -301,6 +332,25 @@ export function describeCondition(c: Condition): string {
       return `${negate}for ${str(p.attack_type)} attacks`;
     case "is-battle-shocked":
       return `${negate}the unit is battle-shocked`;
+    case "unit-selected-to-shoot-this-phase":
+      return `${negate}the unit has been selected to shoot this phase`;
+    case "eligible-to-shoot":
+      return `${negate}the unit is eligible to shoot`;
+    case "selection-has-keyword": {
+      const selection = p.selection;
+      let selected = "the selected unit";
+      if (selection && typeof selection === "object") {
+        if ("observer_for" in selection) {
+          const reference = selection.observer_for;
+          if (reference && typeof reference === "object" && "selection_var" in reference) {
+            selected = `the Observer unit that marked the bound ${str(reference.selection_var).replace(/_/g, " ")}`;
+          }
+        } else if ("selection_var" in selection) {
+          selected = `the bound ${str(selection.selection_var).replace(/_/g, " ")}`;
+        }
+      }
+      return `${negate}${selected} has the ${str(p.keyword)} keyword`;
+    }
     case "has-lost-wounds":
       return `${negate}the model has lost wounds`;
     case "wounds-remaining-at-or-below":
@@ -313,7 +363,10 @@ export function describeCondition(c: Condition): string {
             ? "the selected friendly unit"
             : "the unit";
       const atk = p.attack_type ? `${str(p.attack_type)} ` : "";
-      const weapon = p.weapon_name ? ` by ${str(p.weapon_name)}` : "";
+      const keyword = p.weapon_keyword ? `[${dekebab(str(p.weapon_keyword)).toUpperCase()}]` : "";
+      const weapon = p.weapon_name
+        ? ` by ${str(p.weapon_name)}${keyword ? ` (with ${keyword})` : ""}`
+        : keyword ? ` made with a ${keyword} weapon` : "";
       const boundSource =
         p.source && typeof p.source === "object" && "event_var" in (p.source as Record<string, unknown>)
           ? " from the triggering unit"
@@ -375,10 +428,26 @@ export function describeCondition(c: Condition): string {
       const control = p.controlled_by === "your-army" ? " you control" : p.controlled_by === "opponent" ? " your opponent controls" : "";
       return `${negate}${who} is within range of an objective marker${control}`;
     }
+    case "event-source-is-bearer-unit":
+      return `${negate}the triggering event was performed by this unit`;
+    case "event-source-is-attached-unit":
+      return `${negate}the triggering Act of Faith was performed by the unit this model leads`;
+    case "miracle-die-generation-reason": {
+      const keywords = Array.isArray(p.keywords) ? p.keywords.map(str).join(" ") : "";
+      return `${negate}the Miracle die was gained because a friendly ${keywords} unit or model was destroyed`;
+    }
+    case "miracle-die-generation-timing":
+      return `${negate}the Miracle die was gained at the start of the battle round`;
+    case "destroyed-event-within-range":
+      return `${negate}that destroyed unit or model was within ${str(p.range)}\" of this model`;
+    case "destroyed-by-friendly-unit": {
+      const keywords = Array.isArray(p.keywords) ? p.keywords.map(str).join(" ") : "";
+      return `${negate}the unit was destroyed by a friendly ${keywords} unit`;
+    }
     case "target-is-visible":
       return `${negate}the target is visible to the attacking model`;
     case "has-fought-this-phase":
-      return `${negate}has fought this phase`;
+      return `${negate}${p.subject === "self" ? "this model " : p.subject === "destroyed-model" ? "the destroyed model " : p.subject === "unit" ? "the unit " : p.subject === "target" ? "the target unit " : ""}has fought this phase`;
     case "destroyed-by-attack-type":
       return p.attack_type === "any"
         ? `${negate}destroyed by any attack`
@@ -400,12 +469,16 @@ export function describeCondition(c: Condition): string {
       return `${negate}the unit is ${dekebab(st)}`;
     }
     case "unit-was-in-engagement-range-of": {
-      // `object` is a bound event-variable reference (schema `#/$defs/event-bound-reference`,
-      // e.g. the enemy unit a sibling trigger's `binds_event_variable` names as the one that
-      // ended a Fall Back move). `event_var` is an internal linking id, never rendered — the
-      // relationship always reads as "that enemy unit", with no game phase assumed.
       const snapshotPoint = p.snapshot === "turn-start" ? "the turn" : "the phase";
       return `${negate}the selected friendly unit started ${snapshotPoint} within Engagement Range of that enemy unit`;
+    }
+    case "ability-window-capacity": {
+      const source = (p.source_ability as Record<string, unknown> | undefined)?.ability_id;
+      return `${negate}the ${dekebab(str(source))} ability had unused selection capacity at the end of the opponent's previous turn`;
+    }
+    case "candidate-eligible-in-ability-window": {
+      const source = (p.source_ability as Record<string, unknown> | undefined)?.ability_id;
+      return `${negate}the candidate was eligible for the ${dekebab(str(source))} ability at the end of the opponent's previous turn`;
     }
     case "disposition-matches": {
       const d = str(p.disposition);

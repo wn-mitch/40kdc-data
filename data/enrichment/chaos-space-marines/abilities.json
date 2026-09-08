@@ -9130,5 +9130,260 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "[APPROX] Selects a hated foe at the start of the battle; models the re-roll to Wound rolls against it via the marked-target mechanism. Because that mechanism buffs all attacks against the mark, the restriction to this model's own attacks is not enforced, and the clause allowing a new hated foe to be chosen when the current one is destroyed is not modeled. Full rule in raw-text store."
+  },
+  {
+    "ability_id": "daemonkin-psychic-zarkans-daemonkin",
+    "name": "Daemonkin (Psychic)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "2026-q2",
+    "unit_ids": [
+      "aranis-zarkan"
+    ],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "is-attached"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "roll-modifier",
+            "target": "unit",
+            "modifier": {
+              "roll": "advance",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "unit",
+            "modifier": {
+              "roll": "charge",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unholy-bloodshed-zarkans-daemonkin",
+    "name": "Unholy Bloodshed",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "2026-q2",
+    "unit_ids": [
+      "zarkans-daemonkin-possessed"
+    ],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "behavior": "activated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "dark-pact"
+        }
+      },
+      "effect": {
+        "type": "keyword-grant",
+        "target": "unit",
+        "modifier": {
+          "keywords": [
+            "Devastating Wounds"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
+  },
+  {
+    "ability_id": "veterans-of-the-long-war-zarkans-daemonkin",
+    "name": "Veterans of the Long War",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "2026-q2",
+    "unit_ids": [
+      "zarkans-daemonkin-legionaries"
+    ],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "unit",
+          "modifier": {
+            "roll": "wound",
+            "subset": "ones",
+            "weapon_type": "melee"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "within-range-of-objective",
+            "parameters": {
+              "subject": "target"
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "all-failures",
+              "weapon_type": "melee"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sacrificial-dagger-zarkans-daemonkin",
+    "name": "Sacrificial Dagger",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "4cf89ebfe8e7c1f06eedc4401376a88ae4069e08a397032d28650dc5da0eba98",
+    "version": "2026-q3",
+    "unit_ids": [
+      "aranis-zarkan"
+    ],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "behavior": "activated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "selected-to-attack"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "mortal-wounds",
+            "target": "self",
+            "modifier": {
+              "count": 1
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1,
+              "weapon_keyword": "Psychic"
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "unit",
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1,
+              "weapon_keyword": "Psychic"
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "usage": {
+      "frequency": "n-per-phase",
+      "count": 1,
+      "per": "unit"
+    }
+  },
+  {
+    "ability_id": "combat-squad-zarkans-daemonkin",
+    "name": "Combat Squad",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "9133cc1a77fec9635ea613ab1c91076654c9bdd5a00c823b8c0bd32708d1f703",
+    "version": "2026-q3",
+    "unit_ids": [
+      "zarkans-daemonkin-legionaries"
+    ],
+    "faction_id": "chaos-space-marines",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "behavior": "activated",
+    "effect": {
+      "type": "named-effect",
+      "name": "Combat Squad",
+      "optional": true,
+      "trigger": {
+        "event": "declare-battle-formations"
+      },
+      "effect": {
+        "type": "unit-division",
+        "target": "unit",
+        "modifier": {
+          "resulting_model_counts": [
+            5,
+            5
+          ]
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "battle"
+    }
   }
 ]

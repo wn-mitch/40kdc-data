@@ -4651,5 +4651,163 @@
       "duration": "phase"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+  },
+  {
+    "ability_id": "malicious-calculations-maggot-lords",
+    "name": "Malicious Calculations",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "b50c173051dce164bc9ebdb3301de6e62434df33331738f35dbe5f8dfa1f67d7",
+    "version": "2025-q3",
+    "unit_ids": [
+      "septimol-fulg-maggot-lords-tallyman"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "unit",
+      "modifier": {
+        "roll": "all",
+        "operation": "ignore-modifiers"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "infused-with-the-blessings-of-nurgle-maggot-lords",
+    "name": "Infused with the Blessings of Nurgle",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "a44d4afefbf6e44fd2b780f92badbc8f7564c3d6efce929fff5c0bf1a3a6dc20",
+    "version": "2025-q3",
+    "unit_ids": [
+      "maggot-lords-plague-marines"
+    ],
+    "ability_type": "unit",
+    "behavior": "activated",
+    "trigger": {
+      "event": "after-unit-resolves-attacks",
+      "subject": "self",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    },
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "was-hit-by-attack",
+        "parameters": {
+          "subject": "target",
+          "attack_type": "ranged",
+          "window": "just-finished-shooting-sequence"
+        }
+      },
+      "effect": {
+        "type": "unit-tag",
+        "target": "unit",
+        "modifier": {
+          "tag": "afflicted",
+          "applies_to": "one-hit-enemy",
+          "clears_on": "turn-rollover"
+        }
+      }
+    },
+    "scope": {
+      "range": "any-on-battlefield",
+      "duration": "until-start-next-turn"
+    }
+  },
+  {
+    "ability_id": "obstinate-resistance-maggot-lords",
+    "name": "Obstinate Resistance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "9a496ed14d8d7d44537d438be68639e143c2a8c3f2adfb1e7bdd724ab1eac27e",
+    "version": "2025-q3",
+    "unit_ids": [
+      "maggot-lords-deathshroud-terminators"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "engagement-state",
+        "parameters": {
+          "state": "engaged"
+        }
+      },
+      "effect": {
+        "type": "objective-control-modifier",
+        "target": "unit",
+        "modifier": {
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "enemy-spotted-maggot-lords",
+    "name": "Enemy Spotted",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "a0753610a750c4d8adea367415c1718f46751c4a0fb739cb43065a0a59e9d6e7",
+    "version": "2025-q3",
+    "unit_ids": [
+      "sholgor-the-putrid"
+    ],
+    "ability_type": "unit",
+    "behavior": "activated",
+    "effect": {
+      "type": "designate-target",
+      "designation": "spotted",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "timing": "start-of-shooting-phase",
+        "within_inches": 18
+      },
+      "duration": "phase",
+      "applies": {
+        "to": "target",
+        "effect": {
+          "type": "detection-range-modifier",
+          "target": "target",
+          "modifier": {
+            "operation": "add",
+            "value": 6
+          }
+        }
+      }
+    },
+    "scope": {
+      "range": "aura-custom",
+      "range_inches": 18,
+      "duration": "phase"
+    }
   }
 ]

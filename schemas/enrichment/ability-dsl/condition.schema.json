@@ -86,7 +86,25 @@
             "unit-model-count",
             "uniform-ranged-loadout",
             "all-attacks-target-same-unit",
-            "target-is-visible"
+            "target-is-visible",
+            "ability-window-capacity",
+            "candidate-eligible-in-ability-window",
+            "unit-is-led-by",
+            "on-battlefield",
+            "target-within-half-weapon-range",
+            "has-destroyed",
+            "roll-succeeded",
+            "unit-selected-to-shoot-this-phase",
+            "eligible-to-shoot",
+            "selection-has-keyword",
+            "target-of-triggering-charge",
+            "every-model-within-range-of-bearer",
+            "event-source-is-bearer-unit",
+            "event-source-is-attached-unit",
+            "miracle-die-generation-reason",
+            "miracle-die-generation-timing",
+            "destroyed-event-within-range",
+            "destroyed-by-friendly-unit"
           ],
           "description": " target-is-visible tests whether the target of the current attack is visible to its attacking model (not whether some other model can see it). within-range-of-objective subject:target tests the attack target; controlled_by qualifies the SAME marker, not an unrelated controlled objective."
         },
@@ -116,6 +134,11 @@
             "properties": {
               "parameters": {
                 "properties": {
+                  "weapon_keyword": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "The attack's weapon must have this keyword when the hit was scored."
+                  },
                   "source": {
                     "$ref": "#/$defs/event-bound-reference"
                   },
@@ -238,6 +261,590 @@
                 "additionalProperties": false
               }
             }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "enum": [
+                  "ability-window-capacity",
+                  "candidate-eligible-in-ability-window"
+                ]
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": ["parameters"],
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "source_ability": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "ability_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "owner": {
+                        "const": "friendly"
+                      }
+                    },
+                    "required": [
+                      "ability_id",
+                      "owner"
+                    ]
+                  },
+                  "window": {
+                    "const": "end-of-opponents-previous-turn"
+                  },
+                  "comparison": {
+                    "const": "less-than-maximum"
+                  }
+                },
+                "required": [
+                  "source_ability",
+                  "window"
+                ]
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "ability-window-capacity"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "parameters": {
+                      "required": [
+                        "comparison"
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "unit-is-led-by"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "keyword": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "keyword"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "on-battlefield"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "subject": {
+                    "enum": [
+                      "self",
+                      "unit",
+                      "target"
+                    ]
+                  },
+                  "model_name": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "subject"
+                ]
+              }
+            },
+            "required": [
+              "parameters"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "target-within-half-weapon-range"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "has-destroyed"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "subject": {
+                    "enum": [
+                      "self",
+                      "unit",
+                      "target"
+                    ]
+                  },
+                  "victim_kind": {
+                    "enum": [
+                      "model",
+                      "unit"
+                    ]
+                  },
+                  "victim_owner": {
+                    "enum": [
+                      "friendly",
+                      "enemy"
+                    ]
+                  },
+                  "victim_keywords": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                  },
+                  "window": {
+                    "enum": [
+                      "this-phase",
+                      "this-battle",
+                      "just-finished-attack-sequence"
+                    ]
+                  },
+                  "count_min": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "subject",
+                  "victim_kind",
+                  "victim_owner",
+                  "window"
+                ]
+              }
+            },
+            "required": [
+              "parameters"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "roll-succeeded"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "roll": {
+                    "enum": [
+                      "hit",
+                      "wound",
+                      "save",
+                      "leadership",
+                      "battle-shock"
+                    ]
+                  },
+                  "source": {
+                    "$ref": "#/$defs/event-bound-reference"
+                  }
+                },
+                "required": [
+                  "roll",
+                  "source"
+                ]
+              }
+            },
+            "required": [
+              "parameters"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "selection-has-keyword"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "selection": {
+                    "oneOf": [
+                      {
+                        "$ref": "effect.schema.json#/$defs/selection-reference"
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "observer_for": {
+                            "$ref": "effect.schema.json#/$defs/selection-reference"
+                          }
+                        },
+                        "required": ["observer_for"],
+                        "description": "The Observer unit that marked the referenced Spotted unit in the current paired-designation attack."
+                      }
+                    ]
+                  },
+                  "keyword": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "selection",
+                  "keyword"
+                ]
+              }
+            },
+            "required": [
+              "parameters"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "target-of-triggering-charge"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "maxProperties": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "every-model-within-range-of-bearer"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "range": {
+                    "type": "number",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "range"
+                ]
+              }
+            },
+            "required": [
+              "parameters"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "event-source-is-bearer-unit"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "maxProperties": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "event-source-is-attached-unit"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "leader": {
+                    "const": "self"
+                  }
+                },
+                "required": [
+                  "leader"
+                ]
+              }
+            },
+            "required": [
+              "parameters"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "miracle-die-generation-reason"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "reason": {
+                    "const": "friendly-unit-or-model-destroyed"
+                  },
+                  "owner": {
+                    "const": "friendly"
+                  },
+                  "keywords": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "reason",
+                  "owner",
+                  "keywords"
+                ]
+              }
+            },
+            "required": [
+              "parameters"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "miracle-die-generation-timing"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "timing": {
+                    "const": "start-of-battle-round"
+                  },
+                  "count": {
+                    "const": 1
+                  }
+                },
+                "required": [
+                  "timing",
+                  "count"
+                ]
+              }
+            },
+            "required": [
+              "parameters"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "destroyed-event-within-range"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "destroyed_subject": {
+                    "$ref": "#/$defs/event-bound-reference"
+                  },
+                  "of": {
+                    "const": "self"
+                  },
+                  "range": {
+                    "type": "number",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "destroyed_subject",
+                  "of",
+                  "range"
+                ]
+              }
+            },
+            "required": [
+              "parameters"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "destroyed-by-friendly-unit"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "keywords": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                  }
+                },
+                "required": [
+                  "keywords"
+                ]
+              }
+            },
+            "required": [
+              "parameters"
+            ]
           }
         }
       ]

@@ -1152,5 +1152,137 @@
         ]
       }
     ]
+  },
+  {
+    "unit_id": "frenzied-reavers-jakhals",
+    "faction_id": "world-eaters",
+    "models": [
+      {
+        "name": "Dishonoured",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "skullsmasher-and-mangler"
+        ]
+      },
+      {
+        "name": "Jakhal with Autopistol and Chainblade",
+        "min": 7,
+        "max": 7,
+        "default_weapon_ids": [
+          "autopistol",
+          "chainblade"
+        ]
+      },
+      {
+        "name": "Jakhal with Autopistol and Mauler Chainblade",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "autopistol",
+          "mauler-chainblade"
+        ]
+      },
+      {
+        "name": "Jakhal Pack Leader",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "autopistol",
+          "chainblade"
+        ],
+        "is_leader_model": true
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "unit_id": "frenzied-reavers-khorne-berzerkers",
+    "faction_id": "world-eaters",
+    "models": [
+      {
+        "name": "Khorne Berzerker with Bolt Pistol and Chainblade",
+        "min": 5,
+        "max": 5,
+        "default_weapon_ids": [
+          "bolt-pistol",
+          "chainblade"
+        ]
+      },
+      {
+        "name": "Khorne Berzerker Champion",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "chainblade",
+          "plasma-pistol"
+        ],
+        "is_leader_model": true
+      },
+      {
+        "name": "Khorne Berzerker with Plasma Pistol and Chainblade",
+        "min": 2,
+        "max": 2,
+        "default_weapon_ids": [
+          "chainblade",
+          "plasma-pistol"
+        ]
+      },
+      {
+        "name": "Khorne Berzerker with Bolt Pistol and Khornate Eviscerator",
+        "min": 2,
+        "max": 2,
+        "default_weapon_ids": [
+          "bolt-pistol",
+          "khornate-eviscerator"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "unit_id": "frenzied-reavers-master-of-executions",
+    "faction_id": "world-eaters",
+    "models": [
+      {
+        "name": "Master of Executions",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "bolt-pistol",
+          "axe-of-dismemberment"
+        ],
+        "is_leader_model": true
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "unit_id": "vorrakh-lord-of-the-frenzied-reavers",
+    "faction_id": "world-eaters",
+    "models": [
+      {
+        "name": "Vorrakh",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "hellforged-weapons",
+          "infernal-cannon"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
   }
 ]

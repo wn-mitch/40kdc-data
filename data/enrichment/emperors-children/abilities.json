@@ -6515,5 +6515,88 @@
       ]
     },
     "community_notes": "Unit Upgrade (Infractors unit only, not a Character Enhancement): once per battle, in the Fight phase when an enemy unit targets this unit, attacks that target it get -1 to Hit rolls."
+  },
+  {
+    "ability_id": "excessive-assault-callous-blades",
+    "name": "Excessive Assault",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "71a446dd91af1c0bb5f73b83b61e9be302a90de0ff223f717433b9bd4c4ff1dc",
+    "version": "2025-q3",
+    "unit_ids": [
+      "callous-blades-infractors"
+    ],
+    "faction_id": "emperors-children",
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "unit",
+          "modifier": {
+            "roll": "wound",
+            "subset": "ones",
+            "weapon_type": "melee"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "within-range-of-objective",
+            "parameters": {
+              "subject": "target"
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "all-failures",
+              "weapon_type": "melee"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "peerless-killer-callous-blades",
+    "name": "Peerless Killer",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "77dd4303c100f79ad3bd8293749c0b80e6bd432d1b35b61449bc180c67e761a4",
+    "version": "2025-q3",
+    "unit_ids": [
+      "lord-kaphrael-of-the-callous-blades"
+    ],
+    "faction_id": "emperors-children",
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Lethal Hits"
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    }
   }
 ]

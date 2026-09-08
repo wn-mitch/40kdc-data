@@ -28,7 +28,7 @@
         "max": 10,
         "loadout_variants": [
           { "name": "Beast Snagga Boy", "weapon_ids": ["choppa-beast-snagga-boyz"] },
-          { "name": "Beast Snagga Boy", "weapon_ids": ["choppa-beast-snagga-boyz", "slugga"] },
+          { "name": "Beast Snagga Boy", "weapon_ids": ["choppa-beast-snagga-boyz"] },
           { "name": "Beast Snagga Boy w/ Thump Gun", "weapon_ids": ["thump-gun"] }
         ],
         "loadout_variant_budgets": [
@@ -47,7 +47,8 @@
         "min": 1,
         "max": 5,
         "loadout_variants": [
-          { "name": "Specialist", "weapon_ids": ["choppa-beast-snagga-boyz", "shoota"] }
+          { "name": "Specialist", "weapon_ids": ["choppa-beast-snagga-boyz", "shoota"] },
+          { "name": "Stale faction variant", "weapon_ids": ["faction-only-weapon"] }
         ]
       },
       {

@@ -1907,6 +1907,13 @@
       "min": 3,
       "max": 3
     },
+    "weapon_ids": [
+      "powered-strikes",
+      "sp-conversion-beamer"
+    ],
+    "ability_ids": [
+      "breaching-fire-bane-slayers-bulwark"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -1962,6 +1969,16 @@
       "min": 5,
       "max": 5
     },
+    "weapon_ids": [
+      "exoarmour-grenade-launcher",
+      "graviton-hammer",
+      "plasma-blade-gauntlet",
+      "volkanite-disintegrator"
+    ],
+    "ability_ids": [
+      "decisive-destruction-bane-slayers-bulwark",
+      "weavefield-crest-bane-slayers-bulwark-einhyr-hearthguard"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -2017,6 +2034,20 @@
       "min": 10,
       "max": 10
     },
+    "weapon_ids": [
+      "armoured-fists",
+      "autoch-pattern-bolt-pistol",
+      "hylas-auto-rifle",
+      "ion-blaster",
+      "magna-rail-rifle",
+      "plasma-knife",
+      "theyns-armaments",
+      "theyns-pistol"
+    ],
+    "ability_ids": [
+      "panspectral-scanning-bane-slayers-bulwark",
+      "weavefield-crest-bane-slayers-bulwark-hearthkyn-warriors"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -2075,6 +2106,15 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "autoch-pattern-combi-bolter",
+      "mass-hammer"
+    ],
+    "ability_ids": [
+      "fast-firing-targeters-vynn-bane-slayer",
+      "leader",
+      "weavefield-crest-vynn-bane-slayer"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"

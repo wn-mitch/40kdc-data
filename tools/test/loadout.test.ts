@@ -219,6 +219,31 @@ describe("validateLoadout — per-item duplicate sub-cap", () => {
   });
 });
 
+describe("baseLoadout — bounded model allocation", () => {
+  const unit = { id: "example-squad", weapon_ids: ["alpha", "beta", "gamma"] } as Unit;
+
+  it("fills additional rows instead of exceeding the largest row's maximum", () => {
+    const models = [
+      { name: "Alpha", min: 1, max: 2, default_weapon_ids: ["alpha"] },
+      { name: "Beta", min: 1, max: 3, default_weapon_ids: ["beta"] },
+      { name: "Gamma", min: 0, max: 2, default_weapon_ids: ["gamma"] },
+    ];
+    const stock = baseLoadout(unit, 7, [], models);
+    expect(Object.fromEntries(stock.counts)).toEqual({ alpha: 2, beta: 3, gamma: 2 });
+    expect(checkUnitLegality(unit, 7, [], stock.counts, models)).toEqual([]);
+  });
+
+  it("does not allocate leader minima twice in an all-leader composition", () => {
+    const models = [
+      { name: "Alpha", min: 2, max: 2, is_leader_model: true, default_weapon_ids: ["alpha"] },
+      { name: "Beta", min: 1, max: 3, is_leader_model: true, default_weapon_ids: ["beta"] },
+    ];
+    const stock = baseLoadout(unit, 5, [], models);
+    expect(Object.fromEntries(stock.counts)).toEqual({ alpha: 2, beta: 3 });
+    expect(checkUnitLegality(unit, 5, [], stock.counts, models)).toEqual([]);
+  });
+});
+
 describe("baseLoadout — Khorne Berzerkers @ 10 (legal default)", () => {
   it("carries only the base weapons on every model, no swaps applied", () => {
     const bz = dataset.units.getAny("khorne-berzerkers")!;
@@ -594,6 +619,88 @@ describe("loadoutCandidates", () => {
     expect(variantBudgetCap({ variant_names: ["A"], count: 2, per_models: 0, scope: "unit" }, 20, 5)).toBe(2);
     expect(variantBudgetCap({ variant_names: ["A"], count: 1, per_models: 10, scope: "unit" }, 20, 5)).toBe(2);
     expect(variantBudgetCap({ variant_names: ["A"], count: 1, per_models: 5, scope: "model-row" }, 20, 5)).toBe(1);
+  });
+});
+
+describe("validateLoadout — whole-model variants", () => {
+  const unit = { id: "variant-unit", weapon_ids: ["rifle", "plasma", "melta"] } as Unit;
+  const models = [
+    {
+      name: "Trooper",
+      min: 2,
+      max: 2,
+      loadout_variants: [
+        { name: "Rifle", weapon_ids: ["rifle"] },
+        { name: "Plasma", weapon_ids: ["plasma"] },
+        { name: "Melta", weapon_ids: ["melta"] },
+      ],
+      loadout_variant_budgets: [
+        { variant_names: ["Plasma", "Melta"], count: 1, per_models: 0, scope: "unit" },
+      ],
+    },
+  ];
+
+  it("accepts valid heterogeneous variants but rejects hybrid equipment and variant budgets", () => {
+    expect(validateLoadout(unit, 2, [], new Map([["rifle", 1], ["plasma", 1]]), models)).toEqual([]);
+    expect(validateLoadout(unit, 2, [], new Map([["rifle", 1], ["plasma", 1], ["melta", 1]]), models)).not.toEqual([]);
+    expect(validateLoadout(unit, 2, [], new Map([["plasma", 1], ["melta", 1]]), models)).not.toEqual([]);
+  });
+
+  it("enumerates compatible options without bypassing the destination variant cap", () => {
+    const options = [
+      opt({ replaces: ["rifle"], replacement: ["plasma"], model_constraint: { any_number: true } }),
+      opt({ replacement: ["scanner"], model_constraint: { max_count: 1 } }),
+    ];
+    const candidates = loadoutCandidates(unit, 2, options, models);
+    expect(candidates).toContain("Rifle×1;Plasma×1 => plasma:1,rifle:1,scanner:1");
+    for (const candidate of candidates) {
+      const counts = new Map(candidate.split(" => ")[1].split(",").map((pair) => {
+        const [id, count] = pair.split(":");
+        return [id, Number(count)] as const;
+      }));
+      expect(validateLoadout(unit, 2, options, counts, models)).toEqual([]);
+    }
+    expect(validateLoadout(unit, 2, options, new Map([["plasma", 2]]), models)).toContainEqual(
+      expect.objectContaining({ code: "swap-conflict" }),
+    );
+    expect(validateLoadout(unit, 2, options, new Map([["plasma", 2], ["scanner", 1]]), models)).toContainEqual(
+      expect.objectContaining({ code: "swap-conflict" }),
+    );
+  });
+
+  it("rejects missing equipment and individual variant limits without a shared budget", () => {
+    const capped = [{ name: "Trooper", min: 2, max: 2, loadout_variants: [
+      { name: "Rifle", weapon_ids: ["rifle"] },
+      { name: "Plasma", weapon_ids: ["plasma"], max_count: 1 },
+    ] }];
+    expect(validateLoadout(unit, 2, [], new Map([["plasma", 2]]), capped)).toContainEqual(
+      expect.objectContaining({ code: "swap-conflict" }),
+    );
+    expect(validateLoadout(unit, 2, [], new Map(), capped)).toContainEqual(
+      expect.objectContaining({ code: "swap-conflict" }),
+    );
+  });
+
+  it("validates a configuration beyond the enumeration cutoff", () => {
+    const variants = Array.from({ length: 257 }, (_, index) => ({
+      name: `Variant ${String(index).padStart(3, "0")}`,
+      weapon_ids: [`weapon-${index}`],
+    }));
+    const rows = [{ name: "Trooper", min: 1, max: 1, loadout_variants: variants }];
+    expect(loadoutCandidates(unit, 1, [], rows)).not.toContain("Variant 256×1 => weapon-256:1");
+    expect(validateLoadout(unit, 1, [], new Map([["weapon-256", 1]]), rows)).toEqual([]);
+  });
+
+  it("completes only omitted defaults around an explicitly selected variant", () => {
+    const rows = [{ name: "Trooper", min: 2, max: 2, default_weapon_ids: ["rifle", "knife"],
+      loadout_variants: [
+        { name: "Rifle", weapon_ids: ["rifle", "knife"] },
+        { name: "Plasma", weapon_ids: ["plasma", "knife"], max_count: 1 },
+      ],
+    }];
+    const completed = completeLoadout(unit, 2, [], rows, new Map([["plasma", 1]]));
+    expect(completed?.counts).toEqual(new Map([["knife", 2], ["rifle", 1], ["plasma", 1]]));
+    expect(completeLoadout(unit, 2, [], rows, new Map())?.counts.has("plasma")).toBe(false);
   });
 });
 

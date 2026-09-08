@@ -1782,5 +1782,154 @@
         ]
       }
     ]
+  },
+  {
+    "unit_id": "manipulus-skand",
+    "faction_id": "adeptus-mechanicus",
+    "models": [
+      {
+        "name": "Manipulus Skand",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "omnissian-staff",
+          "transonic-cannon"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Manipulus Skand",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "purge-corps-pteraxii-sterylizors",
+    "faction_id": "adeptus-mechanicus",
+    "models": [
+      {
+        "name": "Pteraxii Sterylizor Alpha",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "default_weapon_ids": [
+          "flechette-blaster",
+          "taser-goad-pteraxii-sterylizors"
+        ]
+      },
+      {
+        "name": "Pteraxii Sterylizor",
+        "min": 4,
+        "max": 4,
+        "default_weapon_ids": [
+          "phosphor-torch",
+          "pteraxii-talons"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Pteraxii Sterylizor Alpha",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Pteraxii Sterylizor",
+            "min": 4,
+            "max": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "purge-corps-skitarii-vanguard",
+    "faction_id": "adeptus-mechanicus",
+    "models": [
+      {
+        "name": "Skitarii Vanguard Alpha",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "default_weapon_ids": [
+          "alpha-combat-weapon",
+          "mechanicus-pistol-skitarii-vanguard"
+        ]
+      },
+      {
+        "name": "Skitarii Vanguard with Arc Rifle",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "arc-rifle",
+          "close-combat-weapon-skitarii-vanguard"
+        ]
+      },
+      {
+        "name": "Skitarii Vanguard with Plasma Caliver",
+        "min": 1,
+        "max": 1,
+        "profile_name": "Skitarii Vanguard with Plasma Caliver",
+        "default_weapon_ids": [
+          "close-combat-weapon-skitarii-vanguard",
+          "plasma-caliver"
+        ]
+      },
+      {
+        "name": "Skitarii Vanguard",
+        "min": 7,
+        "max": 7,
+        "default_weapon_ids": [
+          "close-combat-weapon-skitarii-vanguard",
+          "radium-carbine"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Skitarii Vanguard Alpha",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Skitarii Vanguard with Arc Rifle",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Skitarii Vanguard with Plasma Caliver",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Skitarii Vanguard",
+            "min": 7,
+            "max": 7
+          }
+        ]
+      }
+    ]
   }
 ]

@@ -3392,5 +3392,350 @@
       "duration": "turn"
     },
     "community_notes": "When a GENESTEALER CULTS unit is set up as Reinforcements, its weapons gain [SUSTAINED HITS 1] and [IGNORES COVER] until the end of your next Fight phase (modeled as a grant triggered on arrival)."
+  },
+  {
+    "ability_id": "claw-of-ascension-survey-augur",
+    "name": "Survey Augur",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "2025-q3",
+    "unit_ids": [
+      "claw-of-ascension-achilles-ridgerunner"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "effect": {
+      "type": "designate-target",
+      "designation": "claw-of-ascension-survey-augur-target",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "eligibility": {
+          "type": "was-hit-by-attack",
+          "parameters": {
+            "subject": "target",
+            "attack_type": "ranged",
+            "source": {
+              "event_var": "claw-of-ascension-survey-augur-shooting"
+            },
+            "window": "just-finished-shooting-sequence"
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "attacker_keywords": [
+          "GENESTEALER CULTS"
+        ],
+        "effect": {
+          "type": "keyword-grant",
+          "target": "attacker",
+          "modifier": {
+            "keywords": [
+              "Ignores Cover"
+            ]
+          }
+        }
+      },
+      "duration": "phase"
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "trigger": {
+      "event": "after-unit-resolves-attacks",
+      "subject": "self",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      },
+      "binds_event_variable": "claw-of-ascension-survey-augur-shooting"
+    }
+  },
+  {
+    "ability_id": "claw-of-ascension-crossfire",
+    "name": "Crossfire",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "2025-q3",
+    "unit_ids": [
+      "claw-of-ascension-achilles-ridgerunner"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "effect": {
+      "type": "designate-target",
+      "designation": "claw-of-ascension-crossfire-target",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "eligibility": {
+          "type": "was-hit-by-attack",
+          "parameters": {
+            "subject": "target",
+            "attack_type": "ranged",
+            "source": {
+              "event_var": "claw-of-ascension-crossfire-shooting"
+            },
+            "window": "just-finished-shooting-sequence"
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "attacker_keywords": [
+          "GENESTEALER CULTS"
+        ],
+        "effect": {
+          "type": "stat-modifier",
+          "target": "attacker",
+          "modifier": {
+            "stat": "AP",
+            "operation": "add",
+            "value": -1
+          }
+        }
+      },
+      "duration": "turn"
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "trigger": {
+      "event": "after-unit-resolves-attacks",
+      "subject": "self",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      },
+      "binds_event_variable": "claw-of-ascension-crossfire-shooting"
+    }
+  },
+  {
+    "ability_id": "claw-of-ascension-adaptable-fighters",
+    "name": "Adaptable Fighters",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "2025-q3",
+    "unit_ids": [
+      "claw-of-ascension-atalan-jackals"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "selected-to-attack"
+        }
+      },
+      "effect": {
+        "type": "choice",
+        "choice_label": "adaptable-fighters-attack-keyword",
+        "options": [
+          {
+            "type": "keyword-grant",
+            "target": "self",
+            "modifier": {
+              "keyword": "Sustained Hits",
+              "value": 1
+            }
+          },
+          {
+            "type": "keyword-grant",
+            "target": "self",
+            "modifier": {
+              "keywords": [
+                "Lethal Hits"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "phase"
+    }
+  },
+  {
+    "ability_id": "claw-of-ascension-brood-claim",
+    "name": "Brood Claim",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "2025-q3",
+    "unit_ids": [
+      "claw-of-ascension-hybrid-metamorphs"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "end-of-phase"
+            }
+          },
+          {
+            "type": "controls-objective",
+            "parameters": {}
+          }
+        ]
+      },
+      "effect": {
+        "type": "objective-control-modifier",
+        "target": "self",
+        "modifier": {
+          "sticky": true
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "battle"
+    }
+  },
+  {
+    "ability_id": "claw-of-ascension-priority-target",
+    "name": "Priority Target",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "2025-q3",
+    "unit_ids": [
+      "shanus-daskovian"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "effect": {
+      "type": "designate-target",
+      "designation": "claw-of-ascension-priority-target",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "eligibility": {
+          "type": "was-hit-by-attack",
+          "parameters": {
+            "subject": "target",
+            "attack_type": "ranged",
+            "weapon_name": "Cult Sniper Rifle",
+            "source": {
+              "event_var": "claw-of-ascension-priority-target-shooting"
+            },
+            "window": "just-finished-shooting-sequence"
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "attacker_keywords": [
+          "GENESTEALER CULTS"
+        ],
+        "effect": {
+          "type": "re-roll",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones"
+          }
+        }
+      },
+      "duration": "phase"
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "trigger": {
+      "event": "after-unit-resolves-attacks",
+      "subject": "self",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      },
+      "binds_event_variable": "claw-of-ascension-priority-target-shooting"
+    }
+  },
+  {
+    "ability_id": "claw-of-ascension-master-outrider",
+    "name": "Master Outrider",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "2025-q3",
+    "unit_ids": [
+      "shanus-daskovian"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "movement-modifier",
+          "target": "self",
+          "modifier": {
+            "move_type": "normal",
+            "distance": 6
+          }
+        },
+        {
+          "type": "ability-grant",
+          "target": "self",
+          "modifier": {
+            "grant_type": "charge-ineligible"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "turn"
+    },
+    "trigger": {
+      "event": "after-unit-resolves-attacks",
+      "subject": "self",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   }
 ]

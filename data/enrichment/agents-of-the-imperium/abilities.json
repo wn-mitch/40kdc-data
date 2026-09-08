@@ -4720,5 +4720,288 @@
       "duration": "permanent"
     },
     "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21. Applies to Inquisitor, Inquisitorial Agents and Ordo Malleus models from your army."
+  },
+  {
+    "ability_id": "overkill-inquisitors-hand",
+    "name": "Overkill",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "620a9691de22b9324b39c47e8c70552d1b6cfd3a7ee4bfae6ac7ff120ef28fba",
+    "version": "2026-q3",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "unit",
+      "modifier": {
+        "stat": "AP",
+        "operation": "set",
+        "value": -4,
+        "weapon_type": "melee"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "attack-sequence"
+    },
+    "unit_ids": [
+      "inquisitors-hand-eversor-assassin"
+    ],
+    "ability_type": "unit",
+    "behavior": "activated",
+    "trigger": {
+      "event": "on-unit-selected",
+      "subject": "unit",
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1
+    }
+  },
+  {
+    "ability_id": "tome-skull-inquisitors-hand",
+    "name": "Tome Skull",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "b5d3056036227ef272ecae14381690267e854b0befbd2094e33d20ddea35ca25",
+    "version": "2026-q3",
+    "effect": {
+      "type": "choice",
+      "choice_label": "Tome Skull target",
+      "options": [
+        {
+          "type": "select-units",
+          "selector": {
+            "owner": "friendly",
+            "count": 1,
+            "range_inches": 6,
+            "keywords": [
+              "Agents of the Imperium"
+            ],
+            "eligibility": {
+              "type": "is-battle-shocked"
+            }
+          },
+          "effect": {
+            "type": "remove-battle-shock",
+            "target": "selected-models-unit",
+            "modifier": {}
+          }
+        },
+        {
+          "type": "select-units",
+          "selector": {
+            "owner": "enemy",
+            "count": 1,
+            "range_inches": 6
+          },
+          "effect": {
+            "type": "battle-shock-test",
+            "target": "selected-models-unit",
+            "modifier": {}
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "aura-6",
+      "duration": "resolution"
+    },
+    "unit_ids": [
+      "inquisitors-hand-inquisitorial-agents"
+    ],
+    "ability_type": "unit",
+    "behavior": "activated",
+    "trigger": {
+      "event": "start-of-phase",
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1
+    }
+  },
+  {
+    "ability_id": "loyal-to-the-cause-inquisitors-hand",
+    "name": "Loyal To The Cause",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "9ef0978b60be2368b023f19c9eba07402b41958f66298574326bb2304a60892e",
+    "version": "2026-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "within-range-of-objective",
+        "parameters": {
+          "subject": "unit"
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "attacker",
+        "modifier": {
+          "roll": "wound",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "inquisitors-hand-inquisitorial-agents"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive"
+  },
+  {
+    "ability_id": "merciless-judgement-inquisitors-hand",
+    "name": "Merciless Judgement",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "2c1d44ec20fb8067bf02f072b8918aa3e95b0405d834fdc60b396067dc728a3c",
+    "version": "2026-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is-type",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "unit-below-half-strength",
+            "parameters": {
+              "subject": "target"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "unit",
+        "modifier": {
+          "roll": "wound",
+          "operation": "add",
+          "value": 1,
+          "weapon_type": "ranged"
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "inquisitors-hand-vigilant-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "zealot-preacher-teguen",
+    "name": "Zealot",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "5070dc7c414a6d5e8846a8a48154f8a1fc822b97357f70a154250d2966b2899e",
+    "version": "2026-q3",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "self",
+          "modifier": {
+            "stat": "A",
+            "operation": "add",
+            "value": 3,
+            "weapon_type": "melee"
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "self",
+          "modifier": {
+            "stat": "S",
+            "operation": "add",
+            "value": 3,
+            "weapon_type": "melee"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "attack-sequence"
+    },
+    "unit_ids": [
+      "preacher-teguen"
+    ],
+    "ability_type": "unit",
+    "behavior": "activated",
+    "trigger": {
+      "event": "selected-to-fight",
+      "subject": "unit",
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1
+    }
+  },
+  {
+    "ability_id": "holy-hatred-preacher-teguen",
+    "name": "Holy Hatred",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "7b0e6da57419e548853c907e9f52fa764a19038b7675384e13d174cddb08b804",
+    "version": "2026-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "is-attached"
+      },
+      "effect": {
+        "type": "keyword-grant",
+        "target": "unit",
+        "modifier": {
+          "keywords": [
+            "Sustained Hits 1"
+          ],
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "preacher-teguen"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
   }
 ]

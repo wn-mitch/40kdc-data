@@ -1164,24 +1164,25 @@ describe("effectToBuffs: activatable gates", () => {
 
   it("a timing gate whose body has no combat buff yields no lever", () => {
     // Berzerker Frenzy shape: on-destroyed → dice-gated → resurrection.
+    const gate = {
+      type: "dice-gated",
+      dice: "D6",
+      threshold: 2,
+      on_success: { type: "resurrection", target: "self", modifier: {} },
+      on_fail: null,
+    };
     const result = effectToBuffs(
       {
         type: "conditional",
         condition: { type: "timing-is", parameters: { timing: "on-destroyed" } },
-        effect: {
-          type: "dice-gated",
-          dice: "D6",
-          threshold: 2,
-          on_success: { type: "resurrection", target: "self", modifier: {} },
-          on_fail: null,
-        },
+        effect: gate,
       },
       unitRule,
       { phase: "fight" },
     );
     expect(result.activatable).toEqual([]);
     expect(result.applied).toEqual([]);
-    expect(result.unsupported).toEqual([]);
+    expect(result.unsupported.map((entry) => entry.effectFragment)).toEqual([gate]);
   });
 });
 
@@ -1323,6 +1324,62 @@ describe("effectToBuffs: charged-this-turn condition", () => {
     const result = effectToBuffs(relentlessRage, unitRule, { phase: "fight" });
     expect(result.applied).toEqual([]);
     expect(result.unsupported[0].reason).toMatch(/cannot evaluate condition/);
+  });
+});
+
+describe("effectToBuffs: named activations", () => {
+  const hit = { type: "roll-modifier", target: "unit", modifier: { roll: "hit", operation: "add", value: 1 } };
+  const wound = { type: "roll-modifier", target: "unit", modifier: { roll: "wound", operation: "add", value: 1 } };
+
+  it("keeps passive buffs separate from paid buffs and reports unsupported riders", () => {
+    const result = effectToBuffs({
+      type: "sequence",
+      steps: [
+        { type: "named-effect", name: "Steady Aim", effect: hit },
+        {
+          type: "named-effect",
+          name: "Empowered Strike",
+          optional: true,
+          cost: { type: "resource-spend", target: "self", modifier: { pool_id: "example-pool", amount: 1 } },
+          effect: { type: "sequence", steps: [wound, { type: "unit-division" }] },
+        },
+      ],
+    }, unitRule, ctx);
+    expect(result.applied.map((buff) => buff.contribution)).toEqual([{ type: "hit-mod", value: 1 }]);
+    expect(result.activatable.map((activation) => activation.buffs.map((buff) => buff.contribution)))
+      .toEqual([[{ type: "wound-mod", value: 1 }]]);
+    expect(result.unsupported.map((entry) => entry.effectFragment)).toEqual([{ type: "unit-division" }]);
+  });
+
+  it("does not offer an activation whose trigger condition is false", () => {
+    const effect = {
+      type: "named-effect",
+      name: "Close Combat",
+      trigger: { event: "unit-selected-to-fight", condition: { type: "phase-is", parameters: { phase: "fight" } } },
+      effect: hit,
+    };
+    expect(effectToBuffs(effect, unitRule, ctx).activatable).toEqual([]);
+    const active = effectToBuffs(effect, unitRule, { phase: "fight" });
+    expect(active.applied).toEqual([]);
+    expect(active.activatable.flatMap((activation) => activation.buffs.map((buff) => buff.contribution)))
+      .toEqual([{ type: "hit-mod", value: 1 }]);
+  });
+
+  it("preserves named choice benefits and their shared two-choice cap", () => {
+    const result = effectToBuffs({
+      type: "choice",
+      min_choices: 0,
+      max_choices: 2,
+      options: [
+        { type: "named-effect", name: "Accurate", effect: hit },
+        { type: "named-effect", name: "Lethal", effect: wound },
+      ],
+    }, unitRule, ctx);
+    expect(result.applied).toEqual([]);
+    expect(result.activatable.map((activation) => activation.group))
+      .toEqual([{ id: "fury?choice", maxActivations: 2 }, { id: "fury?choice", maxActivations: 2 }]);
+    expect(result.activatable.flatMap((activation) => activation.buffs.map((buff) => buff.contribution)))
+      .toEqual([{ type: "hit-mod", value: 1 }, { type: "wound-mod", value: 1 }]);
   });
 });
 

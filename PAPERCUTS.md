@@ -170,3 +170,27 @@ I ran a jq probe with a literal TARGET placeholder instead of first extracting t
 ## 2026-09-03T19:23:34Z — codex
 
 This installed jj version has no archive subcommand, so the planned whole-parent materialization failed before comparison; use jj file show per composition instead.
+
+## 2026-09-08T16:37:21Z — gpt-6-astra
+
+The supplied review appeared only as truncated inline text, with no recoverable attachment URI. Earlier local exports were different reviews, so the full finding inventory requires the original Markdown upload.
+
+## 2026-09-08T16:49:20Z — gpt-6-astra
+
+The CLI rejects --list-models; model availability is exposed by omp models find, while pi/task must first be resolved through omp config get modelRoles.
+
+## 2026-09-08T18:08:23Z — gpt-6-astra
+
+Eval's edit bridge takes an undocumented input field and returns hasError instead of throwing; unchecked calls left an intended edit unapplied. The bash wildcard expansion also emitted nonexistent suffix paths rather than matching full paths.
+
+## 2026-09-08T19:03:03Z — gpt-6-astra
+
+Runner protocol documentation showed init fields at top level, but the actual runner requires args; corrected the example. Rust codegen also requires refreshing the schema bundle first, and its flattener accepts only whole-file or top-level definition references.
+
+## 2026-09-08T19:18:01Z — gpt-6-astra
+
+Rust loadout coverage is not a standalone integration target; cargo test --test loadout fails. Use cargo test -p wh40kdc loadout to select the embedded and API tests.
+
+## 2026-09-08T20:51:05Z — gpt-6-astra
+
+A subagent reported private JSON proposal paths that were absent from the parent workspace. Recovering and publishing the existing artifacts required a second handoff before validation could run.

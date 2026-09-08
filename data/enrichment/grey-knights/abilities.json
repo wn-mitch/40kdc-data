@@ -976,60 +976,83 @@
     }
   },
   {
-    "ability_id": "fervour-of-the-ancients-aura",
-    "name": "Fervour of the Ancients (Aura)",
+    "ability_id": "guidance-of-the-ancients-psychic-crowes-sanctifiers",
+    "name": "Guidance of the Ancients (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "launch"
     },
-    "source_digest": "c10210a80fcf179118bed1aed9386209ccdad0676cd5eedcfb35effc45c1ba4a",
+    "source_digest": "0df670431bf5506839be6fe574fc589066a9e4b048e363722afbd02dd9fd5492",
     "version": "2025-q3",
     "effect": {
-      "type": "roll-modifier",
-      "target": "friendly-within-aura",
-      "modifier": {
-        "roll": "charge",
-        "operation": "add",
-        "value": 1
-      }
-    },
-    "scope": {
-      "range": "aura-6",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "venerable-dreadnought"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "blizzard-shield",
-    "name": "Blizzard Shield",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "1932a9069a89679fec8c06bb0995adab086eddeb56e983cbdfab4519f04a5538",
-    "version": "2025-q3",
-    "effect": {
-      "type": "invulnerable-save",
-      "target": "self",
-      "modifier": {
-        "invuln_sv": 4
-      }
+      "type": "designate-target",
+      "designation": "guidance-of-the-ancients-crowes-sanctifiers",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "eligibility": {
+          "type": "was-hit-by-attack",
+          "parameters": {
+            "subject": "target",
+            "attack_type": "ranged",
+            "source": {
+              "event_var": "guidance-of-the-ancients-crowes-sanctifiers-shooting"
+            },
+            "window": "just-finished-shooting-sequence"
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "attacker_keywords": [
+          "GREY KNIGHTS"
+        ],
+        "effect": {
+          "type": "roll-modifier",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1,
+            "attack_type": "ranged"
+          }
+        }
+      },
+      "duration": "phase"
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "phase"
     },
     "unit_ids": [
-      "venerable-dreadnought"
+      "crowes-sanctifiers-venerable-dreadnought"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "reactive",
+    "trigger": {
+      "event": "after-unit-resolves-attacks",
+      "subject": "self",
+      "optional": true,
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "binds_event_variable": "guidance-of-the-ancients-crowes-sanctifiers-shooting"
+    }
   },
   {
     "ability_id": "champion-of-the-order-of-purifiers-psychic",
@@ -2301,15 +2324,37 @@
     "faction_id": "grey-knights",
     "detachment_id": "augurium-task-force",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "select-units",
       "selector": {
+        "owner": "friendly",
+        "min_count": 1,
         "max_count": 1,
         "keywords": [
           "GREY KNIGHTS"
         ],
-        "owner": "friendly"
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "engagement-state",
+              "parameters": {
+                "state": "on-battlefield"
+              }
+            },
+            {
+              "type": "candidate-eligible-in-ability-window",
+              "parameters": {
+                "source_ability": {
+                  "ability_id": "gate-of-infinity",
+                  "owner": "friendly"
+                },
+                "window": "end-of-opponents-previous-turn"
+              }
+            }
+          ]
+        }
       },
       "effect": {
         "type": "movement-modifier",
@@ -2322,9 +2367,47 @@
     },
     "scope": {
       "range": "unit",
-      "duration": "permanent"
+      "duration": "resolution"
     },
-    "community_notes": "[APPROX] Gated on the second battle round onward and on not having used the full Gate of Infinity quota the previous turn; those preconditions are not encoded. Full rule in raw-text store."
+    "trigger": {
+      "event": "start-of-phase",
+      "subject": "self",
+      "optional": true,
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          },
+          {
+            "type": "battle-round",
+            "parameters": {
+              "min": 2
+            }
+          },
+          {
+            "type": "ability-window-capacity",
+            "parameters": {
+              "source_ability": {
+                "ability_id": "gate-of-infinity",
+                "owner": "friendly"
+              },
+              "window": "end-of-opponents-previous-turn",
+              "comparison": "less-than-maximum"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "channelled-force",
@@ -2946,5 +3029,40 @@
       "duration": "turn"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+  },
+  {
+    "ability_id": "combat-squads-crowes-sanctifiers",
+    "name": "Combat Squad",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "9133cc1a77fec9635ea613ab1c91076654c9bdd5a00c823b8c0bd32708d1f703",
+    "version": "2026-q3",
+    "trigger": {
+      "event": "declare-battle-formations",
+      "subject": "self",
+      "optional": true
+    },
+    "effect": {
+      "type": "unit-division",
+      "target": "unit",
+      "modifier": {
+        "resulting_model_counts": [
+          5,
+          5
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "crowes-sanctifiers-strike-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "activated"
   }
 ]

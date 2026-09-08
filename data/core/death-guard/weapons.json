@@ -3790,5 +3790,164 @@
         "id": "af84b3c1-1876-4334-af19-dff23480aba8"
       }
     ]
+  },
+  {
+    "id": "manreaper-strike-maggot-lords",
+    "name": "Manreaper - Strike",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Strike",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 8,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1744b2ea-9646-41c4-aaff-c6869840de9e"
+      }
+    ]
+  },
+  {
+    "id": "plaguespurt-gauntlet-maggot-lords",
+    "name": "Plaguespurt gauntlet",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Plaguespurt gauntlet",
+        "range": 12,
+        "stats": {
+          "A": "D6",
+          "S": 3,
+          "AP": 0,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "close-quarters"
+          },
+          {
+            "keyword_id": "ignores-cover"
+          },
+          {
+            "keyword_id": "torrent"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a02867ca-781b-4c45-8733-6f2f6e3810a2"
+      }
+    ]
+  },
+  {
+    "id": "plasma-pistol-maggot-lords",
+    "name": "Plasma pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Standard",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 7,
+          "AP": -2,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      },
+      {
+        "name": "Supercharge",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 8,
+          "AP": -3,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          },
+          {
+            "keyword_id": "hazardous"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6a5203dc-acc6-4fe2-a758-2cf13c82ae52"
+      }
+    ]
+  },
+  {
+    "id": "power-fist-sholgor-the-putrid",
+    "name": "Power fist",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Power fist",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 8,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6267c763-c582-4e33-b165-a225fd6b610b"
+      }
+    ]
   }
 ]

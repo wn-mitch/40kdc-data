@@ -2927,5 +2927,42 @@
         "id": "a1ab3a24-c192-4ec2-a529-e2bc5fe90b35"
       }
     ]
+  },
+  {
+    "id": "stinger-pistol-xatrophos-nuul",
+    "name": "Stinger Pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Stinger Pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 2,
+          "AP": -1,
+          "D": "D3",
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Infantry",
+              "threshold": 2
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1a222cfc-f20a-473a-b353-92d26b903de5"
+      }
+    ]
   }
 ]

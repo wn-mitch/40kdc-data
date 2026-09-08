@@ -3071,5 +3071,83 @@
         "id": "16ea02ec-fed3-4322-8651-890b5f46ef58"
       }
     ]
+  },
+  {
+    "id": "balistus-grenade-launcher-gilded-blades",
+    "name": "Balistus grenade launcher",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Balistus grenade launcher",
+        "range": 18,
+        "stats": {
+          "A": "D6",
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f651a6f2-afe4-4cbf-951e-0b1bb2125817"
+      }
+    ]
+  },
+  {
+    "id": "castellan-axe-gilded-blades",
+    "name": "Castellan axe",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Ranged",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": -1,
+          "D": 2,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          }
+        ]
+      },
+      {
+        "name": "Melee",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 9,
+          "AP": -1,
+          "D": 3,
+          "WS": 2
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "73baadc4-6e5f-404d-bdef-a16674cfaefe"
+      }
+    ]
   }
 ]

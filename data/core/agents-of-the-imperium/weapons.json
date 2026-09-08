@@ -6234,5 +6234,107 @@
         "id": "69adc544-038e-476c-8734-4303f038f7c4"
       }
     ]
+  },
+  {
+    "id": "plasma-pistol-standard-inquisitors-hand",
+    "name": "Plasma Pistol - Standard",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Standard",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 7,
+          "AP": -2,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2ee2e039-4a18-4f15-bf4b-5a2235acc4ab"
+      }
+    ]
+  },
+  {
+    "id": "grenade-launcher-frag-inquisitors-hand",
+    "name": "Grenade Launcher - Frag",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Frag",
+        "range": 24,
+        "stats": {
+          "A": "D3",
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9d8f3c79-6666-4b58-91c9-1394f9a571bf"
+      }
+    ]
+  },
+  {
+    "id": "webber-inquisitors-hand",
+    "name": "Webber",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Webber",
+        "range": 12,
+        "stats": {
+          "A": "D6",
+          "S": 2,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "284608b3-0062-4e04-b773-53c3f040f3a8"
+      }
+    ]
   }
 ]

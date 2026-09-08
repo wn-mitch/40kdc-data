@@ -145,6 +145,19 @@
         "namespace": "mfm",
         "id": "e6444013-4fb5-42af-92a0-9da6cccf630c"
       }
+    ],
+    "weapon_ids": [
+      "big-choppa",
+      "kombi-rokkit",
+      "kombi-shoota",
+      "kustom-shoota",
+      "choppa",
+      "shoota",
+      "slugga"
+    ],
+    "ability_ids": [
+      "waaagh",
+      "grab-dat-scrap"
     ]
   },
   {
@@ -199,6 +212,15 @@
         "namespace": "mfm",
         "id": "78cd83a9-847c-4329-b799-a8b94c237fd1"
       }
+    ],
+    "weapon_ids": [
+      "blasta",
+      "lobbin-bombs",
+      "scavenged-shivs"
+    ],
+    "ability_ids": [
+      "grot-infestation-once-per-battle-per-unit",
+      "waaagh"
     ]
   },
   {
@@ -255,6 +277,14 @@
         "namespace": "mfm",
         "id": "9c76c38d-b347-447f-8c4d-9345578deca1"
       }
+    ],
+    "weapon_ids": [
+      "kustom-choppa",
+      "kustom-shoota"
+    ],
+    "ability_ids": [
+      "smash-em-up",
+      "waaagh"
     ]
   },
   {
@@ -310,6 +340,15 @@
         "namespace": "mfm",
         "id": "114ad759-bfc7-47fc-835b-2926d40e7ec6"
       }
+    ],
+    "weapon_ids": [
+      "choppa",
+      "kustom-shoota",
+      "rokkit-launcha"
+    ],
+    "ability_ids": [
+      "indiscriminate-detonations",
+      "waaagh"
     ]
   },
   {
@@ -366,6 +405,14 @@
         "namespace": "mfm",
         "id": "67524464-74a5-4718-9f39-41153ad1f501"
       }
+    ],
+    "weapon_ids": [
+      "psychic-powers",
+      "waaagh-staff"
+    ],
+    "ability_ids": [
+      "totem-of-mork-psychic",
+      "waaagh"
     ]
   },
   {
@@ -495,10 +542,12 @@
       "max": 6
     },
     "weapon_ids": [
+      "big-choppa",
       "choppa",
-      "dual-dakkagun",
-      "kustom-choppa",
-      "dual-kombi-rokkit"
+      "close-combat-weapon",
+      "power-klaw",
+      "slugga",
+      "twin-dakkagun"
     ],
     "ability_ids": [
       "drive-by-dakka",
@@ -506,24 +555,10 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "codex-orks"
     },
     "is_legend": false,
-    "points_provisional": false,
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "83a7-ea20-ed9-d14a"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "01b374d7-1471-53cf-bff9-cca5d7efcf13"
-      },
-      {
-        "namespace": "mfm",
-        "id": "99e837f4-ef82-488b-ad2f-0d27d5ddbead"
-      }
-    ]
+    "points_provisional": false
   },
   {
     "id": "deffkoptas",
@@ -1733,7 +1768,7 @@
       },
       {
         "models": 6,
-        "cost": 155,
+        "cost": 135,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1756,10 +1791,10 @@
     },
     "weapon_ids": [
       "choppa-tankbustas",
+      "close-combat-weapon-tankbustas",
+      "rokkit-launcha-tankbustas",
       "rokkit-pistol",
-      "smash-hammer",
-      "busta-rokkit-launcha",
-      "gitstikka"
+      "smash-hammer"
     ],
     "ability_ids": [
       "bomb-squigs",
@@ -1769,7 +1804,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "codex-orks"
     },
     "is_legend": false,
     "points_provisional": false,
@@ -1778,22 +1813,9 @@
         "items": [
           "pulsa-rokkit"
         ],
-        "count": 1,
-        "per_models": 0
-      }
-    ],
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "dadc-d370-ef10-853c"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "dcb10a15-0567-5c33-83f9-ba6d36a3b99b"
-      },
-      {
-        "namespace": "mfm",
-        "id": "cd03e48d-ef51-40a1-97c7-0f2ada778c7c"
+        "count": 2,
+        "per_models": 0,
+        "duplicate_limit": 1
       }
     ]
   },
@@ -1925,25 +1947,27 @@
     "points": [
       {
         "models": 10,
-        "cost": 90,
+        "cost": 75,
         "unit_count_min": 1,
         "unit_count_max": 3
       },
       {
-        "models": 20,
-        "cost": 180,
+        "models": 11,
+        "models_max": 20,
+        "cost": 160,
         "unit_count_min": 1,
         "unit_count_max": 3
       },
       {
         "models": 10,
-        "cost": 100,
+        "cost": 85,
         "unit_count_min": 4,
         "unit_count_max": null
       },
       {
-        "models": 20,
-        "cost": 190,
+        "models": 11,
+        "models_max": 20,
+        "cost": 170,
         "unit_count_min": 4,
         "unit_count_max": null
       }
@@ -1967,17 +1991,17 @@
     },
     "weapon_ids": [
       "big-shoota-boyz",
+      "burna-boyz-unit",
       "kombi-rokkit-boyz",
+      "kombi-skorcha-boyz",
       "kustom-shoota-boyz",
       "rokkit-launcha-boyz",
+      "shoota-boyz-unit",
       "slugga",
       "big-choppa-boyz",
       "choppa-boyz",
-      "power-klaw-boyz",
-      "shoota",
-      "kustom-choppa",
-      "kombi-skorcha",
-      "burna"
+      "kustom-choppa-boyz",
+      "power-klaw-boyz"
     ],
     "ability_ids": [
       "ammo-runts",
@@ -1988,22 +2012,18 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "codex-orks"
     },
     "is_legend": false,
     "points_provisional": false,
-    "external_refs": [
+    "wargear_budgets": [
       {
-        "namespace": "bsdata",
-        "id": "e3b1-1240-2476-cd86"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "126f5eb6-5c28-57fb-a570-21a60a3d85f0"
-      },
-      {
-        "namespace": "mfm",
-        "id": "01474b35-18d2-4231-9e9d-c175829eec3d"
+        "items": [
+          "big-shoota",
+          "rokkit-launcha-boyz"
+        ],
+        "count": 1,
+        "per_models": 10
       }
     ]
   },
@@ -2949,27 +2969,12 @@
     "points": [
       {
         "models": 10,
-        "cost": 85,
-        "unit_count_min": 1,
-        "unit_count_max": 3
+        "cost": 90
       },
       {
-        "models": 20,
-        "cost": 170,
-        "unit_count_min": 1,
-        "unit_count_max": 3
-      },
-      {
-        "models": 10,
-        "cost": 95,
-        "unit_count_min": 4,
-        "unit_count_max": null
-      },
-      {
-        "models": 20,
-        "cost": 180,
-        "unit_count_min": 4,
-        "unit_count_max": null
+        "models": 11,
+        "models_max": 20,
+        "cost": 170
       }
     ],
     "keywords": [
@@ -2991,6 +2996,7 @@
     },
     "weapon_ids": [
       "choppa-beast-snagga-boyz",
+      "close-combat-weapon-beast-snagga-boyz",
       "power-snappa",
       "slugga",
       "thump-gun"
@@ -3002,22 +3008,18 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "codex-orks"
     },
     "is_legend": false,
     "points_provisional": false,
-    "external_refs": [
+    "wargear_budgets": [
       {
-        "namespace": "bsdata",
-        "id": "b7c3-d00e-daf2-76fb"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "9d13f644-86ae-568e-9f34-97e50e1cb30d"
-      },
-      {
-        "namespace": "mfm",
-        "id": "ebb6b151-5a87-487a-81c9-d019440cc01b"
+        "items": [
+          "close-combat-weapon-beast-snagga-boyz",
+          "thump-gun"
+        ],
+        "count": 1,
+        "per_models": 10
       }
     ]
   },
@@ -3601,7 +3603,7 @@
     "points": [
       {
         "models": 5,
-        "cost": 125,
+        "cost": 105,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -3614,14 +3616,14 @@
       },
       {
         "models": 5,
-        "cost": 155,
+        "cost": 115,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 280,
+        "cost": 220,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -3642,13 +3644,13 @@
       "max": 10
     },
     "weapon_ids": [
+      "big-skorcha-nobz",
+      "kustom-shoota-nobz",
+      "kombi-rokkit-nobz",
       "big-choppa-nobz",
+      "kustom-choppa-nobz",
       "kustom-krumpa",
-      "kustom-shoota",
-      "kombi-rokkit",
-      "kustom-big-shoota",
-      "kustom-choppa",
-      "big-skorcha"
+      "paired-kustom-krumpas"
     ],
     "ability_ids": [
       "ammo-runts",
@@ -3658,28 +3660,17 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "codex-orks"
     },
     "is_legend": false,
     "points_provisional": false,
-    "external_refs": [
+    "wargear_budgets": [
       {
-        "namespace": "bsdata",
-        "id": "b16a-7132-3f8a-abe5"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "40af5f86-133a-5802-9ee9-4f0a8b483b56"
-      },
-      {
-        "namespace": "mfm",
-        "id": "d063a486-12c5-466e-911b-e14e87b97f9e"
-      }
-    ],
-    "wargear_costs": [
-      {
-        "item_id": "paired-krumpas",
-        "cost": 5
+        "items": [
+          "ammo-runt"
+        ],
+        "count": 1,
+        "per_models": 5
       }
     ]
   },
@@ -4496,19 +4487,9 @@
   },
   {
     "id": "nazdreg",
-    "external_refs": [
-      {
-        "namespace": "game-datacards",
-        "id": "1deb9d81-a1bd-53cf-b1f4-f84682879f5d"
-      },
-      {
-        "namespace": "mfm",
-        "id": "5a8b2395-8999-4421-8f66-d9768be02673"
-      }
-    ],
     "name": "Nazdreg",
     "faction_id": "orks",
-    "role": "epic-hero",
+    "role": "character",
     "profiles": [
       {
         "name": "Nazdreg",
@@ -4516,21 +4497,16 @@
         "T": 7,
         "W": 8,
         "Sv": 2,
-        "invuln_sv": null,
+        "invuln_sv": 5,
         "Ld": 6,
         "OC": 1
       }
     ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 175
-      }
-    ],
     "keywords": [
+      "Infantry",
       "Character",
       "Epic Hero",
-      "Infantry",
+      "Explosives",
       "Mega Armour",
       "Warboss"
     ],
@@ -4541,16 +4517,25 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "kustom-blasta-x",
+      "kustom-blasta-x-melee",
+      "moonchewa"
+    ],
+    "ability_ids": [
+      "intimidating-motivation",
+      "nazdregs-know-wotz",
+      "supreme-kunnin",
+      "waaagh",
+      "leader",
+      "deep-strike"
+    ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "codex-orks"
     },
     "is_legend": false,
-    "points_provisional": false,
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 60
-    },
+    "points_provisional": true,
     "attachment_role": "leader"
   },
   {
@@ -4610,24 +4595,20 @@
     "base_size_mm": {
       "shape": "round",
       "diameter": 150
-    }
+    },
+    "weapon_ids": [
+      "saw-blades",
+      "sawn-off-shotgun",
+      "squig-launchas"
+    ],
+    "ability_ids": [
+      "squig-barrage",
+      "waaagh",
+      "deadly-demise-1"
+    ]
   },
   {
     "id": "runtherd",
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "552d-6c0d-80e8-ac32"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "94decce0-6781-5e3b-8d0a-95b3d30ac78b"
-      },
-      {
-        "namespace": "mfm",
-        "id": "1cb8e0e2-a7d6-4218-9776-102b86524adc"
-      }
-    ],
     "name": "Runtherd",
     "faction_id": "orks",
     "role": "character",
@@ -4643,15 +4624,9 @@
         "OC": 1
       }
     ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 10
-      }
-    ],
     "keywords": [
-      "Character",
-      "Infantry"
+      "Infantry",
+      "Character"
     ],
     "faction_keywords": [
       "Orks"
@@ -4660,16 +4635,20 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "slugga",
+      "runtherd-tools"
+    ],
+    "ability_ids": [
+      "thatll-learn-ya",
+      "waaagh"
+    ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "codex-orks"
     },
     "is_legend": false,
-    "points_provisional": false,
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 32
-    },
+    "points_provisional": true,
     "attachment_role": "support"
   },
   {
@@ -4787,6 +4766,16 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "weapon_ids": [
+      "kustom-choppa",
+      "kustom-shoota",
+      "multi-busta-launcha"
+    ],
+    "ability_ids": [
+      "bombdakka-support",
+      "bust-em",
+      "waaagh"
+    ]
   }
 ]

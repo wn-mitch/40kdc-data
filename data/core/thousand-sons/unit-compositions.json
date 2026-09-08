@@ -1246,5 +1246,202 @@
         ]
       }
     ]
+  },
+  {
+    "unit_id": "kaaskrek",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Kaa'skrek",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "baleful-devolution",
+          "force-stave"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Kaa'skrek",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "prism-of-zadophon-rubric-marines",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Aspiring Sorcerer",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "force-weapon-rubric-marines",
+          "inferno-bolt-pistol-prism-of-zadophon",
+          "malefic-curse"
+        ]
+      },
+      {
+        "name": "Rubric Marine with Soulreaper Cannon and Stocks and Fists",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "soulreaper-cannon",
+          "stocks-and-fists"
+        ]
+      },
+      {
+        "name": "Rubric Marine with Inferno Boltgun and Stocks and Fists",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "inferno-boltgun",
+          "stocks-and-fists"
+        ]
+      },
+      {
+        "name": "Rubric Marine with Warpflamer and Stocks and Fists",
+        "min": 5,
+        "max": 5,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "warpflamer",
+          "stocks-and-fists"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Aspiring Sorcerer",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Rubric Marine with Soulreaper Cannon and Stocks and Fists",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Rubric Marine with Inferno Boltgun and Stocks and Fists",
+            "min": 3,
+            "max": 3
+          },
+          {
+            "name": "Rubric Marine with Warpflamer and Stocks and Fists",
+            "min": 5,
+            "max": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "prism-of-zadophon-tzaangor-enlightened",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Tzaangor Enlightened",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "divining-spear"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Tzaangor Enlightened",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "zadophon-the-soul-eater",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Zadophon the Soul Eater",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        },
+        "default_weapon_ids": [
+          "hellforged-weapons",
+          "infernal-cannon"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Zadophon the Soul Eater",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   }
 ]

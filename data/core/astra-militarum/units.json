@@ -6298,6 +6298,17 @@
       "min": 5,
       "max": 5
     },
+    "weapon_ids": [
+      "goad-lance",
+      "hunting-lance",
+      "lasgun",
+      "laspistol-attilan-rough-riders",
+      "power-sabre-attilan-rough-riders",
+      "steeds-hooves"
+    ],
+    "ability_ids": [
+      "horsemasters-draydens-lance"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -6311,7 +6322,13 @@
       "shape": "oval",
       "width": 60,
       "length": 35.5
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "55a134c9-ec7f-4da8-b04f-f12b35e11f3a"
+      }
+    ]
   },
   {
     "id": "draydens-lance-command-squad",
@@ -6360,6 +6377,22 @@
       "min": 4,
       "max": 4
     },
+    "weapon_ids": [
+      "bolt-pistol",
+      "gun-stocks",
+      "lasgun",
+      "plasma-pistol",
+      "power-fist",
+      "power-weapon"
+    ],
+    "ability_ids": [
+      "medi-pack-draydens-lance",
+      "orders-draydens-lance",
+      "regimental-standard-draydens-lance",
+      "master-vox-draydens-lance",
+      "voice-of-command-draydens-lance",
+      "over-there-draydens-lance"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -6416,6 +6449,24 @@
       "min": 10,
       "max": 10
     },
+    "weapon_ids": [
+      "chainsword-kasrkin",
+      "flamer",
+      "grenade-launcher-kasrkin",
+      "gun-stocks",
+      "hot-shot-lasgun",
+      "hot-shot-laspistol",
+      "hot-shot-marksman-rifle",
+      "hot-shot-volley-gun",
+      "plasma-gun-kasrkin",
+      "plasma-pistol"
+    ],
+    "ability_ids": [
+      "warrior-elite-draydens-lance",
+      "melta-mine-draydens-lance",
+      "vox-caster-draydens-lance",
+      "voice-of-command-draydens-lance"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"

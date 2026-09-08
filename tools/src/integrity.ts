@@ -154,12 +154,11 @@ interface MissionCardRef {
 }
 
 /**
- * Known, accepted loadout orphans — a `<faction>/<unit_id>/<weapon_id>` triple
  * whose weapon is in the unit's `weapon_ids` but is neither a recorded
- * `default_weapon_ids` entry nor reachable through any wargear-option. Each entry
- * is a deliberate, reviewed exception — a NEW orphan (any triple not listed) fails
- * CI, and a listed triple that is no longer an orphan is reported as stale so the
- * list stays minimal.
+ * `default_weapon_ids` entry, a complete `loadout_variant` entry, nor reachable
+ * through any wargear-option. Each entry is a deliberate, reviewed exception — a
+ * NEW orphan (any triple not listed) fails CI, and a listed triple that is no
+ * longer an orphan is reported as stale so the list stays minimal.
  *
  * This set is now EMPTY: every former orphan has been resolved by restructuring
  * the unit composition to match the GW MFM dump's per-figure miniature rows
@@ -215,18 +214,18 @@ export function variantWeaponOwner(weaponId: string, unitIds: Iterable<string>):
  * Structural checks over one composition's `loadout_variants` /
  * `loadout_variant_budgets`.
  *
- * A variant states a WHOLE per-model loadout, so nothing downstream re-derives
- * its equipment from the unit's own vocabulary — an unresolvable or misappropriated
- * weapon id would surface only as a silently wrong candidate loadout. Scope is
- * the faction's weapon + wargear pool rather than the owning unit's
- * `weapon_ids`, deliberately: a variant may legitimately name equipment the
- * unit record does not list (Boyz' `close-combat-weapon`), and keeping
- * `units.json` untouched is a property the BSData projection relies on.
+ * A variant states a whole per-model loadout. Its equipment must therefore be
+ * drawn from the owning unit's declared weapon vocabulary, except for explicit
+ * faction wargear. Faction-wide weapon existence alone is insufficient: it
+ * would let a stale import attach another datasheet's weapon profile merely
+ * because that profile happens to resolve in the same faction.
  */
 function collectVariantErrors(
   comp: CompLike,
   index: number,
   factionEquipment: ReadonlySet<string>,
+  factionWargear: ReadonlySet<string>,
+  unitWeaponIds: ReadonlySet<string>,
   factionUnitIds: ReadonlySet<string>,
 ): Array<{ path: string; message: string }> {
   const errs: Array<{ path: string; message: string }> = [];
@@ -268,6 +267,13 @@ function collectVariantErrors(
           errs.push({
             path: `/${index}/models/${m}/loadout_variants/${v}`,
             message: `${where}: loadout_variant "${name}" names equipment "${wid}" that is neither a weapon nor a wargear entry in this faction — a variant states a whole loadout, so every id must resolve`,
+          });
+          continue;
+        }
+        if (!unitWeaponIds.has(wid) && !factionWargear.has(wid)) {
+          errs.push({
+            path: `/${index}/models/${m}/loadout_variants/${v}`,
+            message: `${where}: loadout_variant "${name}" names faction equipment "${wid}" that is not declared by this unit — variants may only use owning-unit weapon_ids or faction wargear`,
           });
           continue;
         }
@@ -912,9 +918,14 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
     // loadout_variant checks (see collectVariantErrors).
     const factionUnitIds = new Set<string>(units.map((u) => u.id ?? "").filter(Boolean));
     const factionEquipment = new Set<string>();
+    const factionWargear = new Set<string>();
     for (const name of ["weapons.json", "wargear.json"]) {
       try {
-        for (const e of readArray<{ id?: string }>(resolve(dir, name))) if (e.id) factionEquipment.add(e.id);
+        for (const e of readArray<{ id?: string }>(resolve(dir, name))) {
+          if (!e.id) continue;
+          factionEquipment.add(e.id);
+          if (name === "wargear.json") factionWargear.add(e.id);
+        }
       } catch {
         // faction has no file of this kind — the other one still constrains variants
       }
@@ -946,6 +957,8 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
         c,
         i,
         factionEquipment,
+        factionWargear,
+        new Set(weaponIdsByUnit.get(c.unit_id ?? "") ?? []),
         factionUnitIds,
       );
       // Populated = every model row carries a non-empty default loadout.
@@ -962,8 +975,10 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
       const defaults = new Set<string>();
       for (const m of models) for (const id of m.default_weapon_ids ?? []) defaults.add(id);
       const reachable = reachableByUnit.get(c.unit_id ?? "") ?? new Set<string>();
+      const variantEquipment = new Set<string>();
+      for (const m of models) for (const variant of m.loadout_variants ?? []) for (const id of variant.weapon_ids ?? []) variantEquipment.add(id);
       for (const wid of weaponIdsByUnit.get(c.unit_id ?? "") ?? []) {
-        if (defaults.has(wid) || reachable.has(wid)) continue;
+        if (defaults.has(wid) || variantEquipment.has(wid) || reachable.has(wid)) continue;
         const key = `${faction}/${c.unit_id}/${wid}`;
         if (KNOWN_LOADOUT_ORPHANS.has(key)) {
           seenAllowed.add(key);

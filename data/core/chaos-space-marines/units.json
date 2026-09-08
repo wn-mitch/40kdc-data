@@ -5088,6 +5088,15 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "bolt-pistol",
+      "rite-of-possession",
+      "staff-of-possession"
+    ],
+    "ability_ids": [
+      "daemonkin-psychic-zarkans-daemonkin",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -5097,6 +5106,7 @@
     ],
     "is_legend": false,
     "points_provisional": false,
+    "attachment_role": "leader",
     "base_size_mm": {
       "shape": "round",
       "diameter": 40
@@ -5146,6 +5156,14 @@
       "min": 10,
       "max": 10
     },
+    "weapon_ids": [
+      "autopistol",
+      "blades-and-cudgels",
+      "bolt-pistol"
+    ],
+    "ability_ids": [
+      "for-the-dark-gods"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -5203,6 +5221,19 @@
       "min": 10,
       "max": 10
     },
+    "weapon_ids": [
+      "accursed-weapon",
+      "bolt-pistol",
+      "boltgun",
+      "fists-and-knives",
+      "heavy-bolter",
+      "meltagun",
+      "plasma-pistol"
+    ],
+    "ability_ids": [
+      "chaos-icon",
+      "veterans-of-the-long-war-zarkans-daemonkin"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -5258,6 +5289,12 @@
       "min": 5,
       "max": 5
     },
+    "weapon_ids": [
+      "hideous-mutations"
+    ],
+    "ability_ids": [
+      "unholy-bloodshed-zarkans-daemonkin"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"

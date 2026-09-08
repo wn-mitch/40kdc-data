@@ -243,22 +243,8 @@
       "shuriken-pistol",
       "power-sword"
     ],
-    "replacement_choice": [
-      [
-        "shredder"
-      ],
-      [
-        "wraithcannon"
-      ],
-      [
-        "shuriken-cannon-corsair-voidscarred"
-      ],
-      [
-        "blaster"
-      ],
-      [
-        "shuriken-rifle"
-      ]
+    "replacement": [
+      "shuriken-rifle"
     ],
     "model_constraint": {
       "model_name": "Corsair Voidscarred",
@@ -275,15 +261,19 @@
     },
     "is_free": true,
     "replaces": [
-      "shuriken-pistol",
-      "power-sword"
+      "shuriken-rifle"
     ],
-    "replacement": [
-      "long-rifle"
+    "replacement_choice": [
+      [
+        "blaster"
+      ],
+      [
+        "shredder"
+      ]
     ],
     "model_constraint": {
       "model_name": "Corsair Voidscarred",
-      "per_n_models": 10
+      "per_n_models": 5
     }
   },
   {
@@ -295,16 +285,44 @@
       "dataslate": "launch"
     },
     "is_free": true,
-    "replacement": [
-      "faolchu"
+    "replaces": [
+      "shuriken-rifle"
+    ],
+    "replacement_choice": [
+      [
+        "shuriken-cannon-corsair-voidscarred"
+      ],
+      [
+        "wraithcannon"
+      ]
     ],
     "model_constraint": {
       "model_name": "Corsair Voidscarred",
-      "any_number": true
+      "per_n_models": 10
     }
   },
   {
     "id": "corsair-voidscarred-wgo-mfm-5",
+    "unit_id": "corsair-voidscarred",
+    "faction_id": "aeldari",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "shuriken-rifle"
+    ],
+    "replacement": [
+      "long-rifle"
+    ],
+    "model_constraint": {
+      "model_name": "Corsair Voidscarred",
+      "per_n_models": 10
+    }
+  },
+  {
+    "id": "corsair-voidscarred-wgo-mfm-6",
     "unit_id": "corsair-voidscarred",
     "faction_id": "aeldari",
     "game_version": {
@@ -320,11 +338,11 @@
     ],
     "model_constraint": {
       "model_name": "Corsair Voidscarred",
-      "any_number": true
+      "per_n_models": 10
     }
   },
   {
-    "id": "corsair-voidscarred-wgo-mfm-6",
+    "id": "corsair-voidscarred-wgo-mfm-7",
     "unit_id": "corsair-voidscarred",
     "faction_id": "aeldari",
     "game_version": {

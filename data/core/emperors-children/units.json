@@ -1442,6 +1442,10 @@
       "min": 3,
       "max": 3
     },
+    "weapon_ids": [
+      "blissblade",
+      "bolt-pistol-callous-blades"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -1454,7 +1458,17 @@
     "base_size_mm": {
       "shape": "round",
       "diameter": 40
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5cd85ac1-b455-45a0-b2c5-86d8cbb9f08a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4afabec4-3f10-4544-8e8c-692dc62811be"
+      }
+    ]
   },
   {
     "id": "callous-blades-infractors",
@@ -1485,9 +1499,17 @@
       "Emperor’s Children"
     ],
     "model_count": {
-      "min": 1,
-      "max": 1
+      "min": 10,
+      "max": 10
     },
+    "weapon_ids": [
+      "bolt-pistol-callous-blades",
+      "duelling-sabre",
+      "power-sword-infractors"
+    ],
+    "ability_ids": [
+      "excessive-assault-callous-blades"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -1547,6 +1569,13 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "phoenix-power-spear",
+      "power-fist-lord-exultant"
+    ],
+    "ability_ids": [
+      "peerless-killer-callous-blades"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -1556,6 +1585,7 @@
     ],
     "is_legend": false,
     "points_provisional": false,
+    "attachment_role": "leader",
     "base_size_mm": {
       "shape": "round",
       "diameter": 40

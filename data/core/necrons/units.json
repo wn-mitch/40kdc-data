@@ -4036,9 +4036,8 @@
       }
     ],
     "keywords": [
-      "Amonhotekh's Guard",
       "Canoptek",
-      "Canoptek Doomstalker",
+      "Doomstalker",
       "Vehicle",
       "Walker"
     ],
@@ -4049,6 +4048,15 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "doomsday-blaster",
+      "twin-gauss-flayer",
+      "doomstalker-limbs"
+    ],
+    "ability_ids": [
+      "damaged-1-4-wounds-remaining-amonhotekhs-guard-doomstalker",
+      "reanimation-protocols"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -4092,9 +4100,9 @@
       }
     ],
     "keywords": [
-      "Amonhotekh's Guard",
       "Canoptek",
       "Fly",
+      "Scarab Swarms",
       "Swarm"
     ],
     "faction_keywords": [
@@ -4104,6 +4112,13 @@
       "min": 3,
       "max": 3
     },
+    "weapon_ids": [
+      "feeder-mandibles"
+    ],
+    "ability_ids": [
+      "scarab-interference-amonhotekhs-guard",
+      "reanimation-protocols"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -4148,9 +4163,9 @@
       }
     ],
     "keywords": [
-      "Amonhotekh's Guard",
       "Battleline",
-      "Infantry"
+      "Infantry",
+      "Necron Warriors"
     ],
     "faction_keywords": [
       "Necrons"
@@ -4159,6 +4174,15 @@
       "min": 10,
       "max": 10
     },
+    "weapon_ids": [
+      "gauss-flayer",
+      "gauss-reaper",
+      "close-combat-weapon"
+    ],
+    "ability_ids": [
+      "reanimation-protocols",
+      "their-number-is-legion"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -4202,9 +4226,8 @@
       }
     ],
     "keywords": [
-      "Amonhotekh's Guard",
-      "Destroyer Cult",
-      "Infantry"
+      "Infantry",
+      "Skorpekh Destroyers"
     ],
     "faction_keywords": [
       "Necrons"
@@ -4213,6 +4236,14 @@
       "min": 3,
       "max": 3
     },
+    "weapon_ids": [
+      "skorpekh-hyperphase-weapons"
+    ],
+    "ability_ids": [
+      "plasmacyte-amonhotekhs-guard",
+      "whirling-onslaught",
+      "reanimation-protocols"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -4257,7 +4288,7 @@
       }
     ],
     "keywords": [
-      "Amonhotekh's Guard",
+      "Amonhotekh",
       "Character",
       "Infantry",
       "Noble",
@@ -4270,6 +4301,14 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "tachyon-arrow",
+      "overlords-blade"
+    ],
+    "ability_ids": [
+      "iron-will-overlord-amonhotekh",
+      "reanimation-protocols"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"

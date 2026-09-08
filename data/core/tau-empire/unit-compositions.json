@@ -1461,6 +1461,7 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "default_weapon_ids": [],
         "base_size_mm": {
           "shape": "hull",
           "draft": true
@@ -1471,6 +1472,7 @@
         "min": 0,
         "max": 1,
         "is_leader_model": false,
+        "default_weapon_ids": [],
         "base_size_mm": {
           "shape": "hull",
           "draft": true
@@ -2107,6 +2109,213 @@
             "name": "Kroot Flesh Shaper",
             "min": 1,
             "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "commander-cloudspear",
+    "faction_id": "tau-empire",
+    "models": [
+      {
+        "name": "Commander Cloudspear",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        },
+        "default_weapon_ids": [
+          "airbursting-fragmentation-projector",
+          "battlesuit-fists-commander-in-enforcer-battlesuit",
+          "plasma-rifle-commander-in-enforcer-battlesuit"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Commander Cloudspear",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "sudden-dawn-cadre-breacher-team",
+    "faction_id": "tau-empire",
+    "models": [
+      {
+        "name": "Sha'sui",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "gun-stocks",
+          "pulse-blaster",
+          "pulse-pistol"
+        ]
+      },
+      {
+        "name": "Breacher Team",
+        "min": 9,
+        "max": 9,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "gun-stocks",
+          "pulse-blaster",
+          "pulse-pistol"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Sha'sui",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Breacher Team",
+            "min": 9,
+            "max": 9
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "sudden-dawn-cadre-devilfish",
+    "faction_id": "tau-empire",
+    "models": [
+      {
+        "name": "Devilfish",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        },
+        "default_weapon_ids": [
+          "accelerator-burst-cannon",
+          "armoured-hull-devilfish",
+          "twin-pulse-carbine"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Devilfish",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "sudden-dawn-cadre-pathfinder-team",
+    "faction_id": "tau-empire",
+    "models": [
+      {
+        "name": "Pathfinder Shas'ui",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "gun-stocks",
+          "pulse-carbine",
+          "pulse-pistol"
+        ]
+      },
+      {
+        "name": "Pathfinder with Pulse Pistol, Rail Rifle and Close Combat Weapon",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "gun-stocks",
+          "pulse-pistol",
+          "rail-rifle"
+        ]
+      },
+      {
+        "name": "Pathfinder with Pulse Carbine, Pulse Pistol and Close Combat Weapon",
+        "min": 6,
+        "max": 6,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "gun-stocks",
+          "pulse-carbine",
+          "pulse-pistol"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Pathfinder Shas'ui",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Pathfinder with Pulse Pistol, Rail Rifle and Close Combat Weapon",
+            "min": 3,
+            "max": 3
+          },
+          {
+            "name": "Pathfinder with Pulse Carbine, Pulse Pistol and Close Combat Weapon",
+            "min": 6,
+            "max": 6
           }
         ]
       }

@@ -503,6 +503,7 @@
             "name": "Seraphim",
             "weapon_ids": [
               "close-combat-weapon",
+              "bolt-pistol",
               "bolt-pistol"
             ],
             "max_count": 9
@@ -511,9 +512,9 @@
             "name": "Seraphim with Special Weapons",
             "weapon_ids": [
               "close-combat-weapon",
+              "ministorum-hand-flamer",
               "ministorum-hand-flamer"
-            ],
-            "max_count": 2
+            ]
           }
         ],
         "loadout_variant_budgets": [
@@ -1701,6 +1702,190 @@
             "name": "Intranzia Fraye",
             "min": 1,
             "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "sanctuary-canoness-adalya",
+    "faction_id": "adepta-sororitas",
+    "models": [
+      {
+        "name": "Canoness Adalya",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "condemnor-boltgun-canoness",
+          "hallowed-chainsword",
+          "null-rod"
+        ],
+        "is_leader_model": true
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Canoness Adalya",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "sanctuary-guardians-arco-flagellants",
+    "faction_id": "adepta-sororitas",
+    "models": [
+      {
+        "name": "Arco-flagellant",
+        "min": 10,
+        "max": 10,
+        "default_weapon_ids": [
+          "arco-flails"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Arco-flagellant",
+            "min": 10,
+            "max": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "sanctuary-guardians-battle-sisters-squad",
+    "faction_id": "adepta-sororitas",
+    "models": [
+      {
+        "name": "Sister Superior",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "bolt-pistol",
+          "combi-weapon",
+          "power-weapon-battle-sisters-squad"
+        ],
+        "is_leader_model": true
+      },
+      {
+        "name": "Battle Sister with Ministorum flamer",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "bolt-pistol",
+          "ministorum-flamer",
+          "close-combat-weapon-battle-sisters-squad"
+        ]
+      },
+      {
+        "name": "Battle Sister with Ministorum heavy flamer",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "bolt-pistol",
+          "ministorum-heavy-flamer",
+          "close-combat-weapon-battle-sisters-squad"
+        ]
+      },
+      {
+        "name": "Battle Sister with Simulacrum Imperialis",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "bolt-pistol",
+          "boltgun",
+          "close-combat-weapon-battle-sisters-squad",
+          "simulacrum-imperialis"
+        ]
+      },
+      {
+        "name": "Battle Sister",
+        "min": 6,
+        "max": 6,
+        "default_weapon_ids": [
+          "bolt-pistol",
+          "boltgun",
+          "close-combat-weapon-battle-sisters-squad"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Sister Superior",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Battle Sister with Ministorum flamer",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Battle Sister with Ministorum heavy flamer",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Battle Sister with Simulacrum Imperialis",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Battle Sister",
+            "min": 6,
+            "max": 6
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "sanctuary-guardians-celestian-sacresants",
+    "faction_id": "adepta-sororitas",
+    "models": [
+      {
+        "name": "Celestian Sacresant",
+        "min": 5,
+        "max": 5,
+        "default_weapon_ids": [
+          "bolt-pistol",
+          "hallowed-mace"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Celestian Sacresant",
+            "min": 5,
+            "max": 5
           }
         ]
       }

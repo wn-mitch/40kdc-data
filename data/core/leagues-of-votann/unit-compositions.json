@@ -1292,5 +1292,246 @@
         ]
       }
     ]
+  },
+  {
+    "unit_id": "bane-slayers-bulwark-brokhyr-thunderkyn",
+    "faction_id": "leagues-of-votann",
+    "models": [
+      {
+        "name": "Brokhyr Thunderkyn",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "powered-strikes",
+          "sp-conversion-beamer"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Brokhyr Thunderkyn",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "bane-slayers-bulwark-einhyr-hearthguard",
+    "faction_id": "leagues-of-votann",
+    "models": [
+      {
+        "name": "Hesyr",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "exoarmour-grenade-launcher",
+          "graviton-hammer",
+          "volkanite-disintegrator"
+        ]
+      },
+      {
+        "name": "Einhyr Hearthguard",
+        "min": 4,
+        "max": 4,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "exoarmour-grenade-launcher",
+          "plasma-blade-gauntlet",
+          "volkanite-disintegrator"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Hesyr",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Einhyr Hearthguard",
+            "min": 4,
+            "max": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "bane-slayers-bulwark-hearthkyn-warriors",
+    "faction_id": "leagues-of-votann",
+    "models": [
+      {
+        "name": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol and Plasma Knife",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "autoch-pattern-bolt-pistol",
+          "plasma-knife"
+        ]
+      },
+      {
+        "name": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, HYLas Auto Rifle and Armoured Fists",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "armoured-fists",
+          "autoch-pattern-bolt-pistol",
+          "hylas-auto-rifle"
+        ]
+      },
+      {
+        "name": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, Magna-Rail Rifle and Armoured Fists",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "armoured-fists",
+          "autoch-pattern-bolt-pistol",
+          "magna-rail-rifle"
+        ]
+      },
+      {
+        "name": "Theyn",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "autoch-pattern-bolt-pistol",
+          "theyns-armaments",
+          "theyns-pistol"
+        ]
+      },
+      {
+        "name": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, Ion Blaster and Armoured Fists",
+        "min": 6,
+        "max": 6,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "armoured-fists",
+          "autoch-pattern-bolt-pistol",
+          "ion-blaster"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol and Plasma Knife",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, HYLas Auto Rifle and Armoured Fists",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, Magna-Rail Rifle and Armoured Fists",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Theyn",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Hearthkyn Warrior with Autoch-pattern Bolt Pistol, Ion Blaster and Armoured Fists",
+            "min": 6,
+            "max": 6
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "vynn-bane-slayer",
+    "faction_id": "leagues-of-votann",
+    "models": [
+      {
+        "name": "Vynn Bane-Slayer",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "autoch-pattern-combi-bolter",
+          "mass-hammer"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Vynn Bane-Slayer",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   }
 ]

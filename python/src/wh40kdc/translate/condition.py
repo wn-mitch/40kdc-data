@@ -190,7 +190,7 @@ _EVENT_PHRASES: dict[str, str] = {
     "before-hit-roll": "before a Hit roll is made",
     "after-hit-roll": "after a Hit roll is made",
     "before-wound-roll": "before a Wound roll is made",
-    "after-wound-roll": "after a Wound roll is made",
+    "attack-scores-wound": "each time an attack scores a wound",
     "before-save-roll": "before a saving throw is made",
     "after-save-roll": "after a saving throw is made",
     "before-damage-roll": "before a Damage roll is made",
@@ -217,8 +217,16 @@ _EVENT_PHRASES: dict[str, str] = {
     "battle-shock-test": "when the unit takes a Battle-shock test",
     "leadership-test": "when the unit takes a Leadership test",
     "desperate-escape-test": "when the unit takes a Desperate Escape test",
+    "end-of-opponent-charge-phase": "at the end of the opponent's Charge phase",
+    "enemy-unit-completed-shooting-targeting-bearer": "after an enemy unit has shot and targeted this unit",
+    "enemy-unit-selects-bearer-as-charge-target": "when an enemy unit selects this unit as a charge target",
+    "enemy-unit-targets-bearer": "when an enemy unit targets this unit",
+    "enemy-unit-completed-fall-back-from-bearer": "after an enemy unit within Engagement Range of this unit completes a Fall Back move",
+    "act-of-faith-completed": "after an Act of Faith is completed",
+    "act-of-faith-performed": "when an Act of Faith is performed",
+    "miracle-die-generated": "when a Miracle die is generated",
+    "enemy-unit-selected-charge-targets-before-charge-move": "after an enemy unit selects targets for its charge but before it makes a Charge move",
 }
-
 
 def event_clause(event: Any) -> str:
     """A reactive ``trigger.event`` token → natural clause (unmapped → ``when <dekebab>``)."""
@@ -281,6 +289,48 @@ def describe_condition(c: Condition) -> str:
     p = c.get("parameters") or {}
     ctype = c.get("type")
 
+    if ctype == "target-of-triggering-charge":
+        return f"{negate}the unit was selected as a target of that charge"
+    if ctype == "every-model-within-range-of-bearer":
+        return f'{negate}every model in the unit is within {_str(p.get("range"))}" of this Transport'
+    if ctype == "roll-succeeded":
+        return f"{negate}the triggering {dekebab(_str(p.get('roll')))} roll succeeded"
+    if ctype == "on-battlefield":
+        who = (
+            f"the {_str(p.get('model_name'))} model"
+            if p.get("model_name") is not None
+            else "the unit"
+            if p.get("subject") == "unit"
+            else "the target unit"
+            if p.get("subject") == "target"
+            else "this model"
+        )
+        return f"{negate}{who} is on the battlefield"
+    if ctype == "target-within-half-weapon-range":
+        return f"{negate}the target is within half the attacking weapon's range"
+    if ctype == "has-destroyed":
+        who = (
+            "the unit"
+            if p.get("subject") == "unit"
+            else "the target unit"
+            if p.get("subject") == "target"
+            else "this model"
+        )
+        keywords = (
+            f" {' '.join(_str(keyword) for keyword in p['victim_keywords'])}"
+            if isinstance(p.get("victim_keywords"), list)
+            else ""
+        )
+        victims = _count(
+            p.get("count_min") if p.get("count_min") is not None else 1,
+            f"{_str(p.get('victim_owner'))}{keywords} {_str(p.get('victim_kind'))}",
+        )
+        window = (
+            "with its just-resolved attacks"
+            if p.get("window") == "just-finished-attack-sequence"
+            else f"during {dekebab(_str(p.get('window')))}"
+        )
+        return f"{negate}{who} has destroyed {victims} {window}"
     # ── Ability-DSL conditions ───────────────────────────────────────────────
     if ctype == "phase-is":
         phase = _str(p.get("phase"))
@@ -327,6 +377,8 @@ def describe_condition(c: Condition) -> str:
         return f'{negate}the target has "{_str(p.get("keyword"))}"'
     if ctype == "model-is-leader":
         return f"{negate}the model is leading a unit"
+    if ctype == "unit-is-led-by":
+        return f"{negate}this unit is being led by an {_str(p.get('keyword'))} model"
     if ctype == "is-attached":
         kw = f"{_str(p.get('keyword'))} " if p.get("keyword") else ""
         return f"{negate}the model is leading a {kw}unit"
@@ -336,6 +388,27 @@ def describe_condition(c: Condition) -> str:
         if p.get("comparison") is not None:
             return f"{negate}when {dekebab(_str(p.get('comparison')))}"
         return f"{negate}for {_str(p.get('attack_type'))} attacks"
+    if ctype == "unit-selected-to-shoot-this-phase":
+        return f"{negate}the unit has been selected to shoot this phase"
+    if ctype == "eligible-to-shoot":
+        return f"{negate}the unit is eligible to shoot"
+    if ctype == "selection-has-keyword":
+        selection = p.get("selection")
+        selected = "the selected unit"
+        if isinstance(selection, dict):
+            if "observer_for" in selection:
+                reference = selection.get("observer_for")
+                if isinstance(reference, dict) and "selection_var" in reference:
+                    selected = (
+                        "the Observer unit that marked the bound "
+                        + _str(reference.get("selection_var")).replace("_", " ")
+                    )
+            elif "selection_var" in selection:
+                selected = (
+                    "the bound "
+                    + _str(selection.get("selection_var")).replace("_", " ")
+                )
+        return f"{negate}{selected} has the {_str(p.get('keyword'))} keyword"
     if ctype == "is-battle-shocked":
         return f"{negate}the unit is battle-shocked"
     if ctype == "has-lost-wounds":
@@ -353,15 +426,19 @@ def describe_condition(c: Condition) -> str:
             else "the unit"
         )
         atk = f"{_str(p.get('attack_type'))} " if p.get("attack_type") else ""
-        weapon = f" by {_str(p.get('weapon_name'))}" if p.get("weapon_name") else ""
-        source = p.get("source")
-        bound_source = (
-            " from the triggering unit"
-            if isinstance(source, dict) and source.get("event_var") is not None
-            else f" from {_str(source)}"
-            if source is not None
+        keyword = (
+            f"[{dekebab(_str(p.get('weapon_keyword'))).upper()}]"
+            if p.get("weapon_keyword")
             else ""
         )
+        weapon = (
+            f" by {_str(p.get('weapon_name'))}{f' (with {keyword})' if keyword else ''}"
+            if p.get("weapon_name")
+            else f" made with a {keyword} weapon"
+            if keyword
+            else ""
+        )
+        source = p.get("source")
         window = (
             " during its just-finished shooting sequence"
             if p.get("window") == "just-finished-shooting-sequence"
@@ -442,10 +519,35 @@ def describe_condition(c: Condition) -> str:
             else ""
         )
         return f"{negate}{who} is within range of an objective marker{control}"
+    if ctype == "event-source-is-bearer-unit":
+        return f"{negate}the triggering event was performed by this unit"
+    if ctype == "event-source-is-attached-unit":
+        return f"{negate}the triggering Act of Faith was performed by the unit this model leads"
+    if ctype == "miracle-die-generation-reason":
+        keywords = " ".join(_str(k) for k in p.get("keywords") or []) if isinstance(p.get("keywords"), list) else ""
+        return f"{negate}the Miracle die was gained because a friendly {keywords} unit or model was destroyed"
+    if ctype == "miracle-die-generation-timing":
+        return f"{negate}the Miracle die was gained at the start of the battle round"
+    if ctype == "destroyed-event-within-range":
+        return f'{negate}that destroyed unit or model was within {_str(p.get("range"))}" of this model'
+    if ctype == "destroyed-by-friendly-unit":
+        keywords = " ".join(_str(k) for k in p.get("keywords") or []) if isinstance(p.get("keywords"), list) else ""
+        return f"{negate}the unit was destroyed by a friendly {keywords} unit"
     if ctype == "target-is-visible":
         return f"{negate}the target is visible to the attacking model"
     if ctype == "has-fought-this-phase":
-        return f"{negate}has fought this phase"
+        who = (
+            "this model "
+            if p.get("subject") == "self"
+            else "the destroyed model "
+            if p.get("subject") == "destroyed-model"
+            else "the unit "
+            if p.get("subject") == "unit"
+            else "the target unit "
+            if p.get("subject") == "target"
+            else ""
+        )
+        return f"{negate}{who}has fought this phase"
     if ctype == "destroyed-by-attack-type":
         if p.get("attack_type") == "any":
             return f"{negate}destroyed by any attack"
@@ -474,17 +576,14 @@ def describe_condition(c: Condition) -> str:
             return f"{negate}the unit is within Engagement Range"
         return f"{negate}the unit is {dekebab(st)}"
     if ctype == "unit-was-in-engagement-range-of":
-        # `object` is a bound event-variable reference (schema
-        # `#/$defs/event-bound-reference`, e.g. the enemy unit a sibling
-        # trigger's `binds_event_variable` names as the one that ended a Fall
-        # Back move). `event_var` is an internal linking id, never rendered —
-        # the relationship always reads as "that enemy unit", with no game
-        # phase assumed.
         snapshot_point = "the turn" if p.get("snapshot") == "turn-start" else "the phase"
-        return (
-            f"{negate}the selected friendly unit started {snapshot_point} "
-            "within Engagement Range of that enemy unit"
-        )
+        return f"{negate}the selected friendly unit started {snapshot_point} within Engagement Range of that enemy unit"
+    if ctype == "ability-window-capacity":
+        source = (p.get("source_ability") or {}).get("ability_id")
+        return f"{negate}the {dekebab(_str(source))} ability had unused selection capacity at the end of the opponent's previous turn"
+    if ctype == "candidate-eligible-in-ability-window":
+        source = (p.get("source_ability") or {}).get("ability_id")
+        return f"{negate}the candidate was eligible for the {dekebab(_str(source))} ability at the end of the opponent's previous turn"
     if ctype == "disposition-matches":
         d = _str(p.get("disposition"))
         if d == "strategic-reserves":

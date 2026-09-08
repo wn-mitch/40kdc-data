@@ -3258,17 +3258,24 @@ function genEffectTranslation(): void {
   });
   // Faction-scoped worklist pins: the global by-id index can resolve another
   // faction's copy of shared names such as Blessing of the Omnissiah.
-  const greyKnightsFidelityIds = new Set(["surge-of-wrath-psychic", "warrior-strategist", "might-of-titan-psychic", "sanctity-of-purpose", "indomitable-spirit-psychic", "guidance-of-the-ancients-psychic", "champion-of-the-order-of-purifiers-psychic", "sanctifying-ritual-psychic", "techmarine", "blessing-of-the-omnissiah", "guardians-of-the-machine", "righteous-persecution", "personal-teleporters", "litanies-of-sanctity", "attuned-onslaught-psychic", "sanctuary-psychic", "hammer-aflame-psychic", "force-edge-psychic", "channelled-force", "hallowed-ground", "fury-of-titan", "dauntless-champions", "searing-soulflame"]);
-  const greyKnightsFidelity = JSON.parse(readFileSync(join(REPO_ROOT, "data/enrichment/grey-knights/abilities.json"), "utf8")) as Array<Record<string, unknown>>;
-  for (const raw of greyKnightsFidelity) {
-    if (!greyKnightsFidelityIds.has(String(raw.ability_id))) continue;
-    cases.push({
-      caseId: `grey-knights-fidelity/${raw.ability_id}`,
-      effect: raw.effect, scope: raw.scope,
-      ...(raw.trigger ? { trigger: raw.trigger } : {}),
-      ...(raw.usage ? { usage: raw.usage } : {}),
-      expected: { text: describeAbility(raw as Parameters<typeof describeAbility>[0]) },
-    });
+  const fidelityWorklists: Array<[string, string[]]> = [
+    ["grey-knights", ["dauntless-champions","attuned-onslaught-psychic","blessing-of-the-omnissiah","guardians-of-the-machine","techmarine","force-edge-psychic","champion-of-the-order-of-purifiers-psychic","might-of-titan-psychic","warrior-strategist","surge-of-wrath-psychic","sanctuary-psychic","hammer-aflame-psychic","personal-teleporters","indomitable-spirit-psychic","righteous-persecution","sanctity-of-purpose","sanctifying-ritual-psychic","guidance-of-the-ancients-psychic","litanies-of-sanctity","prescient-redeployment","channelled-force","hallowed-ground","fury-of-titan","searing-soulflame"]],
+    ["adepta-sororitas", ["sworn-protectors","anguish-of-the-unredeemed","anchorite-sarcophagus","sacred-command","divine-deliverance","rapturous-blows","ministorum-sermon","cherub","salvationist-medikit","simulacrum-imperialis","attached-unit","extremis-trigger-word","rituale-nullificatus","virtue-of-intolerance","denuncia-oratory","litany-of-deeds","stanchion-of-holy-martyrs","relics-of-the-matriarchs","solemn-procession","overseer-of-redemption","laud-hailer","stirring-rhetoric","purge-and-cleanse","sacred-healing","righteous-repugnance","cherubs","storm-of-retribution","impetuous-fervour","sacred-banner","holy-judgement","mysterious-saviours","self-repair","righteous-paragons","rites-of-castigation","devastating-refrain","fiery-conviction","zealot","holy-mission","holy-hatred","embodied-prophecy","righteous-awareness","lifewards","defenders-of-the-faith","null-rod","emergency-combat-embarkation","judged-for-execution","angelic-judgement","clarion-of-urgency-chorus-of-condemnation","inspirational-battle-canticles-chorus-of-condemnation","harmonised-exorcism-chorus-of-condemnation","devastating-reprise-chorus-of-condemnation","holy-quest"]],
+    ["adeptus-astartes", ["techmarine", "blessing-of-the-omnissiah", "wisdom-of-the-ancients-aura"]],
+  ];
+  for (const [faction, ids] of fidelityWorklists) {
+    const abilities = JSON.parse(readFileSync(join(REPO_ROOT, `data/enrichment/${faction}/abilities.json`), "utf8")) as Array<Record<string, unknown>>;
+    for (const id of ids) {
+      const raw = abilities.find((ability) => ability.ability_id === id);
+      if (!raw) throw new Error(`Missing fidelity case ability: ${faction}/${id}`);
+      cases.push({
+        caseId: `${faction}-fidelity/${id}`,
+        effect: raw.effect, scope: raw.scope,
+        ...(raw.trigger ? { trigger: raw.trigger } : {}),
+        ...(raw.usage ? { usage: raw.usage } : {}),
+        expected: { text: describeAbility(raw as Parameters<typeof describeAbility>[0]) },
+      });
+    }
   }
   const fidelityBoundaryCases = [
     { caseId: "fidelity/no-effect", effect: { type: "no-effect" } },

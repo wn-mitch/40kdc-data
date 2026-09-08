@@ -333,50 +333,7 @@
         },
         "default_weapon_ids": [
           "paired-hekatarii-blades",
-          "shuriken-pistol",
-          "close-combat-weapon"
-        ],
-        "loadout_variants": [
-          {
-            "name": "Shade Runner",
-            "weapon_ids": [
-              "close-combat-weapon-corsair-voidscarred",
-              "shuriken-pistol",
-              "paired-hekatarii-blades"
-            ],
-            "max_count": 1
-          },
-          {
-            "name": "Soul Weaver",
-            "weapon_ids": [
-              "close-combat-weapon-corsair-voidscarred",
-              "shuriken-pistol",
-              "power-sword"
-            ],
-            "max_count": 1
-          },
-          {
-            "name": "Way Seeker",
-            "weapon_ids": [
-              "close-combat-weapon-corsair-voidscarred",
-              "shuriken-pistol",
-              "executioner",
-              "witch-staff"
-            ],
-            "max_count": 1
-          }
-        ],
-        "loadout_variant_budgets": [
-          {
-            "variant_names": [
-              "Shade Runner",
-              "Soul Weaver",
-              "Way Seeker"
-            ],
-            "count": 9,
-            "per_models": 0,
-            "scope": "model-row"
-          }
+          "shuriken-pistol"
         ]
       },
       {
@@ -391,8 +348,7 @@
         "default_weapon_ids": [
           "shuriken-pistol",
           "power-sword",
-          "channeller-stones",
-          "close-combat-weapon"
+          "channeller-stones"
         ]
       },
       {
@@ -407,8 +363,7 @@
         "default_weapon_ids": [
           "shuriken-pistol",
           "witch-staff",
-          "executioner",
-          "close-combat-weapon"
+          "executioner"
         ]
       }
     ],
@@ -1381,12 +1336,28 @@
         ],
         "loadout_variants": [
           {
+            "name": "Skyreaver w/ Corsair blade",
+            "weapon_ids": [
+              "corsair-blade",
+              "shuriken-pistol"
+            ],
+            "max_count": 9
+          },
+          {
+            "name": "Skyreaver w/ blaster",
+            "weapon_ids": [
+              "close-combat-weapon-corsair-skyreavers",
+              "blaster"
+            ],
+            "max_count": 2
+          },
+          {
             "name": "Skyreaver w/ flamer",
             "weapon_ids": [
               "close-combat-weapon-corsair-skyreavers",
               "flamer"
             ],
-            "max_count": 1
+            "max_count": 2
           },
           {
             "name": "Skyreaver w/ fusion gun",
@@ -1394,7 +1365,7 @@
               "close-combat-weapon-corsair-skyreavers",
               "fusion-gun"
             ],
-            "max_count": 1
+            "max_count": 2
           },
           {
             "name": "Skyreaver w/ shredder",
@@ -1402,19 +1373,20 @@
               "close-combat-weapon-corsair-skyreavers",
               "shredder"
             ],
-            "max_count": 1
+            "max_count": 2
           }
         ],
         "loadout_variant_budgets": [
           {
             "variant_names": [
+              "Skyreaver w/ blaster",
               "Skyreaver w/ flamer",
               "Skyreaver w/ fusion gun",
               "Skyreaver w/ shredder"
             ],
             "count": 2,
-            "per_models": 0,
-            "scope": "model-row"
+            "per_models": 5,
+            "scope": "unit"
           }
         ]
       }
@@ -3607,13 +3579,16 @@
           {
             "name": "Player with Harlequin's Blade",
             "weapon_ids": [
-              "shuriken-pistol"
+              "flip-belt",
+              "shuriken-pistol",
+              "harlequins-blade"
             ],
             "max_count": 11
           },
           {
             "name": "Player with Harlequin's Special Weapon",
             "weapon_ids": [
+              "flip-belt",
               "shuriken-pistol",
               "harlequins-special-weapon-troupe"
             ],
@@ -3622,27 +3597,20 @@
           {
             "name": "Player with Fusion Pistol",
             "weapon_ids": [
-              "fusion-pistol"
-            ]
+              "flip-belt",
+              "fusion-pistol",
+              "harlequins-special-weapon-troupe"
+            ],
+            "max_count": 4
           },
           {
             "name": "Player with Neuro Disruptor",
             "weapon_ids": [
-              "neuro-disruptor"
-            ]
-          }
-        ],
-        "loadout_variant_budgets": [
-          {
-            "variant_names": [
-              "Player with Harlequin's Blade",
-              "Player with Harlequin's Special Weapon",
-              "Player with Fusion Pistol",
-              "Player with Neuro Disruptor"
+              "flip-belt",
+              "neuro-disruptor",
+              "harlequins-special-weapon-troupe"
             ],
-            "count": 11,
-            "per_models": 0,
-            "scope": "model-row"
+            "max_count": 4
           }
         ]
       }
@@ -3870,5 +3838,116 @@
         ]
       }
     ]
+  },
+  {
+    "unit_id": "kygharils-protectors-dire-avengers",
+    "faction_id": "aeldari",
+    "models": [
+      {
+        "name": "Dire Avengers Exarch",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": { "shape": "round", "diameter": 28.5 },
+        "default_weapon_ids": ["power-glaive"]
+      },
+      {
+        "name": "Dire Avenger",
+        "min": 4,
+        "max": 4,
+        "is_leader_model": false,
+        "base_size_mm": { "shape": "round", "diameter": 28.5 },
+        "default_weapon_ids": ["avenger-shuriken-catapult", "weapon-strike"]
+      }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "launch" },
+    "tiers": [{ "models": [{ "name": "Dire Avengers Exarch", "min": 1, "max": 1 }, { "name": "Dire Avenger", "min": 4, "max": 4 }] }]
+  },
+  {
+    "unit_id": "kygharils-protectors-warp-spiders",
+    "faction_id": "aeldari",
+    "models": [
+      {
+        "name": "Warp Spider Exarch",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": { "shape": "round", "diameter": 28.5 },
+        "default_weapon_ids": ["death-weavers", "powerblades"]
+      },
+      {
+        "name": "Warp Spider",
+        "min": 4,
+        "max": 4,
+        "is_leader_model": false,
+        "base_size_mm": { "shape": "round", "diameter": 28.5 },
+        "default_weapon_ids": ["death-spinner", "weapon-strike"]
+      }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "launch" },
+    "tiers": [{ "models": [{ "name": "Warp Spider Exarch", "min": 1, "max": 1 }, { "name": "Warp Spider", "min": 4, "max": 4 }] }]
+  },
+  {
+    "unit_id": "kygharils-protectors-wraithblades",
+    "faction_id": "aeldari",
+    "models": [
+      {
+        "name": "Wraithblade",
+        "min": 5,
+        "max": 5,
+        "is_leader_model": false,
+        "base_size_mm": { "shape": "round", "diameter": 40 },
+        "default_weapon_ids": ["ghostaxe"]
+      }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "launch" },
+    "tiers": [{ "models": [{ "name": "Wraithblade", "min": 5, "max": 5 }] }]
+  },
+  {
+    "unit_id": "spiritseer-kygharil",
+    "faction_id": "aeldari",
+    "models": [
+      {
+        "name": "Spiritseer Kygharil",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": { "shape": "round", "diameter": 25 },
+        "default_weapon_ids": ["shuriken-pistol-spiritseer", "witch-staff"]
+      }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "launch" },
+    "tiers": [{ "models": [{ "name": "Spiritseer Kygharil", "min": 1, "max": 1 }] }]
+  },
+  {
+    "unit_id": "clanblade",
+    "faction_id": "aeldari",
+    "models": [{ "name": "Clanblade", "min": 1, "max": 1, "is_leader_model": false, "default_weapon_ids": ["drakesteed-fangs-and-talons", "moonblades", "solar-carbine"] }],
+    "game_version": { "edition": "11th", "dataslate": "launch" },
+    "tiers": [{ "models": [{ "name": "Clanblade", "min": 1, "max": 1 }] }]
+  },
+  {
+    "unit_id": "dragon-knights",
+    "faction_id": "aeldari",
+    "models": [
+      { "name": "Dragon Knight Leader", "min": 1, "max": 1, "is_leader_model": true, "default_weapon_ids": ["drakesteed-fangs-and-talons", "laser-lance", "solar-carbine"] },
+      { "name": "Dragon Knight", "min": 2, "max": 5, "is_leader_model": false, "default_weapon_ids": ["drakesteed-fangs-and-talons", "laser-lance", "solar-carbine"] }
+    ],
+    "game_version": { "edition": "11th", "dataslate": "launch" },
+    "tiers": [{ "models": [{ "name": "Dragon Knight Leader", "min": 1, "max": 1 }, { "name": "Dragon Knight", "min": 2, "max": 5 }] }]
+  },
+  {
+    "unit_id": "leystalker",
+    "faction_id": "aeldari",
+    "models": [{ "name": "Leystalker", "min": 1, "max": 1, "is_leader_model": false, "default_weapon_ids": ["drakesteed-fangs-and-talons", "hunting-blades", "long-rifle"] }],
+    "game_version": { "edition": "11th", "dataslate": "launch" },
+    "tiers": [{ "models": [{ "name": "Leystalker", "min": 1, "max": 1 }] }]
+  },
+  {
+    "unit_id": "stonesinger",
+    "faction_id": "aeldari",
+    "models": [{ "name": "Stonesinger", "min": 1, "max": 1, "is_leader_model": false, "default_weapon_ids": ["drakesteed-fangs-and-talons", "song-of-waning", "solar-carbine", "stone-stave", "venomcrest-spit"] }],
+    "game_version": { "edition": "11th", "dataslate": "launch" },
+    "tiers": [{ "models": [{ "name": "Stonesinger", "min": 1, "max": 1 }] }]
   }
 ]

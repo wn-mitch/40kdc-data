@@ -6310,47 +6310,57 @@
       "edition": "11th",
       "dataslate": "codex-orks"
     },
-    "source_digest": "d4b3d78415888c163d222ca825b1d04d429b14779e390408927d1839fd3d8015",
+    "source_digest": "9505f77890a320546443de269c675a682eadc1fd17e53cf04186b389edfed427",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
+      "type": "select-units",
+      "selector": {
+        "owner": "enemy",
+        "target_kind": "unit",
+        "count": 1,
+        "eligibility": {
+          "type": "was-hit-by-attack",
+          "parameters": {
+            "subject": "target",
+            "source": {
+              "event_var": "indiscriminate-attacks"
+            },
+            "window": "just-finished-shooting-sequence"
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
+            "type": "ability-grant",
+            "target": "unit",
+            "modifier": {
+              "grant_type": "suppressed"
             }
           },
           {
-            "type": "was-hit-by-attack",
-            "parameters": {
-              "subject": "target"
+            "type": "roll-modifier",
+            "target": "unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "subtract",
+              "value": 1
             }
           }
         ]
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "defender",
-        "modifier": {
-          "roll": "hit",
-          "operation": "subtract",
-          "value": 1
-        }
       }
     },
     "scope": {
       "range": "any-on-battlefield",
-      "duration": "until-next-command-phase"
+      "duration": "until-start-next-turn"
     },
     "unit_ids": [
-      "wartrakk"
+      "ardmob-wartrakk"
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "community_notes": "community-authored from 11e source",
     "faction_id": "orks"
   },
   {
@@ -7073,7 +7083,7 @@
       "edition": "11th",
       "dataslate": "codex-orks"
     },
-    "source_digest": "8fd95a4101f4539e06db2ae78a112dea78d28035f278afa91dc922022e1f866c",
+    "source_digest": "a94083bd50ebda093185eeb28fb526320628e6bf3f14286ae8f64daa332d8a69",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -7100,7 +7110,7 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "wartrakk"
+      "wartrakks"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -7236,10 +7246,56 @@
       "edition": "11th",
       "dataslate": "codex-orks"
     },
-    "source_digest": "5f1d327ee628cc5bbbeb9afe15c04774f283877b39bf2fb48207b50d20a079f9",
+    "source_digest": "1592dc1ed7ca8011c3ba6a9f14cc362343bc9af0a812b0cc0f3e897717a3877b",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
+      "type": "designate-target",
+      "designation": "busted",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "timing": "after-unit-resolves-attacks",
+        "eligibility": {
+          "type": "was-hit-by-attack",
+          "parameters": {
+            "subject": "target",
+            "source": {
+              "event_var": "bust-attacks"
+            },
+            "window": "just-finished-shooting-sequence"
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "attacker_keywords": [
+          "SPEED FREEKS"
+        ],
+        "effect": {
+          "type": "keyword-grant",
+          "target": "unit",
+          "modifier": {
+            "keywords": [
+              "Lethal Hits"
+            ]
+          }
+        }
+      },
+      "duration": "turn"
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "unit_ids": [
+      "wartrakks"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "community_notes": "community-authored from 11e source",
+    "trigger": {
+      "event": "after-unit-resolves-attacks",
+      "subject": "self",
       "condition": {
         "operator": "and",
         "operands": [
@@ -7250,66 +7306,15 @@
             }
           },
           {
-            "type": "timing-is",
+            "type": "player-turn-is",
             "parameters": {
-              "timing": "after-unit-shoots"
+              "turn": "your"
             }
           }
         ]
       },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ability-grant",
-            "target": "defender",
-            "modifier": {
-              "grant_type": "busted",
-              "select_one": true
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "target-has-keyword",
-                  "parameters": {
-                    "keyword": "Busted"
-                  }
-                },
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "SPEED FREEKS"
-                  }
-                }
-              ]
-            },
-            "effect": {
-              "type": "keyword-grant",
-              "target": "attacker",
-              "modifier": {
-                "keywords": [
-                  "Lethal Hits"
-                ]
-              }
-            }
-          }
-        ]
-      }
+      "binds_event_variable": "bust-attacks"
     },
-    "scope": {
-      "range": "unit",
-      "duration": "turn"
-    },
-    "unit_ids": [
-      "wartrakk"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 11e source",
     "faction_id": "orks"
   },
   {
@@ -8286,7 +8291,7 @@
       "edition": "11th",
       "dataslate": "codex-orks"
     },
-    "source_digest": "9b449d08e181db6b0b19d53910705e37d3c5c51ffe33f3a014a4f53263320151",
+    "source_digest": "9f9536effdf1ae4b1bc56eed716186ea6435025b5b5ffca72ac70ed276b14e9f",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -8366,7 +8371,7 @@
     },
     "scope": {
       "range": "aura-6",
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "unit_ids": [
       "nazdreg",
@@ -9662,83 +9667,44 @@
       "edition": "11th",
       "dataslate": "codex-orks"
     },
-    "source_digest": "2cd090f120ad3fa2afd08d15343777b18784cb35d89d3289f33adb271766fec4",
+    "source_digest": "d3929c0fd9033368162f0c1e10c83f117ccca2448df27a4fd2ed5cde5127ec03",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "after-unit-has-shot"
-            }
-          },
-          {
-            "type": "disposition-matches",
-            "parameters": {
-              "subject": "target",
-              "disposition": "enemy"
-            }
-          },
-          {
-            "type": "was-hit-by-attack",
-            "parameters": {
-              "subject": "target",
-              "attack_type": "ranged",
-              "weapon_name": "Squig Launcha"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "MONSTER"
-                }
-              }
-            ]
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "target-has-keyword",
-                "parameters": {
-                  "keyword": "VEHICLE"
-                }
-              }
-            ]
+      "type": "select-units",
+      "selector": {
+        "owner": "enemy",
+        "target_kind": "unit",
+        "count": 1,
+        "excluded_keywords": [
+          "MONSTER",
+          "VEHICLE"
+        ],
+        "eligibility": {
+          "type": "was-hit-by-attack",
+          "parameters": {
+            "subject": "target",
+            "attack_type": "ranged",
+            "weapon_name": "Squig Launchas",
+            "source": {
+              "event_var": "squig-attacks"
+            },
+            "window": "just-finished-shooting-sequence"
           }
-        ]
+        }
       },
       "effect": {
         "type": "sequence",
         "steps": [
           {
             "type": "ability-grant",
-            "target": "defender",
+            "target": "unit",
             "modifier": {
               "grant_type": "covered-in-squigs"
             }
           },
           {
             "type": "roll-modifier",
-            "target": "defender",
+            "target": "unit",
             "modifier": {
               "roll": "hit",
               "operation": "subtract",
@@ -9753,11 +9719,33 @@
       "duration": "until-start-next-turn"
     },
     "unit_ids": [
-      "rukkatrukk-squigbuggy"
+      "rukkatrukk-squigbuggies"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
+    "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
+    "trigger": {
+      "event": "after-unit-resolves-attacks",
+      "subject": "self",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your"
+            }
+          }
+        ]
+      },
+      "binds_event_variable": "squig-attacks"
+    },
     "faction_id": "orks"
   },
   {
@@ -9872,7 +9860,7 @@
       "edition": "11th",
       "dataslate": "codex-orks"
     },
-    "source_digest": "731e0a50652db71e586632ab905f534c5abd6a05296fb36ed134fe9658b9cc4b",
+    "source_digest": "6ce1dbc0dda22db5e016a682c712f0b9be926be2ff6564c5454f7a09720a7498",
     "version": "2025-q3",
     "effect": {
       "type": "sequence",
@@ -9893,7 +9881,7 @@
     },
     "scope": {
       "range": "unit",
-      "duration": "one-use"
+      "duration": "permanent"
     },
     "unit_ids": [
       "runtherd"
@@ -16706,12 +16694,27 @@
       "edition": "11th",
       "dataslate": "codex-orks"
     },
-    "source_digest": "48e82264948f8a7d13988049dee581b8a5640523c824afae7c06d69e85bd548b",
+    "source_digest": "2dd4e2d919d202f057eb4a7837614bc1798f59403ee36f95c6e927cef5b49f02",
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "deep-strike",
+          "target": "unit",
+          "modifier": {}
+        },
+        {
+          "type": "keyword-grant",
+          "target": "unit",
+          "modifier": {
+            "keywords": [
+              "Ignores Cover"
+            ],
+            "weapon_type": "ranged"
+          }
+        }
+      ]
     },
     "scope": {
       "range": "unit",
@@ -16725,6 +16728,210 @@
     "faction_id": "orks"
   },
   {
+    "ability_id": "grab-dat-scrap",
+    "name": "Grab Dat Scrap",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "source_digest": "9a496ed14d8d7d44537d438be68639e143c2a8c3f2adfb1e7bdd724ab1eac27e",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "engagement-state",
+        "parameters": {
+          "state": "engaged"
+        }
+      },
+      "effect": {
+        "type": "objective-control-modifier",
+        "target": "unit",
+        "modifier": {
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "ardmob-boyz"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "community_notes": "community-authored from 11e source",
+    "faction_id": "orks"
+  },
+  {
+    "ability_id": "grot-infestation-once-per-battle-per-unit",
+    "name": "Grot Infestation (Once per battle per unit)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "source_digest": "0dbd6e8851daafb22525572e8a1b2bf78fff1cb12d53304b84e853ec8d32e7d5",
+    "version": "2025-q3",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "self",
+          "modifier": {
+            "grant_type": "place-into-strategic-reserves"
+          }
+        },
+        {
+          "type": "resurrection",
+          "target": "unit",
+          "modifier": {
+            "count": "all",
+            "type": "models"
+          }
+        },
+        {
+          "type": "deep-strike",
+          "target": "self",
+          "modifier": {}
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "ardmob-gretchin"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "on-unit-destroyed",
+      "subject": "self",
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    },
+    "community_notes": "community-authored from 11e source",
+    "faction_id": "orks"
+  },
+  {
+    "ability_id": "smash-em-up",
+    "name": "Smash 'Em Up",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "source_digest": "d257121415da4847001f1bdc6ec304519cc182fa6792ba714127025f7b4fc773",
+    "version": "2025-q3",
+    "effect": {
+      "type": "choice",
+      "choice_label": "smash-em-up-melee-keyword",
+      "options": [
+        {
+          "type": "keyword-grant",
+          "target": "unit",
+          "modifier": {
+            "keywords": [
+              "Lethal Hits"
+            ],
+            "weapon_type": "melee"
+          }
+        },
+        {
+          "type": "keyword-grant",
+          "target": "unit",
+          "modifier": {
+            "keywords": [
+              "Sustained Hits 1"
+            ],
+            "weapon_type": "melee"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "unit_ids": [
+      "ardmob-warboss"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected-to-fight",
+      "subject": "self",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    },
+    "community_notes": "community-authored from 11e source",
+    "faction_id": "orks"
+  },
+  {
+    "ability_id": "totem-of-mork-psychic",
+    "name": "Totem of Mork (Psychic)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "source_digest": "78fbf9e623d3801ac21d2eaeaae92d77a151ec25780d947588a9923553e62d57",
+    "version": "2025-q3",
+    "effect": {
+      "type": "objective-tag",
+      "target": "unit",
+      "modifier": {
+        "tag": "secured"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "ardmob-weirdboy"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "end-of-phase",
+      "subject": "self",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "controls-objective",
+            "parameters": {
+              "count_min": 1
+            }
+          }
+        ]
+      }
+    },
+    "community_notes": "community-authored from 11e source",
+    "faction_id": "orks"
+  },
+  {
     "ability_id": "supreme-kunnin",
     "name": "Supreme Kunnin'",
     "authored_by": "40kdc-community",
@@ -16732,22 +16939,87 @@
       "edition": "11th",
       "dataslate": "codex-orks"
     },
-    "source_digest": "09ef6ee6c1536e0857e3fdfc9af0d1a9196e8734db03d57e7ec4dbe2ddd403fe",
+    "source_digest": "9799fde47d3abb00f3ebee3847921282c163642a58730e11393876626424df91",
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {}
+      "type": "choice",
+      "choice_label": "supreme-kunnin-move-distance",
+      "options": [
+        {
+          "type": "movement-modifier",
+          "target": "self",
+          "modifier": {
+            "move_type": "normal",
+            "distance": "D6"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "disposition-matches",
+            "parameters": {
+              "disposition": "riled-up"
+            }
+          },
+          "effect": {
+            "type": "movement-modifier",
+            "target": "self",
+            "modifier": {
+              "move_type": "normal",
+              "distance": 5
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "unit",
-      "duration": "permanent"
+      "range": "self",
+      "duration": "phase"
     },
     "unit_ids": [
       "nazdreg"
     ],
     "ability_type": "unit",
     "behavior": "reactive",
+    "trigger": {
+      "event": "enemy-unit-ended-move",
+      "subject": "enemy-unit",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent"
+            }
+          },
+          {
+            "type": "unit-within-range-of",
+            "parameters": {
+              "target_type": "triggering-enemy-unit",
+              "range": 8
+            }
+          },
+          {
+            "type": "engagement-state",
+            "parameters": {
+              "state": "unengaged"
+            }
+          }
+        ]
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-phase",
+      "per": "army"
+    },
     "faction_id": "orks"
   }
 ]

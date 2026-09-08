@@ -120,3 +120,66 @@ def test_variant_candidates_are_sorted_and_budgeted() -> None:
     candidates = loadout_candidates({"id": "u"}, 5, [], models)
     assert candidates == sorted(candidates)
     assert "Plasma×1;Melta×1" not in "\n".join(candidates)
+
+
+def test_variants_use_options_without_bypassing_variant_caps() -> None:
+    from wh40kdc.data.loadout import loadout_candidates, validate_loadout
+
+    models = [
+        {
+            "name": "Trooper",
+            "min": 2,
+            "max": 2,
+            "loadout_variants": [
+                {"name": "Rifle", "weapon_ids": ["rifle"]},
+                {"name": "Plasma", "weapon_ids": ["plasma"], "max_count": 1},
+            ],
+            "loadout_variant_budgets": [
+                {
+                    "variant_names": ["Plasma"],
+                    "count": 1,
+                    "per_models": 0,
+                    "scope": "unit",
+                }
+            ],
+        }
+    ]
+    options = [
+        {
+            "replaces": ["rifle"],
+            "replacement": ["plasma"],
+            "model_constraint": {"any_number": True},
+        },
+        {
+            "replacement": ["scanner"],
+            "model_constraint": {"max_count": 1},
+        },
+    ]
+
+    candidates = loadout_candidates({"id": "u"}, 2, options, models)
+    assert any(candidate.split(" => ")[1] == "plasma:1,rifle:1,scanner:1" for candidate in candidates)
+    for candidate in candidates:
+        counts = dict((item.split(":")[0], int(item.split(":")[1])) for item in candidate.split(" => ")[1].split(","))
+        assert validate_loadout({"id": "u"}, 2, options, counts, models) == []
+    assert validate_loadout({"id": "u"}, 2, options, {"plasma": 2}, models)
+    assert validate_loadout({"id": "u"}, 2, options, {"plasma": 2, "scanner": 1}, models)
+    assert validate_loadout({"id": "u"}, 2, options, {"rifle": 1, "plasma": 1, "scanner": 1}, models) == []
+
+
+def test_variant_legality_is_exact_even_when_candidate_output_is_truncated() -> None:
+    from wh40kdc.data.loadout import loadout_candidates, validate_loadout
+
+    models = [
+        {
+            "name": "Trooper",
+            "min": 2,
+            "max": 2,
+            "loadout_variants": [
+                {"name": "Rifle", "weapon_ids": ["rifle"]},
+                {"name": "Plasma", "weapon_ids": ["plasma"], "max_count": 1},
+            ],
+        }
+    ]
+    assert loadout_candidates({"id": "u"}, 2, [], models, limit=0) == ["…truncated"]
+    assert validate_loadout({"id": "u"}, 2, [], {"rifle": 1, "plasma": 1}, models) == []
+    assert validate_loadout({"id": "u"}, 2, [], {"plasma": 2}, models)

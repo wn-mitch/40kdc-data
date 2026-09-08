@@ -7361,5 +7361,431 @@
       "duration": "phase"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+  },
+  {
+    "ability_id": "shimmershield-kygharils-protectors-dire-avengers",
+    "name": "Shimmershield",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "c69db863c1aab1a5a171818b7efe9460a5e6dcf681caf4ddbc4e5f0a1e036e63",
+    "version": "2026-q3",
+    "unit_ids": [
+      "kygharils-protectors-dire-avengers"
+    ],
+    "faction_id": "aeldari",
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "invulnerable-save",
+      "target": "self",
+      "modifier": {
+        "invuln_sv": 4
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "forceshield-kygharils-protectors-wraithblades",
+    "name": "Forceshield",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "c69db863c1aab1a5a171818b7efe9460a5e6dcf681caf4ddbc4e5f0a1e036e63",
+    "version": "2026-q3",
+    "unit_ids": [
+      "kygharils-protectors-wraithblades"
+    ],
+    "faction_id": "aeldari",
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "invulnerable-save",
+      "target": "self",
+      "modifier": {
+        "invuln_sv": 4
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "blade-of-the-clans-clanblade",
+    "name": "Blade of the Clans",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "fd24f11860556d3a624e7a182427c87747daf4b1a6e962d3ce4dcacad163306d",
+    "version": "2026-q3",
+    "unit_ids": [
+      "clanblade"
+    ],
+    "faction_id": "aeldari",
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "weapon_type": "melee",
+        "keywords": [
+          "Sustained Hits 1"
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "aspect-shrine-token-kygharils-protectors-dire-avengers",
+    "name": "Aspect Shrine Token",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "fd2f84cd7c865aa8ccf4c9097a773b8642d9ab368b681c5f66962f787b49e8b3",
+    "version": "2026-q3",
+    "unit_ids": [
+      "kygharils-protectors-dire-avengers"
+    ],
+    "faction_id": "aeldari",
+    "ability_type": "unit",
+    "behavior": "activated",
+    "effect": {
+      "type": "choice",
+      "choice_label": "Change one roll to an unmodified 6",
+      "options": [
+        {
+          "type": "auto-result",
+          "target": "unit",
+          "modifier": {
+            "roll": "hit",
+            "result": 6
+          }
+        },
+        {
+          "type": "auto-result",
+          "target": "unit",
+          "modifier": {
+            "roll": "wound",
+            "result": 6
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
+  },
+  {
+    "ability_id": "aspect-shrine-token-kygharils-protectors-warp-spiders",
+    "name": "Aspect Shrine Token",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "fd2f84cd7c865aa8ccf4c9097a773b8642d9ab368b681c5f66962f787b49e8b3",
+    "version": "2026-q3",
+    "unit_ids": [
+      "kygharils-protectors-warp-spiders"
+    ],
+    "faction_id": "aeldari",
+    "ability_type": "unit",
+    "behavior": "activated",
+    "effect": {
+      "type": "choice",
+      "choice_label": "Change one roll to an unmodified 6",
+      "options": [
+        {
+          "type": "auto-result",
+          "target": "unit",
+          "modifier": {
+            "roll": "hit",
+            "result": 6
+          }
+        },
+        {
+          "type": "auto-result",
+          "target": "unit",
+          "modifier": {
+            "roll": "wound",
+            "result": 6
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
+  },
+  {
+    "ability_id": "engulfing-flames-kygharils-protectors-warp-spiders",
+    "name": "Engulfing Flames",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "85bf97e4d481620a0020cef28aba5a5c5932b1df20655e59e85cdfbd7ed841d7",
+    "version": "2026-q3",
+    "unit_ids": [
+      "kygharils-protectors-warp-spiders"
+    ],
+    "faction_id": "aeldari",
+    "ability_type": "unit",
+    "behavior": "activated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "selected-to-shoot"
+        }
+      },
+      "effect": {
+        "type": "keyword-grant",
+        "target": "unit",
+        "modifier": {
+          "weapon_type": "ranged",
+          "keywords": [
+            "Anti-Infantry 3+"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
+  },
+  {
+    "ability_id": "spiritseer-spiritseer-kygharil",
+    "name": "Spiritseer",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "a0ef2394e565a70345e86283a9c32213cb935772dc26fb151bfff0641d18c193",
+    "version": "2026-q3",
+    "unit_ids": [
+      "spiritseer-kygharil"
+    ],
+    "faction_id": "aeldari",
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "unit-within-range-of",
+        "parameters": {
+          "subject": "unit",
+          "target_type": "friendly-keyword",
+          "keyword": "Wraith Construct",
+          "range": 3
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "self",
+        "modifier": {
+          "ability_id": "lone-operative"
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "psychic-guidance-kygharils-protectors-wraithblades",
+    "name": "Psychic Guidance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "9ce13e8c371dd55f10660af4566546c3a3e26ef5ec3249f175ead547e99029f8",
+    "version": "2026-q3",
+    "unit_ids": [
+      "kygharils-protectors-wraithblades"
+    ],
+    "faction_id": "aeldari",
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "unit-within-range-of",
+        "parameters": {
+          "subject": "unit",
+          "target_type": "friendly-keyword",
+          "keywords": [
+            "Aeldari",
+            "Psyker"
+          ],
+          "range": 12
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "unit",
+            "modifier": {
+              "stat": "Ld",
+              "operation": "set",
+              "value": 6
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "on-the-hunt-dragon-knights",
+    "name": "On the Hunt",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "257bfed1d589044865ce018a96dc073ac4167fd25bb7303d8a1c794b51c057c7",
+    "version": "2026-q3",
+    "unit_ids": [
+      "dragon-knights"
+    ],
+    "faction_id": "aeldari",
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "fallback-and-act",
+      "target": "unit",
+      "modifier": {
+        "can_charge": true
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bladestorm-kygharils-protectors-dire-avengers",
+    "name": "Bladestorm",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "97501f336c63e1aa0e7d3786986a824f5b5cf5a0ba00a92ca646f1c92d60f80a",
+    "version": "2026-q3",
+    "unit_ids": [
+      "kygharils-protectors-dire-avengers"
+    ],
+    "faction_id": "aeldari",
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "target-within-half-weapon-range",
+        "parameters": {}
+      },
+      "effect": {
+        "type": "keyword-grant",
+        "target": "unit",
+        "modifier": {
+          "weapon_type": "ranged",
+          "keywords": [
+            "Sustained Hits 1"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cornered-prey-clanblade",
+    "name": "Cornered Prey",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "3cdeda1d44d6b5ac3b67ac45f0b60d6e5ce3243b78cb21d01cf627c3754d3fde",
+    "version": "2026-q3",
+    "unit_ids": [
+      "clanblade"
+    ],
+    "faction_id": "aeldari",
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "enemy-unit-completed-fall-back-from-bearer",
+      "subject": "enemy-unit"
+    },
+    "effect": {
+      "type": "desperate-escape",
+      "target": "triggering-unit",
+      "modifier": {
+        "required": true,
+        "roll_modifier_if_battle_shocked": -1
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    }
   }
 ]

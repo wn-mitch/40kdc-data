@@ -190,14 +190,6 @@
         "default_weapon_ids": [
           "heavy-bolt-pistol",
           "astartes-chainsword"
-        ],
-        "loadout_variants": [
-          {
-            "name": "Sword Brother w/ Twin Lightning Claws",
-            "weapon_ids": [
-              "twin-lightning-claws"
-            ]
-          }
         ]
       }
     ],
@@ -4394,9 +4386,7 @@
           "shape": "hull",
           "draft": true
         },
-        "default_weapon_ids": [
-          "drop-pod"
-        ]
+        "default_weapon_ids": []
       }
     ],
     "game_version": {
@@ -9296,4 +9286,937 @@
       "dataslate": "launch"
     }
   }
+,
+{
+  "unit_id": "askars-wolfpack-blood-claws",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Blood Claw Pack Leader",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "plasma-pistol-blood-claws",
+        "power-weapon"
+      ],
+      "is_leader_model": true
+    },
+    {
+      "name": "Blood Claw",
+      "min": 9,
+      "max": 9,
+      "default_weapon_ids": [
+        "bolt-pistol",
+        "astartes-chainsword-blood-claws"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Blood Claw Pack Leader",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "Blood Claw",
+          "min": 9,
+          "max": 9
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "askars-wolfpack-wolf-guard-terminators",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Wolf Guard Terminator Pack Leader",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "relic-greataxe"
+      ],
+      "is_leader_model": true
+    },
+    {
+      "name": "Wolf Guard Terminator with Assault Cannon and Power Fist",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "assault-cannon-wolf-guard-terminators",
+        "power-fist"
+      ]
+    },
+    {
+      "name": "Wolf Guard Terminator with Storm Bolter and Master-crafted Power Weapon",
+      "min": 3,
+      "max": 3,
+      "default_weapon_ids": [
+        "master-crafted-power-weapon-wolf-guard-terminators",
+        "storm-bolter-wolf-guard-terminators"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Wolf Guard Terminator Pack Leader",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "Wolf Guard Terminator with Assault Cannon and Power Fist",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "Wolf Guard Terminator with Storm Bolter and Master-crafted Power Weapon",
+          "min": 3,
+          "max": 3
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "askars-wolfpack-wulfen",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Wulfen with Feral Claws and Stormfrag Auto-launcher",
+      "min": 2,
+      "max": 2,
+      "default_weapon_ids": [
+        "death-totem",
+        "frost-blades-and-feral-claws",
+        "stormfrag-auto-launcher"
+      ]
+    },
+    {
+      "name": "Wulfen with Feral Claws",
+      "min": 3,
+      "max": 3,
+      "default_weapon_ids": [
+        "death-totem",
+        "frost-blades-and-feral-claws"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Wulfen with Feral Claws and Stormfrag Auto-launcher",
+          "min": 2,
+          "max": 2
+        },
+        {
+          "name": "Wulfen with Feral Claws",
+          "min": 3,
+          "max": 3
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "assault-force-captain",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Captain",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "heavy-bolt-pistol-captain",
+        "master-crafted-power-weapon-captain"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Captain",
+          "min": 1,
+          "max": 1
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "assault-force-intercessor-squad",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Intercessor Sergeant",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "bolt-pistol",
+        "bolt-rifle",
+        "chainsword",
+        "knives-and-fists"
+      ],
+      "is_leader_model": true
+    },
+    {
+      "name": "Intercessor with Grenade Launcher",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "bolt-pistol",
+        "bolt-rifle",
+        "grenade-launcher",
+        "knives-and-fists"
+      ]
+    },
+    {
+      "name": "Intercessor",
+      "min": 3,
+      "max": 3,
+      "default_weapon_ids": [
+        "bolt-pistol",
+        "bolt-rifle",
+        "knives-and-fists"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Intercessor Sergeant",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "Intercessor with Grenade Launcher",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "Intercessor",
+          "min": 3,
+          "max": 3
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "assault-force-land-speeder",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Land Speeder",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "armoured-impact",
+        "heavy-flamer",
+        "multi-melta",
+        "stormfury-missile-launcher"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Land Speeder",
+          "min": 1,
+          "max": 1
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "assault-force-librarian",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Librarian",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "bolt-pistol",
+        "force-weapon",
+        "fulmination"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Librarian",
+          "min": 1,
+          "max": 1
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "assault-force-vanguard-veteran-squad-with-jump-packs",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Vanguard Veteran Sergeant",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "heavy-bolt-pistol",
+        "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs"
+      ],
+      "is_leader_model": true
+    },
+    {
+      "name": "Vanguard Veteran with Plasma Pistol",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs",
+        "plasma-pistol-vanguard-veteran-squad-with-jump-packs"
+      ]
+    },
+    {
+      "name": "Vanguard Veteran",
+      "min": 3,
+      "max": 3,
+      "default_weapon_ids": [
+        "heavy-bolt-pistol",
+        "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Vanguard Veteran Sergeant",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "Vanguard Veteran with Plasma Pistol",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "Vanguard Veteran",
+          "min": 3,
+          "max": 3
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "captain-raldeo",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Captain Raldeo",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "inferno-pistol-blood-angels-captain",
+        "master-crafted-chainsword"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Captain Raldeo",
+          "min": 1,
+          "max": 1
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "emperors-champion-vedrenn",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Emperor's Champion Vedrenn",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "black-sword",
+        "bolt-pistol-emperors-champion"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Emperor's Champion Vedrenn",
+          "min": 1,
+          "max": 1
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "fyrri-askar",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Fyrri Askar",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "master-crafted-power-weapon"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Fyrri Askar",
+          "min": 1,
+          "max": 1
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "master-zacharial",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Master Zacharial",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "boltstorm-gauntlet",
+        "power-fist-captain-in-gravis-armour",
+        "relic-chainsword"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Master Zacharial",
+          "min": 1,
+          "max": 1
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "sanguinary-spearhead-assault-intercessor-squad",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Assault Intercessor Sergeant",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "astartes-chainsword-assault-intercessor-squad",
+        "plasma-pistol-assault-intercessor-squad"
+      ],
+      "is_leader_model": true
+    },
+    {
+      "name": "Assault Intercessor",
+      "min": 9,
+      "max": 9,
+      "default_weapon_ids": [
+        "astartes-chainsword-assault-intercessor-squad",
+        "heavy-bolt-pistol"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Assault Intercessor Sergeant",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "Assault Intercessor",
+          "min": 9,
+          "max": 9
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "sanguinary-spearhead-sanguinary-guard",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Sanguinary Guard with Encarmine Blade",
+      "min": 3,
+      "max": 3,
+      "default_weapon_ids": [
+        "encarmine-blade",
+        "angelus-boltgun"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Sanguinary Guard with Encarmine Blade",
+          "min": 3,
+          "max": 3
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "vengeful-brethren-bladeguard-veteran-squad",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Bladeguard Veteran Sergeant",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "heavy-bolt-pistol",
+        "master-crafted-power-weapon-bladeguard-veteran-squad"
+      ],
+      "is_leader_model": true
+    },
+    {
+      "name": "Bladeguard Veteran",
+      "min": 2,
+      "max": 2,
+      "default_weapon_ids": [
+        "heavy-bolt-pistol",
+        "master-crafted-power-weapon-bladeguard-veteran-squad"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Bladeguard Veteran Sergeant",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "Bladeguard Veteran",
+          "min": 2,
+          "max": 2
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "vengeful-brethren-hellblaster-squad",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Hellblaster Sergeant",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "bolt-pistol",
+        "knives-and-fists",
+        "plasma-incinerator"
+      ],
+      "is_leader_model": true
+    },
+    {
+      "name": "Hellblaster",
+      "min": 4,
+      "max": 4,
+      "default_weapon_ids": [
+        "bolt-pistol",
+        "knives-and-fists",
+        "plasma-incinerator"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Hellblaster Sergeant",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "Hellblaster",
+          "min": 4,
+          "max": 4
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "vengeful-brethren-intercessor-squad",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Intercessor Sergeant",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "bolt-pistol",
+        "bolt-rifle",
+        "knives-and-fists"
+      ],
+      "is_leader_model": true
+    },
+    {
+      "name": "Intercessor",
+      "min": 9,
+      "max": 9,
+      "default_weapon_ids": [
+        "bolt-pistol",
+        "bolt-rifle",
+        "knives-and-fists"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Intercessor Sergeant",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "Intercessor",
+          "min": 9,
+          "max": 9
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "vow-sworn-bladeguard-veteran-squad",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Bladeguard Veteran Sergeant",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "neo-volkite-pistol",
+        "master-crafted-power-weapon-bladeguard-veteran-squad"
+      ],
+      "is_leader_model": true
+    },
+    {
+      "name": "Bladeguard Veteran",
+      "min": 2,
+      "max": 2,
+      "default_weapon_ids": [
+        "heavy-bolt-pistol",
+        "master-crafted-power-weapon-bladeguard-veteran-squad"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Bladeguard Veteran Sergeant",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "Bladeguard Veteran",
+          "min": 2,
+          "max": 2
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "vow-sworn-crusader-squad",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Initiate with Pyreblaster, Bolt Pistol and Knives and Fists",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "bolt-pistol",
+        "knives-and-fists",
+        "pyreblaster"
+      ]
+    },
+    {
+      "name": "Sword Brother",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "heavy-bolt-pistol",
+        "master-crafted-power-weapon-crusader-squad"
+      ],
+      "is_leader_model": true
+    },
+    {
+      "name": "Initiate with Bolt Pistol, Bolt Rifle and Knives and Fists",
+      "min": 2,
+      "max": 2,
+      "default_weapon_ids": [
+        "bolt-pistol",
+        "bolt-rifle",
+        "knives-and-fists"
+      ]
+    },
+    {
+      "name": "Initiate with Heavy Bolt Pistol and Chainsword",
+      "min": 2,
+      "max": 2,
+      "default_weapon_ids": [
+        "astartes-chainsword-crusader-squad",
+        "heavy-bolt-pistol"
+      ]
+    },
+    {
+      "name": "Neophyte with Bolt Pistol and Chainsword",
+      "min": 2,
+      "max": 2,
+      "default_weapon_ids": [
+        "bolt-pistol",
+        "astartes-chainsword-crusader-squad"
+      ]
+    },
+    {
+      "name": "Neophyte with Neophyte Firearm and Knives and Fists",
+      "min": 2,
+      "max": 2,
+      "default_weapon_ids": [
+        "knives-and-fists",
+        "neophyte-firearm"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Initiate with Pyreblaster, Bolt Pistol and Knives and Fists",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "Sword Brother",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "Initiate with Bolt Pistol, Bolt Rifle and Knives and Fists",
+          "min": 2,
+          "max": 2
+        },
+        {
+          "name": "Initiate with Heavy Bolt Pistol and Chainsword",
+          "min": 2,
+          "max": 2
+        },
+        {
+          "name": "Neophyte with Bolt Pistol and Chainsword",
+          "min": 2,
+          "max": 2
+        },
+        {
+          "name": "Neophyte with Neophyte Firearm and Knives and Fists",
+          "min": 2,
+          "max": 2
+        }
+      ]
+    }
+  ]
+},
+{
+  "unit_id": "vow-sworn-sword-brethren-squad",
+  "faction_id": "adeptus-astartes",
+  "models": [
+    {
+      "name": "Sword Brother Castellan",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "combi-weapon",
+        "master-crafted-power-weapon-crusader-squad"
+      ],
+      "is_leader_model": true
+    },
+    {
+      "name": "Sword Brother with Heavy Bolt Pistol and Chainsword",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "astartes-chainsword",
+        "heavy-bolt-pistol"
+      ]
+    },
+    {
+      "name": "Sword Brother with Plasma Pistol and Master-crafted Power Weapon",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "master-crafted-power-weapon-crusader-squad",
+        "plasma-pistol"
+      ]
+    },
+    {
+      "name": "Sword Brother with Pyre Pistol and Master-crafted Power Weapon",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "master-crafted-power-weapon-crusader-squad",
+        "pyre-pistol"
+      ]
+    },
+    {
+      "name": "Sword Brother with Twin Lightning Claws",
+      "min": 1,
+      "max": 1,
+      "default_weapon_ids": [
+        "twin-lightning-claws"
+      ]
+    }
+  ],
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "tiers": [
+    {
+      "models": [
+        {
+          "name": "Sword Brother Castellan",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "Sword Brother with Heavy Bolt Pistol and Chainsword",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "Sword Brother with Plasma Pistol and Master-crafted Power Weapon",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "Sword Brother with Pyre Pistol and Master-crafted Power Weapon",
+          "min": 1,
+          "max": 1
+        },
+        {
+          "name": "Sword Brother with Twin Lightning Claws",
+          "min": 1,
+          "max": 1
+        }
+      ]
+    }
+  ]
+}
 ]

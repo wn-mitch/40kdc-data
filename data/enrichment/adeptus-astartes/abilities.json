@@ -4572,14 +4572,29 @@
     "source_digest": "e7e235af9ad73b7483179d4d56443409917bdf02986bc7fc7eccf3e27ece8ecc",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "self",
-      "modifier": {
-        "ability_id": "lone-operative"
+      "type": "conditional",
+      "condition": {
+        "type": "unit-within-range-of",
+        "parameters": {
+          "subject": "self",
+          "target_type": "friendly-keyword",
+          "keywords": [
+            "ADEPTUS ASTARTES",
+            "VEHICLE"
+          ],
+          "range": 3
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "self",
+        "modifier": {
+          "grant_type": "lone-operative"
+        }
       }
     },
     "scope": {
-      "range": "aura-6",
+      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -4597,25 +4612,77 @@
       "dataslate": "pre-launch-provisional"
     },
     "source_digest": "e5225e61a26bbb16680e2796c526e9396465ff98e8b60bdbc5ae75bd5fc9835e",
-    "version": "2025-q3",
     "effect": {
-      "type": "roll-modifier",
-      "target": "unit",
-      "modifier": {
-        "roll": "hit",
-        "operation": "add",
-        "value": 1
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "owner": "friendly",
+          "max_count": 1,
+          "target_kind": "model",
+          "keywords": [
+            "ADEPTUS ASTARTES",
+            "VEHICLE"
+          ],
+          "range_inches": 3,
+          "selection_limit": {
+            "count": 1,
+            "period": "turn"
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "heal-wounds",
+              "target": "unit",
+              "modifier": {
+                "amount": "D3"
+              }
+            },
+            {
+              "type": "roll-modifier",
+              "target": "unit",
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          ]
+        }
       }
     },
     "scope": {
-      "range": "aura-6",
+      "range": "self",
       "duration": "until-next-command-phase"
     },
     "unit_ids": [
       "techmarine"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "activated",
+    "usage": {
+      "frequency": "once-per-command-phase",
+      "per": "model"
+    }
   },
   {
     "ability_id": "vengeance-of-the-omnissiah",
@@ -5181,11 +5248,25 @@
     "source_digest": "0359e9f387938151d81e4a03e48f76d9ae3c4a968c96734c73819aa941b7447f",
     "version": "2025-q3",
     "effect": {
-      "type": "re-roll",
-      "target": "unit",
+      "type": "aura",
+      "target": "friendly-within-aura",
       "modifier": {
-        "roll": "hit",
-        "subset": "ones"
+        "range": 6,
+        "recipient_filter": {
+          "required_keywords": [
+            "ADEPTUS ASTARTES",
+            "INFANTRY"
+          ]
+        },
+        "effect": {
+          "type": "re-roll",
+          "target": "unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones",
+            "optional": false
+          }
+        }
       }
     },
     "scope": {
@@ -9579,45 +9660,6 @@
     "behavior": "passive",
     "disputed": true,
     "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
-  },
-  {
-    "ability_id": "guidance-of-the-ancients-psychic",
-    "name": "Guidance of the Ancients (Psychic)",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ef4598aba86a562d79e1a5cb8245c6712ee2769bfcf1aad393ca823a430fe3de",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "unit",
-        "modifier": {
-          "roll": "hit",
-          "operation": "add",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "venerable-dreadnought"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
   },
   {
     "ability_id": "fervour-of-the-ancients-aura",
@@ -19348,4 +19390,311 @@
     },
     "community_notes": "While this unit is within Engagement Range of one or more enemy units, it has +2 OC"
   }
+,
+{
+  "ability_id": "gravis-protection",
+  "name": "Gravis Protection",
+  "authored_by": "40kdc-community",
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "source_digest": "f87eb1cbf06306e8339d03888db0fb75c0dbec9a007363234b7e1a4d29ca949f",
+  "version": "2026-q3",
+  "unit_ids": [
+    "master-zacharial"
+  ],
+  "ability_type": "unit",
+  "behavior": "passive",
+  "effect": {
+    "type": "stat-modifier",
+    "target": "unit",
+    "modifier": {
+      "stat": "D",
+      "operation": "subtract",
+      "value": 1,
+      "incoming": true
+    }
+  },
+  "scope": {
+    "range": "unit",
+    "duration": "permanent"
+  }
+},
+{
+  "ability_id": "punishing-volley",
+  "name": "Punishing Volley",
+  "authored_by": "40kdc-community",
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "source_digest": "c3ed3aff6d8646ec2d675116c1d9fb463940666e487a6c3d713e07f4db7e2fe0",
+  "version": "2026-q3",
+  "unit_ids": [
+    "vengeful-brethren-hellblaster-squad"
+  ],
+  "ability_type": "unit",
+  "behavior": "activated",
+  "effect": {
+    "type": "conditional",
+    "condition": {
+      "operator": "and",
+      "operands": [
+        {
+          "type": "timing-is",
+          "parameters": {
+            "timing": "after-unit-resolves-attacks"
+          }
+        },
+        {
+          "type": "was-hit-by-attack",
+          "parameters": {
+            "subject": "target",
+            "count_min": 1
+          }
+        }
+      ]
+    },
+    "effect": {
+      "type": "battle-shock-test",
+      "target": "target",
+      "modifier": {}
+    }
+  },
+  "scope": {
+    "range": "unit",
+    "duration": "phase"
+  }
+}
+,
+{
+  "ability_id": "targeted-intercession-combat-patrol",
+  "name": "Targeted Intercession",
+  "authored_by": "40kdc-community",
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "source_digest": "a7bb5653947bcf4e361d78804ff0c304bba0e630db7eb82a21740f8bd57b4314",
+  "version": "2026-q3",
+  "unit_ids": [
+    "captain-raldeo",
+    "sanguinary-spearhead-assault-intercessor-squad"
+  ],
+  "ability_type": "unit",
+  "behavior": "passive",
+  "effect": {
+    "type": "conditional",
+    "condition": {
+      "type": "phase-is",
+      "parameters": {
+        "phase": "fight"
+      }
+    },
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "unit",
+          "modifier": {
+            "roll": "wound",
+            "subset": "ones",
+            "attack_type": "melee"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "within-range-of-objective",
+            "parameters": {
+              "subject": "target"
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "all-failures",
+              "attack_type": "melee"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "scope": {
+    "range": "unit",
+    "duration": "permanent"
+  }
+},
+{
+  "ability_id": "righteous-zeal-vow-sworn",
+  "name": "Righteous Zeal",
+  "authored_by": "40kdc-community",
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "source_digest": "19fc5786bc0198e1530c19a5a7a603ad083e07591bf3c3900288d564bb67615a",
+  "version": "2026-q3",
+  "unit_ids": [
+    "vow-sworn-crusader-squad"
+  ],
+  "ability_type": "unit",
+  "behavior": "reactive",
+  "usage": {
+    "frequency": "once-per-turn",
+    "per": "unit"
+  },
+  "effect": {
+    "type": "conditional",
+    "condition": {
+      "operator": "and",
+      "operands": [
+        {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "shooting"
+          }
+        },
+        {
+          "type": "player-turn-is",
+          "parameters": {
+            "turn": "opponent"
+          }
+        },
+        {
+          "type": "destroyed-by-attack-type",
+          "parameters": {
+            "attack_type": "ranged"
+          }
+        },
+        {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "opponent-unit-within-range",
+              "parameters": {
+                "range": "engagement"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "effect": {
+      "type": "movement-modifier",
+      "target": "unit",
+      "modifier": {
+        "move_type": "reactive",
+        "name": "Righteous Zeal",
+        "distance": "D6+2"
+      }
+    }
+  },
+  "scope": {
+    "range": "unit",
+    "duration": "phase"
+  }
+},
+{
+  "ability_id": "rugged-resilience-askars-wolfpack",
+  "name": "Rugged Resilience",
+  "authored_by": "40kdc-community",
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "source_digest": "1b57b90a43fd6fb7ac87e9fa018b3fcce8e46613320a51f7b0bd1e4470b396c7",
+  "version": "2026-q3",
+  "effect": {
+    "type": "conditional",
+    "condition": {
+      "type": "attack-stat-compare",
+      "parameters": {
+        "attacker_stat": "S",
+        "comparison": "greater-than",
+        "target_stat": "T"
+      }
+    },
+    "effect": {
+      "type": "roll-modifier",
+      "target": "attacker",
+      "modifier": {
+        "roll": "wound",
+        "operation": "subtract",
+        "value": 1
+      }
+    }
+  },
+  "scope": {
+    "range": "unit",
+    "duration": "attack-sequence"
+  },
+  "unit_ids": [
+    "askars-wolfpack-wolf-guard-terminators"
+  ],
+  "ability_type": "unit",
+  "behavior": "passive"
+},
+{
+  "ability_id": "heroic-last-stand-fyrri-askar",
+  "name": "Heroic Last Stand",
+  "authored_by": "40kdc-community",
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "source_digest": "65f6e0e9dcf9650506c832ee5d25b9a8ef80e424852b29d7d0af9dd4e7dfc90a",
+  "version": "2026-q3",
+  "trigger": {
+    "event": "on-model-destroyed",
+    "subject": "bearer",
+    "condition": {
+      "operator": "and",
+      "operands": [
+        {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "fight"
+          }
+        },
+        {
+          "type": "has-fought-this-phase",
+          "negated": true,
+          "parameters": {
+            "subject": "destroyed-model"
+          }
+        }
+      ]
+    }
+  },
+  "effect": {
+    "type": "dice-gated",
+    "dice": "D6",
+    "threshold": 2,
+    "comparison": "gte",
+    "on_success": {
+      "type": "fight-on-death",
+      "target": "destroyed-model",
+      "modifier": {
+        "resolution": "when-unit-fights",
+        "removal": "after-unit-fights-or-phase-end"
+      }
+    },
+    "on_fail": null
+  },
+  "scope": {
+    "range": "unit",
+    "duration": "phase"
+  },
+  "unit_ids": [
+    "fyrri-askar"
+  ],
+  "ability_type": "unit",
+  "behavior": "reactive"
+}
 ]

@@ -12,7 +12,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "unit-is-led-by",
+        "parameters": {
+          "keyword": "ADEPTA SORORITAS CHARACTER"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -120,15 +123,42 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "destroyed-by-attack-type",
+            "parameters": {
+              "attack_type": "melee"
+            }
+          },
+          {
+            "type": "has-fought-this-phase",
+            "negated": true,
+            "parameters": {
+              "subject": "destroyed-model"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "fight-on-death",
-        "target": "self",
-        "modifier": {}
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 2,
+        "comparison": "gte",
+        "on_success": {
+          "type": "fight-on-death",
+          "target": "destroyed-model",
+          "modifier": {
+            "resolution": "when-unit-fights",
+            "removal": "after-unit-fights-or-phase-end"
+          }
+        }
       }
     },
     "scope": {
@@ -152,13 +182,27 @@
     "source_digest": "2afa67a0868278f3756199ebb0172bd4d678efa31de7119f8389757827d4b21e",
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "self",
-      "modifier": {
-        "stat": "M",
-        "operation": "set",
-        "value": 7
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "self",
+          "modifier": {
+            "stat": "M",
+            "operation": "set",
+            "value": 7
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "self",
+          "modifier": {
+            "stat": "Sv",
+            "operation": "set",
+            "value": 3
+          }
+        }
+      ]
     },
     "scope": {
       "range": "unit",
@@ -233,9 +277,11 @@
     "source_digest": "98fc5d0ec136db92dbaf4239c7ea51df203850797714bd06c55387dada576772",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-refund",
-      "target": "self",
+      "type": "stratagem-cost-modifier",
+      "target": "unit",
       "modifier": {
+        "applies_to": "triggering-stratagem-use",
+        "operation": "decrease",
         "amount": 1
       }
     },
@@ -247,7 +293,16 @@
       "canoness-with-jump-pack"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
+    },
+    "trigger": {
+      "event": "stratagem-targeted",
+      "subject": "friendly-unit",
+      "optional": true
+    }
   },
   {
     "ability_id": "divine-deliverance",
@@ -262,30 +317,43 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "start-of-fight-phase"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "sequence",
         "steps": [
           {
             "type": "stat-modifier",
-            "target": "unit",
+            "target": "self",
             "modifier": {
               "stat": "A",
               "operation": "add",
-              "value": 3
+              "value": 3,
+              "weapon_type": "melee"
             }
           },
           {
             "type": "keyword-grant",
-            "target": "unit",
+            "target": "self",
             "modifier": {
               "keywords": [
                 "Devastating Wounds"
-              ]
+              ],
+              "weapon_type": "melee"
             }
           }
         ]
@@ -300,7 +368,9 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "auto-generated, partial"
+    "usage": {
+      "frequency": "once-per-battle"
+    }
   },
   {
     "ability_id": "fury-of-the-righteous",
@@ -348,23 +418,42 @@
     "source_digest": "31d06f446524facd1975a55d93610fde2f3baceeb3c1a436a08a0fec343fb026",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
+      "type": "named-effect",
+      "name": "Rapturous Blows",
+      "optional": true,
+      "cost": {
+        "type": "resource-spend",
+        "target": "self",
+        "modifier": {
+          "pool_id": "miracle-dice-pool",
+          "amount": 1
         }
       },
+      "trigger": {
+        "event": "selected-to-fight",
+        "subject": "unit"
+      },
+      "duration": "phase",
       "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": "1"
+        "type": "conditional",
+        "condition": {
+          "type": "attack-is-type",
+          "parameters": {
+            "attack_type": "melee"
+          }
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "defender",
+          "modifier": {
+            "count": "1",
+            "in_addition_to_normal_damage": true
+          }
         }
       }
     },
     "scope": {
-      "range": "unit",
+      "range": "self",
       "duration": "phase"
     },
     "unit_ids": [
@@ -411,12 +500,23 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
-      "modifier": {
-        "keywords": [
-          "Sustained Hits 1"
-        ]
+      "type": "conditional",
+      "condition": {
+        "type": "unit-model-count",
+        "parameters": {
+          "keyword": "Ministorum Priest",
+          "count_min": 1
+        }
+      },
+      "effect": {
+        "type": "keyword-grant",
+        "target": "unit",
+        "modifier": {
+          "keywords": [
+            "Sustained Hits 1"
+          ],
+          "weapon_type": "melee"
+        }
       }
     },
     "scope": {
@@ -439,11 +539,20 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "resource-gain",
-      "target": "self",
-      "modifier": {
-        "pool_id": "miracle-dice-pool",
-        "amount": 1
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "act-of-faith-completed"
+        }
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "self",
+        "modifier": {
+          "pool_id": "miracle-dice-pool",
+          "amount": 1
+        }
       }
     },
     "scope": {
@@ -454,8 +563,7 @@
       "sanctifiers"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "[APPROX] Once per battle, after the unit performs an Act of Faith, gain 1 Miracle dice; the after-Act-of-Faith trigger is not gated. Full rule in raw-text store."
+    "behavior": "activated"
   },
   {
     "ability_id": "salvationist-medikit",
@@ -468,10 +576,40 @@
     "source_digest": "392dd836fe1a5c269be6cb61a9368372458348a6487b2435a7b0ae80c875cf23",
     "version": "2025-q3",
     "effect": {
-      "type": "resurrection",
-      "target": "unit",
-      "modifier": {
-        "count": "d3"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your"
+            }
+          },
+          {
+            "type": "on-battlefield",
+            "parameters": {
+              "subject": "self"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "resurrection",
+        "target": "unit",
+        "modifier": {
+          "count": "d3",
+          "up_to": true,
+          "exclude_keywords": [
+            "CHARACTER"
+          ]
+        }
       }
     },
     "scope": {
@@ -505,18 +643,22 @@
             }
           },
           {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your"
+            }
+          },
+          {
             "type": "timing-is",
             "parameters": {
               "timing": "end-of-phase"
             }
           },
           {
-            "type": "controls-objective",
-            "parameters": {}
+            "type": "controls-objective"
           },
           {
-            "type": "within-range-of-objective",
-            "parameters": {}
+            "type": "within-range-of-objective"
           }
         ]
       },
@@ -526,25 +668,24 @@
         "threshold": 4,
         "comparison": "gte",
         "on_success": {
-          "type": "resource-gain",
+          "type": "pool-add-die",
           "target": "self",
           "modifier": {
             "pool_id": "miracle-dice-pool",
-            "amount": 1
+            "value": "rolled"
           }
         }
       }
     },
     "scope": {
       "range": "self",
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "sanctifiers"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive"
   },
   {
     "ability_id": "attached-unit",
@@ -557,15 +698,17 @@
     "source_digest": "9216ab16de6014f5b93d492d7ddde76e2352e1161d48f9d868f4ba107517f23a",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "is-attached"
-      },
+      "type": "leader-model-ability-grant",
+      "leader_keyword": "Ministorum Priest",
+      "eligibility_source_unit": "battle-sisters-squad",
+      "attached_to": "sanctifiers",
+      "formation_timing": "declare-battle-formations",
       "effect": {
-        "type": "ability-grant",
-        "target": "unit",
+        "type": "movement-modifier",
+        "target": "bearer",
         "modifier": {
-          "ability_id": "attached-unit-eligibility"
+          "move_type": "scout",
+          "distance": 6
         }
       }
     },
@@ -613,7 +756,7 @@
         "steps": [
           {
             "type": "stat-modifier",
-            "target": "self",
+            "target": "unit",
             "modifier": {
               "stat": "A",
               "operation": "set",
@@ -623,7 +766,7 @@
           },
           {
             "type": "keyword-grant",
-            "target": "self",
+            "target": "unit",
             "modifier": {
               "keywords": [
                 "Hazardous"
@@ -635,15 +778,14 @@
       }
     },
     "scope": {
-      "range": "self",
+      "range": "unit",
       "duration": "phase"
     },
     "unit_ids": [
       "arco-flagellants"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "activated"
   },
   {
     "ability_id": "rituale-nullificatus",
@@ -660,7 +802,7 @@
       "target": "unit",
       "modifier": {
         "threshold": 4,
-        "scope": "psychic"
+        "scope": "psychic-and-mortal"
       }
     },
     "scope": {
@@ -684,26 +826,42 @@
     "source_digest": "2bb6174fbe23e34798b4b44f06231c2cf2ffd7921dd4dc4713f0f9589868ec70",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "re-roll",
-          "target": "unit",
-          "modifier": {
-            "roll": "hit",
-            "subset": "all-failures"
-          }
-        },
-        {
-          "type": "keyword-grant",
-          "target": "unit",
-          "modifier": {
-            "keywords": [
-              "Precision"
-            ]
-          }
+      "type": "persistent-designation",
+      "designation": "quarry",
+      "duration": "battle",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "timing": "start-of-battle",
+        "allow_while_embarked": true
+      },
+      "consumer": {
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "re-roll",
+              "target": "unit",
+              "modifier": {
+                "roll": "hit",
+                "result_scope": "any-result"
+              }
+            },
+            {
+              "type": "keyword-grant",
+              "target": "unit",
+              "modifier": {
+                "keywords": [
+                  "Precision"
+                ]
+              }
+            }
+          ]
         }
-      ]
+      },
+      "applies": {
+        "to": "bearer-attacks-target"
+      }
     },
     "scope": {
       "range": "unit",
@@ -713,8 +871,7 @@
       "celestian-insidiants"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "behavior": "passive"
   },
   {
     "ability_id": "denuncia-oratory",
@@ -727,19 +884,20 @@
     "source_digest": "c61132b8b764afe816d94c79637370bbfec332fd18df8c7a7ac9802600bca631",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "units-destroyed",
-        "parameters": {
-          "side": "enemy",
-          "count_min": 1
-        }
+      "type": "designate-target",
+      "designation": "quarry",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "timing": "when-designated-quarry-destroyed"
       },
-      "effect": {
-        "type": "ability-grant",
-        "target": "self",
-        "modifier": {
-          "grant_type": "select-new-quarry"
+      "duration": "battle",
+      "applies": {
+        "to": "bearer-attacks-target",
+        "effect": {
+          "type": "no-effect",
+          "target": "self",
+          "modifier": {}
         }
       }
     },
@@ -751,8 +909,7 @@
       "celestian-insidiants"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive"
   },
   {
     "ability_id": "litany-of-deeds",
@@ -770,39 +927,39 @@
         "operator": "and",
         "operands": [
           {
-            "type": "units-destroyed",
+            "type": "timing-is",
             "parameters": {
-              "side": "friendly",
-              "window": "current",
-              "count_min": 1
+              "timing": "friendly-adepta-sororitas-unit-destroyed-generates-miracle-die"
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "unit-within-range-of",
             "parameters": {
-              "keyword": "ADEPTA SORORITAS"
+              "target_type": "friendly-keyword",
+              "keyword": "ADEPTA SORORITAS",
+              "range": 12
             }
           }
         ]
       },
       "effect": {
-        "type": "ability-grant",
+        "type": "re-roll",
         "target": "self",
         "modifier": {
-          "grant_type": "miracle-dice-reroll-before-pool"
+          "roll": "miracle-die",
+          "result_scope": "any-result"
         }
       }
     },
     "scope": {
-      "range": "aura-12",
-      "duration": "turn"
+      "range": "self",
+      "duration": "permanent"
     },
     "unit_ids": [
       "imagifier"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive"
   },
   {
     "ability_id": "stanchion-of-holy-martyrs",
@@ -817,16 +974,28 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "model-is-leader"
       },
       "effect": {
-        "type": "stat-modifier",
-        "target": "unit",
-        "modifier": {
-          "stat": "Sv",
-          "operation": "set",
-          "value": 2
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "unit",
+            "modifier": {
+              "stat": "Sv",
+              "operation": "set",
+              "value": 2
+            }
+          },
+          {
+            "type": "invulnerable-save",
+            "target": "unit",
+            "modifier": {
+              "value": 4
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -837,8 +1006,7 @@
       "imagifier"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "behavior": "passive"
   },
   {
     "ability_id": "relics-of-the-matriarchs",
@@ -859,24 +1027,21 @@
         }
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "self",
-        "modifier": {
-          "grant_type": "relics-of-matriarchs",
-          "max_count": 2
-        }
+        "type": "choice",
+        "choice_prompt": "select up to two Relics of the Matriarchs abilities",
+        "max_choices": 2,
+        "options": []
       }
     },
     "scope": {
       "range": "self",
-      "duration": "battle-round"
+      "duration": "until-next-battle-round"
     },
     "unit_ids": [
       "triumph-of-saint-katherine"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "activated"
   },
   {
     "ability_id": "solemn-procession",
@@ -891,10 +1056,21 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "start-of-battle-round"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "start-of-battle-round"
+            }
+          },
+          {
+            "type": "engagement-state",
+            "parameters": {
+              "state": "on-battlefield"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "pool-add-die",
@@ -907,14 +1083,13 @@
     },
     "scope": {
       "range": "self",
-      "duration": "battle-round"
+      "duration": "permanent"
     },
     "unit_ids": [
       "triumph-of-saint-katherine"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "The Triumph contributes a guaranteed value-6 Miracle die to the pool each battle round; modeled with the pooled-resource `pool-add-die` effect. Previously punted as an opaque ability-grant grant_type."
+    "behavior": "reactive"
   },
   {
     "ability_id": "angelic-ascent",
@@ -965,10 +1140,22 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "fight"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "unit-model-count",
+            "parameters": {
+              "keyword": "Repentia Superior",
+              "count_min": 1
+            }
+          },
+          {
+            "type": "attack-is-type",
+            "parameters": {
+              "attack_type": "melee"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "sequence",
@@ -978,7 +1165,8 @@
             "target": "unit",
             "modifier": {
               "roll": "hit",
-              "subset": "all-failures"
+              "model_keyword": "Sisters Repentia",
+              "result_scope": "any-result"
             }
           },
           {
@@ -986,7 +1174,8 @@
             "target": "unit",
             "modifier": {
               "roll": "wound",
-              "subset": "all-failures"
+              "model_keyword": "Sisters Repentia",
+              "result_scope": "any-result"
             }
           }
         ]
@@ -1000,8 +1189,7 @@
       "repentia-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "behavior": "passive"
   },
   {
     "ability_id": "laud-hailer",
@@ -1014,10 +1202,22 @@
     "source_digest": "49cd58670b7ca0cdd9dad6f27cfae3ac233fc26f6535c0aea8c674ec41dc8326",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "ability_id": "once-per-battle-special"
+      "type": "select-units",
+      "selector": {
+        "scope": "friendly-unit",
+        "count": 1,
+        "range": 12,
+        "required_keywords": [
+          "ADEPTA SORORITAS"
+        ],
+        "eligibility": {
+          "type": "is-battle-shocked"
+        }
+      },
+      "effect": {
+        "type": "remove-battle-shock",
+        "target": "selected-models-unit",
+        "modifier": {}
       }
     },
     "scope": {
@@ -1028,7 +1228,15 @@
       "dialogus"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "usage": {
+      "frequency": "once-per-battle"
+    },
+    "trigger": {
+      "event": "start-of-phase",
+      "subject": "self",
+      "optional": true
+    }
   },
   {
     "ability_id": "stirring-rhetoric",
@@ -1043,35 +1251,39 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "model-is-leader"
+        "operator": "and",
+        "operands": [
+          {
+            "type": "model-is-leader"
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "act-of-faith"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "timing-is",
-          "parameters": {
-            "timing": "act-of-faith"
-          }
-        },
-        "effect": {
-          "type": "ability-grant",
-          "target": "unit",
-          "modifier": {
-            "grant_type": "miracle-dice-value-set-6"
-          }
+        "type": "roll-modifier",
+        "target": "unit",
+        "modifier": {
+          "roll": "miracle-die",
+          "operation": "set",
+          "value": 6,
+          "amount": 1
         }
       }
     },
     "scope": {
       "range": "unit",
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "dialogus"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive"
   },
   {
     "ability_id": "executioner-of-heretics-aura",
@@ -1192,21 +1404,40 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "after-unit-resolves-attacks"
+            }
+          },
+          {
+            "type": "was-hit-by-attack",
+            "parameters": {
+              "subject": "target",
+              "count_min": 1
+            }
+          }
+        ]
       },
       "effect": {
         "type": "ability-grant",
-        "target": "unit",
+        "target": "target",
         "modifier": {
-          "ability_id": "benefit-of-cover"
+          "ability_id": "benefit-of-cover",
+          "enabled": false
         }
       }
     },
     "scope": {
-      "range": "unit",
+      "range": "self",
       "duration": "phase"
     },
     "unit_ids": [
@@ -1261,14 +1492,63 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "operator": "and",
+        "operands": [
+          {
+            "type": "model-is-leader"
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "resurrection",
-        "target": "unit",
-        "modifier": {
-          "count": "1"
-        }
+        "type": "choice",
+        "choice_prompt": "select one",
+        "options": [
+          {
+            "type": "resurrection",
+            "target": "unit",
+            "modifier": {
+              "count": "1",
+              "exclude_keywords": [
+                "Character"
+              ]
+            }
+          },
+          {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-spend",
+                "target": "self",
+                "modifier": {
+                  "pool_id": "miracle-dice-pool",
+                  "amount": 1
+                }
+              },
+              {
+                "type": "resurrection",
+                "target": "unit",
+                "modifier": {
+                  "count": "d3+1",
+                  "exclude_keywords": [
+                    "Character"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
       }
     },
     "scope": {
@@ -1340,17 +1620,67 @@
     "source_digest": "7e0bcde68ad20fa8adedc20e796af870d1c3aed10a77c8b9842edbd4f230efde",
     "version": "2025-q3",
     "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {
-        "stat": "A",
-        "operation": "add",
-        "value": 3
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "timing-is",
+                "parameters": {
+                  "timing": "selected-to-shoot-or-fight"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-spend",
+                "target": "self",
+                "modifier": {
+                  "pool_id": "miracle-dice-pool",
+                  "amount": 1
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "self",
+                "modifier": {
+                  "stat": "A",
+                  "operation": "add",
+                  "value": 3,
+                  "weapon_name": "Fidelis or Lance of Illumination"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "enemy-unit-destroyed-by-bearer"
+            }
+          },
+          "effect": {
+            "type": "resource-gain",
+            "target": "self",
+            "modifier": {
+              "pool_id": "miracle-dice-pool",
+              "amount": 1
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "unit",
-      "duration": "phase"
+      "range": "self",
+      "duration": "permanent"
     },
     "unit_ids": [
       "morvenn-vahl"
@@ -1396,11 +1726,20 @@
     "source_digest": "a2de412f3c95c44725479d5934a5e04042a32f4d37af9b8959dccd8641fe143b",
     "version": "2025-q3",
     "effect": {
-      "type": "resource-gain",
-      "target": "self",
-      "modifier": {
-        "pool_id": "miracle-dice-pool",
-        "amount": 1
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "act-of-faith-completed"
+        }
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "self",
+        "modifier": {
+          "pool_id": "miracle-dice-pool",
+          "amount": 1
+        }
       }
     },
     "scope": {
@@ -1415,8 +1754,7 @@
     "usage": {
       "frequency": "n-per-battle",
       "count": 2
-    },
-    "community_notes": "[APPROX] Twice per battle, after the unit performs an Act of Faith, gain 1 Miracle dice; the after-Act-of-Faith trigger is not gated. Full rule in raw-text store."
+    }
   },
   {
     "ability_id": "storm-of-retribution",
@@ -1429,52 +1767,61 @@
     "source_digest": "50158d0651f9a51133c8e4f64611863e8378aae739812a58eec2ac0155095170",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "ones"
-            }
-          },
-          {
-            "type": "re-roll",
-            "target": "unit",
-            "modifier": {
-              "roll": "wound",
-              "subset": "ones"
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
-            }
-          },
-          {
-            "type": "roll-modifier",
-            "target": "unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones",
+            "weapon_type": "ranged"
           }
-        ]
-      }
+        },
+        {
+          "type": "re-roll",
+          "target": "unit",
+          "modifier": {
+            "roll": "wound",
+            "subset": "ones",
+            "weapon_type": "ranged"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "target-has-keyword",
+            "parameters": {
+              "keyword": "destroyed-ADEPTA-SORORITAS-unit"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "roll-modifier",
+                "target": "unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "add",
+                  "value": 1,
+                  "weapon_type": "ranged"
+                }
+              },
+              {
+                "type": "roll-modifier",
+                "target": "unit",
+                "modifier": {
+                  "roll": "wound",
+                  "operation": "add",
+                  "value": 1,
+                  "weapon_type": "ranged"
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "range": "unit",
@@ -1484,8 +1831,7 @@
       "retributor-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "behavior": "passive"
   },
   {
     "ability_id": "infiltrators",
@@ -1525,12 +1871,35 @@
     "source_digest": "696e85410d1504e334e39448b79cf3e7142cb1bea30a6cda4877394900a46f8c",
     "version": "2025-q3",
     "effect": {
-      "type": "re-roll",
-      "target": "unit",
-      "modifier": {
-        "roll": "hit",
-        "subset": "ones"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones",
+            "optional": false
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "within-range-of-objective",
+            "parameters": {
+              "subject": "target"
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "unit",
+            "modifier": {
+              "roll": "hit",
+              "result_scope": "any-result"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "range": "unit",
@@ -1553,12 +1922,25 @@
     "source_digest": "4602dc7a8b6287c375cd0aebfba1914c9f22c93f20797716a1006551a5ef7d5a",
     "version": "2025-q3",
     "effect": {
-      "type": "re-roll",
-      "target": "unit",
-      "modifier": {
-        "roll": "charge",
-        "subset": "all-failures"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "unit",
+          "modifier": {
+            "roll": "advance",
+            "result_scope": "any-result"
+          }
+        },
+        {
+          "type": "re-roll",
+          "target": "unit",
+          "modifier": {
+            "roll": "charge",
+            "result_scope": "any-result"
+          }
+        }
+      ]
     },
     "scope": {
       "range": "unit",
@@ -1637,21 +2019,53 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "start-of-phase"
+            }
+          },
+          {
+            "type": "unit-within-range-of",
+            "parameters": {
+              "target_type": "enemy",
+              "range": 12
+            }
+          },
+          {
+            "type": "target-is-visible"
+          }
+        ]
       },
       "effect": {
-        "type": "mortal-wounds",
-        "target": "defender",
-        "modifier": {
-          "count": "3"
+        "type": "dice-gated",
+        "test": {
+          "type": "battle-shock",
+          "modifier": {
+            "operation": "subtract",
+            "value": 2,
+            "if_target_keyword": "CHAOS"
+          }
+        },
+        "on_fail": {
+          "type": "mortal-wounds",
+          "target": "target",
+          "modifier": {
+            "count": "3"
+          }
         }
       }
     },
     "scope": {
-      "range": "aura-12",
+      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1671,11 +2085,34 @@
     "source_digest": "50abfa531feeebeda388d39ecae4272c43a09d5c2477e04197a91458b9522d04",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-refund",
-      "target": "self",
-      "modifier": {
-        "stratagem": "fire-overwatch-or-heroic"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stratagem-targeting-permission",
+          "target": "unit",
+          "modifier": {
+            "stratagem": "heroic-intervention",
+            "exception": "already-targeted-different-unit-this-phase"
+          }
+        },
+        {
+          "type": "stratagem-cost-modifier",
+          "target": "unit",
+          "modifier": {
+            "stratagem": "heroic-intervention",
+            "operation": "decrease",
+            "amount": 1
+          }
+        },
+        {
+          "type": "stratagem-targeting-permission",
+          "target": "unit",
+          "modifier": {
+            "stratagem": "heroic-intervention",
+            "exception": "does-not-prevent-targeting-different-unit-this-phase"
+          }
+        }
+      ]
     },
     "scope": {
       "range": "unit",
@@ -1728,11 +2165,37 @@
     "source_digest": "4b19112f35e85157ac580964d95c0983124bc05f5573dd530567b407558b2e6c",
     "version": "2025-q3",
     "effect": {
-      "type": "resurrection",
-      "target": "self",
-      "modifier": {
-        "count": "1",
-        "type": "wounds"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "start-of-phase"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "resurrection",
+        "target": "self",
+        "modifier": {
+          "count": "1",
+          "type": "wounds"
+        }
       }
     },
     "scope": {
@@ -1756,27 +2219,47 @@
     "source_digest": "05ee6f5a96280213cfcbd53c1a4cf1dca8ac07ceab87b753cb1e8b4cc873526d",
     "version": "2025-q3",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "roll-modifier",
-          "target": "unit",
-          "modifier": {
-            "roll": "hit",
-            "operation": "add",
-            "value": 1
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "target-has-keyword",
+            "parameters": {
+              "keyword": "MONSTER"
+            }
+          },
+          {
+            "type": "target-has-keyword",
+            "parameters": {
+              "keyword": "VEHICLE"
+            }
           }
-        },
-        {
-          "type": "roll-modifier",
-          "target": "unit",
-          "modifier": {
-            "roll": "wound",
-            "operation": "add",
-            "value": 1
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "roll-modifier",
+            "target": "unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "unit",
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1
+            }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "range": "unit",
@@ -1786,8 +2269,7 @@
       "paragon-warsuits"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "auto-generated, partial"
+    "behavior": "passive"
   },
   {
     "ability_id": "rites-of-castigation",
@@ -1802,30 +2284,55 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "after-unit-resolves-attacks"
+            }
+          },
+          {
+            "type": "was-hit-by-attack",
+            "parameters": {
+              "subject": "target",
+              "count_min": 1
+            }
+          }
+        ]
       },
       "effect": {
         "type": "stat-modifier",
-        "target": "unit",
+        "target": "all-friendly",
         "modifier": {
           "stat": "AP",
-          "operation": "add",
-          "value": -1
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "ranged",
+          "required_keywords": [
+            "ADEPTA SORORITAS"
+          ]
         }
       }
     },
     "scope": {
-      "range": "unit",
+      "range": "self",
       "duration": "turn"
     },
     "unit_ids": [
       "castigator"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "usage": {
+      "frequency": "once-per-turn-per-target"
+    }
   },
   {
     "ability_id": "devastating-refrain",
@@ -1840,21 +2347,54 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "was-hit-by-attack",
+            "parameters": {
+              "subject": "target",
+              "weapon_keyword": "Indirect Fire"
+            }
+          }
+        ]
       },
       "effect": {
-        "type": "leadership-modifier",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "test": "battle-shock"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "battle-shock-test",
+            "target": "target",
+            "modifier": {}
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "timing-is",
+              "parameters": {
+                "timing": "indirect-fire-destroys-deadly-demise-model"
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "target",
+              "modifier": {
+                "roll": "deadly-demise",
+                "operation": "set",
+                "value": 5
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "range": "unit",
+      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1936,10 +2476,74 @@
     "source_digest": "0b36290756bd677905f9c46e98521acc567a5fa6e4d53c5fcb42500bf9709023",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-gain",
-      "target": "self",
-      "modifier": {
-        "amount": 1
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "start-of-phase"
+            }
+          },
+          {
+            "type": "engagement-state",
+            "parameters": {
+              "state": "on-battlefield"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "choice",
+        "choice_prompt": "choose one",
+        "options": [
+          {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-spend",
+                "target": "self",
+                "modifier": {
+                  "pool_id": "miracle-dice-pool",
+                  "amount": 1
+                }
+              },
+              {
+                "type": "cp-gain",
+                "target": "self",
+                "modifier": {
+                  "amount": 1
+                }
+              }
+            ]
+          },
+          {
+            "type": "dice-gated",
+            "test": {
+              "type": "leadership"
+            },
+            "on_success": {
+              "type": "cp-gain",
+              "target": "self",
+              "modifier": {
+                "amount": 1
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -2021,28 +2625,30 @@
         "steps": [
           {
             "type": "stat-modifier",
-            "target": "unit",
+            "target": "self",
             "modifier": {
               "stat": "A",
-              "operation": "add",
-              "value": 3
+              "operation": "improve",
+              "value": 3,
+              "weapon_type": "melee"
             }
           },
           {
             "type": "stat-modifier",
-            "target": "unit",
+            "target": "self",
             "modifier": {
               "stat": "S",
-              "operation": "add",
-              "value": 3
+              "operation": "improve",
+              "value": 3,
+              "weapon_type": "melee"
             }
           }
         ]
       }
     },
     "scope": {
-      "range": "unit",
-      "duration": "phase"
+      "range": "self",
+      "duration": "one-use"
     },
     "unit_ids": [
       "ministorum-priest"
@@ -2061,20 +2667,46 @@
     "source_digest": "51abd9145f5aa949fd9ae789ef3e66c7dec8bdf2567726a932b56e9e5594795c",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "is-attached"
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "unit",
-        "modifier": {
-          "ability_id": "attached-unit-eligibility"
+      "type": "choice",
+      "choice_prompt": "at the start of the Declare Battle Formations step",
+      "options": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "is-attached",
+            "parameters": {
+              "keyword": "DOMINION SQUAD"
+            }
+          },
+          "effect": {
+            "type": "movement-modifier",
+            "target": "self",
+            "modifier": {
+              "move_type": "scout",
+              "distance": 6
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "is-attached",
+            "parameters": {
+              "keyword": "SISTERS NOVITIATE SQUAD"
+            }
+          },
+          "effect": {
+            "type": "ability-grant",
+            "target": "self",
+            "modifier": {
+              "ability_id": "infiltrators"
+            }
+          }
         }
-      }
+      ]
     },
     "scope": {
-      "range": "unit",
+      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2096,7 +2728,7 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "model-is-leader"
       },
       "effect": {
         "type": "keyword-grant",
@@ -2104,7 +2736,8 @@
         "modifier": {
           "keywords": [
             "Sustained Hits 1"
-          ]
+          ],
+          "weapon_type": "melee"
         }
       }
     },
@@ -2203,27 +2836,66 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "charged-this-turn"
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "selected-to-fight"
+            }
+          }
+        ]
       },
       "effect": {
         "type": "sequence",
         "steps": [
           {
-            "type": "keyword-grant",
-            "target": "unit",
-            "modifier": {
-              "keywords": [
-                "Lethal Hits"
-              ]
-            }
+            "type": "choice",
+            "choice_prompt": "select one melee weapon ability",
+            "options": [
+              {
+                "type": "keyword-grant",
+                "target": "unit",
+                "modifier": {
+                  "keywords": [
+                    "Sustained Hits 1"
+                  ],
+                  "weapon_type": "melee"
+                }
+              },
+              {
+                "type": "keyword-grant",
+                "target": "unit",
+                "modifier": {
+                  "keywords": [
+                    "Lethal Hits"
+                  ],
+                  "weapon_type": "melee"
+                }
+              }
+            ]
           },
           {
-            "type": "keyword-grant",
-            "target": "unit",
-            "modifier": {
-              "keywords": [
-                "Sustained Hits 1"
-              ]
+            "type": "conditional",
+            "condition": {
+              "type": "charged-this-turn"
+            },
+            "effect": {
+              "type": "keyword-grant",
+              "target": "unit",
+              "modifier": {
+                "keywords": [
+                  "Sustained Hits 1",
+                  "Lethal Hits"
+                ],
+                "weapon_type": "melee"
+              }
             }
           }
         ]
@@ -2237,8 +2909,7 @@
       "zephyrim-squad"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "auto-generated, partial"
+    "behavior": "activated"
   },
   {
     "ability_id": "righteous-awareness",
@@ -2254,11 +2925,12 @@
       "type": "movement-modifier",
       "target": "unit",
       "modifier": {
-        "move_type": "reactive"
+        "move_type": "normal",
+        "distance": "d6"
       }
     },
     "scope": {
-      "range": "aura-9",
+      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2269,7 +2941,28 @@
     "trigger": {
       "event": "enemy-unit-ended-move",
       "subject": "enemy-unit",
-      "optional": true
+      "optional": true,
+      "conditions": [
+        {
+          "type": "player-turn-is",
+          "parameters": {
+            "turn": "opponent"
+          }
+        },
+        {
+          "type": "unit-within-range-of",
+          "parameters": {
+            "target_type": "enemy",
+            "range": 8
+          }
+        },
+        {
+          "type": "engagement-state",
+          "parameters": {
+            "state": "not-in-engagement-range"
+          }
+        }
+      ]
     }
   },
   {
@@ -2415,10 +3108,20 @@
     "source_digest": "8a1e483edd968274a3ffa9dba8dfba1c1ec76b22fb83896dca198ff841d23352",
     "version": "2025-q3",
     "effect": {
-      "type": "feel-no-pain",
-      "target": "unit",
-      "modifier": {
-        "threshold": 4
+      "type": "conditional",
+      "condition": {
+        "type": "unit-model-count",
+        "parameters": {
+          "keyword": "Geminae Superia",
+          "count_min": 1
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "self",
+        "modifier": {
+          "threshold": 4
+        }
       }
     },
     "scope": {
@@ -2496,10 +3199,44 @@
     "source_digest": "b7839c91742ce711a4223df21826be04e6f781c4b938441d5e232b1abcecd9b2",
     "version": "2025-q3",
     "effect": {
-      "type": "objective-control-modifier",
-      "target": "unit",
-      "modifier": {
-        "sticky": true
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "end-of-phase"
+            }
+          },
+          {
+            "type": "within-range-of-objective",
+            "parameters": {
+              "subject": "unit",
+              "controlled_by": "your-army"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "objective-control-modifier",
+        "target": "unit",
+        "modifier": {
+          "sticky": true,
+          "retake": "opponent-control-greater-at-phase-end"
+        }
       }
     },
     "scope": {
@@ -2558,7 +3295,7 @@
       "target": "unit",
       "modifier": {
         "threshold": 4,
-        "scope": "psychic"
+        "scope": "psychic-and-mortal"
       }
     },
     "scope": {
@@ -2760,10 +3497,46 @@
     "source_digest": "ec448e25edb0e59f4330bacfe329c3ec0eecacbcf9914e0d0bb83b360825e828",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "ability_id": "once-per-round-special"
+      "type": "select-units",
+      "selector": {
+        "scope": "friendly-unit",
+        "count": 1,
+        "range": 3,
+        "required_keywords": [
+          "ADEPTA SORORITAS"
+        ],
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "engagement-state",
+              "parameters": {
+                "state": "not-in-engagement-range"
+              }
+            },
+            {
+              "type": "timing-is",
+              "parameters": {
+                "timing": "selected-as-charge-target"
+              }
+            },
+            {
+              "type": "unit-model-count",
+              "parameters": {
+                "keyword": "every-model-within-3-inches-of-transport",
+                "count_min": 1
+              }
+            }
+          ]
+        }
+      },
+      "effect": {
+        "type": "disembark",
+        "target": "unit",
+        "modifier": {
+          "transport": "this Transport",
+          "operation": "embark"
+        }
       }
     },
     "scope": {
@@ -2777,6 +3550,11 @@
     "behavior": "passive",
     "usage": {
       "frequency": "once-per-turn"
+    },
+    "trigger": {
+      "event": "charge-targets-selected",
+      "subject": "opponent",
+      "optional": true
     }
   },
   {
@@ -2986,23 +3764,25 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
+      "type": "designate-target",
+      "designation": "condemned",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "range": 12,
+        "timing": "shooting-phase",
+        "requires_visible": true
       },
-      "effect": {
-        "type": "ability-grant",
-        "target": "all-enemy",
-        "modifier": {
-          "grant_type": "detection-range-modifier",
-          "value": 3,
-          "unit": "inches",
-          "target_scope": "one-visible-enemy",
-          "range_inches": 12,
-          "tag": "condemned"
+      "duration": "battle",
+      "applies": {
+        "to": "target",
+        "effect": {
+          "type": "detection-range-modifier",
+          "target": "target",
+          "modifier": {
+            "operation": "add",
+            "value": 3
+          }
         }
       }
     },
@@ -3050,6 +3830,18 @@
             "parameters": {
               "turn": "opponent"
             }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "end-of-phase"
+            }
+          },
+          {
+            "type": "engagement-state",
+            "parameters": {
+              "state": "not-in-engagement-range"
+            }
           }
         ]
       },
@@ -3058,13 +3850,7 @@
         "target": "unit",
         "modifier": {
           "move_type": "redeploy",
-          "to_reserves": true,
-          "condition": {
-            "type": "engagement-state",
-            "parameters": {
-              "state": "not-in-engagement-range"
-            }
-          }
+          "to_reserves": true
         }
       }
     },
@@ -3130,11 +3916,22 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "unit-tag",
-      "target": "unit",
-      "modifier": {
-        "tag": "battle-shocked",
-        "operation": "remove"
+      "type": "select-units",
+      "selector": {
+        "scope": "friendly-unit",
+        "count": 1,
+        "range": 6,
+        "required_keywords": [
+          "ADEPTA SORORITAS"
+        ],
+        "eligibility": {
+          "type": "is-battle-shocked"
+        }
+      },
+      "effect": {
+        "type": "remove-battle-shock",
+        "target": "selected-models-unit",
+        "modifier": {}
       }
     },
     "scope": {
@@ -3142,9 +3939,14 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
-        "Adepta Sororitas"
+      "required_keywords_any": [
+        "Adepta Sororitas Infantry Fly",
+        "Exorcist"
       ]
+    },
+    "trigger": {
+      "event": "start-of-command-phase",
+      "subject": "self"
     }
   },
   {
@@ -3164,13 +3966,33 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "roll-modifier",
-      "target": "unit",
-      "modifier": {
-        "roll": "hit",
-        "operation": "add",
-        "value": 1,
-        "attack_type": "ranged"
+      "type": "designate-target",
+      "designation": "harmonised-exorcism-target",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "range": 9,
+        "timing": "selected-to-shoot",
+        "source_unit_keywords": [
+          "ADEPTA SORORITAS",
+          "INFANTRY",
+          "FLY"
+        ],
+        "requires_visible": true
+      },
+      "duration": "phase",
+      "applies": {
+        "to": "bearer-attacks-target",
+        "effect": {
+          "type": "roll-modifier",
+          "target": "unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1,
+            "weapon_type": "ranged"
+          }
+        }
       }
     },
     "scope": {
@@ -3200,14 +4022,31 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
-      "modifier": {
-        "keywords": [
-          "Devastating Wounds"
-        ],
-        "scope": "weapon",
-        "attack_type": "ranged"
+      "type": "designate-target",
+      "designation": "devastating-reprise-target",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "timing": "after-unit-resolves-attacks",
+        "requires_hit_by_source": true,
+        "excluded_keywords": [
+          "MONSTER",
+          "VEHICLE"
+        ]
+      },
+      "duration": "phase",
+      "applies": {
+        "to": "bearer-attacks-target",
+        "effect": {
+          "type": "keyword-grant",
+          "target": "unit",
+          "modifier": {
+            "keywords": [
+              "Devastating Wounds"
+            ],
+            "weapon_type": "ranged"
+          }
+        }
       }
     },
     "scope": {
@@ -3239,13 +4078,27 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "roll-modifier",
-      "target": "all-friendly",
-      "modifier": {
-        "roll": "hit",
-        "operation": "add",
-        "value": 1
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "all-friendly",
+          "modifier": {
+            "stat": "BS",
+            "operation": "improve",
+            "value": 1
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "all-friendly",
+          "modifier": {
+            "stat": "WS",
+            "operation": "improve",
+            "value": 1
+          }
+        }
+      ]
     },
     "scope": {
       "range": "any-on-battlefield",
@@ -3881,35 +4734,23 @@
     "source_digest": "02ce06d0b4ed3bd991bb0feab7f4f646e3a318e1eb9b5970346f7def36b741d2",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "end-of-movement-phase"
-            }
-          },
-          {
-            "type": "unit-within-range-of",
-            "parameters": {
-              "target_type": "enemy"
-            }
-          }
-        ]
+      "type": "designate-target",
+      "designation": "judged-for-execution",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "range": 18,
+        "timing": "end-of-movement-phase",
+        "requires_visible": true
       },
-      "effect": {
-        "type": "conditional",
-        "condition": {
-          "type": "unit-has-keyword",
-          "parameters": {
-            "keyword": "ADEPTA SORORITAS"
-          }
-        },
+      "duration": "until-next-command-phase",
+      "applies": {
+        "attacker_keywords": [
+          "ADEPTA SORORITAS"
+        ],
         "effect": {
           "type": "keyword-grant",
-          "target": "defender",
+          "target": "attacker",
           "modifier": {
             "keywords": [
               "Lethal Hits"
@@ -3926,8 +4767,7 @@
       "intranzia-fraye"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "activated"
   },
   {
     "ability_id": "boundless-zeal-penitent-host",
@@ -6258,5 +7098,38 @@
       ]
     },
     "community_notes": "The bearer's melee attacks have +1 Damage; the bearer's unit adds 1 to Wound rolls for melee attacks."
+  },
+  {
+    "ability_id": "lead-the-righteous",
+    "name": "Lead the Righteous",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "is-attached"
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "unit",
+        "modifier": {
+          "roll": "hit",
+          "result_scope": "any-result"
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "sanctuary-canoness-adalya"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
   }
 ]

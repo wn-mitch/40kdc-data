@@ -888,14 +888,12 @@
           "shape": "hull",
           "draft": true
         },
-        "default_weapon_ids": [
-          "cyclops-demolition-vehicle"
-        ]
+        "default_weapon_ids": []
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "launch"
     },
     "tiers": [
       {
@@ -1277,14 +1275,12 @@
           "shape": "hull",
           "draft": true
         },
-        "default_weapon_ids": [
-          "aegis-defence-line"
-        ]
+        "default_weapon_ids": []
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "launch"
     },
     "tiers": [
       {
@@ -4021,6 +4017,350 @@
             "name": "Hippogriff AFV",
             "min": 2,
             "max": 2
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "unit_id": "draydens-lance-attilan-rough-riders",
+    "faction_id": "astra-militarum",
+    "models": [
+      {
+        "name": "Rough Rider Sergeant",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        },
+        "default_weapon_ids": [
+          "hunting-lance",
+          "lasgun",
+          "laspistol-attilan-rough-riders",
+          "power-sabre-attilan-rough-riders",
+          "steeds-hooves"
+        ]
+      },
+      {
+        "name": "Rough Rider with Goad Lance",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        },
+        "default_weapon_ids": [
+          "goad-lance",
+          "laspistol-attilan-rough-riders",
+          "steeds-hooves"
+        ]
+      },
+      {
+        "name": "Rough Rider with Hunting Lance",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        },
+        "default_weapon_ids": [
+          "hunting-lance",
+          "lasgun",
+          "laspistol-attilan-rough-riders",
+          "steeds-hooves"
+        ]
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Rough Rider Sergeant",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Rough Rider with Goad Lance",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Rough Rider with Hunting Lance",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "unit_id": "draydens-lance-command-squad",
+    "faction_id": "astra-militarum",
+    "models": [
+      {
+        "name": "Major Drayden",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "plasma-pistol",
+          "power-weapon"
+        ]
+      },
+      {
+        "name": "Cadian Veteran Guardsman",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "gun-stocks",
+          "lasgun"
+        ]
+      },
+      {
+        "name": "Cadian Veteran Guardsman with Powerfist",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "bolt-pistol",
+          "power-fist"
+        ]
+      },
+      {
+        "name": "Cadian Veteran Guardsmen with Medi-pack",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "gun-stocks",
+          "lasgun",
+          "medi-pack"
+        ]
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Major Drayden",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Cadian Veteran Guardsman",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Cadian Veteran Guardsman with Powerfist",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Cadian Veteran Guardsmen with Medi-pack",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "unit_id": "draydens-lance-kasrkin",
+    "faction_id": "astra-militarum",
+    "models": [
+      {
+        "name": "Kasrkin Sergeant",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "chainsword-kasrkin",
+          "plasma-pistol"
+        ]
+      },
+      {
+        "name": "Kasrkin Trooper",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "gun-stocks",
+          "hot-shot-lasgun"
+        ]
+      },
+      {
+        "name": "Kasrkin Trooper with Flamer",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "flamer",
+          "gun-stocks"
+        ]
+      },
+      {
+        "name": "Kasrkin Trooper with Grenade Launcher",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "grenade-launcher-kasrkin",
+          "gun-stocks"
+        ]
+      },
+      {
+        "name": "Kasrkin Trooper with Hot-shot Marksman Rifle",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "gun-stocks",
+          "hot-shot-marksman-rifle"
+        ]
+      },
+      {
+        "name": "Kasrkin Trooper with Hot-shot Volley Gun",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "gun-stocks",
+          "hot-shot-volley-gun"
+        ]
+      },
+      {
+        "name": "Kasrkin Trooper with Melta Mine",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "gun-stocks",
+          "hot-shot-laspistol",
+          "melta-mine"
+        ]
+      },
+      {
+        "name": "Kasrkin Trooper with Plasma Gun",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "gun-stocks",
+          "plasma-gun-kasrkin"
+        ]
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Kasrkin Sergeant",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Kasrkin Trooper",
+            "min": 3,
+            "max": 3
+          },
+          {
+            "name": "Kasrkin Trooper with Flamer",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Kasrkin Trooper with Grenade Launcher",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Kasrkin Trooper with Hot-shot Marksman Rifle",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Kasrkin Trooper with Hot-shot Volley Gun",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Kasrkin Trooper with Melta Mine",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Kasrkin Trooper with Plasma Gun",
+            "min": 1,
+            "max": 1
           }
         ]
       }

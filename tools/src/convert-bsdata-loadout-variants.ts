@@ -68,26 +68,71 @@ export function makeEquipmentResolver(entities: JsonNode[], unitId: string, fact
   };
 }
 
-function fixedEquipment(peer: JsonNode): JsonNode[] {
-  const result: JsonNode[] = [];
-  const visit = (node: JsonNode): void => {
+interface FixedEquipment {
+  links: JsonNode[];
+  item?: string;
+  reason?: string;
+}
+
+function fixedCopies(node: JsonNode): number | undefined {
+  const min = constraint(node, "min");
+  const max = constraint(node, "max");
+  if (min === undefined && max === undefined) return 1;
+  if (min === undefined) return max === 1 ? 1 : undefined;
+  if (max === undefined) return min === 1 ? 1 : undefined;
+  return min === max && min > 0 ? min : undefined;
+}
+
+function fixedEquipment(peer: JsonNode): FixedEquipment {
+  const links: JsonNode[] = [];
+  let item: string | undefined;
+  let reason: string | undefined;
+  const unsupported = (node: JsonNode, why: string): void => {
+    item ??= str(node.name) ?? "(unnamed equipment)";
+    reason ??= why;
+  };
+  const add = (node: JsonNode): void => {
+    const copies = fixedCopies(node);
+    if (copies === undefined) {
+      unsupported(node, "configurable equipment multiplicity");
+      return;
+    }
+    links.push(...Array.from({ length: copies }, () => node));
+  };
+  const visit = (node: JsonNode, includeNode = false): void => {
+    if (includeNode && node.type === "selectionEntry" && str(node.targetId)) add(node);
+    else if (includeNode && arr(node.profiles).some((profile) => / weapons$/i.test(str(profile.typeName) ?? ""))) add(node);
     for (const link of arr(node.entryLinks)) {
       const min = constraint(link, "min");
-      if (link.type === "selectionEntry" && (min === undefined || min > 0) && !/ upgrade$/i.test(str(link.name) ?? "")) result.push(link);
+      if (link.type === "selectionEntry" && (min === undefined || min > 0) && !/ upgrade$/i.test(str(link.name) ?? "")) add(link);
     }
     for (const entry of arr(node.selectionEntries)) {
       if ((constraint(entry, "min") ?? 1) <= 0) continue;
-      if (arr(entry.profiles).some((profile) => / weapons$/i.test(str(profile.typeName) ?? ""))) result.push(entry);
-      visit(entry);
+      visit(entry, true);
     }
     for (const group of arr(node.selectionEntryGroups)) {
       const defaultId = str(group.defaultSelectionEntryId);
-      const selected = defaultId ? children(group).find((item) => item.id === defaultId) : undefined;
-      if (selected) visit(selected);
+      if (!defaultId) {
+        if ((constraint(group, "min") ?? 0) > 0) unsupported(group, "required equipment choice has no default selection");
+        continue;
+      }
+      const selected = children(group).find((candidate) => candidate.id === defaultId);
+      if (selected) visit(selected, true);
+      else unsupported(group, "default equipment selection is missing");
     }
   };
   visit(peer);
-  return result;
+  return { links, item, reason };
+}
+
+function staticMaxCount(peer: JsonNode): number | undefined {
+  const max = constraint(peer, "max");
+  if (!max) return undefined;
+  const maxConstraintIds = new Set(constraints(peer, "max").map((entry) => str(entry.id)).filter((id): id is string => !!id));
+  return arr(peer.modifiers).some((modifier) => {
+    const field = str(modifier.field);
+    return field === "selections" || (field !== undefined && maxConstraintIds.has(field));
+  }) ? undefined : max;
 }
 
 export function projectBudget(group: JsonNode, names: string[]): LoadoutVariantBudget | undefined {
@@ -108,38 +153,62 @@ export function projectUnit(unit: JsonNode, rows: JsonNode[], equipment: JsonNod
   const issues: VariantIssue[] = [];
   const resolve = makeEquipmentResolver(equipment, unitId, factionUnitIds);
   const grouped = new Map<string, { rowName: string; variants: LoadoutVariant[]; budgets: LoadoutVariantBudget[] }>();
+  const incompleteRows = new Set<string>();
   for (const group of collectPeerGroups(unit)) {
     const peers = arr(group.selectionEntries).filter((entry) => entry.type === "model");
     const base = normModelName(str(peers[0]?.name) ?? "");
-    const bucket = grouped.get(base) ?? { rowName: str(peers[0]?.name) ?? "", variants: [], budgets: [] };
-    const names: string[] = [];
+    const projected = { rowName: str(peers[0]?.name) ?? "", variants: [] as LoadoutVariant[], budgets: [] as LoadoutVariantBudget[] };
+    let complete = true;
     for (const peer of peers) {
       const name = str(peer.name) ?? "unnamed";
-      const links = fixedEquipment(peer);
-      const ids = links.map(resolve);
-      const unresolved = ids.findIndex((id) => !id);
-      if (unresolved >= 0 || ids.length === 0) {
-        issues.push({ unit: unitId, model_row: base, variant: name, item: str(links[unresolved]?.name) ?? "(no fixed equipment)", reason: "unresolved equipment" });
+      const fixed = fixedEquipment(peer);
+      if (fixed.reason) {
+        issues.push({ unit: unitId, model_row: base, variant: name, item: fixed.item ?? "(no fixed equipment)", reason: fixed.reason });
+        complete = false;
         continue;
       }
-      const max = constraint(peer, "max");
+      const ids = fixed.links.map(resolve);
+      const unresolved = ids.findIndex((id) => !id);
+      if (unresolved >= 0 || ids.length === 0) {
+        issues.push({ unit: unitId, model_row: base, variant: name, item: str(fixed.links[unresolved]?.name) ?? "(no fixed equipment)", reason: "unresolved equipment" });
+        complete = false;
+        continue;
+      }
+      const max = staticMaxCount(peer);
       const variant = { name, weapon_ids: ids as string[], ...(max ? { max_count: max } : {}) };
-      const existing = bucket.variants.find((item) => item.name === name);
-      if (!existing) bucket.variants.push(variant);
+      const existing = projected.variants.find((item) => item.name === name);
+      if (!existing) projected.variants.push(variant);
       else if (JSON.stringify(existing.weapon_ids) === JSON.stringify(variant.weapon_ids)) {
         const mergedMax = Math.max(existing.max_count ?? 0, variant.max_count ?? 0);
         if (mergedMax > 0) existing.max_count = mergedMax;
       } else {
         issues.push({ unit: unitId, model_row: base, variant: name, item: name, reason: "conflicting duplicate variant" });
+        complete = false;
       }
-      names.push(name);
     }
-    const budget = projectBudget(group, names);
-    if (budget) bucket.budgets.push(budget);
+    if (!complete) {
+      incompleteRows.add(base);
+      continue;
+    }
+    const budget = projectBudget(group, projected.variants.map((variant) => variant.name));
+    if (budget) projected.budgets.push(budget);
+    const bucket = grouped.get(base) ?? { rowName: projected.rowName, variants: [], budgets: [] };
+    for (const variant of projected.variants) {
+      const existing = bucket.variants.find((item) => item.name === variant.name);
+      if (!existing) bucket.variants.push(variant);
+      else if (JSON.stringify(existing.weapon_ids) === JSON.stringify(variant.weapon_ids)) {
+        const mergedMax = Math.max(existing.max_count ?? 0, variant.max_count ?? 0);
+        if (mergedMax > 0) existing.max_count = mergedMax;
+      } else {
+        issues.push({ unit: unitId, model_row: base, variant: variant.name, item: variant.name, reason: "conflicting duplicate variant" });
+        incompleteRows.add(base);
+      }
+    }
+    bucket.budgets.push(...projected.budgets);
     grouped.set(base, bucket);
   }
-  for (const projected of grouped.values()) {
-    if (!projected.variants.length) continue;
+  for (const [base, projected] of grouped) {
+    if (incompleteRows.has(base) || !projected.variants.length) continue;
     const row = rows.find((candidate) => str(candidate.name)?.toLocaleLowerCase("en") === projected.rowName.toLocaleLowerCase("en"))
       ?? rows.find((candidate) => normModelName(str(candidate.name) ?? "") === normModelName(projected.rowName));
     if (!row) continue;
@@ -162,6 +231,50 @@ export function collectSourceNodes(catalogues: JsonNode[]): Map<string, JsonNode
   return nodes;
 }
 function readJson(file: string): unknown { return JSON.parse(fs.readFileSync(file, "utf8")); }
+
+export function prepareFactionProjection(
+  units: JsonNode[],
+  compositions: JsonNode[],
+  equipment: JsonNode[],
+  sourceNodes: ReadonlyMap<string, JsonNode>,
+): { compositions: JsonNode[]; issues: VariantIssue[]; discoveredUnits: number; discoveredVariants: number; projectedUnits: number; projectedVariants: number } {
+  const projected = structuredClone(compositions);
+  for (const composition of projected) {
+    for (const row of arr(composition.models)) {
+      delete row.loadout_variants;
+      delete row.loadout_variant_budgets;
+    }
+  }
+
+  const issues: VariantIssue[] = [];
+  let discoveredUnits = 0;
+  let discoveredVariants = 0;
+  let projectedUnits = 0;
+  let projectedVariants = 0;
+  const factionUnitIds = units.map((item) => str(item.id)).filter((id): id is string => !!id);
+  for (const repoUnit of units) {
+    const sourceId = externalId(repoUnit);
+    const source = sourceId ? sourceNodes.get(sourceId) : undefined;
+    const composition = projected.find((item) => item.unit_id === repoUnit.id);
+    if (!source || !composition) continue;
+    const rows = arr(composition.models);
+    const peerGroups = collectPeerGroups(source).filter((group) => {
+      const firstPeer = arr(group.selectionEntries).find((entry) => entry.type === "model");
+      return rows.some((row) => normModelName(str(row.name) ?? "") === normModelName(str(firstPeer?.name) ?? ""));
+    });
+    const sourceVariantCount = peerGroups.reduce(
+      (sum, group) => sum + arr(group.selectionEntries).filter((entry) => entry.type === "model").length,
+      0,
+    );
+    if (sourceVariantCount > 0) discoveredUnits += 1;
+    discoveredVariants += sourceVariantCount;
+    issues.push(...projectUnit(source, rows, equipment, str(repoUnit.id)!, factionUnitIds));
+    const variantCount = rows.reduce((sum, row) => sum + arr(row.loadout_variants).length, 0);
+    if (variantCount > 0) projectedUnits += 1;
+    projectedVariants += variantCount;
+  }
+  return { compositions: projected, issues, discoveredUnits, discoveredVariants, projectedUnits, projectedVariants };
+}
 
 export async function run(argv: readonly string[]): Promise<void> {
   const cmd = new Command().option("--bsdata <path>", "11e BSData directory", path.join(REPO_ROOT, "_private", "bsdata-wh40k-11e")).option("--source-ref <rev>").option("--faction <id>").option("--write").exitOverride();
@@ -192,44 +305,23 @@ export async function run(argv: readonly string[]): Promise<void> {
     const compositionsPath = path.join(dir, "unit-compositions.json");
     if (!fs.existsSync(compositionsPath)) continue;
     const compositions = readJson(compositionsPath) as JsonNode[];
-    for (const composition of compositions) {
-      for (const row of arr(composition.models)) {
-        delete row.loadout_variants;
-        delete row.loadout_variant_budgets;
-      }
-    }
     const equipment = ["weapons.json", "wargear.json"].flatMap((file) => fs.existsSync(path.join(dir, file)) ? readJson(path.join(dir, file)) as JsonNode[] : []);
-    const issues: VariantIssue[] = [];
-    for (const repoUnit of units) {
-      const source = externalId(repoUnit) ? allNodes.get(externalId(repoUnit)!) : undefined;
-      const composition = compositions.find((item) => item.unit_id === repoUnit.id);
-      if (source && composition) {
-        const rows = arr(composition.models);
-        const peerGroups = collectPeerGroups(source).filter((group) => {
-          const firstPeer = arr(group.selectionEntries).find((entry) => entry.type === "model");
-          return rows.some((row) => normModelName(str(row.name) ?? "") === normModelName(str(firstPeer?.name) ?? ""));
-        });
-        const sourceVariantCount = peerGroups.reduce(
-          (sum, group) => sum + arr(group.selectionEntries).filter((entry) => entry.type === "model").length,
-          0,
-        );
-        if (sourceVariantCount > 0) discoveredUnits += 1;
-        discoveredVariants += sourceVariantCount;
-        issues.push(...projectUnit(source, rows, equipment, str(repoUnit.id)!, units.map((item) => str(item.id)).filter((id): id is string => !!id)));
-        const variantCount = rows.reduce((sum, row) => sum + arr(row.loadout_variants).length, 0);
-        if (variantCount > 0) projectedUnits += 1;
-        projectedVariants += variantCount;
-      }
+    const projection = prepareFactionProjection(units, compositions, equipment, allNodes);
+    discoveredUnits += projection.discoveredUnits;
+    discoveredVariants += projection.discoveredVariants;
+    projectedUnits += projection.projectedUnits;
+    projectedVariants += projection.projectedVariants;
+    unresolvedVariants += projection.issues.length;
+    if (projection.issues.length) {
+      const detail = projection.issues
+        .map((issue) => `${issue.unit}/${issue.model_row}/${issue.variant}: ${issue.item} (${issue.reason})`)
+        .join("; ");
+      throw new Error(`[bsdata-loadout-variants] ${faction}: refusing incomplete projection; current variants remain unchanged (${detail})`);
     }
     const original = fs.readFileSync(compositionsPath, "utf8");
-    const text = `${JSON.stringify(compositions, null, 2)}\n`;
-    if (text !== original) staged.push({ path: compositionsPath, value: compositions, text });
-    staged.push({
-      path: path.join(core, "_reports", `_bsdata-loadout-variants-unresolved.${faction}.json`),
-      value: issues,
-    });
-    console.log(`[bsdata-loadout-variants] ${faction}: ${issues.length} unresolved`);
-    unresolvedVariants += issues.length;
+    const text = `${JSON.stringify(projection.compositions, null, 2)}\n`;
+    if (text !== original) staged.push({ path: compositionsPath, value: projection.compositions, text });
+    console.log(`[bsdata-loadout-variants] ${faction}: 0 unresolved`);
   }
   console.log(`[bsdata-loadout-variants] discovered ${discoveredVariants} source variants across ${discoveredUnits} units; projected ${projectedVariants} variants across ${projectedUnits} units; ${unresolvedVariants} unresolved`);
   await applyWrites(staged, { write: !!opts.write, label: "bsdata-loadout-variants" });

@@ -4819,5 +4819,304 @@
     "ability_type": "unit",
     "behavior": "passive",
     "community_notes": "[APPROX] This model can move through terrain features (but cannot end a move inside a wall/floor). The RUINS floor-level placement clause is unmodeled. Full rule in raw-text store."
+  },
+  {
+    "ability_id": "disruption-bombardment-vardenghast-swarm",
+    "name": "Disruption Bombardment",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "9d32ea1bad5b84ef876d16105c0011c87735bd40441b69d4e51f818730d4a283",
+    "version": "2025-q3",
+    "effect": {
+      "type": "designate-target",
+      "designation": "pinned",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "timing": "after-this-unit-shoots",
+        "eligibility": {
+          "type": "was-hit-by-attack",
+          "parameters": {
+            "subject": "target",
+            "attack_type": "ranged",
+            "source": {
+              "event_var": "disruption-bombardment-shooting"
+            },
+            "window": "just-finished-shooting-sequence"
+          }
+        }
+      },
+      "applies": {
+        "to": "target",
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "defender",
+              "modifier": {
+                "stat": "M",
+                "operation": "subtract",
+                "value": 2
+              }
+            },
+            {
+              "type": "roll-modifier",
+              "target": "defender",
+              "modifier": {
+                "roll": "advance",
+                "operation": "subtract",
+                "value": 2
+              }
+            },
+            {
+              "type": "roll-modifier",
+              "target": "defender",
+              "modifier": {
+                "roll": "charge",
+                "operation": "subtract",
+                "value": 2
+              }
+            }
+          ]
+        }
+      },
+      "duration": "until-next-command-phase"
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "vardenghast-swarm-barbgaunts"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "after-unit-resolves-attacks",
+      "subject": "self",
+      "optional": true,
+      "binds_event_variable": "disruption-bombardment-shooting"
+    }
+  },
+  {
+    "ability_id": "feeding-frenzy-vardenghast-swarm",
+    "name": "Feeding Frenzy",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "71f23041700f8850bfa4be903c049c61189e52e6d62cf8cdc059ac5ef4202f76",
+    "version": "2025-q3",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is-type",
+                "parameters": {
+                  "attack_type": "melee"
+                }
+              },
+              {
+                "type": "unit-below-starting-strength"
+              }
+            ]
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is-type",
+                "parameters": {
+                  "attack_type": "melee"
+                }
+              },
+              {
+                "type": "unit-below-half-strength"
+              }
+            ]
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "vardenghast-swarm-psychophage"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "bio-stimulus-aura-vardenghast-swarm",
+    "name": "Bio-stimulus (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "90348167549f9b5f9749deb561a07037e4c95e90040efdfcc912b03ebb55be63",
+    "version": "2025-q3",
+    "effect": {
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": 6,
+        "eligible": {
+          "required_keywords": [
+            "Tyranids"
+          ]
+        },
+        "effect": {
+          "type": "feel-no-pain",
+          "target": "friendly-within-aura",
+          "modifier": {
+            "threshold": 6
+          }
+        }
+      }
+    },
+    "scope": {
+      "range": "aura-6",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "vardenghast-swarm-psychophage"
+    ],
+    "ability_type": "unit",
+    "behavior": "aura"
+  },
+  {
+    "ability_id": "skulking-horrors-vardenghast-swarm",
+    "name": "Skulking Horrors",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "25b4f07fe687da1dd8d9a4f6571eb46cec0dfe6c624392c643fffc2c74181878",
+    "version": "2025-q3",
+    "effect": {
+      "type": "movement-modifier",
+      "target": "unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": "D6"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "unit_ids": [
+      "vardenghast-swarm-termagants"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "enemy-unit-ended-move",
+      "subject": "enemy-unit",
+      "proximity": {
+        "of": "self",
+        "range": 8
+      },
+      "condition": {
+        "type": "engagement-state",
+        "parameters": {
+          "state": "unengaged"
+        }
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-phase",
+      "per": "unit"
+    }
+  },
+  {
+    "ability_id": "pouncing-leap-vardenghast-swarm",
+    "name": "Pouncing Leap",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "5e16879d430e1131f61dd89657dcd783e1ada26310d569ad9be99044be7b2ada",
+    "version": "2025-q3",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stratagem-targeting-permission",
+          "target": "unit",
+          "modifier": {
+            "stratagem": "heroic-intervention",
+            "exception": "already-targeted-different-unit-this-phase"
+          }
+        },
+        {
+          "type": "stratagem-cost-modifier",
+          "target": "unit",
+          "modifier": {
+            "stratagem": "heroic-intervention",
+            "operation": "decrease",
+            "amount": 1
+          }
+        },
+        {
+          "type": "stratagem-targeting-permission",
+          "target": "unit",
+          "modifier": {
+            "stratagem": "heroic-intervention",
+            "exception": "does-not-prevent-targeting-different-unit-this-phase"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "vardenghast-swarm-von-ryans-leapers"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "unit"
+    }
   }
 ]

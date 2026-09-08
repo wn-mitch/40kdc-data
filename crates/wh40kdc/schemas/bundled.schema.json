@@ -158,6 +158,7 @@
         "after-hit-roll",
         "before-wound-roll",
         "after-wound-roll",
+        "attack-scores-wound",
         "before-save-roll",
         "after-save-roll",
         "before-damage-roll",
@@ -185,7 +186,16 @@
         "leadership-test",
         "desperate-escape-test",
         "stratagem-targeted",
-        "ability-target-selected"
+        "ability-target-selected",
+        "end-of-opponent-charge-phase",
+        "enemy-unit-completed-shooting-targeting-bearer",
+        "enemy-unit-selects-bearer-as-charge-target",
+        "enemy-unit-targets-bearer",
+        "enemy-unit-completed-fall-back-from-bearer",
+        "act-of-faith-completed",
+        "act-of-faith-performed",
+        "miracle-die-generated",
+        "enemy-unit-selected-charge-targets-before-charge-move"
       ]
     },
     "battle-size": {
@@ -2372,6 +2382,7 @@
                 "minimum": 1
               },
               "default_weapon_ids": {
+                "description": "The model's no-choice equipment multiset, used by base_loadout. It must describe a legal default configuration even when whole-model variants are present; it does not implicitly add another selectable variant.",
                 "type": "array",
                 "items": {
                   "$ref": "#/$defs/entity-id"
@@ -2397,7 +2408,7 @@
                 ]
               },
               "loadout_variants": {
-                "description": "The complete alternative loadouts a model of this type may be built with, as named peers rather than deltas against `default_weapon_ids`. Each variant states the WHOLE weapon multiset for one model, so a squad that allocates its models between several equally-privileged loadouts needs no base model to subtract from. Repeated ids mean multiplicity. Absent means every model of this type carries `default_weapon_ids`; present, `default_weapon_ids` still governs `base_loadout` and is not replaced.",
+                "description": "Mutually exclusive whole-model loadout alternatives, expressed as named peers rather than deltas against default_weapon_ids. Each selected variant supplies one model's complete initial equipment multiset; repeated IDs preserve multiplicity. Compatible item-level wargear_options may transform that loadout but must satisfy the resulting variant's selection limits and all equipment budgets. When absent, models start with default_weapon_ids. When present, default_weapon_ids still governs base_loadout and is not replaced.",
                 "type": "array",
                 "minItems": 1,
                 "items": {
@@ -2409,7 +2420,7 @@
                       "minLength": 1
                     },
                     "weapon_ids": {
-                      "description": "This variant's complete per-model weapon/wargear multiset. A variant with no equipment is not a loadout.",
+                      "description": "This variant's complete per-model equipment multiset. Every ID must be in the owning unit's weapon_ids or resolve to faction wargear. Repeated IDs mean multiple copies; an empty multiset is not a loadout.",
                       "type": "array",
                       "minItems": 1,
                       "items": {
@@ -3034,7 +3045,7 @@
     },
     "wargear-option": {
       "title": "Wargear Option",
-      "description": "A wargear option available to models within a unit: a weapon/wargear swap, a pure add-on, or a choice between alternatives. Models start with the unit's base loadout; an option modifies that loadout for the number of models its `model_constraint` permits.",
+      "description": "An item-level weapon/wargear swap, addition, or choice available to models within a unit. An option transforms a model's default or selected whole-model loadout only when its model constraints and replacement prerequisites are satisfied. Whole-model alternatives belong in the composition's loadout_variants; applying an option must not bypass the resulting variant's selection limits or the unit's equipment budgets.",
       "type": "object",
       "properties": {
         "id": {
@@ -3431,8 +3442,36 @@
             "friendly-unit",
             "enemy-unit",
             "any-unit",
-            "model-in-bearer"
+            "model-in-bearer",
+            "friendly-model",
+            "enemy-model"
           ]
+        },
+        "caused_by": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "source": {
+              "enum": [
+                "bearer-model",
+                "bearer-unit"
+              ]
+            },
+            "attack_type": {
+              "enum": [
+                "melee",
+                "ranged"
+              ]
+            },
+            "weapon_keyword": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "source"
+          ],
+          "description": "Bind a destruction event to its actual causing model or unit. Supplying attack_type or weapon_keyword further requires a qualifying attack by that source."
         },
         "proximity": {
           "type": "object",
@@ -3526,10 +3565,90 @@
           ],
           "additionalProperties": false,
           "description": "Filter an ability-target-selected event by its source ability and source unit. The trigger subject is the selected unit. This does not infer that the source ability was used from a tag or phase."
+        },
+        "subject_keywords": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "All keywords required on the event subject itself: the triggering unit or individual model, not the ability bearer."
+        },
+        "subject_excluded_keywords": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "The event subject must have none of these keywords."
+        },
+        "binds_die_variable": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Binds the generated Miracle die identity from a resource-generation trigger; consumers refer only as {die_var: ID}."
+        },
+        "binds_selected_die_variable": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}."
         }
       },
       "required": [
         "event"
+      ],
+      "additionalProperties": false
+    },
+    "ability-trigger": {
+      "description": "For reactive abilities: the game event(s) this ability fires on, plus structured guards. One trigger object, OR an array of trigger objects — the ability fires on ANY listed trigger (models multi-event reactions like 'set up OR ends a move'). See `$defs/trigger`.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/trigger"
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/trigger"
+          }
+        }
+      ]
+    },
+    "ability-usage": {
+      "description": "How often the ability may be used, beyond what scope.duration captures. `scope.duration: one-use` already models 'once per battle'; this models finer limits (once per turn/phase, N per battle) and an optional per-army/unit/model granularity.",
+      "type": "object",
+      "properties": {
+        "frequency": {
+          "type": "string",
+          "enum": [
+            "once-per-turn",
+            "once-per-phase",
+            "once-per-battle-round",
+            "once-per-command-phase",
+            "once-per-opponent-turn",
+            "n-per-battle",
+            "first-this-battle",
+            "first-time-this-phase"
+          ]
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "per": {
+          "type": "string",
+          "enum": [
+            "army",
+            "unit",
+            "model"
+          ]
+        }
+      },
+      "required": [
+        "frequency"
       ],
       "additionalProperties": false
     },
@@ -3621,57 +3740,13 @@
           "$ref": "#/$defs/effect"
         },
         "trigger": {
-          "description": "For reactive abilities: the game event(s) this ability fires on, plus structured guards. One trigger object, OR an array of trigger objects — the ability fires on ANY listed trigger (models multi-event reactions like 'set up OR ends a move'). See `$defs/trigger`.",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/trigger"
-            },
-            {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "$ref": "#/$defs/trigger"
-              }
-            }
-          ]
+          "$ref": "#/$defs/ability-trigger"
         },
         "scope": {
           "$ref": "#/$defs/scope"
         },
         "usage": {
-          "description": "How often the ability may be used, beyond what scope.duration captures. `scope.duration: one-use` already models 'once per battle'; this models finer limits (once per turn/phase, N per battle) and an optional per-army/unit/model granularity.",
-          "type": "object",
-          "properties": {
-            "frequency": {
-              "type": "string",
-              "enum": [
-                "once-per-turn",
-                "once-per-phase",
-                "once-per-battle-round",
-                "once-per-command-phase",
-                "once-per-opponent-turn",
-                "n-per-battle",
-                "first-this-battle",
-                "first-time-this-phase"
-              ]
-            },
-            "count": {
-              "type": "integer",
-              "minimum": 1
-            },
-            "per": {
-              "type": "string",
-              "enum": [
-                "army",
-                "unit",
-                "model"
-              ]
-            }
-          },
-          "required": [
-            "frequency"
-          ],
-          "additionalProperties": false
+          "$ref": "#/$defs/ability-usage"
         },
         "applies_to": {
           "description": "Static, human-curated keyword filter naming which datasheet units this ability benefits, for roster-side highlighting. A unit matches when it carries every keyword in `required_keywords` (across its `keywords` + `faction_keywords`) and none in `excluded_keywords`. This is a denormalized projection distinct from the runtime `effect` condition tree (which mixes static class, runtime-granted markers, and timing gates and must not be scraped for scope). Absent/null means no resolvable unit scope — consumers render no highlight rather than guess.",
@@ -3825,7 +3900,25 @@
             "unit-model-count",
             "uniform-ranged-loadout",
             "all-attacks-target-same-unit",
-            "target-is-visible"
+            "target-is-visible",
+            "ability-window-capacity",
+            "candidate-eligible-in-ability-window",
+            "unit-is-led-by",
+            "on-battlefield",
+            "target-within-half-weapon-range",
+            "has-destroyed",
+            "roll-succeeded",
+            "unit-selected-to-shoot-this-phase",
+            "eligible-to-shoot",
+            "selection-has-keyword",
+            "target-of-triggering-charge",
+            "every-model-within-range-of-bearer",
+            "event-source-is-bearer-unit",
+            "event-source-is-attached-unit",
+            "miracle-die-generation-reason",
+            "miracle-die-generation-timing",
+            "destroyed-event-within-range",
+            "destroyed-by-friendly-unit"
           ],
           "description": " target-is-visible tests whether the target of the current attack is visible to its attacking model (not whether some other model can see it). within-range-of-objective subject:target tests the attack target; controlled_by qualifies the SAME marker, not an unrelated controlled objective."
         },
@@ -3935,6 +4028,24 @@
         },
         {
           "$ref": "#/$defs/no-effect-effect"
+        },
+        {
+          "$ref": "#/$defs/select-objective-effect"
+        },
+        {
+          "$ref": "#/$defs/for-each-objective-effect"
+        },
+        {
+          "$ref": "#/$defs/paired-designation-effect"
+        },
+        {
+          "$ref": "#/$defs/miracle-die-operation-effect"
+        },
+        {
+          "$ref": "#/$defs/formation-attachment-grant-effect"
+        },
+        {
+          "$ref": "#/$defs/attachment-eligibility-inherit-effect"
         }
       ]
     },
@@ -4106,7 +4217,13 @@
             "unit-keyword",
             "unit-keyword-grant",
             "unit-tag",
-            "ward"
+            "ward",
+            "unit-division",
+            "desperate-escape",
+            "reactive-charge",
+            "ability-usage-limit",
+            "deadly-demise-threshold",
+            "embark"
           ]
         },
         "target": {
@@ -4124,7 +4241,9 @@
             "friendly-within-aura",
             "enemy-within-aura",
             "all-friendly",
-            "all-enemy"
+            "all-enemy",
+            "destroyed-model",
+            "triggering-unit"
           ]
         },
         "modifier": {
@@ -4207,6 +4326,16 @@
         "choice_prompt": {
           "type": "string",
           "minLength": 1
+        },
+        "min_choices": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Minimum number of distinct options selected at this activation; defaults to one."
+        },
+        "max_choices": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum number of distinct options selected at this activation; defaults to one."
         }
       },
       "required": [
@@ -4283,6 +4412,21 @@
           "type": "boolean",
           "default": false,
           "description": "Whether the controlling player may decline to use this named sub-ability."
+        },
+        "cost": {
+          "$ref": "#/$defs/effect-node",
+          "description": "A prerequisite cost: the nested effect is granted only after this complete cost is paid. An optional named effect may be declined without paying it."
+        },
+        "duration": {
+          "$ref": "#/$defs/scope-duration",
+          "description": "Expiration of this sub-effect, independently of sibling rules in an enclosing bundle."
+        },
+        "trigger": {
+          "$ref": "#/$defs/ability-trigger",
+          "description": "Reactive event for this sub-ability. When nested inside an activated effect, the subscription exists only for the enclosing effect duration."
+        },
+        "usage": {
+          "$ref": "#/$defs/ability-usage"
         }
       },
       "required": [
@@ -4352,14 +4496,38 @@
           "type": "object",
           "properties": {
             "kind": {
-              "const": "leadership"
+              "enum": [
+                "leadership",
+                "battle-shock"
+              ]
             },
             "subject": {
               "type": "string",
               "enum": [
                 "unit",
-                "self"
+                "self",
+                "target"
               ]
+            },
+            "modifiers": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "condition": {
+                    "$ref": "#/$defs/condition"
+                  },
+                  "value": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "condition",
+                  "value"
+                ]
+              }
             }
           },
           "required": [
@@ -4367,7 +4535,12 @@
             "subject"
           ],
           "additionalProperties": false,
-          "description": "Perform an actual Leadership test with the normal test modifiers/re-roll permissions and the selected subject's current Leadership (the unit's applicable Leadership for subject:unit). It passes on 2D6 >= Leadership. It is not a Battle-shock test and does not itself inflict Battle-shock."
+          "description": "Perform the named actual 2D6 test using the subject's current Leadership and normal applicable modifiers and reroll permissions. A Battle-shock failure inflicts Battle-shock as well as resolving on_fail; a Leadership test does not."
+        },
+        "roll_var": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Binds this D6 result for an immediate nested consumer; a consumer refers to it only as {roll_var: ID}."
         }
       },
       "required": [
@@ -4580,6 +4753,12 @@
               ],
               "description": "Origin of both the range and engagement_relation gates. Default bearer means the model carrying the ability; bearer-unit means its entire current unit."
             },
+            "within_inches_from": {
+              "$ref": "#/$defs/selection-reference"
+            },
+            "visible_to": {
+              "$ref": "#/$defs/selection-reference"
+            },
             "selection_limit": {
               "type": "object",
               "properties": {
@@ -4603,6 +4782,30 @@
               ],
               "additionalProperties": false,
               "description": "Maximum selections of EACH target by this ability across ALL friendly bearers during the named period. Counter key is (controlling army, ability identity, target identity, period), not bearer identity. Selecting another target does not consume this target's counter."
+            },
+            "model_names": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "description": "Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords."
+            },
+            "excluded_keywords": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "description": "A candidate with any listed keyword is excluded."
+            },
+            "bind_as": {
+              "type": "string",
+              "minLength": 1
             }
           },
           "required": [
@@ -4689,6 +4892,36 @@
                 "bearer-unit"
               ],
               "description": "Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords."
+            },
+            "model_names": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "description": "Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords."
+            },
+            "excluded_keywords": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "description": "A candidate with any listed keyword is excluded."
+            },
+            "bind_as": {
+              "type": "string",
+              "minLength": 1
+            },
+            "eligibility": {
+              "$ref": "#/$defs/condition"
+            },
+            "within_objective": {
+              "$ref": "#/$defs/selection-reference"
             }
           },
           "required": [
@@ -4960,6 +5193,16 @@
               "type": "number",
               "minimum": 0
             },
+            "reference": {
+              "enum": [
+                "bearer",
+                "bearer-unit"
+              ],
+              "description": "Explicit built-in origin of range and visibility gates, matching select-units."
+            },
+            "visibility_required": {
+              "type": "boolean"
+            },
             "keywords": {
               "type": "array",
               "minItems": 1,
@@ -4979,6 +5222,48 @@
             "eligibility": {
               "$ref": "#/$defs/condition",
               "description": "Predicate on the candidate before selecting it. Event-bound history can refer to the attack sequence that caused this selection."
+            },
+            "visible_to": {
+              "$ref": "#/$defs/selection-reference"
+            },
+            "excluded_keywords": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "bind_as": {
+              "type": "string",
+              "minLength": 1
+            },
+            "within_inches_from": {
+              "$ref": "#/$defs/selection-reference"
+            },
+            "selection_limit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "count": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "period": {
+                  "enum": [
+                    "phase",
+                    "turn",
+                    "battle-round",
+                    "battle"
+                  ]
+                }
+              },
+              "required": [
+                "count",
+                "period"
+              ],
+              "description": "Maximum selections of this same target by this ability across the whole army in the named period."
             }
           },
           "required": [
@@ -4994,7 +5279,8 @@
               "enum": [
                 "target",
                 "attackers-of-target",
-                "bearer-attacks-target"
+                "bearer-attacks-target",
+                "bound-unit-attacks-reference"
               ]
             },
             "effect": {
@@ -5009,6 +5295,22 @@
               "minItems": 1,
               "uniqueItems": true,
               "description": "All keywords required on each individual friendly attacking MODEL, not on its unit. Only meaningful with to:attackers-of-target."
+            },
+            "attacker_unit_keywords": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "description": "All keywords required on the attacking model's UNIT, including attached-unit keyword unions. Does not require those keywords on the individual model. Only meaningful with to:attackers-of-target."
+            },
+            "beneficiary": {
+              "$ref": "#/$defs/event-or-selection-reference"
+            },
+            "reference": {
+              "$ref": "#/$defs/selection-reference"
             }
           },
           "required": [
@@ -6077,10 +6379,17 @@
     "persistent-designation-effect": {
       "type": "object",
       "additionalProperties": false,
-      "$comment": "Retain one selected enemy unit or objective marker, then resolve a bearer-only consumer relation against that exact reference for the declared duration. The seed policy is one-time selection at the start of the first battle round.",
+      "$comment": "Retained state is keyed by bearer unit and designation. Establishing it selects a reference and defines its consumer. A replacement-only operation updates that same designation's reference without adding another consumer or refreshing its expiry.",
       "properties": {
         "type": {
           "const": "persistent-designation"
+        },
+        "operation": {
+          "enum": [
+            "establish",
+            "replace"
+          ],
+          "default": "establish"
         },
         "designation": {
           "type": "string",
@@ -6108,8 +6417,16 @@
             "selection_policy": {
               "type": "string",
               "enum": [
-                "one-time"
+                "one-time",
+                "replace-on-destroyed"
               ]
+            },
+            "allow_while_embarked": {
+              "type": "boolean"
+            },
+            "bind_as": {
+              "type": "string",
+              "minLength": 1
             }
           },
           "required": [
@@ -6121,7 +6438,7 @@
         "consumer": {
           "type": "object",
           "additionalProperties": false,
-          "description": "The retained reference is consumed by the bearer model only; the renderer names both the bearer recipient and the exact selected-reference relation.",
+          "description": "Resolve the declared bearer-model or unit beneficiary against the exact retained reference.",
           "properties": {
             "relation": {
               "type": "string",
@@ -6129,16 +6446,21 @@
                 "attacks-selected-unit",
                 "within-selected-marker"
               ],
-              "description": "Resolve this relation from the bearer to its retained enemy unit or marker; do not substitute a generic target or nearby-object predicate."
+              "description": "Resolve this relation from the declared beneficiary to its retained unit or marker, not a generic target or nearby object."
             },
             "beneficiary": {
               "type": "string",
-              "const": "bearer",
-              "description": "For the seed, beneficiary bearer resolves to this model; the selected unit or marker is never the effect recipient."
+              "enum": [
+                "bearer",
+                "unit"
+              ]
             },
             "effect": {
               "$ref": "#/$defs/effect-node",
-              "description": "Nested effects target the bearer. Objective Control operation set is an assignment and renders as setting the characteristic to the value, not as a signed delta."
+              "description": "Nested effects apply to the declared beneficiary. An Objective Control set operation assigns the value, not a signed delta."
+            },
+            "reference": {
+              "$ref": "#/$defs/selection-reference"
             }
           },
           "required": [
@@ -6156,13 +6478,49 @@
             "battle",
             "until-next-command-phase"
           ]
+        },
+        "lifecycle": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "replace": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "event": {
+                  "const": "on-unit-destroyed"
+                },
+                "reference": {
+                  "$ref": "#/$defs/selection-reference"
+                },
+                "optional": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "event",
+                "reference",
+                "optional"
+              ]
+            },
+            "exclusivity": {
+              "const": "one-active-per-bearer-unit"
+            },
+            "expiry": {
+              "const": "battle-end"
+            }
+          },
+          "required": [
+            "replace",
+            "exclusivity",
+            "expiry"
+          ]
         }
       },
       "required": [
         "type",
         "designation",
         "select",
-        "consumer",
         "duration"
       ]
     },
@@ -6179,9 +6537,609 @@
       "additionalProperties": false,
       "description": "Resolve no effect; does not create attacks, damage, selections, or secondary events."
     },
+    "selection-reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "selection_var": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "selection_var"
+      ]
+    },
+    "event-or-selection-reference": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/event-bound-reference"
+        },
+        {
+          "$ref": "#/$defs/selection-reference"
+        }
+      ]
+    },
+    "objective-selector": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "count": {
+          "type": "integer",
+          "const": 1
+        },
+        "range_inches": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "origin": {
+          "enum": [
+            "bearer",
+            "bearer-unit"
+          ]
+        },
+        "controlled_by": {
+          "enum": [
+            "your-army",
+            "opponent"
+          ]
+        },
+        "requires_unit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "owner": {
+              "enum": [
+                "friendly",
+                "enemy"
+              ]
+            },
+            "requires_ability": {
+              "type": "string",
+              "minLength": 1
+            },
+            "relation": {
+              "const": "within-range"
+            }
+          },
+          "required": [
+            "owner",
+            "requires_ability",
+            "relation"
+          ]
+        },
+        "selection_limit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "period": {
+              "enum": [
+                "turn",
+                "phase",
+                "battle-round",
+                "battle"
+              ]
+            }
+          },
+          "required": [
+            "count",
+            "period"
+          ]
+        },
+        "bind_as": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "count",
+        "bind_as"
+      ]
+    },
+    "select-objective-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "select-objective"
+        },
+        "selector": {
+          "$ref": "#/$defs/objective-selector"
+        },
+        "effect": {
+          "$ref": "#/$defs/effect-node"
+        }
+      },
+      "required": [
+        "type",
+        "selector",
+        "effect"
+      ]
+    },
+    "for-each-objective-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "for-each-objective"
+        },
+        "selector": {
+          "$ref": "#/$defs/objective-selector"
+        },
+        "effect": {
+          "$ref": "#/$defs/effect-node"
+        }
+      },
+      "required": [
+        "type",
+        "selector",
+        "effect"
+      ]
+    },
+    "paired-designation-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "paired-designation"
+        },
+        "duration": {
+          "const": "phase"
+        },
+        "observer": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "role": {
+              "const": "observer"
+            },
+            "selector": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/paired-unit-selector"
+                },
+                {
+                  "properties": {
+                    "owner": {
+                      "const": "friendly"
+                    },
+                    "selection_mode": {
+                      "const": "any-number"
+                    }
+                  },
+                  "required": [
+                    "selection_mode",
+                    "requires_ability"
+                  ],
+                  "not": {
+                    "required": [
+                      "count"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "role",
+            "selector"
+          ]
+        },
+        "spotted": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "role": {
+              "const": "spotted"
+            },
+            "selector": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/paired-unit-selector"
+                },
+                {
+                  "properties": {
+                    "owner": {
+                      "const": "enemy"
+                    },
+                    "count": {
+                      "const": 1
+                    }
+                  },
+                  "required": [
+                    "count",
+                    "visible_to",
+                    "selection_limit"
+                  ],
+                  "not": {
+                    "required": [
+                      "selection_mode"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "role",
+            "selector"
+          ]
+        },
+        "guided": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "role": {
+              "const": "guided"
+            },
+            "owner": {
+              "const": "friendly"
+            },
+            "requires_ability": {
+              "type": "string",
+              "minLength": 1
+            },
+            "excludes": {
+              "$ref": "#/$defs/selection-reference"
+            },
+            "while_attacking": {
+              "$ref": "#/$defs/selection-reference"
+            }
+          },
+          "required": [
+            "role",
+            "owner",
+            "requires_ability",
+            "excludes",
+            "while_attacking"
+          ]
+        },
+        "observer_eligibility": {
+          "$ref": "#/$defs/condition"
+        },
+        "effects": {
+          "$ref": "#/$defs/effect-node"
+        }
+      },
+      "required": [
+        "type",
+        "duration",
+        "observer",
+        "spotted",
+        "guided",
+        "observer_eligibility",
+        "effects"
+      ],
+      "$comment": "Select the Observer set at phase start, then bind each eligible Observer to its Spotted unit during the phase. Observer/spotted references resolve to the current pair inside the per-attack effects and to the accumulated role sets for Guided eligibility."
+    },
+    "paired-unit-selector": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "owner": {
+          "enum": [
+            "friendly",
+            "enemy"
+          ]
+        },
+        "count": {
+          "type": "integer",
+          "const": 1
+        },
+        "selection_mode": {
+          "const": "any-number"
+        },
+        "requires_ability": {
+          "type": "string",
+          "minLength": 1
+        },
+        "visible_to": {
+          "$ref": "#/$defs/selection-reference"
+        },
+        "selection_limit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "period": {
+              "enum": [
+                "turn",
+                "phase",
+                "battle-round",
+                "battle"
+              ]
+            }
+          },
+          "required": [
+            "count",
+            "period"
+          ]
+        },
+        "bind_as": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "owner",
+        "bind_as"
+      ],
+      "oneOf": [
+        {
+          "required": [
+            "count"
+          ]
+        },
+        {
+          "required": [
+            "selection_mode"
+          ]
+        }
+      ]
+    },
+    "roll-reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "roll_var": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "roll_var"
+      ]
+    },
+    "miracle-die-reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "die_var": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "die_var"
+      ]
+    },
+    "miracle-die-operation-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "miracle-die-operation"
+        },
+        "target": {
+          "const": "self"
+        },
+        "modifier": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "operation": {
+              "enum": [
+                "reroll-generated-result",
+                "set-generated-value-without-roll",
+                "set-used-value",
+                "reroll-retained-and-return"
+              ]
+            },
+            "die": {
+              "$ref": "#/$defs/miracle-die-reference"
+            },
+            "value": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 6
+            },
+            "pool_id": {
+              "const": "miracle-dice-pool"
+            },
+            "resource_label": {
+              "const": "Miracle dice"
+            },
+            "stage": {
+              "enum": [
+                "before-pool-add",
+                "before-act-of-faith-resolution"
+              ]
+            },
+            "selection": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "count": {
+                  "oneOf": [
+                    {
+                      "const": 1
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "minimum": {
+                          "const": 1
+                        },
+                        "maximum": {
+                          "enum": [
+                            1,
+                            3
+                          ]
+                        }
+                      },
+                      "required": [
+                        "minimum",
+                        "maximum"
+                      ]
+                    }
+                  ]
+                },
+                "from": {
+                  "enum": [
+                    "dice-used-in-triggering-act-of-faith",
+                    "retained-pool-dice"
+                  ]
+                },
+                "policy": {
+                  "const": "controller-chooses"
+                }
+              },
+              "required": [
+                "count",
+                "from",
+                "policy"
+              ]
+            },
+            "optional": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "operation",
+            "pool_id",
+            "resource_label"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "target",
+        "modifier"
+      ]
+    },
+    "formation-attachment-grant-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "formation-attachment-grant"
+        },
+        "source": {
+          "enum": [
+            "self",
+            "bearer-unit"
+          ]
+        },
+        "beneficiary": {
+          "enum": [
+            "self",
+            "attached-leader-model"
+          ]
+        },
+        "formation_event": {
+          "const": "declare-battle-formations"
+        },
+        "attachment": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "leader_id": {
+              "$ref": "#/$defs/entity-id"
+            },
+            "bodyguard_id": {
+              "$ref": "#/$defs/entity-id"
+            }
+          },
+          "required": [
+            "bodyguard_id"
+          ]
+        },
+        "grant": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "recipient": {
+              "const": "beneficiary"
+            },
+            "effect": {
+              "$ref": "#/$defs/beneficiary-bound-effect-node"
+            }
+          },
+          "required": [
+            "recipient",
+            "effect"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "source",
+        "beneficiary",
+        "formation_event",
+        "attachment",
+        "grant"
+      ]
+    },
+    "attachment-eligibility-inherit-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "attachment-eligibility-inherit"
+        },
+        "target": {
+          "const": "self"
+        },
+        "modifier": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "leader_id": {
+              "$ref": "#/$defs/entity-id"
+            },
+            "required_leader_ability": {
+              "const": "Leader"
+            },
+            "from_bodyguard_id": {
+              "$ref": "#/$defs/entity-id"
+            },
+            "to_bodyguard_id": {
+              "$ref": "#/$defs/entity-id"
+            }
+          },
+          "required": [
+            "leader_id",
+            "required_leader_ability",
+            "from_bodyguard_id",
+            "to_bodyguard_id"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "target",
+        "modifier"
+      ]
+    },
     "effect": {
       "title": "Ability Effect",
       "$ref": "#/$defs/effect-node"
+    },
+    "scope-duration": {
+      "type": "string",
+      "enum": [
+        "phase",
+        "turn",
+        "battle-round",
+        "battle",
+        "until-next-command-phase",
+        "until-next-movement-phase",
+        "until-next-battle-round",
+        "until-start-next-turn",
+        "one-use",
+        "permanent",
+        "attack-sequence",
+        "resolution"
+      ],
+      "description": "attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit."
     },
     "scope": {
       "title": "Ability Scope",
@@ -6204,22 +7162,7 @@
           ]
         },
         "duration": {
-          "type": "string",
-          "enum": [
-            "phase",
-            "turn",
-            "battle-round",
-            "battle",
-            "until-next-command-phase",
-            "until-next-movement-phase",
-            "until-next-battle-round",
-            "until-start-next-turn",
-            "one-use",
-            "permanent",
-            "attack-sequence",
-            "resolution"
-          ],
-          "description": "attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit."
+          "$ref": "#/$defs/scope-duration"
         },
         "range_inches": {
           "type": "number"

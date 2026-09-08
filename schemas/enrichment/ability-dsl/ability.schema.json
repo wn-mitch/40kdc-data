@@ -88,57 +88,13 @@
       "$ref": "effect.schema.json"
     },
     "trigger": {
-      "description": "For reactive abilities: the game event(s) this ability fires on, plus structured guards. One trigger object, OR an array of trigger objects — the ability fires on ANY listed trigger (models multi-event reactions like 'set up OR ends a move'). See `$defs/trigger`.",
-      "oneOf": [
-        {
-          "$ref": "#/$defs/trigger"
-        },
-        {
-          "type": "array",
-          "minItems": 1,
-          "items": {
-            "$ref": "#/$defs/trigger"
-          }
-        }
-      ]
+      "$ref": "#/$defs/ability-trigger"
     },
     "scope": {
       "$ref": "scope.schema.json"
     },
     "usage": {
-      "description": "How often the ability may be used, beyond what scope.duration captures. `scope.duration: one-use` already models 'once per battle'; this models finer limits (once per turn/phase, N per battle) and an optional per-army/unit/model granularity.",
-      "type": "object",
-      "properties": {
-        "frequency": {
-          "type": "string",
-          "enum": [
-            "once-per-turn",
-            "once-per-phase",
-            "once-per-battle-round",
-            "once-per-command-phase",
-            "once-per-opponent-turn",
-            "n-per-battle",
-            "first-this-battle",
-            "first-time-this-phase"
-          ]
-        },
-        "count": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "per": {
-          "type": "string",
-          "enum": [
-            "army",
-            "unit",
-            "model"
-          ]
-        }
-      },
-      "required": [
-        "frequency"
-      ],
-      "additionalProperties": false
+      "$ref": "#/$defs/ability-usage"
     },
     "applies_to": {
       "description": "Static, human-curated keyword filter naming which datasheet units this ability benefits, for roster-side highlighting. A unit matches when it carries every keyword in `required_keywords` (across its `keywords` + `faction_keywords`) and none in `excluded_keywords`. This is a denormalized projection distinct from the runtime `effect` condition tree (which mixes static class, runtime-granted markers, and timing gates and must not be scraped for scope). Absent/null means no resolvable unit scope — consumers render no highlight rather than guess.",
@@ -224,8 +180,21 @@
             "friendly-unit",
             "enemy-unit",
             "any-unit",
-            "model-in-bearer"
+            "model-in-bearer",
+            "friendly-model",
+            "enemy-model"
           ]
+        },
+        "caused_by": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "source": { "enum": ["bearer-model", "bearer-unit"] },
+            "attack_type": { "enum": ["melee", "ranged"] },
+            "weapon_keyword": { "type": "string", "minLength": 1 }
+          },
+          "required": ["source"],
+          "description": "Bind a destruction event to its actual causing model or unit. Supplying attack_type or weapon_keyword further requires a qualifying attack by that source."
         },
         "proximity": {
           "type": "object",
@@ -319,6 +288,36 @@
           ],
           "additionalProperties": false,
           "description": "Filter an ability-target-selected event by its source ability and source unit. The trigger subject is the selected unit. This does not infer that the source ability was used from a tag or phase."
+        },
+        "subject_keywords": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "All keywords required on the event subject itself: the triggering unit or individual model, not the ability bearer."
+        },
+        "subject_excluded_keywords": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "The event subject must have none of these keywords."
+        },
+        "binds_die_variable": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Binds the generated Miracle die identity from a resource-generation trigger; consumers refer only as {die_var: ID}."
+        },
+        "binds_selected_die_variable": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}."
         }
       },
       "required": [
@@ -326,6 +325,12 @@
       ],
       "additionalProperties": false,
       "allOf": [
+        {
+          "if": { "required": ["caused_by"] },
+          "then": {
+            "properties": { "event": { "enum": ["on-unit-destroyed", "on-model-destroyed"] } }
+          }
+        },
         {
           "if": {
             "required": [
@@ -357,8 +362,92 @@
               "subject"
             ]
           }
+        },
+        {
+          "if": {
+            "required": [
+              "binds_die_variable"
+            ]
+          },
+          "then": {
+            "properties": {
+              "event": {
+                "const": "miracle-die-generated"
+              }
+            },
+            "required": [
+              "subject"
+            ]
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "binds_selected_die_variable"
+            ]
+          },
+          "then": {
+            "properties": {
+              "event": {
+                "const": "act-of-faith-performed"
+              }
+            },
+            "required": [
+              "subject"
+            ]
+          }
         }
       ]
+    },
+    "ability-trigger": {
+      "description": "For reactive abilities: the game event(s) this ability fires on, plus structured guards. One trigger object, OR an array of trigger objects — the ability fires on ANY listed trigger (models multi-event reactions like 'set up OR ends a move'). See `$defs/trigger`.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/trigger"
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/trigger"
+          }
+        }
+      ]
+    },
+    "ability-usage": {
+      "description": "How often the ability may be used, beyond what scope.duration captures. `scope.duration: one-use` already models 'once per battle'; this models finer limits (once per turn/phase, N per battle) and an optional per-army/unit/model granularity.",
+      "type": "object",
+      "properties": {
+        "frequency": {
+          "type": "string",
+          "enum": [
+            "once-per-turn",
+            "once-per-phase",
+            "once-per-battle-round",
+            "once-per-command-phase",
+            "once-per-opponent-turn",
+            "n-per-battle",
+            "first-this-battle",
+            "first-time-this-phase"
+          ]
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "per": {
+          "type": "string",
+          "enum": [
+            "army",
+            "unit",
+            "model"
+          ]
+        }
+      },
+      "required": [
+        "frequency"
+      ],
+      "additionalProperties": false
     }
   }
 }

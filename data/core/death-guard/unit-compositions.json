@@ -1374,5 +1374,233 @@
         ]
       }
     ]
+  },
+  {
+    "unit_id": "maggot-lords-chaos-rhino",
+    "faction_id": "death-guard",
+    "models": [
+      {
+        "name": "Chaos Rhino",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "armoured-tracks",
+          "havoc-launcher"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Chaos Rhino",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "maggot-lords-deathshroud-terminators",
+    "faction_id": "death-guard",
+    "models": [
+      {
+        "name": "Deathshroud Champion",
+        "profile_name": "Deathshroud Terminator",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "default_weapon_ids": [
+          "manreaper-strike-maggot-lords",
+          "plaguespurt-gauntlet-maggot-lords"
+        ]
+      },
+      {
+        "name": "Deathshroud Terminator",
+        "min": 2,
+        "max": 2,
+        "default_weapon_ids": [
+          "manreaper-strike-maggot-lords",
+          "plaguespurt-gauntlet-maggot-lords"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Deathshroud Champion",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Deathshroud Terminator",
+            "min": 2,
+            "max": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "maggot-lords-plague-marines",
+    "faction_id": "death-guard",
+    "models": [
+      {
+        "name": "Plague Champion",
+        "profile_name": "Plague Marine with Plague Spewer",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "default_weapon_ids": [
+          "plasma-pistol-maggot-lords",
+          "power-fist"
+        ]
+      },
+      {
+        "name": "Plague Marine with Blight Launcher",
+        "profile_name": "Plague Marine with Plague Spewer",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "blight-launcher",
+          "plague-knives-plague-marines"
+        ]
+      },
+      {
+        "name": "Plague Marine with Plague Spewer",
+        "profile_name": "Plague Marine with Plague Spewer",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "plague-knives-plague-marines",
+          "plague-spewer"
+        ]
+      },
+      {
+        "name": "Plague Marine",
+        "profile_name": "Plague Marine with Plague Spewer",
+        "min": 4,
+        "max": 4,
+        "default_weapon_ids": [
+          "boltgun",
+          "plague-knives-plague-marines"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Plague Champion",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Plague Marine with Blight Launcher",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Plague Marine with Plague Spewer",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Plague Marine",
+            "min": 4,
+            "max": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "septimol-fulg-maggot-lords-tallyman",
+    "faction_id": "death-guard",
+    "models": [
+      {
+        "name": "Septimol Fulg",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "numerological-artefacts",
+          "plasma-pistol-maggot-lords"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Septimol Fulg",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "sholgor-the-putrid",
+    "faction_id": "death-guard",
+    "models": [
+      {
+        "name": "Sholgor the Putrid",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "power-fist-sholgor-the-putrid",
+          "twin-plague-spewer"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Sholgor the Putrid",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   }
 ]

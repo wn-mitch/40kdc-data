@@ -29,7 +29,7 @@ Each line is exactly one valid JSON object terminated by `\n`. UTF-8, no BOM. Li
 The first request after launch is always:
 
 ```json
-{"op":"init","spec_version":1,"locale":"C","tz":"UTC","seed":0}
+{"op":"init","args":{"spec_version":1,"locale":"C","tz":"UTC","seed":0}}
 ```
 
 The runner responds with:

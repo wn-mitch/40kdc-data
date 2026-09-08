@@ -72,5 +72,15 @@
       "edition": "11th",
       "dataslate": "launch"
     }
+  },
+  {
+    "leader_id": "vynn-bane-slayer",
+    "eligible_bodyguard_ids": [
+      "bane-slayers-bulwark-einhyr-hearthguard"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
   }
 ]

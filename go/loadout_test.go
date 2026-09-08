@@ -67,3 +67,84 @@ func TestVariantBudgetCap(t *testing.T) {
 		t.Fatalf("expected flat cap 2, got %d", got)
 	}
 }
+
+func TestVariantLoadoutUsesNamedCapsAndExactLegality(t *testing.T) {
+	unit := map[string]any{"id": "variant-unit"}
+	models := []any{map[string]any{
+		"name": "Trooper", "min": float64(2), "max": float64(2),
+		"default_weapon_ids": []any{"gun"},
+		"loadout_variants": []any{
+			map[string]any{"name": "gunner", "weapon_ids": []any{"gun"}},
+			map[string]any{"name": "plasma", "weapon_ids": []any{"plasma"}, "max_count": float64(1)},
+		},
+	}}
+	got := LoadoutCandidates(unit, 2, nil, models, nil, nil)
+	for _, candidate := range got {
+		if candidate == "plasma×2 => plasma:2" {
+			t.Fatalf("variant max_count must constrain candidates: %v", got)
+		}
+	}
+	if violations := validateLoadout(unit, 2, nil, map[string]int{"plasma": 2}, models); len(violations) == 0 || violations[len(violations)-1]["code"] != "swap-conflict" {
+		t.Fatalf("two capped variants must fail exact legality, got %v", violations)
+	}
+	if violations := validateLoadout(unit, 2, nil, map[string]int{"gun": 1, "plasma": 1}, models); len(violations) != 0 {
+		t.Fatalf("one of each declared variant should be legal, got %v", violations)
+	}
+
+	scannerOptions := []any{
+		map[string]any{"replaces": []any{"rifle"}, "replacement": []any{"plasma"}, "model_constraint": map[string]any{"any_number": true}},
+		map[string]any{"replacement": []any{"scanner"}, "model_constraint": map[string]any{"max_count": float64(1)}},
+	}
+	sharedRow := map[string]any{
+		"name": "Trooper", "min": float64(2), "max": float64(2),
+		"loadout_variants": []any{
+			map[string]any{"name": "Rifle", "weapon_ids": []any{"rifle"}},
+			map[string]any{"name": "Plasma", "weapon_ids": []any{"plasma"}, "max_count": float64(1)},
+		},
+		"loadout_variant_budgets": []any{
+			map[string]any{"variant_names": []any{"Plasma"}, "count": float64(1), "per_models": float64(0), "scope": "unit"},
+		},
+	}
+	sharedModels := []any{sharedRow}
+	hasPlasmaOptionRoute := false
+	for _, candidate := range rowCandidates(sharedRow, 0, 2, 2, scannerOptions).candidates {
+		if candidate.key == "1:plasma" && candidate.variantName == "Plasma" && len(candidate.usedOptions) == 1 && candidate.usedOptions[0] == 0 {
+			hasPlasmaOptionRoute = true
+			break
+		}
+	}
+	if !hasPlasmaOptionRoute {
+		t.Fatal("expected rifle-to-plasma option provenance under the canonical Plasma variant")
+	}
+	scannerCandidates := LoadoutCandidates(unit, 2, scannerOptions, sharedModels, nil, nil)
+	legal := "Rifle×1;Plasma×1 => plasma:1,rifle:1,scanner:1"
+	foundLegal := false
+	for _, candidate := range scannerCandidates {
+		if candidate == legal {
+			foundLegal = true
+			break
+		}
+	}
+	if !foundLegal {
+		t.Fatalf("expected legal rifle/plasma scanner candidate, got %v", scannerCandidates)
+	}
+	if violations := validateLoadout(unit, 2, scannerOptions, map[string]int{"rifle": 1, "plasma": 1, "scanner": 1}, sharedModels); len(violations) != 0 {
+		t.Fatalf("rifle, plasma, and scanner should be legal, got %v", violations)
+	}
+	if violations := validateLoadout(unit, 2, scannerOptions, map[string]int{"plasma": 2, "scanner": 1}, sharedModels); len(violations) == 0 || violations[len(violations)-1]["code"] != "swap-conflict" {
+		t.Fatalf("scanner must not bypass plasma cap, got %v", violations)
+	}
+}
+
+func TestRowCandidatesRequireDuplicateReplacementPrerequisites(t *testing.T) {
+	options := []any{map[string]any{
+		"replaces": []any{"gun", "gun"}, "replacement": []any{"launcher"},
+		"model_constraint": map[string]any{"max_count": float64(1)},
+	}}
+	candidates := enumerateRowCandidates(map[string]int{"gun": 1}, "Trooper", options, nil)
+	for _, candidate := range candidates {
+		if candidate.weapons["launcher"] > 0 {
+			t.Fatalf("replacement requiring two guns applied with one prerequisite: %#v", candidate)
+		}
+	}
+}
