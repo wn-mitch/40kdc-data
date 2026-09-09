@@ -480,6 +480,22 @@ def _roll_name(roll: Any) -> str:
     return _ROLL_NAMES.get(r, _title_case(r))
 
 
+def _reroll_count(m: dict[str, Any]) -> int | None:
+    """The re-roll modifier's ``count`` cap, when one is set."""
+    cnt = m.get("count")
+    return cnt if isinstance(cnt, int) and not isinstance(cnt, bool) else None
+
+
+def _reroll_count_phrase(m: dict[str, Any], cnt: int) -> str:
+    """Renders a count-capped re-roll's subject: "one Hit roll", "up to 2
+    failed Wound rolls", "one roll of 1"."""
+    lead, plural = ("one", "") if cnt == 1 else (f"up to {cnt}", "s")
+    failed = "failed " if m.get("subset") == "all-failures" else ""
+    noun = "roll" if _jstr(m.get("roll")) == "any" else f"{_roll_name(m.get('roll'))} roll"
+    of_one = " of 1" if m.get("subset") == "ones" else ""
+    return f"{lead} {failed}{noun}{plural}{of_one}"
+
+
 def _is_plural(subj: str) -> bool:
     return bool(
         re.search(r" units\b", subj)
@@ -1200,7 +1216,10 @@ def _named_region_effect(branch: dict[str, Any], qualified: bool, ctx: Ctx | Non
         modifier = modifier_raw
     roll = _roll_name(modifier.get("roll"))
     if effect.get("type") == "re-roll":
-        if modifier.get("result_scope") == "any-result":
+        reroll_cap = _reroll_count(modifier)
+        if reroll_cap is not None:
+            text = f"can re-roll {_reroll_count_phrase(modifier, reroll_cap)}"
+        elif modifier.get("result_scope") == "any-result":
             text = f"can re-roll the {roll} roll"
         elif modifier.get("subset") == "ones":
             text = f"can re-roll {roll} rolls of 1"
@@ -1705,7 +1724,12 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
         sgn = _signed(m.get("operation"), m["value"])
         return f"{subj} {_v(subj, 'gets')} {sgn} to {roll} rolls{ctx_note}"
     if etype == "re-roll":
-        if _jstr(m.get("roll")) == "any":
+        # Count-capped re-roll: up to `count` qualifying rolls within the
+        # ability's active window ("one Hit roll", "up to 2 failed Wound rolls").
+        reroll_cap = _reroll_count(m)
+        if reroll_cap is not None:
+            which = _reroll_count_phrase(m, reroll_cap)
+        elif _jstr(m.get("roll")) == "any":
             which = "any roll of 1" if m.get("subset") == "ones" else "any roll"
         else:
             noun = _roll_name(m.get("roll"))

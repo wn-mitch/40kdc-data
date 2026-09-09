@@ -1450,14 +1450,19 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
     }
     case "re-roll": {
       const rn = jstr(m.roll);
+      // Count-capped re-roll: up to `count` qualifying rolls within the
+      // ability's active window ("one Hit roll", "up to 2 failed Wound rolls").
+      const cnt = typeof m.count === "number" ? m.count : undefined;
       const which =
-        rn === "any"
-          ? m.subset === "ones"
-            ? "any roll of 1"
-            : "any roll"
-          : m.subset === "ones"
-            ? `a ${rollName(m.roll)} roll of 1`
-            : `the ${rollName(m.roll)} roll`;
+        cnt != null
+          ? `${cnt === 1 ? "one" : `up to ${cnt}`} ${m.subset === "all-failures" ? "failed " : ""}${rn === "any" ? "roll" : `${rollName(m.roll)} roll`}${cnt === 1 ? "" : "s"}${m.subset === "ones" ? " of 1" : ""}`
+          : rn === "any"
+            ? m.subset === "ones"
+              ? "any roll of 1"
+              : "any roll"
+            : m.subset === "ones"
+              ? `a ${rollName(m.roll)} roll of 1`
+              : `the ${rollName(m.roll)} roll`;
       const permission = m.optional === false ? "re-roll" : "you can re-roll";
       const owner = e.target === "self" || e.target === "bearer" || ctx.selectedModel ? ` for ${["hit", "wound", "damage"].includes(jstr(m.roll)) ? "attacks made by " : ""}${weaponHolder(e.target, ctx)}` : "";
       return `${permission} ${which}${owner}${weaponRollScope(m)}`;
@@ -2098,12 +2103,15 @@ function namedRegionEffect(branch: Record<string, unknown>, qualified: boolean, 
   const roll = rollName(modifier.roll);
   let text: string;
   if (effect.type === "re-roll") {
+    const cnt = typeof modifier.count === "number" ? modifier.count : undefined;
     text =
-      modifier.result_scope === "any-result"
-        ? `can re-roll the ${roll} roll`
-        : modifier.subset === "ones"
-          ? `can re-roll ${roll} rolls of 1`
-          : `can re-roll ${roll} rolls`;
+      cnt != null
+        ? `can re-roll ${cnt === 1 ? "one" : `up to ${cnt}`} ${modifier.subset === "all-failures" ? "failed " : ""}${roll} roll${cnt === 1 ? "" : "s"}${modifier.subset === "ones" ? " of 1" : ""}`
+        : modifier.result_scope === "any-result"
+          ? `can re-roll the ${roll} roll`
+          : modifier.subset === "ones"
+            ? `can re-roll ${roll} rolls of 1`
+            : `can re-roll ${roll} rolls`;
   } else if (effect.type === "roll-modifier" && modifier.value != null) {
     text = `gets ${signed(modifier.operation, modifier.value)} to ${roll}`;
   } else {

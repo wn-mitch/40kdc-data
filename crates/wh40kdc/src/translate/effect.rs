@@ -1243,6 +1243,37 @@ fn named_region_subject(m: &Map<String, Value>) -> String {
     )
 }
 
+/// The re-roll modifier's `count` cap, when one is set.
+fn reroll_count(m: &Map<String, Value>) -> Option<i64> {
+    m.get("count").and_then(Value::as_i64)
+}
+
+/// Renders a count-capped re-roll's subject: "one Hit roll", "up to 2 failed
+/// Wound rolls", "one roll of 1".
+fn reroll_count_phrase(m: &Map<String, Value>, cnt: i64) -> String {
+    let (lead, plural) = if cnt == 1 {
+        ("one".to_string(), "")
+    } else {
+        (format!("up to {cnt}"), "s")
+    };
+    let failed = if nstr(m, "subset") == Some("all-failures") {
+        "failed "
+    } else {
+        ""
+    };
+    let noun = if nstr(m, "roll") == Some("any") {
+        "roll".to_string()
+    } else {
+        format!("{} roll", roll_name(m.get("roll").unwrap_or(&Value::Null)))
+    };
+    let of_one = if nstr(m, "subset") == Some("ones") {
+        " of 1"
+    } else {
+        ""
+    };
+    format!("{lead} {failed}{noun}{plural}{of_one}")
+}
+
 fn named_region_effect(branch: &Map<String, Value>, qualified: bool, ctx: &Ctx) -> String {
     let effect_value = branch.get("effect");
     let effect_map = effect_value.and_then(Value::as_object);
@@ -1256,7 +1287,12 @@ fn named_region_effect(branch: &Map<String, Value>, qualified: bool, ctx: &Ctx) 
         .as_deref()
     {
         Some("re-roll") => {
-            if modifier
+            if let Some(cnt) = modifier.and_then(reroll_count) {
+                format!(
+                    "can re-roll {}",
+                    reroll_count_phrase(modifier.unwrap_or(&Map::new()), cnt)
+                )
+            } else if modifier
                 .and_then(|m| m.get("result_scope"))
                 .map(jval)
                 .as_deref()
@@ -2061,7 +2097,11 @@ fn describe_single(e: &SingleEffect, ctx: &Ctx) -> String {
             }
         }
         T::ReRoll => {
-            let which = if nstr(m, "roll") == Some("any") {
+            // Count-capped re-roll: up to `count` qualifying rolls within the
+            // ability's active window ("one Hit roll", "up to 2 failed Wound rolls").
+            let which = if let Some(cnt) = reroll_count(m) {
+                reroll_count_phrase(m, cnt)
+            } else if nstr(m, "roll") == Some("any") {
                 if nstr(m, "subset") == Some("ones") {
                     "any roll of 1".to_string()
                 } else {

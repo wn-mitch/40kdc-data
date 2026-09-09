@@ -3071,6 +3071,66 @@ function genEffectTranslation(): void {
       },
     });
   }
+
+  // Count-capped re-rolls ("you can re-roll one Hit roll"): the optional
+  // `count` on the re-roll modifier caps how many qualifying rolls may be
+  // re-rolled within the ability's active window. No enrichment ability
+  // carries `count` yet, so these are forced synthetic exemplars pinning the
+  // four phrasings (one/any-result, one failed, up-to-N, one-of-1); expected
+  // text still comes from the reference describer, so a second impl must
+  // independently reproduce it.
+  const FORCED_REROLL_COUNT_CASES: {
+    id: string;
+    effect: Record<string, unknown>;
+    scope: Record<string, unknown>;
+  }[] = [
+    {
+      id: "reroll-count-one-hit",
+      effect: {
+        type: "re-roll",
+        target: "unit",
+        modifier: { roll: "hit", result_scope: "any-result", count: 1 },
+      },
+      scope: { range: "unit", duration: "phase" },
+    },
+    {
+      id: "reroll-count-one-failed-wound",
+      effect: {
+        type: "re-roll",
+        target: "unit",
+        modifier: { roll: "wound", subset: "all-failures", count: 1 },
+      },
+      scope: { range: "unit", duration: "phase" },
+    },
+    {
+      id: "reroll-count-two-any",
+      effect: {
+        type: "re-roll",
+        target: "unit",
+        modifier: { roll: "any", result_scope: "any-result", count: 2 },
+      },
+      scope: { range: "unit", duration: "turn" },
+    },
+    {
+      id: "reroll-count-one-of-1",
+      effect: {
+        type: "re-roll",
+        target: "unit",
+        modifier: { roll: "hit", subset: "ones", count: 1 },
+      },
+      scope: { range: "unit", duration: "phase" },
+    },
+  ];
+  for (const fc of FORCED_REROLL_COUNT_CASES) {
+    cases.push({
+      caseId: `${fc.id}#${cases.length}`,
+      effect: fc.effect,
+      scope: fc.scope,
+      expected: {
+        text: describeAbility({ effect: fc.effect as Effect, scope: fc.scope }),
+      },
+    });
+  }
   // moved-through-tall-terrain canonical game-event: pins the new timing-is
   // negation arm (inline conditional lead-in AND trigger-condition predicate
   // form), the event dispatched directly as a trigger.event, the two legacy

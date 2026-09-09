@@ -1795,6 +1795,39 @@ func namedRegionSubject(m map[string]any) string {
 	return "Models in " + namedRegionKeywords(gate["keywords"]) + " units" + factionPart
 }
 
+// rerollCount returns the re-roll modifier's `count` cap, when one is set.
+func rerollCount(m map[string]any) (int, bool) {
+	switch v := m["count"].(type) {
+	case float64:
+		return int(v), true
+	case int:
+		return v, true
+	}
+	return 0, false
+}
+
+// rerollCountPhrase renders a count-capped re-roll's subject: "one Hit roll",
+// "up to 2 failed Wound rolls", "one roll of 1".
+func rerollCountPhrase(m map[string]any, cnt int) string {
+	lead, plural := "one", ""
+	if cnt != 1 {
+		lead, plural = "up to "+itoa(cnt), "s"
+	}
+	failed := ""
+	if m["subset"] == "all-failures" {
+		failed = "failed "
+	}
+	noun := "roll"
+	if ejstr(m["roll"]) != "any" {
+		noun = rollName(m["roll"]) + " roll"
+	}
+	ofOne := ""
+	if m["subset"] == "ones" {
+		ofOne = " of 1"
+	}
+	return lead + " " + failed + noun + plural + ofOne
+}
+
 func namedRegionBranchEffect(branch map[string]any, qualified bool, ctx map[string]any) string {
 	effect, _ := asMap(branch["effect"])
 	modifier, _ := asMap(effect["modifier"])
@@ -1802,7 +1835,9 @@ func namedRegionBranchEffect(branch map[string]any, qualified bool, ctx map[stri
 	text := ""
 	switch getStr(effect, "type") {
 	case "re-roll":
-		if modifier["result_scope"] == "any-result" {
+		if cnt, ok := rerollCount(modifier); ok {
+			text = "can re-roll " + rerollCountPhrase(modifier, cnt)
+		} else if modifier["result_scope"] == "any-result" {
 			text = "can re-roll the " + roll + " roll"
 		} else if modifier["subset"] == "ones" {
 			text = "can re-roll " + roll + " rolls of 1"
@@ -1990,7 +2025,11 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 		return subj + " " + ev(subj, "gets") + " " + esigned(m["operation"], m["value"]) + " to " + roll + " rolls" + ctxNote
 	case "re-roll":
 		var which string
-		if ejstr(m["roll"]) == "any" {
+		if cnt, ok := rerollCount(m); ok {
+			// Count-capped re-roll: up to `count` qualifying rolls within the
+			// ability's active window ("one Hit roll", "up to 2 failed Wound rolls").
+			which = rerollCountPhrase(m, cnt)
+		} else if ejstr(m["roll"]) == "any" {
 			which = "any roll"
 			if m["subset"] == "ones" {
 				which = "any roll of 1"
