@@ -225,6 +225,10 @@ func translateReroll(node, source map[string]any, opts dslOpts, out *effectTrans
 	if opts.perspective == "target" && roll != "save" {
 		return
 	}
+	if _, capped := modifier["count"]; capped {
+		out.unsupported = append(out.unsupported, unsup("re-roll: count-capped permissions are not modelled by the expected-value engine", node))
+		return
+	}
 	if (roll == "hit" || roll == "wound" || roll == "save" || roll == "damage") &&
 		(subset == "ones" || subset == "all-failures") {
 		out.applied = append(out.applied, map[string]any{"source": source, "contribution": map[string]any{"type": "reroll", "roll": roll, "subset": subset}})

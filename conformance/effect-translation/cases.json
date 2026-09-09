@@ -17821,83 +17821,7 @@
     }
   },
   {
-    "caseId": "reroll-count-one-hit#447",
-    "effect": {
-      "type": "re-roll",
-      "target": "unit",
-      "modifier": {
-        "roll": "hit",
-        "result_scope": "any-result",
-        "count": 1
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "phase"
-    },
-    "expected": {
-      "text": "Until the end of the phase, you can re-roll one Hit roll."
-    }
-  },
-  {
-    "caseId": "reroll-count-one-failed-wound#448",
-    "effect": {
-      "type": "re-roll",
-      "target": "unit",
-      "modifier": {
-        "roll": "wound",
-        "subset": "all-failures",
-        "count": 1
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "phase"
-    },
-    "expected": {
-      "text": "Until the end of the phase, you can re-roll one failed Wound roll."
-    }
-  },
-  {
-    "caseId": "reroll-count-two-any#449",
-    "effect": {
-      "type": "re-roll",
-      "target": "unit",
-      "modifier": {
-        "roll": "any",
-        "result_scope": "any-result",
-        "count": 2
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "turn"
-    },
-    "expected": {
-      "text": "Until the end of the turn, you can re-roll up to 2 rolls."
-    }
-  },
-  {
-    "caseId": "reroll-count-one-of-1#450",
-    "effect": {
-      "type": "re-roll",
-      "target": "unit",
-      "modifier": {
-        "roll": "hit",
-        "subset": "ones",
-        "count": 1
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "phase"
-    },
-    "expected": {
-      "text": "Until the end of the phase, you can re-roll one Hit roll of 1."
-    }
-  },
-  {
-    "caseId": "moved-through-tall-terrain-inline#451",
+    "caseId": "moved-through-tall-terrain-inline#447",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17925,7 +17849,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-condition#452",
+    "caseId": "moved-through-tall-terrain-trigger-condition#448",
     "effect": {
       "type": "keyword-grant",
       "target": "self",
@@ -17953,7 +17877,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-inline#453",
+    "caseId": "moved-through-tall-terrain-negated-inline#449",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -17982,7 +17906,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-negated-trigger-condition#454",
+    "caseId": "moved-through-tall-terrain-negated-trigger-condition#450",
     "effect": {
       "type": "keyword-grant",
       "target": "self",
@@ -18011,7 +17935,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-trigger-event#455",
+    "caseId": "moved-through-tall-terrain-trigger-event#451",
     "effect": {
       "type": "keyword-grant",
       "target": "self",
@@ -18033,7 +17957,7 @@
     }
   },
   {
-    "caseId": "moved-through-tall-terrain-legacy-aliases#456",
+    "caseId": "moved-through-tall-terrain-legacy-aliases#452",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -18084,7 +18008,7 @@
     }
   },
   {
-    "caseId": "moved-through-terrain-generic-unaffected#457",
+    "caseId": "moved-through-terrain-generic-unaffected#453",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -18112,7 +18036,7 @@
     }
   },
   {
-    "caseId": "aura-role-filtered-effect#458",
+    "caseId": "aura-role-filtered-effect#454",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -19580,6 +19504,82 @@
     },
     "expected": {
       "text": "When resolving this use, you can re-roll the Advance roll for this model."
+    }
+  },
+  {
+    "caseId": "fidelity/reroll-count-one-hit",
+    "effect": {
+      "type": "re-roll",
+      "target": "unit",
+      "modifier": {
+        "roll": "hit",
+        "result_scope": "any-result",
+        "count": 1
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, you can re-roll one Hit roll."
+    }
+  },
+  {
+    "caseId": "fidelity/reroll-count-one-failed-wound",
+    "effect": {
+      "type": "re-roll",
+      "target": "unit",
+      "modifier": {
+        "roll": "wound",
+        "subset": "all-failures",
+        "count": 1
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, you can re-roll one failed Wound roll."
+    }
+  },
+  {
+    "caseId": "fidelity/reroll-count-two-any",
+    "effect": {
+      "type": "re-roll",
+      "target": "unit",
+      "modifier": {
+        "roll": "any",
+        "result_scope": "any-result",
+        "count": 2
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, you can re-roll up to 2 rolls."
+    }
+  },
+  {
+    "caseId": "fidelity/reroll-count-one-of-one",
+    "effect": {
+      "type": "re-roll",
+      "target": "unit",
+      "modifier": {
+        "roll": "hit",
+        "subset": "ones",
+        "count": 1
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, you can re-roll one Hit roll of 1."
     }
   }
 ]

@@ -376,6 +376,16 @@ function translateReroll(
   const subset = modifier.value === 1 ? "ones" : modifier.subset;
   // Under target perspective, only "save" rerolls fire on the buffed unit.
   if (opts.perspective === "target" && roll !== "save") return;
+  // Finite permissions are non-linear over a roll pool. Until the cruncher
+  // carries the exact pool distribution, applying this as an uncapped reroll
+  // would silently overstate the effect.
+  if (modifier.count !== undefined) {
+    out.unsupported.push({
+      reason: "re-roll: count-capped permissions are not modelled by the expected-value engine",
+      effectFragment: node,
+    });
+    return;
+  }
   if (
     (roll === "hit" || roll === "wound" || roll === "save" || roll === "damage") &&
     (subset === "ones" || subset === "all-failures")

@@ -278,6 +278,20 @@ def _translate_reroll(
     # Under target perspective, only "save" rerolls fire on the buffed unit.
     if opts["perspective"] == "target" and roll != "save":
         return
+    # Finite permissions are non-linear over a roll pool. Until the cruncher
+    # carries the exact pool distribution, applying this as an uncapped reroll
+    # would silently overstate the effect.
+    if modifier.get("count") is not None:
+        out["unsupported"].append(
+            {
+                "reason": (
+                    "re-roll: count-capped permissions are not modelled "
+                    "by the expected-value engine"
+                ),
+                "effectFragment": node,
+            }
+        )
+        return
     if roll in ("hit", "wound", "save", "damage") and subset in ("ones", "all-failures"):
         out["applied"].append(
             {"source": source, "contribution": {"type": "reroll", "roll": roll, "subset": subset}}

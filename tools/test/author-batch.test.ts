@@ -175,6 +175,17 @@ describe("buildRepairedEntry → AJV gate", () => {
     }, { range: "self", duration: "phase" });
     expect(validate(entry)).toBe(false);
   });
+
+  it("accepts positive reroll counts and rejects non-positive or fractional counts", () => {
+    for (const [count, valid] of [[1, true], [0, false], [-1, false], [1.5, false]] as const) {
+      const entry = buildRepairedEntry(ORIGINAL, {
+        type: "re-roll",
+        target: "self",
+        modifier: { roll: "hit", result_scope: "any-result", count },
+      }, { range: "self", duration: "phase" });
+      expect(validate(entry), `count=${count}`).toBe(valid);
+    }
+  });
 });
 
 
@@ -229,6 +240,19 @@ describe("lintCanonical", () => {
     expect(lintCanonical({ type: "re-roll", target: "self", modifier: { roll: "advance", result_scope: "all-results" } }).canonical).toBe(false);
     expect(lintCanonical({ type: "re-roll", target: "self", modifier: { roll: "advance" } }).canonical).toBe(false);
     expect(lintCanonical({ type: "re-roll", target: "self", modifier: { roll: "advance", subset: "all-failures", result_scope: "any-result" } }).canonical).toBe(false);
+  });
+
+  it("accepts count and rejects the obsolete max_rerolls spelling", () => {
+    expect(lintCanonical({
+      type: "re-roll",
+      target: "self",
+      modifier: { roll: "hit", result_scope: "any-result", count: 1 },
+    }).canonical).toBe(true);
+    expect(lintCanonical({
+      type: "re-roll",
+      target: "self",
+      modifier: { roll: "hit", result_scope: "any-result", max_rerolls: 1 },
+    }).canonical).toBe(false);
   });
 
   it("rejects invented modifier keys on cruncher-interpreted leaves (the silent-over-apply trap)", () => {
