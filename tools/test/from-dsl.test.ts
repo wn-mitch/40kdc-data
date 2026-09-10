@@ -53,6 +53,22 @@ describe("effectToBuffs: leaves", () => {
     });
   });
 
+  it("rejects count-capped rerolls instead of applying them as unlimited", () => {
+    const effect = {
+      type: "re-roll",
+      target: "unit",
+      modifier: { roll: "hit", result_scope: "any-result", count: 1 },
+    };
+    const result = effectToBuffs(effect, armyRule, ctx);
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported).toEqual([
+      {
+        reason: "re-roll: count-capped permissions are not modelled by the expected-value engine",
+        effectFragment: effect,
+      },
+    ]);
+  });
+
   it("roll-modifier add → matching mod buff", () => {
     const result = effectToBuffs(
       {
@@ -203,7 +219,7 @@ describe("effectToBuffs: nested relationship containers", () => {
         },
       },
       unitRule,
-      ctx,
+      { ...ctx, attackerKeywords: ["ALLY"] },
     );
 
     expect(result.applied).toHaveLength(1);
@@ -1182,7 +1198,7 @@ describe("effectToBuffs: activatable gates", () => {
     );
     expect(result.activatable).toEqual([]);
     expect(result.applied).toEqual([]);
-    expect(result.unsupported.map((entry) => entry.effectFragment)).toEqual([gate]);
+    expect(result.unsupported).toEqual([]);
   });
 });
 

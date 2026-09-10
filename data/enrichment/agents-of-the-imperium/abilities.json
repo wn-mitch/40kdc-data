@@ -4752,7 +4752,7 @@
     "behavior": "activated",
     "trigger": {
       "event": "on-unit-selected",
-      "subject": "unit",
+      "subject": "bearer",
       "optional": true
     },
     "usage": {
@@ -4960,7 +4960,7 @@
     "behavior": "activated",
     "trigger": {
       "event": "selected-to-fight",
-      "subject": "unit",
+      "subject": "bearer",
       "optional": true
     },
     "usage": {

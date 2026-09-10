@@ -18,6 +18,7 @@ export interface Condition {
   type?: string;
   operator?: "and" | "or" | "not";
   operands?: Condition[];
+  of?: string;
   parameters?: Record<string, unknown>;
   negated?: boolean;
 }
@@ -30,6 +31,27 @@ export function dekebab(s: string): string {
 function str(v: unknown): string {
   if (v == null) return "?";
   return typeof v === "string" ? v : String(v);
+}
+
+/** Explicit `of` wins; legacy subjects are only applied where that predicate already consumed them. */
+export function conditionSubject(
+  c: Condition,
+  implicit: string,
+  legacySubjects: Record<string, string> = {},
+): string {
+  const explicitSubjects: Record<string, string> = {
+    bearer: "this model",
+    unit: "the unit",
+    "led-unit": "the unit this model leads",
+    attacker: "the attacking unit",
+    defender: "the target unit",
+    target: "the target unit",
+    friendly: "the friendly unit",
+    enemy: "the enemy unit",
+  };
+  if (typeof c.of === "string") return explicitSubjects[c.of] ?? implicit;
+  const legacy = (c.parameters ?? {}).subject;
+  return typeof legacy === "string" ? legacySubjects[legacy] ?? implicit : implicit;
 }
 
 /**
@@ -300,7 +322,7 @@ export function describeCondition(c: Condition): string {
       return `${negate}in ${phrase} turn`;
     }
     case "charged-this-turn":
-      return `${negate}the unit charged this turn`;
+      return `${negate}${conditionSubject(c, "the unit")} charged this turn`;
     case "advanced-this-turn":
       return `${negate}the unit advanced this turn`;
     case "remained-stationary":
@@ -308,7 +330,7 @@ export function describeCondition(c: Condition): string {
     case "unit-below-starting-strength":
       return `${negate}the unit is below starting strength`;
     case "unit-below-half-strength":
-      return `${negate}the ${p.subject === "target" ? "target unit" : "unit"} is below half strength`;
+      return `${negate}${conditionSubject(c, "the unit", { target: "the target unit" })} is below half strength`;
     case "unit-has-keyword":
       return `${negate}the unit has "${str(p.keyword)}"`;
     case "unit-model-count":
@@ -331,7 +353,7 @@ export function describeCondition(c: Condition): string {
       if (p.comparison != null) return `${negate}when ${dekebab(str(p.comparison))}`;
       return `${negate}for ${str(p.attack_type)} attacks`;
     case "is-battle-shocked":
-      return `${negate}the unit is battle-shocked`;
+      return `${negate}${conditionSubject(c, "the unit")} is battle-shocked`;
     case "unit-selected-to-shoot-this-phase":
       return `${negate}the unit has been selected to shoot this phase`;
     case "eligible-to-shoot":

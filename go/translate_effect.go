@@ -170,6 +170,7 @@ func selectorEligibilityClause(sel map[string]any) string {
 	}
 	return " " + describeSelectionEligibility(eligibility)
 }
+
 // forEachUnitSubject renders the closed for-each-unit selector.
 func forEachUnitSubject(sel map[string]any) string {
 	var keywords []string
@@ -177,10 +178,21 @@ func forEachUnitSubject(sel map[string]any) string {
 		keywords = append(keywords, titleCase(keyword))
 	}
 	within := ""
+	if sel["within_inches"] != nil {
+		within += " within " + ejstr(sel["within_inches"]) + "\""
+	}
 	if sel["within_objective"] != nil {
-		within = " within range of " + selectionRefName(sel["within_objective"], "the selected objective marker")
-	} else if sel["within_inches"] != nil {
-		within = " within " + ejstr(sel["within_inches"]) + "\""
+		within += " within range of " + selectionRefName(sel["within_objective"], "the selected objective marker")
+	}
+	engagement := ""
+	origin := "the bearer"
+	if sel["reference"] == "bearer-unit" {
+		origin = "this model's unit"
+	}
+	if sel["engagement_relation"] == "engaged-with-bearer" {
+		engagement = " in Engagement Range of " + origin
+	} else if sel["engagement_relation"] == "not-engaged-with-bearer" {
+		engagement = " not in Engagement Range of " + origin
 	}
 	keywordText := ""
 	if len(keywords) > 0 {
@@ -198,7 +210,7 @@ func forEachUnitSubject(sel map[string]any) string {
 	if value, ok := getMap(sel, "eligibility"); ok && value != nil {
 		eligibility = " " + describeSelectionEligibility(value)
 	}
-	return ejstr(sel["owner"]) + keywordText + " " + noun + selectionModelFilters(sel) + member + within + eligibility + selectionBinding(sel)
+	return ejstr(sel["owner"]) + keywordText + " " + noun + selectionModelFilters(sel) + member + within + engagement + eligibility + selectionBinding(sel)
 }
 
 // forEachUnitCtx binds each iteration's matching unit or model as its target.
@@ -1202,7 +1214,7 @@ func conditionLeadIn(c map[string]any) string {
 	case "model-is-leader":
 		return "while this model leads a unit"
 	case "charged-this-turn":
-		return "if the unit charged this turn"
+		return "if " + conditionSubject(c, "the unit", nil) + " charged this turn"
 	case "advanced-this-turn":
 		return "if the unit Advanced this turn"
 	case "disembarked-from-transport":
@@ -1247,12 +1259,13 @@ func conditionLeadIn(c map[string]any) string {
 		}
 		return "when all of the unit's " + attackType + "attacks target the same enemy unit"
 	case "is-battle-shocked":
-		return "while the unit is Battle-shocked"
+		return "while " + conditionSubject(c, "the unit", nil) + " is Battle-shocked"
 	case "unit-below-half-strength":
-		if p["subject"] == "target" {
-			return "while the target unit is below half strength"
-		}
-		return "while the unit is below half strength"
+		return "while " + conditionSubject(
+			c,
+			"the unit",
+			map[string]string{"target": "the target unit"},
+		) + " is below half strength"
 	case "unit-below-starting-strength":
 		return "while the unit is below its starting strength"
 	case "has-lost-wounds":
@@ -1913,6 +1926,39 @@ func namedRegionSubject(m map[string]any) string {
 	return "Models in " + namedRegionKeywords(gate["keywords"]) + " units" + factionPart
 }
 
+// rerollCount returns the re-roll modifier's `count` cap, when one is set.
+func rerollCount(m map[string]any) (int, bool) {
+	switch v := m["count"].(type) {
+	case float64:
+		return int(v), true
+	case int:
+		return v, true
+	}
+	return 0, false
+}
+
+// rerollCountPhrase renders a count-capped re-roll's subject: "one Hit roll",
+// "up to 2 failed Wound rolls", "one roll of 1".
+func rerollCountPhrase(m map[string]any, cnt int) string {
+	lead, plural := "one", ""
+	if cnt != 1 {
+		lead, plural = "up to "+itoa(cnt), "s"
+	}
+	failed := ""
+	if m["subset"] == "all-failures" {
+		failed = "failed "
+	}
+	noun := "roll"
+	if ejstr(m["roll"]) != "any" {
+		noun = rollName(m["roll"]) + " roll"
+	}
+	ofOne := ""
+	if m["subset"] == "ones" {
+		ofOne = " of 1"
+	}
+	return lead + " " + failed + noun + plural + ofOne
+}
+
 func namedRegionBranchEffect(branch map[string]any, qualified bool, ctx map[string]any) string {
 	effect, _ := asMap(branch["effect"])
 	modifier, _ := asMap(effect["modifier"])
@@ -1920,7 +1966,9 @@ func namedRegionBranchEffect(branch map[string]any, qualified bool, ctx map[stri
 	text := ""
 	switch getStr(effect, "type") {
 	case "re-roll":
-		if modifier["result_scope"] == "any-result" {
+		if cnt, ok := rerollCount(modifier); ok {
+			text = "can re-roll " + rerollCountPhrase(modifier, cnt)
+		} else if modifier["result_scope"] == "any-result" {
 			text = "can re-roll the " + roll + " roll"
 		} else if modifier["subset"] == "ones" {
 			text = "can re-roll " + roll + " rolls of 1"
@@ -2120,7 +2168,11 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 		return subj + " " + ev(subj, "gets") + " " + esigned(m["operation"], m["value"]) + " to " + roll + " rolls" + ctxNote
 	case "re-roll":
 		var which string
-		if ejstr(m["roll"]) == "any" {
+		if cnt, ok := rerollCount(m); ok {
+			// Count-capped re-roll: up to `count` qualifying rolls within the
+			// ability's active window ("one Hit roll", "up to 2 failed Wound rolls").
+			which = rerollCountPhrase(m, cnt)
+		} else if ejstr(m["roll"]) == "any" {
 			which = "any roll"
 			if m["subset"] == "ones" {
 				which = "any roll of 1"
@@ -2702,6 +2754,10 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 			placement = " next to " + subj
 		}
 		return "place " + countText + " " + noun + placement + " as a reminder"
+	case "fight-first":
+		return subj + " " + ev(subj, "has") + " the Fights First ability"
+	case "fight-last":
+		return subj + " " + ev(subj, "has") + " the Fights Last ability"
 	case "fight-on-death":
 		if m["resolution"] == "when-unit-fights" {
 			return "do not remove " + subj + " yet; when its unit is selected to fight, it can fight; remove it after its unit has finished fighting or at the end of the phase, whichever happens first"
@@ -3677,6 +3733,8 @@ func describeReactiveTrigger(t map[string]any) string {
 		switch t["subject"] {
 		case "bearer", "self":
 			s = "when this model is destroyed"
+		case "model-in-bearer":
+			s = "when a model in this unit is destroyed"
 		case "friendly-model":
 			s = "when a friendly model is destroyed"
 		case "enemy-model":
@@ -4248,6 +4306,9 @@ func selectionFrequency(value any) string {
 }
 
 func choicePrompt(e map[string]any) string {
+	if value, ok := e["choice_prompt"].(string); ok && value != "" {
+		return value
+	}
 	if e["min_choices"] != nil && e["max_choices"] != nil {
 		min, max := ejstr(e["min_choices"]), ejstr(e["max_choices"])
 		quantity := "from " + min + " through " + max
@@ -4261,9 +4322,6 @@ func choicePrompt(e map[string]any) string {
 			label = " (" + titleCase(value) + ")"
 		}
 		return "select " + quantity + " distinct options" + label
-	}
-	if value, ok := e["choice_prompt"].(string); ok && value != "" {
-		return value
 	}
 	label := ""
 	if value, ok := e["choice_label"].(string); ok && value != "" {

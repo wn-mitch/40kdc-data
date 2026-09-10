@@ -636,8 +636,7 @@
       "shuriken-pistol",
       "shuriken-rifle",
       "witch-staff",
-      "wraithcannon",
-      "close-combat-weapon"
+      "wraithcannon"
     ],
     "ability_ids": [
       "channeller-stones",

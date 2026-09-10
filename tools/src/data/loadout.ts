@@ -627,8 +627,22 @@ interface RowCandidate {
   usedOptions: number[];
   /** Every matching variant-budget allowance consumed by this model's base variant. */
   usedVariantBudgets: string[];
+  variantIndex?: number;
   variantName?: string;
   key: string;
+}
+
+/** How much of an explicit sparse selection one candidate satisfies by itself. */
+function explicitContribution(
+  candidate: RowCandidate,
+  required: ReadonlyMap<string, number>,
+): number {
+  let contribution = 0;
+  for (const [id, count] of candidate.weapons) {
+    const needed = required.get(id) ?? 0;
+    if (needed > 0) contribution += Math.min(count, needed);
+  }
+  return contribution;
 }
 
 function candidateCanBeSelected(
@@ -793,6 +807,7 @@ function rowCandidates(
           ...candidate,
           usedVariantBudgets: variantUses[vi],
           variantName: variants[vi].name,
+          variantIndex: vi,
         };
         candidates.set(`${candidate.key}#${candidate.usedOptions.join(",")}#${variants[vi].name}`, selected);
       }
@@ -822,8 +837,9 @@ type LoadoutAssignment = {
  * `upper`, never exceeding an option's usage cap. Exact grouping passes the
  * same bag for both bounds; source-loadout completion gives omitted defaults a
  * wider upper bound. Rows are taken in order; within a row, candidates in their
- * pre-sorted order, trying the largest feasible count first. Returns the first
- * solution found, or `null` when no bounded partition exists.
+ * pre-sorted order, trying the largest feasible count first. Without `onSolution`
+ * it returns the first solution; with it, it visits every solution until the
+ * callback returns `true`, then returns that final solution.
  */
 function solveAssignment(
   rows: readonly SolverRow[],
@@ -831,7 +847,7 @@ function solveAssignment(
   upper: Map<string, number>,
   optionCaps: readonly number[],
   variantCaps: ReadonlyMap<string, number> = new Map(),
-  onSolution?: (solution: LoadoutAssignment) => void,
+  onSolution?: (solution: LoadoutAssignment) => boolean,
 ): LoadoutAssignment | null {
   const remainingLower = new Map(lower);
   const remainingUpper = new Map(upper);
@@ -849,10 +865,7 @@ function solveAssignment(
   const assignRow = (ri: number): boolean => {
     if (ri === rows.length) {
       for (const c of remainingLower.values()) if (c > 0) return false;
-      if (onSolution) {
-        onSolution(snapshot());
-        return false;
-      }
+      if (onSolution) return onSolution(snapshot());
       return true;
     }
     return distribute(ri, 0, rows[ri].count);
@@ -1152,6 +1165,7 @@ export function completeLoadout(
           )
           .sort(
             (a, b) =>
+              explicitContribution(b, lower) - explicitContribution(a, lower) ||
               a.usedOptions.length - b.usedOptions.length ||
               a.key.localeCompare(b.key) ||
               a.usedOptions.join(",").localeCompare(b.usedOptions.join(",")),
@@ -1182,6 +1196,50 @@ export function completeLoadout(
   return null;
 }
 
+/** Report every explicitly submitted, non-budgeted count outside its computed range. */
+function boundViolations(
+  bounds: ReadonlyMap<string, WeaponBound>,
+  unit: Unit,
+  counts: ReadonlyMap<string, number>,
+): Violation[] {
+  // Items governed by a shared-allowance budget are policed solely by
+  // `budgetViolations` (the GW `limited_wargear_choice_set` cap). Their per-id
+  // `weaponBounds` max is derived from the dump's cross-product loadout branches
+  // — the unreliable signal the budget exists to replace (a weapon in several
+  // option branches sums an inflated bound) — so skip the per-id check for them.
+  const budgeted = new Set<string>();
+  for (const budget of unit.wargear_budgets ?? [])
+    for (const id of budget.items ?? []) budgeted.add(id);
+
+  const out: Violation[] = [];
+  for (const [id, count] of counts) {
+    if (budgeted.has(id)) continue;
+    const bound = bounds.get(id);
+    if (!bound) continue;
+    if (count > bound.max) {
+      out.push({
+        id,
+        code: "exceeds-max",
+        message: `${id}: ${count} exceeds max ${bound.max}`,
+      });
+    } else if (count < bound.min) {
+      out.push({
+        id,
+        code: "below-min",
+        message: `${id}: ${count} below min ${bound.min}`,
+      });
+    }
+  }
+  return out;
+}
+
+/** Stable public ordering for loadout validation output. */
+function sortViolations(violations: Violation[]): Violation[] {
+  return violations.sort((a, b) =>
+    a.id === b.id ? a.code.localeCompare(b.code) : a.id.localeCompare(b.id),
+  );
+}
+
 /** Report every weapon/wargear count that falls outside its valid range. */
 export function validateLoadout(
   unit: Unit,
@@ -1191,54 +1249,27 @@ export function validateLoadout(
   models?: readonly LoadoutModel[],
 ): Violation[] {
   const budgets = budgetViolations(unit, modelCount, counts);
-  // Search structured states directly. `loadoutCandidates` is intentionally
-  // serialized and bounded, so it cannot establish exact submitted legality.
-  const hasVariants = models?.some((model) => model.loadout_variants?.length) ?? false;
-  if (hasVariants && hasRecordedLoadoutBases(models)) {
-    const validCounts = [...counts.values()].every((count) => Number.isInteger(count) && count >= 0);
-    if (validCounts && exactGroups(unit, modelCount, options, models, counts) !== null) return budgets;
-    return [...budgets, {
-      id: unit.id,
-      code: "swap-conflict" as const,
-      message: `${unit.id}: equipment cannot be assigned to legal whole-model loadouts`,
-    }].sort((a, b) => a.id === b.id ? a.code.localeCompare(b.code) : a.id.localeCompare(b.id));
-  }
-  if ((models?.length ?? 0) > 1 && groupLoadout(unit, modelCount, options, models, counts) !== null) return budgets;
   const bounds = weaponBounds(unit, modelCount, options, models);
-  const out: Violation[] = [];
-  // Items governed by a shared-allowance budget are policed solely by
-  // `budgetViolations` (the GW `limited_wargear_choice_set` cap). Their per-id
-  // `weaponBounds` max is derived from the dump's cross-product loadout branches
-  // — the unreliable signal the budget exists to replace (a weapon in several
-  // option branches sums an inflated bound) — so skip the per-id check for them.
-  const budgeted = new Set<string>();
-  for (const b of unit.wargear_budgets ?? [])
-    for (const id of b.items ?? []) budgeted.add(id);
-  for (const [id, n] of counts) {
-    if (budgeted.has(id)) continue;
-    const b = bounds.get(id);
-    if (!b) continue;
-    if (n > b.max) {
-      out.push({
-        id,
-        code: "exceeds-max",
-        message: `${id}: ${n} exceeds max ${b.max}`,
-      });
-    } else if (n < b.min) {
-      out.push({
-        id,
-        code: "below-min",
-        message: `${id}: ${n} below min ${b.min}`,
-      });
-    }
+  const perItemBounds = boundViolations(bounds, unit, counts);
+  const hasVariants = models?.some((model) => model.loadout_variants?.length) ?? false;
+
+  if (hasVariants && hasRecordedLoadoutBases(models)) {
+    // Source/import counts are sparse explicit selections. Report independently
+    // knowable bounds first; only a bounds-valid selection needs whole-model
+    // completion to determine whether omitted defaults make it legal.
+    const directViolations = [...perItemBounds, ...budgets];
+    if (directViolations.length > 0) return sortViolations(directViolations);
+    if (completeLoadout(unit, modelCount, options, models, counts) !== null) return [];
+    return [{
+      id: unit.id,
+      code: "swap-conflict",
+      message: `${unit.id}: equipment cannot be assigned to legal whole-model loadouts`,
+    }];
   }
-  out.push(...swapConflicts(unit, modelCount, options, counts, models));
-  out.push(...budgets);
-  // Deterministic order so the result is stable for cross-impl comparison.
-  out.sort((a, b) =>
-    a.id === b.id ? a.code.localeCompare(b.code) : a.id.localeCompare(b.id),
-  );
-  return out;
+
+  if ((models?.length ?? 0) > 1 && groupLoadout(unit, modelCount, options, models, counts) !== null) return budgets;
+  perItemBounds.push(...swapConflicts(unit, modelCount, options, counts, models), ...budgets);
+  return sortViolations(perItemBounds);
 }
 
 /**
@@ -1391,19 +1422,19 @@ export const LOADOUT_CANDIDATES_DEFAULT_LIMIT = 256;
 export const LOADOUT_CANDIDATES_TRUNCATED = "…truncated";
 
 /**
- * Every exact per-row model allocation of `total` models across `rows`: each row
- * takes between its `min` and `max` (with `max` floored at `min`, matching
- * {@link candidateRowCounts}) and the row counts sum to `total`. Returns the
- * empty list when `total` is outside `[Σmin, Σmax]`, which is what makes the
+ * Yield every exact per-row model allocation of `total` models across `rows`: each
+ * row takes between its `min` and `max` (with `max` floored at `min`, matching
+ * {@link candidateRowCounts}) and the row counts sum to `total`. Yields no
+ * allocations when `total` is outside `[Σmin, Σmax]`, which is what makes the
  * tier containment filter in {@link loadoutCandidates} an optimisation rather
- * than a semantic gate. Enumeration order is not load-bearing — the caller sorts
- * the encoded candidates — but is fixed (descending count per row, left to right)
- * across implementations anyway.
+ * than a semantic gate. Enumeration is fixed (descending count per row, left to
+ * right) across implementations; it is the canonical traversal order for
+ * {@link loadoutCandidates}.
  */
-function allocationsFor(
+function* allocationsFor(
   rows: readonly LoadoutModel[],
   total: number,
-): number[][] {
+): Generator<number[]> {
   const mins = rows.map((r) => Math.max(0, r.min ?? 0));
   const maxs = rows.map((r, i) => Math.max(mins[i], r.max ?? mins[i]));
   const suffixMin = Array(rows.length + 1).fill(0) as number[];
@@ -1412,22 +1443,20 @@ function allocationsFor(
     suffixMin[i] = suffixMin[i + 1] + mins[i];
     suffixMax[i] = suffixMax[i + 1] + maxs[i];
   }
-  const out: number[][] = [];
   const current = Array(rows.length).fill(0) as number[];
-  const visit = (i: number, remaining: number): void => {
+  function* visit(i: number, remaining: number): Generator<number[]> {
     if (i === rows.length) {
-      if (remaining === 0) out.push([...current]);
+      if (remaining === 0) yield [...current];
       return;
     }
     const lo = Math.max(mins[i], remaining - suffixMax[i + 1]);
     const hi = Math.min(maxs[i], remaining - suffixMin[i + 1]);
     for (let count = hi; count >= lo; count--) {
       current[i] = count;
-      visit(i + 1, remaining - count);
+      yield* visit(i + 1, remaining - count);
     }
-  };
-  visit(0, total);
-  return out;
+  }
+  yield* visit(0, total);
 }
 
 /**
@@ -1482,9 +1511,10 @@ function encodeCandidate(
   return `${witness.join(";")} => ${encodedCounts}`;
 }
 /**
- * Every legal squad build for `modelCount` models, encoded as sorted
- * `"<witness> => <counts>"` strings — the candidate generator a damage optimiser
- * needs, without forcing one alternative into {@link baseLoadout}.
+ * Every legal squad build for `modelCount` models, encoded in deterministic
+ * canonical traversal order as `"<witness> => <counts>"` strings — the candidate
+ * generator a damage optimiser needs, without forcing one alternative into
+ * {@link baseLoadout}.
  *
  * Tiers are the size gate: when the composition declares them, every tier whose
  * total range contains `modelCount` contributes its own bounded per-row
@@ -1493,12 +1523,13 @@ function encodeCandidate(
  * no tier admits yields the empty list, as does a unit with no composition rows —
  * "no legal build" and "no modelled breakdown" are both honestly zero candidates.
  *
- * Results are deduped on the encoded string (two tiers can describe the same
- * build), sorted ascending by code point, then truncated to `limit` (default
- * {@link LOADOUT_CANDIDATES_DEFAULT_LIMIT}) with {@link
- * LOADOUT_CANDIDATES_TRUNCATED} appended when anything was dropped. Sorting
- * before truncating is what makes the truncated prefix deterministic across
- * implementations. Mirror of `crates/wh40kdc/src/data/loadout.rs`.
+ * Results are globally deduped in first-seen traversal order (tiers, descending
+ * row allocations, rows, then declared variants and their option states), then
+ * truncated to `limit` (default {@link LOADOUT_CANDIDATES_DEFAULT_LIMIT}) with
+ * {@link LOADOUT_CANDIDATES_TRUNCATED} appended when a distinct `limit + 1`
+ * candidate exists. Allocations and assignments are streamed, so traversal stops
+ * immediately once that proof is found. Mirror of
+ * `crates/wh40kdc/src/data/loadout.rs`.
  *
  * Rows with `loadout_variants` enumerate every legal multiset of named variants;
  * other rows contribute their recorded defaults exactly once.
@@ -1528,14 +1559,22 @@ export function loadoutCandidates(
   } else if (base.length > 0) {
     rowSets.push([...base]);
   }
+  // Keep only the canonical prefix and its truncation proof. A Set preserves
+  // first-seen order while deduplicating encodings across tiers and allocations.
   const encoded = new Set<string>();
+  const retain = (candidate: string): boolean => {
+    if (encoded.has(candidate)) return false;
+    encoded.add(candidate);
+    return encoded.size > cap;
+  };
   for (const rows of rowSets) {
     for (const allocation of allocationsFor(rows, total)) {
       if (!rows.some((row) => row.loadout_variants?.length)) {
         const witness = rows.flatMap((row, index) =>
           allocation[index] > 0 ? [`${row.name ?? ""}×${allocation[index]}`] : [],
         );
-        encoded.add(encodeCandidate(witness, allocationCounts(unit, total, options, rows, allocation)));
+        if (retain(encodeCandidate(witness, allocationCounts(unit, total, options, rows, allocation))))
+          return [...encoded].slice(0, cap).concat(LOADOUT_CANDIDATES_TRUNCATED);
         continue;
       }
       const fixedModels = rows.map((row, index) => ({ ...row, min: allocation[index], max: allocation[index] }));
@@ -1555,9 +1594,21 @@ export function loadoutCandidates(
         }
         for (const [id, maximum] of rowMaxima)
           upper.set(id, (upper.get(id) ?? 0) + maximum * count);
-        solverRows.push({ name: rows[index].name ?? null, count, candidates: prepared.candidates });
+        const candidates = [...prepared.candidates].sort((a, b) => {
+          const variantOrder = (a.variantIndex ?? -1) - (b.variantIndex ?? -1);
+          if (variantOrder !== 0) return variantOrder;
+          if (a.key < b.key) return -1;
+          if (a.key > b.key) return 1;
+          const shared = Math.min(a.usedOptions.length, b.usedOptions.length);
+          for (let i = 0; i < shared; i++) {
+            const optionOrder = a.usedOptions[i] - b.usedOptions[i];
+            if (optionOrder !== 0) return optionOrder;
+          }
+          return a.usedOptions.length - b.usedOptions.length;
+        });
+        solverRows.push({ name: rows[index].name ?? null, count, candidates });
       }
-      solveAssignment(solverRows, new Map(), upper, optionCaps, variantCaps, (solution) => {
+      if (solveAssignment(solverRows, new Map(), upper, optionCaps, variantCaps, (solution) => {
         const counts = new Map<string, number>();
         const witnessCounts = new Map<string, number>();
         for (const group of solution) {
@@ -1566,15 +1617,18 @@ export function loadoutCandidates(
           for (const [id, perModel] of group.weapons)
             counts.set(id, (counts.get(id) ?? 0) + perModel * group.count);
         }
-        if (budgetViolations(unit, total, counts).length > 0) return;
-        encoded.add(encodeCandidate([...witnessCounts].map(([name, count]) => `${name}×${count}`), counts));
-      });
+        if (budgetViolations(unit, total, counts).length > 0) return false;
+        return retain(
+          encodeCandidate(
+            [...witnessCounts].map(([name, count]) => `${name}×${count}`),
+            counts,
+          ),
+        );
+      }))
+        return [...encoded].slice(0, cap).concat(LOADOUT_CANDIDATES_TRUNCATED);
     }
   }
-  // Code-point order, not localeCompare: a witness carries display names (which
-  // do contain non-ASCII), and only ordinal comparison agrees with Rust/Go byte
-  // order and Python code-point order.
-  const out = [...encoded].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+  const out = [...encoded];
   if (out.length <= cap) return out;
   return [...out.slice(0, cap), LOADOUT_CANDIDATES_TRUNCATED];
 }

@@ -136,33 +136,7 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
-        },
-        "loadout_variants": [
-          {
-            "name": "Khorne Berzerker w/ eviscerator and bolt pistol",
-            "weapon_ids": [
-              "khornate-eviscerator",
-              "bolt-pistol-khorne-berzerkers"
-            ],
-            "max_count": 4
-          },
-          {
-            "name": "Khorne Berzerker w/ eviscerator and plasma pistol",
-            "weapon_ids": [
-              "khornate-eviscerator",
-              "plasma-pistol-khorne-berzerkers"
-            ],
-            "max_count": 4
-          },
-          {
-            "name": "Khorne Berzerker w/ chainblade and plasma pistol",
-            "weapon_ids": [
-              "chainblade",
-              "plasma-pistol-khorne-berzerkers"
-            ],
-            "max_count": 4
-          }
-        ]
+        }
       }
     ],
     "game_version": {
@@ -251,8 +225,7 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
-              "Dishonoured w/ skullsmasher and mangler",
-              "Dishonoured w/ paired manglers"
+              "Dishonoured w/ skullsmasher and mangler"
             ],
             "count": 1,
             "per_models": 0,

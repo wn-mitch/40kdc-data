@@ -631,6 +631,14 @@
         },
         "loadout_variants": [
           {
+            "name": "Scarab Occult Terminator w/ inferno combi-bolter and khopesh",
+            "weapon_ids": [
+              "inferno-combi-bolter",
+              "prosperine-khopesh"
+            ],
+            "max_count": 9
+          },
+          {
             "name": "Scarab Occult Terminator w/ heavy warpflamer",
             "weapon_ids": [
               "heavy-warpflamer",
@@ -834,12 +842,37 @@
         },
         "loadout_variants": [
           {
+            "name": "Tzaangor w/ tzaangor blades",
+            "weapon_ids": [
+              "tzaangor-blades"
+            ],
+            "max_count": 19
+          },
+          {
             "name": "Tzaangor w/ pistol and chainsword",
             "weapon_ids": [
               "autopistol",
               "chainsword-tzaangors"
             ],
             "max_count": 19
+          },
+          {
+            "name": "Tzaangor w/ pistol and chainsword and brayhorn",
+            "weapon_ids": [
+              "autopistol",
+              "chainsword-tzaangors",
+              "brayhorn"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Tzaangor w/ pistol and chainsword and herd banner",
+            "weapon_ids": [
+              "autopistol",
+              "chainsword-tzaangors",
+              "herd-banner"
+            ],
+            "max_count": 1
           }
         ]
       }

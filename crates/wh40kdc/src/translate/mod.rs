@@ -453,6 +453,26 @@ pub(crate) fn region_membership_phrase(p: &Map<String, Value>, negated: bool) ->
     )
 }
 
+/// Explicit `of` wins; legacy parameter subjects apply only where that
+/// predicate historically consumed them.
+pub(super) fn condition_subject(
+    s: &SimpleCondition,
+    implicit: &str,
+    legacy_subject: Option<&str>,
+) -> String {
+    let explicit = match s.of.as_ref().map(ToString::to_string).as_deref() {
+        Some("bearer") => Some("this model"),
+        Some("unit") => Some("the unit"),
+        Some("led-unit") => Some("the unit this model leads"),
+        Some("attacker") => Some("the attacking unit"),
+        Some("defender" | "target") => Some("the target unit"),
+        Some("friendly") => Some("the friendly unit"),
+        Some("enemy") => Some("the enemy unit"),
+        _ => None,
+    };
+    explicit.or(legacy_subject).unwrap_or(implicit).to_string()
+}
+
 fn describe_simple(s: &SimpleCondition) -> String {
     let negate = if s.negated { "not " } else { "" };
     let p = &s.parameters;
@@ -486,7 +506,9 @@ fn describe_simple(s: &SimpleCondition) -> String {
             };
             format!("{negate}in {turn} turn")
         }
-        T::ChargedThisTurn => format!("{negate}the unit charged this turn"),
+        T::ChargedThisTurn => {
+            format!("{negate}{} charged this turn", condition_subject(s, "the unit", None))
+        }
         T::AdvancedThisTurn => format!("{negate}the unit advanced this turn"),
         T::DisembarkedFromTransport => {
             format!("{negate}the unit disembarked from a Transport this turn")
@@ -512,12 +534,15 @@ fn describe_simple(s: &SimpleCondition) -> String {
         T::RemainedStationary => format!("{negate}the unit remained stationary"),
         T::UnitBelowStartingStrength => format!("{negate}the unit is below starting strength"),
         T::UnitBelowHalfStrength => {
-            let who = if pj(p, "subject") == "target" {
-                "target unit"
+            let legacy_subject = if ps(p, "subject") == Some("target") {
+                Some("the target unit")
             } else {
-                "unit"
+                None
             };
-            format!("{negate}the {who} is below half strength")
+            format!(
+                "{negate}{} is below half strength",
+                condition_subject(s, "the unit", legacy_subject)
+            )
         }
         T::UnitHasKeyword => format!("{negate}the unit has \"{}\"", pj(p, "keyword")),
         T::UnitModelCount => format!(
@@ -562,7 +587,12 @@ fn describe_simple(s: &SimpleCondition) -> String {
                 None => format!("{negate}for {} attacks", pj(p, "attack_type")),
             }
         }
-        T::IsBattleShocked => format!("{negate}the unit is battle-shocked"),
+        T::IsBattleShocked => {
+            format!(
+                "{negate}{} is battle-shocked",
+                condition_subject(s, "the unit", None)
+            )
+        }
         T::HasLostWounds => format!("{negate}the model has lost wounds"),
         T::WoundsRemainingAtOrBelow => format!(
             "{negate}the model has {} or fewer wounds remaining",
@@ -1153,6 +1183,7 @@ mod tests {
         let parameters = params.as_object().cloned().unwrap_or_default();
         Condition(ConditionNode::SimpleCondition(SimpleCondition {
             negated: false,
+            of: None,
             parameters,
             type_,
         }))

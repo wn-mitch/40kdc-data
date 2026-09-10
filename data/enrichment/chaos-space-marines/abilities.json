@@ -9341,8 +9341,7 @@
       "duration": "phase"
     },
     "usage": {
-      "frequency": "n-per-phase",
-      "count": 1,
+      "frequency": "once-per-phase",
       "per": "unit"
     }
   },

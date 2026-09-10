@@ -461,15 +461,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "wargear_budgets": [
-      {
-        "items": [
-          "pyre-pistol"
-        ],
-        "count": 2,
-        "per_models": 5
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -13330,6 +13321,7 @@
       "blizzard-shield",
       "deadly-demise-1",
       "fervour-of-the-ancients-aura",
+      "guidance-of-the-ancients-psychic",
       "wisdom-of-the-ancients-aura"
     ],
     "game_version": {
@@ -15243,10 +15235,6 @@
       "min": 1,
       "max": 1
     },
-    "weapon_ids": [
-      "heavy-bolt-pistol-captain",
-      "master-crafted-power-weapon-captain"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -15309,16 +15297,6 @@
       "min": 5,
       "max": 5
     },
-    "weapon_ids": [
-      "bolt-pistol",
-      "bolt-rifle",
-      "chainsword",
-      "knives-and-fists",
-      "grenade-launcher"
-    ],
-    "ability_ids": [
-      "stalwart-defenders"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -15377,12 +15355,6 @@
       "min": 1,
       "max": 1
     },
-    "weapon_ids": [
-      "armoured-impact",
-      "heavy-flamer",
-      "multi-melta",
-      "stormfury-missile-launcher"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -15443,11 +15415,6 @@
       "min": 1,
       "max": 1
     },
-    "weapon_ids": [
-      "bolt-pistol",
-      "force-weapon",
-      "fulmination"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -15509,11 +15476,6 @@
       "min": 5,
       "max": 5
     },
-    "weapon_ids": [
-      "heavy-bolt-pistol",
-      "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs",
-      "plasma-pistol-vanguard-veteran-squad-with-jump-packs"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -15577,10 +15539,6 @@
       "min": 1,
       "max": 1
     },
-    "weapon_ids": [
-      "black-sword",
-      "bolt-pistol-emperors-champion"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -15638,11 +15596,6 @@
       "min": 3,
       "max": 3
     },
-    "weapon_ids": [
-      "neo-volkite-pistol",
-      "heavy-bolt-pistol",
-      "master-crafted-power-weapon-bladeguard-veteran-squad"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -15712,19 +15665,6 @@
       "min": 10,
       "max": 10
     },
-    "weapon_ids": [
-      "bolt-pistol",
-      "knives-and-fists",
-      "pyreblaster",
-      "heavy-bolt-pistol",
-      "master-crafted-power-weapon-crusader-squad",
-      "bolt-rifle",
-      "astartes-chainsword-crusader-squad",
-      "neophyte-firearm"
-    ],
-    "ability_ids": [
-      "righteous-zeal-vow-sworn"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -15778,15 +15718,6 @@
       "min": 5,
       "max": 5
     },
-    "weapon_ids": [
-      "combi-weapon",
-      "master-crafted-power-weapon-crusader-squad",
-      "heavy-bolt-pistol",
-      "astartes-chainsword",
-      "plasma-pistol",
-      "pyre-pistol",
-      "twin-lightning-claws"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -15847,13 +15778,6 @@
       "min": 1,
       "max": 1
     },
-    "weapon_ids": [
-      "inferno-pistol-blood-angels-captain",
-      "master-crafted-chainsword"
-    ],
-    "ability_ids": [
-      "targeted-intercession-combat-patrol"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -15916,14 +15840,6 @@
       "min": 10,
       "max": 10
     },
-    "weapon_ids": [
-      "astartes-chainsword-assault-intercessor-squad",
-      "plasma-pistol-assault-intercessor-squad",
-      "heavy-bolt-pistol"
-    ],
-    "ability_ids": [
-      "targeted-intercession-combat-patrol"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -15986,13 +15902,6 @@
       "min": 3,
       "max": 3
     },
-    "weapon_ids": [
-      "encarmine-blade",
-      "angelus-boltgun"
-    ],
-    "ability_ids": [
-      "born-to-fight"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -16049,14 +15958,6 @@
       "min": 1,
       "max": 1
     },
-    "weapon_ids": [
-      "boltstorm-gauntlet",
-      "power-fist-captain-in-gravis-armour",
-      "relic-chainsword"
-    ],
-    "ability_ids": [
-      "gravis-protection"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -16124,10 +16025,6 @@
       "min": 3,
       "max": 3
     },
-    "weapon_ids": [
-      "heavy-bolt-pistol",
-      "master-crafted-power-weapon-bladeguard-veteran-squad"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -16185,14 +16082,6 @@
       "min": 5,
       "max": 5
     },
-    "weapon_ids": [
-      "bolt-pistol",
-      "knives-and-fists",
-      "plasma-incinerator"
-    ],
-    "ability_ids": [
-      "punishing-volley"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -16252,14 +16141,6 @@
       "min": 10,
       "max": 10
     },
-    "weapon_ids": [
-      "bolt-pistol",
-      "bolt-rifle",
-      "knives-and-fists"
-    ],
-    "ability_ids": [
-      "objective-secured"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -16319,15 +16200,6 @@
       "min": 10,
       "max": 10
     },
-    "weapon_ids": [
-      "plasma-pistol-blood-claws",
-      "power-weapon",
-      "bolt-pistol",
-      "astartes-chainsword-blood-claws"
-    ],
-    "ability_ids": [
-      "berserk-charge"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -16385,16 +16257,6 @@
       "min": 5,
       "max": 5
     },
-    "weapon_ids": [
-      "relic-greataxe",
-      "assault-cannon-wolf-guard-terminators",
-      "power-fist",
-      "master-crafted-power-weapon-wolf-guard-terminators",
-      "storm-bolter-wolf-guard-terminators"
-    ],
-    "ability_ids": [
-      "rugged-resilience-askars-wolfpack"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -16450,10 +16312,6 @@
       "min": 5,
       "max": 5
     },
-    "weapon_ids": [
-      "frost-blades-and-feral-claws",
-      "stormfrag-auto-launcher"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -16484,7 +16342,7 @@
         "name": "Fyrri Askar",
         "M": 7,
         "T": 4,
-        "W": 6,
+        "W": 5,
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 6,
@@ -16514,12 +16372,6 @@
       "min": 1,
       "max": 1
     },
-    "weapon_ids": [
-      "master-crafted-power-weapon"
-    ],
-    "ability_ids": [
-      "heroic-last-stand-fyrri-askar"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"

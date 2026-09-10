@@ -194,3 +194,11 @@ Rust loadout coverage is not a standalone integration target; cargo test --test 
 ## 2026-09-08T20:51:05Z — gpt-6-astra
 
 A subagent reported private JSON proposal paths that were absent from the parent workspace. Recovering and publishing the existing artifacts required a second handoff before validation could run.
+
+## 2026-09-10T14:09:16Z — openai-codex/gpt-5.6-sol
+
+A jj log query failed because GitHub exposed an external-fork PR SHA that the local jj repo had not fetched. Check ref availability or add the contributor remote before including external PR SHAs in one revision set.
+
+## 2026-09-10T14:19:43Z — openai-codex/gpt-5.6-sol
+
+A PR data-review subagent ran to completion but yielded null data, so the canonical data and stock-loadout audit had to be dispatched again.

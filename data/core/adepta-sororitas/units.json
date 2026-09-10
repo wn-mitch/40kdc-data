@@ -2873,16 +2873,6 @@
       "min": 1,
       "max": 1
     },
-    "weapon_ids": [
-      "condemnor-boltgun-canoness",
-      "hallowed-chainsword"
-    ],
-    "ability_ids": [
-      "acts-of-faith",
-      "leader",
-      "null-rod",
-      "lead-the-righteous"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -2938,14 +2928,6 @@
       "min": 10,
       "max": 10
     },
-    "weapon_ids": [
-      "arco-flails"
-    ],
-    "ability_ids": [
-      "acts-of-faith",
-      "extremis-trigger-word",
-      "feel-no-pain-5"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -3003,19 +2985,6 @@
       "min": 10,
       "max": 10
     },
-    "weapon_ids": [
-      "bolt-pistol",
-      "boltgun",
-      "combi-weapon",
-      "close-combat-weapon-battle-sisters-squad",
-      "ministorum-flamer",
-      "ministorum-heavy-flamer",
-      "power-weapon-battle-sisters-squad"
-    ],
-    "ability_ids": [
-      "acts-of-faith",
-      "simulacrum-imperialis"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -3071,14 +3040,6 @@
       "min": 5,
       "max": 5
     },
-    "weapon_ids": [
-      "bolt-pistol",
-      "hallowed-mace"
-    ],
-    "ability_ids": [
-      "acts-of-faith",
-      "sworn-protectors"
-    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"

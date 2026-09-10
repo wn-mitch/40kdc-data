@@ -173,16 +173,5 @@
       "edition": "11th",
       "dataslate": "launch"
     }
-  },
-  {
-    "leader_id": "sanctuary-canoness-adalya",
-    "eligible_bodyguard_ids": [
-      "sanctuary-guardians-battle-sisters-squad",
-      "sanctuary-guardians-celestian-sacresants"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    }
   }
 ]

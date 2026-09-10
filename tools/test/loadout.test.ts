@@ -537,17 +537,57 @@ describe("loadoutCandidates", () => {
     },
   ];
 
-  it("enumerates every bounded model-row allocation in stable encoded order", () => {
+  it("enumerates every bounded model-row allocation in canonical traversal order", () => {
     expect(loadoutCandidates(unit, 4, [], models)).toEqual([
-      "Leader×1;Trooper×1;Specialist×2 => knife:3,pistol:1,rifle:1,special:2",
-      "Leader×1;Trooper×2;Specialist×1 => knife:3,pistol:1,rifle:2,special:1",
       "Leader×1;Trooper×3 => knife:3,pistol:1,rifle:3",
+      "Leader×1;Trooper×2;Specialist×1 => knife:3,pistol:1,rifle:2,special:1",
+      "Leader×1;Trooper×1;Specialist×2 => knife:3,pistol:1,rifle:1,special:2",
     ]);
   });
 
-  it("truncates after sorting and appends the protocol marker", () => {
+  it("returns the canonical traversal prefix with its marker", () => {
+    const unlimited = loadoutCandidates(
+      unit,
+      4,
+      [],
+      models,
+      undefined,
+      Number.MAX_SAFE_INTEGER,
+    );
     expect(loadoutCandidates(unit, 4, [], models, undefined, 1)).toEqual([
-      "Leader×1;Trooper×1;Specialist×2 => knife:3,pistol:1,rifle:1,special:2",
+      ...unlimited.slice(0, 1),
+      "…truncated",
+    ]);
+  });
+
+  it("keeps declared variant order before truncation", () => {
+    const variantRows = [{
+      name: "Trooper",
+      min: 1,
+      max: 1,
+      loadout_variants: [
+        { name: "Zulu", weapon_ids: ["zeta"] },
+        { name: "Alpha", weapon_ids: ["alpha"] },
+      ],
+    }];
+    expect(loadoutCandidates(unit, 1, [], variantRows, undefined, 1)).toEqual([
+      "Zulu×1 => zeta:1",
+      "…truncated",
+    ]);
+  });
+
+  it("proves zero-limit truncation without traversing complete variants", () => {
+    const variants = Array.from({ length: 257 }, (_, index) => ({
+      name: `Variant ${String(index).padStart(3, "0")}`,
+      weapon_ids: [`weapon-${index}`],
+    }));
+    const completeRows = [{
+      name: "Trooper",
+      min: 5,
+      max: 5,
+      loadout_variants: variants,
+    }];
+    expect(loadoutCandidates(unit, 5, [], completeRows, undefined, 0)).toEqual([
       "…truncated",
     ]);
   });
@@ -566,6 +606,7 @@ describe("loadoutCandidates", () => {
       "Leader×1;Trooper×2;Specialist×1 => knife:3,pistol:1,rifle:2,special:1",
     ]);
     expect(loadoutCandidates(unit, 5, [], models, tiers)).toEqual([]);
+    expect(loadoutCandidates(unit, 5, [], models, tiers, 0)).toEqual([]);
   });
 
   it("matches baseLoadout for a variant-free single allocation", () => {
@@ -629,6 +670,7 @@ describe("validateLoadout — whole-model variants", () => {
       name: "Trooper",
       min: 2,
       max: 2,
+      default_weapon_ids: ["rifle"],
       loadout_variants: [
         { name: "Rifle", weapon_ids: ["rifle"] },
         { name: "Plasma", weapon_ids: ["plasma"] },
@@ -640,10 +682,52 @@ describe("validateLoadout — whole-model variants", () => {
     },
   ];
 
-  it("accepts valid heterogeneous variants but rejects hybrid equipment and variant budgets", () => {
+  it("accepts valid heterogeneous variants but rejects a full hybrid equipment bag", () => {
     expect(validateLoadout(unit, 2, [], new Map([["rifle", 1], ["plasma", 1]]), models)).toEqual([]);
-    expect(validateLoadout(unit, 2, [], new Map([["rifle", 1], ["plasma", 1], ["melta", 1]]), models)).not.toEqual([]);
-    expect(validateLoadout(unit, 2, [], new Map([["plasma", 1], ["melta", 1]]), models)).not.toEqual([]);
+    expect(validateLoadout(unit, 2, [], new Map([["rifle", 1], ["plasma", 1], ["melta", 1]]), models)).toEqual([
+      {
+        id: "variant-unit",
+        code: "swap-conflict",
+        message: "variant-unit: equipment cannot be assigned to legal whole-model loadouts",
+      },
+    ]);
+  });
+
+  it("accepts an explicit variant selection while completing omitted defaults", () => {
+    expect(validateLoadout(unit, 2, [], new Map([["plasma", 1]]), models)).toEqual([]);
+  });
+
+  it("reports a sparse over-limit selection without a swap conflict", () => {
+    const rows = [
+      {
+        name: "Leader",
+        min: 1,
+        max: 1,
+        default_weapon_ids: ["rifle"],
+        loadout_variants: [
+          { name: "Rifle", weapon_ids: ["rifle"] },
+          { name: "Plasma", weapon_ids: ["plasma"] },
+        ],
+      },
+      { name: "Trooper", min: 1, max: 1, default_weapon_ids: ["rifle"] },
+    ];
+    expect(validateLoadout(unit, 2, [], new Map([["plasma", 2]]), rows)).toEqual([
+      {
+        id: "plasma",
+        code: "exceeds-max",
+        message: "plasma: 2 exceeds max 1",
+      },
+    ]);
+  });
+
+  it("rejects mutually incompatible sparse variants with a swap conflict", () => {
+    expect(validateLoadout(unit, 2, [], new Map([["plasma", 1], ["melta", 1]]), models)).toEqual([
+      {
+        id: "variant-unit",
+        code: "swap-conflict",
+        message: "variant-unit: equipment cannot be assigned to legal whole-model loadouts",
+      },
+    ]);
   });
 
   it("enumerates compatible options without bypassing the destination variant cap", () => {
@@ -701,6 +785,31 @@ describe("validateLoadout — whole-model variants", () => {
     const completed = completeLoadout(unit, 2, [], rows, new Map([["plasma", 1]]));
     expect(completed?.counts).toEqual(new Map([["knife", 2], ["rifle", 1], ["plasma", 1]]));
     expect(completeLoadout(unit, 2, [], rows, new Map())?.counts.has("plasma")).toBe(false);
+  });
+
+  it("completes a sparse variant with its explicitly selected option bundle first", () => {
+    const extras = Array.from({ length: 8 }, (_, index) => `accessory-${index}`);
+    const options = extras.map((id) =>
+      opt({ id: `option-${id}`, replacement: [id], model_constraint: { max_count: 1 } }),
+    );
+    const rows = [{
+      name: "Trooper",
+      min: 10,
+      max: 10,
+      default_weapon_ids: ["rifle"],
+      loadout_variants: [
+        { name: "Rifle", weapon_ids: ["rifle"] },
+        { name: "Target", weapon_ids: ["target"] },
+      ],
+    }];
+    const explicit = new Map<string, number>([
+      ["target", 1] as const,
+      ...extras.map((id) => [id, 1] as const),
+    ]);
+    const completed = completeLoadout(unit, 10, options, rows, explicit);
+    expect(completed?.counts.get("rifle")).toBe(9);
+    expect(completed?.counts.get("target")).toBe(1);
+    for (const id of extras) expect(completed?.counts.get(id)).toBe(1);
   });
 });
 

@@ -39,6 +39,8 @@ _MODEL_SCOPED_REASON = (
 _ATTACKER_TARGET = "attacker"
 _DEFENDER_TARGETS = frozenset(["defender", "enemy-within-aura", "all-enemy"])
 
+_STOCHASTIC_DICE_GATED_REASON = "dice-gated effect: stochastic; not expressible as a buff"
+
 
 def effect_to_buffs(
     effect: Any,
@@ -195,7 +197,7 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         # Probabilistic; the buff layer is deterministic.
         out["unsupported"].append(
             {
-                "reason": "dice-gated effect: stochastic; not expressible as a buff",
+                "reason": _STOCHASTIC_DICE_GATED_REASON,
                 "effectFragment": node,
             }
         )
@@ -361,6 +363,20 @@ def _translate_reroll(
     subset = "ones" if modifier.get("value") == 1 else modifier.get("subset")
     # Under target perspective, only "save" rerolls fire on the buffed unit.
     if opts["perspective"] == "target" and roll != "save":
+        return
+    # Finite permissions are non-linear over a roll pool. Until the cruncher
+    # carries the exact pool distribution, applying this as an uncapped reroll
+    # would silently overstate the effect.
+    if modifier.get("count") is not None:
+        out["unsupported"].append(
+            {
+                "reason": (
+                    "re-roll: count-capped permissions are not modelled "
+                    "by the expected-value engine"
+                ),
+                "effectFragment": node,
+            }
+        )
         return
     if roll in ("hit", "wound", "save", "damage") and subset in ("ones", "all-failures"):
         out["applied"].append(
@@ -963,27 +979,28 @@ def _translate_named_effect(
         triggers = []
     else:
         triggers = [trigger_value]
-    conditions = [
-        trigger.get("condition")
-        for trigger in triggers
-        if _is_object(trigger) and _is_object(trigger.get("condition"))
-    ]
+    conditions: list[dict[str, Any]] = []
+    for trigger in triggers:
+        if not _is_object(trigger):
+            continue
+        trigger_condition = trigger.get("condition")
+        if _is_object(trigger_condition):
+            conditions.append(trigger_condition)
+
+    sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
     if conditions and len(conditions) == len(triggers):
-        condition: dict[str, Any] = (
-            conditions[0]
-            if len(conditions) == 1
-            else {"operator": "or", "operands": conditions}
+        condition = (
+            conditions[0] if len(conditions) == 1 else {"operator": "or", "operands": conditions}
         )
-        body: dict[str, Any] = {
+        gated_body: dict[str, Any] = {
             "type": "conditional",
             "condition": condition,
             "effect": node.get("effect"),
         }
+        _walk(gated_body, source, opts, sub)
     else:
-        body = node.get("effect")
+        _walk(node.get("effect"), source, opts, sub)
 
-    sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
-    _walk(body, source, opts, sub)
     out["unsupported"].extend(sub["unsupported"])
     out["activatable"].extend(sub["activatable"])
     if sub["applied"]:
@@ -1145,19 +1162,32 @@ def _enumerate_timing_gate(
     condition = node.get("condition")
     if not _is_object(condition):
         return
+    buffs: list[Buff] = []
+    _collect_gated_buffs(node.get("effect"), source, opts, {}, buffs)
     sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
     _walk(node.get("effect"), source, opts, sub)
-    out["unsupported"].extend(sub["unsupported"])
+    # A stochastic branch contributes nothing to a timing activation. Preserve
+    # every other unsupported diagnostic discovered while finding inner levers.
+    out["unsupported"].extend(
+        fragment
+        for fragment in sub["unsupported"]
+        if not (
+            _is_object(fragment)
+            and fragment.get("reason") == _STOCHASTIC_DICE_GATED_REASON
+            and _is_object(fragment.get("effectFragment"))
+            and fragment["effectFragment"].get("type") == "dice-gated"
+        )
+    )
     # Inner independent decisions pass straight through as their own levers.
     out["activatable"].extend(sub["activatable"])
     # Inner unconditional buffs become one lever gated only on the timing.
-    if sub["applied"]:
+    if buffs:
         timing = _extract_timing(condition) or "timing"
         out["activatable"].append(
             {
                 "id": f"{opts['abilityId']}@{timing}",
-                "label": _label_for_buffs(sub["applied"]),
-                "buffs": sub["applied"],
+                "label": _label_for_buffs(buffs),
+                "buffs": buffs,
             }
         )
 
@@ -1621,10 +1651,7 @@ _DESIGNATION_SELECTION_FIDELITY_FIELDS = (
 def _trigger_has_unresolved_source(trigger: Any) -> bool:
     if not _is_object(trigger):
         return False
-    return any(
-        trigger.get(key) is not None
-        for key in ("caused_by", "source_ability")
-    )
+    return any(trigger.get(key) is not None for key in ("caused_by", "source_ability"))
 
 
 def _has_unresolved_fidelity_binding(node: dict[str, Any]) -> bool:
@@ -1634,22 +1661,16 @@ def _has_unresolved_fidelity_binding(node: dict[str, Any]) -> bool:
     modifier = node.get("modifier") or {}
     consumer = modifier.get("consumer") or {}
     node_type = node.get("type")
-    selection_binding = (
-        node_type in ("select-units", "for-each-unit")
-        and (
-            selector.get("target_kind") == "model"
-            or any(selector.get(key) is not None for key in _SELECTOR_FIDELITY_FIELDS)
-        )
+    selection_binding = node_type in ("select-units", "for-each-unit") and (
+        selector.get("target_kind") == "model"
+        or any(selector.get(key) is not None for key in _SELECTOR_FIDELITY_FIELDS)
     )
-    designation_binding = (
-        node_type == "designate-target"
-        and (
-            any(select.get(key) is not None for key in _DESIGNATION_SELECTION_FIDELITY_FIELDS)
-            or applies.get("attacker_keywords") is not None
-            or applies.get("attacker_unit_keywords") is not None
-            or applies.get("beneficiary") is not None
-            or applies.get("reference") is not None
-        )
+    designation_binding = node_type == "designate-target" and (
+        any(select.get(key) is not None for key in _DESIGNATION_SELECTION_FIDELITY_FIELDS)
+        or applies.get("attacker_keywords") is not None
+        or applies.get("attacker_unit_keywords") is not None
+        or applies.get("beneficiary") is not None
+        or applies.get("reference") is not None
     )
     trigger_value = node.get("trigger")
     triggers = trigger_value if isinstance(trigger_value, list) else [trigger_value]
@@ -1658,8 +1679,5 @@ def _has_unresolved_fidelity_binding(node: dict[str, Any]) -> bool:
         selection_binding
         or designation_binding
         or source_binding
-        or (
-            node_type == "named-region-state"
-            and consumer.get("attack_condition") is not None
-        )
+        or (node_type == "named-region-state" and consumer.get("attack_condition") is not None)
     )

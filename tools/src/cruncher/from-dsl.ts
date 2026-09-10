@@ -41,6 +41,8 @@ export type UnsupportedFragment = {
   effectFragment: unknown;
 };
 
+const stochasticDiceGatedReason = "dice-gated effect: stochastic; not expressible as a buff";
+
 /**
  * A mutually-limited pool of {@link ActivatableBuff} levers. Dice-pool
  * allocations cap how many options fire at once (`max_activations`); a `choice`
@@ -245,7 +247,7 @@ function walk(
       return;
     case "dice-gated":
       out.unsupported.push({
-        reason: "dice-gated effect: stochastic; not expressible as a buff",
+        reason: stochasticDiceGatedReason,
         effectFragment: currentNode,
       });
       return;
@@ -393,6 +395,16 @@ function translateReroll(
   const subset = modifier.value === 1 ? "ones" : modifier.subset;
   // Under target perspective, only "save" rerolls fire on the buffed unit.
   if (opts.perspective === "target" && roll !== "save") return;
+  // Finite permissions are non-linear over a roll pool. Until the cruncher
+  // carries the exact pool distribution, applying this as an uncapped reroll
+  // would silently overstate the effect.
+  if (modifier.count !== undefined) {
+    out.unsupported.push({
+      reason: "re-roll: count-capped permissions are not modelled by the expected-value engine",
+      effectFragment: node,
+    });
+    return;
+  }
   if (
     (roll === "hit" || roll === "wound" || roll === "save" || roll === "damage") &&
     (subset === "ones" || subset === "all-failures")
@@ -1095,19 +1107,30 @@ function enumerateTimingGate(
 ): void {
   const condition = node.condition;
   if (!isObject(condition)) return;
+  const buffs: Buff[] = [];
+  collectGatedBuffs(node.effect, source, opts, {}, buffs);
   const sub: EffectTranslation = { applied: [], unsupported: [], activatable: [] };
   walk(node.effect, source, opts, sub);
-  out.unsupported.push(...sub.unsupported);
+  // A stochastic branch contributes nothing to a timing activation. Preserve
+  // every other unsupported diagnostic discovered while finding inner levers.
+  out.unsupported.push(
+    ...sub.unsupported.filter(
+      ({ reason, effectFragment }) =>
+        reason !== stochasticDiceGatedReason ||
+        !isObject(effectFragment) ||
+        effectFragment.type !== "dice-gated",
+    ),
+  );
   // Inner independent decisions (dice-pool options, choice branches) pass
   // straight through as their own levers.
   out.activatable.push(...sub.activatable);
   // Inner unconditional buffs become one lever gated only on the timing.
-  if (sub.applied.length > 0) {
+  if (buffs.length > 0) {
     const timing = extractTiming(condition) ?? "timing";
     out.activatable.push({
       id: `${opts.abilityId}@${timing}`,
-      label: labelForBuffs(sub.applied),
-      buffs: sub.applied,
+      label: labelForBuffs(buffs),
+      buffs,
     });
   }
 }

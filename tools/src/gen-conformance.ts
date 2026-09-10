@@ -3071,6 +3071,7 @@ function genEffectTranslation(): void {
       },
     });
   }
+
   // moved-through-tall-terrain canonical game-event: pins the new timing-is
   // negation arm (inline conditional lead-in AND trigger-condition predicate
   // form), the event dispatched directly as a trigger.event, the two legacy
@@ -3273,6 +3274,7 @@ function genEffectTranslation(): void {
         effect: raw.effect, scope: raw.scope,
         ...(raw.trigger ? { trigger: raw.trigger } : {}),
         ...(raw.usage ? { usage: raw.usage } : {}),
+        ...(raw.applies_to != null ? { applies_to: raw.applies_to } : {}),
         expected: { text: describeAbility(raw as Parameters<typeof describeAbility>[0]) },
       });
     }
@@ -3295,6 +3297,68 @@ function genEffectTranslation(): void {
     } },
     { caseId: "fidelity/model-advance-reroll", effect: {
       type: "re-roll", target: "self", modifier: { roll: "advance", result_scope: "any-result" },
+    } },
+    { caseId: "fidelity/condition-of-charged-this-turn", effect: {
+      type: "conditional",
+      condition: { type: "charged-this-turn", of: "target" },
+      effect: { type: "no-effect" },
+    } },
+    { caseId: "fidelity/condition-of-unit-below-half-strength", effect: {
+      type: "conditional",
+      condition: { type: "unit-below-half-strength", of: "target" },
+      effect: { type: "no-effect" },
+    } },
+    { caseId: "fidelity/condition-of-is-battle-shocked", effect: {
+      type: "conditional",
+      condition: { type: "is-battle-shocked", of: "target" },
+      effect: { type: "no-effect" },
+    } },
+    { caseId: "fidelity/reroll-count-one-hit", effect: {
+      type: "re-roll", target: "unit",
+      modifier: { roll: "hit", result_scope: "any-result", count: 1 },
+    } },
+    { caseId: "fidelity/reroll-count-one-failed-wound", effect: {
+      type: "re-roll", target: "unit",
+      modifier: { roll: "wound", subset: "all-failures", count: 1 },
+    } },
+    { caseId: "fidelity/reroll-count-two-any", effect: {
+      type: "re-roll", target: "unit",
+      modifier: { roll: "any", result_scope: "any-result", count: 2 },
+    } },
+    { caseId: "fidelity/named-region-reroll-count-two-any", effect: {
+      type: "named-region-state",
+      target: "all-friendly",
+      modifier: {
+        region_ref: { region_id: "example-region" },
+        producer: {},
+        consumer: {
+          beneficiary_gate: { faction: "example-faction", keywords: ["EXAMPLE"] },
+          membership: { unit_scope: "whole-unit", relation: "wholly-within" },
+          default_branch: {
+            effect: { type: "re-roll", modifier: { roll: "any", result_scope: "any-result", count: 2 } },
+          },
+          qualified_branch: {
+            effect: { type: "re-roll", modifier: { roll: "any", result_scope: "any-result", count: 2 } },
+          },
+        },
+      },
+    } },
+    { caseId: "fidelity/reroll-count-one-of-one", effect: {
+      type: "re-roll", target: "unit",
+      modifier: { roll: "hit", subset: "ones", count: 1 },
+    } },
+    { caseId: "fidelity/for-each-unit-engaged-with-bearer-unit", effect: {
+      type: "for-each-unit",
+      selector: {
+        owner: "enemy",
+        engagement_relation: "engaged-with-bearer",
+        reference: "bearer-unit",
+      },
+      effect: {
+        type: "mortal-wounds",
+        target: "unit",
+        modifier: { count: 1 },
+      },
     } },
   ];
   for (const example of fidelityBoundaryCases) {

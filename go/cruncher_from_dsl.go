@@ -27,6 +27,8 @@ var modelTargets = map[string]bool{"self": true, "bearer": true}
 // attached member.
 const modelScopedReason = "model-scoped effect from an attached model: applies to that model only (core rule 19.04)"
 
+const stochasticDiceGatedReason = "dice-gated effect: stochastic; not expressible as a buff"
+
 var defenderTargets = map[string]bool{
 	"defender": true, "enemy-within-aura": true, "all-enemy": true,
 }
@@ -123,7 +125,7 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 	case "choice":
 		enumerateChoice(n, source, opts, out)
 	case "dice-gated":
-		out.unsupported = append(out.unsupported, unsup("dice-gated effect: stochastic; not expressible as a buff", n))
+		out.unsupported = append(out.unsupported, unsup(stochasticDiceGatedReason, n))
 	case "dice-pool-allocation":
 		enumerateDicePool(n, source, opts, out)
 	case "select-units":
@@ -134,13 +136,6 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 			return
 		}
 		modifier, _ := getMap(n, "modifier")
-		if emitterFilter, present := modifier["emitter_filter"]; present {
-			matches, _ := auraRecipientFilterMatches(emitterFilter, nil, opts.perspective)
-			if !matches {
-				out.unsupported = append(out.unsupported, unsup("aura emitter filter requires the source unit's keywords", n))
-				return
-			}
-		}
 		if recipientFilter, present := modifier["recipient_filter"]; present {
 			matches, reason := auraRecipientFilterMatches(recipientFilter, opts.context, opts.perspective)
 			if reason != "" {
@@ -148,6 +143,13 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 				return
 			}
 			if !matches {
+				return
+			}
+		}
+		if emitterFilter, present := modifier["emitter_filter"]; present {
+			matches, _ := auraRecipientFilterMatches(emitterFilter, nil, opts.perspective)
+			if !matches {
+				out.unsupported = append(out.unsupported, unsup("aura emitter filter requires the source unit's keywords", n))
 				return
 			}
 		}
@@ -384,19 +386,34 @@ func enumerateTimingGate(node, source map[string]any, opts dslOpts, out *effectT
 	if !ok {
 		return
 	}
+	var buffs []any
+	collectGatedBuffs(node["effect"], source, opts, map[string]any{}, &buffs)
 	sub := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
 	dslWalk(node["effect"], source, opts, sub)
-	out.unsupported = append(out.unsupported, sub.unsupported...)
+	// A stochastic branch contributes nothing to a timing activation. Preserve
+	// every other unsupported diagnostic discovered while finding inner levers.
+	for _, unsupported := range sub.unsupported {
+		fragment, ok := asMap(unsupported)
+		if ok && getStr(fragment, "reason") == stochasticDiceGatedReason {
+			effectFragment, isDiceGate := asMap(fragment["effectFragment"])
+			if isDiceGate && getStr(effectFragment, "type") == "dice-gated" {
+				continue
+			}
+		}
+		out.unsupported = append(out.unsupported, unsupported)
+	}
+	// Inner independent decisions pass straight through as their own levers.
 	out.activatable = append(out.activatable, sub.activatable...)
-	if len(sub.applied) > 0 {
+	// Inner unconditional buffs become one lever gated only on the timing.
+	if len(buffs) > 0 {
 		timing := extractTiming(condition)
 		if timing == "" {
 			timing = "timing"
 		}
 		out.activatable = append(out.activatable, map[string]any{
 			"id":    opts.abilityID + "@" + timing,
-			"label": labelForBuffs(sub.applied),
-			"buffs": sub.applied,
+			"label": labelForBuffs(buffs),
+			"buffs": buffs,
 		})
 	}
 }
@@ -567,6 +584,10 @@ func translateReroll(node, source map[string]any, opts dslOpts, out *effectTrans
 		subset = "ones"
 	}
 	if opts.perspective == "target" && roll != "save" {
+		return
+	}
+	if _, capped := modifier["count"]; capped {
+		out.unsupported = append(out.unsupported, unsup("re-roll: count-capped permissions are not modelled by the expected-value engine", node))
 		return
 	}
 	if (roll == "hit" || roll == "wound" || roll == "save" || roll == "damage") &&
@@ -972,7 +993,6 @@ func translateConditional(node, source map[string]any, opts dslOpts, out *effect
 	}
 	dslWalk(node["effect"], source, opts, out)
 }
-
 
 func conditionMentionsTiming(condition map[string]any) bool {
 	if getStr(condition, "type") == "timing-is" {
@@ -1415,28 +1435,26 @@ func hasUnresolvedFidelityBinding(n map[string]any) bool {
 	applies, _ := getMap(n, "applies")
 	modifier, _ := getMap(n, "modifier")
 	consumer, _ := getMap(modifier, "consumer")
-	selectorUnresolved := (n["type"] == "select-units" || n["type"] == "for-each-unit") && (
-		selector["target_kind"] == "model" ||
-			selector["eligibility"] != nil ||
-			selector["reference"] != nil ||
-			selector["origin"] != nil ||
-			selector["selection_limit"] != nil ||
-			selector["bind_as"] != nil ||
-			selector["within_inches_from"] != nil ||
-			selector["visible_to"] != nil ||
-			selector["visibility_required"] == true)
-	designationUnresolved := n["type"] == "designate-target" && (
-		selectSpec["eligibility"] != nil ||
-			selectSpec["reference"] != nil ||
-			selectSpec["visibility_required"] == true ||
-			selectSpec["bind_as"] != nil ||
-			selectSpec["within_inches_from"] != nil ||
-			selectSpec["visible_to"] != nil ||
-			selectSpec["selection_limit"] != nil ||
-			applies["attacker_keywords"] != nil ||
-			applies["attacker_unit_keywords"] != nil ||
-			applies["beneficiary"] != nil ||
-			applies["reference"] != nil)
+	selectorUnresolved := (n["type"] == "select-units" || n["type"] == "for-each-unit") && (selector["target_kind"] == "model" ||
+		selector["eligibility"] != nil ||
+		selector["reference"] != nil ||
+		selector["origin"] != nil ||
+		selector["selection_limit"] != nil ||
+		selector["bind_as"] != nil ||
+		selector["within_inches_from"] != nil ||
+		selector["visible_to"] != nil ||
+		selector["visibility_required"] == true)
+	designationUnresolved := n["type"] == "designate-target" && (selectSpec["eligibility"] != nil ||
+		selectSpec["reference"] != nil ||
+		selectSpec["visibility_required"] == true ||
+		selectSpec["bind_as"] != nil ||
+		selectSpec["within_inches_from"] != nil ||
+		selectSpec["visible_to"] != nil ||
+		selectSpec["selection_limit"] != nil ||
+		applies["attacker_keywords"] != nil ||
+		applies["attacker_unit_keywords"] != nil ||
+		applies["beneficiary"] != nil ||
+		applies["reference"] != nil)
 	triggerUnresolved := n["type"] == "named-effect" && hasUnresolvedTriggerBinding(n["trigger"])
 	return selectorUnresolved ||
 		designationUnresolved ||

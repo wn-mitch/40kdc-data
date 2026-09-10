@@ -22,7 +22,7 @@
             </profile>
             <profile name="Deadly Demise D3" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When a model in the unit is destroyed, until the end of the phase:
+                <characteristic name="Description">When this model is destroyed, until the end of the phase:
   -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
@@ -118,7 +118,7 @@
             </profile>
             <profile name="Bloody Fury" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before a Hit roll is made, you may use this ability:
+                <characteristic name="Description">Before a Hit roll is made for an attack made by this model, you may use this ability:
 While making ranged attacks, if the target is the closest eligible target, you can re-roll the Hit roll for attacks made by this model for ranged attacks.
 If the target is the closest eligible target, you can re-roll the Charge roll for this model.</characteristic>
               </characteristics>
@@ -314,7 +314,7 @@ If the target is the closest eligible target, you can re-roll the Charge roll fo
             </profile>
             <profile name="Bloody Fury" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before a Hit roll is made, you may use this ability:
+                <characteristic name="Description">Before a Hit roll is made for an attack made by this model, you may use this ability:
 While making ranged attacks, if the target is the closest eligible target, you can re-roll the Hit roll for attacks made by this model for ranged attacks.
 If the target is the closest eligible target, you can re-roll the Charge roll for this model.</characteristic>
               </characteristics>

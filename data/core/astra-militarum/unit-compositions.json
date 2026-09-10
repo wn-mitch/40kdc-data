@@ -350,6 +350,7 @@
           {
             "name": "Tempestus Scion",
             "weapon_ids": [
+              "hot-shot-lasgun",
               "close-combat-weapon-militarum-tempestus-command-squad"
             ],
             "max_count": 4
@@ -1858,7 +1859,7 @@
         }
       },
       {
-        "name": "Cadian Veteran Guardsman with regimental standard",
+        "name": "Cadian Veteran Guardsman",
         "profile_name": "Cadian Veteran Guardsman",
         "min": 1,
         "max": 1,
@@ -1903,7 +1904,7 @@
         ]
       },
       {
-        "name": "Cadian Veteran Guardsman with master vox",
+        "name": "Cadian Veteran Guardsman",
         "profile_name": "Cadian Veteran Guardsman",
         "min": 1,
         "max": 1,
@@ -1919,7 +1920,7 @@
         }
       },
       {
-        "name": "Cadian Veteran Guardsman with medi-pack",
+        "name": "Cadian Veteran Guardsman",
         "profile_name": "Cadian Veteran Guardsman",
         "min": 1,
         "max": 1,
@@ -1934,7 +1935,7 @@
         }
       },
       {
-        "name": "Cadian Veteran Guardsman with chainsword",
+        "name": "Cadian Veteran Guardsman",
         "profile_name": "Cadian Veteran Guardsman",
         "min": 1,
         "max": 1,
@@ -2334,12 +2335,11 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
-              "Death Korps Trooper",
               "Death Korps Trooper w/ Vox-caster"
             ],
-            "count": 9,
-            "per_models": 0,
-            "scope": "model-row"
+            "count": 1,
+            "per_models": 10,
+            "scope": "unit"
           },
           {
             "variant_names": [
@@ -2350,29 +2350,8 @@
               "Death Korps Trooper w/ Plasma gun"
             ],
             "count": 2,
-            "per_models": 0,
-            "scope": "model-row"
-          },
-          {
-            "variant_names": [
-              "Death Korps Trooper",
-              "Death Korps Trooper w/ Vox-caster"
-            ],
-            "count": 18,
-            "per_models": 0,
-            "scope": "model-row"
-          },
-          {
-            "variant_names": [
-              "Death Korps Trooper w/ Flamer",
-              "Death Korps Trooper w/ Grenade launcher",
-              "Death Korps Trooper w/ Long-las",
-              "Death Korps Trooper w/ Meltagun",
-              "Death Korps Trooper w/ Plasma gun"
-            ],
-            "count": 4,
-            "per_models": 0,
-            "scope": "model-row"
+            "per_models": 10,
+            "scope": "unit"
           }
         ]
       }
@@ -3080,6 +3059,14 @@
         ],
         "loadout_variants": [
           {
+            "name": "Jungle Fighter",
+            "weapon_ids": [
+              "lasgun",
+              "close-combat-weapon-catachan-jungle-fighters"
+            ],
+            "max_count": 18
+          },
+          {
             "name": "Jungle Fighter w/ Vox-caster",
             "weapon_ids": [
               "close-combat-weapon-catachan-jungle-fighters",
@@ -3100,21 +3087,11 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
-              "Jungle Fighter w/ Vox-caster",
               "Jungle Fighter w/ Flamer"
             ],
-            "count": 9,
-            "per_models": 0,
-            "scope": "model-row"
-          },
-          {
-            "variant_names": [
-              "Jungle Fighter w/ Vox-caster",
-              "Jungle Fighter w/ Flamer"
-            ],
-            "count": 18,
-            "per_models": 0,
-            "scope": "model-row"
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
           }
         ]
       }
@@ -3758,7 +3735,8 @@
             "name": "Recon Trooper w/ Vox-caster",
             "weapon_ids": [
               "lasgun",
-              "close-combat-weapon-cadian-recon-squad"
+              "close-combat-weapon-cadian-recon-squad",
+              "vox-caster"
             ],
             "max_count": 1
           },
@@ -3821,7 +3799,7 @@
               "Recon Trooper w/ Missile launcher",
               "Recon Trooper w/ Laspistol"
             ],
-            "count": 1,
+            "count": 2,
             "per_models": 0,
             "scope": "model-row"
           },

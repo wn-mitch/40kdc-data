@@ -7844,6 +7844,7 @@
         "plasma-pistol-tallyman",
         "power-fist",
         "power-fist-lord-of-virulence",
+        "power-fist-sholgor-the-putrid",
         "power-scourge",
         "predator-autocannon",
         "predator-twin-lascannon",
@@ -7932,6 +7933,7 @@
         "stimm-needler",
         "stinger-pistol",
         "stinger-pistol-haemonculus",
+        "stinger-pistol-xatrophos-nuul",
         "stinger-pod",
         "stunclaw",
         "talos-gauntlet",
@@ -8487,7 +8489,7 @@
         "big-shoota",
         "big-shoota-boyz",
         "big-shoota-warboss-in-mega-armour",
-        "big-skorcha",
+        "big-skorcha-nobz",
         "blasta",
         "blastajet-force-field",
         "blitzkannon",
@@ -8544,12 +8546,16 @@
         "knucklebustas",
         "kombi-rokkit",
         "kombi-rokkit-boyz",
+        "kombi-rokkit-nobz",
         "kombi-shoota",
         "kombi-skorcha",
+        "kombi-skorcha-boyz",
         "kombi-weapon",
         "kustom-big-shoota",
         "kustom-blasta-x",
         "kustom-choppa",
+        "kustom-choppa-boyz",
+        "kustom-choppa-nobz",
         "kustom-force-field",
         "kustom-krumpa",
         "kustom-mega-blasta",
@@ -8560,6 +8566,7 @@
         "kustom-shoota-boyz",
         "kustom-shoota-kommandos",
         "kustom-shoota-meganobz",
+        "kustom-shoota-nobz",
         "lobba",
         "lobbin-bombs",
         "mega-choppa",
@@ -9725,7 +9732,11 @@
         "fists-and-knives": "combat-patrol"
       },
       "death-guard": {
-        "numerological-artefacts": "combat-patrol"
+        "numerological-artefacts": "combat-patrol",
+        "power-fist-sholgor-the-putrid": "combat-patrol"
+      },
+      "drukhari": {
+        "stinger-pistol-xatrophos-nuul": "combat-patrol"
       },
       "genestealer-cults": {
         "leaders-weapon-symbiote": "combat-patrol",

@@ -293,8 +293,12 @@ pub fn loadout_models(models: &[UnitCompositionModelsItem]) -> Vec<LoadoutModel>
     models.iter().map(LoadoutModel::from).collect()
 }
 
-fn allocations_for(rows: &[LoadoutModel], total: u64) -> Vec<Vec<u64>> {
-    fn visit(
+fn visit_allocations(
+    rows: &[LoadoutModel],
+    total: u64,
+    mut visitor: impl FnMut(&[u64]) -> bool,
+) -> bool {
+    fn visit<F: FnMut(&[u64]) -> bool>(
         i: usize,
         remaining: u64,
         mins: &[u64],
@@ -302,22 +306,19 @@ fn allocations_for(rows: &[LoadoutModel], total: u64) -> Vec<Vec<u64>> {
         suffix_min: &[u64],
         suffix_max: &[u64],
         current: &mut [u64],
-        out: &mut Vec<Vec<u64>>,
-    ) {
+        visitor: &mut F,
+    ) -> bool {
         if i == mins.len() {
-            if remaining == 0 {
-                out.push(current.to_vec());
-            }
-            return;
+            return remaining == 0 && visitor(current);
         }
         if remaining < suffix_min[i] || remaining > suffix_max[i] {
-            return;
+            return false;
         }
         let lo = mins[i].max(remaining.saturating_sub(suffix_max[i + 1]));
         let hi = maxs[i].min(remaining - suffix_min[i + 1]);
         for count in (lo..=hi).rev() {
             current[i] = count;
-            visit(
+            if visit(
                 i + 1,
                 remaining - count,
                 mins,
@@ -325,10 +326,14 @@ fn allocations_for(rows: &[LoadoutModel], total: u64) -> Vec<Vec<u64>> {
                 suffix_min,
                 suffix_max,
                 current,
-                out,
-            );
+                visitor,
+            ) {
+                return true;
+            }
         }
+        false
     }
+
     let mins: Vec<u64> = rows.iter().map(|r| r.min).collect();
     let maxs: Vec<u64> = rows.iter().map(|r| r.max.max(r.min)).collect();
     let mut suffix_min = vec![0; rows.len() + 1];
@@ -337,7 +342,6 @@ fn allocations_for(rows: &[LoadoutModel], total: u64) -> Vec<Vec<u64>> {
         suffix_min[i] = suffix_min[i + 1] + mins[i];
         suffix_max[i] = suffix_max[i + 1] + maxs[i];
     }
-    let mut out = Vec::new();
     visit(
         0,
         total,
@@ -346,15 +350,37 @@ fn allocations_for(rows: &[LoadoutModel], total: u64) -> Vec<Vec<u64>> {
         &suffix_min,
         &suffix_max,
         &mut vec![0; rows.len()],
-        &mut out,
-    );
+        &mut visitor,
+    )
+}
+
+fn allocations_for(rows: &[LoadoutModel], total: u64) -> Vec<Vec<u64>> {
+    let mut out = Vec::new();
+    visit_allocations(rows, total, |allocation| {
+        out.push(allocation.to_vec());
+        false
+    });
     out
 }
 
-/// Every legal squad build for `model_count` models, encoded as sorted
-/// `"<witness> => <counts>"` strings. Variant-bearing rows are expanded through the
-/// same exact bounded-cover solver as grouping, so options, shared allowances, and
-/// variant provenance cannot drift from legality.
+fn record_candidate(
+    candidates: &mut Vec<String>,
+    candidate_indexes: &mut HashMap<String, usize>,
+    cap: usize,
+    value: String,
+) -> bool {
+    if candidate_indexes.contains_key(&value) {
+        return false;
+    }
+    candidate_indexes.insert(value.clone(), candidates.len());
+    candidates.push(value);
+    candidates.len() > cap
+}
+
+/// Every legal squad build for `model_count` models, encoded as
+/// `"<witness> => <counts>"` strings in canonical solver traversal order.
+/// Variant-bearing rows are expanded through the same exact bounded-cover solver
+/// as grouping, so options, shared allowances, and variant provenance cannot drift.
 pub fn loadout_candidates(
     unit: &Unit,
     model_count: u64,
@@ -378,26 +404,32 @@ pub fn loadout_candidates(
         row_sets.push(base.to_vec());
     }
 
-    let mut encoded = std::collections::BTreeSet::new();
+    let cap = limit.unwrap_or(LOADOUT_CANDIDATES_DEFAULT_LIMIT);
+    let mut encoded = Vec::new();
+    let mut encoded_indexes = HashMap::new();
     for rows in row_sets {
-        for allocation in allocations_for(&rows, model_count) {
+        let cancelled = visit_allocations(&rows, model_count, |allocation| {
             if !rows.iter().any(|row| !row.loadout_variants.is_empty()) {
                 let witness: Vec<String> = rows
                     .iter()
-                    .zip(&allocation)
+                    .zip(allocation)
                     .filter(|(_, count)| **count > 0)
                     .map(|(row, count)| format!("{}×{count}", row.name.as_deref().unwrap_or("")))
                     .collect();
-                encoded.insert(encode_candidate(
-                    &witness,
-                    &allocation_counts(unit, model_count, options, &rows, &allocation),
-                ));
-                continue;
+                return record_candidate(
+                    &mut encoded,
+                    &mut encoded_indexes,
+                    cap,
+                    encode_candidate(
+                        &witness,
+                        &allocation_counts(unit, model_count, options, &rows, allocation),
+                    ),
+                );
             }
 
             let fixed_models: Vec<LoadoutModel> = rows
                 .iter()
-                .zip(&allocation)
+                .zip(allocation)
                 .map(|(row, count)| {
                     let mut fixed = row.clone();
                     fixed.min = *count;
@@ -445,7 +477,8 @@ pub fn loadout_candidates(
                 &variant_caps,
                 |picks| {
                     let mut counts = BTreeMap::new();
-                    let mut witness_counts = BTreeMap::new();
+                    let mut witness_counts = Vec::new();
+                    let mut witness_indexes = HashMap::new();
                     for (row_index, candidate_index, count) in picks {
                         let candidate = &rows_for_solver[*row_index].candidates[*candidate_index];
                         let label = candidate
@@ -453,32 +486,50 @@ pub fn loadout_candidates(
                             .as_deref()
                             .or(rows_for_solver[*row_index].name.as_deref())
                             .unwrap_or("");
-                        *witness_counts.entry(label.to_owned()).or_insert(0u64) += *count;
+                        let index = match witness_indexes.get(label) {
+                            Some(index) => *index,
+                            None => {
+                                let index = witness_counts.len();
+                                witness_indexes.insert(label.to_owned(), index);
+                                witness_counts.push((label.to_owned(), 0u64));
+                                index
+                            }
+                        };
+                        witness_counts[index].1 += *count;
                         for (id, per_model) in &candidate.weapons {
                             *counts.entry(id.clone()).or_insert(0) += per_model * *count as i64;
                         }
                     }
-                    let budget_counts: HashMap<_, _> =
-                        counts.iter().map(|(id, count)| (id.clone(), *count)).collect();
+                    let budget_counts: HashMap<_, _> = counts
+                        .iter()
+                        .map(|(id, count)| (id.clone(), *count))
+                        .collect();
                     if budget_violations(unit, model_count, &budget_counts).is_empty() {
                         let witness: Vec<String> = witness_counts
                             .into_iter()
                             .map(|(name, count)| format!("{name}×{count}"))
                             .collect();
-                        encoded.insert(encode_candidate(&witness, &counts));
+                        return record_candidate(
+                            &mut encoded,
+                            &mut encoded_indexes,
+                            cap,
+                            encode_candidate(&witness, &counts),
+                        );
                     }
                     false
                 },
-            );
+            )
+            .is_some()
+        });
+        if cancelled {
+            break;
         }
     }
-    let cap = limit.unwrap_or(LOADOUT_CANDIDATES_DEFAULT_LIMIT);
-    let truncated = encoded.len() > cap;
-    let mut out: Vec<String> = encoded.into_iter().take(cap).collect();
-    if truncated {
-        out.push(LOADOUT_CANDIDATES_TRUNCATED.to_owned());
+    if encoded.len() > cap {
+        let _ = encoded.pop();
+        encoded.push(LOADOUT_CANDIDATES_TRUNCATED.to_owned());
     }
-    out
+    encoded
 }
 
 /// True when every model row records a non-empty default loadout.
@@ -514,17 +565,18 @@ fn allocate_models<'a>(
     let mut out: Vec<(&LoadoutModel, u64)> = models.iter().map(|m| (m, 0u64)).collect();
     let mut remaining = model_count;
     // Leaders first, at their declared minimum.
-    for row in out.iter_mut() {
+    for row in &mut out {
         if !row.0.is_leader_model {
             continue;
         }
-        let c = row.0.min.min(remaining);
-        row.1 += c;
-        remaining -= c;
+        let count = row.0.min.min(remaining);
+        row.1 += count;
+        remaining -= count;
     }
-    // Indices of the non-leader bulk rows; if none, the leaders are the sink.
-    let mut bulk_idx: Vec<usize> = (0..out.len())
-        .filter(|&i| !out[i].0.is_leader_model)
+    let mut bulk_idx: Vec<usize> = out
+        .iter()
+        .enumerate()
+        .filter_map(|(index, (model, _))| (!model.is_leader_model).then_some(index))
         .collect();
     if bulk_idx.is_empty() {
         bulk_idx = (0..out.len()).collect();
@@ -693,7 +745,11 @@ pub fn weapon_bounds(
         bounds.clear();
         for allocation in allocations_for(models.expect("variant rows imply models"), model_count) {
             let mut totals = BTreeMap::new();
-            for (index, row) in models.expect("variant rows imply models").iter().enumerate() {
+            for (index, row) in models
+                .expect("variant rows imply models")
+                .iter()
+                .enumerate()
+            {
                 let count = allocation[index];
                 if count == 0 {
                     continue;
@@ -1163,9 +1219,10 @@ fn enumerate_row_candidates(
             let replaces: Vec<String> =
                 options[oi].replaces.iter().map(|s| s.to_string()).collect();
             let required = to_multiset(&replaces);
-            if required.iter().any(|(id, count)| {
-                weapons.get(id).copied().unwrap_or(0) < *count as i64
-            }) {
+            if required
+                .iter()
+                .any(|(id, count)| weapons.get(id).copied().unwrap_or(0) < *count as i64)
+            {
                 continue;
             }
             for bundle in option_bundles(options[oi]) {
@@ -1218,49 +1275,67 @@ fn row_candidates(
             .into_iter()
             .map(|(id, count)| (id, count as i64))
             .collect();
+        let mut candidates = enumerate_row_candidates(&base, row.name.as_deref(), options, &[]);
+        candidates.sort_by(|left, right| {
+            left.key
+                .cmp(&right.key)
+                .then_with(|| join_usize(&left.used_options).cmp(&join_usize(&right.used_options)))
+        });
         return PreparedRowCandidates {
-            candidates: enumerate_row_candidates(&base, row.name.as_deref(), options, &[]),
+            candidates,
             variant_caps,
         };
     }
-    let variant_uses: Vec<Vec<String>> = row.loadout_variants.iter().enumerate().map(|(variant_index, variant)| {
-        let token = format!("{row_index}:variant:{variant_index}");
-        variant_caps.insert(
-            token.clone(),
-            row_count.min(variant.max_count.unwrap_or(row_count)) as i64,
-        );
-        let mut uses = vec![token];
-        for (budget_index, budget) in row.loadout_variant_budgets.iter().enumerate() {
-            if budget.variant_names.contains(&variant.name) {
-                uses.push(format!("{row_index}:{budget_index}"));
+    let variant_uses: Vec<Vec<String>> = row
+        .loadout_variants
+        .iter()
+        .enumerate()
+        .map(|(variant_index, variant)| {
+            let token = format!("{row_index}:variant:{variant_index}");
+            variant_caps.insert(
+                token.clone(),
+                row_count.min(variant.max_count.unwrap_or(row_count)) as i64,
+            );
+            let mut uses = vec![token];
+            for (budget_index, budget) in row.loadout_variant_budgets.iter().enumerate() {
+                if budget.variant_names.contains(&variant.name) {
+                    uses.push(format!("{row_index}:{budget_index}"));
+                }
             }
-        }
-        uses
-    }).collect();
+            uses
+        })
+        .collect();
     struct EquipmentState {
         candidates: Vec<RowCandidate>,
         origin_variants: Vec<usize>,
         min_options: usize,
     }
-    let mut states: BTreeMap<String, EquipmentState> = BTreeMap::new();
+    let mut states = Vec::new();
+    let mut state_indexes = HashMap::new();
     for (variant_index, variant) in row.loadout_variants.iter().enumerate() {
         let base = to_multiset(&variant.weapon_ids)
             .into_iter()
             .map(|(id, count)| (id, count as i64))
             .collect();
         let origin_budgets = &variant_uses[variant_index];
-        for candidate in enumerate_row_candidates(
-            &base,
-            row.name.as_deref(),
-            options,
-            origin_budgets,
-        ) {
+        for candidate in
+            enumerate_row_candidates(&base, row.name.as_deref(), options, origin_budgets)
+        {
             let cost = candidate.used_options.len();
-            let state = states.entry(candidate.key.clone()).or_insert_with(|| EquipmentState {
-                candidates: Vec::new(),
-                origin_variants: vec![variant_index],
-                min_options: cost,
-            });
+            let state_index = match state_indexes.get(&candidate.key) {
+                Some(index) => *index,
+                None => {
+                    let index = states.len();
+                    state_indexes.insert(candidate.key.clone(), index);
+                    states.push(EquipmentState {
+                        candidates: Vec::new(),
+                        origin_variants: vec![variant_index],
+                        min_options: cost,
+                    });
+                    index
+                }
+            };
+            let state = &mut states[state_index];
             if cost < state.min_options {
                 state.min_options = cost;
                 state.origin_variants.clear();
@@ -1273,22 +1348,30 @@ fn row_candidates(
     }
     // Normalize optional extras to the closest whole-model alternatives while
     // retaining every option route and its distinct allowance consumption.
-    let mut candidates = BTreeMap::new();
+    let mut candidates = Vec::new();
+    let mut candidate_indexes = HashMap::new();
     let mut record = |mut selected: RowCandidate, variant_index: usize| {
         if selected.used_variant_budgets != variant_uses[variant_index] {
-            selected.used_variant_budgets.clone_from(&variant_uses[variant_index]);
+            selected
+                .used_variant_budgets
+                .clone_from(&variant_uses[variant_index]);
         }
         selected.variant_name = Some(row.loadout_variants[variant_index].name.clone());
+        let option_state_key = format!("{}#{}", selected.key, join_usize(&selected.used_options));
         let key = format!(
-            "{}#{}#{}",
-            selected.key,
-            join_usize(&selected.used_options),
+            "{option_state_key}#{}",
             row.loadout_variants[variant_index].name
         );
-        candidates.insert(key, selected);
+        if !candidate_indexes.contains_key(&key) {
+            candidate_indexes.insert(key, candidates.len());
+            candidates.push((variant_index, option_state_key, selected));
+        }
     };
-    for state in states.into_values() {
-        let (&last, others) = state.origin_variants.split_last().expect("each equipment state has an origin");
+    for state in states {
+        let (&last, others) = state
+            .origin_variants
+            .split_last()
+            .expect("each equipment state has an origin");
         for candidate in state.candidates {
             for &variant_index in others {
                 record(candidate.clone(), variant_index);
@@ -1296,8 +1379,12 @@ fn row_candidates(
             record(candidate, last);
         }
     }
+    candidates.sort_by(|left, right| left.0.cmp(&right.0).then(left.1.cmp(&right.1)));
     PreparedRowCandidates {
-        candidates: candidates.into_values().collect(),
+        candidates: candidates
+            .into_iter()
+            .map(|(_, _, candidate)| candidate)
+            .collect(),
         variant_caps,
     }
 }
@@ -1425,7 +1512,20 @@ pub fn group_loadout(
     models: Option<&[LoadoutModel]>,
     counts: &BTreeMap<String, i64>,
 ) -> Option<Vec<LoadoutGroup>> {
-    if model_count <= 1 || !has_recorded_loadout_bases(models) {
+    (model_count > 1)
+        .then(|| exact_groups(unit, model_count, options, models, counts))
+        .flatten()
+}
+
+/// The exact whole-model assignment solver, including legal single-model rows.
+fn exact_groups(
+    unit: &Unit,
+    model_count: u64,
+    options: &[&WargearOption],
+    models: Option<&[LoadoutModel]>,
+    counts: &BTreeMap<String, i64>,
+) -> Option<Vec<LoadoutGroup>> {
+    if !has_recorded_loadout_bases(models) {
         return None;
     }
     let models = models.expect("recorded bases imply Some");
@@ -1461,8 +1561,7 @@ pub fn group_loadout(
             if count == 0 {
                 continue;
             }
-            let mut prepared =
-                row_candidates(model, index, count, model_count, &option_refs);
+            let mut prepared = row_candidates(model, index, count, model_count, &option_refs);
             variant_caps.extend(prepared.variant_caps);
             prepared.candidates.retain(|candidate| {
                 candidate
@@ -1582,6 +1681,25 @@ fn groups_from_solution(rows: &[SolverRow], picks: &[(usize, usize, u64)]) -> Ve
         .collect()
 }
 
+/// Prefer candidates that discharge explicit selections, keeping the solver's
+/// deterministic tie-breaks for equally useful candidates.
+fn sort_completion_candidates(candidates: &mut [RowCandidate], lower: &BTreeMap<String, i64>) {
+    candidates.sort_by(|a, b| {
+        let contribution = |candidate: &RowCandidate| {
+            candidate
+                .weapons
+                .iter()
+                .map(|(id, per_model)| (*per_model).min(lower.get(id).copied().unwrap_or(0)))
+                .sum::<i64>()
+        };
+        contribution(b)
+            .cmp(&contribution(a))
+            .then(a.used_options.len().cmp(&b.used_options.len()))
+            .then_with(|| a.key.cmp(&b.key))
+            .then_with(|| join_usize(&a.used_options).cmp(&join_usize(&b.used_options)))
+    });
+}
+
 /// Complete a partial source loadout without inventing optional selections.
 ///
 /// For every legal composition allocation, this bounded-cover solver permits each
@@ -1670,8 +1788,7 @@ pub fn complete_loadout(
                 if count == 0 {
                     continue;
                 }
-                let mut prepared =
-                    row_candidates(model, index, count, model_count, &option_refs);
+                let mut prepared = row_candidates(model, index, count, model_count, &option_refs);
                 variant_caps.extend(prepared.variant_caps);
                 prepared.candidates.retain(|candidate| {
                     candidate
@@ -1683,13 +1800,7 @@ pub fn complete_loadout(
                             .iter()
                             .all(|&option_index| option_caps[option_index] >= 1)
                 });
-                prepared.candidates.sort_by(|a, b| {
-                    a.used_options
-                        .len()
-                        .cmp(&b.used_options.len())
-                        .then_with(|| a.key.cmp(&b.key))
-                        .then_with(|| join_usize(&a.used_options).cmp(&join_usize(&b.used_options)))
-                });
+                sort_completion_candidates(&mut prepared.candidates, &lower);
                 rows.push(SolverRow {
                     name: model.name.clone(),
                     count,
@@ -1714,8 +1825,10 @@ pub fn complete_loadout(
                         weapon.count as i64 * group.count as i64;
                 }
             }
-            let budget_counts: HashMap<_, _> =
-                counts.iter().map(|(id, count)| (id.clone(), *count)).collect();
+            let budget_counts: HashMap<_, _> = counts
+                .iter()
+                .map(|(id, count)| (id.clone(), *count))
+                .collect();
             if !budget_violations(unit, model_count, &budget_counts).is_empty() {
                 continue;
             }
@@ -1760,16 +1873,45 @@ pub fn validate_loadout(
         .map(|(id, count)| (id.clone(), *count))
         .collect();
     let budgets = budget_violations(unit, model_count, counts);
-    let has_variants = models.is_some_and(|rows| {
-        rows.iter().any(|row| !row.loadout_variants.is_empty())
-    });
+    let has_variants =
+        models.is_some_and(|rows| rows.iter().any(|row| !row.loadout_variants.is_empty()));
     if has_variants && has_recorded_loadout_bases(models) {
-        if counts.values().all(|count| *count >= 0)
-            && group_loadout(unit, model_count, options, models, &count_tree).is_some()
-        {
-            return budgets;
+        let bounds = weapon_bounds(unit, model_count, options, models);
+        let budgeted: HashSet<&str> = unit
+            .wargear_budgets
+            .iter()
+            .flat_map(|b| b.items.iter().map(|i| &***i))
+            .collect();
+        let mut out = Vec::new();
+        for (id, &n) in counts {
+            if budgeted.contains(id.as_str()) {
+                continue;
+            }
+            let Some(b) = bounds.get(id) else { continue };
+            if n > b.max as i64 {
+                out.push(Violation {
+                    id: id.clone(),
+                    code: ViolationCode::ExceedsMax,
+                    message: format!("{id}: {n} exceeds max {}", b.max),
+                });
+            } else if n < b.min as i64 {
+                out.push(Violation {
+                    id: id.clone(),
+                    code: ViolationCode::BelowMin,
+                    message: format!("{id}: {n} below min {}", b.min),
+                });
+            }
         }
-        let mut out = budgets;
+        out.extend(budgets);
+        if !out.is_empty() {
+            out.sort_by(|a, b| a.id.cmp(&b.id).then(a.code.as_str().cmp(b.code.as_str())));
+            return out;
+        }
+        if counts.values().all(|count| *count >= 0)
+            && complete_loadout(unit, model_count, options, models, &count_tree).is_some()
+        {
+            return out;
+        }
         out.push(Violation {
             id: unit.id.to_string(),
             code: ViolationCode::SwapConflict,
@@ -2204,10 +2346,15 @@ mod tests {
         }));
         let options = [&option];
         let over = HashMap::from([("plasma".to_owned(), 3)]);
-        assert!(validate_loadout(&unit, 10, &options, &over, None).iter().any(|violation|
-            violation.id == "plasma" && violation.code == ViolationCode::ExceedsMax
-        ));
-        let counts = base_loadout(&unit, 10, &options, None).counts.into_iter().collect();
+        assert!(validate_loadout(&unit, 10, &options, &over, None)
+            .iter()
+            .any(
+                |violation| violation.id == "plasma" && violation.code == ViolationCode::ExceedsMax
+            ));
+        let counts = base_loadout(&unit, 10, &options, None)
+            .counts
+            .into_iter()
+            .collect();
         assert!(validate_loadout(&unit, 10, &options, &counts, None).is_empty());
     }
 
@@ -2272,6 +2419,120 @@ mod tests {
         assert_eq!(clamp_weapon_count(&bounds, "sword", 2), 1);
     }
 
+    fn variant_model(count: u64, variants: Vec<LoadoutVariant>) -> Vec<LoadoutModel> {
+        vec![LoadoutModel {
+            name: Some("Trooper".to_owned()),
+            min: count,
+            max: count,
+            default_weapon_ids: Vec::new(),
+            is_leader_model: false,
+            loadout_variants: variants,
+            loadout_variant_budgets: Vec::new(),
+        }]
+    }
+
+    #[test]
+    fn candidate_limits_are_prefixes_of_canonical_traversal() {
+        let unit = syn_unit(&[]);
+        let models = variant_model(
+            2,
+            vec![
+                LoadoutVariant {
+                    name: "C".to_owned(),
+                    weapon_ids: vec!["charlie".to_owned()],
+                    max_count: None,
+                },
+                LoadoutVariant {
+                    name: "A".to_owned(),
+                    weapon_ids: vec!["alpha".to_owned()],
+                    max_count: None,
+                },
+                LoadoutVariant {
+                    name: "B".to_owned(),
+                    weapon_ids: vec!["bravo".to_owned()],
+                    max_count: None,
+                },
+            ],
+        );
+        let full = loadout_candidates(&unit, 2, &[], Some(&models), None, Some(64));
+        for cap in 0..full.len() {
+            let mut expected = full[..cap].to_vec();
+            expected.push(LOADOUT_CANDIDATES_TRUNCATED.to_owned());
+            assert_eq!(
+                loadout_candidates(&unit, 2, &[], Some(&models), None, Some(cap)),
+                expected
+            );
+        }
+        assert_eq!(
+            loadout_candidates(&unit, 2, &[], Some(&models), None, Some(full.len())),
+            full
+        );
+    }
+
+    #[test]
+    fn zero_limit_cancels_a_large_variant_search_after_its_first_candidate() {
+        let unit = syn_unit(&[]);
+        let variants = (0..257)
+            .map(|index| LoadoutVariant {
+                name: format!("variant-{index:03}"),
+                weapon_ids: vec![format!("weapon-{index:03}")],
+                max_count: None,
+            })
+            .collect();
+        let models = variant_model(5, variants);
+        assert_eq!(
+            loadout_candidates(&unit, 5, &[], Some(&models), None, Some(0)),
+            vec![LOADOUT_CANDIDATES_TRUNCATED.to_owned()]
+        );
+    }
+
+    #[test]
+    fn variants_are_legal_for_a_single_model_even_without_group_presentation() {
+        let unit = syn_unit(&[]);
+        let models = variant_model(
+            1,
+            vec![LoadoutVariant {
+                name: "Only".to_owned(),
+                weapon_ids: vec!["alpha".to_owned()],
+                max_count: None,
+            }],
+        );
+        let counts = HashMap::from([("alpha".to_owned(), 1)]);
+        assert!(validate_loadout(&unit, 1, &[], &counts, Some(&models)).is_empty());
+        assert!(group_loadout(
+            &unit,
+            1,
+            &[],
+            Some(&models),
+            &BTreeMap::from([("alpha".to_owned(), 1)]),
+        )
+        .is_none());
+    }
+
+    #[test]
+    fn candidate_witnesses_follow_declared_variant_order() {
+        let unit = syn_unit(&[]);
+        let models = variant_model(
+            2,
+            vec![
+                LoadoutVariant {
+                    name: "Zulu".to_owned(),
+                    weapon_ids: vec!["zulu".to_owned()],
+                    max_count: Some(1),
+                },
+                LoadoutVariant {
+                    name: "Alpha".to_owned(),
+                    weapon_ids: vec!["alpha".to_owned()],
+                    max_count: Some(1),
+                },
+            ],
+        );
+        assert_eq!(
+            loadout_candidates(&unit, 2, &[], Some(&models), None, None),
+            vec!["Zulu×1;Alpha×1 => alpha:1,zulu:1"]
+        );
+    }
+
     #[test]
     fn variants_use_exact_assignments_and_per_variant_maxima() {
         let unit = syn_unit(&[]);
@@ -2316,9 +2577,105 @@ mod tests {
         ];
         let refs: Vec<_> = options.iter().collect();
         let with_scanner = HashMap::from([("alpha".to_owned(), 2), ("scanner".to_owned(), 1)]);
-        assert!(validate_loadout(&unit, 2, &refs, &with_scanner, Some(&models))
-            .iter().any(|violation| violation.code == ViolationCode::SwapConflict));
-        let legal = HashMap::from([("alpha".to_owned(), 1), ("beta".to_owned(), 1), ("scanner".to_owned(), 1)]);
+        assert!(
+            validate_loadout(&unit, 2, &refs, &with_scanner, Some(&models))
+                .iter()
+                .any(|violation| violation.code == ViolationCode::SwapConflict)
+        );
+        let legal = HashMap::from([
+            ("alpha".to_owned(), 1),
+            ("beta".to_owned(), 1),
+            ("scanner".to_owned(), 1),
+        ]);
         assert!(validate_loadout(&unit, 2, &refs, &legal, Some(&models)).is_empty());
+    }
+
+    #[test]
+    fn completion_candidates_prioritize_explicit_equipment() {
+        let mut candidates = vec![
+            RowCandidate {
+                weapons: BTreeMap::from([("rifle".to_owned(), 1)]),
+                used_options: Vec::new(),
+                used_variant_budgets: Vec::new(),
+                variant_name: None,
+                key: "1:rifle".to_owned(),
+            },
+            RowCandidate {
+                weapons: BTreeMap::from([("plasma".to_owned(), 1)]),
+                used_options: vec![0],
+                used_variant_budgets: Vec::new(),
+                variant_name: None,
+                key: "1:plasma".to_owned(),
+            },
+        ];
+        sort_completion_candidates(&mut candidates, &BTreeMap::from([("plasma".to_owned(), 1)]));
+        assert_eq!(candidates[0].key, "1:plasma");
+    }
+
+    #[test]
+    fn variant_validation_completes_sparse_counts_after_specific_violations() {
+        let models = vec![LoadoutModel {
+            name: Some("Trooper".to_owned()),
+            min: 1,
+            max: 1,
+            default_weapon_ids: vec!["rifle".to_owned()],
+            is_leader_model: false,
+            loadout_variants: vec![
+                LoadoutVariant {
+                    name: "Rifle".to_owned(),
+                    weapon_ids: vec!["rifle".to_owned()],
+                    max_count: None,
+                },
+                LoadoutVariant {
+                    name: "Plasma".to_owned(),
+                    weapon_ids: vec!["plasma".to_owned()],
+                    max_count: None,
+                },
+            ],
+            loadout_variant_budgets: Vec::new(),
+        }];
+        let unit = syn_unit(&["rifle", "plasma"]);
+        let sparse = HashMap::new();
+        let completed = complete_loadout(&unit, 1, &[], Some(&models), &BTreeMap::new())
+            .expect("omitted default completes");
+        assert_eq!(completed.counts, BTreeMap::from([("rifle".to_owned(), 1)]));
+        assert_eq!(completed.groups, None);
+        assert!(validate_loadout(&unit, 1, &[], &sparse, Some(&models)).is_empty());
+        assert!(group_loadout(&unit, 1, &[], Some(&models), &BTreeMap::new()).is_none());
+
+        let incompatible = HashMap::from([("rifle".to_owned(), 1), ("plasma".to_owned(), 1)]);
+        assert_eq!(
+            validate_loadout(&unit, 1, &[], &incompatible, Some(&models))
+                .iter()
+                .map(|violation| (violation.id.clone(), violation.code))
+                .collect::<Vec<_>>(),
+            vec![("syn-unit".to_owned(), ViolationCode::SwapConflict)]
+        );
+
+        let over_bound = HashMap::from([("plasma".to_owned(), 2)]);
+        assert_eq!(
+            validate_loadout(&unit, 1, &[], &over_bound, Some(&models))
+                .iter()
+                .map(|violation| (violation.id.clone(), violation.code))
+                .collect::<Vec<_>>(),
+            vec![("plasma".to_owned(), ViolationCode::ExceedsMax)]
+        );
+
+        let budgeted_unit: crate::generated::Unit = serde_json::from_value(serde_json::json!({
+            "id": "syn-unit", "name": "Synthetic", "faction_id": "test",
+            "game_version": { "edition": "10th", "dataslate": "2025-q3" },
+            "is_legend": false, "points_provisional": false,
+            "weapon_ids": ["rifle", "plasma"], "ability_ids": [], "profiles": [],
+            "points": [], "allied_points": [],
+            "wargear_budgets": [{ "items": ["plasma"], "count": 1, "per_models": 0 }],
+        }))
+        .expect("synthetic unit deserializes");
+        assert_eq!(
+            validate_loadout(&budgeted_unit, 1, &[], &over_bound, Some(&models))
+                .iter()
+                .map(|violation| (violation.id.clone(), violation.code))
+                .collect::<Vec<_>>(),
+            vec![("plasma".to_owned(), ViolationCode::ExceedsAllowance)]
+        );
     }
 }

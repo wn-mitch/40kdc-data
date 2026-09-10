@@ -120,7 +120,7 @@
             "friendly",
             "enemy"
           ],
-          "$comment": "WHOSE state this condition tests. Optional for now so existing data stays valid; intended to become required once authored. Today the subject is carried by the atom NAME (`unit-below-half-strength` vs a downstream `target-below-half-strength`), or by an optional `parameters.subject` that is set on 2 of 46 `unit-below-half-strength` uses and 7 of 22 `is-battle-shocked` uses. `charged-this-turn` has no parameters at all, so \"the unit charged\" and \"the unit was charged\" are the same node. With `of`, one atom per predicate covers both and no `target-*` twin is needed."
+          "$comment": "The actor or state holder whose condition is tested. Optional so legacy condition records remain valid. Supported only for condition types whose describers resolve this field; it takes precedence over legacy implicit or parameter subjects."
         },
         "parameters": {
           "type": "object",
@@ -136,6 +136,31 @@
         "type"
       ],
       "allOf": [
+        {
+          "if": {
+            "required": [
+              "of"
+            ]
+          },
+          "then": {
+            "properties": {
+              "type": {
+                "enum": [
+                  "charged-this-turn",
+                  "unit-below-half-strength",
+                  "is-battle-shocked"
+                ]
+              },
+              "parameters": {
+                "not": {
+                  "required": [
+                    "subject"
+                  ]
+                }
+              }
+            }
+          }
+        },
         {
           "if": {
             "properties": {

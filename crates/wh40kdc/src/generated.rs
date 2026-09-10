@@ -8211,6 +8211,14 @@ pub struct ForEachObjectiveEffect {
 ///        "eligibility": {
 ///          "$ref": "#/$defs/condition"
 ///        },
+///        "engagement_relation": {
+///          "description": "Candidate engagement relation to the bearer or bearer-unit.",
+///          "type": "string",
+///          "enum": [
+///            "engaged-with-bearer",
+///            "not-engaged-with-bearer"
+///          ]
+///        },
 ///        "excluded_keywords": {
 ///          "description": "A candidate with any listed keyword is excluded.",
 ///          "type": "array",
@@ -8252,6 +8260,14 @@ pub struct ForEachObjectiveEffect {
 ///          "enum": [
 ///            "friendly",
 ///            "enemy"
+///          ]
+///        },
+///        "reference": {
+///          "description": "Origin of the engagement_relation gate.",
+///          "type": "string",
+///          "enum": [
+///            "bearer",
+///            "bearer-unit"
 ///          ]
 ///        },
 ///        "target_kind": {
@@ -8308,6 +8324,14 @@ pub struct ForEachUnitEffect {
 ///    "eligibility": {
 ///      "$ref": "#/$defs/condition"
 ///    },
+///    "engagement_relation": {
+///      "description": "Candidate engagement relation to the bearer or bearer-unit.",
+///      "type": "string",
+///      "enum": [
+///        "engaged-with-bearer",
+///        "not-engaged-with-bearer"
+///      ]
+///    },
 ///    "excluded_keywords": {
 ///      "description": "A candidate with any listed keyword is excluded.",
 ///      "type": "array",
@@ -8351,6 +8375,14 @@ pub struct ForEachUnitEffect {
 ///        "enemy"
 ///      ]
 ///    },
+///    "reference": {
+///      "description": "Origin of the engagement_relation gate.",
+///      "type": "string",
+///      "enum": [
+///        "bearer",
+///        "bearer-unit"
+///      ]
+///    },
 ///    "target_kind": {
 ///      "description": "Whether each iteration binds a whole unit or one matching model.",
 ///      "default": "unit",
@@ -8379,6 +8411,11 @@ pub struct ForEachUnitEffectSelector {
     pub bind_as: ::std::option::Option<ForEachUnitEffectSelectorBindAs>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub eligibility: ::std::option::Option<Condition>,
+    ///Candidate engagement relation to the bearer or bearer-unit.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub engagement_relation: ::std::option::Option<
+        ForEachUnitEffectSelectorEngagementRelation,
+    >,
     ///A candidate with any listed keyword is excluded.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub excluded_keywords: ::std::option::Option<
@@ -8394,6 +8431,9 @@ pub struct ForEachUnitEffectSelector {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub model_names: ::std::option::Option<Vec<ForEachUnitEffectSelectorModelNamesItem>>,
     pub owner: ForEachUnitEffectSelectorOwner,
+    ///Origin of the engagement_relation gate.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub reference: ::std::option::Option<ForEachUnitEffectSelectorReference>,
     ///Whether each iteration binds a whole unit or one matching model.
     #[serde(default = "defaults::for_each_unit_effect_selector_target_kind")]
     pub target_kind: ForEachUnitEffectSelectorTargetKind,
@@ -8473,6 +8513,85 @@ impl<'de> ::serde::Deserialize<'de> for ForEachUnitEffectSelectorBindAs {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///Candidate engagement relation to the bearer or bearer-unit.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Candidate engagement relation to the bearer or bearer-unit.",
+///  "type": "string",
+///  "enum": [
+///    "engaged-with-bearer",
+///    "not-engaged-with-bearer"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ForEachUnitEffectSelectorEngagementRelation {
+    #[serde(rename = "engaged-with-bearer")]
+    EngagedWithBearer,
+    #[serde(rename = "not-engaged-with-bearer")]
+    NotEngagedWithBearer,
+}
+impl ::std::fmt::Display for ForEachUnitEffectSelectorEngagementRelation {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::EngagedWithBearer => f.write_str("engaged-with-bearer"),
+            Self::NotEngagedWithBearer => f.write_str("not-engaged-with-bearer"),
+        }
+    }
+}
+impl ::std::str::FromStr for ForEachUnitEffectSelectorEngagementRelation {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "engaged-with-bearer" => Ok(Self::EngagedWithBearer),
+            "not-engaged-with-bearer" => Ok(Self::NotEngagedWithBearer),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorEngagementRelation {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for ForEachUnitEffectSelectorEngagementRelation {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ForEachUnitEffectSelectorEngagementRelation {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///`ForEachUnitEffectSelectorExcludedKeywordsItem`
@@ -8843,6 +8962,85 @@ impl ::std::convert::TryFrom<&::std::string::String> for ForEachUnitEffectSelect
     }
 }
 impl ::std::convert::TryFrom<::std::string::String> for ForEachUnitEffectSelectorOwner {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Origin of the engagement_relation gate.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Origin of the engagement_relation gate.",
+///  "type": "string",
+///  "enum": [
+///    "bearer",
+///    "bearer-unit"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ForEachUnitEffectSelectorReference {
+    #[serde(rename = "bearer")]
+    Bearer,
+    #[serde(rename = "bearer-unit")]
+    BearerUnit,
+}
+impl ::std::fmt::Display for ForEachUnitEffectSelectorReference {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Bearer => f.write_str("bearer"),
+            Self::BearerUnit => f.write_str("bearer-unit"),
+        }
+    }
+}
+impl ::std::str::FromStr for ForEachUnitEffectSelectorReference {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "bearer" => Ok(Self::Bearer),
+            "bearer-unit" => Ok(Self::BearerUnit),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorReference {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for ForEachUnitEffectSelectorReference {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ForEachUnitEffectSelectorReference {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -28723,6 +28921,20 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///      "default": false,
 ///      "type": "boolean"
 ///    },
+///    "of": {
+///      "type": "string",
+///      "enum": [
+///        "bearer",
+///        "unit",
+///        "led-unit",
+///        "attacker",
+///        "defender",
+///        "target",
+///        "friendly",
+///        "enemy"
+///      ],
+///      "$comment": "The actor or state holder whose condition is tested. Optional so legacy condition records remain valid. Supported only for condition types whose describers resolve this field; it takes precedence over legacy implicit or parameter subjects."
+///    },
 ///    "parameters": {
 ///      "type": "object",
 ///      "additionalProperties": true,
@@ -28806,7 +29018,7 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///      ]
 ///    }
 ///  },
-///  "$comment": "Board/meta-state and scoring predicates. `parameters` is intentionally open (additionalProperties: true); each type documents its own param convention. Combat-reactive predicate: `was-hit-by-attack` { subject?: 'self'|'target' (default 'self'), attack_type?: 'melee'|'ranged', weapon_name?: string, count_min?: int (default 1) } — the named unit was hit by at least count_min attacks this phase (distinct from `has-lost-wounds`, which fires only when a wound got through — a hit that is saved or shrugged still satisfies this). `subject:'self'` = the bearer was hit (reactive defensive triggers); `subject:'target'` = the unit the bearer attacked was hit (offensive follow-ups, e.g. a debuff applied to a unit the bearer's named weapon hit). Optional `attack_type`/`weapon_name` narrow which attacks count. Scoring predicates added for mission cards: `units-destroyed` { side: 'enemy'|'friendly', window: 'this-turn'|'previous-turn', count_min: int } — at least count_min units of `side` were destroyed in `window`. `units-destroyed-comparison` { subject: {side, window}, comparator: 'greater-than'|'greater-or-equal', reference: {side, window} } — compares two destruction tallies (e.g. more enemy units destroyed this turn than friendly last turn). `objective-majority` { relative_to: 'opponent' } — you control more objectives than the named party. `controls-objective` params: { count_min: int, objective_role?: 'central'|'expansion'|'non-home'|'home', exclude?: 'home', objective?: 'opponent-home'|'your-home', scope?: 'enemy-territory'|'your-territory' }. Mission-card extensions (11e primary deck): `action-completed` { action_id?: string, target_kind?: 'objective'|'terrain'|'enemy-unit'|'self', target_filter?: { in_enemy_territory?: bool, objective_role?: 'central'|'non-home', exclude?: 'home' }, count_min: int, window?: 'this-turn'|'previous-turn'|'cumulative' } — at least count_min instances of a named action were completed in the window. `objective-has-tag` { tag: 'baited'|'decoyed'|'cleansed'|'triangulated'|'consecrated'|'sabotaged'|'marked'|'vanguard'|'spotted', count_min: int, count_max?: int, objective?: 'opponent-home'|'your-home', scope?: 'enemy-territory'|'your-territory' } — at least count_min objectives carry the named transient tag. `unit-has-tag` { tag: 'doomed'|'condemned'|'spotted'|'surveilled', side: 'enemy'|'friendly', count_min: int, window?: 'destroyed-this-turn'|'left-battlefield-this-turn'|'this-turn'|'still-on-board' } — at least count_min units of `side` carry the tag (optionally with an event window — Punishment scores when a condemned unit was destroyed or left the battlefield this turn; Surveil the Foe scores on units tagged this turn). `terrain-has-tag` { tag: 'mined'|'trapped'|'marked'|'vanguard'|'plundered', friendly_units_min?: int, enemy_units_max?: int, last_marked?: bool, in_enemy_dz?: bool } — terrain piece state predicate; `last_marked` selects the most-recently-marked piece (Find and Deny / Recover the Relics' Overwhelming Force trigger). `new-objective-controlled` { count_min: int } — at least count_min objectives are controlled this turn that were not controlled in the previous command phase. `engagement-fronts` { count_min: int } — friendly units engage enemies in at least count_min distinct fronts; a 'front' is one of the four table quarters (board quadrants about the board's centre — each of the four areas formed by dividing the table along both centre lines). `destroyed-while-on-objective` { destroyer_on_objective?: bool, victim_on_objective?: bool, victim_started_turn_on_objective?: bool, objective_role?: 'central', count_min: int } — count_min enemy units were destroyed this turn under the named spatial condition (the destroying friendly unit, the destroyed enemy unit, or both were within range of an objective at the moment of the kill; `victim_started_turn_on_objective` instead tests the victim's position at the start of the turn, and `objective_role` narrows which objectives count — Secure Asset's central-objective kill row). `destroyed-in-tagged-terrain` { tag?: 'mined'|'trapped'|'marked'|'vanguard'|'plundered', at_start_of_turn?: bool, count_min: int } — count_min enemy units were destroyed this turn while in terrain carrying the named tag; with `at_start_of_turn` the victim must have been in that terrain at the start of the turn (Death Trap's kill bonus), otherwise the spatial test is at the moment of the kill (parallels `destroyed-while-on-objective`). With `tag` omitted, any terrain area qualifies (Search and Scour). `operation-markers` { side?: 'friendly'|'opponent', count_min?: int, count_max?: int, within_range_of?: 'opponent-home-objective', friendly_unit_in_same_terrain_area?: bool, no_enemy_in_terrain_area?: bool } — counts operation markers on the battlefield (side omitted counts both sides' markers); count_max: 0 is 'none remain', count_min == count_max == 1 is 'exactly one'; the terrain-area flags add the co-location proviso used by Locate and Deny / Extract Relic ('one of your units is within the same terrain area as that marker, and no enemy units are within it'). Combat/structural predicates: `attack-stat-compare` { attacker_stat: 'S'|'A'|'AP'|'D', comparison: 'greater-than'|'less-than'|'greater-or-equal'|'less-or-equal'|'equal', target_stat: 'T'|'Sv'|'W'|'OC' } — compares a characteristic of the incoming attack to a characteristic of the target unit (e.g. attack Strength greater than the unit's Toughness). `made-ingress-move-this-turn` {} — the named unit arrived from Reserves / made an ingress (Deep Strike-style set-up) move this turn (parallels charged-this-turn / advanced-this-turn). `wounds-remaining-at-or-below` { threshold: int } — the bearer model currently has `threshold` or fewer wounds remaining; the standard way to model a datasheet **Damaged profile** bracket ('while this model has 1-N wounds remaining, …'), used as the condition of a conditional-effect whose effect is the bracket's penalty (e.g. -1 to Hit rolls, reduced Objective Control). Distinct from `has-lost-wounds` (binary: any wound lost) and `unit-below-half-strength` (model COUNT in a multi-model unit, not a single model's wounds). `token-count-at-or-above` { pool_id: string, threshold: int } — the bearer's named pooled resource currently holds at least `threshold` tokens; the standard threshold-unlock gate for pooled-resource economies ('while this unit has 3+ Pain tokens, …'), used as the condition of a conditional-effect."
+///  "$comment": "Board/meta-state and scoring predicates. `parameters` is intentionally open (additionalProperties: true); each type documents its own param convention. Combat-reactive predicate: `was-hit-by-attack` { subject?: 'self'|'target' (default 'self'), attack_type?: 'melee'|'ranged', weapon_name?: string, count_min?: int (default 1) } — the named unit was hit by at least count_min attacks this phase (distinct from `has-lost-wounds`, which fires only when a wound got through — a hit that is saved or shrugged still satisfies this). `subject:'self'` = the bearer was hit (reactive defensive triggers); `subject:'target'` = the unit the bearer attacked was hit (offensive follow-ups, e.g. a debuff applied to a unit the bearer's named weapon hit). Optional `attack_type`/`weapon_name` narrow which attacks count. Scoring predicates added for mission cards: `units-destroyed` { side: 'enemy'|'friendly', window: 'this-turn'|'previous-turn', count_min: int } — at least count_min units of `side` were destroyed in `window`. `units-destroyed-comparison` { subject: {side, window}, comparator: 'greater-than'|'greater-or-equal', reference: {side, window} } — compares two destruction tallies (e.g. more enemy units destroyed this turn than friendly last turn). `objective-majority` { relative_to: 'opponent' } — you control more objectives than the named party. `controls-objective` params: { count_min: int, objective_role?: 'central'|'expansion'|'non-home'|'home', exclude?: 'home', objective?: 'opponent-home'|'your-home', scope?: 'enemy-territory'|'your-territory' }. Mission-card extensions (11e primary deck): `action-completed` { action_id?: string, target_kind?: 'objective'|'terrain'|'enemy-unit'|'self', target_filter?: { in_enemy_territory?: bool, objective_role?: 'central'|'non-home', exclude?: 'home' }, count_min: int, window?: 'this-turn'|'previous-turn'|'cumulative' } — at least count_min instances of a named action were completed in the window. `objective-has-tag` { tag: 'baited'|'decoyed'|'cleansed'|'triangulated'|'consecrated'|'sabotaged'|'marked'|'vanguard'|'spotted', count_min: int, count_max?: int, objective?: 'opponent-home'|'your-home', scope?: 'enemy-territory'|'your-territory' } — at least count_min objectives carry the named transient tag. `unit-has-tag` { tag: 'doomed'|'condemned'|'spotted'|'surveilled', side: 'enemy'|'friendly', count_min: int, window?: 'destroyed-this-turn'|'left-battlefield-this-turn'|'this-turn'|'still-on-board' } — at least count_min units of `side` carry the tag (optionally with an event window — Punishment scores when a condemned unit was destroyed or left the battlefield this turn; Surveil the Foe scores on units tagged this turn). `terrain-has-tag` { tag: 'mined'|'trapped'|'marked'|'vanguard'|'plundered', friendly_units_min?: int, enemy_units_max?: int, last_marked?: bool, in_enemy_dz?: bool } — terrain piece state predicate; `last_marked` selects the most-recently-marked piece (Find and Deny / Recover the Relics' Overwhelming Force trigger). `new-objective-controlled` { count_min: int } — at least count_min objectives are controlled this turn that were not controlled in the previous command phase. `engagement-fronts` { count_min: int } — friendly units engage enemies in at least count_min distinct fronts; a 'front' is one of the four table quarters (board quadrants about the board's centre — each of the four areas formed by dividing the table along both centre lines). `destroyed-while-on-objective` { destroyer_on_objective?: bool, victim_on_objective?: bool, victim_started_turn_on_objective?: bool, objective_role?: 'central', count_min: int } — count_min enemy units were destroyed this turn under the named spatial condition (the destroying friendly unit, the destroyed enemy unit, or both were within range of an objective at the moment of the kill; `victim_started_turn_on_objective` instead tests the victim's position at the start of the turn, and `objective_role` narrows which objectives count — Secure Asset's central-objective kill row). `destroyed-in-tagged-terrain` { tag?: 'mined'|'trapped'|'marked'|'vanguard'|'plundered', at_start_of_turn?: bool, count_min: int } — count_min enemy units were destroyed this turn while in terrain carrying the named tag; with `at_start_of_turn` the victim must have been in that terrain at the start of the turn (Death Trap's kill bonus), otherwise the spatial test is at the moment of the kill (parallels `destroyed-while-on-objective`). With `tag` omitted, any terrain area qualifies (Search and Scour). `operation-markers` { side?: 'friendly'|'opponent', count_min?: int, count_max?: int, within_range_of?: 'opponent-home-objective', friendly_unit_in_same_terrain_area?: bool, no_enemy_in_terrain_area?: bool } — counts operation markers on the battlefield (side omitted counts both sides' markers); count_max: 0 is 'none remain', count_min == count_max == 1 is 'exactly one'; the terrain-area flags add the co-location proviso used by Locate and Deny / Extract Relic ('one of your units is within the same terrain area as that marker, and no enemy units are within it'). Combat/structural predicates: `attack-stat-compare` { attacker_stat: 'S'|'A'|'AP'|'D', comparison: 'greater-than'|'less-than'|'greater-or-equal'|'less-or-equal'|'equal', target_stat: 'T'|'Sv'|'W'|'OC' } — compares a characteristic of the incoming attack to a characteristic of the target unit (e.g. attack Strength greater than the unit's Toughness). `made-ingress-move-this-turn` {} — the named unit arrived from Reserves / made an ingress (Deep Strike-style set-up) move this turn (parallels charged-this-turn / advanced-this-turn). `wounds-remaining-at-or-below` { threshold: int } — the bearer model currently has `threshold` or fewer wounds remaining; the standard way to model a datasheet **Damaged profile** bracket ('while this model has 1-N wounds remaining, …'), used as the condition of a conditional-effect whose effect is the bracket's penalty (e.g. -1 to Hit rolls, reduced Objective Control). Distinct from `has-lost-wounds` (binary: any wound lost) and `unit-below-half-strength` (model COUNT in a multi-model unit, not a single model's wounds). `token-count-at-or-above` { pool_id: string, threshold: int } — the bearer's named pooled resource currently holds at least `threshold` tokens; the standard threshold-unlock gate for pooled-resource economies ('while this unit has 3+ Pain tokens, …'), used as the condition of a conditional-effect. `of` names the subject explicitly; see its own $comment."
 ///}
 /// ```
 /// </details>
@@ -28814,11 +29026,120 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 pub struct SimpleCondition {
     #[serde(default)]
     pub negated: bool,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub of: ::std::option::Option<SimpleConditionOf>,
     #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
     pub parameters: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     /// target-is-visible tests whether the target of the current attack is visible to its attacking model (not whether some other model can see it). within-range-of-objective subject:target tests the attack target; controlled_by qualifies the SAME marker, not an unrelated controlled objective.
     #[serde(rename = "type")]
     pub type_: SimpleConditionType,
+}
+///`SimpleConditionOf`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "bearer",
+///    "unit",
+///    "led-unit",
+///    "attacker",
+///    "defender",
+///    "target",
+///    "friendly",
+///    "enemy"
+///  ],
+///  "$comment": "The actor or state holder whose condition is tested. Optional so legacy condition records remain valid. Supported only for condition types whose describers resolve this field; it takes precedence over legacy implicit or parameter subjects."
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum SimpleConditionOf {
+    #[serde(rename = "bearer")]
+    Bearer,
+    #[serde(rename = "unit")]
+    Unit,
+    #[serde(rename = "led-unit")]
+    LedUnit,
+    #[serde(rename = "attacker")]
+    Attacker,
+    #[serde(rename = "defender")]
+    Defender,
+    #[serde(rename = "target")]
+    Target,
+    #[serde(rename = "friendly")]
+    Friendly,
+    #[serde(rename = "enemy")]
+    Enemy,
+}
+impl ::std::fmt::Display for SimpleConditionOf {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Bearer => f.write_str("bearer"),
+            Self::Unit => f.write_str("unit"),
+            Self::LedUnit => f.write_str("led-unit"),
+            Self::Attacker => f.write_str("attacker"),
+            Self::Defender => f.write_str("defender"),
+            Self::Target => f.write_str("target"),
+            Self::Friendly => f.write_str("friendly"),
+            Self::Enemy => f.write_str("enemy"),
+        }
+    }
+}
+impl ::std::str::FromStr for SimpleConditionOf {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "bearer" => Ok(Self::Bearer),
+            "unit" => Ok(Self::Unit),
+            "led-unit" => Ok(Self::LedUnit),
+            "attacker" => Ok(Self::Attacker),
+            "defender" => Ok(Self::Defender),
+            "target" => Ok(Self::Target),
+            "friendly" => Ok(Self::Friendly),
+            "enemy" => Ok(Self::Enemy),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for SimpleConditionOf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for SimpleConditionOf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for SimpleConditionOf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 /// target-is-visible tests whether the target of the current attack is visible to its attacking model (not whether some other model can see it). within-range-of-objective subject:target tests the attack target; controlled_by qualifies the SAME marker, not an unrelated controlled objective.
 ///
@@ -29277,6 +29598,13 @@ impl ::std::convert::TryFrom<::std::string::String> for SimpleConditionType {
 ///  "type": "object",
 ///  "allOf": [
 ///    {
+///      "not": {
+///        "required": [
+///          "reach"
+///        ]
+///      }
+///    },
+///    {
 ///      "$comment": "`flyover`: a model that ends a move over an enemy unit rolls `dice`; each result at or above `threshold` inflicts `mortal_wounds` on the moved-over enemy. Models flyover/strafing mortal wounds (target is the moved-over enemy, named via the ability's trigger)."
 ///    },
 ///    {
@@ -29329,7 +29657,8 @@ impl ::std::convert::TryFrom<::std::string::String> for SimpleConditionType {
 ///  "properties": {
 ///    "modifier": {
 ///      "type": "object",
-///      "additionalProperties": true
+///      "additionalProperties": true,
+///      "$comment": "Existing effect-specific `modifier.type` values remain supported. Do not introduce `modifier.type` as a new generic discriminator: an effect node's `type` names the effect, so generic reuse inside modifiers would make validators report modifier values as unknown effect types. Prefer `mode` for new modifier variants."
 ///    },
 ///    "scaling": {
 ///      "$ref": "#/$defs/scaling"
@@ -29423,10 +29752,11 @@ impl ::std::convert::TryFrom<::std::string::String> for SimpleConditionType {
 ///        "ability-usage-limit",
 ///        "deadly-demise-threshold",
 ///        "embark"
-///      ]
+///      ],
+///      "$comment": "Proven isomorphic legacy migrations: bs-modifier -> stat-modifier with stat BS; detection-range-modifier -> stat-modifier with stat detection-range; leadership-modifier -> stat-modifier with stat Ld; charge-roll-modifier -> roll-modifier with roll charge. Existing records retain their effect-specific type."
 ///    }
 ///  },
-///  "$comment": "Optional weapon narrowing on cruncher-interpreted modifiers (stat-modifier/roll-modifier/re-roll/keyword-grant): `weapon_type` ('melee'|'ranged'), `weapon_name` (one named weapon), or `weapon_keyword` (a weapon ability such as 'Torrent'|'Blast'|'Pistol' — restricts the effect to weapons carrying that keyword). When `type` is `re-roll`, `modifier` must carry `roll` (string) and `subset` (`ones` | `all-failures`). Rerolls always target failures; the subset decides whether only 1s are rerolled or every failed die. The constraint is enforced by AJV at validation time and stripped from the codegen bundle (typify can't model if/then/else) — the generated TS/Rust types therefore see `modifier` as an open object, matching its other-`type` callers. When `type` is `feel-no-pain`, `modifier` carries `threshold` (the FNP save target) and optionally `scope` ∈ {`all`, `mortal`, `psychic`, `psychic-and-mortal`}; an absent scope defaults to `all` (fires on every unsaved wound). Narrowed scopes compose independently against the mortal-wound stream and are excluded from general attack-damage math by the cruncher. Tag effects (`terrain-area-tag`, `objective-tag`, `unit-tag`) set a transient marker on the named subject; `modifier` carries `tag` (string) and optionally `source` ('this-action'|'destroying-unit') and `clears_on` ('turn-rollover'|'never'). `target` for tag effects names the kind of entity the tag is applied to ('unit', 'self') — a placeholder, since the marker target is the objective/terrain/unit specified by the action context, not a combat target. Parameterized weapon keywords on `keyword-grant`/`unit-keyword-grant`: a granted keyword may carry its rating either baked into the `keyword` string ('Sustained Hits 1') or structurally via `value` (Sustained Hits/Rapid Fire/Melta N); Anti-X keywords may use `anti_keyword` + `anti_threshold` (rendered '[ANTI-INFANTRY 4+]'). When `type` is `auto-result`, `modifier` carries `result` (`pass`|`fail`, or an integer the named roll counts as) plus `test` (e.g. 'battle-shock') or `roll` (e.g. 'hit'). When `type` is `firing-deck`, `modifier` carries `value` (the Firing Deck rating). `disembark-after-move` needs no modifier. When `type` is `rule-state`, a named rule is switched on/off for `target`: `modifier` carries `direction` (`suppressed` | `granted`), `rule_kind` (`core-rule` | `keyword` | `ability` | `faction-rule`), `rule` (the rule slug — constrained to the closed core-rule vocabulary when `rule_kind` is `core-rule`; a free slug resolved by integrity.ts against the matching ability/faction-rule entity when `rule_kind` is `ability`/`faction-rule`; a free string when `rule_kind` is `keyword`), and — carried over from `forgo-faction-rule` — optional `scope` and `cost`. `target` names whose printed datasheet line the rule is a property OF (the rule-text attachment point), not a buff/debuff stance: a self-immunity is `self`, an aura debuff projected onto enemies is `enemy-within-aura`. `forgo-faction-rule` is exactly `rule-state` with `direction: suppressed`, `rule_kind: faction-rule`. Pooled-resource economy (shape #1): `resource-gain`/`resource-spend` move plain COUNT tokens (Pain tokens, Yield Points) by `amount` from a free-string `pool_id`; `resource-spend` may additionally carry a `cap` ({ `count` (int), `per` ('turn'|'phase'|'battle') }) bounding how often the bearer may spend from that pool. For pools whose tokens carry a FIXED FACE VALUE (Adepta Sororitas Miracle dice), two dedicated effects apply: `pool-add-die` adds a die SHOWING a value to the pool — `modifier` carries `pool_id` (free string), `value` (integer 1-6, the string 'highest' for 'the highest result you could roll', or 'rolled' for a die whose face is rolled rather than chosen), optional `count` (integer or dice-expression string, default 1), optional `count_per_pool` (a pool id: add one die per point currently in THAT pool — Icon of Khorne's per-Bloodshed-point dice), and optional `consumes_pool` (boolean, only with `count_per_pool`: the counting pool empties after the dice are added); and `replace-roll-from-pool` discards a die from the pool to substitute its value for a roll — `modifier` carries `pool_id` and `rolls` (array of roll names the substitution may apply to, e.g. ['hit','wound','save','advance','charge','desperate-escape','hazardous','leadership']). `replace-roll-from-pool` revives the dice-substitution sub-shape retired at v1.0.0; the cruncher leaves both pool effects unsupported (fail-safe) since pool state is not tracked by the buff layer. When `type` is `disembark`, `modifier` carries `distance` (inches the disembarking unit may be set up wholly within of the transport, extending the default 3\") and `allow_engagement_range` (boolean — removes the core restriction against disembarking within Engagement Range of enemies); deployment mechanic, left unsupported by the cruncher like `disembark-after-move`/`deep-strike`. When `type` is `fight-eligibility-extension`, `modifier` carries `range` (inches): when determining which models in the target unit are eligible to fight, models within `range`\" of one or more enemy models are eligible and can target enemy units within `range`\" — the 'extended fight eligibility' family of rules; left unsupported by the cruncher (model-count geometry is not tracked by the buff layer)."
+///  "$comment": "Optional weapon narrowing on cruncher-interpreted modifiers (stat-modifier/roll-modifier/re-roll/keyword-grant): `weapon_type` ('melee'|'ranged'), `weapon_name` (one named weapon), or `weapon_keyword` (a weapon ability such as 'Torrent'|'Blast'|'Pistol' — restricts the effect to weapons carrying that keyword). When `type` is `re-roll`, `modifier` must carry `roll` (string) and `subset` (`ones` | `all-failures`). Rerolls always target failures; the subset decides whether only 1s are rerolled or every failed die. An optional `count` (integer >= 1) caps how many qualifying rolls may be re-rolled within the ability's active window ('you can re-roll one Hit roll'); absent means every qualifying roll. The constraint is enforced by AJV at validation time and stripped from the codegen bundle (typify can't model if/then/else) — the generated TS/Rust types therefore see `modifier` as an open object, matching its other-`type` callers. When `type` is `feel-no-pain`, `modifier` carries `threshold` (the FNP save target) and optionally `scope` ∈ {`all`, `mortal`, `psychic`, `psychic-and-mortal`}; an absent scope defaults to `all` (fires on every unsaved wound). Narrowed scopes compose independently against the mortal-wound stream and are excluded from general attack-damage math by the cruncher. Tag effects (`terrain-area-tag`, `objective-tag`, `unit-tag`) set a transient marker on the named subject; `modifier` carries `tag` (string) and optionally `source` ('this-action'|'destroying-unit') and `clears_on` ('turn-rollover'|'never'). `target` for tag effects names the kind of entity the tag is applied to ('unit', 'self') — a placeholder, since the marker target is the objective/terrain/unit specified by the action context, not a combat target. Parameterized weapon keywords on `keyword-grant`/`unit-keyword-grant`: a granted keyword may carry its rating either baked into the `keyword` string ('Sustained Hits 1') or structurally via `value` (Sustained Hits/Rapid Fire/Melta N); Anti-X keywords may use `anti_keyword` + `anti_threshold` (rendered '[ANTI-INFANTRY 4+]'). When `type` is `auto-result`, `modifier` carries `result` (`pass`|`fail`, or an integer the named roll counts as) plus `test` (e.g. 'battle-shock') or `roll` (e.g. 'hit'). When `type` is `firing-deck`, `modifier` carries `value` (the Firing Deck rating). `disembark-after-move` needs no modifier. When `type` is `rule-state`, a named rule is switched on/off for `target`: `modifier` carries `direction` (`suppressed` | `granted`), `rule_kind` (`core-rule` | `keyword` | `ability` | `faction-rule`), `rule` (the rule slug — constrained to the closed core-rule vocabulary when `rule_kind` is `core-rule`; a free slug resolved by integrity.ts against the matching ability/faction-rule entity when `rule_kind` is `ability`/`faction-rule`; a free string when `rule_kind` is `keyword`), and — carried over from `forgo-faction-rule` — optional `scope` and `cost`. `target` names whose printed datasheet line the rule is a property OF (the rule-text attachment point), not a buff/debuff stance: a self-immunity is `self`, an aura debuff projected onto enemies is `enemy-within-aura`. `forgo-faction-rule` is exactly `rule-state` with `direction: suppressed`, `rule_kind: faction-rule`. Pooled-resource economy (shape #1): `resource-gain`/`resource-spend` move plain COUNT tokens (Pain tokens, Yield Points) by `amount` from a free-string `pool_id`; `resource-spend` may additionally carry a `cap` ({ `count` (int), `per` ('turn'|'phase'|'battle') }) bounding how often the bearer may spend from that pool. For pools whose tokens carry a FIXED FACE VALUE (Adepta Sororitas Miracle dice), two dedicated effects apply: `pool-add-die` adds a die SHOWING a value to the pool — `modifier` carries `pool_id` (free string), `value` (integer 1-6, the string 'highest' for 'the highest result you could roll', or 'rolled' for a die whose face is rolled rather than chosen), optional `count` (integer or dice-expression string, default 1), optional `count_per_pool` (a pool id: add one die per point currently in THAT pool — Icon of Khorne's per-Bloodshed-point dice), and optional `consumes_pool` (boolean, only with `count_per_pool`: the counting pool empties after the dice are added); and `replace-roll-from-pool` discards a die from the pool to substitute its value for a roll — `modifier` carries `pool_id` and `rolls` (array of roll names the substitution may apply to, e.g. ['hit','wound','save','advance','charge','desperate-escape','hazardous','leadership']). `replace-roll-from-pool` revives the dice-substitution sub-shape retired at v1.0.0; the cruncher leaves both pool effects unsupported (fail-safe) since pool state is not tracked by the buff layer. When `type` is `disembark`, `modifier` carries `distance` (inches the disembarking unit may be set up wholly within of the transport, extending the default 3\") and `allow_engagement_range` (boolean — removes the core restriction against disembarking within Engagement Range of enemies); deployment mechanic, left unsupported by the cruncher like `disembark-after-move`/`deep-strike`. When `type` is `fight-eligibility-extension`, `modifier` carries `range` (inches): when determining which models in the target unit are eligible to fight, models within `range`\" of one or more enemy models are eligible and can target enemy units within `range`\" — the 'extended fight eligibility' family of rules; left unsupported by the cruncher (model-count geometry is not tracked by the buff layer)."
 ///}
 /// ```
 /// </details>
@@ -29657,7 +29987,8 @@ impl ::std::convert::TryFrom<::std::string::String> for SingleEffectTarget {
 ///    "ability-usage-limit",
 ///    "deadly-demise-threshold",
 ///    "embark"
-///  ]
+///  ],
+///  "$comment": "Proven isomorphic legacy migrations: bs-modifier -> stat-modifier with stat BS; detection-range-modifier -> stat-modifier with stat detection-range; leadership-modifier -> stat-modifier with stat Ld; charge-roll-modifier -> roll-modifier with roll charge. Existing records retain their effect-specific type."
 ///}
 /// ```
 /// </details>

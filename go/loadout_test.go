@@ -1,6 +1,9 @@
 package wh40kdc
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 // A lone plain single-target swap (base weapon → one replacement, max 1): a
 // model takes one or the other, never both. Each id is independently in [0,1],
@@ -84,8 +87,13 @@ func TestVariantLoadoutUsesNamedCapsAndExactLegality(t *testing.T) {
 			t.Fatalf("variant max_count must constrain candidates: %v", got)
 		}
 	}
-	if violations := validateLoadout(unit, 2, nil, map[string]int{"plasma": 2}, models); len(violations) == 0 || violations[len(violations)-1]["code"] != "swap-conflict" {
-		t.Fatalf("two capped variants must fail exact legality, got %v", violations)
+	if got, want := validateLoadout(unit, 2, nil, map[string]int{"plasma": 2}, models), []map[string]string{
+		{"id": "variant-unit", "code": "swap-conflict", "message": "variant-unit: equipment cannot be assigned to legal whole-model loadouts"},
+	}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("two capped variants must fail exact legality: got %v, want %v", got, want)
+	}
+	if violations := validateLoadout(unit, 2, nil, map[string]int{"plasma": 1}, models); len(violations) != 0 {
+		t.Fatalf("an explicit variant with omitted defaults should be completed legally, got %v", violations)
 	}
 	if violations := validateLoadout(unit, 2, nil, map[string]int{"gun": 1, "plasma": 1}, models); len(violations) != 0 {
 		t.Fatalf("one of each declared variant should be legal, got %v", violations)
@@ -136,6 +144,47 @@ func TestVariantLoadoutUsesNamedCapsAndExactLegality(t *testing.T) {
 	}
 }
 
+func TestVariantLoadoutReportsBoundsAndBudgetsBeforeSwapConflict(t *testing.T) {
+	models := []any{map[string]any{
+		"name": "Trooper", "min": float64(2), "max": float64(2),
+		"default_weapon_ids": []any{"gun"},
+		"loadout_variants": []any{
+			map[string]any{"name": "gunner", "weapon_ids": []any{"gun"}},
+			map[string]any{"name": "plasma", "weapon_ids": []any{"plasma"}},
+		},
+	}}
+
+	if got, want := validateLoadout(map[string]any{"id": "variant-unit"}, 2, nil, map[string]int{"gun": 3}, models), []map[string]string{
+		{"id": "gun", "code": "exceeds-max", "message": "gun: 3 exceeds max 2"},
+	}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("variant bound violations must not add swap-conflict: got %v, want %v", got, want)
+	}
+
+	unit := map[string]any{
+		"id": "variant-unit",
+		"wargear_budgets": []any{
+			map[string]any{"items": []any{"plasma"}, "count": float64(1), "per_models": float64(0)},
+		},
+	}
+	if got, want := validateLoadout(unit, 2, nil, map[string]int{"plasma": 2}, models), []map[string]string{
+		{"id": "plasma", "code": "exceeds-allowance", "message": "plasma: 2 exceeds shared allowance 1 (1 per unit)"},
+	}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("variant budget violations must not add swap-conflict: got %v, want %v", got, want)
+	}
+}
+
+func TestCompleteLoadoutRanksExplicitRequirementsFirst(t *testing.T) {
+	candidates := []rowCandidate{
+		{weapons: map[string]int{"gun": 1}, key: "gun"},
+		{weapons: map[string]int{"plasma": 1}, usedOptions: []int{0}, key: "plasma"},
+		{weapons: map[string]int{"plasma": 1}, usedOptions: []int{0, 1}, key: "plasma-slow"},
+	}
+	sortCompletionCandidates(candidates, map[string]int{"plasma": 2})
+	if got, want := []string{candidates[0].key, candidates[1].key, candidates[2].key}, []string{"plasma", "plasma-slow", "gun"}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("completion candidates must prioritize explicit requirements: got %v, want %v", got, want)
+	}
+}
+
 func TestRowCandidatesRequireDuplicateReplacementPrerequisites(t *testing.T) {
 	options := []any{map[string]any{
 		"replaces": []any{"gun", "gun"}, "replacement": []any{"launcher"},
@@ -146,5 +195,49 @@ func TestRowCandidatesRequireDuplicateReplacementPrerequisites(t *testing.T) {
 		if candidate.weapons["launcher"] > 0 {
 			t.Fatalf("replacement requiring two guns applied with one prerequisite: %#v", candidate)
 		}
+	}
+}
+
+func TestLoadoutCandidatesSmallLimitMatchesCanonicalPrefix(t *testing.T) {
+	unit := map[string]any{"id": "candidate-prefix"}
+	models := []any{
+		map[string]any{"name": "Leader", "min": float64(1), "max": float64(1), "default_weapon_ids": []any{"pistol"}},
+		map[string]any{"name": "Trooper", "min": float64(1), "max": float64(3), "default_weapon_ids": []any{"rifle", "knife"}},
+		map[string]any{"name": "Specialist", "min": float64(0), "max": float64(2), "default_weapon_ids": []any{"special", "knife"}},
+	}
+	all := LoadoutCandidates(unit, 4, nil, models, nil, nil)
+	for _, cap := range []int{1, 2} {
+		limit := cap
+		got := LoadoutCandidates(unit, 4, nil, models, nil, &limit)
+		want := append([]string(nil), all[:cap]...)
+		if len(all) > cap {
+			want = append(want, LoadoutCandidatesTruncated)
+		}
+		if len(got) != len(want) {
+			t.Fatalf("limit %d returned %v, want %v", cap, got, want)
+		}
+		for i := range want {
+			if got[i] != want[i] {
+				t.Fatalf("limit %d returned %v, want %v", cap, got, want)
+			}
+		}
+	}
+}
+
+func TestLoadoutCandidatesFiveModels257VariantsLimitZeroReturnsMarker(t *testing.T) {
+	variants := make([]any, 257)
+	for i := range variants {
+		variants[i] = map[string]any{
+			"name":       "Variant " + itoa(i),
+			"weapon_ids": []any{"weapon-" + itoa(i)},
+		}
+	}
+	models := []any{map[string]any{
+		"name": "Trooper", "min": float64(5), "max": float64(5),
+		"loadout_variants": variants,
+	}}
+	limit := 0
+	if got := LoadoutCandidates(map[string]any{"id": "candidate-limit-zero"}, 5, nil, models, nil, &limit); len(got) != 1 || got[0] != LoadoutCandidatesTruncated {
+		t.Fatalf("limit zero should return only the truncation marker, got %v", got)
 	}
 }

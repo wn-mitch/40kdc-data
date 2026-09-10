@@ -277,13 +277,19 @@ func maximalLoadout(unit map[string]any, modelCount int, options []any, models [
 	return counts
 }
 
-// LoadoutCandidates enumerates every structured, tier-legal build. Variant rows
-// are solved with the same option and variant caps used for exact legality.
+// LoadoutCandidates enumerates structured, tier-legal builds in canonical
+// traversal order. Variant rows are solved with the same option and variant caps
+// used for exact legality; exact legality and grouping remain exhaustive through
+// candidateRowCounts.
 func LoadoutCandidates(unit map[string]any, modelCount int, options, models, tiers []any, limit *int) []string {
 	total := maxInt(0, modelCount)
 	capN := LoadoutCandidatesDefaultLimit
 	if limit != nil {
 		capN = maxInt(0, *limit)
+	}
+	capacity := capN
+	if capacity < int(^uint(0)>>1) {
+		capacity++
 	}
 	var rowSets [][]any
 	if len(tiers) > 0 {
@@ -303,9 +309,23 @@ func LoadoutCandidates(unit map[string]any, modelCount int, options, models, tie
 	} else if len(models) > 0 {
 		rowSets = append(rowSets, models)
 	}
+
+	// A first-seen encoding is globally deduped across tiers and allocations.
+	// Keep one additional distinct value as the proof that the requested prefix
+	// was truncated; traversal can then stop without materializing later builds.
 	encoded := map[string]struct{}{}
+	out := []string{}
+	record := func(value string) bool {
+		if _, exists := encoded[value]; exists {
+			return false
+		}
+		encoded[value] = struct{}{}
+		out = append(out, value)
+		return len(out) == capacity
+	}
+
 	for _, rows := range rowSets {
-		for _, allocation := range candidateRowCounts(rows, total, map[string]int{}) {
+		stopped := visitCandidateRowCounts(rows, total, func(allocation []int) bool {
 			hasVariants := false
 			for _, rowAny := range rows {
 				row, _ := asMap(rowAny)
@@ -314,17 +334,22 @@ func LoadoutCandidates(unit map[string]any, modelCount int, options, models, tie
 			if !hasVariants {
 				witness, counts := []string{}, map[string]int{}
 				for i, n := range allocation {
-					if n <= 0 { continue }
+					if n <= 0 {
+						continue
+					}
 					row, _ := asMap(rows[i])
 					witness = append(witness, getStr(row, "name")+"×"+itoa(n))
-					for _, id := range getStrList(row, "default_weapon_ids") { counts[id] += n }
+					for _, id := range getStrList(row, "default_weapon_ids") {
+						counts[id] += n
+					}
 				}
 				if !hasRecordedDefaults(rows) {
 					counts = map[string]int{}
-					for _, id := range baseWeaponIDs(unit, options) { counts[id] += total }
+					for _, id := range baseWeaponIDs(unit, options) {
+						counts[id] += total
+					}
 				}
-				encoded[encodeLoadoutCandidate(witness, counts)] = struct{}{}
-				continue
+				return record(encodeLoadoutCandidate(witness, counts))
 			}
 			fixed := make([]any, len(rows))
 			optionCaps := make([]int, len(options))
@@ -340,53 +365,111 @@ func LoadoutCandidates(unit map[string]any, modelCount int, options, models, tie
 			}
 			solverRows, variantCaps, upper := []solverRow{}, map[string]int{}, map[string]int{}
 			for i, n := range allocation {
-				if n <= 0 { continue }
+				if n <= 0 {
+					continue
+				}
 				row, _ := asMap(rows[i])
 				prepared := rowCandidates(row, i, n, total, options)
-				for token, cap := range prepared.variantCaps { variantCaps[token] = cap }
-				rowMax := map[string]int{}
-				for _, candidate := range prepared.candidates {
-					for id, per := range candidate.weapons { rowMax[id] = maxInt(rowMax[id], per) }
+				for token, cap := range prepared.variantCaps {
+					variantCaps[token] = cap
 				}
-				for id, maximum := range rowMax { upper[id] += maximum * n }
-				solverRows = append(solverRows, solverRow{name: row["name"], count: n, candidates: prepared.candidates})
+				// Candidate presentation follows the authored variant declaration
+				// and normalized option state, without perturbing exact solvers.
+				candidates := append([]rowCandidate(nil), prepared.candidates...)
+				for ci := range candidates {
+					candidates[ci].usedOptions = append([]int(nil), candidates[ci].usedOptions...)
+					candidates[ci].usedVariantBudgets = append([]string(nil), candidates[ci].usedVariantBudgets...)
+					sort.Ints(candidates[ci].usedOptions)
+					sort.Strings(candidates[ci].usedVariantBudgets)
+				}
+				sort.SliceStable(candidates, func(leftIndex, rightIndex int) bool {
+					left, right := candidates[leftIndex], candidates[rightIndex]
+					if left.variantIndex != right.variantIndex {
+						return left.variantIndex < right.variantIndex
+					}
+					if left.key != right.key {
+						return left.key < right.key
+					}
+					for index := 0; index < len(left.usedOptions) && index < len(right.usedOptions); index++ {
+						if left.usedOptions[index] != right.usedOptions[index] {
+							return left.usedOptions[index] < right.usedOptions[index]
+						}
+					}
+					if len(left.usedOptions) != len(right.usedOptions) {
+						return len(left.usedOptions) < len(right.usedOptions)
+					}
+					for index := 0; index < len(left.usedVariantBudgets) && index < len(right.usedVariantBudgets); index++ {
+						if left.usedVariantBudgets[index] != right.usedVariantBudgets[index] {
+							return left.usedVariantBudgets[index] < right.usedVariantBudgets[index]
+						}
+					}
+					return len(left.usedVariantBudgets) < len(right.usedVariantBudgets)
+				})
+				rowMax := map[string]int{}
+				for _, candidate := range candidates {
+					for id, per := range candidate.weapons {
+						rowMax[id] = maxInt(rowMax[id], per)
+					}
+				}
+				for id, maximum := range rowMax {
+					upper[id] += maximum * n
+				}
+				solverRows = append(solverRows, solverRow{name: row["name"], count: n, candidates: candidates})
 			}
+			stopped := false
 			solveAssignment(solverRows, map[string]int{}, upper, optionCaps, variantCaps, func(solution []pick) bool {
 				counts, witnessCounts := map[string]int{}, map[string]int{}
 				witnessOrder := []string{}
 				for _, choice := range solution {
 					candidate := solverRows[choice.ri].candidates[choice.ci]
 					label := candidate.variantName
-					if label == "" { label, _ = solverRows[choice.ri].name.(string) }
-					if _, seen := witnessCounts[label]; !seen { witnessOrder = append(witnessOrder, label) }
+					if label == "" {
+						label, _ = solverRows[choice.ri].name.(string)
+					}
+					if _, seen := witnessCounts[label]; !seen {
+						witnessOrder = append(witnessOrder, label)
+					}
 					witnessCounts[label] += choice.count
-					for id, per := range candidate.weapons { counts[id] += per * choice.count }
+					for id, per := range candidate.weapons {
+						counts[id] += per * choice.count
+					}
 				}
-				if len(budgetViolations(unit, total, counts)) == 0 {
-					witness := make([]string, 0, len(witnessOrder))
-					for _, label := range witnessOrder { witness = append(witness, label+"×"+itoa(witnessCounts[label])) }
-					encoded[encodeLoadoutCandidate(witness, counts)] = struct{}{}
+				if len(budgetViolations(unit, total, counts)) != 0 {
+					return false
 				}
-				return false
+				witness := make([]string, 0, len(witnessOrder))
+				for _, label := range witnessOrder {
+					witness = append(witness, label+"×"+itoa(witnessCounts[label]))
+				}
+				stopped = record(encodeLoadoutCandidate(witness, counts))
+				return stopped
 			})
+			return stopped
+		})
+		if stopped {
+			break
 		}
 	}
-	out := make([]string, 0, len(encoded))
-	for value := range encoded { out = append(out, value) }
-	sort.Strings(out)
-	if len(out) > capN { return append(out[:capN], LoadoutCandidatesTruncated) }
+	if len(out) > capN {
+		return append(out[:capN], LoadoutCandidatesTruncated)
+	}
 	return out
 }
 
 func encodeLoadoutCandidate(witness []string, counts map[string]int) string {
 	ids := make([]string, 0, len(counts))
-	for id, count := range counts { if count > 0 { ids = append(ids, id) } }
+	for id, count := range counts {
+		if count > 0 {
+			ids = append(ids, id)
+		}
+	}
 	sort.Strings(ids)
 	parts := make([]string, len(ids))
-	for i, id := range ids { parts[i] = id + ":" + itoa(counts[id]) }
+	for i, id := range ids {
+		parts[i] = id + ":" + itoa(counts[id])
+	}
 	return strings.Join(witness, ";") + " => " + strings.Join(parts, ",")
 }
-
 
 func toMultiset(ids []string) map[string]int {
 	m := map[string]int{}
@@ -516,10 +599,12 @@ func assignRowCounts(models []any, modelCount int, counts map[string]int) []int 
 	return out
 }
 
-// candidateRowCounts returns every bounded row allocation, with the historical
-// heuristic first so established grouping output remains stable.
-func candidateRowCounts(models []any, modelCount int, counts map[string]int) [][]int {
-	preferred := assignRowCounts(models, modelCount, counts)
+// visitCandidateRowCounts streams bounded row allocations in canonical
+// descending recursive order. Returning true from visit cancels the traversal.
+func visitCandidateRowCounts(models []any, modelCount int, visit func([]int) bool) bool {
+	if modelCount < 0 {
+		return false
+	}
 	mins := make([]int, len(models))
 	maxs := make([]int, len(models))
 	suffixMin := make([]int, len(models)+1)
@@ -533,50 +618,60 @@ func candidateRowCounts(models []any, modelCount int, counts map[string]int) [][
 		suffixMin[i] = suffixMin[i+1] + mins[i]
 		suffixMax[i] = suffixMax[i+1] + maxs[i]
 	}
-
-	var generated [][]int
 	current := make([]int, len(models))
-	var visit func(int, int)
-	visit = func(i, remaining int) {
+	var walk func(int, int) bool
+	walk = func(i, remaining int) bool {
 		if i == len(models) {
-			if remaining == 0 {
-				generated = append(generated, append([]int(nil), current...))
-			}
-			return
+			return remaining == 0 && visit(append([]int(nil), current...))
 		}
 		if remaining < suffixMin[i] || remaining > suffixMax[i] {
-			return
+			return false
 		}
 		lo := maxInt(mins[i], remaining-suffixMax[i+1])
 		hi := minInt(maxs[i], remaining-suffixMin[i+1])
 		for count := hi; count >= lo; count-- {
 			current[i] = count
-			visit(i+1, remaining-count)
+			if walk(i+1, remaining-count) {
+				return true
+			}
 		}
+		return false
 	}
-	visit(0, maxInt(0, modelCount))
+	return walk(0, modelCount)
+}
 
-	seen := map[string]struct{}{}
-	var out [][]int
-	all := append([][]int{preferred}, generated...)
-	for _, allocation := range all {
-		total, bounded := 0, true
-		parts := make([]string, len(allocation))
-		for i, count := range allocation {
-			total += count
-			bounded = bounded && count >= mins[i] && count <= maxs[i]
-			parts[i] = itoa(count)
-		}
-		key := strings.Join(parts, ",")
-		if total != modelCount || !bounded {
-			continue
-		}
-		if _, ok := seen[key]; ok {
-			continue
-		}
-		seen[key] = struct{}{}
-		out = append(out, allocation)
+// candidateRowCounts returns every bounded row allocation, with the historical
+// heuristic first so established grouping output remains stable.
+func candidateRowCounts(models []any, modelCount int, counts map[string]int) [][]int {
+	preferred := assignRowCounts(models, modelCount, counts)
+	preferredValid := len(preferred) == len(models)
+	preferredTotal := 0
+	for i, count := range preferred {
+		model, _ := asMap(models[i])
+		minimum := maxInt(0, asInt(model["min"]))
+		maximum := maxInt(minimum, asInt(model["max"]))
+		preferredValid = preferredValid && count >= minimum && count <= maximum
+		preferredTotal += count
 	}
+	preferredValid = preferredValid && preferredTotal == modelCount
+
+	var out [][]int
+	if preferredValid {
+		out = append(out, preferred)
+	}
+	visitCandidateRowCounts(models, modelCount, func(allocation []int) bool {
+		if preferredValid {
+			same := len(allocation) == len(preferred)
+			for i, count := range allocation {
+				same = same && count == preferred[i]
+			}
+			if same {
+				return false
+			}
+		}
+		out = append(out, allocation)
+		return false
+	})
 	return out
 }
 
@@ -603,6 +698,7 @@ type rowCandidate struct {
 	weapons            map[string]int
 	usedOptions        []int
 	usedVariantBudgets []string
+	variantIndex       int
 	variantName        string
 	key                string
 }
@@ -631,12 +727,17 @@ func enumerateRowCandidates(base map[string]int, rowName any, options []any, use
 		o, _ := asMap(oAny)
 		c, _ := getMap(o, "model_constraint")
 		name, named := c["model_name"].(string)
-		if !named || (rowNameOK && name == rowNameStr) { applicable = append(applicable, i) }
+		if !named || (rowNameOK && name == rowNameStr) {
+			applicable = append(applicable, i)
+		}
 	}
 	stateKey := func(w map[string]int, used []int) string {
 		return multisetKey(w) + "#" + joinInts(used) + "#" + strings.Join(usedVariantBudgets, ",")
 	}
-	type qItem struct { weapons map[string]int; used []int }
+	type qItem struct {
+		weapons map[string]int
+		used    []int
+	}
 	result := []rowCandidate{}
 	seen := map[string]struct{}{stateKey(base, nil): {}}
 	queue := []qItem{{weapons: cloneCounts(base)}}
@@ -647,27 +748,52 @@ func enumerateRowCandidates(base map[string]int, rowName any, options []any, use
 			o, _ := asMap(options[oi])
 			replaces := getStrList(o, "replaces")
 			uses := 0
-			for _, used := range cur.used { if used == oi { uses++ } }
+			for _, used := range cur.used {
+				if used == oi {
+					uses++
+				}
+			}
 			perModelLimit := 1
 			if len(replaces) == 0 {
-				if c, ok := getMap(o, "model_constraint"); ok && c["max_count"] != nil { perModelLimit = asInt(c["max_count"]) }
+				if c, ok := getMap(o, "model_constraint"); ok && c["max_count"] != nil {
+					perModelLimit = asInt(c["max_count"])
+				}
 			}
-			if uses >= perModelLimit { continue }
+			if uses >= perModelLimit {
+				continue
+			}
 			possible := true
 			for id, required := range toMultiset(replaces) {
-				if cur.weapons[id] < required { possible = false; break }
+				if cur.weapons[id] < required {
+					possible = false
+					break
+				}
 			}
-			if !possible { continue }
+			if !possible {
+				continue
+			}
 			for _, bundle := range optionBundles(o) {
-				if len(bundle) == 0 { continue }
+				if len(bundle) == 0 {
+					continue
+				}
 				w := cloneCounts(cur.weapons)
-				for _, id := range replaces { w[id]-- }
-				for _, id := range bundle { w[id]++ }
-				for id, count := range w { if count <= 0 { delete(w, id) } }
+				for _, id := range replaces {
+					w[id]--
+				}
+				for _, id := range bundle {
+					w[id]++
+				}
+				for id, count := range w {
+					if count <= 0 {
+						delete(w, id)
+					}
+				}
 				used := append(append([]int(nil), cur.used...), oi)
 				sort.Ints(used)
 				key := stateKey(w, used)
-				if _, duplicate := seen[key]; duplicate { continue }
+				if _, duplicate := seen[key]; duplicate {
+					continue
+				}
 				seen[key] = struct{}{}
 				queue = append(queue, qItem{weapons: w, used: used})
 			}
@@ -677,14 +803,20 @@ func enumerateRowCandidates(base map[string]int, rowName any, options []any, use
 }
 func variantBudgetCap(budget map[string]any, unitCount, rowCount int) int {
 	perModels := asInt(budget["per_models"])
-	if perModels == 0 { return asInt(budget["count"]) }
+	if perModels == 0 {
+		return asInt(budget["count"])
+	}
 	models := rowCount
-	if getStr(budget, "scope") == "unit" { models = unitCount }
+	if getStr(budget, "scope") == "unit" {
+		models = unitCount
+	}
 	return models * asInt(budget["count"]) / perModels
 }
 
-
-type preparedRowCandidates struct { candidates []rowCandidate; variantCaps map[string]int }
+type preparedRowCandidates struct {
+	candidates  []rowCandidate
+	variantCaps map[string]int
+}
 
 func rowCandidates(row map[string]any, rowIndex, rowCount, unitCount int, options []any) preparedRowCandidates {
 	variantCaps := map[string]int{}
@@ -759,6 +891,7 @@ func rowCandidates(row map[string]any, rowIndex, rowCount, unitCount int, option
 			for _, candidate := range state.candidates {
 				selected := candidate
 				selected.usedVariantBudgets = variantUses[variantIndex]
+				selected.variantIndex = variantIndex
 				selected.variantName = getStr(variant, "name")
 				key := candidate.key + "#" + joinInts(candidate.usedOptions) + "#" + selected.variantName
 				if _, exists := candidates[key]; exists {
@@ -806,41 +939,81 @@ func solveAssignment(rows []solverRow, lower, upper map[string]int, optionCaps [
 	var distribute func(int, int, int) bool
 	assignRow = func(ri int) bool {
 		if ri == len(rows) {
-			for _, count := range remainingLower { if count > 0 { return false } }
-			if onSolution != nil { return onSolution(append([]pick(nil), picks...)) }
+			for _, count := range remainingLower {
+				if count > 0 {
+					return false
+				}
+			}
+			if onSolution != nil {
+				return onSolution(append([]pick(nil), picks...))
+			}
 			return true
 		}
 		return distribute(ri, 0, rows[ri].count)
 	}
 	distribute = func(ri, ci, left int) bool {
 		row := rows[ri]
-		if ci == len(row.candidates) { return left == 0 && assignRow(ri+1) }
+		if ci == len(row.candidates) {
+			return left == 0 && assignRow(ri+1)
+		}
 		candidate := row.candidates[ci]
 		hi := left
 		for id, per := range candidate.weapons {
-			if per > 0 { hi = minInt(hi, remainingUpper[id]/per) }
+			if per > 0 {
+				hi = minInt(hi, remainingUpper[id]/per)
+			}
 		}
 		optionUses := map[int]int{}
-		for _, oi := range candidate.usedOptions { optionUses[oi]++ }
-		for oi, perModel := range optionUses { hi = minInt(hi, (optionCaps[oi]-usage[oi])/perModel) }
+		for _, oi := range candidate.usedOptions {
+			optionUses[oi]++
+		}
+		for oi, perModel := range optionUses {
+			hi = minInt(hi, (optionCaps[oi]-usage[oi])/perModel)
+		}
 		variantUses := map[string]int{}
-		for _, token := range candidate.usedVariantBudgets { variantUses[token]++ }
-		for token, perModel := range variantUses { hi = minInt(hi, (variantCaps[token]-variantUsage[token])/perModel) }
+		for _, token := range candidate.usedVariantBudgets {
+			variantUses[token]++
+		}
+		for token, perModel := range variantUses {
+			hi = minInt(hi, (variantCaps[token]-variantUsage[token])/perModel)
+		}
 		hi = maxInt(0, hi)
 		for take := hi; take >= 0; take-- {
-			for id, per := range candidate.weapons { remainingLower[id] -= per * take; remainingUpper[id] -= per * take }
-			for _, oi := range candidate.usedOptions { usage[oi] += take }
-			for _, token := range candidate.usedVariantBudgets { variantUsage[token] += take }
-			if take > 0 { picks = append(picks, pick{ri, ci, take}) }
-			if distribute(ri, ci+1, left-take) { return true }
-			if take > 0 { picks = picks[:len(picks)-1] }
-			for _, token := range candidate.usedVariantBudgets { variantUsage[token] -= take }
-			for _, oi := range candidate.usedOptions { usage[oi] -= take }
-			for id, per := range candidate.weapons { remainingLower[id] += per * take; remainingUpper[id] += per * take }
+			for id, per := range candidate.weapons {
+				remainingLower[id] -= per * take
+				remainingUpper[id] -= per * take
+			}
+			for _, oi := range candidate.usedOptions {
+				usage[oi] += take
+			}
+			for _, token := range candidate.usedVariantBudgets {
+				variantUsage[token] += take
+			}
+			if take > 0 {
+				picks = append(picks, pick{ri, ci, take})
+			}
+			if distribute(ri, ci+1, left-take) {
+				return true
+			}
+			if take > 0 {
+				picks = picks[:len(picks)-1]
+			}
+			for _, token := range candidate.usedVariantBudgets {
+				variantUsage[token] -= take
+			}
+			for _, oi := range candidate.usedOptions {
+				usage[oi] -= take
+			}
+			for id, per := range candidate.weapons {
+				remainingLower[id] += per * take
+				remainingUpper[id] += per * take
+			}
 		}
 		return false
 	}
-	if !assignRow(0) { return nil }
+	if !assignRow(0) {
+		return nil
+	}
 	return append([]pick(nil), picks...)
 }
 func optionsWithPrintedUnitAbilities(unit map[string]any, options []any, counts map[string]int) []any {
@@ -885,43 +1058,66 @@ func filterRowCandidates(candidates []rowCandidate, upper map[string]int, option
 // exactGroups proves and decomposes a flat loadout across every feasible
 // per-model row allocation, including a single model for variant legality.
 func exactGroups(unit map[string]any, modelCount int, options []any, models []any, counts map[string]int) []any {
-	if !hasRecordedLoadoutBases(models) { return nil }
+	if !hasRecordedLoadoutBases(models) {
+		return nil
+	}
 	bag := map[string]int{}
-	for id, count := range counts { if count > 0 { bag[id] = count } }
+	for id, count := range counts {
+		if count > 0 {
+			bag[id] = count
+		}
+	}
 	effectiveOptions := optionsWithPrintedUnitAbilities(unit, options, bag)
 	for _, rowN := range candidateRowCounts(models, modelCount, bag) {
 		fixedModels := make([]any, len(models))
 		for i, modelAny := range models {
-			model, _ := asMap(modelAny); fixed := cloneMap(model)
-			fixed["min"], fixed["max"] = rowN[i], rowN[i]; fixedModels[i] = fixed
+			model, _ := asMap(modelAny)
+			fixed := cloneMap(model)
+			fixed["min"], fixed["max"] = rowN[i], rowN[i]
+			fixedModels[i] = fixed
 		}
 		optionCaps := make([]int, len(effectiveOptions))
-		for i, optionAny := range effectiveOptions { option, _ := asMap(optionAny); optionCaps[i] = optionCap(option, modelCount, fixedModels) }
+		for i, optionAny := range effectiveOptions {
+			option, _ := asMap(optionAny)
+			optionCaps[i] = optionCap(option, modelCount, fixedModels)
+		}
 		rows, variantCaps := []solverRow{}, map[string]int{}
 		for i, fixedAny := range fixedModels {
-			if rowN[i] <= 0 { continue }
+			if rowN[i] <= 0 {
+				continue
+			}
 			fixed, _ := asMap(fixedAny)
 			prepared := rowCandidates(fixed, i, rowN[i], modelCount, effectiveOptions)
-			for token, cap := range prepared.variantCaps { variantCaps[token] = cap }
+			for token, cap := range prepared.variantCaps {
+				variantCaps[token] = cap
+			}
 			candidates := filterRowCandidates(prepared.candidates, bag, optionCaps)
 			sort.SliceStable(candidates, func(a, b int) bool {
-				if candidates[a].key != candidates[b].key { return candidates[a].key < candidates[b].key }
-				if len(candidates[a].usedOptions) != len(candidates[b].usedOptions) { return len(candidates[a].usedOptions) < len(candidates[b].usedOptions) }
+				if candidates[a].key != candidates[b].key {
+					return candidates[a].key < candidates[b].key
+				}
+				if len(candidates[a].usedOptions) != len(candidates[b].usedOptions) {
+					return len(candidates[a].usedOptions) < len(candidates[b].usedOptions)
+				}
 				return joinInts(candidates[a].usedOptions) < joinInts(candidates[b].usedOptions)
 			})
 			rows = append(rows, solverRow{name: fixed["name"], count: rowN[i], candidates: candidates})
 		}
-		if picks := solveAssignment(rows, bag, bag, optionCaps, variantCaps, nil); picks != nil { return groupsFromPicks(rows, picks) }
+		if picks := solveAssignment(rows, bag, bag, optionCaps, variantCaps, nil); picks != nil {
+			return groupsFromPicks(rows, picks)
+		}
 	}
 	return nil
 }
+
 // GroupLoadout preserves the historical grouping API: a one-model unit is not
 // rendered as a group even though exactGroups still validates its variants.
 func GroupLoadout(unit map[string]any, modelCount int, options []any, models []any, counts map[string]int) []any {
-	if modelCount <= 1 { return nil }
+	if modelCount <= 1 {
+		return nil
+	}
 	return exactGroups(unit, modelCount, options, models, counts)
 }
-
 
 type completedLoadout struct {
 	counts map[string]int
@@ -968,6 +1164,30 @@ func groupsFromPicks(rows []solverRow, picks []pick) []any {
 		out = append(out, map[string]any{"model_name": group.name, "count": group.count, "weapons": sortedGroupWeapons(group.weapons)})
 	}
 	return out
+}
+
+func completionContribution(candidate rowCandidate, lower map[string]int) int {
+	contribution := 0
+	for id, required := range lower {
+		contribution += minInt(candidate.weapons[id], required)
+	}
+	return contribution
+}
+
+func sortCompletionCandidates(candidates []rowCandidate, lower map[string]int) {
+	sort.SliceStable(candidates, func(a, b int) bool {
+		left, right := completionContribution(candidates[a], lower), completionContribution(candidates[b], lower)
+		if left != right {
+			return left > right
+		}
+		if len(candidates[a].usedOptions) != len(candidates[b].usedOptions) {
+			return len(candidates[a].usedOptions) < len(candidates[b].usedOptions)
+		}
+		if candidates[a].key != candidates[b].key {
+			return candidates[a].key < candidates[b].key
+		}
+		return joinInts(candidates[a].usedOptions) < joinInts(candidates[b].usedOptions)
+	})
 }
 
 // completeLoadout adds only composition defaults omitted by a source format.
@@ -1044,16 +1264,16 @@ func completeLoadout(unit map[string]any, modelCount int, options []any, models 
 			}
 			rows, variantCaps := []solverRow{}, map[string]int{}
 			for i, fixedAny := range fixedModels {
-				if rowCounts[i] <= 0 { continue }
+				if rowCounts[i] <= 0 {
+					continue
+				}
 				fixed, _ := asMap(fixedAny)
 				prepared := rowCandidates(fixed, i, rowCounts[i], modelCount, effectiveOptions)
-				for token, cap := range prepared.variantCaps { variantCaps[token] = cap }
+				for token, cap := range prepared.variantCaps {
+					variantCaps[token] = cap
+				}
 				candidates := filterRowCandidates(prepared.candidates, upper, optionCaps)
-				sort.SliceStable(candidates, func(a, b int) bool {
-					if len(candidates[a].usedOptions) != len(candidates[b].usedOptions) { return len(candidates[a].usedOptions) < len(candidates[b].usedOptions) }
-					if candidates[a].key != candidates[b].key { return candidates[a].key < candidates[b].key }
-					return joinInts(candidates[a].usedOptions) < joinInts(candidates[b].usedOptions)
-				})
+				sortCompletionCandidates(candidates, lower)
 				rows = append(rows, solverRow{name: fixed["name"], count: rowCounts[i], candidates: candidates})
 			}
 			picks := solveAssignment(rows, lower, upper, optionCaps, variantCaps, nil)
@@ -1162,13 +1382,19 @@ func weaponBounds(unit map[string]any, modelCount int, options []any, models []a
 		for _, allocation := range candidateRowCounts(models, modelCount, map[string]int{}) {
 			totals := map[string]int{}
 			for i, count := range allocation {
-				if count <= 0 { continue }
+				if count <= 0 {
+					continue
+				}
 				row, _ := asMap(models[i])
 				maxima := map[string]int{}
 				for _, candidate := range rowCandidates(row, i, count, modelCount, options).candidates {
-					for id, per := range candidate.weapons { maxima[id] = maxInt(maxima[id], per) }
+					for id, per := range candidate.weapons {
+						maxima[id] = maxInt(maxima[id], per)
+					}
 				}
-				for id, maximum := range maxima { totals[id] += maximum * count }
+				for id, maximum := range maxima {
+					totals[id] += maximum * count
+				}
 			}
 			for id, maximum := range totals {
 				current := bounds[id]
@@ -1196,36 +1422,26 @@ func weaponBounds(unit map[string]any, modelCount int, options []any, models []a
 func hasVariants(models []any) bool {
 	for _, modelAny := range models {
 		model, _ := asMap(modelAny)
-		if len(getList(model, "loadout_variants")) > 0 { return true }
+		if len(getList(model, "loadout_variants")) > 0 {
+			return true
+		}
 	}
 	return false
 }
 func hasRecordedLoadoutBases(models []any) bool {
-	if len(models) == 0 { return false }
+	if len(models) == 0 {
+		return false
+	}
 	for _, modelAny := range models {
 		model, _ := asMap(modelAny)
-		if len(getStrList(model, "default_weapon_ids")) == 0 && len(getList(model, "loadout_variants")) == 0 { return false }
+		if len(getStrList(model, "default_weapon_ids")) == 0 && len(getList(model, "loadout_variants")) == 0 {
+			return false
+		}
 	}
 	return true
 }
 
-
-
-func validateLoadout(unit map[string]any, modelCount int, options []any, counts map[string]int, models []any) []map[string]string {
-	budgets := budgetViolations(unit, modelCount, counts)
-	if hasVariants(models) && hasRecordedLoadoutBases(models) {
-		if exactGroups(unit, modelCount, options, models, counts) != nil { return budgets }
-		uid := getStr(unit, "id")
-		out := append(budgets, map[string]string{"id": uid, "code": "swap-conflict", "message": uid + ": equipment cannot be assigned to legal whole-model loadouts"})
-		sort.SliceStable(out, func(i, j int) bool {
-			if out[i]["id"] != out[j]["id"] { return out[i]["id"] < out[j]["id"] }
-			return out[i]["code"] < out[j]["code"]
-		})
-		return out
-	}
-	if len(models) > 1 && GroupLoadout(unit, modelCount, options, models, counts) != nil {
-		return budgets
-	}
+func boundViolations(unit map[string]any, modelCount int, options []any, counts map[string]int, models []any) []map[string]string {
 	bounds := weaponBounds(unit, modelCount, options, models)
 	var out []map[string]string
 	// Items governed by a shared-allowance budget are policed solely by
@@ -1253,6 +1469,32 @@ func validateLoadout(unit map[string]any, modelCount int, options []any, counts 
 			out = append(out, map[string]string{"id": id, "code": "below-min", "message": id + ": " + itoa(n) + " below min " + itoa(b.min)})
 		}
 	}
+	return out
+}
+
+func validateLoadout(unit map[string]any, modelCount int, options []any, counts map[string]int, models []any) []map[string]string {
+	budgets := budgetViolations(unit, modelCount, counts)
+	if hasVariants(models) && hasRecordedLoadoutBases(models) {
+		out := append(boundViolations(unit, modelCount, options, counts, models), budgets...)
+		if len(out) > 0 {
+			sort.SliceStable(out, func(i, j int) bool {
+				if out[i]["id"] != out[j]["id"] {
+					return out[i]["id"] < out[j]["id"]
+				}
+				return out[i]["code"] < out[j]["code"]
+			})
+			return out
+		}
+		if completeLoadout(unit, modelCount, options, models, counts) != nil {
+			return budgets
+		}
+		uid := getStr(unit, "id")
+		return []map[string]string{{"id": uid, "code": "swap-conflict", "message": uid + ": equipment cannot be assigned to legal whole-model loadouts"}}
+	}
+	if len(models) > 1 && GroupLoadout(unit, modelCount, options, models, counts) != nil {
+		return budgets
+	}
+	out := boundViolations(unit, modelCount, options, counts, models)
 	out = append(out, swapConflicts(unit, modelCount, options, counts, models)...)
 	out = append(out, budgets...)
 	sort.SliceStable(out, func(i, j int) bool {

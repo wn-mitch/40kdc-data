@@ -1508,6 +1508,7 @@ export interface SimpleCondition {
     | "miracle-die-generation-timing"
     | "destroyed-event-within-range"
     | "destroyed-by-friendly-unit";
+  of?: "bearer" | "unit" | "led-unit" | "attacker" | "defender" | "target" | "friendly" | "enemy";
   parameters?: {
     [k: string]: unknown;
   };
@@ -1851,6 +1852,14 @@ export interface ForEachUnitEffect {
      */
     target_kind?: "unit" | "model";
     within_inches?: number;
+    /**
+     * Candidate engagement relation to the bearer or bearer-unit.
+     */
+    engagement_relation?: "engaged-with-bearer" | "not-engaged-with-bearer";
+    /**
+     * Origin of the engagement_relation gate.
+     */
+    reference?: "bearer" | "bearer-unit";
     /**
      * Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.
      */

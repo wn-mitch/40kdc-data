@@ -94,6 +94,24 @@ def test_named_region_weapon_keyword_narrowing_is_not_applied_broadly() -> None:
     )
 
 
+def test_count_capped_reroll_is_not_applied_as_unlimited() -> None:
+    effect = {
+        "type": "re-roll",
+        "target": "unit",
+        "modifier": {"roll": "hit", "result_scope": "any-result", "count": 1},
+    }
+    result = effect_to_buffs(effect, _source(), {"phase": "shooting"})
+    assert result["applied"] == []
+    assert result["unsupported"] == [
+        {
+            "reason": (
+                "re-roll: count-capped permissions are not modelled by the expected-value engine"
+            ),
+            "effectFragment": effect,
+        }
+    ]
+
+
 def test_leader_model_ability_grant_requires_resolved_beneficiary() -> None:
     effect = {
         "type": "leader-model-ability-grant",

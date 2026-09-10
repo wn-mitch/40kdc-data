@@ -7984,7 +7984,8 @@
       "optional": true
     },
     "scope": {
-      "range": "aura-3",
+      "range": "aura-custom",
+      "range_inches": 3,
       "duration": "one-use"
     },
     "unit_ids": [

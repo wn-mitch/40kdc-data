@@ -21,6 +21,18 @@
       ]
     },
     "duration": {
+      "$ref": "#/$defs/scope-duration"
+    },
+    "range_inches": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "range",
+    "duration"
+  ],
+  "$defs": {
+    "scope-duration": {
       "type": "string",
       "enum": [
         "phase",
@@ -37,13 +49,6 @@
         "resolution"
       ],
       "description": "attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit."
-    },
-    "range_inches": {
-      "type": "number"
     }
-  },
-  "required": [
-    "range",
-    "duration"
-  ]
+  }
 }

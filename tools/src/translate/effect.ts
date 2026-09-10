@@ -14,7 +14,7 @@
  * Unknown leaf types degrade to a deterministic bracketed form (`[the-type]`).
  */
 
-import { describeCondition, describeSelectionEligibility, describeTiming, negatedTiming, eventClause, dekebab, type Condition } from "./condition.js";
+import { conditionSubject, dekebab, describeCondition, describeSelectionEligibility, describeTiming, eventClause, negatedTiming, type Condition } from "./condition.js";
 
 /** Independent all-required/none-excluded keyword predicate for aura roles. */
 export interface KeywordFilter {
@@ -96,6 +96,7 @@ export interface Effect {
     visible_to?: { selection_var: string };
     selection_limit?: { count: number; period: string };
     within_inches?: number;
+    within_objective?: { selection_var: string };
     range_inches?: number;
     visibility_required?: boolean;
     engagement_relation?: "any" | "engaged-with-bearer" | "not-engaged-with-bearer";
@@ -394,12 +395,20 @@ function leaderModelAbilityGrantClause(e: Effect, ctx: Ctx): string {
 /** "enemy unit within 6\"" — the `for-each-unit` selector phrase. */
 function forEachUnitSubject(sel: Record<string, unknown> = {}): string {
   const keywords = Array.isArray(sel.keywords) ? `${sel.keywords.map((keyword) => titleCase(jstr(keyword))).join(" ")} ` : "";
-  const within = sel.within_objective
-    ? ` within range of ${selectionRefName(sel.within_objective, "the selected objective marker")}`
-    : sel.within_inches != null ? ` within ${jstr(sel.within_inches)}"` : "";
+  const within = [
+    sel.within_inches != null ? ` within ${jstr(sel.within_inches)}"` : "",
+    sel.within_objective ? ` within range of ${selectionRefName(sel.within_objective, "the selected objective marker")}` : "",
+  ].join("");
+  const origin = sel.reference === "bearer-unit" ? "this model's unit" : "the bearer";
+  const engagement =
+    sel.engagement_relation === "engaged-with-bearer"
+      ? ` in Engagement Range of ${origin}`
+      : sel.engagement_relation === "not-engaged-with-bearer"
+        ? ` not in Engagement Range of ${origin}`
+        : "";
   const noun = sel.target_kind === "model" ? "model" : "unit";
   const eligibility = sel.eligibility ? ` ${describeSelectionEligibility(sel.eligibility as Condition)}` : "";
-  return `${jstr(sel.owner)} ${keywords}${noun}${selectionModelFilters(sel)}${sel.member_of === "bearer-unit" ? " in this model's unit" : ""}${within}${eligibility}${selectionBinding(sel)}`;
+  return `${jstr(sel.owner)} ${keywords}${noun}${selectionModelFilters(sel)}${sel.member_of === "bearer-unit" ? " in this model's unit" : ""}${within}${engagement}${eligibility}${selectionBinding(sel)}`;
 }
 
 /** JS-template stringification (numbers print without trailing `.0`). */
@@ -1196,7 +1205,7 @@ function conditionLeadIn(c: Condition): string {
     case "model-is-leader":
       return "while this model leads a unit";
     case "charged-this-turn":
-      return "if the unit charged this turn";
+      return `if ${conditionSubject(c, "the unit")} charged this turn`;
     case "advanced-this-turn":
       return "if the unit Advanced this turn";
     case "disembarked-from-transport":
@@ -1223,11 +1232,9 @@ function conditionLeadIn(c: Condition): string {
     case "unit-has-keyword":
       return `if the unit has the ${jstr(p.keyword)} keyword`;
     case "is-battle-shocked":
-      return "while the unit is Battle-shocked";
+      return `while ${conditionSubject(c, "the unit")} is Battle-shocked`;
     case "unit-below-half-strength":
-      return p.subject === "target"
-        ? "while the target unit is below half strength"
-        : "while the unit is below half strength";
+      return `while ${conditionSubject(c, "the unit", { target: "the target unit" })} is below half strength`;
     case "unit-below-starting-strength":
       return "while the unit is below its starting strength";
     case "has-lost-wounds":
@@ -1597,14 +1604,19 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
     }
     case "re-roll": {
       const rn = jstr(m.roll);
+      // Count-capped re-roll: up to `count` qualifying rolls within the
+      // ability's active window ("one Hit roll", "up to 2 failed Wound rolls").
+      const cnt = typeof m.count === "number" ? m.count : undefined;
       const which =
-        rn === "any"
-          ? m.subset === "ones"
-            ? "any roll of 1"
-            : "any roll"
-          : m.subset === "ones"
-            ? `a ${rollName(m.roll)} roll of 1`
-            : `the ${rollName(m.roll)} roll`;
+        cnt != null
+          ? `${cnt === 1 ? "one" : `up to ${cnt}`} ${m.subset === "all-failures" ? "failed " : ""}${rn === "any" ? "roll" : `${rollName(m.roll)} roll`}${cnt === 1 ? "" : "s"}${m.subset === "ones" ? " of 1" : ""}`
+          : rn === "any"
+            ? m.subset === "ones"
+              ? "any roll of 1"
+              : "any roll"
+            : m.subset === "ones"
+              ? `a ${rollName(m.roll)} roll of 1`
+              : `the ${rollName(m.roll)} roll`;
       const permission = m.optional === false ? "re-roll" : "you can re-roll";
       const owner = e.target === "self" || e.target === "bearer" || ctx.selectedModel ? ` for ${["hit", "wound", "damage"].includes(jstr(m.roll)) ? "attacks made by " : ""}${weaponHolder(e.target, ctx)}` : "";
       return `${permission} ${which}${owner}${weaponRollScope(m)}`;
@@ -2206,11 +2218,12 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
 }
 
 function choicePrompt(e: Effect): string {
+  if (typeof e.choice_prompt === "string" && e.choice_prompt.trim().length > 0) return e.choice_prompt;
   if (e.min_choices != null && e.max_choices != null) {
     const quantity = e.min_choices === e.max_choices ? `exactly ${e.max_choices}` : e.min_choices === 0 ? `up to ${e.max_choices}` : `from ${e.min_choices} through ${e.max_choices}`;
     return `select ${quantity} distinct options${e.choice_label ? ` (${titleCase(e.choice_label)})` : ""}`;
   }
-  return e.choice_prompt ?? `select one of the following${e.choice_label ? ` (${titleCase(e.choice_label)})` : ""}`;
+  return `select one of the following${e.choice_label ? ` (${titleCase(e.choice_label)})` : ""}`;
 }
 
 function namedRegionRecord(value: unknown): Record<string, unknown> {
@@ -2312,12 +2325,16 @@ function namedRegionEffect(branch: Record<string, unknown>, qualified: boolean, 
   const roll = rollName(modifier.roll);
   let text: string;
   if (effect.type === "re-roll") {
+    const cnt = typeof modifier.count === "number" ? modifier.count : undefined;
+    const cappedRoll = jstr(modifier.roll) === "any" ? "" : `${roll} `;
     text =
-      modifier.result_scope === "any-result"
-        ? `can re-roll the ${roll} roll`
-        : modifier.subset === "ones"
-          ? `can re-roll ${roll} rolls of 1`
-          : `can re-roll ${roll} rolls`;
+      cnt != null
+        ? `can re-roll ${cnt === 1 ? "one" : `up to ${cnt}`} ${modifier.subset === "all-failures" ? "failed " : ""}${cappedRoll}roll${cnt === 1 ? "" : "s"}${modifier.subset === "ones" ? " of 1" : ""}`
+        : modifier.result_scope === "any-result"
+          ? `can re-roll the ${roll} roll`
+          : modifier.subset === "ones"
+            ? `can re-roll ${roll} rolls of 1`
+            : `can re-roll ${roll} rolls`;
   } else if (effect.type === "roll-modifier" && modifier.value != null) {
     text = `gets ${signed(modifier.operation, modifier.value)} to ${roll}`;
   } else {
@@ -2838,7 +2855,7 @@ function objectiveSelectionInline(e: Effect, ctx: Ctx, each: boolean): string {
   const qualifier = sel.requires_unit as Record<string, unknown> | undefined;
   const ability = qualifier ? ` with one or more ${jstr(qualifier.owner)} units with the ${titleCase(jstr(qualifier.requires_ability))} ability within range` : "";
   const limit = sel.selection_limit as { count: number; period: string } | undefined;
-  const dedupe = limit ? `; each objective marker can be selected for this ability at most ${limit.count === 1 ? "once" : `${limit.count} times`} per ${dekebab(limit.period)} across your army` : "";
+  const dedupe = limit ? `; ${selectionLimitPhrase(limit, "objective marker")}` : "";
   const subject = `objective marker${controlled}${range}${ability}${selectionBinding(sel)}`;
   return `${each ? "for each" : "select one"} ${subject}: ${describeEffectInline(e.effect ?? {}, ctx)}${dedupe}`;
 }

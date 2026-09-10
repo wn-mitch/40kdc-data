@@ -305,6 +305,32 @@
           "shuriken-pistol",
           "power-sword",
           "close-combat-weapon-corsair-voidscarred"
+        ],
+        "loadout_variants": [
+          {
+            "name": "Voidscarred Felarch with Shuriken Pistol",
+            "weapon_ids": [
+              "shuriken-pistol",
+              "power-sword",
+              "close-combat-weapon-corsair-voidscarred"
+            ]
+          },
+          {
+            "name": "Voidscarred Felarch with Neuro Disruptor",
+            "weapon_ids": [
+              "neuro-disruptor",
+              "power-sword",
+              "close-combat-weapon-corsair-voidscarred"
+            ]
+          },
+          {
+            "name": "Voidscarred Felarch with Shuriken Rifle",
+            "weapon_ids": [
+              "shuriken-rifle",
+              "power-sword",
+              "close-combat-weapon-corsair-voidscarred"
+            ]
+          }
         ]
       },
       {
@@ -320,6 +346,68 @@
           "shuriken-pistol",
           "power-sword",
           "close-combat-weapon-corsair-voidscarred"
+        ],
+        "loadout_variants": [
+          {
+            "name": "Corsair Voidscarred with Pistol and Sword",
+            "weapon_ids": [
+              "shuriken-pistol",
+              "power-sword",
+              "close-combat-weapon-corsair-voidscarred"
+            ]
+          },
+          {
+            "name": "Corsair Voidscarred with Shuriken Rifle",
+            "weapon_ids": [
+              "shuriken-rifle",
+              "close-combat-weapon-corsair-voidscarred"
+            ]
+          },
+          {
+            "name": "Corsair Voidscarred with Corsair Blaster",
+            "weapon_ids": [
+              "blaster",
+              "close-combat-weapon-corsair-voidscarred"
+            ]
+          },
+          {
+            "name": "Corsair Voidscarred with Corsair Shredder",
+            "weapon_ids": [
+              "shredder",
+              "close-combat-weapon-corsair-voidscarred"
+            ]
+          },
+          {
+            "name": "Corsair Voidscarred with Wraithcannon",
+            "weapon_ids": [
+              "wraithcannon",
+              "close-combat-weapon-corsair-voidscarred"
+            ]
+          },
+          {
+            "name": "Corsair Voidscarred with Shuriken Cannon",
+            "weapon_ids": [
+              "shuriken-cannon-corsair-voidscarred",
+              "close-combat-weapon-corsair-voidscarred"
+            ]
+          },
+          {
+            "name": "Corsair Voidscarred with Long Rifle",
+            "weapon_ids": [
+              "long-rifle",
+              "close-combat-weapon-corsair-voidscarred"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Corsair Voidscarred with Fusion Pistol",
+            "weapon_ids": [
+              "fusion-pistol",
+              "shuriken-pistol",
+              "close-combat-weapon-corsair-voidscarred"
+            ],
+            "max_count": 1
+          }
         ]
       },
       {
@@ -332,6 +420,7 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
+          "close-combat-weapon",
           "paired-hekatarii-blades",
           "shuriken-pistol"
         ]
@@ -346,6 +435,7 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
+          "close-combat-weapon",
           "shuriken-pistol",
           "power-sword",
           "channeller-stones"
@@ -361,6 +451,7 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
+          "close-combat-weapon",
           "shuriken-pistol",
           "witch-staff",
           "executioner"
@@ -841,63 +932,42 @@
             "weapon_ids": [
               "close-combat-weapon",
               "shuriken-pistol"
-            ],
-            "max_count": 10
+            ]
           },
           {
             "name": "Storm Guardian with Flamer",
             "weapon_ids": [
               "close-combat-weapon",
               "flamer"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Storm Guardian with Fusion Gun",
             "weapon_ids": [
               "close-combat-weapon",
               "fusion-gun"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Storm Guardian with Power Sword",
             "weapon_ids": [
               "shuriken-pistol",
               "power-sword-storm-guardians"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Storm Guardian with Flamer & Power Sword",
             "weapon_ids": [
               "flamer",
               "power-sword-storm-guardians"
-            ],
-            "max_count": 2
+            ]
           },
           {
             "name": "Storm Guardian with Fusion Gun & Power Sword",
             "weapon_ids": [
               "power-sword-storm-guardians",
               "fusion-gun"
-            ],
-            "max_count": 2
-          }
-        ],
-        "loadout_variant_budgets": [
-          {
-            "variant_names": [
-              "Storm Guardian",
-              "Storm Guardian with Flamer",
-              "Storm Guardian with Fusion Gun",
-              "Storm Guardian with Power Sword",
-              "Storm Guardian with Flamer & Power Sword",
-              "Storm Guardian with Fusion Gun & Power Sword"
-            ],
-            "count": 10,
-            "per_models": 0,
-            "scope": "model-row"
+            ]
           }
         ]
       },
@@ -913,7 +983,15 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 40
-        }
+        },
+        "loadout_variants": [
+          {
+            "name": "Serpent’s Scale Platform",
+            "weapon_ids": [
+              "close-combat-weapon"
+            ]
+          }
+        ]
       }
     ],
     "game_version": {
@@ -3559,7 +3637,81 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 25
-        }
+        },
+        "loadout_variants": [
+          {
+            "name": "Lead Player with Harlequin's Blade",
+            "weapon_ids": [
+              "flip-belt",
+              "shuriken-pistol",
+              "harlequins-blade"
+            ]
+          },
+          {
+            "name": "Lead Player with Harlequin's Special Weapon",
+            "weapon_ids": [
+              "flip-belt",
+              "shuriken-pistol",
+              "harlequins-special-weapon-troupe"
+            ]
+          },
+          {
+            "name": "Lead Player with Power Sword",
+            "weapon_ids": [
+              "flip-belt",
+              "shuriken-pistol",
+              "power-sword-troupe"
+            ]
+          },
+          {
+            "name": "Lead Player with Harlequin's Blade and Fusion Pistol",
+            "weapon_ids": [
+              "flip-belt",
+              "fusion-pistol",
+              "harlequins-blade"
+            ]
+          },
+          {
+            "name": "Lead Player with Harlequin's Special Weapon and Fusion Pistol",
+            "weapon_ids": [
+              "flip-belt",
+              "fusion-pistol",
+              "harlequins-special-weapon-troupe"
+            ]
+          },
+          {
+            "name": "Lead Player with Power Sword and Fusion Pistol",
+            "weapon_ids": [
+              "flip-belt",
+              "fusion-pistol",
+              "power-sword-troupe"
+            ]
+          },
+          {
+            "name": "Lead Player with Harlequin's Blade and Neuro Disruptor",
+            "weapon_ids": [
+              "flip-belt",
+              "neuro-disruptor",
+              "harlequins-blade"
+            ]
+          },
+          {
+            "name": "Lead Player with Harlequin's Special Weapon and Neuro Disruptor",
+            "weapon_ids": [
+              "flip-belt",
+              "neuro-disruptor",
+              "harlequins-special-weapon-troupe"
+            ]
+          },
+          {
+            "name": "Lead Player with Power Sword and Neuro Disruptor",
+            "weapon_ids": [
+              "flip-belt",
+              "neuro-disruptor",
+              "power-sword-troupe"
+            ]
+          }
+        ]
       },
       {
         "name": "Player",
@@ -3582,8 +3734,7 @@
               "flip-belt",
               "shuriken-pistol",
               "harlequins-blade"
-            ],
-            "max_count": 11
+            ]
           },
           {
             "name": "Player with Harlequin's Special Weapon",
@@ -3591,26 +3742,39 @@
               "flip-belt",
               "shuriken-pistol",
               "harlequins-special-weapon-troupe"
-            ],
-            "max_count": 11
+            ]
           },
           {
-            "name": "Player with Fusion Pistol",
+            "name": "Player with Harlequin's Blade and Fusion Pistol",
+            "weapon_ids": [
+              "flip-belt",
+              "fusion-pistol",
+              "harlequins-blade"
+            ]
+          },
+          {
+            "name": "Player with Harlequin's Special Weapon and Fusion Pistol",
             "weapon_ids": [
               "flip-belt",
               "fusion-pistol",
               "harlequins-special-weapon-troupe"
-            ],
-            "max_count": 4
+            ]
           },
           {
-            "name": "Player with Neuro Disruptor",
+            "name": "Player with Harlequin's Blade and Neuro Disruptor",
+            "weapon_ids": [
+              "flip-belt",
+              "neuro-disruptor",
+              "harlequins-blade"
+            ]
+          },
+          {
+            "name": "Player with Harlequin's Special Weapon and Neuro Disruptor",
             "weapon_ids": [
               "flip-belt",
               "neuro-disruptor",
               "harlequins-special-weapon-troupe"
-            ],
-            "max_count": 4
+            ]
           }
         ]
       }

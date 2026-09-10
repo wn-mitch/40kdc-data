@@ -4536,7 +4536,11 @@
     },
     "is_legend": false,
     "points_provisional": true,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    }
   },
   {
     "id": "rukkatrukk-squigbuggies",
@@ -4649,7 +4653,11 @@
     },
     "is_legend": false,
     "points_provisional": true,
-    "attachment_role": "support"
+    "attachment_role": "support",
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    }
   },
   {
     "id": "warbuggies",

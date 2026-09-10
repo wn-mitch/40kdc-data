@@ -146,7 +146,7 @@ Add one rolled D6 to your Blessings of Khorne Pool for each Bloodshed Point you 
             </profile>
             <profile name="Deadly Demise D3" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When a model in the unit is destroyed, until the end of the phase:
+                <characteristic name="Description">When this model is destroyed, until the end of the phase:
   -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>

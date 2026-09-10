@@ -9,29 +9,31 @@
 use serde_json::{Map, Value};
 
 use super::{
-    battle_round_ordinal, dekebab, describe_node, describe_timing, event_clause, negated_timing,
-    num_param,
+    battle_round_ordinal, condition_subject, dekebab, describe_node, describe_timing, event_clause,
+    negated_timing, num_param,
 };
-use crate::{generated::{
-    Ability, AbilityAppliesTo, AbilityTrigger, AbilityUsage, AbilityUsageFrequency, AuraEffect,
-    AuraEffectModifierRange, AuraEffectTarget, BeneficiaryBoundEffectNode,
-    CompoundConditionOperator, Condition, ConditionNode, DesignateTargetEffectAppliesTo,
-    DesignateTargetEffectSelect, DesignateTargetEffectSelectKeywordMatch,
-    DesignateTargetEffectSelectScope, DiceGatedEffect, DiceGatedEffectComparison,
-    DiceGatedEffectThreshold, DicePoolAllocationEffect, DiceRequirementSpec, DiceTableEffect,
-    EffectNode, FormationAttachmentGrantEffect, KeywordFilter,
-    LeaderModelAbilityGrantEffect, MiracleDieOperationEffect, MovementModifierEffect,
-    NamedEffectKind, ObjectiveSelector, PairedDesignationEffect, PersistentDesignationEffect,
-    PersistentDesignationEffectConsumerRelation, PersistentDesignationEffectOperation,
-    PersistentDesignationEffectSelectScope,
-    ResourceActionMenuEffectActionsItemDuration, ResourceActionMenuEffectActionsItemWhen,
-    ResourceActionMenuEffectSharedUsage, ResourceActionMenuTrigger,
-    ResourceActionMenuTriggerMoveTypesItem, ResourceActionMenuTriggerProximityOf,
-    ResourceActionMenuTriggerSubject, Scaling, ScalingOf, ScalingRound, Scope, ScopeRange,
-    SelectUnitsEffectSelector, SimpleConditionType, SingleEffect,
-    SingleEffectTarget, SingleEffectType, StanceSelectEffectMode, Trigger,
-    TriggerCausedBySource, TriggerMoveTypesItem, TriggerProximityOf,
-}, LeaderModelAbilityGrantEffectBeneficiary, ResourceActionMenuEffect, ResourceActionMenuEffectActionsItem};
+use crate::{
+    generated::{
+        Ability, AbilityAppliesTo, AbilityTrigger, AbilityUsage, AbilityUsageFrequency, AuraEffect,
+        AuraEffectModifierRange, AuraEffectTarget, BeneficiaryBoundEffectNode,
+        CompoundConditionOperator, Condition, ConditionNode, DesignateTargetEffectAppliesTo,
+        DesignateTargetEffectSelect, DiceGatedEffect, DiceGatedEffectComparison,
+        DiceGatedEffectThreshold, DicePoolAllocationEffect, DiceRequirementSpec, DiceTableEffect,
+        EffectNode, FormationAttachmentGrantEffect, KeywordFilter, LeaderModelAbilityGrantEffect,
+        MiracleDieOperationEffect, MovementModifierEffect, NamedEffectKind, ObjectiveSelector,
+        PairedDesignationEffect, PersistentDesignationEffect,
+        PersistentDesignationEffectConsumerRelation, PersistentDesignationEffectOperation,
+        PersistentDesignationEffectSelectScope, ResourceActionMenuEffectActionsItemDuration,
+        ResourceActionMenuEffectActionsItemWhen, ResourceActionMenuEffectSharedUsage,
+        ResourceActionMenuTrigger, ResourceActionMenuTriggerMoveTypesItem,
+        ResourceActionMenuTriggerProximityOf, ResourceActionMenuTriggerSubject, Scaling, ScalingOf,
+        ScalingRound, Scope, ScopeRange, SelectUnitsEffectSelector, SimpleConditionType,
+        SingleEffect, SingleEffectTarget, SingleEffectType, StanceSelectEffectMode, Trigger,
+        TriggerCausedBySource, TriggerMoveTypesItem, TriggerProximityOf,
+    },
+    LeaderModelAbilityGrantEffectBeneficiary, ResourceActionMenuEffect,
+    ResourceActionMenuEffectActionsItem,
+};
 
 /// Rendering context threaded from the ability (scope info the leaf needs).
 #[derive(Default, Clone)]
@@ -148,33 +150,6 @@ fn designation_label(designation: &str) -> String {
     } else {
         format!(" (your {label} target)")
     }
-}
-
-fn designation_target_subject_base(sel: &DesignateTargetEffectSelect) -> String {
-    let disposition = match sel.scope {
-        DesignateTargetEffectSelectScope::FriendlyUnit => "friendly",
-        DesignateTargetEffectSelectScope::EnemyUnit => "enemy",
-    };
-    let keywords = sel
-        .keywords
-        .iter()
-        .map(|keyword| title_case(keyword.as_str()))
-        .collect::<Vec<_>>();
-    let keyword_join = if sel.keyword_match == DesignateTargetEffectSelectKeywordMatch::Any {
-        " or "
-    } else {
-        " "
-    };
-    let keyword_text = if keywords.is_empty() {
-        String::new()
-    } else {
-        format!(" {}", keywords.join(keyword_join))
-    };
-    let within = sel
-        .within_inches
-        .map(|range| format!(" within {} inches", fmt_num(range)))
-        .unwrap_or_default();
-    format!("{disposition}{keyword_text} unit{within}")
 }
 
 fn transport_capacity_conversion(m: &Map<String, Value>) -> String {
@@ -354,7 +329,11 @@ fn persistent_designation_lead(p: &PersistentDesignationEffect) -> String {
             );
             clauses.push(format!(
                 "When {name} is destroyed, {} select one new {scope_noun} to replace it.",
-                if replacement.optional { "you may" } else { "you must" }
+                if replacement.optional {
+                    "you may"
+                } else {
+                    "you must"
+                }
             ));
         }
     }
@@ -397,7 +376,14 @@ fn persistent_designation_when(p: &PersistentDesignationEffect) -> String {
             format!("while {bearer} is within range of {name}")
         }
         PersistentDesignationEffectConsumerRelation::AttacksSelectedUnit => {
-            format!("each time {bearer} makes an attack against {name}")
+            format!(
+                "each time {bearer} makes an attack against {}",
+                if consumer.reference.is_some() {
+                    &name
+                } else {
+                    "it"
+                }
+            )
         }
     };
     let (_, trail) = duration_clauses(&p.duration.to_string());
@@ -419,7 +405,9 @@ fn persistent_designation_replacement(p: &PersistentDesignationEffect) -> String
         .map(|reference| selection_ref_name(&reference, &fallback))
         .unwrap_or(fallback);
     let label = persistent_designation_label(p.designation.as_str(), p.select.scope);
-    let optional = replacement.map(|replacement| replacement.optional).unwrap_or(false);
+    let optional = replacement
+        .map(|replacement| replacement.optional)
+        .unwrap_or(false);
     let embarked = if p.select.allow_while_embarked == Some(true) {
         ". This selection can be made while this unit is embarked"
     } else {
@@ -604,10 +592,7 @@ fn paired_selector_subject(
     )
 }
 
-fn paired_designation_inline(
-    p: &PairedDesignationEffect,
-    ctx: &Ctx,
-) -> String {
+fn paired_designation_inline(p: &PairedDesignationEffect, ctx: &Ctx) -> String {
     let node = serde_json::to_value(p).unwrap_or(Value::Null);
     let node = node.as_object().cloned().unwrap_or_default();
     let observer_role = node
@@ -698,7 +683,11 @@ fn paired_designation_inline(
     )
 }
 
-fn beneficiary_bound_inline(effect: &BeneficiaryBoundEffectNode, ctx: &Ctx) -> String {
+fn beneficiary_bound_inline(
+    effect: &BeneficiaryBoundEffectNode,
+    ctx: &Ctx,
+    beneficiary: &str,
+) -> String {
     let mut object = Map::new();
     object.insert(
         "type".to_string(),
@@ -715,7 +704,7 @@ fn beneficiary_bound_inline(effect: &BeneficiaryBoundEffectNode, ctx: &Ctx) -> S
         }
     }
     match serde_json::from_value::<EffectNode>(Value::Object(object)) {
-        Ok(node) => inline(&node, ctx).replacen("this model", "that leader model", 1),
+        Ok(node) => inline(&node, ctx).replacen("this model", beneficiary, 1),
         Err(_) => format!("[{}]", effect.type_.as_str()),
     }
 }
@@ -727,10 +716,7 @@ fn miracle_die_operation_inline(p: &MiracleDieOperationEffect) -> String {
     miracle_die_operation_clause(&modifier)
 }
 
-fn formation_attachment_grant_inline(
-    p: &FormationAttachmentGrantEffect,
-    ctx: &Ctx,
-) -> String {
+fn formation_attachment_grant_inline(p: &FormationAttachmentGrantEffect, ctx: &Ctx) -> String {
     let value = serde_json::to_value(p).unwrap_or(Value::Null);
     let attachment = value
         .get("attachment")
@@ -749,7 +735,7 @@ fn formation_attachment_grant_inline(
         } else {
             "this model"
         };
-    let grant = beneficiary_bound_inline(&p.grant.effect, ctx).replace("this model", beneficiary);
+    let grant = beneficiary_bound_inline(&p.grant.effect, ctx, beneficiary);
     format!(
         "if {leader} was attached to {bodyguard} when declaring Battle Formations, {grant} for the battle"
     )
@@ -812,7 +798,7 @@ fn leader_model_ability_grant_clause(p: &LeaderModelAbilityGrantEffect, ctx: &Ct
     } else {
         format!("the bearer unit with {unit_keywords}")
     };
-    let nested = beneficiary_bound_inline(&p.grant.effect, ctx);
+    let nested = beneficiary_bound_inline(&p.grant.effect, ctx, "that leader model");
     format!("while {leader} leads {source}, {nested}")
 }
 
@@ -1025,14 +1011,24 @@ fn subject(target: &str, ctx: &Ctx) -> String {
     };
     match target {
         "self" | "bearer" => "this model".to_string(),
-        "unit" if ctx.selected_model => "that model".to_string(),
-        "unit" if ctx.selected_unit => "that unit".to_string(),
-        "unit" => "the unit".to_string(),
+        "unit" => ctx.unit_subject.clone().unwrap_or_else(|| {
+            if ctx.selected_model {
+                "that model".to_string()
+            } else if ctx.selected_unit {
+                "that unit".to_string()
+            } else {
+                "the unit".to_string()
+            }
+        }),
         "attached-unit" => "the unit this model leads".to_string(),
         "selected-models-unit" => "that model's unit".to_string(),
         "destroyed-model" => "the destroyed model".to_string(),
+        "triggering-unit" => "the triggering unit".to_string(),
         "target" => "the target".to_string(),
-        "attacker" => "the attacking unit".to_string(),
+        "attacker" => ctx
+            .unit_subject
+            .clone()
+            .unwrap_or_else(|| "the attacking unit".to_string()),
         "defender" => "the target".to_string(),
         "targets-of-selected-unit-attacks" => {
             let selected = if ctx.selected_model { "model" } else { "unit" };
@@ -1364,7 +1360,12 @@ fn condition_lead_in(n: &ConditionNode) -> String {
                     _ => "in either player's turn".to_string(),
                 },
                 T::ModelIsLeader => "while this model leads a unit".to_string(),
-                T::ChargedThisTurn => "if the unit charged this turn".to_string(),
+                T::ChargedThisTurn => {
+                    format!(
+                        "if {} charged this turn",
+                        condition_subject(s, "the unit", None)
+                    )
+                }
                 T::AdvancedThisTurn => "if the unit Advanced this turn".to_string(),
                 T::DisembarkedFromTransport => {
                     "if the unit disembarked from a Transport this turn".to_string()
@@ -1415,13 +1416,22 @@ fn condition_lead_in(n: &ConditionNode) -> String {
                         "when all of the unit's {attack_type}attacks target the same enemy unit"
                     )
                 }
-                T::IsBattleShocked => "while the unit is Battle-shocked".to_string(),
+                T::IsBattleShocked => {
+                    format!(
+                        "while {} is Battle-shocked",
+                        condition_subject(s, "the unit", None)
+                    )
+                }
                 T::UnitBelowHalfStrength => {
-                    if nstr(p, "subject") == Some("target") {
-                        "while the target unit is below half strength".to_string()
+                    let legacy_subject = if nstr(p, "subject") == Some("target") {
+                        Some("the target unit")
                     } else {
-                        "while the unit is below half strength".to_string()
-                    }
+                        None
+                    };
+                    format!(
+                        "while {} is below half strength",
+                        condition_subject(s, "the unit", legacy_subject)
+                    )
                 }
                 T::UnitBelowStartingStrength => {
                     "while the unit is below its starting strength".to_string()
@@ -1640,6 +1650,37 @@ fn named_region_subject(m: &Map<String, Value>) -> String {
     )
 }
 
+/// The re-roll modifier's `count` cap, when one is set.
+fn reroll_count(m: &Map<String, Value>) -> Option<i64> {
+    m.get("count").and_then(Value::as_i64)
+}
+
+/// Renders a count-capped re-roll's subject: "one Hit roll", "up to 2 failed
+/// Wound rolls", "one roll of 1".
+fn reroll_count_phrase(m: &Map<String, Value>, cnt: i64) -> String {
+    let (lead, plural) = if cnt == 1 {
+        ("one".to_string(), "")
+    } else {
+        (format!("up to {cnt}"), "s")
+    };
+    let failed = if nstr(m, "subset") == Some("all-failures") {
+        "failed "
+    } else {
+        ""
+    };
+    let noun = if nstr(m, "roll") == Some("any") {
+        "roll".to_string()
+    } else {
+        format!("{} roll", roll_name(m.get("roll").unwrap_or(&Value::Null)))
+    };
+    let of_one = if nstr(m, "subset") == Some("ones") {
+        " of 1"
+    } else {
+        ""
+    };
+    format!("{lead} {failed}{noun}{plural}{of_one}")
+}
+
 fn named_region_effect(branch: &Map<String, Value>, qualified: bool, ctx: &Ctx) -> String {
     let effect_value = branch.get("effect");
     let effect_map = effect_value.and_then(Value::as_object);
@@ -1653,7 +1694,12 @@ fn named_region_effect(branch: &Map<String, Value>, qualified: bool, ctx: &Ctx) 
         .as_deref()
     {
         Some("re-roll") => {
-            if modifier
+            if let Some(cnt) = modifier.and_then(reroll_count) {
+                format!(
+                    "can re-roll {}",
+                    reroll_count_phrase(modifier.unwrap_or(&Map::new()), cnt)
+                )
+            } else if modifier
                 .and_then(|m| m.get("result_scope"))
                 .map(jval)
                 .as_deref()
@@ -2255,7 +2301,7 @@ fn aura_clause(e: &AuraEffect, ctx: &Ctx) -> String {
     let effect_text = match &m.effect {
         Some(inner) => {
             let recipient_ctx = Ctx {
-                selected_unit: true,
+                selected_unit: filtered || m.eligible.is_some(),
                 unit_subject: None,
                 ..ctx.clone()
             };
@@ -2544,7 +2590,11 @@ fn describe_single(e: &SingleEffect, ctx: &Ctx) -> String {
             }
         }
         T::ReRoll => {
-            let which = if nstr(m, "roll") == Some("any") {
+            // Count-capped re-roll: up to `count` qualifying rolls within the
+            // ability's active window ("one Hit roll", "up to 2 failed Wound rolls").
+            let which = if let Some(cnt) = reroll_count(m) {
+                reroll_count_phrase(m, cnt)
+            } else if nstr(m, "roll") == Some("any") {
                 if nstr(m, "subset") == Some("ones") {
                     "any roll of 1".to_string()
                 } else {
@@ -3534,11 +3584,21 @@ fn describe_single(e: &SingleEffect, ctx: &Ctx) -> String {
                 )
             }
         }
-        T::BsModifier => format!(
-            "{subj} {} {} to Ballistic Skill",
-            agree(&subj, "gets"),
-            signed(m)
-        ),
+        T::BsModifier => {
+            if nstr(m, "operation") == Some("improve") {
+                format!(
+                    "improve the Ballistic Skill of attacks made by {} by {}",
+                    weapon_holder(&e.target.to_string(), ctx),
+                    jv(m, "value")
+                )
+            } else {
+                format!(
+                    "{subj} {} {} to Ballistic Skill",
+                    agree(&subj, "gets"),
+                    signed(m)
+                )
+            }
+        }
         T::ChargeRollModifier => {
             format!(
                 "{subj} {} {} to Charge rolls",
@@ -3967,6 +4027,13 @@ fn scaling_clause(s: &Scaling) -> String {
 
 fn choice_prompt(c: &crate::generated::ChoiceEffect) -> String {
     let raw = serde_json::to_value(c).unwrap_or(Value::Null);
+    if let Some(prompt) = c
+        .choice_prompt
+        .as_deref()
+        .filter(|prompt| !prompt.trim().is_empty())
+    {
+        return prompt.to_string();
+    }
     if let (Some(min), Some(max)) = (
         raw.get("min_choices").filter(|value| !value.is_null()),
         raw.get("max_choices").filter(|value| !value.is_null()),
@@ -3985,17 +4052,12 @@ fn choice_prompt(c: &crate::generated::ChoiceEffect) -> String {
             .unwrap_or_default();
         return format!("select {quantity} distinct options{label}");
     }
-    c.choice_prompt
+    let label = c
+        .choice_label
         .as_deref()
-        .map(|prompt| prompt.to_string())
-        .unwrap_or_else(|| {
-            let label = c
-                .choice_label
-                .as_deref()
-                .map(|label| format!(" ({})", title_case(label)))
-                .unwrap_or_default();
-            format!("select one of the following{label}")
-        })
+        .map(|label| format!(" ({})", title_case(label)))
+        .unwrap_or_default();
+    format!("select one of the following{label}")
 }
 
 fn named_metadata(n: &crate::generated::NamedEffect) -> Option<Map<String, Value>> {
@@ -4016,7 +4078,11 @@ fn named_effect_inline(n: &crate::generated::NamedEffect, ctx: &Ctx) -> String {
     };
     let Some(raw) = named_metadata(n) else {
         let prefix = if n.optional { "you can use " } else { "" };
-        return format!("{prefix}{}{level}: {}", n.name.as_str(), inline(&n.effect, ctx));
+        return format!(
+            "{prefix}{}{level}: {}",
+            n.name.as_str(),
+            inline(&n.effect, ctx)
+        );
     };
     let trigger = raw
         .get("trigger")
@@ -4290,7 +4356,12 @@ fn selection_model_filters(value: &Map<String, Value>) -> String {
     let names = value
         .get("model_names")
         .and_then(Value::as_array)
-        .map(|items| format!(" named {}", or_list(&items.iter().map(jval).collect::<Vec<_>>())))
+        .map(|items| {
+            format!(
+                " named {}",
+                or_list(&items.iter().map(jval).collect::<Vec<_>>())
+            )
+        })
         .unwrap_or_default();
     let exclusions = value
         .get("excluded_keywords")
@@ -4370,7 +4441,12 @@ fn select_units_subject(sel: &SelectUnitsEffectSelector) -> String {
     let bound_origin = value
         .get("within_inches_from")
         .filter(|origin| !origin.is_null())
-        .map(|origin| format!(" of {}", selection_ref_name(origin, "the bound source unit")))
+        .map(|origin| {
+            format!(
+                " of {}",
+                selection_ref_name(origin, "the bound source unit")
+            )
+        })
         .unwrap_or_default();
     let within = if let Some(range) = value.get("within_inches").and_then(Value::as_f64) {
         format!(" within {}\"{bound_origin}", fmt_num(range))
@@ -4386,19 +4462,17 @@ fn select_units_subject(sel: &SelectUnitsEffectSelector) -> String {
     } else {
         String::new()
     };
-    let visible = if let Some(reference) = value
-        .get("visible_to")
-        .filter(|visible| !visible.is_null())
-    {
-        format!(
-            " visible to {}",
-            selection_ref_name(reference, "the bound source unit")
-        )
-    } else if value.get("visibility_required").and_then(Value::as_bool) == Some(true) {
-        " visible to the bearer".to_string()
-    } else {
-        String::new()
-    };
+    let visible =
+        if let Some(reference) = value.get("visible_to").filter(|visible| !visible.is_null()) {
+            format!(
+                " visible to {}",
+                selection_ref_name(reference, "the bound source unit")
+            )
+        } else if value.get("visibility_required").and_then(Value::as_bool) == Some(true) {
+            " visible to the bearer".to_string()
+        } else {
+            String::new()
+        };
     let eligibility = value
         .get("eligibility")
         .and_then(|raw| serde_json::from_value::<Condition>(raw.clone()).ok())
@@ -4556,7 +4630,11 @@ fn for_each_unit_subject(selector: &impl serde::Serialize) -> String {
         .as_object()
         .map(selection_model_filters)
         .unwrap_or_default();
-    let within = selector
+    let within_inches = selector
+        .get("within_inches")
+        .map(|range| format!(" within {}\"", jval(range)))
+        .unwrap_or_default();
+    let within_objective = selector
         .get("within_objective")
         .map(|reference| {
             format!(
@@ -4564,12 +4642,26 @@ fn for_each_unit_subject(selector: &impl serde::Serialize) -> String {
                 selection_ref_name(reference, "the selected objective marker")
             )
         })
-        .or_else(|| {
-            selector
-                .get("within_inches")
-                .map(|range| format!(" within {}\"", jval(range)))
-        })
         .unwrap_or_default();
+    let engagement = match selector.get("engagement_relation").and_then(Value::as_str) {
+        Some("engaged-with-bearer") => format!(
+            " in Engagement Range of {}",
+            if selector.get("reference").and_then(Value::as_str) == Some("bearer-unit") {
+                "this model's unit"
+            } else {
+                "the bearer"
+            }
+        ),
+        Some("not-engaged-with-bearer") => format!(
+            " not in Engagement Range of {}",
+            if selector.get("reference").and_then(Value::as_str) == Some("bearer-unit") {
+                "this model's unit"
+            } else {
+                "the bearer"
+            }
+        ),
+        _ => String::new(),
+    };
     let eligibility = selector
         .get("eligibility")
         .and_then(|raw| serde_json::from_value::<Condition>(raw.clone()).ok())
@@ -4579,7 +4671,9 @@ fn for_each_unit_subject(selector: &impl serde::Serialize) -> String {
         .as_object()
         .map(|value| selection_binding(value))
         .unwrap_or_default();
-    format!("{owner} {keywords}{noun}{filters}{member}{within}{eligibility}{binding}")
+    format!(
+        "{owner} {keywords}{noun}{filters}{member}{within_inches}{within_objective}{engagement}{eligibility}{binding}"
+    )
 }
 
 fn for_each_unit_ctx(ctx: &Ctx, selector: &impl serde::Serialize) -> Ctx {
@@ -4897,6 +4991,7 @@ fn block(e: &EffectNode, depth: usize, ctx: &Ctx) -> String {
                 format!("{indent}{arrow}{lead}. {engagement}")
             };
             if is_container(inner) {
+                let header = header.trim_end_matches('.');
                 let count = selector
                     .get("count")
                     .or_else(|| selector.get("max_count"))
@@ -4927,11 +5022,21 @@ fn block(e: &EffectNode, depth: usize, ctx: &Ctx) -> String {
         }
         EffectNode::SelectObjectiveEffect(p) => format!(
             "{indent}{arrow}{}.",
-            capitalize(&objective_selection_inline(&p.selector, &p.effect, ctx, false))
+            capitalize(&objective_selection_inline(
+                &p.selector,
+                &p.effect,
+                ctx,
+                false
+            ))
         ),
         EffectNode::ForEachObjectiveEffect(p) => format!(
             "{indent}{arrow}{}.",
-            capitalize(&objective_selection_inline(&p.selector, &p.effect, ctx, true))
+            capitalize(&objective_selection_inline(
+                &p.selector,
+                &p.effect,
+                ctx,
+                true
+            ))
         ),
         EffectNode::PairedDesignationEffect(p) => format!(
             "{indent}{arrow}{}.",
@@ -5286,7 +5391,10 @@ fn describe_ability_trigger(t: &Trigger) -> String {
             ));
         }
     }
-    if let Some(keywords) = value.get("subject_excluded_keywords").and_then(Value::as_array) {
+    if let Some(keywords) = value
+        .get("subject_excluded_keywords")
+        .and_then(Value::as_array)
+    {
         if !keywords.is_empty() {
             s.push_str(&format!(
                 " (the triggering {actor} must not have {})",
@@ -5626,12 +5734,10 @@ fn designation_target_subject(sel: &DesignateTargetEffectSelect) -> String {
                 selection_ref_name(origin, "the bound source unit")
             )
         })
-        .or_else(|| {
-            match nstr(&value, "reference") {
-                Some("bearer-unit") => Some(" of this model's unit".to_string()),
-                Some(_) => Some(" of the bearer".to_string()),
-                None => None,
-            }
+        .or_else(|| match nstr(&value, "reference") {
+            Some("bearer-unit") => Some(" of this model's unit".to_string()),
+            Some(_) => Some(" of the bearer".to_string()),
+            None => None,
         })
         .unwrap_or_default();
     let within = value
@@ -5639,24 +5745,22 @@ fn designation_target_subject(sel: &DesignateTargetEffectSelect) -> String {
         .filter(|within| !within.is_null())
         .map(|within| format!(" within {} inches{origin}", jval(within)))
         .unwrap_or_default();
-    let visible = if let Some(reference) = value
-        .get("visible_to")
-        .filter(|visible| !visible.is_null())
-    {
-        format!(
-            " visible to {}",
-            selection_ref_name(reference, "the bound source unit")
-        )
-    } else if value.get("visibility_required").and_then(Value::as_bool) == Some(true) {
-        let reference = if nstr(&value, "reference") == Some("bearer-unit") {
-            "this model's unit"
+    let visible =
+        if let Some(reference) = value.get("visible_to").filter(|visible| !visible.is_null()) {
+            format!(
+                " visible to {}",
+                selection_ref_name(reference, "the bound source unit")
+            )
+        } else if value.get("visibility_required").and_then(Value::as_bool) == Some(true) {
+            let reference = if nstr(&value, "reference") == Some("bearer-unit") {
+                "this model's unit"
+            } else {
+                "the bearer"
+            };
+            format!(" visible to {reference}")
         } else {
-            "the bearer"
+            String::new()
         };
-        format!(" visible to {reference}")
-    } else {
-        String::new()
-    };
     let exclusions = value
         .get("excluded_keywords")
         .and_then(Value::as_array)
@@ -5664,11 +5768,7 @@ fn designation_target_subject(sel: &DesignateTargetEffectSelect) -> String {
         .map(|keywords| {
             format!(
                 " (excluding {} units)",
-                keywords
-                    .iter()
-                    .map(jval)
-                    .collect::<Vec<_>>()
-                    .join(" and ")
+                keywords.iter().map(jval).collect::<Vec<_>>().join(" and ")
             )
         })
         .unwrap_or_default();
@@ -5763,9 +5863,9 @@ fn leadership_test(d: &DiceGatedEffect, ctx: &Ctx) -> Option<String> {
                 .iter()
                 .filter_map(Value::as_object)
                 .filter_map(|modifier| {
-                    let condition = modifier
-                        .get("condition")
-                        .and_then(|value| serde_json::from_value::<Condition>(value.clone()).ok())?;
+                    let condition = modifier.get("condition").and_then(|value| {
+                        serde_json::from_value::<Condition>(value.clone()).ok()
+                    })?;
                     Some(format!(
                         "apply {} if {}",
                         signed_parts(Some("add"), modifier.get("value")),
@@ -5848,10 +5948,7 @@ fn designated_attack_when(applies: &impl serde::Serialize) -> String {
     format!("each time {source} makes an attack against {target}")
 }
 
-fn designated_recipient_context(
-    applies: &impl serde::Serialize,
-    ctx: &Ctx,
-) -> Ctx {
+fn designated_recipient_context(applies: &impl serde::Serialize, ctx: &Ctx) -> Ctx {
     let value = serde_json::to_value(applies).unwrap_or(Value::Null);
     let value = value.as_object().cloned().unwrap_or_default();
     if value.get("to").and_then(Value::as_str) != Some("bound-unit-attacks-reference") {

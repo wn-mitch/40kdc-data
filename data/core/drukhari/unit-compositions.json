@@ -744,6 +744,13 @@
         },
         "loadout_variants": [
           {
+            "name": "Wrack",
+            "weapon_ids": [
+              "twin-torturers-tools"
+            ],
+            "max_count": 9
+          },
+          {
             "name": "Wrack with Hexrifle",
             "weapon_ids": [
               "torturers-tool",

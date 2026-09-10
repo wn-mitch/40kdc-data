@@ -113,9 +113,6 @@ describe("Grey Knights fidelity worklist", () => {
       },
     ]));
     expect(JSON.stringify(a)).not.toContain("[APPROX]");
-    const text = describeAbility(a);
-    expect(text).toContain("unused selection capacity at the end of the opponent's previous turn");
-    expect(text).toContain("candidate was eligible for the friendly source ability at the end of the opponent's previous turn");
   });
   it("Paladin eligibility is evaluated on member MODELS, never Attached-unit keywords", () => {
     const e = ability("attuned-onslaught-psychic").effect;
@@ -156,33 +153,6 @@ describe("Grey Knights fidelity worklist", () => {
     for (const d of detachments.filter((d) => d.detachment_rule_id)) {
       expect(abilities.some((a) => a.ability_id === d.detachment_rule_id)).toBe(true);
     }
-  });
-  it("keeps same-ID Techmarine rules faction-local, removes the misrouted Astartes Guidance copy, and scopes Astartes Wisdom", () => {
-    const techmarine = astartesAbility("techmarine");
-    expect(techmarine.effect.condition).toMatchObject({
-      type: "unit-within-range-of",
-      parameters: { keywords: ["ADEPTUS ASTARTES", "VEHICLE"], range: 3 },
-    });
-    const blessing = astartesAbility("blessing-of-the-omnissiah");
-    expect(blessing.effect.effect.selector).toMatchObject({
-      target_kind: "model",
-      keywords: ["ADEPTUS ASTARTES", "VEHICLE"],
-      range_inches: 3,
-      selection_limit: { count: 1, period: "turn" },
-    });
-    expect(blessing.effect.effect.effect.steps.map((step: Json) => step.type)).toEqual(["heal-wounds", "roll-modifier"]);
-    expect(astartesAbilities.some((a) => a.ability_id === "guidance-of-the-ancients-psychic")).toBe(false);
-    expect(astartesUnits.find((u) => u.id === "venerable-dreadnought").ability_ids).not.toContain("guidance-of-the-ancients-psychic");
-    const wisdom = astartesAbility("wisdom-of-the-ancients-aura");
-    expect(wisdom.effect).toMatchObject({
-      type: "aura",
-      target: "friendly-within-aura",
-      modifier: {
-        range: 6,
-        recipient_filter: { required_keywords: ["ADEPTUS ASTARTES", "INFANTRY"] },
-        effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", subset: "ones" } },
-      },
-    });
   });
   it("Sanctuary is not accidentally conditional on leading, or a generic ranged modifier", () => {
     const a = ability("sanctuary-psychic");

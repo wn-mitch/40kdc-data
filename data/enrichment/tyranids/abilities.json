@@ -5092,7 +5092,8 @@
           "modifier": {
             "stratagem": "heroic-intervention",
             "operation": "decrease",
-            "amount": 1
+            "amount": 1,
+            "applies_to": "triggering-stratagem-use"
           }
         },
         {

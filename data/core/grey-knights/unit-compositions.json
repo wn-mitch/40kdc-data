@@ -214,6 +214,15 @@
         },
         "loadout_variants": [
           {
+            "name": "Purifier",
+            "weapon_ids": [
+              "storm-bolter",
+              "purifying-flame",
+              "nemesis-force-weapon-purifier-squad"
+            ],
+            "max_count": 9
+          },
+          {
             "name": "Purifier w/ incinerator",
             "weapon_ids": [
               "close-combat-weapon",
@@ -248,7 +257,7 @@
               "Purifier w/ psilencer",
               "Purifier w/ psycannon"
             ],
-            "count": 2,
+            "count": 4,
             "per_models": 0,
             "scope": "model-row"
           }
@@ -745,6 +754,14 @@
         },
         "loadout_variants": [
           {
+            "name": "Purgator",
+            "weapon_ids": [
+              "storm-bolter",
+              "nemesis-force-weapon-purgation-squad"
+            ],
+            "max_count": 9
+          },
+          {
             "name": "Purgator w/ incinerator",
             "weapon_ids": [
               "close-combat-weapon",
@@ -887,6 +904,14 @@
           "diameter": 32
         },
         "loadout_variants": [
+          {
+            "name": "Interceptor",
+            "weapon_ids": [
+              "storm-bolter",
+              "nemesis-force-weapon-interceptor-squad"
+            ],
+            "max_count": 9
+          },
           {
             "name": "Interceptor w/ incinerator",
             "weapon_ids": [

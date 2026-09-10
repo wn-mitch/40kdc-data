@@ -1,5 +1,5 @@
 {
-  "version": 21,
+  "version": 22,
   "kinds": {
     "faction": [
       "adepta-sororitas",
@@ -4940,7 +4940,19 @@
       "paired-krumpas",
       "power-vomit",
       "runtherds-toolz",
-      "saddlegits-shiv"
+      "saddlegits-shiv",
+      "balistus-grenade-launcher-gilded-blades",
+      "bolt-pistol-callous-blades",
+      "castellan-axe-gilded-blades",
+      "grenade-launcher-frag-inquisitors-hand",
+      "inferno-bolt-pistol-prism-of-zadophon",
+      "manreaper-strike-maggot-lords",
+      "plaguespurt-gauntlet-maggot-lords",
+      "plasma-pistol-maggot-lords",
+      "plasma-pistol-standard-inquisitors-hand",
+      "power-fist-sholgor-the-putrid",
+      "stinger-pistol-xatrophos-nuul",
+      "webber-inquisitors-hand"
     ],
     "enhancement": [
       "a-chink-in-their-armour",
