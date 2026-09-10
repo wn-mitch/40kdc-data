@@ -4,7 +4,7 @@
   import {
     boardOf,
     orientedFootprint,
-    upperFloorBoardVerts,
+    upperFloorPolygons,
     isGroundBlocked,
     bbox,
     keystoneDisplays,
@@ -26,7 +26,7 @@
     type ReferenceFit,
   } from "./model.js";
   import type { ResolvedPiece } from "@alpaca-software/40kdc-data";
-  import { facingAngle, formatKeystoneDistance } from "../../../_shared/layout-geometry.js";
+  import { facingAngle, formatKeystoneDistance, rendersAsWallsOnly } from "../../../_shared/layout-geometry.js";
 
   interface Props {
     layout: EditLayout;
@@ -186,11 +186,7 @@
   const editById = $derived(new Map(layout.pieces.map((p) => [p.id, p])));
 
   // Upper-floor platforms across the layout (dashed overlays).
-  const uppers = $derived(
-    layout.pieces
-      .map((p) => ({ id: p.id, verts: upperFloorBoardVerts(p, layout) }))
-      .filter((u): u is { id: string; verts: Vec2[] } => !!u.verts),
-  );
+  const uppers = $derived(upperFloorPolygons(layout));
 
   const selOriented = $derived<OrientedFootprint | null>(
     selectedPiece ? orientedFootprint(selectedPiece, layout) : null,
@@ -366,20 +362,22 @@
     {#each resolved as p, pi}
       {@const ep = p.id ? editById.get(p.id) : undefined}
       {@const tplCat = templateById(ep?.template)?.terrain_category ?? ''}
-      <polygon
-        points={pts(p)}
-        class="piece {p.piece_type} {tplCat} {ep?.terrain === false ? 'empty' : ''} {p.id === selectedId
-          ? 'selected'
-          : ''} {p.id === twinId
-          ? 'twin'
-          : ''} {ep && isGroundBlocked(ep) ? 'blocked' : ''} {p.id && warnPieceIds.has(p.id)
-          ? 'needs-review'
-          : ''}"
-        role="button"
-        tabindex="0"
-        aria-label={p.name ?? p.id ?? "piece"}
-        onpointerdown={(e) => onPointerDown(e, p)}
-      />
+      {#if !rendersAsWallsOnly(p)}
+        <polygon
+          points={pts(p)}
+          class="piece {p.piece_type} {tplCat} {ep?.terrain === false ? 'empty' : ''} {p.id === selectedId
+            ? 'selected'
+            : ''} {p.id === twinId
+            ? 'twin'
+            : ''} {ep && isGroundBlocked(ep) ? 'blocked' : ''} {p.id && warnPieceIds.has(p.id)
+            ? 'needs-review'
+            : ''}"
+          role="button"
+          tabindex="0"
+          aria-label={p.name ?? p.id ?? "piece"}
+          onpointerdown={(e) => onPointerDown(e, p)}
+        />
+      {/if}
     {/each}
 
     <!-- wall polylines: resolved board-space walls from feature templates -->

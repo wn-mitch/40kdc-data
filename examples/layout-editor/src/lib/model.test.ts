@@ -21,6 +21,7 @@ import {
   loadTerrainLayout,
   registerTerrainTemplates,
   resolve,
+  upperFloorPolygons,
   type EditLayout,
   type EditPiece,
 } from "./model.js";
@@ -570,7 +571,22 @@ describe("source-projected layouts", () => {
         id: "test-bm-wall",
         name: "Projected wall",
         kind: "feature",
-        footprint: { type: "rectangle", width: 4, height: 1 },
+        footprint: { type: "rectangle", width: 4, height: 2 },
+        upper_floor: {
+          footprint: {
+            type: "polygon",
+            points: [
+              { x: 0, y: 0 },
+              { x: 4, y: 0 },
+              { x: 4, y: 0.5 },
+              { x: 0, y: 0.5 },
+            ],
+          },
+          floor: 1,
+        },
+        walls: [
+          { points: [{ x: 0, y: 0 }, { x: 4, y: 0 }], thickness: 0.5 },
+        ],
         game_version: { edition: "11th", dataslate: "pre-launch-provisional" },
       },
       {
@@ -579,7 +595,12 @@ describe("source-projected layouts", () => {
         kind: "area",
         footprint: { type: "rectangle", width: 8, height: 6 },
         features: [
-          { id: "wall", template: "test-bm-wall", position: { x: 1, y: 0 } },
+          {
+            id: "wall",
+            template: "test-bm-wall",
+            position: { x: 1, y: 0 },
+            rotation_degrees: 90,
+          },
         ],
         game_version: { edition: "11th", dataslate: "pre-launch-provisional" },
       },
@@ -597,6 +618,7 @@ describe("source-projected layouts", () => {
           piece_type: "area",
           template: "test-bm-area",
           position: { x: 30, y: 22 },
+          rotation_degrees: 90,
         },
       ],
       game_version: { edition: "11th", dataslate: "pre-launch-provisional" },
@@ -608,11 +630,22 @@ describe("source-projected layouts", () => {
     expect(editable).toMatchObject({
       id: "test-bm-layout",
       source: "battlemaster-tts-cache",
-      pieces: [{ id: "area-01", rotation_degrees: 0, mirror: "none" }],
+      pieces: [{ id: "area-01", rotation_degrees: 90, mirror: "none" }],
     });
     expect(resolve(editable).map((piece) => piece.piece_type)).toEqual([
       "area",
       "feature",
+    ]);
+    expect(upperFloorPolygons(editable)).toEqual([
+      {
+        id: "area-01--wall",
+        verts: [
+          { x: 32, y: 24 },
+          { x: 28, y: 24 },
+          { x: 28, y: 23.5 },
+          { x: 32, y: 23.5 },
+        ],
+      },
     ]);
   });
 });

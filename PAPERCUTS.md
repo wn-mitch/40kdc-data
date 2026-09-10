@@ -236,3 +236,7 @@ Running npm test from tools with the repository-relative tools/test path made Vi
 ## 2026-09-15T20:09:55Z — openai-codex/gpt-5.6-sol
 
 npm pack --dry-run --json interleaves prepack lifecycle output with JSON, so piping directly to jq fails and closes stdout, causing the postbuild audit to crash with EPIPE. Run prepack prerequisites separately and use --ignore-scripts for machine-readable inspection.
+
+## 2026-09-16T18:32:13Z — openai-codex/gpt-5.6-sol
+
+The browser tab.run context exposes Puppeteer, not Playwright: page.locator(...).count() is unavailable despite locator-style APIs being common elsewhere. Use page.99520eval/querySelectorAll for DOM counts.

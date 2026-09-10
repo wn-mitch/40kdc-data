@@ -212,7 +212,16 @@ describe("Battlemaster read-only projector", () => {
               mirroredY: false,
               boundsWidthIn: 4,
               boundsHeightIn: 2,
-              outline: null,
+              outline: {
+                points: [
+                  { x: 0, y: 0 },
+                  { x: 4, y: 0 },
+                  { x: 4, y: 0.5 },
+                  { x: 0.5, y: 0.5 },
+                  { x: 0.5, y: 2 },
+                  { x: 0, y: 2 },
+                ],
+              },
               walls: [
                 {
                   points: [
@@ -298,6 +307,29 @@ describe("Battlemaster read-only projector", () => {
       has_roof: true,
       terrain_category: "dense",
       walls: [expect.objectContaining({ thickness: 0.25 })],
+      footprint: {
+        type: "polygon",
+        points: [
+          { x: 0, y: 0 },
+          { x: 4, y: 0 },
+          { x: 4, y: -2 },
+          { x: 0, y: -2 },
+        ],
+      },
+      upper_floor: {
+        footprint: {
+          type: "polygon",
+          points: [
+            { x: 0, y: 0 },
+            { x: 4, y: 0 },
+            { x: 4, y: -0.5 },
+            { x: 0.5, y: -0.5 },
+            { x: 0.5, y: -2 },
+            { x: 0, y: -2 },
+          ],
+        },
+        floor: 1,
+      },
     });
     expect(compositeTemplate).toMatchObject({
       id: expect.stringMatching(

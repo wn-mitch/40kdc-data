@@ -655,6 +655,41 @@ export function upperFloorBoardVerts(
   });
 }
 
+/**
+ * Board-space upper-floor polygons for explicit pieces and template-composed
+ * features. Composed ids mirror the resolver's `${area}--${feature}` contract.
+ */
+export function upperFloorPolygons(
+  layout: EditLayout,
+): { id: string; verts: Vec2[] }[] {
+  const explicit = layout.pieces.flatMap((piece) => {
+    const verts = upperFloorBoardVerts(piece, layout);
+    return verts ? [{ id: piece.id, verts }] : [];
+  });
+  const composed = layout.pieces.flatMap((area) => {
+    if (area.piece_type !== "area" || area.parent_area_id) return [];
+    return (templateById(area.template)?.features ?? []).flatMap(
+      (feature, index) => {
+        const id = `${area.id}--${feature.id ?? `feature-${index + 1}`}`;
+        const verts = upperFloorBoardVerts(
+          {
+            id,
+            piece_type: "feature",
+            template: feature.template,
+            position: feature.position,
+            rotation_degrees: feature.rotation_degrees ?? 0,
+            mirror: feature.mirror ?? "none",
+            parent_area_id: area.id,
+          },
+          layout,
+        );
+        return verts ? [{ id, verts }] : [];
+      },
+    );
+  });
+  return [...explicit, ...composed];
+}
+
 /** True when a template's ground footprint can't hold models (gantry/catwalk/generator). */
 export function isGroundBlocked(piece: EditPiece): boolean {
   const tpl = templateById(piece.template) as

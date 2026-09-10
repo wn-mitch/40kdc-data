@@ -19,6 +19,7 @@ import {
   polygonCentroid,
   resolveLayout,
 } from "./terrain/resolve.js";
+import { authorKeystones } from "./derive-keystones.js";
 import { applyWrites } from "./mfm/apply.js";
 import { CORE_DIR, readJsonArray } from "./mfm/repo-files.js";
 
@@ -175,6 +176,7 @@ interface ProjectedLayout extends TerrainLayout {
 interface ProjectedTemplate extends TerrainTemplate {
   source: string;
   game_version: typeof GAME_VERSION;
+  upper_floor?: { footprint: Footprint; floor: number };
 }
 
 interface CompositeVariant {
@@ -2055,9 +2057,12 @@ function projectFromRestApi(
           if (part.hasRoof) ft.has_roof = true;
           if (part.material) ft.terrain_category = part.material;
           if (part.outline) {
-            ft.footprint = {
-              type: "polygon",
-              points: apiPartPointsToYDown(part.outline.points),
+            ft.upper_floor = {
+              footprint: {
+                type: "polygon",
+                points: apiPartPointsToYDown(part.outline.points),
+              },
+              floor: 1,
             };
           }
           featureTemplateMap.set(fid, ft);
@@ -2297,6 +2302,7 @@ export async function projectBattlemasterRestApi(
   ).filter((template) => !hasBattlemasterSource(template));
 
   const geometry = projectFromRestApi(sources, canonicalTemplates);
+  authorKeystones(geometry.layouts, geometry.templates);
   const resolvedPieces = geometry.layouts.reduce((acc, l) => {
     const resolved = resolveLayout(l, geometry.templates);
     return acc + resolved.length;

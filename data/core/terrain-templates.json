@@ -1295,7 +1295,7 @@
         "id": "feature-1",
         "template": "bm-part-cd-1d1e702704",
         "position": {
-          "x": -3.224717,
+          "x": -2.224717,
           "y": 1.826039
         },
         "rotation_degrees": 180
@@ -1304,8 +1304,8 @@
         "id": "feature-2",
         "template": "bm-part-ef-90ee2cab5b",
         "position": {
-          "x": 3.775283,
-          "y": -1.923961
+          "x": 2.275283,
+          "y": -0.673961
         },
         "rotation_degrees": 270
       }
@@ -2821,7 +2821,7 @@
         "template": "bm-part-cd-1d1e702704",
         "position": {
           "x": -3.974717,
-          "y": -0.923961
+          "y": 0.076039
         },
         "rotation_degrees": 270
       },
@@ -2829,8 +2829,8 @@
         "id": "feature-2",
         "template": "bm-part-gh-4d1828b3f0",
         "position": {
-          "x": 3.525283,
-          "y": 2.326039
+          "x": 2.275283,
+          "y": 1.576039
         },
         "rotation_degrees": 90
       }
@@ -4346,7 +4346,7 @@
         "template": "bm-part-co-f6884fd313",
         "position": {
           "x": -3.974717,
-          "y": -0.923961
+          "y": 0.076039
         },
         "rotation_degrees": 270
       },
@@ -4354,8 +4354,8 @@
         "id": "feature-2",
         "template": "bm-part-gh-4d1828b3f0",
         "position": {
-          "x": 3.525283,
-          "y": 2.326039
+          "x": 2.275283,
+          "y": 1.576039
         },
         "rotation_degrees": 90
       }
@@ -5870,7 +5870,7 @@
         "id": "feature-1",
         "template": "bm-part-cd-1d1e702704",
         "position": {
-          "x": 3.275283,
+          "x": 2.275283,
           "y": -1.673961
         }
       },
@@ -5878,8 +5878,8 @@
         "id": "feature-2",
         "template": "bm-part-gh-4d1828b3f0",
         "position": {
-          "x": -4.474717,
-          "y": 1.326039
+          "x": -3.724717,
+          "y": 0.076039
         },
         "rotation_degrees": 180
       }
@@ -7395,7 +7395,7 @@
         "template": "bm-part-cd-1d1e702704",
         "position": {
           "x": 3.971717,
-          "y": 1.076039
+          "y": 0.076039
         },
         "rotation_degrees": 90
       },
@@ -7403,8 +7403,8 @@
         "id": "feature-2",
         "template": "bm-part-gh-4d1828b3f0",
         "position": {
-          "x": -3.528283,
-          "y": -2.173961
+          "x": -2.278283,
+          "y": -1.423961
         },
         "rotation_degrees": 270
       },
@@ -8927,8 +8927,8 @@
         "id": "feature-1",
         "template": "bm-part-gh-4d1828b3f0",
         "position": {
-          "x": -3.474717,
-          "y": -2.173961
+          "x": -2.224717,
+          "y": -1.423961
         },
         "rotation_degrees": 270
       },
@@ -8937,7 +8937,7 @@
         "template": "bm-part-cd-1d1e702704",
         "position": {
           "x": 4.025283,
-          "y": 1.076039
+          "y": 0.076039
         },
         "rotation_degrees": 90
       }
@@ -10452,15 +10452,15 @@
         "id": "feature-1",
         "template": "bm-part-gh-4d1828b3f0",
         "position": {
-          "x": 4.525283,
-          "y": -1.173961
+          "x": 3.775283,
+          "y": 0.076039
         }
       },
       {
         "id": "feature-2",
         "template": "bm-part-cd-1d1e702704",
         "position": {
-          "x": -3.224717,
+          "x": -2.224717,
           "y": 1.826039
         },
         "rotation_degrees": 180
@@ -11977,7 +11977,7 @@
         "template": "bm-part-cd-1d1e702704",
         "position": {
           "x": 4.025283,
-          "y": 1.076039
+          "y": 0.076039
         },
         "rotation_degrees": 90
       },
@@ -11985,8 +11985,8 @@
         "id": "feature-2",
         "template": "bm-part-gh-4d1828b3f0",
         "position": {
-          "x": -4.474717,
-          "y": 1.326039
+          "x": -3.724717,
+          "y": 0.076039
         },
         "rotation_degrees": 180
       }
@@ -13509,7 +13509,7 @@
         "id": "feature-2",
         "template": "bm-part-cd-1d1e702704",
         "position": {
-          "x": 3.275283,
+          "x": 2.275283,
           "y": -1.673961
         }
       }
@@ -15032,7 +15032,7 @@
         "id": "feature-2",
         "template": "bm-part-co-f6884fd313",
         "position": {
-          "x": 3.275283,
+          "x": 2.275283,
           "y": -1.673961
         }
       }
@@ -16548,7 +16548,7 @@
         "template": "bm-part-cd-1d1e702704",
         "position": {
           "x": 3.971717,
-          "y": 1.076039
+          "y": 0.076039
         },
         "rotation_degrees": 90
       },
@@ -18080,7 +18080,7 @@
         "template": "bm-part-co-f6884fd313",
         "position": {
           "x": 4.025283,
-          "y": 1.076039
+          "y": 0.076039
         },
         "rotation_degrees": 90
       }
@@ -19604,7 +19604,7 @@
         "template": "bm-part-cd-1d1e702704",
         "position": {
           "x": 4.025283,
-          "y": 1.076039
+          "y": 0.076039
         },
         "rotation_degrees": 90
       }
@@ -21119,7 +21119,7 @@
         "id": "feature-1",
         "template": "bm-part-co-f6884fd313",
         "position": {
-          "x": -3.224717,
+          "x": -2.224717,
           "y": 1.826039
         },
         "rotation_degrees": 180
@@ -22644,7 +22644,7 @@
         "id": "feature-1",
         "template": "bm-part-cd-1d1e702704",
         "position": {
-          "x": -3.224717,
+          "x": -2.224717,
           "y": 1.826039
         },
         "rotation_degrees": 180
@@ -24169,7 +24169,7 @@
         "id": "feature-1",
         "template": "bm-part-cd-1d1e702704",
         "position": {
-          "x": -3.278283,
+          "x": -2.278283,
           "y": 1.826039
         },
         "rotation_degrees": 180
@@ -25703,7 +25703,7 @@
         "id": "feature-2",
         "template": "bm-part-cd-1d1e702704",
         "position": {
-          "x": 3.275283,
+          "x": 2.275283,
           "y": -1.673961
         }
       }
@@ -27219,7 +27219,7 @@
         "template": "bm-part-cd-1d1e702704",
         "position": {
           "x": 4.025283,
-          "y": 1.076039
+          "y": 0.076039
         },
         "rotation_degrees": 90
       },
@@ -28744,7 +28744,7 @@
         "template": "bm-part-cd-1d1e702704",
         "position": {
           "x": -3.974717,
-          "y": -0.923961
+          "y": 0.076039
         },
         "rotation_degrees": 270
       },
@@ -30269,7 +30269,7 @@
         "template": "bm-part-co-f6884fd313",
         "position": {
           "x": -3.974717,
-          "y": -0.923961
+          "y": 0.076039
         },
         "rotation_degrees": 270
       },
@@ -31793,8 +31793,8 @@
         "id": "feature-1",
         "template": "bm-part-ef-90ee2cab5b",
         "position": {
-          "x": -4.224717,
-          "y": -1.423961
+          "x": -2.974717,
+          "y": 0.076039
         },
         "rotation_degrees": 180
       },
@@ -31802,8 +31802,8 @@
         "id": "feature-2",
         "template": "bm-part-gh-4d1828b3f0",
         "position": {
-          "x": 3.525283,
-          "y": 2.326039
+          "x": 2.275283,
+          "y": 1.576039
         },
         "rotation_degrees": 90
       }
@@ -33318,16 +33318,16 @@
         "id": "feature-1",
         "template": "bm-part-ef-90ee2cab5b",
         "position": {
-          "x": 4.275283,
-          "y": 1.576039
+          "x": 3.025283,
+          "y": 0.076039
         }
       },
       {
         "id": "feature-2",
         "template": "bm-part-gh-4d1828b3f0",
         "position": {
-          "x": -3.474717,
-          "y": -2.173961
+          "x": -2.224717,
+          "y": -1.423961
         },
         "rotation_degrees": 270
       }
@@ -34842,8 +34842,8 @@
         "id": "feature-1",
         "template": "bm-part-ef-90ee2cab5b",
         "position": {
-          "x": -3.724717,
-          "y": 2.076039
+          "x": -2.224717,
+          "y": 0.826039
         },
         "rotation_degrees": 90
       },
@@ -34851,8 +34851,8 @@
         "id": "feature-2",
         "template": "bm-part-gh-4d1828b3f0",
         "position": {
-          "x": 4.525283,
-          "y": -1.173961
+          "x": 3.775283,
+          "y": 0.076039
         }
       }
     ],
@@ -36366,8 +36366,8 @@
         "id": "feature-1",
         "template": "bm-part-ef-90ee2cab5b",
         "position": {
-          "x": 3.775283,
-          "y": -1.923961
+          "x": 2.275283,
+          "y": -0.673961
         },
         "rotation_degrees": 270
       },
@@ -36375,8 +36375,8 @@
         "id": "feature-2",
         "template": "bm-part-gh-4d1828b3f0",
         "position": {
-          "x": -4.474717,
-          "y": 1.326039
+          "x": -3.724717,
+          "y": 0.076039
         },
         "rotation_degrees": 180
       }
@@ -37891,8 +37891,8 @@
         "id": "feature-1",
         "template": "bm-part-ef-90ee2cab5b",
         "position": {
-          "x": 3.721717,
-          "y": -1.923961
+          "x": 2.221717,
+          "y": -0.673961
         },
         "rotation_degrees": 270
       },
@@ -37900,8 +37900,8 @@
         "id": "feature-2",
         "template": "bm-part-gh-4d1828b3f0",
         "position": {
-          "x": -4.528283,
-          "y": 1.326039
+          "x": -3.778283,
+          "y": 0.076039
         },
         "rotation_degrees": 180
       }
@@ -39416,8 +39416,8 @@
         "id": "feature-1",
         "template": "bm-part-ef-90ee2cab5b",
         "position": {
-          "x": 3.775283,
-          "y": -1.923961
+          "x": 2.275283,
+          "y": -0.673961
         },
         "rotation_degrees": 270
       },
@@ -40941,8 +40941,8 @@
         "id": "feature-1",
         "template": "bm-part-ef-90ee2cab5b",
         "position": {
-          "x": -3.724717,
-          "y": 2.076039
+          "x": -2.224717,
+          "y": 0.826039
         },
         "rotation_degrees": 90
       },
@@ -42475,8 +42475,8 @@
         "id": "feature-2",
         "template": "bm-part-ef-90ee2cab5b",
         "position": {
-          "x": -3.778283,
-          "y": 2.076039
+          "x": -2.278283,
+          "y": 0.826039
         },
         "rotation_degrees": 90
       }
@@ -43991,8 +43991,8 @@
         "id": "feature-1",
         "template": "bm-part-ef-90ee2cab5b",
         "position": {
-          "x": -4.224717,
-          "y": -1.423961
+          "x": -2.974717,
+          "y": 0.076039
         },
         "rotation_degrees": 180
       },
@@ -45524,8 +45524,8 @@
         "id": "feature-2",
         "template": "bm-part-gh-4d1828b3f0",
         "position": {
-          "x": 3.525283,
-          "y": 2.326039
+          "x": 2.275283,
+          "y": 1.576039
         },
         "rotation_degrees": 90
       }
@@ -74567,8 +74567,8 @@
         "id": "feature-1",
         "template": "bm-part-ab-68b696d07f",
         "position": {
-          "x": -5.388016,
-          "y": 1.18631
+          "x": -4.763016,
+          "y": 0.18631
         }
       },
       {
@@ -77386,8 +77386,8 @@
         "id": "feature-1",
         "template": "bm-part-ab-b2b36df6fb",
         "position": {
-          "x": -5.388016,
-          "y": 1.18631
+          "x": -4.763016,
+          "y": 0.18631
         }
       },
       {
@@ -80205,8 +80205,8 @@
         "id": "feature-1",
         "template": "bm-part-ab-68b696d07f",
         "position": {
-          "x": 2.611984,
-          "y": 1.18631
+          "x": 1.611984,
+          "y": 0.56131
         },
         "rotation_degrees": 270
       },
@@ -83026,8 +83026,8 @@
         "id": "feature-1",
         "template": "bm-part-ab-68b696d07f",
         "position": {
-          "x": -2.614984,
-          "y": 1.18631
+          "x": -1.989984,
+          "y": 0.18631
         }
       },
       {
@@ -84451,11 +84451,163 @@
           "y": 0
         },
         {
-          "x": 2.5,
+          "x": 3.75,
           "y": 0
         },
         {
-          "x": 2.5,
+          "x": 3.75,
+          "y": -4.5
+        },
+        {
+          "x": 0,
+          "y": -4.5
+        }
+      ]
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "walls": [
+      {
+        "points": [
+          {
+            "x": 3.75,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": -4.5
+          }
+        ],
+        "thickness": 0.5
+      }
+    ],
+    "has_roof": true,
+    "terrain_category": "dense",
+    "upper_floor": {
+      "footprint": {
+        "type": "polygon",
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 2.5,
+            "y": 0
+          },
+          {
+            "x": 2.5,
+            "y": -2.5
+          },
+          {
+            "x": 0,
+            "y": -2.5
+          }
+        ]
+      },
+      "floor": 1
+    }
+  },
+  {
+    "id": "bm-part-ab-b2b36df6fb",
+    "name": "Battlemaster AB",
+    "kind": "feature",
+    "source": "battlemaster-11e",
+    "footprint": {
+      "type": "polygon",
+      "points": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 3.75,
+          "y": 0
+        },
+        {
+          "x": 3.75,
+          "y": -4.5
+        },
+        {
+          "x": 0,
+          "y": -4.5
+        }
+      ]
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "walls": [
+      {
+        "points": [
+          {
+            "x": 3.75,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": -4.5
+          }
+        ],
+        "thickness": 0.5
+      }
+    ],
+    "has_roof": true,
+    "terrain_category": "dense",
+    "upper_floor": {
+      "footprint": {
+        "type": "polygon",
+        "points": [
+          {
+            "x": -0.25,
+            "y": -2.5
+          },
+          {
+            "x": 2.75,
+            "y": -2.5
+          },
+          {
+            "x": 2.75,
+            "y": 0
+          },
+          {
+            "x": -0.25,
+            "y": 0
+          }
+        ]
+      },
+      "floor": 1
+    }
+  },
+  {
+    "id": "bm-part-cd-1d1e702704",
+    "name": "Battlemaster CD",
+    "kind": "feature",
+    "source": "battlemaster-11e",
+    "footprint": {
+      "type": "polygon",
+      "points": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 6,
+          "y": 0
+        },
+        {
+          "x": 6,
           "y": -2.5
         },
         {
@@ -84472,110 +84624,6 @@
       {
         "points": [
           {
-            "x": 3.75,
-            "y": 0
-          },
-          {
-            "x": 0,
-            "y": 0
-          },
-          {
-            "x": 0,
-            "y": -4.5
-          }
-        ],
-        "thickness": 0.5
-      }
-    ],
-    "has_roof": true,
-    "terrain_category": "dense"
-  },
-  {
-    "id": "bm-part-ab-b2b36df6fb",
-    "name": "Battlemaster AB",
-    "kind": "feature",
-    "source": "battlemaster-11e",
-    "footprint": {
-      "type": "polygon",
-      "points": [
-        {
-          "x": -0.25,
-          "y": -2.5
-        },
-        {
-          "x": 2.75,
-          "y": -2.5
-        },
-        {
-          "x": 2.75,
-          "y": 0
-        },
-        {
-          "x": -0.25,
-          "y": 0
-        }
-      ]
-    },
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "walls": [
-      {
-        "points": [
-          {
-            "x": 3.75,
-            "y": 0
-          },
-          {
-            "x": 0,
-            "y": 0
-          },
-          {
-            "x": 0,
-            "y": -4.5
-          }
-        ],
-        "thickness": 0.5
-      }
-    ],
-    "has_roof": true,
-    "terrain_category": "dense"
-  },
-  {
-    "id": "bm-part-cd-1d1e702704",
-    "name": "Battlemaster CD",
-    "kind": "feature",
-    "source": "battlemaster-11e",
-    "footprint": {
-      "type": "polygon",
-      "points": [
-        {
-          "x": 2,
-          "y": -2.5
-        },
-        {
-          "x": 2,
-          "y": 0
-        },
-        {
-          "x": 6,
-          "y": 0
-        },
-        {
-          "x": 6,
-          "y": -2.5
-        }
-      ]
-    },
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "walls": [
-      {
-        "points": [
-          {
             "x": 0,
             "y": -2.5
           },
@@ -84592,7 +84640,31 @@
       }
     ],
     "has_roof": true,
-    "terrain_category": "dense"
+    "terrain_category": "dense",
+    "upper_floor": {
+      "footprint": {
+        "type": "polygon",
+        "points": [
+          {
+            "x": 2,
+            "y": -2.5
+          },
+          {
+            "x": 2,
+            "y": 0
+          },
+          {
+            "x": 6,
+            "y": 0
+          },
+          {
+            "x": 6,
+            "y": -2.5
+          }
+        ]
+      },
+      "floor": 1
+    }
   },
   {
     "id": "bm-part-co-f6884fd313",
@@ -84603,19 +84675,19 @@
       "type": "polygon",
       "points": [
         {
-          "x": 2,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 6,
+          "y": 0
+        },
+        {
+          "x": 6,
           "y": -2.5
         },
         {
-          "x": 2,
-          "y": 0
-        },
-        {
-          "x": 6,
-          "y": 0
-        },
-        {
-          "x": 6,
+          "x": 0,
           "y": -2.5
         }
       ]
@@ -84644,7 +84716,31 @@
       }
     ],
     "has_roof": true,
-    "terrain_category": "dense"
+    "terrain_category": "dense",
+    "upper_floor": {
+      "footprint": {
+        "type": "polygon",
+        "points": [
+          {
+            "x": 2,
+            "y": -2.5
+          },
+          {
+            "x": 2,
+            "y": 0
+          },
+          {
+            "x": 6,
+            "y": 0
+          },
+          {
+            "x": 6,
+            "y": -2.5
+          }
+        ]
+      },
+      "floor": 1
+    }
   },
   {
     "id": "bm-part-corner-c4cb7c0a38",
@@ -84706,20 +84802,20 @@
       "type": "polygon",
       "points": [
         {
-          "x": 4.5,
-          "y": -3
-        },
-        {
-          "x": 2.5,
-          "y": -3
-        },
-        {
-          "x": 2.5,
+          "x": 0,
           "y": 0
         },
         {
           "x": 4.5,
           "y": 0
+        },
+        {
+          "x": 4.5,
+          "y": -6
+        },
+        {
+          "x": 0,
+          "y": -6
         }
       ]
     },
@@ -84747,7 +84843,31 @@
       }
     ],
     "has_roof": true,
-    "terrain_category": "dense"
+    "terrain_category": "dense",
+    "upper_floor": {
+      "footprint": {
+        "type": "polygon",
+        "points": [
+          {
+            "x": 4.5,
+            "y": -3
+          },
+          {
+            "x": 2.5,
+            "y": -3
+          },
+          {
+            "x": 2.5,
+            "y": 0
+          },
+          {
+            "x": 4.5,
+            "y": 0
+          }
+        ]
+      },
+      "floor": 1
+    }
   },
   {
     "id": "bm-part-generator-2aeba08b62",
@@ -84833,20 +84953,20 @@
       "type": "polygon",
       "points": [
         {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 3,
+          "y": 0
+        },
+        {
           "x": 3,
           "y": -6
         },
         {
-          "x": 1.5,
+          "x": 0,
           "y": -6
-        },
-        {
-          "x": 1.5,
-          "y": -2.5
-        },
-        {
-          "x": 3,
-          "y": -2.5
         }
       ]
     },
@@ -84874,7 +84994,31 @@
       }
     ],
     "has_roof": true,
-    "terrain_category": "dense"
+    "terrain_category": "dense",
+    "upper_floor": {
+      "footprint": {
+        "type": "polygon",
+        "points": [
+          {
+            "x": 3,
+            "y": -6
+          },
+          {
+            "x": 1.5,
+            "y": -6
+          },
+          {
+            "x": 1.5,
+            "y": -2.5
+          },
+          {
+            "x": 3,
+            "y": -2.5
+          }
+        ]
+      },
+      "floor": 1
+    }
   },
   {
     "id": "bm-part-long-barrier-606087c15a",
@@ -85172,16 +85316,16 @@
       "type": "polygon",
       "points": [
         {
-          "x": 2,
-          "y": -2.5
-        },
-        {
-          "x": 2,
-          "y": 0
-        },
-        {
           "x": 0,
           "y": 0
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": -2.5
         },
         {
           "x": 0,
@@ -85221,7 +85365,31 @@
       }
     ],
     "has_roof": true,
-    "terrain_category": "dense"
+    "terrain_category": "dense",
+    "upper_floor": {
+      "footprint": {
+        "type": "polygon",
+        "points": [
+          {
+            "x": 2,
+            "y": -2.5
+          },
+          {
+            "x": 2,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": -2.5
+          }
+        ]
+      },
+      "floor": 1
+    }
   },
   {
     "id": "catwalk",

@@ -18,6 +18,15 @@
           "y": 22.066281
         },
         "rotation_degrees": 270,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 27.9985,
+            "y": 21.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -33,16 +42,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 27.9985,
-            "y": 21.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-02",
@@ -183,6 +183,14 @@
           "y": 7.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 50.2485,
+            "y": 7.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -198,15 +206,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 50.2485,
-            "y": 7.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-07",
@@ -244,6 +244,14 @@
           "x": 9.724717,
           "y": 14.423961
         },
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 9.7515,
+            "y": 14.4985
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -259,15 +267,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 9.7515,
-            "y": 14.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-09",
@@ -279,6 +279,15 @@
           "y": 21.933719
         },
         "rotation_degrees": 90,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 32.0015,
+            "y": 22.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -294,16 +303,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 32.0015,
-            "y": 22.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-10",
@@ -442,6 +442,14 @@
           "x": 9.724717,
           "y": 36.423961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 9.7515,
+            "y": 36.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -457,15 +465,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 9.7515,
-            "y": 36.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-15",
@@ -503,6 +503,14 @@
           "y": 29.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 50.2485,
+            "y": 29.5015
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -518,15 +526,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 50.2485,
-            "y": 29.5015
-          }
-        }
+        ]
       }
     ],
     "game_version": {
@@ -613,6 +613,15 @@
           "y": 24.027971
         },
         "rotation_degrees": 180,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.9985,
+            "y": 24.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -628,16 +637,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.9985,
-            "y": 24.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-04",
@@ -710,6 +710,14 @@
           "y": 10.778283
         },
         "rotation_degrees": 270,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 50.4985,
+            "y": 10.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -725,15 +733,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 50.4985,
-            "y": 10.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-07",
@@ -744,6 +744,15 @@
           "x": 29.933719,
           "y": 19.972029
         },
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.0015,
+            "y": 19.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -759,16 +768,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.0015,
-            "y": 19.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-08",
@@ -936,6 +936,14 @@
           "y": 33.221717
         },
         "rotation_degrees": 90,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 9.5015,
+            "y": 33.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -951,15 +959,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 9.5015,
-            "y": 33.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-14",
@@ -1005,6 +1005,14 @@
           "y": 33.329152
         },
         "rotation_degrees": 238,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 45.92161,
+            "y": 33.266939
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -1027,15 +1035,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 45.92161,
-            "y": 33.266939
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -1047,6 +1047,14 @@
           "y": 10.670848
         },
         "rotation_degrees": 58,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 14.07839,
+            "y": 10.733061
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -1069,15 +1077,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 14.07839,
-            "y": 10.733061
-          }
-        }
+        ]
       }
     ],
     "game_version": {
@@ -1137,6 +1137,15 @@
           "x": 29.933719,
           "y": 19.972029
         },
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.0015,
+            "y": 19.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -1152,16 +1161,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.0015,
-            "y": 19.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-03",
@@ -1173,6 +1173,14 @@
           "y": 34.221717
         },
         "rotation_degrees": 270,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 10.4985,
+            "y": 34.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -1188,15 +1196,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 10.4985,
-            "y": 34.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-04",
@@ -1260,6 +1260,14 @@
           "x": 40.221717,
           "y": 36.423961
         },
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 40.2485,
+            "y": 36.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -1275,15 +1283,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 40.2485,
-            "y": 36.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-07",
@@ -1390,6 +1390,15 @@
           "y": 24.027971
         },
         "rotation_degrees": 180,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.9985,
+            "y": 24.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -1405,16 +1414,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.9985,
-            "y": 24.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-11",
@@ -1426,6 +1426,14 @@
           "y": 9.778283
         },
         "rotation_degrees": 90,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 49.5015,
+            "y": 9.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -1441,15 +1449,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 49.5015,
-            "y": 9.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-12",
@@ -1515,6 +1515,14 @@
           "y": 7.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 19.7515,
+            "y": 7.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -1530,15 +1538,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 19.7515,
-            "y": 7.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-15",
@@ -1687,6 +1687,14 @@
           "y": 7.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 50.2485,
+            "y": 7.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -1702,15 +1710,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 50.2485,
-            "y": 7.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-04",
@@ -1749,6 +1749,15 @@
           "y": 22.066281
         },
         "rotation_degrees": 270,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 27.9985,
+            "y": 21.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -1764,16 +1773,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 27.9985,
-            "y": 21.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-06",
@@ -1785,6 +1785,14 @@
           "y": 13.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 10.7515,
+            "y": 13.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -1800,15 +1808,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 10.7515,
-            "y": 13.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-07",
@@ -1948,6 +1948,15 @@
           "y": 21.933719
         },
         "rotation_degrees": 90,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 32.0015,
+            "y": 22.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -1963,16 +1972,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 32.0015,
-            "y": 22.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-12",
@@ -1982,6 +1982,14 @@
         "position": {
           "x": 49.275283,
           "y": 30.423961
+        },
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 49.2485,
+            "y": 30.4985
+          }
         },
         "keystones": [
           {
@@ -1998,15 +2006,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 49.2485,
-            "y": 30.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-13",
@@ -2051,6 +2051,14 @@
           "x": 9.724717,
           "y": 36.423961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 9.7515,
+            "y": 36.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -2066,15 +2074,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 9.7515,
-            "y": 36.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-15",
@@ -2160,6 +2160,15 @@
           "x": 30.069281,
           "y": 19.972029
         },
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.0015,
+            "y": 19.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -2175,16 +2184,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.0015,
-            "y": 19.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-02",
@@ -2257,6 +2257,14 @@
           "y": 17.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 47.2485,
+            "y": 17.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -2272,15 +2280,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 47.2485,
-            "y": 17.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-05",
@@ -2319,6 +2319,14 @@
           "y": 36.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 40.2485,
+            "y": 36.5015
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -2334,15 +2342,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 40.2485,
-            "y": 36.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-07",
@@ -2354,6 +2354,15 @@
           "y": 24.027971
         },
         "rotation_degrees": 180,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.9985,
+            "y": 24.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -2369,16 +2378,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.9985,
-            "y": 24.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-08",
@@ -2483,6 +2483,14 @@
           "x": 12.724717,
           "y": 26.423961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 12.7515,
+            "y": 26.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -2498,15 +2506,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 12.7515,
-            "y": 26.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-12",
@@ -2544,6 +2544,14 @@
           "x": 19.778283,
           "y": 7.423961
         },
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 19.7515,
+            "y": 7.4985
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -2559,15 +2567,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 19.7515,
-            "y": 7.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-14",
@@ -2823,6 +2823,15 @@
           "x": 29.933719,
           "y": 19.972029
         },
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.0015,
+            "y": 19.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -2838,16 +2847,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.0015,
-            "y": 19.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-07",
@@ -2859,6 +2859,14 @@
           "y": 33.03022
         },
         "rotation_degrees": 196,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 47.563552,
+            "y": 32.951186
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -2881,15 +2889,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 47.563552,
-            "y": 32.951186
-          }
-        }
+        ]
       },
       {
         "id": "area-08",
@@ -3041,6 +3041,15 @@
           "y": 24.027971
         },
         "rotation_degrees": 180,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.9985,
+            "y": 24.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -3056,16 +3065,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.9985,
-            "y": 24.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-14",
@@ -3077,6 +3077,14 @@
           "y": 10.96978
         },
         "rotation_degrees": 16,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 12.436448,
+            "y": 11.048814
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -3099,15 +3107,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 12.436448,
-            "y": 11.048814
-          }
-        }
+        ]
       },
       {
         "id": "area-15",
@@ -3117,6 +3117,14 @@
         "position": {
           "x": 50.221717,
           "y": 8.426961
+        },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 50.2485,
+            "y": 8.5015
+          }
         },
         "keystones": [
           {
@@ -3133,15 +3141,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 50.2485,
-            "y": 8.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -3153,6 +3153,14 @@
           "y": 35.573039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 9.7515,
+            "y": 35.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -3168,15 +3176,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 9.7515,
-            "y": 35.4985
-          }
-        }
+        ]
       }
     ],
     "game_version": {
@@ -3306,8 +3306,8 @@
         "piece_type": "area",
         "template": "bm-composite-triangle-ab-corner-02-4b8322162e",
         "position": {
-          "x": 32.247374,
-          "y": 22.977296
+          "x": 31.997374,
+          "y": 23.227296
         },
         "rotation_degrees": 328,
         "objective_role": "center",
@@ -3353,6 +3353,14 @@
           "y": 10.767668
         },
         "rotation_degrees": 235,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 13.167186,
+            "y": 10.702975
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -3375,15 +3383,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 13.167186,
-            "y": 10.702975
-          }
-        }
+        ]
       },
       {
         "id": "area-07",
@@ -3455,6 +3455,14 @@
           "y": 32.205249
         },
         "rotation_degrees": 59,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 10.03913,
+            "y": 32.266596
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -3477,15 +3485,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 10.03913,
-            "y": 32.266596
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -3520,8 +3520,8 @@
         "piece_type": "area",
         "template": "bm-composite-triangle-ab-corner-02-4b8322162e",
         "position": {
-          "x": 27.752626,
-          "y": 21.022704
+          "x": 27.502626,
+          "y": 21.272704
         },
         "rotation_degrees": 148,
         "objective_role": "center",
@@ -3567,6 +3567,14 @@
           "y": 33.232332
         },
         "rotation_degrees": 55,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 46.832814,
+            "y": 33.297025
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -3589,15 +3597,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 46.832814,
-            "y": 33.297025
-          }
-        }
+        ]
       },
       {
         "id": "area-13",
@@ -3697,6 +3697,14 @@
           "y": 11.794751
         },
         "rotation_degrees": 239,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 49.96087,
+            "y": 11.733404
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -3719,15 +3727,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 49.96087,
-            "y": 11.733404
-          }
-        }
+        ]
       }
     ],
     "game_version": {
@@ -3754,6 +3754,15 @@
           "y": 23.385016
         },
         "rotation_degrees": 90,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.0015,
+            "y": 21.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -3769,16 +3778,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.0015,
-            "y": 21.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-02",
@@ -3790,6 +3790,14 @@
           "y": 34.221717
         },
         "rotation_degrees": 90,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 42.5015,
+            "y": 34.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -3805,15 +3813,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 42.5015,
-            "y": 34.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-03",
@@ -3946,6 +3946,14 @@
           "y": 32.275283
         },
         "rotation_degrees": 270,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 8.4985,
+            "y": 32.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -3961,15 +3969,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 8.4985,
-            "y": 32.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-08",
@@ -4008,6 +4008,14 @@
           "y": 9.778283
         },
         "rotation_degrees": 270,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 17.4985,
+            "y": 9.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -4023,15 +4031,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 17.4985,
-            "y": 9.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -4043,6 +4043,15 @@
           "y": 20.614984
         },
         "rotation_degrees": 270,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.9985,
+            "y": 22.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -4058,16 +4067,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.9985,
-            "y": 22.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-11",
@@ -4201,6 +4201,14 @@
           "y": 11.724717
         },
         "rotation_degrees": 90,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 51.5015,
+            "y": 11.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -4216,15 +4224,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 51.5015,
-            "y": 11.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -4277,6 +4277,14 @@
           "x": 10.724717,
           "y": 35.423961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 10.7515,
+            "y": 35.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -4292,15 +4300,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 10.7515,
-            "y": 35.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-02",
@@ -4311,6 +4311,15 @@
           "x": 31.385016,
           "y": 24.06369
         },
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.9985,
+            "y": 22.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -4326,16 +4335,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.9985,
-            "y": 22.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-03",
@@ -4475,6 +4475,14 @@
           "y": 27.778283
         },
         "rotation_degrees": 270,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 51.4985,
+            "y": 27.7515
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -4490,15 +4498,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 51.4985,
-            "y": 27.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-08",
@@ -4536,6 +4536,15 @@
           "y": 19.93631
         },
         "rotation_degrees": 180,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.0015,
+            "y": 21.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -4551,16 +4560,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.0015,
-            "y": 21.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-10",
@@ -4606,6 +4606,14 @@
           "y": 8.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 49.2485,
+            "y": 8.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -4621,15 +4629,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 49.2485,
-            "y": 8.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-12",
@@ -4736,6 +4736,14 @@
           "y": 16.221717
         },
         "rotation_degrees": 90,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 8.5015,
+            "y": 16.2485
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -4751,15 +4759,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 8.5015,
-            "y": 16.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -4812,6 +4812,14 @@
           "x": 48.221717,
           "y": 17.426961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 48.2485,
+            "y": 17.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -4827,15 +4835,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 48.2485,
-            "y": 17.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-02",
@@ -4900,6 +4900,14 @@
           "x": 41.221717,
           "y": 36.423961
         },
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 41.2485,
+            "y": 36.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -4915,15 +4923,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 41.2485,
-            "y": 36.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-05",
@@ -5030,6 +5030,14 @@
           "y": 19.901632
         },
         "rotation_degrees": 215,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 22.993481,
+            "y": 19.978912
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -5052,15 +5060,7 @@
               "index": 345
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 22.993481,
-            "y": 19.978912
-          }
-        }
+        ]
       },
       {
         "id": "area-09",
@@ -5072,6 +5072,14 @@
           "y": 26.573039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 11.7515,
+            "y": 26.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -5087,15 +5095,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 11.7515,
-            "y": 26.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -5228,6 +5228,14 @@
           "y": 24.098368
         },
         "rotation_degrees": 35,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 37.006519,
+            "y": 24.021088
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -5250,15 +5258,7 @@
               "index": 345
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 37.006519,
-            "y": 24.021088
-          }
-        }
+        ]
       },
       {
         "id": "area-15",
@@ -5270,6 +5270,14 @@
           "y": 7.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 18.7515,
+            "y": 7.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -5285,15 +5293,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 18.7515,
-            "y": 7.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -5380,6 +5380,14 @@
           "x": 48.221717,
           "y": 7.426961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 48.2485,
+            "y": 7.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -5395,15 +5403,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 48.2485,
-            "y": 7.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-03",
@@ -5517,6 +5517,14 @@
           "y": 15.93631
         },
         "rotation_degrees": 180,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 26.7515,
+            "y": 17.0015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -5532,15 +5540,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 26.7515,
-            "y": 17.0015
-          }
-        }
+        ]
       },
       {
         "id": "area-07",
@@ -5662,6 +5662,14 @@
           "y": 36.573039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 11.7515,
+            "y": 36.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -5677,15 +5685,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 11.7515,
-            "y": 36.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-11",
@@ -5798,6 +5798,14 @@
           "x": 34.635016,
           "y": 28.06369
         },
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 33.2485,
+            "y": 26.9985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -5813,15 +5821,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 33.2485,
-            "y": 26.9985
-          }
-        }
+        ]
       },
       {
         "id": "area-15",
@@ -5924,6 +5924,14 @@
           "y": 6.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 44.2485,
+            "y": 6.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -5939,15 +5947,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 44.2485,
-            "y": 6.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-02",
@@ -6102,6 +6102,14 @@
           "y": 32.182114
         },
         "rotation_degrees": 37,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 50.486097,
+            "y": 32.257761
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -6124,15 +6132,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 50.486097,
-            "y": 32.257761
-          }
-        }
+        ]
       },
       {
         "id": "area-08",
@@ -6177,6 +6177,14 @@
           "x": 15.724717,
           "y": 37.423961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 15.7515,
+            "y": 37.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -6192,15 +6200,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 15.7515,
-            "y": 37.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -6353,6 +6353,14 @@
           "y": 11.817886
         },
         "rotation_degrees": 217,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 9.513903,
+            "y": 11.742239
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -6375,15 +6383,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 9.513903,
-            "y": 11.742239
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -6505,7 +6505,7 @@
             "edge": "bottom",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -6613,6 +6613,14 @@
           "x": 50.221717,
           "y": 27.423961
         },
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 50.2485,
+            "y": 27.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -6628,15 +6636,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 50.2485,
-            "y": 27.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-07",
@@ -6648,6 +6648,14 @@
           "y": 36.073039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 16.7515,
+            "y": 35.9985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -6663,15 +6671,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 16.7515,
-            "y": 35.9985
-          }
-        }
+        ]
       },
       {
         "id": "area-08",
@@ -6778,7 +6778,7 @@
             "edge": "top",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -6888,6 +6888,14 @@
           "y": 16.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 9.7515,
+            "y": 16.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -6903,15 +6911,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 9.7515,
-            "y": 16.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-15",
@@ -6921,6 +6921,14 @@
         "position": {
           "x": 43.275283,
           "y": 7.926961
+        },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 43.2485,
+            "y": 8.0015
+          }
         },
         "keystones": [
           {
@@ -6937,15 +6945,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 43.2485,
-            "y": 8.0015
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -7006,6 +7006,14 @@
           "y": 18.240109
         },
         "rotation_degrees": 129,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 28.490213,
+            "y": 19.987981
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -7028,15 +7036,7 @@
               "index": 345
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 28.490213,
-            "y": 19.987981
-          }
-        }
+        ]
       },
       {
         "id": "area-02",
@@ -7048,6 +7048,14 @@
           "y": 34.275283
         },
         "rotation_degrees": 270,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 42.4985,
+            "y": 34.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -7063,15 +7071,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 42.4985,
-            "y": 34.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-03",
@@ -7137,6 +7137,14 @@
           "y": 8.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 50.2485,
+            "y": 8.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -7152,15 +7160,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 50.2485,
-            "y": 8.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-06",
@@ -7305,6 +7305,14 @@
           "x": 9.724717,
           "y": 35.423961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 9.7515,
+            "y": 35.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -7320,15 +7328,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 9.7515,
-            "y": 35.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-12",
@@ -7420,6 +7420,14 @@
           "y": 25.759891
         },
         "rotation_degrees": 309,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 31.509787,
+            "y": 24.012019
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -7442,15 +7450,7 @@
               "index": 345
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 31.509787,
-            "y": 24.012019
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -7462,6 +7462,14 @@
           "y": 9.724717
         },
         "rotation_degrees": 90,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 17.5015,
+            "y": 9.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -7477,15 +7485,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 17.5015,
-            "y": 9.7515
-          }
-        }
+        ]
       }
     ],
     "game_version": {
@@ -7619,6 +7619,14 @@
           "y": 20.778283
         },
         "rotation_degrees": 270,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 12.5015,
+            "y": 20.7515
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -7634,15 +7642,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 12.5015,
-            "y": 20.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-06",
@@ -7681,6 +7681,14 @@
           "y": 7.724717
         },
         "rotation_degrees": 90,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 22.5015,
+            "y": 7.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -7696,15 +7704,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 22.5015,
-            "y": 7.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-08",
@@ -7743,7 +7743,7 @@
             "edge": "top",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -7866,6 +7866,14 @@
           "y": 23.221717
         },
         "rotation_degrees": 90,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 47.4985,
+            "y": 23.2485
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -7881,15 +7889,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 47.4985,
-            "y": 23.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-14",
@@ -7928,6 +7928,14 @@
           "y": 36.275283
         },
         "rotation_degrees": 270,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 37.4985,
+            "y": 36.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -7943,15 +7951,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 37.4985,
-            "y": 36.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -7990,7 +7990,7 @@
             "edge": "bottom",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -8020,6 +8020,14 @@
           "y": 9.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 49.2485,
+            "y": 9.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -8035,15 +8043,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 49.2485,
-            "y": 9.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-02",
@@ -8190,6 +8190,14 @@
           "y": 34.269623
         },
         "rotation_degrees": 343,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 46.476074,
+            "y": 34.333075
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -8212,15 +8220,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 46.476074,
-            "y": 34.333075
-          }
-        }
+        ]
       },
       {
         "id": "area-08",
@@ -8245,14 +8245,14 @@
             "edge": "bottom",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           },
           {
             "edge": "right",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           },
           {
@@ -8273,6 +8273,14 @@
           "x": 10.724717,
           "y": 34.423961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 10.7515,
+            "y": 34.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -8288,15 +8296,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 10.7515,
-            "y": 34.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -8441,6 +8441,14 @@
           "y": 9.730377
         },
         "rotation_degrees": 163,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 13.523926,
+            "y": 9.666925
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -8463,15 +8471,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 13.523926,
-            "y": 9.666925
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -8496,14 +8496,14 @@
             "edge": "top",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           },
           {
             "edge": "left",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           },
           {
@@ -8539,6 +8539,14 @@
           "x": 48.275283,
           "y": 17.426961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 48.2485,
+            "y": 17.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -8554,15 +8562,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 48.2485,
-            "y": 17.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-02",
@@ -8709,6 +8709,14 @@
           "y": 34.275283
         },
         "rotation_degrees": 270,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 42.4985,
+            "y": 34.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -8724,15 +8732,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 42.4985,
-            "y": 34.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-08",
@@ -8768,10 +8768,10 @@
             }
           },
           {
-            "edge": "right",
+            "edge": "top",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -8786,6 +8786,14 @@
           "y": 26.573039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 11.7515,
+            "y": 26.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -8801,15 +8809,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 11.7515,
-            "y": 26.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -8954,6 +8954,14 @@
           "y": 9.724717
         },
         "rotation_degrees": 90,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 17.5015,
+            "y": 9.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -8969,15 +8977,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 17.5015,
-            "y": 9.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -9013,10 +9013,10 @@
             }
           },
           {
-            "edge": "left",
+            "edge": "bottom",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -9046,6 +9046,14 @@
           "y": 8.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 49.2485,
+            "y": 8.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -9061,15 +9069,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 49.2485,
-            "y": 8.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-02",
@@ -9176,7 +9176,7 @@
             "edge": "bottom",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -9225,6 +9225,14 @@
           "y": 25.18794
         },
         "rotation_degrees": 121,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 50.036387,
+            "y": 25.126592
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -9247,15 +9255,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 50.036387,
-            "y": 25.126592
-          }
-        }
+        ]
       },
       {
         "id": "area-07",
@@ -9334,6 +9334,14 @@
           "x": 10.724717,
           "y": 35.423961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 10.7515,
+            "y": 35.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -9349,15 +9357,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 10.7515,
-            "y": 35.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -9464,7 +9464,7 @@
             "edge": "top",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -9513,6 +9513,14 @@
           "y": 18.81206
         },
         "rotation_degrees": 301,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 9.963613,
+            "y": 18.873408
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -9535,15 +9543,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 9.963613,
-            "y": 18.873408
-          }
-        }
+        ]
       },
       {
         "id": "area-15",
@@ -9638,6 +9638,14 @@
           "y": 10.069281
         },
         "rotation_degrees": 270,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 7.0015,
+            "y": 10.0015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -9653,15 +9661,7 @@
               "index": 92
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 7.0015,
-            "y": 10.0015
-          }
-        }
+        ]
       },
       {
         "id": "area-02",
@@ -9726,6 +9726,14 @@
           "x": 23.221717,
           "y": 17.426961
         },
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 23.2485,
+            "y": 17.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -9741,15 +9749,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 23.2485,
-            "y": 17.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-05",
@@ -9829,6 +9829,14 @@
           "y": 8.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 50.2485,
+            "y": 8.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -9844,15 +9852,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 50.2485,
-            "y": 8.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-08",
@@ -9951,6 +9951,14 @@
           "y": 26.573039
         },
         "rotation_degrees": 180,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 36.7515,
+            "y": 26.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -9966,15 +9974,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 36.7515,
-            "y": 26.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-12",
@@ -9986,6 +9986,14 @@
           "y": 33.930719
         },
         "rotation_degrees": 90,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 52.9985,
+            "y": 33.9985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -10001,15 +10009,7 @@
               "index": 92
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 52.9985,
-            "y": 33.9985
-          }
-        }
+        ]
       },
       {
         "id": "area-13",
@@ -10088,6 +10088,14 @@
           "x": 9.724717,
           "y": 35.423961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 9.7515,
+            "y": 35.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -10103,15 +10111,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 9.7515,
-            "y": 35.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -10214,6 +10214,14 @@
           "y": 7.778283
         },
         "rotation_degrees": 270,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 17.5015,
+            "y": 7.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -10229,15 +10237,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 17.5015,
-            "y": 7.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-03",
@@ -10345,6 +10345,14 @@
           "y": 36.221717
         },
         "rotation_degrees": 90,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 42.4985,
+            "y": 36.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -10360,15 +10368,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 42.4985,
-            "y": 36.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-07",
@@ -10495,6 +10495,14 @@
           "y": 11.778283
         },
         "rotation_degrees": 270,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.4985,
+            "y": 11.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -10510,15 +10518,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.4985,
-            "y": 11.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-12",
@@ -10625,6 +10625,14 @@
           "y": 32.221717
         },
         "rotation_degrees": 90,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.5015,
+            "y": 32.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -10640,15 +10648,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.5015,
-            "y": 32.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -10708,6 +10708,14 @@
           "x": 9.724717,
           "y": 35.423961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 9.7515,
+            "y": 35.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -10723,15 +10731,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 9.7515,
-            "y": 35.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-02",
@@ -10748,14 +10748,14 @@
             "edge": "top",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           },
           {
             "edge": "left",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           },
           {
@@ -10845,6 +10845,14 @@
           "y": 30.024971
         },
         "rotation_degrees": 180,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 52.7485,
+            "y": 29.9985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -10860,15 +10868,7 @@
               "index": 92
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 52.7485,
-            "y": 29.9985
-          }
-        }
+        ]
       },
       {
         "id": "area-06",
@@ -10880,6 +10880,14 @@
           "y": 23.724717
         },
         "rotation_degrees": 90,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 36.4985,
+            "y": 23.7515
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -10895,15 +10903,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 36.4985,
-            "y": 23.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-07",
@@ -10983,6 +10983,14 @@
           "y": 8.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 50.2485,
+            "y": 8.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -10998,15 +11006,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 50.2485,
-            "y": 8.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -11023,14 +11023,14 @@
             "edge": "bottom",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           },
           {
             "edge": "right",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           },
           {
@@ -11119,6 +11119,14 @@
           "x": 7.319281,
           "y": 13.975029
         },
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 7.2515,
+            "y": 14.0015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -11134,15 +11142,7 @@
               "index": 92
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 7.2515,
-            "y": 14.0015
-          }
-        }
+        ]
       },
       {
         "id": "area-14",
@@ -11154,6 +11154,14 @@
           "y": 20.275283
         },
         "rotation_degrees": 270,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 23.5015,
+            "y": 20.2485
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -11169,15 +11177,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 23.5015,
-            "y": 20.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-15",
@@ -11305,6 +11305,14 @@
           "x": 35.221717,
           "y": 36.423961
         },
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 35.2485,
+            "y": 36.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -11320,15 +11328,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 35.2485,
-            "y": 36.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-03",
@@ -11393,6 +11393,14 @@
           "y": 18.778283
         },
         "rotation_degrees": 270,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 48.4985,
+            "y": 18.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -11408,15 +11416,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 48.4985,
-            "y": 18.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-06",
@@ -11428,6 +11428,14 @@
           "y": 22.364984
         },
         "rotation_degrees": 270,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 35.0015,
+            "y": 23.7515
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -11443,15 +11451,7 @@
               "index": 62
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 35.0015,
-            "y": 23.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-07",
@@ -11578,6 +11578,14 @@
           "y": 25.221717
         },
         "rotation_degrees": 90,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 11.5015,
+            "y": 25.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -11593,15 +11601,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 11.5015,
-            "y": 25.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-12",
@@ -11613,6 +11613,14 @@
           "y": 21.635016
         },
         "rotation_degrees": 90,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 24.9985,
+            "y": 20.2485
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -11628,15 +11636,7 @@
               "index": 62
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 24.9985,
-            "y": 20.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-13",
@@ -11702,6 +11702,14 @@
           "y": 7.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 24.7515,
+            "y": 7.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -11717,15 +11725,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 24.7515,
-            "y": 7.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -11778,6 +11778,14 @@
           "x": 9.724717,
           "y": 17.423961
         },
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 9.7515,
+            "y": 17.4985
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -11793,15 +11801,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 9.7515,
-            "y": 17.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-02",
@@ -12024,6 +12024,14 @@
           "x": 39.221717,
           "y": 6.426961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 39.2485,
+            "y": 6.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -12039,15 +12047,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 39.2485,
-            "y": 6.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-09",
@@ -12059,6 +12059,14 @@
           "y": 26.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 50.2485,
+            "y": 26.5015
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -12074,15 +12082,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 50.2485,
-            "y": 26.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -12306,6 +12306,14 @@
           "y": 37.573039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 20.7515,
+            "y": 37.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -12321,15 +12329,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 20.7515,
-            "y": 37.4985
-          }
-        }
+        ]
       }
     ],
     "game_version": {
@@ -12356,6 +12356,14 @@
           "y": 12.778283
         },
         "rotation_degrees": 270,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 51.4985,
+            "y": 12.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -12371,15 +12379,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 51.4985,
-            "y": 12.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-02",
@@ -12528,6 +12528,14 @@
           "y": 33.125919
         },
         "rotation_degrees": 56,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 44.880927,
+            "y": 33.189804
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -12550,15 +12558,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 44.880927,
-            "y": 33.189804
-          }
-        }
+        ]
       },
       {
         "id": "area-07",
@@ -12624,6 +12624,14 @@
           "y": 31.221717
         },
         "rotation_degrees": 90,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 8.5015,
+            "y": 31.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -12639,15 +12647,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 8.5015,
-            "y": 31.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -12849,6 +12849,14 @@
           "y": 10.874081
         },
         "rotation_degrees": 236,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 15.119073,
+            "y": 10.810196
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -12871,15 +12879,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 15.119073,
-            "y": 10.810196
-          }
-        }
+        ]
       }
     ],
     "game_version": {
@@ -12906,6 +12906,14 @@
           "y": 10.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 50.2485,
+            "y": 10.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -12921,15 +12929,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 50.2485,
-            "y": 10.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-02",
@@ -13049,6 +13049,14 @@
           "y": 33.344962
         },
         "rotation_degrees": 235,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 47.569336,
+            "y": 33.280269
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -13071,15 +13079,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 47.569336,
-            "y": 33.280269
-          }
-        }
+        ]
       },
       {
         "id": "area-07",
@@ -13125,6 +13125,15 @@
           "y": 19.93631
         },
         "rotation_degrees": 180,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.9985,
+            "y": 21.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -13140,16 +13149,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.9985,
-            "y": 21.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-09",
@@ -13159,6 +13159,14 @@
         "position": {
           "x": 9.724717,
           "y": 33.423961
+        },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 9.7515,
+            "y": 33.4985
+          }
         },
         "keystones": [
           {
@@ -13175,15 +13183,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 9.7515,
-            "y": 33.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -13301,6 +13301,14 @@
           "y": 10.655038
         },
         "rotation_degrees": 55,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 12.430664,
+            "y": 10.719731
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -13323,15 +13331,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 12.430664,
-            "y": 10.719731
-          }
-        }
+        ]
       },
       {
         "id": "area-15",
@@ -13376,6 +13376,15 @@
           "x": 31.388016,
           "y": 24.06369
         },
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.0015,
+            "y": 22.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -13391,16 +13400,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.0015,
-            "y": 22.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       }
     ],
     "game_version": {
@@ -13568,6 +13568,14 @@
           "y": 33.278283
         },
         "rotation_degrees": 270,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 43.4985,
+            "y": 33.2515
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -13583,15 +13591,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 43.4985,
-            "y": 33.2515
-          }
-        }
+        ]
       },
       {
         "id": "area-07",
@@ -13691,6 +13691,14 @@
           "y": 11.724717
         },
         "rotation_degrees": 90,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 49.4985,
+            "y": 11.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -13706,15 +13714,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 49.4985,
-            "y": 11.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-11",
@@ -13753,6 +13753,14 @@
           "y": 10.721717
         },
         "rotation_degrees": 90,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 16.5015,
+            "y": 10.7485
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -13768,15 +13776,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 16.5015,
-            "y": 10.7485
-          }
-        }
+        ]
       },
       {
         "id": "area-13",
@@ -13788,6 +13788,15 @@
           "y": 20.611984
         },
         "rotation_degrees": 270,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.9985,
+            "y": 21.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -13803,16 +13812,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.9985,
-            "y": 21.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-14",
@@ -13851,6 +13851,14 @@
           "y": 32.275283
         },
         "rotation_degrees": 270,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 10.5015,
+            "y": 32.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -13866,15 +13874,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 10.5015,
-            "y": 32.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -13886,6 +13886,15 @@
           "y": 23.388016
         },
         "rotation_degrees": 90,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.0015,
+            "y": 22.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -13901,16 +13910,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.0015,
-            "y": 22.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       }
     ],
     "game_version": {
@@ -13971,6 +13971,14 @@
           "y": 8.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 48.2485,
+            "y": 8.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -13986,15 +13994,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 48.2485,
-            "y": 8.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-03",
@@ -14073,6 +14073,15 @@
           "x": 31.388016,
           "y": 24.06369
         },
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.0015,
+            "y": 22.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -14088,16 +14097,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.0015,
-            "y": 22.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-06",
@@ -14143,6 +14143,14 @@
           "y": 12.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 9.7515,
+            "y": 12.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -14158,15 +14166,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 9.7515,
-            "y": 12.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-08",
@@ -14204,6 +14204,14 @@
           "x": 11.724717,
           "y": 35.423961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 11.7515,
+            "y": 35.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -14219,15 +14227,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 11.7515,
-            "y": 35.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -14307,6 +14307,15 @@
           "y": 19.93631
         },
         "rotation_degrees": 180,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.9985,
+            "y": 21.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -14322,16 +14331,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.9985,
-            "y": 21.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-13",
@@ -14410,6 +14410,14 @@
           "x": 50.221717,
           "y": 31.423961
         },
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 50.2485,
+            "y": 31.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -14425,15 +14433,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 50.2485,
-            "y": 31.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -14520,6 +14520,14 @@
           "y": 16.221717
         },
         "rotation_degrees": 90,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 8.5015,
+            "y": 16.2485
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -14535,15 +14543,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 8.5015,
-            "y": 16.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-03",
@@ -14553,6 +14553,14 @@
         "position": {
           "x": 10.724717,
           "y": 35.423961
+        },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 10.7515,
+            "y": 35.4985
+          }
         },
         "keystones": [
           {
@@ -14569,15 +14577,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 10.7515,
-            "y": 35.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-04",
@@ -14717,6 +14717,14 @@
           "y": 27.778283
         },
         "rotation_degrees": 270,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 51.4985,
+            "y": 27.7515
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -14732,15 +14740,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 51.4985,
-            "y": 27.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-09",
@@ -14750,6 +14750,14 @@
         "position": {
           "x": 32.635016,
           "y": 26.06369
+        },
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 31.2485,
+            "y": 24.9985
+          }
         },
         "keystones": [
           {
@@ -14766,15 +14774,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 31.2485,
-            "y": 24.9985
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -14786,6 +14786,14 @@
           "y": 8.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 49.2485,
+            "y": 8.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -14801,15 +14809,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 49.2485,
-            "y": 8.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-11",
@@ -14943,6 +14943,14 @@
           "y": 17.93631
         },
         "rotation_degrees": 180,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 28.7515,
+            "y": 19.0015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -14958,15 +14966,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 28.7515,
-            "y": 19.0015
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -15125,6 +15125,14 @@
           "y": 10.767668
         },
         "rotation_degrees": 235,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 13.167186,
+            "y": 10.702975
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -15147,15 +15155,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 13.167186,
-            "y": 10.702975
-          }
-        }
+        ]
       },
       {
         "id": "area-06",
@@ -15275,6 +15275,14 @@
           "y": 11.794751
         },
         "rotation_degrees": 239,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 49.96087,
+            "y": 11.733404
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -15297,15 +15305,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 49.96087,
-            "y": 11.733404
-          }
-        }
+        ]
       },
       {
         "id": "area-11",
@@ -15317,6 +15317,14 @@
           "y": 33.232332
         },
         "rotation_degrees": 55,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 46.832814,
+            "y": 33.297025
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -15339,15 +15347,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 46.832814,
-            "y": 33.297025
-          }
-        }
+        ]
       },
       {
         "id": "area-12",
@@ -15435,6 +15435,14 @@
           "y": 32.205249
         },
         "rotation_degrees": 59,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 10.03913,
+            "y": 32.266596
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -15457,15 +15465,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 10.03913,
-            "y": 32.266596
-          }
-        }
+        ]
       },
       {
         "id": "area-15",
@@ -15595,6 +15595,14 @@
           "y": 9.778283
         },
         "rotation_degrees": 270,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 17.5015,
+            "y": 9.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -15610,15 +15618,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 17.5015,
-            "y": 9.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-03",
@@ -15657,7 +15657,7 @@
             "edge": "left",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -15820,6 +15820,14 @@
           "y": 32.275283
         },
         "rotation_degrees": 270,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 8.5015,
+            "y": 32.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -15835,15 +15843,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 8.5015,
-            "y": 32.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -15855,6 +15855,14 @@
           "y": 34.221717
         },
         "rotation_degrees": 90,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 42.4985,
+            "y": 34.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -15870,15 +15878,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 42.4985,
-            "y": 34.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-11",
@@ -16012,6 +16012,14 @@
           "y": 11.724717
         },
         "rotation_degrees": 90,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 51.4985,
+            "y": 11.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -16027,15 +16035,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 51.4985,
-            "y": 11.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -16074,7 +16074,7 @@
             "edge": "right",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -16104,6 +16104,14 @@
           "y": 13.573039
         },
         "rotation_degrees": 180,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 10.7515,
+            "y": 13.4985
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -16119,15 +16127,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 10.7515,
-            "y": 13.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-02",
@@ -16274,6 +16274,15 @@
           "x": 31.388016,
           "y": 24.06369
         },
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.0015,
+            "y": 22.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -16289,16 +16298,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.0015,
-            "y": 22.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-07",
@@ -16377,6 +16377,14 @@
           "x": 49.221717,
           "y": 30.426961
         },
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 49.2485,
+            "y": 30.5015
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -16392,15 +16400,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 49.2485,
-            "y": 30.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -16412,6 +16412,15 @@
           "y": 19.93631
         },
         "rotation_degrees": 180,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.9985,
+            "y": 21.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -16427,16 +16436,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.9985,
-            "y": 21.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-11",
@@ -16482,6 +16482,14 @@
           "y": 7.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 49.2485,
+            "y": 7.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -16497,15 +16505,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 49.2485,
-            "y": 7.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-13",
@@ -16550,6 +16550,14 @@
           "x": 10.724717,
           "y": 36.423961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 10.7515,
+            "y": 36.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -16565,15 +16573,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 10.7515,
-            "y": 36.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-15",
@@ -16702,6 +16702,14 @@
           "y": 33.232332
         },
         "rotation_degrees": 55,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 46.832814,
+            "y": 33.297025
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -16724,15 +16732,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 46.832814,
-            "y": 33.297025
-          }
-        }
+        ]
       },
       {
         "id": "area-03",
@@ -16812,6 +16812,14 @@
           "y": 8.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 50.2485,
+            "y": 8.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -16827,15 +16835,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 50.2485,
-            "y": 8.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-06",
@@ -16880,6 +16880,15 @@
           "x": 31.388016,
           "y": 24.06369
         },
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.0015,
+            "y": 22.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -16895,16 +16904,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.0015,
-            "y": 22.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-08",
@@ -16916,6 +16916,15 @@
           "y": 19.93631
         },
         "rotation_degrees": 180,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.9985,
+            "y": 21.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -16931,16 +16940,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.9985,
-            "y": 21.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-09",
@@ -17074,6 +17074,14 @@
           "y": 10.767668
         },
         "rotation_degrees": 235,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 13.167186,
+            "y": 10.702975
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -17096,15 +17104,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 13.167186,
-            "y": 10.702975
-          }
-        }
+        ]
       },
       {
         "id": "area-14",
@@ -17114,6 +17114,14 @@
         "position": {
           "x": 9.724717,
           "y": 35.423961
+        },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 9.7515,
+            "y": 35.4985
+          }
         },
         "keystones": [
           {
@@ -17130,15 +17138,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 9.7515,
-            "y": 35.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-15",
@@ -17218,6 +17218,14 @@
           "y": 22.275283
         },
         "rotation_degrees": 270,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 13.5015,
+            "y": 22.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -17233,15 +17241,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 13.5015,
-            "y": 22.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-02",
@@ -17333,6 +17333,15 @@
           "x": 31.388016,
           "y": 24.06369
         },
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.0015,
+            "y": 22.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -17348,16 +17357,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.0015,
-            "y": 22.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-06",
@@ -17369,6 +17369,14 @@
           "y": 21.724717
         },
         "rotation_degrees": 90,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 46.4985,
+            "y": 21.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -17384,15 +17392,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 46.4985,
-            "y": 21.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-07",
@@ -17538,6 +17538,15 @@
           "y": 19.93631
         },
         "rotation_degrees": 180,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.9985,
+            "y": 21.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -17553,16 +17562,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.9985,
-            "y": 21.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-13",
@@ -17601,6 +17601,14 @@
           "y": 36.275283
         },
         "rotation_degrees": 270,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 37.4985,
+            "y": 36.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -17616,15 +17624,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 37.4985,
-            "y": 36.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-15",
@@ -17662,6 +17662,14 @@
           "y": 7.724717
         },
         "rotation_degrees": 90,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 22.5015,
+            "y": 7.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -17677,15 +17685,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 22.5015,
-            "y": 7.7515
-          }
-        }
+        ]
       }
     ],
     "game_version": {
@@ -17712,6 +17712,14 @@
           "y": 33.221717
         },
         "rotation_degrees": 90,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 8.5015,
+            "y": 33.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -17727,15 +17735,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 8.5015,
-            "y": 33.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-02",
@@ -17747,6 +17747,14 @@
           "y": 9.767668
         },
         "rotation_degrees": 235,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 15.167186,
+            "y": 9.702975
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -17769,15 +17777,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 15.167186,
-            "y": 9.702975
-          }
-        }
+        ]
       },
       {
         "id": "area-03",
@@ -17979,6 +17979,14 @@
           "y": 10.778283
         },
         "rotation_degrees": 270,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 51.4985,
+            "y": 10.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -17994,15 +18002,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 51.4985,
-            "y": 10.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -18014,6 +18014,14 @@
           "y": 34.232332
         },
         "rotation_degrees": 55,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 44.832814,
+            "y": 34.297025
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -18036,15 +18044,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 44.832814,
-            "y": 34.297025
-          }
-        }
+        ]
       },
       {
         "id": "area-11",
@@ -18289,7 +18289,7 @@
             "edge": "left",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -18357,6 +18357,14 @@
           "y": 32.221717
         },
         "rotation_degrees": 90,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 10.5015,
+            "y": 32.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -18372,15 +18380,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 10.5015,
-            "y": 32.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-05",
@@ -18446,7 +18446,7 @@
             "edge": "right",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -18515,6 +18515,14 @@
           "y": 11.778283
         },
         "rotation_degrees": 270,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 49.4985,
+            "y": 11.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -18530,15 +18538,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 49.4985,
-            "y": 11.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -18548,6 +18548,14 @@
         "position": {
           "x": 35.224717,
           "y": 37.423961
+        },
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 35.2515,
+            "y": 37.4985
+          }
         },
         "keystones": [
           {
@@ -18564,15 +18572,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 35.2515,
-            "y": 37.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-11",
@@ -18584,6 +18584,14 @@
           "y": 6.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 24.7485,
+            "y": 6.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -18599,15 +18607,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 24.7485,
-            "y": 6.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-12",
@@ -18803,6 +18803,14 @@
           "y": 26.573039
         },
         "rotation_degrees": 180,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 50.2485,
+            "y": 26.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -18818,15 +18826,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 50.2485,
-            "y": 26.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-03",
@@ -18838,6 +18838,14 @@
           "y": 37.573039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 21.7515,
+            "y": 37.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -18853,15 +18861,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 21.7515,
-            "y": 37.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-04",
@@ -18900,7 +18900,7 @@
             "edge": "left",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -18982,6 +18982,14 @@
           "x": 38.221717,
           "y": 6.426961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 38.2485,
+            "y": 6.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -18997,15 +19005,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 38.2485,
-            "y": 6.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-08",
@@ -19015,6 +19015,14 @@
         "position": {
           "x": 9.724717,
           "y": 17.426961
+        },
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 9.7515,
+            "y": 17.5015
+          }
         },
         "keystones": [
           {
@@ -19031,15 +19039,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 9.7515,
-            "y": 17.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-09",
@@ -19112,7 +19112,7 @@
             "edge": "right",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -19407,7 +19407,7 @@
             "edge": "top",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -19422,6 +19422,14 @@
           "y": 8.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 48.2485,
+            "y": 8.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -19437,15 +19445,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 48.2485,
-            "y": 8.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-04",
@@ -19455,6 +19455,14 @@
         "position": {
           "x": 10.724717,
           "y": 13.426961
+        },
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 10.7515,
+            "y": 13.5015
+          }
         },
         "keystones": [
           {
@@ -19471,15 +19479,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 10.7515,
-            "y": 13.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-05",
@@ -19681,7 +19681,7 @@
             "edge": "bottom",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -19694,6 +19694,14 @@
         "position": {
           "x": 11.724717,
           "y": 35.423961
+        },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 11.7515,
+            "y": 35.4985
+          }
         },
         "keystones": [
           {
@@ -19710,15 +19718,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 11.7515,
-            "y": 35.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-12",
@@ -19730,6 +19730,14 @@
           "y": 30.573039
         },
         "rotation_degrees": 180,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 49.2485,
+            "y": 30.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -19745,15 +19753,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 49.2485,
-            "y": 30.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-13",
@@ -19935,6 +19935,14 @@
           "y": 9.724717
         },
         "rotation_degrees": 90,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 10.5015,
+            "y": 9.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -19950,15 +19958,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 10.5015,
-            "y": 9.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-03",
@@ -19997,7 +19997,7 @@
             "edge": "top",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -20100,6 +20100,14 @@
           "y": 8.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 49.2485,
+            "y": 8.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -20115,15 +20123,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 49.2485,
-            "y": 8.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-08",
@@ -20189,6 +20189,14 @@
           "y": 34.275283
         },
         "rotation_degrees": 270,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 49.4985,
+            "y": 34.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -20204,15 +20212,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 49.4985,
-            "y": 34.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-11",
@@ -20251,7 +20251,7 @@
             "edge": "bottom",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -20352,6 +20352,14 @@
           "x": 10.724717,
           "y": 35.423961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 10.7515,
+            "y": 35.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -20367,15 +20375,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 10.7515,
-            "y": 35.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -20456,7 +20456,7 @@
             "edge": "left",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -20524,6 +20524,14 @@
           "y": 36.221717
         },
         "rotation_degrees": 90,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 37.4985,
+            "y": 36.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -20539,15 +20547,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 37.4985,
-            "y": 36.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-05",
@@ -20586,6 +20586,14 @@
           "y": 10.778283
         },
         "rotation_degrees": 270,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 49.4985,
+            "y": 10.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -20601,15 +20609,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 49.4985,
-            "y": 10.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-07",
@@ -20716,7 +20716,7 @@
             "edge": "right",
             "ref": {
               "kind": "vertex",
-              "index": 62
+              "index": 63
             }
           }
         ]
@@ -20785,6 +20785,14 @@
           "y": 7.778283
         },
         "rotation_degrees": 270,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 22.5015,
+            "y": 7.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -20800,15 +20808,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 22.5015,
-            "y": 7.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-13",
@@ -20847,6 +20847,14 @@
           "y": 33.221717
         },
         "rotation_degrees": 90,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 10.5015,
+            "y": 33.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -20862,15 +20870,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 10.5015,
-            "y": 33.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-15",
@@ -20992,6 +20992,15 @@
           "y": 19.93631
         },
         "rotation_degrees": 180,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.9985,
+            "y": 21.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -21007,16 +21016,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.9985,
-            "y": 21.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-03",
@@ -21028,6 +21028,14 @@
           "y": 12.724717
         },
         "rotation_degrees": 90,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 51.4985,
+            "y": 12.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -21043,15 +21051,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 51.4985,
-            "y": 12.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-04",
@@ -21116,6 +21116,15 @@
           "x": 31.388016,
           "y": 24.06369
         },
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.0015,
+            "y": 22.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -21131,16 +21140,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.0015,
-            "y": 22.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-07",
@@ -21152,6 +21152,14 @@
           "y": 31.275283
         },
         "rotation_degrees": 270,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 8.5015,
+            "y": 31.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -21167,15 +21175,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 8.5015,
-            "y": 31.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-08",
@@ -21267,6 +21267,14 @@
           "y": 9.778283
         },
         "rotation_degrees": 270,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 16.5015,
+            "y": 9.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -21282,15 +21290,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 16.5015,
-            "y": 9.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-12",
@@ -21302,6 +21302,14 @@
           "y": 34.221717
         },
         "rotation_degrees": 90,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 43.4985,
+            "y": 34.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -21317,15 +21325,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 43.4985,
-            "y": 34.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-13",
@@ -21493,6 +21493,15 @@
           "x": 31.388016,
           "y": 24.06369
         },
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.0015,
+            "y": 22.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -21508,16 +21517,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.0015,
-            "y": 22.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-03",
@@ -21527,6 +21527,14 @@
         "position": {
           "x": 46.221717,
           "y": 7.926961
+        },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 46.2485,
+            "y": 8.0015
+          }
         },
         "keystones": [
           {
@@ -21543,15 +21551,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 46.2485,
-            "y": 8.0015
-          }
-        }
+        ]
       },
       {
         "id": "area-04",
@@ -21563,6 +21563,14 @@
           "y": 16.573039
         },
         "rotation_degrees": 180,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 10.7515,
+            "y": 16.4985
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -21578,15 +21586,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 10.7515,
-            "y": 16.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-05",
@@ -21734,6 +21734,14 @@
           "y": 36.073039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 13.7515,
+            "y": 35.9985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -21749,15 +21757,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 13.7515,
-            "y": 35.9985
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -21767,6 +21767,14 @@
         "position": {
           "x": 49.221717,
           "y": 27.426961
+        },
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 49.2485,
+            "y": 27.5015
+          }
         },
         "keystones": [
           {
@@ -21783,15 +21791,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 49.2485,
-            "y": 27.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-11",
@@ -21803,6 +21803,15 @@
           "y": 19.93631
         },
         "rotation_degrees": 180,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.9985,
+            "y": 21.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -21818,16 +21827,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.9985,
-            "y": 21.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-12",
@@ -22111,6 +22111,14 @@
           "y": 8.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 48.2485,
+            "y": 8.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -22126,15 +22134,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 48.2485,
-            "y": 8.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-05",
@@ -22173,6 +22173,14 @@
           "y": 34.407566
         },
         "rotation_degrees": 324,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 46.711191,
+            "y": 34.452126
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -22195,15 +22203,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 46.711191,
-            "y": 34.452126
-          }
-        }
+        ]
       },
       {
         "id": "area-07",
@@ -22382,6 +22382,15 @@
           "x": 31.388016,
           "y": 24.06369
         },
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.0015,
+            "y": 22.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -22397,16 +22406,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.0015,
-            "y": 22.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-14",
@@ -22418,6 +22418,15 @@
           "y": 19.93631
         },
         "rotation_degrees": 180,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.9985,
+            "y": 21.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -22433,16 +22442,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.9985,
-            "y": 21.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-15",
@@ -22452,6 +22452,14 @@
         "position": {
           "x": 11.724717,
           "y": 35.423961
+        },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 11.7515,
+            "y": 35.4985
+          }
         },
         "keystones": [
           {
@@ -22468,15 +22476,7 @@
               "index": 184
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 11.7515,
-            "y": 35.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-16",
@@ -22488,6 +22488,14 @@
           "y": 9.592434
         },
         "rotation_degrees": 144,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 13.288809,
+            "y": 9.547874
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -22510,15 +22518,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 13.288809,
-            "y": 9.547874
-          }
-        }
+        ]
       }
     ],
     "game_version": {
@@ -22598,6 +22598,15 @@
           "y": 23.385016
         },
         "rotation_degrees": 90,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.0015,
+            "y": 21.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -22613,16 +22622,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.0015,
-            "y": 21.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-04",
@@ -22634,6 +22634,14 @@
           "y": 6.573039
         },
         "rotation_degrees": 180,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 18.7545,
+            "y": 6.4985
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -22649,15 +22657,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 18.7545,
-            "y": 6.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-05",
@@ -22749,6 +22749,14 @@
           "x": 11.778283,
           "y": 26.423961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 11.7515,
+            "y": 26.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -22764,15 +22772,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 11.7515,
-            "y": 26.4985
-          }
-        }
+        ]
       },
       {
         "id": "area-09",
@@ -22784,6 +22784,14 @@
           "y": 17.576039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 48.2485,
+            "y": 17.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -22799,15 +22807,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 48.2485,
-            "y": 17.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-10",
@@ -22845,6 +22845,14 @@
           "x": 41.218717,
           "y": 37.426961
         },
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 41.2455,
+            "y": 37.5015
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -22860,15 +22868,7 @@
               "index": 183
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 41.2455,
-            "y": 37.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-12",
@@ -22880,6 +22880,15 @@
           "y": 20.614984
         },
         "rotation_degrees": 270,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.9985,
+            "y": 22.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -22895,16 +22904,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.9985,
-            "y": 22.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-13",
@@ -23175,6 +23175,15 @@
           "y": 21.930719
         },
         "rotation_degrees": 90,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 32.0015,
+            "y": 21.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -23190,16 +23199,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 32.0015,
-            "y": 21.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-06",
@@ -23245,6 +23245,14 @@
           "y": 18.778283
         },
         "rotation_degrees": 270,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 9.5015,
+            "y": 18.7515
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -23260,15 +23268,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 9.5015,
-            "y": 18.7515
-          }
-        }
+        ]
       },
       {
         "id": "area-08",
@@ -23347,6 +23347,14 @@
           "x": 29.724717,
           "y": 7.426961
         },
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.7515,
+            "y": 7.5015
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -23362,15 +23370,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.7515,
-            "y": 7.5015
-          }
-        }
+        ]
       },
       {
         "id": "area-11",
@@ -23416,6 +23416,15 @@
           "y": 22.069281
         },
         "rotation_degrees": 270,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 27.9985,
+            "y": 22.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -23431,16 +23440,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 27.9985,
-            "y": 22.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-13",
@@ -23486,6 +23486,14 @@
           "y": 25.221717
         },
         "rotation_degrees": 90,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 50.4985,
+            "y": 25.2485
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -23501,15 +23509,7 @@
               "index": 182
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 50.4985,
-            "y": 25.2485
-          }
-        }
+        ]
       },
       {
         "id": "area-15",
@@ -23555,6 +23555,14 @@
           "y": 36.573039
         },
         "rotation_degrees": 180,
+        "objective_role": "home",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.2485,
+            "y": 36.4985
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -23570,15 +23578,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "home",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.2485,
-            "y": 36.4985
-          }
-        }
+        ]
       }
     ],
     "game_version": {
@@ -23632,6 +23632,15 @@
           "y": 20.614984
         },
         "rotation_degrees": 270,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 30.9985,
+            "y": 22.0015
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "top",
@@ -23647,16 +23656,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 30.9985,
-            "y": 22.0015
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-03",
@@ -23808,6 +23808,15 @@
           "y": 23.385016
         },
         "rotation_degrees": 90,
+        "objective_role": "center",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 29.0015,
+            "y": 21.9985
+          }
+        },
+        "link_group": "objective-center",
         "keystones": [
           {
             "edge": "bottom",
@@ -23823,16 +23832,7 @@
               "index": 61
             }
           }
-        ],
-        "objective_role": "center",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 29.0015,
-            "y": 21.9985
-          }
-        },
-        "link_group": "objective-center"
+        ]
       },
       {
         "id": "area-09",
@@ -23925,6 +23925,14 @@
           "y": 33.654581
         },
         "rotation_degrees": 8,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 47.791788,
+            "y": 33.732122
+          }
+        },
         "keystones": [
           {
             "edge": "bottom",
@@ -23947,15 +23955,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 47.791788,
-            "y": 33.732122
-          }
-        }
+        ]
       },
       {
         "id": "area-13",
@@ -24043,6 +24043,14 @@
           "y": 10.345419
         },
         "rotation_degrees": 188,
+        "objective_role": "expansion",
+        "is_objective": true,
+        "objective": {
+          "position": {
+            "x": 12.208212,
+            "y": 10.267878
+          }
+        },
         "keystones": [
           {
             "edge": "top",
@@ -24065,15 +24073,7 @@
               "index": 0
             }
           }
-        ],
-        "objective_role": "expansion",
-        "is_objective": true,
-        "objective": {
-          "position": {
-            "x": 12.208212,
-            "y": 10.267878
-          }
-        }
+        ]
       },
       {
         "id": "area-16",

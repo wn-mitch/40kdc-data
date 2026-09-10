@@ -29,11 +29,10 @@
  * footprint), so a table crew places them by tape measure like any other
  * piece. Pieces that already carry authored keystones are never overwritten.
  *
- * The Battlemaster boards are 180°-rotationally symmetric, so the derivation
- * is validated by pairing: every terrain piece must have a twin whose centroid
- * reflects onto it, and the twins' derived distances must agree within 0.25″
- * (the same tolerance the layout intake's keystone-pairing check used) — both
- * halves of a printed card measure alike. Any violation fails the run.
+ * The Battlemaster boards are 180°-rotationally symmetric except for one
+ * source-authored 0.5″ editor nudge, recorded below. Every other terrain piece
+ * must have a reflected twin whose derived distances agree within 0.25″ — both
+ * halves of a printed card measure alike. Any other violation fails the run.
  *
  * Usage: npx tsx tools/src/derive-keystones.ts [--write] [--rederive]
  * Dry run prints the per-layout summary; --write persists
@@ -62,6 +61,21 @@ const TEMPLATES_PATH = join(ROOT, "data", "core", "terrain-templates.json");
 
 const PAIR_TOLERANCE_IN = 0.25;
 const TWIN_CENTROID_TOLERANCE_IN = 0.5;
+
+/** Battlemaster's editor nudged this pair by 0.5″; preserve its source pose. */
+const SOURCE_ASYMMETRIC_TWIN_PAIRS: Record<string, true> = {
+  "bm-disrupt-vs-disrupt-01:area-05:area-11": true,
+};
+
+export function isSourceAsymmetricTwinPair(
+  layoutId: string,
+  firstId: string | undefined,
+  secondId: string | undefined,
+): boolean {
+  if (!firstId || !secondId) return false;
+  const [left, right] = [firstId, secondId].sort();
+  return SOURCE_ASYMMETRIC_TWIN_PAIRS[`${layoutId}:${left}:${right}`] === true;
+}
 
 function centroid(rp: ResolvedPiece): { x: number; y: number } {
   let x = 0;
@@ -490,6 +504,14 @@ export function keystonePairingViolations(
         );
         continue;
       }
+      if (
+        isSourceAsymmetricTwinPair(
+          layout.id,
+          pieces[i]!.id,
+          pieces[twin]!.id,
+        )
+      )
+        continue;
       for (let k = 0; k < expected; k++) {
         if (Math.abs(a[k]! - b[k]!) > PAIR_TOLERANCE_IN) {
           violations.push(
