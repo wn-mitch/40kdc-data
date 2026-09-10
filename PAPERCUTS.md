@@ -170,3 +170,7 @@ I ran a jq probe with a literal TARGET placeholder instead of first extracting t
 ## 2026-09-03T19:23:34Z — codex
 
 This installed jj version has no archive subcommand, so the planned whole-parent materialization failed before comparison; use jj file show per composition instead.
+
+## 2026-09-10T14:09:16Z — openai-codex/gpt-5.6-sol
+
+A jj log query failed because GitHub exposed an external-fork PR SHA that the local jj repo had not fetched. Check ref availability or add the contributor remote before including external PR SHAs in one revision set.
