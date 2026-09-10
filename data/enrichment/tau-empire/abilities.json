@@ -7189,5 +7189,188 @@
       ]
     },
     "community_notes": "[APPROX] Unit Upgrade (Devilfish unit, not a Character Enhancement): when a friendly unit disembarks from this unit, its pulse blaster and pulse carbine weapons get +1 Attacks. Encoded as an opaque grant."
+  },
+  {
+    "ability_id": "shield-drone-commander-cloudspear",
+    "name": "Shield Drone",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "2025-q3",
+    "unit_ids": [
+      "commander-cloudspear"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "self",
+      "modifier": {
+        "stat": "W",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "superior-weapon-support-system-commander-cloudspear",
+    "name": "Superior Weapon Support System",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "2025-q3",
+    "unit_ids": [
+      "commander-cloudspear"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is-type",
+        "parameters": {
+          "attack_type": "ranged"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "bs-modifier",
+            "target": "self",
+            "modifier": {
+              "operation": "ignore-modifiers"
+            }
+          },
+          {
+            "type": "roll-modifier",
+            "target": "self",
+            "modifier": {
+              "roll": "hit",
+              "operation": "ignore-modifiers"
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "breach-and-clear-sudden-dawn-cadre",
+    "name": "Breach and Clear",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "2025-q3",
+    "unit_ids": [
+      "sudden-dawn-cadre-breacher-team"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "within-range-of-objective",
+        "parameters": {
+          "subject": "target"
+        }
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "self",
+        "modifier": {
+          "roll": "wound",
+          "subset": "all-failures",
+          "weapon_type": "ranged"
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "target-uploaded-sudden-dawn-cadre",
+    "name": "Target Uploaded",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "2025-q3",
+    "unit_ids": [
+      "sudden-dawn-cadre-pathfinder-team"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "attack-is-type",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "target-has-keyword",
+            "parameters": {
+              "keyword": "SPOTTED"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "self",
+            "modifier": {
+              "stat": "BS",
+              "operation": "improve",
+              "value": 1,
+              "weapon_type": "ranged"
+            }
+          },
+          {
+            "type": "keyword-grant",
+            "target": "self",
+            "modifier": {
+              "keywords": [
+                "Ignores Cover"
+              ],
+              "weapon_type": "ranged"
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    }
   }
 ]

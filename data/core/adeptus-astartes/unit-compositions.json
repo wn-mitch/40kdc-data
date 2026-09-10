@@ -193,10 +193,27 @@
         ],
         "loadout_variants": [
           {
+            "name": "Sword Brother",
+            "weapon_ids": [
+              "heavy-bolt-pistol",
+              "astartes-chainsword"
+            ]
+          },
+          {
             "name": "Sword Brother w/ Twin Lightning Claws",
             "weapon_ids": [
               "twin-lightning-claws"
             ]
+          }
+        ],
+        "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Sword Brother w/ Twin Lightning Claws"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
           }
         ]
       }

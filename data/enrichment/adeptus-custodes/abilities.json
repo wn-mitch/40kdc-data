@@ -6165,5 +6165,267 @@
       ]
     },
     "community_notes": "When the bearer's unit ends a Charge move, select one enemy unit engaged with it: that unit makes a Battle-shock roll with -1 to the roll."
+  },
+  {
+    "ability_id": "slayers-of-tyrants-gilded-blades",
+    "name": "Slayers of Tyrants",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "5eac851f9ced6939594d85b3a73d3e27c17712f4ccd39f78dca625297cb4ed66",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "target-has-keyword",
+            "parameters": {
+              "keyword": "CHARACTER"
+            }
+          },
+          {
+            "type": "target-has-keyword",
+            "parameters": {
+              "keyword": "MONSTER"
+            }
+          },
+          {
+            "type": "target-has-keyword",
+            "parameters": {
+              "keyword": "VEHICLE"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "unit",
+        "modifier": {
+          "roll": "wound",
+          "subset": "all-failures"
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "gilded-blades-allarus-custodians"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "sentinel-storm-gilded-blades",
+    "name": "Sentinel Storm",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "cb39b349c24837caa780a64b9f9bf07419370a367c6fb0d6a667cd9479b85dcb",
+    "version": "2025-q3",
+    "trigger": {
+      "event": "after-unit-resolves-attacks",
+      "subject": "self",
+      "optional": true
+    },
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "ability_id": "shoot-again"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "one-use"
+    },
+    "unit_ids": [
+      "gilded-blades-custodian-guard"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive"
+  },
+  {
+    "ability_id": "stand-vigil-gilded-blades",
+    "name": "Stand Vigil",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "71a446dd91af1c0bb5f73b83b61e9be302a90de0ff223f717433b9bd4c4ff1dc",
+    "version": "2025-q3",
+    "effect": {
+      "type": "choice",
+      "choice_label": "Stand Vigil",
+      "options": [
+        {
+          "type": "re-roll",
+          "target": "unit",
+          "modifier": {
+            "roll": "wound",
+            "subset": "ones"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "within-range-of-objective",
+            "parameters": {
+              "subject": "target"
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "all-failures"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "gilded-blades-custodian-guard"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "praesidium-shield-gilded-blades",
+    "name": "Praesidium Shield",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "6a50cd34b88428e209ccddb9bd411a5eebf362bea01fa27d5ef2840e84ed7113",
+    "version": "2025-q3",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "self",
+      "modifier": {
+        "stat": "W",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "gilded-blades-custodian-guard"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "divine-protection-gilded-blades",
+    "name": "Divine Protection",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "1368eb269443861da9368c68d3c39f59adaddebb7e02c37eccd79a77eacba08f",
+    "version": "2025-q3",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "unit",
+      "modifier": {
+        "threshold": 4,
+        "scope": "mortal"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "gilded-blades-custodian-wardens"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "rapid-strike-gilded-blades",
+    "name": "Rapid Strike",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "1d120fcc196decfae0041fccdc43a9d5a2d35c87f7c91d7d2a78f1dd20a9b0d9",
+    "version": "2025-q3",
+    "effect": {
+      "type": "re-roll",
+      "target": "unit",
+      "modifier": {
+        "roll": "advance",
+        "subset": "all-failures"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "tristraen-of-the-gilded-blades"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "from-golden-light-gilded-blades",
+    "name": "From Golden Light",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "dcdd34ddd4306ea78e9c123279c0bf9bb1bbd80482fcc61af4bb207d24222e21",
+    "version": "2025-q3",
+    "trigger": {
+      "event": "end-of-opponent-turn",
+      "subject": "self",
+      "condition": {
+        "type": "engagement-state",
+        "negated": true,
+        "parameters": {
+          "state": "engaged"
+        }
+      },
+      "optional": true
+    },
+    "effect": {
+      "type": "movement-modifier",
+      "target": "unit",
+      "modifier": {
+        "move_type": "redeploy",
+        "to_reserves": true
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "one-use"
+    },
+    "unit_ids": [
+      "gilded-blades-allarus-custodians"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive"
   }
 ]

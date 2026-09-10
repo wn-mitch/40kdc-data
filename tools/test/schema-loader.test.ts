@@ -200,6 +200,26 @@ describe("schema-loader", () => {
     expect(validate!({ type: "was-not-a-real-condition" })).toBe(false);
   });
 
+  it("restricts explicit condition actors to supported predicates", () => {
+    const validate = createValidator().getSchema(
+      "https://40kdc.dev/schemas/enrichment/ability-dsl/condition.schema.json",
+    );
+    expect(validate).toBeDefined();
+
+    expect(validate!({ type: "charged-this-turn", of: "target" })).toBe(true);
+    expect(
+      validate!({ type: "is-battle-shocked", parameters: { subject: "target" } }),
+    ).toBe(true);
+    expect(validate!({ type: "remained-stationary", of: "target" })).toBe(false);
+    expect(
+      validate!({
+        type: "is-battle-shocked",
+        of: "target",
+        parameters: { subject: "unit" },
+      }),
+    ).toBe(false);
+  });
+
   it("gates the optional game_modes field to the game-mode enum (absent implies matched-play)", () => {
     const ajv = createValidator();
     const validate = ajv.getSchema(
@@ -505,6 +525,121 @@ describe("schema-loader", () => {
             ],
           },
         },
+      }),
+    ).toBe(false);
+  });
+  it("restricts designation binding fields to bound attacks", () => {
+    const validate = createValidator().getSchema(
+      "https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json",
+    );
+    expect(validate).toBeDefined();
+    const valid = {
+      type: "designate-target",
+      designation: "bound-fixture",
+      select: { scope: "enemy-unit", bind_as: "bound-target" },
+      applies: {
+        to: "bound-unit-attacks-reference",
+        beneficiary: { selection_var: "bound-unit" },
+        reference: { selection_var: "bound-target" },
+        effect: {
+          type: "re-roll",
+          target: "bearer",
+          modifier: { roll: "hit", subset: "all-failures" },
+        },
+      },
+    };
+    expect(validate!(valid)).toBe(true);
+    expect(
+      validate!({
+        ...valid,
+        applies: {
+          to: "attackers-of-target",
+          beneficiary: valid.applies.beneficiary,
+          effect: valid.applies.effect,
+        },
+      }),
+    ).toBe(false);
+    expect(
+      validate!({
+        ...valid,
+        applies: {
+          to: "attackers-of-target",
+          reference: valid.applies.reference,
+          effect: valid.applies.effect,
+        },
+      }),
+    ).toBe(false);
+  });
+
+  it("validates closed engagement-gated for-each-unit selectors", () => {
+    const validate = createValidator().getSchema(
+      "https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json",
+    );
+    expect(validate).toBeDefined();
+    const valid = {
+      type: "for-each-unit",
+      selector: {
+        owner: "enemy",
+        engagement_relation: "engaged-with-bearer",
+        reference: "bearer-unit",
+      },
+      effect: {
+        type: "mortal-wounds",
+        target: "unit",
+        modifier: { count: 1 },
+      },
+    };
+    expect(validate!(valid)).toBe(true);
+    expect(
+      validate!({
+        ...valid,
+        selector: {
+          owner: "enemy",
+          engagement_relation: "not-engaged-with-bearer",
+          reference: "bearer",
+        },
+      }),
+    ).toBe(true);
+    expect(
+      validate!({
+        ...valid,
+        selector: {
+          owner: "enemy",
+          engagement_relation: "engaged-with-bearer",
+        },
+      }),
+    ).toBe(false);
+    expect(
+      validate!({
+        ...valid,
+        selector: { ...valid.selector, engagement_relation: "any" },
+      }),
+    ).toBe(false);
+    expect(
+      validate!({
+        ...valid,
+        selector: { ...valid.selector, reference: "selected-unit" },
+      }),
+    ).toBe(false);
+    expect(
+      validate!({
+        ...valid,
+        selector: { ...valid.selector, unrelated: true },
+      }),
+    ).toBe(false);
+  });
+
+  it("rejects generic effect reach", () => {
+    const validate = createValidator().getSchema(
+      "https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json",
+    );
+    expect(validate).toBeDefined();
+    expect(
+      validate!({
+        type: "re-roll",
+        target: "bearer",
+        reach: { who: "bearer", extent: "model" },
+        modifier: { roll: "hit", subset: "all-failures" },
       }),
     ).toBe(false);
   });

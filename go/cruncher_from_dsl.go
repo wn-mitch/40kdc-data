@@ -27,6 +27,8 @@ var modelTargets = map[string]bool{"self": true, "bearer": true}
 // attached member.
 const modelScopedReason = "model-scoped effect from an attached model: applies to that model only (core rule 19.04)"
 
+const stochasticDiceGatedReason = "dice-gated effect: stochastic; not expressible as a buff"
+
 var defenderTargets = map[string]bool{
 	"defender": true, "enemy-within-aura": true, "all-enemy": true,
 }
@@ -118,17 +120,39 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		for _, step := range getList(n, "steps") {
 			dslWalk(step, source, opts, out)
 		}
+	case "named-effect":
+		translateNamedEffect(n, source, opts, out)
 	case "choice":
 		enumerateChoice(n, source, opts, out)
 	case "dice-gated":
-		out.unsupported = append(out.unsupported, unsup("dice-gated effect: stochastic; not expressible as a buff", n))
+		out.unsupported = append(out.unsupported, unsup(stochasticDiceGatedReason, n))
 	case "dice-pool-allocation":
 		enumerateDicePool(n, source, opts, out)
 	case "select-units":
 		// Targeting wrapper — the selected units receive the nested effect.
 		dslWalk(n["effect"], source, opts, out)
 	case "aura":
+		if !appliesToBuffedUnit(n, opts.perspective) {
+			return
+		}
 		modifier, _ := getMap(n, "modifier")
+		if recipientFilter, present := modifier["recipient_filter"]; present {
+			matches, reason := auraRecipientFilterMatches(recipientFilter, opts.context, opts.perspective)
+			if reason != "" {
+				out.unsupported = append(out.unsupported, unsup("aura recipient keywords are unavailable or its filter is malformed", n))
+				return
+			}
+			if !matches {
+				return
+			}
+		}
+		if emitterFilter, present := modifier["emitter_filter"]; present {
+			matches, _ := auraRecipientFilterMatches(emitterFilter, nil, opts.perspective)
+			if !matches {
+				out.unsupported = append(out.unsupported, unsup("aura emitter filter requires the source unit's keywords", n))
+				return
+			}
+		}
 		effect, ok := getMap(modifier, "effect")
 		if ok && effect != nil {
 			dslWalk(effect, source, opts, out)
@@ -171,6 +195,278 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 	}
 }
 
+// translateNamedEffect treats an un-gated named rule as transparent. Named
+// rules with an optional/cost/trigger/usage gate become one opt-in lever while
+// preserving any nested levers and unsupported fragments discovered in the
+// body. Trigger conditions are wrapped around the body so they remain a
+// resolver-visible guard rather than being silently discarded.
+func translateNamedEffect(node, source map[string]any, opts dslOpts, out *effectTranslation) {
+	if node["optional"] != true && node["cost"] == nil && node["trigger"] == nil && node["usage"] == nil {
+		dslWalk(node["effect"], source, opts, out)
+		return
+	}
+
+	var triggers []any
+	if raw, ok := asList(node["trigger"]); ok {
+		triggers = raw
+	} else if node["trigger"] != nil {
+		triggers = []any{node["trigger"]}
+	}
+	conditions := make([]any, 0, len(triggers))
+	for _, raw := range triggers {
+		trigger, ok := asMap(raw)
+		if !ok {
+			continue
+		}
+		if condition, ok := getMap(trigger, "condition"); ok {
+			conditions = append(conditions, condition)
+		}
+	}
+	body := node["effect"]
+	if len(conditions) > 0 && len(conditions) == len(triggers) {
+		var condition any = conditions[0]
+		if len(conditions) > 1 {
+			operands := make([]any, len(conditions))
+			copy(operands, conditions)
+			condition = map[string]any{"operator": "or", "operands": operands}
+		}
+		body = map[string]any{
+			"type":      "conditional",
+			"condition": condition,
+			"effect":    node["effect"],
+		}
+	}
+
+	sub := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
+	dslWalk(body, source, opts, sub)
+	out.unsupported = append(out.unsupported, sub.unsupported...)
+	out.activatable = append(out.activatable, sub.activatable...)
+	if len(sub.applied) > 0 {
+		name := getStr(node, "name")
+		if name == "" {
+			name = labelForBuffs(sub.applied)
+		}
+		out.activatable = append(out.activatable, map[string]any{
+			"id":    opts.abilityID + "#" + name,
+			"label": name,
+			"buffs": sub.applied,
+		})
+	}
+}
+
+// --- activatable-lever enumeration ---
+func enumerateChoice(node, source map[string]any, opts dslOpts, out *effectTranslation) {
+	options, _ := asList(node["options"])
+	maxActivations := float64(1)
+	if isNumber(node["max_choices"]) {
+		maxActivations, _ = num(node["max_choices"])
+	}
+	for i, opt := range options {
+		var buffs []any
+		collectGatedBuffs(opt, source, opts, map[string]any{}, &buffs)
+		if len(buffs) == 0 {
+			continue
+		}
+		out.activatable = append(out.activatable, map[string]any{
+			"id":    opts.abilityID + "?" + strconv.Itoa(i),
+			"label": labelForBuffs(buffs),
+			"buffs": buffs,
+			"group": map[string]any{"id": opts.abilityID + "?choice", "maxActivations": maxActivations},
+		})
+	}
+}
+
+func enumerateDicePool(node, source map[string]any, opts dslOpts, out *effectTranslation) {
+	options, _ := asList(node["options"])
+	var maxActivations float64
+	if isNumber(node["max_activations"]) {
+		maxActivations, _ = num(node["max_activations"])
+	} else {
+		maxActivations = float64(len(options))
+	}
+	for _, optAny := range options {
+		opt, ok := asMap(optAny)
+		if !ok {
+			continue
+		}
+		var buffs []any
+		collectGatedBuffs(opt["effect"], source, opts, map[string]any{}, &buffs)
+		if len(buffs) == 0 {
+			continue
+		}
+		name, _ := opt["name"].(string)
+		if name == "" {
+			name = labelForBuffs(buffs)
+		}
+		out.activatable = append(out.activatable, map[string]any{
+			"id":    opts.abilityID + "#" + name,
+			"label": name,
+			"buffs": buffs,
+			"group": map[string]any{"id": opts.abilityID, "maxActivations": maxActivations},
+		})
+	}
+}
+
+// enumerateNamedOptions emits one opt-in lever per buff-bearing named option
+// (stance-select / issue-orders), grouped under groupID with maxActivations.
+func enumerateNamedOptions(node, source map[string]any, opts dslOpts, out *effectTranslation, groupID string, maxActivations float64) {
+	options, _ := asList(node["options"])
+	for _, optAny := range options {
+		opt, ok := asMap(optAny)
+		if !ok {
+			continue
+		}
+		var buffs []any
+		collectGatedBuffs(opt["effect"], source, opts, map[string]any{}, &buffs)
+		if len(buffs) == 0 {
+			continue
+		}
+		name, _ := opt["name"].(string)
+		if name == "" {
+			name = labelForBuffs(buffs)
+		}
+		out.activatable = append(out.activatable, map[string]any{
+			"id":    opts.abilityID + "#" + name,
+			"label": name,
+			"buffs": buffs,
+			"group": map[string]any{"id": groupID, "maxActivations": maxActivations},
+		})
+	}
+}
+
+// enumerateMenuActions emits one opt-in lever per buff-bearing
+// resource-action-menu action. Unlike enumerateNamedOptions (stance-select /
+// issue-orders, a pick-one group), each action here is an INDEPENDENT
+// decision with its own trigger and cost — no shared group/maxActivations
+// cap, since a unit's per-phase manoeuvre limit isn't a mutual-exclusion pool
+// the cruncher can enforce (and usage.repeatable_if_different_unit
+// explicitly allows the same action to recur via a different unit in one
+// phase). A single eligibility.requires_keyword narrows the lever to
+// attackers carrying that keyword; multiple required keywords have no
+// single-field applicability representation today and are left ungated
+// (correctness-conservative: the lever still surfaces, just without that
+// extra restriction attached).
+func enumerateMenuActions(node, source map[string]any, opts dslOpts, out *effectTranslation) {
+	actions, _ := asList(node["actions"])
+	for _, actionAny := range actions {
+		action, ok := asMap(actionAny)
+		if !ok {
+			continue
+		}
+		applicability := map[string]any{}
+		if elig, ok := getMap(action, "eligibility"); ok {
+			requiresKeyword := getStrList(elig, "requires_keyword")
+			if len(requiresKeyword) == 1 {
+				applicability = map[string]any{"requiresAttackerKeyword": requiresKeyword[0]}
+			}
+		}
+		var buffs []any
+		collectGatedBuffs(action["effect"], source, opts, applicability, &buffs)
+		if len(buffs) == 0 {
+			continue
+		}
+		label, _ := action["label"].(string)
+		if label == "" {
+			label = labelForBuffs(buffs)
+		}
+		id, _ := action["id"].(string)
+		if id == "" {
+			id = label
+		}
+		out.activatable = append(out.activatable, map[string]any{
+			"id":    opts.abilityID + "#" + id,
+			"label": label,
+			"buffs": buffs,
+		})
+	}
+}
+
+func enumerateTimingGate(node, source map[string]any, opts dslOpts, out *effectTranslation) {
+	condition, ok := getMap(node, "condition")
+	if !ok {
+		return
+	}
+	var buffs []any
+	collectGatedBuffs(node["effect"], source, opts, map[string]any{}, &buffs)
+	sub := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
+	dslWalk(node["effect"], source, opts, sub)
+	// A stochastic branch contributes nothing to a timing activation. Preserve
+	// every other unsupported diagnostic discovered while finding inner levers.
+	for _, unsupported := range sub.unsupported {
+		fragment, ok := asMap(unsupported)
+		if ok && getStr(fragment, "reason") == stochasticDiceGatedReason {
+			effectFragment, isDiceGate := asMap(fragment["effectFragment"])
+			if isDiceGate && getStr(effectFragment, "type") == "dice-gated" {
+				continue
+			}
+		}
+		out.unsupported = append(out.unsupported, unsupported)
+	}
+	// Inner independent decisions pass straight through as their own levers.
+	out.activatable = append(out.activatable, sub.activatable...)
+	// Inner unconditional buffs become one lever gated only on the timing.
+	if len(buffs) > 0 {
+		timing := extractTiming(condition)
+		if timing == "" {
+			timing = "timing"
+		}
+		out.activatable = append(out.activatable, map[string]any{
+			"id":    opts.abilityID + "@" + timing,
+			"label": labelForBuffs(buffs),
+			"buffs": buffs,
+		})
+	}
+}
+
+func collectGatedBuffs(node any, source map[string]any, opts dslOpts, applicability map[string]any, outBuffs *[]any) {
+	n, ok := asMap(node)
+	if !ok {
+		return
+	}
+	switch getStr(n, "type") {
+	case "conditional":
+		condition, ok := getMap(n, "condition")
+		if !ok {
+			return
+		}
+		app := conditionToApplicability(condition)
+		switch a := app.(type) {
+		case string:
+			if a == "gate" {
+				collectGatedBuffs(n["effect"], source, opts, applicability, outBuffs)
+				return
+			}
+			if a == "context" {
+				if evaluateCondition(condition, opts.context) == true {
+					collectGatedBuffs(n["effect"], source, opts, applicability, outBuffs)
+				}
+				return
+			}
+		case map[string]any:
+			collectGatedBuffs(n["effect"], source, opts, combineApplicability(applicability, a), outBuffs)
+			return
+		}
+		return
+	case "rules-bundle", "sequence":
+		for _, step := range getList(n, "steps") {
+			collectGatedBuffs(step, source, opts, applicability, outBuffs)
+		}
+		return
+	case "named-effect":
+		if n["optional"] != true && n["cost"] == nil && n["trigger"] == nil && n["usage"] == nil {
+			collectGatedBuffs(n["effect"], source, opts, applicability, outBuffs)
+		}
+		return
+	case "choice", "dice-pool-allocation", "dice-gated":
+		return
+	}
+	tmp := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
+	dslWalk(n, source, opts, tmp)
+	for _, b := range tmp.applied {
+		*outBuffs = append(*outBuffs, applyApplicability(b.(map[string]any), applicability))
+	}
+}
+
 func unsup(reason string, fragment any) map[string]any {
 	return map[string]any{"reason": reason, "effectFragment": fragment}
 }
@@ -204,6 +500,71 @@ func appliesToBuffedUnit(node map[string]any, perspective string) bool {
 	return false
 }
 
+func auraRecipientFilterMatches(value any, context map[string]any, perspective string) (bool, string) {
+	filter, ok := asMap(value)
+	if !ok || filter == nil {
+		return false, "aura recipient_filter is malformed"
+	}
+	requiredRaw, ok := asList(filter["required_keywords"])
+	if !ok || len(requiredRaw) == 0 {
+		return false, "aura recipient_filter is missing required keywords"
+	}
+	required := make([]string, len(requiredRaw))
+	for i, raw := range requiredRaw {
+		keyword, ok := raw.(string)
+		if !ok || keyword == "" {
+			return false, "aura recipient_filter has malformed required keywords"
+		}
+		required[i] = strings.ToLower(keyword)
+	}
+	excluded := []string{}
+	if raw, present := filter["excluded_keywords"]; present {
+		excludedRaw, ok := asList(raw)
+		if !ok || len(excludedRaw) == 0 {
+			return false, "aura recipient_filter has malformed excluded keywords"
+		}
+		excluded = make([]string, len(excludedRaw))
+		for i, item := range excludedRaw {
+			keyword, ok := item.(string)
+			if !ok || keyword == "" {
+				return false, "aura recipient_filter has malformed excluded keywords"
+			}
+			excluded[i] = strings.ToLower(keyword)
+		}
+	}
+	contextKey := "targetKeywords"
+	if perspective == "attacker" {
+		contextKey = "attackerKeywords"
+	}
+	rawKeywords, present := context[contextKey]
+	if !present || rawKeywords == nil {
+		return false, "aura recipient_filter cannot be evaluated without recipient keywords"
+	}
+	keywords, ok := asList(rawKeywords)
+	if !ok {
+		return false, "aura recipient_filter recipient keywords are malformed"
+	}
+	current := map[string]bool{}
+	for _, raw := range keywords {
+		keyword, ok := raw.(string)
+		if !ok || keyword == "" {
+			return false, "aura recipient_filter recipient keywords are malformed"
+		}
+		current[strings.ToLower(keyword)] = true
+	}
+	for _, keyword := range required {
+		if !current[keyword] {
+			return false, ""
+		}
+	}
+	for _, keyword := range excluded {
+		if current[keyword] {
+			return false, ""
+		}
+	}
+	return true, ""
+}
+
 func translateReroll(node, source map[string]any, opts dslOpts, out *effectTranslation) {
 	if opts.perspective == "attacker" && !appliesToBuffedUnit(node, "attacker") {
 		return
@@ -223,6 +584,10 @@ func translateReroll(node, source map[string]any, opts dslOpts, out *effectTrans
 		subset = "ones"
 	}
 	if opts.perspective == "target" && roll != "save" {
+		return
+	}
+	if _, capped := modifier["count"]; capped {
+		out.unsupported = append(out.unsupported, unsup("re-roll: count-capped permissions are not modelled by the expected-value engine", node))
 		return
 	}
 	if (roll == "hit" || roll == "wound" || roll == "save" || roll == "damage") &&
@@ -627,195 +992,6 @@ func translateConditional(node, source map[string]any, opts dslOpts, out *effect
 		return
 	}
 	dslWalk(node["effect"], source, opts, out)
-}
-
-// --- activatable-lever enumeration ---
-
-func enumerateChoice(node, source map[string]any, opts dslOpts, out *effectTranslation) {
-	options, _ := asList(node["options"])
-	for i, opt := range options {
-		var buffs []any
-		collectGatedBuffs(opt, source, opts, map[string]any{}, &buffs)
-		if len(buffs) == 0 {
-			continue
-		}
-		out.activatable = append(out.activatable, map[string]any{
-			"id":    opts.abilityID + "?" + strconv.Itoa(i),
-			"label": labelForBuffs(buffs),
-			"buffs": buffs,
-			"group": map[string]any{"id": opts.abilityID + "?choice", "maxActivations": float64(1)},
-		})
-	}
-}
-
-func enumerateDicePool(node, source map[string]any, opts dslOpts, out *effectTranslation) {
-	options, _ := asList(node["options"])
-	var maxActivations float64
-	if isNumber(node["max_activations"]) {
-		maxActivations, _ = num(node["max_activations"])
-	} else {
-		maxActivations = float64(len(options))
-	}
-	for _, optAny := range options {
-		opt, ok := asMap(optAny)
-		if !ok {
-			continue
-		}
-		var buffs []any
-		collectGatedBuffs(opt["effect"], source, opts, map[string]any{}, &buffs)
-		if len(buffs) == 0 {
-			continue
-		}
-		name, _ := opt["name"].(string)
-		if name == "" {
-			name = labelForBuffs(buffs)
-		}
-		out.activatable = append(out.activatable, map[string]any{
-			"id":    opts.abilityID + "#" + name,
-			"label": name,
-			"buffs": buffs,
-			"group": map[string]any{"id": opts.abilityID, "maxActivations": maxActivations},
-		})
-	}
-}
-
-// enumerateNamedOptions emits one opt-in lever per buff-bearing named option
-// (stance-select / issue-orders), grouped under groupID with maxActivations.
-func enumerateNamedOptions(node, source map[string]any, opts dslOpts, out *effectTranslation, groupID string, maxActivations float64) {
-	options, _ := asList(node["options"])
-	for _, optAny := range options {
-		opt, ok := asMap(optAny)
-		if !ok {
-			continue
-		}
-		var buffs []any
-		collectGatedBuffs(opt["effect"], source, opts, map[string]any{}, &buffs)
-		if len(buffs) == 0 {
-			continue
-		}
-		name, _ := opt["name"].(string)
-		if name == "" {
-			name = labelForBuffs(buffs)
-		}
-		out.activatable = append(out.activatable, map[string]any{
-			"id":    opts.abilityID + "#" + name,
-			"label": name,
-			"buffs": buffs,
-			"group": map[string]any{"id": groupID, "maxActivations": maxActivations},
-		})
-	}
-}
-
-// enumerateMenuActions emits one opt-in lever per buff-bearing
-// resource-action-menu action. Unlike enumerateNamedOptions (stance-select /
-// issue-orders, a pick-one group), each action here is an INDEPENDENT
-// decision with its own trigger and cost — no shared group/maxActivations
-// cap, since a unit's per-phase manoeuvre limit isn't a mutual-exclusion pool
-// the cruncher can enforce (and usage.repeatable_if_different_unit
-// explicitly allows the same action to recur via a different unit in one
-// phase). A single eligibility.requires_keyword narrows the lever to
-// attackers carrying that keyword; multiple required keywords have no
-// single-field applicability representation today and are left ungated
-// (correctness-conservative: the lever still surfaces, just without that
-// extra restriction attached).
-func enumerateMenuActions(node, source map[string]any, opts dslOpts, out *effectTranslation) {
-	actions, _ := asList(node["actions"])
-	for _, actionAny := range actions {
-		action, ok := asMap(actionAny)
-		if !ok {
-			continue
-		}
-		applicability := map[string]any{}
-		if elig, ok := getMap(action, "eligibility"); ok {
-			requiresKeyword := getStrList(elig, "requires_keyword")
-			if len(requiresKeyword) == 1 {
-				applicability = map[string]any{"requiresAttackerKeyword": requiresKeyword[0]}
-			}
-		}
-		var buffs []any
-		collectGatedBuffs(action["effect"], source, opts, applicability, &buffs)
-		if len(buffs) == 0 {
-			continue
-		}
-		label, _ := action["label"].(string)
-		if label == "" {
-			label = labelForBuffs(buffs)
-		}
-		id, _ := action["id"].(string)
-		if id == "" {
-			id = label
-		}
-		out.activatable = append(out.activatable, map[string]any{
-			"id":    opts.abilityID + "#" + id,
-			"label": label,
-			"buffs": buffs,
-		})
-	}
-}
-
-func enumerateTimingGate(node, source map[string]any, opts dslOpts, out *effectTranslation) {
-	condition, ok := getMap(node, "condition")
-	if !ok {
-		return
-	}
-	sub := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
-	dslWalk(node["effect"], source, opts, sub)
-	out.activatable = append(out.activatable, sub.activatable...)
-	if len(sub.applied) > 0 {
-		timing := extractTiming(condition)
-		if timing == "" {
-			timing = "timing"
-		}
-		out.activatable = append(out.activatable, map[string]any{
-			"id":    opts.abilityID + "@" + timing,
-			"label": labelForBuffs(sub.applied),
-			"buffs": sub.applied,
-		})
-	}
-}
-
-func collectGatedBuffs(node any, source map[string]any, opts dslOpts, applicability map[string]any, outBuffs *[]any) {
-	n, ok := asMap(node)
-	if !ok {
-		return
-	}
-	switch getStr(n, "type") {
-	case "conditional":
-		condition, ok := getMap(n, "condition")
-		if !ok {
-			return
-		}
-		app := conditionToApplicability(condition)
-		switch a := app.(type) {
-		case string:
-			if a == "gate" {
-				collectGatedBuffs(n["effect"], source, opts, applicability, outBuffs)
-				return
-			}
-			if a == "context" {
-				if evaluateCondition(condition, opts.context) == true {
-					collectGatedBuffs(n["effect"], source, opts, applicability, outBuffs)
-				}
-				return
-			}
-		case map[string]any:
-			collectGatedBuffs(n["effect"], source, opts, combineApplicability(applicability, a), outBuffs)
-			return
-		}
-		return
-	case "rules-bundle", "sequence":
-		for _, step := range getList(n, "steps") {
-			collectGatedBuffs(step, source, opts, applicability, outBuffs)
-		}
-		return
-	case "choice", "dice-pool-allocation", "dice-gated":
-		return
-	}
-	tmp := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
-	dslWalk(n, source, opts, tmp)
-	for _, b := range tmp.applied {
-		*outBuffs = append(*outBuffs, applyApplicability(b.(map[string]any), applicability))
-	}
 }
 
 func conditionMentionsTiming(condition map[string]any) bool {
@@ -1259,7 +1435,42 @@ func hasUnresolvedFidelityBinding(n map[string]any) bool {
 	applies, _ := getMap(n, "applies")
 	modifier, _ := getMap(n, "modifier")
 	consumer, _ := getMap(modifier, "consumer")
-	return (n["type"] == "select-units" && (selector["target_kind"] == "model" || selector["eligibility"] != nil || selector["reference"] != nil || selector["selection_limit"] != nil)) ||
-		(n["type"] == "designate-target" && (selectSpec["eligibility"] != nil || applies["attacker_keywords"] != nil)) ||
+	selectorUnresolved := (n["type"] == "select-units" || n["type"] == "for-each-unit") && (selector["target_kind"] == "model" ||
+		selector["eligibility"] != nil ||
+		selector["reference"] != nil ||
+		selector["origin"] != nil ||
+		selector["selection_limit"] != nil ||
+		selector["bind_as"] != nil ||
+		selector["within_inches_from"] != nil ||
+		selector["visible_to"] != nil ||
+		selector["visibility_required"] == true)
+	designationUnresolved := n["type"] == "designate-target" && (selectSpec["eligibility"] != nil ||
+		selectSpec["reference"] != nil ||
+		selectSpec["visibility_required"] == true ||
+		selectSpec["bind_as"] != nil ||
+		selectSpec["within_inches_from"] != nil ||
+		selectSpec["visible_to"] != nil ||
+		selectSpec["selection_limit"] != nil ||
+		applies["attacker_keywords"] != nil ||
+		applies["attacker_unit_keywords"] != nil ||
+		applies["beneficiary"] != nil ||
+		applies["reference"] != nil)
+	triggerUnresolved := n["type"] == "named-effect" && hasUnresolvedTriggerBinding(n["trigger"])
+	return selectorUnresolved ||
+		designationUnresolved ||
+		triggerUnresolved ||
 		(n["type"] == "named-region-state" && consumer["attack_condition"] != nil)
+}
+
+func hasUnresolvedTriggerBinding(raw any) bool {
+	if triggers, ok := asList(raw); ok {
+		for _, trigger := range triggers {
+			if hasUnresolvedTriggerBinding(trigger) {
+				return true
+			}
+		}
+		return false
+	}
+	trigger, ok := asMap(raw)
+	return ok && (trigger["caused_by"] != nil || trigger["source_ability"] != nil)
 }

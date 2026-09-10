@@ -1413,6 +1413,15 @@
         },
         "loadout_variants": [
           {
+            "name": "Vigilant w/ combat shotgun",
+            "weapon_ids": [
+              "arbites-combat-shotgun",
+              "arbites-shotpistol",
+              "close-combat-weapon-vigilant-squad"
+            ],
+            "max_count": 9
+          },
+          {
             "name": "Vigilant w/ grenade launcher",
             "weapon_ids": [
               "close-combat-weapon-vigilant-squad",
@@ -2160,5 +2169,282 @@
       "edition": "11th",
       "dataslate": "launch"
     }
+  },
+  {
+    "unit_id": "inquisitors-hand-eversor-assassin",
+    "faction_id": "agents-of-the-imperium",
+    "models": [
+      {
+        "name": "Eversor Assassin",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "executioner-pistol",
+          "power-sword-and-neuro-gauntlet"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Eversor Assassin",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "inquisitors-hand-inquisitorial-agents",
+    "faction_id": "agents-of-the-imperium",
+    "models": [
+      {
+        "name": "Gun Servitor",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "agents-implement",
+          "heavy-bolter-inquisitorial-agents"
+        ]
+      },
+      {
+        "name": "Inquisitorial Agent with Agent’s Firearm, Agent’s Implement and Mystic Stave",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "agent-firearm",
+          "agents-implement",
+          "mystic-stave"
+        ]
+      },
+      {
+        "name": "Inquisitorial Agent with Agent’s Firearm, Plasma Pistol and Agent’s Implement",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "agent-firearm",
+          "agents-implement",
+          "plasma-pistol-standard-inquisitors-hand"
+        ]
+      },
+      {
+        "name": "Inquisitorial Agent with Agent’s Firearm and Agent’s Implement",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "agent-firearm",
+          "agents-implement"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Gun Servitor",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Inquisitorial Agent with Agent’s Firearm, Agent’s Implement and Mystic Stave",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Inquisitorial Agent with Agent’s Firearm, Plasma Pistol and Agent’s Implement",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Inquisitorial Agent with Agent’s Firearm and Agent’s Implement",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "inquisitors-hand-vigilant-squad",
+    "faction_id": "agents-of-the-imperium",
+    "models": [
+      {
+        "name": "Cyber-Mastiff",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "mechanical-bite"
+        ]
+      },
+      {
+        "name": "Proctor-Vigilant",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "combat-shotgun",
+          "gun-stocks",
+          "shotpistol"
+        ]
+      },
+      {
+        "name": "Vigilant with Grenade Launcher, Shotpistol and Gun Stocks",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "grenade-launcher-frag-inquisitors-hand",
+          "gun-stocks",
+          "shotpistol"
+        ]
+      },
+      {
+        "name": "Vigilant with Shotpistol, Webber and Gun Stocks",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "gun-stocks",
+          "shotpistol",
+          "webber-inquisitors-hand"
+        ]
+      },
+      {
+        "name": "Vigilant with Combat Shotgun, Shotpistol and Gun Stocks",
+        "min": 6,
+        "max": 6,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "combat-shotgun",
+          "gun-stocks",
+          "shotpistol"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Cyber-Mastiff",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Proctor-Vigilant",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Vigilant with Grenade Launcher, Shotpistol and Gun Stocks",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Vigilant with Shotpistol, Webber and Gun Stocks",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Vigilant with Combat Shotgun, Shotpistol and Gun Stocks",
+            "min": 6,
+            "max": 6
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "preacher-teguen",
+    "faction_id": "agents-of-the-imperium",
+    "models": [
+      {
+        "name": "Preacher Teguen",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "zealots-vindictor"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Preacher Teguen",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   }
 ]

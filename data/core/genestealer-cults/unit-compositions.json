@@ -1281,5 +1281,231 @@
         ]
       }
     ]
+  },
+  {
+    "unit_id": "claw-of-ascension-achilles-ridgerunner",
+    "faction_id": "genestealer-cults",
+    "models": [
+      {
+        "name": "Achilles Ridgerunner",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        },
+        "default_weapon_ids": [
+          "armoured-hull-achilles-ridgerunners",
+          "missile-launcher",
+          "survey-augur",
+          "twin-heavy-stubber"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Achilles Ridgerunner",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "claw-of-ascension-atalan-jackals",
+    "faction_id": "genestealer-cults",
+    "models": [
+      {
+        "name": "Atalan Jackal with Power Weapon",
+        "profile_name": "Atalan Jackal",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        },
+        "default_weapon_ids": [
+          "atalan-power-weapon",
+          "stolen-firearms"
+        ]
+      },
+      {
+        "name": "Atalan Wolfquad",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        },
+        "default_weapon_ids": [
+          "mining-laser",
+          "stolen-blade",
+          "stolen-firearms"
+        ]
+      },
+      {
+        "name": "Atalan Jackal",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        },
+        "default_weapon_ids": [
+          "stolen-blade",
+          "stolen-firearms"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Atalan Jackal with Power Weapon",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Atalan Wolfquad",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Atalan Jackal",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "claw-of-ascension-hybrid-metamorphs",
+    "faction_id": "genestealer-cults",
+    "models": [
+      {
+        "name": "Metamorph",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "metamorph-mutations"
+        ]
+      },
+      {
+        "name": "Metamorph Leader",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "autopistol",
+          "leaders-weapon-symbiote"
+        ]
+      },
+      {
+        "name": "Metamorph with Hand Flamer",
+        "profile_name": "Metamorph",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "hand-flamer",
+          "metamorph-mutations"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Metamorph",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Metamorph Leader",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Metamorph with Hand Flamer",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "shanus-daskovian",
+    "faction_id": "genestealer-cults",
+    "models": [
+      {
+        "name": "Shanus Daskovian",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        },
+        "default_weapon_ids": [
+          "autopistol-jackal-alphus",
+          "cult-sniper-rifle-jackal-alphus",
+          "stolen-blade"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Shanus Daskovian",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   }
 ]

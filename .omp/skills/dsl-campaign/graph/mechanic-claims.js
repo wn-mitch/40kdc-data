@@ -8,7 +8,11 @@ export const MECHANIC_ONTOLOGY_VERSION = 1
 export const MECHANIC_IDENTITY_ONTOLOGY_VERSION = 1
 export const MECHANIC_PROPOSITION_SCHEMA_ID = '40k.mechanic-claim'
 export const MECHANIC_PROPOSITION_SCHEMA_VERSION = '1'
-export const MECHANIC_TERMINAL_EFFECT_TYPES = Object.freeze(['no-effect'])
+export const MECHANIC_TERMINAL_EFFECT_TYPES = Object.freeze([
+  'no-effect',
+  'miracle-die-operation',
+  'attachment-eligibility-inherit',
+])
 
 const IDENTIFIER = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*(?:\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*)+$/
 const ROLE_IDENTIFIER = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/
@@ -56,6 +60,11 @@ export const MECHANIC_CHILD_DESCRIPTORS = Object.freeze([
   { container_type: 'resource-action-menu', path: 'actions/*/when', child_kind: 'trigger', role: 'trigger', ordered: false },
   { container_type: 'resource-action-menu', path: 'actions/*/eligibility/requires/*', child_kind: 'condition', role: 'condition', ordered: false },
   { container_type: 'for-each-unit', path: 'effect', child_kind: 'effect', role: 'members', ordered: true },
+  { container_type: 'select-objective', path: 'effect', child_kind: 'effect', role: 'members', ordered: true },
+  { container_type: 'for-each-objective', path: 'effect', child_kind: 'effect', role: 'members', ordered: true },
+  { container_type: 'paired-designation', path: 'observer_eligibility', child_kind: 'condition', role: 'condition', ordered: true },
+  { container_type: 'paired-designation', path: 'effects', child_kind: 'effect', role: 'members', ordered: true },
+  { container_type: 'formation-attachment-grant', path: 'grant/effect', child_kind: 'effect', role: 'members', ordered: true },
   { container_type: 'named-region-state', path: 'modifier/consumer/attack_condition', child_kind: 'condition', role: 'attack-condition', ordered: true },
   { container_type: 'named-region-state', path: 'modifier/consumer/qualified_condition', child_kind: 'condition', role: 'condition', ordered: true },
   { container_type: 'named-region-state', path: 'modifier/consumer/default_branch/effect', child_kind: 'effect', role: 'default-branch', ordered: true },

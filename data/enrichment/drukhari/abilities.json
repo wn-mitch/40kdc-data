@@ -4180,5 +4180,249 @@
       "duration": "phase"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+  },
+  {
+    "ability_id": "empowered-engines-coven-of-agonies",
+    "name": "Empowered Engines",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "d7472ffbabaab063fcffce6448fd1b253721fbb1951fb4e1c230bc2c3a2e49db",
+    "version": "2026-q3",
+    "unit_ids": [
+      "coven-of-agonies-cronos"
+    ],
+    "faction_id": "drukhari",
+    "ability_type": "unit",
+    "behavior": "activated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "normal-move"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "advance-move"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "fall-back-move"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "resource-spend",
+            "target": "self",
+            "modifier": {
+              "pool_id": "pain-token-pool",
+              "amount": 1
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "self",
+            "modifier": {
+              "stat": "M",
+              "operation": "add",
+              "value": 2
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "phase"
+    }
+  },
+  {
+    "ability_id": "torture-device-coven-of-agonies",
+    "name": "Torture Device",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "aba2fdcf7735ffd3a75d45dcef318d55d0c08fd4fcab6060a23ea10ef4513a08",
+    "version": "2026-q3",
+    "unit_ids": [
+      "coven-of-agonies-talos"
+    ],
+    "faction_id": "drukhari",
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "units-destroyed",
+        "parameters": {
+          "side": "enemy",
+          "window": "this-attack",
+          "count_min": 1
+        }
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "self",
+        "modifier": {
+          "pool_id": "pain-token-pool",
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "battle"
+    }
+  },
+  {
+    "ability_id": "fear-incarnate-aura-xatrophos-nuul",
+    "name": "Fear Incarnate (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "34d0dc28f22776dfd0ddef1213c55cf76b5b5a14009525031f1dfdc143752379",
+    "version": "2026-q3",
+    "unit_ids": [
+      "xatrophos-nuul"
+    ],
+    "faction_id": "drukhari",
+    "ability_type": "unit",
+    "behavior": "aura",
+    "effect": {
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "enemy-within-aura",
+          "modifier": {
+            "stat": "Ld",
+            "operation": "subtract",
+            "value": 1
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent"
+                }
+              },
+              {
+                "type": "timing-is",
+                "parameters": {
+                  "timing": "before-battle-shock"
+                }
+              },
+              {
+                "type": "unit-below-starting-strength"
+              }
+            ]
+          },
+          "effect": {
+            "type": "leadership-modifier",
+            "target": "enemy-within-aura",
+            "modifier": {
+              "test": "battle-shock",
+              "operation": "force-test"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "aura-6",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vile-weaponry-xatrophos-nuul",
+    "name": "Vile Weaponry",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "5a98b047289430392aa967acc0ff4a3c429bb6fa962f0bdca119b5bccb177470",
+    "version": "2026-q3",
+    "unit_ids": [
+      "xatrophos-nuul"
+    ],
+    "faction_id": "drukhari",
+    "ability_type": "unit",
+    "behavior": "activated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "timing-is",
+            "parameters": {
+              "timing": "selected-to-fight"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "resource-spend",
+            "target": "self",
+            "modifier": {
+              "pool_id": "pain-token-pool",
+              "amount": 1
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "self",
+            "modifier": {
+              "stat": "D",
+              "operation": "set",
+              "value": 3
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "phase"
+    }
   }
 ]

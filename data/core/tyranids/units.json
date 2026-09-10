@@ -4081,6 +4081,13 @@
       "shape": "round",
       "diameter": 50
     },
+    "weapon_ids": [
+      "prime-talons"
+    ],
+    "ability_ids": [
+      "shadow-in-the-warp",
+      "synapse"
+    ],
     "external_refs": [
       {
         "namespace": "mfm",
@@ -4134,6 +4141,15 @@
       "shape": "round",
       "diameter": 40
     },
+    "weapon_ids": [
+      "barblauncher",
+      "chitinous-claws-and-teeth-barbgaunts"
+    ],
+    "ability_ids": [
+      "disruption-bombardment-vardenghast-swarm",
+      "shadow-in-the-warp",
+      "synapse"
+    ],
     "external_refs": [
       {
         "namespace": "mfm",
@@ -4190,6 +4206,16 @@
       "width": 120,
       "length": 92
     },
+    "weapon_ids": [
+      "psychoclastic-torrent",
+      "talons-and-betentacled-maw"
+    ],
+    "ability_ids": [
+      "feeding-frenzy-vardenghast-swarm",
+      "bio-stimulus-aura-vardenghast-swarm",
+      "shadow-in-the-warp",
+      "synapse"
+    ],
     "external_refs": [
       {
         "namespace": "mfm",
@@ -4245,7 +4271,26 @@
     "base_size_mm": {
       "shape": "round",
       "diameter": 28.5
-    }
+    },
+    "weapon_ids": [
+      "chitinous-claws-and-teeth-termagants",
+      "fleshborer"
+    ],
+    "ability_ids": [
+      "skulking-horrors-vardenghast-swarm",
+      "shadow-in-the-warp",
+      "synapse"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b18d6cab-944e-4c3a-96f8-7008a040f5a3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9a2b0ce6-8d85-46f0-a5de-fb5e494ae6d4"
+      }
+    ]
   },
   {
     "id": "vardenghast-swarm-von-ryans-leapers",
@@ -4294,6 +4339,14 @@
       "shape": "round",
       "diameter": 40
     },
+    "weapon_ids": [
+      "leapers-talons"
+    ],
+    "ability_ids": [
+      "pouncing-leap-vardenghast-swarm",
+      "shadow-in-the-warp",
+      "synapse"
+    ],
     "external_refs": [
       {
         "namespace": "mfm",

@@ -7636,5 +7636,486 @@
     ],
     "ability_type": "unit",
     "behavior": "activated"
+  },
+  {
+    "ability_id": "horsemasters-draydens-lance",
+    "name": "Horsemasters",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "launch",
+    "effect": {
+      "type": "fallback-and-act",
+      "target": "unit",
+      "modifier": {}
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "draydens-lance-attilan-rough-riders"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "medi-pack-draydens-lance",
+    "name": "Medi-pack",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "launch",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "draydens-lance-command-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "orders-draydens-lance",
+    "name": "Orders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "launch",
+    "effect": {
+      "type": "ability-grant",
+      "target": "self",
+      "modifier": {
+        "grant_type": "issue-orders",
+        "max_orders": 2,
+        "applies_to_keywords": [
+          "Drayden's Lance"
+        ]
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "battle"
+    },
+    "unit_ids": [
+      "draydens-lance-command-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "regimental-standard-draydens-lance",
+    "name": "Regimental Standard",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "launch",
+    "effect": {
+      "type": "objective-control-modifier",
+      "target": "unit",
+      "modifier": {
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "draydens-lance-command-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "master-vox-draydens-lance",
+    "name": "Master Vox",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "launch",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "extended-order-range",
+        "range": 24
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "battle"
+    },
+    "unit_ids": [
+      "draydens-lance-command-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "voice-of-command-draydens-lance",
+    "name": "Voice of Command",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "launch",
+    "effect": {
+      "type": "issue-orders",
+      "range": 6,
+      "options": [
+        {
+          "name": "Move! Move! Move!",
+          "effect": {
+            "type": "stat-modifier",
+            "target": "unit",
+            "modifier": {
+              "stat": "M",
+              "operation": "add",
+              "value": 3
+            }
+          }
+        },
+        {
+          "name": "Fix Bayonets!",
+          "effect": {
+            "type": "stat-modifier",
+            "target": "unit",
+            "modifier": {
+              "stat": "WS",
+              "operation": "improve",
+              "value": 1,
+              "attack_type": "melee"
+            }
+          }
+        },
+        {
+          "name": "Take Aim!",
+          "effect": {
+            "type": "bs-modifier",
+            "target": "unit",
+            "modifier": {
+              "operation": "improve",
+              "value": 1
+            }
+          }
+        },
+        {
+          "name": "First Rank, Fire! Second Rank, Fire!",
+          "effect": {
+            "type": "stat-modifier",
+            "target": "unit",
+            "modifier": {
+              "stat": "A",
+              "operation": "improve",
+              "value": 1,
+              "weapon_keyword": "Rapid Fire"
+            }
+          }
+        },
+        {
+          "name": "Take Cover!",
+          "effect": {
+            "type": "stat-modifier",
+            "target": "unit",
+            "modifier": {
+              "stat": "Sv",
+              "operation": "improve",
+              "value": 1
+            }
+          }
+        },
+        {
+          "name": "Duty and Honour!",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "leadership-modifier",
+                "target": "unit",
+                "modifier": {
+                  "operation": "improve",
+                  "value": 1
+                }
+              },
+              {
+                "type": "objective-control-modifier",
+                "target": "unit",
+                "modifier": {
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "until-next-command-phase"
+    },
+    "unit_ids": [
+      "draydens-lance-command-squad",
+      "draydens-lance-kasrkin"
+    ],
+    "ability_type": "faction",
+    "behavior": "activated"
+  },
+  {
+    "ability_id": "warrior-elite-draydens-lance",
+    "name": "Warrior Elite",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "launch",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "extra-order"
+      }
+    },
+    "trigger": {
+      "event": "start-of-phase",
+      "subject": "self",
+      "optional": true
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "until-next-command-phase"
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "unit"
+    },
+    "unit_ids": [
+      "draydens-lance-kasrkin"
+    ],
+    "ability_type": "unit",
+    "behavior": "activated"
+  },
+  {
+    "ability_id": "melta-mine-draydens-lance",
+    "name": "Melta Mine",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "launch",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "target-has-keyword",
+            "parameters": {
+              "keyword": "Vehicle"
+            }
+          },
+          "effect": {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 2,
+            "comparison": "gte",
+            "on_success": {
+              "type": "mortal-wounds",
+              "target": "enemy-within-aura",
+              "modifier": {
+                "count": "2D3"
+              }
+            },
+            "on_fail": null
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "target-has-keyword",
+            "negated": true,
+            "parameters": {
+              "keyword": "Vehicle"
+            }
+          },
+          "effect": {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 2,
+            "comparison": "gte",
+            "on_success": {
+              "type": "mortal-wounds",
+              "target": "enemy-within-aura",
+              "modifier": {
+                "count": "D3"
+              }
+            },
+            "on_fail": null
+          }
+        }
+      ]
+    },
+    "trigger": {
+      "event": "start-of-phase",
+      "subject": "self",
+      "optional": true
+    },
+    "scope": {
+      "range": "aura-custom",
+      "range_inches": 3,
+      "duration": "one-use"
+    },
+    "unit_ids": [
+      "draydens-lance-kasrkin"
+    ],
+    "ability_type": "unit",
+    "behavior": "activated"
+  },
+  {
+    "ability_id": "vox-caster-draydens-lance",
+    "name": "Vox-caster",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "version": "launch",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "unit-within-range-of",
+            "parameters": {
+              "subject": "unit",
+              "keywords": [
+                "Officer"
+              ],
+              "range": 6
+            }
+          },
+          "effect": {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 4,
+            "comparison": "gte",
+            "on_success": {
+              "type": "cp-gain",
+              "target": "self",
+              "modifier": {
+                "amount": 1
+              }
+            },
+            "on_fail": null
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "unit-within-range-of",
+            "negated": true,
+            "parameters": {
+              "subject": "unit",
+              "keywords": [
+                "Officer"
+              ],
+              "range": 6
+            }
+          },
+          "effect": {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 5,
+            "comparison": "gte",
+            "on_success": {
+              "type": "cp-gain",
+              "target": "self",
+              "modifier": {
+                "amount": 1
+              }
+            },
+            "on_fail": null
+          }
+        }
+      ]
+    },
+    "trigger": {
+      "event": "stratagem-targeted",
+      "subject": "self"
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "draydens-lance-kasrkin"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive"
+  },
+  {
+    "ability_id": "over-there-draydens-lance",
+    "name": "Over There",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "2d6d4eccaf2d17acc252a234e1c58c030e32d4b442317bbcaae2f79e17ccf9bd",
+    "version": "2026-q3",
+    "effect": {
+      "type": "designate-target",
+      "designation": "over-there-target",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "within_inches": 24,
+        "timing": "start-of-your-shooting-phase"
+      },
+      "applies": {
+        "to": "target",
+        "effect": {
+          "type": "detection-range-modifier",
+          "target": "target",
+          "modifier": {
+            "operation": "add",
+            "value": 3
+          }
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "draydens-lance-command-squad"
+    ],
+    "ability_type": "unit",
+    "behavior": "activated"
   }
 ]

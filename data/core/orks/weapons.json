@@ -466,53 +466,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "29e9-cd9b-66bd-fe60"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "2f83-0702-df95-cf20"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "5bf6-ed4b-e32a-d7c1"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "614f-3d6b-88aa-9e15"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "aecd-6ba5-5558-fee2"
-      },
-      {
-        "namespace": "mfm",
-        "id": "0fe5f368-01f4-40a0-a83d-4f213580f6fc"
-      },
-      {
-        "namespace": "mfm",
-        "id": "165b3616-0e91-47d5-aa5e-57060b831464"
-      },
-      {
-        "namespace": "mfm",
-        "id": "313e7cdb-5038-4ba5-9fa2-d2d92e3801dc"
-      },
-      {
-        "namespace": "mfm",
-        "id": "4e15d651-f804-48b1-b050-3d5cb4bfd5e1"
-      },
-      {
-        "namespace": "mfm",
-        "id": "65a34ea0-9de2-4aee-ba0b-e000ec821038"
-      },
-      {
-        "namespace": "mfm",
-        "id": "9182041a-6322-4530-92b3-aa95c6c5829e"
-      }
-    ]
+    }
   },
   {
     "id": "big-choppa-boyz",
@@ -535,13 +489,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "29e9-cd9b-66bd-fe60"
-      }
-    ]
+    }
   },
   {
     "id": "big-choppa-kommandos",
@@ -600,13 +548,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "29e9-cd9b-66bd-fe60"
-      }
-    ]
+    }
   },
   {
     "id": "big-choppa-squighog-boyz",
@@ -771,13 +713,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "1fa0-d99a-154f-ffd8"
-      }
-    ]
+    }
   },
   {
     "id": "big-shoota-warboss-in-mega-armour",
@@ -1119,57 +1055,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "3daf-71a1-f386-435b"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "4e6a-844c-26bf-2b5d"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "76f1-21d4-c437-d3a4"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "8fca-90dd-a784-b5c0"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "a58e-f269-23ae-0158"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "e542-78f9-46d8-6c33"
-      },
-      {
-        "namespace": "mfm",
-        "id": "36256fc0-ca91-492a-916e-a0d196e06ce3"
-      },
-      {
-        "namespace": "mfm",
-        "id": "657458ab-fd4b-4bc2-ada6-f059387fb3b7"
-      },
-      {
-        "namespace": "mfm",
-        "id": "703ec7fa-4349-4bd9-ba66-5972c48a4217"
-      },
-      {
-        "namespace": "mfm",
-        "id": "7f60039c-9edd-43c3-8ede-3b1d2e4ffc36"
-      },
-      {
-        "namespace": "mfm",
-        "id": "c31ce680-a3dc-47b7-a22e-4b0832446d74"
-      },
-      {
-        "namespace": "mfm",
-        "id": "db980f73-dbab-4560-bb1d-dff0b8a99b23"
-      }
-    ]
+    }
   },
   {
     "id": "choppa-bannernob",
@@ -1239,13 +1125,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "4e6a-844c-26bf-2b5d"
-      }
-    ]
+    }
   },
   {
     "id": "choppa-boyz",
@@ -1268,13 +1148,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "e542-78f9-46d8-6c33"
-      }
-    ]
+    }
   },
   {
     "id": "choppa-breaka-boyz",
@@ -1355,13 +1229,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "8fca-90dd-a784-b5c0"
-      }
-    ]
+    }
   },
   {
     "id": "close-combat-weapon",
@@ -1384,65 +1252,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "050a-60ad-b309-77f5"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "0534-7359-3392-9d1b"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "0e59-78ec-9545-8d01"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "1d15-6f62-f2d4-9c10"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "8df-71e4-ccf5-99e8"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "b292-af7e-e129-8336"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "bec6-2d9b-d764-288"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "e1c3-9162-7c4b-b7da"
-      },
-      {
-        "namespace": "mfm",
-        "id": "0c5b8304-65b2-4269-a0ee-ec558c3ed49d"
-      },
-      {
-        "namespace": "mfm",
-        "id": "0cd704db-446f-4192-9895-46de31e27ad1"
-      },
-      {
-        "namespace": "mfm",
-        "id": "38617f6e-4a10-4797-8d6f-e63efa90c64f"
-      },
-      {
-        "namespace": "mfm",
-        "id": "a041f5cd-3e4a-4f95-8bc2-953018b387c3"
-      },
-      {
-        "namespace": "mfm",
-        "id": "a8e8cb81-6541-44c6-9f3c-3abaed1644a3"
-      },
-      {
-        "namespace": "mfm",
-        "id": "ef6354ba-1831-4183-b3b5-017afab8590d"
-      }
-    ]
+    }
   },
   {
     "id": "close-combat-weapon-beast-snagga-boyz",
@@ -1465,13 +1275,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "bec6-2d9b-d764-288"
-      }
-    ]
+    }
   },
   {
     "id": "close-combat-weapon-big-mek-with-shokk-attack-gun",
@@ -1575,13 +1379,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "e1c3-9162-7c4b-b7da"
-      }
-    ]
+    }
   },
   {
     "id": "da-grabzappa",
@@ -2710,13 +2508,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "32ab-c37c-b71f-8415"
-      }
-    ]
+    }
   },
   {
     "id": "kombi-weapon",
@@ -3134,13 +2926,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "8bba-d0bf-1102-2131"
-      }
-    ]
+    }
   },
   {
     "id": "kustom-shoota-kommandos",
@@ -3459,41 +3245,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "1341-d8c6-b2d2-96f0"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "83ef-7378-6a4-6ed5"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "a325-d197-5553-a355"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "edac-a910-975a-d4fd"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "ee65-6385-44ba-3758"
-      },
-      {
-        "namespace": "mfm",
-        "id": "a5ae440b-063d-41d5-8a8d-e3e702e3115b"
-      },
-      {
-        "namespace": "mfm",
-        "id": "c6276540-cfec-4983-8f5e-a03aa3efbc40"
-      },
-      {
-        "namespace": "mfm",
-        "id": "e8db9372-7bbd-42a1-aabf-29eacb780a99"
-      }
-    ]
+    }
   },
   {
     "id": "power-klaw-big-mek",
@@ -3574,13 +3326,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "ee65-6385-44ba-3758"
-      }
-    ]
+    }
   },
   {
     "id": "power-klaw-meganobz",
@@ -3682,21 +3428,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "0cda-9dab-edbc-df3b"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "d76a-13f1-cdb0-c3bc"
-      },
-      {
-        "namespace": "mfm",
-        "id": "a6cc88e7-2e5f-408b-8533-56ddf62e47d6"
-      }
-    ]
+    }
   },
   {
     "id": "psyko-gatler",
@@ -3795,13 +3527,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "80bc-5c89-4125-2253"
-      }
-    ]
+    }
   },
   {
     "id": "rokkit-launcha-deff-dread",
@@ -3989,13 +3715,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "80bc-5c89-4125-2253"
-      }
-    ]
+    }
   },
   {
     "id": "rokkit-pistol",
@@ -4022,17 +3742,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "9786-120d-a921-3226"
-      },
-      {
-        "namespace": "mfm",
-        "id": "93fd3e45-cd64-4434-a614-a4aad11c2f3a"
-      }
-    ]
+    }
   },
   {
     "id": "runtherd-tools",
@@ -4055,13 +3765,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "6b985332-0162-4edd-aa5a-fc24edba68c2"
-      }
-    ]
+    }
   },
   {
     "id": "saddlegit-weapons",
@@ -4461,41 +4165,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "752e-cd9b-4721-f0b0"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "b621-5929-fc60-ed8d"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "e71d-1472-87d-b4fa"
-      },
-      {
-        "namespace": "mfm",
-        "id": "31d37488-865b-4eba-9e13-a7671d8291cd"
-      },
-      {
-        "namespace": "mfm",
-        "id": "5c1a0739-fb44-487c-aa95-8e8ceaea8018"
-      },
-      {
-        "namespace": "mfm",
-        "id": "9d6a57ab-5f9f-4dfc-b7ad-72a5f0b97cc3"
-      },
-      {
-        "namespace": "mfm",
-        "id": "b31f3b9d-ec5f-4f8a-b14e-3bfdc64a9069"
-      },
-      {
-        "namespace": "mfm",
-        "id": "d1e09cd1-8d0b-4135-985a-1be08e6555f7"
-      }
-    ]
+    }
   },
   {
     "id": "slugga-bigboss",
@@ -4623,21 +4293,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "5987-fa47-5ae9-93d2"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "e3d8-11a8-fc8a-cf41"
-      },
-      {
-        "namespace": "mfm",
-        "id": "8a17b503-2a14-4861-8e4c-88dbc60bc825"
-      }
-    ]
+    }
   },
   {
     "id": "smasha-gun",
@@ -5444,21 +5100,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "codex-orks"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "109a-db29-c4a5-f826"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "347d-2fc1-ef8d-cc1d"
-      },
-      {
-        "namespace": "mfm",
-        "id": "1a7b0369-94f2-4c47-9265-0e49a0ee6a96"
-      }
-    ]
+    }
   },
   {
     "id": "tracks-and-wheels",
@@ -5671,21 +5313,7 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    },
-    "external_refs": [
-      {
-        "namespace": "bsdata",
-        "id": "dc72-6a9b-5792-557a"
-      },
-      {
-        "namespace": "bsdata",
-        "id": "e7c2-5811-ea75-469f"
-      },
-      {
-        "namespace": "mfm",
-        "id": "d8b2a600-0295-400f-97b8-a12ee0e6ee0b"
-      }
-    ]
+    }
   },
   {
     "id": "twin-killsaw",
@@ -7801,46 +7429,18 @@
   },
   {
     "id": "kustom-blasta-x",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "6fabb023-507c-4354-9d74-8f5b4d612800"
-      }
-    ],
     "name": "Kustom Blasta X",
-    "type": "melee",
+    "type": "ranged",
     "profiles": [
-      {
-        "name": "Kustom Blasta X",
-        "range": "Melee",
-        "stats": {
-          "A": 6,
-          "S": 5,
-          "AP": -1,
-          "D": 1,
-          "WS": 2
-        },
-        "keywords": [
-          {
-            "keyword_id": "cleave",
-            "parameters": {
-              "value": 1
-            }
-          },
-          {
-            "keyword_id": "extra-attacks"
-          }
-        ]
-      },
       {
         "name": "Gatler",
         "range": 24,
         "stats": {
           "A": 6,
-          "S": 9,
+          "BS": 4,
+          "S": 8,
           "AP": -2,
-          "D": 3,
-          "BS": 4
+          "D": 3
         },
         "keywords": [
           {
@@ -7853,12 +7453,21 @@
         "range": 18,
         "stats": {
           "A": 4,
+          "BS": 4,
           "S": 5,
           "AP": -1,
-          "D": 1,
-          "BS": 4
+          "D": 1
         },
         "keywords": [
+          {
+            "keyword_id": "lethal-hits",
+            "parameters": {
+              "excluded_target_keywords": [
+                "Monster",
+                "Vehicle"
+              ]
+            }
+          },
           {
             "keyword_id": "rapid-fire",
             "parameters": {
@@ -7871,16 +7480,12 @@
         "name": "Skorcha",
         "range": 12,
         "stats": {
-          "A": 3,
+          "A": "D6+1",
           "S": 5,
           "AP": -1,
-          "D": 1,
-          "BS": null
+          "D": 1
         },
         "keywords": [
-          {
-            "keyword_id": "blast"
-          },
           {
             "keyword_id": "torrent"
           }
@@ -7889,17 +7494,11 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "codex-orks"
     }
   },
   {
     "id": "moonchewa",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "7eb49a9e-9c91-4b3f-adef-299aa936b4d5"
-      }
-    ],
     "name": "Moonchewa",
     "type": "melee",
     "profiles": [
@@ -7908,10 +7507,10 @@
         "range": "Melee",
         "stats": {
           "A": 5,
+          "WS": 2,
           "S": 12,
           "AP": -2,
-          "D": 3,
-          "WS": 2
+          "D": 3
         },
         "keywords": [
           {
@@ -7928,7 +7527,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "codex-orks"
     }
   },
   {
@@ -8228,12 +7827,6 @@
   },
   {
     "id": "kustom-krumpa",
-    "external_refs": [
-      {
-        "namespace": "mfm",
-        "id": "4acc5ff7-b2a5-4360-849e-7653802b18fd"
-      }
-    ],
     "name": "Kustom Krumpa",
     "type": "melee",
     "profiles": [
@@ -8246,12 +7839,13 @@
           "AP": -2,
           "D": 2,
           "WS": 3
-        }
+        },
+        "keywords": []
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "codex-orks"
     }
   },
   {
@@ -8407,6 +8001,270 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
+    }
+  },
+  {
+    "id": "big-skorcha-nobz",
+    "name": "Big Skorcha",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Big Skorcha",
+        "range": 18,
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": -1,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "torrent"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    }
+  },
+  {
+    "id": "burna-boyz-unit",
+    "name": "Burna",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Burna",
+        "range": 12,
+        "stats": {
+          "A": 3,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "torrent"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    }
+  },
+  {
+    "id": "kombi-rokkit-nobz",
+    "name": "Kombi-rokkit",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Busta",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 10,
+          "AP": -2,
+          "D": 3,
+          "BS": 5
+        },
+        "keywords": []
+      },
+      {
+        "name": "Shoota",
+        "range": 18,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    }
+  },
+  {
+    "id": "kombi-skorcha-boyz",
+    "name": "Kombi-skorcha",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Kombi-skorcha",
+        "range": 12,
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "torrent"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    }
+  },
+  {
+    "id": "kustom-choppa-boyz",
+    "name": "Kustom Choppa",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Kustom Choppa",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    }
+  },
+  {
+    "id": "kustom-choppa-nobz",
+    "name": "Kustom Choppa",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Kustom Choppa",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    }
+  },
+  {
+    "id": "kustom-shoota-nobz",
+    "name": "Kustom Shoota",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Kustom Shoota",
+        "range": 18,
+        "stats": {
+          "A": 8,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    }
+  },
+  {
+    "id": "paired-kustom-krumpas",
+    "name": "Paired Kustom Krumpas",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Paired Kustom Krumpas",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 10,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    }
+  },
+  {
+    "id": "shoota-boyz-unit",
+    "name": "Shoota",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Shoota",
+        "range": 18,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    }
+  },
+  {
+    "id": "kustom-blasta-x-melee",
+    "name": "Kustom Blasta X",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Kustom Blasta X",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "WS": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 1
+        },
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 1
+            }
+          },
+          {
+            "keyword_id": "extra-attacks"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
     }
   }
 ]

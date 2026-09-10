@@ -86,7 +86,28 @@ interface UnitRecord {
   name?: string;
   weapon_ids?: string[];
   points?: { models: number; models_max?: number }[];
+  external_refs?: { namespace?: string; id?: string }[];
   [k: string]: unknown;
+}
+
+/**
+ * Resolve the core record for a dump datasheet. Ordinary sheets retain their
+ * stable name-derived ids; Combat Patrol sheets have mode-specific display names,
+ * so their seeded MFM external reference is the authoritative join key.
+ */
+function datasheetUnitId(
+  ds: DatasheetRow,
+  name: string,
+  byId: ReadonlyMap<string, UnitRecord>,
+  byMfmId: ReadonlyMap<string, string>,
+): string | null {
+  try {
+    const nameId = nameToId(name);
+    if (byId.has(nameId)) return nameId;
+  } catch {
+    // Fall through to the source identity below.
+  }
+  return ds.id ? (byMfmId.get(ds.id) ?? null) : null;
 }
 interface CoreWargearRecord {
   id: string;
@@ -1637,6 +1658,13 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
 
     const units = readJsonArray<UnitRecord>(upath);
     const byId = new Map(units.map((u) => [u.id, u]));
+    const byMfmId = new Map(
+      units.flatMap((unit) =>
+        (unit.external_refs ?? [])
+          .filter((ref) => ref.namespace === "mfm" && !!ref.id)
+          .map((ref) => [ref.id!, unit.id] as const),
+      ),
+    );
     const comps = readJsonArray<CompRecord>(cpath);
     // A unit can carry several compositions (different build tiers) — index ALL
     // of them so derived defaults and manual overrides patch every one, not just
@@ -1679,25 +1707,28 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
     let optsChanged = false;
     let unitsChanged = false;
 
-    // Process home-faction datasheets before shared-roster imports, so a unit's
-    // own-faction loadout wins over a chapter/legion variant of the same name.
-    const dsList = (byDir.get(dir) ?? [])
-      .slice()
-      .sort((a, b) => homeScore(dump, a, dir) - homeScore(dump, b, dir));
+    const dsList = [
+      ...new Map(
+        [
+          ...(byDir.get(dir) ?? []),
+          ...dump.table("datasheet").filter((ds) => !!ds.id && byMfmId.has(ds.id)),
+        ].map((ds) => [ds.id!, ds] as const),
+      ).values(),
+    ].sort((a, b) => homeScore(dump, a, dir) - homeScore(dump, b, dir));
     for (const ds of dsList) {
       const name = dump.enName(ds);
       if (!name) continue;
-      let id: string;
-      try {
-        id = nameToId(name);
-      } catch {
+      const id = datasheetUnitId(ds, name, byId, byMfmId);
+      if (!id) {
+        try {
+          const sourceId = nameToId(name);
+          if (!res.newInDump.includes(sourceId)) res.newInDump.push(sourceId);
+        } catch {
+          // No stable source slug exists to report.
+        }
         continue;
       }
-      const rec = byId.get(id);
-      if (!rec) {
-        if (!res.newInDump.includes(id)) res.newInDump.push(id);
-        continue;
-      }
+      const rec = byId.get(id)!;
       if (matchedRepoIds.has(id)) continue; // first candidate dir wins
       matchedRepoIds.add(id);
       res.matched++;
@@ -2657,10 +2688,21 @@ export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersR
       (compsByUnit.get(c.unit_id) ?? compsByUnit.set(c.unit_id, []).get(c.unit_id)!).push(c);
     const units = readJsonArray<UnitRecord & { model_count?: { min: number; max: number } }>(upath);
     const unitsById = new Map(units.map((u) => [u.id, u]));
-
-    const dsList = (byDir.get(dir) ?? [])
-      .slice()
-      .sort((a, b) => homeScore(dump, a, dir) - homeScore(dump, b, dir));
+    const byMfmId = new Map(
+      units.flatMap((unit) =>
+        (unit.external_refs ?? [])
+          .filter((ref) => ref.namespace === "mfm" && !!ref.id)
+          .map((ref) => [ref.id!, unit.id] as const),
+      ),
+    );
+    const dsList = [
+      ...new Map(
+        [
+          ...(byDir.get(dir) ?? []),
+          ...dump.table("datasheet").filter((ds) => !!ds.id && byMfmId.has(ds.id)),
+        ].map((ds) => [ds.id!, ds] as const),
+      ).values(),
+    ].sort((a, b) => homeScore(dump, a, dir) - homeScore(dump, b, dir));
     const matchedRepoIds = new Set<string>();
     let matched = 0;
     let unitsTiered = 0;
@@ -2671,12 +2713,8 @@ export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersR
     for (const ds of dsList) {
       const name = dump.enName(ds);
       if (!name) continue;
-      let id: string;
-      try {
-        id = nameToId(name);
-      } catch {
-        continue;
-      }
+      const id = datasheetUnitId(ds, name, unitsById, byMfmId);
+      if (!id) continue;
       if (matchedRepoIds.has(id) || !compsByUnit.has(id)) continue;
       matchedRepoIds.add(id);
       matched++;

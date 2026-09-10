@@ -3744,6 +3744,15 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "airbursting-fragmentation-projector",
+      "battlesuit-fists-commander-in-enforcer-battlesuit",
+      "plasma-rifle-commander-in-enforcer-battlesuit"
+    ],
+    "ability_ids": [
+      "shield-drone-commander-cloudspear",
+      "superior-weapon-support-system-commander-cloudspear"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -3802,6 +3811,14 @@
       "min": 10,
       "max": 10
     },
+    "weapon_ids": [
+      "gun-stocks",
+      "pulse-blaster",
+      "pulse-pistol"
+    ],
+    "ability_ids": [
+      "breach-and-clear-sudden-dawn-cadre"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -3859,6 +3876,14 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "accelerator-burst-cannon",
+      "armoured-hull-devilfish",
+      "twin-pulse-carbine"
+    ],
+    "transport_capacity": {
+      "capacity": 12
+    },
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -3910,6 +3935,15 @@
       "min": 10,
       "max": 10
     },
+    "weapon_ids": [
+      "gun-stocks",
+      "pulse-carbine",
+      "pulse-pistol",
+      "rail-rifle"
+    ],
+    "ability_ids": [
+      "target-uploaded-sudden-dawn-cadre"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"

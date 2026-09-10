@@ -2808,6 +2808,14 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "executioner-pistol",
+      "power-sword-and-neuro-gauntlet"
+    ],
+    "ability_ids": [
+      "assigned-agents",
+      "overkill-inquisitors-hand"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -2864,6 +2872,18 @@
       "min": 6,
       "max": 6
     },
+    "weapon_ids": [
+      "agent-firearm",
+      "agents-implement",
+      "heavy-bolter-inquisitorial-agents",
+      "mystic-stave",
+      "plasma-pistol-standard-inquisitors-hand"
+    ],
+    "ability_ids": [
+      "assigned-agents",
+      "loyal-to-the-cause-inquisitors-hand",
+      "tome-skull-inquisitors-hand"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -2919,6 +2939,18 @@
       "min": 10,
       "max": 10
     },
+    "weapon_ids": [
+      "combat-shotgun",
+      "grenade-launcher-frag-inquisitors-hand",
+      "gun-stocks",
+      "mechanical-bite",
+      "shotpistol",
+      "webber-inquisitors-hand"
+    ],
+    "ability_ids": [
+      "assigned-agents",
+      "merciless-judgement-inquisitors-hand"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -2967,6 +2999,16 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "zealots-vindictor"
+    ],
+    "ability_ids": [
+      "assigned-agents",
+      "holy-hatred-preacher-teguen",
+      "leader",
+      "zealot-preacher-teguen"
+    ],
+    "attachment_role": "support",
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"

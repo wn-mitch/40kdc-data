@@ -2111,6 +2111,16 @@
       "min": 10,
       "max": 10
     },
+    "weapon_ids": [
+      "skullsmasher-and-mangler",
+      "autopistol",
+      "chainblade",
+      "mauler-chainblade"
+    ],
+    "ability_ids": [
+      "icon-of-khorne",
+      "objective-ravaged"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -2165,6 +2175,16 @@
       "min": 10,
       "max": 10
     },
+    "weapon_ids": [
+      "bolt-pistol",
+      "chainblade",
+      "plasma-pistol",
+      "khornate-eviscerator"
+    ],
+    "ability_ids": [
+      "blood-surge",
+      "icon-of-khorne"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -2222,6 +2242,14 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "bolt-pistol",
+      "axe-of-dismemberment"
+    ],
+    "ability_ids": [
+      "a-worthy-skull",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -2235,6 +2263,7 @@
       "shape": "round",
       "diameter": 40
     },
+    "attachment_role": "leader",
     "external_refs": [
       {
         "namespace": "mfm",
@@ -2254,7 +2283,7 @@
         "T": 10,
         "W": 10,
         "Sv": 2,
-        "invuln_sv": null,
+        "invuln_sv": 4,
         "Ld": 6,
         "OC": 3
       }
@@ -2281,6 +2310,15 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "hellforged-weapons",
+      "infernal-cannon"
+    ],
+    "ability_ids": [
+      "devastating-assault-frenzied-reavers",
+      "direct-the-slaughter-frenzied-reavers",
+      "lord-of-murder-frenzied-reavers"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"

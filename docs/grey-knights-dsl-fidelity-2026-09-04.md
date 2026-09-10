@@ -2,11 +2,12 @@
 
 ## Scope and source provenance
 
-This is a fidelity repair, not a damage-optimizer approximation. Twenty-three
+This is a fidelity repair, not a damage-optimizer approximation. Twenty-four
 reviewed abilities are represented, one obsolete active entry is removed, and
-Prescient Redeployment is explicitly unresolved. No unsupported clause is moved
-into new community notes. The current schema is extended where a small reusable
-semantic distinction was missing; `conformance/SPEC_VERSION` advances to 113.
+Prescient Redeployment uses an explicit typed historical ability-window record.
+No unsupported clause is moved into new community notes. The current schema is
+extended where a small reusable semantic distinction was missing; `conformance/SPEC_VERSION`
+must be advanced by the integration owner.
 
 Baseline: `a8d7ec3a4ba7e0e7f6dedf62d2f91ef8bfa61a3d` on the isolated repair
 branch. The sibling raw-text file `40kdc-abilities/grey-knights.json` was inspected
@@ -35,9 +36,9 @@ Source locators (not reproduced rule paragraphs):
   `https://anyflip.com/fpxga/xnwm/basic/51-88`, printed pages 68–69.
   The official explanation of ingress is at
   `https://www.warhammer-community.com/en-gb/articles/m3son4il/new40k-combat-changes-shake-up-fighting-in-the-new-edition/`.
-* Guardians of the Machine: the current MFM record reduces Heroic Intervention
-  by 1CP. Its special use remains legal after a different unit's use and does
-  not prevent a later use on a different unit in the same phase.
+* Guardians of the Machine: the current source reduces Heroic Intervention by
+  1CP. Its special use remains legal after a different unit's use and does not
+  prevent a later use on a different unit in the same phase.
 * Warrior Strategist: the current Grand Master and Grand Master in Nemesis
   Dreadknight datasheet entries both carry the army-shared battle-round reduction.
   An enrichment `unit_ids` list is not a substitute for actual core `ability_ids`.
@@ -64,7 +65,7 @@ another faction's copy. Generated descriptions are in
 | dauntless-champions | fixed-existing-schema | Friendly Paladin unit selected to fight; per-attack S<T; melee Wound +1; current attack sequence only. |
 | attuned-onslaught-psychic | fixed-existing-schema | Charge completion; bearer-unit member **models** with PALADIN SQUAD; melee D+1; turn duration. Attached Leaders lacking that model keyword do not qualify. |
 | blessing-of-the-omnissiah | fixed-existing-schema | Own Command phase; optional single friendly GK Vehicle model within 3 inches; D3 healing then Hit +1; next own Command start expiration; separate bearer phase use and army-shared per-target turn cap. |
-| guardians-of-the-machine | fixed-existing-schema | Enemy charge completion; enemy within 6 inches of bearer's unit and engaged with friendly GK Vehicle unit; optional Heroic Intervention set-to-0 plus only its different-unit repeat exception. |
+| guardians-of-the-machine | fixed-existing-schema | Enemy charge completion; enemy within 6 inches of bearer's unit and engaged with friendly GK Vehicle unit; optional Heroic Intervention cost reduced by 1CP plus only its different-unit repeat exception. |
 | techmarine | fixed-existing-schema | Bearer model within 3 inches of a friendly unit having both GK and Vehicle keywords; self Lone Operative while true. |
 | force-edge-psychic | fixed-existing-schema | Melee attacks of models in the unit; target neither Monster nor Vehicle; AP improved by one, without an invented Fight-phase gate. |
 | champion-of-the-order-of-purifiers-psychic | fixed-existing-schema | Leading condition; A+1 only on Purifying Flame weapons of models in the led unit. |
@@ -81,7 +82,7 @@ another faction's copy. Generated descriptions are in
 | guidance-of-the-ancients-psychic | fixed-existing-schema | After own shooting; designate one enemy hit in that sequence; Hit +1 for each friendly **GK attacking model** against it; phase duration. |
 | wisdom-of-the-ancients-aura | removed-obsolete | Removed from active enrichment and datasheet references; historical share-index slots remain append-only. |
 | litanies-of-sanctity | fixed-existing-schema | Optional start of any phase; one use per battle per bearer; one friendly GK Battle-shocked unit within 12 inches; remove Battle-shock. |
-| prescient-redeployment | needs-schema | Intentionally unchanged, not approved: its legacy output still omits the retrospective quota and eligibility predicates. See blocker below. |
+| prescient-redeployment | fixed-new-history-shape | Second battle round onward at own Movement-phase start; optional one current on-battlefield friendly GK unit to Strategic Reserves only if Gate of Infinity had unused capacity at the end of the opponent's previous turn and that candidate was eligible in that same past window. |
 | channelled-force | fixed-existing-schema | Friendly GK unit selected to fight; optional actual Leadership test at current Ld; on pass choose Sustained Hits 1 OR Lethal Hits, only Psychic melee weapons; phase duration. |
 | hallowed-ground | fixed-existing-schema | Own deployment always; continuous 6-inch Purifier-unit areas; separate >=half objective phase-start snapshots for NML/opponent deployment; phase expiry; GK melee or visible ranged attacks; Hit ones upgraded to any-result for Purifiers OR whole-unit membership. |
 | fury-of-titan | fixed-existing-schema | Friendly unit actually set up by Deep Strike; Hit ones AND Wound ones; expires this turn, not the next turn after Rapid Ingress. |
@@ -135,32 +136,33 @@ The available deterministic buff adapters fail closed on the newly bound
 selection/history/model/visibility forms rather than discarding their gates.
 They do not implement a full battlefield event/state simulator.
 
-## Remaining schema decision: Prescient Redeployment
+## Historical ability-window shape: Prescient Redeployment
 
-A current battle-round predicate and a current friendly-unit selector are
-insufficient. Two distinct historical facts are required: unused selection
+Prescient Redeployment requires two distinct historical facts: unused selection
 capacity in the relevant prior Gate of Infinity window, and whether a candidate
-could have been selected in that window. Counting current models or a generic
-resource pool would invent semantics; a current non-engagement test does not
-prove past eligibility.
+could have been selected in that same window. Current state is neither
+substitute. The minimal typed conditions are:
 
-The smallest proposed family extension is a typed ability-window history
-reference with a resolved source ability id, an explicit prior-window locator,
-a selection count/capacity comparison, and a candidate eligibility snapshot.
-The remaining decision is whether that snapshot belongs to a retained
-ability-resolution record or a reusable selector-history store, including its
-invalidation/reset rules. Do not introduce opaque `parameters` fields that
-pretend either store already exists. Corpus search found the same unresolved
-quota note here; `a-grim-warning-rage-cursed-onslaught` is a near historical-state
-consumer (previous-phase objective control), not an exact quota substitute.
+* `ability-window-capacity` with a friendly source ability, the closed
+  `end-of-opponents-previous-turn` locator, and
+  `less-than-maximum` comparison.
+* `candidate-eligible-in-ability-window` with the same friendly source ability
+  and locator, evaluated as the candidate eligibility snapshot.
+
+The current on-battlefield restriction remains a separate predicate. The four
+describers render both historical facts generically; the buff adapter already
+fails closed for `select-units` eligibility bindings, so Prescient does not
+need an adapter approximation.
 
 ## Verification entrypoints
 
-`tools/test/grey-knights-fidelity.test.ts` checks all 25 dispositions, all 23
-repaired descriptions, model/weapon/target/timing/history distinctions, negative
-schema cases, source references, and fail-closed buff adapters. Five synthetic
-conformance cases cover no-op results, a model Leadership test with failure,
-friendly selected targets, variable weapon characteristics, and non-attack rolls.
+`tools/test/grey-knights-fidelity.test.ts` checks all 25 dispositions, 23
+diagnostic description contracts, Prescient's historical capacity and candidate
+snapshot distinctions, model/weapon/target/timing constraints, negative schema
+cases, source references, faction-local same-ID routing, and fail-closed buff
+adapters. Five synthetic conformance cases cover no-op results, a model
+Leadership test with failure, friendly selected targets, variable weapon
+characteristics, and non-attack rolls.
 
 Run `just regen`, `just fmt`, stage the intended generated artifacts, then
 `just preflight` to prove repeatable regeneration and the normal language suites.

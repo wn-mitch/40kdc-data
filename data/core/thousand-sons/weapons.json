@@ -3980,5 +3980,38 @@
         "id": "e62f84ee-90b0-4fcb-a444-0380eef624ee"
       }
     ]
+  },
+  {
+    "id": "inferno-bolt-pistol-prism-of-zadophon",
+    "name": "Inferno bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Inferno bolt pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b714400c-7389-49bd-9d70-b7c22b646f87"
+      }
+    ]
   }
 ]

@@ -15,15 +15,15 @@
     },
     "unit": {
       "entities": 1094,
-      "with_external_refs": 1086,
+      "with_external_refs": 1084,
       "covered_entities_by_namespace": {
-        "bsdata": 989,
-        "game-datacards": 996,
-        "mfm": 1086
+        "bsdata": 983,
+        "game-datacards": 989,
+        "mfm": 1084
       },
       "references_by_namespace": {
-        "bsdata": 1053,
-        "game-datacards": 996,
+        "bsdata": 1047,
+        "game-datacards": 989,
         "mfm": 1096
       }
     },
@@ -62,15 +62,15 @@
       }
     },
     "weapon": {
-      "entities": 3181,
-      "with_external_refs": 3107,
+      "entities": 3203,
+      "with_external_refs": 3092,
       "covered_entities_by_namespace": {
-        "bsdata": 2840,
-        "mfm": 3029
+        "bsdata": 2817,
+        "mfm": 3027
       },
       "references_by_namespace": {
-        "bsdata": 3370,
-        "mfm": 3210
+        "bsdata": 3321,
+        "mfm": 3192
       }
     },
     "wargear": {
@@ -276,22 +276,6 @@
           "entity_type": "weapon",
           "id": "armoured-tracks-chaos-vindicator",
           "faction_id": "thousand-sons"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
-      "id": "1fa0-d99a-154f-ffd8",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "big-shoota",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "big-shoota-boyz",
-          "faction_id": "orks"
         }
       ]
     },
@@ -560,27 +544,6 @@
           "entity_type": "weapon",
           "id": "plasma-pistol-talonstrike-kill-team",
           "faction_id": "adeptus-astartes"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
-      "id": "29e9-cd9b-66bd-fe60",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "big-choppa",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "big-choppa-boyz",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "big-choppa-nobz",
-          "faction_id": "orks"
         }
       ]
     },
@@ -938,22 +901,6 @@
     },
     {
       "namespace": "bsdata",
-      "id": "3daf-71a1-f386-435b",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "choppa",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "choppa-bannernob",
-          "faction_id": "orks"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
       "id": "3f62-4655-f148-baff",
       "targets": [
         {
@@ -1092,22 +1039,6 @@
           "entity_type": "weapon",
           "id": "thunder-hammer-intercessor-squad",
           "faction_id": "adeptus-astartes"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
-      "id": "4e6a-844c-26bf-2b5d",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "choppa",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "choppa-beast-snagga-boyz",
-          "faction_id": "orks"
         }
       ]
     },
@@ -1306,22 +1237,6 @@
     },
     {
       "namespace": "bsdata",
-      "id": "5bf6-ed4b-e32a-d7c1",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "big-choppa",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "big-choppa-kommandos",
-          "faction_id": "orks"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
       "id": "5d22-a8d8-8e57-b8ab",
       "targets": [
         {
@@ -1390,22 +1305,6 @@
           "entity_type": "weapon",
           "id": "missile-pod-commander-in-enforcer-battlesuit",
           "faction_id": "tau-empire"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
-      "id": "614f-3d6b-88aa-9e15",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "big-choppa",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "big-choppa-warboss",
-          "faction_id": "orks"
         }
       ]
     },
@@ -1642,22 +1541,6 @@
     },
     {
       "namespace": "bsdata",
-      "id": "752e-cd9b-4721-f0b0",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "slugga",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "slugga-bigboss",
-          "faction_id": "orks"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
       "id": "7628-8029-9230-b60f",
       "targets": [
         {
@@ -1799,11 +1682,6 @@
         },
         {
           "entity_type": "weapon",
-          "id": "rokkit-launcha-boyz",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
           "id": "rokkit-launcha-deff-dread",
           "faction_id": "orks"
         },
@@ -1820,11 +1698,6 @@
         {
           "entity_type": "weapon",
           "id": "rokkit-launcha-morkanaut",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "rokkit-launcha-tankbustas",
           "faction_id": "orks"
         }
       ]
@@ -1882,11 +1755,6 @@
         },
         {
           "entity_type": "weapon",
-          "id": "kustom-shoota-boyz",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
           "id": "kustom-shoota-kommandos",
           "faction_id": "orks"
         },
@@ -1915,22 +1783,6 @@
     },
     {
       "namespace": "bsdata",
-      "id": "8df-71e4-ccf5-99e8",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-gretchin",
-          "faction_id": "orks"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
       "id": "8e20-4ae8-9125-42a6",
       "targets": [
         {
@@ -1951,22 +1803,12 @@
       "targets": [
         {
           "entity_type": "weapon",
-          "id": "choppa",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
           "id": "choppa-breaka-boyz",
           "faction_id": "orks"
         },
         {
           "entity_type": "weapon",
           "id": "choppa-flash-gitz",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "choppa-tankbustas",
           "faction_id": "orks"
         }
       ]
@@ -2223,11 +2065,6 @@
       "targets": [
         {
           "entity_type": "weapon",
-          "id": "power-klaw",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
           "id": "power-klaw-big-mek",
           "faction_id": "orks"
         },
@@ -2398,22 +2235,6 @@
     },
     {
       "namespace": "bsdata",
-      "id": "aecd-6ba5-5558-fee2",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "big-choppa",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "big-choppa-squighog-boyz",
-          "faction_id": "orks"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
       "id": "b059-adc7-9243-df68",
       "targets": [
         {
@@ -2501,22 +2322,6 @@
     },
     {
       "namespace": "bsdata",
-      "id": "b292-af7e-e129-8336",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-big-mek-with-shokk-attack-gun",
-          "faction_id": "orks"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
       "id": "b349-9d3a-1a65-3e48",
       "targets": [
         {
@@ -2596,22 +2401,6 @@
     },
     {
       "namespace": "bsdata",
-      "id": "b621-5929-fc60-ed8d",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "slugga",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "slugga-boss-snikrot",
-          "faction_id": "orks"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
       "id": "b770-d969-e667-3e1a",
       "targets": [
         {
@@ -2655,22 +2444,6 @@
           "entity_type": "weapon",
           "id": "power-weapon-hastarii-fusiliers",
           "faction_id": "adeptus-mechanicus"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
-      "id": "bec6-2d9b-d764-288",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-beast-snagga-boyz",
-          "faction_id": "orks"
         }
       ]
     },
@@ -2952,22 +2725,6 @@
     },
     {
       "namespace": "bsdata",
-      "id": "e1c3-9162-7c4b-b7da",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-tankbustas",
-          "faction_id": "orks"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
       "id": "e383-791c-b4cf-e0be",
       "targets": [
         {
@@ -3010,22 +2767,6 @@
           "entity_type": "weapon",
           "id": "psycannon-strike-squad",
           "faction_id": "grey-knights"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
-      "id": "e542-78f9-46d8-6c33",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "choppa",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "choppa-boyz",
-          "faction_id": "orks"
         }
       ]
     },
@@ -3163,22 +2904,6 @@
     },
     {
       "namespace": "bsdata",
-      "id": "edac-a910-975a-d4fd",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "power-klaw",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "power-klaw-warboss",
-          "faction_id": "orks"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
       "id": "edce-b2da-b8c3-7c8b",
       "targets": [
         {
@@ -3210,27 +2935,6 @@
           "entity_type": "weapon",
           "id": "bolt-pistol-krieg-command-squad",
           "faction_id": "astra-militarum"
-        }
-      ]
-    },
-    {
-      "namespace": "bsdata",
-      "id": "ee65-6385-44ba-3758",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "power-klaw",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "power-klaw-boyz",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "power-klaw-meganobz",
-          "faction_id": "orks"
         }
       ]
     },
@@ -4877,11 +4581,6 @@
           "entity_type": "weapon",
           "id": "close-combat-weapon",
           "faction_id": "grey-knights"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon",
-          "faction_id": "orks"
         },
         {
           "entity_type": "weapon",
@@ -7545,6 +7244,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "6267c763-c582-4e33-b165-a225fd6b610b",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-lord-exultant",
+          "faction_id": "emperors-children"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "power-fist-sholgor-the-putrid",
+          "faction_id": "death-guard"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "62737c30-d4aa-4ce8-8fa3-e4eb3d94e8b2",
       "targets": [
         {
@@ -9069,22 +8784,6 @@
     },
     {
       "namespace": "mfm",
-      "id": "a041f5cd-3e4a-4f95-8bc2-953018b387c3",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon-ratlings",
-          "faction_id": "astra-militarum"
-        }
-      ]
-    },
-    {
-      "namespace": "mfm",
       "id": "a1a12a4d-db31-4f87-ac5a-a149f718043a",
       "targets": [
         {
@@ -9390,11 +9089,6 @@
       "namespace": "mfm",
       "id": "a8e8cb81-6541-44c6-9f3c-3abaed1644a3",
       "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon",
-          "faction_id": "orks"
-        },
         {
           "entity_type": "weapon",
           "id": "close-combat-weapon-hexmark-destroyer",
@@ -11932,11 +11626,6 @@
       "namespace": "mfm",
       "id": "ef6354ba-1831-4183-b3b5-017afab8590d",
       "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "close-combat-weapon",
-          "faction_id": "orks"
-        },
         {
           "entity_type": "weapon",
           "id": "close-combat-weapon",

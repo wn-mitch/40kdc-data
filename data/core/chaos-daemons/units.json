@@ -3578,7 +3578,9 @@
     "weapon_ids": [],
     "ability_ids": [
       "cover",
-      "shadow-of-khorne-aura"
+      "shadow-of-khorne-aura",
+      "fortification",
+      "infiltrators"
     ],
     "game_version": {
       "edition": "11th",

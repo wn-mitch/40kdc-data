@@ -7439,5 +7439,137 @@
       "duration": "phase"
     },
     "community_notes": "Friendly WORLD EATERS CHARACTER (excluding EPIC HERO) gains Feel No Pain 4+ against mortal wounds when it suffers a mortal wound."
+  },
+  {
+    "ability_id": "lord-of-murder-frenzied-reavers",
+    "name": "Lord of Murder",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "c99e6a83c2b20355bb06a3dcf9ccabc52b9931da067897afc917164cf2f0717d",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [
+      "vorrakh-lord-of-the-frenzied-reavers"
+    ],
+    "faction_id": null,
+    "detachment_id": null,
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "unit-within-range-of",
+        "parameters": {
+          "range": 3,
+          "target_type": "friendly-infantry",
+          "keyword": "Frenzied Reavers"
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "self",
+        "modifier": {
+          "grant_type": "lone-operative"
+        }
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "devastating-assault-frenzied-reavers",
+    "name": "Devastating Assault",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "194ef8a6fdaaf98ee8531462c572df36a63fc82ee7303707273a9b066ab55c48",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [
+      "vorrakh-lord-of-the-frenzied-reavers"
+    ],
+    "faction_id": null,
+    "detachment_id": null,
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "charged-this-turn"
+      },
+      "effect": {
+        "type": "keyword-grant",
+        "target": "unit",
+        "modifier": {
+          "keyword": "Devastating Wounds",
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "trigger": {
+      "event": "before-hit-roll",
+      "subject": "self"
+    }
+  },
+  {
+    "ability_id": "direct-the-slaughter-frenzied-reavers",
+    "name": "Direct the Slaughter",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "cd0be48e71b0fcd5398243ca80f6f01a8a7b9921b434a97a72ffb4909f391795",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [
+      "vorrakh-lord-of-the-frenzied-reavers"
+    ],
+    "faction_id": null,
+    "detachment_id": null,
+    "ability_type": "unit",
+    "behavior": "activated",
+    "effect": {
+      "type": "stratagem-cost-modifier",
+      "target": "unit",
+      "modifier": {
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "triggering-stratagem-use"
+      }
+    },
+    "scope": {
+      "range": "aura-12",
+      "duration": "resolution"
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
+    },
+    "trigger": {
+      "event": "stratagem-targeted",
+      "subject": "friendly-unit",
+      "proximity": {
+        "of": "self",
+        "range": 12
+      },
+      "optional": true
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Frenzied Reavers"
+      ]
+    }
   }
 ]

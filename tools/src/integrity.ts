@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { glob } from "glob";
 import { resolve, basename, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -144,14 +144,21 @@ interface CompLike {
 interface AbilityLike {
   ability_id?: string;
 }
+interface MissionRef {
+  id?: string;
+}
+interface MissionCardRef {
+  id?: string;
+  card_type?: "primary" | "secondary";
+  awards?: unknown[];
+}
 
 /**
- * Known, accepted loadout orphans — a `<faction>/<unit_id>/<weapon_id>` triple
  * whose weapon is in the unit's `weapon_ids` but is neither a recorded
- * `default_weapon_ids` entry nor reachable through any wargear-option. Each entry
- * is a deliberate, reviewed exception — a NEW orphan (any triple not listed) fails
- * CI, and a listed triple that is no longer an orphan is reported as stale so the
- * list stays minimal.
+ * `default_weapon_ids` entry, a complete `loadout_variant` entry, nor reachable
+ * through any wargear-option. Each entry is a deliberate, reviewed exception — a
+ * NEW orphan (any triple not listed) fails CI, and a listed triple that is no
+ * longer an orphan is reported as stale so the list stays minimal.
  *
  * This set is now EMPTY: every former orphan has been resolved by restructuring
  * the unit composition to match the GW MFM dump's per-figure miniature rows
@@ -207,18 +214,18 @@ export function variantWeaponOwner(weaponId: string, unitIds: Iterable<string>):
  * Structural checks over one composition's `loadout_variants` /
  * `loadout_variant_budgets`.
  *
- * A variant states a WHOLE per-model loadout, so nothing downstream re-derives
- * its equipment from the unit's own vocabulary — an unresolvable or misappropriated
- * weapon id would surface only as a silently wrong candidate loadout. Scope is
- * the faction's weapon + wargear pool rather than the owning unit's
- * `weapon_ids`, deliberately: a variant may legitimately name equipment the
- * unit record does not list (Boyz' `close-combat-weapon`), and keeping
- * `units.json` untouched is a property the BSData projection relies on.
+ * A variant states a whole per-model loadout. Its equipment must therefore be
+ * drawn from the owning unit's declared weapon vocabulary, except for explicit
+ * faction wargear. Faction-wide weapon existence alone is insufficient: it
+ * would let a stale import attach another datasheet's weapon profile merely
+ * because that profile happens to resolve in the same faction.
  */
 function collectVariantErrors(
   comp: CompLike,
   index: number,
   factionEquipment: ReadonlySet<string>,
+  factionWargear: ReadonlySet<string>,
+  unitWeaponIds: ReadonlySet<string>,
   factionUnitIds: ReadonlySet<string>,
 ): Array<{ path: string; message: string }> {
   const errs: Array<{ path: string; message: string }> = [];
@@ -260,6 +267,13 @@ function collectVariantErrors(
           errs.push({
             path: `/${index}/models/${m}/loadout_variants/${v}`,
             message: `${where}: loadout_variant "${name}" names equipment "${wid}" that is neither a weapon nor a wargear entry in this faction — a variant states a whole loadout, so every id must resolve`,
+          });
+          continue;
+        }
+        if (!unitWeaponIds.has(wid) && !factionWargear.has(wid)) {
+          errs.push({
+            path: `/${index}/models/${m}/loadout_variants/${v}`,
+            message: `${where}: loadout_variant "${name}" names faction equipment "${wid}" that is not declared by this unit — variants may only use owning-unit weapon_ids or faction wargear`,
           });
           continue;
         }
@@ -339,6 +353,138 @@ export function diceTableInvariantErrors(effect: unknown): string[] {
   collectDiceTableErrors(effect, errors);
   return errors;
 }
+
+function checkMissionCardLinks(root: string, result: ValidationResult): void {
+  const missionsFile = resolve(root, "core/missions.json");
+  const missionCardsFile = resolve(root, "core/mission-cards.json");
+  const hasMissions = existsSync(missionsFile);
+  const hasMissionCards = existsSync(missionCardsFile);
+  if (!hasMissions && !hasMissionCards) return;
+
+  let missions: MissionRef[] = [];
+  let missionCards: MissionCardRef[] = [];
+  try {
+    if (hasMissions) {
+      const parsed = readArray<MissionRef>(missionsFile);
+      if (!Array.isArray(parsed)) return;
+      missions = parsed;
+    }
+    if (hasMissionCards) {
+      const parsed = readArray<MissionCardRef>(missionCardsFile);
+      if (!Array.isArray(parsed)) return;
+      missionCards = parsed;
+    }
+  } catch {
+    // Structural failures belong to the AJV pass; do not duplicate them here.
+    return;
+  }
+
+  type IntegrityIssue = ValidationResult["errors"][number];
+  const issues = new Map<string, IntegrityIssue>();
+  const issueKey = (file: string, index: number) => `${file}\0${index}`;
+  const addIssue = (
+    file: string,
+    index: number,
+    path: string,
+    message: string,
+  ): void => {
+    const key = issueKey(file, index);
+    const issue = issues.get(key) ?? { file, index, errors: [] };
+    issue.errors.push({ path, message });
+    issues.set(key, issue);
+  };
+  const indexById = <T extends { id?: string }>(records: T[]) => {
+    const byId = new Map<string, number[]>();
+    for (let index = 0; index < records.length; index++) {
+      const id = records[index]?.id;
+      if (!id) continue;
+      const indices = byId.get(id) ?? [];
+      indices.push(index);
+      byId.set(id, indices);
+    }
+    return byId;
+  };
+
+  const missionIndices = indexById(missions);
+  const missionCardIndices = indexById(missionCards);
+
+  for (const [id, indices] of missionIndices) {
+    for (const index of indices.slice(1)) {
+      addIssue(
+        missionsFile,
+        index,
+        `/${index}/id`,
+        `duplicate mission id "${id}" — Collection is first-wins, so this mission is silently shadowed`,
+      );
+    }
+  }
+  for (const [id, indices] of missionCardIndices) {
+    for (const index of indices.slice(1)) {
+      addIssue(
+        missionCardsFile,
+        index,
+        `/${index}/id`,
+        `duplicate mission-card id "${id}" — Collection is first-wins, so this card is silently shadowed`,
+      );
+    }
+  }
+
+  for (const [id, indices] of missionIndices) {
+    const matches = missionCardIndices.get(id) ?? [];
+    if (
+      matches.length === 0 ||
+      (matches.length === 1 &&
+        missionCards[matches[0]]?.card_type !== "primary")
+    ) {
+      const index = indices[0]!;
+      addIssue(
+        missionsFile,
+        index,
+        `/${index}/id`,
+        `mission "${id}" has no same-id primary mission card`,
+      );
+    }
+  }
+
+  for (let index = 0; index < missionCards.length; index++) {
+    const card = missionCards[index]!;
+    if (card.card_type !== "primary" || !card.id) continue;
+    if (!missionIndices.has(card.id)) {
+      addIssue(
+        missionCardsFile,
+        index,
+        `/${index}/id`,
+        `primary mission-card "${card.id}" has no mission`,
+      );
+    }
+    if (!Array.isArray(card.awards) || card.awards.length === 0) {
+      addIssue(
+        missionCardsFile,
+        index,
+        `/${index}/awards`,
+        `primary mission-card "${card.id}" has no scoring awards`,
+      );
+    }
+  }
+
+  result.totalFiles += Number(hasMissions) + Number(hasMissionCards);
+  result.totalItems += missions.length + missionCards.length;
+  const finishRecord = (file: string, index: number): void => {
+    const issue = issues.get(issueKey(file, index));
+    if (issue) {
+      result.failed++;
+      result.errors.push(issue);
+    } else {
+      result.passed++;
+    }
+  };
+  for (let index = 0; index < missions.length; index++) {
+    finishRecord(missionsFile, index);
+  }
+  for (let index = 0; index < missionCards.length; index++) {
+    finishRecord(missionCardsFile, index);
+  }
+}
 /**
  * Cross-entity referential integrity that per-file JSON Schema validation cannot
  * express:
@@ -348,6 +494,8 @@ export function diceTableInvariantErrors(effect: unknown): string[] {
  *    Same-faction scoping is deliberate — a union check would pass shared-unit
  *    contaminants because they happen to be defined in some *other* faction's
  *    enrichment.
+ *  - every mission must resolve to a same-id primary mission card, and every
+ *    primary mission card must resolve back to a mission and define scoring awards.
  *  - every unit `faction_keywords` entry must be permitted for the unit's faction
  *    (see {@link FACTION_HOME_KEYWORD}).
  *
@@ -362,6 +510,8 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
     failed: 0,
     errors: [],
   };
+
+  checkMissionCardLinks(root, result);
 
   // Shared core ability pool, available to every faction (optional).
   const coreAbilities = new Set<string>();
@@ -768,9 +918,14 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
     // loadout_variant checks (see collectVariantErrors).
     const factionUnitIds = new Set<string>(units.map((u) => u.id ?? "").filter(Boolean));
     const factionEquipment = new Set<string>();
+    const factionWargear = new Set<string>();
     for (const name of ["weapons.json", "wargear.json"]) {
       try {
-        for (const e of readArray<{ id?: string }>(resolve(dir, name))) if (e.id) factionEquipment.add(e.id);
+        for (const e of readArray<{ id?: string }>(resolve(dir, name))) {
+          if (!e.id) continue;
+          factionEquipment.add(e.id);
+          if (name === "wargear.json") factionWargear.add(e.id);
+        }
       } catch {
         // faction has no file of this kind — the other one still constrains variants
       }
@@ -802,6 +957,8 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
         c,
         i,
         factionEquipment,
+        factionWargear,
+        new Set(weaponIdsByUnit.get(c.unit_id ?? "") ?? []),
         factionUnitIds,
       );
       // Populated = every model row carries a non-empty default loadout.
@@ -818,8 +975,10 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
       const defaults = new Set<string>();
       for (const m of models) for (const id of m.default_weapon_ids ?? []) defaults.add(id);
       const reachable = reachableByUnit.get(c.unit_id ?? "") ?? new Set<string>();
+      const variantEquipment = new Set<string>();
+      for (const m of models) for (const variant of m.loadout_variants ?? []) for (const id of variant.weapon_ids ?? []) variantEquipment.add(id);
       for (const wid of weaponIdsByUnit.get(c.unit_id ?? "") ?? []) {
-        if (defaults.has(wid) || reachable.has(wid)) continue;
+        if (defaults.has(wid) || variantEquipment.has(wid) || reachable.has(wid)) continue;
         const key = `${faction}/${c.unit_id}/${wid}`;
         if (KNOWN_LOADOUT_ORPHANS.has(key)) {
           seenAllowed.add(key);

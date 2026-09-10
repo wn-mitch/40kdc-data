@@ -142,6 +142,25 @@ describe("terrain (embedded catalog + layout resolution)", () => {
   });
 });
 
+describe("mission cards (embedded primary and secondary rules)", () => {
+  it("resolves a mission to its same-id primary scoring card", () => {
+    expect(dataset.missionCards.all).toHaveLength(43);
+    expect(
+      dataset.missionCards.all.filter((card) => card.card_type === "primary"),
+    ).toHaveLength(25);
+    expect(
+      dataset.missionCards.all.filter((card) => card.card_type === "secondary"),
+    ).toHaveLength(18);
+
+    const mission = dataset.missions.get("determined-acquisition");
+    expect(mission).toBeDefined();
+    const card = dataset.missionCards.get(mission!.id);
+    expect(card?.id).toBe(mission!.id);
+    expect(card?.card_type).toBe("primary");
+    expect(card?.awards?.length).toBeGreaterThan(0);
+  });
+});
+
 describe("normalizeName", () => {
   it("strips diacritics via NFD", () => {
     expect(normalizeName("Khârn the Betrayer")).toBe("kharn the betrayer");

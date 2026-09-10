@@ -20,7 +20,7 @@
  *     breaks into inline elements). An inline object whose value is a breaking
  *     array yields the hugging hybrid `{ "op": "or", "operands": [ <newline> … ] }`.
  *
- * Verified byte-identical against data/core/secondary-cards.json, missions.json,
+ * Verified byte-identical against data/core/mission-cards.json, missions.json,
  * mission-matchups.json, and force-dispositions.json (see compact-json.test.ts).
  * `formatCompact(JSON.parse(text)) === text` is the contract those tests pin.
  */

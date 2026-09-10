@@ -133,5 +133,15 @@
       "edition": "11th",
       "dataslate": "launch"
     }
+  },
+  {
+    "leader_id": "shanus-daskovian",
+    "eligible_bodyguard_ids": [
+      "claw-of-ascension-atalan-jackals"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
   }
 ]

@@ -7589,5 +7589,67 @@
       ]
     },
     "community_notes": "Applies only to the bearer's infernal cannon; the weapon-name scoping is not encoded."
+  },
+  {
+    "ability_id": "bringers-of-change-prism-of-zadophon",
+    "name": "Bringers of Change",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "aafd2cc81f6ccc65d37dfffb2f5259a6b06799a02aa8ea2d38046e4b6a7f1765",
+    "version": "2026-q3",
+    "unit_ids": [
+      "prism-of-zadophon-rubric-marines"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "within-range-of-objective",
+            "parameters": {
+              "subject": "target"
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "all-failures",
+              "weapon_type": "ranged"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "within-range-of-objective",
+            "negated": true,
+            "parameters": {
+              "subject": "target"
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones",
+              "weapon_type": "ranged"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    }
   }
 ]

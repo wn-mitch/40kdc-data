@@ -6304,5 +6304,168 @@
     ],
     "ability_type": "core",
     "behavior": "activated"
+  },
+  {
+    "ability_id": "plasmacyte-amonhotekhs-guard",
+    "name": "Plasmacyte",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "unit_ids": [
+      "amonhotekhs-guard-skorpekh-destroyers"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected-to-fight",
+      "subject": "self",
+      "optional": true
+    },
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Devastating Wounds"
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
+  },
+  {
+    "ability_id": "scarab-interference-amonhotekhs-guard",
+    "name": "Scarab Interference",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "unit_ids": [
+      "amonhotekhs-guard-canoptek-scarab-swarms"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "for-each-unit",
+      "selector": {
+        "owner": "enemy",
+        "engagement_relation": "engaged-with-bearer",
+        "reference": "bearer-unit"
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "unit",
+        "modifier": {
+          "operation": "subtract",
+          "roll": "hit",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-4-wounds-remaining-amonhotekhs-guard-doomstalker",
+    "name": "Damaged: 1-4 Wounds Remaining",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "unit_ids": [
+      "amonhotekhs-guard-canoptek-doomstalker"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "wounds-remaining-at-or-below",
+        "parameters": {
+          "threshold": 4
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "self",
+        "modifier": {
+          "operation": "subtract",
+          "roll": "hit",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "iron-will-overlord-amonhotekh",
+    "name": "Iron Will",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "unit_ids": [
+      "overlord-amonhotekh"
+    ],
+    "ability_type": "unit",
+    "behavior": "reactive",
+    "trigger": {
+      "event": "on-model-destroyed",
+      "subject": "bearer",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "has-fought-this-phase",
+            "parameters": {
+              "subject": "unit"
+            },
+            "negated": true
+          }
+        ]
+      }
+    },
+    "effect": {
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 2,
+      "comparison": "gte",
+      "on_success": {
+        "type": "fight-on-death",
+        "target": "destroyed-model",
+        "modifier": {
+          "resolution": "when-unit-fights",
+          "removal": "after-unit-fights-or-phase-end"
+        }
+      },
+      "on_fail": null
+    },
+    "scope": {
+      "range": "self",
+      "duration": "phase"
+    }
   }
 ]

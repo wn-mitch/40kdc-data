@@ -14,6 +14,13 @@ import { effectToBuffs } from "../src/cruncher/from-dsl.js";
 type Json = any;
 const root = resolve(import.meta.dirname, "../..");
 const abilities: Json[] = JSON.parse(readFileSync(join(root, "data/enrichment/grey-knights/abilities.json"), "utf8"));
+const astartesAbilities: Json[] = JSON.parse(readFileSync(join(root, "data/enrichment/adeptus-astartes/abilities.json"), "utf8"));
+const astartesUnits: Json[] = JSON.parse(readFileSync(join(root, "data/core/adeptus-astartes/units.json"), "utf8"));
+const astartesAbility = (id: string): Json => {
+  const found = astartesAbilities.filter((a) => a.ability_id === id);
+  expect(found).toHaveLength(1);
+  return found[0];
+};
 const units: Json[] = JSON.parse(readFileSync(join(root, "data/core/grey-knights/units.json"), "utf8"));
 const detachments: Json[] = JSON.parse(readFileSync(join(root, "data/core/grey-knights/detachments.json"), "utf8"));
 const ability = (id: string): Json => {
@@ -71,7 +78,41 @@ describe("Grey Knights fidelity worklist", () => {
     expect(Object.keys(contracts)).toHaveLength(23);
     expect(abilities.some((a) => a.ability_id === "wisdom-of-the-ancients-aura")).toBe(false);
     expect(units.every((u) => !(u.ability_ids ?? []).includes("wisdom-of-the-ancients-aura"))).toBe(true);
-    expect(ability("prescient-redeployment")).toBeDefined(); // Explicit unresolved ledger, not called repaired.
+    expect(ability("prescient-redeployment")).toBeDefined();
+  });
+  it("Prescient Redeployment uses Gate's prior-window record, not current eligibility", () => {
+    const a = ability("prescient-redeployment");
+    expect(validate(a), JSON.stringify(validate.errors)).toBe(true);
+    expect(a.trigger).toMatchObject({
+      event: "start-of-phase",
+      optional: true,
+      condition: {
+        operator: "and",
+        operands: expect.arrayContaining([
+          expect.objectContaining({ type: "battle-round", parameters: { min: 2 } }),
+          expect.objectContaining({
+            type: "ability-window-capacity",
+            parameters: {
+              source_ability: { ability_id: "gate-of-infinity", owner: "friendly" },
+              window: "end-of-opponents-previous-turn",
+              comparison: "less-than-maximum",
+            },
+          }),
+        ]),
+      },
+    });
+    expect(a.effect.selector).toMatchObject({ min_count: 1, max_count: 1, keywords: ["GREY KNIGHTS"] });
+    expect(a.effect.selector.eligibility.operands).toEqual(expect.arrayContaining([
+      { type: "engagement-state", parameters: { state: "on-battlefield" } },
+      {
+        type: "candidate-eligible-in-ability-window",
+        parameters: {
+          source_ability: { ability_id: "gate-of-infinity", owner: "friendly" },
+          window: "end-of-opponents-previous-turn",
+        },
+      },
+    ]));
+    expect(JSON.stringify(a)).not.toContain("[APPROX]");
   });
   it("Paladin eligibility is evaluated on member MODELS, never Attached-unit keywords", () => {
     const e = ability("attuned-onslaught-psychic").effect;

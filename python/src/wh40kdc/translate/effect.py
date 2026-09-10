@@ -17,6 +17,7 @@ from typing import Any
 
 from wh40kdc.translate.condition import (
     Condition,
+    condition_subject,
     dekebab,
     describe_condition,
     describe_selection_eligibility,
@@ -45,6 +46,9 @@ _CONTAINER_TYPES = {
     "risk-reward",
     "issue-orders",
     "resource-action-menu",
+    "select-objective",
+    "for-each-objective",
+    "paired-designation",
 }
 
 
@@ -53,7 +57,7 @@ def _select_units_subject(sel: Any) -> str:
     sel = sel or {}
     owner = _jstr(sel.get("owner"))
     keywords = " ".join(_title_case(_jstr(k)) for k in (sel.get("keywords") or []))
-    owner_keywords = f" {keywords}" if keywords else ""
+    filters = _selection_model_filters(sel)
     exact_count = sel.get("count")
     min_count = sel.get("min_count")
     max_count = sel.get("max_count")
@@ -71,18 +75,52 @@ def _select_units_subject(sel: Any) -> str:
     else:
         quantity = f"up to {_jstr(max_count)}"
     if sel.get("within_inches") is not None:
-        within = f' within {_jstr(sel["within_inches"])}"'
+        origin = (
+            f" of {_selection_ref_name(sel.get('within_inches_from'), 'the bound source unit')}"
+            if sel.get("within_inches_from")
+            else ""
+        )
+        within = f' within {_jstr(sel["within_inches"])}"{origin}'
     elif isinstance(sel.get("range_inches"), (int, float)):
-        origin = "this model's unit" if sel.get("reference") == "bearer-unit" else "the bearer"
-        within = f" within {_jstr(sel['range_inches'])} inches of {origin}"
+        if sel.get("within_inches_from"):
+            origin = (
+                f" of {_selection_ref_name(sel.get('within_inches_from'), 'the bound source unit')}"
+            )
+        else:
+            origin_ref = (
+                "this model's unit" if sel.get("reference") == "bearer-unit" else "the bearer"
+            )
+            origin = f" of {origin_ref}"
+        within = f" within {_jstr(sel['range_inches'])} inches{origin}"
     else:
         within = ""
-    visible = " visible to the bearer" if sel.get("visibility_required") is True else ""
+    visible = (
+        f" visible to {_selection_ref_name(sel.get('visible_to'), 'the bound source unit')}"
+        if sel.get("visible_to")
+        else " visible to the bearer"
+        if sel.get("visibility_required") is True
+        else ""
+    )
     inclusive = ", inclusive" if bounded else ""
     return (
-        f"{quantity} {owner}{owner_keywords} {noun}{inclusive}{within}{visible}"
-        f"{_selection_eligibility(sel)}"
+        f"{quantity} {owner}{f' {keywords}' if keywords else ''} "
+        f"{noun}{filters}{inclusive}{within}{visible}{_selection_eligibility(sel)}"
     )
+
+
+def _selection_model_filters(sel: dict[str, Any]) -> str:
+    names = (
+        f" named {_or_list([_jstr(name) for name in sel['model_names']])}"
+        if isinstance(sel.get("model_names"), list)
+        else ""
+    )
+    exclusions = (
+        f" (excluding {'models' if sel.get('target_kind') == 'model' else 'units'} with "
+        f"{_or_list([_jstr(keyword) for keyword in sel['excluded_keywords']])})"
+        if isinstance(sel.get("excluded_keywords"), list) and sel["excluded_keywords"]
+        else ""
+    )
+    return names + exclusions
 
 
 def _select_units_engagement(sel: Any) -> str:
@@ -98,17 +136,23 @@ def _select_units_engagement(sel: Any) -> str:
         )
     limit = sel.get("selection_limit")
     if limit:
-        count = "once" if limit["count"] == 1 else f"{limit['count']} times"
-        parts.append(
-            f"Each {noun} can be selected for this ability at most {count} "
-            f"per {dekebab(limit['period'])} across your army."
-        )
+        parts.append(f"{_capitalize(_selection_limit_phrase(limit, noun))}.")
     return " ".join(parts)
+
+
+def _selection_limit_phrase(limit: dict[str, Any], noun: str) -> str:
+    count = "once" if limit.get("count") == 1 else f"{_jstr(limit.get('count'))} times"
+    return (
+        f"each {noun} can be selected for this ability at most {count} "
+        f"per {dekebab(_jstr(limit.get('period')))} across your army"
+    )
 
 
 def _selected_recipient(text: str, sel: Any) -> str:
     sel = sel or {}
-    count = sel.get("count", sel.get("max_count", 0))
+    count = sel.get("count")
+    if count is None:
+        count = sel.get("max_count", 0)
     noun = "model" if sel.get("target_kind") == "model" else "unit"
     recipient = f"each selected {noun}" if count > 1 else f"the selected {noun}"
     text = text.replace("The unit's", f"Each selected {noun}'s").replace(
@@ -119,22 +163,47 @@ def _selected_recipient(text: str, sel: Any) -> str:
 
 def _selected_context(ctx: Ctx, sel: Any) -> Ctx:
     selected_model = (sel or {}).get("target_kind") == "model"
-    return {**ctx, "selected_unit": not selected_model, "selected_model": selected_model}
+    return {
+        **ctx,
+        "selected_unit": not selected_model,
+        "selected_model": selected_model,
+        "unit_subject": None,
+    }
+
+
+def _selection_ref_name(ref: Any, fallback: str) -> str:
+    value = ref if isinstance(ref, dict) else {}
+    identifier = value.get("selection_var")
+    if identifier is None:
+        identifier = value.get("event_var")
+    if isinstance(identifier, str) and identifier:
+        return f"the bound {dekebab(identifier.replace('_', '-'))}"
+    return fallback
+
+
+def _selection_binding(sel: dict[str, Any]) -> str:
+    binding = sel.get("bind_as")
+    if isinstance(binding, str) and binding:
+        pronoun = "them" if sel.get("selection_mode") == "any-number" else "it"
+        return f", binding {pronoun} as {dekebab(binding.replace('_', '-'))}"
+    return ""
 
 
 def _select_units_inline(sel: Any, effect: Effect, ctx: Ctx) -> str:
+    sel = sel or {}
     subject = _select_units_subject(sel)
     engagement = _select_units_engagement(sel)
+    binding = _selection_binding(sel)
     nested = _selected_recipient(describe_effect_inline(effect, _selected_context(ctx, sel)), sel)
     return (
-        f"select {subject}. {engagement} {_capitalize(nested)}"
+        f"select {subject}{binding}. {engagement} {_capitalize(nested)}"
         if engagement
-        else f"select {subject}: {nested}"
+        else f"select {subject}{binding}: {nested}"
     )
 
 
 def _leader_model_ability_grant_clause(e: Effect, ctx: Ctx) -> str:
-    """Render the beneficiary-only leader relation without a bearer fallback."""
+    """Render the beneficiary-only leader relation without exposing a bearer fallback."""
     filt = e.get("leader_filter") or {}
     identity = _title_case(_jstr(filt.get("identity"))) if filt.get("identity") else ""
     keywords = " and ".join(_bracket_keyword(k) for k in (filt.get("keywords") or []))
@@ -159,15 +228,37 @@ def _for_each_unit_subject(selector: Any) -> str:
     """The candidate phrase for an independently resolved unit iteration."""
     selector = selector or {}
     owner = _jstr(selector.get("owner"))
-    keywords = " ".join(_title_case(keyword) for keyword in selector.get("keywords") or [])
-    within = (
-        f' within {_jstr(selector.get("within_inches"))}"'
-        if selector.get("within_inches") is not None
+    keywords = " ".join(_title_case(_jstr(keyword)) for keyword in selector.get("keywords") or [])
+    if selector.get("within_objective"):
+        objective_ref = _selection_ref_name(
+            selector.get("within_objective"),
+            "the selected objective marker",
+        )
+        within = f" within range of {objective_ref}"
+    elif selector.get("within_inches") is not None:
+        within = f' within {_jstr(selector.get("within_inches"))}"'
+    else:
+        within = ""
+    origin = "this model's unit" if selector.get("reference") == "bearer-unit" else "the bearer"
+    engagement = (
+        f" in Engagement Range of {origin}"
+        if selector.get("engagement_relation") == "engaged-with-bearer"
+        else f" not in Engagement Range of {origin}"
+        if selector.get("engagement_relation") == "not-engaged-with-bearer"
         else ""
     )
     noun = "model" if selector.get("target_kind") == "model" else "unit"
+    eligibility = (
+        f" {describe_selection_eligibility(selector['eligibility'])}"
+        if isinstance(selector.get("eligibility"), dict)
+        else ""
+    )
     member = " in this model's unit" if selector.get("member_of") == "bearer-unit" else ""
-    return f"{owner}{f' {keywords}' if keywords else ''} {noun}{member}{within}"
+    filters = _selection_model_filters(selector)
+    return (
+        f"{owner}{f' {keywords}' if keywords else ''} {noun}{filters}{member}{within}{engagement}"
+        f"{eligibility}{_selection_binding(selector)}"
+    )
 
 
 def _selection_eligibility(sel: dict[str, Any]) -> str:
@@ -251,7 +342,8 @@ def _persistent_designation_supported(e: Effect) -> bool:
     consumer_raw = e.get("consumer")
     sel = select_raw if isinstance(select_raw, dict) else {}
     consumer = consumer_raw if isinstance(consumer_raw, dict) else {}
-    if consumer.get("beneficiary") != "bearer":
+    recipient = consumer.get("beneficiary") in ("bearer", "unit")
+    if not recipient:
         return False
     return (
         sel.get("scope") == "enemy-unit" and consumer.get("relation") == "attacks-selected-unit"
@@ -264,11 +356,27 @@ def _persistent_designation_supported(e: Effect) -> bool:
 def _persistent_designation_lead(e: Effect) -> str:
     select_raw = e.get("select")
     sel = select_raw if isinstance(select_raw, dict) else {}
-    scope_noun = "objective marker" if sel.get("scope") == "objective-marker" else "enemy unit"
+    noun = "objective marker" if sel.get("scope") == "objective-marker" else "enemy unit"
     label = _persistent_designation_label(e.get("designation"), sel.get("scope"))
     timing = sel.get("timing")
     select_lead = f"{describe_timing(timing)}, select" if timing else "select"
-    return f"{select_lead} one {scope_noun}{label}."
+    clauses = [f"{select_lead} one {noun}{label}{_selection_binding(sel)}."]
+    if sel.get("allow_while_embarked"):
+        clauses.append("This selection can be made while this unit is embarked.")
+    lifecycle = e.get("lifecycle") or {}
+    replacement = lifecycle.get("replace") if isinstance(lifecycle, dict) else None
+    if sel.get("selection_policy") == "replace-on-destroyed" and isinstance(replacement, dict):
+        name = _selection_ref_name(
+            replacement.get("reference"),
+            _persistent_designation_name(e.get("designation"), sel.get("scope")),
+        )
+        modal = "you may" if replacement.get("optional") else "you must"
+        clauses.append(f"When {name} is destroyed, {modal} select one new {noun} to replace it.")
+    if lifecycle.get("exclusivity") == "one-active-per-bearer-unit":
+        clauses.append("Only one such designation can be active for this bearer unit.")
+    if lifecycle.get("expiry") == "battle-end" and e.get("duration") != "battle":
+        clauses.append("This designation expires at the end of the battle.")
+    return " ".join(clauses)
 
 
 def _persistent_designation_when(e: Effect) -> str:
@@ -276,14 +384,44 @@ def _persistent_designation_when(e: Effect) -> str:
     consumer_raw = e.get("consumer")
     sel = select_raw if isinstance(select_raw, dict) else {}
     consumer = consumer_raw if isinstance(consumer_raw, dict) else {}
-    name = _persistent_designation_name(e.get("designation"), sel.get("scope"))
+    name = _selection_ref_name(
+        consumer.get("reference"),
+        _persistent_designation_name(e.get("designation"), sel.get("scope")),
+    )
+    bearer = "a model in this unit" if consumer.get("beneficiary") == "unit" else "this model"
     relation = (
-        f"while this model is within range of {name}"
+        f"while {bearer} is within range of {name}"
         if consumer.get("relation") == "within-selected-marker"
-        else "each time this model makes an attack against it"
+        else f"each time {bearer} makes an attack against "
+        f"{name if consumer.get('reference') else 'it'}"
     )
     _, trail = _duration_clauses(e.get("duration"))
     return f"{_capitalize(trail)}, {relation}" if trail else relation
+
+
+def _persistent_designation_replacement(e: Effect) -> str:
+    select_raw = e.get("select")
+    sel = select_raw if isinstance(select_raw, dict) else {}
+    lifecycle = e.get("lifecycle") or {}
+    replacement = lifecycle.get("replace") if isinstance(lifecycle, dict) else {}
+    previous = _selection_ref_name(
+        replacement.get("reference") if isinstance(replacement, dict) else None,
+        _persistent_designation_name(e.get("designation"), sel.get("scope")),
+    )
+    label = _persistent_designation_label(e.get("designation"), sel.get("scope"))
+    optional = replacement.get("optional") if isinstance(replacement, dict) else False
+    embarked = (
+        ". This selection can be made while this unit is embarked"
+        if sel.get("allow_while_embarked")
+        else ""
+    )
+    modal = "you may" if optional else "you must"
+    return (
+        f"when {previous} is destroyed, {modal} select one new enemy unit{label} "
+        f"to replace this bearer unit's existing designation{_selection_binding(sel)}. "
+        f"Its existing effects apply to the new target without changing the designation's "
+        f"battle-end expiry{embarked}"
+    )
 
 
 def _title_case(s: str) -> str:
@@ -336,12 +474,33 @@ def _designation_target_subject_base(sel: dict[str, Any]) -> str:
     )
     keyword_join = " or " if sel.get("keyword_match") == "any" else " "
     keyword_text = f" {keyword_join.join(keywords)}" if keywords else ""
+    reference = sel.get("reference")
+    reference_name = "this model's unit" if reference == "bearer-unit" else "the bearer"
+    origin = (
+        f" of {_selection_ref_name(sel.get('within_inches_from'), 'the bound source unit')}"
+        if sel.get("within_inches_from")
+        else f" of {reference_name}"
+        if reference
+        else ""
+    )
     within = (
-        f" within {_jstr(sel['within_inches'])} inches"
+        f" within {_jstr(sel['within_inches'])} inches{origin}"
         if sel.get("within_inches") is not None
         else ""
     )
-    return f"{disposition}{keyword_text} unit{within}"
+    visible = (
+        f" visible to {_selection_ref_name(sel.get('visible_to'), 'the bound source unit')}"
+        if sel.get("visible_to")
+        else f" visible to {reference_name}"
+        if sel.get("visibility_required")
+        else ""
+    )
+    exclusions = (
+        f" (excluding {' and '.join(_jstr(keyword) for keyword in sel['excluded_keywords'])} units)"
+        if isinstance(sel.get("excluded_keywords"), list) and sel["excluded_keywords"]
+        else ""
+    )
+    return f"{disposition}{keyword_text} unit{within}{visible}{exclusions}"
 
 
 def _transport_capacity_conversion(m: dict[str, Any]) -> str:
@@ -480,6 +639,22 @@ def _roll_name(roll: Any) -> str:
     return _ROLL_NAMES.get(r, _title_case(r))
 
 
+def _reroll_count(m: dict[str, Any]) -> int | None:
+    """The re-roll modifier's ``count`` cap, when one is set."""
+    cnt = m.get("count")
+    return cnt if isinstance(cnt, int) and not isinstance(cnt, bool) else None
+
+
+def _reroll_count_phrase(m: dict[str, Any], cnt: int) -> str:
+    """Renders a count-capped re-roll's subject: "one Hit roll", "up to 2
+    failed Wound rolls", "one roll of 1"."""
+    lead, plural = ("one", "") if cnt == 1 else (f"up to {cnt}", "s")
+    failed = "failed " if m.get("subset") == "all-failures" else ""
+    noun = "roll" if _jstr(m.get("roll")) == "any" else f"{_roll_name(m.get('roll'))} roll"
+    of_one = " of 1" if m.get("subset") == "ones" else ""
+    return f"{lead} {failed}{noun}{plural}{of_one}"
+
+
 def _is_plural(subj: str) -> bool:
     return bool(
         re.search(r" units\b", subj)
@@ -528,6 +703,8 @@ def _subject(target: str | None, ctx: Ctx) -> str:
     if target in ("self", "bearer"):
         return "this model"
     if target == "unit":
+        if ctx.get("unit_subject") is not None:
+            return ctx["unit_subject"]
         if ctx.get("selected_model"):
             return "that model"
         return "that unit" if ctx.get("selected_unit") else "the unit"
@@ -535,10 +712,14 @@ def _subject(target: str | None, ctx: Ctx) -> str:
         return "the unit this model leads"
     if target == "selected-models-unit":
         return "that model's unit"
+    if target == "destroyed-model":
+        return "the destroyed model"
+    if target == "triggering-unit":
+        return "the triggering unit"
     if target == "target":
         return "the target"
     if target == "attacker":
-        return "the attacking unit"
+        return ctx["unit_subject"] if ctx.get("unit_subject") is not None else "the attacking unit"
     if target == "defender":
         # The defending unit in an attack is the enemy from the bearer's view.
         return "the target"
@@ -719,29 +900,90 @@ def _is_end_of_phase_disembark_battle_shock(t: dict[str, Any]) -> bool:
     )
 
 
+_TRIGGER_ATTACK_MODELS = {
+    "bearer": "this model",
+    "self": "this model",
+    "unit": "a model in this unit",
+    "model-in-bearer": "a model in this unit",
+    "friendly-unit": "a model in a friendly unit",
+    "enemy-unit": "a model in an enemy unit",
+    "friendly-model": "a friendly model",
+    "enemy-model": "an enemy model",
+}
+
+
 def _describe_trigger(t: dict[str, Any]) -> str:
     """Reactive trigger -> front-of-sentence lead clause
     ("an enemy unit ends a move within 9\" of this model")."""
     s = event_clause(t.get("event"))
-    if t.get("subject") == "friendly-unit":
-        s = s.replace("the unit", "a friendly unit", 1)
-    if t.get("subject") == "enemy-unit":
-        s = s.replace("the unit", "an enemy unit", 1)
+    subject = t.get("subject")
+    if subject == "friendly-unit":
+        s = re.sub(r"\b(?:the|a) unit\b", "a friendly unit", s)
+    if subject == "enemy-unit":
+        s = re.sub(r"\b(?:the|a) unit\b", "an enemy unit", s)
+    if t.get("event") == "on-model-destroyed":
+        if subject in ("bearer", "self"):
+            s = "when this model is destroyed"
+        elif subject == "model-in-bearer":
+            s = "when a model in this unit is destroyed"
+        elif subject == "friendly-model":
+            s = "when a friendly model is destroyed"
+        elif subject == "enemy-model":
+            s = "when an enemy model is destroyed"
+    attack_model = _TRIGGER_ATTACK_MODELS.get(subject) if isinstance(subject, str) else None
+    if (
+        re.fullmatch(r"(?:before|after)-(?:hit|wound|damage)-roll", _jstr(t.get("event")))
+        and attack_model
+    ):
+        s += f" for an attack made by {attack_model}"
+    if t.get("event") == "attack-scores-wound" and attack_model:
+        s = f"each time an attack made by {attack_model} scores a wound"
+    caused_by = t.get("caused_by")
+    if isinstance(caused_by, dict):
+        source = "this model" if caused_by.get("source") == "bearer-model" else "this unit"
+        attack_type = f"{caused_by['attack_type']} " if caused_by.get("attack_type") else ""
+        weapon = (
+            f" with {_bracket_keyword(caused_by['weapon_keyword'])} weapons"
+            if caused_by.get("weapon_keyword")
+            else ""
+        )
+        s += (
+            f" by {attack_type}attacks made by {source}{weapon}"
+            if attack_type or weapon
+            else f" by {source}"
+        )
     if t.get("event") == "stratagem-targeted":
         s = "when this model's unit is targeted with a Stratagem"
     if t.get("event") == "ability-target-selected" and t.get("source_ability"):
         source = t["source_ability"]
-        keywords = " ".join(source.get("keywords") or [])
-        subject = {
+        source_keywords = " ".join(source.get("keywords") or [])
+        source_subject = {
             "friendly-unit": "a friendly unit",
             "enemy-unit": "an enemy unit",
         }.get(_jstr(t.get("subject")), "a unit")
         s = (
-            f"when {subject} is selected by the {_title_case(source['ability_id'])} "
-            f"ability of a {source['owner']} {keywords} unit"
+            f"when {source_subject} is selected by the {_title_case(source['ability_id'])} "
+            f"ability of a {source['owner']} {source_keywords} unit"
         )
     if t.get("event") == "falls-back" and t.get("subject") == "enemy-unit":
         s = "an enemy unit Falls Back"
+    actor = (
+        "model"
+        if subject in ("bearer", "self", "model-in-bearer", "friendly-model", "enemy-model")
+        else "unit"
+    )
+    keywords = t.get("subject_keywords")
+    if isinstance(keywords, list) and keywords:
+        s += (
+            f" (the triggering {actor} must have "
+            f"{_and_list([_jstr(keyword) for keyword in keywords])})"
+        )
+    excluded_keywords = t.get("subject_excluded_keywords")
+    if isinstance(excluded_keywords, list) and excluded_keywords:
+        s += (
+            f" (the triggering {actor} must not have "
+            f"{_or_list([_jstr(keyword) for keyword in excluded_keywords])})"
+        )
     # Narrow a move event to its move kinds: "ends a move" -> "ends a Normal,
     # Advance or Fall Back move".
     move_types = t.get("move_types")
@@ -766,6 +1008,12 @@ def _describe_trigger(t: dict[str, Any]) -> str:
         s += ", if the unit disembarked from a Transport this turn and is Battle-shocked"
     elif t.get("condition"):
         s += f", if {describe_condition(t['condition'])}"
+    if t.get("binds_die_variable"):
+        binding = _jstr(t["binds_die_variable"]).replace("_", "-")
+        s += f" (binding the generated die as {dekebab(binding)})"
+    if t.get("binds_selected_die_variable"):
+        binding = _jstr(t["binds_selected_die_variable"]).replace("_", "-")
+        s += f" (binding one chosen die used in that Act of Faith as {dekebab(binding)})"
     if t.get("optional"):
         s += ", you may use this ability"
     return s
@@ -1006,7 +1254,7 @@ def _condition_lead_in(c: Condition) -> str:
     if ctype == "model-is-leader":
         return "while this model leads a unit"
     if ctype == "charged-this-turn":
-        return "if the unit charged this turn"
+        return f"if {condition_subject(c, 'the unit')} charged this turn"
     if ctype == "advanced-this-turn":
         return "if the unit Advanced this turn"
     if ctype == "disembarked-from-transport":
@@ -1042,11 +1290,10 @@ def _condition_lead_in(c: Condition) -> str:
         attack_type = f"{_jstr(p.get('attack_type'))} " if p.get("attack_type") else ""
         return f"when all of the unit's {attack_type}attacks target the same enemy unit"
     if ctype == "is-battle-shocked":
-        return "while the unit is Battle-shocked"
+        return f"while {condition_subject(c, 'the unit')} is Battle-shocked"
     if ctype == "unit-below-half-strength":
-        if p.get("subject") == "target":
-            return "while the target unit is below half strength"
-        return "while the unit is below half strength"
+        subject = condition_subject(c, "the unit", {"target": "the target unit"})
+        return f"while {subject} is below half strength"
     if ctype == "unit-below-starting-strength":
         return "while the unit is below its starting strength"
     if ctype == "has-lost-wounds":
@@ -1200,7 +1447,10 @@ def _named_region_effect(branch: dict[str, Any], qualified: bool, ctx: Ctx | Non
         modifier = modifier_raw
     roll = _roll_name(modifier.get("roll"))
     if effect.get("type") == "re-roll":
-        if modifier.get("result_scope") == "any-result":
+        reroll_cap = _reroll_count(modifier)
+        if reroll_cap is not None:
+            text = f"can re-roll {_reroll_count_phrase(modifier, reroll_cap)}"
+        elif modifier.get("result_scope") == "any-result":
             text = f"can re-roll the {roll} roll"
         elif modifier.get("subset") == "ones":
             text = f"can re-roll {roll} rolls of 1"
@@ -1601,6 +1851,11 @@ def describe_effect_inline(e: Effect, ctx: Ctx | None = None) -> str:
     base = _describe_effect_inline_base(e, ctx)
     if e.get("type") == "movement-modifier" and e.get("after_move"):
         base += f"; if it does, {describe_effect_inline(e['after_move'], ctx)}"
+    if (
+        e.get("type") == "mortal-wounds"
+        and (e.get("modifier") or {}).get("in_addition_to_normal_damage") is True
+    ):
+        base += ", in addition to normal damage"
     scaling = e.get("scaling")
     return f"{base} {_scaling_clause(scaling)}" if scaling else base
 
@@ -1640,6 +1895,16 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
     subj = _subject(e.get("target"), ctx)
     etype = e.get("type")
 
+    if etype == "unit-division":
+        counts = (
+            [_jstr(count) for count in m["resulting_model_counts"]]
+            if isinstance(m.get("resulting_model_counts"), list)
+            else []
+        )
+        return (
+            f"divide {subj} into {len(counts)} separate units containing "
+            f"{_and_list(counts)} models, respectively"
+        )
     if etype == "stat-modifier":
         if m.get("stat") is not None and any(
             m.get(k) is not None for k in ("weapon_type", "weapon_name", "weapon_keyword")
@@ -1705,7 +1970,12 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
         sgn = _signed(m.get("operation"), m["value"])
         return f"{subj} {_v(subj, 'gets')} {sgn} to {roll} rolls{ctx_note}"
     if etype == "re-roll":
-        if _jstr(m.get("roll")) == "any":
+        # Count-capped re-roll: up to `count` qualifying rolls within the
+        # ability's active window ("one Hit roll", "up to 2 failed Wound rolls").
+        reroll_cap = _reroll_count(m)
+        if reroll_cap is not None:
+            which = _reroll_count_phrase(m, reroll_cap)
+        elif _jstr(m.get("roll")) == "any":
             which = "any roll of 1" if m.get("subset") == "ones" else "any roll"
         else:
             noun = _roll_name(m.get("roll"))
@@ -1807,9 +2077,25 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
             kw = f"[{dekebab(_jstr(base_kw)).upper()} {_jstr(m['value'])}]"
         else:
             kw = _bracket_keyword(m.get("keyword") if m.get("keyword") is not None else "keywords")
+        if m.get("attack_recipient") == "bearer":
+            return (
+                f"{_weapon_noun(m)} equipped by {_weapon_holder(e.get('target'), ctx)} "
+                f"gain {kw} when they target this unit"
+            )
         if any(m.get(k) is not None for k in ("weapon_type", "weapon_name", "weapon_keyword")):
             return f"{_weapon_noun(m)} equipped by {_weapon_holder(e.get('target'), ctx)} gain {kw}"
         return f"{_of_or_possessive(subj, 'weapons')} gain {kw}"
+    if etype == "ability-usage-limit":
+        return (
+            f"{subj} can use the {_grant_label(_jstr(m.get('ability_id')))} ability at most "
+            f"{_jstr(m.get('max_uses'))} times per {dekebab(_jstr(m.get('period')))}, "
+            "replacing its usual usage limit"
+        )
+    if etype == "deadly-demise-threshold":
+        return (
+            f"{subj}'s existing Deadly Demise ability triggers on a roll of "
+            f"{_jstr(m.get('threshold'))}+ instead of its usual threshold"
+        )
     if etype == "detection-range-modifier":
         return (
             f"{subj} {_v(subj, 'gets')} "
@@ -1924,7 +2210,15 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
         if e.get("target") in ("self", "bearer"):
             return f"{subj} {_v(subj, 'is')} set up again{tail_clause} with {w} wounds remaining"
         noun = "destroyed model" if count == "1" else "destroyed models"
-        return f"return {count} {noun} to {subj} with {w} wounds{tail_clause}"
+        excluded = (
+            f" (excluding {_or_list([_jstr(keyword) for keyword in m['exclude_keywords']])} models)"
+            if isinstance(m.get("exclude_keywords"), list) and m["exclude_keywords"]
+            else ""
+        )
+        return (
+            f"return {'up to ' if m.get('up_to') is True else ''}{count} {noun}{excluded} "
+            f"to {subj} with {w} wounds{tail_clause}"
+        )
     if etype == "heal-wounds":
         healing_amount = _dice_case(
             m.get("amount") if m.get("amount") is not None else m.get("value", "1")
@@ -1946,10 +2240,11 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
         )
     if etype == "model-destruction":
         count = _dice_case(m.get("count")) if m.get("count") is not None else "1"
+        role = f"{dekebab(_jstr(m.get('model_role')))} " if m.get("model_role") is not None else ""
         kind = (
-            f"{_title_case(_jstr(m.get('model_keyword')))} model"
+            f"{role}{_title_case(_jstr(m.get('model_keyword')))} model"
             if m.get("model_keyword") is not None
-            else "model"
+            else f"{role}model"
         )
         noun = kind if count == "1" else f"{kind}s"
         return f"destroy {count} {noun} in {subj}"
@@ -1974,12 +2269,24 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
             lost = f", after which all your {per_plural} are lost" if m.get("consumes_pool") else ""
             return f"add {die} to your {pool_label} for each {per_label} you have{lost}"
         cnt = _dice_case(m.get("count")) if m.get("count") is not None else "1"
+        bound_roll = _roll_reference(m.get("value"))
+        if bound_roll:
+            return (
+                f"add one die showing the result bound as "
+                f"{dekebab(bound_roll.replace('_', '-'))} to your {pool_label}"
+            )
         if rolled:
             dice = "a rolled D6" if cnt == "1" else f"{cnt} rolled D6"
             return f"add {dice} to your {pool_label}"
         shown_val = "the highest result" if m.get("value") == "highest" else _jstr(m.get("value"))
         dice = "a die" if cnt == "1" else f"{cnt} dice"
         return f"add {dice} showing {shown_val} to your {pool_label}"
+    if etype == "miracle-die-operation":
+        return _miracle_die_operation_clause(m)
+    if etype == "formation-attachment-grant":
+        return _formation_attachment_grant_clause(e, ctx)
+    if etype == "attachment-eligibility-inherit":
+        return _attachment_eligibility_inherit_clause(m)
     if etype == "replace-roll-from-pool":
         raw_rolls = m.get("rolls")
         rolls = [dekebab(_jstr(r)) for r in raw_rolls] if isinstance(raw_rolls, list) else []
@@ -2042,14 +2349,29 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
         return f"{subj} can be targeted with Stratagems even while Battle-shocked"
     if etype == "modifier-immunity":
         scope = _jstr(m.get("scope"))
+        if scope == "attack-rolls-and-ballistic-skill":
+            names = {
+                "ballistic-skill": "Ballistic Skill",
+                "hit-roll": "Hit rolls",
+                "wound-roll": "Wound rolls",
+            }
+            ignored = (
+                [names.get(_jstr(value), _jstr(value)) for value in m.get("ignores") or []]
+                if isinstance(m.get("ignores"), list)
+                else []
+            )
+            return (
+                f"{_of_or_possessive(subj, 'ranged attacks')} can ignore modifiers to "
+                f"{_and_list(ignored)}"
+            )
         if scope == "enemy-stratagems":
             return f"{subj} cannot be affected by enemy Stratagems"
         if scope == "enemy-abilities":
             return f"{subj} cannot be affected by enemy abilities"
         exclude = m.get("exclude")
         if isinstance(exclude, list) and exclude:
-            names = " and ".join(_stat_name(s) for s in exclude)
-            exc = f" (except {names})"
+            excluded_stat_names = " and ".join(_stat_name(s) for s in exclude)
+            exc = f" (except {excluded_stat_names})"
         else:
             exc = ""
         return (
@@ -2103,7 +2425,16 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
         return f"you gain {_jstr(gain_amount)} {_resource_noun(m, gain_amount)}"
     if etype == "resource-spend":
         spend_amount = m.get("amount") if m.get("amount") is not None else m.get("value")
-        base = f"spend {_jstr(spend_amount)} {_resource_noun(m, spend_amount)}"
+        selected_pool_die = (
+            isinstance(m.get("selection"), dict)
+            and m["selection"].get("from") == "retained-pool-dice"
+        )
+        base = (
+            f"discard {_jstr(spend_amount)} {_resource_noun(m, spend_amount)} from your "
+            f"{_pool_name(m.get('pool_id'))}"
+            if selected_pool_die
+            else f"spend {_jstr(spend_amount)} {_resource_noun(m, spend_amount)}"
+        )
         cap_obj = m.get("cap")
         if (
             isinstance(cap_obj, dict)
@@ -2163,6 +2494,18 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
     if etype == "fight-last":
         return f"{subj} {_v(subj, 'has')} the Fights Last ability"
     if etype == "fight-on-death":
+        if m.get("resolution") == "when-unit-fights":
+            return (
+                f"do not remove {subj} yet; when its unit is selected to fight, it can fight; "
+                "remove it after its unit has finished fighting or at the end of the phase, "
+                "whichever happens first"
+            )
+        if m.get("resolution") == "after-attacking-unit-finishes":
+            return (
+                f"do not remove {subj} yet; after the attacking unit has finished making its "
+                "attacks, "
+                "it can fight; then remove it"
+            )
         if subj == "this model":
             return "each time this model is destroyed, it can fight before being removed from play"
         return (
@@ -2213,7 +2556,15 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
         return f"{subj} {_v(subj, 'has')} Firing Deck {_jstr(m.get('value'))}"
     if etype == "transport-capacity-conversion":
         return _transport_capacity_conversion(m)
+    if etype == "embark":
+        return f"{subj} can embark within this Transport"
     if etype == "disembark":
+        if isinstance(m.get("modes"), list) and m.get("setup_distance") is not None:
+            modes = " or ".join(dekebab(_jstr(mode)) for mode in m["modes"])
+            return (
+                f"when a unit embarked within this model disembarks using {modes} mode, "
+                f'its set-up distance is {_jstr(m["setup_distance"])}"'
+            )
         where = (
             f' and be set up wholly within {_jstr(m.get("distance"))}" of the transport'
             if m.get("distance") is not None
@@ -2250,7 +2601,7 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
             if m.get("min_enemy_distance") is not None
             else ""
         )
-        counts = (
+        normal_move_count_text = (
             "; such units count as having made a Normal move"
             if m.get("counts_as_normal_move")
             else ""
@@ -2263,7 +2614,7 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
             charge = ""
         else:
             charge = ", but cannot declare a charge this turn"
-        return f"{who} {verb} from {subj} {when}{away}{counts}{charge}"
+        return f"{who} {verb} from {subj} {when}{away}{normal_move_count_text}{charge}"
     if etype == "unit-attachment":
         if m.get("mandatory"):
             return f"{subj} must be attached to a Leader, or it counts as destroyed"
@@ -2324,11 +2675,30 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
             return f"{subj} {_v(subj, 'gets')} {sgn} to {pron} Objective Control characteristic"
         return f"modify {_of_or_possessive(subj, 'Objective Control characteristic')}"
     if etype == "bs-modifier":
+        if m.get("operation") == "improve":
+            return (
+                f"improve the Ballistic Skill of attacks made by "
+                f"{_weapon_holder(e.get('target'), ctx)} by {_jstr(m.get('value'))}"
+            )
         sgn = _signed(m.get("operation"), m.get("value"))
         return f"{subj} {_v(subj, 'gets')} {sgn} to Ballistic Skill"
     if etype == "charge-roll-modifier":
         sgn = _signed(m.get("operation"), m.get("value"))
         return f"{subj} {_v(subj, 'gets')} {sgn} to Charge rolls"
+    if etype == "desperate-escape":
+        penalty = (
+            f", with {_signed('add', m.get('roll_modifier_if_battle_shocked'))} to each test "
+            "while it is Battle-shocked"
+            if m.get("roll_modifier_if_battle_shocked") is not None
+            else ""
+        )
+        return f"every model in {subj} must take a Desperate Escape test{penalty}"
+    if etype == "reactive-charge":
+        return (
+            f"{subj} can resolve a charge; if its charge-roll result is greater than "
+            f"{_jstr(m.get('charge_roll_max_after_modifiers'))} after modifiers, change it to "
+            f"{_jstr(m.get('charge_roll_max_after_modifiers'))}"
+        )
     if etype == "terrain-area-tag":
         if m.get("tag") is None:
             return "the terrain area is marked"
@@ -2359,15 +2729,37 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
             if e.get("kind") == "psychic" and e.get("level") is not None
             else ""
         )
+        if any(e.get(field) for field in ("cost", "duration", "trigger", "usage")):
+            lead = ", ".join(
+                part
+                for part in (
+                    " or ".join(
+                        _describe_trigger(trigger)
+                        for trigger in _normalize_triggers(e.get("trigger"))
+                    ),
+                    _usage_clause(e["usage"]) if isinstance(e.get("usage"), dict) else "",
+                )
+                if part
+            )
+            use = "you may use" if e.get("optional") is True else "use"
+            cost = (
+                f" by paying this cost ({describe_effect_inline(e['cost'], ctx)})"
+                if isinstance(e.get("cost"), dict)
+                else ""
+            )
+            _, trail = _duration_clauses(e.get("duration"))
+            return (
+                f"{lead + ', ' if lead else ''}{use} {_jstr(e.get('name'))}{level}{cost}: "
+                f"{trail + ', ' if trail else ''}"
+                f"{describe_effect_inline(e.get('effect') or {}, ctx)}"
+            )
         prefix = "you can use " if e.get("optional") is True else ""
-        inner = describe_effect_inline(e.get("effect") or {}, ctx)
-        return f"{prefix}{_jstr(e.get('name'))}{level}: {inner}"
-    if etype == "choice":
-        prompt = (
-            f"select one of the following ({_title_case(e['choice_label'])})"
-            if e.get("choice_label")
-            else "select one of the following"
+        return (
+            f"{prefix}{_jstr(e.get('name'))}{level}: "
+            f"{describe_effect_inline(e.get('effect') or {}, ctx)}"
         )
+    if etype == "choice":
+        prompt = _choice_prompt(e)
         options = " / ".join(describe_effect_inline(o, ctx) for o in e.get("options") or [])
         return f"{prompt}: {options}"
     if etype == "dice-gated":
@@ -2378,7 +2770,12 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
         success = describe_effect_inline(on_success, ctx) if on_success else "nothing happens"
         on_fail = e.get("on_fail")
         fail = f"; otherwise, {describe_effect_inline(on_fail, ctx)}" if on_fail else ""
-        return f"roll one {_dice_case(e.get('dice'))}: on {comp}, {success}{fail}"
+        binding = (
+            f" (binding the result as {dekebab(_jstr(e['roll_var']).replace('_', '-'))})"
+            if e.get("roll_var")
+            else ""
+        )
+        return f"roll one {_dice_case(e.get('dice'))}{binding}: on {comp}, {success}{fail}"
     if etype == "dice-table":
         outcomes = []
         for outcome in e.get("outcomes") or []:
@@ -2407,11 +2804,19 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
             f"for each {_for_each_unit_subject(e.get('selector'))}: "
             f"{describe_effect_inline(e.get('effect') or {}, inner_ctx)}"
         )
+    if etype == "select-objective":
+        return _objective_selection_inline(e, ctx, False)
+    if etype == "for-each-objective":
+        return _objective_selection_inline(e, ctx, True)
+    if etype == "paired-designation":
+        return _paired_designation_inline(e, ctx)
     if etype == "select-units":
         return _select_units_inline(e.get("selector"), e.get("effect") or {}, ctx)
     if etype == "leader-model-ability-grant":
         return _leader_model_ability_grant_clause(e, ctx)
     if etype == "persistent-designation":
+        if e.get("operation") == "replace":
+            return _persistent_designation_replacement(e)
         if not _persistent_designation_supported(e):
             return "[persistent-designation]"
         consumer = e.get("consumer") or {}
@@ -2431,15 +2836,13 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
             when = "while it is your target"
         elif applies.get("to") == "bearer-attacks-target":
             when = "each time this unit attacks it"
+        elif applies.get("to") == "bound-unit-attacks-reference":
+            when = _designated_attack_when(applies)
         else:
-            keywords = " ".join(applies.get("attacker_keywords") or [])
-            when = (
-                f"each time a friendly {keywords} model attacks it"
-                if keywords
-                else "each time a friendly unit attacks it"
-            )
+            when = _designation_attacker_phrase(applies)
         when_clause = f"{dur_trail}, {when}" if dur_trail else when
-        inner = describe_effect_inline(applies.get("effect") or {}, ctx)
+        recipient_ctx = _designated_recipient_context(applies, ctx)
+        inner = describe_effect_inline(applies.get("effect") or {}, recipient_ctx)
         return (
             f"{select_lead} one {_designation_target_subject(sel)}{desig}; {when_clause}, {inner}"
         )
@@ -2458,14 +2861,34 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
             f"take a {_test_name(risk.get('test'))} test (on a failure, {fail_txt}), then {reward}"
         )
     if etype == "issue-orders":
-        names = " / ".join(_jstr(o.get("name")) for o in e.get("options") or [])
-        return f"issue Orders, each one of: {names}"
+        order_names = " / ".join(_jstr(o.get("name")) for o in e.get("options") or [])
+        return f"issue Orders, each one of: {order_names}"
 
     if etype == "resource-action-menu":
         actions = " / ".join(_describe_menu_action(a, ctx) for a in e.get("actions") or [])
         return f"actions may be performed when their conditions are met: {actions}"
 
     return f"[{etype if etype is not None else 'unknown'}]"
+
+
+def _choice_prompt(e: Effect) -> str:
+    if e.get("min_choices") is not None and e.get("max_choices") is not None:
+        minimum = e["min_choices"]
+        maximum = e["max_choices"]
+        quantity = (
+            f"exactly {_jstr(maximum)}"
+            if minimum == maximum
+            else f"up to {_jstr(maximum)}"
+            if minimum == 0
+            else f"from {_jstr(minimum)} through {_jstr(maximum)}"
+        )
+        label = f" ({_title_case(_jstr(e.get('choice_label')))})" if e.get("choice_label") else ""
+        return f"select {quantity} distinct options{label}"
+    return e.get("choice_prompt") or (
+        f"select one of the following ({_title_case(_jstr(e.get('choice_label')))})"
+        if e.get("choice_label")
+        else "select one of the following"
+    )
 
 
 def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
@@ -2494,6 +2917,8 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
     if etype in ("rules-bundle", "sequence"):
         return "\n".join(describe_effect(s, depth, ctx) for s in e.get("steps") or [])
     if etype == "named-effect":
+        if any(e.get(field) for field in ("cost", "duration", "trigger", "usage")):
+            return f"{indent}{arrow}{_capitalize(describe_effect_inline(e, ctx))}."
         level = (
             f" (Psychic level {_jstr(e.get('level'))})"
             if e.get("kind") == "psychic" and e.get("level") is not None
@@ -2509,11 +2934,7 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
             f"{_capitalize(describe_effect_inline(inner, ctx))}."
         )
     if etype == "choice":
-        prompt = e.get("choice_prompt") or (
-            f"select one of the following ({_title_case(e['choice_label'])})"
-            if e.get("choice_label")
-            else "select one of the following"
-        )
+        prompt = _choice_prompt(e)
         options = "\n".join(
             f"{indent}  - {_capitalize(describe_effect_inline(o, ctx))}."
             for o in e.get("options") or []
@@ -2527,7 +2948,15 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         success = describe_effect_inline(on_success, ctx) if on_success else "nothing happens"
         on_fail = e.get("on_fail")
         fail = f"; otherwise, {describe_effect_inline(on_fail, ctx)}" if on_fail else ""
-        return f"{indent}{arrow}Roll one {_dice_case(e.get('dice'))}: on {comp}, {success}{fail}."
+        binding = (
+            f" (binding the result as {dekebab(_jstr(e['roll_var']).replace('_', '-'))})"
+            if e.get("roll_var")
+            else ""
+        )
+        return (
+            f"{indent}{arrow}Roll one {_dice_case(e.get('dice'))}{binding}: on {comp}, "
+            f"{success}{fail}."
+        )
     if etype == "dice-table":
         outcomes = []
         for outcome in e.get("outcomes") or []:
@@ -2565,10 +2994,12 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         inner = e.get("effect") or {}
         inner_ctx = _selected_context(ctx, selector)
         engagement = _select_units_engagement(selector)
-        lead = f"Select {_select_units_subject(selector)}"
+        lead = f"Select {_select_units_subject(selector)}{_selection_binding(selector)}"
         header = f"{indent}{arrow}{lead}. {engagement}" if engagement else f"{indent}{arrow}{lead}"
         if inner.get("type") in _CONTAINER_TYPES:
-            count = selector.get("count", selector.get("max_count", 0))
+            count = selector.get("count")
+            if count is None:
+                count = selector.get("max_count", 0)
             if count > 1:
                 nested = describe_effect(inner, depth + 2, inner_ctx)
                 noun = "model" if selector.get("target_kind") == "model" else "unit"
@@ -2576,10 +3007,31 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
             return f"{header.rstrip('.')}:\n" + describe_effect(inner, depth + 1, inner_ctx)
         nested = _selected_recipient(describe_effect_inline(inner, inner_ctx), selector)
         return f"{header} {_capitalize(nested)}." if engagement else f"{header}: {nested}."
+    if etype == "for-each-unit":
+        inner = e.get("effect") or {}
+        inner_ctx = _selected_context(ctx, e.get("selector"))
+        lead = f"For each {_for_each_unit_subject(e.get('selector'))}"
+        if inner.get("type") in _CONTAINER_TYPES:
+            return f"{indent}{lead}:\n" + describe_effect(inner, depth + 1, inner_ctx)
+        return f"{indent}{lead}: {_capitalize(describe_effect_inline(inner, inner_ctx))}."
+    if etype == "select-objective":
+        return f"{indent}{arrow}{_capitalize(_objective_selection_inline(e, ctx, False))}."
+    if etype == "for-each-objective":
+        return f"{indent}{arrow}{_capitalize(_objective_selection_inline(e, ctx, True))}."
+    if etype == "paired-designation":
+        return f"{indent}{arrow}{_capitalize(_paired_designation_inline(e, ctx))}."
     if etype == "leader-model-ability-grant":
         text = _capitalize(_leader_model_ability_grant_clause(e, ctx))
         return f"{indent}{arrow}{text}."
+    if etype == "formation-attachment-grant":
+        text = _capitalize(_formation_attachment_grant_clause(e, ctx))
+        return f"{indent}{arrow}{text}."
+    if etype == "attachment-eligibility-inherit":
+        text = _capitalize(_attachment_eligibility_inherit_clause(e.get("modifier") or {}))
+        return f"{indent}{arrow}{text}."
     if etype == "persistent-designation":
+        if e.get("operation") == "replace":
+            return f"{indent}{arrow}{_capitalize(_persistent_designation_replacement(e))}."
         if not _persistent_designation_supported(e):
             return f"{indent}{arrow}[persistent-designation]."
         consumer = e.get("consumer") or {}
@@ -2589,13 +3041,6 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         if inner.get("type") in _CONTAINER_TYPES:
             return f"{head}:\n" + describe_effect(inner, depth + 1, ctx)
         return f"{head}, {describe_effect_inline(inner, ctx)}."
-    if etype == "for-each-unit":
-        inner = e.get("effect") or {}
-        inner_ctx = _selected_context(ctx, e.get("selector"))
-        lead = f"For each {_for_each_unit_subject(e.get('selector'))}"
-        if inner.get("type") in _CONTAINER_TYPES:
-            return f"{indent}{lead}:\n" + describe_effect(inner, depth + 1, inner_ctx)
-        return f"{indent}{lead}: {_capitalize(describe_effect_inline(inner, inner_ctx))}."
     if etype == "designate-target":
         sel_raw = e.get("select")
         sel = sel_raw if isinstance(sel_raw, dict) else {}
@@ -2611,19 +3056,17 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
             when = "while it is your target"
         elif applies.get("to") == "bearer-attacks-target":
             when = "each time this unit makes an attack against it"
+        elif applies.get("to") == "bound-unit-attacks-reference":
+            when = _designated_attack_when(applies)
         else:
-            keywords = " ".join(applies.get("attacker_keywords") or [])
-            when = (
-                f"each time a friendly {keywords} model makes an attack against it"
-                if keywords
-                else "each time a friendly unit makes an attack against it"
-            )
+            when = _designation_attacker_phrase(applies, True)
         when_clause = f"{_capitalize(dur_trail)}, {when}" if dur_trail else _capitalize(when)
         target = _designation_target_subject(sel)
         head = f"{indent}{arrow}{select_lead} one {target}{desig}. {when_clause}"
+        recipient_ctx = _designated_recipient_context(applies, ctx)
         if inner.get("type") in _CONTAINER_TYPES:
-            return f"{head}:\n" + describe_effect(inner, depth + 1, ctx)
-        return f"{head}, {describe_effect_inline(inner, ctx)}."
+            return f"{head}:\n" + describe_effect(inner, depth + 1, recipient_ctx)
+        return f"{head}, {describe_effect_inline(inner, recipient_ctx)}."
     if etype == "stance-select":
         select = e.get("select")
         when = (
@@ -2838,8 +3281,247 @@ def describe_ability(a: dict[str, Any]) -> str:
     return "\n".join(part for part in (core, applies) if part)
 
 
+def _objective_selection_inline(e: Effect, ctx: Ctx, each: bool) -> str:
+    selector = e.get("selector") or {}
+    origin = "this model's unit" if selector.get("origin") == "bearer-unit" else "the bearer"
+    range_text = (
+        f" within {_jstr(selector.get('range_inches'))} inches of {origin}"
+        if selector.get("range_inches") is not None
+        else ""
+    )
+    controlled = (
+        " you control"
+        if selector.get("controlled_by") == "your-army"
+        else " your opponent controls"
+        if selector.get("controlled_by") == "opponent"
+        else ""
+    )
+    qualifier = selector.get("requires_unit")
+    ability = (
+        f" with one or more {_jstr(qualifier.get('owner'))} units with the "
+        f"{_title_case(_jstr(qualifier.get('requires_ability')))} ability within range"
+        if isinstance(qualifier, dict)
+        else ""
+    )
+    limit = selector.get("selection_limit")
+    dedupe = (
+        f"; each objective marker can be selected for this ability at most "
+        f"{'once' if limit.get('count') == 1 else _jstr(limit.get('count')) + ' times'} "
+        f"per {dekebab(_jstr(limit.get('period')))} across your army"
+        if isinstance(limit, dict)
+        else ""
+    )
+    subject = f"objective marker{controlled}{range_text}{ability}{_selection_binding(selector)}"
+    return (
+        f"{'for each' if each else 'select one'} {subject}: "
+        f"{describe_effect_inline(e.get('effect') or {}, ctx)}{dedupe}"
+    )
+
+
+def _paired_selector_subject(sel: dict[str, Any], current: dict[str, Any] | None = None) -> str:
+    quantity = "any number of" if sel.get("selection_mode") == "any-number" else "one"
+    noun = "units" if sel.get("selection_mode") == "any-number" else "unit"
+    ability = (
+        f" with the {_title_case(_jstr(sel.get('requires_ability')))} ability"
+        if sel.get("requires_ability")
+        else ""
+    )
+    reference = sel.get("visible_to")
+    current_reference = (
+        isinstance(current, dict)
+        and isinstance(reference, dict)
+        and reference.get("selection_var") == current.get("id")
+    )
+    if reference:
+        selected_source_name = current.get("name") if current is not None else None
+        visible_to = (
+            selected_source_name
+            if current_reference
+            else _selection_ref_name(reference, "the selected source unit")
+        )
+        visible = f" visible to {visible_to}"
+    else:
+        visible = ""
+    return f"{quantity} {_jstr(sel.get('owner'))} {noun}{ability}{visible}"
+
+
+def _paired_designation_inline(e: Effect, ctx: Ctx) -> str:
+    observer_role = e.get("observer") or {}
+    spotted_role = e.get("spotted") or {}
+    observer = observer_role.get("selector") or {}
+    spotted = spotted_role.get("selector") or {}
+    guided = e.get("guided") or {}
+    observer_name = _title_case(_jstr(observer_role.get("role")))
+    spotted_name = _title_case(_jstr(spotted_role.get("role")))
+    guided_name = _title_case(_jstr(guided.get("role")))
+    observer_set = _selection_ref_name(
+        {"selection_var": observer.get("bind_as")},
+        f"{observer_name} units",
+    )
+    observer_limit = _select_units_engagement(observer)
+    spotted_limit = _select_units_engagement(spotted)
+    eligibility = describe_condition(e.get("observer_eligibility") or {})
+    exclusion = _selection_ref_name(guided.get("excludes"), f"{observer_name} units")
+    target = _selection_ref_name(guided.get("while_attacking"), f"{spotted_name} units")
+    effect = describe_effect_inline(
+        e.get("effects") or {},
+        {**ctx, "unit_subject": f"the attacking {guided_name} unit"},
+    )
+    initial = (
+        f"at the start of your Shooting phase, select "
+        f"{_paired_selector_subject(observer)} as {observer_name} units"
+        f"{_selection_binding(observer)}"
+        f"{f'. {observer_limit}' if observer_limit else '.'}"
+    )
+    current_observer = {"id": observer.get("bind_as"), "name": f"that {observer_name} unit"}
+    marking = (
+        f"During your Shooting phase, for each {observer_name} unit in {observer_set}, "
+        f"if {eligibility}, select {_paired_selector_subject(spotted, current_observer)} "
+        f"as that {observer_name} unit's {spotted_name} unit{_selection_binding(spotted)}"
+        f"{f'. {spotted_limit}' if spotted_limit else '.'}"
+    )
+    guided_units = (
+        f"{_capitalize(_jstr(guided.get('owner')))} units with the "
+        f"{_title_case(_jstr(guided.get('requires_ability')))} ability, excluding all "
+        f"{observer_name} units in {exclusion}, are {guided_name} units while targeting "
+        f"one or more {spotted_name} units in {target}."
+    )
+    return (
+        f"{initial} {marking} {guided_units} Until the end of the phase, each time a model "
+        f"in a {guided_name} unit attacks a {spotted_name} unit, using the "
+        f"{observer_name} that marked that target: {effect}"
+    )
+
+
+def _designated_attack_when(applies: dict[str, Any]) -> str:
+    source = _selection_ref_name(applies.get("beneficiary"), "the selected beneficiary unit")
+    target = _selection_ref_name(applies.get("reference"), "the selected designated target")
+    return f"each time {source} makes an attack against {target}"
+
+
+def _designated_recipient_context(applies: dict[str, Any], ctx: Ctx) -> Ctx:
+    if applies.get("to") != "bound-unit-attacks-reference":
+        return ctx
+    return {
+        **ctx,
+        "unit_subject": _selection_ref_name(
+            applies.get("beneficiary"), "the selected beneficiary unit"
+        ),
+    }
+
+
+def _roll_reference(value: Any) -> str | None:
+    return (
+        value.get("roll_var")
+        if isinstance(value, dict) and isinstance(value.get("roll_var"), str)
+        else None
+    )
+
+
+def _miracle_die_reference(ref: Any) -> str:
+    if not isinstance(ref, dict) or not isinstance(ref.get("die_var"), str):
+        raise ValueError("A Miracle die reference requires a die_var binding")
+    variable = ref["die_var"]
+    return f"the Miracle die bound as {dekebab(variable.replace('_', '-'))}"
+
+
+def _miracle_die_operation_clause(m: dict[str, Any]) -> str:
+    pool = _pool_name(m.get("pool_id"))
+    operation = m.get("operation")
+    if operation == "reroll-generated-result":
+        return (
+            f"you may re-roll the result of {_miracle_die_reference(m.get('die'))} before "
+            f"adding it to your {pool}"
+        )
+    if operation == "reroll-retained-and-return":
+        selection = m.get("selection") or {}
+        count = selection.get("count")
+        bounds = count if isinstance(count, dict) else {}
+        single = count == 1 or bounds.get("maximum") == 1
+        if single:
+            amount = "one Miracle die"
+        elif bounds.get("minimum") == 1:
+            amount = f"up to {bounds.get('maximum')} Miracle dice"
+        else:
+            amount = f"from {bounds.get('minimum')} through {bounds.get('maximum')} Miracle dice"
+        pronoun = "it" if single else "them"
+        returned = "that same die" if single else "those same dice"
+        result = "result" if single else "results"
+        return (
+            f"you may select {amount} from your {pool}, re-roll {pronoun}, and return {returned} "
+            f"to your {pool} showing the new {result}"
+        )
+    if operation == "set-generated-value-without-roll":
+        return (
+            f"do not roll to determine the value of {_miracle_die_reference(m.get('die'))}; "
+            f"it has a value of {_jstr(m.get('value'))}"
+        )
+    if operation == "set-used-value":
+        return (
+            f"change {_miracle_die_reference(m.get('die'))}, selected from the dice used in that "
+            f"Act of Faith, to a value of {_jstr(m.get('value'))} before it is used"
+        )
+    raise ValueError(f"Unknown Miracle die operation: {_jstr(operation)}")
+
+
+def _formation_attachment_grant_clause(e: Effect, ctx: Ctx) -> str:
+    attachment = e.get("attachment") or {}
+    bodyguard = _title_case(_jstr(attachment.get("bodyguard_id")))
+    leader = (
+        f"a {_title_case(_jstr(attachment.get('leader_id')))} leader model"
+        if attachment.get("leader_id")
+        else "this model"
+    )
+    beneficiary = (
+        "that leader model" if e.get("beneficiary") == "attached-leader-model" else "this model"
+    )
+    grant = describe_effect_inline(
+        {**(e.get("grant") or {}).get("effect", {}), "target": "self"},
+        ctx,
+    ).replace("this model", beneficiary)
+    return (
+        f"if {leader} was attached to {bodyguard} when declaring Battle Formations, "
+        f"{grant} for the battle"
+    )
+
+
+def _attachment_eligibility_inherit_clause(m: dict[str, Any]) -> str:
+    return (
+        f"a {_title_case(_jstr(m.get('leader_id')))} model with the "
+        f"{_jstr(m.get('required_leader_ability'))} ability that can be attached to a "
+        f"{_title_case(_jstr(m.get('from_bodyguard_id')))} unit can be attached to a "
+        f"{_title_case(_jstr(m.get('to_bodyguard_id')))} unit instead"
+    )
+
+
 def _designation_target_subject(sel: dict[str, Any]) -> str:
-    return _designation_target_subject_base(sel) + _selection_eligibility(sel)
+    limit = (
+        f" ({_selection_limit_phrase(sel['selection_limit'], 'unit')})"
+        if isinstance(sel.get("selection_limit"), dict)
+        else ""
+    )
+    return (
+        _designation_target_subject_base(sel)
+        + _selection_eligibility(sel)
+        + _selection_binding(sel)
+        + limit
+    )
+
+
+def _designation_attacker_phrase(applies: dict[str, Any], block: bool = False) -> str:
+    model_keywords = " ".join(_jstr(k) for k in applies.get("attacker_keywords") or [])
+    unit_keywords = " ".join(_jstr(k) for k in applies.get("attacker_unit_keywords") or [])
+    if unit_keywords:
+        attacker = (
+            f"a{f' {model_keywords}' if model_keywords else ''} model "
+            f"in a friendly {unit_keywords} unit"
+        )
+    elif model_keywords:
+        attacker = f"a friendly {model_keywords} model"
+    else:
+        attacker = "a friendly unit"
+    verb = "makes an attack against it" if block else "attacks it"
+    return f"each time {attacker} {verb}"
 
 
 # These helpers compose qualifiers; no ability-specific labels enter the renderer.
@@ -2853,6 +3535,8 @@ def _weapon_noun(m: dict[str, Any]) -> str:
 def _weapon_holder(target: Any, ctx: Ctx) -> str:
     if target in ("self", "bearer"):
         return "this model"
+    if ctx.get("unit_subject") is not None and target in ("unit", "attacker"):
+        return f"models in {ctx['unit_subject']}"
     if ctx.get("selected_model"):
         return "that model"
     if target in ("unit", "attached-unit"):
@@ -2869,12 +3553,31 @@ def _weapon_roll_scope(m: dict[str, Any]) -> str:
 
 
 def _leadership_test(e: Effect, ctx: Ctx) -> str:
-    who = "this model" if e.get("test", {}).get("subject") == "self" else "that unit"
+    test = e.get("test") or {}
+    subject = test.get("subject")
+    who = (
+        "this model"
+        if subject == "self"
+        else "the target unit"
+        if subject == "target"
+        else "that unit"
+    )
+    kind = "Battle-shock" if test.get("kind") == "battle-shock" else "Leadership"
+    modifiers = "; ".join(
+        (
+            f"apply {_signed('add', modifier.get('value'))} if "
+            f"{describe_condition(modifier.get('condition') or {})}"
+        )
+        for modifier in test.get("modifiers") or []
+    )
     success = (
         describe_effect_inline(e["on_success"], ctx) if e.get("on_success") else "nothing happens"
     )
-    fail = f"; otherwise, {describe_effect_inline(e['on_fail'], ctx)}" if e.get("on_fail") else ""
+    failures = ([f"{who} becomes Battle-shocked"] if test.get("kind") == "battle-shock" else []) + (
+        [describe_effect_inline(e["on_fail"], ctx)] if e.get("on_fail") else []
+    )
+    fail = f"; otherwise, {'; '.join(failures)}" if failures else ""
     return (
-        f"{who} takes a Leadership test (2D6, passing on its current Leadership or higher); "
-        f"if passed, {success}{fail}"
+        f"{who} takes a {kind} test (2D6, passing on its current Leadership or higher"
+        f"{'; ' + modifiers if modifiers else ''}); if passed, {success}{fail}"
     )

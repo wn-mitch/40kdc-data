@@ -503,6 +503,7 @@
             "name": "Seraphim",
             "weapon_ids": [
               "close-combat-weapon",
+              "bolt-pistol",
               "bolt-pistol"
             ],
             "max_count": 9

@@ -53,5 +53,15 @@
       "edition": "11th",
       "dataslate": "launch"
     }
+  },
+  {
+    "leader_id": "frenzied-reavers-master-of-executions",
+    "eligible_bodyguard_ids": [
+      "frenzied-reavers-khorne-berzerkers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
   }
 ]

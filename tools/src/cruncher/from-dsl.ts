@@ -41,6 +41,8 @@ export type UnsupportedFragment = {
   effectFragment: unknown;
 };
 
+const stochasticDiceGatedReason = "dice-gated effect: stochastic; not expressible as a buff";
+
 /**
  * A mutually-limited pool of {@link ActivatableBuff} levers. Dice-pool
  * allocations cap how many options fire at once (`max_activations`); a `choice`
@@ -237,12 +239,15 @@ function walk(
     case "sequence":
       for (const step of (currentNode.steps as unknown[]) ?? []) walk(step, source, opts, out);
       return;
+    case "named-effect":
+      translateNamedEffect(currentNode, source, opts, out);
+      return;
     case "choice":
       enumerateChoice(currentNode, source, opts, out);
       return;
     case "dice-gated":
       out.unsupported.push({
-        reason: "dice-gated effect: stochastic; not expressible as a buff",
+        reason: stochasticDiceGatedReason,
         effectFragment: currentNode,
       });
       return;
@@ -254,6 +259,20 @@ function walk(
       return;
     case "aura": {
       const modifier = isObject(currentNode.modifier) ? currentNode.modifier : undefined;
+      if (!appliesToBuffedUnit(currentNode, opts.perspective)) return;
+      if (modifier?.recipient_filter !== undefined) {
+        const keywords = opts.perspective === "attacker" ? opts.context.attackerKeywords : opts.context.targetKeywords;
+        const matches = evaluateKeywordFilter(modifier.recipient_filter, keywords);
+        if (matches === false) return;
+        if (matches === "unknown") {
+          out.unsupported.push({ reason: "aura recipient keywords are unavailable or its filter is malformed", effectFragment: currentNode });
+          return;
+        }
+      }
+      if (modifier?.emitter_filter !== undefined && evaluateKeywordFilter(modifier.emitter_filter, undefined) !== true) {
+        out.unsupported.push({ reason: "aura emitter filter requires the source unit's keywords", effectFragment: currentNode });
+        return;
+      }
       if (modifier && isObject(modifier.effect)) {
         walk(modifier.effect, source, opts, out);
       } else {
@@ -376,6 +395,16 @@ function translateReroll(
   const subset = modifier.value === 1 ? "ones" : modifier.subset;
   // Under target perspective, only "save" rerolls fire on the buffed unit.
   if (opts.perspective === "target" && roll !== "save") return;
+  // Finite permissions are non-linear over a roll pool. Until the cruncher
+  // carries the exact pool distribution, applying this as an uncapped reroll
+  // would silently overstate the effect.
+  if (modifier.count !== undefined) {
+    out.unsupported.push({
+      reason: "re-roll: count-capped permissions are not modelled by the expected-value engine",
+      effectFragment: node,
+    });
+    return;
+  }
   if (
     (roll === "hit" || roll === "wound" || roll === "save" || roll === "damage") &&
     (subset === "ones" || subset === "all-failures")
@@ -911,6 +940,36 @@ function translateConditional(
   walk(effect, source, opts, out);
 }
 
+/** A named rule is transparent unless using it requires an activation. */
+function translateNamedEffect(
+  node: Record<string, unknown>,
+  source: BuffSource,
+  opts: WalkOpts,
+  out: EffectTranslation,
+): void {
+  if (node.optional !== true && node.cost == null && node.trigger == null && node.usage == null) {
+    walk(node.effect, source, opts, out);
+    return;
+  }
+  const triggers = Array.isArray(node.trigger) ? node.trigger : node.trigger == null ? [] : [node.trigger];
+  const conditions = triggers.filter(isObject).map((trigger) => trigger.condition).filter(isObject);
+  const body = conditions.length > 0 && conditions.length === triggers.length
+    ? {
+      type: "conditional",
+      condition: conditions.length === 1 ? conditions[0] : { operator: "or", operands: conditions },
+      effect: node.effect,
+    }
+    : node.effect;
+  const sub: EffectTranslation = { applied: [], unsupported: [], activatable: [] };
+  walk(body, source, opts, sub);
+  out.unsupported.push(...sub.unsupported);
+  out.activatable.push(...sub.activatable);
+  if (sub.applied.length > 0) {
+    const name = typeof node.name === "string" ? node.name : labelForBuffs(sub.applied);
+    out.activatable.push({ id: `${opts.abilityId}#${name}`, label: name, buffs: sub.applied });
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Activatable-lever enumeration
 //
@@ -924,7 +983,7 @@ function translateConditional(
 // `applicableWhen` so the resolver gates them per-target.
 // ---------------------------------------------------------------------------
 
-/** Emit one lever per `choice` branch that yields a buff (pick exactly one). */
+/** Emit one lever per buff-bearing choice, retaining its shared selection cap. */
 function enumerateChoice(
   node: Record<string, unknown>,
   source: BuffSource,
@@ -940,7 +999,7 @@ function enumerateChoice(
       id: `${opts.abilityId}?${i}`,
       label: labelForBuffs(buffs),
       buffs,
-      group: { id: `${opts.abilityId}?choice`, maxActivations: 1 },
+      group: { id: `${opts.abilityId}?choice`, maxActivations: typeof node.max_choices === "number" ? node.max_choices : 1 },
     });
   });
 }
@@ -1048,18 +1107,30 @@ function enumerateTimingGate(
 ): void {
   const condition = node.condition;
   if (!isObject(condition)) return;
+  const buffs: Buff[] = [];
+  collectGatedBuffs(node.effect, source, opts, {}, buffs);
   const sub: EffectTranslation = { applied: [], unsupported: [], activatable: [] };
   walk(node.effect, source, opts, sub);
+  // A stochastic branch contributes nothing to a timing activation. Preserve
+  // every other unsupported diagnostic discovered while finding inner levers.
+  out.unsupported.push(
+    ...sub.unsupported.filter(
+      ({ reason, effectFragment }) =>
+        reason !== stochasticDiceGatedReason ||
+        !isObject(effectFragment) ||
+        effectFragment.type !== "dice-gated",
+    ),
+  );
   // Inner independent decisions (dice-pool options, choice branches) pass
   // straight through as their own levers.
   out.activatable.push(...sub.activatable);
   // Inner unconditional buffs become one lever gated only on the timing.
-  if (sub.applied.length > 0) {
+  if (buffs.length > 0) {
     const timing = extractTiming(condition) ?? "timing";
     out.activatable.push({
       id: `${opts.abilityId}@${timing}`,
-      label: labelForBuffs(sub.applied),
-      buffs: sub.applied,
+      label: labelForBuffs(buffs),
+      buffs,
     });
   }
 }
@@ -1103,6 +1174,11 @@ function collectGatedBuffs(
     case "sequence":
       for (const step of (node.steps as unknown[]) ?? []) {
         collectGatedBuffs(step, source, opts, applicability, outBuffs);
+      }
+      return;
+    case "named-effect":
+      if (node.optional !== true && node.cost == null && node.trigger == null && node.usage == null) {
+        collectGatedBuffs(node.effect, source, opts, applicability, outBuffs);
       }
       return;
     case "choice":
@@ -1493,15 +1569,64 @@ function isObject(value: unknown): value is Record<string, unknown> {
 
 const FIDELITY_BINDING_REASON = "selection/history/model/attack predicates are not resolved by the buff engine";
 function hasUnresolvedFidelityBinding(node: Record<string, unknown>): boolean {
-  const selector = isObject(node.selector) ? node.selector : {};
-  const select = isObject(node.select) ? node.select : {};
-  const applies = isObject(node.applies) ? node.applies : {};
-  const modifier = isObject(node.modifier) ? node.modifier : {};
-  const consumer = isObject(modifier.consumer) ? modifier.consumer : {};
+  const selector = isObject(node.selector) ? node.selector : undefined;
+  const select = isObject(node.select) ? node.select : undefined;
+  const applies = isObject(node.applies) ? node.applies : undefined;
+  const modifier = isObject(node.modifier) ? node.modifier : undefined;
+  const consumer = isObject(modifier?.consumer) ? modifier.consumer : undefined;
   return (
-    (node.type === "select-units" && (selector.target_kind === "model" ||
-      selector.eligibility != null || selector.reference != null || selector.selection_limit != null)) ||
-    (node.type === "designate-target" && (select.eligibility != null || applies.attacker_keywords != null)) ||
-    (node.type === "named-region-state" && consumer.attack_condition != null)
+    ((node.type === "select-units" || node.type === "for-each-unit") &&
+      (selector?.target_kind === "model" || selector?.eligibility != null ||
+        selector?.reference != null || selector?.origin != null || selector?.selection_limit != null ||
+        selector?.bind_as != null || selector?.within_inches_from != null ||
+        selector?.visible_to != null || selector?.visibility_required === true)) ||
+    (node.type === "designate-target" && (select?.eligibility != null ||
+      select?.reference != null || select?.visibility_required === true || select?.bind_as != null ||
+      select?.within_inches_from != null || select?.visible_to != null || select?.selection_limit != null ||
+      applies?.attacker_keywords != null || applies?.attacker_unit_keywords != null ||
+      applies?.beneficiary != null || applies?.reference != null)) ||
+    (node.type === "named-effect" && hasUnresolvedTriggerBinding(node.trigger)) ||
+    (node.type === "named-region-state" && consumer?.attack_condition != null)
   );
+}
+
+function hasUnresolvedTriggerBinding(trigger: unknown): boolean {
+  if (Array.isArray(trigger)) return trigger.some(hasUnresolvedTriggerBinding);
+  return isObject(trigger) && (trigger.caused_by != null || trigger.source_ability != null);
+}
+
+/** Filters the recipient unit; emitter identity is not part of EngineContext. */
+function evaluateKeywordFilter(filter: unknown, keywords: readonly string[] | undefined): boolean | "unknown" {
+  if (!isObject(filter) || !isKeywordList(filter.required_keywords) || filter.required_keywords.length === 0 ||
+    (filter.excluded_keywords !== undefined && (!isKeywordList(filter.excluded_keywords) || filter.excluded_keywords.length === 0)) ||
+    !isKeywordList(keywords)) return "unknown";
+  for (const key in filter) {
+    if (key !== "required_keywords" && key !== "excluded_keywords") return "unknown";
+  }
+  for (const keyword of filter.required_keywords) {
+    if (!includesKeyword(keywords, keyword)) return false;
+  }
+  const excluded = filter.excluded_keywords as string[] | undefined;
+  if (excluded) {
+    for (const keyword of excluded) {
+      if (includesKeyword(keywords, keyword)) return false;
+    }
+  }
+  return true;
+}
+
+function isKeywordList(value: unknown): value is string[] {
+  if (!Array.isArray(value)) return false;
+  for (const keyword of value) {
+    if (typeof keyword !== "string" || keyword.length === 0) return false;
+  }
+  return true;
+}
+
+function includesKeyword(keywords: readonly string[], keyword: string): boolean {
+  const lower = keyword.toLowerCase();
+  for (const candidate of keywords) {
+    if (candidate.toLowerCase() === lower) return true;
+  }
+  return false;
 }

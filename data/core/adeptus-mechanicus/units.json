@@ -2864,6 +2864,14 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "omnissian-staff",
+      "transonic-cannon"
+    ],
+    "ability_ids": [
+      "defend-the-divine-work-manipulus-skand",
+      "doctrina-imperatives"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -2921,6 +2929,16 @@
       "min": 5,
       "max": 5
     },
+    "weapon_ids": [
+      "flechette-blaster",
+      "phosphor-torch",
+      "pteraxii-talons",
+      "taser-goad-pteraxii-sterylizors"
+    ],
+    "ability_ids": [
+      "doctrina-imperatives",
+      "searing-conflagration-purge-corps-pteraxii-sterylizors"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -3043,6 +3061,19 @@
       "min": 10,
       "max": 10
     },
+    "weapon_ids": [
+      "alpha-combat-weapon",
+      "arc-rifle",
+      "close-combat-weapon-skitarii-vanguard",
+      "mechanicus-pistol-skitarii-vanguard",
+      "plasma-caliver",
+      "radium-carbine"
+    ],
+    "ability_ids": [
+      "doctrina-imperatives",
+      "omnispex-purge-corps-skitarii-vanguard",
+      "rad-saturation-aura-purge-corps-skitarii-vanguard"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"

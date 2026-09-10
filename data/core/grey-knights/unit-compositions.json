@@ -214,6 +214,15 @@
         },
         "loadout_variants": [
           {
+            "name": "Purifier",
+            "weapon_ids": [
+              "storm-bolter",
+              "purifying-flame",
+              "nemesis-force-weapon-purifier-squad"
+            ],
+            "max_count": 9
+          },
+          {
             "name": "Purifier w/ incinerator",
             "weapon_ids": [
               "close-combat-weapon",
@@ -248,7 +257,7 @@
               "Purifier w/ psilencer",
               "Purifier w/ psycannon"
             ],
-            "count": 2,
+            "count": 4,
             "per_models": 0,
             "scope": "model-row"
           }
@@ -745,6 +754,14 @@
         },
         "loadout_variants": [
           {
+            "name": "Purgator",
+            "weapon_ids": [
+              "storm-bolter",
+              "nemesis-force-weapon-purgation-squad"
+            ],
+            "max_count": 9
+          },
+          {
             "name": "Purgator w/ incinerator",
             "weapon_ids": [
               "close-combat-weapon",
@@ -887,6 +904,14 @@
           "diameter": 32
         },
         "loadout_variants": [
+          {
+            "name": "Interceptor",
+            "weapon_ids": [
+              "storm-bolter",
+              "nemesis-force-weapon-interceptor-squad"
+            ],
+            "max_count": 9
+          },
           {
             "name": "Interceptor w/ incinerator",
             "weapon_ids": [
@@ -1601,6 +1626,243 @@
         "models": [
           {
             "name": "Grey Knights Stormraven Gunship",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "crowes-sanctifiers-brotherhood-terminator-squad",
+    "faction_id": "grey-knights",
+    "models": [
+      {
+        "name": "Brotherhood Terminator Justicar",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "nemesis-force-weapon",
+          "storm-bolter"
+        ]
+      },
+      {
+        "name": "Brotherhood Terminator with Psycannon and Nemesis Force Weapon",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "nemesis-force-weapon",
+          "psycannon"
+        ]
+      },
+      {
+        "name": "Brotherhood Terminator with Storm Bolter and Nemesis Force Weapon",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "nemesis-force-weapon",
+          "storm-bolter"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Brotherhood Terminator Justicar",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Brotherhood Terminator with Psycannon and Nemesis Force Weapon",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Brotherhood Terminator with Storm Bolter and Nemesis Force Weapon",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "crowes-sanctifiers-strike-squad",
+    "faction_id": "grey-knights",
+    "models": [
+      {
+        "name": "Grey Knight with Incinerator and Ceramite Fists",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "ceramite-fists",
+          "incinerator"
+        ]
+      },
+      {
+        "name": "Grey Knight with Psycannon and Ceramite Fists",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "ceramite-fists",
+          "psycannon"
+        ]
+      },
+      {
+        "name": "Justicar",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "nemesis-force-weapon",
+          "storm-bolter"
+        ]
+      },
+      {
+        "name": "Grey Knight with Storm Bolter and Nemesis Force Weapon",
+        "min": 7,
+        "max": 7,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "nemesis-force-weapon",
+          "storm-bolter"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Grey Knight with Incinerator and Ceramite Fists",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Grey Knight with Psycannon and Ceramite Fists",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Justicar",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Grey Knight with Storm Bolter and Nemesis Force Weapon",
+            "min": 7,
+            "max": 7
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "crowes-sanctifiers-venerable-dreadnought",
+    "faction_id": "grey-knights",
+    "models": [
+      {
+        "name": "Venerable Dreadnought",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        },
+        "default_weapon_ids": [
+          "dreadnought-fist",
+          "storm-bolter",
+          "twin-lascannon"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Venerable Dreadnought",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "sanctifiers-castellan-crowe",
+    "faction_id": "grey-knights",
+    "models": [
+      {
+        "name": "Castellan Crowe",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "black-blade-of-antwyr",
+          "purifying-flame-castellan-crowe",
+          "storm-bolter-castellan-crowe"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Castellan Crowe",
             "min": 1,
             "max": 1
           }

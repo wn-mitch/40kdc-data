@@ -3113,5 +3113,260 @@
       "duration": "permanent"
     },
     "community_notes": "community-authored; permanent re-roll of Wound rolls of 1 for the bearer's unit, plus an optional 3YP spend each time the unit is selected to shoot or fight for +1 to Wound roll until end of phase."
+  },
+  {
+    "ability_id": "decisive-destruction-bane-slayers-bulwark",
+    "name": "Decisive Destruction",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "28124b1d5300b8d6a3d3fe5e8a96a3323c44c348d05b56d9f84b692a4a9dc980",
+    "version": "2026-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "disposition-matches",
+        "parameters": {
+          "disposition": "closest-eligible-target"
+        }
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "self",
+        "modifier": {
+          "roll": "hit",
+          "subset": "ones",
+          "attack_type": "ranged"
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "bane-slayers-bulwark-einhyr-hearthguard"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "fast-firing-targeters-vynn-bane-slayer",
+    "name": "Fast-firing Targeters",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "fef718169e2b545fafa5954a85dc6531f74f62237df2871b8ef05d747ea1625a",
+    "version": "2026-q3",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "assault"
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "vynn-bane-slayer"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "weavefield-crest-vynn-bane-slayer",
+    "name": "Weavefield Crest",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "68426ec8b944511c58adbd811e019076ca2b4c54ff346f2150a510d0f400fe06",
+    "version": "2026-q3",
+    "effect": {
+      "type": "invulnerable-save",
+      "target": "self",
+      "modifier": {
+        "invuln_sv": 4
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "vynn-bane-slayer"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "weavefield-crest-bane-slayers-bulwark-einhyr-hearthguard",
+    "name": "Weavefield Crest",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "690fe2c22bf18401f64e1ebdf24d34e9e95f82ebcd35f3051bf9f6b41f97694b",
+    "version": "2026-q3",
+    "effect": {
+      "type": "invulnerable-save",
+      "target": "self",
+      "modifier": {
+        "invuln_sv": 5
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "bane-slayers-bulwark-einhyr-hearthguard"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "panspectral-scanning-bane-slayers-bulwark",
+    "name": "Panspectral Scanning",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "0cbfdf0f29dd5b8b80d04e1095b22044b9508d5383923b08fe1c9dbd15a465ff",
+    "version": "2026-q3",
+    "effect": {
+      "type": "re-roll",
+      "target": "unit",
+      "modifier": {
+        "roll": "hit",
+        "subset": "ones",
+        "attack_type": "ranged"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "bane-slayers-bulwark-hearthkyn-warriors"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "weavefield-crest-bane-slayers-bulwark-hearthkyn-warriors",
+    "name": "Weavefield Crest",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "690fe2c22bf18401f64e1ebdf24d34e9e95f82ebcd35f3051bf9f6b41f97694b",
+    "version": "2026-q3",
+    "effect": {
+      "type": "invulnerable-save",
+      "target": "self",
+      "modifier": {
+        "invuln_sv": 5
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "bane-slayers-bulwark-hearthkyn-warriors"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+},
+{
+  "ability_id": "breaching-fire-bane-slayers-bulwark",
+  "name": "Breaching Fire",
+  "authored_by": "40kdc-community",
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "launch"
+  },
+  "source_digest": "e48f70be9da992e60d688bffb753d14b64c74110e45f4ff4a7bb4e13be65f2f7",
+  "version": "2026-q3",
+  "effect": {
+    "type": "designate-target",
+    "designation": "breaching-fire-target",
+    "select": {
+      "scope": "enemy-unit",
+      "count": 1,
+      "timing": "after-this-unit-resolves-shooting-attacks",
+      "eligibility": {
+        "type": "was-hit-by-attack",
+        "parameters": {
+          "subject": "target",
+          "attack_type": "ranged",
+          "source": {
+            "event_var": "breaching-fire-shooting"
+          },
+          "window": "just-finished-shooting-sequence"
+        }
+      }
+    },
+    "applies": {
+      "to": "attackers-of-target",
+      "attacker_keywords": [
+        "LEAGUES OF VOTANN"
+      ],
+      "effect": {
+        "type": "keyword-grant",
+        "target": "unit",
+        "modifier": {
+          "keywords": [
+            "Ignores Cover"
+          ]
+        }
+      }
+    },
+    "duration": "phase"
+  },
+  "scope": {
+    "range": "unit",
+    "duration": "phase"
+  },
+  "unit_ids": [
+    "bane-slayers-bulwark-brokhyr-thunderkyn"
+  ],
+  "ability_type": "unit",
+  "behavior": "reactive",
+  "trigger": {
+    "event": "after-unit-resolves-attacks",
+    "subject": "self",
+    "condition": {
+      "operator": "and",
+      "operands": [
+        {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "shooting"
+          }
+        },
+        {
+          "type": "player-turn-is",
+          "parameters": {
+            "turn": "your-turn"
+          }
+        }
+      ]
+    },
+    "binds_event_variable": "breaching-fire-shooting"
   }
+}
 ]

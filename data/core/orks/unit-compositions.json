@@ -82,74 +82,34 @@
     "faction_id": "orks",
     "models": [
       {
+        "name": "Boss Nob on Warbike",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "close-combat-weapon",
+          "twin-dakkagun"
+        ],
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 75,
+          "length": 42
+        }
+      },
+      {
         "name": "Warbiker",
         "min": 2,
         "max": 5,
         "default_weapon_ids": [
-          "choppa",
-          "dual-dakkagun"
+          "twin-dakkagun",
+          "close-combat-weapon"
         ],
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "oval",
           "width": 75,
           "length": 42
-        },
-        "loadout_variants": [
-          {
-            "name": "Warbiker",
-            "weapon_ids": [
-              "twin-dakkagun",
-              "close-combat-weapon"
-            ],
-            "max_count": 5
-          },
-          {
-            "name": "Warbiker w/ Slugga",
-            "weapon_ids": [
-              "twin-dakkagun",
-              "slugga",
-              "close-combat-weapon"
-            ],
-            "max_count": 5
-          },
-          {
-            "name": "Warbiker w/ Choppa",
-            "weapon_ids": [
-              "twin-dakkagun",
-              "choppa",
-              "close-combat-weapon"
-            ],
-            "max_count": 5
-          }
-        ],
-        "loadout_variant_budgets": [
-          {
-            "variant_names": [
-              "Warbiker",
-              "Warbiker w/ Slugga",
-              "Warbiker w/ Choppa"
-            ],
-            "count": 5,
-            "per_models": 0,
-            "scope": "model-row"
-          }
-        ]
-      },
-      {
-        "name": "Biker Nob",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "oval",
-          "width": 75,
-          "length": 42
-        },
-        "default_weapon_ids": [
-          "kustom-choppa",
-          "dual-kombi-rokkit"
-        ]
+        }
       }
     ],
     "game_version": {
@@ -160,28 +120,28 @@
       {
         "models": [
           {
+            "name": "Boss Nob on Warbike",
+            "min": 1,
+            "max": 1
+          },
+          {
             "name": "Warbiker",
             "min": 2,
             "max": 2
-          },
-          {
-            "name": "Biker Nob",
-            "min": 1,
-            "max": 1
           }
         ]
       },
       {
         "models": [
           {
+            "name": "Boss Nob on Warbike",
+            "min": 1,
+            "max": 1
+          },
+          {
             "name": "Warbiker",
             "min": 3,
             "max": 5
-          },
-          {
-            "name": "Biker Nob",
-            "min": 1,
-            "max": 1
           }
         ]
       }
@@ -809,71 +769,33 @@
     "faction_id": "orks",
     "models": [
       {
+        "name": "Boss Nob",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "rokkit-pistol",
+          "rokkit-pistol",
+          "choppa-tankbustas"
+        ],
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
+      },
+      {
         "name": "Tankbusta",
         "min": 5,
         "max": 5,
         "default_weapon_ids": [
-          "busta-rokkit-launcha",
-          "gitstikka"
+          "rokkit-launcha-tankbustas",
+          "close-combat-weapon-tankbustas"
         ],
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
-        },
-        "loadout_variants": [
-          {
-            "name": "Tankbusta w/ Rokkit launcha",
-            "weapon_ids": [
-              "rokkit-launcha-tankbustas",
-              "close-combat-weapon-tankbustas"
-            ],
-            "max_count": 5
-          },
-          {
-            "name": "Tankbusta w/ Two rokkit launchas",
-            "weapon_ids": [
-              "rokkit-launcha-tankbustas",
-              "close-combat-weapon-tankbustas"
-            ],
-            "max_count": 1
-          },
-          {
-            "name": "Tankbusta w/ Pulsa rokkit",
-            "weapon_ids": [
-              "rokkit-launcha-tankbustas",
-              "close-combat-weapon-tankbustas"
-            ],
-            "max_count": 1
-          }
-        ],
-        "loadout_variant_budgets": [
-          {
-            "variant_names": [
-              "Tankbusta w/ Rokkit launcha",
-              "Tankbusta w/ Two rokkit launchas",
-              "Tankbusta w/ Pulsa rokkit"
-            ],
-            "count": 5,
-            "per_models": 0,
-            "scope": "model-row"
-          }
-        ]
-      },
-      {
-        "name": "Nob",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "choppa-tankbustas",
-          "rokkit-pistol",
-          "rokkit-pistol"
-        ]
+        }
       }
     ],
     "game_version": {
@@ -884,14 +806,14 @@
       {
         "models": [
           {
+            "name": "Boss Nob",
+            "min": 1,
+            "max": 1
+          },
+          {
             "name": "Tankbusta",
             "min": 5,
             "max": 5
-          },
-          {
-            "name": "Nob",
-            "min": 1,
-            "max": 1
           }
         ]
       }
@@ -956,84 +878,25 @@
     "faction_id": "orks",
     "models": [
       {
+        "name": "Nob",
+        "min": 1,
+        "max": 2,
+        "default_weapon_ids": [
+          "kustom-choppa-boyz",
+          "kombi-skorcha-boyz"
+        ],
+        "is_leader_model": true
+      },
+      {
         "name": "Boy",
         "min": 9,
         "max": 18,
         "default_weapon_ids": [
           "choppa-boyz",
-          "shoota",
+          "shoota-boyz-unit",
           "slugga"
         ],
-        "is_leader_model": false,
-        "loadout_variants": [
-          {
-            "name": "Boy",
-            "weapon_ids": [
-              "choppa-boyz",
-              "slugga"
-            ],
-            "max_count": 19
-          },
-          {
-            "name": "Boy w/ Shoota",
-            "weapon_ids": [
-              "shoota",
-              "choppa-boyz",
-              "slugga"
-            ],
-            "max_count": 19
-          },
-          {
-            "name": "Boy w/ Big shoota",
-            "weapon_ids": [
-              "big-shoota-boyz",
-              "close-combat-weapon"
-            ],
-            "max_count": 2
-          },
-          {
-            "name": "Boy w/ Rokkit launcha",
-            "weapon_ids": [
-              "rokkit-launcha-boyz",
-              "close-combat-weapon"
-            ],
-            "max_count": 2
-          }
-        ],
-        "loadout_variant_budgets": [
-          {
-            "variant_names": [
-              "Boy",
-              "Boy w/ Shoota"
-            ],
-            "count": 19,
-            "per_models": 0,
-            "scope": "model-row"
-          },
-          {
-            "variant_names": [
-              "Boy w/ Big shoota",
-              "Boy w/ Rokkit launcha"
-            ],
-            "count": 1,
-            "per_models": 10,
-            "scope": "unit"
-          }
-        ]
-      },
-      {
-        "name": "Nob",
-        "min": 1,
-        "max": 2,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "kustom-choppa",
-          "kombi-skorcha"
-        ]
+        "is_leader_model": false
       }
     ],
     "game_version": {
@@ -1044,28 +907,28 @@
       {
         "models": [
           {
+            "name": "Boss Nob",
+            "min": 1,
+            "max": 1
+          },
+          {
             "name": "Boy",
             "min": 9,
             "max": 9
-          },
-          {
-            "name": "Nob",
-            "min": 1,
-            "max": 1
           }
         ]
       },
       {
         "models": [
           {
-            "name": "Boy",
-            "min": 18,
-            "max": 18
+            "name": "Boss Nob",
+            "min": 1,
+            "max": 1
           },
           {
-            "name": "Nob",
-            "min": 2,
-            "max": 2
+            "name": "Boy",
+            "min": 10,
+            "max": 19
           }
         ]
       }
@@ -1556,61 +1419,32 @@
     "faction_id": "orks",
     "models": [
       {
+        "name": "Beast Snagga Nob",
+        "min": 1,
+        "max": 2,
+        "default_weapon_ids": [
+          "power-snappa",
+          "slugga"
+        ],
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
+      },
+      {
         "name": "Beast Snagga Boy",
         "min": 9,
         "max": 18,
         "default_weapon_ids": [
-          "choppa-beast-snagga-boyz",
-          "slugga"
+          "slugga",
+          "choppa-beast-snagga-boyz"
         ],
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
-        },
-        "loadout_variants": [
-          {
-            "name": "Beast Snagga Boy w/ Thump gun",
-            "weapon_ids": [
-              "close-combat-weapon-beast-snagga-boyz",
-              "thump-gun"
-            ],
-            "max_count": 1
-          },
-          {
-            "name": "Beast Snagga Boy",
-            "weapon_ids": [
-              "slugga",
-              "choppa-beast-snagga-boyz"
-            ],
-            "max_count": 19
-          }
-        ],
-        "loadout_variant_budgets": [
-          {
-            "variant_names": [
-              "Beast Snagga Boy w/ Thump gun",
-              "Beast Snagga Boy"
-            ],
-            "count": 19,
-            "per_models": 0,
-            "scope": "model-row"
-          }
-        ]
-      },
-      {
-        "name": "Nob",
-        "min": 1,
-        "max": 2,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "power-snappa",
-          "slugga"
-        ]
+        }
       }
     ],
     "game_version": {
@@ -1621,28 +1455,28 @@
       {
         "models": [
           {
+            "name": "Beast Snagga Nob",
+            "min": 1,
+            "max": 1
+          },
+          {
             "name": "Beast Snagga Boy",
             "min": 9,
             "max": 9
-          },
-          {
-            "name": "Nob",
-            "min": 1,
-            "max": 1
           }
         ]
       },
       {
         "models": [
           {
+            "name": "Beast Snagga Nob",
+            "min": 2,
+            "max": 2
+          },
+          {
             "name": "Beast Snagga Boy",
             "min": 18,
             "max": 18
-          },
-          {
-            "name": "Nob",
-            "min": 2,
-            "max": 2
           }
         ]
       }
@@ -1920,45 +1754,7 @@
         "max": 10,
         "default_weapon_ids": [
           "kustom-krumpa",
-          "kustom-shoota"
-        ],
-        "loadout_variants": [
-          {
-            "name": "Nob w/ Slugga and big choppa",
-            "weapon_ids": [
-              "slugga",
-              "big-choppa-nobz"
-            ],
-            "max_count": 9
-          },
-          {
-            "name": "Nob w/ Slugga and power klaw",
-            "weapon_ids": [
-              "slugga",
-              "power-klaw"
-            ],
-            "max_count": 9
-          },
-          {
-            "name": "Nob w/ Kombi-weapon",
-            "weapon_ids": [
-              "close-combat-weapon",
-              "kombi-weapon"
-            ],
-            "max_count": 9
-          }
-        ],
-        "loadout_variant_budgets": [
-          {
-            "variant_names": [
-              "Nob w/ Slugga and big choppa",
-              "Nob w/ Slugga and power klaw",
-              "Nob w/ Kombi-weapon"
-            ],
-            "count": 9,
-            "per_models": 0,
-            "scope": "model-row"
-          }
+          "kustom-shoota-nobz"
         ]
       }
     ],
@@ -1970,18 +1766,28 @@
       {
         "models": [
           {
+            "name": "Boss Nob",
+            "min": 1,
+            "max": 1
+          },
+          {
             "name": "Nob",
-            "min": 5,
-            "max": 5
+            "min": 4,
+            "max": 4
           }
         ]
       },
       {
         "models": [
           {
+            "name": "Boss Nob",
+            "min": 1,
+            "max": 1
+          },
+          {
             "name": "Nob",
-            "min": 6,
-            "max": 10
+            "min": 5,
+            "max": 9
           }
         ]
       }
@@ -2378,6 +2184,296 @@
             "name": "Wazdakka Gutsmek",
             "min": 1,
             "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "nazdreg",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "Nazdreg",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "kustom-blasta-x",
+          "kustom-blasta-x-melee",
+          "moonchewa"
+        ],
+        "is_leader_model": true
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Nazdreg",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "runtherd",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "Runtherd",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "slugga",
+          "runtherd-tools"
+        ],
+        "is_leader_model": true
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    }
+  },
+  {
+    "unit_id": "ardmob-boyz",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "Boss Nob",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "big-choppa",
+          "kustom-shoota",
+          "slugga"
+        ],
+        "is_leader_model": true
+      },
+      {
+        "name": "Boyz",
+        "min": 9,
+        "max": 9,
+        "default_weapon_ids": [
+          "choppa",
+          "shoota",
+          "slugga"
+        ],
+        "is_leader_model": false
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Boss Nob",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Boyz",
+            "min": 9,
+            "max": 9
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "ardmob-gretchin",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "Gretchin",
+        "min": 10,
+        "max": 10,
+        "default_weapon_ids": [
+          "blasta",
+          "lobbin-bombs",
+          "scavenged-shivs"
+        ],
+        "is_leader_model": false
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Gretchin",
+            "min": 10,
+            "max": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "ardmob-warboss",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "Warboss",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "kustom-choppa",
+          "kustom-shoota"
+        ],
+        "is_leader_model": false
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Warboss",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "ardmob-wartrakk",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "Wartrakk",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "choppa",
+          "kustom-shoota",
+          "rokkit-launcha"
+        ],
+        "is_leader_model": false
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Wartrakk",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "ardmob-weirdboy",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "'Ardmob Weirdboy",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "psychic-powers",
+          "waaagh-staff"
+        ],
+        "is_leader_model": false
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "'Ardmob Weirdboy",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "rukkatrukk-squigbuggies",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "Rukkatrukk Squigbuggy",
+        "min": 1,
+        "max": 2,
+        "default_weapon_ids": [
+          "saw-blades",
+          "sawn-off-shotgun",
+          "squig-launchas"
+        ],
+        "is_leader_model": false
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Rukkatrukk Squigbuggy",
+            "min": 1,
+            "max": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "wartrakks",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "Wartrakk",
+        "min": 1,
+        "max": 2,
+        "default_weapon_ids": [
+          "kustom-choppa",
+          "kustom-shoota",
+          "multi-busta-launcha"
+        ],
+        "is_leader_model": false
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Wartrakk",
+            "min": 1,
+            "max": 2
           }
         ]
       }

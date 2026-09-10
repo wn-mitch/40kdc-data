@@ -184,3 +184,34 @@ func orEmpty(l []any) []any {
 
 func TestFromDSLCorpus(t *testing.T)          { runDSLCorpus(t, "from-dsl.json") }
 func TestDefensiveFromDSLCorpus(t *testing.T) { runDSLCorpus(t, "defensive-from-dsl.json") }
+
+func TestCountCappedRerollIsNotAppliedAsUnlimited(t *testing.T) {
+	effect := map[string]any{
+		"type":   "re-roll",
+		"target": "unit",
+		"modifier": map[string]any{
+			"roll":         "hit",
+			"result_scope": "any-result",
+			"count":        float64(1),
+		},
+	}
+	source := map[string]any{
+		"kind":        "ability",
+		"abilityId":   "count-capped-reroll",
+		"abilityKind": "unit",
+	}
+	result := effectToBuffs(effect, source, map[string]any{"phase": "shooting"}, "attacker")
+	if len(result.applied) != 0 {
+		t.Fatalf("applied = %#v, want none", result.applied)
+	}
+	if len(result.unsupported) != 1 {
+		t.Fatalf("unsupported = %#v, want one diagnostic", result.unsupported)
+	}
+	diagnostic, ok := asMap(result.unsupported[0])
+	if !ok {
+		t.Fatalf("unsupported diagnostic = %#v, want object", result.unsupported[0])
+	}
+	if got := getStr(diagnostic, "reason"); got != "re-roll: count-capped permissions are not modelled by the expected-value engine" {
+		t.Fatalf("reason = %q", got)
+	}
+}

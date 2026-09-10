@@ -945,9 +945,8 @@
         "min": 4,
         "max": 4,
         "default_weapon_ids": [
-          "havoc-autocannon",
-          "havoc-lascannon",
-          "close-combat-weapon"
+          "close-combat-weapon",
+          "havoc-autocannon"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -1684,6 +1683,15 @@
         ],
         "loadout_variants": [
           {
+            "name": "Red Corsairs Raider w/ boltgun",
+            "weapon_ids": [
+              "boltgun",
+              "bolt-pistol",
+              "reavers-blade"
+            ],
+            "max_count": 9
+          },
+          {
             "name": "Red Corsairs Raider w/ meltagun",
             "weapon_ids": [
               "meltagun",
@@ -1714,13 +1722,21 @@
         "loadout_variant_budgets": [
           {
             "variant_names": [
-              "Red Corsairs Raider w/ meltagun",
               "Red Corsairs Raider w/ power fist",
               "Red Corsairs Raider w/ power fist and meltagun"
             ],
-            "count": 4,
-            "per_models": 0,
-            "scope": "model-row"
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
+          },
+          {
+            "variant_names": [
+              "Red Corsairs Raider w/ meltagun",
+              "Red Corsairs Raider w/ power fist and meltagun"
+            ],
+            "count": 1,
+            "per_models": 5,
+            "scope": "unit"
           }
         ]
       }
@@ -2952,6 +2968,246 @@
             "name": "Defiler",
             "min": 1,
             "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "aranis-zarkan",
+    "faction_id": "chaos-space-marines",
+    "models": [
+      {
+        "name": "Aranis Zarkan",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "bolt-pistol",
+          "rite-of-possession",
+          "staff-of-possession"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Aranis Zarkan",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "zarkans-daemonkin-cultist-mob",
+    "faction_id": "chaos-space-marines",
+    "models": [
+      {
+        "name": "Cultist Champion",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "blades-and-cudgels",
+          "bolt-pistol"
+        ]
+      },
+      {
+        "name": "Chaos Cultist",
+        "min": 9,
+        "max": 9,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "autopistol",
+          "blades-and-cudgels"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Cultist Champion",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Chaos Cultist",
+            "min": 9,
+            "max": 9
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "zarkans-daemonkin-legionaries",
+    "faction_id": "chaos-space-marines",
+    "models": [
+      {
+        "name": "Aspiring Champion",
+        "profile_name": "Legionary",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "accursed-weapon",
+          "plasma-pistol"
+        ]
+      },
+      {
+        "name": "Legionary with Heavy Bolter",
+        "profile_name": "Legionary",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "bolt-pistol",
+          "fists-and-knives",
+          "heavy-bolter"
+        ]
+      },
+      {
+        "name": "Legionary with Meltagun",
+        "profile_name": "Legionary",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "bolt-pistol",
+          "fists-and-knives",
+          "meltagun"
+        ]
+      },
+      {
+        "name": "Legionary",
+        "min": 7,
+        "max": 7,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "boltgun",
+          "bolt-pistol",
+          "fists-and-knives"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Aspiring Champion",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Legionary with Heavy Bolter",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Legionary with Meltagun",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Legionary",
+            "min": 7,
+            "max": 7
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "zarkans-daemonkin-possessed",
+    "faction_id": "chaos-space-marines",
+    "models": [
+      {
+        "name": "Possessed Champion",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "hideous-mutations"
+        ]
+      },
+      {
+        "name": "Possessed",
+        "min": 4,
+        "max": 4,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "hideous-mutations"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Possessed Champion",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Possessed",
+            "min": 4,
+            "max": 4
           }
         ]
       }

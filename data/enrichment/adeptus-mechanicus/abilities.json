@@ -4575,5 +4575,187 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+  },
+  {
+    "ability_id": "defend-the-divine-work-manipulus-skand",
+    "name": "Defend the Divine Work",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "c0973904e22fd909c2789a1848111ef2fbfa9c1ce2ee2a470335b96d9ee09d63",
+    "version": "2025-q3",
+    "effect": {
+      "type": "invulnerable-save",
+      "target": "unit",
+      "modifier": {
+        "invuln_sv": 4
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "unit_ids": [
+      "manipulus-skand"
+    ],
+    "ability_type": "unit",
+    "behavior": "activated",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    }
+  },
+  {
+    "ability_id": "searing-conflagration-purge-corps-pteraxii-sterylizors",
+    "name": "Searing Conflagration",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "e88be08f4d0ce56c85aee9f4de8460798039792905c1190fe701643b9f83ac69",
+    "version": "2025-q3",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "within-range-of-objective",
+            "parameters": {
+              "subject": "target"
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "ones",
+              "weapon_name": "phosphor-torch"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "within-range-of-objective",
+                "parameters": {
+                  "subject": "target"
+                }
+              },
+              {
+                "type": "unit-within-range-of",
+                "parameters": {
+                  "subject": "unit",
+                  "range": 6,
+                  "keywords": [
+                    "Adeptus Mechanicus",
+                    "Battleline"
+                  ]
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "all-failures",
+              "weapon_name": "phosphor-torch"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "attack-sequence"
+    },
+    "unit_ids": [
+      "purge-corps-pteraxii-sterylizors"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "omnispex-purge-corps-skitarii-vanguard",
+    "name": "Omnispex",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "ac35d9337e4586e8285303e4a9cc8ad1f2e7415b7e98a19eb3993684681d3165",
+    "version": "2025-q3",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Ignores Cover"
+        ],
+        "weapon_type": "ranged"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "unit_ids": [
+      "purge-corps-skitarii-vanguard"
+    ],
+    "ability_type": "unit",
+    "behavior": "passive"
+  },
+  {
+    "ability_id": "rad-saturation-aura-purge-corps-skitarii-vanguard",
+    "name": "Rad-saturation (Aura)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "source_digest": "e7ff7349f136793ff396b18834e952378c434702cbe8e8bb01e8e02f87749f15",
+    "version": "2025-q3",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "target-has-keyword",
+            "parameters": {
+              "keyword": "VEHICLE"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "objective-control-modifier",
+        "target": "enemy-within-aura",
+        "modifier": {
+          "operation": "subtract",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "range": "aura-custom",
+      "range_inches": 3,
+      "duration": "battle"
+    },
+    "unit_ids": [
+      "purge-corps-skitarii-vanguard"
+    ],
+    "ability_type": "unit",
+    "behavior": "aura"
   }
 ]

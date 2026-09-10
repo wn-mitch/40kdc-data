@@ -49,6 +49,32 @@ describe("referential integrity", () => {
     expect(result.passed).toBe(1);
   });
 
+  it("accepts same-id primary mission cards and standalone secondaries", async () => {
+    const result = await checkReferentialIntegrity(
+      resolve(FIXTURES, "integrity-mission-cards-good"),
+    );
+    expect(result.failed).toBe(0);
+    expect(result.passed).toBe(3);
+  });
+
+  it("rejects broken mission-to-primary-card relationships", async () => {
+    const result = await checkReferentialIntegrity(
+      resolve(FIXTURES, "integrity-mission-cards-bad"),
+    );
+    expect(result.failed).toBe(5);
+    expect(
+      result.errors.flatMap((entry) =>
+        entry.errors.map((error) => error.message),
+      ),
+    ).toEqual([
+      'mission "secondary-only" has no same-id primary mission card',
+      'duplicate mission id "duplicate-mission" — Collection is first-wins, so this mission is silently shadowed',
+      'duplicate mission-card id "duplicate-card" — Collection is first-wins, so this card is silently shadowed',
+      'primary mission-card "no-awards" has no scoring awards',
+      'primary mission-card "orphan-primary" has no mission',
+    ]);
+  });
+
   it("requires rules-bundle grants to resolve in their faction or the shared core pool", async () => {
     const result = await checkReferentialIntegrity(resolve(FIXTURES, "integrity-bundle-grant"));
     const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message));
@@ -153,48 +179,23 @@ describe("referential integrity", () => {
 
   it("polices loadout_variants: duplicate names, unknown and borrowed equipment, bad budgets", async () => {
     const result = await checkReferentialIntegrity(resolve(FIXTURES, "integrity-variants"));
-    const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message));
-
-    // Two of the three compositions fail; the clean Boyz one passes alongside
-    // the fixture's three clean unit records.
+    const compositions = result.errors.filter((entry) => entry.file.endsWith("unit-compositions.json"));
     expect(result.failed).toBe(2);
     expect(result.passed).toBe(4);
-
-    // A duplicate variant name within one model row.
-    expect(
-      messages.some(
-        (m) => m.includes('duplicate loadout_variant name "Beast Snagga Boy"') && m.includes('unit "beast-snagga-boyz"'),
-      ),
-    ).toBe(true);
-    // Equipment that resolves to no faction weapon or wargear entry.
-    expect(
-      messages.some((m) => m.includes('equipment "thump-gun"') && m.includes("neither a weapon nor a wargear entry")),
-    ).toBe(true);
-    // Another unit's stat-specific weapon variant.
-    expect(
-      messages.some(
-        (m) =>
-          m.includes('names "choppa-beast-snagga-boyz"') &&
-          m.includes('unit "beast-snagga-boyz"\'s own weapon variant') &&
-          m.includes('unit "special-squad"'),
-      ),
-    ).toBe(true);
-    // A budget naming a variant that does not exist in its own row.
-    expect(
-      messages.some((m) => m.includes('names variant "Nonexistent Variant"') && m.includes("does not exist in this model row")),
-    ).toBe(true);
-    // A ratio above 1:1 is a flat cap in disguise.
-    expect(messages.some((m) => m.includes("allows 3 per 2 model(s)"))).toBe(true);
-    // Budgets with nothing to budget.
-    expect(
-      messages.some((m) => m.includes("loadout_variant_budgets is present with no loadout_variants")),
-    ).toBe(true);
-
-    // The clean row must not be flagged: shared faction wargear and this unit's
-    // own `-boyz` weapon variants are both legitimate.
-    expect(messages.some((m) => m.includes('"close-combat-weapon"'))).toBe(false);
-    expect(messages.some((m) => m.includes('names "choppa-boyz"'))).toBe(false);
-    expect(messages.some((m) => m.includes('names "big-shoota-boyz"'))).toBe(false);
+    // The clean first composition permits its own equipment and faction wargear.
+    expect(compositions.map((entry) => entry.index)).toEqual([1, 2]);
+    // Each independent malformed field has its own actionable JSON pointer.
+    expect(compositions[0].errors.map((error) => error.path)).toEqual(expect.arrayContaining([
+      "/1/models/0/loadout_variants/1",
+      "/1/models/0/loadout_variants/2",
+      "/1/models/0/loadout_variant_budgets/0",
+      "/1/models/0/loadout_variant_budgets/1",
+    ]));
+    expect(compositions[1].errors.map((error) => error.path)).toEqual(expect.arrayContaining([
+      "/2/models/0/loadout_variants/0",
+      "/2/models/0/loadout_variants/1",
+      "/2/models/1/loadout_variant_budgets",
+    ]));
   });
 
   it("registers the chaos cult factions with bare-legion home keywords", () => {

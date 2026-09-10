@@ -1724,6 +1724,14 @@
       {
         "namespace": "mfm",
         "id": "95ab65d0-8005-4884-a33f-cb10b747260e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "28d89a09-ccc3-450c-9c05-23a23b57df1a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "317f8085-b808-4905-ae71-11865e20b6f1"
       }
     ]
   },
@@ -2051,6 +2059,10 @@
       {
         "namespace": "mfm",
         "id": "006df490-474c-47b0-b0ad-ebe6114eae80"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6267c763-c582-4e33-b165-a225fd6b610b"
       }
     ]
   },
@@ -2088,6 +2100,10 @@
       {
         "namespace": "mfm",
         "id": "dac5e04e-19e4-4313-906b-01b8a063ab99"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ff253138-99ed-4465-84d5-f5866df8ad2c"
       }
     ]
   },
@@ -2264,6 +2280,43 @@
       {
         "namespace": "mfm",
         "id": "12bd8048-805d-4024-8acf-1743c0f20a04"
+      }
+    ]
+  },
+  {
+    "id": "bolt-pistol-callous-blades",
+    "name": "Bolt pistol",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Bolt pistol",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1b6d2907-3eb6-4895-abdc-80ff5639e859"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5ee73c5e-76d7-4a31-bcf4-d0d38afddeb4"
       }
     ]
   }

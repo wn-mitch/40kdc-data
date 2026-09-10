@@ -944,9 +944,7 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      "blizzard-shield",
       "deadly-demise-1",
-      "fervour-of-the-ancients-aura",
       "guidance-of-the-ancients-psychic",
       "deep-strike"
     ],
@@ -2333,6 +2331,15 @@
       "min": 5,
       "max": 5
     },
+    "weapon_ids": [
+      "nemesis-force-weapon",
+      "psycannon",
+      "storm-bolter"
+    ],
+    "ability_ids": [
+      "force-edge-psychic",
+      "gate-of-infinity"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -2391,6 +2398,18 @@
       "min": 10,
       "max": 10
     },
+    "weapon_ids": [
+      "ceramite-fists",
+      "incinerator",
+      "nemesis-force-weapon",
+      "psycannon",
+      "storm-bolter"
+    ],
+    "ability_ids": [
+      "sanctifying-ritual-psychic",
+      "combat-squads-crowes-sanctifiers",
+      "gate-of-infinity"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -2451,6 +2470,15 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "dreadnought-fist",
+      "storm-bolter",
+      "twin-lascannon"
+    ],
+    "ability_ids": [
+      "guidance-of-the-ancients-psychic-crowes-sanctifiers",
+      "gate-of-infinity"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -2510,6 +2538,15 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "black-blade-of-antwyr",
+      "purifying-flame-castellan-crowe",
+      "storm-bolter-castellan-crowe"
+    ],
+    "ability_ids": [
+      "foesight-psychic",
+      "gate-of-infinity"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"

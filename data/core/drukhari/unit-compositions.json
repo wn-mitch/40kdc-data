@@ -744,6 +744,13 @@
         },
         "loadout_variants": [
           {
+            "name": "Wrack",
+            "weapon_ids": [
+              "twin-torturers-tools"
+            ],
+            "max_count": 9
+          },
+          {
             "name": "Wrack with Hexrifle",
             "weapon_ids": [
               "torturers-tool",
@@ -1324,6 +1331,193 @@
             "name": "Mandrake",
             "min": 5,
             "max": 9
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "coven-of-agonies-cronos",
+    "faction_id": "drukhari",
+    "models": [
+      {
+        "name": "Cronos",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        },
+        "default_weapon_ids": [
+          "spirit-leech-tentacles",
+          "spirit-syphon",
+          "spirit-vortex"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Cronos",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "coven-of-agonies-talos",
+    "faction_id": "drukhari",
+    "models": [
+      {
+        "name": "Talos",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        },
+        "default_weapon_ids": [
+          "chain-flails",
+          "twin-liquifier-gun",
+          "twin-splinter-cannon"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Talos",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "coven-of-agonies-wracks",
+    "faction_id": "drukhari",
+    "models": [
+      {
+        "name": "Acothyst",
+        "profile_name": "Wrack",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "hexrifle",
+          "torturers-tool"
+        ]
+      },
+      {
+        "name": "Wrack with Ossefactor",
+        "profile_name": "Wrack",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "ossefactor",
+          "torturers-tool"
+        ]
+      },
+      {
+        "name": "Wrack",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "twin-torturers-tools"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Acothyst",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Wrack with Ossefactor",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Wrack",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "xatrophos-nuul",
+    "faction_id": "drukhari",
+    "models": [
+      {
+        "name": "Xatrophos Nuul",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "haemonculus-tools-and-scissorhands",
+          "stinger-pistol-xatrophos-nuul"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Xatrophos Nuul",
+            "min": 1,
+            "max": 1
           }
         ]
       }

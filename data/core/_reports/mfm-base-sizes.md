@@ -8,10 +8,10 @@ never overwritten.
 
 | Metric | Count |
 |---|--:|
-| Filled (was empty) | 0 |
+| Filled (was empty) | 2 |
 | De-drafted (dump confirmed a guess) | 0 |
 | Corrected (dump fixed a draft) | 0 |
-| Confirmed (already matched) | 846 |
+| Confirmed (already matched) | 844 |
 | Review (authored ≠ dump, kept) | 19 |
 
 ## Review — authored value the dump contradicts (NOT changed)

@@ -172,11 +172,11 @@ export const stratagems = dataset.stratagems;
 export const wargearOptions = dataset.wargearOptions;
 /** All non-weapon wargear items (icons, attachments). */
 export const wargear = dataset.wargear;
-/** All missions. */
+/** Mission metadata. Resolve its primary rule card with `missionCards.get(mission.id)`. */
 export const missions = dataset.missions;
 /** All mission matchups. */
 export const missionMatchups = dataset.missionMatchups;
-/** All secondary mission cards. */
+/** All primary and secondary mission cards. */
 export const missionCards = dataset.missionCards;
 /** All deployment patterns. */
 export const deploymentPatterns = dataset.deploymentPatterns;

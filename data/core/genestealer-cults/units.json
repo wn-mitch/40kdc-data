@@ -2043,6 +2043,15 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "armoured-hull-achilles-ridgerunners",
+      "missile-launcher",
+      "twin-heavy-stubber"
+    ],
+    "ability_ids": [
+      "claw-of-ascension-crossfire",
+      "claw-of-ascension-survey-augur"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -2109,6 +2118,15 @@
       "min": 5,
       "max": 5
     },
+    "weapon_ids": [
+      "atalan-power-weapon",
+      "mining-laser",
+      "stolen-blade",
+      "stolen-firearms"
+    ],
+    "ability_ids": [
+      "claw-of-ascension-adaptable-fighters"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -2160,6 +2178,15 @@
       "min": 5,
       "max": 5
     },
+    "weapon_ids": [
+      "autopistol",
+      "hand-flamer",
+      "leaders-weapon-symbiote",
+      "metamorph-mutations"
+    ],
+    "ability_ids": [
+      "claw-of-ascension-brood-claim"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -2212,6 +2239,16 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "autopistol-jackal-alphus",
+      "cult-sniper-rifle-jackal-alphus",
+      "stolen-blade"
+    ],
+    "ability_ids": [
+      "claw-of-ascension-master-outrider",
+      "claw-of-ascension-priority-target",
+      "leader"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"

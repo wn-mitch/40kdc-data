@@ -157,6 +157,7 @@
         "after-hit-roll",
         "before-wound-roll",
         "after-wound-roll",
+        "attack-scores-wound",
         "before-save-roll",
         "after-save-roll",
         "before-damage-roll",
@@ -184,7 +185,16 @@
         "leadership-test",
         "desperate-escape-test",
         "stratagem-targeted",
-        "ability-target-selected"
+        "ability-target-selected",
+        "end-of-opponent-charge-phase",
+        "enemy-unit-completed-shooting-targeting-bearer",
+        "enemy-unit-selects-bearer-as-charge-target",
+        "enemy-unit-targets-bearer",
+        "enemy-unit-completed-fall-back-from-bearer",
+        "act-of-faith-completed",
+        "act-of-faith-performed",
+        "miracle-die-generated",
+        "enemy-unit-selected-charge-targets-before-charge-move"
       ]
     },
     "battle-size": {

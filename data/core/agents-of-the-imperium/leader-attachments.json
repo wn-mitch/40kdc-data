@@ -142,5 +142,15 @@
       "edition": "11th",
       "dataslate": "launch"
     }
+  },
+  {
+    "leader_id": "preacher-teguen",
+    "eligible_bodyguard_ids": [
+      "inquisitors-hand-inquisitorial-agents"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
   }
 ]

@@ -29,7 +29,7 @@ Each line is exactly one valid JSON object terminated by `\n`. UTF-8, no BOM. Li
 The first request after launch is always:
 
 ```json
-{"op":"init","spec_version":1,"locale":"C","tz":"UTC","seed":0}
+{"op":"init","args":{"spec_version":1,"locale":"C","tz":"UTC","seed":0}}
 ```
 
 The runner responds with:
@@ -108,7 +108,7 @@ The `query` enum covers the read paths on `Dataset`:
 
 Ordering semantics for each query are documented per-area in `CONFORMANCE.md`. The runner protocol itself is opaque to whether the order is load-bearing — it simply emits whatever the implementation's public API returns.
 
-`loadout_candidates` selects every composition tier whose summed model-row range contains `modelCount` (or the top-level model rows when there are no tiers), enumerates every bounded row allocation, and emits `"<witness> => <counts>"`. A variant-free witness is the nonzero model rows in declaration order as `<name>×<count>`, separated by `;`; counts are ascending `id:count` pairs separated by `,`. Results are deduplicated, sorted by ordinal/code-point order, and truncated to `limit` (default 256). If truncation drops any candidate, the final result entry is exactly `"…truncated"`; this marker is additional to the requested candidate limit. A missing composition or model count admitted by no tier returns an empty list.
+`loadout_candidates` selects every composition tier whose summed model-row range contains `modelCount`, in tier declaration order (or the top-level model rows when there are no tiers). For each applicable tier it enumerates exact row allocations by pure descending recursive enumeration: model-row declaration order, with each row's count visited from its feasible high end down to its low end. Within each row, declared variants precede their compatible option states in canonical provenance order. It emits `"<witness> => <counts>"`; a variant-free witness is the nonzero model rows in declaration order as `<name>×<count>`, separated by `;`, while variant selections retain their variant identity in the witness; counts are ascending `id:count` pairs separated by `,`. Encoded candidates are globally deduplicated by first occurrence and emitted in that deterministic traversal order (witness groups retain their first-seen traversal order). Traversal stops after finding distinct `limit + 1` legal encodings, returning the first `limit` plus the final `"…truncated"` marker; `limit` defaults to 256, and `limit=0` returns the marker iff any legal candidate exists. The limit does not make proof of no solution universally bounded: rejected, duplicate, and no-solution branches may still require exhaustive search. Exact legality is independent of this output traversal and limit and remains exhaustive. A missing composition or model count admitted by no tier returns an empty list.
 
 ### `check_unit_legality`
 

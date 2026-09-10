@@ -85,6 +85,7 @@ GameEvent: TypeAlias = Literal[
     "after-hit-roll",
     "before-wound-roll",
     "after-wound-roll",
+    "attack-scores-wound",
     "before-save-roll",
     "after-save-roll",
     "before-damage-roll",
@@ -113,6 +114,15 @@ GameEvent: TypeAlias = Literal[
     "desperate-escape-test",
     "stratagem-targeted",
     "ability-target-selected",
+    "end-of-opponent-charge-phase",
+    "enemy-unit-completed-shooting-targeting-bearer",
+    "enemy-unit-selects-bearer-as-charge-target",
+    "enemy-unit-targets-bearer",
+    "enemy-unit-completed-fall-back-from-bearer",
+    "act-of-faith-completed",
+    "act-of-faith-performed",
+    "miracle-die-generated",
+    "enemy-unit-selected-charge-targets-before-charge-move",
 ]
 
 
@@ -766,6 +776,12 @@ class Weapon(TypedDict):
     game_modes: NotRequired[GameModes]
 
 
+class CausedBy(TypedDict):
+    source: Literal["bearer-model", "bearer-unit"]
+    attack_type: NotRequired[Literal["melee", "ranged"]]
+    weapon_keyword: NotRequired[str]
+
+
 class Proximity(TypedDict):
     of: NotRequired[Literal["self", "bearer", "attached-unit", "bearer-unit"]]
     range: float
@@ -784,7 +800,13 @@ class SourceAbility(TypedDict):
     keywords: list[Keyword2]
 
 
-class Usage(TypedDict):
+SubjectKeyword: TypeAlias = str
+
+
+SubjectExcludedKeyword: TypeAlias = str
+
+
+class AbilityUsage(TypedDict):
     frequency: Literal[
         "once-per-turn",
         "once-per-phase",
@@ -869,6 +891,27 @@ class SimpleCondition(TypedDict):
         "uniform-ranged-loadout",
         "all-attacks-target-same-unit",
         "target-is-visible",
+        "ability-window-capacity",
+        "candidate-eligible-in-ability-window",
+        "unit-is-led-by",
+        "on-battlefield",
+        "target-within-half-weapon-range",
+        "has-destroyed",
+        "roll-succeeded",
+        "unit-selected-to-shoot-this-phase",
+        "eligible-to-shoot",
+        "selection-has-keyword",
+        "target-of-triggering-charge",
+        "every-model-within-range-of-bearer",
+        "event-source-is-bearer-unit",
+        "event-source-is-attached-unit",
+        "miracle-die-generation-reason",
+        "miracle-die-generation-timing",
+        "destroyed-event-within-range",
+        "destroyed-by-friendly-unit",
+    ]
+    of: NotRequired[
+        Literal["bearer", "unit", "led-unit", "attacker", "defender", "target", "friendly", "enemy"]
     ]
     parameters: NotRequired[dict[str, Any]]
     negated: NotRequired[bool]
@@ -975,6 +1018,12 @@ class SingleEffect(TypedDict):
         "unit-keyword-grant",
         "unit-tag",
         "ward",
+        "unit-division",
+        "desperate-escape",
+        "reactive-charge",
+        "ability-usage-limit",
+        "deadly-demise-threshold",
+        "embark",
     ]
     target: Literal[
         "self",
@@ -990,14 +1039,11 @@ class SingleEffect(TypedDict):
         "enemy-within-aura",
         "all-friendly",
         "all-enemy",
+        "destroyed-model",
+        "triggering-unit",
     ]
     modifier: NotRequired[dict[str, Any]]
     scaling: NotRequired[Scaling]
-
-
-class Test(TypedDict):
-    kind: Literal["leadership"]
-    subject: Literal["unit", "self"]
 
 
 Result: TypeAlias = int
@@ -1013,12 +1059,10 @@ class SelectionLimit(TypedDict):
     period: Literal["turn", "phase", "battle-round", "battle"]
 
 
-class Selector2(TypedDict):
-    owner: Literal["friendly", "enemy"]
-    keywords: NotRequired[list[Keyword2]]
-    target_kind: NotRequired[Literal["unit", "model"]]
-    within_inches: NotRequired[float]
-    member_of: NotRequired[Literal["bearer-unit"]]
+ModelName: TypeAlias = str
+
+
+ExcludedKeyword: TypeAlias = str
 
 
 class Marker(TypedDict):
@@ -1034,15 +1078,20 @@ RangeItem: TypeAlias = int
 RequiredKeyword: TypeAlias = str
 
 
-ExcludedKeyword: TypeAlias = str
-
-
 class Eligible(TypedDict):
     required_keywords: NotRequired[list[RequiredKeyword]]
     excluded_keywords: NotRequired[list[ExcludedKeyword]]
 
 
+class SelectionLimit2(TypedDict):
+    count: int
+    period: Literal["phase", "turn", "battle-round", "battle"]
+
+
 AttackerKeyword: TypeAlias = str
+
+
+AttackerUnitKeyword: TypeAlias = str
 
 
 class Eligible1(TypedDict):
@@ -1086,7 +1135,7 @@ class Cost1(TypedDict):
     resource_label: NotRequired[str]
 
 
-class Usage1(TypedDict):
+class Usage(TypedDict):
     repeatable_if_different_unit: NotRequired[bool]
 
 
@@ -1240,11 +1289,245 @@ class Select1(TypedDict):
     scope: Literal["enemy-unit", "objective-marker"]
     count: NotRequired[Literal[1]]
     timing: str
-    selection_policy: Literal["one-time"]
+    selection_policy: Literal["one-time", "replace-on-destroyed"]
+    allow_while_embarked: NotRequired[bool]
+    bind_as: NotRequired[str]
 
 
 class NoEffectEffect(TypedDict):
     type: Literal["no-effect"]
+
+
+class SelectionReference(TypedDict):
+    selection_var: str
+
+
+EventOrSelectionReference: TypeAlias = EventBoundReference | SelectionReference
+
+
+class RequiresUnit(TypedDict):
+    owner: Literal["friendly", "enemy"]
+    requires_ability: str
+    relation: Literal["within-range"]
+
+
+class SelectionLimit3(TypedDict):
+    count: int
+    period: Literal["turn", "phase", "battle-round", "battle"]
+
+
+class ObjectiveSelector(TypedDict):
+    count: Literal[1]
+    range_inches: NotRequired[float]
+    origin: NotRequired[Literal["bearer", "bearer-unit"]]
+    controlled_by: NotRequired[Literal["your-army", "opponent"]]
+    requires_unit: NotRequired[RequiresUnit]
+    selection_limit: NotRequired[SelectionLimit3]
+    bind_as: str
+
+
+class Selector31(TypedDict):
+    owner: Literal["friendly", "enemy"]
+    count: Literal[1]
+    selection_mode: NotRequired[Literal["any-number"]]
+    requires_ability: NotRequired[str]
+    visible_to: NotRequired[SelectionReference]
+    selection_limit: NotRequired[SelectionLimit3]
+    bind_as: str
+
+
+class Selector32(TypedDict):
+    owner: Literal["friendly", "enemy"]
+    count: NotRequired[Literal[1]]
+    selection_mode: Literal["any-number"]
+    requires_ability: NotRequired[str]
+    visible_to: NotRequired[SelectionReference]
+    selection_limit: NotRequired[SelectionLimit3]
+    bind_as: str
+
+
+class Selector33(TypedDict):
+    owner: NotRequired[Literal["friendly"]]
+    selection_mode: Literal["any-number"]
+    requires_ability: Any
+
+
+class Selector34(Selector31, Selector33):
+    pass
+
+
+class Selector35(Selector32, Selector33):
+    pass
+
+
+Selector3: TypeAlias = Selector34 | Selector35
+
+
+class Observer(TypedDict):
+    role: Literal["observer"]
+    selector: Selector3
+
+
+class Selector41(TypedDict):
+    owner: Literal["friendly", "enemy"]
+    count: Literal[1]
+    selection_mode: NotRequired[Literal["any-number"]]
+    requires_ability: NotRequired[str]
+    visible_to: NotRequired[SelectionReference]
+    selection_limit: NotRequired[SelectionLimit3]
+    bind_as: str
+
+
+class Selector42(TypedDict):
+    owner: Literal["friendly", "enemy"]
+    count: NotRequired[Literal[1]]
+    selection_mode: Literal["any-number"]
+    requires_ability: NotRequired[str]
+    visible_to: NotRequired[SelectionReference]
+    selection_limit: NotRequired[SelectionLimit3]
+    bind_as: str
+
+
+class Selector43(TypedDict):
+    owner: NotRequired[Literal["enemy"]]
+    count: Literal[1]
+    visible_to: Any
+    selection_limit: Any
+
+
+class Selector44(Selector41, Selector43):
+    pass
+
+
+class Selector45(Selector42, Selector43):
+    pass
+
+
+Selector4: TypeAlias = Selector44 | Selector45
+
+
+class Spotted(TypedDict):
+    role: Literal["spotted"]
+    selector: Selector4
+
+
+class Guided(TypedDict):
+    role: Literal["guided"]
+    owner: Literal["friendly"]
+    requires_ability: str
+    excludes: SelectionReference
+    while_attacking: SelectionReference
+
+
+class PairedUnitSelector1(TypedDict):
+    owner: Literal["friendly", "enemy"]
+    count: Literal[1]
+    selection_mode: NotRequired[Literal["any-number"]]
+    requires_ability: NotRequired[str]
+    visible_to: NotRequired[SelectionReference]
+    selection_limit: NotRequired[SelectionLimit3]
+    bind_as: str
+
+
+class PairedUnitSelector2(TypedDict):
+    owner: Literal["friendly", "enemy"]
+    count: NotRequired[Literal[1]]
+    selection_mode: Literal["any-number"]
+    requires_ability: NotRequired[str]
+    visible_to: NotRequired[SelectionReference]
+    selection_limit: NotRequired[SelectionLimit3]
+    bind_as: str
+
+
+PairedUnitSelector: TypeAlias = PairedUnitSelector1 | PairedUnitSelector2
+
+
+class RollReference(TypedDict):
+    roll_var: str
+
+
+class MiracleDieReference(TypedDict):
+    die_var: str
+
+
+class Count(TypedDict):
+    minimum: Literal[1]
+    maximum: Literal[1, 3]
+
+
+Selection = TypedDict(
+    "Selection",
+    {
+        "count": Literal[1] | Count,
+        "from": Literal["dice-used-in-triggering-act-of-faith", "retained-pool-dice"],
+        "policy": Literal["controller-chooses"],
+    },
+)
+
+
+class Modifier3(TypedDict):
+    operation: Literal[
+        "reroll-generated-result",
+        "set-generated-value-without-roll",
+        "set-used-value",
+        "reroll-retained-and-return",
+    ]
+    die: NotRequired[MiracleDieReference]
+    value: NotRequired[int]
+    pool_id: Literal["miracle-dice-pool"]
+    resource_label: Literal["Miracle dice"]
+    stage: NotRequired[Literal["before-pool-add", "before-act-of-faith-resolution"]]
+    selection: NotRequired[Selection]
+    optional: NotRequired[bool]
+
+
+class MiracleDieOperationEffect(TypedDict):
+    type: Literal["miracle-die-operation"]
+    target: Literal["self"]
+    modifier: Modifier3
+
+
+class Attachment(TypedDict):
+    leader_id: NotRequired[EntityId]
+    bodyguard_id: EntityId
+
+
+class FormationAttachmentGrantEffect(TypedDict):
+    type: Literal["formation-attachment-grant"]
+    source: Literal["self", "bearer-unit"]
+    beneficiary: Literal["self", "attached-leader-model"]
+    formation_event: Literal["declare-battle-formations"]
+    attachment: Attachment
+    grant: Grant
+
+
+class Modifier4(TypedDict):
+    leader_id: EntityId
+    required_leader_ability: Literal["Leader"]
+    from_bodyguard_id: EntityId
+    to_bodyguard_id: EntityId
+
+
+class AttachmentEligibilityInheritEffect(TypedDict):
+    type: Literal["attachment-eligibility-inherit"]
+    target: Literal["self"]
+    modifier: Modifier4
+
+
+ScopeDuration: TypeAlias = Literal[
+    "phase",
+    "turn",
+    "battle-round",
+    "battle",
+    "until-next-command-phase",
+    "until-next-movement-phase",
+    "until-next-battle-round",
+    "until-start-next-turn",
+    "one-use",
+    "permanent",
+    "attack-sequence",
+    "resolution",
+]
 
 
 class Scope(TypedDict):
@@ -1261,20 +1544,7 @@ class Scope(TypedDict):
         "any-on-battlefield",
         "terrain-within-range",
     ]
-    duration: Literal[
-        "phase",
-        "turn",
-        "battle-round",
-        "battle",
-        "until-next-command-phase",
-        "until-next-movement-phase",
-        "until-next-battle-round",
-        "until-start-next-turn",
-        "one-use",
-        "permanent",
-        "attack-sequence",
-        "resolution",
-    ]
+    duration: ScopeDuration
     range_inches: NotRequired[float]
 
 
@@ -1297,6 +1567,18 @@ class PhaseMapping(TypedDict):
     phases: PhaseList
     game_version: GameVersionRef
     authored_by: NotRequired[ContributorRef]
+
+
+class Replace(TypedDict):
+    event: Literal["on-unit-destroyed"]
+    reference: SelectionReference
+    optional: bool
+
+
+class Lifecycle(TypedDict):
+    replace: Replace
+    exclusivity: Literal["one-active-per-bearer-unit"]
+    expiry: Literal["battle-end"]
 
 
 class Action(TypedDict):
@@ -1370,8 +1652,18 @@ class WeaponKeyword(TypedDict):
 class Trigger(TypedDict):
     event: GameEvent
     subject: NotRequired[
-        Literal["self", "bearer", "friendly-unit", "enemy-unit", "any-unit", "model-in-bearer"]
+        Literal[
+            "self",
+            "bearer",
+            "friendly-unit",
+            "enemy-unit",
+            "any-unit",
+            "model-in-bearer",
+            "friendly-model",
+            "enemy-model",
+        ]
     ]
+    caused_by: NotRequired[CausedBy]
     proximity: NotRequired[Proximity]
     move_types: NotRequired[list[Literal["normal", "advance", "fall-back", "charge"]]]
     condition: NotRequired[Condition]
@@ -1380,6 +1672,13 @@ class Trigger(TypedDict):
     window: NotRequired[str]
     binds_event_variable: NotRequired[str]
     source_ability: NotRequired[SourceAbility]
+    subject_keywords: NotRequired[list[SubjectKeyword]]
+    subject_excluded_keywords: NotRequired[list[SubjectExcludedKeyword]]
+    binds_die_variable: NotRequired[str]
+    binds_selected_die_variable: NotRequired[str]
+
+
+AbilityTrigger: TypeAlias = Trigger | list[Trigger]
 
 
 class Ability(TypedDict):
@@ -1398,9 +1697,9 @@ class Ability(TypedDict):
     ]
     behavior: NotRequired[Literal["passive", "activated", "reactive", "aura"]]
     effect: Effect
-    trigger: NotRequired[Trigger | list[Trigger]]
+    trigger: NotRequired[AbilityTrigger]
     scope: Scope
-    usage: NotRequired[Usage]
+    usage: NotRequired[AbilityUsage]
     applies_to: NotRequired[AppliesTo | None]
     interactions: NotRequired[list[Interaction]]
     disputed: NotRequired[bool]
@@ -1441,6 +1740,12 @@ EffectNode: TypeAlias = Union[
     LeaderModelAbilityGrantEffect,
     "PersistentDesignationEffect",
     NoEffectEffect,
+    "SelectObjectiveEffect",
+    "ForEachObjectiveEffect",
+    "PairedDesignationEffect",
+    MiracleDieOperationEffect,
+    FormationAttachmentGrantEffect,
+    AttachmentEligibilityInheritEffect,
 ]
 
 
@@ -1449,6 +1754,8 @@ class ChoiceEffect(TypedDict):
     options: list[EffectNode]
     choice_label: NotRequired[str]
     choice_prompt: NotRequired[str]
+    min_choices: NotRequired[int]
+    max_choices: NotRequired[int]
 
 
 class SequenceEffect(TypedDict):
@@ -1468,6 +1775,21 @@ class NamedEffect(TypedDict):
     level: NotRequired[int]
     effect: EffectNode
     optional: NotRequired[bool]
+    cost: NotRequired[EffectNode]
+    duration: NotRequired[ScopeDuration]
+    trigger: NotRequired[AbilityTrigger]
+    usage: NotRequired[AbilityUsage]
+
+
+class Modifier(TypedDict):
+    condition: Condition
+    value: int
+
+
+class Test(TypedDict):
+    kind: Literal["leadership", "battle-shock"]
+    subject: Literal["unit", "self", "target"]
+    modifiers: NotRequired[list[Modifier]]
 
 
 class DiceGatedEffect(TypedDict):
@@ -1478,6 +1800,7 @@ class DiceGatedEffect(TypedDict):
     on_success: NotRequired[EffectNode | None]
     on_fail: NotRequired[EffectNode | None]
     test: NotRequired[Test]
+    roll_var: NotRequired[str]
 
 
 class Outcome(TypedDict):
@@ -1525,7 +1848,12 @@ class Selector(TypedDict):
         Literal["any", "engaged-with-bearer", "not-engaged-with-bearer"]
     ]
     reference: NotRequired[Literal["bearer", "bearer-unit"]]
+    within_inches_from: NotRequired[SelectionReference]
+    visible_to: NotRequired[SelectionReference]
     selection_limit: NotRequired[SelectionLimit]
+    model_names: NotRequired[list[ModelName]]
+    excluded_keywords: NotRequired[list[ExcludedKeyword]]
+    bind_as: NotRequired[str]
 
 
 class Selector1(TypedDict):
@@ -1543,7 +1871,12 @@ class Selector1(TypedDict):
         Literal["any", "engaged-with-bearer", "not-engaged-with-bearer"]
     ]
     reference: NotRequired[Literal["bearer", "bearer-unit"]]
+    within_inches_from: NotRequired[SelectionReference]
+    visible_to: NotRequired[SelectionReference]
     selection_limit: NotRequired[SelectionLimit]
+    model_names: NotRequired[list[ModelName]]
+    excluded_keywords: NotRequired[list[ExcludedKeyword]]
+    bind_as: NotRequired[str]
 
 
 class SelectUnitsEffect(TypedDict):
@@ -1552,13 +1885,28 @@ class SelectUnitsEffect(TypedDict):
     effect: EffectNode
 
 
+class Selector2(TypedDict):
+    owner: Literal["friendly", "enemy"]
+    keywords: NotRequired[list[Keyword2]]
+    target_kind: NotRequired[Literal["unit", "model"]]
+    within_inches: NotRequired[float]
+    engagement_relation: NotRequired[Literal["engaged-with-bearer", "not-engaged-with-bearer"]]
+    reference: NotRequired[Literal["bearer", "bearer-unit"]]
+    member_of: NotRequired[Literal["bearer-unit"]]
+    model_names: NotRequired[list[ModelName]]
+    excluded_keywords: NotRequired[list[ExcludedKeyword]]
+    bind_as: NotRequired[str]
+    eligibility: NotRequired[Condition]
+    within_objective: NotRequired[SelectionReference]
+
+
 class ForEachUnitEffect(TypedDict):
     type: Literal["for-each-unit"]
     selector: Selector2
     effect: EffectNode
 
 
-class Modifier(TypedDict):
+class Modifier1(TypedDict):
     move_type: NotRequired[
         Literal[
             "normal",
@@ -1613,11 +1961,11 @@ class MovementModifierEffect(TypedDict):
         "all-friendly",
         "all-enemy",
     ]
-    modifier: Modifier
+    modifier: Modifier1
     after_move: NotRequired[EffectNode]
 
 
-class Modifier1(TypedDict):
+class Modifier2(TypedDict):
     range: NotRequired[int | list[RangeItem]]
     range_bonus: NotRequired[int]
     of: NotRequired[str]
@@ -1630,7 +1978,7 @@ class Modifier1(TypedDict):
 class AuraEffect(TypedDict):
     type: Literal["aura"]
     target: Literal["enemy-within-aura", "friendly-within-aura"]
-    modifier: Modifier1
+    modifier: Modifier2
 
 
 class Select(TypedDict):
@@ -1638,15 +1986,27 @@ class Select(TypedDict):
     count: NotRequired[int]
     timing: NotRequired[str]
     within_inches: NotRequired[float]
+    reference: NotRequired[Literal["bearer", "bearer-unit"]]
+    visibility_required: NotRequired[bool]
     keywords: NotRequired[list[Keyword2]]
     keyword_match: NotRequired[Literal["all", "any"]]
     eligibility: NotRequired[Condition]
+    visible_to: NotRequired[SelectionReference]
+    excluded_keywords: NotRequired[list[ExcludedKeyword]]
+    bind_as: NotRequired[str]
+    within_inches_from: NotRequired[SelectionReference]
+    selection_limit: NotRequired[SelectionLimit2]
 
 
 class Applies(TypedDict):
-    to: Literal["target", "attackers-of-target", "bearer-attacks-target"]
+    to: Literal[
+        "target", "attackers-of-target", "bearer-attacks-target", "bound-unit-attacks-reference"
+    ]
     effect: EffectNode
     attacker_keywords: NotRequired[list[AttackerKeyword]]
+    attacker_unit_keywords: NotRequired[list[AttackerUnitKeyword]]
+    beneficiary: NotRequired[EventOrSelectionReference]
+    reference: NotRequired[SelectionReference]
 
 
 class DesignateTargetEffect(TypedDict):
@@ -1704,7 +2064,7 @@ class Action1(TypedDict):
     when: ResourceActionMenuTrigger | list[ResourceActionMenuTrigger]
     cost: Cost1
     eligibility: NotRequired[Eligibility]
-    usage: NotRequired[Usage1]
+    usage: NotRequired[Usage]
     duration: NotRequired[Literal["immediate", "until-end-of-phase", "until-end-of-turn"]]
     effect: EffectNode
 
@@ -1772,16 +2132,41 @@ class NamedRegionState(TypedDict):
 
 class Consumer(TypedDict):
     relation: Literal["attacks-selected-unit", "within-selected-marker"]
-    beneficiary: Literal["bearer"]
+    beneficiary: Literal["bearer", "unit"]
     effect: EffectNode
+    reference: NotRequired[SelectionReference]
 
 
 class PersistentDesignationEffect(TypedDict):
     type: Literal["persistent-designation"]
+    operation: NotRequired[Literal["establish", "replace"]]
     designation: str
     select: Select1
-    consumer: Consumer
+    consumer: NotRequired[Consumer]
     duration: Literal["phase", "turn", "battle-round", "battle", "until-next-command-phase"]
+    lifecycle: NotRequired[Lifecycle]
+
+
+class SelectObjectiveEffect(TypedDict):
+    type: Literal["select-objective"]
+    selector: ObjectiveSelector
+    effect: EffectNode
+
+
+class ForEachObjectiveEffect(TypedDict):
+    type: Literal["for-each-objective"]
+    selector: ObjectiveSelector
+    effect: EffectNode
+
+
+class PairedDesignationEffect(TypedDict):
+    type: Literal["paired-designation"]
+    duration: Literal["phase"]
+    observer: Observer
+    spotted: Spotted
+    guided: Guided
+    observer_eligibility: Condition
+    effects: EffectNode
 
 
 Effect: TypeAlias = EffectNode
