@@ -13,7 +13,6 @@
       "Death Guard"
     ],
     "aliases": [],
-    "faction_rule_id": "nurgle-s-gift-aura",
     "logo_url": "https://cdn.jsdelivr.net/gh/Certseeds/wh40k-icon@be230023ff0755d19ffb1a1762658c711c2887f9/src/svgs/chaos/legions/death-guard.svg",
     "external_refs": [
       {
@@ -24,6 +23,9 @@
         "namespace": "mfm",
         "id": "19176137-2faa-4d6e-adb4-2572510032b7"
       }
+    ],
+    "faction_rule_ids": [
+      "nurgle-s-gift-aura"
     ]
   }
 ]

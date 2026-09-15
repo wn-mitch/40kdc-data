@@ -7905,6 +7905,7 @@ impl<'de> ::serde::Deserialize<'de> for ExternalReferenceNamespace {
 ///  "description": "A playable faction or sub-faction.",
 ///  "type": "object",
 ///  "required": [
+///    "faction_rule_ids",
 ///    "game_version",
 ///    "id",
 ///    "name"
@@ -7919,16 +7920,14 @@ impl<'de> ::serde::Deserialize<'de> for ExternalReferenceNamespace {
 ///    "external_refs": {
 ///      "$ref": "#/$defs/external-reference-list"
 ///    },
-///    "faction_rule_id": {
-///      "description": "Reference to the faction-wide ability (e.g., Oath of Moment)",
-///      "oneOf": [
-///        {
-///          "$ref": "#/$defs/entity-id"
-///        },
-///        {
-///          "type": "null"
-///        }
-///      ]
+///    "faction_rule_ids": {
+///      "description": "References to the faction-wide abilities in display order",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
 ///    },
 ///    "game_version": {
 ///      "$ref": "#/$defs/game-version-ref"
@@ -7971,9 +7970,8 @@ pub struct Faction {
     pub aliases: ::std::vec::Vec<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub external_refs: ::std::option::Option<ExternalReferenceList>,
-    ///Reference to the faction-wide ability (e.g., Oath of Moment)
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub faction_rule_id: ::std::option::Option<EntityId>,
+    ///References to the faction-wide abilities in display order
+    pub faction_rule_ids: Vec<EntityId>,
     pub game_version: GameVersionRef,
     pub id: EntityId,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]

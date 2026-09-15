@@ -103,7 +103,7 @@
       "consumers": ["tools/src/mfm/external-refs.ts#runMfmExternalRefs"],
       "reason": "The namespace distinguishes MFM ids from other source identities."
     },
-    "/faction_rule_id": {
+    "/faction_rule_ids": {
       "provenance": "joined",
       "coverage": "partial",
       "sources": [
@@ -127,15 +127,51 @@
       "transforms": [
         {
           "symbol": "tools/src/converters/id-generator.ts#nameToId",
-          "operation": "Slug each owned army-rule name (trailing parenthetical stripped) into a candidate faction_rule_id."
+          "operation": "Collect every owned army-rule name as a de-duplicated faction_rule_ids array after stripping trailing parentheticals and slugging each name."
         }
       ],
       "filters": [
-        "Fill-only: filled when the faction owns exactly one army rule and none is authored; confirmed when the authored slug matches any owned rule; a mismatch or an ambiguous multi-rule faction is surfaced for review, never overwritten (the dump cannot pick THE faction-wide rule among several)."
+        "Fill only when faction_rule_ids is absent. Compare authored and owned ids as unordered sets; preserve the authored array and emit both sets on mismatch."
+      ],
+      "precedence": [
+        "Existing authored arrays win on mismatch."
+      ],
+      "consumers": ["tools/src/mfm/faction-fields.ts#runFactionFields"],
+      "reason": "The complete owned army-rule set supplies explicit faction-wide ability membership without forcing a singular choice."
+    },
+    "/faction_rule_ids/*": {
+      "provenance": "joined",
+      "coverage": "partial",
+      "sources": [
+        "data.army_rule.id",
+        "data.army_rule.localisations.*.name",
+        "data.army_rule_faction_keyword.armyRuleId",
+        "data.army_rule_faction_keyword.factionKeywordId"
+      ],
+      "joins": [
+        {
+          "relation": "army_rule_faction_keyword.factionKeywordId",
+          "direction": "children",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "army_rule_faction_keyword.armyRuleId",
+          "direction": "parent",
+          "purpose": "applicability"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/converters/id-generator.ts#nameToId",
+          "operation": "Slug one owned army-rule name after stripping its trailing parenthetical."
+        }
+      ],
+      "filters": [
+        "Each member is de-duplicated within the owned faction-rule set."
       ],
       "precedence": [],
       "consumers": ["tools/src/mfm/faction-fields.ts#runFactionFields"],
-      "reason": "The owned army rules give candidate faction_rule_id slugs; runFactionFields fills an unambiguous single one and confirms or preserves authored curated slugs."
+      "reason": "Each array member is a joined named-rule to faction ability link."
     },
     "/game_version": {
       "provenance": "repo-authored",

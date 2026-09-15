@@ -170,6 +170,8 @@ I ran a jq probe with a literal TARGET placeholder instead of first extracting t
 ## 2026-09-03T19:23:34Z — codex
 
 This installed jj version has no archive subcommand, so the planned whole-parent materialization failed before comparison; use jj file show per composition instead.
+<<<<<<< conflict 1 of 1
++++++++ qotqmzzv 02ae2248 "chore: Release 1.4.3" (rebase destination)
 
 ## 2026-09-08T16:37:21Z — gpt-6-astra
 
@@ -202,3 +204,15 @@ A jj log query failed because GitHub exposed an external-fork PR SHA that the lo
 ## 2026-09-10T14:19:43Z — openai-codex/gpt-5.6-sol
 
 A PR data-review subagent ran to completion but yielded null data, so the canonical data and stock-loadout audit had to be dispatched again.
+
+## 2026-09-15T00:05:56Z — openai-codex/gpt-5.6-sol
+
+ast_edit matched all faction JSON properties but proposed invalid arrays by stripping captured string quotes, forcing a parsed JSON codemod fallback.
+
+## 2026-09-15T00:13:12Z — openai-codex/gpt-5.6-sol
+
+just preflight fails by design on intended uncommitted generated artifacts, so it cannot serve as a pre-commit gate for schema changes; use verify-regen-stable plus test-all before committing, then preflight.
+
+## 2026-09-15T00:17:01Z — openai-codex/gpt-5.6-sol
+
+Example-local npm test and check failed because workspace dependencies were absent; the repository requires npm ci at the monorepo root before example validation.

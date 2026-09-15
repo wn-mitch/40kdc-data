@@ -59,6 +59,17 @@ describe("Codex routes", () => {
       kind: "not-found",
     });
   });
+
+  it("resolves every declared Tyranids faction rule", () => {
+    const faction = resolveCodexRoute(parseCodexRoute("/factions/tyranids"));
+    expect(faction.kind).toBe("faction");
+    if (faction.kind === "faction") {
+      expect(faction.factionRules.map((rule) => rule.id)).toEqual([
+        "shadow-in-the-warp",
+        "synapse",
+      ]);
+    }
+  });
 });
 
 describe("base-size formatting", () => {

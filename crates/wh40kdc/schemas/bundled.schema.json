@@ -1096,16 +1096,14 @@
             "type": "string"
           }
         },
-        "faction_rule_id": {
-          "oneOf": [
-            {
-              "$ref": "#/$defs/entity-id"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Reference to the faction-wide ability (e.g., Oath of Moment)"
+        "faction_rule_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entity-id"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "References to the faction-wide abilities in display order"
         },
         "logo_url": {
           "type": "string",
@@ -1116,7 +1114,8 @@
       "required": [
         "id",
         "name",
-        "game_version"
+        "game_version",
+        "faction_rule_ids"
       ],
       "additionalProperties": false
     },

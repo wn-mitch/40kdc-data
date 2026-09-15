@@ -13,7 +13,6 @@
       "Space Wolves"
     ],
     "aliases": [],
-    "faction_rule_id": "oath-of-moment",
     "logo_url": "https://cdn.jsdelivr.net/gh/Certseeds/wh40k-icon@be230023ff0755d19ffb1a1762658c711c2887f9/src/svgs/human_imperium/astartes_legion/space-wolves.svg",
     "external_refs": [
       {
@@ -24,6 +23,9 @@
         "namespace": "mfm",
         "id": "bc367514-36b7-47c6-bd3f-ffbf85f5cfd9"
       }
+    ],
+    "faction_rule_ids": [
+      "oath-of-moment"
     ]
   }
 ]

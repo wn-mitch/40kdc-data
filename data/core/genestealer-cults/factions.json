@@ -11,7 +11,6 @@
       "Genestealer Cults"
     ],
     "aliases": [],
-    "faction_rule_id": "cult-ambush",
     "logo_url": "https://cdn.jsdelivr.net/gh/Certseeds/wh40k-icon@be230023ff0755d19ffb1a1762658c711c2887f9/src/svgs/xenos/genestealer_cult/genestealer-cults.svg",
     "external_refs": [
       {
@@ -22,6 +21,9 @@
         "namespace": "mfm",
         "id": "800c0387-5033-47da-bad0-f42e53b37453"
       }
+    ],
+    "faction_rule_ids": [
+      "cult-ambush"
     ]
   }
 ]

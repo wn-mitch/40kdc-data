@@ -332,7 +332,7 @@ class Faction(TypedDict):
     game_version: GameVersionRef
     keywords: NotRequired[KeywordList]
     aliases: NotRequired[list[str]]
-    faction_rule_id: NotRequired[EntityId | None]
+    faction_rule_ids: list[EntityId]
     logo_url: NotRequired[str]
 
 

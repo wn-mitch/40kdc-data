@@ -682,6 +682,20 @@ describe("collection integrity", () => {
     expect(abilities.size).toBeGreaterThan(0);
   });
 
+  it("links every declared Tyranids faction rule to a faction ability", () => {
+    const tyranids = factions.get("tyranids");
+    expect(tyranids?.raw.faction_rule_ids).toEqual([
+      "shadow-in-the-warp",
+      "synapse",
+    ]);
+
+    for (const ruleId of tyranids!.raw.faction_rule_ids) {
+      expect(abilities.getInFaction(ruleId, "tyranids")?.raw.ability_type).toBe(
+        "faction",
+      );
+    }
+  });
+
   it("deduplicates abilities by (faction_id, id) — every faction's copy retained", () => {
     // A shared ability_id keeps one copy per faction (the copies legitimately
     // diverge); only true within-faction duplicates collapse.
