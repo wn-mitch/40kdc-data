@@ -121,6 +121,7 @@ describe("schema-loader", () => {
       id: "test-faction",
       name: "Test Faction",
       game_version: { edition: "10th", dataslate: "2025-q3" },
+      faction_rule_ids: ["test-rule"],
     });
     expect(valid).toBe(true);
 
@@ -129,6 +130,7 @@ describe("schema-loader", () => {
       id: "INVALID ID",
       name: "Test",
       game_version: { edition: "10th", dataslate: "2025-q3" },
+      faction_rule_ids: ["test-rule"],
     });
     expect(invalid).toBe(false);
   });
@@ -143,6 +145,7 @@ describe("schema-loader", () => {
       id: "test-faction",
       name: "Test Faction",
       game_version: { edition: "11th", dataslate: "test" },
+      faction_rule_ids: ["test-rule"],
     };
     const refs = [
       { namespace: "future-source", id: "record-1" },

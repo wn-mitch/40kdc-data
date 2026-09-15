@@ -1050,9 +1050,11 @@ export interface Faction {
   keywords?: KeywordList;
   aliases?: string[];
   /**
-   * Reference to the faction-wide ability (e.g., Oath of Moment)
+   * References to the faction-wide abilities in display order
+   *
+   * @minItems 1
    */
-  faction_rule_id?: EntityId | null;
+  faction_rule_ids: [EntityId, ...EntityId[]];
   /**
    * URL to the faction's logo/emblem image.
    */

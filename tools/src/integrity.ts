@@ -611,7 +611,7 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   // because a suppression legitimately references another faction's ability
   // (e.g. negating an enemy's Lone Operative); a same-faction check would falsely
   // fail those cross-faction references. faction-rule slugs resolve against the
-  // `faction_rule_id` set declared on the factions.
+  // `faction_rule_ids` set declared on the factions.
   const allAbilityIds = new Set<string>(coreAbilities);
   const abilityIdsByFaction = new Map<string, Set<string>>();
   const abilityRecordsByFaction = new Map<string, Map<string, AbilityLike & { id?: string; effect?: unknown }>>();
@@ -639,8 +639,10 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   const factionRuleIds = new Set<string>();
   for (const f of await glob("core/*/factions.json", { cwd: root, absolute: true })) {
     try {
-      for (const fac of readArray<{ faction_rule_id?: string }>(f)) {
-        if (fac.faction_rule_id) factionRuleIds.add(fac.faction_rule_id);
+      for (const fac of readArray<{ faction_rule_ids: string[] }>(f)) {
+        for (const factionRuleId of fac.faction_rule_ids) {
+          factionRuleIds.add(factionRuleId);
+        }
       }
     } catch {
       // skip unreadable faction files
@@ -735,7 +737,7 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
         } else if (kind === "faction-rule" && !factionRuleIds.has(rule)) {
           errs.push({
             path: `/${i}/effect`,
-            message: `ability "${a.id ?? a.ability_id}": rule-state rule_kind:faction-rule "${rule}" is not a declared faction_rule_id`,
+            message: `ability "${a.id ?? a.ability_id}": rule-state rule_kind:faction-rule "${rule}" is not declared in faction_rule_ids`,
           });
         }
       }

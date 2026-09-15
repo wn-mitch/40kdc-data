@@ -212,12 +212,14 @@
             {/if}
 
             <section id="faction-rule" class="reader-section" aria-labelledby="faction-rule-title">
-              <h2 id="faction-rule-title">Faction Rule</h2>
-              {#if page.factionRule}
-                {@const factionRuleText = sourceDescription(page.factionRule.id, page.factionRule.description)}
-                <div class="rule-card"><h3>{page.factionRule.name}</h3>{#if factionRuleText}<p>{factionRuleText}</p>{/if}</div>
+              <h2 id="faction-rule-title">Faction Rules</h2>
+              {#if page.factionRules.length}
+                {#each page.factionRules as factionRule (factionRule.id)}
+                  {@const factionRuleText = sourceDescription(factionRule.id, factionRule.description)}
+                  <div class="rule-card"><h3>{factionRule.name}</h3>{#if factionRuleText}<p>{factionRuleText}</p>{/if}</div>
+                {/each}
               {:else}
-                <p class="empty-state">No faction rule published for this faction.</p>
+                <p class="empty-state">No faction rules published for this faction.</p>
               {/if}
             </section>
 

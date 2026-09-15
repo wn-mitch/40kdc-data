@@ -14,7 +14,6 @@
     "aliases": [
       "Imperial Agents"
     ],
-    "faction_rule_id": "assigned-agents",
     "logo_url": "https://cdn.jsdelivr.net/gh/Certseeds/wh40k-icon@be230023ff0755d19ffb1a1762658c711c2887f9/src/svgs/human_imperium/imperial-aquila.svg",
     "external_refs": [
       {
@@ -25,6 +24,9 @@
         "namespace": "mfm",
         "id": "2f81671f-3164-4ab0-93c0-4a99746b5996"
       }
+    ],
+    "faction_rule_ids": [
+      "assigned-agents"
     ]
   }
 ]

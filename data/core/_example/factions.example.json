@@ -6,6 +6,7 @@
     "game_version": { "edition": "10th", "dataslate": "2025-q3" },
     "keywords": ["Imperium", "Stellar Wardens"],
     "aliases": ["Wardens"],
+    "faction_rule_ids": ["wardens-oath"],
     "logo_url": "https://example.invalid/logos/stellar-wardens.svg"
   },
   {
@@ -14,7 +15,8 @@
     "parent_faction_id": "stellar-wardens",
     "game_version": { "edition": "10th", "dataslate": "2025-q3" },
     "keywords": ["Imperium", "Stellar Wardens", "Ironclad Company"],
-    "aliases": []
+    "aliases": [],
+    "faction_rule_ids": ["wardens-oath"]
   },
   {
     "id": "void-reapers",
@@ -22,6 +24,7 @@
     "parent_faction_id": null,
     "game_version": { "edition": "10th", "dataslate": "2025-q3" },
     "keywords": ["Chaos", "Void Reapers"],
-    "aliases": ["Reapers"]
+    "aliases": ["Reapers"],
+    "faction_rule_ids": ["void-harvest"]
   }
 ]

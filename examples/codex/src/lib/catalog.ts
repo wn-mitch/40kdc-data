@@ -16,7 +16,7 @@ export interface DirectoryPage {
 export interface FactionPage {
   kind: "faction";
   faction: FactionView;
-  factionRule: ResolvedAbility | undefined;
+  factionRules: ResolvedAbility[];
   units: UnitView[];
   detachments: ResolvedDetachment[];
 }
@@ -25,7 +25,7 @@ export interface UnitPage {
   kind: "unit";
   faction: FactionView;
   unit: UnitView;
-  factionRule: ResolvedAbility | undefined;
+  factionRules: ResolvedAbility[];
   units: UnitView[];
   detachments: ResolvedDetachment[];
 }
@@ -34,7 +34,7 @@ export interface DetachmentPage {
   kind: "detachment";
   faction: FactionView;
   detachment: ResolvedDetachment;
-  factionRule: ResolvedAbility | undefined;
+  factionRules: ResolvedAbility[];
   units: UnitView[];
   detachments: ResolvedDetachment[];
 }
@@ -52,7 +52,9 @@ export type CodexPage =
 
 function factionPageData(faction: FactionView) {
   return {
-    factionRule: resolveAbility(faction.raw.faction_rule_id, faction.id),
+    factionRules: faction.raw.faction_rule_ids
+      .map((ruleId) => resolveAbility(ruleId, faction.id))
+      .filter((rule): rule is ResolvedAbility => rule !== undefined),
     units: [...faction.units].sort((left, right) => left.name.localeCompare(right.name)),
     detachments: detachmentsForFaction(faction.id),
   };

@@ -13,7 +13,6 @@
       "Thousand Sons"
     ],
     "aliases": [],
-    "faction_rule_id": "cabal-of-sorcerers",
     "logo_url": "https://cdn.jsdelivr.net/gh/Certseeds/wh40k-icon@be230023ff0755d19ffb1a1762658c711c2887f9/src/svgs/chaos/legions/thousand-sons.svg",
     "external_refs": [
       {
@@ -24,6 +23,9 @@
         "namespace": "mfm",
         "id": "25d2c58f-59b5-4a4f-b597-495ba322ce07"
       }
+    ],
+    "faction_rule_ids": [
+      "cabal-of-sorcerers"
     ]
   }
 ]
