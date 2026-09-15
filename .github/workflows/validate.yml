@@ -307,7 +307,7 @@ jobs:
           fi
       - name: Publish to npm
         if: steps.check.outputs.publish == 'true'
-        run: cd tools && npm publish --provenance --access public
+        run: cd tools && npm publish --provenance --access public --tag latest
         # npm exchanges this job's GitHub OIDC token for short-lived publish
         # credentials; do not override it with a registry token.
       - name: Tag and create GitHub release
