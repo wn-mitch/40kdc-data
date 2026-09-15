@@ -216,3 +216,11 @@ just preflight fails by design on intended uncommitted generated artifacts, so i
 ## 2026-09-15T00:17:01Z — openai-codex/gpt-5.6-sol
 
 Example-local npm test and check failed because workspace dependencies were absent; the repository requires npm ci at the monorepo root before example validation.
+
+## 2026-09-15T00:30:03Z — openai-codex/gpt-5.6-sol
+
+gh pr merge failed in a jj detached working copy because it tried to determine a current git branch; pass -R owner/repo so the operation does not depend on checkout state.
+
+## 2026-09-15T00:55:38Z — openai-codex/gpt-5.6-sol
+
+Local npm credentials are unavailable, so accidental release cleanup must run through the authenticated GitHub Actions publish environment.
