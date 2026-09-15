@@ -38,35 +38,60 @@ program
   .command("translate")
   .description("Translate ability DSL to plain English")
   .argument("[path]", "Path to abilities.json file")
-  .option("--gw", "Show official GW source text (from data/_audit/reauthor-input/) alongside each ability")
-  .option("--gw-file <path>", "Path to a reauthor-input JSON file (overrides auto-detect)")
-  .action((path, opts) => translateCommand(path, { gw: opts.gw, gwFile: opts.gwFile }));
+  .option(
+    "--gw",
+    "Show source text from the private 40kdc-abilities store alongside each ability",
+  )
+  .option(
+    "--gw-file <path>",
+    "Path to a private source JSON file (overrides auto-detect)",
+  )
+  .action((path, opts) =>
+    translateCommand(path, { gw: opts.gw, gwFile: opts.gwFile }),
+  );
 
 program
   .command("audit-coverage")
-  .description("Audit how much ability data translates into cruncher buffs, per faction")
+  .description(
+    "Audit how much ability data translates into cruncher buffs, per faction",
+  )
   .option("--reporter <mode>", "Output format: pretty or json", "pretty")
   .option("--write", "Also write data/_audit/coverage.json + summary.md", false)
-  .action((opts) => auditCoverageCommand({ reporter: opts.reporter, write: opts.write }));
+  .action((opts) =>
+    auditCoverageCommand({ reporter: opts.reporter, write: opts.write }),
+  );
 
 program
   .command("audit-phrasing")
-  .description("Catalogue every ability's generated English text and flag phrasing defects, per faction")
+  .description(
+    "Catalogue every ability's generated English text and flag phrasing defects, per faction",
+  )
   .option("--reporter <mode>", "Output format: pretty or json", "pretty")
-  .option("--write", "Also write data/_audit/phrasing.csv + phrasing.json", false)
-  .action((opts) => auditPhrasingCommand({ reporter: opts.reporter, write: opts.write }));
+  .option(
+    "--write",
+    "Also write data/_audit/phrasing.csv + phrasing.json",
+    false,
+  )
+  .action((opts) =>
+    auditPhrasingCommand({ reporter: opts.reporter, write: opts.write }),
+  );
 
 program
   .command("import")
   .description("Import a ListForge army-list export into a 40kdc roster")
-  .argument("[input]", "ListForge URL, base64 segment, JSON, or file path (omit/'-' for stdin)")
+  .argument(
+    "[input]",
+    "ListForge URL, base64 segment, JSON, or file path (omit/'-' for stdin)",
+  )
   .option("--reporter <mode>", "Output format: json or pretty", "json")
   .option("--out <file>", "Write roster JSON to a file instead of stdout")
   .action(importCommand);
 
 program
   .command("populate-base-sizes")
-  .description("Populate base_size_mm on units + composition models from the GW base-size guide (+ bevy fallback)")
+  .description(
+    "Populate base_size_mm on units + composition models from the GW base-size guide (+ bevy fallback)",
+  )
   .action(populateBaseSizesCommand);
 
 program.parse();

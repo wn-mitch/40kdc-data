@@ -26,9 +26,9 @@ units.find("Kharn")!.abilities
 
 ## What This Is Not
 
-This is not a database of game rules. Ability text is never stored here — it's replaced by the [Ability DSL](#ability-dsl), a community-authored structured language that expresses what abilities *do* without reproducing copyrighted text.
-
-Stat lines and point costs are included. These are numerical facts, not creative expression.
+This is not a database of source rules prose. Source prose is kept outside the
+public dataset. The package contains structured mechanical representations,
+generated descriptions, stat lines, and point costs.
 
 ## IP Stance
 
@@ -37,8 +37,8 @@ Stat lines and point costs are included. These are numerical facts, not creative
 | Stat lines (M, T, W, Sv, etc.) | Yes | Numerical facts |
 | Point costs | Yes | Numerical facts |
 | Weapon stats (A, S, AP, D) | Yes | Numerical facts |
-| Ability text | **No** | Creative expression — replaced by DSL |
-| Rules text | **No** | Creative expression |
+| Source ability prose | **No** | Kept in private authoring inputs |
+| Source rules prose | **No** | Kept outside the public dataset |
 | Artwork / logos | **No** | Creative IP |
 
 ## Quick Start
@@ -105,7 +105,9 @@ that — but it is the supported entry point for cross-language verification.
 
 ## Ability DSL
 
-Instead of storing ability text, 40kdc builds structured game trees that express what abilities *do*. Game mechanics aren't copyrightable — only their expression is. The DSL is a new expression authored by the community.
+40kdc builds community-authored structured game trees that express what abilities
+do. A deterministic describer renders those trees for consumers; it does not
+consult source prose.
 
 An ability entry composes four primitives:
 

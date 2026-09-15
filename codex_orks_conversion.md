@@ -53,7 +53,7 @@ Counts on `main` before Codex reconciliation:
 | Detachment rules | 14 | 2 detachments have no `detachment_rule_id` |
 | Leader attachments | 19 | Reconcile against current MFM relations |
 | Unit compositions | 58 | Reconcile names, tiers, and model counts |
-| Wargear options | 66 | Resolve 9 records still present in `_wargear-options.unparsed.json` |
+| Wargear options | 66 | Resolve 9 records retained only in the ignored private authoring workspace |
 | Wargear abilities | 11 | Reconcile book changes and ability links |
 | Authored abilities | 159 | Replace stale 10e/provisional mechanics and reach complete Codex coverage |
 | Phase mappings | 194 | Rebuild after the final ability set is stable |
