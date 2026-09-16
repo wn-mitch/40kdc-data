@@ -1,5 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { storeSourceForFaction } from "../src/mfm/extract-source-corpus.js";
+import {
+  storeEntryForFaction,
+  storeSourceForFaction,
+} from "../src/mfm/extract-source-corpus.js";
 import {
   normalizeSourceForDigest,
   sourceDigest,
@@ -221,7 +224,7 @@ describe("source-digest", () => {
 });
 
 describe("storeSourceForFaction", () => {
-  it("accepts only the faction that owns a globally keyed store entry", () => {
+  it("accepts only the faction that owns a store entry", () => {
     const entry = { faction: "grey-knights", raw_text: "Fabricated rule text." };
 
     expect(storeSourceForFaction(entry, "grey-knights")).toBe("Fabricated rule text.");
@@ -239,5 +242,28 @@ describe("storeSourceForFaction", () => {
     expect(
       storeSourceForFaction({ raw_text: "Fabricated unscoped rule." }, "orks"),
     ).toBeNull();
+  });
+});
+
+describe("storeEntryForFaction", () => {
+  it("resolves distinct faction copies of a shared ability id", () => {
+    const store = {
+      orks: {
+        "shared-rule": { faction: "orks", raw_text: "Fabricated Orks rule." },
+      },
+      "tau-empire": {
+        "shared-rule": {
+          faction: "tau-empire",
+          raw_text: "Fabricated T'au rule.",
+        },
+      },
+    };
+
+    expect(storeEntryForFaction(store, "shared-rule", "orks")).toMatchObject({
+      faction: "orks",
+    });
+    expect(storeEntryForFaction(store, "shared-rule", "tau-empire")).toMatchObject({
+      faction: "tau-empire",
+    });
   });
 });

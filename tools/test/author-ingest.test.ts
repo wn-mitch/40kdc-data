@@ -1,5 +1,9 @@
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
+  buildRawTextIndex,
   ingestFaction,
   ingestSnapshot,
   mergeRawTextRecords,
@@ -451,5 +455,40 @@ describe("mergeRawTextRecords (non-destructive store writes)", () => {
   it("never deletes: incoming empty leaves the store intact", () => {
     const existing = [rt("a", "AAA"), rt("b", "BBB")];
     expect(mergeRawTextRecords(existing, [])).toEqual(existing);
+  });
+});
+
+describe("buildRawTextIndex", () => {
+  it("retains same-id records under their owning factions", () => {
+    const store = mkdtempSync(join(tmpdir(), "40kdc-abilities-"));
+    try {
+      writeFileSync(
+        join(store, "orks.json"),
+        JSON.stringify([raw("shared-rule", [], { raw_text: "Fabricated Orks rule." })]),
+      );
+      writeFileSync(
+        join(store, "tau-empire.json"),
+        JSON.stringify([
+          {
+            ...raw("shared-rule", [], { raw_text: "Fabricated T'au rule." }),
+            faction_id: "tau-empire",
+          },
+        ]),
+      );
+
+      expect(buildRawTextIndex(store)).toMatchObject({
+        orks: {
+          "shared-rule": { faction: "orks", raw_text: "Fabricated Orks rule." },
+        },
+        "tau-empire": {
+          "shared-rule": {
+            faction: "tau-empire",
+            raw_text: "Fabricated T'au rule.",
+          },
+        },
+      });
+    } finally {
+      rmSync(store, { recursive: true, force: true });
+    }
   });
 });
