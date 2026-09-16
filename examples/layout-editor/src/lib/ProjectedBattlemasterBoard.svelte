@@ -1,6 +1,7 @@
 <script lang="ts">
   import { resolveLayout } from "@alpaca-software/40kdc-data";
   import type { ResolvedPiece, ResolvedWall, TerrainLayout, TerrainTemplate } from "@alpaca-software/40kdc-data";
+  import { rendersAsWallsOnly } from "../../../_shared/layout-geometry.js";
 
 
   interface Props {
@@ -37,14 +38,16 @@
 >
   <g transform="translate(44 0) rotate(90)">
     {#each resolved as piece, index (`${piece.id ?? piece.name}-${index}`)}
-      <polygon
-        points={points(piece)}
-        class:area={!!piece.id && areaIds.has(piece.id)}
-        class:feature={!piece.id || !areaIds.has(piece.id)}
-        style:--piece-color={featureColor(piece)}
-      >
-        <title>{piece.name ?? piece.id ?? "Battlemaster terrain"}</title>
-      </polygon>
+      {#if !rendersAsWallsOnly(piece)}
+        <polygon
+          points={points(piece)}
+          class:area={!!piece.id && areaIds.has(piece.id)}
+          class:feature={!piece.id || !areaIds.has(piece.id)}
+          style:--piece-color={featureColor(piece)}
+        >
+          <title>{piece.name ?? piece.id ?? "Battlemaster terrain"}</title>
+        </polygon>
+      {/if}
     {/each}
     {#each resolved as piece, pi}
       {#if piece.walls}

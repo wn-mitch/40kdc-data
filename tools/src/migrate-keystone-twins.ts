@@ -37,6 +37,7 @@ import {
   type TerrainTemplate,
   type Vec2,
 } from "./terrain/resolve.js";
+import { isSourceAsymmetricTwinPair } from "./derive-keystones.js";
 
 const BOARD = { width: 60, height: 44 } as const;
 /** Twin pairing tolerance on the point-reflected centroid (matches the editor). */
@@ -200,6 +201,7 @@ export function pairKeystones(
         if (!onCentre) warnings.push(`${label}: no symmetry twin found — pair by hand`);
         continue; // centre pieces are their own mirror; nothing to do
       }
+      if (isSourceAsymmetricTwinPair(layout.id, p.id, t.id)) continue;
       const pv = boardVertices(p, byId);
       const tv = boardVertices(t, byId);
       if (!pv || !tv) {

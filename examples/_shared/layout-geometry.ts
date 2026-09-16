@@ -25,6 +25,11 @@ export interface Vec2 {
 
 export const BOARD = { width: 60, height: 44 } as const;
 
+/** A resolved feature with wall geometry renders as lines, not its floor panel. */
+export function rendersAsWallsOnly(piece: ResolvedPiece): boolean {
+  return piece.piece_type === "feature" && (piece.walls?.length ?? 0) > 0;
+}
+
 export interface DiagramZone {
   player: string;
   color?: string;
