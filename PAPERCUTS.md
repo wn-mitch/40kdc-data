@@ -224,3 +224,15 @@ gh pr merge failed in a jj detached working copy because it tried to determine a
 ## 2026-09-15T00:55:38Z — openai-codex/gpt-5.6-sol
 
 Local npm credentials are unavailable, so accidental release cleanup must run through the authenticated GitHub Actions publish environment.
+
+## 2026-09-15T20:01:25Z — openai-codex/gpt-5.6-sol
+
+A shell glob for optional per-faction artifacts expanded through every data/core child, causing cp to report dozens of expected missing paths after copying valid files. Use an explicit file list or nullglob-capable invocation for heterogeneous trees.
+
+## 2026-09-15T20:04:36Z — openai-codex/gpt-5.6-sol
+
+Running npm test from tools with the repository-relative tools/test path made Vitest find no files because its root is already tools/. Use test/validate.test.ts or validate.test.ts from that workspace.
+
+## 2026-09-15T20:09:55Z — openai-codex/gpt-5.6-sol
+
+npm pack --dry-run --json interleaves prepack lifecycle output with JSON, so piping directly to jq fails and closes stdout, causing the postbuild audit to crash with EPIPE. Run prepack prerequisites separately and use --ignore-scripts for machine-readable inspection.

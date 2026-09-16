@@ -5,8 +5,8 @@
  * conformance-pinned `ability.print()`); this file only handles file loading
  * and per-ability presentation.
  *
- * Pass `--gw` to load the corresponding `data/_audit/reauthor-input/<faction>.json`
- * and display the official GW source text above each generated description.
+ * Pass `--gw` to load source text from the private sibling
+ * `40kdc-abilities` store and display it above each generated description.
  */
 
 import { readFileSync, existsSync } from "node:fs";
@@ -40,8 +40,14 @@ interface Ability {
   applies_to?: AbilityAppliesTo | null;
 }
 
-interface AuditEntry {
-  ability_id: string;
+interface SourceEntry {
+  ability_id?: string;
+  id?: string;
+  raw_text?: string;
+  when?: string;
+  target?: string;
+  effect?: string;
+  restrictions?: string;
   src?: { description?: string };
 }
 
@@ -50,35 +56,54 @@ export interface TranslateOptions {
   gwFile?: string;
 }
 
-/** Load GW source text keyed by ability_id from a reauthor-input file. */
-function loadGwText(abilitiesPath: string, opts: TranslateOptions): Map<string, string> {
-  let auditPath = opts.gwFile;
-  if (!auditPath) {
-    // Auto-detect: infer faction name from the path (e.g. "world-eaters/abilities.json")
+/** Load source text keyed by ability_id from a private source file. */
+function loadGwText(
+  abilitiesPath: string,
+  opts: TranslateOptions,
+): Map<string, string> {
+  let sourcePath = opts.gwFile;
+  if (!sourcePath) {
     const factionDir = basename(dirname(abilitiesPath));
-    auditPath = resolve(REPO_ROOT, "data/_audit/reauthor-input", `${factionDir}.json`);
+    sourcePath = resolve(
+      REPO_ROOT,
+      "..",
+      "40kdc-abilities",
+      `${factionDir}.json`,
+    );
   }
-  if (!existsSync(auditPath)) return new Map();
-  const entries: AuditEntry[] = JSON.parse(readFileSync(auditPath, "utf-8"));
+  if (!existsSync(sourcePath)) return new Map();
+  const entries: SourceEntry[] = JSON.parse(readFileSync(sourcePath, "utf-8"));
   const out = new Map<string, string>();
-  for (const e of entries) {
-    const text = e.src?.description?.trim();
-    if (e.ability_id && text) out.set(e.ability_id, text);
+  for (const entry of entries) {
+    const id = entry.ability_id ?? entry.id;
+    const text =
+      entry.raw_text?.trim() ??
+      entry.src?.description?.trim() ??
+      [entry.when, entry.target, entry.effect, entry.restrictions]
+        .filter(
+          (part): part is string =>
+            typeof part === "string" && part.trim().length > 0,
+        )
+        .join("\n")
+        .trim();
+    if (id && text) out.set(id, text);
   }
   return out;
 }
 
 export async function translateCommand(
   path?: string,
-  opts: TranslateOptions = {}
+  opts: TranslateOptions = {},
 ): Promise<void> {
   const filePath = resolve(
     process.cwd(),
-    path ?? "../data/enrichment/world-eaters/abilities.json"
+    path ?? "../data/enrichment/world-eaters/abilities.json",
   );
   const abilities: Ability[] = JSON.parse(readFileSync(filePath, "utf-8"));
 
-  const gwText = opts.gw ? loadGwText(filePath, opts) : new Map<string, string>();
+  const gwText = opts.gw
+    ? loadGwText(filePath, opts)
+    : new Map<string, string>();
 
   for (const a of abilities) {
     const meta: string[] = [];
@@ -106,12 +131,16 @@ export async function translateCommand(
     );
   }
 
-  const gwCoverage = gwText.size > 0
-    ? `  (${gwText.size}/${abilities.length} have GW source text)`
-    : "";
+  const gwCoverage =
+    gwText.size > 0
+      ? `  (${gwText.size}/${abilities.length} have GW source text)`
+      : "";
   console.log(`\n── ${abilities.length} abilities translated ──${gwCoverage}`);
 }
 
 function indent(text: string, prefix: string): string {
-  return text.split("\n").map((l) => prefix + l).join("\n");
+  return text
+    .split("\n")
+    .map((l) => prefix + l)
+    .join("\n");
 }
