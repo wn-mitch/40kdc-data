@@ -410,9 +410,9 @@ export function projectRawTextRecords(
 
 const STORE_README = `# 40kdc-abilities — raw ability text store
 
-Out-of-repo lookup mapping \`ability_id\` → original raw ability text, written by
-\`40kdc-data\`'s \`author:ingest\`. This pairs each authored Ability DSL entry with
-the source prose it was authored from.
+Out-of-repo lookup mapping \`faction\` and \`ability_id\` → original raw ability
+text, written by \`40kdc-data\`'s \`author:ingest\`. This pairs each authored
+Ability DSL entry with the source prose it was authored from.
 
 This store is its **own git repository**, separate from 40kdc-data. The
 \`author:ingest\` tool runs \`jj git init\` on first use; commit it to version the raw text.
@@ -420,7 +420,7 @@ This store is its **own git repository**, separate from 40kdc-data. The
 **This is GW-copyrighted text — never commit it into 40kdc-data, which tracks
 mechanics only.**
 
-- \`index.json\` — flat \`ability_id → { faction, raw_text }\` for O(1) lookup.
+- \`index.json\` — nested \`faction → ability_id → { faction, raw_text }\` lookup.
 - \`<faction>.json\` — full records (hierarchy + provenance + raw_text) per faction.
 `;
 
@@ -451,6 +451,39 @@ export function mergeRawTextRecords(existing: RawTextRecord[], incoming: RawText
   return Array.from(merged.values());
 }
 
+export function buildRawTextIndex(storeRoot: string = RAW_TEXT_STORE): Record<string, Record<string, Json>> {
+  const index: Record<string, Record<string, Json>> = {};
+  for (const file of readdirSync(storeRoot)) {
+    if (!file.endsWith(".json") || file.startsWith("bundle-") || file === "index.json") continue;
+    let entries: Json;
+    try {
+      entries = readJSON(resolve(storeRoot, file));
+    } catch {
+      continue;
+    }
+    if (!Array.isArray(entries)) continue;
+    const faction = file.replace(/\.json$/, "");
+    for (const entry of entries) {
+      if (!entry.ability_id) continue;
+      const owner = entry.faction_id ?? faction;
+      const factionIndex = index[owner] ??= {};
+      if (entry.ability_type === "stratagem" && (entry.when || entry.effect)) {
+        const indexed: Json = {
+          faction: owner,
+          when: entry.when ?? "",
+          target: entry.target ?? "",
+          effect: entry.effect ?? "",
+        };
+        if (entry.restrictions) indexed.restrictions = entry.restrictions;
+        factionIndex[entry.ability_id] = indexed;
+      } else if (entry.raw_text) {
+        factionIndex[entry.ability_id] = { faction: owner, raw_text: entry.raw_text };
+      }
+    }
+  }
+  return index;
+}
+
 function writeRawTextStore(records: RawTextRecord[], snapshots: ReadonlyMap<string, SnapshotManifest>): void {
   mkdirSync(RAW_TEXT_STORE, { recursive: true });
   ensureStoreRepo();
@@ -474,30 +507,10 @@ function writeRawTextStore(records: RawTextRecord[], snapshots: ReadonlyMap<stri
     writeFileSync(path, JSON.stringify(projected, null, 2) + "\n");
   }
 
-  const index: Record<string, Json> = {};
-  for (const file of readdirSync(RAW_TEXT_STORE)) {
-    if (!file.endsWith(".json") || file.startsWith("bundle-") || file === "index.json") continue;
-    let entries: Json;
-    try {
-      entries = readJSON(resolve(RAW_TEXT_STORE, file));
-    } catch {
-      continue;
-    }
-    if (!Array.isArray(entries)) continue;
-    const faction = file.replace(/\.json$/, "");
-    for (const entry of entries) {
-      if (!entry.ability_id) continue;
-      const owner = entry.faction_id ?? faction;
-      if (entry.ability_type === "stratagem" && (entry.when || entry.effect)) {
-        const indexed: Json = { faction: owner, when: entry.when ?? "", target: entry.target ?? "", effect: entry.effect ?? "" };
-        if (entry.restrictions) indexed.restrictions = entry.restrictions;
-        index[entry.ability_id] = indexed;
-      } else if (entry.raw_text) {
-        index[entry.ability_id] = { faction: owner, raw_text: entry.raw_text };
-      }
-    }
-  }
-  writeFileSync(resolve(RAW_TEXT_STORE, "index.json"), JSON.stringify(index, null, 2) + "\n");
+  writeFileSync(
+    resolve(RAW_TEXT_STORE, "index.json"),
+    JSON.stringify(buildRawTextIndex(), null, 2) + "\n",
+  );
 }
 
 function main(): void {

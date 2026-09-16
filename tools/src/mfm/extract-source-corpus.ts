@@ -284,13 +284,21 @@ function storeSource(entry: Record<string, unknown>): string | null {
 }
 
 /**
- * Read a store entry only for the faction it declares.
+ * Resolve one faction's copy from the raw-text store's composite index.
  *
- * The store is keyed by bare ability id, while the repository permits the same
- * id to diverge across factions. Ignoring the store's faction metadata would
- * fingerprint every duplicate against whichever faction last populated that
- * global key.
+ * The repository permits the same bare ability id to diverge across factions,
+ * so the store retains one entry for each `(faction, ability_id)` pair.
  */
+export function storeEntryForFaction(
+  store: Record<string, Record<string, Record<string, unknown>>>,
+  abilityId: string,
+  factionId: string,
+): Record<string, unknown> | null {
+  const storeFaction = factionId === CORE_FACTION_ID ? "core" : factionId;
+  return store[storeFaction]?.[abilityId] ?? null;
+}
+
+/** Verify an indexed entry's declared owner before using its source text. */
 export function storeSourceForFaction(
   entry: Record<string, unknown>,
   factionId: string,
@@ -365,7 +373,10 @@ function main(): void {
   const storePath = flag("--store", DEFAULT_STORE);
   const outPath = flag("--out", DEFAULT_OUT);
 
-  const store = JSON.parse(fs.readFileSync(storePath, "utf8")) as Record<string, Record<string, unknown>>;
+  const store = JSON.parse(fs.readFileSync(storePath, "utf8")) as Record<
+    string,
+    Record<string, Record<string, unknown>>
+  >;
   const index = buildDumpIndex(loadDump());
   const annotations = loadAnnotations();
 
@@ -374,7 +385,7 @@ function main(): void {
   const unresolved: Annotation[] = [];
 
   for (const annotation of annotations) {
-    const entry = store[annotation.ability_id];
+    const entry = storeEntryForFaction(store, annotation.ability_id, annotation.faction_id);
     let source = entry ? storeSourceForFaction(entry, annotation.faction_id) : null;
     let origin: Origin = "store";
     if (!source) {
