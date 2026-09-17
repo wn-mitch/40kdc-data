@@ -515,19 +515,56 @@ function hierarchyFor(dump: MfmDump, ability: AnyRecord): AbilityState["hierarch
   return { container_type: null, components: [] };
 }
 
+const CORE_DATA = join(REPO, "data", "core");
+
+/**
+ * Every keyword the dataset uses, read once from the faction unit files.
+ *
+ * A hard-coded seven-keyword list was the only source of `keyword_*` questions,
+ * so a keyword gate the source states in a keyword outside that list was never
+ * asked about and could never be constructed. The unit files carry the real
+ * vocabulary (985 keywords), which is the same list a reader of the datasheet
+ * would recognise.
+ */
+let keywordCatalogCache: readonly string[] | null = null;
+
+function keywordCatalog(): readonly string[] {
+  if (keywordCatalogCache) return keywordCatalogCache;
+  const keywords = new Set<string>();
+  for (const entry of readdirSync(CORE_DATA, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const unitsPath = join(CORE_DATA, entry.name, "units.json");
+    if (!existsSync(unitsPath)) continue;
+    for (const unit of readJson<AnyRecord[]>(unitsPath)) {
+      for (const field of ["keywords", "faction_keywords"]) {
+        for (const keyword of (unit[field] as unknown[] | undefined) ?? []) {
+          if (typeof keyword === "string" && keyword.trim()) keywords.add(keyword.trim().toUpperCase());
+        }
+      }
+    }
+  }
+  keywordCatalogCache = [...keywords].sort((left, right) => right.length - left.length);
+  return keywordCatalogCache;
+}
+
+/** Compile the catalog into one alternation, longest first so a compound
+ *  keyword wins over its own prefix (`Epic Hero` before `Hero`). */
+function keywordMatcher(): RegExp {
+  const alternatives = keywordCatalog().map((keyword) => keyword.replaceAll(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  return new RegExp(`(?<![\\w'])(?:${alternatives.join("|")})(?![\\w'])`, "gi");
+}
+
 function literals(source: string): AbilityState["literal_candidates"] {
   const integers = [...new Set([...source.matchAll(/\b\d+\b/g)].map((match) => Number(match[0])))].sort((a, b) => a - b);
   const dice = [...new Set([...source.matchAll(/\b(?:\d+)?D\d+\b/gi)].map((match) => match[0].toUpperCase()))];
   const distances = [...new Set([...source.matchAll(/\b(\d+)\s*(?:"|inches?)/gi)].map((match) => Number(match[1])))].sort((a, b) => a - b);
-  const keywordVocabulary = [
-    "ORKS", "WALKER", "TITANIC", "BEAST SNAGGA", "MONSTER", "VEHICLE", "BATTLE-SHOCKED",
-  ];
-  const upper = source.toUpperCase();
+  const named = new Set<string>();
+  for (const match of source.matchAll(keywordMatcher())) named.add(match[0].toUpperCase());
   return {
     integers,
     dice,
     distances_inches: distances,
-    named_keywords: keywordVocabulary.filter((keyword) => upper.includes(keyword)),
+    named_keywords: [...named].sort(),
   };
 }
 
@@ -757,6 +794,25 @@ export function genericDecompositionQuestions(
       "selection-then-effect": null,
       other: null,
     }),
+    turn_is_your: noul({
+      task: "Does the source name the controlling player's own turn as a condition of the rule?",
+      true: "The source says my turn / your turn (or names a phase in a way that only your turn satisfies) as a condition.",
+      false: "The source does not name whose turn gates the rule, or it states that either player's turn satisfies it. Do not infer a turn from the phase alone.",
+    }),
+    turn_is_opponent: noul({
+      task: "Does the source name the opposing player's turn as a condition of the rule?",
+      true: "The source says the opponent's turn / their turn as a condition.",
+      false: "The source does not name the opponent's turn, or it states that either player's turn satisfies it.",
+    }),
+    recipient: choice("Which entity does the operative effect apply to?", {
+      "this-model": null,
+      "this-unit": null,
+      "selected-unit": null,
+      "attacking-enemy": null,
+      "triggering-unit": null,
+      "all-friendly": null,
+      "all-enemy": null,
+    }),
   };
 
   if (broadAnswers.has_trigger === 1) {
@@ -819,6 +875,8 @@ export function genericDecompositionQuestions(
         W: null,
         Ld: null,
         OC: null,
+        AP: null,
+        D: null,
         other: null,
       });
       questions.effect_operation = choice("What operation is applied to that characteristic?", {
@@ -1075,6 +1133,10 @@ export function verificationQuestions(abilityId: CohortAbilityId): Questions {
       true: "Every operative effect, condition, timing rule, target, and quantity is equivalent. Normalized wording may make an implicit passive duration or subject explicit.",
       false: "At least one gameplay consequence is absent, wrong, or broadened.",
     }),
+    preserves_effects: noul("Do the candidate representations state every operative effect the source states?"),
+    preserves_conditions: noul("Do the candidate representations state every eligibility condition, restriction, and gate the source states?"),
+    preserves_quantities: noul("Do the candidate representations state every numeric quantity and die expression the source states?"),
+    preserves_recipients: noul("Do the candidate representations apply each effect to the same recipient the source names?"),
     missing_effect: noul("Does the source contain an operative gameplay effect absent from both candidate representations?"),
     missing_condition: noul("Does the source contain an eligibility condition or restriction absent from both candidate representations?"),
     missing_timing_or_usage: noul("Does the source contain timing or usage semantics absent from both candidate representations? Ignore an explicit battle duration for a passive datasheet rule whose source is implicitly always active."),
@@ -1223,9 +1285,11 @@ const ABSENCE_IS_AN_ANSWER = new Set([
   "semantic_timing",
   "condition_relation",
   "selection_reference",
+  "recipient",
 ]);
 
-const SLOT_OF_REFINEMENT = /^refine_\d+__(.+?)__/;
+/** `refine_<stage>__<slot>__<slugified option>`, the refinement question id form. */
+const SLOT_OF_REFINEMENT = /^refine_\d+__(.+?)__(.+)$/;
 
 /** Map a question id to the slot it belongs to; refined propositions map back. */
 export function slotOf(questionId: string): string {
@@ -1610,13 +1674,795 @@ function constructFallbackHazard(current: AnyRecord, claims: CandidateClaim[]): 
   }));
 }
 
-function constructed(claims: CandidateClaim[], consumed: string[], candidate: AnyRecord): ConstructionResult {
-  const consumedSet = new Set(consumed);
-  const unconsumed = claims.filter((claim) => !consumedSet.has(claim.id)).map((claim) => claim.id);
-  return { status: "constructed", candidate, consumed_claim_ids: consumed, unconsumed_claim_ids: unconsumed, findings: [] };
+/* ==========================================================================
+ * Family registry
+ * ==========================================================================
+ *
+ * Construction used to dispatch on ability id, so only the four abilities a
+ * human had written a constructor for could be constructed at all; the other
+ * 241 reported one aggregate `unsupported family` string and nothing else.
+ * This registry dispatches on the pair the classifier already emits —
+ * (composition, primary_effect) — and every constructor reads the same
+ * decomposition slots, so a family is covered once rather than per ability.
+ *
+ * Two rules keep a family constructor honest:
+ *
+ *   1. It authors only what a settled slot determines. An undetermined slot is
+ *      reported, never defaulted — a guessed recipient is precisely the
+ *      `wrong-recipient` defect the round trip exists to catch.
+ *   2. Every claim it evaluated is either consumed (its slot decided the
+ *      output) or left in `unconsumed_claim_ids` beside a finding naming the
+ *      slot that blocked it, so an incomplete candidate is a worklist item
+ *      instead of an opaque failure.
+ */
+
+/**
+ * Option names whose refinement slug is lossy because `slugify` lowercases
+ * them. Every other option survives the round trip through `_` -> `-`.
+ */
+const SLOT_OPTION_VOCABULARY: Record<string, readonly string[]> = {
+  effect_stat: ["M", "A", "S", "T", "Sv", "W", "Ld", "OC", "AP", "D"],
+};
+
+function optionFromSlug(slot: string, slug: string): string {
+  if (slug === "truth") return "true";
+  const canonical = SLOT_OPTION_VOCABULARY[slot]?.find((option) => slugify(option) === slug);
+  return canonical ?? slug.replaceAll("_", "-");
 }
 
-function incomplete(claims: CandidateClaim[], gate: { consumed: string[]; findings: string[] }): ConstructionResult {
+export type SlotReading = {
+  slot: string;
+  /** Settled options. Several may hold at once; that is what refinement buys. */
+  options: string[];
+  /** Every claim evaluated for this slot, relied on or not. */
+  claim_ids: string[];
+  evidence: "refined" | "direct" | "selected" | "undetermined";
+  /** Support behind the reading, so a thin one can be reported. */
+  probability: number | null;
+  /** Proposition slots answer true or false; not-settled-true is a value
+   *  ("the rule does not say this"), not a missing answer. */
+  proposition: boolean;
+};
+
+/**
+ * Below a coin flip there is no leading candidate to fall back to, and the slot
+ * is reported as undetermined rather than answered by noise.
+ */
+const SELECTION_FLOOR = 0.5;
+
+/**
+ * Read each decomposition slot's settled value.
+ *
+ * A refined slot is read from its propositions, because a forced choice cannot
+ * express a value that satisfies two options at once (design law 2). A slot
+ * that was never refined is read from its own answer.
+ *
+ * When no proposition clears the threshold the slot still has a leading option —
+ * the negatives settle while the affirmative sits in the ambiguous band, which
+ * is the ordinary outcome for a slot whose options co-occur in one clause
+ * (design law 5). That option is carried with its probability and marked
+ * `selected`, so a constructor reads the selection rather than the threshold and
+ * reports how thin the support was. A slot whose best option cannot reach the
+ * floor stays `undetermined`: absent evidence is not evidence.
+ */
+export function readSlots(
+  claims: readonly CandidateClaim[],
+  threshold: number = ACCEPTANCE_CONFIDENCE,
+): Map<string, SlotReading> {
+  const direct = new Map<string, CandidateClaim>();
+  for (const claim of claims) {
+    if (!SLOT_OF_REFINEMENT.test(claim.question_id)) direct.set(claim.question_id, claim);
+  }
+
+  const readings = new Map<string, SlotReading>();
+  const affirmative = new Map<string, { option: string; probability: number }[]>();
+  for (const claim of claims) {
+    const match = SLOT_OF_REFINEMENT.exec(claim.question_id);
+    if (!match) continue;
+    const slot = match[1];
+    const reading = readings.get(slot)
+      ?? { slot, options: [], claim_ids: [], evidence: "refined" as const, probability: null, proposition: false };
+    reading.claim_ids.push(claim.id);
+    if (claim.value === 1) {
+      const option = optionFromSlug(slot, match[2]);
+      affirmative.set(slot, [...(affirmative.get(slot) ?? []), { option, probability: claim.probability }]);
+      if (claim.probability >= threshold) {
+        reading.options.push(option);
+        reading.probability = claim.probability;
+      }
+    }
+    readings.set(slot, reading);
+  }
+
+  for (const [slot, claim] of direct) {
+    const refined = readings.get(slot);
+    if (refined) {
+      refined.claim_ids.push(claim.id);
+      continue;
+    }
+    if (typeof claim.value === "number") {
+      // Proposition slots: only a settled true contributes a value. A settled
+      // false is the answer "this does not hold", which is absence rather than
+      // a value to read.
+      const settledTrue = claim.probability >= threshold && claim.value === 1;
+      readings.set(slot, {
+        slot,
+        options: settledTrue ? ["true"] : [],
+        claim_ids: [claim.id],
+        evidence: claim.probability >= threshold ? "direct" : "undetermined",
+        probability: claim.probability,
+        proposition: true,
+      });
+      continue;
+    }
+    if (typeof claim.value !== "string") continue;
+    const supported = claim.probability >= SELECTION_FLOOR;
+    readings.set(slot, {
+      slot,
+      options: supported ? [claim.value] : [],
+      claim_ids: [claim.id],
+      evidence: claim.probability >= threshold ? "direct" : supported ? "selected" : "undetermined",
+      probability: claim.probability,
+      proposition: false,
+    });
+  }
+
+  for (const [slot, reading] of readings) {
+    if (reading.options.length > 0) continue;
+    const base = direct.get(slot);
+    const candidates = [
+      ...(affirmative.get(slot) ?? []),
+      ...(base && typeof base.value === "string"
+        ? [{ option: base.value, probability: base.probability }]
+        : []),
+    ];
+    const best = candidates.reduce<{ option: string; probability: number } | null>(
+      (leader, candidate) => (!leader || candidate.probability > leader.probability ? candidate : leader),
+      null,
+    );
+    if (best && best.probability >= SELECTION_FLOOR) {
+      reading.options = [best.option];
+      reading.evidence = "selected";
+      reading.probability = best.probability;
+    } else if (reading.evidence === "refined") {
+      reading.evidence = "undetermined";
+    }
+  }
+  return readings;
+}
+
+/** Findings for slots answered from a leading option rather than a settled one. */
+function fallbackFindings(
+  readings: Map<string, SlotReading>,
+  slots: readonly string[],
+): string[] {
+  return [...new Set(slots)]
+    .filter((slot) => readings.get(slot)?.evidence === "selected")
+    .map((slot) => {
+      const reading = readings.get(slot)!;
+      return `${slot}: nothing settled; used the leading option `
+        + `${reading.options[0]} (${(reading.probability ?? 0).toFixed(2)})`;
+    });
+}
+
+function slotOptions(readings: Map<string, SlotReading>, slot: string): string[] {
+  return readings.get(slot)?.options ?? [];
+}
+
+function slotClaims(readings: Map<string, SlotReading>, slots: readonly string[]): string[] {
+  return [...new Set(slots.flatMap((slot) => readings.get(slot)?.claim_ids ?? []))];
+}
+
+/** One finding per slot that was asked and produced nothing, so an incomplete
+ *  candidate names every question a human has to answer rather than one
+ *  aggregate string. A slot the packet never asked (because its gate answer was
+ *  confidently false) is silent: it is not a question waiting to be answered. */
+function blockingFindings(
+  readings: Map<string, SlotReading>,
+  slots: readonly string[],
+): string[] {
+  return slots
+    .filter((slot) => readings.has(slot))
+    .filter((slot) => slotOptions(readings, slot).length === 0)
+    // A proposition that is not settled true is the answer "the rule does not
+    // state this", so it too is not a question waiting to be answered.
+    .filter((slot) => !readings.get(slot)?.proposition)
+    .map((slot) => `${slot}: no settled option (${readings.get(slot)?.evidence ?? "not asked"})`);
+}
+
+type LiteralReading = {
+  value: string | number;
+  question_id: string;
+  options: string[];
+  claim_ids: string[];
+};
+
+/**
+ * Literal-role slots (`integer_4`, `distance_8`, `keyword_ORKS`, ...) are named
+ * after the value they ask about, so the question id is recomputed from the
+ * state rather than parsed back out of the slug.
+ */
+function literalReadings(
+  readings: Map<string, SlotReading>,
+  state: AbilityState | null,
+  kind: "integer" | "dice" | "distance" | "keyword",
+): LiteralReading[] {
+  if (!state) return [];
+  const values: (string | number)[] =
+    kind === "integer" ? state.literal_candidates.integers
+      : kind === "dice" ? state.literal_candidates.dice
+        : kind === "distance" ? state.literal_candidates.distances_inches
+          : state.literal_candidates.named_keywords;
+  return values.map((value) => {
+    const questionId = literalQuestionId(kind, value);
+    const reading = readings.get(questionId);
+    return {
+      value,
+      question_id: questionId,
+      options: reading?.options ?? [],
+      claim_ids: reading?.claim_ids ?? [],
+    };
+  });
+}
+
+/**
+ * Slot option -> condition operand. Every entry is the source-literal reading
+ * of one slot option; nothing here infers a gate the slot did not report.
+ */
+const TRIGGER_OPERAND: Record<string, () => AnyRecord> = {
+  "selected-to-shoot": () => ({ type: "phase-is", parameters: { phase: "shooting" } }),
+  "selected-to-fight": () => ({ type: "phase-is", parameters: { phase: "fight" } }),
+  "phase-start": () => ({ type: "timing-is", parameters: { timing: "start-of-phase" } }),
+  "phase-end": () => ({ type: "timing-is", parameters: { timing: "end-of-phase" } }),
+  "move-ended": () => ({ type: "timing-is", parameters: { timing: "end-of-normal-move" } }),
+};
+
+const SEMANTIC_TIMING_OPERAND: Record<string, () => AnyRecord> = {
+  "phase-start": () => ({ type: "timing-is", parameters: { timing: "start-of-phase" } }),
+  "phase-end": () => ({ type: "timing-is", parameters: { timing: "end-of-phase" } }),
+  "move-ended": () => ({ type: "timing-is", parameters: { timing: "end-of-normal-move" } }),
+};
+
+const TURN_OPERANDS: Record<string, () => AnyRecord> = {
+  turn_is_your: () => ({ type: "player-turn-is", parameters: { turn: "your" } }),
+  turn_is_opponent: () => ({ type: "player-turn-is", parameters: { turn: "opponent" } }),
+};
+
+const KEYWORD_OPERAND: Record<string, (keyword: string) => AnyRecord> = {
+  "bearer-eligibility": (keyword) => ({ type: "unit-has-keyword", parameters: { keyword } }),
+  "subject-eligibility": (keyword) => ({ type: "unit-has-keyword", parameters: { keyword } }),
+  condition: (keyword) => ({ type: "unit-has-keyword", parameters: { keyword } }),
+  "target-eligibility": (keyword) => ({ type: "target-has-keyword", parameters: { keyword } }),
+  "target-exclusion": (keyword) => ({
+    operator: "not",
+    operands: [{ type: "target-has-keyword", parameters: { keyword } }],
+  }),
+};
+
+/** Slots the condition compiler reads. A family whose source gates on one of
+ *  these and reports nothing has an extraction gap, not an ontology gap. */
+const CONDITION_SLOTS = [
+  "trigger_event",
+  "semantic_timing",
+  "turn_is_your",
+  "turn_is_opponent",
+  "condition_relation",
+] as const;
+
+type ConditionCompilation = {
+  condition: AnyRecord | null;
+  claim_ids: string[];
+  findings: string[];
+};
+
+function compileCondition(
+  readings: Map<string, SlotReading>,
+  state: AbilityState | null,
+): ConditionCompilation {
+  const operands: AnyRecord[] = [];
+  const used: string[] = [];
+  const seen = new Set<string>();
+  const add = (node: AnyRecord | null, slot: string): void => {
+    if (!node) return;
+    const key = canonical(node);
+    if (seen.has(key)) return;
+    seen.add(key);
+    operands.push(node);
+    used.push(slot);
+  };
+
+  for (const option of slotOptions(readings, "trigger_event")) {
+    add(TRIGGER_OPERAND[option]?.() ?? null, "trigger_event");
+  }
+  for (const option of slotOptions(readings, "semantic_timing")) {
+    add(SEMANTIC_TIMING_OPERAND[option]?.() ?? null, "semantic_timing");
+  }
+  for (const [slot, build] of Object.entries(TURN_OPERANDS)) {
+    if (slotOptions(readings, slot).includes("true")) add(build(), slot);
+  }
+  for (const literal of literalReadings(readings, state, "keyword")) {
+    for (const option of literal.options) {
+      add(KEYWORD_OPERAND[option]?.(String(literal.value)) ?? null, literal.question_id);
+    }
+  }
+  for (const literal of literalReadings(readings, state, "distance")) {
+    if (!literal.options.includes("selection-range")) continue;
+    add({ type: "unit-within-range-of", parameters: { range: literal.value } }, literal.question_id);
+  }
+
+  const condition = operands.length === 0
+    ? null
+    : operands.length === 1 ? operands[0] : { operator: "and", operands };
+  return {
+    condition,
+    claim_ids: slotClaims(readings, [...new Set(used)]),
+    findings: [...fallbackFindings(readings, used), ...blockingFindings(readings, CONDITION_SLOTS)],
+  };
+}
+
+/** `recipient` option -> effect target. The names are the describer's subjects:
+ *  `self` is the bearer model, `unit` its unit, `target` the enemy it acts on. */
+const RECIPIENT_TARGET: Record<string, string> = {
+  "this-model": "self",
+  "this-unit": "unit",
+  "attacking-enemy": "target",
+  "triggering-unit": "triggering-unit",
+  "all-friendly": "all-friendly",
+  "all-enemy": "all-enemy",
+};
+
+type RecipientReading = {
+  target: string | null;
+  claim_ids: string[];
+  finding: string | null;
+};
+
+/** The slot a composition reads its recipient from, for fallback reporting. */
+function recipientSlots(context: LeafContext): string[] {
+  return context.composition === "selection" ? ["selection_owner"] : ["recipient"];
+}
+
+/**
+ * The effect's recipient. Inside a `selection` composition the selected unit is
+ * the recipient, so the side of the selection decides it and `recipient` is not
+ * consulted; everywhere else the `recipient` slot does.
+ */
+function recipientTarget(
+  readings: Map<string, SlotReading>,
+  composition: string | null,
+): RecipientReading {
+  const owner = slotOptions(readings, "selection_owner")[0];
+  if (composition === "selection" && owner) {
+    return {
+      target: owner === "enemy" ? "defender" : "unit",
+      claim_ids: slotClaims(readings, ["selection_owner"]),
+      finding: null,
+    };
+  }
+  const recipient = slotOptions(readings, "recipient")[0];
+  const target = recipient ? RECIPIENT_TARGET[recipient] : undefined;
+  if (!target) {
+    return {
+      target: null,
+      claim_ids: slotClaims(readings, ["recipient"]),
+      finding: "recipient: no settled recipient to apply the effect to",
+    };
+  }
+  return { target, claim_ids: slotClaims(readings, ["recipient"]), finding: null };
+}
+
+const ROLL_KIND: Record<string, string> = {
+  hit: "hit",
+  wound: "wound",
+  save: "save",
+  charge: "charge",
+  advance: "advance",
+  leadership: "leadership",
+};
+
+const STAT_OPERATION: Record<string, string> = { add: "add", subtract: "subtract", set: "set" };
+const ROLL_OPERATION: Record<string, string> = {
+  add: "add",
+  subtract: "subtract",
+  "ignore-modifiers": "ignore-modifiers",
+};
+
+type EffectCompilation = {
+  effect: AnyRecord | null;
+  claim_ids: string[];
+  findings: string[];
+};
+
+/**
+ * The modifier's magnitude. Exactly one integer may claim the `modifier-value`
+ * role; zero or several is undetermined, and a default of 1 would be an
+ * invented quantity.
+ */
+function modifierValue(
+  readings: Map<string, SlotReading>,
+  state: AbilityState | null,
+): { value: number | null; claim_ids: string[]; finding: string | null } {
+  const candidates = literalReadings(readings, state, "integer")
+    .filter((literal) => literal.options.includes("modifier-value"));
+  if (candidates.length === 1) {
+    return { value: Number(candidates[0].value), claim_ids: candidates[0].claim_ids, finding: null };
+  }
+  return {
+    value: null,
+    claim_ids: candidates.flatMap((literal) => literal.claim_ids),
+    finding: candidates.length === 0
+      ? "modifier-value: no integer is settled as the modifier magnitude"
+      : `modifier-value: ${candidates.length} integers claim the role, so the magnitude is ambiguous`,
+  };
+}
+
+type LeafContext = {
+  readings: Map<string, SlotReading>;
+  state: AbilityState | null;
+  composition: string | null;
+};
+
+function compileRollModifier(context: LeafContext): EffectCompilation {
+  const { readings, state } = context;
+  const roll = slotOptions(readings, "effect_roll")[0];
+  const operation = slotOptions(readings, "effect_operation")[0];
+  const findings: string[] = [
+    ...fallbackFindings(readings, ["effect_roll", "effect_operation", ...recipientSlots(context)]),
+  ];
+  const kind = roll ? ROLL_KIND[roll] : undefined;
+  if (!roll) findings.push(...blockingFindings(readings, ["effect_roll"]));
+  else if (!kind) findings.push(`effect_roll: ${roll} does not name a roll that can be modified`);
+  const applied = operation ? ROLL_OPERATION[operation] : undefined;
+  if (!operation) findings.push(...blockingFindings(readings, ["effect_operation"]));
+  else if (!applied) {
+    findings.push(operation === "reroll"
+      // `re-roll` needs `subset` (ones | all-failures) and no slot reports it,
+      // so the operation is reported rather than defaulted to one of them.
+      ? "effect_operation: reroll needs a re-roll subset, which no slot reports"
+      : `effect_operation: ${operation} does not name a supported roll operation`);
+  }
+  const recipient = recipientTarget(readings, context.composition);
+  if (recipient.finding) findings.push(recipient.finding);
+  if (!kind || !applied || !recipient.target) {
+    return { effect: null, claim_ids: [...recipient.claim_ids], findings };
+  }
+  const modifier: AnyRecord = { roll: kind, operation: applied };
+  const claimIds = [...slotClaims(readings, ["effect_roll", "effect_operation"]), ...recipient.claim_ids];
+  if (applied !== "ignore-modifiers") {
+    const magnitude = modifierValue(readings, state);
+    if (magnitude.finding) {
+      return { effect: null, claim_ids: [...claimIds, ...magnitude.claim_ids], findings: [...findings, magnitude.finding] };
+    }
+    modifier.value = magnitude.value;
+    claimIds.push(...magnitude.claim_ids);
+  }
+  return {
+    effect: { type: "roll-modifier", target: recipient.target, modifier },
+    claim_ids: claimIds,
+    findings,
+  };
+}
+
+function compileStatModifier(context: LeafContext): EffectCompilation {
+  const { readings, state } = context;
+  const stat = slotOptions(readings, "effect_stat")[0];
+  const operation = slotOptions(readings, "effect_operation")[0];
+  const findings: string[] = [
+    ...fallbackFindings(readings, ["effect_stat", "effect_operation", ...recipientSlots(context)]),
+  ];
+  const modified = stat && SLOT_OPTION_VOCABULARY.effect_stat.includes(stat) ? stat : undefined;
+  if (!stat) findings.push(...blockingFindings(readings, ["effect_stat"]));
+  else if (!modified) findings.push(`effect_stat: ${stat} does not name a modifiable characteristic`);
+  const applied = operation ? STAT_OPERATION[operation] : undefined;
+  if (!operation) findings.push(...blockingFindings(readings, ["effect_operation"]));
+  else if (!applied) {
+    findings.push(`effect_operation: ${operation} does not name a supported characteristic operation`);
+  }
+  const recipient = recipientTarget(readings, context.composition);
+  if (recipient.finding) findings.push(recipient.finding);
+  if (!modified || !applied || !recipient.target) {
+    return { effect: null, claim_ids: [...recipient.claim_ids], findings };
+  }
+  const magnitude = modifierValue(readings, state);
+  if (magnitude.finding) {
+    return {
+      effect: null,
+      claim_ids: [...recipient.claim_ids, ...magnitude.claim_ids],
+      findings: [...findings, magnitude.finding],
+    };
+  }
+  return {
+    effect: {
+      type: "stat-modifier",
+      target: recipient.target,
+      modifier: { stat: modified, operation: applied, value: magnitude.value },
+    },
+    claim_ids: [
+      ...slotClaims(readings, ["effect_stat", "effect_operation"]),
+      ...magnitude.claim_ids,
+      ...recipient.claim_ids,
+    ],
+    findings,
+  };
+}
+
+function compileKeywordGrant(context: LeafContext): EffectCompilation {
+  const { readings, state } = context;
+  const findings: string[] = [
+    ...fallbackFindings(readings, ["keyword_grant_subject", ...recipientSlots(context)]),
+  ];
+  const subject = slotOptions(readings, "keyword_grant_subject")[0];
+  if (!subject) findings.push(...blockingFindings(readings, ["keyword_grant_subject"]));
+  const granted = literalReadings(readings, state, "keyword")
+    .filter((literal) => literal.options.includes("granted-effect"));
+  if (granted.length === 0) {
+    findings.push("keyword: no keyword is settled as granted, so there is nothing to grant");
+  }
+  const recipient = recipientTarget(readings, context.composition);
+  if (recipient.finding) findings.push(recipient.finding);
+  if (!subject || granted.length === 0 || !recipient.target) {
+    return { effect: null, claim_ids: [...recipient.claim_ids], findings };
+  }
+  return {
+    effect: {
+      type: "keyword-grant",
+      target: recipient.target,
+      modifier: { keywords: granted.map((literal) => String(literal.value)) },
+    },
+    claim_ids: [
+      ...slotClaims(readings, ["keyword_grant_subject"]),
+      ...granted.flatMap((literal) => literal.claim_ids),
+      ...recipient.claim_ids,
+    ],
+    findings,
+  };
+}
+
+function compileMortalWounds(context: LeafContext): EffectCompilation {
+  const { readings, state } = context;
+  const findings: string[] = [
+    ...fallbackFindings(readings, ["mortal_wound_resolution", ...recipientSlots(context)]),
+  ];
+  const resolution = slotOptions(readings, "mortal_wound_resolution")[0];
+  const recipient = recipientTarget(readings, context.composition);
+  if (recipient.finding) findings.push(recipient.finding);
+  const claimIds = [...recipient.claim_ids];
+  let count: string | number | null = null;
+
+  if (resolution === "dice") {
+    const dice = literalReadings(readings, state, "dice").filter((literal) => literal.options.includes("effect-amount"));
+    if (dice.length === 1) {
+      count = String(dice[0].value);
+      claimIds.push(...dice[0].claim_ids);
+    } else findings.push(`effect-amount: ${dice.length} dice claim the mortal-wound amount`);
+  } else if (resolution === "fixed") {
+    const fixed = literalReadings(readings, state, "integer").filter((literal) => literal.options.includes("count"));
+    if (fixed.length === 1) {
+      count = String(fixed[0].value);
+      claimIds.push(...fixed[0].claim_ids);
+    } else findings.push(`count: ${fixed.length} integers claim the mortal-wound count`);
+  } else {
+    findings.push(...blockingFindings(readings, ["mortal_wound_resolution"]));
+    if (resolution) findings.push(`mortal_wound_resolution: ${resolution} is not composable from the settled slots`);
+  }
+
+  if (count === null || !recipient.target) {
+    return { effect: null, claim_ids: claimIds, findings };
+  }
+  const wounds: AnyRecord = { type: "mortal-wounds", target: recipient.target, modifier: { count } };
+  const usedSlots = ["mortal_wound_resolution"];
+
+  // A die that the slot calls a `test-roll` gates the wounds rather than
+  // measuring them. Emitting the bare mortal-wounds node would flatten the test
+  // into an unconditional effect, which changes play rather than wording.
+  const tests = literalReadings(readings, state, "dice")
+    .filter((literal) => literal.options.includes("test-roll"));
+  if (tests.length > 0) {
+    const thresholds = literalReadings(readings, state, "integer")
+      .filter((literal) => literal.options.includes("threshold"));
+    if (tests.length !== 1 || thresholds.length !== 1) {
+      findings.push(
+        `test-roll: ${tests.length} dice and ${thresholds.length} thresholds claim the mortal-wound test, `
+        + "so the gate cannot be assembled",
+      );
+      return { effect: null, claim_ids: claimIds, findings };
+    }
+    usedSlots.push(tests[0].question_id, thresholds[0].question_id);
+    return {
+      effect: {
+        type: "dice-gated",
+        dice: String(tests[0].value),
+        threshold: Number(thresholds[0].value),
+        comparison: "gte",
+        on_success: wounds,
+        on_fail: null,
+      },
+      claim_ids: [
+        ...slotClaims(readings, usedSlots),
+        ...tests[0].claim_ids,
+        ...thresholds[0].claim_ids,
+        ...claimIds,
+      ],
+      findings: [...findings, ...fallbackFindings(readings, [tests[0].question_id, thresholds[0].question_id])],
+    };
+  }
+
+  return {
+    effect: wounds,
+    claim_ids: [...slotClaims(readings, usedSlots), ...claimIds],
+    findings,
+  };
+}
+
+const EFFECT_BUILDERS: Record<string, (context: LeafContext) => EffectCompilation> = {
+  "roll-modifier": compileRollModifier,
+  "stat-modifier": compileStatModifier,
+  "keyword-grant": compileKeywordGrant,
+  "mortal-wounds": compileMortalWounds,
+};
+
+const CARDINALITY: Record<string, AnyRecord> = {
+  one: { count: 1 },
+  "up-to-one": { max_count: 1 },
+};
+
+/** `selection_owner`/`selection_cardinality`/`selection_reference` -> selector. */
+function compileSelector(
+  readings: Map<string, SlotReading>,
+  state: AbilityState | null,
+): { selector: AnyRecord | null; claim_ids: string[]; findings: string[] } {
+  const owner = slotOptions(readings, "selection_owner")[0];
+  const cardinality = slotOptions(readings, "selection_cardinality")[0];
+  const reference = slotOptions(readings, "selection_reference")[0];
+  const findings: string[] = [
+    ...fallbackFindings(readings, ["selection_owner", "selection_cardinality", "selection_reference"]),
+  ];
+  const bounds = cardinality ? CARDINALITY[cardinality] : undefined;
+  if (!owner) findings.push(...blockingFindings(readings, ["selection_owner"]));
+  if (!bounds) {
+    findings.push(`selection_cardinality: ${cardinality ?? "no settled option"} has no selector bound`);
+  }
+  if (!reference || !["model", "unit"].includes(reference)) {
+    findings.push(`selection_reference: ${reference ?? "no settled option"} does not name a selectable kind`);
+  }
+  if (!owner || !bounds || !reference || !["model", "unit"].includes(reference)) {
+    return { selector: null, claim_ids: [], findings };
+  }
+  const selector: AnyRecord = { owner, target_kind: reference, ...bounds };
+  const distances = literalReadings(readings, state, "distance")
+    .filter((literal) => literal.options.includes("selection-range"));
+  if (distances.length === 1) selector.range_inches = distances[0].value;
+  const visibility = slotOptions(readings, "selection_requires_visibility").includes("true");
+  if (visibility) selector.visibility_required = true;
+  return {
+    selector,
+    claim_ids: [
+      ...slotClaims(readings, ["selection_owner", "selection_cardinality", "selection_reference"]),
+      ...distances.flatMap((literal) => literal.claim_ids),
+      ...slotClaims(readings, ["selection_requires_visibility"]),
+    ],
+    findings,
+  };
+}
+
+/** The answer the classifier selected for a broad question, as text. */
+function broadValue(claims: readonly CandidateClaim[], questionId: string): string | null {
+  const claim = claims.find((candidate) => candidate.question_id === questionId);
+  return claim === undefined ? null : String(claim.value);
+}
+
+type FamilyContext = {
+  abilityId: CohortAbilityId;
+  current: AnyRecord;
+  claims: readonly CandidateClaim[];
+  state: AbilityState | null;
+  readings: Map<string, SlotReading>;
+};
+
+const WRAPPING_COMPOSITIONS = ["leaf", "conditional", "selection"] as const;
+
+/**
+ * A rule with several operative effects cannot be composed by a family that
+ * authors one. Emitting the single effect the family understands would flatten
+ * the others into nothing, which changes play rather than wording, so the
+ * constructor declines and names the reason. A `selection` composition is
+ * exempt because selection-then-effect is exactly what it models.
+ */
+function multiEffectBlocker(context: FamilyContext): string | null {
+  if (broadValue(context.claims, "composition") === "selection") return null;
+  if (!slotOptions(context.readings, "has_multiple_effects").includes("true")) return null;
+  return "has_multiple_effects: the source states several effects and this family composes one";
+}
+
+/**
+ * Wrap a compiled leaf in the composition the classifier reported. A
+ * `conditional` whose condition could not be assembled is incomplete: emitting
+ * the leaf unconditioned would drop the gate the source states, which is the
+ * `omitted-condition` defect the round trip flags.
+ */
+function constructWrapped(context: FamilyContext, leaf: EffectCompilation): ConstructionResult {
+  const composition = broadValue(context.claims, "composition");
+  const findings = [...leaf.findings];
+  const claimIds = [...leaf.claim_ids];
+  if (!leaf.effect) {
+    return incomplete(context.claims, {
+      consumed: claimIds,
+      findings: findings.length ? findings : ["effect: no settled slot determines the effect payload"],
+    });
+  }
+  const flattened = multiEffectBlocker(context);
+  if (flattened) {
+    return incomplete(context.claims, {
+      consumed: claimIds,
+      findings: [...findings, flattened],
+    });
+  }
+  if (composition === "leaf") {
+    return constructed(context.claims, claimIds, baseAbility(context.current, leaf.effect), findings);
+  }
+  if (composition === "conditional") {
+    const condition = compileCondition(context.readings, context.state);
+    findings.push(...condition.findings);
+    claimIds.push(...condition.claim_ids);
+    if (!condition.condition) {
+      return incomplete(context.claims, {
+        consumed: claimIds,
+        findings: [...findings, "condition: no settled slot assembles a condition operand"],
+      });
+    }
+    return constructed(
+      context.claims,
+      claimIds,
+      baseAbility(context.current, { type: "conditional", condition: condition.condition, effect: leaf.effect }),
+      findings,
+    );
+  }
+  const selection = compileSelector(context.readings, context.state);
+  findings.push(...selection.findings);
+  claimIds.push(...selection.claim_ids);
+  if (!selection.selector) {
+    return incomplete(context.claims, {
+      consumed: claimIds,
+      findings: [...findings, "selector: no settled slot assembles the selection"],
+    });
+  }
+  return constructed(
+    context.claims,
+    claimIds,
+    baseAbility(context.current, { type: "select-units", selector: selection.selector, effect: leaf.effect }),
+    findings,
+  );
+}
+
+const FAMILY_CONSTRUCTORS = new Map<string, (context: FamilyContext) => ConstructionResult>();
+for (const [effectKind, build] of Object.entries(EFFECT_BUILDERS)) {
+  for (const composition of WRAPPING_COMPOSITIONS) {
+    FAMILY_CONSTRUCTORS.set(`${composition}/${effectKind}`, (context) =>
+      constructWrapped(context, build({
+        readings: context.readings,
+        state: context.state,
+        composition,
+      })));
+  }
+}
+
+/** Family keys a constructor exists for, sorted. The registry is the contract. */
+export function registeredFamilies(): string[] {
+  return [...FAMILY_CONSTRUCTORS.keys()].sort();
+}
+
+function constructed(
+  claims: readonly CandidateClaim[],
+  consumed: string[],
+  candidate: AnyRecord,
+  findings: string[] = [],
+): ConstructionResult {
+  const consumedSet = new Set(consumed);
+  const unconsumed = claims.filter((claim) => !consumedSet.has(claim.id)).map((claim) => claim.id);
+  return { status: "constructed", candidate, consumed_claim_ids: consumed, unconsumed_claim_ids: unconsumed, findings };
+}
+
+function incomplete(claims: readonly CandidateClaim[], gate: { consumed: string[]; findings: string[] }): ConstructionResult {
   const consumedSet = new Set(gate.consumed);
   return {
     status: "incomplete",
@@ -1628,6 +2474,15 @@ function incomplete(claims: CandidateClaim[], gate: { consumed: string[]; findin
 
 type CandidateConstructor = (current: AnyRecord, claims: CandidateClaim[]) => ConstructionResult;
 
+/**
+ * Ability-specific overrides, tried before the family registry.
+ *
+ * The supervised abilities are asked per-ability question packets rather than
+ * the generic slots, so a family constructor has nothing to read for them and
+ * would report every slot blocking. Their constructors are the only encoding of
+ * those questions' answers, and they stay until the fleet-wide slots can carry
+ * the same claims.
+ */
 const CONSTRUCTORS: Partial<Record<CohortAbilityId, CandidateConstructor>> = {
   "bomb-squig": constructBombSquig,
   "try-dat-button-dread-mob": constructTryDatButton,
@@ -1639,17 +2494,30 @@ export function constructCandidate(
   abilityId: CohortAbilityId,
   current: AnyRecord,
   claims: CandidateClaim[],
+  state?: AbilityState,
 ): ConstructionResult {
-  const constructor = CONSTRUCTORS[abilityId];
-  if (constructor) return constructor(current, claims);
-  const values = answerMap(claims);
-  return incomplete(claims, {
-    consumed: [],
-    findings: [
-      `unsupported family: composition=${String(values.get("composition"))}; `
-      + `primary_effect=${String(values.get("primary_effect"))}; `
-      + `ontology_gap=${String(values.get("likely_ontology_gap"))}`,
-    ],
+  const override = CONSTRUCTORS[abilityId];
+  if (override) return override(current, claims);
+  const readings = readSlots(claims);
+  const composition = broadValue(claims, "composition");
+  const primaryEffect = broadValue(claims, "primary_effect");
+  const family = composition && primaryEffect ? `${composition}/${primaryEffect}` : null;
+  const constructor = family ? FAMILY_CONSTRUCTORS.get(family) : undefined;
+  if (!constructor || !family) {
+    return incomplete(claims, {
+      consumed: [],
+      findings: [family
+        ? `unsupported family: composition=${composition}; primary_effect=${primaryEffect}; `
+          + `ontology_gap=${String(broadValue(claims, "likely_ontology_gap"))}`
+        : `unclassified: composition=${String(composition)}; primary_effect=${String(primaryEffect)}`],
+    });
+  }
+  return constructor({
+    abilityId,
+    current,
+    claims,
+    state: state ?? null,
+    readings,
   });
 }
 
@@ -1725,6 +2593,17 @@ function summaryResponse(response: CachedResponse): AnyRecord {
   };
 }
 
+/**
+ * Acceptance: the aggregate must be confident, no defect may be confidently
+ * asserted, and no preservation claim may be confidently denied.
+ *
+ * Requiring every `preserves_*` proposition to clear the threshold made the
+ * gate a conjunction over up to thirteen probabilistic facts, so it measured
+ * how many questions were asked rather than whether the candidate is right —
+ * the failure design law 1 names. The atomic propositions are vetoes here: an
+ * unconfident one is "don't know" and decides nothing, while a confident denial
+ * or a confident defect rejects outright.
+ */
 export function verificationPassed(response: CachedResponse): boolean {
   const probabilities = Object.fromEntries(
     Object.entries(response.answers).map(([questionId, answer]) => [
@@ -1734,16 +2613,23 @@ export function verificationPassed(response: CachedResponse): boolean {
         : undefined,
     ]),
   );
-  const atomicChecks = Object.entries(probabilities)
+  const value = (questionId: string): number | undefined => {
+    const probability = probabilities[questionId];
+    return typeof probability === "number" ? probability : undefined;
+  };
+  const supported = value("candidate_supported");
+  if (supported === undefined || supported < ACCEPTANCE_CONFIDENCE) return false;
+  const preserved = Object.entries(probabilities)
     .filter(([questionId]) => questionId.startsWith("preserves_"))
     .map(([, probability]) => probability);
-  return atomicChecks.length > 0
-    && atomicChecks.every((probability) => typeof probability === "number" && probability >= ACCEPTANCE_CONFIDENCE)
-    && typeof probabilities.candidate_supported === "number"
-    && probabilities.candidate_supported >= 0.5
-    && ["missing_effect", "missing_condition", "missing_timing_or_usage", "introduced_mechanic"]
-      .every((questionId) => typeof probabilities[questionId] === "number"
-        && probabilities[questionId] < ACCEPTANCE_CONFIDENCE);
+  if (preserved.some((probability) => typeof probability === "number" && probability <= 1 - ACCEPTANCE_CONFIDENCE)) {
+    return false;
+  }
+  return ["missing_effect", "missing_condition", "missing_timing_or_usage", "introduced_mechanic"]
+    .every((questionId) => {
+      const probability = value(questionId);
+      return probability === undefined || probability < ACCEPTANCE_CONFIDENCE;
+    });
 }
 
 export async function runExperiment(options: {
@@ -1853,7 +2739,7 @@ export async function runExperiment(options: {
     writeJson(join(privateRoot, "claims", `${abilityId}.json`), claims);
     const current = byId.get(abilityId);
     if (!current) throw new Error(`Current Ork ability missing: ${abilityId}`);
-    const construction = constructCandidate(abilityId, current, claims);
+    const construction = constructCandidate(abilityId, current, claims, state);
     if (construction.candidate) {
       const ajv = createValidator();
       const validate = ajv.getSchema(ABILITY_SCHEMA_ID);
@@ -1921,6 +2807,7 @@ export async function runExperiment(options: {
           abilityId,
           current,
           claimsFromResponse(abilityId, state, candidateResponse),
+          state,
         );
         return canonical({
           status: candidateConstruction.status,

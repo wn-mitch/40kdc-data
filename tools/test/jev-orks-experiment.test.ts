@@ -20,6 +20,8 @@ import {
   orkSliceCount,
   orkSlicePool,
   SLICE_SIZE,
+  readSlots,
+  registeredFamilies,
   slotEvidence,
   slotOf,
   verificationPassed,
@@ -51,14 +53,33 @@ const STATE: AbilityState = {
   source_text: "This unit has plus one to charge rolls.",
 };
 
-function claims(abilityId: CohortAbilityId, values: Record<string, string | number>): CandidateClaim[] {
+function claim(
+  abilityId: CohortAbilityId,
+  questionId: string,
+  value: string | number,
+  probability = 0.99,
+): CandidateClaim {
+  return {
+    id: questionId,
+    ability_id: abilityId,
+    question_id: questionId,
+    predicate: `jev.${questionId}`,
+    value,
+    probability,
+    selected: true,
+    source_digest: "a".repeat(64),
+    state: "proposed",
+  };
+}
+
+function claims(abilityId: CohortAbilityId, values: Record<string, string | number>, probability = 0.99): CandidateClaim[] {
   return Object.entries(values).map(([questionId, value], index) => ({
     id: `claim-${index}`,
     ability_id: abilityId,
     question_id: questionId,
     predicate: `jev.${questionId}`,
     value,
-    probability: 0.99,
+    probability,
     selected: true,
     source_digest: "a".repeat(64),
     state: "proposed",
@@ -408,39 +429,159 @@ describe("JEV Ork experiment", () => {
     });
   });
 
-  it("accepts only confident atomic verification with no confident defect", () => {
+  it("accepts only a confident aggregate with no confident defect or denial", () => {
     const response: CachedResponse = {
       request_hash: "verification",
       repeat: 0,
       model: "jev-latest",
       answers: {
-        candidate_supported: { type: "noul", noul: 0.65 },
+        candidate_supported: { type: "noul", noul: 0.92 },
         missing_effect: { type: "noul", noul: 0.1 },
         missing_condition: { type: "noul", noul: 0.2 },
         missing_timing_or_usage: { type: "noul", noul: 0.1 },
         introduced_mechanic: { type: "noul", noul: 0.1 },
-        preserves_effect: { type: "noul", noul: 0.8 },
-        preserves_scope: { type: "noul", noul: 0.95 },
+        preserves_effects: { type: "noul", noul: 0.7 },
+        preserves_recipients: { type: "noul", noul: 0.55 },
       },
       usage: { input_tokens: 10, output_tokens: 2 },
       latency_ms: 1,
     };
+    // An unconfident preservation proposition is "don't know", not a defect.
     expect(verificationPassed(response)).toBe(true);
-    response.answers.preserves_effect = { type: "noul", noul: 0.79 };
+    response.answers.preserves_recipients = { type: "noul", noul: 0.12 };
+    expect(verificationPassed(response)).toBe(false);
+    response.answers.preserves_recipients = { type: "noul", noul: 0.55 };
+    response.answers.missing_condition = { type: "noul", noul: 0.85 };
+    expect(verificationPassed(response)).toBe(false);
+    response.answers.missing_condition = { type: "noul", noul: 0.2 };
+    response.answers.candidate_supported = { type: "noul", noul: 0.64 };
     expect(verificationPassed(response)).toBe(false);
   });
 
   it("classifies unregistered families without emitting a candidate", () => {
     const result = constructCandidate("wild-ride", CURRENT, claims("wild-ride", {
-      composition: "leaf",
-      primary_effect: "roll-modifier",
+      composition: "dice-count-choice",
+      primary_effect: "stat-modifier",
       likely_ontology_gap: 1,
     }));
     expect(result).toMatchObject({
       status: "incomplete",
-      findings: ["unsupported family: composition=leaf; primary_effect=roll-modifier; ontology_gap=1"],
+      findings: ["unsupported family: composition=dice-count-choice; primary_effect=stat-modifier; ontology_gap=1"],
     });
     expect(result.candidate).toBeUndefined();
+  });
+
+  it("matches a registered family by its composition and primary effect pair", () => {
+    expect(registeredFamilies()).toEqual([
+      "conditional/keyword-grant",
+      "conditional/mortal-wounds",
+      "conditional/roll-modifier",
+      "conditional/stat-modifier",
+      "leaf/keyword-grant",
+      "leaf/mortal-wounds",
+      "leaf/roll-modifier",
+      "leaf/stat-modifier",
+      "selection/keyword-grant",
+      "selection/mortal-wounds",
+      "selection/roll-modifier",
+      "selection/stat-modifier",
+    ]);
+  });
+
+  it("constructs a registered family from its settled slots", () => {
+    const result = constructCandidate("wild-ride", CURRENT, claims("wild-ride", {
+      composition: "conditional",
+      primary_effect: "stat-modifier",
+      effect_stat: "A",
+      effect_operation: "add",
+      recipient: "this-unit",
+      integer_2: "modifier-value",
+      semantic_timing: "phase-start",
+    }), { ...STATE, literal_candidates: { ...STATE.literal_candidates, integers: [1, 2] } });
+    expect(result.status).toBe("constructed");
+    expect(result.candidate?.effect).toEqual({
+      type: "conditional",
+      // The phase-start timing slot is the only condition source the source names.
+      condition: { type: "timing-is", parameters: { timing: "start-of-phase" } },
+      effect: { type: "stat-modifier", target: "unit", modifier: { stat: "A", operation: "add", value: 2 } },
+    });
+  });
+
+  it("refuses to flatten a rule the classifier calls multi-effect", () => {
+    const result = constructCandidate("wild-ride", CURRENT, claims("wild-ride", {
+      composition: "conditional",
+      primary_effect: "stat-modifier",
+      effect_stat: "A",
+      effect_operation: "add",
+      recipient: "this-unit",
+      integer_2: "modifier-value",
+      has_multiple_effects: 1,
+    }), { ...STATE, literal_candidates: { ...STATE.literal_candidates, integers: [1, 2] } });
+    expect(result.status).toBe("incomplete");
+    expect(result.candidate).toBeUndefined();
+    expect(result.findings).toContain(
+      "has_multiple_effects: the source states several effects and this family composes one",
+    );
+  });
+
+  it("gates mortal wounds behind the die the source tests on", () => {
+    const result = constructCandidate("wild-ride", CURRENT, claims("wild-ride", {
+      composition: "conditional",
+      primary_effect: "mortal-wounds",
+      mortal_wound_resolution: "dice",
+      recipient: "attacking-enemy",
+      dice_d6: "test-roll",
+      integer_3: "threshold",
+      dice_d3: "effect-amount",
+      semantic_timing: "phase-end",
+    }), {
+      ...STATE,
+      literal_candidates: { integers: [3], dice: ["D6", "D3"], distances_inches: [], named_keywords: [] },
+    });
+    expect(result.status).toBe("constructed");
+    expect(result.candidate?.effect).toMatchObject({
+      effect: {
+        type: "dice-gated",
+        dice: "D6",
+        threshold: 3,
+        on_success: { type: "mortal-wounds", target: "target", modifier: { count: "D3" } },
+      },
+    });
+  });
+
+  it("reads a leading option when no proposition settles, and reports its support", () => {
+    const reading = readSlots([
+      ...claims("wild-ride", { recipient: "this-unit" }, 0.31),
+      claim("wild-ride", "refine_1__recipient__this_unit", 1, 0.62),
+      claim("wild-ride", "refine_1__recipient__selected_unit", 0, 0.88),
+    ]).get("recipient");
+    expect(reading?.options).toEqual(["this-unit"]);
+    expect(reading?.evidence).toBe("selected");
+    expect(reading?.probability).toBe(0.62);
+  });
+
+  it("leaves a slot undetermined when even its leading option is below a coin flip", () => {
+    const reading = readSlots([
+      ...claims("wild-ride", { recipient: "this-unit" }, 0.31),
+      claim("wild-ride", "refine_1__recipient__this_unit", 1, 0.31),
+    ]).get("recipient");
+    expect(reading?.options).toEqual([]);
+    expect(reading?.evidence).toBe("undetermined");
+  });
+
+  it("treats an unsettled proposition as an answer rather than a blocker", () => {
+    const result = constructCandidate("wild-ride", CURRENT, claims("wild-ride", {
+      composition: "conditional",
+      primary_effect: "stat-modifier",
+      effect_stat: "A",
+      effect_operation: "add",
+      recipient: "this-unit",
+      integer_2: "modifier-value",
+      semantic_timing: "phase-end",
+      turn_is_your: 0,
+    }), { ...STATE, literal_candidates: { ...STATE.literal_candidates, integers: [1, 2] } });
+    expect(result.status).toBe("constructed");
+    expect(result.findings ?? []).toEqual([]);
   });
 
   it("routes partial families into parameter-complete recursive question packets", () => {

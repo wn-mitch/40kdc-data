@@ -18,17 +18,19 @@ works end to end: every ability yields confident, source-bound claims. The gap i
 | --- | --- |
 | Ork abilities with source text | 245 (12 supervised + 15 legacy + 218 sliced) |
 | Slices recorded | 15 / 15 (14 × 15, then 8) |
-| Question banks / cached responses | 245 banks / 973 response files (967 distinct requests) |
-| Claims proposed | 11,085 (min 11, max 98, mean 45.2 per ability) |
-| Candidates **constructed** | 4 |
-| Candidates **incomplete** | 241 |
+| Question banks / cached responses | 245 banks / 2,109 response files |
+| Claims proposed | 13,042 (min 11, max 119, mean 53.2 per ability) |
+| Candidates **constructed** | 35 (7 accepted, 28 verification-rejected) |
+| Candidates **incomplete** | 210 |
 | Round-trip buckets (245) | divergence 146, delegated 97, declared-approximation 2 |
-| Two-leg localiser (33 hand-labelled) | clean 0, authoring 6, describer 0, both-wrong 27 |
+| Two-leg localiser (33 adjudicated) | exact 20, consistent 29 (see Stage 6) |
 | Repeatability | 1 ability × 3 runs: selection and construction stable, distribution not |
-| Observed cost | $0.073 — 1,734,093 in / 499,233 out; budget $2 |
+| Observed cost | $0.195 of cache — 4,632,000 in / 1,360,000 out; budget $2 |
 
-The four constructed abilities are the hand-written pilots: `bomb-squig`,
-`try-dat-button-dread-mob`, `waaagh-banner`, `where-dya-fink-youre-going-da-big-hunt`.
+Construction is no longer the whole gap. The four hand-written pilots remain
+(`bomb-squig`, `try-dat-button-dread-mob`, `waaagh-banner`,
+`where-dya-fink-youre-going-da-big-hunt`), and the family registry adds 31 more from the
+generic slots; the remaining 210 candidates each name the slot that blocked them.
 
 ## Pipeline
 
@@ -64,6 +66,20 @@ and steered by `decompositionEvidence`, `slotEvidence`, `slotOf`, and `leafSettl
 Closure is evaluated **per slot, not per question** — see Design law 1, which is the
 single most expensive thing the experiment learned.
 
+The generic packet asks four semantic slots (`semantic_subject`, `semantic_timing`,
+`semantic_duration`, `semantic_structure`), the two effect-recipient slots
+(`recipient`, `turn_is_your` / `turn_is_opponent`), the gated slots (`trigger_event`,
+`condition_relation`, `selection_*`, the per-effect slots), and one **literal-role**
+question per integer, die, distance, and named keyword in the source. A slot that comes
+back unsettled is refined into one proposition per option, and those propositions are what
+`readSlots` reads.
+
+The named-keyword list comes from the dataset: `keywordCatalog()` reads every
+`data/core/*/units.json` for its `keywords` and `faction_keywords` (985 keywords) and
+`literals()` matches them against the source longest-first. It was a hard-coded
+seven-entry literal, which silently capped every keyword gate the source states in any
+other keyword.
+
 ### Stage 3 — claims
 
 `claimsFromResponse` turns settled answers into claims, written to
@@ -86,38 +102,81 @@ single most expensive thing the experiment learned.
 `source_digest` binds every claim to the exact source revision it was read from, so a
 claim cannot silently outlive the text that justified it.
 
+#### Reading a claim set
+
+`readSlots(claims)` turns a claim set into one reading per slot — the vocabulary the
+family registry reads. A refined slot is read from its propositions; an unrefined one
+from its own answer. Two rules matter:
+
+- **A confident false is an answer, not a blank.** Proposition slots (`turn_is_your`,
+  `selection_requires_visibility`) carry `["true"]` only when settled true; otherwise the
+  slot's value is "the rule does not state this", and it is not reported as a blocker.
+- **A slot whose affirmative never clears the threshold is read by selection.** The
+  negative propositions settle while the affirmative sits in the ambiguous band, which is
+  the ordinary shape of a slot whose options co-occur in one clause. The reading carries
+  the leading option with its probability and is marked `selected`, so the constructor
+  reads the selection rather than the threshold and reports how thin the support was.
+  Below `SELECTION_FLOOR = 0.5` there is no leading candidate and the slot stays
+  `undetermined`.
+
 ### Stage 4 — construction
 
-`constructCandidate(abilityId, current, claims)` produces
+`constructCandidate(abilityId, current, claims, state)` produces
 `_private/jev-orks/candidates/<ability>.json` with either
 
-- `constructed` — a candidate effect tree plus `consumed_claim_ids` and
-  `unconsumed_claim_ids`, or
-- `incomplete` — `consumed_claim_ids` empty plus `findings`.
+- `constructed` — a candidate effect tree plus `consumed_claim_ids`,
+  `unconsumed_claim_ids`, and `findings` (a candidate may carry findings: a thin
+  reading, or a slot answered by its leading option, is reported rather than hidden), or
+- `incomplete` — the claims it managed to consume plus one finding per blocking slot.
 
-Dispatch is a lookup table:
+Dispatch is a **registry keyed by the family**, the `(composition, primary_effect)` pair
+the classifier already emits:
 
 ```ts
-const CONSTRUCTORS: Partial<Record<CohortAbilityId, CandidateConstructor>> = {
-  "bomb-squig": constructBombSquig,
-  "try-dat-button-dread-mob": constructTryDatButton,
-  "waaagh-banner": constructWaaaghBanner,
-  "where-dya-fink-youre-going-da-big-hunt": constructFallbackHazard,
-};
+const FAMILY_CONSTRUCTORS = new Map<string, FamilyConstructor>();
+for (const [effectKind, build] of Object.entries(EFFECT_BUILDERS)) {
+  for (const composition of WRAPPING_COMPOSITIONS) {          // leaf | conditional | selection
+    FAMILY_CONSTRUCTORS.set(`${composition}/${effectKind}`, …);
+  }
+}
 ```
 
-Keyed by **ability id**, with four entries. Everything else falls through to
+Four effect builders (roll-modifier, stat-modifier, keyword-grant, mortal-wounds) × three
+compositions = **12 registered families**, covering the families the generic slots can
+actually determine. `registeredFamilies()` is the contract.
 
-```
-unsupported family: composition=<c>; primary_effect=<p>; ontology_gap=<g>
-```
+A constructor authors only what a settled slot determines, and reports the rest:
 
-That single line accounts for all 241 incomplete candidates. This is the gap.
+- an effect slot that settles no value (`effect_stat: other does not name a modifiable
+  characteristic`), or a role no integer claims (`modifier-value: no integer is settled
+  as the modifier magnitude`);
+- a `conditional` whose condition compiles to no operand;
+- `has_multiple_effects` when the source states several effects and the family composes
+  one — **the flattening guard**: emitting the single effect the family understands would
+  change play, not wording;
+- a mortal-wound test that cannot be assembled (`test-roll` dies or `threshold` integers
+  that do not resolve to exactly one each), because dropping the gate flattens randomness.
+
+The four supervised abilities keep their ability-id constructors as an override, tried
+first: they are asked per-ability question packets rather than the generic slots, so a
+family constructor would report every slot blocking for them.
+
+Everything else still reports
+`unsupported family: composition=<c>; primary_effect=<p>; ontology_gap=<g>` — now against
+136 abilities instead of 241.
 
 ### Stage 5 — verification and acceptance
 
-A verification pass asks atomic questions against the constructed candidate; a confident
-defect rejects it. Acceptance is gated at `ACCEPTANCE_CONFIDENCE = 0.8`.
+A verification pass asks the aggregate question, four preservation propositions
+(`preserves_effects`, `preserves_conditions`, `preserves_quantities`,
+`preserves_recipients`) and four defect probes against the constructed candidate.
+
+Acceptance at `ACCEPTANCE_CONFIDENCE = 0.8`: the **aggregate** must be confident, no
+defect probe may be confidently asserted, and no preservation proposition may be
+confidently denied. The atomic propositions are **vetoes, not conjunctive requirements** —
+requiring every one of up to thirteen to clear the threshold measures how many questions
+were asked rather than whether the candidate is right (design law 1), so an unconfident
+proposition is "don't know" and decides nothing.
 
 ### Stage 6 — round-trip fidelity
 
@@ -130,27 +189,53 @@ buckets `divergence` / `declared-approximation` / `delegated`.
 **Two-leg localiser** (`jev-round-trip.ts`) — asks JEV literal propositions about each
 end of the pipeline and attributes the fault:
 
-- **Leg one** — authored record versus source text: is every effect, condition, and
-  quantity represented; is randomness preserved as table structure rather than flattened;
-  is the recipient preserved; does it add nothing?
-- **Leg two** — rendered prose versus authored record: does the prose state every effect
-  and quantity, match recipient, respect scope kind, avoid placeholder prose, add nothing?
+- **Leg one** — source text versus record. It is given the source and the record's
+  mechanics, and **not** the rendered prose: the prose is leg two's candidate, and letting
+  leg one see it attributes a prose defect to authoring (measured on
+  `never-too-busy-to-fight` and `sneaky-gitz`, whose records are right and whose renders
+  are wrong).
+- **Leg two** — record plus rendered prose. A failure here is a describer defect.
 
-`evaluateLeg` requires **every** proposition to clear the threshold, then
-`localise(leg1, leg2)` yields one of:
+A proposition that does not clear the threshold splits in two, and the split is the
+instrument:
+
+| proposition | meaning | effect on the leg |
+| --- | --- | --- |
+| confidently true (`>= 0.8`) | the claim holds | none |
+| **refuted** (`<= 0.2`) | the model denies it | the leg is **faulted** |
+| mid-band | don't know | the leg is **unproven**, not faulted |
+
+`randomness_preserved` is gated out of the packet entirely when the source states no die
+(`state.literal_candidates.dice` is empty), because a rule with no roll cannot fail to
+preserve one — law 4 applied to the localiser. A vacuity clause was not enough: six of
+eight remaining misattributions were this proposition refuting a no-dice record.
+
+`localise(leg1, leg2)` then yields:
 
 | leg one | leg two | verdict |
 | --- | --- | --- |
-| clean | clean | `clean` |
-| faulted | clean | `authoring` |
-| clean | faulted | `describer` |
-| faulted | faulted | `both-wrong` |
+| refuted | any | `authoring` — the record is wrong first, so prose graded against it is not independent evidence |
+| not refuted | refuted | `describer` |
+| not refuted | not refuted, either leg unproven | `unresolved` |
+| proven | proven | `clean` |
 
-A leg is faulted when a proposition fails **or** a named defect is reported that is not
-`no-material-difference`. The defect vocabularies are the useful output: authoring
-(`omitted-effect`, `omitted-condition`, `omitted-quantity`, `flattened-randomness`,
-`wrong-recipient`, `invented-effect`) and describer (adds `placeholder`,
-`weapon-context-misuse`).
+A leg's **named defect** (`primary_defect`) is the diagnosis the report groups by — it is
+not a verdict trigger. Five adjudicated-clean records name one with nothing refuted, so
+treating it as a fault attributes a defect the evidence does not support.
+
+Measured against the adjudicated 33 (`_private/jev-orks/round-trip-semantic-labels.json`):
+
+| localiser revision | exact | consistent |
+| --- | --- | --- |
+| as inherited | 2 / 33 | 2 / 33 |
+| refuted/unproven split only | 2 / 33 | 2 / 33 |
+| + fault on refutation, leg-one precedence | 18 / 33 | 25 / 33 |
+| + gated `randomness_preserved`, leg one blind to the prose | **20 / 33** | **29 / 33** |
+
+Four contradictions remain, each with a named cause: `feel-no-pain-5`/`-6` refute
+`every_quantity_preserved` on the two core-ability template texts; `sneaky-gitz`'s
+`rule-state` encoding is correct but leg one cannot read a bespoke type's meaning from its
+JSON; `thatll-learn-ya` is refuted by leg two on a render that is faithful.
 
 ### Reproducibility and cost
 
@@ -158,7 +243,7 @@ Requests are content-addressed — `hash({version, request})` — and responses 
 `_private/jev-orks/responses/<hash>.repeat-<n>.json`. A cache miss throws unless `--live`
 is passed, so an ordinary run is offline and cannot silently spend money.
 
-**Stability is barely measured.** 967 distinct requests are cached, and exactly one
+**Stability is barely measured.** 2,109 responses are cached, and exactly one
 ability was run three times (`try-dat-button-dread-mob`). On that one, selection and
 construction were identical across all three runs while the probability distribution was
 not — so a gate that reads probabilities rather than selection can flip on a re-run.
@@ -166,8 +251,15 @@ Every other ability has a single recorded run, and its "identical" flags are tri
 true rather than evidence of determinism. Nothing here yet licenses trusting
 `ACCEPTANCE_CONFIDENCE` as a stable boundary.
 
+Changing the question bank invalidates the cache: the request hash covers the state and
+the packet, so adding a slot or a keyword makes every affected request miss and the
+offline replay fail closed. A full re-population of the 245-ability corpus after a bank
+change cost **$0.113** across four passes; a re-run with an unchanged bank replays offline
+in about 1.5 seconds and spends nothing.
+
 Pricing is modelled at `INPUT_PRICE_PER_MILLION_USD = 0.042` with a scheduling reserve,
-under a `--budget` ceiling.
+under a `--budget` ceiling. The model prices input only — the `$0.192` above is the
+modelled input cost of the whole cache, not the bill.
 
 ## Design laws
 
@@ -188,66 +280,100 @@ Earned from the experiment, with the evidence that forced each one.
    `trigger_event` slot whose emptiness then counted against closure.
 5. **Slots are per clause.** `semantic_subject` held both `this-unit` and `selected-unit`
    in the ambiguous band for 6 of 15 abilities. Selection sentences and effect sentences
-   have different subjects, so one per-rule slot cannot hold the value. *Observed but not
-   yet repaired.*
+   have different subjects, so one per-rule slot cannot hold the value. *Partially
+   repaired: `recipient` now asks the effect's recipient separately, and the selection
+   composition reads its own subject from `selection_owner`.*
+6. **A fact the source can stay silent about must be asked as a proposition.** `turn_owner`
+   as a forced choice over `{your, opponent, either}` produced a turn gate the independent
+   authored record did not have **35 times against 2 omissions** — the model answers the
+   forced choice rather than the silence (law 2, again). Asked as two propositions
+   (`turn_is_your`, `turn_is_opponent`), the same corpus produced **7 additions against 1
+   omission**. The repair for a failing choice slot is not better wording; it is a
+   different question shape.
+7. **A constructor that cannot refuse will flatten.** The first registry pass authored the
+   one effect its family understood for rules the classifier called multi-effect, and
+   dropped the dice-gate in front of mortal wounds. Both are `flattened-randomness` — the
+   highest-severity class, because collapsing a table or a test changes play rather than
+   wording. Both were caught by diffing candidates against the independent authored
+   records, **not** by the round trip. Declining with a named reason is part of the
+   contract.
+8. **Extraction is a prerequisite of construction, not a sibling stage.** Three of the four
+   blockers that survived the registry were extraction gaps the DSL could already express:
+   the keyword vocabulary was a seven-entry literal rather than the dataset's 985 keywords;
+   turn ownership was never asked; the effect recipient had no slot. Construction quality
+   cannot exceed the question bank, so a family's blockers are a question-bank worklist
+   first and an ontology decision only when the DSL genuinely cannot say it.
 
 ## Next steps
 
 Ordered by how much of the corpus each unblocks.
 
-### N1 — Replace per-ability constructors with a family registry
+### N1 — Replace per-ability constructors with a family registry — **done**
 
-**P0.** Keyed by `(composition, primary_effect)`, the pair the classifier already emits,
-instead of ability id. The distribution across the 241 incomplete candidates is 35
-distinct families, heavily front-loaded:
+The registry is in place: 12 families keyed by `(composition, primary_effect)`, each
+reading the shared slots, each returning per-slot findings. Construction went from **4 to
+35** candidates (7 accepted, 28 verification-rejected), all schema-valid.
 
-| Abilities | Family |
-| --- | --- |
-| 54 | `conditional/ability-grant` |
-| 31 | `conditional/roll-modifier` |
-| 27 | `conditional/stat-modifier` |
-| 15 | `conditional/other` |
-| 11 | `conditional/restriction` |
-| 9 | `conditional/mortal-wounds` |
-| 8 | `conditional/keyword-grant` |
-| 7 | `sequence/ability-grant` |
-| 7 | `selection/other` |
-| 7 | `selection/roll-modifier` |
-| 6 | `leaf/stat-modifier` |
-| 6 | `leaf/ability-grant` |
-| 6 | `leaf/roll-modifier` |
+### N1b — Close the extraction gaps the registry exposed
 
-Three constructors cover **112 abilities (46%)**; the seven `conditional/*` families shown
-above cover **155 (64%)**, and all eight `conditional/*` families together cover **156
-(65%)**. The remaining families are a long tail — 15 of the 35 have two abilities or
-fewer, and should be an explicit keep-or-drop decision rather than default neglect.
+**P0.** 109 abilities land in a registered family and still fail to construct. The blockers
+are, in order:
 
-Contract for each family constructor: consume the claims it understands, return the ids
-it did **not** consume as findings. The current `incomplete` path reports one aggregate
-family string and discards per-claim reasons, which makes the 241 candidates harder to
-work than they need to be.
-
-### N2 — Calibrate the localiser; it cannot currently say `clean`
-
-**P0.** Leg one passed **0 of 33**. Against the hand labels in
-`_private/jev-orks/round-trip-labels.json`:
-
-| Hand label | n | Localiser verdicts |
+| Abilities | Blocker | Where the fix lives |
 | --- | --- | --- |
-| `expect_clean` | 15 | authoring 3, both-wrong 12 |
-| `expect_authoring_fault` | 16 | both-wrong 13, authoring 3 |
-| `expect_describer_fault` | 4 | both-wrong 4 |
+| 22 | `recipient: no settled recipient` — every option below the coin-flip floor | `recipient` wording, or a per-clause split |
+| 14 | `trigger_event: no settled option` | `trigger_event` |
+| 13 | condition compiles to no operand although `has_condition` is 1 | `condition_relation` (law 2) |
+| 9 | `semantic_timing: no settled option` | `semantic_timing` |
+| 8 | `effect_operation: reroll needs a re-roll subset` | new `roll_subset` slot (`ones` \| `all-failures`) |
+| 7 | refused: `has_multiple_effects` (correct refusal; needs a multi-effect composer) | new composition |
 
-**15 of 15 records a human called clean got a fault verdict**, so the instrument is not
-usable as a gate yet. The likely cause is in `evaluateLeg`: a proposition fails when
-`!(probability >= 0.8)`, which cannot distinguish *false* from *unconfident*. A `noul` at
-0.75 is "don't know", and design law 1 is exactly the lesson that treating an unsettled
-slot as a defect destroys the score.
+Two of these are named slots with an obvious shape (`roll_subset`, a multi-effect
+composition); the rest are the same forced-choice disease as law 6, so the fix is a
+question-shape change, not a threshold move.
 
-Candidate fixes, in cost order: fault a leg only on a **named** defect; or route
-unconfident propositions to a refinement question instead of failing them; or calibrate
-per-proposition thresholds against the labels. Acceptance: `expect_clean` reaches `clean`
-and `expect_authoring_fault` reaches `authoring`.
+### N1c — Register the `ability-grant` families
+
+**P0.** 81 abilities are still `unsupported family`, 75 of them `*/ability-grant`
+(`conditional` 54, `sequence` 9, `leaf` 6, `choice` 6). These cannot be authored from the
+slots at all: `granted_permission` is a seven-option vocabulary while the corpus carries
+**102 distinct `grant_type` values across 109 uses in Orks** — essentially one per rule. A
+generic constructor would emit a coarse label, which is the N6 anti-pattern. The choice is
+between deriving the grant from a new slot, delegating the payload to the current record
+(and reporting the delegation), or leaving the family unregistered. **Decide before
+building**; the measured condition operands are now good enough that delegation would be
+worth measuring rather than assuming.
+
+### N2 — Calibrate the localiser — **done for this round**
+
+The instrument now separates *refuted* from *unproven*, faults on refutation only, takes
+leg one's fault as `authoring` even when leg two also fails, gates `randomness_preserved`
+on the source stating a die, and keeps the rendered prose out of leg one. Against the
+hand-adjudicated 33 that moved agreement from **2 / 33 to 20 / 33 exact (29 / 33
+consistent)**. The four remaining contradictions are named in Stage 6.
+
+The labelled set itself was the first thing to fix. The 33 entries in
+`round-trip-labels.json` are **lexical** — the file's own `_note` says they came from the
+fact-diff report and "cannot adjudicate the semantic leg-1 verdicts" — and adjudicating
+each record by hand against its source disagreed with them on **12 of 33**:
+
+| adjudicated | n | lexical label said |
+| --- | --- | --- |
+| `clean` | 11 | clean 4, authoring 7 |
+| `authoring` | 18 | authoring 16, clean 2 |
+| `describer` | 4 | describer 2, authoring 2 |
+
+`round-trip-semantic-labels.json` holds the adjudicated set with a defect class and a
+field-level reason per ability, citing DSL field names and clause shapes only. Re-run it
+whenever the leg questions change.
+
+**Next iteration**, in evidence order: (1) leg one cannot read a bespoke DSL type's
+meaning from its JSON (`sneaky-gitz`'s `rule-state`, `krushin-impetus`'s `select-units`),
+so `every_effect_represented` and `adds_nothing` refute faithful encodings — give leg one
+the type's own description, not the render; (2) the two core-ability templates
+(`feel-no-pain-5`/`-6`) refute `every_quantity_preserved`, so either exclude template
+definitions from the corpus or ask it differently; (3) one leg-two false positive on a
+faithful render (`thatll-learn-ya`).
 
 ### N2b — Widen the repeat cohort before trusting any threshold
 
@@ -261,23 +387,52 @@ under their own `repeat-<n>` files.
 
 ### N3 — Work the authoring defect queue
 
-Across the 33 localised abilities: `omitted-condition` 11, `invented-effect` 7,
-`wrong-recipient` 4, `flattened-randomness` 3, `omitted-effect` 2.
+Counted from the **adjudicated** labels, not from the localiser's own defect field:
 
-`omitted-condition` leading is consistent with the closure work: conditions are where the
-slot granularity is thinnest. `flattened-randomness` is the highest-severity class — a
-table or variable roll collapsed into one unconditional effect changes play, not wording.
+| defect | n | abilities |
+| --- | --- | --- |
+| `omitted-effect` | 5 | `fix-dat-armour-up`, `grot-assistant`, `buzzer-squigs`, `da-grand-warlords-ladz`, `makari-hoist-dat-banner` |
+| `flattened-randomness` | 5 | `bomb-squig`, `drill-through`, `piston-driven-brutality`, `shooty-power-trip`, `spirit-of-gork-psychic` |
+| `omitted-condition` | 4 | `dat-s-our-loot`, `get-da-good-bitz`, `splat`, `squig-mine` |
+| `wrong-recipient` | 2 | `rivetin-dakka`, `roar-of-mork-psychic` |
+| `invented-effect` | 2 | `too-arrogant-to-die-bully-boyz`, `try-dat-button-dread-mob` |
+
+The lexical labels put `omitted-condition` first at 11; the adjudicated set ties
+`flattened-randomness` with `omitted-effect` at the top. That reordering matters — a table
+or a die test collapsed into one unconditional effect changes play, not wording, and five
+of eight authoring faults of that shape are die-band tables where every band was emitted
+as an unconditional step. It is also the shape the registry now refuses to emit.
+
+### N3b — Audit the recipient of the 33 `disposition-matches` operands
+
+### N3b — Audit the recipient of the 33 `disposition-matches` operands
+
+33 Ork records carry a `disposition-matches` operand, 31 of them `friendly`. The describer
+renders it as "while the unit's disposition is friendly" (to players, a *Force
+Disposition*), which reads as a subject marker rather than a matched-play disposition —
+and the DSL's own option list has no side vocabulary. Either the operand means "a friendly
+unit" and needs its own condition type, or those 31 operands are noise. Settle it before
+they propagate: construction currently declines to emit them, so the candidates for those
+abilities are missing an operand the authored records carry.
 
 ### N4 — Work the describer defect queue
 
-`wrong-recipient` 2, `omitted-effect` 2, `weapon-context-misuse` 2, `invented-effect` 1.
-Small, but these are the ones that would otherwise be misread as authoring faults.
+Four, all adjudicated, and all the kind that gets misread as an authoring fault:
 
-### N5 — Repair design law 5 (slots are per clause)
+| ability | what the prose does |
+| --- | --- |
+| `never-too-busy-to-fight` | renders an engagement passthrough as a movement trait |
+| `sneaky-gitz` | suppresses the *bearer's* Overwatch where the source restricts enemy targeting (the record's own `rule-state.direction` is ambiguous and should be re-authored too) |
+| `beast-snagga-following`, `boss-of-da-hunt` | render a `keyword-grant` of Lone Operative as a weapons keyword |
 
-Split `semantic_subject` (and its siblings) per clause, so selection sentences and effect
-sentences can carry different subjects. The law was observed and never repaired, and it
-is the named cause of an ambiguous band in 6 of 15 abilities.
+`boss-of-da-hunt` also spells its selector keyword `BEAST-SNAGGA` where
+`beast-snagga-following` spells `BEAST SNAGGA`.
+
+### N5 — Repair design law 5 (slots are per clause) — **partly done**
+
+`recipient` now carries the effect's recipient separately from `semantic_subject`, and a
+`selection` composition takes its subject from `selection_owner`. The remaining work is
+splitting `semantic_subject` for rules with more than one operative clause.
 
 ### N6 — Shrink the opaque-grant tail
 
@@ -290,10 +445,12 @@ that surfaced them.
 
 ### N7 — Decide the family tail
 
-15 families have ≤2 abilities. Folding several into a generic shape may be cheaper than
-15 constructors; leaving them unencoded is also defensible if the shapes are genuinely
-irreducible. Either way, record the decision rather than letting the tail sit in
-`incomplete` forever.
+Nine families have ≤3 abilities (`sequence/keyword-grant`, `dice-table/stat-modifier`,
+`dice-table/mortal-wounds`, `leaf/other`, `leaf/restriction`, `selection/restriction`,
+`conditional/hazard-rolls`, `dice-count-choice/stat-modifier`, `sequence/stat-modifier`).
+Folding several into a generic shape may be cheaper than nine constructors; leaving them
+unencoded is also defensible if the shapes are genuinely irreducible. Either way, record
+the decision rather than letting the tail sit in `incomplete` forever.
 
 ## Running it
 
@@ -304,10 +461,23 @@ npm run experiment:jev-orks -- --slice 15               # one slice of the corpu
 npm run experiment:jev-orks -- --corpus <path> --dump <path> --private-root <path>
 ```
 
+The round trip is its own runner, and defaults to every ability with source text:
+
+```sh
+npx tsx tools/src/jev-round-trip.ts --live --budget 2              # all 245, two legs each
+npx tsx tools/src/jev-round-trip.ts --live --ids-file _private/jev-orks/semantic-label-ids.json
+```
+
+That second form is the calibration run: `--ids-file` takes a JSON array of ability ids,
+and `semantic-label-ids.json` holds exactly the 33 adjudicated abilities. After changing
+any leg question, re-run it and re-score against
+`round-trip-semantic-labels.json` before trusting a verdict.
+
 Artifacts land in `_private/jev-orks/`: `source-state/`, `question-bank/`, `responses/`,
 `claims/`, `candidates/`, `comparisons/`, plus the rollups `run-summary.json`,
 `slice-runs.json`, `slices.json`, `design-laws.json`, `question-refinement-ledger.json`,
-`round-trip.json`, `jev-round-trip.json`, `round-trip-labels.json`,
+`round-trip.json`, `jev-round-trip.json`, `round-trip-labels.json` (lexical, from the
+fact diff), `round-trip-semantic-labels.json` (adjudicated, the localiser's calibration),
 `source-provenance.json`.
 
 `_private/` is gitignored and absent from a fresh clone. Tests that need it skip rather
