@@ -429,29 +429,79 @@ neutral-or-better, and the measurement has to be per-ability, not an aggregate: 
 draft of this section claimed the four lost constructions were flattened randomness, and
 the per-ability diff refuted it.
 
-#### The grant payload has no carrier
+#### The vocabulary is an escape rope, not a partition
 
-Registering an `ability-grant` family was attempted from the artifacts of the last run and
-abandoned before any code: the family has nothing to build the payload from.
+Registering an `ability-grant` family was attempted from the last run's artifacts and
+abandoned before any code — and the measurement reframes *why*. The 380 `grant_type` slugs
+are not a vocabulary the payload slot fails to address; they are largely not a vocabulary
+at all:
 
-Of the 82 candidates whose findings name `primary_effect=ability-grant`, the payload slot
-`granted_permission` is *settled* for 58 (probability >= 0.8; 11 mid-band, 10 below it, 3
-absent), so the slot is not the problem — its **resolution** is. It offers six options
-(`movement`, `shooting`, `charge`, `reroll`, `deployment`, `weapon-ability`, `other`), while
-`data/enrichment/**` uses **380 distinct `grant_type` slugs** — and the mapping is not a
-partition: `movement` alone could be `act-after-move` (20 uses), `ingress-move` (13),
-`charge-after-advance` (11), `advance-6-instead-of-roll`, or `place-into-strategic-reserves`;
-`deployment` could be `deep-strike`, `infiltrators`, or `scouts-6`. Emitting any single slug
-from a six-way slot collapses 380 meanings into 6, which is the flattening the corpus rules
-out — and unlike the vocabulary experiments above, there is no per-ability measurement that
-could make it neutral, because the flattening is in the payload, not the label.
+| measure | value |
+| --- | --- |
+| distinct `grant_type` slugs | 379 (593 uses) |
+| slugs used **exactly once** | **321 (84%)** |
+| distinct `ability_id` grants | 32 (291 uses, ~9 uses each) |
+| `grant_type` slugs that are *also* an ability id in the dataset | **19** |
 
-So `conditional/ability-grant` is not a missing-builder gap that a constructor can close.
-It is the same forced-choice disease as law 2, one level down: the payload question has to
-carry the grant's identity (a refinement enumerating the slugs *within* the settled
-permission, drawn from the DSL's own vocabulary) before a builder has anything faithful to
-consume. That makes the fix a question-shape change in the decomposition bank — i.e. N1b
-work wearing an N1c label — and it needs live calls, since a new question is a cache miss.
+The last row is the tell: `deep-strike`, `stealth`, `infiltrators`, `lone-operative`,
+`scouts-6`, `scouts-7`, `deadly-demise-d6`, `dark-pacts` and ten others name abilities that
+already exist as entities, so the faithful encoding is
+`{type: "ability-grant", target, modifier: {ability_id: "…"}}` — which authors used
+correctly in 291 places. `grant_type` is where a rule went when its author could not (or did
+not) author the DSL, and an 84%-singleton distribution is what an escape hatch looks like
+after a long time in service.
+
+So the family is not blocked by a slot that cannot carry the payload. It is blocked by a
+label vocabulary that should mostly be **deleted**: re-encode the 19 ability references as
+`ability_id`, author or drop the ~321 singletons, and an `ability-grant` family then has a
+small honest vocabulary to consume. That makes this an authoring-and-deletion worklist (N6),
+not a question-shape change — and it removes the objection that a builder would have to
+collapse 380 meanings into six.
+
+### N1b-ii — `condition_relation` is asked, answered, and never read
+
+**P0.** The condition compiler assembles operands from five sources — `trigger_event`,
+`semantic_timing`, the turn flags, `keyword` literals, and `selection-range` distances — and
+**never reads `condition_relation`**. The slot is asked for every `has_condition=1` ability,
+its answers are cached, and nothing consumes them, so its much-discussed ambiguous band is
+irrelevant to construction.
+
+Wiring it is not mechanical, because the relation is one-to-many against the operand
+vocabulary — and that vocabulary is far larger than the schema's `const` values suggest.
+Corpus usage, top operand types:
+
+| operand | uses | operand | uses |
+| --- | --- | --- | --- |
+| `phase-is` | 764 | `unit-below-starting-strength` | 51 |
+| `timing-is` | 401 | `unit-below-half-strength` | 49 |
+| `unit-has-keyword` | 320 | `charged-this-turn` | 45 |
+| `is-attached` | 286 | `disposition-matches` | 44 |
+| `target-has-keyword` | 228 | `model-is-leader` | 41 |
+| `player-turn-is` | 104 | `within-range-of-objective` | 33 |
+| `unit-within-range-of` | 63 | `opponent-unit-within-range` | 26 |
+| `attack-is-type` | 58 | `engagement-state` / `is-battle-shocked` | 23 / 22 |
+| `attack-stat-compare` | 19 | `was-hit-by-attack` | 19 |
+
+Only three of the seven relations map cleanly (`keyword` → `unit-has-keyword`, `position` →
+`unit-within-range-of`, `engagement` → `engagement-state`); `state`, `target`, `comparison`
+and `leadership` each fan out across many operands, and several operands need parameters the
+bank does not carry (`attack-stat-compare` wants attacker stat, comparison and target stat).
+
+**And most of the 13 blocked candidates are label errors, not payload errors.** Checked
+against their authored records: `dead-brutal`, `ramshackle-but-rugged` and `special-dose`
+author **no condition at all** (so `has_condition=1` is wrong), while `beastboss` authors
+`phase-is` + `is-attached` and was labelled `leadership`. Only four — `hardy-bioniks` and
+`spiteful-power-trip` (`attack-stat-compare`), `mobile-fortress` (`attack-is-type`) and
+`nowhere-to-hide` (`target-has-keyword`) — state a condition the compiler cannot build but
+could, given the operand and its parameters.
+
+**So the lever is the label layer first.** A pass that re-asks `has_condition` and
+`condition_relation` per ability against the authored clause is cheaper than an operand
+mechanism that would fix four, and it is a prerequisite for one: an operand question asks
+"which state predicate?" of ten abilities where no state predicate exists. Two constraints
+for whenever that mechanism lands: an operand **choice** would confabulate (a forced choice
+cannot say "none", per law 2), so operands must be independent propositions; and propositions
+cost roughly one question per candidate operand per conditional ability.
 
 ### N2 — Calibrate the localiser — **done for this round**
 
