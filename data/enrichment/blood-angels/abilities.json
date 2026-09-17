@@ -1177,11 +1177,9 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ability-grant",
+          "type": "battle-shock-test",
           "target": "target",
-          "modifier": {
-            "grant_type": "battle-shock-test"
-          }
+          "modifier": {}
         },
         {
           "type": "roll-modifier",
@@ -2163,11 +2161,9 @@
         ]
       },
       "effect": {
-        "type": "ability-grant",
+        "type": "battle-shock-test",
         "target": "enemy-within-aura",
-        "modifier": {
-          "grant_type": "battle-shock-test"
-        }
+        "modifier": {}
       }
     },
     "scope": {

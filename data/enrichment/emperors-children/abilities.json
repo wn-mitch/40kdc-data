@@ -3515,11 +3515,9 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ability-grant",
+          "type": "battle-shock-test",
           "target": "enemy-within-aura",
-          "modifier": {
-            "grant_type": "battle-shock-test"
-          }
+          "modifier": {}
         },
         {
           "type": "bs-modifier",
@@ -4120,11 +4118,9 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "ability-grant",
+      "type": "battle-shock-test",
       "target": "enemy-within-aura",
-      "modifier": {
-        "grant_type": "battle-shock-test"
-      }
+      "modifier": {}
     },
     "scope": {
       "range": "aura-6",
@@ -6174,11 +6170,9 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ability-grant",
+          "type": "battle-shock-test",
           "target": "enemy-within-aura",
-          "modifier": {
-            "grant_type": "battle-shock-test"
-          }
+          "modifier": {}
         },
         {
           "type": "bs-modifier",

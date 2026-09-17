@@ -5791,11 +5791,9 @@
           }
         },
         {
-          "type": "ability-grant",
+          "type": "battle-shock-test",
           "target": "enemy-within-aura",
-          "modifier": {
-            "grant_type": "battle-shock-test"
-          }
+          "modifier": {}
         }
       ]
     },
@@ -6719,11 +6717,9 @@
           "type": "sequence",
           "steps": [
             {
-              "type": "ability-grant",
+              "type": "battle-shock-test",
               "target": "unit",
-              "modifier": {
-                "grant_type": "battle-shock-test"
-              }
+              "modifier": {}
             },
             {
               "type": "conditional",
