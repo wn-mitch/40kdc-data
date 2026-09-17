@@ -53,8 +53,8 @@
           "assets": {
             "included": [
               {
-                "item": "Weapon§Armoured hull",
-                "name": "Armoured hull",
+                "item": "Weapon§Armoured Hull",
+                "name": "Armoured Hull",
                 "quantity": 1
               },
               {
@@ -66,11 +66,6 @@
                 "item": "Weapon§Lancer laser destroyer",
                 "name": "Lancer laser destroyer",
                 "quantity": 1
-              },
-              {
-                "item": "Weapon§Storm bolter",
-                "name": "Storm bolter",
-                "quantity": 2
               }
             ]
           }
@@ -104,11 +99,6 @@
               {
                 "item": "Weapon§Storm Bolters",
                 "name": "Storm Bolters",
-                "quantity": 1
-              },
-              {
-                "item": "Weapon§Twin storm bolter",
-                "name": "Twin storm bolter",
                 "quantity": 1
               }
             ]

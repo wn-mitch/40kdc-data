@@ -110,11 +110,12 @@
       "bolt-pistol-intercessor-squad",
       "bolt-rifle-intercessor-squad",
       "close-combat-weapon",
-      "hand-flamer",
+      "hand-flamer-intercessor-squad",
       "plasma-pistol-intercessor-squad",
-      "power-fist",
+      "power-fist-intercessor-squad",
       "power-weapon-intercessor-squad",
       "thunder-hammer-intercessor-squad",
+      "astartes-grenade-launcher-intercessor-squad",
       "close-combat-weapon-intercessor-squad"
     ]
   },

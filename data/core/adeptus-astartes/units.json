@@ -123,7 +123,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "armoured-hull",
+      "armoured-hull-gladiator-lancer",
       "fragstorm-grenade-launcher",
       "icarus-rocket-pod",
       "ironhail-heavy-stubber",
@@ -208,13 +208,13 @@
       "max": 10
     },
     "weapon_ids": [
-      "assault-cannon",
-      "chainfist",
-      "cyclone-missile-launcher",
+      "assault-cannon-terminator-squad",
+      "chainfist-terminator-squad",
+      "cyclone-missile-launcher-terminator-squad",
       "heavy-flamer-terminator-squad",
-      "power-fist",
+      "power-fist-terminator-squad",
       "power-weapon-terminator-squad",
-      "storm-bolter"
+      "storm-bolter-terminator-squad"
     ],
     "ability_ids": [
       "deep-strike",
@@ -703,7 +703,6 @@
     },
     "weapon_ids": [
       "astartes-chainsword-sternguard-veteran-squad",
-      "close-combat-weapon-sternguard-veteran-squad",
       "combi-weapon-sternguard-veteran-squad",
       "power-fist-sternguard-veteran-squad",
       "power-weapon-sternguard-veteran-squad",
@@ -827,11 +826,11 @@
     },
     "weapon_ids": [
       "armoured-tracks",
-      "hunter-killer-missile",
-      "hurricane-bolter",
+      "hunter-killer-missile-land-raider-crusader",
+      "hurricane-bolter-land-raider-crusader",
       "multi-melta-land-raider-crusader",
-      "storm-bolter",
-      "twin-assault-cannon"
+      "storm-bolter-land-raider-crusader",
+      "twin-assault-cannon-land-raider-crusader"
     ],
     "ability_ids": [
       "assault-ramp",
@@ -1168,10 +1167,10 @@
       "max": 1
     },
     "weapon_ids": [
-      "armoured-hull",
+      "armoured-hull-impulsor",
       "bellicatus-missile-array",
       "fragstorm-grenade-launcher-impulsor",
-      "ironhail-heavy-stubber",
+      "ironhail-heavy-stubber-impulsor",
       "ironhail-skytalon-array",
       "storm-bolter-impulsor"
     ],
@@ -1289,7 +1288,7 @@
       "ironhail-heavy-stubber",
       "macro-plasma-incinerator",
       "repulsor-executioner-defensive-array",
-      "twin-heavy-bolter",
+      "twin-heavy-bolter-repulsor-executioner",
       "twin-icarus-ironhail-heavy-stubber"
     ],
     "ability_ids": [
@@ -1460,10 +1459,10 @@
       "max": 1
     },
     "weapon_ids": [
-      "armoured-hull",
+      "armoured-hull-gladiator-valiant",
       "icarus-rocket-pod",
       "ironhail-heavy-stubber",
-      "multi-melta",
+      "multi-melta-gladiator-valiant",
       "twin-las-talon",
       "defensive-array-gladiator-valiant"
     ],
@@ -1627,10 +1626,10 @@
       "armoured-hull-repulsor",
       "heavy-onslaught-gatling-cannon-repulsor",
       "hunter-slayer-missile",
-      "las-talon",
+      "las-talon-repulsor",
       "repulsor-defensive-array",
-      "twin-heavy-bolter",
-      "twin-lascannon"
+      "twin-heavy-bolter-repulsor",
+      "twin-lascannon-repulsor"
     ],
     "ability_ids": [
       "emergency-combat-embarkation",
@@ -1723,10 +1722,9 @@
       "max": 1
     },
     "weapon_ids": [
-      "armoured-hull",
+      "armoured-hull-gladiator-reaper",
       "icarus-rocket-pod",
       "ironhail-heavy-stubber",
-      "tempest-bolter",
       "twin-heavy-onslaught-gatling-cannon",
       "defensive-array-gladiator-reaper"
     ],
@@ -5709,11 +5707,11 @@
     },
     "weapon_ids": [
       "astartes-chainsword-assault-intercessor-squad",
-      "hand-flamer",
-      "heavy-bolt-pistol",
+      "hand-flamer-assault-intercessor-squad",
+      "heavy-bolt-pistol-assault-intercessor-squad",
       "plasma-pistol-assault-intercessor-squad",
-      "power-fist",
-      "power-weapon",
+      "power-fist-assault-intercessor-squad",
+      "power-weapon-assault-intercessor-squad",
       "thunder-hammer-assault-intercessor-squad"
     ],
     "ability_ids": [
@@ -5815,9 +5813,8 @@
       "max": 6
     },
     "weapon_ids": [
-      "assault-bolters",
-      "close-combat-weapon",
-      "plasma-exterminators",
+      "assault-bolters-inceptor-squad",
+      "plasma-exterminators-inceptor-squad",
       "ceramite-fists-inceptor-squad"
     ],
     "ability_ids": [
@@ -5891,7 +5888,7 @@
       "close-combat-weapon-ancient-in-terminator-armour",
       "power-fist-ancient-in-terminator-armour",
       "power-weapon-ancient-in-terminator-armour",
-      "storm-bolter",
+      "storm-bolter-ancient-in-terminator-armour",
       "thunder-hammer-ancient-in-terminator-armour",
       "twin-lightning-claws-ancient-in-terminator-armour"
     ],
@@ -5976,10 +5973,8 @@
       "max": 1
     },
     "weapon_ids": [
-      "close-combat-weapon-storm-speeder-hailstrike",
       "fragstorm-grenade-launcher-storm-speeder-hailstrike",
       "onslaught-gatling-cannon-storm-speeder-hailstrike",
-      "twin-ironhail-heavy-stubber",
       "armoured-impact",
       "ironhail-heavy-stubber-array-storm-speeder-hailstrike"
     ],
@@ -6389,11 +6384,9 @@
     },
     "weapon_ids": [
       "bolt-pistol-eradicator-squad",
-      "close-combat-weapon",
-      "melta-rifle",
+      "melta-rifle-eradicator-squad",
       "multi-melta-eradicator-squad",
-      "ceramite-fists-eradicator-squad",
-      "heavy-bolter-eradicator-squad"
+      "ceramite-fists-eradicator-squad"
     ],
     "ability_ids": [
       "total-obliteration"
@@ -6470,7 +6463,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "bolt-pistol",
+      "bolt-pistol-librarian",
       "force-weapon",
       "smite"
     ],
@@ -6892,7 +6885,7 @@
       "max": 6
     },
     "weapon_ids": [
-      "heavy-bolt-pistol",
+      "heavy-bolt-pistol-bladeguard-veteran-squad",
       "master-crafted-power-weapon-bladeguard-veteran-squad",
       "neo-volkite-pistol",
       "plasma-pistol-bladeguard-veteran-squad"
@@ -7000,7 +6993,6 @@
       "max": 2
     },
     "weapon_ids": [
-      "close-combat-weapon",
       "twin-firestrike-autocannon",
       "twin-firestrike-las-talon",
       "hovering-bulk-firestrike-servo-turrets"
@@ -7077,7 +7069,6 @@
       "max": 1
     },
     "weapon_ids": [
-      "close-combat-weapon-storm-speeder-hammerstrike",
       "hammerstrike-missile-launcher",
       "krakstorm-grenade-launcher",
       "melta-destroyer",
@@ -7235,7 +7226,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "absolvor-bolt-pistol",
+      "absolvor-bolt-pistol-judiciar",
       "executioner-relic-blade"
     ],
     "ability_ids": [
@@ -7421,9 +7412,9 @@
       "max": 1
     },
     "weapon_ids": [
-      "combi-weapon",
+      "combi-weapon-captain-in-terminator-armour",
       "relic-fist-captain-in-terminator-armour",
-      "relic-weapon",
+      "relic-weapon-captain-in-terminator-armour",
       "storm-bolter-captain-in-terminator-armour"
     ],
     "ability_ids": [
@@ -7666,9 +7657,9 @@
       "astartes-chainsword-captain-with-jump-pack",
       "hand-flamer-captain-with-jump-pack",
       "heavy-bolt-pistol-captain-with-jump-pack",
-      "plasma-pistol",
+      "plasma-pistol-captain-with-jump-pack",
       "power-fist-captain-with-jump-pack",
-      "relic-weapon",
+      "relic-weapon-captain-with-jump-pack",
       "thunder-hammer-captain-with-jump-pack"
     ],
     "ability_ids": [
@@ -7754,10 +7745,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "close-combat-weapon-storm-speeder-thunderstrike",
-      "stormfury-missiles",
       "thunderstrike-las-talon",
-      "twin-icarus-rocket-pod",
       "armoured-impact",
       "stormfury-missile-launcher-storm-speeder-thunderstrike",
       "thunderstrike-icarus-rocket-pod-storm-speeder-thunderstrike"
@@ -7985,7 +7973,7 @@
       "combi-weapon-librarian-in-terminator-armour",
       "force-weapon",
       "smite",
-      "storm-bolter"
+      "storm-bolter-librarian-in-terminator-armour"
     ],
     "ability_ids": [
       "leader",
@@ -8330,10 +8318,10 @@
       "max": 10
     },
     "weapon_ids": [
-      "bolt-pistol",
-      "close-combat-weapon",
-      "plasma-incinerator",
-      "plasma-pistol-hellblaster-squad"
+      "bolt-pistol-hellblaster-squad",
+      "plasma-incinerator-hellblaster-squad",
+      "plasma-pistol-hellblaster-squad",
+      "close-combat-weapon-hellblaster-squad"
     ],
     "ability_ids": [
       "for-the-chapter"
@@ -8406,10 +8394,10 @@
       "max": 10
     },
     "weapon_ids": [
-      "bolt-pistol",
-      "close-combat-weapon",
+      "bolt-pistol-heavy-intercessor-squad",
       "heavy-bolt-rifle",
-      "heavy-bolter-heavy-intercessor-squad"
+      "heavy-bolter-heavy-intercessor-squad",
+      "close-combat-weapon-heavy-intercessor-squad"
     ],
     "ability_ids": [
       "unyielding-in-the-face-of-the-foe"
@@ -8575,9 +8563,8 @@
     "weapon_ids": [
       "astartes-chainsword-scout-squad",
       "astartes-shotgun",
-      "bolt-pistol",
-      "boltgun",
-      "close-combat-weapon-scout-squad",
+      "bolt-pistol-scout-squad",
+      "boltgun-scout-squad",
       "combat-knife-scout-squad",
       "heavy-bolter-scout-squad",
       "missile-launcher-scout-squad",
@@ -8740,7 +8727,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "absolvor-bolt-pistol",
+      "absolvor-bolt-pistol-apothecary-biologis",
       "close-combat-weapon-apothecary-biologis"
     ],
     "ability_ids": [
@@ -8824,9 +8811,9 @@
       "brutalis-bolt-rifles",
       "brutalis-fists",
       "brutalis-talons",
-      "twin-heavy-bolter",
-      "twin-icarus-ironhail-heavy-stubber",
-      "twin-multi-melta"
+      "twin-heavy-bolter-brutalis-dreadnought",
+      "twin-icarus-ironhail-heavy-stubber-brutalis-dreadnought",
+      "twin-multi-melta-brutalis-dreadnought"
     ],
     "ability_ids": [
       "brutalis-charge",
@@ -8902,7 +8889,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "bolt-pistol",
+      "bolt-pistol-librarian-in-phobos-armour",
       "force-weapon",
       "smite"
     ],
@@ -8979,7 +8966,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "absolvor-bolt-pistol",
+      "absolvor-bolt-pistol-apothecary",
       "close-combat-weapon-apothecary",
       "reductor-pistol"
     ],
@@ -9067,10 +9054,10 @@
     "weapon_ids": [
       "armoured-tracks",
       "godhammer-lascannon",
-      "hunter-killer-missile",
-      "multi-melta",
-      "storm-bolter",
-      "twin-heavy-bolter"
+      "hunter-killer-missile-land-raider",
+      "multi-melta-land-raider",
+      "storm-bolter-land-raider",
+      "twin-heavy-bolter-land-raider"
     ],
     "ability_ids": [
       "assault-ramp",
@@ -9156,7 +9143,7 @@
       "master-crafted-bolter-lieutenant",
       "master-crafted-power-weapon-lieutenant",
       "neo-volkite-pistol-lieutenant",
-      "plasma-pistol",
+      "plasma-pistol-lieutenant",
       "power-fist-lieutenant",
       "ceramite-fists-lieutenant"
     ],
@@ -9550,11 +9537,10 @@
       "max": 3
     },
     "weapon_ids": [
-      "bolt-pistol",
-      "bolt-sniper-rifle",
-      "close-combat-weapon",
-      "instigator-bolt-carbine",
-      "las-fusil",
+      "bolt-pistol-eliminator-squad",
+      "bolt-sniper-rifle-eliminator-squad",
+      "instigator-bolt-carbine-eliminator-squad",
+      "las-fusil-eliminator-squad",
       "ceramite-fists-eliminator-squad"
     ],
     "ability_ids": [
@@ -9631,14 +9617,13 @@
     "weapon_ids": [
       "astartes-chainsword-outrider-squad",
       "bolt-pistol",
-      "close-combat-weapon-outrider-squad",
-      "heavy-bolt-pistol",
+      "heavy-bolt-pistol-outrider-squad",
       "multi-melta",
       "onslaught-gatling-cannon",
       "twin-bolt-rifle-outrider-squad",
       "plasma-pistol-outrider-squad",
       "power-weapon-outrider-squad",
-      "thunder-hammer"
+      "thunder-hammer-outrider-squad"
     ],
     "ability_ids": [
       "thunderous-impact"
@@ -9734,12 +9719,12 @@
       "max": 5
     },
     "weapon_ids": [
-      "bolt-pistol",
-      "castellan-launcher",
-      "close-combat-weapon",
-      "superfrag-rocket-launcher",
-      "superkrak-rocket-launcher",
-      "vengor-launcher"
+      "bolt-pistol-desolation-squad",
+      "castellan-launcher-desolation-squad",
+      "superfrag-rocket-launcher-desolation-squad",
+      "superkrak-rocket-launcher-desolation-squad",
+      "vengor-launcher-desolation-squad",
+      "close-combat-weapon-desolation-squad"
     ],
     "ability_ids": [
       "targeter-optics"
@@ -10268,10 +10253,10 @@
     "weapon_ids": [
       "archeotech-laspistol",
       "astropathic-blast",
-      "bolt-rifle",
+      "bolt-rifle-wardens-of-ultramar",
       "close-combat-weapon-wardens-of-ultramar",
       "force-stave",
-      "heavy-bolt-pistol",
+      "heavy-bolt-pistol-wardens-of-ultramar",
       "master-crafted-power-weapon-wardens-of-ultramar",
       "power-weapon-wardens-of-ultramar",
       "ceramite-fists-wardens-of-ultramar"
@@ -10352,7 +10337,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "heavy-flamer",
+      "heavy-flamer-redemptor-dreadnought",
       "heavy-onslaught-gatling-cannon",
       "icarus-rocket-pod",
       "macro-plasma-incinerator",
@@ -10442,9 +10427,8 @@
       "max": 1
     },
     "weapon_ids": [
-      "bolt-pistol",
-      "bolt-rifle",
-      "close-combat-weapon-ancient",
+      "bolt-pistol-ancient",
+      "bolt-rifle-ancient",
       "power-weapon-ancient",
       "ceramite-fists-ancient"
     ],
@@ -10598,8 +10582,8 @@
       "max": 1
     },
     "weapon_ids": [
-      "crozius-arcanum",
-      "storm-bolter"
+      "crozius-arcanum-chaplain-in-terminator-armour",
+      "storm-bolter-chaplain-in-terminator-armour"
     ],
     "ability_ids": [
       "leader",
@@ -10774,9 +10758,9 @@
       "max": 10
     },
     "weapon_ids": [
-      "bolt-pistol",
+      "bolt-pistol-incursor-squad",
       "occulus-bolt-carbine",
-      "paired-combat-blades"
+      "paired-combat-blades-incursor-squad"
     ],
     "ability_ids": [
       "haywire-mine",
@@ -10877,11 +10861,11 @@
     },
     "weapon_ids": [
       "astartes-chainsword-assault-intercessors-with-jump-packs",
-      "hand-flamer",
-      "heavy-bolt-pistol",
+      "hand-flamer-assault-intercessors-with-jump-packs",
+      "heavy-bolt-pistol-assault-intercessors-with-jump-packs",
       "plasma-pistol-assault-intercessors-with-jump-packs",
-      "power-fist",
-      "power-weapon"
+      "power-fist-assault-intercessors-with-jump-packs",
+      "power-weapon-assault-intercessors-with-jump-packs"
     ],
     "ability_ids": [
       "hammer-of-wrath",
@@ -11084,9 +11068,10 @@
       "plasma-pistol-vanguard-veteran-squad-with-jump-packs",
       "vanguard-veteran-weapon",
       "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs",
-      "heavy-bolt-pistol",
+      "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs",
+      "power-fist-vanguard-veteran-squad-with-jump-packs",
       "relic-blade-vanguard-veteran-squad-with-jump-packs",
-      "thunder-hammer"
+      "thunder-hammer-vanguard-veteran-squad-with-jump-packs"
     ],
     "ability_ids": [
       "vanguard-assault",
@@ -11189,13 +11174,13 @@
       "max": 4
     },
     "weapon_ids": [
-      "bolt-pistol-company-heroes",
+      "bolt-pistol",
       "bolt-rifle",
-      "close-combat-weapon-company-heroes",
       "master-crafted-bolt-rifle",
       "master-crafted-heavy-bolter",
       "master-crafted-power-weapon-company-heroes",
-      "combat-knife-company-heroes"
+      "combat-knife-company-heroes",
+      "bolt-pistol-company-heroes"
     ],
     "ability_ids": [
       "command-squad",
@@ -11283,10 +11268,10 @@
       "max": 6
     },
     "weapon_ids": [
-      "auto-boltstorm-gauntlets",
-      "flamestorm-gauntlets",
-      "fragstorm-grenade-launcher",
-      "twin-power-fists"
+      "auto-boltstorm-gauntlets-aggressor-squad",
+      "flamestorm-gauntlets-aggressor-squad",
+      "fragstorm-grenade-launcher-aggressor-squad",
+      "twin-power-fists-aggressor-squad"
     ],
     "ability_ids": [
       "close-quarters-firepower"
@@ -11437,12 +11422,11 @@
     },
     "weapon_ids": [
       "bolt-pistol-captain",
-      "close-combat-weapon-captain",
       "heavy-bolt-pistol-captain",
       "master-crafted-bolter",
       "master-crafted-power-weapon-captain",
       "neo-volkite-pistol-captain",
-      "plasma-pistol",
+      "plasma-pistol-captain",
       "power-fist-captain"
     ],
     "ability_ids": [
@@ -11593,8 +11577,8 @@
       "max": 1
     },
     "weapon_ids": [
-      "absolvor-bolt-pistol",
-      "crozius-arcanum",
+      "absolvor-bolt-pistol-chaplain-on-bike",
+      "crozius-arcanum-chaplain-on-bike",
       "twin-bolt-rifle"
     ],
     "ability_ids": [
@@ -11922,14 +11906,14 @@
       "bolt-pistol",
       "boltgun",
       "combi-weapon-chaplain-with-jump-pack",
-      "crozius-arcanum",
+      "crozius-arcanum-chaplain-with-jump-pack",
       "grav-pistol",
       "hand-flamer",
       "inferno-pistol",
       "plasma-pistol-chaplain-with-jump-pack",
       "power-fist-chaplain-with-jump-pack",
       "storm-bolter",
-      "absolvor-bolt-pistol"
+      "absolvor-bolt-pistol-chaplain-with-jump-pack"
     ],
     "ability_ids": [
       "exhortation-of-rage",
@@ -12017,11 +12001,12 @@
       "bolt-pistol-intercessor-squad",
       "bolt-rifle-intercessor-squad",
       "close-combat-weapon",
-      "hand-flamer",
+      "hand-flamer-intercessor-squad",
       "plasma-pistol-intercessor-squad",
-      "power-fist",
+      "power-fist-intercessor-squad",
       "power-weapon-intercessor-squad",
       "thunder-hammer-intercessor-squad",
+      "astartes-grenade-launcher-intercessor-squad",
       "close-combat-weapon-intercessor-squad"
     ],
     "ability_ids": [
@@ -12192,10 +12177,10 @@
     "weapon_ids": [
       "armoured-tracks",
       "flamestorm-cannon",
-      "hunter-killer-missile",
-      "multi-melta",
-      "storm-bolter",
-      "twin-assault-cannon"
+      "hunter-killer-missile-land-raider-redeemer",
+      "multi-melta-land-raider-redeemer",
+      "storm-bolter-land-raider-redeemer",
+      "twin-assault-cannon-land-raider-redeemer"
     ],
     "ability_ids": [
       "assault-ramp",
@@ -12361,8 +12346,8 @@
     },
     "weapon_ids": [
       "armoured-tracks-rhino",
-      "hunter-killer-missile",
-      "storm-bolter"
+      "hunter-killer-missile-rhino",
+      "storm-bolter-rhino"
     ],
     "ability_ids": [
       "firing-deck-2",
@@ -12437,9 +12422,8 @@
       "max": 1
     },
     "weapon_ids": [
-      "bolt-pistol",
-      "close-combat-weapon-invader-atv",
-      "multi-melta",
+      "bolt-pistol-invader-atv",
+      "multi-melta-invader-atv",
       "onslaught-gatling-cannon-invader-atv",
       "twin-bolt-rifle-invader-atv",
       "armoured-impact-invader-atv"
@@ -12542,8 +12526,7 @@
       "max": 10
     },
     "weapon_ids": [
-      "bolt-pistol",
-      "close-combat-weapon",
+      "bolt-pistol-infiltrator-squad",
       "marksman-bolt-carbine",
       "ceramite-fists-infiltrator-squad"
     ],
@@ -12639,7 +12622,6 @@
       "armoured-feet",
       "ballistus-lascannon",
       "ballistus-missile-launcher",
-      "twin-storm-bolter-ballistus-dreadnought",
       "storm-bolters-ballistus-dreadnought"
     ],
     "ability_ids": [
@@ -12718,9 +12700,9 @@
       "max": 10
     },
     "weapon_ids": [
-      "bolt-pistol",
-      "close-combat-weapon",
-      "pyreblaster-infernus-squad"
+      "bolt-pistol-infernus-squad",
+      "pyreblaster-infernus-squad",
+      "close-combat-weapon-infernus-squad"
     ],
     "ability_ids": [
       "incendiary-terror"
@@ -12946,7 +12928,6 @@
     "weapon_ids": [
       "bolt-pistol-lieutenant-in-phobos-armour",
       "master-crafted-bolt-carbine-lieutenant-in-phobos-armour",
-      "paired-combat-blades-lieutenant-in-phobos-armour",
       "monomolecular-combat-blades-lieutenant-in-phobos-armour"
     ],
     "ability_ids": [
@@ -13027,7 +13008,8 @@
       "bolt-carbine",
       "close-combat-weapon",
       "combat-knife",
-      "special-issue-bolt-pistol-reiver-squad"
+      "special-issue-bolt-pistol-reiver-squad",
+      "combat-knife-reiver-squad"
     ],
     "ability_ids": [
       "fearsome-assault",
@@ -13100,8 +13082,8 @@
       "max": 1
     },
     "weapon_ids": [
-      "absolvor-bolt-pistol",
-      "crozius-arcanum"
+      "absolvor-bolt-pistol-chaplain",
+      "crozius-arcanum-chaplain"
     ],
     "ability_ids": [
       "leader",
@@ -13175,7 +13157,6 @@
       "incendium-cannon",
       "invictor-fist",
       "twin-ironhail-autocannon",
-      "twin-ironhail-heavy-stubber",
       "ironhail-heavy-stubbers-invictor-tactical-warsuit"
     ],
     "ability_ids": [
@@ -13247,8 +13228,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "close-combat-weapon-bladeguard-ancient",
-      "heavy-bolt-pistol",
+      "heavy-bolt-pistol-bladeguard-ancient",
       "relics-of-battle-bladeguard-ancient"
     ],
     "ability_ids": [
@@ -15118,9 +15098,9 @@
     "is_legend": false,
     "points_provisional": false,
     "weapon_ids": [
-      "bolt-pistol",
+      "bolt-pistol-eradicator-squad-with-heavy-bolters",
       "heavy-bolter-eradicator-squad-with-heavy-bolters",
-      "close-combat-weapon"
+      "ceramite-fists-eradicator-squad-with-heavy-bolters"
     ],
     "base_size_mm": {
       "shape": "round",
@@ -15188,9 +15168,8 @@
     "points_provisional": false,
     "weapon_ids": [
       "onslaught-gatling-cannon",
-      "multi-melta",
+      "multi-melta-land-speeder",
       "stormfury-missile-launcher",
-      "close-combat-weapon-land-speeder",
       "heavy-flamer",
       "armoured-impact",
       "pyrecannon"

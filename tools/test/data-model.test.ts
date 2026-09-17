@@ -579,7 +579,7 @@ describe("unit-scoped weapon profiles", () => {
     expect(option).toBeDefined();
     expect(option!.replacement_choice).toEqual([
       [id, "plasma-pistol-vanguard-veteran-squad-with-jump-packs"],
-      [id, "heavy-bolt-pistol"],
+      [id, "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs"],
     ]);
 
     const scoped = unit!.weapons.find((weapon) => weapon.id === id);

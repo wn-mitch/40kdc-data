@@ -9,5 +9,5 @@ Detachment: 1st Company Task Force
 Detachment: Librarius Conclave
 
 ## Battleline [310 pts]
-Gladiator Lancer [160 pts]: Armoured hull, Defensive Array, Lancer laser destroyer, 2x Storm bolter
-Ballistus Dreadnought [150 pts]: Armoured feet, Ballistus lascannon, Ballistus missile launcher, Storm Bolters, Twin storm bolter
+Gladiator Lancer [160 pts]: Armoured Hull, Defensive Array, Lancer laser destroyer
+Ballistus Dreadnought [150 pts]: Armoured feet, Ballistus lascannon, Ballistus missile launcher, Storm Bolters

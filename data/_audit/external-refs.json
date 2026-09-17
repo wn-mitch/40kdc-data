@@ -62,7 +62,7 @@
       }
     },
     "weapon": {
-      "entities": 3255,
+      "entities": 3365,
       "with_external_refs": 3092,
       "covered_entities_by_namespace": {
         "bsdata": 2817,

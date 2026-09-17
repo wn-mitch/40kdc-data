@@ -49,8 +49,8 @@
       "wargear": [
         {
           "ref": {
-            "id": "armoured-hull",
-            "raw_name": "Armoured hull",
+            "id": "armoured-hull-gladiator-lancer",
+            "raw_name": "Armoured Hull",
             "resolved": true,
             "candidates": []
           },
@@ -73,15 +73,6 @@
             "candidates": []
           },
           "count": 1
-        },
-        {
-          "ref": {
-            "id": "storm-bolter",
-            "raw_name": "Storm bolter",
-            "resolved": true,
-            "candidates": []
-          },
-          "count": 2
         }
       ],
       "leader_attachment": null
@@ -134,15 +125,6 @@
             "candidates": []
           },
           "count": 1
-        },
-        {
-          "ref": {
-            "id": "twin-storm-bolter-ballistus-dreadnought",
-            "raw_name": "Twin storm bolter",
-            "resolved": true,
-            "candidates": []
-          },
-          "count": 1
         }
       ],
       "leader_attachment": null
@@ -155,7 +137,7 @@
   "diagnostics": {
     "resolved_units": 2,
     "unresolved_units": 0,
-    "resolved_weapons": 9,
+    "resolved_weapons": 7,
     "unresolved_weapons": 0,
     "warnings": []
   }

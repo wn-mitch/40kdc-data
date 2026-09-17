@@ -140,7 +140,7 @@
                     </profile>
                   </profiles>
                 </selection>
-                <selection id="unit1-m0-w1" name="Heavy bolt pistol" type="upgrade" number="1">
+                <selection id="unit1-m0-w1" name="Heavy Bolt Pistol" type="upgrade" number="1">
                   <profiles>
                     <profile name="Heavy Bolt Pistol" typeName="Ranged Weapons">
                       <characteristics>
@@ -150,7 +150,7 @@
                         <characteristic name="S">5</characteristic>
                         <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords">Pistol, Close-quarters</characteristic>
+                        <characteristic name="Keywords">Close-quarters</characteristic>
                       </characteristics>
                     </profile>
                   </profiles>
@@ -174,7 +174,7 @@
                     </profile>
                   </profiles>
                 </selection>
-                <selection id="unit1-m1-w1" name="Heavy bolt pistol" type="upgrade" number="4">
+                <selection id="unit1-m1-w1" name="Heavy Bolt Pistol" type="upgrade" number="4">
                   <profiles>
                     <profile name="Heavy Bolt Pistol" typeName="Ranged Weapons">
                       <characteristics>
@@ -184,7 +184,7 @@
                         <characteristic name="S">5</characteristic>
                         <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords">Pistol, Close-quarters</characteristic>
+                        <characteristic name="Keywords">Close-quarters</characteristic>
                       </characteristics>
                     </profile>
                   </profiles>

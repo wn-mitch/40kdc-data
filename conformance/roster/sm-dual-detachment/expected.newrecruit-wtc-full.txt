@@ -14,7 +14,7 @@
 BATTLELINE
 
 1x Gladiator Lancer (160 pts)
-1 with Armoured hull, Defensive Array, Lancer laser destroyer, 2x Storm bolter
+1 with Armoured Hull, Defensive Array, Lancer laser destroyer
 
 1x Ballistus Dreadnought (150 pts)
-1 with Armoured feet, Ballistus lascannon, Ballistus missile launcher, Storm Bolters, Twin storm bolter
+1 with Armoured feet, Ballistus lascannon, Ballistus missile launcher, Storm Bolters

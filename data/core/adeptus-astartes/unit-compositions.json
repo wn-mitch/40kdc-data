@@ -48,11 +48,9 @@
           "diameter": 100
         },
         "default_weapon_ids": [
-          "storm-bolter",
-          "storm-bolter",
-          "armoured-hull",
-          "lancer-laser-destroyer",
-          "defensive-array-gladiator-lancer"
+          "armoured-hull-gladiator-lancer",
+          "defensive-array-gladiator-lancer",
+          "lancer-laser-destroyer"
         ]
       }
     ],
@@ -86,8 +84,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "storm-bolter",
-          "power-fist"
+          "power-fist-terminator-squad"
         ]
       },
       {
@@ -100,8 +97,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "storm-bolter",
-          "power-fist"
+          "power-fist-terminator-squad"
         ]
       }
     ],
@@ -434,10 +430,8 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "sternguard-bolt-pistol",
-          "sternguard-bolt-rifle",
-          "close-combat-weapon-sternguard-veteran-squad",
           "artificer-firearm-sternguard-veteran-squad",
+          "sternguard-bolt-pistol",
           "ceramite-fists-sternguard-veteran-squad"
         ]
       },
@@ -451,9 +445,9 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "close-combat-weapon-sternguard-veteran-squad",
-          "sternguard-bolt-rifle",
-          "sternguard-bolt-pistol"
+          "artificer-firearm-sternguard-veteran-squad",
+          "sternguard-bolt-pistol",
+          "ceramite-fists-sternguard-veteran-squad"
         ]
       }
     ],
@@ -506,10 +500,9 @@
           "draft": true
         },
         "default_weapon_ids": [
-          "hurricane-bolter",
-          "hurricane-bolter",
           "armoured-tracks",
-          "twin-assault-cannon"
+          "hurricane-bolter-land-raider-crusader",
+          "twin-assault-cannon-land-raider-crusader"
         ]
       }
     ],
@@ -666,9 +659,8 @@
           "diameter": 100
         },
         "default_weapon_ids": [
-          "storm-bolter-impulsor",
-          "storm-bolter-impulsor",
-          "armoured-hull"
+          "armoured-hull-impulsor",
+          "storm-bolter-impulsor"
         ]
       }
     ],
@@ -703,11 +695,10 @@
         },
         "default_weapon_ids": [
           "heavy-onslaught-gatling-cannon",
-          "twin-heavy-bolter",
+          "twin-heavy-bolter-repulsor-executioner",
           "armoured-hull-repulsor-executioner",
           "twin-icarus-ironhail-heavy-stubber",
-          "repulsor-executioner-defensive-array",
-          "macro-plasma-incinerator"
+          "repulsor-executioner-defensive-array"
         ]
       }
     ],
@@ -777,11 +768,10 @@
           "diameter": 100
         },
         "default_weapon_ids": [
-          "armoured-hull",
-          "twin-las-talon",
-          "multi-melta",
-          "multi-melta",
-          "defensive-array-gladiator-valiant"
+          "armoured-hull-gladiator-valiant",
+          "defensive-array-gladiator-valiant",
+          "multi-melta-gladiator-valiant",
+          "twin-las-talon"
         ]
       }
     ],
@@ -850,11 +840,11 @@
           "diameter": 100
         },
         "default_weapon_ids": [
-          "hunter-slayer-missile",
+          "armoured-hull-repulsor",
           "repulsor-defensive-array",
           "heavy-onslaught-gatling-cannon-repulsor",
-          "twin-heavy-bolter",
-          "armoured-hull-repulsor"
+          "hunter-slayer-missile",
+          "twin-heavy-bolter-repulsor"
         ]
       }
     ],
@@ -888,11 +878,9 @@
           "diameter": 100
         },
         "default_weapon_ids": [
-          "armoured-hull",
-          "tempest-bolter",
-          "tempest-bolter",
-          "twin-heavy-onslaught-gatling-cannon",
-          "defensive-array-gladiator-reaper"
+          "armoured-hull-gladiator-reaper",
+          "defensive-array-gladiator-reaper",
+          "twin-heavy-onslaught-gatling-cannon"
         ]
       }
     ],
@@ -3332,8 +3320,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "master-crafted-power-weapon-captain-in-gravis-armour",
           "master-crafted-heavy-bolt-rifle",
+          "master-crafted-power-weapon-captain-in-gravis-armour",
           "power-fist-captain-in-gravis-armour"
         ]
       }
@@ -3403,7 +3391,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "heavy-bolt-pistol",
+          "heavy-bolt-pistol-assault-intercessor-squad",
           "astartes-chainsword-assault-intercessor-squad"
         ]
       },
@@ -3417,7 +3405,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "heavy-bolt-pistol",
+          "heavy-bolt-pistol-assault-intercessor-squad",
           "astartes-chainsword-assault-intercessor-squad"
         ]
       }
@@ -3499,8 +3487,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "assault-bolters",
-          "close-combat-weapon",
+          "assault-bolters-inceptor-squad",
           "ceramite-fists-inceptor-squad"
         ]
       },
@@ -3514,8 +3501,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "assault-bolters",
-          "close-combat-weapon"
+          "assault-bolters-inceptor-squad",
+          "ceramite-fists-inceptor-squad"
         ]
       }
     ],
@@ -3568,8 +3555,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "power-fist-ancient-in-terminator-armour",
-          "storm-bolter"
+          "storm-bolter-ancient-in-terminator-armour"
         ]
       }
     ],
@@ -3603,13 +3589,10 @@
           "diameter": 90
         },
         "default_weapon_ids": [
-          "onslaught-gatling-cannon-storm-speeder-hailstrike",
-          "fragstorm-grenade-launcher-storm-speeder-hailstrike",
-          "fragstorm-grenade-launcher-storm-speeder-hailstrike",
-          "close-combat-weapon-storm-speeder-hailstrike",
-          "twin-ironhail-heavy-stubber",
           "armoured-impact",
-          "ironhail-heavy-stubber-array-storm-speeder-hailstrike"
+          "fragstorm-grenade-launcher-storm-speeder-hailstrike",
+          "ironhail-heavy-stubber-array-storm-speeder-hailstrike",
+          "onslaught-gatling-cannon-storm-speeder-hailstrike"
         ]
       }
     ],
@@ -3643,10 +3626,10 @@
           "diameter": 40
         },
         "default_weapon_ids": [
+          "forge-bolter",
           "grav-pistol-techmarine",
           "omnissiah-power-axe",
-          "servo-arm",
-          "forge-bolter"
+          "servo-arm"
         ]
       }
     ],
@@ -3680,9 +3663,9 @@
           "diameter": 40
         },
         "default_weapon_ids": [
+          "anzuq-korsarro-khan",
           "bolt-pistol-korsarro-khan",
-          "moonfang",
-          "anzuq-korsarro-khan"
+          "moonfang"
         ]
       }
     ],
@@ -3719,8 +3702,8 @@
         "default_weapon_ids": [
           "heavy-bolt-pistol-suboden-khan",
           "onslaught-gatling-cannon-suboden-khan",
-          "stormtooth",
-          "power-sword"
+          "power-sword",
+          "stormtooth"
         ]
       }
     ],
@@ -3790,10 +3773,8 @@
         },
         "default_weapon_ids": [
           "bolt-pistol-eradicator-squad",
-          "melta-rifle",
-          "close-combat-weapon",
           "ceramite-fists-eradicator-squad",
-          "heavy-bolter-eradicator-squad"
+          "melta-rifle-eradicator-squad"
         ]
       },
       {
@@ -3807,8 +3788,8 @@
         },
         "default_weapon_ids": [
           "bolt-pistol-eradicator-squad",
-          "close-combat-weapon",
-          "melta-rifle"
+          "ceramite-fists-eradicator-squad",
+          "melta-rifle-eradicator-squad"
         ]
       }
     ],
@@ -3861,9 +3842,9 @@
           "diameter": 40
         },
         "default_weapon_ids": [
+          "bolt-pistol-librarian",
           "force-weapon",
-          "smite",
-          "bolt-pistol"
+          "smite"
         ]
       }
     ],
@@ -3994,8 +3975,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "thunder-hammer-terminator-assault-squad",
-          "storm-shield"
+          "twin-lightning-claws-terminator-assault-squad"
         ]
       },
       {
@@ -4008,8 +3988,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "storm-shield",
-          "thunder-hammer-terminator-assault-squad"
+          "twin-lightning-claws-terminator-assault-squad"
         ]
       }
     ],
@@ -4097,7 +4076,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "heavy-bolt-pistol",
+          "heavy-bolt-pistol-bladeguard-veteran-squad",
           "master-crafted-power-weapon-bladeguard-veteran-squad"
         ]
       },
@@ -4111,7 +4090,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "heavy-bolt-pistol",
+          "heavy-bolt-pistol-bladeguard-veteran-squad",
           "master-crafted-power-weapon-bladeguard-veteran-squad"
         ]
       }
@@ -4194,7 +4173,6 @@
         },
         "default_weapon_ids": [
           "twin-firestrike-las-talon",
-          "close-combat-weapon",
           "hovering-bulk-firestrike-servo-turrets"
         ]
       }
@@ -4238,12 +4216,10 @@
           "diameter": 90
         },
         "default_weapon_ids": [
+          "armoured-impact",
           "hammerstrike-missile-launcher",
           "krakstorm-grenade-launcher",
-          "krakstorm-grenade-launcher",
-          "melta-destroyer",
-          "close-combat-weapon-storm-speeder-hammerstrike",
-          "armoured-impact"
+          "melta-destroyer"
         ]
       }
     ],
@@ -4321,7 +4297,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "absolvor-bolt-pistol",
+          "absolvor-bolt-pistol-judiciar",
           "executioner-relic-blade"
         ]
       }
@@ -4356,8 +4332,8 @@
           "diameter": 50
         },
         "default_weapon_ids": [
-          "storm-bolter-captain-in-terminator-armour",
-          "relic-weapon"
+          "relic-weapon-captain-in-terminator-armour",
+          "storm-bolter-captain-in-terminator-armour"
         ]
       }
     ],
@@ -4478,8 +4454,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "heavy-bolt-pistol-captain-with-jump-pack",
-          "astartes-chainsword-captain-with-jump-pack"
+          "heavy-bolt-pistol-captain-with-jump-pack"
         ]
       }
     ],
@@ -4522,13 +4497,10 @@
           "diameter": 90
         },
         "default_weapon_ids": [
-          "thunderstrike-las-talon",
-          "stormfury-missiles",
-          "close-combat-weapon-storm-speeder-thunderstrike",
-          "twin-icarus-rocket-pod",
           "armoured-impact",
           "stormfury-missile-launcher-storm-speeder-thunderstrike",
-          "thunderstrike-icarus-rocket-pod-storm-speeder-thunderstrike"
+          "thunderstrike-icarus-rocket-pod-storm-speeder-thunderstrike",
+          "thunderstrike-las-talon"
         ]
       }
     ],
@@ -5059,9 +5031,9 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "plasma-incinerator",
-          "close-combat-weapon"
+          "bolt-pistol-hellblaster-squad",
+          "close-combat-weapon-hellblaster-squad",
+          "plasma-incinerator-hellblaster-squad"
         ]
       },
       {
@@ -5074,9 +5046,9 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "plasma-incinerator",
-          "close-combat-weapon"
+          "bolt-pistol-hellblaster-squad",
+          "close-combat-weapon-hellblaster-squad",
+          "plasma-incinerator-hellblaster-squad"
         ]
       }
     ],
@@ -5129,9 +5101,9 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "heavy-bolt-rifle",
-          "close-combat-weapon"
+          "bolt-pistol-heavy-intercessor-squad",
+          "close-combat-weapon-heavy-intercessor-squad",
+          "heavy-bolt-rifle"
         ]
       },
       {
@@ -5144,9 +5116,9 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "heavy-bolt-rifle",
-          "close-combat-weapon",
-          "bolt-pistol"
+          "bolt-pistol-heavy-intercessor-squad",
+          "close-combat-weapon-heavy-intercessor-squad",
+          "heavy-bolt-rifle"
         ]
       }
     ],
@@ -5236,9 +5208,8 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "boltgun",
-          "close-combat-weapon-scout-squad"
+          "boltgun-scout-squad",
+          "bolt-pistol-scout-squad"
         ]
       },
       {
@@ -5251,9 +5222,8 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "boltgun",
-          "close-combat-weapon-scout-squad",
-          "bolt-pistol"
+          "boltgun-scout-squad",
+          "bolt-pistol-scout-squad"
         ]
       }
     ],
@@ -5340,8 +5310,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "close-combat-weapon-apothecary-biologis",
-          "absolvor-bolt-pistol"
+          "absolvor-bolt-pistol-apothecary-biologis",
+          "close-combat-weapon-apothecary-biologis"
         ]
       }
     ],
@@ -5375,10 +5345,10 @@
           "diameter": 90
         },
         "default_weapon_ids": [
-          "twin-icarus-ironhail-heavy-stubber",
-          "brutalis-fists",
           "brutalis-bolt-rifles",
-          "twin-heavy-bolter"
+          "brutalis-fists",
+          "twin-heavy-bolter-brutalis-dreadnought",
+          "twin-icarus-ironhail-heavy-stubber-brutalis-dreadnought"
         ]
       }
     ],
@@ -5412,9 +5382,9 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "smite",
-          "bolt-pistol",
-          "force-weapon"
+          "bolt-pistol-librarian-in-phobos-armour",
+          "force-weapon",
+          "smite"
         ]
       }
     ],
@@ -5448,9 +5418,9 @@
           "diameter": 40
         },
         "default_weapon_ids": [
+          "absolvor-bolt-pistol-apothecary",
           "reductor-pistol",
-          "close-combat-weapon-apothecary",
-          "absolvor-bolt-pistol"
+          "close-combat-weapon-apothecary"
         ]
       }
     ],
@@ -5484,8 +5454,7 @@
           "draft": true
         },
         "default_weapon_ids": [
-          "twin-heavy-bolter",
-          "godhammer-lascannon",
+          "twin-heavy-bolter-land-raider",
           "godhammer-lascannon",
           "armoured-tracks"
         ]
@@ -5521,10 +5490,9 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "close-combat-weapon-lieutenant",
-          "master-crafted-bolter-lieutenant",
           "bolt-pistol-lieutenant",
-          "ceramite-fists-lieutenant"
+          "ceramite-fists-lieutenant",
+          "master-crafted-bolter-lieutenant"
         ]
       }
     ],
@@ -5559,8 +5527,8 @@
         },
         "default_weapon_ids": [
           "bolt-pistol-chief-librarian-tigurius",
-          "storm-of-the-emperors-wrath",
-          "rod-of-tigurius"
+          "rod-of-tigurius",
+          "storm-of-the-emperors-wrath"
         ]
       }
     ],
@@ -5632,8 +5600,8 @@
         },
         "default_weapon_ids": [
           "bolt-pistol-captain-titus",
-          "master-crafted-chainsword-captain-titus",
-          "master-crafted-bolter-captain-titus"
+          "master-crafted-bolter-captain-titus",
+          "master-crafted-chainsword-captain-titus"
         ]
       }
     ],
@@ -5747,9 +5715,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "bolt-sniper-rifle",
-          "close-combat-weapon",
+          "bolt-pistol-eliminator-squad",
+          "bolt-sniper-rifle-eliminator-squad",
           "ceramite-fists-eliminator-squad"
         ]
       },
@@ -5763,9 +5730,9 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "close-combat-weapon",
-          "bolt-sniper-rifle"
+          "bolt-pistol-eliminator-squad",
+          "bolt-sniper-rifle-eliminator-squad",
+          "ceramite-fists-eliminator-squad"
         ]
       }
     ],
@@ -5801,8 +5768,9 @@
         "max": 1,
         "default_weapon_ids": [
           "astartes-chainsword-outrider-squad",
-          "heavy-bolt-pistol",
-          "twin-bolt-rifle-outrider-squad"
+          "heavy-bolt-pistol-outrider-squad",
+          "twin-bolt-rifle-outrider-squad",
+          "bolt-pistol"
         ],
         "is_leader_model": true,
         "base_size_mm": {
@@ -5817,7 +5785,7 @@
         "max": 5,
         "default_weapon_ids": [
           "astartes-chainsword-outrider-squad",
-          "heavy-bolt-pistol",
+          "heavy-bolt-pistol-outrider-squad",
           "twin-bolt-rifle-outrider-squad"
         ],
         "is_leader_model": false,
@@ -5832,13 +5800,9 @@
         "min": 0,
         "max": 1,
         "default_weapon_ids": [
-          "twin-bolt-rifle-outrider-squad",
-          "onslaught-gatling-cannon",
-          "bolt-pistol",
-          "close-combat-weapon-outrider-squad",
-          "plasma-pistol-outrider-squad",
-          "power-weapon-outrider-squad",
-          "thunder-hammer"
+          "astartes-chainsword-outrider-squad",
+          "heavy-bolt-pistol-outrider-squad",
+          "twin-bolt-rifle-outrider-squad"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -6001,10 +5965,10 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "castellan-launcher",
-          "superfrag-rocket-launcher",
-          "close-combat-weapon"
+          "bolt-pistol-desolation-squad",
+          "castellan-launcher-desolation-squad",
+          "close-combat-weapon-desolation-squad",
+          "superfrag-rocket-launcher-desolation-squad"
         ]
       },
       {
@@ -6017,10 +5981,10 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "close-combat-weapon",
-          "castellan-launcher",
-          "superfrag-rocket-launcher"
+          "bolt-pistol-desolation-squad",
+          "castellan-launcher-desolation-squad",
+          "close-combat-weapon-desolation-squad",
+          "superfrag-rocket-launcher-desolation-squad"
         ]
       }
     ],
@@ -6270,8 +6234,15 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "bolt-rifle",
-          "close-combat-weapon-wardens-of-ultramar"
+          "archeotech-laspistol",
+          "power-weapon-wardens-of-ultramar",
+          "bolt-rifle-wardens-of-ultramar",
+          "ceramite-fists-wardens-of-ultramar",
+          "astropathic-blast",
+          "force-stave",
+          "close-combat-weapon-wardens-of-ultramar",
+          "heavy-bolt-pistol-wardens-of-ultramar",
+          "master-crafted-power-weapon-wardens-of-ultramar"
         ],
         "is_leader_model": true
       },
@@ -6281,10 +6252,15 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "heavy-bolt-pistol",
-          "master-crafted-power-weapon-wardens-of-ultramar",
-          "storm-shield",
-          "ceramite-fists-wardens-of-ultramar"
+          "archeotech-laspistol",
+          "power-weapon-wardens-of-ultramar",
+          "bolt-rifle-wardens-of-ultramar",
+          "ceramite-fists-wardens-of-ultramar",
+          "astropathic-blast",
+          "force-stave",
+          "close-combat-weapon-wardens-of-ultramar",
+          "heavy-bolt-pistol-wardens-of-ultramar",
+          "master-crafted-power-weapon-wardens-of-ultramar"
         ],
         "is_leader_model": false
       },
@@ -6295,7 +6271,13 @@
         "default_weapon_ids": [
           "archeotech-laspistol",
           "power-weapon-wardens-of-ultramar",
-          "refractor-field"
+          "bolt-rifle-wardens-of-ultramar",
+          "ceramite-fists-wardens-of-ultramar",
+          "astropathic-blast",
+          "force-stave",
+          "close-combat-weapon-wardens-of-ultramar",
+          "heavy-bolt-pistol-wardens-of-ultramar",
+          "master-crafted-power-weapon-wardens-of-ultramar"
         ],
         "is_leader_model": false
       },
@@ -6305,7 +6287,14 @@
         "max": 1,
         "default_weapon_ids": [
           "archeotech-laspistol",
-          "power-weapon-wardens-of-ultramar"
+          "power-weapon-wardens-of-ultramar",
+          "bolt-rifle-wardens-of-ultramar",
+          "ceramite-fists-wardens-of-ultramar",
+          "astropathic-blast",
+          "force-stave",
+          "close-combat-weapon-wardens-of-ultramar",
+          "heavy-bolt-pistol-wardens-of-ultramar",
+          "master-crafted-power-weapon-wardens-of-ultramar"
         ],
         "is_leader_model": false
       },
@@ -6314,8 +6303,15 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
+          "archeotech-laspistol",
+          "power-weapon-wardens-of-ultramar",
+          "bolt-rifle-wardens-of-ultramar",
+          "ceramite-fists-wardens-of-ultramar",
           "astropathic-blast",
-          "force-stave"
+          "force-stave",
+          "close-combat-weapon-wardens-of-ultramar",
+          "heavy-bolt-pistol-wardens-of-ultramar",
+          "master-crafted-power-weapon-wardens-of-ultramar"
         ],
         "is_leader_model": false
       },
@@ -6325,7 +6321,14 @@
         "max": 1,
         "default_weapon_ids": [
           "archeotech-laspistol",
-          "close-combat-weapon-wardens-of-ultramar"
+          "power-weapon-wardens-of-ultramar",
+          "bolt-rifle-wardens-of-ultramar",
+          "ceramite-fists-wardens-of-ultramar",
+          "astropathic-blast",
+          "force-stave",
+          "close-combat-weapon-wardens-of-ultramar",
+          "heavy-bolt-pistol-wardens-of-ultramar",
+          "master-crafted-power-weapon-wardens-of-ultramar"
         ],
         "is_leader_model": false
       }
@@ -6385,11 +6388,10 @@
           "diameter": 90
         },
         "default_weapon_ids": [
-          "heavy-flamer",
-          "twin-fragstorm-grenade-launcher",
+          "fragstorm-grenade-launchers-redemptor-dreadnought",
+          "heavy-flamer-redemptor-dreadnought",
           "heavy-onslaught-gatling-cannon",
           "redemptor-fist",
-          "fragstorm-grenade-launchers-redemptor-dreadnought",
           "storm-bolters-redemptor-dreadnought"
         ]
       }
@@ -6424,9 +6426,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "close-combat-weapon-ancient",
-          "bolt-pistol",
-          "bolt-rifle",
+          "bolt-pistol-ancient",
+          "bolt-rifle-ancient",
           "ceramite-fists-ancient"
         ]
       }
@@ -6496,8 +6497,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "storm-bolter",
-          "crozius-arcanum"
+          "crozius-arcanum-chaplain-in-terminator-armour",
+          "storm-bolter-chaplain-in-terminator-armour"
         ]
       }
     ],
@@ -6531,8 +6532,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "paired-combat-blades-lieutenant-with-combi-weapon",
-          "combi-weapon-lieutenant-with-combi-weapon"
+          "combi-weapon-lieutenant-with-combi-weapon",
+          "paired-combat-blades-lieutenant-with-combi-weapon"
         ]
       }
     ],
@@ -6575,9 +6576,9 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-incursor-squad",
           "occulus-bolt-carbine",
-          "paired-combat-blades"
+          "paired-combat-blades-incursor-squad"
         ]
       },
       {
@@ -6590,9 +6591,9 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-incursor-squad",
           "occulus-bolt-carbine",
-          "paired-combat-blades"
+          "paired-combat-blades-incursor-squad"
         ]
       }
     ],
@@ -6645,7 +6646,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "heavy-bolt-pistol",
+          "heavy-bolt-pistol-assault-intercessors-with-jump-packs",
           "astartes-chainsword-assault-intercessors-with-jump-packs"
         ]
       },
@@ -6660,7 +6661,7 @@
         },
         "default_weapon_ids": [
           "astartes-chainsword-assault-intercessors-with-jump-packs",
-          "heavy-bolt-pistol"
+          "heavy-bolt-pistol-assault-intercessors-with-jump-packs"
         ]
       }
     ],
@@ -6741,8 +6742,8 @@
           "diameter": 50
         },
         "default_weapon_ids": [
-          "storm-bolter-caanok-var",
-          "axiom"
+          "axiom",
+          "storm-bolter-caanok-var"
         ]
       }
     ],
@@ -6776,10 +6777,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "vanguard-veteran-weapon",
-          "relic-blade-vanguard-veteran-squad-with-jump-packs",
-          "thunder-hammer"
+          "relic-blade-vanguard-veteran-squad-with-jump-packs"
         ]
       },
       {
@@ -6792,8 +6790,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "vanguard-veteran-weapon"
+          "relic-blade-vanguard-veteran-squad-with-jump-packs"
         ]
       }
     ],
@@ -6874,9 +6871,13 @@
           "diameter": 40
         },
         "default_weapon_ids": [
+          "combat-knife-company-heroes",
           "bolt-pistol-company-heroes",
-          "bolt-rifle",
-          "close-combat-weapon-company-heroes"
+          "master-crafted-bolt-rifle",
+          "master-crafted-power-weapon-company-heroes",
+          "master-crafted-heavy-bolter",
+          "bolt-pistol",
+          "bolt-rifle"
         ]
       },
       {
@@ -6889,8 +6890,11 @@
           "diameter": 40
         },
         "default_weapon_ids": [
+          "combat-knife-company-heroes",
           "bolt-pistol-company-heroes",
-          "master-crafted-power-weapon-company-heroes"
+          "master-crafted-bolt-rifle",
+          "master-crafted-power-weapon-company-heroes",
+          "master-crafted-heavy-bolter"
         ]
       },
       {
@@ -6903,11 +6907,11 @@
           "diameter": 40
         },
         "default_weapon_ids": [
+          "combat-knife-company-heroes",
           "bolt-pistol-company-heroes",
-          "close-combat-weapon-company-heroes",
-          "master-crafted-heavy-bolter",
           "master-crafted-bolt-rifle",
-          "combat-knife-company-heroes"
+          "master-crafted-power-weapon-company-heroes",
+          "master-crafted-heavy-bolter"
         ]
       }
     ],
@@ -6951,8 +6955,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "flamestorm-gauntlets",
-          "twin-power-fists"
+          "flamestorm-gauntlets-aggressor-squad",
+          "twin-power-fists-aggressor-squad"
         ]
       },
       {
@@ -6965,8 +6969,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "twin-power-fists",
-          "flamestorm-gauntlets"
+          "flamestorm-gauntlets-aggressor-squad",
+          "twin-power-fists-aggressor-squad"
         ]
       }
     ],
@@ -7057,9 +7061,9 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "close-combat-weapon-captain",
-          "bolt-pistol-captain",
-          "master-crafted-bolter"
+          "heavy-bolt-pistol-captain",
+          "master-crafted-bolter",
+          "bolt-pistol-captain"
         ]
       }
     ],
@@ -7129,9 +7133,9 @@
           "length": 52.5
         },
         "default_weapon_ids": [
-          "twin-bolt-rifle",
-          "absolvor-bolt-pistol",
-          "crozius-arcanum"
+          "absolvor-bolt-pistol-chaplain-on-bike",
+          "crozius-arcanum-chaplain-on-bike",
+          "twin-bolt-rifle"
         ]
       }
     ],
@@ -7239,8 +7243,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "combat-knife-captain-in-phobos-armour",
           "bolt-pistol-captain-in-phobos-armour",
+          "combat-knife-captain-in-phobos-armour",
           "instigator-bolt-carbine-captain-in-phobos-armour"
         ]
       }
@@ -7275,8 +7279,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "crozius-arcanum"
+          "crozius-arcanum-chaplain-with-jump-pack"
         ]
       }
     ],
@@ -7321,8 +7324,8 @@
         "default_weapon_ids": [
           "bolt-pistol-intercessor-squad",
           "bolt-rifle-intercessor-squad",
-          "close-combat-weapon",
-          "close-combat-weapon-intercessor-squad"
+          "close-combat-weapon-intercessor-squad",
+          "astartes-grenade-launcher-intercessor-squad"
         ]
       },
       {
@@ -7335,9 +7338,9 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-rifle-intercessor-squad",
           "bolt-pistol-intercessor-squad",
-          "close-combat-weapon"
+          "bolt-rifle-intercessor-squad",
+          "close-combat-weapon-intercessor-squad"
         ]
       }
     ],
@@ -7430,10 +7433,9 @@
           "draft": true
         },
         "default_weapon_ids": [
-          "twin-assault-cannon",
+          "armoured-tracks",
           "flamestorm-cannon",
-          "flamestorm-cannon",
-          "armoured-tracks"
+          "twin-assault-cannon-land-raider-redeemer"
         ]
       }
     ],
@@ -7518,8 +7520,8 @@
           "draft": true
         },
         "default_weapon_ids": [
-          "storm-bolter",
-          "armoured-tracks-rhino"
+          "armoured-tracks-rhino",
+          "storm-bolter-rhino"
         ]
       }
     ],
@@ -7553,11 +7555,10 @@
           "draft": true
         },
         "default_weapon_ids": [
-          "close-combat-weapon-invader-atv",
-          "twin-bolt-rifle-invader-atv",
+          "armoured-impact-invader-atv",
+          "bolt-pistol-invader-atv",
           "onslaught-gatling-cannon-invader-atv",
-          "bolt-pistol",
-          "armoured-impact-invader-atv"
+          "twin-bolt-rifle-invader-atv"
         ]
       }
     ],
@@ -7591,10 +7592,9 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "marksman-bolt-carbine",
-          "close-combat-weapon",
-          "ceramite-fists-infiltrator-squad"
+          "bolt-pistol-infiltrator-squad",
+          "ceramite-fists-infiltrator-squad",
+          "marksman-bolt-carbine"
         ]
       },
       {
@@ -7607,8 +7607,8 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "close-combat-weapon",
+          "bolt-pistol-infiltrator-squad",
+          "ceramite-fists-infiltrator-squad",
           "marksman-bolt-carbine"
         ]
       }
@@ -7662,9 +7662,8 @@
           "diameter": 90
         },
         "default_weapon_ids": [
-          "twin-storm-bolter-ballistus-dreadnought",
-          "ballistus-lascannon",
           "armoured-feet",
+          "ballistus-lascannon",
           "ballistus-missile-launcher",
           "storm-bolters-ballistus-dreadnought"
         ]
@@ -7700,9 +7699,9 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "pyreblaster-infernus-squad",
-          "close-combat-weapon"
+          "bolt-pistol-infernus-squad",
+          "close-combat-weapon-infernus-squad",
+          "pyreblaster-infernus-squad"
         ]
       },
       {
@@ -7715,9 +7714,9 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "pyreblaster-infernus-squad",
-          "close-combat-weapon",
-          "bolt-pistol"
+          "bolt-pistol-infernus-squad",
+          "close-combat-weapon-infernus-squad",
+          "pyreblaster-infernus-squad"
         ]
       }
     ],
@@ -7841,10 +7840,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "master-crafted-bolt-carbine-lieutenant-in-phobos-armour",
-          "paired-combat-blades-lieutenant-in-phobos-armour",
-          "bolt-pistol-lieutenant-in-phobos-armour",
-          "monomolecular-combat-blades-lieutenant-in-phobos-armour"
+          "monomolecular-combat-blades-lieutenant-in-phobos-armour",
+          "bolt-pistol-lieutenant-in-phobos-armour"
         ]
       }
     ],
@@ -7878,8 +7875,8 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "special-issue-bolt-pistol-reiver-squad",
-          "combat-knife"
+          "combat-knife-reiver-squad",
+          "special-issue-bolt-pistol-reiver-squad"
         ]
       },
       {
@@ -7892,7 +7889,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "combat-knife",
+          "combat-knife-reiver-squad",
           "special-issue-bolt-pistol-reiver-squad"
         ]
       }
@@ -7946,8 +7943,8 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "crozius-arcanum",
-          "absolvor-bolt-pistol"
+          "absolvor-bolt-pistol-chaplain",
+          "crozius-arcanum-chaplain"
         ]
       }
     ],
@@ -7981,11 +7978,10 @@
           "diameter": 90
         },
         "default_weapon_ids": [
-          "incendium-cannon",
           "fragstorm-grenade-launcher-invictor-tactical-warsuit",
-          "twin-ironhail-heavy-stubber",
-          "invictor-fist",
           "heavy-bolter-invictor-tactical-warsuit",
+          "incendium-cannon",
+          "invictor-fist",
           "ironhail-heavy-stubbers-invictor-tactical-warsuit"
         ]
       }
@@ -8020,8 +8016,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "heavy-bolt-pistol",
-          "close-combat-weapon-bladeguard-ancient",
+          "heavy-bolt-pistol-bladeguard-ancient",
           "relics-of-battle-bladeguard-ancient"
         ]
       }
@@ -9088,9 +9083,9 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "bolt-pistol",
-          "heavy-bolter-eradicator-squad-with-heavy-bolters",
-          "close-combat-weapon"
+          "bolt-pistol-eradicator-squad-with-heavy-bolters",
+          "ceramite-fists-eradicator-squad-with-heavy-bolters",
+          "heavy-bolter-eradicator-squad-with-heavy-bolters"
         ]
       },
       {
@@ -9098,9 +9093,9 @@
         "min": 2,
         "max": 2,
         "default_weapon_ids": [
-          "bolt-pistol",
-          "heavy-bolter-eradicator-squad-with-heavy-bolters",
-          "close-combat-weapon"
+          "bolt-pistol-eradicator-squad-with-heavy-bolters",
+          "ceramite-fists-eradicator-squad-with-heavy-bolters",
+          "heavy-bolter-eradicator-squad-with-heavy-bolters"
         ]
       }
     ],
@@ -9176,11 +9171,10 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "onslaught-gatling-cannon",
-          "multi-melta",
-          "stormfury-missile-launcher",
-          "close-combat-weapon-land-speeder",
           "armoured-impact",
+          "multi-melta-land-speeder",
+          "onslaught-gatling-cannon",
+          "stormfury-missile-launcher",
           "pyrecannon"
         ]
       }
@@ -9211,7 +9205,8 @@
         "max": 6,
         "default_weapon_ids": [
           "master-crafted-bolt-carbine",
-          "master-crafted-power-weapon-victrix-honour-guard"
+          "master-crafted-power-weapon-victrix-honour-guard",
+          "blades-of-honour"
         ]
       },
       {
@@ -9219,6 +9214,8 @@
         "min": 0,
         "max": 1,
         "default_weapon_ids": [
+          "master-crafted-bolt-carbine",
+          "master-crafted-power-weapon-victrix-honour-guard",
           "blades-of-honour"
         ]
       },
@@ -9227,8 +9224,9 @@
         "min": 0,
         "max": 1,
         "default_weapon_ids": [
+          "master-crafted-bolt-carbine",
           "master-crafted-power-weapon-victrix-honour-guard",
-          "banner-of-macragge"
+          "blades-of-honour"
         ]
       }
     ],

@@ -99,7 +99,7 @@
             "selections": [
               {
                 "id": "w-0",
-                "name": "Armoured hull",
+                "name": "Armoured Hull",
                 "type": "upgrade",
                 "number": 1,
                 "categories": [
@@ -126,18 +126,6 @@
                 "name": "Lancer laser destroyer",
                 "type": "upgrade",
                 "number": 1,
-                "categories": [
-                  {
-                    "name": "Ranged Weapon",
-                    "primary": false
-                  }
-                ]
-              },
-              {
-                "id": "w-3",
-                "name": "Storm bolter",
-                "type": "upgrade",
-                "number": 2,
                 "categories": [
                   {
                     "name": "Ranged Weapon",
@@ -180,7 +168,7 @@
               },
               {
                 "id": "w-1",
-                "name": "Heavy flamer",
+                "name": "Heavy Flamer",
                 "type": "upgrade",
                 "number": 1,
                 "categories": [
@@ -217,18 +205,6 @@
               {
                 "id": "w-4",
                 "name": "Storm Bolters",
-                "type": "upgrade",
-                "number": 1,
-                "categories": [
-                  {
-                    "name": "Ranged Weapon",
-                    "primary": false
-                  }
-                ]
-              },
-              {
-                "id": "w-5",
-                "name": "Twin fragstorm grenade launcher",
                 "type": "upgrade",
                 "number": 1,
                 "categories": [

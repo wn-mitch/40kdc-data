@@ -191,8 +191,8 @@
   },
   {
     "name": "atc-exceeds-allowance-eradicator-squad",
-    "args": { "unitId": "eradicator-squad", "modelCount": 6, "counts": { "bolt-pistol": 6, "close-combat-weapon": 6, "melta-rifle": 4, "multi-melta-eradicator-squad": 2 } },
-    "expected": []
+    "args": { "unitId": "eradicator-squad", "modelCount": 6, "counts": { "bolt-pistol-eradicator-squad": 6, "ceramite-fists-eradicator-squad": 6, "melta-rifle-eradicator-squad": 4, "multi-melta-eradicator-squad": 3 } },
+    "expected": ["exceeds-max:multi-melta-eradicator-squad", "swap-conflict:melta-rifle-eradicator-squad"]
   },
   {
     "name": "atc-exceeds-allowance-exceeds-max-atalan-jackals",
@@ -426,8 +426,8 @@
   },
   {
     "name": "atc-exceeds-max-impulsor",
-    "args": { "unitId": "impulsor", "factionId": "adeptus-astartes", "modelCount": 1, "counts": { "armoured-hull": 1, "fragstorm-grenade-launcher": 2, "multi-melta": 1, "shield-dome": 1 } },
-    "expected": []
+    "args": { "unitId": "impulsor", "factionId": "adeptus-astartes", "modelCount": 1, "counts": { "armoured-hull-impulsor": 1, "fragstorm-grenade-launcher-impulsor": 2, "ironhail-heavy-stubber-impulsor": 1, "shield-dome": 1 } },
+    "expected": ["exceeds-max:fragstorm-grenade-launcher-impulsor", "swap-conflict:storm-bolter-impulsor"]
   },
   {
     "name": "atc-exceeds-max-leman-russ-battle-tank",
@@ -491,8 +491,8 @@
   },
   {
     "name": "atc-exceeds-max-rhino",
-    "args": { "unitId": "rhino", "modelCount": 1, "counts": { "armoured-tracks-rhino": 1, "hunter-killer-missile": 1, "storm-bolter": 2 } },
-    "expected": ["exceeds-max:storm-bolter"]
+    "args": { "unitId": "rhino", "modelCount": 1, "counts": { "armoured-tracks-rhino": 1, "hunter-killer-missile-rhino": 1, "storm-bolter-rhino": 2 } },
+    "expected": ["exceeds-max:storm-bolter-rhino"]
   },
   {
     "name": "atc-exceeds-max-sanctifiers",
