@@ -381,7 +381,20 @@
           "D": 2,
           "WS": 2
         },
-        "keywords": [],
+        "keywords": [
+          {
+            "keyword_id": "hunter",
+            "parameters": {
+              "target_keyword": "Monster"
+            }
+          },
+          {
+            "keyword_id": "hunter",
+            "parameters": {
+              "target_keyword": "Vehicle"
+            }
+          }
+        ],
         "target_restrictions": {
           "required_keywords_any": [
             "Monster",
@@ -1113,7 +1126,20 @@
           "D": 1,
           "WS": 3
         },
-        "keywords": [],
+        "keywords": [
+          {
+            "keyword_id": "hunter",
+            "parameters": {
+              "target_keyword": "Monster"
+            }
+          },
+          {
+            "keyword_id": "hunter",
+            "parameters": {
+              "target_keyword": "Vehicle"
+            }
+          }
+        ],
         "target_restrictions": {
           "required_keywords_any": [
             "Monster",
@@ -3703,7 +3729,20 @@
           "D": 3,
           "BS": 4
         },
-        "keywords": [],
+        "keywords": [
+          {
+            "keyword_id": "hunter",
+            "parameters": {
+              "target_keyword": "Monster"
+            }
+          },
+          {
+            "keyword_id": "hunter",
+            "parameters": {
+              "target_keyword": "Vehicle"
+            }
+          }
+        ],
         "target_restrictions": {
           "required_keywords_any": [
             "Monster",
@@ -4281,7 +4320,20 @@
           "D": 6,
           "WS": 3
         },
-        "keywords": [],
+        "keywords": [
+          {
+            "keyword_id": "hunter",
+            "parameters": {
+              "target_keyword": "Monster"
+            }
+          },
+          {
+            "keyword_id": "hunter",
+            "parameters": {
+              "target_keyword": "Vehicle"
+            }
+          }
+        ],
         "target_restrictions": {
           "required_keywords_any": [
             "Monster",
@@ -7550,6 +7602,26 @@
           "AP": -2,
           "D": 3,
           "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "hunter",
+            "parameters": {
+              "target_keyword": "Monster"
+            }
+          },
+          {
+            "keyword_id": "hunter",
+            "parameters": {
+              "target_keyword": "Vehicle"
+            }
+          }
+        ],
+        "target_restrictions": {
+          "required_keywords_any": [
+            "Monster",
+            "Vehicle"
+          ]
         }
       },
       {

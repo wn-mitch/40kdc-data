@@ -17872,6 +17872,18 @@
         },
         "keywords": [
           {
+            "keyword_id": "hunter",
+            "parameters": {
+              "target_keyword": "Monster"
+            }
+          },
+          {
+            "keyword_id": "hunter",
+            "parameters": {
+              "target_keyword": "Vehicle"
+            }
+          },
+          {
             "keyword_id": "melta",
             "parameters": {
               "value": 3
@@ -23392,6 +23404,18 @@
         },
         "keywords": [
           {
+            "keyword_id": "hunter",
+            "parameters": {
+              "target_keyword": "Monster"
+            }
+          },
+          {
+            "keyword_id": "hunter",
+            "parameters": {
+              "target_keyword": "Vehicle"
+            }
+          },
+          {
             "keyword_id": "melta",
             "parameters": {
               "value": 2
@@ -26341,7 +26365,20 @@
           "AP": -2,
           "D": 3
         },
-        "keywords": [],
+        "keywords": [
+          {
+            "keyword_id": "hunter",
+            "parameters": {
+              "target_keyword": "Monster"
+            }
+          },
+          {
+            "keyword_id": "hunter",
+            "parameters": {
+              "target_keyword": "Vehicle"
+            }
+          }
+        ],
         "target_restrictions": {
           "required_keywords_any": [
             "Monster",

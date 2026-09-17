@@ -243,6 +243,13 @@
     "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
   },
   {
+    "id": "hunter",
+    "name": "Hunter",
+    "required_parameters": ["target_keyword"],
+    "effect": null,
+    "game_version": { "edition": "11th", "dataslate": "launch" }
+  },
+  {
     "id": "snagged",
     "name": "Snagged",
     "required_parameters": [],
