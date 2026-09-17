@@ -18,19 +18,19 @@ works end to end: every ability yields confident, source-bound claims. The gap i
 | --- | --- |
 | Ork abilities with source text | 245 (12 supervised + 15 legacy + 218 sliced) |
 | Slices recorded | 15 / 15 (14 × 15, then 8) |
-| Question banks / cached responses | 245 banks / 2,109 response files |
-| Claims proposed | 13,042 (min 11, max 119, mean 53.2 per ability) |
-| Candidates **constructed** | 35 (7 accepted, 28 verification-rejected) |
-| Candidates **incomplete** | 210 |
+| Question banks / cached responses | 245 banks / 2,275 response files |
+| Claims proposed | 13,079 (min 11, max 119, mean 53.4 per ability) |
+| Candidates **constructed** | 44 (8 accepted, 36 verification-rejected) |
+| Candidates **incomplete** | 201 |
 | Round-trip buckets (245) | divergence 146, delegated 97, declared-approximation 2 |
 | Two-leg localiser (33 adjudicated) | exact 20, consistent 29 (see Stage 6) |
 | Repeatability | 1 ability × 3 runs: selection and construction stable, distribution not |
-| Observed cost | $0.195 of cache — 4,632,000 in / 1,360,000 out; budget $2 |
+| Observed cost | $0.205 of cache — 4,885,720 in / 1,428,483 out; budget $2 |
 
 Construction is no longer the whole gap. The four hand-written pilots remain
 (`bomb-squig`, `try-dat-button-dread-mob`, `waaagh-banner`,
 `where-dya-fink-youre-going-da-big-hunt`), and the family registry adds 31 more from the
-generic slots; the remaining 210 candidates each name the slot that blocked them.
+generic slots; the remaining 201 candidates each name the slot that blocked them.
 
 ## Pipeline
 
@@ -312,25 +312,28 @@ Ordered by how much of the corpus each unblocks.
 
 The registry is in place: 12 families keyed by `(composition, primary_effect)`, each
 reading the shared slots, each returning per-slot findings. Construction went from **4 to
-35** candidates (7 accepted, 28 verification-rejected), all schema-valid.
+44** candidates (8 accepted, 36 verification-rejected), all schema-valid.
 
 ### N1b — Close the extraction gaps the registry exposed
 
-**P0.** 109 abilities land in a registered family and still fail to construct. The blockers
-are, in order:
+**P0.** Abilities that land in a registered family and still fail to construct, with what
+is left:
 
 | Abilities | Blocker | Where the fix lives |
 | --- | --- | --- |
-| 22 | `recipient: no settled recipient` — every option below the coin-flip floor | `recipient` wording, or a per-clause split |
-| 14 | `trigger_event: no settled option` | `trigger_event` |
-| 13 | condition compiles to no operand although `has_condition` is 1 | `condition_relation` (law 2) |
+| 14 | condition compiles to no operand although `has_condition` is 1 | `condition_relation` (law 2) — the largest remaining class |
+| 10 | `recipient: no settled recipient` — every option below the coin-flip floor | `recipient` wording, or a per-clause split |
 | 9 | `semantic_timing: no settled option` | `semantic_timing` |
-| 8 | `effect_operation: reroll needs a re-roll subset` | new `roll_subset` slot (`ones` \| `all-failures`) |
-| 7 | refused: `has_multiple_effects` (correct refusal; needs a multi-effect composer) | new composition |
+| 9 | refused: `has_multiple_effects` (correct refusal; needs a multi-effect composer) | new composition |
+| 6 | `modifier-value` — no integer claims the magnitude | integer-role question |
 
-Two of these are named slots with an obvious shape (`roll_subset`, a multi-effect
-composition); the rest are the same forced-choice disease as law 6, so the fix is a
-question-shape change, not a threshold move.
+**Done in this round, both from measured blockers:** a `roll_subset` slot
+(`reroll_subset_is_ones`, a proposition, because a forced choice cannot say "there is no
+re-roll here") now lets `roll-modifier` emit the `re-roll` effect type its own subset of 8
+abilities needed; and `selected-unit` was missing from the recipient→target mapping, which
+blocked 34 abilities and *misreported* them as "no settled recipient". The remaining
+classes are the same forced-choice disease as law 6, so the fix is a question-shape change,
+not a threshold move.
 
 ### N1c — Register the `ability-grant` families
 

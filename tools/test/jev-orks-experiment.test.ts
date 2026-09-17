@@ -584,6 +584,46 @@ describe("JEV Ork experiment", () => {
     expect(result.findings ?? []).toEqual([]);
   });
 
+  it("takes the re-roll subset from the proposition that settles it", () => {
+    const build = (subset: number, support: number): string | undefined => {
+      const result = constructCandidate("wild-ride", CURRENT, [
+        ...claims("wild-ride", {
+          composition: "conditional",
+          primary_effect: "roll-modifier",
+          effect_roll: "hit",
+          effect_operation: "reroll",
+          recipient: "this-unit",
+          semantic_timing: "phase-start",
+        }),
+        // A proposition carries both its value and the support for it, so a
+        // confident false is value 0 at a low probability of true.
+        claim("wild-ride", "reroll_subset_is_ones", subset, support),
+      ], STATE);
+      expect(result.status).toBe("constructed");
+      const effect = result.candidate?.effect as { effect: { modifier: { subset: string } } };
+      return effect.effect.modifier.subset;
+    };
+    // A settled false is a value here, not a missing answer: every failed roll.
+    expect(build(1, 0.97)).toBe("ones");
+    expect(build(0, 0.05)).toBe("all-failures");
+  });
+
+  it("reports an unsettled re-roll subset rather than defaulting it", () => {
+    const result = constructCandidate("wild-ride", CURRENT, [
+      ...claims("wild-ride", {
+        composition: "conditional",
+        primary_effect: "roll-modifier",
+        effect_roll: "hit",
+        effect_operation: "reroll",
+        recipient: "this-unit",
+        semantic_timing: "phase-start",
+      }),
+      claim("wild-ride", "reroll_subset_is_ones", 1, 0.55),
+    ], STATE);
+    expect(result.status).toBe("incomplete");
+    expect(result.findings.some((finding) => finding.startsWith("reroll_subset_is_ones:"))).toBe(true);
+  });
+
   it("routes partial families into parameter-complete recursive question packets", () => {
     expect(Object.keys(extractionQuestions("waaagh"))).toEqual(expect.arrayContaining([
       "activation_once_per_battle",

@@ -903,6 +903,11 @@ export function genericDecompositionQuestions(
         "ignore-modifiers": null,
         other: null,
       });
+      questions.reroll_subset_is_ones = noul({
+        task: "Does the source limit the re-roll to rolls of 1, rather than allowing every failed roll to be re-rolled?",
+        true: 'The source says "re-roll a Hit roll of 1" or otherwise names only the lowest result.',
+        false: "The source allows any failed roll to be re-rolled, or states no re-roll at all.",
+      });
       break;
     case "mortal-wounds":
       questions.mortal_wound_resolution = choice("How is the mortal-wound amount resolved?", {
@@ -2001,10 +2006,12 @@ function compileCondition(
 }
 
 /** `recipient` option -> effect target. The names are the describer's subjects:
- *  `self` is the bearer model, `unit` its unit, `target` the enemy it acts on. */
+ *  `self` is the bearer model, `unit` its unit, `target` the unit the rule acts
+ *  on — a selected unit outside a selection composition included. */
 const RECIPIENT_TARGET: Record<string, string> = {
   "this-model": "self",
   "this-unit": "unit",
+  "selected-unit": "target",
   "attacking-enemy": "target",
   "triggering-unit": "triggering-unit",
   "all-friendly": "all-friendly",
@@ -2040,12 +2047,19 @@ function recipientTarget(
     };
   }
   const recipient = slotOptions(readings, "recipient")[0];
-  const target = recipient ? RECIPIENT_TARGET[recipient] : undefined;
-  if (!target) {
+  if (!recipient) {
     return {
       target: null,
       claim_ids: slotClaims(readings, ["recipient"]),
       finding: "recipient: no settled recipient to apply the effect to",
+    };
+  }
+  const target = RECIPIENT_TARGET[recipient];
+  if (!target) {
+    return {
+      target: null,
+      claim_ids: slotClaims(readings, ["recipient"]),
+      finding: `recipient: ${recipient} does not name an effect target`,
     };
   }
   return { target, claim_ids: slotClaims(readings, ["recipient"]), finding: null };
@@ -2114,20 +2128,41 @@ function compileRollModifier(context: LeafContext): EffectCompilation {
   else if (!kind) findings.push(`effect_roll: ${roll} does not name a roll that can be modified`);
   const applied = operation ? ROLL_OPERATION[operation] : undefined;
   if (!operation) findings.push(...blockingFindings(readings, ["effect_operation"]));
-  else if (!applied) {
-    findings.push(operation === "reroll"
-      // `re-roll` needs `subset` (ones | all-failures) and no slot reports it,
-      // so the operation is reported rather than defaulted to one of them.
-      ? "effect_operation: reroll needs a re-roll subset, which no slot reports"
-      : `effect_operation: ${operation} does not name a supported roll operation`);
+  else if (!applied && operation !== "reroll") {
+    findings.push(`effect_operation: ${operation} does not name a supported roll operation`);
   }
   const recipient = recipientTarget(readings, context.composition);
   if (recipient.finding) findings.push(recipient.finding);
-  if (!kind || !applied || !recipient.target) {
+  if (!kind || !operation || (!applied && operation !== "reroll") || !recipient.target) {
     return { effect: null, claim_ids: [...recipient.claim_ids], findings };
   }
-  const modifier: AnyRecord = { roll: kind, operation: applied };
   const claimIds = [...slotClaims(readings, ["effect_roll", "effect_operation"]), ...recipient.claim_ids];
+
+  // `re-roll` is its own effect type and needs a subset. A settled false is a
+  // value here ("every failed roll"), so only an unsettled answer blocks.
+  if (operation === "reroll") {
+    const ones = readings.get("reroll_subset_is_ones");
+    const settledTrue = ones?.options.includes("true") ?? false;
+    const settledFalse = ones !== undefined && !settledTrue && (ones.probability ?? 1) <= 1 - ACCEPTANCE_CONFIDENCE;
+    if (!settledTrue && !settledFalse) {
+      findings.push(ones === undefined
+        ? "reroll_subset_is_ones: not asked by the packet"
+        : `reroll_subset_is_ones: no settled answer (${ones.evidence}, ${(ones.probability ?? 0).toFixed(2)})`);
+      return { effect: null, claim_ids: claimIds, findings };
+    }
+    if (ones) claimIds.push(...ones.claim_ids);
+    return {
+      effect: {
+        type: "re-roll",
+        target: recipient.target,
+        modifier: { roll: kind, subset: settledTrue ? "ones" : "all-failures" },
+      },
+      claim_ids: claimIds,
+      findings,
+    };
+  }
+
+  const modifier: AnyRecord = { roll: kind, operation: applied };
   if (applied !== "ignore-modifiers") {
     const magnitude = modifierValue(readings, state);
     if (magnitude.finding) {
