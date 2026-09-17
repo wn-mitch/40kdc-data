@@ -18,19 +18,19 @@ works end to end: every ability yields confident, source-bound claims. The gap i
 | --- | --- |
 | Ork abilities with source text | 245 (12 supervised + 15 legacy + 218 sliced) |
 | Slices recorded | 15 / 15 (14 × 15, then 8) |
-| Question banks / cached responses | 245 banks / 2,719 response files |
-| Claims proposed | 13,065 (min 11, max 119, mean 53.3 per ability) |
-| Candidates **constructed** | 47 (9 accepted, 38 verification-rejected) |
-| Candidates **incomplete** | 198 |
+| Question banks / cached responses | 245 banks / 3,439 response files |
+| Claims proposed | 13,000 (min 11, max 120, mean 53.1 per ability) |
+| Candidates **constructed** | 43 (8 accepted, 35 verification-rejected) |
+| Candidates **incomplete** | 202 |
 | Round-trip buckets (245) | divergence 146, delegated 97, declared-approximation 2 |
 | Two-leg localiser (33 adjudicated) | exact 20, consistent 29 (see Stage 6) |
 | Repeatability | 1 ability × 3 runs: selection and construction stable, distribution not |
-| Observed cost | $0.240 of cache — 5,720,337 in / 1,669,266 out; budget $2 |
+| Observed cost | $0.294 of cache — 7,003,878 in / 2,046,149 out; budget $2 |
 
 Construction is no longer the whole gap. The four hand-written pilots remain
 (`bomb-squig`, `try-dat-button-dread-mob`, `waaagh-banner`,
-`where-dya-fink-youre-going-da-big-hunt`), and the family registry adds 43 more from the
-generic slots; the remaining 198 candidates each name the slot that blocked them.
+`where-dya-fink-youre-going-da-big-hunt`), and the family registry adds 39 more from the
+generic slots; the remaining 202 candidates each name the slot that blocked them.
 
 ## Pipeline
 
@@ -402,10 +402,25 @@ uses before the attractor loses:
 | `rules-bundle` | 4-6 |
 | `aura`, `for-each-unit`, `designate-target`, `no-effect` | 2-6 each |
 
-**Recommendation:** expand `composition` with those nodes (each is one option plus, where a
-builder does not exist yet, one small builder), then re-run this measurement. Keep
-delegation off the table — it would lose or replace a gate on 31 of 75 by the earlier
-measurement, and the payload question is downstream of the labelling one.
+#### The vocabulary has to grow with its builders
+
+Adding the six structural nodes the corpus uses but the classifier could not name
+(`movement-modifier`, `aura`, `for-each-unit`, `designate-target`, `rules-bundle`,
+`no-effect`) did shrink the semantic attractor exactly as predicted —
+`conditional/ability-grant` **59 → 49**, `conditional/other` **22 → 14** — and cost 9
+constructions (47 → 38), because those rules relocated into labels that have no builder.
+**Reverted.** The rule this earns: a vocabulary value is only added once a family can
+consume it, one node at a time, measuring each.
+
+`dice-gated` was the exception, because it has a builder (the gate assembly the
+mortal-wound compiler already used, extracted into `diceGate()`/`gated()`). It costs 4
+constructions (47 → 43) and shrinks nothing, but of the 8 rules it captures **5 carry a
+real `dice-gated` node in their authored record** — so those four were previously built
+*without* their gate, i.e. as flattened randomness, which the round trip's highest-severity
+class. The remaining three (`feel-no-pain-5`/`-6`, `too-arrogant-to-die-bully-boyz`) are
+the leaf-vocabulary gap again: `feel-no-pain` is a first-class leaf the classifier cannot
+name, so it reaches for the structure instead. Reverting `dice-gated` is one line if the
+coverage turns out to matter more than the four flattened candidates did.
 
 ### N2 — Calibrate the localiser — **done for this round**
 

@@ -728,6 +728,7 @@ const compositionCriteria = {
   sequence: "Two or more effects all resolve.",
   choice: "A player deliberately selects exactly one effect from a menu.",
   "dice-table": "A die result selects an outcome from an exhaustive table.",
+  "dice-gated": "A die test decides whether the effect resolves at all.",
   "dice-pool-allocation": "The player chooses how many dice to roll and the number changes the consequences.",
   "select-units": "The rule selects another unit or model before resolving an effect.",
   other: "The structure does not fit any listed composition.",
@@ -2392,6 +2393,50 @@ function compileKeywordGrant(context: LeafContext): EffectCompilation {
   };
 }
 
+type DiceGate = { dice: string; threshold: number; claim_ids: string[]; used: string[] };
+
+/**
+ * The die and threshold a `dice-gated` node needs. Read only from slots the
+ * source settles: `test-roll` names the die, `threshold` the number, and
+ * anything other than exactly one of each means the gate cannot be assembled.
+ */
+function diceGate(
+  readings: Map<string, SlotReading>,
+  state: AbilityState | null,
+): DiceGate | { finding: string } {
+  const tests = literalReadings(readings, state, "dice")
+    .filter((literal) => literal.options.includes("test-roll"));
+  const thresholds = literalReadings(readings, state, "integer")
+    .filter((literal) => literal.options.includes("threshold"));
+  if (tests.length !== 1 || thresholds.length !== 1) {
+    return {
+      finding: `test-roll: ${tests.length} dice and ${thresholds.length} thresholds name the test, `
+        + "so the gate cannot be assembled",
+    };
+  }
+  return {
+    dice: String(tests[0].value),
+    threshold: Number(thresholds[0].value),
+    claim_ids: [...tests[0].claim_ids, ...thresholds[0].claim_ids],
+    used: [tests[0].question_id, thresholds[0].question_id],
+  };
+}
+
+function isGate(gate: DiceGate | { finding: string }): gate is DiceGate {
+  return "dice" in gate;
+}
+
+function gated(dice: DiceGate, inner: AnyRecord): AnyRecord {
+  return {
+    type: "dice-gated",
+    dice: dice.dice,
+    threshold: dice.threshold,
+    comparison: "gte",
+    on_success: inner,
+    on_fail: null,
+  };
+}
+
 function compileMortalWounds(context: LeafContext): EffectCompilation {
   const { readings, state } = context;
   const findings: string[] = [
@@ -2426,45 +2471,31 @@ function compileMortalWounds(context: LeafContext): EffectCompilation {
   const wounds: AnyRecord = { type: "mortal-wounds", target: recipient.target, modifier: { count } };
   const usedSlots = ["mortal_wound_resolution"];
 
-  // A die that the slot calls a `test-roll` gates the wounds rather than
-  // measuring them. Emitting the bare mortal-wounds node would flatten the test
-  // into an unconditional effect, which changes play rather than wording.
-  const tests = literalReadings(readings, state, "dice")
-    .filter((literal) => literal.options.includes("test-roll"));
-  if (tests.length > 0) {
-    const thresholds = literalReadings(readings, state, "integer")
-      .filter((literal) => literal.options.includes("threshold"));
-    if (tests.length !== 1 || thresholds.length !== 1) {
-      findings.push(
-        `test-roll: ${tests.length} dice and ${thresholds.length} thresholds claim the mortal-wound test, `
-        + "so the gate cannot be assembled",
-      );
-      return { effect: null, claim_ids: claimIds, findings };
-    }
-    usedSlots.push(tests[0].question_id, thresholds[0].question_id);
-    return {
-      effect: {
-        type: "dice-gated",
-        dice: String(tests[0].value),
-        threshold: Number(thresholds[0].value),
-        comparison: "gte",
-        on_success: wounds,
-        on_fail: null,
-      },
-      claim_ids: [
-        ...slotClaims(readings, usedSlots),
-        ...tests[0].claim_ids,
-        ...thresholds[0].claim_ids,
-        ...claimIds,
-      ],
-      findings: [...findings, ...fallbackFindings(readings, [tests[0].question_id, thresholds[0].question_id])],
-    };
+  // A die the slot calls a `test-roll` gates the wounds rather than measuring
+  // them. The `dice-gated` composition adds that wrapper itself, so this guard
+  // only fires for the compositions that do not name it — emitting the bare
+  // node where a test exists would flatten the test into an unconditional
+  // effect, which changes play rather than wording.
+  if (context.composition === "dice-gated") {
+    return { effect: wounds, claim_ids: [...slotClaims(readings, usedSlots), ...claimIds], findings };
   }
-
+  const gate = diceGate(readings, state);
+  if (!isGate(gate)) {
+    const hasTest = literalReadings(readings, state, "dice").some((literal) => literal.options.includes("test-roll"));
+    if (!hasTest) {
+      return { effect: wounds, claim_ids: [...slotClaims(readings, usedSlots), ...claimIds], findings };
+    }
+    findings.push(gate.finding);
+    return { effect: null, claim_ids: claimIds, findings };
+  }
   return {
-    effect: wounds,
-    claim_ids: [...slotClaims(readings, usedSlots), ...claimIds],
-    findings,
+    effect: gated(gate, wounds),
+    claim_ids: [
+      ...slotClaims(readings, [...usedSlots, ...gate.used]),
+      ...gate.claim_ids,
+      ...claimIds,
+    ],
+    findings: [...findings, ...fallbackFindings(readings, gate.used)],
   };
 }
 
@@ -2533,7 +2564,7 @@ type FamilyContext = {
   readings: Map<string, SlotReading>;
 };
 
-const WRAPPING_COMPOSITIONS = ["leaf", "conditional", "select-units"] as const;
+const WRAPPING_COMPOSITIONS = ["leaf", "conditional", "select-units", "dice-gated"] as const;
 
 /**
  * A rule with several operative effects cannot be composed by a family that
@@ -2591,21 +2622,39 @@ function constructWrapped(context: FamilyContext, leaf: EffectCompilation): Cons
       findings,
     );
   }
-  const selection = compileSelector(context.readings, context.state);
-  findings.push(...selection.findings);
-  claimIds.push(...selection.claim_ids);
-  if (!selection.selector) {
-    return incomplete(context.claims, {
-      consumed: claimIds,
-      findings: [...findings, "selector: no settled slot assembles the selection"],
-    });
+  if (composition === "select-units") {
+    const selection = compileSelector(context.readings, context.state);
+    findings.push(...selection.findings);
+    claimIds.push(...selection.claim_ids);
+    if (!selection.selector) {
+      return incomplete(context.claims, {
+        consumed: claimIds,
+        findings: [...findings, "selector: no settled slot assembles the selection"],
+      });
+    }
+    return constructed(
+      context.claims,
+      claimIds,
+      baseAbility(context.current, { type: "select-units", selector: selection.selector, effect: leaf.effect }),
+      findings,
+    );
   }
-  return constructed(
-    context.claims,
-    claimIds,
-    baseAbility(context.current, { type: "select-units", selector: selection.selector, effect: leaf.effect }),
-    findings,
-  );
+  if (composition === "dice-gated") {
+    const gate = diceGate(context.readings, context.state);
+    if (!isGate(gate)) {
+      return incomplete(context.claims, {
+        consumed: claimIds,
+        findings: [...findings, gate.finding],
+      });
+    }
+    findings.push(...fallbackFindings(context.readings, gate.used));
+    claimIds.push(...gate.claim_ids);
+    return constructed(context.claims, claimIds, baseAbility(context.current, gated(gate, leaf.effect)), findings);
+  }
+  return incomplete(context.claims, {
+    consumed: claimIds,
+    findings: [...findings, `composition: ${String(composition)} has no wrapper`],
+  });
 }
 
 const FAMILY_CONSTRUCTORS = new Map<string, (context: FamilyContext) => ConstructionResult>();

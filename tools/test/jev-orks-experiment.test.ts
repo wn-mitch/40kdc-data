@@ -484,6 +484,10 @@ describe("JEV Ork experiment", () => {
       "conditional/mortal-wounds",
       "conditional/roll-modifier",
       "conditional/stat-modifier",
+      "dice-gated/keyword-grant",
+      "dice-gated/mortal-wounds",
+      "dice-gated/roll-modifier",
+      "dice-gated/stat-modifier",
       "leaf/keyword-grant",
       "leaf/mortal-wounds",
       "leaf/roll-modifier",
@@ -493,6 +497,40 @@ describe("JEV Ork experiment", () => {
       "select-units/roll-modifier",
       "select-units/stat-modifier",
     ]);
+  });
+
+  it("wraps a leaf in the gate when the composition names it", () => {
+    const gateState = {
+      ...STATE,
+      literal_candidates: { ...STATE.literal_candidates, integers: [3], dice: ["D6", "D3"] },
+    };
+    const gateClaims = claims("wild-ride", {
+      composition: "dice-gated",
+      primary_effect: "mortal-wounds",
+      mortal_wound_resolution: "dice",
+      recipient: "attacking-enemy",
+      dice_d6: "test-roll",
+      integer_3: "threshold",
+      dice_d3: "effect-amount",
+    });
+    const wrapped = constructCandidate("wild-ride", CURRENT, gateClaims, gateState);
+    expect(wrapped.status).toBe("constructed");
+    expect(wrapped.candidate?.effect).toEqual({
+      type: "dice-gated",
+      dice: "D6",
+      threshold: 3,
+      comparison: "gte",
+      on_success: { type: "mortal-wounds", target: "target", modifier: { count: "D3" } },
+      on_fail: null,
+    });
+    // The same slot set under a `conditional` composition still gets the gate:
+    // that path is the flattening guard, not the composition.
+    const guarded = constructCandidate("wild-ride", CURRENT, [
+      ...gateClaims.filter((claim) => claim.question_id !== "composition"),
+      claim("wild-ride", "composition", "conditional"),
+    ], gateState);
+    expect(guarded.status).toBe("incomplete");
+    expect(JSON.stringify(guarded.findings)).toContain("condition");
   });
 
   it("constructs a registered family from its settled slots", () => {
