@@ -4484,19 +4484,38 @@
         }
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "friendly-within-aura",
-        "modifier": {
-          "grant_type": "blessings-of-khorne"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-grant",
+            "target": "friendly-within-aura",
+            "modifier": {
+              "grant_type": "blessings-of-khorne"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "faction-rule-active",
+              "parameters": {
+                "rule": "might-of-khorne"
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "friendly-within-aura",
+              "modifier": {
+                "roll": "battle-shock",
+                "result_scope": "any-result"
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
       "range": "aura-6",
       "duration": "permanent"
-    },
-    "trigger": {
-      "event": "start-of-phase"
     }
   },
   {
