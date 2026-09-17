@@ -5981,13 +5981,7 @@
     "ability_type": "enhancement",
     "behavior": "reactive",
     "effect": {
-      "type": "remove-battle-shock",
-      "target": "unit",
-      "modifier": {}
-    },
-    "trigger": {
-      "event": "end-of-phase",
-      "subject": "self",
+      "type": "conditional",
       "condition": {
         "operator": "and",
         "operands": [
