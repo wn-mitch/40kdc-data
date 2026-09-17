@@ -12,6 +12,9 @@
           "$ref": "#/$defs/stance-select-effect"
         },
         {
+          "$ref": "#/$defs/stance-selection-capacity-effect"
+        },
+        {
           "$ref": "#/$defs/choice-effect"
         },
         {
@@ -262,7 +265,12 @@
             "reactive-charge",
             "ability-usage-limit",
             "deadly-demise-threshold",
-            "embark"
+            "embark",
+            "eligibility-override",
+            "weapon-grant",
+            "mirror-triggering-choice",
+            "persistent-battlefield-marker-state",
+            "named-objective-state"
           ],
           "$comment": "Proven isomorphic legacy migrations: bs-modifier -> stat-modifier with stat BS; detection-range-modifier -> stat-modifier with stat detection-range; leadership-modifier -> stat-modifier with stat Ld; charge-roll-modifier -> roll-modifier with roll charge. Existing records retain their effect-specific type."
         },
@@ -326,6 +334,91 @@
                 },
                 "required": ["ability_id", "max_uses", "period"],
                 "description": "Replace the beneficiary's existing usage maximum for this ability and period; this does not grant the ability."
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "eligibility-override" } },
+            "required": ["type"]
+          },
+          "then": {
+            "required": ["modifier"],
+            "properties": {
+              "modifier": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "activity": {
+                    "type": "string",
+                    "enum": [
+                      "start-action",
+                      "shoot",
+                      "charge",
+                      "fight",
+                      "move",
+                      "advance",
+                      "fall-back",
+                      "consolidate"
+                    ]
+                  },
+                  "ignored_restrictions": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": { "type": "string", "minLength": 1 },
+                    "uniqueItems": true
+                  }
+                },
+                "required": ["activity", "ignored_restrictions"],
+                "description": "Waive a normal eligibility blocker: `activity` is what the unit becomes eligible to do, `ignored_restrictions` the blockers it ignores. Kept generic rather than a set of named opaque grants so a rule that waives an eligibility condition states the waiver directly. `activity` is a closed enum because it drives verb phrasing; `ignored_restrictions` stays open, since blockers are a long tail of one-off rule terms."
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "weapon-grant" } },
+            "required": ["type"]
+          },
+          "then": {
+            "required": ["modifier"],
+            "properties": {
+              "modifier": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "weapon_id": { "$ref": "../../defs/common.schema.json#/$defs/entity-id" },
+                  "count": { "type": "integer", "minimum": 1 }
+                },
+                "required": ["weapon_id"],
+                "description": "Grant a weapon defined once in core data, referenced by id so the profile is never duplicated into enrichment. The grant adds equipment; it never replaces or modifies existing wargear. `count` defaults to 1 and preserves repeated identical grants."
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "mirror-triggering-choice" } },
+            "required": ["type"]
+          },
+          "then": {
+            "required": ["modifier"],
+            "properties": {
+              "modifier": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["source_ability_id", "choice_label"],
+                "properties": {
+                  "source_ability_id": { "$ref": "../../defs/common.schema.json#/$defs/entity-id" },
+                  "choice_label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "The option family being mirrored, e.g. 'Combat Doctrine'. Named so the render does not have to infer it from the source ability."
+                  },
+                  "duration": { "$ref": "scope.schema.json#/$defs/scope-duration" }
+                },
+                "description": "Adopt whichever option another named ability selected this window \u2014 the mirror never re-offers the choice. Which unit triggered the source use comes from the ability-level `trigger`."
               }
             }
           }
@@ -1656,6 +1749,52 @@
           }
         },
         {
+          "$comment": "`named-objective-state` carries the objective's named state and its resolution in the modifier object.",
+          "if": {
+            "properties": {
+              "type": {
+                "const": "named-objective-state"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "$ref": "#/$defs/named-objective-state"
+              }
+            },
+            "required": [
+              "modifier"
+            ]
+          }
+        },
+        {
+          "$comment": "`persistent-battlefield-marker-state` carries the marker's placement and lifecycle in the modifier object.",
+          "if": {
+            "properties": {
+              "type": {
+                "const": "persistent-battlefield-marker-state"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "$ref": "#/$defs/persistent-battlefield-marker-state"
+              }
+            },
+            "required": [
+              "modifier"
+            ]
+          }
+        },
+        {
           "$comment": "`named-region-state` carries its structured producer and consumer state in the modifier object.",
           "if": {
             "properties": {
@@ -1865,6 +2004,37 @@
                   },
                   "removal": {
                     "enum": ["after-unit-fights-or-phase-end", "after-destroyed-model-fights"]
+                  },
+                  "eligibility": {
+                    "$ref": "condition.schema.json",
+                    "description": "Narrows which destroyed models this leaf applies to, e.g. only those destroyed before their unit has fought."
+                  },
+                  "gate": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["dice", "threshold"],
+                    "properties": {
+                      "dice": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Die expression rolled separately for each destroyed eligible model, e.g. 'D6'."
+                      },
+                      "threshold": { "type": "integer" },
+                      "comparison": { "enum": ["gte", "lte", "gt", "lt", "eq"] },
+                      "modifiers": {
+                        "type": "array",
+                        "description": "Per-roll adjustments, each applied when its own condition holds. The gate lives inside this leaf because the roll is made separately for each destroyed eligible model; wrapping the leaf in `dice-gated` would wrongly describe a single unit-wide roll.",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": ["condition", "value"],
+                          "properties": {
+                            "condition": { "$ref": "condition.schema.json" },
+                            "value": { "type": "integer" }
+                          }
+                        }
+                      }
+                    }
                   }
                 },
                 "allOf": [
@@ -2576,6 +2746,10 @@
             }
           ]
         },
+        "rider": {
+          "type": "boolean",
+          "description": "Marks this gate as the RIDER half of a roll-with-rider composition: a `sequence` whose first step is this gate and whose second step is the unconditional primary. The gate's effect fires on the roll and the primary resolves regardless, so the sequence renders with a mandatory \"Regardless of the result\" clause. Structurally identical to a real gate (a `dice-gated` with `on_success` and no `on_fail`), which is why the distinction is declared rather than inferred."
+        },
         "test": {
           "type": "object",
           "properties": {
@@ -2880,9 +3054,10 @@
               "type": "string",
               "enum": [
                 "bearer",
-                "bearer-unit"
+                "bearer-unit",
+                "bearer-transport"
               ],
-              "description": "Origin of both the range and engagement_relation gates. Default bearer means the model carrying the ability; bearer-unit means its entire current unit."
+              "description": "Origin of both the range and engagement_relation gates. Default bearer means the model carrying the ability; bearer-unit means its entire current unit; bearer-transport means the Transport that unit is embarked within."
             },
             "within_inches_from": {
               "$ref": "#/$defs/selection-reference"
@@ -3032,7 +3207,16 @@
                 "type": "string",
                 "minLength": 1
               },
-              "description": "Every listed keyword is required on each matching unit."
+              "description": "Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them."
+            },
+            "keyword_match": {
+              "type": "string",
+              "enum": [
+                "all",
+                "any"
+              ],
+              "default": "all",
+              "description": "Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction."
             },
             "target_kind": {
               "type": "string",
@@ -3059,7 +3243,8 @@
               "type": "string",
               "enum": [
                 "bearer",
-                "bearer-unit"
+                "bearer-unit",
+                "bearer-transport"
               ],
               "description": "Origin of the engagement_relation gate."
             },
@@ -3201,7 +3386,8 @@
                 "redeploy",
                 "scout",
                 "infiltrate",
-                "shoot-and-scoot"
+                "shoot-and-scoot",
+                "ingress"
               ]
             },
             "distance": {
@@ -3417,8 +3603,8 @@
               "minimum": 0
             },
             "reference": {
-              "enum": ["bearer", "bearer-unit"],
-              "description": "Explicit built-in origin of range and visibility gates, matching select-units."
+              "enum": ["bearer", "bearer-unit", "bearer-transport"],
+              "description": "Explicit built-in origin of range and visibility gates, matching select-units. bearer-transport measures from the Transport the origin unit is embarked within."
             },
             "visibility_required": { "type": "boolean" },
             "keywords": {
@@ -3699,6 +3885,85 @@
         "options"
       ]
     },
+    "stance-selection-capacity-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "$comment": "Widens how many times the options of a `stance-select` menu may be selected \u2014 the capacity knob for its sibling. Gladius Task Force's Codex Discipline selects one combat doctrine one additional time per battle. `allocation`: 'choose-one-option' pools the extra selection so the player allocates it to any option of that stance; 'fixed-option' pins it to `option_id`. The stance's own menu and effects are unchanged.",
+      "properties": {
+        "type": {
+          "const": "stance-selection-capacity"
+        },
+        "scope": {
+          "type": "string",
+          "enum": [
+            "army",
+            "unit"
+          ]
+        },
+        "modifier": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "stance_id": {
+              "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+            },
+            "additional_selections": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "allocation": {
+              "type": "string",
+              "enum": [
+                "choose-one-option",
+                "fixed-option"
+              ]
+            },
+            "option_id": {
+              "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+            }
+          },
+          "required": [
+            "stance_id",
+            "additional_selections",
+            "allocation"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "modifier"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "modifier": {
+                "properties": {
+                  "allocation": {
+                    "const": "fixed-option"
+                  }
+                },
+                "required": [
+                  "allocation"
+                ]
+              }
+            },
+            "required": [
+              "modifier"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "required": [
+                  "option_id"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
     "risk-reward-effect": {
       "type": "object",
       "additionalProperties": false,
@@ -3875,6 +4140,42 @@
               "minimum": 1
             }
           }
+        },
+        "capacity": {
+          "type": "object",
+          "additionalProperties": false,
+          "$comment": "A per-refresh budget declared on the menu itself, distinct from `shared_usage` (which caps how many actions may be performed) and from each action's own `cost` (which spends the budget). Expresses rules like Librarius: a Psyker Level of 3 lets the unit use Psychic abilities whose combined level does not exceed 3 in a battle round. `ability_noun` names what the budget is spent on ('Psychic'), so the sentence reads as the card does.",
+          "properties": {
+            "amount": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "resource_label": {
+              "type": "string",
+              "minLength": 1,
+              "$comment": "Player-facing singular noun for one unit of the budget (e.g. 'Psychic Level')."
+            },
+            "ability_noun": {
+              "type": "string",
+              "minLength": 1,
+              "$comment": "Player-facing noun for the budgeted abilities (e.g. 'Psychic'), rendered before 'abilities'."
+            },
+            "refresh": {
+              "type": "string",
+              "enum": [
+                "battle-round",
+                "turn",
+                "phase",
+                "battle"
+              ]
+            }
+          },
+          "required": [
+            "amount",
+            "resource_label",
+            "ability_noun",
+            "refresh"
+          ]
         },
         "actions": {
           "type": "array",
@@ -4638,6 +4939,86 @@
         "qualified_branch"
       ],
       "additionalProperties": false
+    },
+    "named-objective-state": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "A named state carried by a specific objective marker: the state resolves when its ability-level trigger fires, and may clear itself. Distinct from `objective-tag`, which only marks the objective without carrying a resolution.",
+      "required": [
+        "state_label",
+        "resolution"
+      ],
+      "properties": {
+        "state_label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "resolution": {
+          "$ref": "#/$defs/effect-node"
+        },
+        "clears": {
+          "type": "string",
+          "enum": [
+            "after-resolving",
+            "end-of-turn",
+            "never"
+          ],
+          "default": "never",
+          "description": "When the named state is removed from the objective."
+        }
+      }
+    },
+    "persistent-battlefield-marker-state": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "A marker placed on the battlefield that persists after placement: matching units may set up near it, using it may consume it, and enemy proximity removes it. Distinct from `tracking-token`, which is a reminder co-located with a model rather than a placed battlefield object with its own lifecycle.",
+      "required": [
+        "marker_label",
+        "placement"
+      ],
+      "properties": {
+        "marker_label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "placement": {
+          "type": "string",
+          "enum": [
+            "bearer",
+            "bearer-unit",
+            "battlefield"
+          ],
+          "description": "Where the marker is placed at the moment the ability resolves."
+        },
+        "setup_within_inches": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Distance from the marker within which matching units may be set up."
+        },
+        "setup_keywords": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "When present, only units carrying every listed keyword may use the marker to set up; absent means any friendly unit."
+        },
+        "consume": {
+          "type": "string",
+          "enum": [
+            "on-use",
+            "never"
+          ],
+          "default": "never",
+          "description": "Whether a single set-up use spends the marker."
+        },
+        "removed_by_enemy_within_inches": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Remove the marker once an enemy unit is within this distance of it."
+        }
+      }
     },
     "named-region-state": {
       "type": "object",

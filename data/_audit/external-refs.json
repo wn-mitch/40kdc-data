@@ -50,7 +50,7 @@
       }
     },
     "stratagem": {
-      "entities": 1434,
+      "entities": 1435,
       "with_external_refs": 1409,
       "covered_entities_by_namespace": {
         "game-datacards": 1319,
@@ -62,7 +62,7 @@
       }
     },
     "weapon": {
-      "entities": 3365,
+      "entities": 3366,
       "with_external_refs": 3092,
       "covered_entities_by_namespace": {
         "bsdata": 2817,

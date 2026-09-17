@@ -13,22 +13,17 @@ describe("Dataset.defensiveBuffsFor", () => {
   });
 
   it("symmetric: same unit produces distinct buff stacks under each perspective", () => {
-    // For a unit whose army rule is purely attacker-flavoured (Oath of Moment
-    // — re-roll-hits + re-roll-wounds), the attacker walk yields reroll
-    // buffs while the defensive walk drops them.
-    const intercessor = ds.units.find("Intercessor Squad")!;
-    const atk = ds.buffsFor(
-      { unitId: intercessor.id, factionId: "adeptus-astartes" },
-      { phase: "shooting" },
-    );
-    const def = ds.defensiveBuffsFor(
-      { unitId: intercessor.id, factionId: "adeptus-astartes" },
-      { phase: "shooting" },
-    );
-    const atkRerolls = atk.filter((b) => b.contribution.type === "reroll");
-    const defRerolls = def.filter((b) => b.contribution.type === "reroll");
-    expect(atkRerolls.length).toBeGreaterThan(0);
-    expect(defRerolls.length).toBe(0);
+    // For a unit whose army rule is purely attacker-flavoured (Black Templars'
+    // Templar Vows — +1 to wound in the fight phase), the attacker walk yields
+    // the buff while the defensive walk drops it.
+    const crusader = ds.units.find("Crusader Squad")!;
+    const input = { unitId: crusader.id, factionId: "adeptus-astartes" };
+    const atk = ds.buffsFor(input, { phase: "fight" });
+    const def = ds.defensiveBuffsFor(input, { phase: "fight" });
+    const atkWound = atk.filter((b) => b.contribution.type === "wound-mod");
+    const defWound = def.filter((b) => b.contribution.type === "wound-mod");
+    expect(atkWound.length).toBeGreaterThan(0);
+    expect(defWound.length).toBe(0);
   });
 
   it("weaponProfiles are ignored under target perspective", () => {

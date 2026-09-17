@@ -2466,5 +2466,24 @@
         "id": "97f24038-3b98-4140-8b29-3167c7dfd01a"
       }
     ]
+  },
+  {
+    "id": "a-worthy-death-gladius-task-force",
+    "name": "A WORTHY DEATH",
+    "category": "detachment",
+    "type": "strategic-ploy",
+    "detachment_id": "gladius-task-force",
+    "cp_cost": 1,
+    "phases": [
+      "fight"
+    ],
+    "player_turn": "either",
+    "timing": "once-per-phase",
+    "target_restrictions": null,
+    "ability_id": "a-worthy-death-gladius-task-force",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   }
 ]

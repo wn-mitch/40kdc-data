@@ -1,5 +1,5 @@
 {
-  "version": 24,
+  "version": 25,
   "kinds": {
     "faction": [
       "adepta-sororitas",
@@ -5117,7 +5117,8 @@
       "twin-lascannon-repulsor",
       "twin-multi-melta-brutalis-dreadnought",
       "twin-power-fists-aggressor-squad",
-      "vengor-launcher-desolation-squad"
+      "vengor-launcher-desolation-squad",
+      "imperiums-sword"
     ],
     "enhancement": [
       "a-chink-in-their-armour",

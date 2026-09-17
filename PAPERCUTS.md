@@ -170,8 +170,6 @@ I ran a jq probe with a literal TARGET placeholder instead of first extracting t
 ## 2026-09-03T19:23:34Z — codex
 
 This installed jj version has no archive subcommand, so the planned whole-parent materialization failed before comparison; use jj file show per composition instead.
-<<<<<<< conflict 1 of 1
-+++++++ qotqmzzv 02ae2248 "chore: Release 1.4.3" (rebase destination)
 
 ## 2026-09-08T16:37:21Z — gpt-6-astra
 
@@ -205,38 +203,98 @@ A jj log query failed because GitHub exposed an external-fork PR SHA that the lo
 
 A PR data-review subagent ran to completion but yielded null data, so the canonical data and stock-loadout audit had to be dispatched again.
 
-## 2026-09-15T00:05:56Z — openai-codex/gpt-5.6-sol
+## 2026-09-10T17:15:14Z — terra
 
-ast_edit matched all faction JSON properties but proposed invalid arrays by stripping captured string quotes, forcing a parsed JSON codemod fallback.
+Layout Editor's npm run check cannot run because svelte-check is not installed in the workspace; verification requires restoring dependencies first.
 
-## 2026-09-15T00:13:12Z — openai-codex/gpt-5.6-sol
+## 2026-09-10T20:45:02Z — terra
 
-just preflight fails by design on intended uncommitted generated artifacts, so it cannot serve as a pre-commit gate for schema changes; use verify-regen-stable plus test-all before committing, then preflight.
+The approved index-rebuild command used ../../40kdc-abilities from tools, which resolves to /Users/40kdc-abilities rather than the sibling store; the command failed before regeneration.
 
-## 2026-09-15T00:17:01Z — openai-codex/gpt-5.6-sol
+## 2026-09-10T20:51:58Z — terra
 
-Example-local npm test and check failed because workspace dependencies were absent; the repository requires npm ci at the monorepo root before example validation.
+just preflight runs verify-clean against @ after regeneration, so it always fails while an uncommitted data change correctly updates generated artifacts; use verify-regen-stable plus test-all before committing.
 
-## 2026-09-15T00:30:03Z — openai-codex/gpt-5.6-sol
+## 2026-09-10T20:56:44Z — terra
 
-gh pr merge failed in a jj detached working copy because it tried to determine a current git branch; pass -R owner/repo so the operation does not depend on checkout state.
+jj -R ../40kdc-abilities diff rejects an unqualified README.md path as rooted in the invoking repo; cross-repo file selection requires root:"README.md".
 
-## 2026-09-15T00:55:38Z — openai-codex/gpt-5.6-sol
+## 2026-09-11T13:53:08Z — openai-codex/gpt-5.6-sol
 
-Local npm credentials are unavailable, so accidental release cleanup must run through the authenticated GitHub Actions publish environment.
+The impeccable skill required a project-local .agents/skills/impeccable context loader, but this repository has no such installed path; the command failed before review UI work.
 
-## 2026-09-15T20:01:25Z — openai-codex/gpt-5.6-sol
+## 2026-09-11T15:42:38Z — openai-codex/gpt-5.6-sol
 
-A shell glob for optional per-faction artifacts expanded through every data/core child, causing cp to report dozens of expected missing paths after copying valid files. Use an explicit file list or nullglob-capable invocation for heterogeneous trees.
+Impeccable requires .agents/skills/impeccable/scripts/load-context.mjs, but this repo has no .agents directory; the documented loader path fails before UI work.
 
-## 2026-09-15T20:04:36Z — openai-codex/gpt-5.6-sol
+## 2026-09-11T16:49:41Z — terra
 
-Running npm test from tools with the repository-relative tools/test path made Vitest find no files because its root is already tools/. Use test/validate.test.ts or validate.test.ts from that workspace.
+tools has no test:conformance script; the focused conformance command must be discovered from package scripts after the alias fails.
 
-## 2026-09-15T20:09:55Z — openai-codex/gpt-5.6-sol
+## 2026-09-11T19:47:11Z — openai-codex/gpt-5.6-sol
 
-npm pack --dry-run --json interleaves prepack lifecycle output with JSON, so piping directly to jq fails and closes stdout, causing the postbuild audit to crash with EPIPE. Run prepack prerequisites separately and use --ignore-scripts for machine-readable inspection.
+Impeccable instructed running a repo-local .agents loader, but this repository has no installed .agents skill directory; the documented command failed before design work.
 
-## 2026-09-16T18:32:13Z — openai-codex/gpt-5.6-sol
+## 2026-09-11T20:22:38Z — openai-codex/gpt-5.6-sol
 
-The browser tab.run context exposes Puppeteer, not Playwright: page.locator(...).count() is unavailable despite locator-style APIs being common elsewhere. Use page.99520eval/querySelectorAll for DOM counts.
+Browser observation did not expose the empty-state file input as a button, so the initial acceptance-bundle upload lookup failed; selecting the underlying input directly was required.
+
+## 2026-09-11T21:16:07Z — openai-codex/gpt-5.6-sol
+
+Claude CLI accepted the structured-output schema locally but the API rejected top-level allOf with a 400; the help text does not document this schema subset, so the 13-item retry checkpoint failed without token spend.
+
+## 2026-09-14T23:37:51Z — openai-codex/gpt-5.6-sol
+
+The repository guidance names upstream/main, but jj has no upstream/main revision, so the initial lineage query failed and required inspecting the local main bookmark instead.
+
+## 2026-09-16T18:59:29Z — openai-codex/gpt-5.6-sol
+
+Root npx tsx resolved to a missing shell command even though both root and tools node_modules contain tsx; invoking the installed binary directly was required.
+
+## 2026-09-16T23:30:52Z — openai-codex/gpt-5.6-sol
+
+The reviewed bundle's missing-shape flag was not at the assumed shape_report.needs_schema path, causing a dead-end jq query while advancing the triage queue.
+
+## 2026-09-16T23:43:15Z — openai-codex/gpt-5.6-sol
+
+Used the wrong copied PDF basename in pdfinfo (11th instead of 11e), causing an avoidable dead-end metadata call.
+
+## 2026-09-16T23:45:05Z — openai-codex/gpt-5.6-sol
+
+A root-wide ignored-file glob for environment files timed out because the repository tree is large; narrower per-directory globs were required.
+
+## 2026-09-16T23:46:07Z — openai-codex/gpt-5.6-sol
+
+A broad home-directory glob timed out before locating this repository; repository discovery needed a scoped home-directory listing.
+
+## 2026-09-17T00:54:23Z — openai-codex/gpt-5.6-sol
+
+The impeccable skill instructed running a project-relative  loader, but this repo has no such checkout; the harness-installed  path is required.
+
+## 2026-09-17T01:29:07Z — openai-codex/gpt-5.6-sol
+
+An extra parenthesis in a long jq selector caused a dead-end query while inspecting affected ability entries.
+
+## 2026-09-17T02:47:46Z — openai-codex/gpt-5.6-sol
+
+gh search issues treated the parenthesized OR query as part of the repo qualifier and rejected it, so issue searches need separate simple queries.
+
+## 2026-09-17T11:28:08Z — openai-codex/gpt-5.6-sol
+
+jq rejected a damage-ability regex because the inline shell/regex escaping was easy to mis-specify; use character classes instead of backslash-escaped plus signs in inline jq patterns.
+
+## 2026-09-17T13:22:21Z — opus
+
+just preflight's drift gate compares against the working copy (@), so it can only pass on a committed tree: bumping conformance/SPEC_VERSION then running preflight costs a commit, a multi-minute regen, a failure naming go/spec.go and python/src/wh40kdc/_spec.py, and a second commit+preflight.
+
+## 2026-09-17T14:01:10Z — opus
+
+just regen never rebuilds data/share-registry.json, so adding entity ids leaves share.test failing on 'allocates every current shareable id' until you run npm run registry:build by hand — and it must run AFTER npm run codegen:data (registry:build reads the generated bundle), which is the opposite of the documented 'registry:build BEFORE codegen:data' order, so a naive single pass silently no-ops.
+
+## 2026-09-17T17:45:43Z — deepseek-v4
+
+referential-integrity's collision-policy test has a 5000ms default vitest timeout but takes ~2.5s alone and >6s under load, so a concurrent heavy job makes the suite fail flakily.
+
+## 2026-09-17T19:39:32Z — deepseek-v4-flash
+
+Widening an enum in effect.schema.json makes 'just regen' fail with a ~40-line recursive TypeScript union-mismatch dump (generated.ts widens automatically but hand-written interfaces in tools/src/translate/effect.ts do not), and the error names the deepest nested type rather than the stale interface, so the actual fix (width of one hand-written union) is hard to see.

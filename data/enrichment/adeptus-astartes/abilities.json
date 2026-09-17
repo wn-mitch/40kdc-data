@@ -217,11 +217,26 @@
     "source_digest": "096a7d713985856d0e8ce93c877db4b58b44a27c01fd2092a3d3014a0095930d",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-refund",
-      "target": "self",
-      "modifier": {
-        "type": "stratagem-for-0cp"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "persistent-battlefield-marker-state",
+          "target": "self",
+          "modifier": {
+            "marker_label": "Teleport Homer",
+            "placement": "battlefield",
+            "setup_within_inches": 3,
+            "consume": "on-use"
+          }
+        },
+        {
+          "type": "cp-refund",
+          "target": "self",
+          "modifier": {
+            "type": "stratagem-for-0cp"
+          }
+        }
+      ]
     },
     "scope": {
       "range": "aura-6",
@@ -232,7 +247,8 @@
       "terminator-assault-squad"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "community_notes": "Set up one Teleport Homer token at the start of the battle. Targeting this unit with Rapid Ingress costs 1CP less, but the unit must be set up within 3\" of that token and not within 8\" of an enemy unit; the token is then removed."
   },
   {
     "ability_id": "judgement-of-the-weak",
@@ -8483,62 +8499,6 @@
     "behavior": "activated"
   },
   {
-    "ability_id": "objective-secured",
-    "name": "Objective Secured",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "b7839c91742ce711a4223df21826be04e6f781c4b938441d5e232b1abcecd9b2",
-    "version": "2025-q3",
-    "effect": {
-      "type": "objective-control-modifier",
-      "target": "unit",
-      "modifier": {
-        "sticky": true
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "intercessor-squad"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "target-elimination",
-    "name": "Target Elimination",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "1619598789fa3d69bbcaaef75e4ada19dca995bbe95c17b6763010040f069446",
-    "version": "2025-q3",
-    "effect": {
-      "type": "stat-modifier",
-      "target": "unit",
-      "modifier": {
-        "stat": "A",
-        "operation": "add",
-        "value": 2
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "phase"
-    },
-    "unit_ids": [
-      "intercessor-squad"
-    ],
-    "ability_type": "unit",
-    "behavior": "activated"
-  },
-  {
     "ability_id": "deadly-demise-d6-2",
     "name": "Deadly Demise D6+2",
     "authored_by": "40kdc-community",
@@ -12079,32 +12039,6 @@
     "unit_ids": []
   },
   {
-    "ability_id": "space-marine-chapters",
-    "name": "Space Marine Chapters",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c956f3df70e3047e79d284a823647e43d9cf2530a36e8a427e1b840d6586cd3b",
-    "version": "2025-q3",
-    "effect": {
-      "type": "attack-restriction",
-      "target": "self",
-      "modifier": {
-        "restriction": "army-composition-rule"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "faction_id": "adeptus-astartes",
-    "ability_type": "faction",
-    "behavior": "passive",
-    "unit_ids": []
-  },
-  {
     "ability_id": "heirs-of-sigismund",
     "name": "Heirs of Sigismund",
     "authored_by": "40kdc-community",
@@ -12129,73 +12063,6 @@
     "ability_type": "faction",
     "behavior": "passive",
     "unit_ids": []
-  },
-  {
-    "ability_id": "oath-of-moment",
-    "name": "Oath of Moment",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2b9f60c4367cb5f8a2c3d6181eaedb246231f6039efe4ffa4e87f5f2b4ac7dea",
-    "version": "2025-q3",
-    "effect": {
-      "type": "designate-target",
-      "designation": "oath-of-moment",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "start-of-command-phase"
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "re-roll",
-          "target": "unit",
-          "modifier": {
-            "roll": "hit",
-            "subset": "all-failures"
-          }
-        }
-      },
-      "duration": "until-next-command-phase"
-    },
-    "scope": {
-      "range": "any-on-battlefield",
-      "duration": "until-next-command-phase"
-    },
-    "community_notes": "Additionally add 1 to the Wound roll against the Oath of Moment target IF you are using a Codex: Space Marines Detachment and your army includes no BLACK TEMPLARS, BLOOD ANGELS, DARK ANGELS, DEATHWATCH or SPACE WOLVES units (an army-composition precondition not expressible in the runtime DSL).",
-    "faction_id": "adeptus-astartes",
-    "ability_type": "faction",
-    "behavior": "activated",
-    "unit_ids": [
-      "lion-eljonson",
-      "decimus-kill-team",
-      "terminator-assault-squad",
-      "land-raider",
-      "dreadnought-drop-pod",
-      "chaplain-venerable-dreadnought",
-      "rhino-primaris",
-      "relic-razorback",
-      "vindicator-laser-destroyer",
-      "xiphon-interceptor",
-      "whirlwind-scorpius",
-      "leviathan-dreadnought",
-      "sicaran-battle-tank",
-      "storm-eagle-gunship",
-      "fire-raptor-gunship",
-      "land-raider-helios",
-      "land-raider-prometheus",
-      "terminus-ultra",
-      "land-raider-achilles",
-      "land-raider-excelsior",
-      "spartan",
-      "tarantula-sentry-battery",
-      "drop-pod",
-      "eradicator-squad-with-heavy-bolters",
-      "land-speeder"
-    ]
   },
   {
     "ability_id": "the-sons-of-sanguinius",
@@ -12633,8 +12500,7 @@
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "adeptus-astartes",
-    "detachment_id": "gladius-task-force",
-    "ability_type": "detachment",
+    "ability_type": "faction",
     "behavior": "activated",
     "effect": {
       "type": "stance-select",
@@ -12645,10 +12511,13 @@
         {
           "name": "Devastator Doctrine",
           "effect": {
-            "type": "ability-grant",
+            "type": "keyword-grant",
             "target": "unit",
             "modifier": {
-              "grant_type": "shoot-after-advance"
+              "keywords": [
+                "Assault"
+              ],
+              "weapon_type": "ranged"
             }
           }
         },
@@ -12678,7 +12547,7 @@
       "range": "unit",
       "duration": "battle-round"
     },
-    "community_notes": "[APPROX] Consumable army-wide stance selected at the start of your Command phase (each Doctrine once per battle). Each Doctrine's 'eligible to shoot/declare a charge in a turn it Advanced or Fell Back' effect is captured as an opaque eligibility grant. Full rule in raw-text store."
+    "community_notes": "[APPROX] Codex army rule. A consumable army-wide stance chosen at the start of your Command phase; each doctrine may be selected once per battle and only one is active for a unit at a time. Devastator grants [ASSAULT] to ranged weapons; Assault and Tactical are captured as opaque eligibility grants. Full rule in raw-text store."
   },
   {
     "ability_id": "lightning-assault",
@@ -19347,5 +19216,194 @@
       "duration": "permanent"
     },
     "community_notes": "While this unit is within Engagement Range of one or more enemy units, it has +2 OC"
+  },
+  {
+    "ability_id": "transhuman-strategist",
+    "name": "Transhuman Strategist",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "unit-has-keyword",
+        "parameters": {
+          "keyword": "WARLORD"
+        }
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "self",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "faction_id": "adeptus-astartes",
+    "ability_type": "faction",
+    "behavior": "passive",
+    "unit_ids": []
+  },
+  {
+    "ability_id": "codex-discipline",
+    "name": "Codex Discipline",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "effect": {
+      "type": "stance-selection-capacity",
+      "scope": "army",
+      "modifier": {
+        "stance_id": "combat-doctrines",
+        "additional_selections": 1,
+        "allocation": "choose-one-option"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "faction_id": "adeptus-astartes",
+    "detachment_id": "gladius-task-force",
+    "ability_type": "detachment",
+    "behavior": "passive",
+    "unit_ids": []
+  },
+  {
+    "ability_id": "bolter-discipline",
+    "name": "Bolter Discipline",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "within-range-of-objective"
+          },
+          {
+            "type": "within-range-of-objective",
+            "parameters": {
+              "subject": "target"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "unit",
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1,
+          "weapon_type": "ranged"
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "faction_id": "adeptus-astartes",
+    "ability_type": "unit",
+    "behavior": "passive",
+    "unit_ids": [
+      "intercessor-squad"
+    ]
+  },
+  {
+    "ability_id": "tactical-mainstay",
+    "name": "Tactical Mainstay",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "eligibility-override",
+          "target": "unit",
+          "modifier": {
+            "activity": "start-action",
+            "ignored_restrictions": [
+              "engaged",
+              "battle-shocked"
+            ]
+          }
+        },
+        {
+          "type": "eligibility-override",
+          "target": "unit",
+          "modifier": {
+            "activity": "shoot",
+            "ignored_restrictions": [
+              "performing-action"
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "faction_id": "adeptus-astartes",
+    "ability_type": "unit",
+    "behavior": "passive",
+    "unit_ids": [
+      "intercessor-squad"
+    ]
+  },
+  {
+    "ability_id": "a-worthy-death-gladius-task-force",
+    "name": "A Worthy Death",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adeptus-astartes",
+    "detachment_id": "gladius-task-force",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "fight-on-death",
+      "target": "destroyed-model",
+      "modifier": {
+        "eligibility": {
+          "type": "has-fought-this-phase",
+          "negated": true
+        },
+        "gate": {
+          "dice": "D6",
+          "threshold": 4,
+          "comparison": "gte",
+          "modifiers": []
+        },
+        "resolution": "when-unit-fights",
+        "removal": "after-unit-fights-or-phase-end"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    }
   }
 ]

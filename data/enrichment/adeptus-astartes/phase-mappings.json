@@ -2383,30 +2383,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "objective-secured",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "target-elimination",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "deadly-demise-d6-2",
     "source_type": "ability",
     "phases": [
@@ -4712,7 +4688,7 @@
   },
   {
     "source_id": "combat-doctrines",
-    "source_type": "detachment-rule",
+    "source_type": "ability",
     "phases": [
       "command",
       "movement",
@@ -5023,6 +4999,42 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "transhuman-strategist",
+    "source_type": "ability",
+    "phases": [
+      "command"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "codex-discipline",
+    "source_type": "detachment-rule",
+    "phases": [
+      "command"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "bolter-discipline",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
     },
     "authored_by": "40kdc-community"
   }

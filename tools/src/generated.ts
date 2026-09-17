@@ -301,6 +301,7 @@ export type AbilityCondition1 = SimpleCondition | CompoundCondition;
 export type AbilityEffect =
   | SingleEffect
   | StanceSelectEffect
+  | StanceSelectionCapacityEffect
   | ChoiceEffect
   | SequenceEffect
   | RulesBundleEffect
@@ -399,7 +400,12 @@ export type SingleEffect = {
     | "reactive-charge"
     | "ability-usage-limit"
     | "deadly-demise-threshold"
-    | "embark";
+    | "embark"
+    | "eligibility-override"
+    | "weapon-grant"
+    | "mirror-triggering-choice"
+    | "persistent-battlefield-marker-state"
+    | "named-objective-state";
   target:
     | "self"
     | "bearer"
@@ -429,6 +435,7 @@ export type SingleEffect = {
 export type EffectNode =
   | SingleEffect
   | StanceSelectEffect
+  | StanceSelectionCapacityEffect
   | ChoiceEffect
   | SequenceEffect
   | RulesBundleEffect
@@ -522,6 +529,7 @@ export type GameModes4 = [GameModeId, ...GameModeId[]];
 export type AbilityEffect1 =
   | SingleEffect
   | StanceSelectEffect
+  | StanceSelectionCapacityEffect
   | ChoiceEffect
   | SequenceEffect
   | RulesBundleEffect
@@ -652,6 +660,7 @@ export type AbilityCondition6 = SimpleCondition | CompoundCondition;
 export type AbilityEffect2 =
   | SingleEffect
   | StanceSelectEffect
+  | StanceSelectionCapacityEffect
   | ChoiceEffect
   | SequenceEffect
   | RulesBundleEffect
@@ -1055,6 +1064,21 @@ export interface Faction {
    * @minItems 1
    */
   faction_rule_ids: [EntityId, ...EntityId[]];
+  /**
+   * Army-construction constraints evaluated against faction keywords. `faction-keyword-cohesion` limits how many distinct additional faction keywords an army built from this faction may include — the Space Marine Chapters rule, where a second Faction keyword names the unit's Chapter and only one Chapter may be fielded.
+   */
+  army_construction_rules?: {
+    type: "faction-keyword-cohesion";
+    base_faction_keyword: Keyword;
+    /**
+     * Which secondary Faction keyword the constraint counts (e.g. `chapter`).
+     */
+    additional_keyword_source: string;
+    /**
+     * Maximum number of distinct additional faction keywords an army may include.
+     */
+    max_distinct: number;
+  }[];
   /**
    * URL to the faction's logo/emblem image.
    */
@@ -1577,6 +1601,20 @@ export interface StanceSelectEffect {
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "stance-selection-capacity-effect".
+ */
+export interface StanceSelectionCapacityEffect {
+  type: "stance-selection-capacity";
+  scope?: "army" | "unit";
+  modifier: {
+    stance_id: EntityId;
+    additional_selections: number;
+    allocation: "choose-one-option" | "fixed-option";
+    option_id?: EntityId;
+  };
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "choice-effect".
  */
 export interface ChoiceEffect {
@@ -1644,6 +1682,7 @@ export interface NamedEffect {
   cost?:
     | SingleEffect
     | StanceSelectEffect
+    | StanceSelectionCapacityEffect
     | ChoiceEffect
     | SequenceEffect
     | RulesBundleEffect
@@ -1708,6 +1747,10 @@ export interface DiceGatedEffect {
   comparison?: "gte" | "lte" | "gt" | "lt" | "eq";
   on_success?: EffectNode | null;
   on_fail?: EffectNode | null;
+  /**
+   * Marks this gate as the RIDER half of a roll-with-rider composition: a `sequence` whose first step is this gate and whose second step is the unconditional primary. The gate's effect fires on the roll and the primary resolves regardless, so the sequence renders with a mandatory "Regardless of the result" clause. Structurally identical to a real gate (a `dice-gated` with `on_success` and no `on_fail`), which is why the distinction is declared rather than inferred.
+   */
+  rider?: boolean;
   /**
    * Perform the named actual 2D6 test using the subject's current Leadership and normal applicable modifiers and reroll permissions. A Battle-shock failure inflicts Battle-shock as well as resolving on_fail; a Leadership test does not.
    */
@@ -1844,11 +1887,15 @@ export interface ForEachUnitEffect {
   selector: {
     owner: "friendly" | "enemy";
     /**
-     * Every listed keyword is required on each matching unit.
+     * Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them.
      *
      * @minItems 1
      */
     keywords?: [string, ...string[]];
+    /**
+     * Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.
+     */
+    keyword_match?: "all" | "any";
     /**
      * Whether each iteration binds a whole unit or one matching model.
      */
@@ -1861,7 +1908,7 @@ export interface ForEachUnitEffect {
     /**
      * Origin of the engagement_relation gate.
      */
-    reference?: "bearer" | "bearer-unit";
+    reference?: "bearer" | "bearer-unit" | "bearer-transport";
     /**
      * Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.
      */
@@ -1920,7 +1967,8 @@ export interface MovementModifierEffect {
       | "redeploy"
       | "scout"
       | "infiltrate"
-      | "shoot-and-scoot";
+      | "shoot-and-scoot"
+      | "ingress";
     distance?: number | string;
     passthrough?: (
       | "non-titanic-models"
@@ -1952,6 +2000,7 @@ export interface MovementModifierEffect {
   after_move?:
     | SingleEffect
     | StanceSelectEffect
+    | StanceSelectionCapacityEffect
     | ChoiceEffect
     | SequenceEffect
     | RulesBundleEffect
@@ -2033,9 +2082,9 @@ export interface DesignateTargetEffect {
     timing?: string;
     within_inches?: number;
     /**
-     * Explicit built-in origin of range and visibility gates, matching select-units.
+     * Explicit built-in origin of range and visibility gates, matching select-units. bearer-transport measures from the Transport the origin unit is embarked within.
      */
-    reference?: "bearer" | "bearer-unit";
+    reference?: "bearer" | "bearer-unit" | "bearer-transport";
     visibility_required?: boolean;
     /**
      * @minItems 1
@@ -2133,6 +2182,12 @@ export interface ResourceActionMenuEffect {
   shared_usage?: {
     unit_max_manoeuvres_per_phase?: number;
     default_manoeuvre_max_per_phase?: number;
+  };
+  capacity?: {
+    amount: number;
+    resource_label: string;
+    ability_noun: string;
+    refresh: "battle-round" | "turn" | "phase" | "battle";
   };
   /**
    * @minItems 1
@@ -2292,6 +2347,7 @@ export interface PersistentDesignationEffect {
     effect:
       | SingleEffect
       | StanceSelectEffect
+      | StanceSelectionCapacityEffect
       | ChoiceEffect
       | SequenceEffect
       | RulesBundleEffect
@@ -3790,6 +3846,51 @@ export interface NamedRegionConsumer {
   default_branch: NamedRegionBranch;
   qualified_branch: NamedRegionBranch;
   attack_condition?: AbilityCondition6;
+}
+/**
+ * A named state carried by a specific objective marker: the state resolves when its ability-level trigger fires, and may clear itself. Distinct from `objective-tag`, which only marks the objective without carrying a resolution.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "named-objective-state".
+ */
+export interface NamedObjectiveState {
+  state_label: string;
+  resolution: EffectNode;
+  /**
+   * When the named state is removed from the objective.
+   */
+  clears?: "after-resolving" | "end-of-turn" | "never";
+}
+/**
+ * A marker placed on the battlefield that persists after placement: matching units may set up near it, using it may consume it, and enemy proximity removes it. Distinct from `tracking-token`, which is a reminder co-located with a model rather than a placed battlefield object with its own lifecycle.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "persistent-battlefield-marker-state".
+ */
+export interface PersistentBattlefieldMarkerState {
+  marker_label: string;
+  /**
+   * Where the marker is placed at the moment the ability resolves.
+   */
+  placement: "bearer" | "bearer-unit" | "battlefield";
+  /**
+   * Distance from the marker within which matching units may be set up.
+   */
+  setup_within_inches?: number;
+  /**
+   * When present, only units carrying every listed keyword may use the marker to set up; absent means any friendly unit.
+   *
+   * @minItems 1
+   */
+  setup_keywords?: [string, ...string[]];
+  /**
+   * Whether a single set-up use spends the marker.
+   */
+  consume?: "on-use" | "never";
+  /**
+   * Remove the marker once an enemy unit is within this distance of it.
+   */
+  removed_by_enemy_within_inches?: number;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
