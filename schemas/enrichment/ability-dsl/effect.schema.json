@@ -2655,10 +2655,7 @@
                     "minimum": 2,
                     "maximum": 12
                   }
-                },
-                "required": [
-                  "charge_roll_max_after_modifiers"
-                ]
+                }
               }
             },
             "required": [

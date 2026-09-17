@@ -3721,11 +3721,9 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "ability-grant",
+      "type": "reactive-charge",
       "target": "unit",
-      "modifier": {
-        "grant_type": "reactive-charge"
-      }
+      "modifier": {}
     },
     "scope": {
       "range": "unit",
@@ -3970,11 +3968,9 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "ability-grant",
+      "type": "reactive-charge",
       "target": "unit",
-      "modifier": {
-        "grant_type": "reactive-charge"
-      }
+      "modifier": {}
     },
     "scope": {
       "range": "unit",

@@ -612,11 +612,9 @@
       "subject": "enemy-unit"
     },
     "effect": {
-      "type": "ability-grant",
+      "type": "reactive-charge",
       "target": "unit",
-      "modifier": {
-        "grant_type": "reactive-charge"
-      }
+      "modifier": {}
     },
     "scope": {
       "range": "unit",
@@ -1073,11 +1071,9 @@
       "subject": "enemy-unit"
     },
     "effect": {
-      "type": "ability-grant",
+      "type": "reactive-charge",
       "target": "unit",
-      "modifier": {
-        "grant_type": "reactive-charge"
-      }
+      "modifier": {}
     },
     "scope": {
       "range": "unit",
