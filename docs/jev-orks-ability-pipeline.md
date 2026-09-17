@@ -497,15 +497,53 @@ the record carries only its phase gate, so the constructed candidate is the more
 of the two. This is also what made the original design-law-6 evidence look like
 over-assertion; the law is corrected above.
 
-### N3c — Audit the recipient of the 33 `disposition-matches` operands
+### N3c — Retire `disposition-matches` from ability records — **routed, not yet done**
 
-33 Ork records carry a `disposition-matches` operand, 31 of them `friendly`. The describer
-renders it as "while the unit's disposition is friendly" (to players, a *Force
-Disposition*), which reads as a subject marker rather than a matched-play disposition —
-and the DSL's own option list has no side vocabulary. Either the operand means "a friendly
-unit" and needs its own condition type, or those 31 operands are noise. Settle it before
-they propagate: construction currently declines to emit them, so the candidates for those
-abilities are missing an operand the authored records carry.
+46 ability operands use the type corpus-wide and **not one is a Force Disposition**:
+`friendly` 33, `enemy` 5, `riled-up` 4, `closest-eligible-target` 2, `fell-back` 1, null 1.
+Dispositions are a real dataset concept with a closed five-value vocabulary
+(`take-and-hold`, `priority-assets`, `reconnaissance`, `disruption`, `purge-the-foe`) living
+in mission and detachment data, so an ability record keyed on `friendly` is simply invalid.
+The four misuses route as:
+
+| misuse | home |
+| --- | --- |
+| `friendly`, `enemy` (38) | side is carried by `select-units.owner`, the effect `target`, and `applies_to` — most are redundant deletions, and the 71 condition operands have no side type at all |
+| `closest-eligible-target` (2) | `unit-within-range-of {target_type: "closest-eligible"}`, which already exists |
+| `fell-back` (1) | `fell-back-this-turn`, the missing fourth sibling of `advanced-this-turn` / `charged-this-turn` / `remained-stationary` — **queued**; `advanced-this-turn` lives in all four ports and a conformance case, so it is a schema + 4 describer + SPEC_VERSION change |
+| `riled-up` (4) | see below |
+
+#### Riled up is a named state, and the machinery already exists — scoped to regions
+
+Riled up is a **named state applied to units whose effects are defined once and referenced
+by consumers**, the same shape as a combat doctrine. The DSL already has that apparatus in
+`named-region-state` = `{region_ref, producer, consumer, branch_precedence}`, with
+`producer` carrying `baseline {kind, zone, activation, expiry}` and `consumer` carrying
+`{state_ref, beneficiary_gate, membership {unit_scope, relation}, qualified_condition,
+default_branch, qualified_branch, attack_condition}`. The Waaagh ability maps onto it
+directly: the War Cry activation is the **producer** (once per battle per army, start of
+the Command phase, applied to a filtered unit set, expiring at the end of the next turn),
+the state's consequences are the **consumer's branches**, and membership is "carries the
+state" rather than "is inside a region".
+
+The region-specific parts are `region_ref` / `zone` / `range_to_marker_inches`. So this is
+**not a new shape and not `unit-tag`** — a tag carries no effects, so every consumer would
+restate the state's consequences and they would drift. It is the existing named-state
+machinery with **scope widened from region to unit**. It is a schema-shape change (the same
+four-port ceremony as `fell-back-this-turn`) and belongs in the shape-design process rather
+than in this pipeline.
+
+Current encodings of the state, for the re-authoring pass: granted as an opaque
+`ability-grant` in 9 records, tested as `unit-has-keyword: "Riled Up"` in 5, and encoded as
+`disposition-matches` in 4.
+
+### N3d — Queued data fixes (decided 2026-09-17)
+
+Folded into the next authoring pass rather than done standalone: the 46
+`disposition-matches` misuse retirements above, and the `target-has-keyword: "A"`
+corruption (52 occurrences corpus-wide, 5 in Orks) where a characteristic was read as a
+keyword. Both are cross-faction data changes needing generated-artifact regeneration and
+`just preflight`.
 
 ### N4 — Work the describer defect queue
 
