@@ -8,6 +8,7 @@ import {
 } from "../src/jev-orks-experiment.js";
 import {
   claimsFromResponse,
+  compileCondition,
   constructCandidate,
   decompositionEvidence,
   confidentAnswers,
@@ -622,6 +623,48 @@ describe("JEV Ork experiment", () => {
     ], STATE);
     expect(result.status).toBe("incomplete");
     expect(result.findings.some((finding) => finding.startsWith("reroll_subset_is_ones:"))).toBe(true);
+  });
+
+  it("assembles a condition from the settled slots only", () => {
+    // The compiler reads keywords from the state's literal list, so the fixture
+    // has to declare them the way `literals()` would.
+    const state = {
+      ...STATE,
+      literal_candidates: { ...STATE.literal_candidates, named_keywords: ["ORKS", "VEHICLES", "TITANIC"] },
+    };
+    const readings = readSlots(claims("wild-ride", {
+      trigger_event: "selected-to-shoot",
+      turn_is_your: 1,
+      keyword_orks: "condition",
+      keyword_vehicles: "target-eligibility",
+      keyword_titanic: "target-exclusion",
+    }));
+    expect(compileCondition(readings, state).condition).toEqual({
+      operator: "and",
+      operands: [
+        { type: "phase-is", parameters: { phase: "shooting" } },
+        { type: "player-turn-is", parameters: { turn: "your" } },
+        { type: "unit-has-keyword", parameters: { keyword: "ORKS" } },
+        { type: "target-has-keyword", parameters: { keyword: "VEHICLES" } },
+        { operator: "not", operands: [{ type: "target-has-keyword", parameters: { keyword: "TITANIC" } }] },
+      ],
+    });
+    // A `recipient`-only claim set names no gate, so there is no condition to
+    // assemble and the caller is told so rather than handed an empty one.
+    expect(compileCondition(readSlots(claims("wild-ride", { recipient: "this-unit" })), state).condition).toBeNull();
+  });
+
+  it("does not promote a marginal proposition to a settled value", () => {
+    // A proposition slot has no options to choose between, so a coin-flip "yes"
+    // is not a leading option. Promoting it invents a gate the source never
+    // stated — eight constructed candidates gained a turn gate this way.
+    const [reading] = [...readSlots([
+      ...claims("wild-ride", { turn_is_your: 0 }, 0.79),
+      claim("wild-ride", "refine_1__turn_is_your__truth", 1, 0.52),
+    ]).values()].filter((candidate) => candidate.slot === "turn_is_your");
+    expect(reading.options).toEqual([]);
+    expect(reading.evidence).toBe("undetermined");
+    expect(reading.proposition).toBe(true);
   });
 
   it("routes partial families into parameter-complete recursive question packets", () => {

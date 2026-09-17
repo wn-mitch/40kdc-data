@@ -284,12 +284,23 @@ Earned from the experiment, with the evidence that forced each one.
    repaired: `recipient` now asks the effect's recipient separately, and the selection
    composition reads its own subject from `selection_owner`.*
 6. **A fact the source can stay silent about must be asked as a proposition.** `turn_owner`
-   as a forced choice over `{your, opponent, either}` produced a turn gate the independent
-   authored record did not have **35 times against 2 omissions** — the model answers the
-   forced choice rather than the silence (law 2, again). Asked as two propositions
-   (`turn_is_your`, `turn_is_opponent`), the same corpus produced **7 additions against 1
-   omission**. The repair for a failing choice slot is not better wording; it is a
-   different question shape.
+   as a forced choice over `{your, opponent, either}` cannot answer "the source states no
+   turn at all", which is law 2's structural objection. It is asked as two propositions
+   (`turn_is_your`, `turn_is_opponent`) instead, each with silence spelled out as its false
+   case.
+   *The evidence first recorded here was wrong and is corrected:* the original claim was
+   that the forced choice "produced a turn gate the independent authored records did not
+   have 35 times against 2 omissions". Those records are **not** ground truth for their own
+   sources. Spot-checking the seven residual cases shows every one of them states
+   "your … phase" in the source while the record carries only the phase gate:
+   `dakkablitz`, `strafing-run`, `deff-from-above`, `kustom-dakka-shoota-boyz`,
+   `blitz-dem-gitz`, `ere-we-go-green-tide`, `fungus-fuel-injection-war-horde`. The
+   count is also not small: **of the 114 Ork records whose source mentions a turn, only 29
+   encode a turn gate.** The compiler was correcting the corpus, not over-asserting.
+   Two real defects did sit in this area, and both are fixed: a refined proposition could
+   be *promoted to a settled value by the leading-option fallback* (a 0.52 "truth" became a
+   turn gate on `headwoppas-killchoppa-war-horde`), and refinement re-asks a proposition as
+   itself. A proposition now has no leading option to fall back to.
 7. **A constructor that cannot refuse will flatten.** The first registry pass authored the
    one effect its family understood for rules the classifier called multi-effect, and
    dropped the dice-gate in front of mortal wounds. Both are `flattened-randomness` — the
@@ -337,15 +348,40 @@ not a threshold move.
 
 ### N1c — Register the `ability-grant` families
 
-**P0.** 81 abilities are still `unsupported family`, 75 of them `*/ability-grant`
-(`conditional` 54, `sequence` 9, `leaf` 6, `choice` 6). These cannot be authored from the
-slots at all: `granted_permission` is a seven-option vocabulary while the corpus carries
-**102 distinct `grant_type` values across 109 uses in Orks** — essentially one per rule. A
-generic constructor would emit a coarse label, which is the N6 anti-pattern. The choice is
-between deriving the grant from a new slot, delegating the payload to the current record
-(and reporting the delegation), or leaving the family unregistered. **Decide before
-building**; the measured condition operands are now good enough that delegation would be
-worth measuring rather than assuming.
+**P0 — measured rather than assumed.** 81 abilities are still `unsupported family`, 75 of
+them `*/ability-grant` (`conditional` 54, `sequence` 9, `leaf` 6, `choice` 6). They cannot
+be authored from the slots: `granted_permission` is a seven-option vocabulary while the
+corpus carries **102 distinct `grant_type` values across 109 uses in Orks** — essentially
+one per rule. A generic constructor would emit a coarse label, which is the N6
+anti-pattern.
+
+The alternative — compile the condition from the slots, keep the record's own payload, and
+report the delegation — was measured through the shipped `compileCondition` on all 75:
+
+| compiled condition vs the record's | n | delegation would… |
+| --- | --- | --- |
+| record has none, compiled adds one | 22 | add a gate the record lacks |
+| overlapping (misses some, adds others) | 20 | replace a correct gate with a different one |
+| neither has one | 15 | be neutral |
+| compiled finds none where the record has one | 6 | **lose** a gate |
+| compiled is a subset | 5 | lose operands |
+| identical | 5 | be neutral |
+| compiled is a superset | 4 | add operands |
+
+So delegation is not a blanket win: it would lose or replace a gate on 31 of 75. Two
+named defects drive the 20 overlapping cases, and neither is about the payload:
+
+- **keywords that scope a range predicate are read as target gates.** The compiler has no
+  `keyword_*` role for "this keyword qualifies a `unit-within-range-of` predicate", so
+  `beast-snagga-following`'s one precise operand becomes three separate
+  `target-has-keyword` gates. Six abilities settle a keyword role on a record that uses a
+  range predicate, and the vocabulary has no option for it.
+- the residual turn over-assertion, now corrected above.
+
+**Recommendation:** do not delegate yet. Close the `keyword_*` role gap first — it is one
+vocabulary option plus a compiler mapping, it is the same defect that would make any
+delegated candidate worse than the record, and it also sharpens the 44 already-constructed
+candidates. Decide the `ability-grant` shape after that, with the same measurement re-run.
 
 ### N2 — Calibrate the localiser — **done for this round**
 
@@ -406,9 +442,16 @@ or a die test collapsed into one unconditional effect changes play, not wording,
 of eight authoring faults of that shape are die-band tables where every band was emitted
 as an unconditional step. It is also the shape the registry now refuses to emit.
 
-### N3b — Audit the recipient of the 33 `disposition-matches` operands
+### N3b — Audit the turn gates the corpus omits
 
-### N3b — Audit the recipient of the 33 `disposition-matches` operands
+**P1, and it is a data defect rather than a pipeline gap.** Of the 114 Ork records whose
+source mentions a turn, only **29 encode a `player-turn-is` gate**. Spot-checking seven of
+the records the compiler added a turn gate to shows the source states "your … phase" and
+the record carries only its phase gate, so the constructed candidate is the more faithful
+of the two. This is also what made the original design-law-6 evidence look like
+over-assertion; the law is corrected above.
+
+### N3c — Audit the recipient of the 33 `disposition-matches` operands
 
 33 Ork records carry a `disposition-matches` operand, 31 of them `friendly`. The describer
 renders it as "while the unit's disposition is friendly" (to players, a *Force

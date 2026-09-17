@@ -1768,6 +1768,9 @@ export function readSlots(
     const reading = readings.get(slot)
       ?? { slot, options: [], claim_ids: [], evidence: "refined" as const, probability: null, proposition: false };
     reading.claim_ids.push(claim.id);
+    // A proposition slot is refined into a re-ask of itself, so the slot is a
+    // proposition whenever its refinement option is the `truth` form.
+    if (match[2] === "truth") reading.proposition = true;
     if (claim.value === 1) {
       const option = optionFromSlug(slot, match[2]);
       affirmative.set(slot, [...(affirmative.get(slot) ?? []), { option, probability: claim.probability }]);
@@ -1814,6 +1817,18 @@ export function readSlots(
 
   for (const [slot, reading] of readings) {
     if (reading.options.length > 0) continue;
+    // A proposition slot is not a choice, so it has no leading option to fall
+    // back to: the model's "yes" at 0.52 is a coin flip, and promoting it to a
+    // settled value invents a gate the source never stated. Eight abilities
+    // gained a spurious turn gate this way before the guard. A proposition is
+    // either settled true (read above), confidently denied, or unknown.
+    if (reading.proposition) {
+      const base = direct.get(slot);
+      const denied = (base !== undefined && base.probability <= 1 - threshold)
+        || (affirmative.get(slot) ?? []).some((candidate) => candidate.probability <= 1 - threshold);
+      reading.evidence = denied ? "direct" : "undetermined";
+      continue;
+    }
     const base = direct.get(slot);
     const candidates = [
       ...(affirmative.get(slot) ?? []),
@@ -1960,7 +1975,14 @@ type ConditionCompilation = {
   findings: string[];
 };
 
-function compileCondition(
+/**
+ * Assemble a condition from the settled slots, or report why it could not be.
+ *
+ * Exported because it is the registry's shared condition layer: every family
+ * that wraps its effect in a `conditional` composes through here, and it is the
+ * unit a family that delegates its payload would wrap too.
+ */
+export function compileCondition(
   readings: Map<string, SlotReading>,
   state: AbilityState | null,
 ): ConditionCompilation {
