@@ -37,14 +37,20 @@ describe("JEV round trip", () => {
     expect(leg(ALL_TRUE).passed).toBe(true);
     const confidentFalse = leg({ ...ALL_TRUE, randomness_preserved: { type: "noul", noul: 0.06 } });
     expect(confidentFalse.passed).toBe(false);
-    expect(confidentFalse.failed_propositions).toEqual(["randomness_preserved"]);
+    expect(confidentFalse.refuted_propositions).toEqual(["randomness_preserved"]);
+    expect(confidentFalse.unresolved_propositions).toEqual([]);
   });
 
-  it("treats a mid-band answer as unresolved rather than as fidelity", () => {
+  it("treats a mid-band answer as unresolved rather than as fidelity or as a fault", () => {
     // The extraction experiment's central lesson: an ambiguous answer is not
     // evidence of fidelity. Only a confident true counts.
     const ambiguous = leg({ ...ALL_TRUE, every_quantity_preserved: { type: "noul", noul: 0.62 } });
     expect(ambiguous.passed).toBe(false);
+    expect(ambiguous.unresolved_propositions).toEqual(["every_quantity_preserved"]);
+    expect(ambiguous.refuted_propositions).toEqual([]);
+    // Unproven is not a fault: attributing it to the authoring leg is how every
+    // adjudicated-clean record in the labelled set acquired a fault verdict.
+    expect(localise(ambiguous, leg(ALL_TRUE))).toBe("unresolved");
   });
 
   it("localises a fault to the leg whose ground truth was violated", () => {
@@ -53,15 +59,18 @@ describe("JEV round trip", () => {
     expect(localise(pass, pass)).toBe("clean");
     expect(localise(fail, pass)).toBe("authoring");
     expect(localise(pass, fail)).toBe("describer");
-    expect(localise(fail, fail)).toBe("both-wrong");
+    // Both legs refuted is still authoring: the record is wrong first, so the
+    // prose's failure is not independent evidence.
+    expect(localise(fail, fail)).toBe("authoring");
   });
 
-  it("fails a leg whose propositions all pass but which names a defect", () => {
-    // A named defect with passing propositions is contradictory evidence; the
-    // named defect wins so the row is not reported as clean.
+  it("does not fault a leg whose propositions all pass and which merely names a defect", () => {
+    // Five adjudicated-clean records in the labelled set name a defect with
+    // nothing refuted, so the diagnosis alone cannot decide the verdict.
     const contradictory = leg(ALL_TRUE, "flattened-randomness");
     expect(contradictory.passed).toBe(true);
-    expect(localise(contradictory, leg(ALL_TRUE))).toBe("authoring");
+    expect(localise(contradictory, leg(ALL_TRUE))).toBe("clean");
+    expect(contradictory.primary_defect).toBe("flattened-randomness");
   });
 
   it("asks atomic source-literal propositions rather than a holistic rubric", () => {

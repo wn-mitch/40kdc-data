@@ -15,11 +15,12 @@
  *
  * Localisation is then just the pair of verdicts:
  *
- *      leg1 fail              → authoring
- *      leg1 pass, leg2 fail   → describer
- *      both fail              → authoring (the record is already wrong, so the
- *                               prose is graded against a bad ground truth)
- *      both pass              → clean
+ *      leg1 refuted             → authoring (even when leg 2 also fails: the
+ *                                 record is already wrong, so the prose was
+ *                                 graded against a bad ground truth)
+ *      leg1 clean, leg2 refuted → describer
+ *      neither refuted, either unresolved → unresolved (don't know)
+ *      all propositions confident → clean
  *
  * Why questions rather than embeddings: an embedding scores two prose samples'
  * similarity, which moves with paraphrase — measured at only −0.43 correlation
@@ -82,30 +83,49 @@ const DESCRIBER_DEFECT_KINDS = {
  * experiment showed interpretive questions sit in the ambiguous band while
  * source-literal propositions settle, so every question here names a concrete
  * thing to look for and admits a confident "no".
+ *
+ * `randomness_preserved` is **gated on the source stating a roll**, not merely
+ * worded to be vacuous-true. A vacuity clause was not enough: six of the eight
+ * remaining misattributions against the adjudicated labels were this
+ * proposition refuting a record whose rule contains no die at all, and a rule
+ * with no die cannot fail to preserve one. Design law 4, applied to the
+ * localiser.
  */
-export function legOneQuestions(): Questions {
+export function legOneQuestions(options: { randomness: boolean } = { randomness: true }): Questions {
   return {
-    every_effect_represented: noul(
-      "Does the record represent every operative effect the source states?",
-    ),
-    every_condition_represented: noul(
-      "Does the record represent every condition, restriction, and eligibility gate the source states?",
-    ),
-    every_quantity_preserved: noul(
-      "Does the record preserve every numeric quantity and die expression the source states "
-      + "(distances, counts, thresholds, D3, D6, D3+3)?",
-    ),
-    randomness_preserved: noul(
-      "Does the record preserve the source's die rolls and result bands as conditional or "
-      + "table structure, rather than collapsing them into unconditional effects?",
-    ),
+    every_effect_represented: noul({
+      task: "Does the record represent every operative effect the source states?",
+      true: "Every operative effect the source states has an equivalent in the record, whatever encoding it uses. Score true when the source states no effect.",
+      false: "The source states an operative effect that the record has no equivalent for.",
+    }),
+    every_condition_represented: noul({
+      task: "Does the record represent every condition, restriction, and eligibility gate the source states?",
+      true: "Every condition, restriction, and gate the source states has an equivalent in the record, whatever encoding it uses. Score true when the source states none.",
+      false: "The source states a condition, restriction, or gate that the record has no equivalent for.",
+    }),
+    every_quantity_preserved: noul({
+      task: "Does the record preserve every numeric quantity and die expression the source states "
+        + "(distances, counts, thresholds, D3, D6, D3+3)?",
+      true: "Every numeric quantity and die expression the source states appears in the record. Score true when the source states none.",
+      false: "The source states a numeric quantity or die expression that the record changes, drops, or replaces.",
+    }),
+    ...(options.randomness ? {
+      randomness_preserved: noul({
+        task: "Does the record preserve the source's die roll and its result bands as conditional or "
+          + "table structure, rather than collapsing them into unconditional effects?",
+        true: "The source's die roll and its result bands survive as gates or tables in the record.",
+        false: "The source rolls a die or reads a table and the record resolves it unconditionally.",
+      }),
+    } : {}),
     recipient_preserved: noul(
       "Does the record apply each effect to the same recipient the source names — bearer, "
       + "bearer's unit, a selected unit, or the enemy being attacked?",
     ),
-    adds_nothing: noul(
-      "Does the record avoid asserting effects, conditions, quantities, or recipients the source does not state?",
-    ),
+    adds_nothing: noul({
+      task: "Does the record avoid asserting effects, conditions, quantities, or recipients the source does not state?",
+      true: "Nothing in the record goes beyond the source. Encoding the same mechanic in a different DSL shape is not an addition.",
+      false: "The record asserts an effect, condition, quantity, or recipient with no counterpart in the source.",
+    }),
     primary_defect: choice("If the record differs from the source, what is the primary difference?", {
       ...AUTHORING_DEFECT_KINDS,
     }),
@@ -142,33 +162,47 @@ export function legTwoQuestions(): Questions {
 
 export type LegEvidence = {
   passed: boolean;
+  /** Propositions the model confidently denied. The leg is refuted. */
+  refuted_propositions: string[];
+  /** Propositions that stayed in the ambiguous band. Unproven, not refuted. */
+  unresolved_propositions: string[];
   answers: Record<string, unknown>;
-  failed_propositions: string[];
   primary_defect: string | null;
 };
 
-/** A leg passes only when every proposition is confident and true. */
+/**
+ * A leg passes only when every proposition is confident and true.
+ *
+ * The propositions split in two when they do not: a confidently denied
+ * proposition **refutes** the leg, while a mid-band one leaves it **unresolved**.
+ * Keeping those apart is what lets `localise` attribute a fault instead of
+ * reporting every unproven leg as a defect.
+ */
 export function evaluateLeg(response: CachedResponse, threshold = 0.8): LegEvidence {
   const answers = response.answers as Record<string, unknown>;
-  const failed: string[] = [];
+  const refuted: string[] = [];
+  const unresolved: string[] = [];
   for (const [questionId, raw] of Object.entries(answers)) {
     const answer = raw as AnyRecord;
     if (answer?.type !== "noul") continue;
     const probability = Number(answer.noul);
     // `noul` is the probability of TRUE. A confident false is a failure.
-    if (!(probability >= threshold)) failed.push(questionId);
+    if (probability >= threshold) continue;
+    if (probability <= 1 - threshold) refuted.push(questionId);
+    else unresolved.push(questionId);
   }
   const defectAnswer = (answers.primary_defect ?? {}) as AnyRecord;
   const primaryDefect = typeof defectAnswer.choice === "string" ? defectAnswer.choice : null;
   return {
-    passed: failed.length === 0,
+    passed: refuted.length === 0 && unresolved.length === 0,
+    refuted_propositions: refuted,
+    unresolved_propositions: unresolved,
     answers,
-    failed_propositions: failed,
     primary_defect: primaryDefect,
   };
 }
 
-export type Verdict = "clean" | "authoring" | "describer" | "both-wrong";
+export type Verdict = "clean" | "authoring" | "describer" | "unresolved";
 
 export type JevRoundTripRow = {
   ability_id: string;
@@ -180,17 +214,39 @@ export type JevRoundTripRow = {
   rendered_text: string;
 };
 
+/**
+ * A leg is faulted when it is **refuted** — some proposition is confidently
+ * false.
+ *
+ * Neither of the two weaker signals faults a leg, and both were measured against
+ * the adjudicated label set before being dropped as triggers:
+ *
+ * - An **unproven** leg (a proposition in the ambiguous band) is "don't know".
+ *   Treating that as a defect is design law 1, and it is what gave every
+ *   adjudicated-clean record in the labelled set a fault verdict.
+ * - A **named defect alone** is the model's diagnosis, and on five
+ *   adjudicated-clean records it named one with nothing refuted
+ *   (`krushin-impetus` invented-effect, `spiteful-power-trip` wrong-recipient,
+ *   `feel-no-pain-6` flattened-randomness, `thatll-learn-ya` invented-effect).
+ *   It stays the diagnosis the report groups by; it does not decide the verdict.
+ */
 function faulted(leg: LegEvidence): boolean {
-  const named = leg.primary_defect !== null && leg.primary_defect !== "no-material-difference";
-  return !leg.passed || named;
+  return leg.refuted_propositions.length > 0;
 }
 
+/**
+ * Both legs failing is **authoring**: the record is already wrong, so the prose
+ * was graded against bad ground truth and its own failure carries no independent
+ * evidence. The per-leg faults stay on the row for the defect queues.
+ */
 export function localise(leg1: LegEvidence, leg2: LegEvidence): Verdict {
-  const one = faulted(leg1);
-  const two = faulted(leg2);
-  if (!one && !two) return "clean";
-  if (one && two) return "both-wrong";
-  return one ? "authoring" : "describer";
+  if (faulted(leg1)) return "authoring";
+  if (faulted(leg2)) return "describer";
+  // Neither leg is refuted, but one asked a question the model could not settle.
+  // Reporting that as a fault would over-attribute; reporting it as clean would
+  // claim fidelity the evidence does not support.
+  if (!leg1.passed || !leg2.passed) return "unresolved";
+  return "clean";
 }
 
 export async function jevRoundTrip(options: {
@@ -240,15 +296,18 @@ export async function jevRoundTrip(options: {
       applies_to: (record.applies_to ?? null) as JsonObject | null,
     };
 
-    // leg 1 — source text is ground truth, the record is the candidate.
+    // leg 1 — source text is ground truth, the record is the candidate. The
+    // rendered prose is deliberately NOT passed: it is leg 2's candidate, and a
+    // prose defect visible here is attributed to authoring (measured on
+    // `never-too-busy-to-fight` and `sneaky-gitz`, whose records are right and
+    // whose renders are wrong).
     const leg1Response = await ask(
       client,
       {
         source_text: state.source_text,
         candidate_record: mechanics as unknown as JsonObject,
-        candidate_rendered_text: rendered,
       },
-      legOneQuestions(),
+      legOneQuestions({ randomness: state.literal_candidates.dice.length > 0 }),
       ledger,
       PRIVATE_ROOT,
       0,
@@ -301,8 +360,13 @@ export async function jevRoundTrip(options: {
       clean: byVerdict("clean").length,
       authoring: byVerdict("authoring").length,
       describer: byVerdict("describer").length,
-      both_wrong: byVerdict("both-wrong").length,
+      unresolved: byVerdict("unresolved").length,
     },
+    /** Rows where both legs are refuted: the prose was graded against a record
+     *  that is already wrong, so its failure is not independent evidence. */
+    both_legs_refuted: rows.filter(
+      (row) => row.leg1.refuted_propositions.length > 0 && row.leg2.refuted_propositions.length > 0,
+    ).length,
     authoring_defect_kinds: defectCounts((row) => row.leg1),
     describer_defect_kinds: defectCounts((row) => row.leg2),
     threshold: options.threshold ?? 0.8,
@@ -341,10 +405,12 @@ if (isMain) {
         console.log([
           row.ability_id.padEnd(44),
           row.verdict.padEnd(12),
-          `leg1=${row.leg1.passed ? "pass" : "FAIL"}`,
-          `leg2=${row.leg2.passed ? "pass" : "FAIL"}`,
+          `leg1=${row.leg1.passed ? "pass" : row.leg1.refuted_propositions.length ? "REFUTED" : "unresolved"}`,
+          `leg2=${row.leg2.passed ? "pass" : row.leg2.refuted_propositions.length ? "REFUTED" : "unresolved"}`,
           `defect=${row.leg1.primary_defect ?? row.leg2.primary_defect ?? "-"}`,
-          row.leg1.failed_propositions.length ? `[${row.leg1.failed_propositions.join(",")}]` : "",
+          [...row.leg1.refuted_propositions, ...row.leg1.unresolved_propositions].length
+            ? `[${[...row.leg1.refuted_propositions, ...row.leg1.unresolved_propositions].join(",")}]`
+            : "",
         ].join("  "));
       }
     })
