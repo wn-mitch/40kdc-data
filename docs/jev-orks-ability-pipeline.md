@@ -243,7 +243,7 @@ Requests are content-addressed — `hash({version, request})` — and responses 
 `_private/jev-orks/responses/<hash>.repeat-<n>.json`. A cache miss throws unless `--live`
 is passed, so an ordinary run is offline and cannot silently spend money.
 
-**Stability is barely measured.** 2,109 responses are cached, and exactly one
+**Stability is barely measured.** 2,275 responses are cached, and exactly one
 ability was run three times (`try-dat-button-dread-mob`). On that one, selection and
 construction were identical across all three runs while the probability distribution was
 not — so a gate that reads probabilities rather than selection can flip on a re-run.
@@ -258,7 +258,7 @@ change cost **$0.113** across four passes; a re-run with an unchanged bank repla
 in about 1.5 seconds and spends nothing.
 
 Pricing is modelled at `INPUT_PRICE_PER_MILLION_USD = 0.042` with a scheduling reserve,
-under a `--budget` ceiling. The model prices input only — the `$0.192` above is the
+under a `--budget` ceiling. The model prices input only — the `$0.205` above is the
 modelled input cost of the whole cache, not the bill.
 
 ## Design laws
