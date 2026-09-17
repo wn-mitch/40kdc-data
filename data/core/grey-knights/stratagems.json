@@ -15,7 +15,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cf5f0be5-ce6e-51e7-bd13-34d946921734"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8b08bfd2-6a32-44ab-a2c4-901589090107"
+      }
+    ]
   },
   {
     "id": "abominus-class-targets-sanctic-spearhead",
@@ -35,7 +45,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a677600b-1170-5a64-9107-31c5aeda6bdb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2bb127f0-35c3-4e5c-b9b3-86eb75105241"
+      }
+    ]
   },
   {
     "id": "aegis-eternal-warpbane-task-force",
@@ -54,7 +74,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9bb9fbff-26bb-502e-81f7-13f6649e2913"
+      },
+      {
+        "namespace": "mfm",
+        "id": "31a2dff2-e760-462d-b57a-6fe1159bd900"
+      }
+    ]
   },
   {
     "id": "aggressive-anticipation-augurium-task-force",
@@ -74,7 +104,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f87691db-a841-5ae3-80e4-a5d20e77a591"
+      },
+      {
+        "namespace": "mfm",
+        "id": "99a51877-1c52-4b9f-9e51-22c7716542cf"
+      }
+    ]
   },
   {
     "id": "appointed-hour-augurium-task-force",
@@ -94,7 +134,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3de883b1-b3de-59e7-bdaa-8ef79c87409e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "89df668f-dc91-491b-b41b-ca3370711b4b"
+      }
+    ]
   },
   {
     "id": "argent-wrath-sanctic-spearhead",
@@ -113,7 +163,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "57aa8173-7d09-5b58-9397-8b24dbf3f2c7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4569dfc7-9a1b-47d6-86f2-04bb9b6a3e89"
+      }
+    ]
   },
   {
     "id": "armoured-aegis-sanctic-spearhead",
@@ -132,7 +192,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "984452ab-17e7-5755-9cf2-53488ca3c410"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9f7a24c9-8984-4968-b298-c8154edd47dc"
+      }
+    ]
   },
   {
     "id": "aura-of-vengeance-argent-assault",
@@ -150,7 +220,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "346acf46-eaaf-5476-8c43-44ad19a80a76"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ecc6a3a8-9b28-4bc6-a7aa-16c9a54cde85"
+      }
+    ]
   },
   {
     "id": "blades-from-the-beyond-immaterial-interdiction",
@@ -168,7 +248,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c2556a7f-d13a-5074-b79d-b3f5a37da066"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d06f1a14-1634-4911-acfb-6eb2caded2d2"
+      }
+    ]
   },
   {
     "id": "by-thought-alone-immaterial-interdiction",
@@ -186,7 +276,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f9438fc1-2554-5348-964b-ede9524634ac"
+      },
+      {
+        "namespace": "mfm",
+        "id": "34943c93-452d-484e-ab45-66f2c592bb44"
+      }
+    ]
   },
   {
     "id": "celerity-banishers",
@@ -205,7 +305,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "79f334e7-bcd3-5ca4-8027-0e0b7b502f26"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6562afef-7c55-4453-8b24-f076004aed1d"
+      }
+    ]
   },
   {
     "id": "chaos-bane-banishers",
@@ -224,7 +334,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bbe867d3-aea6-5352-acbe-5baecddd3d86"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b325fd46-a00d-4ea6-87f6-f003609e2c7a"
+      }
+    ]
   },
   {
     "id": "circle-of-sanctuary-banishers",
@@ -243,7 +363,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7f5a6bdc-5c65-5d95-9c56-4a170fefaf18"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6505ab81-3d8c-4844-b54f-ed92f7916a59"
+      }
+    ]
   },
   {
     "id": "combat-manifestation-brotherhood-strike",
@@ -262,7 +392,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "793e1ce4-f79d-517a-95e8-7e07a8e15ac4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "10a88973-f19c-465a-97b8-7bbd5bd442c0"
+      }
+    ]
   },
   {
     "id": "duty-unending-brotherhood-strike",
@@ -281,7 +421,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0a330054-47ac-52ff-a83c-b9fd57b9d349"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f4ee723f-87ba-49df-a34a-a31358b591ae"
+      }
+    ]
   },
   {
     "id": "exigent-assignments-crowes-sanctifiers",
@@ -299,7 +449,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5f999d31-6978-4ce6-b953-9992aae9c71e"
+      }
+    ]
   },
   {
     "id": "expeditious-exit-brotherhood-strike",
@@ -318,7 +474,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "24b1a428-e7ea-5db4-970f-27956f4ee64c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "faec38a4-dc35-4f94-a2bc-7529c196ad9b"
+      }
+    ]
   },
   {
     "id": "fires-of-covenant-warpbane-task-force",
@@ -337,7 +503,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fb101707-751e-595e-98c6-a9fb417947da"
+      },
+      {
+        "namespace": "mfm",
+        "id": "94a8535c-6341-4a11-a8df-e852234ea3f1"
+      }
+    ]
   },
   {
     "id": "flames-of-sanctity-warpbane-task-force",
@@ -356,7 +532,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9003102c-9212-5b35-809d-7115246f5aad"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6e994f82-b78c-4dc1-aff1-554b5a5e07d4"
+      }
+    ]
   },
   {
     "id": "focused-immolation-fires-of-purgation",
@@ -374,7 +560,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "efbf4e70-49d4-5619-8e1e-21dc989ad93f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f574a3d4-d1ed-4a60-a2de-f3d989784f63"
+      }
+    ]
   },
   {
     "id": "force-wave-sanctic-spearhead",
@@ -394,7 +590,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "753cfc27-a718-5a41-8b79-8f580bd8f2c4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "34aaebd6-22a5-4c6d-855a-dc56f6315c8f"
+      }
+    ]
   },
   {
     "id": "forewarned-evasion-augurium-task-force",
@@ -414,7 +620,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0ab2f006-5fd3-55e0-bb6b-f84bac462acb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c11cfbb8-bc11-4d44-bb9e-70ac3cca22cb"
+      }
+    ]
   },
   {
     "id": "giants-of-the-battlefield-hallowed-conclave",
@@ -433,7 +649,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dcd77896-5f06-5b9c-aa50-08e5783713d3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5d77830b-d1f3-4b68-be52-4897eec1df38"
+      }
+    ]
   },
   {
     "id": "grind-them-underfoot-hallowed-conclave",
@@ -452,7 +678,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5019cca0-3c22-57a2-ad5c-93113c102b3f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "18fe5a9a-f13b-4207-8113-56e0cbe207cd"
+      }
+    ]
   },
   {
     "id": "hallowed-beacon-warpbane-task-force",
@@ -471,7 +707,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a9303323-d99d-52ca-a2ac-dbd42030e175"
+      },
+      {
+        "namespace": "mfm",
+        "id": "267b0b61-2d24-4736-95fd-672513a0559e"
+      }
+    ]
   },
   {
     "id": "hexwrought-reprisal-banishers",
@@ -494,7 +740,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5f8dd849-dd68-5d7d-b56d-a5649592d15d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d6abfabe-6a83-4f8d-b2bc-e64c5a2114ba"
+      }
+    ]
   },
   {
     "id": "mirage-of-echoes-augurium-task-force",
@@ -513,7 +769,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "721f123f-838a-5c9f-8515-aa9c871c2d72"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1d199aa0-6532-4d07-92b0-bb05550242b5"
+      }
+    ]
   },
   {
     "id": "necessary-end-augurium-task-force",
@@ -532,7 +798,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5921057b-33f3-54ec-973b-91bcbb9d9fe3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9728fe32-3c48-4487-a8cd-8cdeb79c4e31"
+      }
+    ]
   },
   {
     "id": "point-blank-purgation-hallowed-conclave",
@@ -551,7 +827,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c2a959a2-d3a0-5b70-b0bd-dfd753e06218"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c0addec3-227c-404f-a291-d2cbf4e87772"
+      }
+    ]
   },
   {
     "id": "precognitive-strategies-hallowed-conclave",
@@ -570,7 +856,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "434fe762-9cfa-565a-874c-12425fdb3d57"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3d11ed32-99da-4804-bfe1-5ceca5bda07a"
+      }
+    ]
   },
   {
     "id": "psi-reactive-ammunition-crowes-sanctifiers",
@@ -588,7 +884,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ec8379f3-0e51-4799-9b31-72811587a410"
+      }
+    ]
   },
   {
     "id": "purgation-pattern-brotherhood-strike",
@@ -607,7 +909,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "98c7424a-90ec-5306-b736-0e2367888ccd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "70353176-4c50-48d7-80a5-8f84c5bdeac8"
+      }
+    ]
   },
   {
     "id": "redirected-strike-augurium-task-force",
@@ -626,7 +938,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "91ad35e4-e9ca-568a-85d4-5ec19cd4e955"
+      },
+      {
+        "namespace": "mfm",
+        "id": "979b7a00-af6b-410d-b702-43ea02eb6148"
+      }
+    ]
   },
   {
     "id": "redoubled-assault-sanctic-spearhead",
@@ -645,7 +967,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1cbbc376-2948-5d40-b05b-fea6851b0f3d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8ed11008-bfff-46f6-be2c-07268ed8dc2f"
+      }
+    ]
   },
   {
     "id": "refusal-to-yield-crowes-sanctifiers",
@@ -663,7 +995,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "48228ed3-39eb-46b6-ba1c-34ad3e8a0613"
+      }
+    ]
   },
   {
     "id": "repelling-sphere-warpbane-task-force",
@@ -682,7 +1020,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0be7ff57-7590-58e8-befc-a71bef1f8d1c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ac2db2b1-35ea-4365-b406-074bccd11c3f"
+      }
+    ]
   },
   {
     "id": "responsive-displacement-immaterial-interdiction",
@@ -700,7 +1048,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "786690d3-d5b5-5f69-8b82-dce6a7bba481"
+      },
+      {
+        "namespace": "mfm",
+        "id": "91e52211-296f-49d8-8047-2ce627d39ea1"
+      }
+    ]
   },
   {
     "id": "sanctified-kill-zone-warpbane-task-force",
@@ -720,7 +1078,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5444efe0-de68-5a56-9ba7-982a07c49c70"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d77e5151-13c0-44dc-9d45-d2c095395928"
+      }
+    ]
   },
   {
     "id": "shadow-of-anarch-banishers",
@@ -739,7 +1107,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "006f594e-dbec-5255-9100-2d96873e4b66"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47e924b5-01af-47a4-8ca8-509808d47818"
+      }
+    ]
   },
   {
     "id": "shining-resolve-hallowed-conclave",
@@ -758,7 +1136,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0cac1953-541b-5cdb-b904-201c72163f34"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cc57b05a-4f98-4d78-9e26-f9ae67f6dd79"
+      }
+    ]
   },
   {
     "id": "shining-veil-brotherhood-strike",
@@ -777,7 +1165,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "37ac57dc-898b-5a6e-9df6-5b2dd400c1d9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fe2f9054-f743-412b-a33d-f6de5dec93dc"
+      }
+    ]
   },
   {
     "id": "soul-locked-fires-of-purgation",
@@ -795,7 +1193,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5b85c215-1e48-5329-aeec-fbd3788e3d6f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7aca7038-39bb-4dac-b2a7-748d2317149e"
+      }
+    ]
   },
   {
     "id": "spiritsear-fires-of-purgation",
@@ -813,7 +1221,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bbd2b9e6-1461-5200-a870-c0ea22b2fa09"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0604aee8-99db-46c2-9acf-57da94556112"
+      }
+    ]
   },
   {
     "id": "truesilver-aegis-argent-assault",
@@ -835,7 +1253,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b93f6fef-057c-5567-a125-121df64c8bcd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6ea42dae-8e52-4643-b989-169bcb5ff983"
+      }
+    ]
   },
   {
     "id": "truesilver-channelling-brotherhood-strike",
@@ -854,7 +1282,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4359d1f9-8dee-53a8-8072-4142d32b3aa0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c27c1fef-b27d-4d79-a325-8081ab9992c9"
+      }
+    ]
   },
   {
     "id": "truesilver-will-sanctic-spearhead",
@@ -877,7 +1315,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a5e23d44-4f3e-551e-87bc-21e384504d61"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ff093638-de55-4e06-be1c-74f65ba523e7"
+      }
+    ]
   },
   {
     "id": "unending-fidelity-hallowed-conclave",
@@ -897,7 +1345,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3764d4f6-2720-5e1e-be51-c460b23a70a4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2c4768fb-fc8c-46bd-8e3c-9475b01da6fb"
+      }
+    ]
   },
   {
     "id": "warding-chant-banishers",
@@ -917,6 +1375,16 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "375490e8-f5af-5d47-88bc-dd8455d9fc5d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5b8c5b24-068e-42ca-a55c-85efa99df5bf"
+      }
+    ]
   }
 ]

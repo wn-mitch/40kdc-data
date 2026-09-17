@@ -9,10 +9,10 @@
 //!    `conditional`, `sequence` — and produces buffs with
 //!    `source.kind = "weapon-keyword"`.
 //!
-//! 2. **Id dispatch**, for the eight rules whose catalog `effect` is null
-//!    because the DSL has no primitive for them yet — `lethal-hits`,
-//!    `sustained-hits`, `devastating-wounds`, `anti`, `melta`, `rapid-fire`,
-//!    `torrent`, `ignores-cover`. These surface as `extra-keyword` buffs so the
+//! 2. **Id dispatch**, for rules whose catalog `effect` is null because the DSL
+//!    has no primitive for them yet — `lethal-hits`, `sustained-hits`,
+//!    `devastating-wounds`, `anti`, `melta`, `rapid-fire`, `torrent`, `blast`,
+//!    and `ignores-cover`. These surface as `extra-keyword` buffs so the
 //!    engine can read them out of [`ResolvedModifiers.extra_keywords`] and
 //!    dispatch its math directly.
 //!
@@ -36,6 +36,7 @@ const ENGINE_DISPATCH_KEYWORDS: &[&str] = &[
     "melta",
     "rapid-fire",
     "torrent",
+    "blast",
     "ignores-cover",
 ];
 
@@ -52,6 +53,9 @@ pub fn buffs_from_keyword(
         weapon_id: weapon_id.to_string(),
         keyword_id: keyword_id.to_string(),
     };
+    if keyword_id == "blast" && parameters.and_then(|value| value.get("value")).is_none() {
+        return Vec::new();
+    }
 
     if ENGINE_DISPATCH_KEYWORDS.contains(&keyword_id) {
         let mut keyword_ref = WeaponKeywordRef {
@@ -101,7 +105,7 @@ fn walk(
         "feel-no-pain" => feel_no_pain_buffs(obj, source),
         "keyword-grant" => keyword_grant_buffs(obj, source),
         "conditional" => conditional_buffs(obj, source, ctx, default_target),
-        "sequence" => walk_children(obj.get("steps"), source, ctx, default_target),
+        "rules-bundle" | "sequence" => walk_children(obj.get("steps"), source, ctx, default_target),
         // These relationship containers require runtime recipient/selection state
         // that EngineContext does not currently carry. Treat them as unsupported
         // rather than applying their nested effects to the wrong unit or target.
@@ -315,6 +319,27 @@ mod tests {
         });
         let buffs = buffs_from_keyword("test", "test-weapon", Some(&effect), None, &context());
         assert!(buffs.is_empty());
+    }
+
+    #[test]
+    fn rules_bundle_walks_every_effect_step() {
+        let effect = json!({
+            "type": "rules-bundle",
+            "steps": [
+                {
+                    "type": "re-roll",
+                    "target": "unit",
+                    "modifier": {"roll": "hit", "subset": "ones"}
+                },
+                {
+                    "type": "re-roll",
+                    "target": "unit",
+                    "modifier": {"roll": "wound", "subset": "ones"}
+                }
+            ]
+        });
+        let buffs = buffs_from_keyword("test", "test-weapon", Some(&effect), None, &context());
+        assert_eq!(buffs.len(), 2);
     }
 
     #[test]

@@ -28,16 +28,16 @@ type affordabilitySpec struct {
 }
 
 // cheapestNextCopy is the cheapest cost to field one more copy of view at army
-// ordinal nextOrdinal (minimum over the unit's points tiers).
-func cheapestNextCopy(view *UnitView, nextOrdinal int) int {
-	tiers := getList(view.Raw, "points")
+// ordinal nextOrdinal (minimum over the tiers in effect for hostFaction's army).
+func cheapestNextCopy(view *UnitView, nextOrdinal int, hostFaction map[string]any) int {
+	tiers := hostPointsTiers(view.Raw, hostFaction)
 	if len(tiers) == 0 {
 		return 0
 	}
 	min := math.MaxInt
 	for _, tAny := range tiers {
 		t, _ := asMap(tAny)
-		cost := baseUnitPoints(view.Raw, asInt(t["models"]), nextOrdinal)
+		cost := hostUnitPoints(view.Raw, asInt(t["models"]), nextOrdinal, hostFaction)
 		if cost < min {
 			min = cost
 		}
@@ -69,6 +69,14 @@ func candidateAffordability(spec affordabilitySpec, ds *Dataset) []map[string]an
 	}
 
 	// Running total of the current list (ordinal-aware) + enhancement costs.
+	// Host-aware: foreign units with an allied_points entry for this army price
+	// from that entry (see hostPointsTiers).
+	var hostFaction map[string]any
+	if spec.factionID != "" {
+		if f, ok := ds.Factions.Get(spec.factionID); ok {
+			hostFaction = f.Raw
+		}
+	}
 	ordinals := map[string]int{}
 	spent := 0
 	for _, u := range spec.units {
@@ -78,7 +86,7 @@ func candidateAffordability(spec affordabilitySpec, ds *Dataset) []map[string]an
 		}
 		ord := ordinals[u.unitID] + 1
 		ordinals[u.unitID] = ord
-		spent += baseUnitPoints(view.Raw, u.modelCount, ord)
+		spent += hostUnitPoints(view.Raw, u.modelCount, ord, hostFaction)
 		if u.enhancementID != "" {
 			if eAny, ok := ds.Enhancements.Get(u.enhancementID); ok {
 				spent += asInt(eAny.(map[string]any)["cost"])
@@ -118,7 +126,7 @@ func candidateAffordability(spec affordabilitySpec, ds *Dataset) []map[string]an
 			continue
 		}
 		nextOrdinal := ordinals[unitID] + 1
-		nextCopyCost := cheapestNextCopy(view, nextOrdinal)
+		nextCopyCost := cheapestNextCopy(view, nextOrdinal, hostFaction)
 		affordable := !hasLimit || nextCopyCost <= remaining
 		out = append(out, map[string]any{
 			"unitId":       view.ID(),

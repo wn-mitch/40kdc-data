@@ -172,7 +172,7 @@ export function repoIds(category: string): Record<string, Set<string>> {
     case "stratagems":
       return stratagemRepoIds();
     case "missions":
-      return { _root: readIdSet(path.join(CORE_DIR, "secondary-cards.json"), "id") };
+      return { _root: readIdSet(path.join(CORE_DIR, "mission-cards.json"), "id") };
     case "allies":
       return { _root: readIdSet(path.join(CORE_DIR, "allies.json"), "id") };
     default:

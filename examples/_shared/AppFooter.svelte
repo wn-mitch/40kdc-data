@@ -18,6 +18,7 @@
     publisherUrl = PUBLISHER_URL,
     patreonUrl = PATREON_URL,
     links = [],
+    notice,
     version,
     build,
   }: {
@@ -27,6 +28,8 @@
     patreonUrl?: string;
     /** Cross-app links (e.g. the other example apps), after the package segment. */
     links?: { label: string; href: string }[];
+    /** Optional plain-language disclosure shown before the build stamp. */
+    notice?: string;
     /** Bundled @alpaca-software/40kdc-data version, shown as a staleness stamp. */
     version?: string;
     /** Short commit hash of the build, appended to the stamp. */
@@ -52,6 +55,10 @@
   <a href={publisherUrl} target="_blank" rel="noreferrer noopener">alpacasoft.dev</a>
   <span class="dot" aria-hidden="true">·</span>
   <a href={patreonUrl} target="_blank" rel="noreferrer noopener">Support on Patreon</a>
+  {#if notice}
+    <span class="dot" aria-hidden="true">·</span>
+    <span class="notice">{notice}</span>
+  {/if}
   {#if version || build}
     <span class="stamp" title="Bundled dataset version · build commit">
       {#if version}v{version}{/if}{#if version && build}&nbsp;·&nbsp;{/if}{#if build}{build}{/if}

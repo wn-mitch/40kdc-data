@@ -19,6 +19,7 @@ export { buffsFromKeyword } from "./from-keyword.js";
 export { getBuffs, type HasBuffs } from "./get-buffs.js";
 export {
   crunch,
+  profileCanTarget,
   type AttackProfileRef,
   type EngineInput,
   type EngineOutput,

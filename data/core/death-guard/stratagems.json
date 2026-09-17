@@ -15,7 +15,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "eb063c01-9a47-5ccb-9c4b-63a34d34a3ea"
+      },
+      {
+        "namespace": "mfm",
+        "id": "37e7540b-b3bb-4204-ae95-8e050945bafa"
+      }
+    ]
   },
   {
     "id": "all-is-rot-tallyband-summoners",
@@ -34,7 +44,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "74c1dc62-1a76-5bb1-b2cc-c392710d41e7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "52b6ce34-3948-4e9c-91d3-845808b1c6fa"
+      }
+    ]
   },
   {
     "id": "avatars-of-decay-tallyband-summoners",
@@ -53,7 +73,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "697159c9-9cd2-53a7-a766-e3eba6b754db"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3768fad3-aca9-41ad-90eb-61b34cbbc076"
+      }
+    ]
   },
   {
     "id": "blessings-of-filth-champions-of-contagion",
@@ -73,7 +103,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2dbb4123-0932-5ebf-a3a3-a6eee849c94d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2baa99bf-6bae-4166-be51-da5a7f53cd6e"
+      }
+    ]
   },
   {
     "id": "blighted-land-mortarions-hammer",
@@ -92,7 +132,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d97e800b-2154-52ae-a1c7-edb292ee09fd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "14d3a04a-a24e-4d89-8257-e4801f32e373"
+      }
+    ]
   },
   {
     "id": "bloodrust-deluge-contagion-engines",
@@ -110,7 +160,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8ca7fe69-3afe-5116-9d77-a75f77519678"
+      },
+      {
+        "namespace": "mfm",
+        "id": "654e9a2a-1896-4ae3-a9a5-a730cc2cac77"
+      }
+    ]
   },
   {
     "id": "blooming-pestilence-death-lords-chosen",
@@ -133,7 +193,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0758a24c-5d3e-51b9-b23a-574a4c722402"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2af32987-7344-4378-8eff-a42b8ec9f2f8"
+      }
+    ]
   },
   {
     "id": "clutching-corruption-tallyband-summoners",
@@ -152,7 +222,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4925f641-7bcc-5304-a4f2-756787762a32"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4b168044-133c-41c9-a41e-b6e10b4a7581"
+      }
+    ]
   },
   {
     "id": "creeping-blight-virulent-vectorium",
@@ -171,7 +251,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1be5c187-e118-5591-90f9-f037375798e5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2a93e803-d47b-45b3-b52f-12dbf621213c"
+      }
+    ]
   },
   {
     "id": "deaths-heads-champions-of-contagion",
@@ -190,7 +280,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "da898295-8fab-5313-828a-199caf31cc9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e85094fd-db5b-4f8a-82ed-d864a72ec72f"
+      }
+    ]
   },
   {
     "id": "disgustingly-resilient-virulent-vectorium",
@@ -210,7 +310,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b7469816-745d-5b2f-8da3-cb56487d7c2f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ea30e94c-cf87-4f02-8210-0fb635615b18"
+      }
+    ]
   },
   {
     "id": "drawn-to-despair-mortarions-hammer",
@@ -229,7 +339,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "66eb473f-df63-5743-946a-b27ae0578b6e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "765c24f5-283c-4838-9512-7d1ae362d97e"
+      }
+    ]
   },
   {
     "id": "droning-horror-flyblown-host",
@@ -248,7 +368,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "38f3804d-1994-53a3-ba27-c179b5ee92a5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "176a5ac6-8774-40bb-bcf5-9638c35ee7bc"
+      }
+    ]
   },
   {
     "id": "eye-of-the-swarm-flyblown-host",
@@ -267,7 +397,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2531b67a-bc48-5894-8eb9-38ef811ce891"
+      },
+      {
+        "namespace": "mfm",
+        "id": "14397813-9386-479d-8645-ccf59904570a"
+      }
+    ]
   },
   {
     "id": "eyestinger-storm-mortarions-hammer",
@@ -286,7 +426,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "52cf2721-0ccd-5f88-81f6-f9ae9d46a94d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2eea5216-ef3d-483d-a6de-9c6ea6373067"
+      }
+    ]
   },
   {
     "id": "fleshy-avalanche-tallyband-summoners",
@@ -306,7 +456,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "10f1a690-b005-5e7f-9754-3766c2d0a0a5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "14db47af-d22f-4a1d-9c38-01fb49823c76"
+      }
+    ]
   },
   {
     "id": "font-of-filth-mortarions-hammer",
@@ -325,7 +485,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c33985f9-15b5-5404-9559-4d9b3504b2f7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e91eb4ac-52af-4e89-abc2-5c0b9e812e5c"
+      }
+    ]
   },
   {
     "id": "fresh-vectors-contagion-engines",
@@ -344,7 +514,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a78d9b21-8f05-55d3-b475-69153b459aba"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7d88ff56-b479-4b60-8b4f-b41d1265a802"
+      }
+    ]
   },
   {
     "id": "gnawing-hunger-shamblerot-vectorium",
@@ -363,7 +543,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "747f88b0-8642-50ee-a48f-568a19b5b138"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1c06212d-4fb6-4992-94cb-32dd22c30052"
+      }
+    ]
   },
   {
     "id": "grim-reapers-death-lords-chosen",
@@ -382,7 +572,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b4fad5a9-75ef-5dd7-8288-89f3aca51297"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2fbf0ab2-4aac-47dc-aa22-12e3df318916"
+      }
+    ]
   },
   {
     "id": "grip-of-the-walking-pox-shamblerot-vectorium",
@@ -401,7 +601,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "eaa59a50-50ba-55f6-9a13-2e2fc44b956b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6cfc1c04-24c9-4c7a-847e-99c499f56925"
+      }
+    ]
   },
   {
     "id": "grotesque-fortitude-champions-of-contagion",
@@ -421,7 +631,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5954bcb2-6b71-5524-a370-87c4b50ab0cb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2227edbd-9daa-457f-9cda-f545297ba2ea"
+      }
+    ]
   },
   {
     "id": "hidden-amongst-the-dead-shamblerot-vectorium",
@@ -440,7 +660,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0d6b82c0-0efb-570c-9f4c-dee8e5072163"
+      },
+      {
+        "namespace": "mfm",
+        "id": "09039d9e-b439-4648-ac05-fbe0e76ec692"
+      }
+    ]
   },
   {
     "id": "inexorable-executioners-maggot-lords",
@@ -458,7 +688,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "954a7fd4-378a-492b-96f0-a0fadd753474"
+      }
+    ]
   },
   {
     "id": "leechspore-eruption-virulent-vectorium",
@@ -477,7 +713,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d616379f-deb7-582d-857c-267c8399451c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "efc8f110-ee54-4114-9a2e-dfc0cd083a16"
+      }
+    ]
   },
   {
     "id": "malignance-magnified-champions-of-contagion",
@@ -497,7 +743,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1837fe75-893e-5bee-9f9e-121645d93e94"
+      },
+      {
+        "namespace": "mfm",
+        "id": "de3ebcf0-0702-41b4-a98b-96fa8a22b308"
+      }
+    ]
   },
   {
     "id": "mireslick-tallyband-summoners",
@@ -516,7 +772,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a122cbc4-83ac-5202-9787-75d55bd97d55"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ed7271d7-ca56-4efc-8c83-974a0dbdf769"
+      }
+    ]
   },
   {
     "id": "mobile-vector-champions-of-contagion",
@@ -535,7 +801,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "29c148f4-edce-584d-ad04-01918b7c8454"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8a0d1b1e-e136-4314-9c00-7d35c745480c"
+      }
+    ]
   },
   {
     "id": "mortarions-teachings-death-lords-chosen",
@@ -554,7 +830,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "649e2a61-4395-5c2f-8f4c-ce52cab9addf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "da30d4bd-ad4d-41e5-bafb-5322aa227053"
+      }
+    ]
   },
   {
     "id": "nauseating-paroxysms-flyblown-host",
@@ -573,7 +859,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "68c430ee-3076-50b0-a3f9-ac0a40e738da"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9f9b4a18-da0a-4415-a04b-b9fbc24f1df2"
+      }
+    ]
   },
   {
     "id": "overwhelming-generosity-virulent-vectorium",
@@ -592,7 +888,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "50485ad8-5f86-57ea-9207-754cef16d3fa"
+      },
+      {
+        "namespace": "mfm",
+        "id": "767efd79-8830-4781-a898-ea5fd8ecc7b1"
+      }
+    ]
   },
   {
     "id": "persistent-pests-tallyband-summoners",
@@ -615,7 +921,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a04f96d4-8df2-5145-876f-e74b689c0b82"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8ed43825-6d56-4613-854a-a1fab24ff5cd"
+      }
+    ]
   },
   {
     "id": "plaguesurge-virulent-vectorium",
@@ -634,7 +950,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cd928c8a-22d2-521b-96a4-5b60023a206c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "699e5a6d-243c-4ee3-a738-ce0882694238"
+      }
+    ]
   },
   {
     "id": "putrid-detonation-virulent-vectorium",
@@ -657,7 +983,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b69c4d04-b34c-5694-9cc8-6072f9ebe1fe"
+      },
+      {
+        "namespace": "mfm",
+        "id": "724908b6-fca9-4b4d-965b-67f3825ece5d"
+      }
+    ]
   },
   {
     "id": "rabid-infusion-champions-of-contagion",
@@ -676,7 +1012,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "654cc815-9b8f-5d1e-a98b-90d69150732d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2c92e4d2-9e0c-4edd-8f3d-ffef6913d9c0"
+      }
+    ]
   },
   {
     "id": "relentless-grind-mortarions-hammer",
@@ -696,7 +1042,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3af9fc5c-ec55-50c7-96dd-bc7e772df24b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2168cd03-21ec-4806-b922-ab81863fba1d"
+      }
+    ]
   },
   {
     "id": "shambling-wall-shamblerot-vectorium",
@@ -715,7 +1071,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f666b889-ff81-5c43-8d4d-cc9bfc2ed7b2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "99c9b040-7b93-4e0c-a1d2-7356e25851e8"
+      }
+    ]
   },
   {
     "id": "shock-and-horror-shamblerot-vectorium",
@@ -734,7 +1100,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3531b006-d7ec-53d0-b33c-ef9cb487d652"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5d69f780-fb56-44a4-b58c-f7df91cb4a75"
+      }
+    ]
   },
   {
     "id": "sickening-horror-maggot-lords",
@@ -752,7 +1128,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "bc5c2a73-d543-4624-bb6d-354e27a14e57"
+      }
+    ]
   },
   {
     "id": "sickening-impact-death-lords-chosen",
@@ -771,7 +1153,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "166f2e84-50ac-5093-b35b-f5dc9e8e7925"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a3da9e50-ecbe-4904-894f-a58ef46ccb69"
+      }
+    ]
   },
   {
     "id": "signal-pox-death-lords-chosen",
@@ -790,7 +1182,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "22882755-842d-5443-b9ad-024d21ec405f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "001a746f-476f-4f0c-970c-f16e5e724245"
+      }
+    ]
   },
   {
     "id": "simultaneous-contamination-paragons-of-putrescence",
@@ -808,7 +1210,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "14cb55e3-6325-51f1-b44e-853af5042911"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3715796d-14c7-4126-b416-7e599cff1e3d"
+      }
+    ]
   },
   {
     "id": "smeared-with-filth-shamblerot-vectorium",
@@ -827,7 +1239,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "60518aaa-8a9f-5620-b81a-870bd7d9655c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "91562c74-7a97-49de-a830-e85bd40bd745"
+      }
+    ]
   },
   {
     "id": "soulrot-flux-contagion-engines",
@@ -845,7 +1267,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c5e38df7-6fcf-5f83-8f51-1efeb9f15b91"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3f39da9b-0b02-4bbc-b58c-f5d7e0a74489"
+      }
+    ]
   },
   {
     "id": "stinking-mire-mortarions-hammer",
@@ -864,7 +1296,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d6edd874-f86a-5e19-868d-0c01765bfb57"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f2095391-ac28-4945-93a1-bfb187acea7f"
+      }
+    ]
   },
   {
     "id": "territorial-infection-paragons-of-putrescence",
@@ -882,7 +1324,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d8078013-8bcc-5523-b3f5-51ff914a73f3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "25ba3f85-9261-4154-9014-fcf2a28390cf"
+      }
+    ]
   },
   {
     "id": "undying-spite-death-lords-chosen",
@@ -901,7 +1353,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "17d8f442-4f48-5329-94c4-9c74fe67307a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "99a3c761-9fd3-423b-a458-5b9172ea4d54"
+      }
+    ]
   },
   {
     "id": "vomitous-salvoes-maggot-lords",
@@ -919,6 +1381,12 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "95ec357c-cf7f-4f5e-a224-85d5da35b084"
+      }
+    ]
   }
 ]

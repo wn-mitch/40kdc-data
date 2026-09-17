@@ -38,7 +38,10 @@ def resolve_eligible_abilities(
         scoped = dataset.units.get_in_faction(id, fid) if fid else None
         return scoped if scoped is not None else dataset.units.get_any(id)
 
-    unit = resolve_unit(input["unitId"], input.get("factionId"))
+    unit_id = input.get("unitId")
+    if not isinstance(unit_id, str):
+        return []
+    unit = resolve_unit(unit_id, input.get("factionId"))
     if unit is None:
         return []
     faction_id = input.get("factionId") or unit.raw.get("faction_id")

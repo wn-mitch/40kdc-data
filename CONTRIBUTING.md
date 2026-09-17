@@ -26,15 +26,15 @@ core dataset and your own Claude tokens.** The model only classifies and judges
 fidelity — assembly and schema validation are pure TypeScript, so it can't
 invent enums or leak rules text.
 
-The source rules live **outside this repo** (the canonical repo ships no core
-data). Point `ARMY_ASSIST_JSON` at your normalized datasource (default
-`~/army-assist/src/assets/json`), then run the loop from `tools/`:
+Source rules live outside this repository. Point `ARMY_ASSIST_JSON` at your
+private normalized datasource (default `~/army-assist/src/assets/json`), then
+run the loop from `tools/`:
 
 ```bash
 cd tools
-# 1. Join each empty-modifier stub to its correct source rule (disambiguated by
-#    unit → faction, since ability names collide). → data/_audit/author-input/
-ARMY_ASSIST_JSON=/path/to/your/json npm run author:input -- <faction|--all>
+# 1. Join each empty-modifier stub to its correct private source rule.
+#    Generated authoring inputs stay ignored under data/_audit/author-input/.
+ARMY_ASSIST_JSON=/path/to/private/json npm run author:input -- <faction|--all>
 # 2. Batched `claude -p --json-schema`: classify → assemble → AJV-validate →
 #    verify. Writes proposals only; live data is untouched. → data/_audit/proposed/
 npm run author:propose -- <faction|--all> [--model <claude-model>] [--batch N]
@@ -50,9 +50,9 @@ npm run audit:coverage                             # 6. re-measure coverage
 
 Then PR the resulting `data/enrichment/<faction>/abilities.json` diffs.
 
-**IP safety still applies.** The DSL describes *what an ability does* — mechanics,
-never GW rules text. The verifier checks fidelity to mechanics; don't paste prose
-into `community_notes` (the audit flags it as `gw-leak`).
+Source prose must remain in `_private/`, an ignored author-input directory, or
+the private `40kdc-abilities` store. Commit only structured DSL and
+community-authored notes.
 
 ### Coverage report — what needs authoring
 
@@ -71,31 +71,33 @@ Repair worklist by faction — abilities still needing DSL work (not total cover
 
 | faction | stub\* | notes-stub | gw-leak | def-skipped |
 |---|--:|--:|--:|--:|
+| adeptus-astartes | 6 | 16 | 0 | 7 |
 | thousand-sons | 6 | 12 | 0 | 2 |
 | chaos-space-marines | 5 | 17 | 0 | 6 |
 | death-guard | 4 | 7 | 0 | 3 |
-| adeptus-astartes | 3 | 16 | 0 | 7 |
+| adeptus-custodes | 4 | 3 | 0 | 3 |
 | emperors-children | 3 | 8 | 0 | 1 |
 | world-eaters | 3 | 0 | 0 | 0 |
 | aeldari | 2 | 7 | 0 | 5 |
-| orks | 2 | 5 | 0 | 3 |
-| astra-militarum | 2 | 3 | 0 | 5 |
-| chaos-knights | 2 | 2 | 0 | 0 |
-| genestealer-cults | 2 | 1 | 0 | 1 |
+| adepta-sororitas | 2 | 7 | 0 | 1 |
+| orks | 2 | 3 | 0 | 2 |
 | tyranids | 1 | 5 | 0 | 5 |
 | drukhari | 1 | 5 | 0 | 1 |
-| grey-knights | 1 | 2 | 0 | 1 |
-| necrons | 1 | 2 | 0 | 0 |
+| astra-militarum | 1 | 3 | 0 | 5 |
+| necrons | 1 | 2 | 0 | 1 |
+| genestealer-cults | 1 | 1 | 0 | 1 |
+| agents-of-the-imperium | 1 | 0 | 0 | 2 |
+| dark-angels | 1 | 0 | 0 | 0 |
 | chaos-daemons | 0 | 7 | 0 | 4 |
-| adepta-sororitas | 0 | 7 | 0 | 1 |
 | imperial-knights | 0 | 5 | 0 | 1 |
-| adeptus-custodes | 0 | 3 | 0 | 3 |
 | tau-empire | 0 | 3 | 0 | 3 |
+| chaos-knights | 0 | 2 | 0 | 0 |
+| grey-knights | 0 | 1 | 0 | 0 |
 | adeptus-mechanicus | 0 | 0 | 0 | 2 |
-| agents-of-the-imperium | 0 | 0 | 0 | 2 |
 | _core | 0 | 0 | 0 | 0 |
+| blood-angels | 0 | 0 | 0 | 0 |
 | leagues-of-votann | 0 | 0 | 0 | 0 |
-| **TOTAL** | **38** | **117** | **0** | **56** |
+| **TOTAL** | **44** | **114** | **0** | **55** |
 
 `stub*` = empty-modifier placeholder nodes (highest need first) · `notes-stub` = flagged in `community_notes` · `gw-leak` = suspected verbatim GW text · `def-skipped` = defensive abilities skipped by the buff walk. Enumerated stub ids: [`data/_audit/worklist.md`](data/_audit/worklist.md). Full total+repair breakdown: [`data/_audit/summary.md`](data/_audit/summary.md).
 <!-- coverage:end -->

@@ -41,6 +41,39 @@ export class UnitView {
     return this.raw.name;
   }
 
+  get factionId(): string {
+    return this.raw.faction_id;
+  }
+
+  get role(): Unit["role"] {
+    return this.raw.role;
+  }
+
+  get keywords(): readonly string[] {
+    return this.raw.keywords ?? [];
+  }
+
+  get factionKeywords(): readonly string[] {
+    return this.raw.faction_keywords ?? [];
+  }
+
+  get modelCount(): Unit["model_count"] {
+    return this.raw.model_count;
+  }
+
+  get points(): Unit["points"] {
+    return this.raw.points;
+  }
+
+  /** All stat profiles for this unit (at least one is always present). */
+  get profiles(): readonly Unit["profiles"][number][] {
+    return this.raw.profiles;
+  }
+
+  get profileCount(): number {
+    return this.raw.profiles.length;
+  }
+
   /** The unit's faction, or `undefined` if its `faction_id` is unknown. */
   get faction(): FactionView | undefined {
     return this.ds.factions.get(this.raw.faction_id);
@@ -185,6 +218,58 @@ export class AbilityView {
   }
 
   /**
+   * Expand entity-backed ability grants into the referenced reusable bundle.
+   * Unresolved, malformed, and cyclic references remain untouched so the DSL
+   * translator emits its normal unsupported diagnostic.
+   */
+  private resolveRulesBundles(effect: unknown, seen = new Set([this.id])): unknown {
+    if (Array.isArray(effect)) {
+      let copy: unknown[] | undefined;
+      for (let i = 0; i < effect.length; i++) {
+        const resolved = this.resolveRulesBundles(effect[i], seen);
+        if (resolved !== effect[i]) {
+          copy ??= [...effect];
+          copy[i] = resolved;
+        }
+      }
+      return copy ?? effect;
+    }
+    if (effect === null || typeof effect !== "object") return effect;
+
+    const node = effect as Record<string, unknown>;
+    if (node.type === "ability-grant" && node.modifier !== null && typeof node.modifier === "object") {
+      const modifier = node.modifier as Record<string, unknown>;
+      const abilityId = modifier.ability_id;
+      if (modifier.rules_bundle === true && typeof abilityId === "string" && !seen.has(abilityId)) {
+        const factionId = this.raw.faction_id;
+        const target =
+          (factionId ? this.ds.abilities.getInFaction(abilityId, factionId) : undefined) ??
+          this.ds.abilities.getAny(abilityId);
+        const targetEffect = target?.raw.effect as unknown;
+        if (
+          targetEffect !== null &&
+          typeof targetEffect === "object" &&
+          (targetEffect as Record<string, unknown>).type === "rules-bundle"
+        ) {
+          const nextSeen = new Set(seen);
+          nextSeen.add(abilityId);
+          return this.resolveRulesBundles(targetEffect, nextSeen);
+        }
+      }
+    }
+
+    let copy: Record<string, unknown> | undefined;
+    for (const [key, value] of Object.entries(node)) {
+      const resolved = this.resolveRulesBundles(value, seen);
+      if (resolved !== value) {
+        copy ??= { ...node };
+        copy[key] = resolved;
+      }
+    }
+    return copy ?? effect;
+  }
+
+  /**
    * Full DSL→Buff translation, including the `unsupported` list of effect
    * fragments the buff layer can't model. The SPA renders these as warnings
    * so users see which abilities have effects that need a manual toggle.
@@ -195,7 +280,12 @@ export class AbilityView {
     perspective: TranslationPerspective = "attacker",
   ): EffectTranslation {
     const ctx: EngineContext = context ?? { phase: "shooting" };
-    const translated = effectToBuffs(this.raw.effect, source, ctx, perspective);
+    const translated = effectToBuffs(
+      this.resolveRulesBundles(this.raw.effect),
+      source,
+      ctx,
+      perspective,
+    );
     // A range-scoped ability (DSL `scope.range_inches`, e.g. a "within 18\""
     // reroll) gates on distance to the target. Stamp it here rather than in the
     // effect translator so the `effect-translation` corpus (bare effects) is
@@ -228,6 +318,19 @@ export class WeaponView {
 
   get name(): string {
     return this.raw.name;
+  }
+
+  get type(): string {
+    return this.raw.type;
+  }
+
+  /** All stat profiles for this weapon (at least one is always present). */
+  get profiles(): readonly Weapon["profiles"][number][] {
+    return this.raw.profiles;
+  }
+
+  get profileCount(): number {
+    return this.raw.profiles.length;
   }
 
   /** Units that list this weapon in their `weapon_ids`. */

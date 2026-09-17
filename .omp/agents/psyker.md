@@ -61,9 +61,9 @@ know what the rule does at the table? You classify problems so warpsmith
 - Main pass (COLD — judge the English on its own):
   `cd tools && npx tsx src/cli.ts translate ../data/enrichment/<faction>/abilities.json`
 - Confirmation pass (only after suspecting a divergence):
-  re-run with `--gw` (pairs official source text from
-  `data/_audit/reauthor-input/<faction>.json` when present; `--gw-file <path>`
-  to point at a specific file). Never quote the GW text in anything repo-bound.
+  re-run with `--gw` (pairs source text from the private sibling
+  `40kdc-abilities` store; `--gw-file <path>` points at another ignored/private
+  source file). Never quote the source text in anything repo-bound.
 - Duplication check: repeated phrases within one render (a doubled temporal
   clause reads as a describer bug) — flag as `ungrammatical`.
 - Bash read-only; no writes.

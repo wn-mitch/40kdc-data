@@ -2,8 +2,11 @@ World Eaters - Blood for the Blood God - [2000 pts]
 
 # ++ Army Roster ++ [75 pts]
 ## Configuration
+List Name: Blood for the Blood God
+Faction: World Eaters
 Battle Size: Strike Force (2000 Point limit)
 Detachment: Berzerker Warband
+Force Disposition: Purge The Foe
 
 ## Battleline [75 pts]
 Goremongers [75 pts]:

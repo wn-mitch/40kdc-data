@@ -1,227 +1,11 @@
 [
   {
-    "id": "follow-me-ladz-war-horde",
-    "name": "Follow Me Ladz",
-    "detachment_id": "war-horde",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "headwoppas-killchoppa-war-horde",
-    "name": "Headwoppa’s Killchoppa",
-    "detachment_id": "war-horde",
-    "cost": 20,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "kunnin-but-brutal-war-horde",
-    "name": "Kunnin’ but Brutal",
-    "detachment_id": "war-horde",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "supa-cybork-body-war-horde",
-    "name": "Supa-Cybork Body",
-    "detachment_id": "war-horde",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "glory-hog-da-big-hunt",
-    "name": "Glory Hog",
-    "detachment_id": "da-big-hunt",
-    "cost": 30,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "skrag-every-stash-da-big-hunt",
-    "name": "Skrag Every Stash!",
-    "detachment_id": "da-big-hunt",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "proper-killy-da-big-hunt",
-    "name": "Proper Killy",
-    "detachment_id": "da-big-hunt",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "surly-as-a-squiggoth-da-big-hunt",
-    "name": "Surly As A Squiggoth",
-    "detachment_id": "da-big-hunt",
-    "cost": 20,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "wazblasta-kult-of-speed",
-    "name": "Wazblasta",
-    "detachment_id": "kult-of-speed",
-    "cost": 10,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "fasta-than-yooz-kult-of-speed",
-    "name": "Fasta Than Yooz",
-    "detachment_id": "kult-of-speed",
-    "cost": 35,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "squig-hide-tyres-kult-of-speed",
-    "name": "Squig-hide Tyres",
-    "detachment_id": "kult-of-speed",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "speed-makes-right-kult-of-speed",
-    "name": "Speed Makes Right",
-    "detachment_id": "kult-of-speed",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
     "id": "smoky-gubbinz-dread-mob",
     "name": "Smoky Gubbinz",
     "detachment_id": "dread-mob",
     "cost": 15,
     "keyword_restrictions": [
-      "Orks"
+      "Mek"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -231,7 +15,13 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "bbc09d5c-a926-4660-a0a9-e9bf51301379"
+      }
+    ]
   },
   {
     "id": "supa-glowy-fing-dread-mob",
@@ -239,7 +29,7 @@
     "detachment_id": "dread-mob",
     "cost": 20,
     "keyword_restrictions": [
-      "Orks"
+      "Mek"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -249,7 +39,13 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6d5b6077-f812-4cdf-9f73-fff6c455516c"
+      }
+    ]
   },
   {
     "id": "press-it-fasta-dread-mob",
@@ -257,7 +53,7 @@
     "detachment_id": "dread-mob",
     "cost": 35,
     "keyword_restrictions": [
-      "Orks"
+      "Mek"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -267,7 +63,13 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "23079735-4f0d-42eb-b660-665e5c3cb72f"
+      }
+    ]
   },
   {
     "id": "gitfinder-gogglez-dread-mob",
@@ -275,7 +77,7 @@
     "detachment_id": "dread-mob",
     "cost": 10,
     "keyword_restrictions": [
-      "Orks"
+      "Mek"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -285,439 +87,13 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "ferocious-show-off-green-tide",
-    "name": "Ferocious Show Off",
-    "detachment_id": "green-tide",
-    "cost": 10,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "brutal-but-kunnin-green-tide",
-    "name": "Brutal But Kunnin’",
-    "detachment_id": "green-tide",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "bloodthirsty-belligerence-green-tide",
-    "name": "Bloodthirsty Belligerence",
-    "detachment_id": "green-tide",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "raucous-warcaller-green-tide",
-    "name": "Raucous Warcaller",
-    "detachment_id": "green-tide",
-    "cost": 20,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "tellyporta-bully-boyz",
-    "name": "Tellyporta",
-    "detachment_id": "bully-boyz",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "big-gob-bully-boyz",
-    "name": "Big Gob",
-    "detachment_id": "bully-boyz",
-    "cost": 20,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "da-biggest-boss-bully-boyz",
-    "name": "Da Biggest Boss",
-    "detachment_id": "bully-boyz",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "eadstompa-bully-boyz",
-    "name": "’Eadstompa",
-    "detachment_id": "bully-boyz",
-    "cost": 10,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "skwad-leader-taktikal-brigade",
-    "name": "Skwad Leader",
-    "detachment_id": "taktikal-brigade",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "mek-kaptin-taktikal-brigade",
-    "name": "Mek Kaptin",
-    "detachment_id": "taktikal-brigade",
-    "cost": 45,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "morks-kunnin-taktikal-brigade",
-    "name": "Mork’s Kunnin’",
-    "detachment_id": "taktikal-brigade",
-    "cost": 20,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "gob-boomer-taktikal-brigade",
-    "name": "Gob Boomer",
-    "detachment_id": "taktikal-brigade",
-    "cost": 10,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "da-gobshot-thunderbuss-more-dakka",
-    "name": "Da Gobshot Thunderbuss",
-    "detachment_id": "more-dakka",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "dead-shiny-shootas-upgrade-more-dakka",
-    "name": "Dead Shiny Shootas (Upgrade)",
-    "detachment_id": "more-dakka",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": true,
-    "max_targets": 3
-  },
-  {
-    "id": "targetin-squigs-more-dakka",
-    "name": "Targetin’ Squigs",
-    "detachment_id": "more-dakka",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "zog-off-and-eat-dakka-more-dakka",
-    "name": "Zog Off and Eat Dakka!",
-    "detachment_id": "more-dakka",
-    "cost": 10,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "da-kaptin-freebooter-krew",
-    "name": "Da Kaptin",
-    "detachment_id": "freebooter-krew",
-    "cost": 10,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "git-spotter-squig-freebooter-krew",
-    "name": "Git-Spotter Squig",
-    "detachment_id": "freebooter-krew",
-    "cost": 20,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "bionik-workshop-freebooter-krew",
-    "name": "Bionik Workshop",
-    "detachment_id": "freebooter-krew",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "razgits-magik-map-freebooter-krew",
-    "name": "Razgit’s Magik Map",
-    "detachment_id": "freebooter-krew",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "boarding-ramps-upgrade-rollin-deff",
-    "name": "Boarding Ramps (Upgrade)",
-    "detachment_id": "rollin-deff",
-    "cost": 10,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": "boarding-ramps-rollin-deff",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": true,
-    "max_targets": 3
-  },
-  {
-    "id": "targetin-gizmos-upgrade-rollin-deff",
-    "name": "Targetin’ Gizmos (Upgrade)",
-    "detachment_id": "rollin-deff",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": "targetin-gizmos-rollin-deff",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": true,
-    "max_targets": 3
-  },
-  {
-    "id": "dead-shiny-shootas-rollin-deff",
-    "name": "Dead Shiny Shootas",
-    "detachment_id": "rollin-deff",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": "dead-shiny-shootas-rollin-deff",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": true,
-    "max_targets": 1
-  },
-  {
-    "id": "da-gobshot-thunderbuss-rollin-deff",
-    "name": "Da Gobshot Thunderbuss",
-    "detachment_id": "rollin-deff",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Orks"
-    ],
-    "ability_id": "da-gobshot-thunderbuss-rollin-deff",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": true,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "feb611dd-912d-42c4-acd1-c9e0922bd5aa"
+      }
+    ]
   },
   {
     "id": "runnin-boots-blitz-brigade",
@@ -725,6 +101,7 @@
     "detachment_id": "blitz-brigade",
     "cost": 10,
     "keyword_restrictions": [
+      "Infantry",
       "Orks"
     ],
     "ability_id": "runnin-boots-blitz-brigade",
@@ -735,7 +112,13 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fb854ed4-d89a-48fe-8885-668fc666fb57"
+      }
+    ]
   },
   {
     "id": "blitzkaptin-blitz-brigade",
@@ -753,7 +136,13 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1bda534d-da5b-4e7f-b5ee-4fd9b2a9c321"
+      }
+    ]
   },
   {
     "id": "supercharged-squig-oil-blitz-brigade",
@@ -761,7 +150,7 @@
     "detachment_id": "blitz-brigade",
     "cost": 10,
     "keyword_restrictions": [
-      "Orks"
+      "Mek"
     ],
     "ability_id": "supercharged-squig-oil-blitz-brigade",
     "is_unique": true,
@@ -771,7 +160,13 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b17429f1-34f9-4b96-89b7-43e46a1146be"
+      }
+    ]
   },
   {
     "id": "tuff-git-blitz-brigade",
@@ -779,6 +174,7 @@
     "detachment_id": "blitz-brigade",
     "cost": 5,
     "keyword_restrictions": [
+      "Infantry",
       "Orks"
     ],
     "ability_id": "tuff-git-blitz-brigade",
@@ -789,25 +185,1392 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "64087f3d-3911-4ed5-bffd-419226e7de28"
+      }
+    ]
   },
   {
-    "id": "rallying-war-cry-ardmob",
-    "name": "Rallying War Cry",
-    "detachment_id": "ardmob",
-    "cost": 0,
+    "id": "dreadherder-dread-mob",
+    "name": "Dreadherder",
+    "detachment_id": "dread-mob",
+    "cost": 20,
+    "points_provisional": false,
+    "ability_id": "dreadherder-dread-mob",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
     },
-    "game_modes": [
-      "combat-patrol"
-    ],
-    "points_provisional": false,
     "keyword_restrictions": [
-      "'Ardmob",
+      "Big Mek"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6923d140-58e0-57fe-8895-bcd4803ed1ac"
+      }
+    ]
+  },
+  {
+    "id": "follow-me-ladz-war-horde",
+    "name": "Follow Me Ladz",
+    "detachment_id": "war-horde",
+    "cost": 20,
+    "points_provisional": false,
+    "ability_id": "follow-me-ladz-war-horde",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Orks"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "43f8c7f9-b65f-5f3a-93a3-cfe1c4ccd751"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6e1ce3ba-cf8c-4f03-8826-d8c32b03c38c"
+      }
+    ]
+  },
+  {
+    "id": "headwoppas-killchoppa-war-horde",
+    "name": "Headwoppa's Killchoppa",
+    "detachment_id": "war-horde",
+    "cost": 15,
+    "points_provisional": false,
+    "ability_id": "headwoppas-killchoppa-war-horde",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Orks"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4fc2ad6d-f72b-53e1-8c9f-0db8903e6bc6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7387cdc9-10f1-49b5-846f-bd74d0990559"
+      }
+    ]
+  },
+  {
+    "id": "kunnin-but-brutal-war-horde",
+    "name": "Kunnin’ But Brutal",
+    "detachment_id": "war-horde",
+    "cost": 20,
+    "points_provisional": false,
+    "ability_id": "kunnin-but-brutal-war-horde",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Orks"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8ae93dff-ca2e-50a2-af43-6abde4960a91"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5276cd34-90a7-4ddb-ae3b-bbadf3775764"
+      }
+    ]
+  },
+  {
+    "id": "glory-hog-da-big-hunt",
+    "name": "Glory Hog",
+    "detachment_id": "da-big-hunt",
+    "cost": 25,
+    "points_provisional": false,
+    "ability_id": "glory-hog-da-big-hunt",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Beast Snagga"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dbf36f14-5041-510e-a3cb-64a0718ae5d4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bb4fc923-48a3-4b7f-a58e-08e2bc7bdbe4"
+      }
+    ]
+  },
+  {
+    "id": "ferocious-show-off-green-tide",
+    "name": "Ferocious Show-off",
+    "detachment_id": "green-tide",
+    "cost": 15,
+    "points_provisional": false,
+    "ability_id": "ferocious-show-off-green-tide",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Infantry",
+      "Orks"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fb76d6b8-0efc-5454-8719-498c4e608ed2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "987fbbf7-d3d3-4e55-a058-14332291177a"
+      }
+    ]
+  },
+  {
+    "id": "ard-boyz-green-tide",
+    "name": "’Ard Boyz",
+    "detachment_id": "green-tide",
+    "cost": 0,
+    "points_provisional": true,
+    "ability_id": "ard-boyz-green-tide",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "keyword_restrictions": [
+      "Boyz"
+    ]
+  },
+  {
+    "id": "blitzboss-brute-bosses",
+    "name": "Blitzboss",
+    "detachment_id": "brute-bosses",
+    "cost": 20,
+    "points_provisional": false,
+    "ability_id": "blitzboss-brute-bosses",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "80146bd1-15f6-5c74-9918-42cc8316ca3a"
+      }
+    ]
+  },
+  {
+    "id": "brutal-but-kunnin-brute-bosses",
+    "name": "Brutal But Kunnin’",
+    "detachment_id": "brute-bosses",
+    "cost": 30,
+    "points_provisional": false,
+    "ability_id": "brutal-but-kunnin-brute-bosses",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
       "Warboss"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "94894a90-fc6a-543b-b82e-d11c4a3df379"
+      }
+    ]
+  },
+  {
+    "id": "competitive-streak-kult-of-speed",
+    "name": "Competitive Streak",
+    "detachment_id": "kult-of-speed",
+    "cost": 15,
+    "points_provisional": false,
+    "ability_id": "competitive-streak-kult-of-speed",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Deffkilla Wartrike"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "350affc1-5169-5c1e-82b0-54af8656d98d"
+      }
+    ]
+  },
+  {
+    "id": "da-boss-is-watchin-war-horde",
+    "name": "Da Boss is Watchin'",
+    "detachment_id": "war-horde",
+    "cost": 25,
+    "points_provisional": false,
+    "ability_id": "da-boss-is-watchin-war-horde",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Orks"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ee67ae2d-2f35-50ec-a5f1-776143408d8d"
+      }
+    ]
+  },
+  {
+    "id": "da-gobshot-thunderbuss-brute-bosses",
+    "name": "Da Gobshot Thunderbuss",
+    "detachment_id": "brute-bosses",
+    "cost": 20,
+    "points_provisional": false,
+    "ability_id": "da-gobshot-thunderbuss-brute-bosses",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6a9773e3-4d52-5397-8d9b-dcb221d02f44"
+      }
+    ]
+  },
+  {
+    "id": "da-krunch-wurrband",
+    "name": "Da Krunch",
+    "detachment_id": "wurrband",
+    "cost": 10,
+    "points_provisional": false,
+    "ability_id": "da-krunch-wurrband",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Orks",
+      "Psyker"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bcfa79fe-d295-515e-ac2f-d18afbe0c46d"
+      }
+    ]
+  },
+  {
+    "id": "eadbanger-wurrband",
+    "name": "'Eadbanger",
+    "detachment_id": "wurrband",
+    "cost": 15,
+    "points_provisional": false,
+    "ability_id": "eadbanger-wurrband",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Orks",
+      "Psyker"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a9d76f2d-9129-576c-8c46-c8fc3fde5c77"
+      }
+    ]
+  },
+  {
+    "id": "enhanced-runt-maw-upgrade-madcap-meks",
+    "name": "Enhanced Runt-maw (Upgrade)",
+    "detachment_id": "madcap-meks",
+    "cost": 10,
+    "points_provisional": false,
+    "ability_id": "enhanced-runt-maw-madcap-meks",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Big Mek with Shokk Attack Gun"
+    ],
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5673cfa0-7099-58be-b3f6-ed9ece5be056"
+      }
+    ]
+  },
+  {
+    "id": "extra-sneaky-upgrade-runt-swarm",
+    "name": "Extra Sneaky (Upgrade)",
+    "detachment_id": "runt-swarm",
+    "cost": 10,
+    "points_provisional": false,
+    "ability_id": "extra-sneaky-runt-swarm",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Gretchin"
+    ],
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f4892714-49c2-5faa-84d4-ed24da62d998"
+      }
+    ]
+  },
+  {
+    "id": "flyboss-upgrade-flyboyz",
+    "name": "Flyboss (Upgrade)",
+    "detachment_id": "flyboyz",
+    "cost": 20,
+    "points_provisional": false,
+    "ability_id": "flyboss-flyboyz",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Aircraft",
+      "Orks"
+    ],
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "82987ea2-9a77-5246-8b67-40e46e7124a0"
+      }
+    ]
+  },
+  {
+    "id": "impulsive-recon-upgrade-flyboyz",
+    "name": "Impulsive Recon (Upgrade)",
+    "detachment_id": "flyboyz",
+    "cost": 15,
+    "points_provisional": false,
+    "ability_id": "impulsive-recon-flyboyz",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Aircraft",
+      "Orks"
+    ],
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "af9fbd3e-0a28-5b33-b83f-d1028ec5bc87"
+      }
+    ]
+  },
+  {
+    "id": "it-came-from-da-drops-da-big-hunt",
+    "name": "It Came from da Drops",
+    "detachment_id": "da-big-hunt",
+    "cost": 20,
+    "points_provisional": false,
+    "ability_id": "it-came-from-da-drops-da-big-hunt",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Beastboss on Squigosaur"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2b3b563d-e1d4-5f44-b1e0-dcab535118fc"
+      }
+    ]
+  },
+  {
+    "id": "kaptins-hat-wreckas",
+    "name": "Kaptin's Hat",
+    "detachment_id": "wreckas",
+    "cost": 25,
+    "points_provisional": false,
+    "ability_id": "kaptins-hat-wreckas",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restriction_groups": [
+      [
+        "Big Mek"
+      ],
+      [
+        "Infantry",
+        "Warboss"
+      ]
+    ],
+    "attachment_bodyguard_ids": [
+      "flash-gitz"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b36e25a9-bddf-5a15-b80f-6fb01fe59568"
+      }
+    ]
+  },
+  {
+    "id": "kill-kommando-taktikal-brigade",
+    "name": "Kill Kommando",
+    "detachment_id": "taktikal-brigade",
+    "cost": 0,
+    "points_provisional": true,
+    "ability_id": "kill-kommando-taktikal-brigade",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "keyword_restriction_groups": [
+      [
+        "Big Mek"
+      ],
+      [
+        "Warboss Infantry"
+      ]
+    ]
+  },
+  {
+    "id": "mekwaaagh-mastermind-madcap-meks",
+    "name": "Mekwaaagh! Mastermind",
+    "detachment_id": "madcap-meks",
+    "cost": 30,
+    "points_provisional": false,
+    "ability_id": "mekwaaagh-mastermind-madcap-meks",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Big Mek"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "54bc27b8-2da1-59c4-9246-c390378b18ed"
+      }
+    ]
+  },
+  {
+    "id": "minefield-detail-upgrade-runt-swarm",
+    "name": "Minefield Detail (Upgrade)",
+    "detachment_id": "runt-swarm",
+    "cost": 10,
+    "points_provisional": false,
+    "ability_id": "minefield-detail-runt-swarm",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Gretchin"
+    ],
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e7526036-f5d5-5d0a-a14f-9c4dbcf00de7"
+      }
+    ]
+  },
+  {
+    "id": "morgogs-finkin-cap-brute-bosses",
+    "name": "Morgog’s Finkin’ Cap",
+    "detachment_id": "brute-bosses",
+    "cost": 50,
+    "points_provisional": false,
+    "ability_id": "morgogs-finkin-cap-brute-bosses",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "19c9ab6a-485b-55de-bfd9-f3a838260656"
+      }
+    ]
+  },
+  {
+    "id": "proper-killy-brute-bosses",
+    "name": "Proper Killy",
+    "detachment_id": "brute-bosses",
+    "cost": 15,
+    "points_provisional": false,
+    "ability_id": "proper-killy-brute-bosses",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f1497cd3-88a4-5d88-ac95-f6b8cab6c831"
+      }
+    ]
+  },
+  {
+    "id": "smoky-gubbinz-upgrade-kult-of-speed",
+    "name": "Smoky Gubbinz (Upgrade)",
+    "detachment_id": "kult-of-speed",
+    "cost": 10,
+    "points_provisional": false,
+    "ability_id": "smoky-gubbinz-kult-of-speed",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Speed Freeks"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e7f7348c-92e4-53ec-be4e-5422013c948a"
+      }
+    ]
+  },
+  {
+    "id": "supa-glowy-fing-shoota-boyz",
+    "name": "Supa-glowy Fing",
+    "detachment_id": "shoota-boyz",
+    "cost": 25,
+    "points_provisional": false,
+    "ability_id": "supa-glowy-fing-shoota-boyz",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Infantry",
+      "Orks"
+    ],
+    "exclusion_keywords": [
+      "Psyker"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "92024cbe-1d67-57dc-a5c4-2fb0eabc2337"
+      }
+    ]
+  },
+  {
+    "id": "supa-snazz-dakka-upgrade-wreckas",
+    "name": "Supa-Snazz Dakka Upgrade",
+    "detachment_id": "wreckas",
+    "cost": 20,
+    "points_provisional": false,
+    "ability_id": "supa-snazz-dakka-upgrade-wreckas",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Flash Gitz"
+    ],
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ef65e131-b18c-5d0f-8288-f073ecead340"
+      }
+    ]
+  },
+  {
+    "id": "surly-as-a-squiggoth-brute-bosses",
+    "name": "Surly as a Squiggoth",
+    "detachment_id": "brute-bosses",
+    "cost": 25,
+    "points_provisional": false,
+    "ability_id": "surly-as-a-squiggoth-brute-bosses",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Infantry",
+      "Warboss"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "46f7d12e-9d3e-5f28-815f-0db2b422d59d"
+      }
+    ]
+  },
+  {
+    "id": "targetin-squigs-shoota-boyz",
+    "name": "Targetin' Squigs",
+    "detachment_id": "shoota-boyz",
+    "cost": 20,
+    "points_provisional": false,
+    "ability_id": "targetin-squigs-shoota-boyz",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restriction_groups": [
+      [
+        "Big Mek"
+      ],
+      [
+        "Bigboss"
+      ],
+      [
+        "Warboss"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "743c1270-2860-5bd6-ae9d-dd3041ac325f"
+      }
+    ]
+  },
+  {
+    "id": "tellyporta-boss-bully-boyz",
+    "name": "Tellyporta Boss",
+    "detachment_id": "bully-boyz",
+    "cost": 20,
+    "points_provisional": false,
+    "ability_id": "tellyporta-boss-bully-boyz",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Mega Armour"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "336c20c0-7740-5764-83a0-e04cacb56d15"
+      }
+    ]
+  },
+  {
+    "id": "temperamental-shokka-upgrade-madcap-meks",
+    "name": "Temperamental Shokka (Upgrade)",
+    "detachment_id": "madcap-meks",
+    "cost": 20,
+    "points_provisional": false,
+    "ability_id": "temperamental-shokka-madcap-meks",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Big Mek with Shokk Attack Gun"
+    ],
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cce81974-c2d4-581b-b47e-2fedb5074062"
+      }
+    ]
+  },
+  {
+    "id": "throat-slittas-upgrade-taktikal-brigade",
+    "name": "Throat-Slittas Upgrade",
+    "detachment_id": "taktikal-brigade",
+    "cost": 15,
+    "points_provisional": false,
+    "ability_id": "throat-slittas-upgrade-taktikal-brigade",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restriction_groups": [
+      [
+        "Kommandos"
+      ],
+      [
+        "Stormboyz"
+      ]
+    ],
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cb0ba06e-38c9-5646-8e5f-6ddf559a0c06"
+      }
+    ]
+  },
+  {
+    "id": "warphead-wurrband",
+    "name": "Warphead",
+    "detachment_id": "wurrband",
+    "cost": 25,
+    "points_provisional": false,
+    "ability_id": "warphead-wurrband",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Orks",
+      "Psyker"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7757c223-321f-5b10-8909-48fa1cb1f198"
+      }
+    ]
+  },
+  {
+    "id": "wimp-kickaz-upgrade-bully-boyz",
+    "name": "Wimp-kickaz (Upgrade)",
+    "detachment_id": "bully-boyz",
+    "cost": 15,
+    "points_provisional": false,
+    "ability_id": "wimp-kickaz-bully-boyz",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "keyword_restrictions": [
+      "Nobz"
+    ],
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "788fa53f-2377-51d0-902f-0d58c77e7fa8"
+      }
+    ]
+  },
+  {
+    "id": "tellyporta-bully-boyz",
+    "name": "Tellyporta",
+    "detachment_id": "bully-boyz",
+    "cost": 25,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Warboss in Mega Armour"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3d83cfeb-581e-435d-b322-029c6adf5add"
+      }
+    ]
+  },
+  {
+    "id": "brutal-but-kunnin-green-tide",
+    "name": "Brutal But Kunnin’",
+    "detachment_id": "green-tide",
+    "cost": 25,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Infantry",
+      "Orks"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e291c41b-6522-4912-a96a-b720d4c622e7"
+      }
+    ]
+  },
+  {
+    "id": "raucous-warcaller-green-tide",
+    "name": "Raucous Warcaller",
+    "detachment_id": "green-tide",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Infantry",
+      "Orks"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7c2dd985-67a3-45f1-bd44-f0184b602442"
+      }
+    ]
+  },
+  {
+    "id": "speed-makes-right-kult-of-speed",
+    "name": "Speed Makes Right",
+    "detachment_id": "kult-of-speed",
+    "cost": 25,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Orks"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "dfd09bc4-e093-4201-b0db-c782a4868a24"
+      }
+    ]
+  },
+  {
+    "id": "supa-cybork-body-war-horde",
+    "name": "Supa-Cybork Body",
+    "detachment_id": "war-horde",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Orks"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "193c7ee0-362c-4c27-92f7-97c33317dba4"
+      }
+    ]
+  },
+  {
+    "id": "surly-as-a-squiggoth-da-big-hunt",
+    "name": "Surly As A Squiggoth",
+    "detachment_id": "da-big-hunt",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Beastboss on Squigosaur"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "331bb820-2848-4288-86db-75419c914d31"
+      }
+    ]
+  },
+  {
+    "id": "bloodthirsty-belligerence-green-tide",
+    "name": "Bloodthirsty Belligerence",
+    "detachment_id": "green-tide",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Infantry",
+      "Orks"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "580c5d4d-7866-4f6c-bf44-5f82dc26e1ec"
+      }
+    ]
+  },
+  {
+    "id": "squig-hide-tyres-kult-of-speed",
+    "name": "Squig-hide Tyres",
+    "detachment_id": "kult-of-speed",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Deffkilla Wartrike"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "33b00a2b-b234-4caf-b5bf-59de4374b7e7"
+      }
+    ]
+  },
+  {
+    "id": "wazblasta-kult-of-speed",
+    "name": "Wazblasta",
+    "detachment_id": "kult-of-speed",
+    "cost": 10,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Deffkilla Wartrike"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a85af4a1-7f20-456c-829f-ca0ccf55f026"
+      }
+    ]
+  },
+  {
+    "id": "big-gob-bully-boyz",
+    "name": "Big Gob",
+    "detachment_id": "bully-boyz",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Infantry",
+      "Warboss"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f23a65d4-01ec-4c5a-b35a-6ad7664b7fd0"
+      }
+    ]
+  },
+  {
+    "id": "proper-killy-da-big-hunt",
+    "name": "Proper Killy",
+    "detachment_id": "da-big-hunt",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Beast Snagga"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "054ed69c-a8e8-4469-80bf-1d1e39dc5103"
+      }
+    ]
+  },
+  {
+    "id": "slippery-git-taktikal-brigade",
+    "name": "Slippery Git",
+    "detachment_id": "taktikal-brigade",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Infantry",
+      "Warboss"
+    ],
+    "attachment_bodyguard_ids": [
+      "kommandos"
+    ],
+    "exclusion_keywords": [
+      "Mega Armour"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "64bce989-3720-4e84-a38f-4f34a7c6cf5a"
+      }
+    ]
+  },
+  {
+    "id": "fasta-than-yooz-kult-of-speed",
+    "name": "Fasta Than Yooz",
+    "detachment_id": "kult-of-speed",
+    "cost": 35,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Infantry",
+      "Orks"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6516c10a-9123-4046-8c02-5567433b3290"
+      }
+    ]
+  },
+  {
+    "id": "eadstompa-bully-boyz",
+    "name": "’Eadstompa",
+    "detachment_id": "bully-boyz",
+    "cost": 10,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Infantry",
+      "Warboss"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "86673872-5905-47cb-a23e-382723db48cd"
+      }
+    ]
+  },
+  {
+    "id": "skrag-every-stash-da-big-hunt",
+    "name": "Skrag Every Stash!",
+    "detachment_id": "da-big-hunt",
+    "cost": 25,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Beast Snagga"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7a2c90a9-5645-451d-971a-7c3068698401"
+      }
+    ]
+  },
+  {
+    "id": "da-biggest-boss-bully-boyz",
+    "name": "Da Biggest Boss",
+    "detachment_id": "bully-boyz",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Infantry",
+      "Warboss"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b26524a0-05cb-4f6d-a0ee-eb29836d5cd5"
+      }
+    ]
+  },
+  {
+    "id": "morks-kunnin-taktikal-brigade",
+    "name": "Mork’s Kunnin’",
+    "detachment_id": "taktikal-brigade",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Orks"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "04e821f4-4153-49f4-b6b4-365816821e2c"
+      }
+    ]
+  },
+  {
+    "id": "ardboyz-upgrade-green-tide",
+    "name": "'Ardboyz (Upgrade)",
+    "detachment_id": "green-tide",
+    "cost": 25,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Boyz"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "af65d54e-4bc4-5e72-99d2-674085e80e46"
+      }
+    ]
+  },
+  {
+    "id": "kill-kommanda-taktikal-brigade",
+    "name": "Kill Kommanda",
+    "detachment_id": "taktikal-brigade",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Big Mek"
+      ],
+      [
+        "Infantry",
+        "Warboss"
+      ]
+    ],
+    "attachment_bodyguard_ids": [
+      "kommandos"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2c369501-4236-5c2d-b688-6f2a27c4d4b2"
+      }
+    ]
+  },
+  {
+    "id": "cybork-boosta-dread-mob",
+    "name": "Cybork Boosta",
+    "detachment_id": "dread-mob",
+    "cost": 10,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Big Mek"
+      ],
+      [
+        "Mek"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "32346fb6-bd01-5947-8255-c2ae9e69581a"
+      }
+    ]
+  },
+  {
+    "id": "boss-boomer-upgrade-blitz-brigade",
+    "name": "Boss Boomer (Upgrade)",
+    "detachment_id": "blitz-brigade",
+    "cost": 10,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Wagon"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9cabdfb5-f52a-5954-867c-a47d7e952107"
+      }
+    ]
+  },
+  {
+    "id": "targetin-gizmos-upgrade-blitz-brigade",
+    "name": "Targetin’ Gizmos (Upgrade)",
+    "detachment_id": "blitz-brigade",
+    "cost": 10,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Wagon"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d9de0258-ab6a-5cb6-bf6f-0df3f1ed01dc"
+      }
     ]
   }
 ]

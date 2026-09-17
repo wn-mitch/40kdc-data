@@ -2,7 +2,7 @@
 + PLAYER NAME: —
 + TEAM NAME: —
 + FACTIONS USED: World Eaters
-+ DISPOSITION: —
++ DISPOSITION: Purge The Foe
 + DETACHMENT: Berzerker Warband
 + ARMY POINTS: 725pts
 +
@@ -15,7 +15,7 @@
 BATTLELINE
 
 Char1: 1x Daemon Prince of Khorne (200 pts)
-1 with Infernal cannon, Hellforged weapons, Warlord
+• 1x Daemon Prince of Khorne: Infernal cannon, Hellforged weapons, Warlord
 
 10x Chaos Terminators (350 pts)
 • 1x World Eaters Terminator Champion: Chainfist, Combi-weapon

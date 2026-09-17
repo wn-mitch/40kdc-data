@@ -12,11 +12,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "angelic-descent-army-of-faith",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1b5496ac-0324-5af1-8ba3-e2893564766c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "65ffee4d-9359-4c13-9e30-d85c50670f20"
+      }
+    ]
   },
   {
     "id": "bastion-of-faith-champions-of-faith",
@@ -31,11 +41,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "bastion-of-faith-champions-of-faith",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1de9308a-ca2b-5491-a6cd-9be725396073"
+      },
+      {
+        "namespace": "mfm",
+        "id": "08d9a628-8178-473c-8d08-906813c20f7d"
+      }
+    ]
   },
   {
     "id": "blazing-ire-bringers-of-flame",
@@ -50,11 +70,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "blazing-ire-bringers-of-flame",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3a86ebd3-5e0e-5c16-960c-7958b4a56afd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "404e1f23-dd4c-4329-8851-86055ac61da4"
+      }
+    ]
   },
   {
     "id": "blinding-radiance-army-of-faith",
@@ -70,11 +100,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "blinding-radiance-army-of-faith",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "654d2c07-d287-5918-b4ec-adb722d81b71"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ee04ab6a-a93f-40e8-b415-d48b5c5e88ba"
+      }
+    ]
   },
   {
     "id": "boundless-zeal-penitent-host",
@@ -89,11 +129,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "boundless-zeal-penitent-host",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0441c667-bdb5-5cb0-bf6d-90daa60ead02"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cf743f7c-6df2-40ea-96f7-cdb0de92947e"
+      }
+    ]
   },
   {
     "id": "carry-forth-the-faithful-bringers-of-flame",
@@ -108,11 +158,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "carry-forth-the-faithful-bringers-of-flame",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4645fe4d-36e1-5ce1-9440-4d3b9da65b9f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "86a868ed-2e90-4bfe-92b7-b2dcd310d09f"
+      }
+    ]
   },
   {
     "id": "cleansing-flames-bringers-of-flame",
@@ -127,11 +187,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "cleansing-flames-bringers-of-flame",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c1dbade7-bb6d-5be9-bb66-402606fbbea0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "edf56ccf-046e-4f5c-ae39-7ebc3d61d85b"
+      }
+    ]
   },
   {
     "id": "devastating-reprise-chorus-of-condemnation",
@@ -149,7 +219,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0c3cfd32-14e7-5c57-8ccf-ad610ba3f288"
+      },
+      {
+        "namespace": "mfm",
+        "id": "32eebb7c-25ad-4030-88b3-6edfcf6ad3eb"
+      }
+    ]
   },
   {
     "id": "devout-fanaticism-penitent-host",
@@ -164,11 +244,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "devout-fanaticism-penitent-host",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f8cbd3a3-6c39-507c-b29a-883c423f036b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ccb4c4f6-5318-47a2-85fe-2a05ff22015f"
+      }
+    ]
   },
   {
     "id": "divine-guidance-army-of-faith",
@@ -184,11 +274,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "divine-guidance-army-of-faith",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1a0185a3-df5c-5146-8239-78708e711ad9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ee842df1-f44d-45b9-9f16-e1ec47871c8f"
+      }
+    ]
   },
   {
     "id": "divine-intervention-hallowed-martyrs",
@@ -207,11 +307,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "divine-intervention-hallowed-martyrs",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "51f52e1f-6fa2-56a5-a468-6dc4a66a226c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e21d2fdd-4666-4136-9a7c-87e12ff1b33c"
+      }
+    ]
   },
   {
     "id": "faith-and-fury-army-of-faith",
@@ -226,11 +336,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "faith-and-fury-army-of-faith",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b97960c0-2b6a-5aa0-9c15-af198a9cc4f6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "76636826-a2ee-46f2-8a54-106731e6ebc8"
+      }
+    ]
   },
   {
     "id": "faithful-fortitude-sacred-champions",
@@ -252,7 +372,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "827aa69f-315a-514d-8f86-958de1be0e03"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cbaa005e-618e-46f8-b2ef-09858ca6861d"
+      }
+    ]
   },
   {
     "id": "fervent-devotion-sanctuary-guardians",
@@ -270,7 +400,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "77540dfb-d4c4-4adf-a425-191c1c32100c"
+      }
+    ]
   },
   {
     "id": "final-redemption-penitent-host",
@@ -289,11 +425,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "final-redemption-penitent-host",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "03a43e6c-85b1-598b-8e79-a066c46b3172"
+      },
+      {
+        "namespace": "mfm",
+        "id": "48c7a8f7-8bee-4691-bd16-bc748c5c8144"
+      }
+    ]
   },
   {
     "id": "fires-of-damnation-sanctuary-guardians",
@@ -312,7 +458,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "dff7be98-fabd-4de4-bdcc-fe507d46a527"
+      }
+    ]
   },
   {
     "id": "harmonised-exorcism-chorus-of-condemnation",
@@ -330,7 +482,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5f0bfc6c-1541-55c8-a2b4-d3810cfabe9f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "696ce713-6868-49bd-ace7-43653c4e6fe6"
+      }
+    ]
   },
   {
     "id": "indefatigable-dedication-champions-of-faith",
@@ -345,11 +507,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "indefatigable-dedication-champions-of-faith",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fa76752a-a477-5dc2-923d-aafbe9c62927"
+      },
+      {
+        "namespace": "mfm",
+        "id": "78f087ce-312d-4241-8732-3b26f8e2b467"
+      }
+    ]
   },
   {
     "id": "inspirational-battle-canticles-chorus-of-condemnation",
@@ -367,7 +539,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "37c04bf2-bfb1-5ba7-b44f-b02be8b94619"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e49af2dc-f25c-4b24-9f5c-da90b8d5c1ef"
+      }
+    ]
   },
   {
     "id": "lash-of-guilt-penitent-host",
@@ -382,11 +564,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "lash-of-guilt-penitent-host",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "65b8145a-38b6-583c-8fd4-1d1f334aadf0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d69e5d7f-ef9c-4822-b6fc-b3b5ba87eb7a"
+      }
+    ]
   },
   {
     "id": "light-of-the-emperor-army-of-faith",
@@ -394,18 +586,28 @@
     "category": "detachment",
     "type": "battle-tactic",
     "detachment_id": "army-of-faith",
-    "cp_cost": 1,
+    "cp_cost": 2,
     "phases": [
       "command"
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "light-of-the-emperor-army-of-faith",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ff8a3b1f-0fdf-5462-9730-444d385a99ac"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9535f9df-440a-42ed-8ce1-fc2b3b3e2e2a"
+      }
+    ]
   },
   {
     "id": "passion-of-the-penitent-penitent-host",
@@ -420,11 +622,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "passion-of-the-penitent-penitent-host",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ac128c2d-3551-5236-beb8-b55cb925468c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a30d560d-8d62-47e7-ab2e-3166b486ce6f"
+      }
+    ]
   },
   {
     "id": "path-of-the-righteous-champions-of-faith",
@@ -439,11 +651,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "path-of-the-righteous-champions-of-faith",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a565deb9-3526-5b20-a96d-3735dfdec51b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3fa7a2b4-eaa6-42ae-9154-489f78e33e8c"
+      }
+    ]
   },
   {
     "id": "praise-the-fallen-hallowed-martyrs",
@@ -458,11 +680,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "praise-the-fallen-hallowed-martyrs",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d4c09986-0b6b-56ce-a164-48db993b0796"
+      },
+      {
+        "namespace": "mfm",
+        "id": "49387306-4b1b-4c97-b135-e3867da6a890"
+      }
+    ]
   },
   {
     "id": "purity-of-suffering-penitent-host",
@@ -478,11 +710,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "purity-of-suffering-penitent-host",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bb20dc5d-8b4b-5165-ba9a-a9d1d78f8446"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b1b62829-e231-428c-ab28-f01ec2e5e05f"
+      }
+    ]
   },
   {
     "id": "righteous-blows-bringers-of-flame",
@@ -497,11 +739,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "righteous-blows-bringers-of-flame",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dea8f517-c444-53b1-878f-51bf28ffc348"
+      },
+      {
+        "namespace": "mfm",
+        "id": "07a13a5c-5ad0-4a41-ab8c-af3a0b6207d4"
+      }
+    ]
   },
   {
     "id": "righteous-vengeance-hallowed-martyrs",
@@ -516,11 +768,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "righteous-vengeance-hallowed-martyrs",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1c361904-d598-5f07-97b6-7ff19020e421"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4eb9bf89-47c8-4e72-9ec9-949d0b403ae2"
+      }
+    ]
   },
   {
     "id": "rites-of-fire-bringers-of-flame",
@@ -535,11 +797,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "rites-of-fire-bringers-of-flame",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5fcfaa5e-1b06-5a31-b617-68cf3736b041"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a1cd7972-52b6-447f-9bf3-f0eb542b0401"
+      }
+    ]
   },
   {
     "id": "sanctified-blows-sacred-champions",
@@ -557,7 +829,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "34879c30-436e-523a-8f82-744cc0b23a24"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6e89c116-3112-44b8-ac3b-74181a382434"
+      }
+    ]
   },
   {
     "id": "sanctified-immolation-hallowed-martyrs",
@@ -576,11 +858,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "sanctified-immolation-hallowed-martyrs",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b78d621a-c4e9-5a79-a7fb-cb3146dae3f3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3cb5147f-4861-46f4-9cc3-5d7e51a985f4"
+      }
+    ]
   },
   {
     "id": "shield-of-aversion-bringers-of-flame",
@@ -596,11 +888,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "shield-of-aversion-bringers-of-flame",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f14bd68a-4150-5694-ac93-2d53cb0626b2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4fe78d2e-a1d9-417b-8ff4-2e50ba6065bb"
+      }
+    ]
   },
   {
     "id": "shield-of-denial-champions-of-faith",
@@ -619,11 +921,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "shield-of-denial-champions-of-faith",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "70dfd1f0-56bf-5801-98b7-bb2e0acf3480"
+      },
+      {
+        "namespace": "mfm",
+        "id": "27162b9e-7b88-4242-802f-ab58c931ea8f"
+      }
+    ]
   },
   {
     "id": "shield-of-faith-army-of-faith",
@@ -642,11 +954,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "shield-of-faith-army-of-faith",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dca63860-e0ef-5282-bfd6-12e0fe0b6a60"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b086ec0e-3e1e-40a6-bcfe-f84331200399"
+      }
+    ]
   },
   {
     "id": "spirit-of-the-martyr-hallowed-martyrs",
@@ -661,11 +983,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "spirit-of-the-martyr-hallowed-martyrs",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3f0385ea-9188-5265-82a2-18018b42465e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "00b13eda-7883-4367-a3db-75713aaada52"
+      }
+    ]
   },
   {
     "id": "suffer-not-the-unfaithful-champions-of-faith",
@@ -681,11 +1013,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "suffer-not-the-unfaithful-champions-of-faith",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fd983395-9cd5-597e-915e-e42cd7eab955"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2241be95-0945-4554-993e-e8a5d41c88b2"
+      }
+    ]
   },
   {
     "id": "suffering-and-sacrifice-hallowed-martyrs",
@@ -700,11 +1042,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "suffering-and-sacrifice-hallowed-martyrs",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0a69d500-8fee-5800-812a-24430564adca"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5313fb29-85be-4a3b-b476-a85efc41e764"
+      }
+    ]
   },
   {
     "id": "take-cover-sanctuary-guardians",
@@ -723,7 +1075,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "437926f7-ad38-4d68-905c-e387c87ec61b"
+      }
+    ]
   },
   {
     "id": "to-the-heart-of-heresy-champions-of-faith",
@@ -738,11 +1096,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "to-the-heart-of-heresy-champions-of-faith",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "03de9e4c-cd61-5387-aa47-c2079e2536f9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "233adae4-81a7-4967-af0c-8b819f453d70"
+      }
+    ]
   },
   {
     "id": "unflinching-determination-sacred-champions",
@@ -760,6 +1128,16 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6422fee7-280f-5fae-adb8-71451fef49fc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "941baf14-ed21-4f5c-a3b3-74d91db967b9"
+      }
+    ]
   }
 ]

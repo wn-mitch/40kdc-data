@@ -11,7 +11,6 @@
       "iron-resolve-1st-company-task-force"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-liberator-assault-group",
       "heroes-of-the-chapter-1st-company-task-force",
       "legendary-fortitude-1st-company-task-force",
       "terrifying-proficiency-1st-company-task-force",
@@ -24,7 +23,7 @@
     },
     "detachment_points": 2,
     "force_dispositions": [
-      "priority-assets"
+      "purge-the-foe"
     ]
   },
   {
@@ -39,7 +38,6 @@
       "fire-discipline-gladius-task-force"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-liberator-assault-group",
       "honour-the-chapter-gladius-task-force",
       "storm-of-fire-gladius-task-force",
       "only-in-death-does-duty-end-gladius-task-force",
@@ -67,7 +65,6 @@
       "hunters-instincts-stormlance-task-force"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-liberator-assault-group",
       "blitzing-fusillade-stormlance-task-force",
       "shock-assault-stormlance-task-force",
       "ride-hard-ride-fast-stormlance-task-force",
@@ -117,7 +114,6 @@
       "shadow-war-veteran-vanguard-spearhead"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-liberator-assault-group",
       "strike-from-the-shadows-vanguard-spearhead",
       "surgical-strikes-vanguard-spearhead",
       "calculated-feint-vanguard-spearhead",
@@ -173,7 +169,6 @@
     ],
     "stratagem_ids": [
       "battle-drill-recall-anvil-siege-force",
-      "armour-of-contempt-liberator-assault-group",
       "no-threat-too-great-anvil-siege-force",
       "rigid-discipline-anvil-siege-force",
       "not-one-backwards-step-anvil-siege-force",
@@ -200,7 +195,6 @@
       "adamantine-mantle-firestorm-assault-force"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-liberator-assault-group",
       "crucible-of-battle-firestorm-assault-force",
       "onslaught-of-fire-firestorm-assault-force",
       "burning-vengeance-firestorm-assault-force",
@@ -213,7 +207,7 @@
     },
     "detachment_points": 2,
     "force_dispositions": [
-      "purge-the-foe"
+      "priority-assets"
     ]
   },
   {
@@ -229,7 +223,6 @@
     ],
     "stratagem_ids": [
       "unbowed-conviction-ironstorm-spearhead",
-      "armour-of-contempt-liberator-assault-group",
       "mercy-is-weakness-ironstorm-spearhead",
       "vengeful-animus-ironstorm-spearhead",
       "ancient-fury-ironstorm-spearhead",
@@ -241,7 +234,7 @@
     },
     "detachment_points": 2,
     "force_dispositions": [
-      "purge-the-foe"
+      "take-and-hold"
     ]
   },
   {
@@ -264,7 +257,7 @@
     },
     "detachment_points": 1,
     "force_dispositions": [
-      "disruption"
+      "reconnaissance"
     ]
   },
   {
@@ -287,7 +280,7 @@
     },
     "detachment_points": 1,
     "force_dispositions": [
-      "reconnaissance"
+      "disruption"
     ]
   },
   {
@@ -305,7 +298,6 @@
       "machine-wrath-armoured-speartip",
       "ceramite-sledgehammer-armoured-speartip",
       "advanced-deployment-armoured-speartip",
-      "armour-of-contempt-liberator-assault-group",
       "purgation-doctrine-armoured-speartip",
       "rapid-embarkation-firestorm-assault-force"
     ],
@@ -361,7 +353,6 @@
       "stand-to-the-end-ceramite-sentinels",
       "priority-strike-ceramite-sentinels",
       "augmented-targeting-ceramite-sentinels",
-      "armour-of-contempt-liberator-assault-group",
       "evasive-repositioning-ceramite-sentinels"
     ],
     "game_version": {
@@ -385,7 +376,6 @@
       "astartes-tank-ace-aura-headhunter-task-force"
     ],
     "stratagem_ids": [
-      "armour-of-contempt-liberator-assault-group",
       "rapid-gunnery-headhunter-task-force",
       "reactive-repositioning-headhunter-task-force",
       "target-weak-point-headhunter-task-force",

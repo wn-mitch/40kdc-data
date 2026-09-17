@@ -6,6 +6,7 @@
     "Berzerker Warband"
   ],
   "battle_size_raw": "Strike Force (2000 Point limit)",
+  "force_disposition_raw_name": null,
   "declared_limit": 2000,
   "total_reported": 725,
   "total_computed": 725,
@@ -13,11 +14,13 @@
     {
       "raw_name": "Daemon Prince of Khorne",
       "is_character": true,
+      "keyword_overrides": [],
       "model_count": 1,
       "points": 200,
       "is_warlord": true,
       "enhancement_raw_name": null,
       "enhancement_points": null,
+      "leader_attachment": null,
       "wargear": [
         {
           "raw_name": "Infernal cannon",
@@ -27,16 +30,34 @@
           "raw_name": "Hellforged weapons",
           "count": 1
         }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Daemon Prince of Khorne",
+          "count": 1,
+          "wargear": [
+            {
+              "raw_name": "Infernal cannon",
+              "count": 1
+            },
+            {
+              "raw_name": "Hellforged weapons",
+              "count": 1
+            }
+          ]
+        }
       ]
     },
     {
       "raw_name": "Chaos Terminators",
       "is_character": false,
+      "keyword_overrides": [],
       "model_count": 10,
       "points": 350,
       "is_warlord": false,
       "enhancement_raw_name": null,
       "enhancement_points": null,
+      "leader_attachment": null,
       "wargear": [
         {
           "raw_name": "Chainfist",
@@ -63,11 +84,13 @@
     {
       "raw_name": "Chaos Terminators",
       "is_character": false,
+      "keyword_overrides": [],
       "model_count": 5,
       "points": 175,
       "is_warlord": false,
       "enhancement_raw_name": null,
       "enhancement_points": null,
+      "leader_attachment": null,
       "wargear": [
         {
           "raw_name": "Chainfist",

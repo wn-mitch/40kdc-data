@@ -39,6 +39,26 @@
             ]
           },
           {
+            "id": "cfg-force-disposition",
+            "name": "Force Disposition",
+            "type": "upgrade",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Configuration",
+                "primary": true
+              }
+            ],
+            "selections": [
+              {
+                "id": "cfg-force-disposition-val",
+                "name": "Priority Assets",
+                "type": "upgrade",
+                "number": 1
+              }
+            ]
+          },
+          {
             "id": "u-0",
             "name": "Jain Zar",
             "type": "model",
@@ -57,6 +77,12 @@
               }
             ],
             "selections": [
+              {
+                "id": "u0-warlord",
+                "name": "Warlord",
+                "type": "upgrade",
+                "number": 1
+              },
               {
                 "id": "w-0",
                 "name": "Silent Death",

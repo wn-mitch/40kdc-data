@@ -83,19 +83,21 @@ pub use data::{normalize_name, Collection, Dataset, RawData, ReactiveTrigger};
 
 pub use data::{
     base_loadout, base_unit_points, check_unit_legality, clamp_weapon_count, group_loadout,
-    loadout_models, loadout_tiers, maximal_loadout, option_cap, points_tier_missing,
-    validate_loadout, Loadout, LoadoutGroup, LoadoutGroupWeapon, LoadoutModel, LoadoutTier,
-    Violation, ViolationCode, WeaponBound,
+    loadout_candidates, loadout_models, loadout_tiers, maximal_loadout, option_cap,
+    points_tier_missing, validate_loadout, Loadout, LoadoutGroup, LoadoutGroupWeapon, LoadoutModel,
+    LoadoutTier, Violation, ViolationCode, WeaponBound, LOADOUT_CANDIDATES_DEFAULT_LIMIT,
+    LOADOUT_CANDIDATES_TRUNCATED,
 };
 
 // Roster-level legality + affordability primitives (need both the Dataset and
 // the importer's Roster/BattleSize types).
 #[cfg(feature = "import")]
 pub use data::{
-    candidate_affordability, check_roster, detachment_cap_for_battle_size,
-    points_limit_for_battle_size, validate_roster_core, AffordabilitySpec, AffordabilityUnit,
-    CandidateCost, NormRoster, NormUnit, RosterLegality, RosterViolation, RosterViolationCode,
-    Severity as RosterSeverity, UnitLegality,
+    candidate_affordability, check_roster, complete_loadout, detachment_cap_for_battle_size,
+    points_limit_for_battle_size, validate_roster_core,
+    validate_roster_core_with_keyword_overrides, AffordabilitySpec, AffordabilityUnit,
+    CandidateCost, CompletedLoadout, NormRoster, NormUnit, RosterLegality, RosterViolation,
+    RosterViolationCode, Severity as RosterSeverity, UnitLegality,
 };
 
 /// Army-list importer: ListForge share payload + NewRecruit (JSON / wtc /

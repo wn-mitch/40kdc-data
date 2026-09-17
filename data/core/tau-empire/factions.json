@@ -11,7 +11,19 @@
       "T’au Empire"
     ],
     "aliases": [],
-    "faction_rule_id": "for-the-greater-good",
-    "logo_url": "https://cdn.jsdelivr.net/gh/Certseeds/wh40k-icon@be230023ff0755d19ffb1a1762658c711c2887f9/src/svgs/xenos/tau_empire/tau-sept.svg"
+    "logo_url": "https://cdn.jsdelivr.net/gh/Certseeds/wh40k-icon@be230023ff0755d19ffb1a1762658c711c2887f9/src/svgs/xenos/tau_empire/tau-sept.svg",
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1a241f8e-2d79-47c4-82b1-f6faea353970"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1a241f8e-2d79-47c4-82b1-f6faea353970"
+      }
+    ],
+    "faction_rule_ids": [
+      "for-the-greater-good"
+    ]
   }
 ]

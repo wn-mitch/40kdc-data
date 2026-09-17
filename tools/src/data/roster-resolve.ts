@@ -12,7 +12,7 @@ import type { Dataset } from "./dataset.js";
 import type { UnitView, WeaponView } from "./entities.js";
 import { detachmentCapForBattleSize, pointsLimitForBattleSize } from "./battle-sizes.js";
 import { checkUnitLegality, type Violation } from "./loadout.js";
-import { baseUnitPoints, wargearPoints } from "./pricing.js";
+import { hostUnitPoints, wargearPoints } from "./pricing.js";
 
 /**
  * Resolve a roster's unit entry against the dataset, returning the linked
@@ -183,6 +183,7 @@ interface NormUnit {
   unitId: string;
   modelCount: number;
   isWarlord: boolean;
+  keywordOverrides?: string[];
   enhancementId: string | null;
   leaderBodyguardId: string | null;
   counts: Map<string, number>;
@@ -230,8 +231,43 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
     }
     return dataset.units.getAny(unitId);
   };
-  const keywordSet = (view: UnitView): Set<string> =>
-    new Set<string>([...(view.raw.keywords ?? []), ...(view.raw.faction_keywords ?? [])]);
+  // The army faction's keywords ([Imperium, Adeptus Astartes, Blood Angels]
+  // for a chapter): every unit in the faction's pool owns them — the
+  // <CHAPTER>-style keyword that chapter-shared datasheet records can't
+  // carry. Granted with the same subset rule that scopes a chapter's unit
+  // pool, so allied units never gain them.
+  const armyKeywords: string[] = spec.factionId
+    ? (dataset.factions.get(spec.factionId)?.raw.keywords ?? [])
+    : [];
+  const armyKeywordSet = new Set<string>(armyKeywords);
+  const keywordSet = (view: UnitView, unit?: NormUnit): Set<string> => {
+    const owned = new Set<string>([
+      ...(view.raw.keywords ?? []),
+      ...(view.raw.faction_keywords ?? []),
+      view.raw.name,
+    ]);
+    const factionKws = view.raw.faction_keywords ?? [];
+    if (armyKeywordSet.size > 0 && factionKws.every((k) => armyKeywordSet.has(k))) {
+      for (const k of armyKeywords) owned.add(k);
+    }
+      for (const grant of view.raw.conditional_keywords ?? []) {
+        if (
+          grant.required_detachment_id &&
+          !spec.detachmentIds.includes(grant.required_detachment_id)
+        ) {
+          continue;
+        }
+        if (
+          grant.required_faction_keyword &&
+          !armyKeywordSet.has(grant.required_faction_keyword)
+        ) {
+          continue;
+        }
+        owned.add(grant.keyword);
+      }
+    for (const keyword of unit?.keywordOverrides ?? []) owned.add(keyword);
+    return owned;
+  };
   const isCharacter = (view: UnitView): boolean => {
     const r = view.raw.role;
     return r === "character" || r === "epic-hero" || (view.raw.keywords ?? []).includes("Character");
@@ -270,7 +306,6 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
         dataset.detachments.getAny(id),
     )
     .filter((d): d is Detachment => d !== undefined);
-  const primary = detachments[0];
 
   // --- Enhancements: per-unit eligibility + army-wide uniqueness. -----------
   const enhUses = new Map<string, number>();
@@ -282,11 +317,18 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
     if (!enh || !view) return;
     if (!spec.detachmentIds.includes(enh.detachment_id))
       err("enhancement-wrong-detachment", enh.id, `${enh.id} is not from a detachment in this roster`, idx);
-    if (!isCharacter(view) && enh.upgrade_tag !== true)
+    if (
+      !isCharacter(view) &&
+      !su.keywordOverrides?.includes("Character") &&
+      enh.upgrade_tag !== true
+    )
       err("enhancement-on-non-character", enh.id, `${enh.id} can only be taken by a Character`, idx);
-    const kws = keywordSet(view);
-    if ((enh.keyword_restrictions ?? []).some((k) => !kws.has(k)))
-      err("enhancement-keyword-mismatch", enh.id, `${view.id} lacks a keyword required by ${enh.id}`, idx);
+    const kws = keywordSet(view, su);
+    const eligible = enh.keyword_restriction_groups
+      ? enh.keyword_restriction_groups.some((group) => group.every((keyword) => kws.has(keyword)))
+      : (enh.keyword_restrictions ?? []).every((keyword) => kws.has(keyword));
+    if (!eligible)
+      err("enhancement-keyword-mismatch", enh.id, `${view.id} lacks an eligible keyword group for ${enh.id}`, idx);
     if ((enh.exclusion_keywords ?? []).some((k) => kws.has(k)))
       err("enhancement-excluded-keyword", enh.id, `${view.id} carries a keyword excluded by ${enh.id}`, idx);
   });
@@ -300,15 +342,24 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
     const view = views[idx];
     if (!view) return;
     if (su.leaderBodyguardId) {
-      const eligible = dataset.bodyguardsAttachableFrom(view.id).map((v) => v.id);
-      if (!eligible.includes(su.leaderBodyguardId))
+      const eligible = new Set(dataset.bodyguardsAttachableFrom(view.id).map((v) => v.id));
+      const enhancement = su.enhancementId ? dataset.enhancements.get(su.enhancementId) : undefined;
+      for (const bodyguardId of enhancement?.attachment_bodyguard_ids ?? []) eligible.add(bodyguardId);
+      if (!eligible.has(su.leaderBodyguardId))
         err("leader-attachment-illegal", view.id, `${view.id} cannot attach to ${su.leaderBodyguardId}`, idx);
-    } else if (view.raw.attachment_role === "support") {
+    } else if (
+      view.raw.attachment_role === "support" &&
+      (isCharacter(view) || su.keywordOverrides?.includes("Character") === true)
+    ) {
       err("leader-must-attach", view.id, `${view.id} is a Support character and must attach to a unit`, idx);
     }
   });
 
   // --- Points total (ordinal-aware) + wargear + enhancement costs. ----------
+  // Host-aware: a foreign unit with an allied_points entry for this army
+  // (Agents' Imperium price, a chapter's reprice of a shared datasheet)
+  // prices from that entry, not its native table.
+  const rosterFaction = spec.factionId ? dataset.factions.get(spec.factionId)?.raw : undefined;
   const ordinals = new Map<string, number>();
   let total = 0;
   spec.units.forEach((su, idx) => {
@@ -316,7 +367,7 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
     if (!view) return;
     const ord = (ordinals.get(su.unitId) ?? 0) + 1;
     ordinals.set(su.unitId, ord);
-    total += baseUnitPoints(view.raw, su.modelCount, ord);
+    total += hostUnitPoints(view.raw, su.modelCount, ord, rosterFaction);
     total += wargearPoints(view.raw, su.counts);
     if (su.enhancementId) total += dataset.enhancements.get(su.enhancementId)?.cost ?? 0;
   });
@@ -331,10 +382,16 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
     err("detachment-points-over", "roster", `detachments cost ${dpUsed} DP, over the ${cap} budget`);
 
   // --- Force disposition (advisory / warn). ---------------------------------
+  // Any selected detachment may grant the pick; detachments whose data does
+  // not record force_dispositions are skipped, and when none record them the
+  // check is inconclusive and stays silent.
   if (spec.forceDisposition == null) {
     push("warn", "disposition-not-picked", "roster", "no Force Disposition selected");
-  } else if (primary?.force_dispositions && !primary.force_dispositions.includes(spec.forceDisposition)) {
-    push("warn", "disposition-invalid", spec.forceDisposition, `${spec.forceDisposition} is not offered by ${primary.id}`);
+  } else {
+    const recorded = detachments.filter((d) => d.force_dispositions);
+    if (recorded.length > 0 && !recorded.some((d) => d.force_dispositions!.includes(spec.forceDisposition!))) {
+      push("warn", "disposition-invalid", spec.forceDisposition, `${spec.forceDisposition} is not offered by any selected detachment`);
+    }
   }
 
   // --- Detachment tag uniqueness (one per shared tag). ----------------------
@@ -350,7 +407,7 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
     spec.units.forEach((su, idx) => {
       const view = views[idx];
       if (!view) return;
-      const kws = keywordSet(view);
+      const kws = keywordSet(view, su);
       if ((r.required_keywords ?? []).some((k) => !kws.has(k)))
         err("detachment-restriction-required", view.id, `${view.id} lacks a keyword required by ${d.id}`, idx);
       if ((r.excluded_keywords ?? []).some((k) => kws.has(k)))
@@ -389,7 +446,10 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
   // --- Unit minimums (e.g. Houndpack: 3+ WAR DOG units). --------------------
   for (const d of detachments) {
     for (const um of d.unit_minimums ?? []) {
-      const count = views.filter((v) => v !== undefined && keywordSet(v).has(um.keyword)).length;
+      const count = views.filter(
+        (view, index) =>
+          view !== undefined && keywordSet(view, spec.units[index]).has(um.keyword),
+      ).length;
       if (count < um.min)
         err("unit-minimum-unmet", um.keyword, `${d.id} requires ${um.min}+ ${um.keyword} units, found ${count}`);
     }
@@ -424,6 +484,7 @@ export function checkRoster(roster: Roster, dataset: Dataset): RosterLegality {
         unitId: u.ref.id ?? "",
         modelCount: u.model_count,
         isWarlord: u.is_warlord,
+        keywordOverrides: u.keyword_overrides ?? [],
         enhancementId: u.enhancement?.id ?? null,
         leaderBodyguardId: u.leader_attachment?.bodyguard_ref.id ?? null,
         counts,

@@ -1,0 +1,19 @@
+{
+  "name": "tankbusta Hunter rokkit profile vs knight paladin",
+  "attacker": { "weaponId": "rokkit-launcha-tankbustas", "profileIndex": 1 },
+  "modelsFiring": 1,
+  "target": { "unitId": "knight-paladin", "profileIndex": 0 },
+  "context": { "phase": "shooting" },
+  "buffs": [],
+  "expected": {
+    "stages": {
+      "attacks": 3,
+      "hits": 1.5,
+      "wounds": 1,
+      "unsaved": 0.6667,
+      "damage": 2,
+      "after-fnp": 2,
+      "models-killed": 0.0769
+    }
+  }
+}

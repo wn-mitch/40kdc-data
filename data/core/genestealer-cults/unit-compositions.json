@@ -16,7 +16,54 @@
           "shape": "oval",
           "width": 60,
           "length": 35.5
-        }
+        },
+        "loadout_variants": [
+          {
+            "name": "Atalan Jackal w/ Grenade launcher",
+            "weapon_ids": [
+              "grenade-launcher",
+              "close-combat-weapon"
+            ],
+            "max_count": 2
+          },
+          {
+            "name": "Atalan Jackal",
+            "weapon_ids": [
+              "close-combat-weapon",
+              "atalan-small-arms"
+            ],
+            "max_count": 8
+          },
+          {
+            "name": "Atalan Jackal w/ Atalan power weapon",
+            "weapon_ids": [
+              "atalan-small-arms",
+              "atalan-power-weapon"
+            ],
+            "max_count": 4
+          },
+          {
+            "name": "Atalan Jackal w/ Grenade launcher & power weapon",
+            "weapon_ids": [
+              "grenade-launcher",
+              "atalan-power-weapon"
+            ],
+            "max_count": 2
+          }
+        ],
+        "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Atalan Jackal w/ Grenade launcher",
+              "Atalan Jackal",
+              "Atalan Jackal w/ Atalan power weapon",
+              "Atalan Jackal w/ Grenade launcher & power weapon"
+            ],
+            "count": 8,
+            "per_models": 0,
+            "scope": "model-row"
+          }
+        ]
       },
       {
         "name": "Atalan Wolfquad",
@@ -152,7 +199,56 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 25
-        }
+        },
+        "loadout_variants": [
+          {
+            "name": "Neophyte Hybrid w/ Hybrid Firearm",
+            "weapon_ids": [
+              "hybrid-firearm",
+              "autopistol",
+              "close-combat-weapon-neophyte-hybrids"
+            ],
+            "max_count": 19
+          },
+          {
+            "name": "Neophyte Hybrid w/ Hybrid Firearm & Cult Icon",
+            "weapon_ids": [
+              "hybrid-firearm",
+              "autopistol",
+              "close-combat-weapon-neophyte-hybrids"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Neophyte Hybrid w/ Heavy Weapon",
+            "weapon_ids": [
+              "close-combat-weapon-neophyte-hybrids",
+              "autopistol"
+            ],
+            "max_count": 4
+          },
+          {
+            "name": "Neophyte Hybrid w/ Special Weapon",
+            "weapon_ids": [
+              "autopistol",
+              "close-combat-weapon-neophyte-hybrids"
+            ],
+            "max_count": 4
+          }
+        ],
+        "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Neophyte Hybrid w/ Hybrid Firearm",
+              "Neophyte Hybrid w/ Hybrid Firearm & Cult Icon",
+              "Neophyte Hybrid w/ Heavy Weapon",
+              "Neophyte Hybrid w/ Special Weapon"
+            ],
+            "count": 19,
+            "per_models": 0,
+            "scope": "model-row"
+          }
+        ]
       }
     ],
     "game_version": {
@@ -347,9 +443,10 @@
           "diameter": 25
         },
         "default_weapon_ids": [
-          "injector-goad",
+          "autopistol-biophagus",
           "chemical-vials",
-          "autopistol-biophagus"
+          "injector-goad",
+          "alchemicus-familiar"
         ]
       }
     ],
@@ -724,7 +821,44 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
-        }
+        },
+        "loadout_variants": [
+          {
+            "name": "Acolyte Hybrid w/ Auto Pistol",
+            "weapon_ids": [
+              "autopistol",
+              "cult-claws-and-knife"
+            ],
+            "max_count": 9
+          },
+          {
+            "name": "Acolyte Hybrid w/ Cult Icon",
+            "weapon_ids": [
+              "cult-icon",
+              "cult-claws-and-knife"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Acolyte Hybrid w/ Heavy Mining Tool",
+            "weapon_ids": [
+              "heavy-mining-tool"
+            ],
+            "max_count": 6
+          }
+        ],
+        "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Acolyte Hybrid w/ Auto Pistol",
+              "Acolyte Hybrid w/ Cult Icon",
+              "Acolyte Hybrid w/ Heavy Mining Tool"
+            ],
+            "count": 9,
+            "per_models": 0,
+            "scope": "model-row"
+          }
+        ]
       }
     ],
     "game_version": {
@@ -793,7 +927,43 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
-        }
+        },
+        "loadout_variants": [
+          {
+            "name": "Hybrid Metamorph w/ Autopistol",
+            "weapon_ids": [
+              "metamorph-mutations",
+              "autopistol"
+            ]
+          },
+          {
+            "name": "Hybrid Metamorph w/ Cult Icon",
+            "weapon_ids": [
+              "cult-icon",
+              "metamorph-mutations"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Hybrid Metamorph w/ Hand Flamer",
+            "weapon_ids": [
+              "hand-flamer",
+              "metamorph-mutations"
+            ]
+          }
+        ],
+        "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Hybrid Metamorph w/ Autopistol",
+              "Hybrid Metamorph w/ Cult Icon",
+              "Hybrid Metamorph w/ Hand Flamer"
+            ],
+            "count": 9,
+            "per_models": 0,
+            "scope": "model-row"
+          }
+        ]
       }
     ],
     "game_version": {
@@ -862,7 +1032,35 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
-        }
+        },
+        "loadout_variants": [
+          {
+            "name": "Acolyte Hybrid w/ Hand Flamer",
+            "weapon_ids": [
+              "hand-flamer",
+              "cult-claws-and-knife"
+            ]
+          },
+          {
+            "name": "Acolyte Hybrid w/ Cult Icon",
+            "weapon_ids": [
+              "cult-icon",
+              "cult-claws-and-knife"
+            ],
+            "max_count": 1
+          }
+        ],
+        "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Acolyte Hybrid w/ Hand Flamer",
+              "Acolyte Hybrid w/ Cult Icon"
+            ],
+            "count": 9,
+            "per_models": 0,
+            "scope": "model-row"
+          }
+        ]
       }
     ],
     "game_version": {
@@ -1077,6 +1275,232 @@
         "models": [
           {
             "name": "Magus",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "claw-of-ascension-achilles-ridgerunner",
+    "faction_id": "genestealer-cults",
+    "models": [
+      {
+        "name": "Achilles Ridgerunner",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        },
+        "default_weapon_ids": [
+          "armoured-hull-achilles-ridgerunners",
+          "missile-launcher",
+          "survey-augur",
+          "twin-heavy-stubber"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Achilles Ridgerunner",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "claw-of-ascension-atalan-jackals",
+    "faction_id": "genestealer-cults",
+    "models": [
+      {
+        "name": "Atalan Jackal with Power Weapon",
+        "profile_name": "Atalan Jackal",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        },
+        "default_weapon_ids": [
+          "atalan-power-weapon",
+          "stolen-firearms"
+        ]
+      },
+      {
+        "name": "Atalan Wolfquad",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        },
+        "default_weapon_ids": [
+          "mining-laser",
+          "stolen-blade",
+          "stolen-firearms"
+        ]
+      },
+      {
+        "name": "Atalan Jackal",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        },
+        "default_weapon_ids": [
+          "stolen-blade",
+          "stolen-firearms"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Atalan Jackal with Power Weapon",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Atalan Wolfquad",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Atalan Jackal",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "claw-of-ascension-hybrid-metamorphs",
+    "faction_id": "genestealer-cults",
+    "models": [
+      {
+        "name": "Metamorph",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "metamorph-mutations"
+        ]
+      },
+      {
+        "name": "Metamorph Leader",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "autopistol",
+          "leaders-weapon-symbiote"
+        ]
+      },
+      {
+        "name": "Metamorph with Hand Flamer",
+        "profile_name": "Metamorph",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "hand-flamer",
+          "metamorph-mutations"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Metamorph",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Metamorph Leader",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Metamorph with Hand Flamer",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "shanus-daskovian",
+    "faction_id": "genestealer-cults",
+    "models": [
+      {
+        "name": "Shanus Daskovian",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
+        },
+        "default_weapon_ids": [
+          "autopistol-jackal-alphus",
+          "cult-sniper-rifle-jackal-alphus",
+          "stolen-blade"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Shanus Daskovian",
             "min": 1,
             "max": 1
           }

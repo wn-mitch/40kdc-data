@@ -6,7 +6,7 @@
 
 #![cfg(feature = "bundled-data")]
 
-use wh40kdc::{normalize_name, Dataset, Phase, RawData};
+use wh40kdc::{normalize_name, Collection, Dataset, ExternalReference, Phase, RawData};
 
 // --- normalize_name ---------------------------------------------------------
 
@@ -112,6 +112,50 @@ fn by_faction_disambiguates_a_shared_unit() {
             "by_faction({f}) should contain the priest"
         );
     }
+}
+
+#[test]
+fn by_external_ref_returns_every_exact_match() {
+    #[derive(Debug)]
+    struct Item {
+        id: &'static str,
+        refs: Vec<ExternalReference>,
+    }
+    let reference = |namespace: &str, id: &str| {
+        serde_json::from_value(serde_json::json!({ "namespace": namespace, "id": id })).unwrap()
+    };
+    let collection = Collection::build(
+        vec![
+            Item {
+                id: "first",
+                refs: vec![
+                    reference("source", "shared"),
+                    reference("source", "alternate"),
+                ],
+            },
+            Item {
+                id: "second",
+                refs: vec![reference("source", "shared")],
+            },
+        ],
+        |item| item.id.to_string(),
+        |_| None,
+        |_| None,
+        |item| item.id.to_string(),
+    )
+    .with_external_refs(|item| &item.refs);
+
+    let ids = |namespace: &str, id: &str| {
+        collection
+            .by_external_ref(namespace, id)
+            .into_iter()
+            .map(|item| item.id)
+            .collect::<Vec<_>>()
+    };
+    assert_eq!(ids("source", "shared"), vec!["first", "second"]);
+    assert_eq!(ids("source", "alternate"), vec!["first"]);
+    assert!(ids("Source", "shared").is_empty());
+    assert!(ids("source", "Shared").is_empty());
 }
 
 // --- unscoped-lookup guard ---------------------------------------------------
@@ -498,12 +542,16 @@ fn collection_is_iterable() {
 #[test]
 fn terrain_catalog_and_layouts_are_embedded() {
     let ds = Dataset::embedded();
-    // 5 areas + 11 GW features after the catalog correction (walls / old corners
-    // / old scenery removed), plus the KOTC `impassable-wall` and the two dense
-    // KOTC ruin area templates (`kotc-ruin-inner`, `kotc-ruin-deployment`).
-    // Elevated-only and solid pieces set ground_accessible = false;
-    // ruins/platforms carry an upper_floor.
-    assert_eq!(ds.terrain_templates.len(), 19);
+    // 19 canonical/KOTC templates plus Battlemaster's feature and composed
+    // area variants (minor count variance when BM adds layout variety, same
+    // tolerance as the TS data-model test). Every variant has a stable ID.
+    assert!(ds.terrain_templates.len() >= 70);
+    let sample = ds
+        .terrain_templates
+        .iter()
+        .find(|template| template.name.as_str() == "Battlemaster BigRect CD EF 01")
+        .expect("Battlemaster composite");
+    assert_eq!(sample.features.len(), 2);
     assert!(ds.terrain_templates.get("area-large").is_some());
     for ruin in ["kotc-ruin-inner", "kotc-ruin-deployment"] {
         assert_eq!(
@@ -538,7 +586,7 @@ fn terrain_catalog_and_layouts_are_embedded() {
     );
     assert!(ds.terrain_templates.get("wall-medium").is_none());
     assert!(ds.terrain_templates.get("scaffold").is_none());
-    assert!(ds.terrain_layouts.get("take-and-hold-mirror-1").is_some());
+    assert!(ds.terrain_layouts.get("bm-take-vs-disrupt-01").is_some());
     // The KOTC colosseum is a first-class dataset layout on a 36×36 board.
     let colosseum = ds
         .terrain_layouts
@@ -557,13 +605,15 @@ fn resolve_terrain_produces_board_vertices() {
     let ds = Dataset::embedded();
     let layout = ds
         .terrain_layouts
-        .get("take-and-hold-mirror-1")
-        .expect("take-and-hold-mirror-1 layout");
+        .get("bm-take-vs-disrupt-01")
+        .expect("bm-take-vs-disrupt-01 layout");
     let resolved = ds
         .resolve_terrain(layout)
         .expect("resolves against embedded catalog");
     assert!(!resolved.is_empty());
-    // Every resolved piece is a polygon (>= 3 vertices) inside the 60x44 board.
+    // Source outlines may extend just over 1" beyond the nominal board edge;
+    // Battlemaster dimensions retain their thousandth-inch measurement precision.
+    const EDGE_OVERHANG: f64 = 1.01;
     for p in &resolved {
         assert!(
             p.vertices.len() >= 3,
@@ -572,7 +622,10 @@ fn resolve_terrain_produces_board_vertices() {
         );
         for v in &p.vertices {
             assert!(
-                v.x >= -1.0 && v.x <= 61.0 && v.y >= -1.0 && v.y <= 45.0,
+                v.x >= -EDGE_OVERHANG
+                    && v.x <= 60.0 + EDGE_OVERHANG
+                    && v.y >= -EDGE_OVERHANG
+                    && v.y <= 44.0 + EDGE_OVERHANG,
                 "vertex off-board: {v:?}"
             );
         }
@@ -620,7 +673,7 @@ fn teq_profile_resolves_to_terminator_stats() {
         .find(|u| u.id.as_str() == p.unit_id.as_str())
         .expect("terminator-squad resolves in adeptus-astartes");
     let prof = &unit.profiles[0];
-    assert_eq!(prof.t.get(), 5);
+    assert_eq!(prof.t.get(), 6);
     assert_eq!(prof.sv, 2);
     assert_eq!(prof.invuln_sv, Some(4));
     assert_eq!(prof.w.get(), 3);

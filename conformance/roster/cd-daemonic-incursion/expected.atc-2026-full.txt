@@ -2,7 +2,7 @@
 + PLAYER NAME: —
 + TEAM NAME: —
 + FACTIONS USED: Chaos Daemons
-+ DISPOSITION: —
++ DISPOSITION: Take And Hold
 + DETACHMENT: Daemonic Incursion
 + ARMY POINTS: 1995pts
 +

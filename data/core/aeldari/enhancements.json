@@ -5,7 +5,8 @@
     "detachment_id": "windrider-host",
     "cost": 10,
     "keyword_restrictions": [
-      "Aeldari"
+      "Asuryani",
+      "Mounted"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -15,7 +16,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4d830d57-92e4-5064-bfd2-dbb383779be3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fb8a0e05-6f2c-49f6-aa41-963dfe850ef3"
+      }
+    ]
   },
   {
     "id": "phoenix-gem-warhost",
@@ -23,7 +34,7 @@
     "detachment_id": "warhost",
     "cost": 35,
     "keyword_restrictions": [
-      "Aeldari"
+      "Asuryani"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -33,7 +44,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "657a693d-f57a-5be1-a6a3-bef24b8d4da4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d9b0f7e9-a70c-42d2-9c5a-177bdef1b3ba"
+      }
+    ]
   },
   {
     "id": "mirage-field-windrider-host",
@@ -41,7 +62,8 @@
     "detachment_id": "windrider-host",
     "cost": 25,
     "keyword_restrictions": [
-      "Aeldari"
+      "Asuryani",
+      "Mounted"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -51,7 +73,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ee42b854-4529-5227-a60d-63f7501a2158"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c73157aa-c3a9-4b4b-a079-fa4317388710"
+      }
+    ]
   },
   {
     "id": "seersight-strike-windrider-host",
@@ -59,7 +91,9 @@
     "detachment_id": "windrider-host",
     "cost": 15,
     "keyword_restrictions": [
-      "Aeldari"
+      "Asuryani",
+      "Mounted",
+      "Psyker"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -69,7 +103,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c4ea3701-3e69-59b3-997f-5a39516a2125"
+      },
+      {
+        "namespace": "mfm",
+        "id": "16d5e738-7ef2-4b1c-8ab2-0d06387fe9c8"
+      }
+    ]
   },
   {
     "id": "echoes-of-ulthanesh-windrider-host",
@@ -77,7 +121,8 @@
     "detachment_id": "windrider-host",
     "cost": 20,
     "keyword_restrictions": [
-      "Aeldari"
+      "Asuryani",
+      "Mounted"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -87,7 +132,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c893bf2f-c929-5474-95c1-5f5cec5dad38"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ac56444c-3a73-4bc2-840f-bf2bc77224cd"
+      }
+    ]
   },
   {
     "id": "guiding-presence-armoured-warhost",
@@ -95,7 +150,8 @@
     "detachment_id": "armoured-warhost",
     "cost": 25,
     "keyword_restrictions": [
-      "Aeldari"
+      "Aeldari",
+      "Psyker"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -105,7 +161,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a948cce5-b375-56f9-9153-cbad4319d175"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ee7b206e-5fe4-4050-8d7b-9e5f569adc9f"
+      }
+    ]
   },
   {
     "id": "light-of-clarity-spirit-conclave",
@@ -113,7 +179,7 @@
     "detachment_id": "spirit-conclave",
     "cost": 30,
     "keyword_restrictions": [
-      "Aeldari"
+      "Spiritseer"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -123,7 +189,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4f875461-e788-5bab-b545-e86a8bd5671b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "518aa1c5-0552-4956-a26e-1f1b0ef0735d"
+      }
+    ]
   },
   {
     "id": "stave-of-kurnos-spirit-conclave",
@@ -167,7 +243,7 @@
     "detachment_id": "spirit-conclave",
     "cost": 10,
     "keyword_restrictions": [
-      "Aeldari"
+      "Spiritseer"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -177,7 +253,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5ba2120d-67ab-5ba6-a46f-d886b79464d4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a22be813-ff64-4ee5-9f34-63af27d95c0f"
+      }
+    ]
   },
   {
     "id": "spirit-stone-of-raelyth-armoured-warhost",
@@ -185,7 +271,8 @@
     "detachment_id": "armoured-warhost",
     "cost": 20,
     "keyword_restrictions": [
-      "Aeldari"
+      "Aeldari",
+      "Psyker"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -195,7 +282,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e5e2a9df-ae12-5a0f-b981-9583b9e51bdf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c6afafd7-2084-43da-af98-5ea9d98ed9f3"
+      }
+    ]
   },
   {
     "id": "guileful-strategist-armoured-warhost",
@@ -221,7 +318,7 @@
     "detachment_id": "spirit-conclave",
     "cost": 25,
     "keyword_restrictions": [
-      "Aeldari"
+      "Spiritseer"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -231,7 +328,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0ad238be-1d6d-5d3f-a4d5-0b6540832587"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2eaf00bc-71f8-4f67-826a-25be5f237381"
+      }
+    ]
   },
   {
     "id": "cegorachs-coil-ghosts-of-the-webway",
@@ -239,7 +346,7 @@
     "detachment_id": "ghosts-of-the-webway",
     "cost": 25,
     "keyword_restrictions": [
-      "Aeldari"
+      "Troupe Master"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -249,7 +356,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d2f4f362-9376-57a0-b82b-27a8354e0ffa"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9a257477-1660-4fad-a6dd-87d8d883f102"
+      }
+    ]
   },
   {
     "id": "mask-of-secrets-ghosts-of-the-webway",
@@ -257,7 +374,7 @@
     "detachment_id": "ghosts-of-the-webway",
     "cost": 15,
     "keyword_restrictions": [
-      "Aeldari"
+      "Harlequins"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -267,7 +384,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "27cb2ce6-0704-52c1-8d9e-ba302d0f5243"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1350fccf-0b94-40fb-a7eb-35f5f21a88ec"
+      }
+    ]
   },
   {
     "id": "murders-jest-ghosts-of-the-webway",
@@ -275,7 +402,7 @@
     "detachment_id": "ghosts-of-the-webway",
     "cost": 20,
     "keyword_restrictions": [
-      "Aeldari"
+      "Death Jester"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -285,7 +412,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cd459bd8-7b9f-5536-a60e-5bbd8174c87e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3a24874a-1649-4168-a7d3-e10d6a6ad595"
+      }
+    ]
   },
   {
     "id": "mistweave-ghosts-of-the-webway",
@@ -293,7 +430,7 @@
     "detachment_id": "ghosts-of-the-webway",
     "cost": 15,
     "keyword_restrictions": [
-      "Aeldari"
+      "Shadowseer"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -303,7 +440,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "04afb711-4711-5e17-b933-9cc5eeaaa77d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "67e3f31f-1ec0-4ad5-b92e-c5e9d7ce7146"
+      }
+    ]
   },
   {
     "id": "timeless-strategist-warhost",
@@ -311,7 +458,7 @@
     "detachment_id": "warhost",
     "cost": 15,
     "keyword_restrictions": [
-      "Aeldari"
+      "Asuryani"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -321,7 +468,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "be6ce130-98c3-5082-ac69-46f7c1c7274b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dc2d066c-2c3b-4d13-8251-71b0f38a46ef"
+      }
+    ]
   },
   {
     "id": "gift-of-foresight-warhost",
@@ -329,7 +486,7 @@
     "detachment_id": "warhost",
     "cost": 15,
     "keyword_restrictions": [
-      "Aeldari"
+      "Asuryani"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -339,7 +496,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7cdc1938-3c02-516d-a639-235915d03975"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7b9fda2-ee8a-4a67-9273-c78b672faf83"
+      }
+    ]
   },
   {
     "id": "psychic-destroyer-warhost",
@@ -347,7 +514,8 @@
     "detachment_id": "warhost",
     "cost": 30,
     "keyword_restrictions": [
-      "Aeldari"
+      "Asuryani",
+      "Psyker"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -357,7 +525,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "09137b36-b4cb-59f0-9aee-c108cec2860e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7c7a454e-4548-414f-9cf1-5faf80dddd9d"
+      }
+    ]
   },
   {
     "id": "craftworlds-champion-guardian-battlehost",
@@ -365,7 +543,7 @@
     "detachment_id": "guardian-battlehost",
     "cost": 25,
     "keyword_restrictions": [
-      "Aeldari"
+      "Asuryani"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -375,7 +553,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "675a6706-474b-5804-9935-6b66ab1b6564"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0ab6c77a-f7e0-4175-a08a-d7ac02cee847"
+      }
+    ]
   },
   {
     "id": "ethereal-pathway-guardian-battlehost",
@@ -383,7 +571,7 @@
     "detachment_id": "guardian-battlehost",
     "cost": 30,
     "keyword_restrictions": [
-      "Aeldari"
+      "Asuryani"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -393,7 +581,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "61a72592-1cd6-5bb9-9826-c4305bc9ab55"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b9241196-72d9-4b64-94f2-7e485bf0a84b"
+      }
+    ]
   },
   {
     "id": "protector-of-the-paths-guardian-battlehost",
@@ -401,7 +599,7 @@
     "detachment_id": "guardian-battlehost",
     "cost": 20,
     "keyword_restrictions": [
-      "Aeldari"
+      "Asuryani"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -411,7 +609,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e71abc4a-a242-5cd5-8699-7c36a0bc845c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f0cce164-4c78-40a7-8b37-448cd4dc2d0c"
+      }
+    ]
   },
   {
     "id": "breath-of-vaul-guardian-battlehost",
@@ -419,7 +627,7 @@
     "detachment_id": "guardian-battlehost",
     "cost": 10,
     "keyword_restrictions": [
-      "Aeldari"
+      "Asuryani"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -429,7 +637,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2d12016e-bbbe-5486-828b-51ba88206bbd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a6dc92ee-14cc-409a-adb4-12aeb3178bce"
+      }
+    ]
   },
   {
     "id": "gaze-of-ynnead-devoted-of-ynnead",
@@ -437,7 +655,7 @@
     "detachment_id": "devoted-of-ynnead",
     "cost": 15,
     "keyword_restrictions": [
-      "Aeldari"
+      "Farseer"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -447,7 +665,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6e969fd4-a743-5bfe-8541-85aa43b0daad"
+      },
+      {
+        "namespace": "mfm",
+        "id": "26849fdc-c5cb-4c85-b018-9a4be81c4266"
+      }
+    ]
   },
   {
     "id": "storm-of-whispers-devoted-of-ynnead",
@@ -455,7 +683,7 @@
     "detachment_id": "devoted-of-ynnead",
     "cost": 10,
     "keyword_restrictions": [
-      "Aeldari"
+      "Warlock"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -465,7 +693,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "86f38f5a-417a-5041-ba7a-d669f6237060"
+      },
+      {
+        "namespace": "mfm",
+        "id": "988e0966-960b-4c51-9589-fd0e01942b13"
+      }
+    ]
   },
   {
     "id": "borrowed-vigour-devoted-of-ynnead",
@@ -473,7 +711,7 @@
     "detachment_id": "devoted-of-ynnead",
     "cost": 10,
     "keyword_restrictions": [
-      "Aeldari"
+      "Archon"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -483,7 +721,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a1ea6b6d-2b07-5070-acb6-49b7f76f3ce0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4c728b85-8794-4043-9890-15c62ee1ee74"
+      }
+    ]
   },
   {
     "id": "morbid-might-devoted-of-ynnead",
@@ -491,7 +739,7 @@
     "detachment_id": "devoted-of-ynnead",
     "cost": 15,
     "keyword_restrictions": [
-      "Aeldari"
+      "Succubus"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -501,7 +749,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bef7a706-036a-5734-911a-6732ebdd5f97"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4400e72b-4375-4bce-b0ec-68b7d2011328"
+      }
+    ]
   },
   {
     "id": "lucid-eye-seer-council",
@@ -509,7 +767,8 @@
     "detachment_id": "seer-council",
     "cost": 30,
     "keyword_restrictions": [
-      "Aeldari"
+      "Asuryani",
+      "Psyker"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -519,7 +778,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "021c5fa4-4893-5d19-ba46-6d422ff758fc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2829e959-9dd5-485b-ad55-9b162e11d54f"
+      }
+    ]
   },
   {
     "id": "runes-of-warding-seer-council",
@@ -527,7 +796,8 @@
     "detachment_id": "seer-council",
     "cost": 25,
     "keyword_restrictions": [
-      "Aeldari"
+      "Asuryani",
+      "Psyker"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -537,7 +807,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b04b1c2c-bda9-5f12-a73b-50b97e9a0c66"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c2eaaffb-4410-4c56-ba4c-f24c5b725653"
+      }
+    ]
   },
   {
     "id": "stone-of-eldritch-fury-seer-council",
@@ -545,7 +825,8 @@
     "detachment_id": "seer-council",
     "cost": 15,
     "keyword_restrictions": [
-      "Aeldari"
+      "Asuryani",
+      "Psyker"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -555,7 +836,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3ae2bca2-7d57-509c-b8ed-e7e615157fef"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d4232944-2e90-4b98-8350-2fedc2258f40"
+      }
+    ]
   },
   {
     "id": "torc-of-morai-heg-seer-council",
@@ -563,7 +854,8 @@
     "detachment_id": "seer-council",
     "cost": 20,
     "keyword_restrictions": [
-      "Aeldari"
+      "Asuryani",
+      "Psyker"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -573,16 +865,23 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8c644daa-ee8e-5929-bfa6-b51405ffcc36"
+      },
+      {
+        "namespace": "mfm",
+        "id": "aed77636-0e18-4093-a0b3-778692d22602"
+      }
+    ]
   },
   {
     "id": "aspect-of-murder-aspect-host",
     "name": "Aspect of Murder",
     "detachment_id": "aspect-host",
     "cost": 15,
-    "keyword_restrictions": [
-      "Aeldari"
-    ],
     "ability_id": null,
     "is_unique": true,
     "game_version": {
@@ -591,16 +890,31 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Autarch"
+      ],
+      [
+        "Autarch Wayleaper"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2c49e215-8d97-5eaf-99b9-a47b1199037e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "af33d000-b02d-40ef-9c11-0e0e92432740"
+      }
+    ]
   },
   {
     "id": "mantle-of-wisdom-aspect-host",
     "name": "Mantle of Wisdom",
     "detachment_id": "aspect-host",
     "cost": 20,
-    "keyword_restrictions": [
-      "Aeldari"
-    ],
     "ability_id": null,
     "is_unique": true,
     "game_version": {
@@ -609,16 +923,31 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Autarch Wayleaper"
+      ],
+      [
+        "Autarch"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dd73ff97-f6da-5bf6-a62f-098bc8eae319"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1ae1869b-921c-48fa-9c64-69dd2b1da1b0"
+      }
+    ]
   },
   {
     "id": "shimmerstone-aspect-host",
     "name": "Shimmerstone",
     "detachment_id": "aspect-host",
     "cost": 10,
-    "keyword_restrictions": [
-      "Aeldari"
-    ],
     "ability_id": null,
     "is_unique": true,
     "game_version": {
@@ -627,16 +956,31 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Autarch Wayleaper"
+      ],
+      [
+        "Autarch"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e37071e9-6464-567f-b6d4-fc388c82324a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "94c1a89a-9440-4408-86ab-de0674cc8068"
+      }
+    ]
   },
   {
     "id": "strategic-savant-aspect-host",
     "name": "Strategic Savant",
     "detachment_id": "aspect-host",
     "cost": 10,
-    "keyword_restrictions": [
-      "Aeldari"
-    ],
     "ability_id": null,
     "is_unique": true,
     "game_version": {
@@ -645,7 +989,25 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Autarch Wayleaper"
+      ],
+      [
+        "Autarch"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6c73d18d-ac39-5278-94b9-55e7177975fc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8d9c8be4-f9d6-4cf2-bdf9-1b50f5e73c04"
+      }
+    ]
   },
   {
     "id": "key-of-ghosts-serpents-brood",
@@ -653,7 +1015,7 @@
     "detachment_id": "serpents-brood",
     "cost": 20,
     "keyword_restrictions": [
-      "Aeldari"
+      "Harlequins"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -666,6 +1028,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Solitaire"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "be8d73f0-d43c-57b2-b6ec-4c2fcfa4a21a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "39ac87c1-1d96-4aaf-909b-6addb2fa6cad"
+      }
     ]
   },
   {
@@ -674,7 +1046,7 @@
     "detachment_id": "serpents-brood",
     "cost": 20,
     "keyword_restrictions": [
-      "Aeldari"
+      "Troupe Master"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -684,7 +1056,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a50d96e3-be0e-5d29-8b52-4cf131e62c33"
+      },
+      {
+        "namespace": "mfm",
+        "id": "964c822b-33e6-412a-8ebd-fa8d57373161"
+      }
+    ]
   },
   {
     "id": "fanged-leer-serpents-brood",
@@ -692,7 +1074,7 @@
     "detachment_id": "serpents-brood",
     "cost": 10,
     "keyword_restrictions": [
-      "Aeldari"
+      "Death Jester"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -702,7 +1084,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "253eeae3-4a54-5d08-b194-8233757c53d0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "aadd7a8b-5a65-42f3-81fc-ec7af02d3685"
+      }
+    ]
   },
   {
     "id": "shedskin-raiment-serpents-brood",
@@ -710,7 +1102,7 @@
     "detachment_id": "serpents-brood",
     "cost": 25,
     "keyword_restrictions": [
-      "Aeldari"
+      "Shadowseer"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -720,7 +1112,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bbfa3df8-630b-5a6c-94d9-16afd73a5f39"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f76c75df-3d07-400d-9d6e-95dd4fea6446"
+      }
+    ]
   },
   {
     "id": "pirate-prince-eldritch-raiders",
@@ -728,7 +1130,7 @@
     "detachment_id": "eldritch-raiders",
     "cost": 15,
     "keyword_restrictions": [
-      "Aeldari"
+      "Prince Yriel"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -738,7 +1140,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "308679b6-4c85-5487-8f1c-cbc9378997cf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "df9c2882-bb85-422e-a0b9-bc4073a61dca"
+      }
+    ]
   },
   {
     "id": "alacritous-assault-eldritch-raiders",
@@ -746,7 +1158,7 @@
     "detachment_id": "eldritch-raiders",
     "cost": 20,
     "keyword_restrictions": [
-      "Aeldari"
+      "Anhrathe"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -756,7 +1168,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "64e4827d-be8c-5daf-97e8-bfd359eb9f49"
+      },
+      {
+        "namespace": "mfm",
+        "id": "00eb75e2-21f5-445c-8fd4-431a1133ceb6"
+      }
+    ]
   },
   {
     "id": "exotic-munitions-eldritch-raiders",
@@ -764,7 +1186,7 @@
     "detachment_id": "eldritch-raiders",
     "cost": 15,
     "keyword_restrictions": [
-      "Aeldari"
+      "Anhrathe"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -774,7 +1196,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a120f0dd-6c8c-5fd3-b08c-7e6196717f49"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4ac38d29-d3a8-4299-b36d-adce59b94bb7"
+      }
+    ]
   },
   {
     "id": "adrenal-infusions-eldritch-raiders",
@@ -782,7 +1214,8 @@
     "detachment_id": "eldritch-raiders",
     "cost": 20,
     "keyword_restrictions": [
-      "Aeldari"
+      "Anhrathe",
+      "Infantry"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -792,7 +1225,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7dd44d35-1fce-5225-ba30-2967e312dd83"
+      },
+      {
+        "namespace": "mfm",
+        "id": "077c4e3a-5f38-4e34-99c5-afaee553a5ee"
+      }
+    ]
   },
   {
     "id": "infamy-aura-corsair-coterie",
@@ -800,7 +1243,7 @@
     "detachment_id": "corsair-coterie",
     "cost": 25,
     "keyword_restrictions": [
-      "Aeldari"
+      "Anhrathe"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -810,7 +1253,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "28e3eafa-354d-5dc6-a682-da25de3dd291"
+      },
+      {
+        "namespace": "mfm",
+        "id": "558885b8-e1fc-4c9e-8100-f7402cbda111"
+      }
+    ]
   },
   {
     "id": "webway-pathstone-corsair-coterie",
@@ -818,7 +1271,7 @@
     "detachment_id": "corsair-coterie",
     "cost": 25,
     "keyword_restrictions": [
-      "Aeldari"
+      "Anhrathe"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -828,7 +1281,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8193c288-5d08-5642-814e-1d77b3561489"
+      },
+      {
+        "namespace": "mfm",
+        "id": "867996f1-aa68-4a1d-a57c-bc2ee1e0e36d"
+      }
+    ]
   },
   {
     "id": "archraider-corsair-coterie",
@@ -836,7 +1299,8 @@
     "detachment_id": "corsair-coterie",
     "cost": 35,
     "keyword_restrictions": [
-      "Aeldari"
+      "Anhrathe",
+      "Character"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -846,7 +1310,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "73ea0ea2-34a4-5d6e-95b2-f3407609d394"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ba1c51ea-71ba-47bc-8e62-298f4ad9f391"
+      }
+    ]
   },
   {
     "id": "voidstone-corsair-coterie",
@@ -854,7 +1328,8 @@
     "detachment_id": "corsair-coterie",
     "cost": 15,
     "keyword_restrictions": [
-      "Aeldari"
+      "Anhrathe",
+      "Infantry"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -864,7 +1339,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5e3d9be9-98d2-5cf1-9d03-876d0554cdcc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1b083a45-8703-43da-8966-0c3340d8c4e2"
+      }
+    ]
   },
   {
     "id": "a-foot-in-the-future-fateful-performance",
@@ -872,7 +1357,8 @@
     "detachment_id": "fateful-performance",
     "cost": 15,
     "keyword_restrictions": [
-      "Aeldari"
+      "Harlequins",
+      "Troupe Master"
     ],
     "ability_id": "a-foot-in-the-future-fateful-performance",
     "is_unique": true,
@@ -882,7 +1368,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f346a86a-a29d-544b-ba0a-4d75d1b364c1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a7de918-b766-40e7-b070-5b35c1bedad5"
+      }
+    ]
   },
   {
     "id": "mistweave-fateful-performance",
@@ -890,7 +1386,8 @@
     "detachment_id": "fateful-performance",
     "cost": 20,
     "keyword_restrictions": [
-      "Aeldari"
+      "Harlequins",
+      "Shadowseer"
     ],
     "ability_id": "mistweave-fateful-performance",
     "is_unique": true,
@@ -900,7 +1397,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "abaedcb3-251b-51fe-a99d-62db77db4e89"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0b334c87-9ac3-471d-9708-20ecb762b900"
+      }
+    ]
   },
   {
     "id": "camouflaged-snipers-upgrade-path-of-the-outcast",
@@ -908,7 +1415,8 @@
     "detachment_id": "path-of-the-outcast",
     "cost": 10,
     "keyword_restrictions": [
-      "Aeldari"
+      "Asuryani",
+      "Rangers"
     ],
     "ability_id": "camouflaged-snipers-path-of-the-outcast",
     "is_unique": true,
@@ -918,7 +1426,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "183adba3-812b-56ff-8530-ce730708cbb2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "654f52bb-4966-4254-bdd1-242d120c8f03"
+      }
+    ]
   },
   {
     "id": "shadowfall-masks-upgrade-twilight-flickers",
@@ -926,7 +1444,8 @@
     "detachment_id": "twilight-flickers",
     "cost": 15,
     "keyword_restrictions": [
-      "Aeldari"
+      "Harlequins",
+      "Troupe"
     ],
     "ability_id": "shadowfall-masks-twilight-flickers",
     "is_unique": true,
@@ -936,7 +1455,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fc758d4f-f386-5d84-9559-8296569e4044"
+      },
+      {
+        "namespace": "mfm",
+        "id": "627a96a6-71e7-4eb1-81ef-83be078a8900"
+      }
+    ]
   },
   {
     "id": "prelude-performer-twilight-flickers",
@@ -944,7 +1473,7 @@
     "detachment_id": "twilight-flickers",
     "cost": 20,
     "keyword_restrictions": [
-      "Aeldari"
+      "Harlequins"
     ],
     "ability_id": "prelude-performer-twilight-flickers",
     "is_unique": true,
@@ -954,7 +1483,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9d068447-3cc8-5235-abbc-86fde7f0001b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "be347cc7-e483-497b-a475-0d5d3be07a32"
+      }
+    ]
   },
   {
     "id": "guided-jump-kygharils-protectors",
@@ -971,10 +1510,15 @@
     ],
     "points_provisional": false,
     "keyword_restrictions": [
-      "Kygharil's Protectors",
-      "Warp Spiders"
+      "Kygharil's Protectors Warp Spiders"
     ],
-    "upgrade_tag": true
+    "upgrade_tag": true,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9f284647-768c-470b-a84e-42450935b075"
+      }
+    ]
   },
   {
     "id": "seers-hand-kygharils-protectors",
@@ -991,8 +1535,76 @@
     ],
     "points_provisional": false,
     "keyword_restrictions": [
-      "Kygharil's Protectors",
+      "Spiritseer Kygharil"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "38c84028-2718-4537-bf80-3808d06997bd"
+      }
+    ]
+  },
+  {
+    "id": "stave-of-kurnous-spirit-conclave",
+    "name": "Stave of Kurnous",
+    "detachment_id": "spirit-conclave",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
       "Spiritseer"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c9e99ad2-3ce8-52e6-b06c-f5b65e5ab86b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "282aca3c-3003-4f0c-beaa-48e503c7cea5"
+      }
+    ]
+  },
+  {
+    "id": "assassins-eye-upgrade-path-of-the-outcast",
+    "name": "Assassins' Eye (Upgrade)",
+    "detachment_id": "path-of-the-outcast",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restriction_groups": [
+      [
+        "Asuryani",
+        "Rangers"
+      ],
+      [
+        "Asuryani",
+        "Shroud Runners"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a22e7f61-f769-58ee-b046-d2b0b03bd45d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "95508954-f634-4150-9300-b76953d3217f"
+      }
     ]
   }
 ]

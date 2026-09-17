@@ -439,6 +439,15 @@ def match_stamps_to_pieces(
 
 MIRROR_PAGES = {9: "take-and-hold-mirror-1", 10: "take-and-hold-mirror-2", 11: "take-and-hold-mirror-3"}
 
+# Semantic labels from the Event Companion's terrain key. They are a validation
+# witness for the xref-derived calibration below, never a source of pose data.
+SEMANTIC_TEMPLATE_SEEDS = {
+    "AB": "corner-ruin-balanced-left",
+    "CD": "corner-ruin-balanced-right",
+    "EF": "corner-ruin-left",
+    "GH": "corner-ruin-right",
+}
+
 
 def load_dataset():
     layouts = {l["id"]: l for l in json.loads(LAYOUTS_PATH.read_text())}
@@ -562,14 +571,15 @@ def cmd_calibrate(args) -> int:
             pieces = resolved_pieces_with_meta(layouts[layout_id], templates)
             total += len(match_stamps_to_pieces(stamps, pieces, args.gate))
         scores[name] = total
-    orientation = max(scores, key=lambda k: scores[k])
+    best_score = max(scores.values(), default=0)
+    winners = [name for name, score in scores.items() if score == best_score]
+    if len(winners) != 1:
+        sys.exit(f"orientation calibration is ambiguous: {scores}")
+    orientation = winners[0]
     print(f"orientation search: {scores} -> {orientation}")
 
     # Iterative witness harvest. GW reuses several artwork variants per
-    # template (pages 10/11 introduce xrefs absent from page 9), and raw
-    # geometric matching on a page weakens once art slop creeps in — so each
-    # round first *extracts* with the witnesses found so far, then matches
-    # only the still-unknown stamps against the still-unclaimed truth pieces.
+    # template, so each round explains known xrefs before fitting new ones.
     votes: dict[int, list[dict]] = defaultdict(list)
     known: set[int] = set()
     for round_no in range(1, 6):
@@ -580,20 +590,13 @@ def cmd_calibrate(args) -> int:
             page_to_board = base.compose(ORIENTATIONS[orientation])
             stamps = page_stamps(page, page_to_board, board_info)
             pieces = resolved_pieces_with_meta(layouts[layout_id], templates)
-
-            # Truth pieces already explained by a known-xref stamp are claimed
-            # (same size-aware matcher, so a pipe stamp can't eat an area row).
             unknown_stamps = [s for s in stamps if s["xref"] not in known]
             known_stamps = [s for s in stamps if s["xref"] in known]
             claimed_ids = {
                 p["id"] for _s, p, _d in match_stamps_to_pieces(known_stamps, pieces, args.gate)
             }
             open_pieces = [p for p in pieces if p["id"] not in claimed_ids]
-
             for s, p, d in match_stamps_to_pieces(unknown_stamps, open_pieces, args.gate):
-                # Witness: C maps template-local -> artwork-unit coords — a
-                # constant of the artwork (up to footprint symmetry, which
-                # doesn't change resolved geometry). `verify` is the arbiter.
                 c_mat = p["mat"].compose(s["mat"].invert())
                 votes[s["xref"]].append({
                     "template": p["template"],
@@ -609,9 +612,13 @@ def cmd_calibrate(args) -> int:
             break
         print(f"round {round_no}: {len(known)} xrefs known")
 
-    # Pick the lowest-cost witness per xref; report template consensus.
     SCRAPE_DIR.mkdir(parents=True, exist_ok=True)
-    calibration: dict = {"orientation": orientation, "xrefs": {}}
+    calibration: dict = {
+        "orientation": orientation,
+        "orientation_scores": scores,
+        "semantic_template_seeds": SEMANTIC_TEMPLATE_SEEDS,
+        "xrefs": {},
+    }
     for xref, vs in sorted(votes.items()):
         templates_seen = sorted({v["template"] for v in vs})
         witness = min(vs, key=lambda v: v["match_dist"])
@@ -667,6 +674,11 @@ def extract_page(doc, page_no: int, calibration: dict, templates: list[dict]) ->
         pieces.append({
             "id": f"{cal['template']}-{counter[cal['template']]}",
             "template": cal["template"],
+            "xref": s["xref"],
+            "match_distance_in": 0.0,
+            "calibration_votes": cal.get("votes", 0),
+            "board_vertices": board_verts,
+            "vertex_residual_in": err,
             **fields,
         })
     return pieces, unknown
@@ -734,6 +746,125 @@ def _poly_delta(a: list[tuple[float, float]], b: list[tuple[float, float]]) -> f
     return best
 
 
+
+def _pose(piece: dict) -> dict:
+    return {
+        "position": piece["position"],
+        "rotation_degrees": piece.get("rotation_degrees", 0),
+        "mirror": piece.get("mirror", "none"),
+    }
+
+
+def candidate_record(
+    doc, page_no: int, layout: dict, calibration: dict, templates: list[dict]
+) -> dict:
+    """Emit a conservative, review-first comparison record for one PDF page."""
+    page = doc[page_no - 1]
+    base, _board_info = board_transform(page)
+    matrix = base.compose(ORIENTATIONS[calibration["orientation"]])
+    candidate, unknown = extract_page(doc, page_no, calibration, templates)
+    source_by_id = {p["id"]: p for p in layout.get("pieces", []) if p.get("id")}
+    truth = resolved_pieces_with_meta(layout, templates)
+    used_truth: set[str] = set()
+    kind_of = {t["id"]: t["kind"] for t in templates}
+    rows = []
+    for proposed in candidate:
+        centroid = polygon_centroid(proposed["board_vertices"])
+        matches = [
+            target for target in truth
+            if target["id"] not in used_truth and target["template"] == proposed["template"]
+        ]
+        target = min(matches, key=lambda item: math.dist(centroid, item["centroid"])) if matches else None
+        if target:
+            used_truth.add(target["id"])
+        source = source_by_id.get(target["id"]) if target else None
+        kind = kind_of.get(proposed["template"], "feature")
+        residual = _poly_delta(proposed["board_vertices"], target["vertices"]) if target else math.inf
+        on_board = all(0 <= x <= BOARD_W and 0 <= y <= BOARD_H for x, y in proposed["board_vertices"])
+        # Areas are decorative art and parented features require editor-frame
+        # mutation to preserve their area-local pose, so both remain review-only.
+        accepted = bool(
+            target and source and kind == "feature" and not source.get("parent_area_id")
+            and not unknown and residual <= 0.35 and on_board
+        )
+        rows.append({
+            "piece_id": target["id"] if target else proposed["id"],
+            "template": proposed["template"],
+            "parent_area_id": source.get("parent_area_id") if source else None,
+            "twin_id": source.get("twin_id") if source else None,
+            "canonical": _pose(source) if source else None,
+            "proposed": _pose(proposed),
+            "delta_board": {
+                "dx": round(centroid[0] - target["centroid"][0], 4) if target else None,
+                "dy": round(centroid[1] - target["centroid"][1], 4) if target else None,
+            },
+            "vertex_residual_in": round(residual, 4) if math.isfinite(residual) else None,
+            "match_distance_in": round(proposed["match_distance_in"], 4),
+            "confidence": {
+                "score": 1.0 if accepted else 0.0,
+                "calibration_votes": proposed["calibration_votes"],
+                "unique_match": target is not None,
+            },
+            "action": "accept" if accepted else "review",
+        })
+    unresolved = list(unknown)
+    if len(rows) != len(candidate) or len(used_truth) != len(candidate):
+        unresolved.append({"gate": "every stamp must resolve to one canonical piece"})
+    return {
+        "layout_id": layout["id"],
+        "pdf_page": page_no,
+        "board_transform": {
+            "matrix": [round(v, 6) for v in (matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f)],
+            "orientation": calibration["orientation"],
+        },
+        "pieces": rows,
+        "unresolved": unresolved,
+    }
+
+
+def parse_page_layout_selection(pages_arg: str | None, layout_ids_arg: str | None) -> list[tuple[int, str]]:
+    if not pages_arg or not layout_ids_arg:
+        raise ValueError("extract requires both --pages and --layout-ids")
+    pages = [int(page) for page in pages_arg.split(",") if page]
+    layout_ids = [layout_id for layout_id in layout_ids_arg.split(",") if layout_id]
+    if len(pages) != len(layout_ids):
+        raise ValueError("--pages and --layout-ids must have the same number of entries")
+    if len(set(pages)) != len(pages) or len(set(layout_ids)) != len(layout_ids):
+        raise ValueError("pages and layout ids must each be unique")
+    return list(zip(pages, layout_ids))
+
+
+def has_unique_orientation(calibration: dict) -> bool:
+    scores = calibration.get("orientation_scores", {})
+    return bool(
+        calibration.get("orientation")
+        and scores
+        and list(scores.values()).count(max(scores.values())) == 1
+    )
+
+
+def cmd_extract(args) -> int:
+    if not args.pdf or not args.pdf.is_absolute():
+        sys.exit("extract requires an explicit absolute --pdf path")
+    try:
+        selections = parse_page_layout_selection(args.pages, args.layout_ids)
+    except ValueError as error:
+        sys.exit(str(error))
+    doc = open_pdf(args.pdf)
+    layouts, templates = load_dataset()
+    cal_path = SCRAPE_DIR / "calibration.json"
+    if not cal_path.exists():
+        sys.exit("run `calibrate` first")
+    calibration = json.loads(cal_path.read_text())
+    if not has_unique_orientation(calibration):
+        sys.exit("calibration does not have a unique orientation winner")
+    for page_no, layout_id in selections:
+        if page_no < 1 or page_no > len(doc):
+            sys.exit(f"page outside PDF: {page_no}")
+        if layout_id not in layouts:
+            sys.exit(f"unknown layout id: {layout_id}")
+        print(json.dumps(candidate_record(doc, page_no, layouts[layout_id], calibration, templates), separators=(",", ":")))
+    return 0
 def cmd_verify(args) -> int:
     doc = open_pdf(args.pdf)
     layouts, templates = load_dataset()
@@ -780,6 +911,9 @@ def main() -> int:
     cal = sub.add_parser("calibrate")
     cal.add_argument("--gate", type=float, default=1.5, help="stamp-piece match gate, inches")
     cal.add_argument("--offset-spread", type=float, default=0.1)
+    ext = sub.add_parser("extract")
+    ext.add_argument("--pages", help="comma-separated 1-based PDF page numbers")
+    ext.add_argument("--layout-ids", help="comma-separated terrain layout ids, paired with --pages")
     ver = sub.add_parser("verify")
     ver.add_argument("--tolerance", type=float, default=0.25)
     # GW's decorative area splats carry up to ~1.3in of print slop relative to
@@ -787,8 +921,8 @@ def main() -> int:
     ver.add_argument("--area-tolerance", type=float, default=1.5)
     ver.add_argument("--verbose", action="store_true")
     args = ap.parse_args()
-    return {"selfcheck": cmd_selfcheck, "census": cmd_census,
-            "calibrate": cmd_calibrate, "verify": cmd_verify}[args.cmd](args)
+    return {"selfcheck": cmd_selfcheck, "census": cmd_census, "calibrate": cmd_calibrate,
+            "extract": cmd_extract, "verify": cmd_verify}[args.cmd](args)
 
 
 if __name__ == "__main__":

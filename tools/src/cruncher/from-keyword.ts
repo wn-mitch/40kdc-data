@@ -10,10 +10,10 @@
  *    the engine knows about — and produces `Buff`s with
  *    `source.kind = "weapon-keyword"`.
  *
- * 2. **Id dispatch**, for the eight rules whose catalog `effect` is null
- *    because the DSL has no primitive for them yet — `lethal-hits`,
- *    `sustained-hits`, `devastating-wounds`, `anti`, `melta`, `rapid-fire`,
- *    `torrent`, `ignores-cover`. These are surfaced as `extra-keyword` buffs
+ * 2. **Id dispatch**, for rules whose catalog `effect` is null because the DSL
+ *    has no primitive for them yet — `lethal-hits`, `sustained-hits`,
+ *    `devastating-wounds`, `anti`, `melta`, `rapid-fire`, `torrent`, `blast`,
+ *    and `ignores-cover`. These are surfaced as `extra-keyword` buffs
  *    so the engine can read them out of `ResolvedModifiers.extraKeywords`
  *    and dispatch its math directly.
  *
@@ -31,9 +31,25 @@ const ENGINE_DISPATCH_KEYWORDS = new Set([
   "melta",
   "rapid-fire",
   "torrent",
+  "blast",
   "ignores-cover",
 ]);
 
+
+function keywordAppliesToTarget(
+  parameters: Record<string, unknown> | undefined,
+  context: EngineContext,
+): boolean {
+  if (!parameters) return true;
+  const targetKeywords = new Set((context.targetKeywords ?? []).map((keyword) => keyword.toLowerCase()));
+  const required = parameters.required_target_keywords_any;
+  if (Array.isArray(required) && !required.some((keyword) => typeof keyword === "string" && targetKeywords.has(keyword.toLowerCase()))) {
+    return false;
+  }
+  const excluded = parameters.excluded_target_keywords;
+  return !Array.isArray(excluded)
+    || !excluded.some((keyword) => typeof keyword === "string" && targetKeywords.has(keyword.toLowerCase()));
+}
 /**
  * Convert a single weapon-keyword reference (catalog effect + reference-site
  * parameters) into the buff contributions it makes against `context`.
@@ -50,6 +66,8 @@ export function buffsFromKeyword(args: {
     weaponId: args.weaponId,
     keywordId: args.keywordId,
   };
+  if (!keywordAppliesToTarget(args.parameters, args.context)) return [];
+  if (args.keywordId === "blast" && args.parameters?.value === undefined) return [];
 
   if (ENGINE_DISPATCH_KEYWORDS.has(args.keywordId)) {
     const ref: WeaponKeywordRef = {

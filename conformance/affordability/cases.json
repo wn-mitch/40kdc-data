@@ -31,7 +31,7 @@
       },
       {
         "unitId": "chaos-terminators",
-        "nextCopyCost": 175,
+        "nextCopyCost": 165,
         "affordable": true
       },
       {
@@ -63,7 +63,7 @@
     "expected": [
       {
         "unitId": "chaos-terminators",
-        "nextCopyCost": 185,
+        "nextCopyCost": 175,
         "affordable": true
       }
     ]
@@ -101,7 +101,7 @@
       },
       {
         "unitId": "chaos-terminators",
-        "nextCopyCost": 175,
+        "nextCopyCost": 165,
         "affordable": false
       },
       {
@@ -180,12 +180,68 @@
       },
       {
         "unitId": "chaos-terminators",
-        "nextCopyCost": 175,
+        "nextCopyCost": 165,
         "affordable": true
       },
       {
         "unitId": "daemon-prince-of-khorne",
         "nextCopyCost": 200,
+        "affordable": true
+      }
+    ]
+  },
+  {
+    "name": "allied-pricing-imperium-host",
+    "note": "Foreign agents units in a Blood Angels army price from their imperium allied_points entries (vindicare 125 not 110, exaction 85 not 90); the native death-company-marines control stays at its own points table.",
+    "args": {
+      "factionId": "blood-angels",
+      "battleSize": "incursion",
+      "units": [],
+      "candidateUnitIds": [
+        "vindicare-assassin",
+        "exaction-squad",
+        "death-company-marines"
+      ]
+    },
+    "expected": [
+      {
+        "unitId": "death-company-marines",
+        "nextCopyCost": 85,
+        "affordable": true
+      },
+      {
+        "unitId": "exaction-squad",
+        "nextCopyCost": 85,
+        "affordable": true
+      },
+      {
+        "unitId": "vindicare-assassin",
+        "nextCopyCost": 125,
+        "affordable": true
+      }
+    ]
+  },
+  {
+    "name": "allied-pricing-own-army-native",
+    "note": "In the unit's OWN army the native table applies even though agents-of-the-imperium itself carries the Imperium keyword — the own-faction guard beats the keyword match.",
+    "args": {
+      "factionId": "agents-of-the-imperium",
+      "battleSize": "incursion",
+      "units": [],
+      "candidateUnitIds": [
+        "vindicare-assassin",
+        "exaction-squad"
+      ]
+    },
+    "expected": [
+      {
+        "unitId": "exaction-squad",
+        "nextCopyCost": 90,
+        "affordable": true
+      },
+      {
+        "unitId": "vindicare-assassin",
+        "nextCopyCost": 110,
         "affordable": true
       }
     ]

@@ -41,6 +41,20 @@ def _lazy_embedded_dataset() -> Dataset:
     return _embedded_dataset
 
 
+def profile_can_target(profile: dict[str, Any], target: dict[str, Any]) -> bool:
+    """Return whether profile-level restrictions permit selecting ``target``."""
+    restrictions = profile.get("target_restrictions")
+    if not restrictions:
+        return True
+    keywords = set(_unit_keywords_lower(target))
+    required = restrictions.get("required_keywords_any") or []
+    if required and not any(str(keyword).lower() in keywords for keyword in required):
+        return False
+    return not any(
+        str(keyword).lower() in keywords for keyword in restrictions.get("excluded_keywords") or []
+    )
+
+
 def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
     """Compute the expected per-stage projection for one
     (attacker, target, buffs) triple.
@@ -73,6 +87,10 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
             f"unit {unit['id']}"
         )
     unit_profile = unit["profiles"][target_profile_index]
+    if not profile_can_target(weapon_profile, unit):
+        raise ValueError(
+            f"crunch: weapon {weapon['id']} profile {profile_index} cannot target unit {unit['id']}"
+        )
 
     target_keywords = _unit_keywords_lower(unit)
     ctx: EngineContext = dict(input["context"])
@@ -105,7 +123,12 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
         target_model_count = (unit.get("model_count") or {}).get("min")
     if target_model_count is None:
         target_model_count = 1
-    blast_extra = math.floor(target_model_count / 5) if blast else 0
+    blast_extra = (
+        math.floor(target_model_count / 5)
+        * eval_stat_value((blast.get("parameters") or {}).get("value", 1))
+        if blast
+        else 0
+    )
     attacks = input["modelsFiring"] * (attacks_per_model + rapid_fire_extra + blast_extra)
     stages.append(
         {
@@ -264,9 +287,7 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
     base_d = eval_stat_value(stats.get("D"))
     melta = _find_keyword(resolved, "melta")
     melta_bonus = (
-        eval_stat_value((melta.get("parameters") or {}).get("value"))
-        if melta and half_range
-        else 0
+        eval_stat_value((melta.get("parameters") or {}).get("value")) if melta and half_range else 0
     )
     before_reduction = max(0, base_d + melta_bonus + resolved["damageMod"]["value"])
     damage_reduction = resolved["damageReduction"]["value"]
@@ -360,10 +381,11 @@ def _manual_weapon_keyword_buffs(
         return []
     out: list[Buff] = []
     for ref in profiles[index].get("keywords") or []:
+        parameters = ref.get("parameters")
         view = dataset.weapon_keywords.get(ref["keyword_id"])
         if view is None:
             continue
-        out.extend(view.get_buffs(ref.get("parameters"), attacker["weapon"]["id"], ctx))
+        out.extend(view.get_buffs(parameters, attacker["weapon"]["id"], ctx))
     return out
 
 

@@ -18,6 +18,7 @@ export interface Condition {
   type?: string;
   operator?: "and" | "or" | "not";
   operands?: Condition[];
+  of?: string;
   parameters?: Record<string, unknown>;
   negated?: boolean;
 }
@@ -30,6 +31,27 @@ export function dekebab(s: string): string {
 function str(v: unknown): string {
   if (v == null) return "?";
   return typeof v === "string" ? v : String(v);
+}
+
+/** Explicit `of` wins; legacy subjects are only applied where that predicate already consumed them. */
+export function conditionSubject(
+  c: Condition,
+  implicit: string,
+  legacySubjects: Record<string, string> = {},
+): string {
+  const explicitSubjects: Record<string, string> = {
+    bearer: "this model",
+    unit: "the unit",
+    "led-unit": "the unit this model leads",
+    attacker: "the attacking unit",
+    defender: "the target unit",
+    target: "the target unit",
+    friendly: "the friendly unit",
+    enemy: "the enemy unit",
+  };
+  if (typeof c.of === "string") return explicitSubjects[c.of] ?? implicit;
+  const legacy = (c.parameters ?? {}).subject;
+  return typeof legacy === "string" ? legacySubjects[legacy] ?? implicit : implicit;
 }
 
 /**
@@ -60,13 +82,13 @@ const TIMING_ALIASES: Record<string, string> = {
   "model-destroyed": "on-model-destroyed",
   "on-destroyed": "on-unit-destroyed",
   "before-this-model-removed": "before-bearer-removed",
-  "command-phase": "start-of-command-phase",
   "reinforcements-step": "reinforcements",
   setup: "unit-set-up",
   "set-up-this-turn": "unit-set-up",
   "after-move-through-terrain-over-4-inches": "moved-through-tall-terrain",
   "after-moving-through-tall-terrain": "moved-through-tall-terrain",
   "when-this-unit-selected-to-shoot": "selected-to-shoot",
+  "when-selected-to-shoot": "selected-to-shoot",
 };
 
 /**
@@ -81,7 +103,9 @@ const TIMING_ONLY_PHRASES: Record<string, string> = {
   "first-this-battle": "the first time this battle",
   "first-time-this-phase": "the first time this phase",
   "in-reserves": "while it is in Reserves",
+  "command-phase": "during the Command phase",
   "shooting-phase": "in the Shooting phase",
+  "start-of-shooting-phase": "at the start of your Shooting phase",
   "start-of-fight-phase": "at the start of the Fight phase",
   "first-movement-phase": "in your first Movement phase",
   "start-of-first-battle-round": "at the start of the first battle round",
@@ -117,6 +141,13 @@ function count(n: unknown, noun: string): string {
   return `${str(n)}+ ${noun}s`;
 }
 
+/** Oxford-free disjunction list ("a", "a or b", "a, b or c"). */
+function orList(items: string[]): string {
+  if (items.length <= 1) return items[0] ?? "";
+  if (items.length === 2) return `${items[0]} or ${items[1]}`;
+  return `${items.slice(0, -1).join(", ")} or ${items[items.length - 1]}`;
+}
+
 /**
  * Canonical `game-event` token → natural clause, for the reactive `trigger.event`.
  * This is the unified event vocabulary; the `timing-is` condition will be
@@ -148,6 +179,7 @@ const EVENT_PHRASES: Record<string, string> = {
   "fall-back-move": "when the unit makes a Fall Back move",
   "falls-back": "when the unit Falls Back",
   "charge-move": "when the unit makes a Charge move",
+  "end-of-charge-move": "after the unit ends a Charge move",
   "charge-declaration": "when a Charge is declared",
   "moved-through-terrain": "when the unit moves through terrain",
   "moved-through-tall-terrain": "when the unit moves through terrain over 4\" tall",
@@ -157,6 +189,7 @@ const EVENT_PHRASES: Record<string, string> = {
   "after-hit-roll": "after a Hit roll is made",
   "before-wound-roll": "before a Wound roll is made",
   "after-wound-roll": "after a Wound roll is made",
+  "attack-scores-wound": "each time an attack scores a wound",
   "before-save-roll": "before a saving throw is made",
   "after-save-roll": "after a saving throw is made",
   "before-damage-roll": "before a Damage roll is made",
@@ -183,6 +216,15 @@ const EVENT_PHRASES: Record<string, string> = {
   "battle-shock-test": "when the unit takes a Battle-shock test",
   "leadership-test": "when the unit takes a Leadership test",
   "desperate-escape-test": "when the unit takes a Desperate Escape test",
+  "end-of-opponent-charge-phase": "at the end of the opponent's Charge phase",
+  "enemy-unit-completed-shooting-targeting-bearer": "after an enemy unit has shot and targeted this unit",
+  "enemy-unit-selects-bearer-as-charge-target": "when an enemy unit selects this unit as a charge target",
+  "enemy-unit-targets-bearer": "when an enemy unit targets this unit",
+  "enemy-unit-completed-fall-back-from-bearer": "after an enemy unit within Engagement Range of this unit completes a Fall Back move",
+  "act-of-faith-completed": "after an Act of Faith is completed",
+  "act-of-faith-performed": "when an Act of Faith is performed",
+  "miracle-die-generated": "when a Miracle die is generated",
+  "enemy-unit-selected-charge-targets-before-charge-move": "after an enemy unit selects targets for its charge but before it makes a Charge move",
 };
 
 export function eventClause(event: unknown): string {
@@ -209,14 +251,31 @@ function regionMembershipPhrase(p: Record<string, unknown>, negated = false): st
   return `${negated ? "not " : ""}${subject} is ${relationPhrase} ${region}`;
 }
 
+/**
+ * Render a condition as a predicate on an already-named candidate unit. This
+ * keeps selection eligibility distinct from an ability's trigger condition.
+ */
+export function describeSelectionEligibility(c: Condition): string {
+  if (c.type === "is-battle-shocked" && !c.operator)
+    return c.negated ? "that is not Battle-shocked" : "that is Battle-shocked";
+  const phrase = describeCondition(c);
+  if (phrase.startsWith("the unit is ")) return `that is ${phrase.slice("the unit is ".length)}`;
+  if (phrase.startsWith("not the unit is ")) return `that is not ${phrase.slice("not the unit is ".length)}`;
+  if (phrase.startsWith("the unit has ")) return `with ${phrase.slice("the unit has ".length)}`;
+  return `if ${phrase}`;
+}
+
 export function describeCondition(c: Condition): string {
   // Compound nodes first — join the operands with lowercase connectives so the
   // result reads naturally inside a "... when X and Y" clause.
   if (c.operator === "and" && c.operands) {
-    return c.operands.map(describeCondition).join(" and ");
+    return c.operands.map((o) => o.operator === "or" ? `(${describeCondition(o)})` : describeCondition(o)).join(" and ");
   }
   if (c.operator === "or" && c.operands) {
-    return c.operands.map(describeCondition).join(" or ");
+    const keywordOperands = c.operands.every((o) => !o.negated && o.type === "unit-has-keyword");
+    if (keywordOperands)
+      return `the unit has the ${orList(c.operands.map((o) => str((o.parameters ?? {}).keyword)))} keywords`;
+    return c.operands.map((o) => o.operator === "and" ? `(${describeCondition(o)})` : describeCondition(o)).join(" or ");
   }
   if (c.operator === "not" && c.operands) {
     return `not (${c.operands.map(describeCondition).join(", ")})`;
@@ -226,9 +285,30 @@ export function describeCondition(c: Condition): string {
   const p = c.parameters ?? {};
 
   switch (c.type) {
+    case "target-of-triggering-charge":
+      return `${negate}the unit was selected as a target of that charge`;
+    case "every-model-within-range-of-bearer":
+      return `${negate}every model in the unit is within ${str(p.range)}\" of this Transport`;
+    case "roll-succeeded":
+      return `${negate}the triggering ${dekebab(str(p.roll))} roll succeeded`;
+    case "on-battlefield": {
+      const who = p.model_name != null ? `the ${str(p.model_name)} model` : p.subject === "unit" ? "the unit" : p.subject === "target" ? "the target unit" : "this model";
+      return `${negate}${who} is on the battlefield`;
+    }
+    case "target-within-half-weapon-range":
+      return `${negate}the target is within half the attacking weapon's range`;
+    case "has-destroyed": {
+      const who = p.subject === "unit" ? "the unit" : p.subject === "target" ? "the target unit" : "this model";
+      const keywords = Array.isArray(p.victim_keywords) ? ` ${p.victim_keywords.map(str).join(" ")}` : "";
+      const victims = count(p.count_min ?? 1, `${str(p.victim_owner)}${keywords} ${str(p.victim_kind)}`);
+      const window = p.window === "just-finished-attack-sequence" ? "with its just-resolved attacks" : `during ${dekebab(str(p.window))}`;
+      return `${negate}${who} has destroyed ${victims} ${window}`;
+    }
     // ── Ability-DSL conditions (ported from commands/translate.ts) ──────────
     case "phase-is":
-      return `${negate}during the ${str(p.phase)} phase`;
+      return str(p.phase) === "command" || str(p.phase) === "command-phase"
+        ? `${negate}during the Command phase`
+        : `${negate}during the ${str(p.phase)} phase`;
     case "timing-is":
       return c.negated ? negatedTiming(p.timing) : describeTiming(p.timing);
     case "player-turn-is": {
@@ -242,7 +322,7 @@ export function describeCondition(c: Condition): string {
       return `${negate}in ${phrase} turn`;
     }
     case "charged-this-turn":
-      return `${negate}the unit charged this turn`;
+      return `${negate}${conditionSubject(c, "the unit")} charged this turn`;
     case "advanced-this-turn":
       return `${negate}the unit advanced this turn`;
     case "remained-stationary":
@@ -250,22 +330,49 @@ export function describeCondition(c: Condition): string {
     case "unit-below-starting-strength":
       return `${negate}the unit is below starting strength`;
     case "unit-below-half-strength":
-      return `${negate}the ${p.subject === "target" ? "target unit" : "unit"} is below half strength`;
+      return `${negate}${conditionSubject(c, "the unit", { target: "the target unit" })} is below half strength`;
     case "unit-has-keyword":
       return `${negate}the unit has "${str(p.keyword)}"`;
+    case "unit-model-count":
+      return `${negate}the unit contains ${str(p.count_min)}+ ${str(p.keyword)} models`;
+    case "uniform-ranged-loadout":
+      return `${negate}all ranged weapons equipped by each ${p.model_keyword ? `${str(p.model_keyword)} ` : ""}model in the unit are the same`;
+    case "all-attacks-target-same-unit":
+      return `${negate}all of the unit's ${p.attack_type ? `${str(p.attack_type)} ` : ""}attacks target the same enemy unit`;
     case "target-has-keyword":
       return `${negate}the target has "${str(p.keyword)}"`;
     case "model-is-leader":
       return `${negate}the model is leading a unit`;
+    case "unit-is-led-by":
+      return `${negate}this unit is being led by an ${str(p.keyword)} model`;
     case "is-attached":
-      return `${negate}attached to a ${p.keyword ? `${str(p.keyword)} ` : ""}unit`;
+      return `${negate}the model is leading a ${p.keyword ? `${str(p.keyword)} ` : ""}unit`;
     case "attack-is-type":
       if (p.comparison === "strength-greater-than-toughness")
         return `${negate}when this attack's Strength is greater than the target's Toughness`;
       if (p.comparison != null) return `${negate}when ${dekebab(str(p.comparison))}`;
       return `${negate}for ${str(p.attack_type)} attacks`;
     case "is-battle-shocked":
-      return `${negate}the unit is battle-shocked`;
+      return `${negate}${conditionSubject(c, "the unit")} is battle-shocked`;
+    case "unit-selected-to-shoot-this-phase":
+      return `${negate}the unit has been selected to shoot this phase`;
+    case "eligible-to-shoot":
+      return `${negate}the unit is eligible to shoot`;
+    case "selection-has-keyword": {
+      const selection = p.selection;
+      let selected = "the selected unit";
+      if (selection && typeof selection === "object") {
+        if ("observer_for" in selection) {
+          const reference = selection.observer_for;
+          if (reference && typeof reference === "object" && "selection_var" in reference) {
+            selected = `the Observer unit that marked the bound ${str(reference.selection_var).replace(/_/g, " ")}`;
+          }
+        } else if ("selection_var" in selection) {
+          selected = `the bound ${str(selection.selection_var).replace(/_/g, " ")}`;
+        }
+      }
+      return `${negate}${selected} has the ${str(p.keyword)} keyword`;
+    }
     case "has-lost-wounds":
       return `${negate}the model has lost wounds`;
     case "wounds-remaining-at-or-below":
@@ -278,10 +385,13 @@ export function describeCondition(c: Condition): string {
             ? "the selected friendly unit"
             : "the unit";
       const atk = p.attack_type ? `${str(p.attack_type)} ` : "";
-      const weapon = p.weapon_name ? ` by ${str(p.weapon_name)}` : "";
+      const keyword = p.weapon_keyword ? `[${dekebab(str(p.weapon_keyword)).toUpperCase()}]` : "";
+      const weapon = p.weapon_name
+        ? ` by ${str(p.weapon_name)}${keyword ? ` (with ${keyword})` : ""}`
+        : keyword ? ` made with a ${keyword} weapon` : "";
       const boundSource =
         p.source && typeof p.source === "object" && "event_var" in (p.source as Record<string, unknown>)
-          ? " from that enemy unit"
+          ? " from the triggering unit"
           : p.source != null
             ? ` from ${str(p.source)}`
             : "";
@@ -292,6 +402,12 @@ export function describeCondition(c: Condition): string {
       const n = Number(p.count_min ?? 1);
       if (n > 1) return `${negate}${subject} was hit by ${n}+ ${atk}attacks${weapon}${boundSource}${window}`;
       return `${negate}${subject} was hit by ${atk === "" ? "an attack" : `a ${atk}attack`}${weapon}${boundSource}${window}`;
+    }
+    case "wounds-lost-from-attack": {
+      const subject = p.subject === "target" ? "the target" : "the unit";
+      const attackType = p.attack_type ? `${str(p.attack_type)} ` : "";
+      const source = p.source === "triggering-attacks" ? " from the triggering attacks" : "";
+      return `${negate}${subject} lost one or more wounds from ${attackType}attacks${source}`;
     }
     case "opponent-unit-within-range": {
       let where: string;
@@ -304,6 +420,12 @@ export function describeCondition(c: Condition): string {
       return `${negate}an enemy unit is within ${where}`;
     }
     case "unit-within-range-of": {
+      if (Array.isArray(p.keywords)) {
+        const who = p.subject === "self" ? "this model" : p.subject === "triggering-unit" ? "the triggering unit" : "the unit";
+        const distance = p.range === "engagement" ? "Engagement Range" : `${str(p.range)}"`;
+        const owner = p.target_type === "friendly-keyword" ? "friendly" : "enemy";
+        return `${negate}${who} is within ${distance} of one or more ${owner} units with all of ${p.keywords.map(str).join(" and ")}`;
+      }
       const tt = str(p.target_type ?? "target");
       // `closest-eligible` names a specific model, not a radius — but a range, when
       // present, still bounds WHICH model is eligible ("the closest ... within 18\"").
@@ -322,10 +444,32 @@ export function describeCondition(c: Condition): string {
       const dist = p.range != null ? `${str(p.range)}"` : '?"';
       return `${negate}within ${dist} of ${who}`;
     }
-    case "within-range-of-objective":
-      return `${negate}within range of an objective`;
+    case "within-range-of-objective": {
+      if (p.subject == null && p.controlled_by == null) return `${negate}within range of an objective`;
+      const who = p.subject === "target" ? "the target unit" : p.subject === "attacker" ? "the attacking unit" : "the unit";
+      const control = p.controlled_by === "your-army" ? " you control" : p.controlled_by === "opponent" ? " your opponent controls" : "";
+      return `${negate}${who} is within range of an objective marker${control}`;
+    }
+    case "event-source-is-bearer-unit":
+      return `${negate}the triggering event was performed by this unit`;
+    case "event-source-is-attached-unit":
+      return `${negate}the triggering Act of Faith was performed by the unit this model leads`;
+    case "miracle-die-generation-reason": {
+      const keywords = Array.isArray(p.keywords) ? p.keywords.map(str).join(" ") : "";
+      return `${negate}the Miracle die was gained because a friendly ${keywords} unit or model was destroyed`;
+    }
+    case "miracle-die-generation-timing":
+      return `${negate}the Miracle die was gained at the start of the battle round`;
+    case "destroyed-event-within-range":
+      return `${negate}that destroyed unit or model was within ${str(p.range)}\" of this model`;
+    case "destroyed-by-friendly-unit": {
+      const keywords = Array.isArray(p.keywords) ? p.keywords.map(str).join(" ") : "";
+      return `${negate}the unit was destroyed by a friendly ${keywords} unit`;
+    }
+    case "target-is-visible":
+      return `${negate}the target is visible to the attacking model`;
     case "has-fought-this-phase":
-      return `${negate}has fought this phase`;
+      return `${negate}${p.subject === "self" ? "this model " : p.subject === "destroyed-model" ? "the destroyed model " : p.subject === "unit" ? "the unit " : p.subject === "target" ? "the target unit " : ""}has fought this phase`;
     case "destroyed-by-attack-type":
       return p.attack_type === "any"
         ? `${negate}destroyed by any attack`
@@ -336,7 +480,7 @@ export function describeCondition(c: Condition): string {
       return `${negate}the attack's ${sv(p.attacker_stat)} is ${dekebab(sv(p.comparison))} the target's ${sv(p.target_stat)}`;
     }
     case "made-ingress-move-this-turn":
-      return `${negate}the unit made an ingress move this turn`;
+      return `${negate}the unit made an ingress move (including a Deep Strike setup) this turn`;
     case "engagement-state": {
       if (p.state == null) return `${negate}the unit is within Engagement Range`;
       const st = str(p.state);
@@ -347,12 +491,16 @@ export function describeCondition(c: Condition): string {
       return `${negate}the unit is ${dekebab(st)}`;
     }
     case "unit-was-in-engagement-range-of": {
-      // `object` is a bound event-variable reference (schema `#/$defs/event-bound-reference`,
-      // e.g. the enemy unit a sibling trigger's `binds_event_variable` names as the one that
-      // ended a Fall Back move). `event_var` is an internal linking id, never rendered — the
-      // relationship always reads as "that enemy unit", with no game phase assumed.
       const snapshotPoint = p.snapshot === "turn-start" ? "the turn" : "the phase";
       return `${negate}the selected friendly unit started ${snapshotPoint} within Engagement Range of that enemy unit`;
+    }
+    case "ability-window-capacity": {
+      const source = (p.source_ability as Record<string, unknown> | undefined)?.ability_id;
+      return `${negate}the ${dekebab(str(source))} ability had unused selection capacity at the end of the opponent's previous turn`;
+    }
+    case "candidate-eligible-in-ability-window": {
+      const source = (p.source_ability as Record<string, unknown> | undefined)?.ability_id;
+      return `${negate}the candidate was eligible for the ${dekebab(str(source))} ability at the end of the opponent's previous turn`;
     }
     case "disposition-matches": {
       const d = str(p.disposition);
@@ -452,10 +600,10 @@ export function describeCondition(c: Condition): string {
       if (p.in_enemy_dz) s += " in the enemy deployment zone";
       return s;
     }
-    case "terrain-area-control":
-      return `${negate}you control a terrain area with ${str(p.min_models ?? 1)}+ models`;
     case "region-membership":
       return regionMembershipPhrase(p, Boolean(c.negated));
+    case "terrain-area-control":
+      return `${negate}you control a terrain area with ${str(p.min_models ?? 1)}+ models`;
     case "territory-control": {
       let s = `${negate}you control ${dekebab(str(p.territory_ref ?? "your-territory"))}`;
       if (p.enemy_units_max != null) s += ` with at most ${str(p.enemy_units_max)} enemy units`;

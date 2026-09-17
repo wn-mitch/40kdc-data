@@ -35,7 +35,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f356024c-026b-5d09-8f01-a86215068522"
+      },
+      {
+        "namespace": "mfm",
+        "id": "178f6e1e-0a30-4650-9ad5-77b19be4c409"
+      }
+    ]
   },
   {
     "id": "blades-of-asuryan-guardian-battlehost",
@@ -54,7 +64,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "97c63479-7280-559a-a329-e302b2d2caf5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "51ff6332-28a3-4308-bc38-3644ffd4c908"
+      }
+    ]
   },
   {
     "id": "blitzing-firepower-warhost",
@@ -73,7 +93,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "12a93ce9-56c2-592e-a68e-2a7d8219e9cc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "45d32b81-e8d4-41f7-a259-aa2b7b83e55b"
+      }
+    ]
   },
   {
     "id": "bloody-dance-ghosts-of-the-webway",
@@ -92,7 +122,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ab97f05b-0454-59e3-9eb0-379ae22553ec"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dcd104fa-3d4a-4195-a919-0d051e1ddf61"
+      }
+    ]
   },
   {
     "id": "captivating-performance-twilight-flickers",
@@ -110,7 +150,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7dc88dbe-7247-579a-9e77-8ab093b02721"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ea9a0a5d-4308-484a-9e70-68f2fa8e9b68"
+      }
+    ]
   },
   {
     "id": "casting-back-the-veil-path-of-the-outcast",
@@ -128,7 +178,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "22df6fef-42f7-5732-9583-4e4dcd4bbb69"
+      },
+      {
+        "namespace": "mfm",
+        "id": "75946e84-e85a-4989-a5c1-84ff265f3ea2"
+      }
+    ]
   },
   {
     "id": "cloak-and-shadow-corsair-coterie",
@@ -147,7 +207,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2ab30da6-6f26-56eb-8554-3beb7611414b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e6d81d10-fb30-42ac-b70b-dcf91203b6fe"
+      }
+    ]
   },
   {
     "id": "cloudstrike-armoured-warhost",
@@ -185,7 +255,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4df058ed-dedc-5dbb-bac6-3e4dc0ae6867"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b3ca085a-1b93-4fe7-93d8-f6a9e03cfa9d"
+      }
+    ]
   },
   {
     "id": "crushing-strides-spirit-conclave",
@@ -204,7 +284,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1da85ce0-a42d-5e3f-a967-11c9f800f41b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9803bbcb-1dd8-4742-ad0b-309a06da2330"
+      }
+    ]
   },
   {
     "id": "daring-riders-windrider-host",
@@ -223,7 +313,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "704cef32-bdaa-559b-8fc0-d1993c5f3b31"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ae0fc4bb-82c5-4cc1-9a6b-be19da973378"
+      }
+    ]
   },
   {
     "id": "death-answers-death-devoted-of-ynnead",
@@ -242,7 +342,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0bbbac8c-1177-5564-b5c7-8cd39f566655"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9a6cbcf3-ab18-4f1e-a49c-928e0a7d2a14"
+      }
+    ]
   },
   {
     "id": "death-from-on-high-windrider-host",
@@ -262,7 +372,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cc8de67b-c13e-5ece-9890-a062793551c5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "de99f8eb-4abf-43d2-904f-233be8792115"
+      }
+    ]
   },
   {
     "id": "deceptive-feint-fateful-performance",
@@ -280,7 +400,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d179b621-479e-5995-93a1-ac19905fea2f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c52b31f5-d5ee-4141-a099-94bb7e5fb3ba"
+      }
+    ]
   },
   {
     "id": "doom-inescapable-aspect-host",
@@ -299,7 +429,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1806b4ec-ed03-5abb-8765-25470de66372"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7ef3eaef-b37c-48e2-9bd4-0378cdc068b9"
+      }
+    ]
   },
   {
     "id": "eldritch-suppression-path-of-the-outcast",
@@ -317,7 +457,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8c6721c5-f419-5008-a30a-160ad956bbb1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1b831fd1-0b01-45c1-8431-379152a85c6d"
+      }
+    ]
   },
   {
     "id": "emissaries-of-ynnead-devoted-of-ynnead",
@@ -336,7 +486,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bc9c6619-f172-5e2b-9e6c-6df63a2dace2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fe0854ba-7dd7-4cff-bd86-950b41b3b719"
+      }
+    ]
   },
   {
     "id": "exit-the-stage-fateful-performance",
@@ -354,7 +514,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7ef3309a-1ca7-5929-804a-616eb3018af5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bcb8d98c-4ec7-49fb-801c-5528a0f54b59"
+      }
+    ]
   },
   {
     "id": "exit-the-stage-ghosts-of-the-webway",
@@ -373,7 +543,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2c14f06d-ef23-5ba2-9c70-8fc062b3339c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "138b254b-d547-4ea0-8fa1-eabd278f0647"
+      }
+    ]
   },
   {
     "id": "fading-fusillade-kygharils-protectors",
@@ -391,7 +571,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "18f4467a-b43b-4169-98ec-227f07fb9bf1"
+      }
+    ]
   },
   {
     "id": "fangs-of-the-brood-serpents-brood",
@@ -410,7 +596,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a9860375-e37d-5753-955e-e1cf02629bd4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ae56ffe0-7c36-4254-9adc-3ac7dd880504"
+      }
+    ]
   },
   {
     "id": "fate-inescapable-seer-council",
@@ -429,7 +625,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4ff63eac-a160-58ce-a2e8-34159479aca6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "26af9c53-96f1-4cee-8720-b19621384d41"
+      }
+    ]
   },
   {
     "id": "feigned-retreat-warhost",
@@ -448,7 +654,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "52eb931a-9ff9-573b-8236-c8ee94eb4c5e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "edcc2c21-970c-4ec2-9865-d163e6cefce6"
+      }
+    ]
   },
   {
     "id": "fire-and-fade-warhost",
@@ -467,7 +683,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ea427e38-b275-5c17-9568-16e703968291"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ef550efc-d0ad-4829-a01d-335b4312f767"
+      }
+    ]
   },
   {
     "id": "focused-firepower-windrider-host",
@@ -486,7 +712,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ff6cb219-3c68-5a51-b2b1-86303fcd69e1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7b546fe8-2b6e-4d32-addb-60eae596cdca"
+      }
+    ]
   },
   {
     "id": "focused-strikes-kygharils-protectors",
@@ -504,7 +740,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ae796b05-95e9-4a24-b7cc-9210e50eee00"
+      }
+    ]
   },
   {
     "id": "forewarned-seer-council",
@@ -523,7 +765,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e50d1b10-28df-5cdb-8926-9ed89df0a5dc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e9659875-df8c-4064-afef-18cd2a054730"
+      }
+    ]
   },
   {
     "id": "heroes-fall-fateful-performance",
@@ -541,7 +793,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d7ee6fbf-dd7e-5041-a9b0-4d0da115d5f7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "de41ace3-61c0-4d33-b6ea-202e212c01fa"
+      }
+    ]
   },
   {
     "id": "heroes-fall-ghosts-of-the-webway",
@@ -560,7 +822,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8cfe1e5a-eb05-5165-8182-cc96066968ac"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6b1b52b9-2e6b-409a-9657-a587ae752928"
+      }
+    ]
   },
   {
     "id": "impeding-fire-eldritch-raiders",
@@ -579,7 +851,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "508b723d-4633-5a91-bdf3-58bf9bf08a99"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2444c11a-0afe-44df-9924-42924e1c1295"
+      }
+    ]
   },
   {
     "id": "into-the-breach-corsair-coterie",
@@ -598,7 +880,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "18655cb6-4394-5cc0-8da6-feccb083c4b3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9f421517-f680-4414-bb79-cd71b9e5866f"
+      }
+    ]
   },
   {
     "id": "ishas-fury-seer-council",
@@ -617,7 +909,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2f2ffc08-f561-5ae9-9a1e-7718444d435c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2fe33769-b05d-4263-8e21-dbbf794e77da"
+      }
+    ]
   },
   {
     "id": "khaines-vengeance-aspect-host",
@@ -636,7 +938,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2b100273-2cac-5ded-ab56-fd3f0c1cfd7d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "97aeb37a-0829-4184-b46a-f22f339b81e5"
+      }
+    ]
   },
   {
     "id": "layered-wards-armoured-warhost",
@@ -659,7 +971,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4697a0e7-2540-5d27-8334-5e621185182d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0353efc2-003c-4da7-bb1b-c687e36155b6"
+      }
+    ]
   },
   {
     "id": "lethal-ruse-corsair-coterie",
@@ -678,7 +1000,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "32c48d7b-49fb-5204-87a4-d8c21bf849b1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "19493a9c-a588-4ca9-98ac-5f7db3253ab6"
+      }
+    ]
   },
   {
     "id": "lightning-fast-reactions-warhost",
@@ -698,7 +1030,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bc4e6861-0236-51e2-aa32-aa8be8aa7343"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2d1e6da6-2f05-409b-9ec4-c3c99d081c99"
+      }
+    ]
   },
   {
     "id": "macabre-resilience-devoted-of-ynnead",
@@ -718,7 +1060,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e7134acb-c092-5322-9dd6-fa2bd053c4a4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c3609894-ebe0-49fa-8e3f-58e4c84264e2"
+      }
+    ]
   },
   {
     "id": "mocking-flight-ghosts-of-the-webway",
@@ -737,7 +1089,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "642ffdda-2b8b-5fc5-a7ac-f490392c9eff"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c690eb45-dac4-4c6d-9b14-7a8d2939bea2"
+      }
+    ]
   },
   {
     "id": "no-prey-too-big-eldritch-raiders",
@@ -756,7 +1118,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5b38d392-db95-54a3-81fa-a1377d58c76d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "23a9ccd8-c557-4ec6-8a93-15f3b41ee8f5"
+      }
+    ]
   },
   {
     "id": "nomads-of-the-hidden-way-path-of-the-outcast",
@@ -774,7 +1146,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "aecf8905-acba-5458-98a4-0457a76ab861"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dac943ef-3409-4250-8495-bd5d6c6f80ff"
+      }
+    ]
   },
   {
     "id": "outcast-ambush-corsair-coterie",
@@ -793,7 +1175,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "55aecdc7-f419-59ec-803e-625d7a6b36ff"
+      },
+      {
+        "namespace": "mfm",
+        "id": "def8613e-eee9-4cb4-9297-76807bced5b5"
+      }
+    ]
   },
   {
     "id": "overflight-windrider-host",
@@ -813,7 +1205,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7ec74e62-99e4-5057-a051-03cee6dfd800"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5bb8576e-c762-4362-9a10-06824c8067ff"
+      }
+    ]
   },
   {
     "id": "pall-of-dread-devoted-of-ynnead",
@@ -836,7 +1238,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6f16be63-c009-5d9c-83f8-dc3c3a44a273"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ff9411ef-6070-478c-acdf-d16899a59a9c"
+      }
+    ]
   },
   {
     "id": "parting-the-veil-devoted-of-ynnead",
@@ -855,7 +1267,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0c49e0d7-7335-524f-985e-e64ce4b1ded0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e56a8c72-0bfb-4255-9631-bc7796d298e9"
+      }
+    ]
   },
   {
     "id": "phantasmal-mirage-twilight-flickers",
@@ -873,7 +1295,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "36427c63-baac-5fbd-b108-07f88e9f3c3c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "67f8daa2-966d-46cf-ba38-26825584be32"
+      }
+    ]
   },
   {
     "id": "pirates-due-corsair-coterie",
@@ -892,7 +1324,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d6e0fec4-fb60-56c0-b033-b4d7ac3598cb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "da1a7e68-a91b-4bc5-a466-6ec7fc740224"
+      }
+    ]
   },
   {
     "id": "presaged-rehearsal-twilight-flickers",
@@ -910,7 +1352,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ad129723-2faa-5cea-a992-c15a567e8404"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cd8a2849-148d-42c2-baa8-70fde6c32971"
+      }
+    ]
   },
   {
     "id": "presentiment-of-dread-seer-council",
@@ -929,7 +1381,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "96422a1e-2528-539e-8b3a-86a2039b6eaf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b876cf77-0c6e-4e03-864c-cb1fb0d1f1c0"
+      }
+    ]
   },
   {
     "id": "preternatural-precision-aspect-host",
@@ -948,7 +1410,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4728bb5c-af48-5466-94d2-0b2a213d00af"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cd5eaa9d-3a56-4cc5-8b88-b644f4c6afe3"
+      }
+    ]
   },
   {
     "id": "psychic-shield-seer-council",
@@ -967,7 +1439,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "30c7e0f0-6d67-5d4c-8361-243c247a0c36"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d8e2588d-eded-4409-870b-be5bc03edee8"
+      }
+    ]
   },
   {
     "id": "raiders-spoils-eldritch-raiders",
@@ -986,7 +1468,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1ea5d42c-06e2-59b4-a18a-7d110aca126d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "12ded315-0be2-463a-ab26-808bb701d1c8"
+      }
+    ]
   },
   {
     "id": "ruthless-killers-eldritch-raiders",
@@ -1006,7 +1498,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "573e7b27-6e0c-59e0-8034-7814ee2cfb55"
+      },
+      {
+        "namespace": "mfm",
+        "id": "25fa402d-6cb8-46cb-9fcb-d6dc03f2ae22"
+      }
+    ]
   },
   {
     "id": "seers-eye-spirit-conclave",
@@ -1026,7 +1528,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9c4f1b17-5276-5062-9a0c-53435d4c7edf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b5489110-d7e8-4ce4-a75a-bfda0952f4b3"
+      }
+    ]
   },
   {
     "id": "shield-nodes-guardian-battlehost",
@@ -1046,7 +1558,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1b1c8e72-acbd-5ee1-a263-32ee377793a9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "05a41026-685b-4152-82cd-652e666ec684"
+      }
+    ]
   },
   {
     "id": "skyborne-sanctuary-aspect-host",
@@ -1065,7 +1587,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b2e1b831-d7c5-5fe9-9b18-87429c25e58e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "49930658-326f-4389-817f-5b6e04515b89"
+      }
+    ]
   },
   {
     "id": "skyborne-sanctuary-warhost",
@@ -1084,7 +1616,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b3e08569-a616-5bda-aaa8-6a59cca0b009"
+      },
+      {
+        "namespace": "mfm",
+        "id": "edce69e0-450a-4bdf-b2c1-85afc566d1e2"
+      }
+    ]
   },
   {
     "id": "skyward-lunge-serpents-brood",
@@ -1103,7 +1645,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "50458d5a-18e3-58f5-88e9-f5f762b031b0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "56ee5752-f8e6-4f8c-9dd1-f8c7c0e73f01"
+      }
+    ]
   },
   {
     "id": "soul-bridge-spirit-conclave",
@@ -1122,7 +1674,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "987411d2-acf0-5a85-a23f-fc22651786f8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3c8e589b-2f69-438e-adae-556c45801551"
+      }
+    ]
   },
   {
     "id": "soulsight-armoured-warhost",
@@ -1141,7 +1703,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f47d0086-0d97-5e3d-97e0-32dc905be66f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c16a05f6-7502-4e92-b42d-e0ad0f306689"
+      }
+    ]
   },
   {
     "id": "soulsight-devoted-of-ynnead",
@@ -1160,7 +1732,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b8e4f128-431a-5ebe-9c38-27a934a3e17a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d5737f54-4a3e-4335-9ddf-6759368bd099"
+      }
+    ]
   },
   {
     "id": "spiralling-evasion-windrider-host",
@@ -1179,7 +1761,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7d5ab8ab-5c1d-5ea4-a39b-9b3a418b1543"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5af63059-fb17-4c24-b61d-34535b3102d7"
+      }
+    ]
   },
   {
     "id": "spirit-token-spirit-conclave",
@@ -1198,7 +1790,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "199d21a4-b9ac-5220-ab13-9bcb8c024f75"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5a663fc3-a303-494a-a705-9b01e3899300"
+      }
+    ]
   },
   {
     "id": "staged-death-ghosts-of-the-webway",
@@ -1221,7 +1823,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "da2d1ad8-261c-5e11-bd6b-0319c839dec6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e5005ef6-da81-4751-894e-1b6c9868f38c"
+      }
+    ]
   },
   {
     "id": "striking-stride-serpents-brood",
@@ -1240,7 +1852,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7769c584-f37a-552d-933a-757cbb5e5e37"
+      },
+      {
+        "namespace": "mfm",
+        "id": "736b0952-212c-4cad-9549-522620d5bc9e"
+      }
+    ]
   },
   {
     "id": "suppressing-storm-kygharils-protectors",
@@ -1258,7 +1880,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "92b58a90-823a-4880-810b-6c491cde687d"
+      }
+    ]
   },
   {
     "id": "swift-deployment-armoured-warhost",
@@ -1296,7 +1924,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "07224579-9d36-5b80-abb7-0a1b89354ff8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "35d8b42d-ab6c-4646-97e5-96f5b764a976"
+      }
+    ]
   },
   {
     "id": "to-their-final-breath-aspect-host",
@@ -1315,7 +1953,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bb3830ff-59df-52ac-aa7f-dd0946fb107c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b6293382-658f-4933-be2b-d68ca5d41786"
+      }
+    ]
   },
   {
     "id": "tricksters-retort-ghosts-of-the-webway",
@@ -1334,7 +1982,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9a213c94-2c00-5d52-a43b-1589b0bb73de"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a5000689-7aa6-4a76-a314-293981e18bbf"
+      }
+    ]
   },
   {
     "id": "unshrouded-truth-seer-council",
@@ -1353,7 +2011,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1abdfd5a-8cf4-5733-ade9-3799b5974a4b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9907d0a7-4f77-449d-8e36-28115304d029"
+      }
+    ]
   },
   {
     "id": "vauls-vengeance-guardian-battlehost",
@@ -1373,7 +2041,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "03968a9d-7a29-5ece-a2a1-7ad66fe7bd2d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e65a0062-cfcb-4f86-a38c-80100bbe12e0"
+      }
+    ]
   },
   {
     "id": "vectored-engines-armoured-warhost",
@@ -1392,7 +2070,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e562b08e-fa91-53fb-ab4e-6d1ab2221d3c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d2d50764-8bcd-4517-9e6e-70a4fbc54d37"
+      }
+    ]
   },
   {
     "id": "vengeful-sorrow-corsair-coterie",
@@ -1411,7 +2099,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ed448520-61ca-510a-bfbf-388d6d1e35b7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b9b3a955-45eb-46fd-9f4a-b2e826b5beba"
+      }
+    ]
   },
   {
     "id": "venomous-wrath-serpents-brood",
@@ -1430,7 +2128,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1fe4d110-d1cd-567b-b8cc-192bfcc681e7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8f2f2e53-650b-4d84-b1cb-3cea96188397"
+      }
+    ]
   },
   {
     "id": "warding-salvoes-guardian-battlehost",
@@ -1450,7 +2158,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b45a9400-f47f-5ce5-85a5-bbfbefc29f71"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d6e4576f-6b14-4e7b-8f8e-4ffd313d4475"
+      }
+    ]
   },
   {
     "id": "warrior-focus-aspect-host",
@@ -1470,7 +2188,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fcd1e7b0-bbc8-5a92-94b0-335129124aa1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9267724d-1147-4977-9b38-c5921fa421cf"
+      }
+    ]
   },
   {
     "id": "weavers-coils-serpents-brood",
@@ -1489,7 +2217,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b9f1431e-7ddd-547d-a5f6-c63d9d6f2c06"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9dba8b85-730a-4f11-bbfc-9c40c995c930"
+      }
+    ]
   },
   {
     "id": "weaving-stride-serpents-brood",
@@ -1508,7 +2246,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "13f08757-82c6-56f4-9ccc-5c7823d22cd5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dd755353-4e09-4880-b362-bdc85c21f03d"
+      }
+    ]
   },
   {
     "id": "webway-tunnel-warhost",
@@ -1527,7 +2275,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6856676c-bee7-57f2-9d7b-8870d48afd32"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8ff5db09-a1f2-40ea-a73b-84e4b2a085bc"
+      }
+    ]
   },
   {
     "id": "wind-of-blades-windrider-host",
@@ -1546,7 +2304,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4e1d108d-5e12-56b0-b06b-30e4560324be"
+      },
+      {
+        "namespace": "mfm",
+        "id": "49258166-47ba-4f9f-97d1-3893b73810c8"
+      }
+    ]
   },
   {
     "id": "withdraw-and-reinforce-eldritch-raiders",
@@ -1565,7 +2333,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6fe958eb-da2e-537f-aac7-b457b0a51eac"
+      },
+      {
+        "namespace": "mfm",
+        "id": "878b9e14-c430-4924-bb65-714dc91a6bbc"
+      }
+    ]
   },
   {
     "id": "wraithbone-armour-spirit-conclave",
@@ -1585,7 +2363,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2a68b7e9-750f-5593-96d7-65c67d38957e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0dc77037-8e04-4c5f-86d2-aa8663b70788"
+      }
+    ]
   },
   {
     "id": "yriels-example-eldritch-raiders",
@@ -1604,6 +2392,16 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5b97e8c9-3154-510d-afed-511f32afae82"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b6e68ab5-ae3a-4ca1-83bd-4e4a370cea97"
+      }
+    ]
   }
 ]

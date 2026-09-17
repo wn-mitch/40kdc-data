@@ -185,7 +185,11 @@ const PARAMETERLESS_EFFECTS = new Set([
   "fight-first",
   "fight-last",
   "fight-on-death",
+  "model-destruction",
   "shoot-on-death",
+  "engagement-passthrough",
+  "set-battle-shock",
+  "strategic-reserves-arrival",
 ]);
 
 /**

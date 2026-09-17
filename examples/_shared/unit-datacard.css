@@ -1,0 +1,42 @@
+.datacard {
+  background: var(--panel);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  max-width: 920px;
+  min-width: 0;
+}
+.dc-header { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) var(--space-4); background: var(--panel-surface); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.dc-title { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.dc-title h1 { margin: 0; font-family: var(--font-heading); font-size: var(--text-xl, 22px); font-weight: 700; letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--text); }
+.dc-sub { color: var(--muted); font-size: var(--text-xs); }
+.dc-points { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--accent); white-space: nowrap; }
+.dc-points .tier { display: block; text-align: right; }
+.statline { display: flex; gap: var(--space-2); padding: var(--space-3) var(--space-4); flex-wrap: wrap; align-items: flex-end; }
+.statline + .statline { padding-top: 0; }
+.stat { display: flex; flex-direction: column; align-items: center; min-width: 44px; }
+.stat .k { font-family: var(--font-heading); font-size: var(--text-2xs); font-weight: 700; color: var(--muted); letter-spacing: var(--tracking-wide); }
+.stat .v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: var(--text-lg, 18px); font-weight: 500; color: var(--text); }
+.stat.invuln .v { color: var(--accent); }
+.profile-name { align-self: center; font-size: var(--text-2xs); color: var(--dim); font-style: italic; margin-right: var(--space-2); }
+.dc-section { padding: var(--space-2) var(--space-4) var(--space-3); }
+.dc-section h2 { margin: var(--space-2) 0 var(--space-1); font-family: var(--font-heading); font-size: var(--text-2xs); font-weight: 700; text-transform: uppercase; letter-spacing: var(--tracking-wider); color: var(--muted); }
+.weapon-scroll { overflow-x: auto; max-width: 100%; }
+table.weapons { width: 100%; min-width: 510px; border-collapse: collapse; font-size: var(--text-xs); }
+table.weapons th { text-align: right; padding: 2px var(--space-2); font-family: var(--font-heading); font-size: var(--text-2xs); font-weight: 700; text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--muted); border-bottom: 1px solid var(--border); }
+table.weapons th.name, table.weapons td.name { text-align: left; }
+table.weapons td { padding: var(--space-1) var(--space-2); border-bottom: 1px solid var(--border-subtle); text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+table.weapons td.name { font-family: inherit; }
+.kw-chips { margin-top: 2px; }
+.chip { display: inline-block; padding: 0 var(--space-2); border-radius: 999px; font-size: var(--text-2xs); font-family: var(--font-heading); font-weight: 600; letter-spacing: var(--tracking-wide); text-transform: uppercase; border: 1px solid var(--border); background: var(--panel-2); color: var(--muted); margin: 1px var(--space-1) 1px 0; }
+.dc-abilities { display: flex; flex-direction: column; gap: var(--space-1); }
+.dc-ability { display: flex; gap: var(--space-2); align-items: flex-start; padding: var(--space-1) var(--space-2); background: var(--panel-2); border: 1px solid transparent; border-radius: var(--radius-md); }
+.dc-ability:hover { border-color: var(--border); }
+.dc-ability .body { flex: 1; min-width: 0; }
+.dc-ability .ab-name { font-weight: 600; font-size: var(--text-xs); color: var(--text); }
+.dc-ability .ab-desc { color: var(--muted); font-size: var(--text-xs); margin-top: 1px; white-space: pre-wrap; }
+.dc-ability .ab-actions { display: flex; gap: 4px; flex-shrink: 0; }
+.dc-keywords { padding: var(--space-3) var(--space-4); border-top: 1px solid var(--border); background: var(--panel-surface); }
+.dc-keywords .kw-line { font-size: var(--text-xs); color: var(--muted); }
+.dc-keywords .kw-line b { color: var(--text); font-family: var(--font-heading); font-size: var(--text-2xs); letter-spacing: var(--tracking-wide); text-transform: uppercase; margin-right: var(--space-2); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }

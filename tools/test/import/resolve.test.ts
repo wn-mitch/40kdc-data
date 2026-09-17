@@ -178,10 +178,10 @@ describe("resolve (against embedded grey-knights data)", () => {
     expect(r.diagnostics.warnings.some((w) => w.code === "unit-unresolved")).toBe(true);
   });
 
-  it("flags multi-force lists and resolves the primary faction", () => {
+  it("resolves allied units without treating a valid multi-force list as a warning", () => {
     const r = importRoster(fixture("gk-allied-multiforce.payload.json"), { dataset: ds });
     expect(r.faction_id).toBe("grey-knights");
-    expect(r.diagnostics.warnings.some((w) => w.code === "multi-force")).toBe(true);
+    expect(r.diagnostics.warnings.some((w) => w.code === "multi-force")).toBe(false);
     expect(r.units.length).toBe(2);
   });
 });
@@ -287,10 +287,10 @@ describe("name resolution: faction-prefixed shared chassis and unit aliases", ()
 // stripped canon.
 describe("enhancement RAW-name resolution (import-correctness)", () => {
   it("resolves an Upgrade enhancement by its RAW '(Upgrade)' roster name", () => {
-    const hit = ds.enhancements.find("Boarding Ramps (Upgrade)");
-    expect(hit?.id).toBe("boarding-ramps-upgrade-rollin-deff");
+    const hit = ds.enhancements.find("Symphonic Payload (Upgrade)");
+    expect(hit?.id).toBe("symphonic-payload-upgrade-chorus-of-condemnation");
     // The stored display name keeps the tag (what a roster line carries).
-    expect(hit?.name).toBe("Boarding Ramps (Upgrade)");
+    expect(hit?.name).toBe("Symphonic Payload (Upgrade)");
   });
 
   it("keeps every '(Upgrade)'/'(Aura)'/'(Psychic)'-tagged name in lockstep with its id", () => {

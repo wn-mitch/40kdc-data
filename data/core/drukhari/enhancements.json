@@ -15,7 +15,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2a1fe1d6-aa31-52e5-b3d7-faa424a5d764"
+      },
+      {
+        "namespace": "mfm",
+        "id": "64571ab3-200a-432c-bab6-ac107cf7598c"
+      }
+    ]
   },
   {
     "id": "dark-vitality-realspace-raiders",
@@ -33,7 +43,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "158ec325-db3f-5ab6-bae5-4625d58c3800"
+      },
+      {
+        "namespace": "mfm",
+        "id": "40f2c5aa-5312-4db7-8850-3aea00881dd3"
+      }
+    ]
   },
   {
     "id": "sadistic-fulcrum-skysplinter-assault",
@@ -51,7 +71,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c906b566-ac27-5ce5-ae6a-810af0c7504a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6be2e13f-061b-4119-ab0f-97abb5c4c7dc"
+      }
+    ]
   },
   {
     "id": "labyrinthine-cunning-realspace-raiders",
@@ -59,7 +89,7 @@
     "detachment_id": "realspace-raiders",
     "cost": 25,
     "keyword_restrictions": [
-      "Drukhari"
+      "Archon"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -69,7 +99,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "907e6ba9-f0c7-5e7d-bd4d-88aa6d3123cd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eac618ae-8833-4a50-980f-7fc0b73121fe"
+      }
+    ]
   },
   {
     "id": "spiteful-raider-skysplinter-assault",
@@ -87,7 +127,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8bb12efa-cb37-5d47-9adb-8c0d028e3b70"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fd35e413-40ed-4ff9-adc8-f062fa5a0dbc"
+      }
+    ]
   },
   {
     "id": "eye-of-spite-realspace-raiders",
@@ -95,7 +145,7 @@
     "detachment_id": "realspace-raiders",
     "cost": 15,
     "keyword_restrictions": [
-      "Drukhari"
+      "Succubus"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -105,7 +155,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c25ae5bb-98cf-5e00-8ba3-1e0f200386eb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a8e27f43-6f0f-487e-9969-c65087ccdefe"
+      }
+    ]
   },
   {
     "id": "nightmare-shroud-skysplinter-assault",
@@ -123,7 +183,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e8f70a67-70e3-575b-abbd-b6089d68bfae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5aabedd1-5bba-4131-b2e8-2be218e5b64f"
+      }
+    ]
   },
   {
     "id": "crucible-of-malediction-realspace-raiders",
@@ -131,7 +201,7 @@
     "detachment_id": "realspace-raiders",
     "cost": 15,
     "keyword_restrictions": [
-      "Drukhari"
+      "Haemonculus"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -141,16 +211,23 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0cc2cc1e-d364-5411-8edf-2eee2704210c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7d179e7a-ca81-4035-a492-85ec8b3a2f96"
+      }
+    ]
   },
   {
     "id": "archraider-reapers-wager",
     "name": "Archraider",
     "detachment_id": "reapers-wager",
     "cost": 15,
-    "keyword_restrictions": [
-      "Drukhari"
-    ],
     "ability_id": null,
     "is_unique": true,
     "game_version": {
@@ -159,16 +236,31 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Drukhari"
+      ],
+      [
+        "Harlequins"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ce516bc3-a9ba-59df-853d-85c5bbe938e7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c08c0431-a879-4802-83e1-63248c280552"
+      }
+    ]
   },
   {
     "id": "webway-walker-reapers-wager",
     "name": "Webway Walker",
     "detachment_id": "reapers-wager",
     "cost": 15,
-    "keyword_restrictions": [
-      "Drukhari"
-    ],
     "ability_id": null,
     "is_unique": true,
     "game_version": {
@@ -177,7 +269,25 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Drukhari"
+      ],
+      [
+        "Harlequins"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "877748b4-170a-5aa3-89e9-0b0793ad1495"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8f4da3ed-14af-43a6-8708-64f2bca26258"
+      }
+    ]
   },
   {
     "id": "reapers-cowl-reapers-wager",
@@ -185,7 +295,7 @@
     "detachment_id": "reapers-wager",
     "cost": 25,
     "keyword_restrictions": [
-      "Drukhari"
+      "Harlequins"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -195,7 +305,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "11218ffe-0a57-5ef5-9993-6885d2e8bfd9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0141231c-7ff0-4807-8ea4-4cf6b1078bad"
+      }
+    ]
   },
   {
     "id": "conductor-of-torment-reapers-wager",
@@ -213,7 +333,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "04d9bfa3-563b-5a05-82d4-1766bee351dd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bde5c097-9180-4e68-9310-38327f9ef752"
+      }
+    ]
   },
   {
     "id": "pharmacophex-spectacle-of-spite",
@@ -221,7 +351,7 @@
     "detachment_id": "spectacle-of-spite",
     "cost": 15,
     "keyword_restrictions": [
-      "Drukhari"
+      "Succubus"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -231,7 +361,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "597afefd-6a24-59d1-ab53-ec77c42d9d8a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a1757591-e117-49bd-91d2-e1573a844ff2"
+      }
+    ]
   },
   {
     "id": "chronoshard-spectacle-of-spite",
@@ -239,7 +379,7 @@
     "detachment_id": "spectacle-of-spite",
     "cost": 15,
     "keyword_restrictions": [
-      "Drukhari"
+      "Succubus"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -249,7 +389,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9b92ce83-f70d-592e-a80b-2083b86a5fde"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a04e80bd-7407-42b2-84f2-c47df330e77c"
+      }
+    ]
   },
   {
     "id": "periapt-of-torments-spectacle-of-spite",
@@ -257,7 +407,7 @@
     "detachment_id": "spectacle-of-spite",
     "cost": 25,
     "keyword_restrictions": [
-      "Drukhari"
+      "Succubus"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -267,7 +417,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bb775f64-d532-58aa-9b25-29acff767551"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0023fd28-a9bd-41ce-b213-ce233e2f7819"
+      }
+    ]
   },
   {
     "id": "morghennas-curse-spectacle-of-spite",
@@ -275,7 +435,7 @@
     "detachment_id": "spectacle-of-spite",
     "cost": 20,
     "keyword_restrictions": [
-      "Drukhari"
+      "Succubus"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -285,7 +445,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "87a5dd44-56d8-5c0f-87ef-6e50556b56b7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "21a18c7b-916b-47d4-a50b-8af59f3c03dc"
+      }
+    ]
   },
   {
     "id": "master-regenesist-covenite-coterie",
@@ -293,7 +463,7 @@
     "detachment_id": "covenite-coterie",
     "cost": 25,
     "keyword_restrictions": [
-      "Drukhari"
+      "Haemonculus"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -303,7 +473,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7c8bfc07-c400-5003-9371-956773bb6197"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b1e340b1-c68a-4470-bbf1-2372715cfce1"
+      }
+    ]
   },
   {
     "id": "master-nemesine-covenite-coterie",
@@ -311,7 +491,7 @@
     "detachment_id": "covenite-coterie",
     "cost": 5,
     "keyword_restrictions": [
-      "Drukhari"
+      "Haemonculus"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -321,7 +501,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0c97162d-cc45-566b-b9a9-8369c5a34fdc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "443165dc-6701-498b-b43c-ebeeb405d304"
+      }
+    ]
   },
   {
     "id": "master-artisan-covenite-coterie",
@@ -329,7 +519,7 @@
     "detachment_id": "covenite-coterie",
     "cost": 20,
     "keyword_restrictions": [
-      "Drukhari"
+      "Haemonculus"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -339,7 +529,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1c209ac4-caad-530b-a451-74ee90cc7023"
+      },
+      {
+        "namespace": "mfm",
+        "id": "48d18d70-1dcd-455e-9894-a193bea14106"
+      }
+    ]
   },
   {
     "id": "master-repugnomancer-aura-covenite-coterie",
@@ -347,7 +547,7 @@
     "detachment_id": "covenite-coterie",
     "cost": 15,
     "keyword_restrictions": [
-      "Drukhari"
+      "Haemonculus"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -357,7 +557,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "724c5a16-7e69-5c8a-a42c-740d990c99c8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f6e6b1bd-e328-479b-bdaa-9e359bc5af3d"
+      }
+    ]
   },
   {
     "id": "leechbite-plate-kabalite-cartel",
@@ -365,7 +575,7 @@
     "detachment_id": "kabalite-cartel",
     "cost": 5,
     "keyword_restrictions": [
-      "Drukhari"
+      "Archon"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -375,7 +585,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8b7961d1-c958-56f9-81b9-c8b2bef7a234"
+      },
+      {
+        "namespace": "mfm",
+        "id": "96ad45b7-7bcb-4584-9692-596c23687f56"
+      }
+    ]
   },
   {
     "id": "webway-awl-kabalite-cartel",
@@ -383,7 +603,7 @@
     "detachment_id": "kabalite-cartel",
     "cost": 25,
     "keyword_restrictions": [
-      "Drukhari"
+      "Archon"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -393,7 +613,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "281b01dc-31cf-5ce3-8209-58211a44e3d7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8b210e33-0efe-4538-89e1-edd6a1e3eef4"
+      }
+    ]
   },
   {
     "id": "informant-network-kabalite-cartel",
@@ -401,7 +631,7 @@
     "detachment_id": "kabalite-cartel",
     "cost": 30,
     "keyword_restrictions": [
-      "Drukhari"
+      "Archon"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -411,7 +641,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2309a6f3-fb44-584d-a5e1-55e4b098fc41"
+      },
+      {
+        "namespace": "mfm",
+        "id": "152e049f-2e43-4e81-979e-29d3149737e0"
+      }
+    ]
   },
   {
     "id": "towering-arrogance-kabalite-cartel",
@@ -419,7 +659,7 @@
     "detachment_id": "kabalite-cartel",
     "cost": 20,
     "keyword_restrictions": [
-      "Drukhari"
+      "Archon"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -429,7 +669,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c483686e-57fc-5335-a7c5-f3346e1a8c0e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1b8a36e1-aaf0-4dc9-8d5e-7dc93f9961b4"
+      }
+    ]
   },
   {
     "id": "periapt-of-torments-exhibition-of-slaughter",
@@ -437,7 +687,8 @@
     "detachment_id": "exhibition-of-slaughter",
     "cost": 20,
     "keyword_restrictions": [
-      "Drukhari"
+      "Drukhari",
+      "Succubus"
     ],
     "ability_id": "periapt-of-torments-exhibition-of-slaughter",
     "is_unique": true,
@@ -447,7 +698,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "671a8f38-5e61-550d-a321-dad89ec70b9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7b2fc03c-6b23-4550-a402-1d5693bc122b"
+      }
+    ]
   },
   {
     "id": "hyperstimm-trafficker-exhibition-of-slaughter",
@@ -455,7 +716,8 @@
     "detachment_id": "exhibition-of-slaughter",
     "cost": 20,
     "keyword_restrictions": [
-      "Drukhari"
+      "Drukhari",
+      "Succubus"
     ],
     "ability_id": "hyperstimm-trafficker-exhibition-of-slaughter",
     "is_unique": true,
@@ -465,7 +727,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "342b82b9-8ed7-583e-8004-3fd6c9c89e87"
+      },
+      {
+        "namespace": "mfm",
+        "id": "910abb59-9838-4b50-8180-fab4fedf9770"
+      }
+    ]
   },
   {
     "id": "towering-arrogance-kabalite-agonysts",
@@ -473,6 +745,7 @@
     "detachment_id": "kabalite-agonysts",
     "cost": 15,
     "keyword_restrictions": [
+      "Archon",
       "Drukhari"
     ],
     "ability_id": "towering-arrogance-kabalite-agonysts",
@@ -483,7 +756,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "11f5aa0f-ac7e-55b5-8e77-d0094a920102"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0904f021-9996-49f4-a13f-7e3c367a058e"
+      }
+    ]
   },
   {
     "id": "contempt-for-rivals-kabalite-agonysts",
@@ -491,6 +774,7 @@
     "detachment_id": "kabalite-agonysts",
     "cost": 20,
     "keyword_restrictions": [
+      "Archon",
       "Drukhari"
     ],
     "ability_id": "contempt-for-rivals-kabalite-agonysts",
@@ -501,7 +785,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ca31d43e-a9e0-52b4-8004-5ddc2a0ef00b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5600dcd0-652a-4078-9d65-266dfff20443"
+      }
+    ]
   },
   {
     "id": "gnarlskin-experimentor-tools-of-torment",
@@ -509,7 +803,8 @@
     "detachment_id": "tools-of-torment",
     "cost": 20,
     "keyword_restrictions": [
-      "Drukhari"
+      "Drukhari",
+      "Haemonculus"
     ],
     "ability_id": "gnarlskin-experimentor-tools-of-torment",
     "is_unique": true,
@@ -519,16 +814,23 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7530314d-9f4b-5d49-9588-f319b6b5ac93"
+      },
+      {
+        "namespace": "mfm",
+        "id": "03586339-4af2-4cd9-bb94-9bddc81d9144"
+      }
+    ]
   },
   {
     "id": "elixir-of-the-corpse-courts-upgrade-tools-of-torment",
     "name": "Elixir of the Corpse Courts (Upgrade)",
     "detachment_id": "tools-of-torment",
     "cost": 15,
-    "keyword_restrictions": [
-      "Drukhari"
-    ],
     "ability_id": "elixir-of-the-corpse-courts-tools-of-torment",
     "is_unique": true,
     "game_version": {
@@ -537,7 +839,27 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "keyword_restriction_groups": [
+      [
+        "Cronos",
+        "Drukhari"
+      ],
+      [
+        "Drukhari",
+        "Talos"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4c1bd012-bccf-524e-bf0b-47a51d6f5330"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bb413bfb-9992-48af-8684-70e080379f3a"
+      }
+    ]
   },
   {
     "id": "superior-soulcraft-coven-of-agonies",
@@ -554,10 +876,15 @@
     ],
     "points_provisional": false,
     "keyword_restrictions": [
-      "Coven of Agonies",
-      "Cronos"
+      "Coven of Agonies Cronos"
     ],
-    "upgrade_tag": true
+    "upgrade_tag": true,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fd120bfc-9c5f-4d5e-ba70-5f3fc53b36c6"
+      }
+    ]
   },
   {
     "id": "toxin-laced-blades-coven-of-agonies",
@@ -576,6 +903,12 @@
     "keyword_restrictions": [
       "Coven of Agonies",
       "Haemonculus"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "69f4dbe4-bfd4-4638-b606-a1cc08c2ac0c"
+      }
     ]
   }
 ]

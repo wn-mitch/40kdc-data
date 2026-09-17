@@ -2,7 +2,7 @@
 + PLAYER NAME: —
 + TEAM NAME: —
 + FACTIONS USED: Chaos Knights
-+ DISPOSITION: —
++ DISPOSITION: Reconnaissance
 + DETACHMENT: Houndpack Lance
 + ARMY POINTS: 2000pts
 +
@@ -21,13 +21,13 @@ BATTLELINE
 1 with Armoured feet, Avenger chaincannon, Daemonbreath spear, Havoc multi-launcher
 
 Char1: 1x War Dog Executioner (130 pts)
-1 with Armoured feet, 2x War Dog autocannon, Diabolus heavy stubber, Warlord
+1 with Armoured feet, 2x War Dog autocannon, Diabolus heavy stubber, Warlord, Detachment Character
 
 1x War Dog Executioner (130 pts)
 1 with Armoured feet, 2x War Dog autocannon, Diabolus heavy stubber
 
 Char2: 1x War Dog Karnivore (165 pts)
-1 with Reaper chaintalon, Slaughterclaw, Havoc multi-launcher
+1 with Reaper chaintalon, Slaughterclaw, Havoc multi-launcher, Detachment Character
 Enhancement: Preyslayer's Mantle (+15 pts)
 
 1x War Dog Karnivore (150 pts)
@@ -43,7 +43,7 @@ Enhancement: Preyslayer's Mantle (+15 pts)
 1 with Havoc multi-launcher, Daemonbreath spear, Slaughterclaw
 
 1x War Dog Stalker (140 pts)
-1 with Havoc multi-launcher, Daemonbreath spear, Slaughterclaw
+1 with Havoc multi-launcher, Daemonbreath spear, Slaughterclaw, Detachment Character
 
 1x War Dog Stalker (140 pts)
 1 with Havoc multi-launcher, Daemonbreath spear, Slaughterclaw

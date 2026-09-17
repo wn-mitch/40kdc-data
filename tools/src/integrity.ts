@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { glob } from "glob";
 import { resolve, basename, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -119,6 +119,19 @@ interface CompModelLike {
   min?: number;
   max?: number;
   default_weapon_ids?: string[];
+  loadout_variants?: LoadoutVariantLike[];
+  loadout_variant_budgets?: VariantBudgetLike[];
+}
+interface LoadoutVariantLike {
+  name?: string;
+  weapon_ids?: string[];
+  max_count?: number;
+}
+interface VariantBudgetLike {
+  variant_names?: string[];
+  count?: number;
+  per_models?: number;
+  scope?: string;
 }
 interface CompTierLike {
   models?: CompModelLike[];
@@ -131,14 +144,21 @@ interface CompLike {
 interface AbilityLike {
   ability_id?: string;
 }
+interface MissionRef {
+  id?: string;
+}
+interface MissionCardRef {
+  id?: string;
+  card_type?: "primary" | "secondary";
+  awards?: unknown[];
+}
 
 /**
- * Known, accepted loadout orphans — a `<faction>/<unit_id>/<weapon_id>` triple
  * whose weapon is in the unit's `weapon_ids` but is neither a recorded
- * `default_weapon_ids` entry nor reachable through any wargear-option. Each entry
- * is a deliberate, reviewed exception — a NEW orphan (any triple not listed) fails
- * CI, and a listed triple that is no longer an orphan is reported as stale so the
- * list stays minimal.
+ * `default_weapon_ids` entry, a complete `loadout_variant` entry, nor reachable
+ * through any wargear-option. Each entry is a deliberate, reviewed exception — a
+ * NEW orphan (any triple not listed) fails CI, and a listed triple that is no
+ * longer an orphan is reported as stale so the list stays minimal.
  *
  * This set is now EMPTY: every former orphan has been resolved by restructuring
  * the unit composition to match the GW MFM dump's per-figure miniature rows
@@ -171,6 +191,126 @@ function readArray<T>(file: string): T[] {
   return JSON.parse(readFileSync(file, "utf-8")) as T[];
 }
 
+/**
+ * The unit a `<base>-<unit_id>` weapon variant belongs to, or `undefined` when
+ * the id carries no unit suffix at all.
+ *
+ * Matching must take the LONGEST unit-id suffix, not the first that fits:
+ * `choppa-beast-snagga-boyz` ends with `-boyz` as well as
+ * `-beast-snagga-boyz`, so a naive scan hands the Beast Snagga weapon to the
+ * plain Boyz unit. Whichever suffix is longest is the real owner.
+ */
+export function variantWeaponOwner(weaponId: string, unitIds: Iterable<string>): string | undefined {
+  let owner: string | undefined;
+  for (const unitId of unitIds) {
+    if (!unitId || unitId === weaponId) continue;
+    if (!weaponId.endsWith(`-${unitId}`)) continue;
+    if (owner === undefined || unitId.length > owner.length) owner = unitId;
+  }
+  return owner;
+}
+
+/**
+ * Structural checks over one composition's `loadout_variants` /
+ * `loadout_variant_budgets`.
+ *
+ * A variant states a whole per-model loadout. Its equipment must therefore be
+ * drawn from the owning unit's declared weapon vocabulary, except for explicit
+ * faction wargear. Faction-wide weapon existence alone is insufficient: it
+ * would let a stale import attach another datasheet's weapon profile merely
+ * because that profile happens to resolve in the same faction.
+ */
+function collectVariantErrors(
+  comp: CompLike,
+  index: number,
+  factionEquipment: ReadonlySet<string>,
+  factionWargear: ReadonlySet<string>,
+  unitWeaponIds: ReadonlySet<string>,
+  factionUnitIds: ReadonlySet<string>,
+): Array<{ path: string; message: string }> {
+  const errs: Array<{ path: string; message: string }> = [];
+  const unitId = comp.unit_id ?? "";
+  const models = comp.models ?? [];
+
+  for (let m = 0; m < models.length; m++) {
+    const row = models[m];
+    const variants = row.loadout_variants;
+    const budgets = row.loadout_variant_budgets;
+    const where = `unit "${unitId}" model row "${row.name ?? m}"`;
+
+    if (!variants?.length) {
+      // A budget with nothing to budget cannot be enforced; the caps only
+      // mean anything relative to named variants in the same row.
+      if (budgets?.length) {
+        errs.push({
+          path: `/${index}/models/${m}/loadout_variant_budgets`,
+          message: `${where}: loadout_variant_budgets is present with no loadout_variants — a variant budget can only cap variants declared in its own row`,
+        });
+      }
+      continue;
+    }
+
+    const names = new Set<string>();
+    for (let v = 0; v < variants.length; v++) {
+      const variant = variants[v];
+      const name = variant.name ?? "";
+      if (names.has(name)) {
+        errs.push({
+          path: `/${index}/models/${m}/loadout_variants/${v}`,
+          message: `${where}: duplicate loadout_variant name "${name}" — variant names are the budget's only handle on a variant, so they must be unique within a model row`,
+        });
+      }
+      names.add(name);
+
+      for (const wid of variant.weapon_ids ?? []) {
+        if (!factionEquipment.has(wid)) {
+          errs.push({
+            path: `/${index}/models/${m}/loadout_variants/${v}`,
+            message: `${where}: loadout_variant "${name}" names equipment "${wid}" that is neither a weapon nor a wargear entry in this faction — a variant states a whole loadout, so every id must resolve`,
+          });
+          continue;
+        }
+        if (!unitWeaponIds.has(wid) && !factionWargear.has(wid)) {
+          errs.push({
+            path: `/${index}/models/${m}/loadout_variants/${v}`,
+            message: `${where}: loadout_variant "${name}" names faction equipment "${wid}" that is not declared by this unit — variants may only use owning-unit weapon_ids or faction wargear`,
+          });
+          continue;
+        }
+        const owner = variantWeaponOwner(wid, factionUnitIds);
+        if (owner !== undefined && owner !== unitId) {
+          errs.push({
+            path: `/${index}/models/${m}/loadout_variants/${v}`,
+            message: `${where}: loadout_variant "${name}" names "${wid}", which is unit "${owner}"'s own weapon variant — a variant must not borrow another unit's stat-specific weapon`,
+          });
+        }
+      }
+    }
+
+    for (let b = 0; b < (budgets?.length ?? 0); b++) {
+      const budget = budgets![b];
+      for (const name of budget.variant_names ?? []) {
+        if (!names.has(name)) {
+          errs.push({
+            path: `/${index}/models/${m}/loadout_variant_budgets/${b}`,
+            message: `${where}: loadout_variant_budget names variant "${name}", which does not exist in this model row (declared: ${[...names].map((n) => `"${n}"`).join(", ")})`,
+          });
+        }
+      }
+      const perModels = budget.per_models ?? 0;
+      const count = budget.count ?? 0;
+      if (perModels > 0 && count > perModels) {
+        errs.push({
+          path: `/${index}/models/${m}/loadout_variant_budgets/${b}`,
+          message: `${where}: loadout_variant_budget allows ${count} per ${perModels} model(s) — a ratio above 1:1 caps nothing per model and is a flat limit in disguise; use per_models: 0 for a flat cap`,
+        });
+      }
+    }
+  }
+
+  return errs;
+}
+
 function loadAbilityIds(file: string, into: Set<string>): void {
   try {
     for (const a of readArray<AbilityLike>(file)) {
@@ -181,6 +321,170 @@ function loadAbilityIds(file: string, into: Set<string>): void {
   }
 }
 
+/** Collect violations of the closed dice-table face partition. */
+function collectDiceTableErrors(node: unknown, out: string[]): void {
+  if (Array.isArray(node)) {
+    for (const value of node) collectDiceTableErrors(value, out);
+    return;
+  }
+  if (node === null || typeof node !== "object") return;
+  const effect = node as Record<string, unknown>;
+  if (effect.type === "dice-table" && (effect.dice === "D3" || effect.dice === "D6") && Array.isArray(effect.outcomes)) {
+    const sides = effect.dice === "D3" ? 3 : 6;
+    const counts = Array.from({ length: sides + 1 }, () => 0);
+    for (const outcome of effect.outcomes) {
+      if (outcome === null || typeof outcome !== "object" || !("results" in outcome) || !Array.isArray(outcome.results)) continue;
+      for (const resultFace of outcome.results) {
+        if (typeof resultFace === "number" && Number.isInteger(resultFace) && resultFace >= 1 && resultFace <= sides) {
+          counts[resultFace]++;
+        }
+      }
+    }
+    const missing = counts.flatMap((count, face) => (face > 0 && count === 0 ? [face] : []));
+    const overlaps = counts.flatMap((count, face) => (face > 0 && count > 1 ? [face] : []));
+    if (missing.length > 0) out.push(`dice-table ${effect.dice} omits result${missing.length === 1 ? "" : "s"} ${missing.join(", ")}`);
+    if (overlaps.length > 0) out.push(`dice-table ${effect.dice} repeats result${overlaps.length === 1 ? "" : "s"} ${overlaps.join(", ")}`);
+  }
+  for (const value of Object.values(effect)) collectDiceTableErrors(value, out);
+}
+
+export function diceTableInvariantErrors(effect: unknown): string[] {
+  const errors: string[] = [];
+  collectDiceTableErrors(effect, errors);
+  return errors;
+}
+
+function checkMissionCardLinks(root: string, result: ValidationResult): void {
+  const missionsFile = resolve(root, "core/missions.json");
+  const missionCardsFile = resolve(root, "core/mission-cards.json");
+  const hasMissions = existsSync(missionsFile);
+  const hasMissionCards = existsSync(missionCardsFile);
+  if (!hasMissions && !hasMissionCards) return;
+
+  let missions: MissionRef[] = [];
+  let missionCards: MissionCardRef[] = [];
+  try {
+    if (hasMissions) {
+      const parsed = readArray<MissionRef>(missionsFile);
+      if (!Array.isArray(parsed)) return;
+      missions = parsed;
+    }
+    if (hasMissionCards) {
+      const parsed = readArray<MissionCardRef>(missionCardsFile);
+      if (!Array.isArray(parsed)) return;
+      missionCards = parsed;
+    }
+  } catch {
+    // Structural failures belong to the AJV pass; do not duplicate them here.
+    return;
+  }
+
+  type IntegrityIssue = ValidationResult["errors"][number];
+  const issues = new Map<string, IntegrityIssue>();
+  const issueKey = (file: string, index: number) => `${file}\0${index}`;
+  const addIssue = (
+    file: string,
+    index: number,
+    path: string,
+    message: string,
+  ): void => {
+    const key = issueKey(file, index);
+    const issue = issues.get(key) ?? { file, index, errors: [] };
+    issue.errors.push({ path, message });
+    issues.set(key, issue);
+  };
+  const indexById = <T extends { id?: string }>(records: T[]) => {
+    const byId = new Map<string, number[]>();
+    for (let index = 0; index < records.length; index++) {
+      const id = records[index]?.id;
+      if (!id) continue;
+      const indices = byId.get(id) ?? [];
+      indices.push(index);
+      byId.set(id, indices);
+    }
+    return byId;
+  };
+
+  const missionIndices = indexById(missions);
+  const missionCardIndices = indexById(missionCards);
+
+  for (const [id, indices] of missionIndices) {
+    for (const index of indices.slice(1)) {
+      addIssue(
+        missionsFile,
+        index,
+        `/${index}/id`,
+        `duplicate mission id "${id}" — Collection is first-wins, so this mission is silently shadowed`,
+      );
+    }
+  }
+  for (const [id, indices] of missionCardIndices) {
+    for (const index of indices.slice(1)) {
+      addIssue(
+        missionCardsFile,
+        index,
+        `/${index}/id`,
+        `duplicate mission-card id "${id}" — Collection is first-wins, so this card is silently shadowed`,
+      );
+    }
+  }
+
+  for (const [id, indices] of missionIndices) {
+    const matches = missionCardIndices.get(id) ?? [];
+    if (
+      matches.length === 0 ||
+      (matches.length === 1 &&
+        missionCards[matches[0]]?.card_type !== "primary")
+    ) {
+      const index = indices[0]!;
+      addIssue(
+        missionsFile,
+        index,
+        `/${index}/id`,
+        `mission "${id}" has no same-id primary mission card`,
+      );
+    }
+  }
+
+  for (let index = 0; index < missionCards.length; index++) {
+    const card = missionCards[index]!;
+    if (card.card_type !== "primary" || !card.id) continue;
+    if (!missionIndices.has(card.id)) {
+      addIssue(
+        missionCardsFile,
+        index,
+        `/${index}/id`,
+        `primary mission-card "${card.id}" has no mission`,
+      );
+    }
+    if (!Array.isArray(card.awards) || card.awards.length === 0) {
+      addIssue(
+        missionCardsFile,
+        index,
+        `/${index}/awards`,
+        `primary mission-card "${card.id}" has no scoring awards`,
+      );
+    }
+  }
+
+  result.totalFiles += Number(hasMissions) + Number(hasMissionCards);
+  result.totalItems += missions.length + missionCards.length;
+  const finishRecord = (file: string, index: number): void => {
+    const issue = issues.get(issueKey(file, index));
+    if (issue) {
+      result.failed++;
+      result.errors.push(issue);
+    } else {
+      result.passed++;
+    }
+  };
+  for (let index = 0; index < missions.length; index++) {
+    finishRecord(missionsFile, index);
+  }
+  for (let index = 0; index < missionCards.length; index++) {
+    finishRecord(missionCardsFile, index);
+  }
+}
 /**
  * Cross-entity referential integrity that per-file JSON Schema validation cannot
  * express:
@@ -190,6 +494,8 @@ function loadAbilityIds(file: string, into: Set<string>): void {
  *    Same-faction scoping is deliberate — a union check would pass shared-unit
  *    contaminants because they happen to be defined in some *other* faction's
  *    enrichment.
+ *  - every mission must resolve to a same-id primary mission card, and every
+ *    primary mission card must resolve back to a mission and define scoring awards.
  *  - every unit `faction_keywords` entry must be permitted for the unit's faction
  *    (see {@link FACTION_HOME_KEYWORD}).
  *
@@ -205,9 +511,22 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
     errors: [],
   };
 
+  checkMissionCardLinks(root, result);
+
   // Shared core ability pool, available to every faction (optional).
   const coreAbilities = new Set<string>();
   loadAbilityIds(resolve(root, "enrichment/_core/abilities.json"), coreAbilities);
+  const coreAbilityById = new Map<string, AbilityLike & { id?: string; effect?: unknown }>();
+  try {
+    for (const ability of readArray<AbilityLike & { id?: string; effect?: unknown }>(
+      resolve(root, "enrichment/_core/abilities.json"),
+    )) {
+      const id = ability.ability_id ?? ability.id;
+      if (id) coreAbilityById.set(id, ability);
+    }
+  } catch {
+    // Optional shared core pool may be absent or unreadable.
+  }
 
   const unitFiles = await glob("core/*/units.json", { cwd: root, absolute: true });
   unitFiles.sort();
@@ -292,25 +611,38 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   // because a suppression legitimately references another faction's ability
   // (e.g. negating an enemy's Lone Operative); a same-faction check would falsely
   // fail those cross-faction references. faction-rule slugs resolve against the
-  // `faction_rule_id` set declared on the factions.
+  // `faction_rule_ids` set declared on the factions.
   const allAbilityIds = new Set<string>(coreAbilities);
+  const abilityIdsByFaction = new Map<string, Set<string>>();
+  const abilityRecordsByFaction = new Map<string, Map<string, AbilityLike & { id?: string; effect?: unknown }>>();
   const abilityFiles = await glob("enrichment/*/abilities.json", { cwd: root, absolute: true });
   for (const f of abilityFiles) {
-    if (basename(dirname(f)).startsWith("_")) continue;
+    const faction = basename(dirname(f));
+    if (faction.startsWith("_")) continue;
     try {
+      const abilityIds = new Set<string>();
+      const abilityRecords = new Map<string, AbilityLike & { id?: string; effect?: unknown }>();
       for (const a of readArray<AbilityLike & { id?: string }>(f)) {
+        if (a.ability_id) {
+          allAbilityIds.add(a.ability_id);
+          abilityIds.add(a.ability_id);
+          abilityRecords.set(a.ability_id, a);
+        }
         if (a.id) allAbilityIds.add(a.id);
-        if (a.ability_id) allAbilityIds.add(a.ability_id);
       }
+      abilityIdsByFaction.set(faction, abilityIds);
+      abilityRecordsByFaction.set(faction, abilityRecords);
     } catch {
-      // structural problems are the AJV pass's job
+      // skip unreadable ability files
     }
   }
   const factionRuleIds = new Set<string>();
   for (const f of await glob("core/*/factions.json", { cwd: root, absolute: true })) {
     try {
-      for (const fac of readArray<{ faction_rule_id?: string }>(f)) {
-        if (fac.faction_rule_id) factionRuleIds.add(fac.faction_rule_id);
+      for (const fac of readArray<{ faction_rule_ids: string[] }>(f)) {
+        for (const factionRuleId of fac.faction_rule_ids) {
+          factionRuleIds.add(factionRuleId);
+        }
       }
     } catch {
       // skip unreadable faction files
@@ -333,6 +665,36 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
     }
   };
 
+  /** A named selection event references its source ability, not a display label. */
+  const collectSourceAbilityRefs = (node: unknown, out: Array<{ abilityId: string; owner: string }>): void => {
+    if (Array.isArray(node)) {
+      node.forEach((value) => collectSourceAbilityRefs(value, out));
+    } else if (node !== null && typeof node === "object") {
+      const rec = node as Record<string, unknown>;
+      if (rec.source_ability !== null && typeof rec.source_ability === "object") {
+        const source = rec.source_ability as Record<string, unknown>;
+        if (typeof source.ability_id === "string") out.push({ abilityId: source.ability_id, owner: String(source.owner) });
+      }
+      Object.values(rec).forEach((value) => collectSourceAbilityRefs(value, out));
+    }
+  };
+
+  /** Collect entity-backed ability grants, including reusable rules bundles. */
+  const collectAbilityGrantRefs = (node: unknown, out: string[]): void => {
+    if (Array.isArray(node)) {
+      for (const value of node) collectAbilityGrantRefs(value, out);
+    } else if (node !== null && typeof node === "object") {
+      const effect = node as Record<string, unknown>;
+      if (effect.type === "ability-grant" && effect.modifier !== null && typeof effect.modifier === "object") {
+        const modifier = effect.modifier as Record<string, unknown>;
+        const abilityId = modifier.ability_id;
+        if (modifier.rules_bundle === true && typeof abilityId === "string") out.push(abilityId);
+      }
+      for (const value of Object.values(effect)) collectAbilityGrantRefs(value, out);
+    }
+  };
+
+
   for (const file of abilityFiles) {
     const faction = basename(dirname(file));
     if (faction.startsWith("_")) continue;
@@ -346,14 +708,26 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
 
     for (let i = 0; i < abilities.length; i++) {
       const a = abilities[i];
+      const sourceAbilityRefs: Array<{ abilityId: string; owner: string }> = [];
+      collectSourceAbilityRefs(a, sourceAbilityRefs);
       const refs: Array<{ kind: string; rule: string }> = [];
       collectRuleStateRefs(a.effect, refs);
-      // Only abilities carrying a rule-state ability/faction-rule slug have
-      // anything to resolve here; skip the rest so this check doesn't inflate the
-      // item counts the unit/wargear passes already own.
-      if (refs.length === 0) continue;
+      const abilityGrantRefs: string[] = [];
+      collectAbilityGrantRefs(a.effect, abilityGrantRefs);
+      const diceTableErrors: string[] = [];
+      collectDiceTableErrors(a.effect, diceTableErrors);
+      // Only abilities carrying an entity reference or dice-table invariant
+      // have anything to resolve here; skip the rest so this check does not
+      // inflate unrelated counts.
+      if (refs.length === 0 && abilityGrantRefs.length === 0 && diceTableErrors.length === 0 && sourceAbilityRefs.length === 0) continue;
       result.totalItems++;
       const errs: Array<{ path: string; message: string }> = [];
+      for (const message of diceTableErrors) {
+        errs.push({
+          path: `/${i}/effect`,
+          message: `ability "${a.id ?? a.ability_id}": ${message}`,
+        });
+      }
       for (const { kind, rule } of refs) {
         if (kind === "ability" && !allAbilityIds.has(rule)) {
           errs.push({
@@ -363,7 +737,31 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
         } else if (kind === "faction-rule" && !factionRuleIds.has(rule)) {
           errs.push({
             path: `/${i}/effect`,
-            message: `ability "${a.id ?? a.ability_id}": rule-state rule_kind:faction-rule "${rule}" is not a declared faction_rule_id`,
+            message: `ability "${a.id ?? a.ability_id}": rule-state rule_kind:faction-rule "${rule}" is not declared in faction_rule_ids`,
+          });
+        }
+      }
+      const factionAbilityRecords = abilityRecordsByFaction.get(faction);
+      for (const { abilityId, owner } of sourceAbilityRefs) {
+        const resolves = owner === "enemy" ? allAbilityIds.has(abilityId) :
+          factionAbilityRecords?.has(abilityId) || coreAbilityById.has(abilityId);
+        if (!resolves) errs.push({
+          path: `/${i}/trigger/source_ability/ability_id`,
+          message: `ability "${a.id ?? a.ability_id}": source_ability "${abilityId}" does not resolve for ${owner} source in ${faction}`,
+        });
+      }
+
+      for (const abilityId of abilityGrantRefs) {
+        const grantedAbility = factionAbilityRecords?.get(abilityId) ?? coreAbilityById.get(abilityId);
+        if (!grantedAbility) {
+          errs.push({
+            path: `/${i}/effect`,
+            message: `ability "${a.id ?? a.ability_id}": rules-bundle grant "${abilityId}" resolves to no ability entity in ${faction} enrichment or the shared core pool`,
+          });
+        } else if ((grantedAbility.effect as { type?: unknown } | undefined)?.type !== "rules-bundle") {
+          errs.push({
+            path: `/${i}/effect`,
+            message: `ability "${a.id ?? a.ability_id}": rules-bundle grant "${abilityId}" resolves to an ability whose effect is not rules-bundle`,
           });
         }
       }
@@ -518,6 +916,22 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
     }
     const weaponIdsByUnit = new Map<string, string[]>(units.map((u) => [u.id ?? "", u.weapon_ids ?? []]));
     const unitRecById = new Map<string, UnitLike>(units.map((u) => [u.id ?? "", u]));
+    // The faction's whole equipment vocabulary + unit ids, for the
+    // loadout_variant checks (see collectVariantErrors).
+    const factionUnitIds = new Set<string>(units.map((u) => u.id ?? "").filter(Boolean));
+    const factionEquipment = new Set<string>();
+    const factionWargear = new Set<string>();
+    for (const name of ["weapons.json", "wargear.json"]) {
+      try {
+        for (const e of readArray<{ id?: string }>(resolve(dir, name))) {
+          if (!e.id) continue;
+          factionEquipment.add(e.id);
+          if (name === "wargear.json") factionWargear.add(e.id);
+        }
+      } catch {
+        // faction has no file of this kind — the other one still constrains variants
+      }
+    }
     const reachableByUnit = new Map<string, Set<string>>();
     const optionsByUnit = new Map<string, WargearOptionLike[]>();
     try {
@@ -538,18 +952,35 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
       const c = comps[i];
       result.totalItems++;
       const models = c.models ?? [];
+      // Whole-loadout model variants and their caps are checked regardless of
+      // whether the composition is "populated" — they carry their own complete
+      // equipment and do not depend on default_weapon_ids being present.
+      const errs: Array<{ path: string; message: string }> = collectVariantErrors(
+        c,
+        i,
+        factionEquipment,
+        factionWargear,
+        new Set(weaponIdsByUnit.get(c.unit_id ?? "") ?? []),
+        factionUnitIds,
+      );
       // Populated = every model row carries a non-empty default loadout.
       const populated = models.length > 0 && models.every((m) => (m.default_weapon_ids?.length ?? 0) > 0);
       if (!populated) {
-        result.passed++;
+        if (errs.length > 0) {
+          result.failed++;
+          result.errors.push({ file, index: i, errors: errs });
+        } else {
+          result.passed++;
+        }
         continue;
       }
       const defaults = new Set<string>();
       for (const m of models) for (const id of m.default_weapon_ids ?? []) defaults.add(id);
       const reachable = reachableByUnit.get(c.unit_id ?? "") ?? new Set<string>();
-      const errs: Array<{ path: string; message: string }> = [];
+      const variantEquipment = new Set<string>();
+      for (const m of models) for (const variant of m.loadout_variants ?? []) for (const id of variant.weapon_ids ?? []) variantEquipment.add(id);
       for (const wid of weaponIdsByUnit.get(c.unit_id ?? "") ?? []) {
-        if (defaults.has(wid) || reachable.has(wid)) continue;
+        if (defaults.has(wid) || variantEquipment.has(wid) || reachable.has(wid)) continue;
         const key = `${faction}/${c.unit_id}/${wid}`;
         if (KNOWN_LOADOUT_ORPHANS.has(key)) {
           seenAllowed.add(key);

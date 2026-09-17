@@ -13,18 +13,28 @@
  * Selecting a cost is therefore a two-step filter: keep the tiers whose ordinal
  * band contains this copy, then pick the highest model-count tier the count
  * reaches. A tier with no `unit_count_min` is unbanded and applies to every copy
- * (the common case). Only native `points` are handled here; `allied_points`
- * (host-army pricing) is a separate concern. Mirror of
+ * (the common case).
+ *
+ * Some units also carry `allied_points` — alternate tiers scoped to a
+ * `host_faction` that apply when the unit is fielded in another faction's army
+ * (an Agents of the Imperium unit allied into any IMPERIUM army; a shared
+ * Space Marine datasheet a chapter section reprices). {@link hostPointsTiers}
+ * selects the tier table in effect for a host army and
+ * {@link hostUnitPoints} prices from it; {@link baseUnitPoints} stays
+ * native-only for callers without army context. Mirror of
  * `crates/wh40kdc/src/data/pricing.rs`.
  *
  * @packageDocumentation
  */
-import type { Unit } from "../generated.js";
+import type { Faction, Unit } from "../generated.js";
 
 type PointsTier = NonNullable<Unit["points"]>[number];
+type AlliedTier = NonNullable<Unit["allied_points"]>[number];
+/** The band/size/cost shape shared by native and allied tiers. */
+type CostTier = PointsTier | AlliedTier;
 
 /** True when `ordinal` (1-based army copy) falls within `tier`'s ordinal band. */
-function tierCoversOrdinal(tier: PointsTier, ordinal: number): boolean {
+function tierCoversOrdinal(tier: CostTier, ordinal: number): boolean {
   const min = tier.unit_count_min;
   if (min == null) return true; // unbanded: applies to every copy
   if (ordinal < min) return false;
@@ -43,7 +53,12 @@ function tierCoversOrdinal(tier: PointsTier, ordinal: number): boolean {
  * guessing.
  */
 export function baseUnitPoints(unit: Unit, modelCount: number, ordinal = 1): number {
-  const tiers = (unit.points ?? [])
+  return tierCost(unit.points ?? [], modelCount, ordinal);
+}
+
+/** The two-step tier selection over an explicit tier table (native or allied). */
+function tierCost(table: readonly CostTier[], modelCount: number, ordinal: number): number {
+  const tiers = table
     .filter((t) => tierCoversOrdinal(t, ordinal))
     .slice()
     .sort((a, b) => a.models - b.models);
@@ -53,6 +68,53 @@ export function baseUnitPoints(unit: Unit, modelCount: number, ordinal = 1): num
     if (modelCount >= t.models) chosen = t;
   }
   return chosen.cost;
+}
+
+/** `Imperium` → `imperium`: faction keywords are display names, `host_faction` values are id slugs. */
+function keywordSlug(name: string): string {
+  return name.trim().toLowerCase().replace(/\s+/g, "-");
+}
+
+/**
+ * The points tiers in effect for a unit fielded in `hostFaction`'s army.
+ *
+ * A unit native to the host army (its `faction_id` IS the army's faction)
+ * always prices from `points` — `allied_points` only ever applies to a unit
+ * included in ANOTHER faction's army. For a foreign unit, an entry whose
+ * `host_faction` names the army's faction id exactly wins (a chapter reprice:
+ * an `adeptus-astartes` datasheet priced for `blood-angels`); otherwise an
+ * entry naming a super-faction keyword the army's faction carries applies (an
+ * Agents unit's `imperium` price in any Imperium army). With no matching
+ * entry — or no army context at all — the native table stands, matching
+ * consumers that ignore allied pricing.
+ */
+export function hostPointsTiers(
+  unit: Unit,
+  hostFaction?: Faction | null,
+): readonly CostTier[] {
+  const native = unit.points ?? [];
+  const entries = unit.allied_points ?? [];
+  if (!hostFaction || entries.length === 0 || unit.faction_id === hostFaction.id) return native;
+  const exact = entries.filter((t) => t.host_faction === hostFaction.id);
+  if (exact.length > 0) return exact;
+  const owned = new Set((hostFaction.keywords ?? []).map(keywordSlug));
+  const grouped = entries.filter((t) => owned.has(t.host_faction));
+  return grouped.length > 0 ? grouped : native;
+}
+
+/**
+ * {@link baseUnitPoints}, but priced from the tier table in effect inside
+ * `hostFaction`'s army (see {@link hostPointsTiers}). With no `hostFaction`
+ * this IS `baseUnitPoints`. Size coverage is identical across tables (allied
+ * tiers reprice the native sizes), so `pointsTierMissing` stays native-only.
+ */
+export function hostUnitPoints(
+  unit: Unit,
+  modelCount: number,
+  ordinal = 1,
+  hostFaction?: Faction | null,
+): number {
+  return tierCost(hostPointsTiers(unit, hostFaction), modelCount, ordinal);
 }
 
 /**

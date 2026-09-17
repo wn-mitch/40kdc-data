@@ -9,13 +9,25 @@
           "$ref": "#/$defs/single-effect"
         },
         {
+          "$ref": "#/$defs/stance-select-effect"
+        },
+        {
           "$ref": "#/$defs/choice-effect"
         },
         {
           "$ref": "#/$defs/sequence-effect"
         },
         {
+          "$ref": "#/$defs/rules-bundle-effect"
+        },
+        {
+          "$ref": "#/$defs/named-effect"
+        },
+        {
           "$ref": "#/$defs/dice-gated-effect"
+        },
+        {
+          "$ref": "#/$defs/dice-table-effect"
         },
         {
           "$ref": "#/$defs/conditional-effect"
@@ -27,22 +39,16 @@
           "$ref": "#/$defs/select-units-effect"
         },
         {
+          "$ref": "#/$defs/for-each-unit-effect"
+        },
+        {
           "$ref": "#/$defs/movement-modifier-effect"
         },
         {
           "$ref": "#/$defs/aura-effect"
         },
         {
-          "$ref": "#/$defs/leader-model-ability-grant-effect"
-        },
-        {
-          "$ref": "#/$defs/persistent-designation-effect"
-        },
-        {
           "$ref": "#/$defs/designate-target-effect"
-        },
-        {
-          "$ref": "#/$defs/stance-select-effect"
         },
         {
           "$ref": "#/$defs/risk-reward-effect"
@@ -52,6 +58,33 @@
         },
         {
           "$ref": "#/$defs/resource-action-menu-effect"
+        },
+        {
+          "$ref": "#/$defs/leader-model-ability-grant-effect"
+        },
+        {
+          "$ref": "#/$defs/persistent-designation-effect"
+        },
+        {
+          "$ref": "#/$defs/no-effect-effect"
+        },
+        {
+          "$ref": "#/$defs/select-objective-effect"
+        },
+        {
+          "$ref": "#/$defs/for-each-objective-effect"
+        },
+        {
+          "$ref": "#/$defs/paired-designation-effect"
+        },
+        {
+          "$ref": "#/$defs/miracle-die-operation-effect"
+        },
+        {
+          "$ref": "#/$defs/formation-attachment-grant-effect"
+        },
+        {
+          "$ref": "#/$defs/attachment-eligibility-inherit-effect"
         }
       ]
     },
@@ -69,6 +102,7 @@
             "enemy-models-in-range",
             "friendly-models-in-range",
             "models-in-bearer-unit",
+            "models-in-or-embarked-in-bearer",
             "enemy-units-in-range",
             "wounds-lost"
           ]
@@ -94,17 +128,6 @@
       ],
       "additionalProperties": false
     },
-    "resource-gain-battle-size-counts": {
-      "type": "object",
-      "description": "Token/resource count keyed by the three supported battle sizes. The renderer intentionally refers players to the accompanying table rather than spelling these values out.",
-      "properties": {
-        "incursion": { "type": "integer", "minimum": 0 },
-        "strike-force": { "type": "integer", "minimum": 0 },
-        "onslaught": { "type": "integer", "minimum": 0 }
-      },
-      "required": ["incursion", "strike-force", "onslaught"],
-      "additionalProperties": false
-    },
     "rule-state-core-rule-slug": {
       "$comment": "Closed vocabulary of core-rule slugs a `rule-state` effect may toggle (rule_kind: core-rule). These are 10e CORE RULES/mechanics (not core abilities \u2014 those are entities, reached via rule_kind: ability). Finite, slow-moving; AJV-enforced, stripped from codegen. The slug \u2014 not direction/target \u2014 disambiguates active vs passive of the same rule: `fire-overwatch` (the bearer firing Overwatch) vs `overwatch-against-bearer` (the bearer being targeted by Overwatch). For rule_kind `ability`/`faction-rule` the slug is a free string resolved by integrity.ts against the matching entity; `keyword` is a free string (open keyword set).",
       "type": "string",
@@ -118,296 +141,6 @@
         "overwatch-against-bearer",
         "desperate-escape"
       ]
-    },
-    "named-region-ref": {
-      "type": "object",
-      "properties": {
-        "region_id": { "type": "string", "minLength": 1 },
-        "owner_faction": { "type": "string", "minLength": 1 }
-      },
-      "required": ["region_id", "owner_faction"],
-      "additionalProperties": false
-    },
-    "named-region-source-gate": {
-      "type": "object",
-      "properties": {
-        "gate_ref": { "type": "string", "minLength": 1 },
-        "owner": { "type": "string", "minLength": 1 },
-        "unit_predicate": {
-          "type": "object",
-          "properties": {
-            "faction": { "type": "string", "minLength": 1 },
-            "keywords": {
-              "type": "array",
-              "minItems": 1,
-              "items": { "type": "string", "minLength": 1 }
-            }
-          },
-          "required": ["faction", "keywords"],
-          "additionalProperties": false
-        },
-        "range_to_marker_inches": { "type": "number", "exclusiveMinimum": 0 }
-      },
-      "required": ["gate_ref", "owner", "unit_predicate"],
-      "additionalProperties": false
-    },
-    "named-region-membership": {
-      "type": "object",
-      "properties": {
-        "unit_scope": { "type": "string", "enum": ["model", "whole-unit"] },
-        "relation": { "type": "string", "minLength": 1 }
-      },
-      "required": ["unit_scope", "relation"],
-      "additionalProperties": true
-    },
-    "named-region-branch-actor": {
-      "type": "object",
-      "properties": {
-        "role": { "type": "string", "minLength": 1 },
-        "gate_ref": { "type": "string", "minLength": 1 }
-      },
-      "required": ["role", "gate_ref"],
-      "additionalProperties": false
-    },
-    "named-region-branch-timing": {
-      "type": "object",
-      "properties": {
-        "event": { "type": "string", "minLength": 1 }
-      },
-      "required": ["event"],
-      "additionalProperties": false
-    },
-    "named-region-branch": {
-      "type": "object",
-      "properties": {
-        "source": { "$ref": "#/$defs/named-region-branch-actor" },
-        "beneficiary": { "$ref": "#/$defs/named-region-branch-actor" },
-        "target": {
-          "type": "string",
-          "enum": [
-            "self",
-            "bearer",
-            "unit",
-            "attached-unit",
-            "attacker",
-            "defender",
-            "target",
-            "friendly-within-aura",
-            "enemy-within-aura",
-            "all-friendly",
-            "all-enemy"
-          ]
-        },
-        "timing": { "$ref": "#/$defs/named-region-branch-timing" },
-        "duration": { "type": "string", "minLength": 1 },
-        "effect": { "$ref": "#/$defs/effect-node" },
-        "optional": { "type": "boolean" }
-      },
-      "required": ["source", "beneficiary", "target", "timing", "duration", "effect", "optional"],
-      "additionalProperties": false
-    },
-    "named-region-baseline": {
-      "type": "object",
-      "properties": {
-        "kind": { "const": "fixed-zone" },
-        "zone": { "const": "own-deployment-zone" },
-        "activation": {
-          "type": "object",
-          "properties": { "event": { "const": "always-active" } },
-          "required": ["event"],
-          "additionalProperties": false
-        },
-        "expiry": {
-          "type": "object",
-          "properties": { "event": { "const": "never" } },
-          "required": ["event"],
-          "additionalProperties": false
-        }
-      },
-      "required": ["kind", "zone", "activation", "expiry"],
-      "additionalProperties": false
-    },
-    "named-region-phase-extension": {
-      "type": "object",
-      "properties": {
-        "kind": { "const": "objective-majority-zone" },
-        "zone": {
-          "type": "string",
-          "enum": ["no-mans-land", "opponent-deployment-zone"]
-        },
-        "control_gate": {
-          "type": "object",
-          "properties": {
-            "marker_scope": { "const": "markers-in-zone" },
-            "controlled_by": { "const": "owner-army" },
-            "threshold": {
-              "type": "object",
-              "properties": {
-                "comparison": { "const": "at-least" },
-                "fraction": { "const": 0.5 }
-              },
-              "required": ["comparison", "fraction"],
-              "additionalProperties": false
-            }
-          },
-          "required": ["marker_scope", "controlled_by", "threshold"],
-          "additionalProperties": false
-        },
-        "activation": {
-          "type": "object",
-          "properties": {
-            "event": { "const": "phase-start" },
-            "evaluation": { "const": "snapshot-once" },
-            "canonical_condition_ids": {
-              "const": ["timing-is", "objective-majority"]
-            }
-          },
-          "required": ["event", "evaluation", "canonical_condition_ids"],
-          "additionalProperties": false
-        },
-        "expiry": {
-          "type": "object",
-          "properties": { "event": { "const": "phase-end" } },
-          "required": ["event"],
-          "additionalProperties": false
-        }
-      },
-      "required": ["kind", "zone", "control_gate", "activation", "expiry"],
-      "additionalProperties": false
-    },
-    "named-region-producer": {
-      "type": "object",
-      "properties": {
-        "region_ref": { "$ref": "#/$defs/named-region-ref" },
-        "mode": { "type": "string", "enum": ["complete", "extension"] },
-        "parent_ref": {
-          "oneOf": [
-            { "$ref": "#/$defs/named-region-ref" },
-            { "type": "null" }
-          ]
-        },
-        "baseline": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/named-region-baseline" }
-        },
-        "phase_extensions": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/named-region-phase-extension" }
-        },
-        "additive_extensions": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "kind": { "type": "string", "minLength": 1 },
-              "source_gate": { "$ref": "#/$defs/named-region-source-gate" }
-            },
-            "required": ["kind", "source_gate"],
-            "additionalProperties": true
-          }
-        }
-      },
-      "required": ["region_ref", "mode", "parent_ref", "baseline", "phase_extensions", "additive_extensions"],
-      "additionalProperties": false,
-      "allOf": [
-        {
-          "if": {
-            "properties": { "mode": { "const": "complete" } },
-            "required": ["mode"]
-          },
-          "then": {
-            "properties": {
-              "parent_ref": { "type": "null" },
-              "baseline": { "minItems": 1, "maxItems": 1 },
-              "phase_extensions": {
-                "minItems": 2,
-                "maxItems": 2,
-                "uniqueItems": true,
-                "contains": {
-                  "type": "object",
-                  "required": ["zone"],
-                  "properties": { "zone": { "const": "no-mans-land" } }
-                },
-                "allOf": [
-                  {
-                    "contains": {
-                      "type": "object",
-                      "required": ["zone"],
-                      "properties": { "zone": { "const": "opponent-deployment-zone" } }
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": { "mode": { "const": "extension" } },
-            "required": ["mode"]
-          },
-          "then": {
-            "properties": {
-              "parent_ref": { "$ref": "#/$defs/named-region-ref" },
-              "baseline": { "maxItems": 0 },
-              "phase_extensions": { "maxItems": 0 },
-              "additive_extensions": { "minItems": 1 }
-            }
-          }
-        }
-      ]
-    },
-    "named-region-consumer": {
-      "type": "object",
-      "properties": {
-        "state_ref": { "$ref": "#/$defs/named-region-ref" },
-        "beneficiary_gate": {
-          "type": "object",
-          "properties": {
-            "owner": { "type": "string", "minLength": 1 },
-            "faction": { "type": "string", "minLength": 1 },
-            "operator": { "type": "string", "enum": ["and", "or"] },
-            "keywords": {
-              "type": "array",
-              "minItems": 1,
-              "items": { "type": "string", "minLength": 1 }
-            }
-          },
-          "required": ["owner", "operator", "keywords"],
-          "additionalProperties": true
-        },
-        "membership": { "$ref": "#/$defs/named-region-membership" },
-        "qualified_condition": { "$ref": "condition.schema.json" },
-        "default_branch": { "$ref": "#/$defs/named-region-branch" },
-        "qualified_branch": { "$ref": "#/$defs/named-region-branch" }
-      },
-      "required": [
-        "state_ref",
-        "beneficiary_gate",
-        "membership",
-        "qualified_condition",
-        "default_branch",
-        "qualified_branch"
-      ],
-      "additionalProperties": false
-    },
-    "named-region-state": {
-      "type": "object",
-      "properties": {
-        "region_ref": { "$ref": "#/$defs/named-region-ref" },
-        "producer": { "$ref": "#/$defs/named-region-producer" },
-        "consumer": { "$ref": "#/$defs/named-region-consumer" },
-        "branch_precedence": {
-          "const": "qualified-replaces-default"
-        }
-      },
-      "required": [
-        "region_ref",
-        "producer",
-        "consumer",
-        "branch_precedence"
-      ],
-      "additionalProperties": false
     },
     "dice-requirement": {
       "$comment": "A single dice-allocation requirement: a pair/triple/single/run of dice at or above min_value.",
@@ -464,59 +197,74 @@
         "type": {
           "type": "string",
           "enum": [
-            "stat-modifier",
-            "roll-modifier",
-            "re-roll",
-            "mortal-wounds",
-            "feel-no-pain",
-            "invulnerable-save",
-            "ward",
-            "keyword-grant",
-            "unit-keyword",
+            "ability-grant",
+            "attack-restriction",
+            "auto-result",
+            "battle-shock-test",
+            "bs-modifier",
+            "charge-roll-modifier",
+            "cp-gain",
+            "cp-on-destroy",
+            "cp-refund",
+            "damage-reduction",
             "deep-strike",
+            "disembark",
+            "disembark-after-move",
+            "engagement-passthrough",
             "fallback-and-act",
+            "feel-no-pain",
+            "fight-eligibility-extension",
             "fight-first",
             "fight-last",
-            "shoot-on-death",
             "fight-on-death",
-            "objective-control-modifier",
+            "firing-deck",
+            "flyover",
+            "heal-wounds",
+            "hazard-rolls",
+            "invulnerable-save",
+            "keyword-grant",
             "leadership-modifier",
-            "damage-reduction",
-            "attack-restriction",
-            "ability-grant",
-            "cp-gain",
-            "cp-refund",
             "model-destruction",
-            "resurrection",
+            "modifier-immunity",
+            "mortal-wounds",
+            "detection-range-modifier",
+            "named-region-state",
+            "objective-control-modifier",
+            "objective-tag",
+            "pool-add-die",
+            "re-roll",
+            "recovery-pool",
+            "remove-battle-shock",
+            "set-battle-shock",
+            "replace-roll-from-pool",
+            "resource-clear",
             "resource-gain",
             "resource-spend",
-            "charge-roll-modifier",
-            "terrain-area-tag",
-            "objective-tag",
-            "unit-tag",
-            "bs-modifier",
-            "engagement-passthrough",
-            "strategic-reserves-arrival",
-            "remove-battle-shock",
-            "unit-keyword-grant",
-            "auto-result",
-            "firing-deck",
-            "disembark-after-move",
-            "disembark",
+            "resurrection",
+            "roll-modifier",
             "rule-state",
-            "pool-add-die",
-            "replace-roll-from-pool",
-            "flyover",
-            "cp-on-destroy",
-            "battle-shock-test",
-            "modifier-immunity",
+            "shoot-on-death",
+            "stat-modifier",
             "stratagem-cost-modifier",
+            "stratagem-targeting-permission",
+            "strategic-reserves-arrival",
             "targeting-permission",
+            "tracking-token",
+            "transport-capacity-conversion",
+            "terrain-area-tag",
             "unit-attachment",
-            "fight-eligibility-extension",
-            "resource-clear",
-            "named-region-state"
-          ]
+            "unit-keyword",
+            "unit-keyword-grant",
+            "unit-tag",
+            "ward",
+            "unit-division",
+            "desperate-escape",
+            "reactive-charge",
+            "ability-usage-limit",
+            "deadly-demise-threshold",
+            "embark"
+          ],
+          "$comment": "Proven isomorphic legacy migrations: bs-modifier -> stat-modifier with stat BS; detection-range-modifier -> stat-modifier with stat detection-range; leadership-modifier -> stat-modifier with stat Ld; charge-roll-modifier -> roll-modifier with roll charge. Existing records retain their effect-specific type."
         },
         "target": {
           "type": "string",
@@ -525,18 +273,23 @@
             "bearer",
             "unit",
             "attached-unit",
+            "selected-models-unit",
             "attacker",
             "defender",
             "target",
+            "targets-of-selected-unit-attacks",
             "friendly-within-aura",
             "enemy-within-aura",
             "all-friendly",
-            "all-enemy"
+            "all-enemy",
+            "destroyed-model",
+            "triggering-unit"
           ]
         },
         "modifier": {
           "type": "object",
-          "additionalProperties": true
+          "additionalProperties": true,
+          "$comment": "Existing effect-specific `modifier.type` values remain supported. Do not introduce `modifier.type` as a new generic discriminator: an effect node's `type` names the effect, so generic reuse inside modifiers would make validators report modifier values as unknown effect types. Prefer `mode` for new modifier variants."
         },
         "scaling": {
           "$ref": "#/$defs/scaling"
@@ -546,31 +299,52 @@
         "type",
         "target"
       ],
-      "$comment": "Optional weapon narrowing on cruncher-interpreted modifiers (stat-modifier/roll-modifier/re-roll/keyword-grant): `weapon_type` ('melee'|'ranged'), `weapon_name` (one named weapon), or `weapon_keyword` (a weapon ability such as 'Torrent'|'Blast'|'Pistol' \u2014 restricts the effect to weapons carrying that keyword). When `type` is `re-roll`, `modifier` must carry `roll` (string) and `subset` (`ones` | `all-failures`). Rerolls always target failures; the subset decides whether only 1s are rerolled or every failed die. The constraint is enforced by AJV at validation time and stripped from the codegen bundle (typify can't model if/then/else) \u2014 the generated TS/Rust types therefore see `modifier` as an open object, matching its other-`type` callers. When `type` is `feel-no-pain`, `modifier` carries `threshold` (the FNP save target) and optionally `scope` \u2208 {`all`, `mortal`, `psychic`, `psychic-and-mortal`}; an absent scope defaults to `all` (fires on every unsaved wound). Narrowed scopes compose independently against the mortal-wound stream and are excluded from general attack-damage math by the cruncher. Tag effects (`terrain-area-tag`, `objective-tag`, `unit-tag`) set a transient marker on the named subject; `modifier` carries `tag` (string) and optionally `source` ('this-action'|'destroying-unit') and `clears_on` ('turn-rollover'|'never'). `target` for tag effects names the kind of entity the tag is applied to ('unit', 'self') \u2014 a placeholder, since the marker target is the objective/terrain/unit specified by the action context, not a combat target. Parameterized weapon keywords on `keyword-grant`/`unit-keyword-grant`: a granted keyword may carry its rating either baked into the `keyword` string ('Sustained Hits 1') or structurally via `value` (Sustained Hits/Rapid Fire/Melta N); Anti-X keywords may use `anti_keyword` + `anti_threshold` (rendered '[ANTI-INFANTRY 4+]'). When `type` is `auto-result`, `modifier` carries `result` (`pass`|`fail`, or an integer the named roll counts as) plus `test` (e.g. 'battle-shock') or `roll` (e.g. 'hit'). When `type` is `firing-deck`, `modifier` carries `value` (the Firing Deck rating). `disembark-after-move` needs no modifier. When `type` is `rule-state`, a named rule is switched on/off for `target`: `modifier` carries `direction` (`suppressed` | `granted`), `rule_kind` (`core-rule` | `keyword` | `ability` | `faction-rule`), `rule` (the rule slug \u2014 constrained to the closed core-rule vocabulary when `rule_kind` is `core-rule`; a free slug resolved by integrity.ts against the matching ability/faction-rule entity when `rule_kind` is `ability`/`faction-rule`; a free string when `rule_kind` is `keyword`), and \u2014 carried over from `forgo-faction-rule` \u2014 optional `scope` and `cost`. `target` names whose printed datasheet line the rule is a property OF (the rule-text attachment point), not a buff/debuff stance: a self-immunity is `self`, an aura debuff projected onto enemies is `enemy-within-aura`. `forgo-faction-rule` is exactly `rule-state` with `direction: suppressed`, `rule_kind: faction-rule`. Pooled-resource economy (shape #1): `resource-gain`/`resource-spend` move plain COUNT tokens (Pain tokens, Yield Points) by `amount` from a free-string `pool_id`; `resource-spend` may additionally carry a `cap` ({ `count` (int), `per` ('turn'|'phase'|'battle') }) bounding how often the bearer may spend from that pool. For pools whose tokens carry a FIXED FACE VALUE (Adepta Sororitas Miracle dice), two dedicated effects apply: `pool-add-die` adds a die SHOWING a value to the pool \u2014 `modifier` carries `pool_id` (free string), `value` (integer 1-6, the string 'highest' for 'the highest result you could roll', or 'rolled' for a die whose face is rolled rather than chosen), optional `count` (integer or dice-expression string, default 1), optional `count_per_pool` (a pool id: add one die per point currently in THAT pool \u2014 Icon of Khorne's per-Bloodshed-point dice), and optional `consumes_pool` (boolean, only with `count_per_pool`: the counting pool empties after the dice are added); and `replace-roll-from-pool` discards a die from the pool to substitute its value for a roll \u2014 `modifier` carries `pool_id` and `rolls` (array of roll names the substitution may apply to, e.g. ['hit','wound','save','advance','charge','desperate-escape','hazardous','leadership']). `replace-roll-from-pool` revives the dice-substitution sub-shape retired at v1.0.0; the cruncher leaves both pool effects unsupported (fail-safe) since pool state is not tracked by the buff layer. When `type` is `disembark`, `modifier` carries `distance` (inches the disembarking unit may be set up wholly within of the transport, extending the default 3\") and `allow_engagement_range` (boolean \u2014 removes the core restriction against disembarking within Engagement Range of enemies); deployment mechanic, left unsupported by the cruncher like `disembark-after-move`/`deep-strike`. When `type` is `fight-eligibility-extension`, `modifier` carries `range` (inches): when determining which models in the target unit are eligible to fight, models within `range`\" of one or more enemy models are eligible and can target enemy units within `range`\" \u2014 the 'extended fight eligibility' family of rules; left unsupported by the cruncher (model-count geometry is not tracked by the buff layer).",
+      "$comment": "Optional weapon narrowing on cruncher-interpreted modifiers (stat-modifier/roll-modifier/re-roll/keyword-grant): `weapon_type` ('melee'|'ranged'), `weapon_name` (one named weapon), or `weapon_keyword` (a weapon ability such as 'Torrent'|'Blast'|'Pistol' — restricts the effect to weapons carrying that keyword). When `type` is `re-roll`, `modifier` must carry `roll` (string) and `subset` (`ones` | `all-failures`). Rerolls always target failures; the subset decides whether only 1s are rerolled or every failed die. An optional `count` (integer >= 1) caps how many qualifying rolls may be re-rolled within the ability's active window ('you can re-roll one Hit roll'); absent means every qualifying roll. The constraint is enforced by AJV at validation time and stripped from the codegen bundle (typify can't model if/then/else) — the generated TS/Rust types therefore see `modifier` as an open object, matching its other-`type` callers. When `type` is `feel-no-pain`, `modifier` carries `threshold` (the FNP save target) and optionally `scope` ∈ {`all`, `mortal`, `psychic`, `psychic-and-mortal`}; an absent scope defaults to `all` (fires on every unsaved wound). Narrowed scopes compose independently against the mortal-wound stream and are excluded from general attack-damage math by the cruncher. Tag effects (`terrain-area-tag`, `objective-tag`, `unit-tag`) set a transient marker on the named subject; `modifier` carries `tag` (string) and optionally `source` ('this-action'|'destroying-unit') and `clears_on` ('turn-rollover'|'never'). `target` for tag effects names the kind of entity the tag is applied to ('unit', 'self') — a placeholder, since the marker target is the objective/terrain/unit specified by the action context, not a combat target. Parameterized weapon keywords on `keyword-grant`/`unit-keyword-grant`: a granted keyword may carry its rating either baked into the `keyword` string ('Sustained Hits 1') or structurally via `value` (Sustained Hits/Rapid Fire/Melta N); Anti-X keywords may use `anti_keyword` + `anti_threshold` (rendered '[ANTI-INFANTRY 4+]'). When `type` is `auto-result`, `modifier` carries `result` (`pass`|`fail`, or an integer the named roll counts as) plus `test` (e.g. 'battle-shock') or `roll` (e.g. 'hit'). When `type` is `firing-deck`, `modifier` carries `value` (the Firing Deck rating). `disembark-after-move` needs no modifier. When `type` is `rule-state`, a named rule is switched on/off for `target`: `modifier` carries `direction` (`suppressed` | `granted`), `rule_kind` (`core-rule` | `keyword` | `ability` | `faction-rule`), `rule` (the rule slug — constrained to the closed core-rule vocabulary when `rule_kind` is `core-rule`; a free slug resolved by integrity.ts against the matching ability/faction-rule entity when `rule_kind` is `ability`/`faction-rule`; a free string when `rule_kind` is `keyword`), and — carried over from `forgo-faction-rule` — optional `scope` and `cost`. `target` names whose printed datasheet line the rule is a property OF (the rule-text attachment point), not a buff/debuff stance: a self-immunity is `self`, an aura debuff projected onto enemies is `enemy-within-aura`. `forgo-faction-rule` is exactly `rule-state` with `direction: suppressed`, `rule_kind: faction-rule`. Pooled-resource economy (shape #1): `resource-gain`/`resource-spend` move plain COUNT tokens (Pain tokens, Yield Points) by `amount` from a free-string `pool_id`; `resource-spend` may additionally carry a `cap` ({ `count` (int), `per` ('turn'|'phase'|'battle') }) bounding how often the bearer may spend from that pool. For pools whose tokens carry a FIXED FACE VALUE (Adepta Sororitas Miracle dice), two dedicated effects apply: `pool-add-die` adds a die SHOWING a value to the pool — `modifier` carries `pool_id` (free string), `value` (integer 1-6, the string 'highest' for 'the highest result you could roll', or 'rolled' for a die whose face is rolled rather than chosen), optional `count` (integer or dice-expression string, default 1), optional `count_per_pool` (a pool id: add one die per point currently in THAT pool — Icon of Khorne's per-Bloodshed-point dice), and optional `consumes_pool` (boolean, only with `count_per_pool`: the counting pool empties after the dice are added); and `replace-roll-from-pool` discards a die from the pool to substitute its value for a roll — `modifier` carries `pool_id` and `rolls` (array of roll names the substitution may apply to, e.g. ['hit','wound','save','advance','charge','desperate-escape','hazardous','leadership']). `replace-roll-from-pool` revives the dice-substitution sub-shape retired at v1.0.0; the cruncher leaves both pool effects unsupported (fail-safe) since pool state is not tracked by the buff layer. When `type` is `disembark`, `modifier` carries `distance` (inches the disembarking unit may be set up wholly within of the transport, extending the default 3\") and `allow_engagement_range` (boolean — removes the core restriction against disembarking within Engagement Range of enemies); deployment mechanic, left unsupported by the cruncher like `disembark-after-move`/`deep-strike`. When `type` is `fight-eligibility-extension`, `modifier` carries `range` (inches): when determining which models in the target unit are eligible to fight, models within `range`\" of one or more enemy models are eligible and can target enemy units within `range`\" — the 'extended fight eligibility' family of rules; left unsupported by the cruncher (model-count geometry is not tracked by the buff layer).",
       "allOf": [
         {
+          "not": {
+            "required": [
+              "reach"
+            ]
+          }
+        },
+        {
           "if": {
-            "properties": {
-              "type": { "const": "resource-gain" },
-              "modifier": {
-                "type": "object",
-                "properties": {
-                  "count_mode": { "const": "by-battle-size" }
-                },
-                "required": ["count_mode"]
-              }
-            },
-            "required": ["type", "modifier"]
+            "properties": { "type": { "const": "ability-usage-limit" } },
+            "required": ["type"]
           },
           "then": {
+            "required": ["modifier"],
             "properties": {
               "modifier": {
                 "type": "object",
+                "additionalProperties": false,
                 "properties": {
-                  "count_by_battle_size": {
-                    "$ref": "#/$defs/resource-gain-battle-size-counts"
-                  }
-                }
+                  "ability_id": { "$ref": "../../defs/common.schema.json#/$defs/entity-id" },
+                  "max_uses": { "type": "integer", "minimum": 0 },
+                  "period": { "enum": ["phase", "turn", "battle-round", "battle"] }
+                },
+                "required": ["ability_id", "max_uses", "period"],
+                "description": "Replace the beneficiary's existing usage maximum for this ability and period; this does not grant the ability."
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "deadly-demise-threshold" } },
+            "required": ["type"]
+          },
+          "then": {
+            "required": ["modifier"],
+            "properties": {
+              "target": { "const": "destroyed-model" },
+              "modifier": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": { "threshold": { "type": "integer", "minimum": 2, "maximum": 6 } },
+                "required": ["threshold"],
+                "description": "Set the minimum successful Deadly Demise die result for this destroyed model's existing ability. Does not grant Deadly Demise or change its damage."
               }
             }
           }
@@ -604,15 +378,35 @@
                   },
                   "result_scope": {
                     "type": "string",
-                    "enum": ["any-result"]
+                    "enum": [
+                      "any-result"
+                    ]
+                  },
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Maximum number of qualifying rolls that may be re-rolled within the ability's active window (the window is anchored by trigger/scope.duration/usage as usual) — 'you can re-roll one Hit roll'. Absent means every qualifying roll may be re-rolled."
+                  },
+                  "optional": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether the controller may decline the re-roll. false requires the qualifying roll to be re-rolled."
                   }
                 },
                 "required": [
                   "roll"
                 ],
-                "anyOf": [
-                  { "required": ["subset"] },
-                  { "required": ["result_scope"] }
+                "oneOf": [
+                  {
+                    "required": [
+                      "subset"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "result_scope"
+                    ]
+                  }
                 ]
               }
             },
@@ -819,6 +613,9 @@
                           "highest",
                           "rolled"
                         ]
+                      },
+                      {
+                        "$ref": "#/$defs/roll-reference"
                       }
                     ]
                   },
@@ -845,6 +642,27 @@
                 "required": [
                   "pool_id",
                   "value"
+                ],
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "value": {
+                          "$ref": "#/$defs/roll-reference"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ]
+                    },
+                    "then": {
+                      "properties": {
+                        "count": {
+                          "const": 1
+                        }
+                      }
+                    }
+                  }
                 ]
               }
             },
@@ -976,7 +794,31 @@
                   },
                   "allow_engagement_range": {
                     "type": "boolean"
+                  },
+                  "modes": {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "rapid-disembark",
+                        "tactical-disembark"
+                      ]
+                    }
+                  },
+                  "setup_distance": {
+                    "type": "integer",
+                    "minimum": 1
                   }
+                },
+                "dependentRequired": {
+                  "modes": [
+                    "setup_distance"
+                  ],
+                  "setup_distance": [
+                    "modes"
+                  ]
                 }
               }
             }
@@ -1069,7 +911,7 @@
           }
         },
         {
-          "$comment": "`battle-shock-test`: the target takes Battle-shock tests on the given `dice` expression instead of the default 2D6 (e.g. '3D6' for Tyranid Synapse).",
+          "$comment": "`battle-shock-test`: the target makes a Battle-shock roll. Optional `dice` replaces the default 2D6 expression; `roll_modifier` applies a fixed signed modifier. To scale the modifier, use `operation` + `value` here and the single effect's sibling `scaling` block.",
           "if": {
             "properties": {
               "type": {
@@ -1088,11 +930,29 @@
                   "dice": {
                     "type": "string",
                     "minLength": 1
+                  },
+                  "roll_modifier": {
+                    "type": "number"
+                  },
+                  "operation": {
+                    "type": "string",
+                    "enum": [
+                      "add",
+                      "subtract"
+                    ]
+                  },
+                  "value": {
+                    "type": "number"
                   }
                 },
-                "required": [
-                  "dice"
-                ]
+                "dependentRequired": {
+                  "operation": [
+                    "value"
+                  ],
+                  "value": [
+                    "operation"
+                  ]
+                }
               }
             },
             "required": [
@@ -1122,13 +982,30 @@
                     "enum": [
                       "characteristics",
                       "enemy-stratagems",
-                      "enemy-abilities"
+                      "enemy-abilities",
+                      "attack-rolls-and-ballistic-skill"
                     ]
                   },
                   "exclude": {
                     "type": "array",
                     "items": {
                       "type": "string"
+                    }
+                  },
+                  "weapon_type": {
+                    "const": "ranged"
+                  },
+                  "ignores": {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "ballistic-skill",
+                        "hit-roll",
+                        "wound-roll"
+                      ]
                     }
                   }
                 },
@@ -1143,7 +1020,7 @@
           }
         },
         {
-          "$comment": "`stratagem-cost-modifier`: modify a Stratagem's CP cost. `operation: increase` adds `amount` CP (the cost-increase / opponent-tax direction \u2014 e.g. 'enemy Stratagems targeting this unit cost 1 more CP'); `set-to` sets the cost to `set_to`. `applies_to` picks which Stratagems: `stratagems-targeting-bearer` (enemy Stratagems against the bearer or its aura) or `stratagems-used-by-bearer`. Optional `stratagem` names a single Stratagem. The 'use a Stratagem for 0CP' reduction stays on `cp-refund`.",
+          "$comment": "Modify a Stratagem CP cost before payment. increase/decrease requires amount; set-to requires set_to. A decrease has a floor of 0CP. triggering-stratagem-use binds only the current use that caused the trigger. Free use is set-to:0, never cp-refund. Optional stratagem restricts to one named Stratagem.",
           "if": {
             "properties": {
               "type": {
@@ -1163,7 +1040,8 @@
                     "type": "string",
                     "enum": [
                       "increase",
-                      "set-to"
+                      "set-to",
+                      "decrease"
                     ]
                   },
                   "amount": {
@@ -1178,8 +1056,10 @@
                     "type": "string",
                     "enum": [
                       "stratagems-targeting-bearer",
-                      "stratagems-used-by-bearer"
-                    ]
+                      "stratagems-used-by-bearer",
+                      "triggering-stratagem-use"
+                    ],
+                    "description": "triggering-stratagem-use binds only the Stratagem use that caused a stratagem-targeted trigger; other uses are not modified. A decrease reduces the cost before payment, to a minimum of 0CP, and is never a refund."
                   },
                   "stratagem": {
                     "type": "string"
@@ -1188,6 +1068,45 @@
                 "required": [
                   "operation",
                   "applies_to"
+                ],
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "operation": {
+                          "enum": [
+                            "increase",
+                            "decrease"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "operation"
+                      ]
+                    },
+                    "then": {
+                      "required": [
+                        "amount"
+                      ]
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "operation": {
+                          "const": "set-to"
+                        }
+                      },
+                      "required": [
+                        "operation"
+                      ]
+                    },
+                    "then": {
+                      "required": [
+                        "set_to"
+                      ]
+                    }
+                  }
                 ]
               }
             },
@@ -1292,6 +1211,223 @@
           }
         },
         {
+          "$comment": "`recovery-pool`: recover a unit's wounds using the closed dice expression, first healing wounded models and then returning destroyed models at one wound. With `target: all-friendly`, `per_target_unit: true` rolls and allocates an independent pool for every eligible friendly unit.",
+          "if": {
+            "properties": {
+              "type": {
+                "const": "recovery-pool"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "oneOf": [
+              {
+                "properties": {
+                  "target": {
+                    "const": "unit"
+                  },
+                  "modifier": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "dice": {
+                        "type": "string",
+                        "pattern": "^[dD][3-6](?:[+-][1-9][0-9]*)?$|^[1-9][0-9]*[dD][3-6](?:[+-][1-9][0-9]*)?$"
+                      }
+                    },
+                    "required": [
+                      "dice"
+                    ]
+                  }
+                },
+                "required": [
+                  "target",
+                  "modifier"
+                ]
+              },
+              {
+                "properties": {
+                  "target": {
+                    "const": "all-friendly"
+                  },
+                  "modifier": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "dice": {
+                        "type": "string",
+                        "pattern": "^[dD][3-6](?:[+-][1-9][0-9]*)?$|^[1-9][0-9]*[dD][3-6](?:[+-][1-9][0-9]*)?$"
+                      },
+                      "per_target_unit": {
+                        "const": true
+                      }
+                    },
+                    "required": [
+                      "dice",
+                      "per_target_unit"
+                    ]
+                  }
+                },
+                "required": [
+                  "target",
+                  "modifier"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "$comment": "Permission to target the named unit with a Stratagem despite the specified restriction. The prior-use exception applies ONLY to the named Stratagem and allows this unit to be targeted after a different unit was targeted this phase. The subsequent-use exception preserves a later use on a different unit after this unit is targeted. Neither removes other targeting restrictions.",
+          "if": {
+            "properties": {
+              "type": {
+                "const": "stratagem-targeting-permission"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target": {
+                "type": "string",
+                "enum": [
+                  "unit",
+                  "attached-unit"
+                ]
+              },
+              "modifier": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "exception": {
+                    "type": "string",
+                    "enum": [
+                      "battle-shocked",
+                      "already-targeted-different-unit-this-phase",
+                      "does-not-prevent-targeting-different-unit-this-phase"
+                    ]
+                  },
+                  "stratagem": {
+                    "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                  }
+                },
+                "required": [
+                  "exception"
+                ],
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "exception": {
+                          "enum": [
+                            "already-targeted-different-unit-this-phase",
+                            "does-not-prevent-targeting-different-unit-this-phase"
+                          ]
+                        }
+                      }
+                    },
+                    "then": {
+                      "required": [
+                        "stratagem"
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "required": [
+              "target",
+              "modifier"
+            ]
+          }
+        },
+        {
+          "$comment": "`bind_count_as` binds a dice-valued mortal-wound count for a following local consumer.",
+          "if": {
+            "properties": {
+              "type": {
+                "const": "mortal-wounds"
+              },
+              "modifier": {
+                "required": [
+                  "bind_count_as"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "modifier"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "count": {
+                    "type": "string",
+                    "pattern": "^[dD][3-6](?:[+-][1-9][0-9]*)?$|^[1-9][0-9]*[dD][3-6](?:[+-][1-9][0-9]*)?$"
+                  },
+                  "bind_count_as": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "count",
+                  "bind_count_as"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "$comment": "`count_from` consumes a preceding local bound count for a wounds-form resurrection.",
+          "if": {
+            "properties": {
+              "type": {
+                "const": "resurrection"
+              },
+              "modifier": {
+                "required": [
+                  "count_from"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "modifier"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "const": "wounds"
+                  },
+                  "count_from": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "type",
+                  "count_from"
+                ]
+              }
+            }
+          }
+        },
+        {
           "$comment": "`unit-attachment`: this unit can join another friendly unit during the Declare Battle Formations step, becoming part of that Bodyguard unit. `led_by` (optional) is the keyword the joined unit must be led by; `mandatory` (optional) marks the attachment as forced (the unit must be attached to a Leader or it counts as destroyed).",
           "if": {
             "properties": {
@@ -1321,18 +1457,907 @@
           }
         },
         {
-          "$comment": "`named-region-state` carries its structured producer and consumer state in the modifier object.",
           "if": {
             "properties": {
-              "type": { "const": "named-region-state" }
+              "type": {
+                "const": "resource-gain"
+              },
+              "modifier": {
+                "type": "object",
+                "properties": {
+                  "count_mode": {
+                    "const": "by-battle-size"
+                  }
+                },
+                "required": [
+                  "count_mode"
+                ]
+              }
             },
-            "required": ["type"]
+            "required": [
+              "type",
+              "modifier"
+            ]
           },
           "then": {
             "properties": {
-              "modifier": { "$ref": "#/$defs/named-region-state" }
+              "modifier": {
+                "type": "object",
+                "properties": {
+                  "count_by_battle_size": {
+                    "$ref": "#/$defs/resource-gain-battle-size-counts"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "Typed Transport occupancy accounting. Grouped models encode ratios with explicit rounding applied once to the total matching-model occupancy quotient, including any partial group; fixed model spaces encode per-model occupancy; equivalent model encodes capacity counting by another model keyword. Base Transport capacity and unrelated embark/Firing Deck riders remain separate mechanics.",
+          "if": {
+            "properties": {
+              "type": {
+                "const": "transport-capacity-conversion"
+              }
             },
-            "required": ["modifier"]
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target": {
+                "enum": [
+                  "self",
+                  "unit"
+                ]
+              },
+              "modifier": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "occupancy_kind": {
+                        "const": "grouped-models"
+                      },
+                      "subject_kind": {
+                        "$ref": "#/$defs/transport-occupancy-subject-kind"
+                      },
+                      "model_keyword": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "transport_eligibility": {
+                        "$ref": "#/$defs/transport-eligibility"
+                      },
+                      "models_per_group": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "spaces_per_group": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "rounding": {
+                        "type": "string",
+                        "enum": [
+                          "up",
+                          "down"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "occupancy_kind",
+                      "subject_kind",
+                      "models_per_group",
+                      "spaces_per_group",
+                      "rounding"
+                    ],
+                    "allOf": [
+                      {
+                        "if": {
+                          "properties": {
+                            "subject_kind": {
+                              "const": "single-model"
+                            }
+                          },
+                          "required": [
+                            "subject_kind"
+                          ]
+                        },
+                        "then": {
+                          "properties": {
+                            "models_per_group": {
+                              "const": 1
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "occupancy_kind": {
+                        "const": "fixed-model-spaces"
+                      },
+                      "subject_kind": {
+                        "$ref": "#/$defs/transport-occupancy-subject-kind"
+                      },
+                      "model_keyword": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "transport_eligibility": {
+                        "$ref": "#/$defs/transport-eligibility"
+                      },
+                      "spaces_per_model": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    },
+                    "required": [
+                      "occupancy_kind",
+                      "subject_kind",
+                      "spaces_per_model"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "occupancy_kind": {
+                        "const": "equivalent-model"
+                      },
+                      "subject_kind": {
+                        "$ref": "#/$defs/transport-occupancy-subject-kind"
+                      },
+                      "model_keyword": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "transport_eligibility": {
+                        "$ref": "#/$defs/transport-eligibility"
+                      },
+                      "equivalent_model_keyword": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "equivalent_model_count": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    },
+                    "required": [
+                      "occupancy_kind",
+                      "subject_kind"
+                    ],
+                    "oneOf": [
+                      {
+                        "required": [
+                          "equivalent_model_keyword"
+                        ]
+                      },
+                      {
+                        "required": [
+                          "equivalent_model_count"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "required": [
+              "modifier"
+            ]
+          }
+        },
+        {
+          "$comment": "`named-region-state` carries its structured producer and consumer state in the modifier object.",
+          "if": {
+            "properties": {
+              "type": {
+                "const": "named-region-state"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "$ref": "#/$defs/named-region-state"
+              }
+            },
+            "required": [
+              "modifier"
+            ]
+          }
+        },
+        {
+          "$comment": "A reusable rules-bundle grant is an entity-backed reference, not a free-form grant label.",
+          "if": {
+            "properties": {
+              "type": {
+                "const": "ability-grant"
+              },
+              "modifier": {
+                "type": "object",
+                "properties": {
+                  "rules_bundle": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "rules_bundle"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "modifier"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "type": "object",
+                "properties": {
+                  "ability_id": {
+                    "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                  },
+                  "rules_bundle": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "ability_id",
+                  "rules_bundle"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "detection-range-modifier"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "operation": {
+                    "type": "string",
+                    "enum": [
+                      "add",
+                      "set"
+                    ]
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "operation",
+                  "value"
+                ]
+              }
+            },
+            "required": [
+              "modifier"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "hazard-rolls"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "additional_per_engaged_unit": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "engaged_keyword": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "roll_modifier_if_battle_shocked": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "additional_per_engaged_unit",
+                  "engaged_keyword"
+                ]
+              }
+            },
+            "required": [
+              "modifier"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "objective-control-modifier"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "type": "object",
+                "properties": {
+                  "retake": {
+                    "const": "opponent-control-greater-at-phase-end",
+                    "description": "A sticky marker remains controlled until, at a phase end, the opponent's Level of Control exceeds yours. Leaving range and equal control do not release it."
+                  }
+                },
+                "allOf": [
+                  {
+                    "if": {
+                      "required": [
+                        "retake"
+                      ]
+                    },
+                    "then": {
+                      "properties": {
+                        "sticky": {
+                          "const": true
+                        }
+                      },
+                      "required": [
+                        "sticky"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "fight-on-death"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "properties": {
+                  "resolution": {
+                    "enum": ["when-unit-fights", "after-attacking-unit-finishes"]
+                  },
+                  "removal": {
+                    "enum": ["after-unit-fights-or-phase-end", "after-destroyed-model-fights"]
+                  }
+                },
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": { "resolution": { "const": "when-unit-fights" } },
+                      "required": ["resolution"]
+                    },
+                    "then": { "properties": { "removal": { "const": "after-unit-fights-or-phase-end" } } }
+                  },
+                  {
+                    "if": {
+                      "properties": { "resolution": { "const": "after-attacking-unit-finishes" } },
+                      "required": ["resolution"]
+                    },
+                    "then": { "properties": { "removal": { "const": "after-destroyed-model-fights" } } }
+                  },
+                  {
+                    "if": {
+                      "anyOf": [
+                        {
+                          "required": [
+                            "resolution"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "removal"
+                          ]
+                        }
+                      ]
+                    },
+                    "then": {
+                      "required": [
+                        "resolution",
+                        "removal"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "resurrection"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "properties": {
+                  "up_to": {
+                    "type": "boolean"
+                  },
+                  "exclude_keywords": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "model-destruction"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "properties": {
+                  "model_role": {
+                    "enum": [
+                      "bodyguard",
+                      "leader",
+                      "support"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "fight-on-death"
+              },
+              "modifier": {
+                "required": [
+                  "resolution"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "modifier"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target": {
+                "const": "destroyed-model"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "unit-division"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target": {
+                "const": "unit"
+              },
+              "modifier": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "resulting_model_counts": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "minItems": 2
+                  }
+                },
+                "required": [
+                  "resulting_model_counts"
+                ]
+              }
+            },
+            "required": [
+              "modifier"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "mortal-wounds"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "properties": {
+                  "in_addition_to_normal_damage": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "desperate-escape"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target": {
+                "const": "triggering-unit"
+              },
+              "modifier": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "required": {
+                    "const": true
+                  },
+                  "roll_modifier_if_battle_shocked": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "required"
+                ]
+              }
+            },
+            "required": [
+              "target",
+              "modifier"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "reactive-charge"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target": {
+                "enum": [
+                  "unit",
+                  "attached-unit"
+                ]
+              },
+              "modifier": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "charge_roll_max_after_modifiers": {
+                    "type": "integer",
+                    "minimum": 2,
+                    "maximum": 12
+                  }
+                },
+                "required": [
+                  "charge_roll_max_after_modifiers"
+                ]
+              }
+            },
+            "required": [
+              "target",
+              "modifier"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "modifier-immunity"
+              },
+              "modifier": {
+                "properties": {
+                  "scope": {
+                    "const": "attack-rolls-and-ballistic-skill"
+                  }
+                },
+                "required": [
+                  "scope"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "modifier"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "scope": {
+                    "const": "attack-rolls-and-ballistic-skill"
+                  },
+                  "weapon_type": {
+                    "const": "ranged"
+                  },
+                  "ignores": {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "ballistic-skill",
+                        "hit-roll",
+                        "wound-roll"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "scope",
+                  "weapon_type",
+                  "ignores"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "embark"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target": {
+                "const": "unit"
+              },
+              "modifier": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "transport": {
+                    "const": "bearer"
+                  }
+                },
+                "required": [
+                  "transport"
+                ]
+              }
+            },
+            "required": [
+              "target",
+              "modifier"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "keyword-grant"
+              },
+              "target": {
+                "const": "attacker"
+              },
+              "modifier": {
+                "required": [
+                  "attack_recipient"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "target",
+              "modifier"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "type": "object",
+                "properties": {
+                  "attack_recipient": {
+                    "const": "bearer"
+                  },
+                  "weapon_type": {
+                    "type": "string",
+                    "enum": [
+                      "melee",
+                      "ranged"
+                    ]
+                  }
+                },
+                "required": [
+                  "attack_recipient"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "resource-spend"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "type": "object",
+                "properties": {
+                  "selection": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "count": {
+                        "const": 1
+                      },
+                      "from": {
+                        "const": "retained-pool-dice"
+                      },
+                      "policy": {
+                        "const": "controller-chooses"
+                      }
+                    },
+                    "required": [
+                      "count",
+                      "from",
+                      "policy"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "resource-gain"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "type": "object",
+                "properties": {
+                  "resource_label": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "resource-spend"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "modifier": {
+                "type": "object",
+                "properties": {
+                  "resource_label": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
           }
         }
       ]
@@ -1352,11 +2377,54 @@
         },
         "choice_label": {
           "type": "string"
+        },
+        "choice_prompt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "min_choices": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Minimum number of distinct options selected at this activation; defaults to one."
+        },
+        "max_choices": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum number of distinct options selected at this activation; defaults to one."
         }
       },
       "required": [
         "type",
         "options"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "anyOf": [
+              {
+                "required": [
+                  "min_choices"
+                ]
+              },
+              {
+                "required": [
+                  "max_choices"
+                ]
+              }
+            ]
+          },
+          "then": {
+            "required": [
+              "min_choices",
+              "max_choices"
+            ],
+            "properties": {
+              "options": {
+                "uniqueItems": true
+              }
+            }
+          }
+        }
       ]
     },
     "sequence-effect": {
@@ -1376,6 +2444,79 @@
       "required": [
         "type",
         "steps"
+      ]
+    },
+    "rules-bundle-effect": {
+      "type": "object",
+      "description": "A reusable named ability's complete effect bundle. Other abilities grant it through an ability-grant effect whose modifier.ability_id names the containing ability.",
+      "properties": {
+        "type": {
+          "const": "rules-bundle"
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/effect-node"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "type",
+        "steps"
+      ],
+      "additionalProperties": false
+    },
+    "named-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "A named sub-ability embedded in a larger rules bundle.",
+      "properties": {
+        "type": {
+          "const": "named-effect"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "psychic"
+          ]
+        },
+        "level": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "effect": {
+          "$ref": "#/$defs/effect-node"
+        },
+        "optional": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the controlling player may decline to use this named sub-ability."
+        },
+        "cost": {
+          "$ref": "#/$defs/effect-node",
+          "description": "A prerequisite cost: the nested effect is granted only after this complete cost is paid. An optional named effect may be declined without paying it."
+        },
+        "duration": {
+          "$ref": "scope.schema.json#/$defs/scope-duration",
+          "description": "Expiration of this sub-effect, independently of sibling rules in an enclosing bundle."
+        },
+        "trigger": {
+          "$ref": "ability.schema.json#/$defs/ability-trigger",
+          "description": "Reactive event for this sub-ability. When nested inside an activated effect, the subscription exists only for the enclosing effect duration."
+        },
+        "usage": {
+          "$ref": "ability.schema.json#/$defs/ability-usage"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "effect"
       ]
     },
     "dice-gated-effect": {
@@ -1434,12 +2575,159 @@
               "type": "null"
             }
           ]
+        },
+        "test": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "leadership",
+                "battle-shock"
+              ]
+            },
+            "subject": {
+              "type": "string",
+              "enum": [
+                "unit",
+                "self",
+                "target"
+              ]
+            },
+            "modifiers": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "condition": {
+                    "$ref": "condition.schema.json"
+                  },
+                  "value": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "condition",
+                  "value"
+                ]
+              }
+            }
+          },
+          "required": [
+            "kind",
+            "subject"
+          ],
+          "additionalProperties": false,
+          "description": "Perform the named actual 2D6 test using the subject's current Leadership and normal applicable modifiers and reroll permissions. A Battle-shock failure inflicts Battle-shock as well as resolving on_fail; a Leadership test does not."
+        },
+        "roll_var": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Binds this D6 result for an immediate nested consumer; a consumer refers to it only as {roll_var: ID}."
         }
       },
       "required": [
         "type",
         "dice",
         "threshold"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "test"
+            ]
+          },
+          "then": {
+            "properties": {
+              "dice": {
+                "const": "2D6"
+              },
+              "threshold": {
+                "const": "leadership"
+              },
+              "comparison": {
+                "const": "gte"
+              }
+            },
+            "required": [
+              "comparison"
+            ]
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "roll_var"
+            ]
+          },
+          "then": {
+            "properties": {
+              "dice": {
+                "const": "D6"
+              }
+            },
+            "required": [
+              "dice"
+            ],
+            "not": {
+              "required": [
+                "test"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "dice-table-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "$comment": "Resolve one dice roll against an exhaustive outcome table. Each face belongs to exactly one outcome; overlap and coverage are enforced by referential integrity because JSON Schema cannot compare sibling arrays.",
+      "properties": {
+        "type": {
+          "const": "dice-table"
+        },
+        "dice": {
+          "type": "string",
+          "enum": [
+            "D3",
+            "D6"
+          ],
+          "description": "One closed die whose faces are covered exactly once by outcomes."
+        },
+        "outcomes": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "results": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 6
+                }
+              },
+              "effect": {
+                "$ref": "#/$defs/effect-node"
+              }
+            },
+            "required": [
+              "results",
+              "effect"
+            ]
+          }
+        }
+      },
+      "required": [
+        "type",
+        "dice",
+        "outcomes"
       ]
     },
     "conditional-effect": {
@@ -1528,9 +2816,8 @@
         "selector": {
           "type": "object",
           "additionalProperties": false,
-          "description": "Legacy selectors omit min_count and retain up-to semantics. Bounded authoring requires min_count, max_count, and owner, with min_count <= max_count.",
           "properties": {
-            "min_count": {
+            "count": {
               "type": "integer",
               "minimum": 1
             },
@@ -1551,6 +2838,26 @@
                 "enemy"
               ]
             },
+            "target_kind": {
+              "type": "string",
+              "enum": [
+                "unit",
+                "model"
+              ],
+              "default": "unit",
+              "description": "Whether the selector binds whole units or individual models."
+            },
+            "within_inches": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "eligibility": {
+              "$ref": "condition.schema.json"
+            },
+            "min_count": {
+              "type": "integer",
+              "minimum": 1
+            },
             "range_inches": {
               "type": "number",
               "minimum": 0,
@@ -1568,11 +2875,280 @@
                 "not-engaged-with-bearer"
               ],
               "description": "Candidate engagement relation to the bearer; evaluated independently of range_inches."
+            },
+            "reference": {
+              "type": "string",
+              "enum": [
+                "bearer",
+                "bearer-unit"
+              ],
+              "description": "Origin of both the range and engagement_relation gates. Default bearer means the model carrying the ability; bearer-unit means its entire current unit."
+            },
+            "within_inches_from": {
+              "$ref": "#/$defs/selection-reference"
+            },
+            "visible_to": {
+              "$ref": "#/$defs/selection-reference"
+            },
+            "selection_limit": {
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "period": {
+                  "type": "string",
+                  "enum": [
+                    "turn",
+                    "phase",
+                    "battle-round",
+                    "battle"
+                  ]
+                }
+              },
+              "required": [
+                "count",
+                "period"
+              ],
+              "additionalProperties": false,
+              "description": "Maximum selections of EACH target by this ability across ALL friendly bearers during the named period. Counter key is (controlling army, ability identity, target identity, period), not bearer identity. Selecting another target does not consume this target's counter."
+            },
+            "model_names": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "description": "Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords."
+            },
+            "excluded_keywords": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "description": "A candidate with any listed keyword is excluded."
+            },
+            "bind_as": {
+              "type": "string",
+              "minLength": 1
             }
           },
           "required": [
-            "max_count",
             "owner"
+          ],
+          "oneOf": [
+            {
+              "required": [
+                "count"
+              ],
+              "not": {
+                "required": [
+                  "max_count"
+                ]
+              }
+            },
+            {
+              "required": [
+                "max_count"
+              ],
+              "not": {
+                "required": [
+                  "count"
+                ]
+              }
+            }
+          ],
+          "description": "Legacy selectors omit min_count and retain up-to semantics. Bounded authoring requires min_count, max_count, and owner, with min_count <= max_count.",
+          "allOf": [
+            {
+              "if": { "required": ["within_inches_from"] },
+              "then": {
+                "anyOf": [{ "required": ["within_inches"] }, { "required": ["range_inches"] }],
+                "not": { "required": ["reference"] }
+              }
+            },
+            {
+              "if": { "required": ["visible_to"] },
+              "then": { "properties": { "visibility_required": { "const": false } } }
+            },
+            {
+              "if": {
+                "required": [
+                  "model_names"
+                ]
+              },
+              "then": {
+                "required": [
+                  "target_kind"
+                ],
+                "properties": {
+                  "target_kind": {
+                    "const": "model"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "effect": {
+          "$ref": "#/$defs/effect-node"
+        }
+      },
+      "required": [
+        "type",
+        "selector",
+        "effect"
+      ]
+    },
+    "for-each-unit-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "$comment": "Resolve `effect` independently once for every matching unit, binding that unit as its target. `selector` has no count because it selects every eligible unit.",
+      "properties": {
+        "type": {
+          "const": "for-each-unit"
+        },
+        "selector": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "owner": {
+              "type": "string",
+              "enum": [
+                "friendly",
+                "enemy"
+              ]
+            },
+            "keywords": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": "Every listed keyword is required on each matching unit."
+            },
+            "target_kind": {
+              "type": "string",
+              "enum": [
+                "unit",
+                "model"
+              ],
+              "default": "unit",
+              "description": "Whether each iteration binds a whole unit or one matching model."
+            },
+            "within_inches": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "engagement_relation": {
+              "type": "string",
+              "enum": [
+                "engaged-with-bearer",
+                "not-engaged-with-bearer"
+              ],
+              "description": "Candidate engagement relation to the bearer or bearer-unit."
+            },
+            "reference": {
+              "type": "string",
+              "enum": [
+                "bearer",
+                "bearer-unit"
+              ],
+              "description": "Origin of the engagement_relation gate."
+            },
+            "member_of": {
+              "type": "string",
+              "enum": [
+                "bearer-unit"
+              ],
+              "description": "Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords."
+            },
+            "model_names": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "description": "Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords."
+            },
+            "excluded_keywords": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "description": "A candidate with any listed keyword is excluded."
+            },
+            "bind_as": { "type": "string", "minLength": 1 },
+            "eligibility": { "$ref": "condition.schema.json" },
+            "within_objective": {
+              "$ref": "#/$defs/selection-reference"
+            }
+          },
+          "required": [
+            "owner"
+          ],
+          "allOf": [
+            {
+              "if": {
+                "required": [
+                  "member_of"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "target_kind": {
+                    "const": "model"
+                  },
+                  "owner": {
+                    "const": "friendly"
+                  }
+                },
+                "required": [
+                  "target_kind"
+                ]
+              }
+            },
+            {
+              "if": {
+                "required": [
+                  "model_names"
+                ]
+              },
+              "then": {
+                "required": [
+                  "target_kind"
+                ],
+                "properties": {
+                  "target_kind": {
+                    "const": "model"
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "required": [
+                  "engagement_relation"
+                ]
+              },
+              "then": {
+                "required": [
+                  "reference"
+                ]
+              }
+            }
           ]
         },
         "effect": {
@@ -1712,38 +3288,16 @@
               "$ref": "condition.schema.json"
             }
           }
+        },
+        "after_move": {
+          "$ref": "#/$defs/effect-node",
+          "description": "Resolve this effect only after the target actually completes the granted move (including a legal zero-distance move). Declining to make the move does not resolve this effect. Uses the enclosing duration for lasting follow-up effects."
         }
       },
       "required": [
         "type",
         "target",
         "modifier"
-      ]
-    },
-    "keyword-filter": {
-      "type": "object",
-      "description": "Independent keyword predicate for the aura emitter or each aura recipient. Required keywords all match; excluded keywords none match.",
-      "additionalProperties": false,
-      "properties": {
-        "required_keywords": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "minItems": 1
-        },
-        "excluded_keywords": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "minItems": 1
-        }
-      },
-      "required": [
-        "required_keywords"
       ]
     },
     "aura-effect": {
@@ -1781,12 +3335,6 @@
                 }
               ]
             },
-            "emitter_filter": {
-              "$ref": "#/$defs/keyword-filter"
-            },
-            "recipient_filter": {
-              "$ref": "#/$defs/keyword-filter"
-            },
             "range_bonus": {
               "type": "integer"
             },
@@ -1795,6 +3343,35 @@
             },
             "effect": {
               "$ref": "#/$defs/effect-node"
+            },
+            "eligible": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "required_keywords": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "excluded_keywords": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "minProperties": 1
+            },
+            "emitter_filter": {
+              "$ref": "#/$defs/keyword-filter"
+            },
+            "recipient_filter": {
+              "$ref": "#/$defs/keyword-filter"
             }
           }
         }
@@ -1805,111 +3382,10 @@
         "modifier"
       ]
     },
-    "beneficiary-bound-effect-node": {
-      "type": "object",
-      "description": "Targetless effect dispatched to a relation-resolved beneficiary model; bearer and unit targets are intentionally not representable.",
-      "properties": {
-        "type": {
-          "type": "string",
-          "minLength": 1
-        },
-        "modifier": {
-          "type": "object",
-          "additionalProperties": true
-        },
-        "scaling": {
-          "$ref": "#/$defs/scaling"
-        }
-      },
-      "required": ["type"],
-      "additionalProperties": false
-    },
-    "leader-model-ability-grant-effect": {
-      "type": "object",
-      "description": "Resolve the attached qualifying leader model and dispatch a targetless effect to that model while it leads the bearer unit.",
-      "additionalProperties": false,
-      "properties": {
-        "type": {
-          "const": "leader-model-ability-grant"
-        },
-        "source": {
-          "const": "bearer-unit"
-        },
-        "beneficiary": {
-          "type": "string",
-          "enum": [
-            "leading-leader-model",
-            "attached-character-leader"
-          ]
-        },
-        "leader_filter": {
-          "type": "object",
-          "properties": {
-            "identity": {
-              "type": "string",
-              "minLength": 1
-            },
-            "keywords": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "minLength": 1
-              },
-              "minItems": 1
-            }
-          },
-          "minProperties": 1,
-          "additionalProperties": false
-        },
-        "attached_unit_filter": {
-          "oneOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "minLength": 1
-              },
-              "minItems": 1
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "duration": {
-          "const": "while-leading"
-        },
-        "grant": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "recipient": {
-              "const": "beneficiary"
-            },
-            "effect": {
-              "$ref": "#/$defs/beneficiary-bound-effect-node"
-            }
-          },
-          "required": ["recipient", "effect"]
-        },
-        "recipient_binding": {
-          "const": "beneficiary-only"
-        }
-      },
-      "required": [
-        "type",
-        "source",
-        "beneficiary",
-        "attached_unit_filter",
-        "duration",
-        "grant",
-        "recipient_binding"
-      ]
-    },
     "designate-target-effect": {
       "type": "object",
       "additionalProperties": false,
-      "$comment": "Nominate one enemy unit (the designation/mark) and apply `applies.effect` keyed to it. `applies.to` decides the beneficiary: 'target' debuffs the marked unit itself (cover-strip, suppression); 'attackers-of-target' buffs every friendly attack made against it (Oath of Moment, Tau spotting). Supersedes the ad-hoc `context: vs-selected-keyword`/`vs-marked` workaround. `select.timing` is when the mark is chosen; `duration` how long it lasts.",
+      "$comment": "Nominate one enemy or friendly unit (the designation/mark) and apply `applies.effect` keyed to it. `applies.to` decides the beneficiary: 'target' affects the marked unit itself; 'attackers-of-target' buffs every friendly attack against it; 'bearer-attacks-target' buffs only attacks made by the ability's bearer against it. Selection can constrain range and require all or any listed keywords. `select.timing` is when the mark is chosen; `duration` how long it lasts.",
       "properties": {
         "type": {
           "const": "designate-target"
@@ -1935,8 +3411,79 @@
             },
             "timing": {
               "type": "string"
+            },
+            "within_inches": {
+              "type": "number",
+              "minimum": 0
+            },
+            "reference": {
+              "enum": ["bearer", "bearer-unit"],
+              "description": "Explicit built-in origin of range and visibility gates, matching select-units."
+            },
+            "visibility_required": { "type": "boolean" },
+            "keywords": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "keyword_match": {
+              "type": "string",
+              "enum": [
+                "all",
+                "any"
+              ],
+              "default": "all"
+            },
+            "eligibility": {
+              "$ref": "condition.schema.json",
+              "description": "Predicate on the candidate before selecting it. Event-bound history can refer to the attack sequence that caused this selection."
+            },
+            "visible_to": {
+              "$ref": "#/$defs/selection-reference"
+            },
+            "excluded_keywords": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "bind_as": {
+              "type": "string",
+              "minLength": 1
+            },
+            "within_inches_from": {
+              "$ref": "#/$defs/selection-reference"
+            },
+            "selection_limit": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "count": { "type": "integer", "minimum": 1 },
+                "period": { "enum": ["phase", "turn", "battle-round", "battle"] }
+              },
+              "required": ["count", "period"],
+              "description": "Maximum selections of this same target by this ability across the whole army in the named period."
             }
           },
+          "allOf": [
+            {
+              "if": { "required": ["within_inches_from"] },
+              "then": {
+                "required": ["within_inches"],
+                "not": { "required": ["reference"] }
+              }
+            },
+            {
+              "if": { "required": ["visible_to"] },
+              "then": { "properties": { "visibility_required": { "const": false } } }
+            }
+          ],
           "required": [
             "scope"
           ]
@@ -1949,11 +3496,36 @@
               "type": "string",
               "enum": [
                 "target",
-                "attackers-of-target"
+                "attackers-of-target",
+                "bearer-attacks-target",
+                "bound-unit-attacks-reference"
               ]
             },
             "effect": {
               "$ref": "#/$defs/effect-node"
+            },
+            "attacker_keywords": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "description": "All keywords required on each individual friendly attacking MODEL, not on its unit. Only meaningful with to:attackers-of-target."
+            },
+            "attacker_unit_keywords": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "minItems": 1,
+              "uniqueItems": true,
+              "description": "All keywords required on the attacking model's UNIT, including attached-unit keyword unions. Does not require those keywords on the individual model. Only meaningful with to:attackers-of-target."
+            },
+            "beneficiary": {
+              "$ref": "#/$defs/event-or-selection-reference"
+            },
+            "reference": {
+              "$ref": "#/$defs/selection-reference"
             }
           },
           "required": [
@@ -1977,125 +3549,55 @@
         "designation",
         "select",
         "applies"
-      ]
-    },
-    "persistent-designation-effect": {
-      "type": "object",
-      "additionalProperties": false,
-      "$comment": "Retain one selected enemy unit or objective marker, then resolve a bearer-only consumer relation against that exact reference for the declared duration. The seed policy is one-time selection at the start of the first battle round.",
-      "properties": {
-        "type": {
-          "const": "persistent-designation"
-        },
-        "designation": {
-          "type": "string",
-          "minLength": 1
-        },
-        "select": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "scope": {
-              "type": "string",
-              "enum": [
-                "enemy-unit",
-                "objective-marker"
-              ]
-            },
-            "count": {
-              "type": "integer",
-              "const": 1
-            },
-            "timing": {
-              "type": "string",
-              "minLength": 1
-            },
-            "selection_policy": {
-              "type": "string",
-              "enum": [
-                "one-time"
-              ]
-            }
-          },
-          "required": [
-            "scope",
-            "timing",
-            "selection_policy"
-          ]
-        },
-        "consumer": {
-          "type": "object",
-          "additionalProperties": false,
-          "description": "The retained reference is consumed by the bearer model only; the renderer names both the bearer recipient and the exact selected-reference relation.",
-          "properties": {
-            "relation": {
-              "type": "string",
-              "enum": [
-                "attacks-selected-unit",
-                "within-selected-marker"
-              ],
-              "description": "Resolve this relation from the bearer to its retained enemy unit or marker; do not substitute a generic target or nearby-object predicate."
-            },
-            "beneficiary": {
-              "type": "string",
-              "const": "bearer",
-              "description": "For the seed, beneficiary bearer resolves to this model; the selected unit or marker is never the effect recipient."
-            },
-            "effect": {
-              "$ref": "#/$defs/effect-node",
-              "description": "Nested effects target the bearer. Objective Control operation set is an assignment and renders as setting the characteristic to the value, not as a signed delta."
-            }
-          },
-          "required": [
-            "relation",
-            "beneficiary",
-            "effect"
-          ]
-        },
-        "duration": {
-          "type": "string",
-          "enum": [
-            "phase",
-            "turn",
-            "battle-round",
-            "battle",
-            "until-next-command-phase"
-          ]
-        }
-      },
-      "required": [
-        "type",
-        "designation",
-        "select",
-        "consumer",
-        "duration"
       ],
       "allOf": [
         {
           "if": {
             "properties": {
-              "select": {
-                "properties": {
-                  "scope": {
-                    "const": "enemy-unit"
-                  }
-                },
-                "required": [
-                  "scope"
+              "applies": {
+                "anyOf": [
+                  { "required": ["attacker_keywords"] },
+                  { "required": ["attacker_unit_keywords"] }
                 ]
               }
             }
           },
           "then": {
             "properties": {
-              "consumer": {
+              "applies": {
                 "properties": {
-                  "relation": {
-                    "const": "attacks-selected-unit"
+                  "to": {
+                    "const": "attackers-of-target"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "applies": {
+                "properties": {
+                  "to": {
+                    "const": "bound-unit-attacks-reference"
                   }
                 },
                 "required": [
-                  "relation"
+                  "to"
+                ]
+              }
+            },
+            "required": [
+              "applies"
+            ]
+          },
+          "then": {
+            "properties": {
+              "applies": {
+                "required": [
+                  "beneficiary",
+                  "reference"
                 ]
               }
             }
@@ -2104,29 +3606,40 @@
         {
           "if": {
             "properties": {
-              "select": {
+              "applies": {
                 "properties": {
-                  "scope": {
-                    "const": "objective-marker"
+                  "to": {
+                    "not": {
+                      "const": "bound-unit-attacks-reference"
+                    }
                   }
                 },
                 "required": [
-                  "scope"
+                  "to"
                 ]
               }
-            }
+            },
+            "required": [
+              "applies"
+            ]
           },
           "then": {
             "properties": {
-              "consumer": {
-                "properties": {
-                  "relation": {
-                    "const": "within-selected-marker"
-                  }
-                },
-                "required": [
-                  "relation"
-                ]
+              "applies": {
+                "not": {
+                  "anyOf": [
+                    {
+                      "required": [
+                        "beneficiary"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "reference"
+                      ]
+                    }
+                  ]
+                }
               }
             }
           }
@@ -2273,6 +3786,64 @@
         "type",
         "options"
       ]
+    },
+    "transport-occupancy-subject-kind": {
+      "type": "string",
+      "enum": [
+        "unit-models",
+        "single-model"
+      ]
+    },
+    "transport-eligibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "requires_capacity_keyword": {
+          "type": "string",
+          "minLength": 1
+        },
+        "embark_as_keyword": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "requires_capacity_keyword"
+          ]
+        },
+        {
+          "required": [
+            "embark_as_keyword"
+          ]
+        }
+      ]
+    },
+    "resource-gain-battle-size-counts": {
+      "type": "object",
+      "description": "Token/resource count keyed by the three supported battle sizes. The renderer intentionally refers players to the accompanying table rather than spelling these values out.",
+      "properties": {
+        "incursion": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "strike-force": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "onslaught": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "incursion",
+        "strike-force",
+        "onslaught"
+      ],
+      "additionalProperties": false
     },
     "resource-action-menu-effect": {
       "type": "object",
@@ -2510,6 +4081,1878 @@
       },
       "required": [
         "event"
+      ]
+    },
+    "named-region-ref": {
+      "type": "object",
+      "properties": {
+        "region_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner_faction": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "region_id",
+        "owner_faction"
+      ],
+      "additionalProperties": false
+    },
+    "named-region-source-gate": {
+      "type": "object",
+      "properties": {
+        "gate_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "unit_predicate": {
+          "type": "object",
+          "properties": {
+            "faction": {
+              "type": "string",
+              "minLength": 1
+            },
+            "keywords": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "faction",
+            "keywords"
+          ],
+          "additionalProperties": false
+        },
+        "range_to_marker_inches": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "gate_ref",
+        "owner",
+        "unit_predicate"
+      ],
+      "additionalProperties": false
+    },
+    "named-region-membership": {
+      "type": "object",
+      "properties": {
+        "unit_scope": {
+          "type": "string",
+          "enum": [
+            "model",
+            "whole-unit"
+          ]
+        },
+        "relation": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "unit_scope",
+        "relation"
+      ],
+      "additionalProperties": true
+    },
+    "named-region-branch-actor": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "gate_ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "role",
+        "gate_ref"
+      ],
+      "additionalProperties": false
+    },
+    "named-region-branch-timing": {
+      "type": "object",
+      "properties": {
+        "event": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "event"
+      ],
+      "additionalProperties": false
+    },
+    "named-region-branch": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/named-region-branch-actor"
+        },
+        "beneficiary": {
+          "$ref": "#/$defs/named-region-branch-actor"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "self",
+            "bearer",
+            "unit",
+            "attached-unit",
+            "attacker",
+            "defender",
+            "target",
+            "friendly-within-aura",
+            "enemy-within-aura",
+            "all-friendly",
+            "all-enemy"
+          ]
+        },
+        "timing": {
+          "$ref": "#/$defs/named-region-branch-timing"
+        },
+        "duration": {
+          "type": "string",
+          "minLength": 1
+        },
+        "effect": {
+          "$ref": "#/$defs/effect-node"
+        },
+        "optional": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "source",
+        "beneficiary",
+        "target",
+        "timing",
+        "duration",
+        "effect",
+        "optional"
+      ],
+      "additionalProperties": false
+    },
+    "named-region-baseline": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "fixed-zone"
+        },
+        "zone": {
+          "const": "own-deployment-zone"
+        },
+        "activation": {
+          "type": "object",
+          "properties": {
+            "event": {
+              "const": "always-active"
+            }
+          },
+          "required": [
+            "event"
+          ],
+          "additionalProperties": false
+        },
+        "expiry": {
+          "type": "object",
+          "properties": {
+            "event": {
+              "const": "never"
+            }
+          },
+          "required": [
+            "event"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "kind",
+        "zone",
+        "activation",
+        "expiry"
+      ],
+      "additionalProperties": false
+    },
+    "named-region-phase-extension": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "objective-majority-zone"
+        },
+        "zone": {
+          "type": "string",
+          "enum": [
+            "no-mans-land",
+            "opponent-deployment-zone"
+          ]
+        },
+        "control_gate": {
+          "type": "object",
+          "properties": {
+            "marker_scope": {
+              "const": "markers-in-zone"
+            },
+            "controlled_by": {
+              "const": "owner-army"
+            },
+            "threshold": {
+              "type": "object",
+              "properties": {
+                "comparison": {
+                  "const": "at-least"
+                },
+                "fraction": {
+                  "const": 0.5
+                }
+              },
+              "required": [
+                "comparison",
+                "fraction"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "marker_scope",
+            "controlled_by",
+            "threshold"
+          ],
+          "additionalProperties": false
+        },
+        "activation": {
+          "type": "object",
+          "properties": {
+            "event": {
+              "const": "phase-start"
+            },
+            "evaluation": {
+              "const": "snapshot-once"
+            },
+            "canonical_condition_ids": {
+              "const": [
+                "timing-is",
+                "objective-majority"
+              ]
+            }
+          },
+          "required": [
+            "event",
+            "evaluation",
+            "canonical_condition_ids"
+          ],
+          "additionalProperties": false
+        },
+        "expiry": {
+          "type": "object",
+          "properties": {
+            "event": {
+              "const": "phase-end"
+            }
+          },
+          "required": [
+            "event"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "kind",
+        "zone",
+        "control_gate",
+        "activation",
+        "expiry"
+      ],
+      "additionalProperties": false
+    },
+    "named-region-producer": {
+      "type": "object",
+      "properties": {
+        "region_ref": {
+          "$ref": "#/$defs/named-region-ref"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "complete",
+            "extension"
+          ]
+        },
+        "parent_ref": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/named-region-ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "baseline": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/named-region-baseline"
+          }
+        },
+        "phase_extensions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/named-region-phase-extension"
+          }
+        },
+        "additive_extensions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_gate": {
+                "$ref": "#/$defs/named-region-source-gate"
+              },
+              "radius_inches": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "activation": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "const": "continuous"
+                  }
+                },
+                "required": [
+                  "event"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "kind",
+              "source_gate"
+            ],
+            "additionalProperties": true,
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "kind": {
+                      "const": "unit-proximity"
+                    }
+                  },
+                  "required": [
+                    "kind"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "radius_inches",
+                    "activation"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "description": "Union of the battlefield areas within radius_inches of each currently qualifying source unit. Re-evaluated continuously as source units move/leave/enter the battlefield; not an objective-marker selection."
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "required": [
+        "region_ref",
+        "mode",
+        "parent_ref",
+        "baseline",
+        "phase_extensions",
+        "additive_extensions"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "const": "complete"
+              }
+            },
+            "required": [
+              "mode"
+            ]
+          },
+          "then": {
+            "properties": {
+              "parent_ref": {
+                "type": "null"
+              },
+              "baseline": {
+                "minItems": 1,
+                "maxItems": 1
+              },
+              "phase_extensions": {
+                "minItems": 2,
+                "maxItems": 2,
+                "uniqueItems": true,
+                "contains": {
+                  "type": "object",
+                  "required": [
+                    "zone"
+                  ],
+                  "properties": {
+                    "zone": {
+                      "const": "no-mans-land"
+                    }
+                  }
+                },
+                "allOf": [
+                  {
+                    "contains": {
+                      "type": "object",
+                      "required": [
+                        "zone"
+                      ],
+                      "properties": {
+                        "zone": {
+                          "const": "opponent-deployment-zone"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "const": "extension"
+              }
+            },
+            "required": [
+              "mode"
+            ]
+          },
+          "then": {
+            "properties": {
+              "parent_ref": {
+                "$ref": "#/$defs/named-region-ref"
+              },
+              "baseline": {
+                "maxItems": 0
+              },
+              "phase_extensions": {
+                "maxItems": 0
+              },
+              "additive_extensions": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "named-region-consumer": {
+      "type": "object",
+      "properties": {
+        "state_ref": {
+          "$ref": "#/$defs/named-region-ref"
+        },
+        "beneficiary_gate": {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "type": "string",
+              "minLength": 1
+            },
+            "faction": {
+              "type": "string",
+              "minLength": 1
+            },
+            "operator": {
+              "type": "string",
+              "enum": [
+                "and",
+                "or"
+              ]
+            },
+            "keywords": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "owner",
+            "operator",
+            "keywords"
+          ],
+          "additionalProperties": true
+        },
+        "membership": {
+          "$ref": "#/$defs/named-region-membership"
+        },
+        "qualified_condition": {
+          "$ref": "condition.schema.json"
+        },
+        "default_branch": {
+          "$ref": "#/$defs/named-region-branch"
+        },
+        "qualified_branch": {
+          "$ref": "#/$defs/named-region-branch"
+        },
+        "attack_condition": {
+          "$ref": "condition.schema.json",
+          "description": "Gate shared by the default and qualified branches, evaluated on each current attack, without gating production of the named region."
+        }
+      },
+      "required": [
+        "state_ref",
+        "beneficiary_gate",
+        "membership",
+        "qualified_condition",
+        "default_branch",
+        "qualified_branch"
+      ],
+      "additionalProperties": false
+    },
+    "named-region-state": {
+      "type": "object",
+      "properties": {
+        "region_ref": {
+          "$ref": "#/$defs/named-region-ref"
+        },
+        "producer": {
+          "$ref": "#/$defs/named-region-producer"
+        },
+        "consumer": {
+          "$ref": "#/$defs/named-region-consumer"
+        },
+        "branch_precedence": {
+          "const": "qualified-replaces-default"
+        }
+      },
+      "required": [
+        "region_ref",
+        "producer",
+        "consumer",
+        "branch_precedence"
+      ],
+      "additionalProperties": false
+    },
+    "keyword-filter": {
+      "type": "object",
+      "description": "Independent keyword predicate for the aura emitter or each aura recipient. Required keywords all match; excluded keywords none match.",
+      "additionalProperties": false,
+      "properties": {
+        "required_keywords": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "excluded_keywords": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "required_keywords"
+      ]
+    },
+    "beneficiary-bound-effect-node": {
+      "type": "object",
+      "description": "Targetless effect dispatched to a relation-resolved beneficiary model; bearer and unit targets are intentionally not representable.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "modifier": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "scaling": {
+          "$ref": "#/$defs/scaling"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false
+    },
+    "leader-model-ability-grant-effect": {
+      "type": "object",
+      "description": "Resolve the attached qualifying leader model and dispatch a targetless effect to that model while it leads the bearer unit.",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "leader-model-ability-grant"
+        },
+        "source": {
+          "const": "bearer-unit"
+        },
+        "beneficiary": {
+          "type": "string",
+          "enum": [
+            "leading-leader-model",
+            "attached-character-leader"
+          ]
+        },
+        "leader_filter": {
+          "type": "object",
+          "properties": {
+            "identity": {
+              "type": "string",
+              "minLength": 1
+            },
+            "keywords": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1
+            }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
+        },
+        "attached_unit_filter": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "duration": {
+          "const": "while-leading"
+        },
+        "grant": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "recipient": {
+              "const": "beneficiary"
+            },
+            "effect": {
+              "$ref": "#/$defs/beneficiary-bound-effect-node"
+            }
+          },
+          "required": [
+            "recipient",
+            "effect"
+          ]
+        },
+        "recipient_binding": {
+          "const": "beneficiary-only"
+        }
+      },
+      "required": [
+        "type",
+        "source",
+        "beneficiary",
+        "attached_unit_filter",
+        "duration",
+        "grant",
+        "recipient_binding"
+      ]
+    },
+    "persistent-designation-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "$comment": "Retained state is keyed by bearer unit and designation. Establishing it selects a reference and defines its consumer. A replacement-only operation updates that same designation's reference without adding another consumer or refreshing its expiry.",
+      "properties": {
+        "type": {
+          "const": "persistent-designation"
+        },
+        "operation": {
+          "enum": ["establish", "replace"],
+          "default": "establish"
+        },
+        "designation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "select": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scope": {
+              "type": "string",
+              "enum": [
+                "enemy-unit",
+                "objective-marker"
+              ]
+            },
+            "count": {
+              "type": "integer",
+              "const": 1
+            },
+            "timing": {
+              "type": "string",
+              "minLength": 1
+            },
+            "selection_policy": {
+              "type": "string",
+              "enum": [
+                "one-time",
+                "replace-on-destroyed"
+              ]
+            },
+            "allow_while_embarked": {
+              "type": "boolean"
+            },
+            "bind_as": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "scope",
+            "timing",
+            "selection_policy"
+          ]
+        },
+        "consumer": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Resolve the declared bearer-model or unit beneficiary against the exact retained reference.",
+          "properties": {
+            "relation": {
+              "type": "string",
+              "enum": [
+                "attacks-selected-unit",
+                "within-selected-marker"
+              ],
+              "description": "Resolve this relation from the declared beneficiary to its retained unit or marker, not a generic target or nearby object."
+            },
+            "beneficiary": {
+              "type": "string",
+              "enum": [
+                "bearer",
+                "unit"
+              ]
+            },
+            "effect": {
+              "$ref": "#/$defs/effect-node",
+              "description": "Nested effects apply to the declared beneficiary. An Objective Control set operation assigns the value, not a signed delta."
+            },
+            "reference": {
+              "$ref": "#/$defs/selection-reference"
+            }
+          },
+          "required": [
+            "relation",
+            "beneficiary",
+            "effect"
+          ]
+        },
+        "duration": {
+          "type": "string",
+          "enum": [
+            "phase",
+            "turn",
+            "battle-round",
+            "battle",
+            "until-next-command-phase"
+          ]
+        },
+        "lifecycle": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "replace": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "event": {
+                  "const": "on-unit-destroyed"
+                },
+                "reference": {
+                  "$ref": "#/$defs/selection-reference"
+                },
+                "optional": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "event",
+                "reference",
+                "optional"
+              ]
+            },
+            "exclusivity": {
+              "const": "one-active-per-bearer-unit"
+            },
+            "expiry": {
+              "const": "battle-end"
+            }
+          },
+          "required": [
+            "replace",
+            "exclusivity",
+            "expiry"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "designation",
+        "select",
+        "duration"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": { "operation": { "const": "replace" } },
+            "required": ["operation"]
+          },
+          "then": {
+            "required": ["lifecycle"],
+            "properties": {
+              "consumer": false,
+              "select": {
+                "properties": {
+                  "scope": { "const": "enemy-unit" },
+                  "timing": { "const": "on-unit-destroyed" },
+                  "selection_policy": { "const": "replace-on-destroyed" }
+                }
+              }
+            }
+          },
+          "else": { "required": ["consumer"] }
+        },
+        {
+          "if": {
+            "properties": {
+              "select": {
+                "properties": {
+                  "scope": {
+                    "const": "enemy-unit"
+                  }
+                },
+                "required": [
+                  "scope"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "consumer": {
+                "properties": {
+                  "relation": {
+                    "const": "attacks-selected-unit"
+                  }
+                },
+                "required": [
+                  "relation"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "select": {
+                "properties": {
+                  "scope": {
+                    "const": "objective-marker"
+                  }
+                },
+                "required": [
+                  "scope"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "consumer": {
+                "properties": {
+                  "relation": {
+                    "const": "within-selected-marker"
+                  }
+                },
+                "required": [
+                  "relation"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "select": {
+                "properties": {
+                  "selection_policy": {
+                    "const": "replace-on-destroyed"
+                  }
+                },
+                "required": [
+                  "selection_policy"
+                ]
+              }
+            },
+            "required": [
+              "select"
+            ]
+          },
+          "then": {
+            "required": [
+              "lifecycle"
+            ],
+            "properties": {
+              "select": {
+                "required": [
+                  "bind_as"
+                ]
+              },
+              "consumer": {
+                "required": [
+                  "reference"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "lifecycle"
+            ]
+          },
+          "then": {
+            "properties": {
+              "duration": { "const": "battle" },
+              "select": {
+                "properties": {
+                  "scope": { "const": "enemy-unit" },
+                  "selection_policy": { "const": "replace-on-destroyed" }
+                },
+                "required": ["selection_policy"]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "no-effect-effect": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "no-effect"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false,
+      "description": "Resolve no effect; does not create attacks, damage, selections, or secondary events."
+    },
+    "selection-reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "selection_var": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "selection_var"
+      ]
+    },
+    "event-or-selection-reference": {
+      "oneOf": [
+        {
+          "$ref": "condition.schema.json#/$defs/event-bound-reference"
+        },
+        {
+          "$ref": "#/$defs/selection-reference"
+        }
+      ]
+    },
+    "objective-selector": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "count": {
+          "type": "integer",
+          "const": 1
+        },
+        "range_inches": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "origin": {
+          "enum": [
+            "bearer",
+            "bearer-unit"
+          ]
+        },
+        "controlled_by": {
+          "enum": [
+            "your-army",
+            "opponent"
+          ]
+        },
+        "requires_unit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "owner": {
+              "enum": [
+                "friendly",
+                "enemy"
+              ]
+            },
+            "requires_ability": {
+              "type": "string",
+              "minLength": 1
+            },
+            "relation": {
+              "const": "within-range"
+            }
+          },
+          "required": [
+            "owner",
+            "requires_ability",
+            "relation"
+          ]
+        },
+        "selection_limit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "period": {
+              "enum": [
+                "turn",
+                "phase",
+                "battle-round",
+                "battle"
+              ]
+            }
+          },
+          "required": [
+            "count",
+            "period"
+          ]
+        },
+        "bind_as": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "count",
+        "bind_as"
+      ]
+    },
+    "select-objective-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "select-objective"
+        },
+        "selector": {
+          "$ref": "#/$defs/objective-selector"
+        },
+        "effect": {
+          "$ref": "#/$defs/effect-node"
+        }
+      },
+      "required": [
+        "type",
+        "selector",
+        "effect"
+      ]
+    },
+    "for-each-objective-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "for-each-objective"
+        },
+        "selector": {
+          "$ref": "#/$defs/objective-selector"
+        },
+        "effect": {
+          "$ref": "#/$defs/effect-node"
+        }
+      },
+      "required": [
+        "type",
+        "selector",
+        "effect"
+      ]
+    },
+    "paired-designation-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "paired-designation"
+        },
+        "duration": {
+          "const": "phase"
+        },
+        "observer": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "role": {
+              "const": "observer"
+            },
+            "selector": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/paired-unit-selector"
+                },
+                {
+                  "properties": {
+                    "owner": {
+                      "const": "friendly"
+                    },
+                    "selection_mode": {
+                      "const": "any-number"
+                    }
+                  },
+                  "required": [
+                    "selection_mode",
+                    "requires_ability"
+                  ],
+                  "not": {
+                    "required": [
+                      "count"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "role",
+            "selector"
+          ]
+        },
+        "spotted": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "role": {
+              "const": "spotted"
+            },
+            "selector": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/paired-unit-selector"
+                },
+                {
+                  "properties": {
+                    "owner": {
+                      "const": "enemy"
+                    },
+                    "count": {
+                      "const": 1
+                    }
+                  },
+                  "required": [
+                    "count",
+                    "visible_to",
+                    "selection_limit"
+                  ],
+                  "not": {
+                    "required": [
+                      "selection_mode"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "role",
+            "selector"
+          ]
+        },
+        "guided": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "role": {
+              "const": "guided"
+            },
+            "owner": {
+              "const": "friendly"
+            },
+            "requires_ability": {
+              "type": "string",
+              "minLength": 1
+            },
+            "excludes": {
+              "$ref": "#/$defs/selection-reference"
+            },
+            "while_attacking": {
+              "$ref": "#/$defs/selection-reference"
+            }
+          },
+          "required": [
+            "role",
+            "owner",
+            "requires_ability",
+            "excludes",
+            "while_attacking"
+          ]
+        },
+        "observer_eligibility": {
+          "$ref": "condition.schema.json"
+        },
+        "effects": {
+          "$ref": "#/$defs/effect-node"
+        }
+      },
+      "required": [
+        "type",
+        "duration",
+        "observer",
+        "spotted",
+        "guided",
+        "observer_eligibility",
+        "effects"
+      ],
+      "$comment": "Select the Observer set at phase start, then bind each eligible Observer to its Spotted unit during the phase. Observer/spotted references resolve to the current pair inside the per-attack effects and to the accumulated role sets for Guided eligibility."
+    },
+    "paired-unit-selector": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "owner": {
+          "enum": [
+            "friendly",
+            "enemy"
+          ]
+        },
+        "count": {
+          "type": "integer",
+          "const": 1
+        },
+        "selection_mode": {
+          "const": "any-number"
+        },
+        "requires_ability": {
+          "type": "string",
+          "minLength": 1
+        },
+        "visible_to": {
+          "$ref": "#/$defs/selection-reference"
+        },
+        "selection_limit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "period": {
+              "enum": [
+                "turn",
+                "phase",
+                "battle-round",
+                "battle"
+              ]
+            }
+          },
+          "required": [
+            "count",
+            "period"
+          ]
+        },
+        "bind_as": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "owner",
+        "bind_as"
+      ],
+      "oneOf": [
+        {
+          "required": [
+            "count"
+          ]
+        },
+        {
+          "required": [
+            "selection_mode"
+          ]
+        }
+      ]
+    },
+    "roll-reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "roll_var": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "roll_var"
+      ]
+    },
+    "miracle-die-reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "die_var": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "die_var"
+      ]
+    },
+    "miracle-die-operation-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "miracle-die-operation"
+        },
+        "target": {
+          "const": "self"
+        },
+        "modifier": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "operation": {
+              "enum": [
+                "reroll-generated-result",
+                "set-generated-value-without-roll",
+                "set-used-value",
+                "reroll-retained-and-return"
+              ]
+            },
+            "die": {
+              "$ref": "#/$defs/miracle-die-reference"
+            },
+            "value": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 6
+            },
+            "pool_id": {
+              "const": "miracle-dice-pool"
+            },
+            "resource_label": {
+              "const": "Miracle dice"
+            },
+            "stage": {
+              "enum": [
+                "before-pool-add",
+                "before-act-of-faith-resolution"
+              ]
+            },
+            "selection": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "count": {
+                  "oneOf": [
+                    {
+                      "const": 1
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "minimum": {
+                          "const": 1
+                        },
+                        "maximum": {
+                          "enum": [
+                            1,
+                            3
+                          ]
+                        }
+                      },
+                      "required": [
+                        "minimum",
+                        "maximum"
+                      ]
+                    }
+                  ]
+                },
+                "from": {
+                  "enum": [
+                    "dice-used-in-triggering-act-of-faith",
+                    "retained-pool-dice"
+                  ]
+                },
+                "policy": {
+                  "const": "controller-chooses"
+                }
+              },
+              "required": [
+                "count",
+                "from",
+                "policy"
+              ]
+            },
+            "optional": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "operation",
+            "pool_id",
+            "resource_label"
+          ],
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "operation": {
+                    "const": "reroll-generated-result"
+                  }
+                },
+                "required": [
+                  "operation"
+                ]
+              },
+              "then": {
+                "required": [
+                  "stage",
+                  "optional",
+                  "die"
+                ],
+                "properties": {
+                  "stage": {
+                    "const": "before-pool-add"
+                  },
+                  "optional": {
+                    "const": true
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "operation": {
+                    "const": "set-generated-value-without-roll"
+                  }
+                },
+                "required": [
+                  "operation"
+                ]
+              },
+              "then": {
+                "required": [
+                  "value",
+                  "die"
+                ],
+                "properties": {
+                  "value": {
+                    "const": 6
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "operation": {
+                    "const": "set-used-value"
+                  }
+                },
+                "required": [
+                  "operation"
+                ]
+              },
+              "then": {
+                "required": [
+                  "value",
+                  "stage",
+                  "selection",
+                  "optional",
+                  "die"
+                ],
+                "properties": {
+                  "value": {
+                    "const": 6
+                  },
+                  "stage": {
+                    "const": "before-act-of-faith-resolution"
+                  },
+                  "optional": {
+                    "const": false
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "operation": {
+                    "const": "reroll-retained-and-return"
+                  }
+                },
+                "required": [
+                  "operation"
+                ]
+              },
+              "then": {
+                "required": [
+                  "selection",
+                  "optional"
+                ],
+                "properties": {
+                  "optional": {
+                    "const": true
+                  },
+                  "selection": {
+                    "properties": {
+                      "from": {
+                        "const": "retained-pool-dice"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "operation": {
+                    "const": "reroll-generated-result"
+                  }
+                },
+                "required": [
+                  "operation"
+                ]
+              },
+              "then": {
+                "not": {
+                  "anyOf": [
+                    {
+                      "required": [
+                        "value"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "selection"
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "operation": {
+                    "const": "set-generated-value-without-roll"
+                  }
+                },
+                "required": [
+                  "operation"
+                ]
+              },
+              "then": {
+                "not": {
+                  "anyOf": [
+                    {
+                      "required": [
+                        "stage"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "selection"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "optional"
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "operation": {
+                    "const": "set-used-value"
+                  }
+                },
+                "required": [
+                  "operation"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "selection": {
+                    "properties": {
+                      "count": {
+                        "const": 1
+                      },
+                      "from": {
+                        "const": "dice-used-in-triggering-act-of-faith"
+                      },
+                      "policy": {
+                        "const": "controller-chooses"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "operation": {
+                    "const": "reroll-retained-and-return"
+                  }
+                },
+                "required": [
+                  "operation"
+                ]
+              },
+              "then": {
+                "not": {
+                  "anyOf": [
+                    {
+                      "required": [
+                        "die"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "value"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "stage"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "target",
+        "modifier"
+      ]
+    },
+    "formation-attachment-grant-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "formation-attachment-grant"
+        },
+        "source": {
+          "enum": [
+            "self",
+            "bearer-unit"
+          ]
+        },
+        "beneficiary": {
+          "enum": [
+            "self",
+            "attached-leader-model"
+          ]
+        },
+        "formation_event": {
+          "const": "declare-battle-formations"
+        },
+        "attachment": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "leader_id": {
+              "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+            },
+            "bodyguard_id": {
+              "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+            }
+          },
+          "required": [
+            "bodyguard_id"
+          ]
+        },
+        "grant": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "recipient": {
+              "const": "beneficiary"
+            },
+            "effect": {
+              "$ref": "#/$defs/beneficiary-bound-effect-node"
+            }
+          },
+          "required": [
+            "recipient",
+            "effect"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "source",
+        "beneficiary",
+        "formation_event",
+        "attachment",
+        "grant"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "beneficiary": {
+                "const": "self"
+              }
+            },
+            "required": [
+              "beneficiary"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source": {
+                "const": "self"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "beneficiary": {
+                "const": "attached-leader-model"
+              }
+            },
+            "required": [
+              "beneficiary"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source": {
+                "const": "bearer-unit"
+              },
+              "attachment": {
+                "required": [
+                  "leader_id",
+                  "bodyguard_id"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "attachment-eligibility-inherit-effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "attachment-eligibility-inherit"
+        },
+        "target": {
+          "const": "self"
+        },
+        "modifier": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "leader_id": {
+              "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+            },
+            "required_leader_ability": {
+              "const": "Leader"
+            },
+            "from_bodyguard_id": {
+              "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+            },
+            "to_bodyguard_id": {
+              "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+            }
+          },
+          "required": [
+            "leader_id",
+            "required_leader_ability",
+            "from_bodyguard_id",
+            "to_bodyguard_id"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "target",
+        "modifier"
       ]
     }
   },

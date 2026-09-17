@@ -2,7 +2,7 @@
 
 Mode: **write**
 
-Pools emitted: **19**, skipped: **2**.
+Pools emitted: **19**, skipped: **3**.
 
 ## Emitted
 
@@ -18,7 +18,7 @@ Pools emitted: **19**, skipped: **2**.
 | chaos-space-marines-renegades | Heretic Astartes | — | 4 | 16 | — | — |
 | daemonic-pact | Chaos Knights, Heretic Astartes | chaos-daemons | 53 | — | — | — |
 | death-guard-nurgle-daemons | Death Guard | chaos-daemons | 6 | 1 | — | — |
-| drukhari-aeldari | Drukhari | aeldari | 14 | 5 | — | — |
+| drukhari-aeldari | Drukhari | aeldari | 14 | 8 | — | — |
 | drukhari-harlequins | Drukhari | aeldari | 8 | 1 | — | — |
 | emperors-children-slaanesh-daemons | Emperor’s Children | chaos-daemons | 5 | 1 | — | — |
 | iconoclast-fiefdom-damned | Chaos Knights | chaos-space-marines | 7 | 1 | — | — |
@@ -32,4 +32,5 @@ Pools emitted: **19**, skipped: **2**.
 
 - `31a47518-f0d5-48c1-8cf8-f1f3ea1c008b` (Titanicus Traitoris): Chaos Warbringer Nemesis Titan; Chaos Warhound Titan; Chaos Reaver Titan; Chaos Warlord Titan
 - `5c07d9ae-8023-43c2-ac7d-6de32fd268b3` (Adeptus Titanicus): Warhound Titan; Warlord Titan; Reaver Titan; Warbringer Nemesis Titan
+- `802478f9-3982-4990-80f7-1bd316e0c312` (802478f9-3982-4990-80f7-1bd316e0c312): 
 

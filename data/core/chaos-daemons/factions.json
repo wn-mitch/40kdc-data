@@ -13,7 +13,15 @@
       "Legiones Daemonica"
     ],
     "aliases": [],
-    "faction_rule_id": "the-shadow-of-chaos",
-    "logo_url": "https://cdn.jsdelivr.net/gh/Certseeds/wh40k-icon@be230023ff0755d19ffb1a1762658c711c2887f9/src/svgs/chaos/chaos-daemons.svg"
+    "logo_url": "https://cdn.jsdelivr.net/gh/Certseeds/wh40k-icon@be230023ff0755d19ffb1a1762658c711c2887f9/src/svgs/chaos/chaos-daemons.svg",
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "40a70c91-675a-4ac5-aa97-daedb9cb6f11"
+      }
+    ],
+    "faction_rule_ids": [
+      "the-shadow-of-chaos"
+    ]
   }
 ]

@@ -28,8 +28,18 @@ EffectTranslation = dict[str, Any]
 _SELF_TARGETS = frozenset(
     ["self", "bearer", "unit", "attached-unit", "friendly-within-aura", "all-friendly"]
 )
+#: The subset of :data:`_SELF_TARGETS` naming a single *model* (the bearer) rather
+#: than its unit. Core rule 19.04: a rule affecting one specified model applies
+#: only to that model, even while it is part of an attached unit.
+_MODEL_TARGETS = frozenset(["self", "bearer"])
+#: Diagnostic emitted for a model-scoped effect pooled in from an attached member.
+_MODEL_SCOPED_REASON = (
+    "model-scoped effect from an attached model: applies to that model only (core rule 19.04)"
+)
 _ATTACKER_TARGET = "attacker"
 _DEFENDER_TARGETS = frozenset(["defender", "enemy-within-aura", "all-enemy"])
+
+_STOCHASTIC_DICE_GATED_REASON = "dice-gated effect: stochastic; not expressible as a buff"
 
 
 def effect_to_buffs(
@@ -54,11 +64,106 @@ def _is_object(value: Any) -> TypeGuard[dict[str, Any]]:
     return isinstance(value, dict)
 
 
+def _is_model_scoped_from_attached_member(node: dict[str, Any], source: BuffSource) -> bool:
+    """Is this node a model-scoped effect reaching the buffed unit from *another*
+    member of the combined unit? Core rule 19.04 keeps those on their own model:
+    an attached Librarian's personal 4+ invulnerable save is not a 4+ invulnerable
+    save for the ten Intercessors it joined.
+
+    Keyed on the buff *source*, not on the DSL condition — the leak is not limited
+    to abilities gated on ``is-attached`` (an Archon's Shadowfield says only "the
+    bearer"), and the resolver already tags pooled member abilities as
+    ``abilityKind: "attached"``. An ability read as the chosen unit's own
+    (``abilityKind: "unit"``) is unaffected."""
+    if source.get("kind") != "ability" or source.get("abilityKind") != "attached":
+        return False
+    target = node.get("target")
+    return isinstance(target, str) and target in _MODEL_TARGETS
+
+
+def _aura_filter_keywords(
+    node: dict[str, Any],
+    modifier: dict[str, Any],
+    opts: dict[str, Any],
+    out: EffectTranslation,
+) -> bool:
+    """Apply an aura's recipient gate, rejecting filters the buff context cannot resolve."""
+    if "recipient_filter" in modifier:
+        recipient = modifier.get("recipient_filter")
+        if not _is_object(recipient):
+            out["unsupported"].append(
+                {
+                    "reason": "aura recipient keywords are unavailable or its filter is malformed",
+                    "effectFragment": node,
+                }
+            )
+            return False
+        required = recipient.get("required_keywords")
+        excluded = recipient.get("excluded_keywords")
+        if (
+            set(recipient) - {"required_keywords", "excluded_keywords"}
+            or not isinstance(required, list)
+            or not required
+            or any(not isinstance(keyword, str) or not keyword for keyword in required)
+            or (
+                excluded is not None
+                and (
+                    not isinstance(excluded, list)
+                    or not excluded
+                    or any(not isinstance(keyword, str) or not keyword for keyword in excluded)
+                )
+            )
+        ):
+            out["unsupported"].append(
+                {
+                    "reason": "aura recipient keywords are unavailable or its filter is malformed",
+                    "effectFragment": node,
+                }
+            )
+            return False
+        context_key = "attackerKeywords" if opts["perspective"] == "attacker" else "targetKeywords"
+        context_keywords = opts["context"].get(context_key)
+        if not isinstance(context_keywords, list) or any(
+            not isinstance(keyword, str) or not keyword for keyword in context_keywords
+        ):
+            out["unsupported"].append(
+                {
+                    "reason": "aura recipient keywords are unavailable or its filter is malformed",
+                    "effectFragment": node,
+                }
+            )
+            return False
+        available = {keyword.lower() for keyword in context_keywords}
+        if any(keyword.lower() not in available for keyword in required):
+            return False
+        if excluded and any(keyword.lower() in available for keyword in excluded):
+            return False
+    if "emitter_filter" in modifier:
+        out["unsupported"].append(
+            {
+                "reason": "aura emitter filter requires the source unit's keywords",
+                "effectFragment": node,
+            }
+        )
+        return False
+    return True
+
+
 def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTranslation) -> None:
     if not _is_object(node):
         return
+    # Core rule 19.04 gate, applied before any leaf translation and under both
+    # perspectives. Safe at this level because no container node (`sequence`,
+    # `conditional`, `choice`, …) carries a `self`/`bearer` target — only leaves
+    # do — so this can never swallow a subtree holding unit-scoped effects too.
+    if _is_model_scoped_from_attached_member(node, source):
+        out["unsupported"].append({"reason": _MODEL_SCOPED_REASON, "effectFragment": node})
+        return
     if opts.get("defaultTarget") is not None and "target" not in node:
         node = {**node, "target": opts["defaultTarget"]}
+    if _has_unresolved_fidelity_binding(node):
+        out["unsupported"].append({"reason": _FIDELITY_BINDING_REASON, "effectFragment": node})
+        return
     node_type = node.get("type")
     if node_type == "re-roll":
         _translate_reroll(node, source, opts, out)
@@ -80,9 +185,11 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         _translate_named_region_state(node, source, opts, out)
     elif node_type == "conditional":
         _translate_conditional(node, source, opts, out)
-    elif node_type == "sequence":
+    elif node_type in ("rules-bundle", "sequence"):
         for step in node.get("steps") or []:
             _walk(step, source, opts, out)
+    elif node_type == "named-effect":
+        _translate_named_effect(node, source, opts, out)
     elif node_type == "choice":
         # Player decision — each branch becomes an opt-in lever (pick one).
         _enumerate_choice(node, source, opts, out)
@@ -90,7 +197,7 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         # Probabilistic; the buff layer is deterministic.
         out["unsupported"].append(
             {
-                "reason": "dice-gated effect: stochastic; not expressible as a buff",
+                "reason": _STOCHASTIC_DICE_GATED_REASON,
                 "effectFragment": node,
             }
         )
@@ -102,8 +209,22 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         # Targeting wrapper — the selected units receive the nested effect.
         _walk(node.get("effect"), source, opts, out)
     elif node_type == "aura":
+        # Aura targets are perspective-sensitive; non-applicable directions are
+        # silently dropped just like the leaf translators.
+        if not _applies_to_buffed_unit(node, opts["perspective"]):
+            return
         modifier = node.get("modifier")
-        effect = modifier.get("effect") if isinstance(modifier, dict) else None
+        if not _is_object(modifier):
+            out["unsupported"].append(
+                {
+                    "reason": "aura without nested effect: not a combat buff",
+                    "effectFragment": node,
+                }
+            )
+            return
+        if not _aura_filter_keywords(node, modifier, opts, out):
+            return
+        effect = modifier.get("effect")
         if isinstance(effect, dict):
             _walk(effect, source, opts, out)
         else:
@@ -242,6 +363,20 @@ def _translate_reroll(
     subset = "ones" if modifier.get("value") == 1 else modifier.get("subset")
     # Under target perspective, only "save" rerolls fire on the buffed unit.
     if opts["perspective"] == "target" and roll != "save":
+        return
+    # Finite permissions are non-linear over a roll pool. Until the cruncher
+    # carries the exact pool distribution, applying this as an uncapped reroll
+    # would silently overstate the effect.
+    if modifier.get("count") is not None:
+        out["unsupported"].append(
+            {
+                "reason": (
+                    "re-roll: count-capped permissions are not modelled "
+                    "by the expected-value engine"
+                ),
+                "effectFragment": node,
+            }
+        )
         return
     if roll in ("hit", "wound", "save", "damage") and subset in ("ones", "all-failures"):
         out["applied"].append(
@@ -780,9 +915,7 @@ def _translate_named_region_state(
         return
     _walk(default_branch.get("effect"), source, opts, out)
     qualified_branch_raw = consumer.get("qualified_branch")
-    qualified_branch = (
-        qualified_branch_raw if _is_object(qualified_branch_raw) else None
-    )
+    qualified_branch = qualified_branch_raw if _is_object(qualified_branch_raw) else None
     if qualified_branch is not None:
         out["unsupported"].append(
             {
@@ -826,6 +959,62 @@ def _translate_conditional(
     _walk(effect, source, opts, out)
 
 
+def _translate_named_effect(
+    node: dict[str, Any], source: BuffSource, opts: dict[str, Any], out: EffectTranslation
+) -> None:
+    """Walk a named sub-ability, making activation requirements opt-in."""
+    if (
+        node.get("optional") is not True
+        and node.get("cost") is None
+        and node.get("trigger") is None
+        and node.get("usage") is None
+    ):
+        _walk(node.get("effect"), source, opts, out)
+        return
+
+    trigger_value = node.get("trigger")
+    if isinstance(trigger_value, list):
+        triggers = trigger_value
+    elif trigger_value is None:
+        triggers = []
+    else:
+        triggers = [trigger_value]
+    conditions: list[dict[str, Any]] = []
+    for trigger in triggers:
+        if not _is_object(trigger):
+            continue
+        trigger_condition = trigger.get("condition")
+        if _is_object(trigger_condition):
+            conditions.append(trigger_condition)
+
+    sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
+    if conditions and len(conditions) == len(triggers):
+        condition = (
+            conditions[0] if len(conditions) == 1 else {"operator": "or", "operands": conditions}
+        )
+        gated_body: dict[str, Any] = {
+            "type": "conditional",
+            "condition": condition,
+            "effect": node.get("effect"),
+        }
+        _walk(gated_body, source, opts, sub)
+    else:
+        _walk(node.get("effect"), source, opts, sub)
+
+    out["unsupported"].extend(sub["unsupported"])
+    out["activatable"].extend(sub["activatable"])
+    if sub["applied"]:
+        name_value = node.get("name")
+        name = name_value if isinstance(name_value, str) else _label_for_buffs(sub["applied"])
+        out["activatable"].append(
+            {
+                "id": f"{opts['abilityId']}#{name}",
+                "label": name,
+                "buffs": sub["applied"],
+            }
+        )
+
+
 # ---------------------------------------------------------------------------
 # Activatable-lever enumeration
 # ---------------------------------------------------------------------------
@@ -838,6 +1027,9 @@ def _enumerate_choice(
     options = node.get("options")
     if not isinstance(options, list):
         options = []
+    max_choices = node.get("max_choices")
+    if not isinstance(max_choices, (int, float)) or isinstance(max_choices, bool):
+        max_choices = 1
     for i, opt in enumerate(options):
         buffs: list[Buff] = []
         _collect_gated_buffs(opt, source, opts, {}, buffs)
@@ -848,7 +1040,10 @@ def _enumerate_choice(
                 "id": f"{opts['abilityId']}?{i}",
                 "label": _label_for_buffs(buffs),
                 "buffs": buffs,
-                "group": {"id": f"{opts['abilityId']}?choice", "maxActivations": 1},
+                "group": {
+                    "id": f"{opts['abilityId']}?choice",
+                    "maxActivations": max_choices,
+                },
             }
         )
 
@@ -967,18 +1162,32 @@ def _enumerate_timing_gate(
     condition = node.get("condition")
     if not _is_object(condition):
         return
+    buffs: list[Buff] = []
+    _collect_gated_buffs(node.get("effect"), source, opts, {}, buffs)
     sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
     _walk(node.get("effect"), source, opts, sub)
+    # A stochastic branch contributes nothing to a timing activation. Preserve
+    # every other unsupported diagnostic discovered while finding inner levers.
+    out["unsupported"].extend(
+        fragment
+        for fragment in sub["unsupported"]
+        if not (
+            _is_object(fragment)
+            and fragment.get("reason") == _STOCHASTIC_DICE_GATED_REASON
+            and _is_object(fragment.get("effectFragment"))
+            and fragment["effectFragment"].get("type") == "dice-gated"
+        )
+    )
     # Inner independent decisions pass straight through as their own levers.
     out["activatable"].extend(sub["activatable"])
     # Inner unconditional buffs become one lever gated only on the timing.
-    if sub["applied"]:
+    if buffs:
         timing = _extract_timing(condition) or "timing"
         out["activatable"].append(
             {
                 "id": f"{opts['abilityId']}@{timing}",
-                "label": _label_for_buffs(sub["applied"]),
-                "buffs": sub["applied"],
+                "label": _label_for_buffs(buffs),
+                "buffs": buffs,
             }
         )
 
@@ -1015,9 +1224,18 @@ def _collect_gated_buffs(
             node.get("effect"), source, opts, _combine_applicability(applicability, app), out_buffs
         )
         return
-    if node_type == "sequence":
+    if node_type in ("rules-bundle", "sequence"):
         for step in node.get("steps") or []:
             _collect_gated_buffs(step, source, opts, applicability, out_buffs)
+        return
+    if node_type == "named-effect":
+        if (
+            node.get("optional") is not True
+            and node.get("cost") is None
+            and node.get("trigger") is None
+            and node.get("usage") is None
+        ):
+            _collect_gated_buffs(node.get("effect"), source, opts, applicability, out_buffs)
         return
     if node_type in ("choice", "dice-pool-allocation", "dice-gated"):
         # A decision (or stochastic roll) nested inside an activation. The
@@ -1402,3 +1620,64 @@ def _to_kebab_case(s: str) -> str:
     import re
 
     return re.sub(r"[^a-z0-9-]", "", re.sub(r"[\s_]+", "-", s.lower()))
+
+
+_FIDELITY_BINDING_REASON = (
+    "selection/history/model/attack predicates are not resolved by the buff engine"
+)
+
+_SELECTOR_FIDELITY_FIELDS = (
+    "eligibility",
+    "reference",
+    "origin",
+    "selection_limit",
+    "bind_as",
+    "within_inches_from",
+    "visible_to",
+    "visibility_required",
+)
+_DESIGNATION_SELECTION_FIDELITY_FIELDS = (
+    "eligibility",
+    "reference",
+    "origin",
+    "selection_limit",
+    "bind_as",
+    "within_inches_from",
+    "visible_to",
+    "visibility_required",
+)
+
+
+def _trigger_has_unresolved_source(trigger: Any) -> bool:
+    if not _is_object(trigger):
+        return False
+    return any(trigger.get(key) is not None for key in ("caused_by", "source_ability"))
+
+
+def _has_unresolved_fidelity_binding(node: dict[str, Any]) -> bool:
+    selector = node.get("selector") or {}
+    select = node.get("select") or {}
+    applies = node.get("applies") or {}
+    modifier = node.get("modifier") or {}
+    consumer = modifier.get("consumer") or {}
+    node_type = node.get("type")
+    selection_binding = node_type in ("select-units", "for-each-unit") and (
+        selector.get("target_kind") == "model"
+        or any(selector.get(key) is not None for key in _SELECTOR_FIDELITY_FIELDS)
+    )
+    designation_binding = node_type == "designate-target" and (
+        any(select.get(key) is not None for key in _DESIGNATION_SELECTION_FIDELITY_FIELDS)
+        or applies.get("attacker_keywords") is not None
+        or applies.get("attacker_unit_keywords") is not None
+        or applies.get("beneficiary") is not None
+        or applies.get("reference") is not None
+    )
+    trigger_value = node.get("trigger")
+    triggers = trigger_value if isinstance(trigger_value, list) else [trigger_value]
+    source_binding = any(_trigger_has_unresolved_source(trigger) for trigger in triggers)
+    return (
+        selection_binding
+        or designation_binding
+        or source_binding
+        or (node_type == "named-region-state" and consumer.get("attack_condition") is not None)
+    )

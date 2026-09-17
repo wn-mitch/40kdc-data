@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { Dataset } from "@alpaca-software/40kdc-data";
-import { diagramModel, facingAngle } from "../../../_shared/layout-geometry.js";
+import {
+  diagramModel,
+  facingAngle,
+  formatKeystoneDistance,
+  pieceRenderKey,
+} from "../../../_shared/layout-geometry.js";
 
 // Real divider endpoints (board frame, 60×44) for the patterns whose facing
 // behavior matters: the orthogonal pair locks in the unchanged baseline, the
@@ -43,7 +48,24 @@ describe("facingAngle", () => {
   });
 
   it("degenerate divider yields 0", () => {
-    expect(facingAngle({ from: { x: 30, y: 22 }, to: { x: 30, y: 22 } }, { x: 10, y: 10 })).toBe(0);
+    expect(
+      facingAngle(
+        { from: { x: 30, y: 22 }, to: { x: 30, y: 22 } },
+        { x: 10, y: 10 },
+      ),
+    ).toBe(0);
+  });
+});
+
+describe("formatKeystoneDistance", () => {
+  it("rounds cardinally aligned pieces to the nearest quarter inch", () => {
+    expect(formatKeystoneDistance(15.92, 0)).toBe("16″");
+    expect(formatKeystoneDistance(16.13, 90)).toBe("16.25″");
+    expect(formatKeystoneDistance(17.38, -90)).toBe("17.5″");
+  });
+
+  it("keeps two decimal places of precision for rotated pieces", () => {
+    expect(formatKeystoneDistance(15.92, 37)).toBe("15.92″");
   });
 });
 
@@ -53,17 +75,42 @@ describe("diagramModel classifies empty areas", () => {
   it("marks KOTC objectives (terrain:false) as empty, so they render as markers not terrain", () => {
     const kotc = ds.terrainLayouts.get("kotc-colosseum")!;
     const { pieceCategories } = diagramModel(ds, kotc);
-    for (const id of ["obj-center", "obj-west", "obj-east", "obj-north", "obj-south"]) {
+    for (const id of [
+      "obj-center",
+      "obj-west",
+      "obj-east",
+      "obj-north",
+      "obj-south",
+    ]) {
       expect(pieceCategories.get(id)).toBe("empty");
     }
   });
 
   it("leaves 11e terrain-area objectives unclassified as empty", () => {
-    const th = ds.terrainLayouts.get("take-and-hold-vs-disruption-2")!;
-    const { pieceCategories } = diagramModel(ds, th);
-    // The large-area objectives are real terrain areas — never "empty".
-    for (const id of ["area-large-31", "area-large-37"]) {
-      expect(pieceCategories.get(id)).not.toBe("empty");
+    const layout = ds.terrainLayouts.get("bm-take-vs-disrupt-02")!;
+    const { pieceCategories } = diagramModel(ds, layout);
+    const objectiveAreas = (layout.pieces ?? []).filter(
+      (piece) => piece.is_objective,
+    );
+
+    expect(objectiveAreas.length).toBeGreaterThan(0);
+    for (const piece of objectiveAreas) {
+      expect(pieceCategories.get(piece.id!)).not.toBe("empty");
     }
+  });
+});
+
+describe("resolved terrain piece render keys", () => {
+  const ds = Dataset.embedded();
+
+  it("remain unique when repeated templates reuse feature ids", () => {
+    const layout = ds.terrainLayouts.get("bm-disrupt-vs-disrupt-01")!;
+    const { pieces } = diagramModel(ds, layout);
+    const rawIds = pieces.map((piece) => piece.id);
+    const keys = pieces.map(pieceRenderKey);
+
+    expect(rawIds.every((id) => id !== null)).toBe(true);
+    expect(new Set(rawIds).size).toBe(rawIds.length);
+    expect(new Set(keys).size).toBe(keys.length);
   });
 });

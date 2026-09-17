@@ -7,7 +7,7 @@
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": null,
+    "ability_id": "saintly-example-hallowed-martyrs",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -15,7 +15,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "258998c0-1b1a-56f0-bcda-266e06d5e9d9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "aa30975d-c98d-40a1-890c-7b6b3b1c9339"
+      }
+    ]
   },
   {
     "id": "through-suffering-strength-hallowed-martyrs",
@@ -25,7 +35,7 @@
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": null,
+    "ability_id": "through-suffering-strength-hallowed-martyrs",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -33,7 +43,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b3112641-8dcc-563b-8295-f6afdc1aca45"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ae5538f8-1681-4fdd-9cdc-2605f8847aa6"
+      }
+    ]
   },
   {
     "id": "chaplet-of-sacrifice-hallowed-martyrs",
@@ -43,7 +63,7 @@
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": null,
+    "ability_id": "chaplet-of-sacrifice-hallowed-martyrs",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -51,17 +71,24 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dbc93e34-9b18-5eda-bf54-fa44a06d98cb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "92b2795b-5a52-43ea-b21f-341217ec2ea6"
+      }
+    ]
   },
   {
     "id": "mantle-of-ophelia-hallowed-martyrs",
     "name": "Mantle of Ophelia",
     "detachment_id": "hallowed-martyrs",
     "cost": 20,
-    "keyword_restrictions": [
-      "Adepta Sororitas"
-    ],
-    "ability_id": null,
+    "ability_id": "mantle-of-ophelia-hallowed-martyrs",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -69,17 +96,35 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Palatine"
+      ],
+      [
+        "Canoness"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b5b25e98-ca3a-567e-ba51-a0a6a0af5399"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ba12b88b-73ac-4fc3-af47-a972cfe31b82"
+      }
+    ]
   },
   {
     "id": "psalm-of-righteous-judgement-penitent-host",
     "name": "Psalm of Righteous Judgement",
     "detachment_id": "penitent-host",
-    "cost": 30,
+    "cost": 20,
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": null,
+    "ability_id": "psalm-of-righteous-judgement-penitent-host",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -87,7 +132,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "28bd915e-12f9-5b4e-a901-013bf4e71053"
+      },
+      {
+        "namespace": "mfm",
+        "id": "180f45a0-731b-4cc6-9829-33e4e90e4d8b"
+      }
+    ]
   },
   {
     "id": "verse-of-holy-piety-penitent-host",
@@ -95,9 +150,9 @@
     "detachment_id": "penitent-host",
     "cost": 15,
     "keyword_restrictions": [
-      "Adepta Sororitas"
+      "Penitent"
     ],
-    "ability_id": null,
+    "ability_id": "verse-of-holy-piety-penitent-host",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -105,17 +160,27 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "656f7705-49ef-5d50-bb5a-7803683c72fa"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fa6ea717-390e-4ed4-a520-a4a28dbec6c2"
+      }
+    ]
   },
   {
     "id": "refrain-of-enduring-faith-penitent-host",
     "name": "Refrain of Enduring Faith",
     "detachment_id": "penitent-host",
-    "cost": 25,
+    "cost": 15,
     "keyword_restrictions": [
-      "Adepta Sororitas"
+      "Penitent"
     ],
-    "ability_id": null,
+    "ability_id": "refrain-of-enduring-faith-penitent-host",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -123,17 +188,24 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4d5847dc-4a1b-5ab7-adf9-f0d504995de8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1f93ff0c-b24e-4da3-9911-8bcc1e169cbf"
+      }
+    ]
   },
   {
     "id": "catechism-of-divine-penitence-penitent-host",
     "name": "Catechism of Divine Penitence",
     "detachment_id": "penitent-host",
-    "cost": 20,
-    "keyword_restrictions": [
-      "Adepta Sororitas"
-    ],
-    "ability_id": null,
+    "cost": 15,
+    "ability_id": "catechism-of-divine-penitence-penitent-host",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -141,7 +213,31 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Ministorum Priest"
+      ],
+      [
+        "Palatine"
+      ],
+      [
+        "Canoness"
+      ]
+    ],
+    "attachment_bodyguard_ids": [
+      "repentia-squad"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "551843ea-c06f-5fb1-9301-c9dab0dcbb5b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ffc30956-bcf9-41db-9ecc-9b1837a30f89"
+      }
+    ]
   },
   {
     "id": "righteous-rage-bringers-of-flame",
@@ -151,7 +247,7 @@
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": null,
+    "ability_id": "righteous-rage-bringers-of-flame",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -159,7 +255,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a2123439-1480-5237-9dd7-8801ef044a03"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c2118c7b-986c-47cb-b2f5-3c82d77dde0f"
+      }
+    ]
   },
   {
     "id": "manual-of-saint-griselda-bringers-of-flame",
@@ -169,7 +275,7 @@
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": null,
+    "ability_id": "manual-of-saint-griselda-bringers-of-flame",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -177,7 +283,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2cbc0ee4-1b9a-544b-a55a-45c5cb401879"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5afcfe28-5864-4b3a-8266-0b6e82eeaf95"
+      }
+    ]
   },
   {
     "id": "fire-and-fury-bringers-of-flame",
@@ -187,7 +303,7 @@
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": null,
+    "ability_id": "fire-and-fury-bringers-of-flame",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -195,17 +311,24 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6fe83448-8c81-5994-ad03-f390ec81b4fd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "153f8261-4beb-4114-9a4a-f82ff261947e"
+      }
+    ]
   },
   {
     "id": "iron-surplice-of-saint-istalela-bringers-of-flame",
     "name": "Iron Surplice of Saint Istalela",
     "detachment_id": "bringers-of-flame",
     "cost": 10,
-    "keyword_restrictions": [
-      "Adepta Sororitas"
-    ],
-    "ability_id": null,
+    "ability_id": "iron-surplice-of-saint-istalela-bringers-of-flame",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -213,17 +336,32 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Palatine"
+      ],
+      [
+        "Canoness"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "06bc7540-81a9-5d78-b941-5d04d1dc5508"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9304d111-c730-4ba5-bfd6-2224695f9026"
+      }
+    ]
   },
   {
     "id": "litanies-of-faith-army-of-faith",
     "name": "Litanies of Faith",
     "detachment_id": "army-of-faith",
     "cost": 10,
-    "keyword_restrictions": [
-      "Adepta Sororitas"
-    ],
-    "ability_id": null,
+    "ability_id": "litanies-of-faith-army-of-faith",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -231,7 +369,25 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Canoness"
+      ],
+      [
+        "Palatine"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9e75243b-b777-50ec-8967-4846e939516e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b50aecce-f946-42b6-8bee-ba753c74f17e"
+      }
+    ]
   },
   {
     "id": "blade-of-saint-ellynor-army-of-faith",
@@ -241,7 +397,7 @@
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": null,
+    "ability_id": "blade-of-saint-ellynor-army-of-faith",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -249,7 +405,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4b900e67-33fc-5dd4-9930-54448af5791d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1183f5f4-7242-46ba-80c1-2be89be8c9db"
+      }
+    ]
   },
   {
     "id": "divine-aspect-army-of-faith",
@@ -259,7 +425,7 @@
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": null,
+    "ability_id": "divine-aspect-army-of-faith",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -267,7 +433,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2711a479-61b8-52dc-969d-3eed2203d5f2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8d156a73-79a2-4b90-836d-3fad32369bc9"
+      }
+    ]
   },
   {
     "id": "triptych-of-the-macharian-crusade-army-of-faith",
@@ -277,7 +453,7 @@
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": null,
+    "ability_id": "triptych-of-the-macharian-crusade-army-of-faith",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -285,7 +461,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4eba52a6-1a06-518f-8def-91b40ec15be5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c0cfd70d-4525-4459-8074-54a740b7b05d"
+      }
+    ]
   },
   {
     "id": "triptych-of-judgement-champions-of-faith",
@@ -295,7 +481,7 @@
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": null,
+    "ability_id": "triptych-of-judgement-champions-of-faith",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -303,7 +489,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "89c4114e-691b-5d13-9e3e-52586248002c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f01eadfd-4046-4236-89b5-7c84433625bc"
+      }
+    ]
   },
   {
     "id": "mark-of-devotion-champions-of-faith",
@@ -313,7 +509,7 @@
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": null,
+    "ability_id": "mark-of-devotion-champions-of-faith",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -321,7 +517,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "48eeb0d1-a6a4-5827-beed-a69748dd860b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6d1771ba-9974-4593-aef1-ddcf25f7865c"
+      }
+    ]
   },
   {
     "id": "eyes-of-the-oracle-champions-of-faith",
@@ -331,7 +537,7 @@
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": null,
+    "ability_id": "eyes-of-the-oracle-champions-of-faith",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -339,7 +545,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "692668cc-5f32-5324-8dcd-302357ccb900"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8d24ee09-38f8-4dc5-a0f8-d1d52fc927e3"
+      }
+    ]
   },
   {
     "id": "sanctified-amulet-champions-of-faith",
@@ -349,7 +565,7 @@
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": null,
+    "ability_id": "sanctified-amulet-champions-of-faith",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -357,7 +573,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c692bc8c-3b93-5ea2-a326-2bd1d67310b5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f741d4ea-8230-4ac1-b124-be8edc98ce32"
+      }
+    ]
   },
   {
     "id": "clarion-of-urgency-chorus-of-condemnation",
@@ -365,6 +591,7 @@
     "detachment_id": "chorus-of-condemnation",
     "cost": 15,
     "keyword_restrictions": [
+      "Adepta Sororitas",
       "Canoness with Jump Pack"
     ],
     "ability_id": "clarion-of-urgency-chorus-of-condemnation",
@@ -375,7 +602,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c669fa05-fecf-5df5-9d58-b8e2dfd4ec19"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9ad0e533-9383-4c8d-8cc9-ad12fc7c906d"
+      }
+    ]
   },
   {
     "id": "symphonic-payload-upgrade-chorus-of-condemnation",
@@ -383,6 +620,7 @@
     "detachment_id": "chorus-of-condemnation",
     "cost": 10,
     "keyword_restrictions": [
+      "Adepta Sororitas",
       "Exorcist"
     ],
     "ability_id": "symphonic-payload-chorus-of-condemnation",
@@ -393,7 +631,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "99da3437-31b9-5850-9a52-e2892995922e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f532cd5a-329a-459c-bf49-61e9cbf7bd46"
+      }
+    ]
   },
   {
     "id": "writ-of-compunction-upgrade-sacred-champions",
@@ -401,6 +649,7 @@
     "detachment_id": "sacred-champions",
     "cost": 20,
     "keyword_restrictions": [
+      "Adepta Sororitas",
       "Celestian Sacresants"
     ],
     "ability_id": "writ-of-compunction-sacred-champions",
@@ -411,7 +660,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e20b88e7-bd65-50b6-9991-eb8de145867f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0f265e7f-9e19-4caa-b1f3-42bcda062ef4"
+      }
+    ]
   },
   {
     "id": "perfervid-haste-sacred-champions",
@@ -429,7 +688,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "60c5375e-0af0-54a8-923b-b7dc8c3b1b9c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b025a522-241b-4585-a9d3-06d44400fb69"
+      }
+    ]
   },
   {
     "id": "hagiomnifex-upgrade-sanctified-orators",
@@ -437,7 +706,8 @@
     "detachment_id": "sanctified-orators",
     "cost": 25,
     "keyword_restrictions": [
-      "Adepta Sororitas Character"
+      "Adepta Sororitas",
+      "Character"
     ],
     "ability_id": "hagiomnifex-sanctified-orators",
     "is_unique": true,
@@ -450,6 +720,16 @@
     "max_targets": 3,
     "exclusion_keywords": [
       "Penitent"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b6e76426-aaf9-5236-beef-b6483c687ef1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "36b50d74-e9ff-4420-9cba-2844461ec80c"
+      }
     ]
   },
   {
@@ -470,7 +750,14 @@
       "Adepta Sororitas",
       "Sanctuary Guardians Battle Sisters Squad"
     ],
-    "upgrade_tag": true
+    "upgrade_tag": true,
+    "ability_id": "divine-miracle-sanctuary-guardians",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "65302b30-0bc3-4ea0-a9ae-4a77a010185e"
+      }
+    ]
   },
   {
     "id": "righteous-fervour-sanctuary-guardians",
@@ -488,7 +775,14 @@
     "points_provisional": false,
     "keyword_restrictions": [
       "Adepta Sororitas",
-      "Sanctuary Canoness Adalya"
+      "Canoness"
+    ],
+    "ability_id": "righteous-fervour-sanctuary-guardians",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "012d2dd8-e566-4c82-a8e9-932d34ecee04"
+      }
     ]
   }
 ]

@@ -22,7 +22,7 @@
             </profile>
             <profile name="Crusade of Wrath" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">After being attached to a unit, add 1 to the unit's Strength characteristic.</characteristic>
+                <characteristic name="Description">While this model is leading a unit, add 1 to the unit's Strength characteristic.</characteristic>
               </characteristics>
             </profile>
             <profile name="High Marshal" typeName="Abilities">
@@ -101,7 +101,7 @@
             <profile name="Assault Intercessor" typeName="Unit">
               <characteristics>
                 <characteristic name="M">6"</characteristic>
-                <characteristic name="T">4</characteristic>
+                <characteristic name="T">5</characteristic>
                 <characteristic name="SV">3+</characteristic>
                 <characteristic name="W">2</characteristic>
                 <characteristic name="LD">6+</characteristic>
@@ -118,22 +118,21 @@
             <category name="Faction: Adeptus Astartes"/>
             <category name="Infantry"/>
             <category name="Battleline"/>
-            <category name="Grenades"/>
+            <category name="Explosives"/>
             <category name="Imperium"/>
             <category name="Tacticus"/>
-            <category name="Assault Intercessor Squad"/>
           </categories>
           <selections>
             <selection id="unit1-m0" name="Assault Intercessor Sergeant" type="model" number="1">
               <selections>
                 <selection id="unit1-m0-w0" name="Astartes chainsword" type="upgrade" number="1">
                   <profiles>
-                    <profile name="Astartes chainsword" typeName="Melee Weapons">
+                    <profile name="Chainsword" typeName="Melee Weapons">
                       <characteristics>
                         <characteristic name="Range">Melee</characteristic>
                         <characteristic name="A">4</characteristic>
                         <characteristic name="WS">3+</characteristic>
-                        <characteristic name="S">4</characteristic>
+                        <characteristic name="S">5</characteristic>
                         <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords"></characteristic>
@@ -141,17 +140,17 @@
                     </profile>
                   </profiles>
                 </selection>
-                <selection id="unit1-m0-w1" name="Heavy bolt pistol" type="upgrade" number="1">
+                <selection id="unit1-m0-w1" name="Heavy Bolt Pistol" type="upgrade" number="1">
                   <profiles>
-                    <profile name="Heavy bolt pistol" typeName="Ranged Weapons">
+                    <profile name="Heavy Bolt Pistol" typeName="Ranged Weapons">
                       <characteristics>
                         <characteristic name="Range">18"</characteristic>
                         <characteristic name="A">1</characteristic>
                         <characteristic name="BS">3+</characteristic>
-                        <characteristic name="S">4</characteristic>
+                        <characteristic name="S">5</characteristic>
                         <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords">Pistol</characteristic>
+                        <characteristic name="Keywords">Close-quarters</characteristic>
                       </characteristics>
                     </profile>
                   </profiles>
@@ -162,12 +161,12 @@
               <selections>
                 <selection id="unit1-m1-w0" name="Astartes chainsword" type="upgrade" number="4">
                   <profiles>
-                    <profile name="Astartes chainsword" typeName="Melee Weapons">
+                    <profile name="Chainsword" typeName="Melee Weapons">
                       <characteristics>
                         <characteristic name="Range">Melee</characteristic>
                         <characteristic name="A">4</characteristic>
                         <characteristic name="WS">3+</characteristic>
-                        <characteristic name="S">4</characteristic>
+                        <characteristic name="S">5</characteristic>
                         <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords"></characteristic>
@@ -175,17 +174,17 @@
                     </profile>
                   </profiles>
                 </selection>
-                <selection id="unit1-m1-w1" name="Heavy bolt pistol" type="upgrade" number="4">
+                <selection id="unit1-m1-w1" name="Heavy Bolt Pistol" type="upgrade" number="4">
                   <profiles>
-                    <profile name="Heavy bolt pistol" typeName="Ranged Weapons">
+                    <profile name="Heavy Bolt Pistol" typeName="Ranged Weapons">
                       <characteristics>
                         <characteristic name="Range">18"</characteristic>
                         <characteristic name="A">1</characteristic>
                         <characteristic name="BS">3+</characteristic>
-                        <characteristic name="S">4</characteristic>
+                        <characteristic name="S">5</characteristic>
                         <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords">Pistol</characteristic>
+                        <characteristic name="Keywords">Close-quarters</characteristic>
                       </characteristics>
                     </profile>
                   </profiles>

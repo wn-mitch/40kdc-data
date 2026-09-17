@@ -5,15 +5,13 @@
     "game_version": {
       "edition": "10th",
       "dataslate": "2025-q3"
-    }
-  },
-  {
-    "id": "wrench",
-    "name": "wrench",
-    "game_version": {
-      "edition": "10th",
-      "dataslate": "2025-q3"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "aee34635-59e6-4c77-9f7c-6334aff37fb3"
+      }
+    ]
   },
   {
     "id": "grot-orderly",
@@ -21,7 +19,13 @@
     "game_version": {
       "edition": "10th",
       "dataslate": "2025-q3"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "06deb955-d375-426c-8b27-560cb55f5dde"
+      }
+    ]
   },
   {
     "id": "ammo-runt",
@@ -29,7 +33,17 @@
     "game_version": {
       "edition": "10th",
       "dataslate": "2025-q3"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0549dd4b-5a1a-4609-9244-415205cad4a6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "07baa154-aeea-43b1-a515-8fb140376b9f"
+      }
+    ]
   },
   {
     "id": "blastajet-force-field",
@@ -37,7 +51,13 @@
     "game_version": {
       "edition": "10th",
       "dataslate": "2025-q3"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b64d38b3-82f0-49af-8259-d35ae3f6c065"
+      }
+    ]
   },
   {
     "id": "distraction-grot",
@@ -45,7 +65,13 @@
     "game_version": {
       "edition": "10th",
       "dataslate": "2025-q3"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0abec0dc-14e8-4ac0-8c7a-976412670343"
+      }
+    ]
   },
   {
     "id": "ard-case",
@@ -53,6 +79,82 @@
     "game_version": {
       "edition": "10th",
       "dataslate": "2025-q3"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7527971e-395b-4f7d-a2c1-876d8ad6a7d6"
+      }
+    ]
+  },
+  {
+    "id": "bomb-squig",
+    "name": "Bomb Squig",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5bdb3f40-f7cc-4737-9814-1a37577a7df6"
+      }
+    ]
+  },
+  {
+    "id": "grot-oiler",
+    "name": "Grot Oiler",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "64d7f6de-ee4d-413a-a33c-bbe7b83d3603"
+      }
+    ]
+  },
+  {
+    "id": "pulsa-rokkit",
+    "name": "Pulsa Rokkit",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7ecf9be2-3858-40d3-9f14-9bdcd9a2d04b"
+      }
+    ]
+  },
+  {
+    "id": "grot-assistant",
+    "name": "Grot Assistant",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0cd172a5-bd3e-42fd-891d-41eeb8ef18b1"
+      }
+    ]
+  },
+  {
+    "id": "paired-krumpas",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5a04b2c9-6f01-4bb8-820e-0102c0ba3ac2"
+      }
+    ],
+    "name": "Paired Krumpas",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
     }
   }
 ]

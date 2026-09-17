@@ -1,95 +1,9 @@
 [
   {
-    "source_id": "deadly-demise-d3",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "waaagh-energy",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "da-jump-psychic",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "deadly-demise-1",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "drill-through",
     "source_type": "ability",
     "phases": [
       "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "drive-by-dakka",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "deep-strike",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "deff-from-above",
-    "source_type": "ability",
-    "phases": [
-      "movement"
     ],
     "game_version": {
       "edition": "11th",
@@ -110,709 +24,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "hold-still-and-say-aargh",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "grot-orderly",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "shooty-power-trip",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "dats-our-loot",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "more-dakka",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "shokk-boosta",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "wild-ride",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bomb-squig",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "might-is-right",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "dead-brutal",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blastajet-attack-run",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "blastajet-force-field",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "deadly-demise-d6",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "firing-deck-11",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "lone-operative",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "stealth",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "kunnin-infiltrator",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "clankin-forward",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "big-an-shooty",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "prophet-of-da-great-waaagh",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "ghazghkulls-waaagh-banner-aura",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "trophy-hunters",
-    "source_type": "ability",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "bomb-squigs",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "attached-unit",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "deadly-demise-2d6",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "stompin-forward",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "ramshackle-cover",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "shoutin-pole-aura",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fortification",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tank-hunters",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "pulsa-rokkit",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "sneaky-gitz",
-    "source_type": "ability",
-    "phases": [
-      "command",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "distraction-grot",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "patrol-squad",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "get-da-good-bitz",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "firing-deck-12",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "grot-riggers",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "sawbonez",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "big-an-stompy",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "splat",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "full-throttle",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "gun-crazy-show-offs",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "ammo-runt",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "boom-bomb",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "piston-driven-brutality",
-    "source_type": "ability",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "beastboss",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "ferocious-rage",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "dakkastorm",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fix-dat-armour-up",
-    "source_type": "ability",
-    "phases": [
-      "command"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "kustom-force-field",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "grot-oiler",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "buzzer-squigs",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting",
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "squig-mine",
-    "source_type": "ability",
-    "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "monster-hunters",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "speedboss",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "fuel-mixa-grot",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "mekaniak",
-    "source_type": "ability",
-    "phases": [
-      "movement",
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "shokk-tunnel",
     "source_type": "ability",
     "phases": [
@@ -825,133 +36,10 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "one-last-kill",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "da-bigger-dey-iz",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "super-runts",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "special-dose",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "thievin-scavengers",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "deranged-snotling-assault",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "grot-assistant",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "spirit-of-gork-psychic",
-    "source_type": "ability",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "pyromaniaks",
     "source_type": "ability",
     "phases": [
       "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "thundering-stampede",
-    "source_type": "ability",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "single-minded-predator",
-    "source_type": "ability",
-    "phases": [
-      "command",
-      "fight"
     ],
     "game_version": {
       "edition": "11th",
@@ -1010,42 +98,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "burna-bomb",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "on-da-hunt",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "da-biggest-and-da-best",
-    "source_type": "ability",
-    "phases": [
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "aerial-deployment",
     "source_type": "ability",
     "phases": [
@@ -1086,18 +138,6 @@
     "source_type": "ability",
     "phases": [
       "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "strafing-run",
-    "source_type": "ability",
-    "phases": [
-      "shooting"
     ],
     "game_version": {
       "edition": "11th",
@@ -1244,18 +284,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "outflank",
-    "source_type": "ability",
-    "phases": [
-      "movement"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "dakkastorm",
     "source_type": "stratagem",
     "phases": [
@@ -1272,18 +300,6 @@
     "source_type": "stratagem",
     "phases": [
       "shooting"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "full-throttle",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
     ],
     "game_version": {
       "edition": "11th",
@@ -1563,18 +579,6 @@
   },
   {
     "source_id": "crushing-impact",
-    "source_type": "stratagem",
-    "phases": [
-      "charge"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
-    "source_id": "tide-of-muscle",
     "source_type": "stratagem",
     "phases": [
       "charge"
@@ -2316,7 +1320,7 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "try-dat-button",
+    "source_id": "try-dat-button-dread-mob",
     "source_type": "detachment-rule",
     "phases": [
       "shooting"
@@ -2392,6 +1396,693 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "dat-s-our-loot",
+    "source_type": "ability",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "ard-as-nails-brute-bosses",
+    "source_type": "detachment-rule",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "dakka-dakka-dakka-more-dakka",
+    "source_type": "detachment-rule",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "powers-of-da-waaagh-wurrband",
+    "source_type": "detachment-rule",
+    "phases": [
+      "movement",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "try-dat-button-madcap-meks",
+    "source_type": "detachment-rule",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "unpredictable-genius-madcap-meks",
+    "source_type": "detachment-rule",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "wreckin-and-lootin-wreckas",
+    "source_type": "detachment-rule",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "da-boss-is-watchin-war-horde",
+    "source_type": "enhancement",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "enhanced-runt-maw-madcap-meks",
+    "source_type": "enhancement",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "impulsive-recon-flyboyz",
+    "source_type": "enhancement",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "morgogs-finkin-cap-brute-bosses",
+    "source_type": "enhancement",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "temperamental-shokka-madcap-meks",
+    "source_type": "enhancement",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "armed-to-da-teef-bully-boyz",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting",
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "armoured-duellists-blitz-brigade",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "breakin-heads-war-horde",
+    "source_type": "stratagem",
+    "phases": [
+      "command"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "brutal-broadside-rollin-deff",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "close-range-dakka-war-horde",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "clownin-dakka-shoota-boyz",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "dakkastorm-kult-of-speed",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "delicious-eating-squigs-kult-of-speed",
+    "source_type": "stratagem",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "devastating-drift-rollin-deff",
+    "source_type": "stratagem",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "drive-by-bustin-wreckas",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "dubious-restraint-taktikal-brigade",
+    "source_type": "stratagem",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "ere-we-go-green-tide",
+    "source_type": "stratagem",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "flyin-headbutt-flyboyz",
+    "source_type": "stratagem",
+    "phases": [
+      "command"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "fungus-fuel-injection-war-horde",
+    "source_type": "stratagem",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "gooped-into-action-da-big-hunt",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "grab-it-wreckas",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "grot-shields-runt-swarm",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "gun-crazy-show-offs-wreckas",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "hit-em-harder-war-horde",
+    "source_type": "stratagem",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "hulking-brutes-bully-boyz",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "impending-crunch-rollin-deff",
+    "source_type": "stratagem",
+    "phases": [
+      "charge"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "impervious-blitz-brigade",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "infested-war-zone-runt-swarm",
+    "source_type": "stratagem",
+    "phases": [
+      "command"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "instinctive-hunters-da-big-hunt",
+    "source_type": "stratagem",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "kustom-dakka-shoota-boyz",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "long-uncontrolled-bursts-flyboyz",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "long-uncontrolled-bursts-rollin-deff",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "mekanised-brutality-blitz-brigade",
+    "source_type": "stratagem",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "mind-mostly-on-the-mission-taktikal-brigade",
+    "source_type": "stratagem",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "mob-mentality-green-tide",
+    "source_type": "stratagem",
+    "phases": [
+      "command"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "mount-up-ladz-blitz-brigade",
+    "source_type": "stratagem",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "mow-em-down-war-horde",
+    "source_type": "stratagem",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "never-enough-dakka-shoota-boyz",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "orks-is-never-beaten-war-horde",
+    "source_type": "stratagem",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "run-em-down-blitz-brigade",
+    "source_type": "stratagem",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "scarper-runt-swarm",
+    "source_type": "stratagem",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "speediest-freeks-kult-of-speed",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "speshul-shells-rollin-deff",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "too-arrogant-to-die-bully-boyz",
+    "source_type": "stratagem",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "unbridled-carnage-green-tide",
+    "source_type": "stratagem",
+    "phases": [
+      "fight"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "vindictive-artillerists-madcap-meks",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "where-dya-fink-youre-going-da-big-hunt",
+    "source_type": "stratagem",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "while-their-backs-are-turned-taktikal-brigade",
+    "source_type": "stratagem",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "whirligig-evasion-flyboyz",
+    "source_type": "stratagem",
+    "phases": [
+      "movement"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "authored_by": "40kdc-community"
+  },
+  {
+    "source_id": "yooz-in-trouble-now-blitz-brigade",
+    "source_type": "stratagem",
+    "phases": [
+      "shooting"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
     },
     "authored_by": "40kdc-community"
   }

@@ -143,7 +143,7 @@ describe("composition and parenting", () => {
       [composedArea, wall],
     );
     expect(resolved.map((r) => r.piece_type)).toEqual(["area", "feature"]);
-    expect(resolved[1].id).toBe("back-wall");
+    expect(resolved[1].id).toBe("a1--back-wall");
     // The wall centroid sits at the area centroid offset by its area-local position (no rotation).
     expect(closeVec(centroidOf(resolved[1].vertices), { x: 30, y: 19 })).toBe(true);
   });

@@ -2,11 +2,15 @@ World Eaters - Terminator Loadout Decomposition - [2000 pts]
 
 # ++ Army Roster ++ [725 pts]
 ## Configuration
+List Name: Terminator Loadout Decomposition
+Faction: World Eaters
 Battle Size: Strike Force (2000 Point limit)
 Detachment: Berzerker Warband
+Force Disposition: Purge The Foe
 
 ## Battleline [725 pts]
-Daemon Prince of Khorne [200 pts]: Warlord, Infernal cannon, Hellforged weapons
+Daemon Prince of Khorne [200 pts]:
+• 1x Daemon Prince of Khorne: Warlord, Infernal cannon, Hellforged weapons
 Chaos Terminators [350 pts]:
 • 1x World Eaters Terminator Champion: Chainfist, Combi-weapon
 • 4x World Eaters Terminator: Combi-weapon, Power fist

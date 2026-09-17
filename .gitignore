@@ -17,6 +17,7 @@ tools/schemas/
 tools/src/data/bundle.generated.ts
 tools/src/share/registry.generated.ts
 .DS_Store
+/.humanlayer/
 *.log
 
 # Local secrets — never commit (e.g. Patreon OAuth client/creator credentials).
@@ -29,6 +30,13 @@ rube-goldberg-output.txt
 /data/_audit/author-input/
 /data/_audit/proposed/*.json
 /data/_audit/worklist.json
+
+# Public/source boundary: raw authoring corpora and unresolved source prose
+# belong under /_private/ or the private 40kdc-abilities store.
+/data/_audit/reauthor-input/
+/data/core/*/_wargear-options.unparsed.json
+/data/_audit/blessings-of-khorne-three-way.md
+/data/_audit/proposed/REVIEW-DETAIL.md
 
 # Fuzz-mode regression repros from the cross-impl parity differ. The directory
 # itself is kept (via .gitkeep) so the differ has somewhere to write; the JSON

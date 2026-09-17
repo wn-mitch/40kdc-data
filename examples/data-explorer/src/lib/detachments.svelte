@@ -119,7 +119,7 @@
             <h2>Enhancements</h2>
             <div class="dc-abilities">
               {#each d.enhancements as e (e.id)}
-                {@const ability = resolveAbility(e.ability_id)}
+                {@const ability = resolveAbility(e.ability_id, factionId)}
                 <div class="dc-ability">
                   <div class="body">
                     <div class="ab-name">{e.name} <span class="meta-inline">{enhMeta(e)}</span></div>
@@ -140,7 +140,7 @@
             <h2>Stratagems</h2>
             <div class="dc-abilities">
               {#each d.stratagems as s (s.id)}
-                {@const ability = resolveAbility(s.ability_id)}
+                {@const ability = resolveAbility(s.ability_id, factionId)}
                 {@const tr = s.target_restrictions}
                 <div class="dc-ability">
                   <div class="body">

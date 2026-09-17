@@ -23,9 +23,11 @@ ROOT = pathlib.Path(__file__).parent.parent
 # Load data
 # ---------------------------------------------------------------------------
 
+
 def _load(faction, file):
     path = ROOT / "data" / "core" / faction / file
     return {e["id"]: e for e in json.loads(path.read_text())}
+
 
 we_weapons = _load("world-eaters", "weapons.json")
 ck_weapons = _load("chaos-knights", "weapons.json")
@@ -57,6 +59,7 @@ FO_REROLL = {
 # Synthetic targets
 # ---------------------------------------------------------------------------
 
+
 def _target(label, T, W, Sv, invuln=None, keywords=None):
     profile = {"name": label, "T": T, "W": W, "Sv": Sv}
     if invuln:
@@ -69,12 +72,13 @@ def _target(label, T, W, Sv, invuln=None, keywords=None):
         "faction_keywords": [],
     }
 
+
 TARGETS = [
-    _target("GEQ",   T=3,  W=1,  Sv=5, keywords=["Infantry"]),
-    _target("MEQ",   T=4,  W=2,  Sv=3, keywords=["Infantry", "Adeptus Astartes"]),
-    _target("TEQ",   T=5,  W=3,  Sv=2, invuln=4, keywords=["Infantry", "Terminator"]),
-    _target("Rhino", T=9,  W=10, Sv=3, keywords=["Vehicle"]),
-    _target("T10V",  T=10, W=12, Sv=3, keywords=["Vehicle"]),
+    _target("GEQ", T=3, W=1, Sv=5, keywords=["Infantry"]),
+    _target("MEQ", T=4, W=2, Sv=3, keywords=["Infantry", "Adeptus Astartes"]),
+    _target("TEQ", T=5, W=3, Sv=2, invuln=4, keywords=["Infantry", "Terminator"]),
+    _target("Rhino", T=9, W=10, Sv=3, keywords=["Vehicle"]),
+    _target("T10V", T=10, W=12, Sv=3, keywords=["Vehicle"]),
 ]
 TARGET_LABELS = [t["name"] for t in TARGETS]
 
@@ -82,11 +86,12 @@ TARGET_LABELS = [t["name"] for t in TARGETS]
 # Cruncher helper
 # ---------------------------------------------------------------------------
 
+
 def shoot(weapon, unit, buffs, dist):
     result = crunch(
         {
             "attacker": {"weapon": weapon, "profileIndex": 0},
-            "target":   {"unit": unit,    "profileIndex": 0},
+            "target": {"unit": unit, "profileIndex": 0},
             "modelsFiring": 1,
             "buffs": buffs,
             "context": {"phase": "shooting", "distanceInches": dist},
@@ -116,17 +121,20 @@ all_rows = []  # (label, totals_list)
 
 # ── Forgefiend ──────────────────────────────────────────────────────────────
 FF_LOADOUTS = [
-    ("FF-A 2×Hades",           [(we_weapons["hades-autocannon"], 2)]),
-    ("FF-B 1×Ecto+2×Hades",    [
-        (we_weapons["ectoplasma-cannon"], 1),
-        (we_weapons["hades-autocannon"], 2),
-    ]),
-    ("FF-C 3×Ecto",            [(we_weapons["ectoplasma-cannon"], 3)]),
+    ("FF-A 2×Hades", [(we_weapons["hades-autocannon"], 2)]),
+    (
+        "FF-B 1×Ecto+2×Hades",
+        [
+            (we_weapons["ectoplasma-cannon"], 1),
+            (we_weapons["hades-autocannon"], 2),
+        ],
+    ),
+    ("FF-C 3×Ecto", [(we_weapons["ectoplasma-cannon"], 3)]),
 ]
 FF_SCENARIOS = [
-    ("cover no strat >18\"",   [COVER],                        30),
-    ("cover + AC (1CP)",       [COVER, IGNORES_CV],            30),
-    ("cover + AC + FO <18\"",  [COVER, IGNORES_CV, FO_REROLL], 12),
+    ('cover no strat >18"', [COVER], 30),
+    ("cover + AC (1CP)", [COVER, IGNORES_CV], 30),
+    ('cover + AC + FO <18"', [COVER, IGNORES_CV, FO_REROLL], 12),
 ]
 
 for loadout_label, weapons in FF_LOADOUTS:
@@ -136,20 +144,26 @@ for loadout_label, weapons in FF_LOADOUTS:
 
 # ── Brigand ──────────────────────────────────────────────────────────────────
 WDB_LOADOUTS = [
-    ("WDB-A Chain+Spear+Stubber", [
-        (ck_weapons["avenger-chaincannon"],    1),
-        (ck_weapons["daemonbreath-spear"],     1),
-        (ck_weapons["diabolus-heavy-stubber"], 1),
-    ]),
-    ("WDB-B Chain+Spear+Launcher", [
-        (ck_weapons["avenger-chaincannon"],  1),
-        (ck_weapons["daemonbreath-spear"],   1),
-        (ck_weapons["havoc-multi-launcher"], 1),
-    ]),
+    (
+        "WDB-A Chain+Spear+Stubber",
+        [
+            (ck_weapons["avenger-chaincannon"], 1),
+            (ck_weapons["daemonbreath-spear"], 1),
+            (ck_weapons["diabolus-heavy-stubber"], 1),
+        ],
+    ),
+    (
+        "WDB-B Chain+Spear+Launcher",
+        [
+            (ck_weapons["avenger-chaincannon"], 1),
+            (ck_weapons["daemonbreath-spear"], 1),
+            (ck_weapons["havoc-multi-launcher"], 1),
+        ],
+    ),
 ]
 WDB_SCENARIOS = [
-    ("OFF obj",  [COVER],             15),
-    ("ON obj",   [COVER, IGNORES_CV], 15),
+    ("OFF obj", [COVER], 15),
+    ("ON obj", [COVER, IGNORES_CV], 15),
 ]
 
 for loadout_label, weapons in WDB_LOADOUTS:
@@ -189,11 +203,10 @@ out = []
 out.append("# WE Forgefiend vs War Dog Brigand vs WE Defiler — Damage Comparison")
 out.append("")
 out.append(
-    "> All targets **in cover** (11th ed: −1 to hit). Damage = wounds after FNP. "
-    "Sorted by MEQ."
+    "> All targets **in cover** (11th ed: −1 to hit). Damage = wounds after FNP. Sorted by MEQ."
 )
 out.append(
-    "> Points provisional where noted. FO reroll at dist <18\". "
+    '> Points provisional where noted. FO reroll at dist <18". '
     "Defiler slots: A=main cannon B=secondary C=baleflamer-slot D=missile-slot."
 )
 out.append("")

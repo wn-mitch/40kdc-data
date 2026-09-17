@@ -12,5 +12,12 @@
     "effective_date": "2026-06-20",
     "label": "Official launch mission deck",
     "supersedes": "pre-launch-provisional"
+  },
+  {
+    "edition": "11th",
+    "dataslate": "codex-orks",
+    "effective_date": "2026-08-20",
+    "label": "Codex: Orks rules snapshot",
+    "supersedes": "launch"
   }
 ]

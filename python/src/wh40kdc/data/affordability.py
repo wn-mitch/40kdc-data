@@ -22,17 +22,22 @@ from typing import Any
 
 from wh40kdc.data.battle_sizes import points_limit_for_battle_size
 from wh40kdc.data.dataset import Dataset
-from wh40kdc.data.pricing import base_unit_points
+from wh40kdc.data.pricing import host_points_tiers, host_unit_points
 
 
-def _cheapest_next_copy(unit: dict[str, Any], next_ordinal: int) -> int:
-    """The cheapest cost to field one more copy of ``unit`` at ``next_ordinal``."""
-    tiers = unit.get("points") or []
+def _cheapest_next_copy(
+    unit: dict[str, Any],
+    next_ordinal: int,
+    host_faction: dict[str, Any] | None,
+) -> int:
+    """The cheapest cost to field one more copy of ``unit`` at ``next_ordinal``,
+    over the tiers in effect for ``host_faction``'s army."""
+    tiers = host_points_tiers(unit, host_faction)
     if not tiers:
         return 0
     best = math.inf
     for t in tiers:
-        cost = base_unit_points(unit, t["models"], next_ordinal)
+        cost = host_unit_points(unit, t["models"], next_ordinal, host_faction)
         if cost < best:
             best = cost
     return 0 if best == math.inf else int(best)
@@ -62,6 +67,10 @@ def candidate_affordability(spec: dict[str, Any], dataset: Dataset) -> list[dict
         return dataset.units.get_any(unit_id)
 
     # Running total of the current list (ordinal-aware) + enhancement costs.
+    # Host-aware: foreign units with an ``allied_points`` entry for this army
+    # price from that entry (see ``host_points_tiers``).
+    host_faction_view = dataset.factions.get(faction_id) if faction_id else None
+    host_faction = host_faction_view.raw if host_faction_view else None
     ordinals: dict[str, int] = {}
     spent = 0
     for u in spec.get("units") or []:
@@ -71,7 +80,7 @@ def candidate_affordability(spec: dict[str, Any], dataset: Dataset) -> list[dict
             continue
         ordinal = ordinals.get(unit_id, 0) + 1
         ordinals[unit_id] = ordinal
-        spent += base_unit_points(view.raw, u.get("model_count") or 0, ordinal)
+        spent += host_unit_points(view.raw, u.get("model_count") or 0, ordinal, host_faction)
         enhancement_id = u.get("enhancement_id")
         if enhancement_id:
             enh = dataset.enhancements.get(enhancement_id)
@@ -79,17 +88,13 @@ def candidate_affordability(spec: dict[str, Any], dataset: Dataset) -> list[dict
 
     override = spec.get("points_limit_override")
     limit = (
-        override
-        if override is not None
-        else points_limit_for_battle_size(spec.get("battle_size"))
+        override if override is not None else points_limit_for_battle_size(spec.get("battle_size"))
     )
     remaining = math.inf if limit is None else limit - spent
 
     candidate_ids = spec.get("candidate_unit_ids")
     if candidate_ids is None:
-        candidate_ids = (
-            [v.id for v in dataset.units.by_faction(faction_id)] if faction_id else []
-        )
+        candidate_ids = [v.id for v in dataset.units.by_faction(faction_id)] if faction_id else []
 
     out: list[dict[str, Any]] = []
     for unit_id in candidate_ids:
@@ -97,7 +102,7 @@ def candidate_affordability(spec: dict[str, Any], dataset: Dataset) -> list[dict
         if view is None:
             continue
         next_ordinal = ordinals.get(unit_id, 0) + 1
-        next_copy_cost = _cheapest_next_copy(view.raw, next_ordinal)
+        next_copy_cost = _cheapest_next_copy(view.raw, next_ordinal, host_faction)
         out.append(
             {
                 "unitId": view.id,

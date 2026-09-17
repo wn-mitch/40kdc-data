@@ -23,6 +23,6 @@ so the pack-global caps project per mission). Prose is never touched.
 | Mission-entity matched | 25 |
 | source filled | 0 |
 | source review (dump differs, kept) | 0 |
-| VP caps confirmed | 50 |
+| VP caps confirmed | 100 |
 | VP caps review (dump differs, kept) | 0 |
 

@@ -6,6 +6,9 @@
   "type": "object",
   "properties": {
     "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "external_refs": {
+      "$ref": "../defs/common.schema.json#/$defs/external-reference-list"
+    },
     "name": { "type": "string", "minLength": 1, "maxLength": 128 },
     "type": { "enum": ["ranged", "melee"] },
     "faction_id": {
@@ -52,14 +55,35 @@
             "items": {
               "type": "object",
               "properties": {
-                "keyword_id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+                "keyword_id": {
+                  "$ref": "../defs/common.schema.json#/$defs/entity-id"
+                },
                 "parameters": {
                   "type": "object",
-                  "description": "Reference-site parameters conforming to the catalog entry's required_parameters. Only the three documented keys are accepted; any other key is invalid.",
+                  "description": "Reference-site parameters conforming to the catalog entry's required parameters and optional target-keyword applicability gates.",
                   "properties": {
-                    "value": { "$ref": "../defs/common.schema.json#/$defs/stat-value" },
-                    "target_keyword": { "type": "string", "minLength": 1, "maxLength": 64 },
-                    "threshold": { "type": "integer", "minimum": 2, "maximum": 6 }
+                    "value": {
+                      "$ref": "../defs/common.schema.json#/$defs/stat-value"
+                    },
+                    "target_keyword": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "threshold": {
+                      "type": "integer",
+                      "minimum": 2,
+                      "maximum": 6
+                    },
+                    "required_target_keywords_any": {
+                      "$ref": "../defs/common.schema.json#/$defs/keyword-list",
+                      "minItems": 1,
+                      "description": "The keyword applies only when the target has at least one listed keyword."
+                    },
+                    "excluded_target_keywords": {
+                      "$ref": "../defs/common.schema.json#/$defs/keyword-list",
+                      "description": "The keyword does not apply when the target has any listed keyword."
+                    }
                   },
                   "additionalProperties": false
                 }
@@ -67,6 +91,27 @@
               "required": ["keyword_id"],
               "additionalProperties": false
             }
+          },
+          "target_restrictions": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "required_keywords_any": {
+                    "$ref": "../defs/common.schema.json#/$defs/keyword-list",
+                    "minItems": 1,
+                    "description": "The profile can target a unit carrying at least one listed keyword."
+                  },
+                  "excluded_keywords": {
+                    "$ref": "../defs/common.schema.json#/$defs/keyword-list",
+                    "description": "The profile cannot target a unit carrying any listed keyword."
+                  }
+                },
+                "additionalProperties": false
+              },
+              { "type": "null" }
+            ],
+            "description": "Target legality for this profile. Distinct from Anti and other effects that modify attacks after a legal target is selected."
           }
         },
         "required": ["name", "stats"],

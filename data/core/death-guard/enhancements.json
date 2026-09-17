@@ -15,7 +15,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "44910d9f-e717-5236-b213-bced9ccb066b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7d03a386-0b47-4684-bd23-eeac1bebc139"
+      }
+    ]
   },
   {
     "id": "furnace-of-plagues-virulent-vectorium",
@@ -33,7 +43,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e6ee4380-0efb-562d-b5f1-8cc42337c8fa"
+      },
+      {
+        "namespace": "mfm",
+        "id": "572b6378-e1cf-433c-841b-015a715aed94"
+      }
+    ]
   },
   {
     "id": "arch-contaminator-virulent-vectorium",
@@ -51,7 +71,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6f4103c8-8ca1-52ca-b557-26e4c4cad74d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f6592bda-6788-468f-a7f0-2ad86506c925"
+      }
+    ]
   },
   {
     "id": "revolting-regeneration-virulent-vectorium",
@@ -69,7 +99,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "af239e40-696f-5d1c-bd12-ecb2496e650f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e389de76-b121-4110-b01e-343ed1bec502"
+      }
+    ]
   },
   {
     "id": "eye-of-affliction-mortarions-hammer",
@@ -87,7 +127,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "68dc97a3-763c-5704-9f42-c6226bbcfe5c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "184bc9b1-4743-4683-bb76-b667e8084f98"
+      }
+    ]
   },
   {
     "id": "bilemaw-blight-mortarions-hammer",
@@ -95,7 +145,7 @@
     "detachment_id": "mortarions-hammer",
     "cost": 10,
     "keyword_restrictions": [
-      "Death Guard"
+      "Malignant Plaguecaster"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -105,7 +155,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a0633048-a026-5dee-a661-21580f0e8260"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5c3eba83-5786-4320-92e5-b6369e5c0535"
+      }
+    ]
   },
   {
     "id": "insectile-murmuration-upgrade-flyblown-host",
@@ -113,7 +173,8 @@
     "detachment_id": "flyblown-host",
     "cost": 15,
     "keyword_restrictions": [
-      "Death Guard"
+      "Death Guard",
+      "Plague Marines"
     ],
     "ability_id": "insectile-murmuration-flyblown-host",
     "is_unique": true,
@@ -123,7 +184,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "539a4ab9-718b-5af9-87d1-04f790af481b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fa211b3a-a993-44c2-bbce-b954c4d653db"
+      }
+    ]
   },
   {
     "id": "rejuvenating-swarm-paragons-of-putrescence",
@@ -131,7 +202,8 @@
     "detachment_id": "paragons-of-putrescence",
     "cost": 20,
     "keyword_restrictions": [
-      "Death Guard"
+      "Death Guard",
+      "Infantry"
     ],
     "ability_id": "rejuvenating-swarm-paragons-of-putrescence",
     "is_unique": true,
@@ -144,6 +216,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Terminator"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6abab6c9-3670-5578-965c-07bd20c36659"
+      },
+      {
+        "namespace": "mfm",
+        "id": "98b3b2a1-6ebe-4087-a039-9ecc48fec9b0"
+      }
     ]
   },
   {
@@ -162,7 +244,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "95f0723a-a5c2-54a4-9304-864c6d5d0dc7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6b6d82dd-7aac-49f5-8219-c2ce15220e4b"
+      }
+    ]
   },
   {
     "id": "plagueveil-upgrade-flyblown-host",
@@ -170,7 +262,8 @@
     "detachment_id": "flyblown-host",
     "cost": 15,
     "keyword_restrictions": [
-      "Death Guard"
+      "Death Guard",
+      "Plague Marines"
     ],
     "ability_id": "plagueveil-flyblown-host",
     "is_unique": true,
@@ -180,7 +273,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9611a303-9e77-5ed5-81f5-dcd29ba50b86"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ff671003-161c-417a-96b9-a62c53d7cd3d"
+      }
+    ]
   },
   {
     "id": "tendrilous-emissions-mortarions-hammer",
@@ -188,7 +291,7 @@
     "detachment_id": "mortarions-hammer",
     "cost": 30,
     "keyword_restrictions": [
-      "Death Guard"
+      "Lord of Virulence"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -198,7 +301,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8e62bc64-9be0-52f4-a8f6-282a8ee9c420"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7b1f761d-498a-4439-a0c1-e76a6cff030e"
+      }
+    ]
   },
   {
     "id": "final-ingredient-champions-of-contagion",
@@ -206,7 +319,7 @@
     "detachment_id": "champions-of-contagion",
     "cost": 20,
     "keyword_restrictions": [
-      "Death Guard"
+      "Biologus Putrifier"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -216,7 +329,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1ceec444-8399-5254-b1bc-eac8ad88d891"
+      },
+      {
+        "namespace": "mfm",
+        "id": "64b1ed35-3581-4727-b68f-91af8d8d9af8"
+      }
+    ]
   },
   {
     "id": "visions-of-virulence-champions-of-contagion",
@@ -224,7 +347,7 @@
     "detachment_id": "champions-of-contagion",
     "cost": 15,
     "keyword_restrictions": [
-      "Death Guard"
+      "Malignant Plaguecaster"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -234,7 +357,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f142f851-890b-5fa1-9f13-95b576d1a45f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "813b1ef8-03dc-4f3c-96a8-110aa39dac35"
+      }
+    ]
   },
   {
     "id": "needle-of-nurgle-champions-of-contagion",
@@ -242,7 +375,7 @@
     "detachment_id": "champions-of-contagion",
     "cost": 25,
     "keyword_restrictions": [
-      "Death Guard"
+      "Plague Surgeon"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -252,7 +385,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5fd0618c-a284-5e20-9964-7b0b6e24ec55"
+      },
+      {
+        "namespace": "mfm",
+        "id": "944ad595-51c6-4fad-8aef-7c779fac2544"
+      }
+    ]
   },
   {
     "id": "cornucophagus-champions-of-contagion",
@@ -260,7 +403,7 @@
     "detachment_id": "champions-of-contagion",
     "cost": 35,
     "keyword_restrictions": [
-      "Death Guard"
+      "Lord of Poxes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -270,7 +413,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "39ebcd86-07a8-5925-b206-1f94e435d946"
+      },
+      {
+        "namespace": "mfm",
+        "id": "473c6049-4c72-42e1-9cbb-49624112c62d"
+      }
+    ]
   },
   {
     "id": "beckoning-blight-tallyband-summoners",
@@ -288,7 +441,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ece0e342-1635-524b-84b1-facd1d42dab6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c0d51c91-9231-442d-9867-c45605bb73ca"
+      }
+    ]
   },
   {
     "id": "fell-harvester-tallyband-summoners",
@@ -306,7 +469,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dd561346-866a-51d7-bcbd-b2b322412420"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c61119f2-8aea-4203-ab1b-565c4deacebe"
+      }
+    ]
   },
   {
     "id": "entropic-knell-tallyband-summoners",
@@ -314,7 +487,7 @@
     "detachment_id": "tallyband-summoners",
     "cost": 15,
     "keyword_restrictions": [
-      "Death Guard"
+      "Great Unclean One"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -324,7 +497,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "951f42ae-7c66-50d8-ad41-786808363ec2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fa2dce92-6a33-4ba4-9401-f3568989a54d"
+      }
+    ]
   },
   {
     "id": "tome-of-bounteous-blessings-tallyband-summoners",
@@ -332,7 +515,7 @@
     "detachment_id": "tallyband-summoners",
     "cost": 20,
     "keyword_restrictions": [
-      "Death Guard"
+      "Malignant Plaguecaster"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -342,7 +525,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1de48589-75e5-5edb-b04f-c2129cde3e8e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c717fc16-3d50-4312-af50-9d7653c5266a"
+      }
+    ]
   },
   {
     "id": "witherbone-pipes-shamblerot-vectorium",
@@ -350,7 +543,7 @@
     "detachment_id": "shamblerot-vectorium",
     "cost": 25,
     "keyword_restrictions": [
-      "Death Guard"
+      "Noxious Blightbringer"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -360,7 +553,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2a8bd434-f136-5299-bae8-82bd0987c6c9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5d974c69-74c8-4495-8370-f4c9e20d3c4f"
+      }
+    ]
   },
   {
     "id": "lord-of-the-walking-pox-shamblerot-vectorium",
@@ -378,7 +581,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c49c7ab4-aa47-5fa3-9535-895a68bc6db9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0b8d22c7-a46c-4865-9a51-dc622a894fec"
+      }
+    ]
   },
   {
     "id": "sorrowsyphon-shamblerot-vectorium",
@@ -386,7 +599,7 @@
     "detachment_id": "shamblerot-vectorium",
     "cost": 10,
     "keyword_restrictions": [
-      "Death Guard"
+      "Malignant Plaguecaster"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -396,7 +609,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6a1ce929-8639-5346-8dfc-4742a9e19407"
+      },
+      {
+        "namespace": "mfm",
+        "id": "646ffc25-fbc8-4702-82ad-ea7c853e5736"
+      }
+    ]
   },
   {
     "id": "talisman-of-burgeoning-shamblerot-vectorium",
@@ -414,7 +637,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b8707865-9fbd-5210-868b-15d56b126bc7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "89e9fb12-929f-4931-8002-58f48241447d"
+      }
+    ]
   },
   {
     "id": "face-of-death-death-lords-chosen",
@@ -422,7 +655,7 @@
     "detachment_id": "death-lords-chosen",
     "cost": 10,
     "keyword_restrictions": [
-      "Death Guard"
+      "Terminator"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -432,7 +665,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b4828be2-6bd1-5336-ba5a-7da43644fcb6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cff1e6f0-e980-4a6d-a722-e86946398006"
+      }
+    ]
   },
   {
     "id": "vile-vigour-death-lords-chosen",
@@ -440,7 +683,7 @@
     "detachment_id": "death-lords-chosen",
     "cost": 15,
     "keyword_restrictions": [
-      "Death Guard"
+      "Terminator"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -450,7 +693,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2700881b-0466-5383-8f14-c193a16d1a49"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8259676b-b493-4d15-b60e-b1922dac0d44"
+      }
+    ]
   },
   {
     "id": "warprot-talisman-death-lords-chosen",
@@ -458,7 +711,7 @@
     "detachment_id": "death-lords-chosen",
     "cost": 30,
     "keyword_restrictions": [
-      "Death Guard"
+      "Terminator"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -468,7 +721,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6c0eb9c9-7a04-508a-a760-e9d0b387193a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b7a6b2a3-f33e-4620-a7aa-826bbccede72"
+      }
+    ]
   },
   {
     "id": "helm-of-the-fly-king-death-lords-chosen",
@@ -476,7 +739,7 @@
     "detachment_id": "death-lords-chosen",
     "cost": 20,
     "keyword_restrictions": [
-      "Death Guard"
+      "Terminator"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -486,7 +749,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "01ee4ccf-2552-5d8a-9d27-dcb7aa667733"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e9aee006-05f7-44cd-9622-5a7a43b13bcc"
+      }
+    ]
   },
   {
     "id": "parasitic-woe-reaper-upgrade-contagion-engines",
@@ -494,7 +767,7 @@
     "detachment_id": "contagion-engines",
     "cost": 15,
     "keyword_restrictions": [
-      "Contagion Engine"
+      "Contagion Engines"
     ],
     "ability_id": "parasitic-woe-reaper-contagion-engines",
     "is_unique": true,
@@ -504,16 +777,23 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f1d68c88-bcd6-56bf-b287-db69cccdb212"
+      },
+      {
+        "namespace": "mfm",
+        "id": "57326899-e3a2-4260-b48b-7fdce760ec8c"
+      }
+    ]
   },
   {
     "id": "lancet-of-the-worldsore-upgrade-contagion-engines",
     "name": "Lancet of the Worldsore (Upgrade)",
     "detachment_id": "contagion-engines",
     "cost": 15,
-    "keyword_restrictions": [
-      "Helbrute"
-    ],
     "ability_id": "lancet-of-the-worldsore-contagion-engines",
     "is_unique": true,
     "game_version": {
@@ -522,7 +802,27 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "keyword_restriction_groups": [
+      [
+        "Death Guard",
+        "Helbrute"
+      ],
+      [
+        "Death Guard",
+        "Myphitic Blight-haulers"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0f52b203-5e89-5f1b-820b-96187bcddf0e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6e0f3baf-ed09-4117-a0a1-181dee486e68"
+      }
+    ]
   },
   {
     "id": "host-of-the-hybridised-pox-paragons-of-putrescence",
@@ -541,7 +841,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "17b153b8-ddf4-5646-8179-5b009f3a1029"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c8c48717-89c6-48b6-bf61-41c84aefc022"
+      }
+    ]
   },
   {
     "id": "bountiful-regeneration-maggot-lords",
@@ -560,6 +870,12 @@
     "keyword_restrictions": [
       "Lord of Virulence",
       "Maggot Lords"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d4db55ce-e6d8-499a-8627-78f59de1e7a4"
+      }
     ]
   },
   {
@@ -579,6 +895,12 @@
     "keyword_restrictions": [
       "Maggot Lords",
       "Tallyman"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5c863751-9ea1-4464-b75c-65e254e9becc"
+      }
     ]
   }
 ]

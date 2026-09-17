@@ -12,11 +12,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "anathema-blademastery-null-maiden-vigil",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b670d1ef-c6b0-507d-938f-f283275de820"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5eed0fdf-fe60-42db-a87b-f3308420c6cc"
+      }
+    ]
   },
   {
     "id": "arcane-genetic-alchemy-shield-host",
@@ -35,11 +45,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "arcane-genetic-alchemy-shield-host",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a67cf9db-eb8f-5ff9-98aa-3c716862bf0f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c86305d1-9ed8-4611-853b-2e9582c62091"
+      }
+    ]
   },
   {
     "id": "archeotech-munitions-shield-host",
@@ -54,11 +74,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "archeotech-munitions-shield-host",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5a3d02bc-0076-5505-a923-84977062b675"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ce8cf776-9cb6-48b5-9ea9-bddb56f19407"
+      }
+    ]
   },
   {
     "id": "avenge-the-fallen-shield-host",
@@ -73,11 +103,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "avenge-the-fallen-shield-host",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "074a438b-8074-5a3d-91be-4c1dc5c06510"
+      },
+      {
+        "namespace": "mfm",
+        "id": "da903080-91ba-4138-a20c-d7719a69754d"
+      }
+    ]
   },
   {
     "id": "deathsong-scythes-silent-hunters",
@@ -95,7 +135,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bc0eae6b-6872-5310-a58f-31eb2282e37c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "df90dc29-28d9-4484-b6aa-266ce4b3699d"
+      }
+    ]
   },
   {
     "id": "defiant-to-the-last-lions-of-the-emperor",
@@ -110,11 +160,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "defiant-to-the-last-lions-of-the-emperor",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5701483f-5126-59c6-886e-db7b4d4e9856"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3d93b0b2-7640-4265-985b-0c1a9e206643"
+      }
+    ]
   },
   {
     "id": "desperations-price-null-maiden-vigil",
@@ -133,11 +193,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "desperations-price-null-maiden-vigil",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a306a34a-64e6-5294-a65f-e063b2e965ed"
+      },
+      {
+        "namespace": "mfm",
+        "id": "985ebdd0-d67f-4c45-90a5-8955020d801b"
+      }
+    ]
   },
   {
     "id": "earning-of-a-name-auric-champions",
@@ -152,11 +222,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "earning-of-a-name-auric-champions",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c8a9d9d9-e8f4-549c-a018-ff9c67f0b2c5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "57f66cf6-3c56-4811-82c8-8f7e92bf2b86"
+      }
+    ]
   },
   {
     "id": "electroexorcist-saturation-tharanatoi-hammerblow",
@@ -174,7 +254,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "68599c6d-d3ea-59c0-b2d3-2255e2624136"
+      },
+      {
+        "namespace": "mfm",
+        "id": "586938da-eb36-4a8c-9ebc-eacd8ac75f90"
+      }
+    ]
   },
   {
     "id": "emperors-executioners-talons-of-the-emperor",
@@ -189,11 +279,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "emperors-executioners-talons-of-the-emperor",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d536aca0-1462-5b2d-9fa6-3f1ef526c2e0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f5c50ce4-bc47-4982-a25c-e9e09f28737d"
+      }
+    ]
   },
   {
     "id": "emperors-vengeance-solar-spearhead",
@@ -208,11 +308,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "emperors-vengeance-solar-spearhead",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a7c98252-cb20-5601-8c0a-0089ee266157"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9876dec8-0561-44cf-b491-429cd673c76b"
+      }
+    ]
   },
   {
     "id": "empyric-severance-talons-of-the-emperor",
@@ -228,11 +338,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "empyric-severance-talons-of-the-emperor",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a2009fc1-5c4f-5d08-849c-6657d38ada9f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "17071980-b9bf-4a01-afe9-c31c1eefc773"
+      }
+    ]
   },
   {
     "id": "flawless-construction-might-of-the-moritoi",
@@ -251,7 +371,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b77bafd4-eaa1-5056-87f1-13c2e5df7096"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3687c101-794e-4b3b-9281-b799cc7c439e"
+      }
+    ]
   },
   {
     "id": "flawless-construction-solar-spearhead",
@@ -267,11 +397,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "flawless-construction-solar-spearhead",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2331013b-f394-57b7-b80d-a8eea4ec2b51"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9d0e1b4f-c0d6-4678-afef-549b0b6877b8"
+      }
+    ]
   },
   {
     "id": "gilded-champion-lions-of-the-emperor",
@@ -290,11 +430,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "gilded-champion-lions-of-the-emperor",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "df49ad1f-c4f0-5ee7-85e6-2ffdd842cfea"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8fdffebf-bfd9-4812-bb51-5108e84c9e37"
+      }
+    ]
   },
   {
     "id": "gilded-spear-tristraens-gilded-blades",
@@ -312,7 +462,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "61d4cd0c-e0d6-4a95-b44c-74112add34f5"
+      }
+    ]
   },
   {
     "id": "hardened-resolve-tharanatoi-hammerblow",
@@ -331,7 +487,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "521864b4-358d-5370-9906-cbfe3e15f048"
+      },
+      {
+        "namespace": "mfm",
+        "id": "342d243e-237b-425e-af03-f0cb82e857b8"
+      }
+    ]
   },
   {
     "id": "hunt-as-one-talons-of-the-emperor",
@@ -346,11 +512,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "hunt-as-one-talons-of-the-emperor",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2a675476-6df7-5da8-85f7-3aab52ac8114"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b87ca775-c322-4333-aa5d-b9fae2c56cce"
+      }
+    ]
   },
   {
     "id": "inevitable-wrath-tristraens-gilded-blades",
@@ -368,7 +544,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9bc24dd6-5c08-41e1-ad41-f4397e391eaa"
+      }
+    ]
   },
   {
     "id": "manoeuvre-and-fire-lions-of-the-emperor",
@@ -383,11 +565,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "manoeuvre-and-fire-lions-of-the-emperor",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "40356130-890d-562f-bf86-65be287dfc81"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1ba62209-9b85-4ff8-96c0-8bf99d35955b"
+      }
+    ]
   },
   {
     "id": "multipotentiality-shield-host",
@@ -402,11 +594,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "multipotentiality-shield-host",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a19b6897-cc82-5ad1-9ae4-4f3d350213e7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8e0c63e9-0417-425a-930d-2f6286be4137"
+      }
+    ]
   },
   {
     "id": "never-outmatched-tristraens-gilded-blades",
@@ -424,7 +626,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c4b60961-67ad-4237-8dbc-2e3641dadadb"
+      }
+    ]
   },
   {
     "id": "peerless-warrior-lions-of-the-emperor",
@@ -439,11 +647,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "peerless-warrior-lions-of-the-emperor",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d31a3858-39ae-5439-8601-214ddd008f39"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b16af145-a7ba-473f-8386-ed8fb276e828"
+      }
+    ]
   },
   {
     "id": "prioritised-eradication-might-of-the-moritoi",
@@ -461,7 +679,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4b2690b1-7f3d-5d7d-9873-cef4957a9705"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dfa96045-020a-40da-a05a-110841d6114f"
+      }
+    ]
   },
   {
     "id": "psy-chaff-volley-null-maiden-vigil",
@@ -476,11 +704,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "psy-chaff-volley-null-maiden-vigil",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f66b38a2-536c-57bf-8cc9-1d7617e2026a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "29d8fbb6-9a19-47a9-9c0c-348c18f2031b"
+      }
+    ]
   },
   {
     "id": "psychic-abominations-null-maiden-vigil",
@@ -495,11 +733,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "psychic-abominations-null-maiden-vigil",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e36ea723-6740-5ccc-9c2d-39a204ea498f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dec320fe-e3fd-475d-9e59-d4ca35479940"
+      }
+    ]
   },
   {
     "id": "punishment-inescapable-solar-spearhead",
@@ -514,11 +762,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "punishment-inescapable-solar-spearhead",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3d77c98d-15ad-5d90-a367-ff23c84096d2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bcb0956b-1bcd-4210-9135-c9a2494bc31a"
+      }
+    ]
   },
   {
     "id": "purgation-sweep-null-maiden-vigil",
@@ -533,11 +791,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "purgation-sweep-null-maiden-vigil",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "23e35a21-0e70-5a2c-b7f6-abc933691e93"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e71fa2b3-af09-442a-b69d-5160a2c30289"
+      }
+    ]
   },
   {
     "id": "relentless-persecution-solar-spearhead",
@@ -552,11 +820,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "relentless-persecution-solar-spearhead",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "97d3de44-18a0-5a30-a24a-1cd9af091955"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b25a7834-58da-4565-9f0a-68df133f1b1f"
+      }
+    ]
   },
   {
     "id": "shield-of-honour-talons-of-the-emperor",
@@ -571,11 +849,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "shield-of-honour-talons-of-the-emperor",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "55788da7-0fe6-51a8-8a04-a788cfd66e12"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8a965f6c-aa11-4319-bc3c-6b1c349fa15e"
+      }
+    ]
   },
   {
     "id": "shoulder-the-mantle-auric-champions",
@@ -590,11 +878,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "shoulder-the-mantle-auric-champions",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4c8aa840-f7e3-5372-b97f-94c1945abf3b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f07bab95-3154-4908-bce2-d95fd4789aed"
+      }
+    ]
   },
   {
     "id": "slayer-of-champions-auric-champions",
@@ -613,11 +911,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "slayer-of-champions-auric-champions",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8f64e309-5abf-5854-8b86-21853d7e66cb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c42f1a6c-7209-44c3-8a08-1983a33aa429"
+      }
+    ]
   },
   {
     "id": "superhuman-reserves-auric-champions",
@@ -636,11 +944,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "superhuman-reserves-auric-champions",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9204f309-136e-5283-a608-3259901cef86"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7837eece-806c-4ae4-bec1-3154e533e778"
+      }
+    ]
   },
   {
     "id": "swift-as-the-eagle-lions-of-the-emperor",
@@ -655,11 +973,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "swift-as-the-eagle-lions-of-the-emperor",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "79872d8a-9042-51c0-bbf7-99a0569f3640"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2abcb82e-781f-455d-9441-3af1b0632799"
+      }
+    ]
   },
   {
     "id": "synchronised-inferno-silent-hunters",
@@ -677,7 +1005,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "90402af6-dfe2-58be-a8cd-66f99182bda9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9786c88d-4694-4c3d-b3c3-c63c25e15a85"
+      }
+    ]
   },
   {
     "id": "taloned-pincer-talons-of-the-emperor",
@@ -692,11 +1030,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "taloned-pincer-talons-of-the-emperor",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9521dc86-5801-56e4-8de6-a64fe2bf0612"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7a56d34b-6e72-4e9f-bdab-e159d6adacdc"
+      }
+    ]
   },
   {
     "id": "talons-interlocked-talons-of-the-emperor",
@@ -711,11 +1059,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "talons-interlocked-talons-of-the-emperor",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8bbef73d-18f9-56eb-934e-c834e58a458b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "35dbd75b-fa44-489d-b243-38467b8777e1"
+      }
+    ]
   },
   {
     "id": "the-emperors-auspice-auric-champions",
@@ -731,11 +1089,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "the-emperors-auspice-auric-champions",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "06948deb-eaa0-5a7c-b502-219f3f4f72f9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "61aafa75-fdc3-4c3b-99e0-08a8f2255a85"
+      }
+    ]
   },
   {
     "id": "umbral-prosecution-silent-hunters",
@@ -753,7 +1121,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "afd9425a-195d-548f-9b80-ad5eebe6f93b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9494bd29-d121-496c-bb4d-f6d1e2897445"
+      }
+    ]
   },
   {
     "id": "unleash-the-lions-lions-of-the-emperor",
@@ -768,11 +1146,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "unleash-the-lions-lions-of-the-emperor",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "317c03c8-6c00-5576-95ec-7cf8994fe523"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b2865d6e-0ca3-40a7-9241-96779ec150cb"
+      }
+    ]
   },
   {
     "id": "unleash-the-lions-tharanatoi-hammerblow",
@@ -790,7 +1178,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a274a0ef-2e4a-5d6a-9f0d-966265008ba0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "10fc0ca3-629c-4140-9a0a-74227662ab9e"
+      }
+    ]
   },
   {
     "id": "unstoppable-advance-might-of-the-moritoi",
@@ -808,7 +1206,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4122c0e6-4f34-5276-b9e4-f437fe5c2c51"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a6a629f0-0db1-4bb1-8a51-eb7979f4d55a"
+      }
+    ]
   },
   {
     "id": "unstoppable-solar-spearhead",
@@ -823,11 +1231,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "unstoppable-solar-spearhead",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5c35a845-2234-578f-b8a7-a05dd9e57891"
+      },
+      {
+        "namespace": "mfm",
+        "id": "097d09b5-a924-4d63-986f-d58d79f092f9"
+      }
+    ]
   },
   {
     "id": "unwavering-sentinels-shield-host",
@@ -842,11 +1260,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "unwavering-sentinels-shield-host",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "08c3aa50-27bd-5ed4-871c-92ceda2ada25"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ac6ec481-d026-4e38-bfca-563a35d74bb1"
+      }
+    ]
   },
   {
     "id": "vigil-unending-auric-champions",
@@ -861,11 +1289,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "vigil-unending-auric-champions",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cf271627-8af5-57bf-9399-153475f15a1e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4898bc4c-936a-4c3f-868b-d7ea4e7bbc1a"
+      }
+    ]
   },
   {
     "id": "vigilance-eternal-shield-host",
@@ -880,11 +1318,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "vigilance-eternal-shield-host",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9ee2e4ee-cbd8-5181-826d-90c20aa830f6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a6ffb4a-4466-4cd2-ae41-b1230b066602"
+      }
+    ]
   },
   {
     "id": "witch-hunters-null-maiden-vigil",
@@ -900,11 +1348,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "witch-hunters-null-maiden-vigil",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e7f3ef59-cb7a-516a-9ffb-cbe90b679491"
+      },
+      {
+        "namespace": "mfm",
+        "id": "01203a84-00f4-4406-9ba5-6dc0b75f2648"
+      }
+    ]
   },
   {
     "id": "wrathful-advance-solar-spearhead",
@@ -919,10 +1377,20 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "wrathful-advance-solar-spearhead",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b346a58a-c646-5502-ba88-e8d8d35d9d17"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b7add7a9-6705-4e92-b4dc-3093bde8bf2d"
+      }
+    ]
   }
 ]

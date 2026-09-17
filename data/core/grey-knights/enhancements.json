@@ -5,7 +5,8 @@
     "detachment_id": "sanctic-spearhead",
     "cost": 10,
     "keyword_restrictions": [
-      "Grey Knights"
+      "Grey Knights",
+      "Walker"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -15,7 +16,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ede05d9c-274c-5f78-a142-ce4d8ee29177"
+      },
+      {
+        "namespace": "mfm",
+        "id": "07673c09-1242-4416-9adc-c16f93f0c5d0"
+      }
+    ]
   },
   {
     "id": "banishing-wave-psychic-brotherhood-strike",
@@ -33,7 +44,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "16d91493-493d-55a4-bd5a-3dcebe1d3d12"
+      },
+      {
+        "namespace": "mfm",
+        "id": "915c7779-5e65-4fef-baab-0185c27046a5"
+      }
+    ]
   },
   {
     "id": "blinding-aura-brotherhood-strike",
@@ -51,7 +72,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fe55cbdb-e5c8-528e-8694-a85d4e05ff20"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5e6639b1-298f-4f8b-bec4-af229022f9b5"
+      }
+    ]
   },
   {
     "id": "quickening-foci-sanctic-spearhead",
@@ -59,7 +90,8 @@
     "detachment_id": "sanctic-spearhead",
     "cost": 15,
     "keyword_restrictions": [
-      "Grey Knights"
+      "Grey Knights",
+      "Infantry"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -69,7 +101,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "87066016-cf89-5dcb-b4a6-9568396c8f0b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bd6fe8ac-e251-40a1-b319-bd5aa29a2ee7"
+      }
+    ]
   },
   {
     "id": "purity-of-purpose-brotherhood-strike",
@@ -87,7 +129,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "46a7efb2-334c-5de3-a506-dca767f11f97"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c2a2fc2a-6104-4f28-9a77-6c40f4fd9495"
+      }
+    ]
   },
   {
     "id": "sigil-of-exigence-sanctic-spearhead",
@@ -105,7 +157,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "238b1869-2a62-5398-bcbf-0961c08cd6be"
+      },
+      {
+        "namespace": "mfm",
+        "id": "aa42a99a-ac5f-4c33-b69f-d12c7c1f05fd"
+      }
+    ]
   },
   {
     "id": "tome-of-forbidden-ways-brotherhood-strike",
@@ -123,7 +185,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "191cb497-91ba-5125-9e45-e0c12b38b1fc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3c84e9b3-44f8-4af4-bb0f-34a1a34f5944"
+      }
+    ]
   },
   {
     "id": "spiritus-machina-sanctic-spearhead",
@@ -131,7 +203,8 @@
     "detachment_id": "sanctic-spearhead",
     "cost": 25,
     "keyword_restrictions": [
-      "Grey Knights"
+      "Grey Knights",
+      "Infantry"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -141,7 +214,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5bd2f294-2fb2-5247-9612-55143a241f80"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9d50d58d-1a5d-45ac-8080-e1c1d08333f7"
+      }
+    ]
   },
   {
     "id": "eye-of-the-augurim-hallowed-conclave",
@@ -177,7 +260,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1e53a742-b00d-5dc6-b55b-51110f350139"
+      },
+      {
+        "namespace": "mfm",
+        "id": "323ce2bc-8188-4990-be3e-a9670bc1afd7"
+      }
+    ]
   },
   {
     "id": "sanctic-reaper-hallowed-conclave",
@@ -185,7 +278,8 @@
     "detachment_id": "hallowed-conclave",
     "cost": 15,
     "keyword_restrictions": [
-      "Grey Knights"
+      "Grey Knights",
+      "Terminator"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -195,7 +289,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "16c80a1b-9082-56f7-b0cd-ff41a48f8955"
+      },
+      {
+        "namespace": "mfm",
+        "id": "de7be923-5642-4bf5-b8da-1ad373303f47"
+      }
+    ]
   },
   {
     "id": "nemesis-rounds-hallowed-conclave",
@@ -203,7 +307,8 @@
     "detachment_id": "hallowed-conclave",
     "cost": 10,
     "keyword_restrictions": [
-      "Grey Knights"
+      "Grey Knights",
+      "Terminator"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -213,7 +318,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0ff25c9c-9c03-52e5-897c-61c5ff1c3099"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7847895b-9f3d-4d0a-a2ce-0969a9e8c7b3"
+      }
+    ]
   },
   {
     "id": "sigil-of-the-hunt-banishers",
@@ -231,7 +346,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "567c1756-23c9-57c5-a263-b74fc97d6eab"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a8f6d3f-5af8-48fc-ae21-286b989dfd97"
+      }
+    ]
   },
   {
     "id": "ephemeral-tome-banishers",
@@ -239,7 +364,8 @@
     "detachment_id": "banishers",
     "cost": 15,
     "keyword_restrictions": [
-      "Grey Knights"
+      "Grey Knights",
+      "Infantry"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -249,7 +375,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3cb975af-2ca8-56a4-8ff1-86cab4461994"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6b7638a4-e670-430f-8ec0-b1409f0b60a3"
+      }
+    ]
   },
   {
     "id": "sixty-sixth-seal-banishers",
@@ -267,7 +403,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0be380bb-0028-5f78-9628-0dff8c7e08b5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a4dda913-e9d9-496e-8c10-fcb30949276e"
+      }
+    ]
   },
   {
     "id": "pyresoul-psychic-banishers",
@@ -285,7 +431,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f612bb94-ebcb-5d32-a09f-4e7e42d3e753"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f3bbe936-2bc7-49a8-8167-c816435fc272"
+      }
+    ]
   },
   {
     "id": "grimoire-of-conjunctions-augurium-task-force",
@@ -303,7 +459,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5597fa1e-8969-5e85-b7f3-9855057cd55d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5ab1864a-e524-4b61-977f-1a0c81e33caa"
+      }
+    ]
   },
   {
     "id": "shield-of-prophecy-augurium-task-force",
@@ -321,7 +487,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "62c95e5a-332e-58cb-9dcb-fc11c1967553"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f5d9692e-4936-4beb-8936-4c26089d74d5"
+      }
+    ]
   },
   {
     "id": "one-foot-in-the-future-augurium-task-force",
@@ -339,7 +515,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fc7a6dac-e442-5f84-9ea8-682a94a9b236"
+      },
+      {
+        "namespace": "mfm",
+        "id": "88afcb48-fb62-437a-8013-fded49c13301"
+      }
+    ]
   },
   {
     "id": "doomseers-amulet-augurium-task-force",
@@ -357,7 +543,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ac4c7613-d65c-51b5-8037-75bd8368bd69"
+      },
+      {
+        "namespace": "mfm",
+        "id": "59726874-96a0-42be-8009-efe88cfa47d5"
+      }
+    ]
   },
   {
     "id": "mandulian-reliquary-warpbane-task-force",
@@ -375,7 +571,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c16f0e00-e3b1-5c37-b28c-57c6f090a2ff"
+      },
+      {
+        "namespace": "mfm",
+        "id": "be02d133-6751-4ea3-b302-4630469a0d4d"
+      }
+    ]
   },
   {
     "id": "radiant-champion-warpbane-task-force",
@@ -383,7 +589,8 @@
     "detachment_id": "warpbane-task-force",
     "cost": 15,
     "keyword_restrictions": [
-      "Grey Knights"
+      "Grey Knights",
+      "Infantry"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -393,7 +600,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "de51cddd-8310-52a1-b3ce-54926a513884"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e3ead97e-e27b-44e0-b925-95a9551416f9"
+      }
+    ]
   },
   {
     "id": "phial-of-the-abyss-warpbane-task-force",
@@ -401,7 +618,8 @@
     "detachment_id": "warpbane-task-force",
     "cost": 15,
     "keyword_restrictions": [
-      "Grey Knights"
+      "Grey Knights",
+      "Infantry"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -411,7 +629,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "19dd6afe-08fa-5e0e-a41d-caeb25428165"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ceb1ad8f-9980-4f08-b06a-9b8da67a5b65"
+      }
+    ]
   },
   {
     "id": "paragon-of-sanctity-warpbane-task-force",
@@ -429,7 +657,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ac6e38f0-8e3f-5519-9abe-50f5e25ee6a2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5344703f-c178-4e55-98d0-e9a77f73d74b"
+      }
+    ]
   },
   {
     "id": "psychic-celerity-argent-assault",
@@ -437,7 +675,7 @@
     "detachment_id": "argent-assault",
     "cost": 15,
     "keyword_restrictions": [
-      "Grey Knights"
+      "Terminator"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -447,7 +685,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5979b54e-27f6-5a78-93c2-bff04bcbd0cc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "796b0922-bb35-4e97-82a9-51538dfdb3b8"
+      }
+    ]
   },
   {
     "id": "vigilance-of-titan-argent-assault",
@@ -455,7 +703,7 @@
     "detachment_id": "argent-assault",
     "cost": 20,
     "keyword_restrictions": [
-      "Grey Knights"
+      "Terminator"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -465,7 +713,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1cc93e4d-9d65-5439-a200-1faa9414d431"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8cd8a60d-73c4-45d7-9794-7fb83cff5fa8"
+      }
+    ]
   },
   {
     "id": "precognicient-volleys-upgrade-fires-of-purgation",
@@ -473,7 +731,8 @@
     "detachment_id": "fires-of-purgation",
     "cost": 10,
     "keyword_restrictions": [
-      "Grey Knights"
+      "Grey Knights",
+      "Purgation Squad"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -483,7 +742,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e138d09d-2e6a-5570-a0b7-dad71e0eea5e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "044a1930-d6e9-4335-9da1-32c1bedd65e6"
+      }
+    ]
   },
   {
     "id": "boons-of-deimos-upgrade-fires-of-purgation",
@@ -491,7 +760,8 @@
     "detachment_id": "fires-of-purgation",
     "cost": 20,
     "keyword_restrictions": [
-      "Grey Knights"
+      "Grey Knights",
+      "Purgation Squad"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -501,7 +771,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "79fd555d-47e9-5a5f-a7b2-7ca656d15d54"
+      },
+      {
+        "namespace": "mfm",
+        "id": "880712dd-e7d0-4140-8b54-c7d395724841"
+      }
+    ]
   },
   {
     "id": "predestined-coordinates-upgrade-immaterial-interdiction",
@@ -509,7 +789,8 @@
     "detachment_id": "immaterial-interdiction",
     "cost": 10,
     "keyword_restrictions": [
-      "Grey Knights"
+      "Grey Knights",
+      "Interceptor Squad"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -519,7 +800,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "64ab23b1-8cba-5eb1-80c1-fce74f0c964a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "30ae63ee-c283-4329-8470-0fd38fc41770"
+      }
+    ]
   },
   {
     "id": "astral-overlap-upgrade-immaterial-interdiction",
@@ -527,7 +818,8 @@
     "detachment_id": "immaterial-interdiction",
     "cost": 10,
     "keyword_restrictions": [
-      "Grey Knights"
+      "Grey Knights",
+      "Interceptor Squad"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -537,7 +829,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a0a5c73c-da78-50e3-b6ee-2e2bb49eb8b7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8f60b2f9-89ee-44cc-8294-35da72e5e06d"
+      }
+    ]
   },
   {
     "id": "purifying-force-crowes-sanctifiers",
@@ -557,7 +859,13 @@
       "Brotherhood Terminator Squad",
       "Crowe's Sanctifiers"
     ],
-    "upgrade_tag": true
+    "upgrade_tag": true,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "057f85bb-3dff-4710-9cad-85ebb9cd2e9a"
+      }
+    ]
   },
   {
     "id": "sanctified-auspexes-crowes-sanctifiers",
@@ -577,6 +885,40 @@
       "Crowe's Sanctifiers",
       "Venerable Dreadnought"
     ],
-    "upgrade_tag": true
+    "upgrade_tag": true,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4ad405a7-f02c-4e89-8e45-9031467ff71c"
+      }
+    ]
+  },
+  {
+    "id": "eye-of-the-augurium-hallowed-conclave",
+    "name": "Eye of the Augurium",
+    "detachment_id": "hallowed-conclave",
+    "cost": 25,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Grey Knights"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "65e0cd22-3d79-5be6-86f9-ed2df64f907a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d43c3399-acad-4b73-b2b0-1f530deeaa1e"
+      }
+    ]
   }
 ]

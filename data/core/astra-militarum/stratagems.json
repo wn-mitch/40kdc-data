@@ -16,7 +16,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "92bc31fb-595f-574f-8042-942509f004f9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "84115c52-4624-40fd-ac54-5a14b36b52c0"
+      }
+    ]
   },
   {
     "id": "accuracy-under-pressure-steel-hammer",
@@ -35,7 +45,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ea9fe880-2e44-5dd7-a939-d3e80aff2944"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6c471763-e759-4d77-811b-0f332a26d6d2"
+      }
+    ]
   },
   {
     "id": "adamantine-behemoth-steel-hammer",
@@ -55,7 +75,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c9ef60ad-e8f6-5eba-8ba5-dc62733ecc14"
+      },
+      {
+        "namespace": "mfm",
+        "id": "125d83f2-4350-43af-b7f6-1a1042570c55"
+      }
+    ]
   },
   {
     "id": "additional-armour-grizzled-company",
@@ -74,7 +104,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a0044bc6-3533-582e-aef3-7e0e6106dd5e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7a6ff137-248f-4f3d-bd6a-1bc96184895e"
+      }
+    ]
   },
   {
     "id": "blazing-advance-hammer-of-the-emperor",
@@ -93,7 +133,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6b9a903d-43a0-539a-a244-8861394d612b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eb817510-d055-49e3-a543-4a5aaf7be9c7"
+      }
+    ]
   },
   {
     "id": "burst-of-speed-armoured-infantry",
@@ -112,7 +162,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "20c3a31c-e3ca-50cb-8e2e-d2f50326601f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2b836f08-0c9a-413d-a0f4-6eddf712d887"
+      }
+    ]
   },
   {
     "id": "callous-sacrifice-siege-regiment",
@@ -131,7 +191,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "19bb1866-5d2b-547f-a051-5e708a21349d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dab1fb6b-12b8-472e-8c21-cfac7ba04607"
+      }
+    ]
   },
   {
     "id": "clear-and-secure-mechanised-assault",
@@ -150,7 +220,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "89100658-94a5-5ea3-bb46-4934e2123202"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3c46b41a-7185-4543-a3f2-d36f0e7242ab"
+      }
+    ]
   },
   {
     "id": "close-range-detection-designation-force",
@@ -168,7 +248,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d1996b61-2f6f-5038-8ee7-30e369414a4f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "97b7bf53-f21f-4c45-81f3-06fce03aa773"
+      }
+    ]
   },
   {
     "id": "combined-fire-armoured-infantry",
@@ -187,7 +277,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d8b8292f-8645-5225-aed7-75f7160ec2dc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e49aa10b-2b42-4430-aa54-86a349613571"
+      }
+    ]
   },
   {
     "id": "coordinated-action-combined-arms",
@@ -210,7 +310,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7185be74-a6ce-54bb-ab95-14f62d1bc380"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e743cec6-cc31-4f29-88a1-d96554d9c7a3"
+      }
+    ]
   },
   {
     "id": "courageous-diversion-recon-element",
@@ -229,7 +339,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7008574c-3104-58e5-bc1f-163d795f8b54"
+      },
+      {
+        "namespace": "mfm",
+        "id": "88921ea9-e94b-46ff-8fa5-ac1d8b58b133"
+      }
+    ]
   },
   {
     "id": "crack-shots-recon-element",
@@ -248,7 +368,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "57d6fdd6-f263-5cd2-86bc-8ae58c6a1867"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5eb2bbea-e871-43f3-a6d0-b216ed4ec55e"
+      }
+    ]
   },
   {
     "id": "crash-through-hammer-of-the-emperor",
@@ -268,7 +398,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5e388f08-3c00-5bf4-a2cf-77d7cfdff813"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1f54e490-9721-4049-b801-4e2c36b78347"
+      }
+    ]
   },
   {
     "id": "draw-them-out-recon-element",
@@ -287,7 +427,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6dc8dc80-0370-5623-be63-852aea8bd0fa"
+      },
+      {
+        "namespace": "mfm",
+        "id": "aa469840-d6dc-4f0d-b4de-587282f3cb8e"
+      }
+    ]
   },
   {
     "id": "engine-of-wrath-steel-hammer",
@@ -306,7 +456,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0e6579c2-a65f-54de-9450-cff72e491b8b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cae76a6f-025e-4be1-86e1-4537c6427c31"
+      }
+    ]
   },
   {
     "id": "fields-of-fire-combined-arms",
@@ -325,7 +485,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cf220ecb-94d1-5948-a231-a615faf2ca2a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "964e2794-16c2-4508-9ad7-64b12b74da63"
+      }
+    ]
   },
   {
     "id": "final-hour-hammer-of-the-emperor",
@@ -344,7 +514,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c13bafc8-a3cf-5773-b772-86ef52646c1d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "81eb0dfa-af6b-4da6-892a-44d54185b879"
+      }
+    ]
   },
   {
     "id": "firing-hot-bridgehead-strike",
@@ -363,7 +543,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6e361d36-36a3-5b07-baeb-d081d5e07feb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47d1a118-137e-4364-a40a-a37ae92455ee"
+      }
+    ]
   },
   {
     "id": "first-wave-draydens-lance",
@@ -381,7 +571,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a180d64a-8e13-40a3-8685-113365ca9610"
+      }
+    ]
   },
   {
     "id": "flare-burst-siege-regiment",
@@ -400,7 +596,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2e0a20b0-4b9b-5f71-b47f-e16d8b393459"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5fc04c7f-6371-4893-9eba-00259a1c2308"
+      }
+    ]
   },
   {
     "id": "flexible-command-combined-arms",
@@ -419,7 +625,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ba90aee4-f66e-526e-8778-040dd57e4acb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c8f25f45-5792-4aa4-858b-25cd9d78b1a9"
+      }
+    ]
   },
   {
     "id": "focus-attacks-draydens-lance",
@@ -437,7 +653,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "63b4ca59-0660-4ad5-9490-c072dc207ebd"
+      }
+    ]
   },
   {
     "id": "furious-cannonade-hammer-of-the-emperor",
@@ -456,7 +678,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "37d73946-7692-53b3-9d65-58eb6fd94c61"
+      },
+      {
+        "namespace": "mfm",
+        "id": "55e95ac0-2b37-4118-8518-9939794e5d4e"
+      }
+    ]
   },
   {
     "id": "furious-fusillade-siege-regiment",
@@ -475,7 +707,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8c2e5b43-aa52-585d-b013-649e76e600a7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "df9c53eb-bd3b-49a7-8d62-d77bf0e5f111"
+      }
+    ]
   },
   {
     "id": "hasty-extraction-mechanised-assault",
@@ -494,7 +736,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "caf19b29-f1e4-5e06-93a6-c22328c56813"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f5bea5d8-e892-402e-876d-5874ad2d475c"
+      }
+    ]
   },
   {
     "id": "imposing-arrival-steel-hammer",
@@ -513,7 +765,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "67555e23-01e6-528d-95c3-6f28e0580350"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c79474b4-c102-42b0-886d-800263f7ec75"
+      }
+    ]
   },
   {
     "id": "inspired-command-combined-arms",
@@ -532,7 +794,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "711e8166-a38a-5c56-97a4-168e5558853b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e7a4dcf1-2f41-4928-8efa-fb5fa6024a9e"
+      }
+    ]
   },
   {
     "id": "low-profile-abhuman-auxiliaries",
@@ -550,7 +822,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8bca0a8f-ee1a-562e-bd36-f32b3e20af54"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ee684281-7c27-436b-8db6-f2924a9f7587"
+      }
+    ]
   },
   {
     "id": "minefield-siege-regiment",
@@ -569,7 +851,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c5b59361-f505-560c-84ba-cb6e4431077e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3d3497b1-3f6e-4785-a585-b0d687552465"
+      }
+    ]
   },
   {
     "id": "mobile-firebase-armoured-infantry",
@@ -588,7 +880,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f01feb14-1edf-5d40-8743-831b6a1d22ed"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d98024e9-20c2-4e8c-988a-55bb7c3aa653"
+      }
+    ]
   },
   {
     "id": "mordian-minute-grizzled-company",
@@ -607,7 +909,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3bee60ed-7f90-5480-80ec-d926dd1f5cca"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e85f3b10-ba5a-436e-a292-251fc2f299f3"
+      }
+    ]
   },
   {
     "id": "move-out-mechanised-assault",
@@ -626,7 +938,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2699d79b-20fe-5468-a917-182d3df3b0d6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0956bc01-7912-4f3c-b7bc-658e1973ffdf"
+      }
+    ]
   },
   {
     "id": "no-retreat-grizzled-company",
@@ -645,7 +967,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f083c475-5eb1-5182-ac41-01a848ecb9b8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1ef5e5f7-9e11-40d4-a742-5bab2377417d"
+      }
+    ]
   },
   {
     "id": "on-my-position-bridgehead-strike",
@@ -664,7 +996,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cb195aca-9064-5b3a-97fb-a05ea9875f83"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1bf6662d-f6be-4140-810c-80a22b524edf"
+      }
+    ]
   },
   {
     "id": "opening-salvo-armoured-infantry",
@@ -683,7 +1025,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "eefa0236-c2dc-5813-b591-cfeaf5ad65f0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "93db3b51-7abc-4b11-8f6f-3122bf6600cf"
+      }
+    ]
   },
   {
     "id": "order-the-advance-armoured-infantry",
@@ -702,7 +1054,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f6e00763-c480-5352-8cfb-67e03648f718"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4339a010-c6b4-46be-8c22-1a57c7f26c52"
+      }
+    ]
   },
   {
     "id": "over-the-top-siege-regiment",
@@ -721,7 +1083,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cbd0e26d-e812-5fd0-808a-8ab1600a2fcb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6f4fefee-7085-4f15-8672-fc629eb81e21"
+      }
+    ]
   },
   {
     "id": "purging-fire-grizzled-company",
@@ -740,7 +1112,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e975fd3b-74c4-5b0e-adcc-68072ddc14c8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "001c82b3-7360-4b5a-a97d-9e743075c9e8"
+      }
+    ]
   },
   {
     "id": "rapid-dispersal-mechanised-assault",
@@ -759,7 +1141,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a6f80ee4-7af4-5168-b5a6-e7297bab3831"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c7da0b4b-e096-4296-ba35-af38c03bfca7"
+      }
+    ]
   },
   {
     "id": "reinforcements-combined-arms",
@@ -782,7 +1174,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8f518594-4a9a-58ee-aa22-c5d418f00170"
+      },
+      {
+        "namespace": "mfm",
+        "id": "05739d84-7f54-414c-9645-20a9392e7505"
+      }
+    ]
   },
   {
     "id": "scouting-outriders-recon-element",
@@ -801,7 +1203,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "08d1ec06-04f2-5f35-8e68-b3c53512f2ba"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3068c795-5fe5-4ff9-8132-db8d3592d9ef"
+      }
+    ]
   },
   {
     "id": "scramble-field-recon-element",
@@ -820,7 +1232,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8bc5a3a6-9715-5342-9e74-c4359bd2a1ae"
+      },
+      {
+        "namespace": "mfm",
+        "id": "335e53e6-f90f-44d0-9fdb-1727578e88ae"
+      }
+    ]
   },
   {
     "id": "servo-designators-bridgehead-strike",
@@ -839,7 +1261,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a7a852ab-dac0-543d-9eb7-3e8ae33b04ac"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ed83bb30-81ad-4d1c-859d-c70bd6be0aba"
+      }
+    ]
   },
   {
     "id": "shattering-salvo-steel-hammer",
@@ -858,7 +1290,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "daf4076e-2255-5ff9-bfdc-cffdd53ab113"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cf01d3f5-2b99-4646-a691-80305f6cdca1"
+      }
+    ]
   },
   {
     "id": "snap-to-it-grizzled-company",
@@ -881,7 +1323,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5fcd0f5a-e471-5eb7-a505-c56984b9b556"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8fa43e12-b4af-4518-b3a1-62a3dfbfa692"
+      }
+    ]
   },
   {
     "id": "stalwart-protector-combined-arms",
@@ -900,7 +1352,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ef171695-babb-5e3d-ac1d-5dbbbada684f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2053f357-238b-4431-9f79-0f32ab09241a"
+      }
+    ]
   },
   {
     "id": "stirred-to-action-abhuman-auxiliaries",
@@ -918,7 +1380,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1df317b3-afb0-5c7b-97d5-ce4372426a3c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ec30fa72-e418-4bbd-9feb-c90e6b57bffe"
+      }
+    ]
   },
   {
     "id": "sump-smog-screen-designation-force",
@@ -936,7 +1408,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a7fdd5b5-1a41-586a-85b8-a20f63b6d70e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "09e881c7-5bb9-4148-9b4a-e5867b05c857"
+      }
+    ]
   },
   {
     "id": "supporting-ordnance-armoured-infantry",
@@ -955,7 +1437,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fda3cc64-e67a-5a70-84e5-1ae60819b150"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c9e721f2-c76f-406f-85eb-ddd265a5bd14"
+      }
+    ]
   },
   {
     "id": "swift-interception-mechanised-assault",
@@ -974,7 +1466,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "aa7f5a4b-d92e-598a-901f-9e63ca7e1941"
+      },
+      {
+        "namespace": "mfm",
+        "id": "45fdab70-839f-4eda-ad79-71d8106a6122"
+      }
+    ]
   },
   {
     "id": "tactical-withdrawal-hammer-of-the-emperor",
@@ -993,7 +1495,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8fec06c9-2bc6-5648-b6f0-66464e345e4e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "de99530b-525c-48b6-a7ef-dc297ad712d3"
+      }
+    ]
   },
   {
     "id": "tanglefoot-grenades-recon-element",
@@ -1012,7 +1524,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "407b0366-05ff-5e78-b28c-c5fc8cf37913"
+      },
+      {
+        "namespace": "mfm",
+        "id": "98f66f68-6f64-494d-81be-ae5f7fbb1698"
+      }
+    ]
   },
   {
     "id": "thick-skulled-obdurance-abhuman-auxiliaries",
@@ -1031,7 +1553,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f44659d3-5a21-5c35-8ead-bd593886551a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a30bf1f8-e97b-4b24-a8a7-197d9bd736c7"
+      }
+    ]
   },
   {
     "id": "trench-fighters-siege-regiment",
@@ -1050,7 +1582,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6ea32a6d-70ef-5d58-8004-1e990faee199"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fdb044ee-4561-4055-8ee2-c8f018e0d46c"
+      }
+    ]
   },
   {
     "id": "triggered-alerts-designation-force",
@@ -1068,7 +1610,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5ab2954b-6b0b-5e40-93cb-f2b8fd98f8d7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ff4c57eb-8d07-495a-8cca-1f82255f7f10"
+      }
+    ]
   },
   {
     "id": "veteran-sharpshooters-grizzled-company",
@@ -1087,7 +1639,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "12e0627d-fcf6-5cf7-8d10-89230532a758"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ff94fb92-54ab-4572-957d-9442010d4246"
+      }
+    ]
   },
   {
     "id": "veteran-skirmishers-draydens-lance",
@@ -1105,7 +1667,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b277cf89-f274-4377-bd99-3a498a3c6ef1"
+      }
+    ]
   },
   {
     "id": "vox-relay-mechanised-assault",
@@ -1124,7 +1692,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9692f057-ac5c-532f-aae5-84d5288a59a9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "457a63c9-85f4-48d1-a56b-e06ea2e59889"
+      }
+    ]
   },
   {
     "id": "withering-firepower-steel-hammer",
@@ -1143,6 +1721,16 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ec76a168-720d-5daa-b8de-ade3278fa692"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0698339c-f31b-418f-99f4-78f4388b063a"
+      }
+    ]
   }
 ]

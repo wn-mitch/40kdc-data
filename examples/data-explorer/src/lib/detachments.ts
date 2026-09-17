@@ -58,10 +58,11 @@ export interface ResolvedDetachment {
  */
 export function resolveAbility(
   id: string | null | undefined,
+  factionId: string,
 ): ResolvedAbility | undefined {
   if (!id) return undefined;
-  const a = abilities.getAny(id);
-  if (!a) return undefined;
+  const a = abilities.getInFaction(id, factionId) ?? abilities.getAny(id);
+  if (!a || (a.raw.faction_id != null && a.raw.faction_id !== factionId)) return undefined;
   let description = "";
   try {
     description = a.describe();
@@ -80,9 +81,9 @@ function ruleIdsOf(d: Detachment): string[] {
 }
 
 /** Resolve one detachment's rule / disposition / enhancement / stratagem links. */
-export function resolveDetachment(d: Detachment): ResolvedDetachment {
+export function resolveDetachment(d: Detachment, factionId: string): ResolvedDetachment {
   const rules = ruleIdsOf(d)
-    .map((id) => resolveAbility(id))
+    .map((id) => resolveAbility(id, factionId))
     .filter((r): r is ResolvedAbility => r !== undefined);
 
   const dispositions = (d.force_dispositions ?? [])
@@ -115,6 +116,6 @@ export function resolveDetachment(d: Detachment): ResolvedDetachment {
 /** Every detachment for a faction, resolved and sorted by name. */
 export function detachmentsForFaction(factionId: string): ResolvedDetachment[] {
   return [...detachments.byFaction(factionId)]
-    .map(resolveDetachment)
+    .map((detachment) => resolveDetachment(detachment, factionId))
     .sort((a, b) => a.raw.name.localeCompare(b.raw.name));
 }

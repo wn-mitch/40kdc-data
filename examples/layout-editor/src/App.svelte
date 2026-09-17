@@ -21,6 +21,16 @@
     reanchorAllFeatures,
     snapToAreaCenter,
     snapFeatureToAreaCorner,
+    seatFeatureInAreaCorner,
+    setCornerAnchor,
+    cornerCandidates,
+    pickCornerByDirection,
+    snapAnchorOf,
+    snapToKeystoneGrid,
+    suggestSolverSeed,
+    replaceKeystone,
+    orientedFootprint,
+    KEYSTONE_INCREMENT,
     setObjectiveRole,
     boardCentroid,
     boardOf,
@@ -35,7 +45,9 @@
     DEPLOYMENT_PATTERNS,
     MISSION_MATCHUPS,
     type EditLayout,
+    type ReferenceFit,
     type EditPiece,
+    type EditKeystone,
     type Mirror,
     type SolverHover,
     type SolverLine,
@@ -44,12 +56,15 @@
     type TerritoryDivider,
     type ObjectiveRole,
   } from "./lib/model.js";
-  import type { TerrainTemplate } from "@alpaca-software/40kdc-data";
+  import type { TerrainLayout, TerrainTemplate } from "@alpaca-software/40kdc-data";
   import type { TerrainSetDef } from "./lib/sets.js";
   import Board from "./lib/Board.svelte";
+  import ReferenceBackground from "./lib/ReferenceBackground.svelte";
+  import ProjectedBattlemasterBoard from "./lib/ProjectedBattlemasterBoard.svelte";
   import Inspector from "./lib/Inspector.svelte";
   import Library from "./lib/Library.svelte";
   import Palette from "./lib/Palette.svelte";
+  import Worklist from "./lib/Worklist.svelte";
   import Thumbnail from "./lib/Thumbnail.svelte";
   import SetThumbnail from "./lib/SetThumbnail.svelte";
   import SupportModal from "../../_shared/SupportModal.svelte";
@@ -57,13 +72,31 @@
   import AppFooter from "../../_shared/AppFooter.svelte";
   import { MISSION_MATRIX_URL, PATREON_URL, SALVO_URL } from "../../_shared/links.js";
 
-  const initialLayout = loadEmbedded("take-and-hold-mirror-1", true) ?? blankLayout();
+  const initialLayout = loadEmbedded("bm-take-vs-take-01", true) ?? blankLayout();
   let symmetric = $state(true);
   // Board-only visibility of the pinned keystone dimension lines; the pins
   // themselves stay on the pieces.
   let showKeystones = $state(true);
   // Rotate keystone labels to face each player (off: upright authoring view).
   let keystoneFacing = $state(false);
+  // ¼″ keystone-grid snapping. On by default: a loaded layout arrives already
+  // keystoned, so its off-grid distances get corrected by any nudge. Alt suspends
+  // it live, and it is a no-op for anything without a 1H+1V anchor.
+  let snapEnabled = $state(true);
+  let snapStep = $state(KEYSTONE_INCREMENT);
+  /**
+   * The corner ("clock") pick in progress. Dropping an area enters it immediately;
+   * `viaKey` means it was entered by holding K on an already-placed piece, so
+   * releasing the key commits. NOT the snap-armed flag — that is derived from the
+   * piece's own keystones (see `snapAnchorOf`), so committing a pick is just
+   * `addKeystone` ×2 and there is no parallel state to keep in sync.
+   */
+  let clockPick = $state<{ pieceId: string; viaKey: boolean; candidate: number | null } | null>(null);
+  /** Bumped to ask the Inspector to reveal + seed the typed-distance solver. */
+  let solverFocus = $state(0);
+  /** One-slot undo for keystone edits: the clock pick writes data and the app has
+   *  no undo stack, so an accidental re-pick would otherwise be unrecoverable. */
+  let lastPin = $state<{ label: string; pieces: { id: string; keystones?: EditKeystone[] }[] } | null>(null);
   let layout = $state<EditLayout>(initialLayout);
   let libraryOpen = $state(false);
   let selectedId = $state<string | null>(null);
@@ -73,6 +106,43 @@
   const board = $derived(boardOf(layout));
   const zones = $derived<DeployZone[]>(deploymentZones(deployment));
   const divider = $derived<TerritoryDivider | null>(territoryDivider(deployment, board));
+  let referenceImage = $state<string | null>(null);
+  /** Turn / nudge / zoom applied to the reference background. Session-only, like the image. */
+  let referenceFit = $state<ReferenceFit>({ quarterTurns: 0, offsetX: 0, offsetY: 0, scale: 1 });
+  let referenceOpacity = $state(0.45);
+  // Session-only fade for the authored terrain overlay while tracing a reference map.
+  let terrainOpacity = $state(1);
+  // Keep the imported Battlemaster geometry visible without obscuring the editable map.
+  let battlemasterOverlayOpacity = $state(0.6);
+  type BattlemasterProjectionSource =
+    | {
+      kind: "rest-api";
+      public_data_docs: string;
+      owner: string;
+      fetched_at: string;
+    }
+    | {
+      kind: "tabletop-simulator-workshop-save";
+      public_data_docs: string;
+      baked_at: string;
+      catalog_id: string;
+    };
+
+  interface BattlemasterProjectionPayload {
+    readonly: true;
+    source: BattlemasterProjectionSource;
+    terrain_templates: TerrainTemplate[];
+    terrain_layouts: TerrainLayout[];
+  }
+
+  let battlemasterLoading = $state(false);
+  let battlemasterError = $state<string | null>(null);
+  let battlemasterProjection = $state<BattlemasterProjectionPayload | null>(null);
+  let battlemasterSource = $state<string | null>(null);
+  let battlemasterSelectedId = $state("");
+  const selectedBattlemasterLayout = $derived(
+    battlemasterProjection?.terrain_layouts.find((candidate) => candidate.id === battlemasterSelectedId) ?? null,
+  );
 
   let solverHover = $state<SolverHover | null>(null);
   let solverLines = $state<SolverLine[]>([]);
@@ -86,6 +156,8 @@
   const selectedBoardPos = $derived(
     selectedPiece ? boardCentroid(layout, selectedPiece) : { x: 0, y: 0 },
   );
+  const areas = $derived(CATALOG.filter((t) => t.kind === "area"));
+  const features = $derived(CATALOG.filter((t) => t.kind === "feature"));
   const markers = $derived(objectiveMarkers(layout));
   // "Needs review" warnings for the working layout: overlapping pieces + off-grid
   // keystones. The banner lists them; the board dims every piece one names.
@@ -98,9 +170,6 @@
     selectedPiece ? keystoneDisplays(layout).filter((d) => d.pieceId === selectedPiece.id) : [],
   );
   const exportText = $derived(JSON.stringify(toCanonicalJson(layout), null, 2));
-
-  const areas = CATALOG.filter((t) => t.kind === "area");
-  const features = CATALOG.filter((t) => t.kind === "feature");
 
   // Area pieces the selected feature can be anchored to. In symmetric mode each
   // area has a twin; we list only one of each pair, since parenting to it carries
@@ -158,6 +227,96 @@
     else unpairTwins(layout);
   }
 
+  function isRecord(value: unknown): value is Record<string, unknown> {
+    return typeof value === "object" && value !== null && !Array.isArray(value);
+  }
+
+  function isTerrainTemplate(value: unknown): value is TerrainTemplate {
+    return isRecord(value) &&
+      typeof value.id === "string" &&
+      typeof value.name === "string" &&
+      (value.kind === "area" || value.kind === "feature") &&
+      isRecord(value.footprint);
+  }
+
+  function isTerrainLayout(value: unknown): value is TerrainLayout {
+    if (!isRecord(value) || typeof value.id !== "string" || typeof value.name !== "string" ||
+      !Array.isArray(value.pieces)) return false;
+    return value.pieces.every((piece) =>
+      isRecord(piece) &&
+      isRecord(piece.position) &&
+      typeof piece.position.x === "number" &&
+      typeof piece.position.y === "number",
+    );
+  }
+
+  function isBattlemasterProjectionSource(value: unknown): value is BattlemasterProjectionSource {
+    if (!isRecord(value) || typeof value.public_data_docs !== "string") return false;
+
+    if (value.kind === "rest-api") {
+      return typeof value.owner === "string" && typeof value.fetched_at === "string";
+    }
+
+    return value.kind === "tabletop-simulator-workshop-save" &&
+      typeof value.baked_at === "string" &&
+      typeof value.catalog_id === "string";
+  }
+
+  function readBattlemasterProjection(value: unknown): BattlemasterProjectionPayload {
+    if (!isRecord(value) ||
+      value.readonly !== true ||
+      !isBattlemasterProjectionSource(value.source) ||
+      !Array.isArray(value.terrain_templates) ||
+      !value.terrain_templates.every(isTerrainTemplate) ||
+      !Array.isArray(value.terrain_layouts) ||
+      !value.terrain_layouts.every(isTerrainLayout)) {
+      throw new Error("Battlemaster returned an invalid terrain projection.");
+    }
+    return value as unknown as BattlemasterProjectionPayload;
+  }
+
+  function battlemasterSourceLabel(source: BattlemasterProjectionSource): string {
+    if (source.kind === "rest-api") {
+      return `${source.owner} · ${source.fetched_at}`;
+    }
+    return `${source.catalog_id} · ${source.baked_at}`;
+  }
+
+  function applyBattlemasterLayout(projected: TerrainLayout): void {
+    battlemasterSelectedId = projected.id;
+    selectedId = null;
+    deployment = projected.deployment_pattern_id ?? defaultDeploymentFor(projected.id);
+  }
+
+  function onBattlemasterLayoutChange(id: string): void {
+    const projected = battlemasterProjection?.terrain_layouts.find((candidate) => candidate.id === id);
+    if (projected) applyBattlemasterLayout(projected);
+  }
+
+  async function importBattlemaster(): Promise<void> {
+    battlemasterLoading = true;
+    battlemasterError = null;
+    try {
+      const response = await fetch(`${import.meta.env.BASE_URL}__battlemaster-projection`);
+      const body: unknown = await response.json();
+      if (!response.ok) {
+        const detail = isRecord(body) && typeof body.error === "string" ? body.error : `HTTP ${response.status}`;
+        throw new Error(detail);
+      }
+      const projection = readBattlemasterProjection(body);
+      battlemasterProjection = projection;
+      battlemasterSource = battlemasterSourceLabel(projection.source);
+      const target = projection.terrain_layouts.find((candidate) => candidate.id === layout.id) ??
+        projection.terrain_layouts[0];
+      if (target) applyBattlemasterLayout(target);
+    } catch (error) {
+      battlemasterError = error instanceof Error ? error.message : String(error);
+    } finally {
+      battlemasterLoading = false;
+    }
+  }
+
+
   // A feature added while an AREA is selected anchors to that area on arrival
   // (the usual flow: select the area, then stock it with features).
   function autoParentTarget(t: TerrainTemplate): EditPiece | null {
@@ -168,9 +327,12 @@
     const added = addTemplate(layout, t, symmetric);
     if (parent) setParentArea(layout, added.id, parent.id);
     selectedId = added.id;
+    if (canClockPick(added)) beginClockPick(added.id, false);
   }
   function addTerrainSet(s: TerrainSetDef): void {
-    selectedId = addSet(layout, s, symmetric)?.id ?? selectedId;
+    const added = addSet(layout, s, symmetric);
+    selectedId = added?.id ?? selectedId;
+    if (added && canClockPick(added)) beginClockPick(added.id, false);
   }
   function addCenter(rotated: boolean): void {
     selectedId = addCenterRuin(layout, rotated)?.id ?? selectedId;
@@ -187,9 +349,11 @@
   let paletteDrag = $state<{ payload: DragPayload; x: number; y: number } | null>(null);
 
   function onPaletteDragStart(t: TerrainTemplate, e: PointerEvent): void {
+    clockPick = null;
     paletteDrag = { payload: { kind: "template", template: t }, x: e.clientX, y: e.clientY };
   }
   function onPaletteDragStartSet(s: TerrainSetDef, e: PointerEvent): void {
+    clockPick = null;
     paletteDrag = { payload: { kind: "set", set: s }, x: e.clientX, y: e.clientY };
   }
   function onDragPointerMove(e: PointerEvent): void {
@@ -208,8 +372,14 @@
         const added = addTemplate(layout, p.template, symmetric, at);
         if (parent) setParentArea(layout, added.id, parent.id);
         selectedId = added.id;
+        // An area lands needing its two printed measurements; go straight to
+        // picking which corner they measure from. Safe here: the palette drag
+        // ended on pointerup, so no pointer is down and no capture is held.
+        if (canClockPick(added)) beginClockPick(added.id, false);
       } else {
-        selectedId = addSet(layout, p.set, symmetric, at)?.id ?? selectedId;
+        const added = addSet(layout, p.set, symmetric, at);
+        selectedId = added?.id ?? selectedId;
+        if (added && canClockPick(added)) beginClockPick(added.id, false);
       }
     }
     paletteDrag = null;
@@ -232,6 +402,9 @@
   function onsnapcenter(id: string): void {
     snapToAreaCenter(layout, id);
   }
+  function onseatcorner(id: string): void {
+    seatFeatureInAreaCorner(layout, id);
+  }
   function onsnapcorner(id: string): void {
     snapFeatureToAreaCorner(layout, id);
   }
@@ -247,28 +420,124 @@
   }
   function remove(id: string): void {
     const twin = layout.pieces.find((p) => p.id === id)?.twin_id;
+    if (clockPick?.pieceId === id || clockPick?.pieceId === twin) clockPick = null;
+    if (lastPin?.pieces.some((q) => q.id === id || q.id === twin)) lastPin = null;
     deletePiece(layout, id);
     if (selectedId === id || selectedId === twin) selectedId = null;
   }
 
-  // Delete/Backspace removes the selected piece — but never while the caret is
-  // in a text field (the title input, inspector fields), where those keys edit
-  // text.
-  function onKeydown(e: KeyboardEvent): void {
-    if (e.key !== "Delete" && e.key !== "Backspace") return;
-    if (!selectedId || libraryOpen) return;
-    const t = e.target as HTMLElement | null;
-    if (
-      t &&
+  // ── corner ("clock") picking ──────────────────────────────────────────────
+  // Flow: drop an area → pick a corner by pointing at it → the H+V keystones pin
+  // there and the ¼″ snap arms → drag to fine-tune → Escape falls back to the
+  // typed-distance solver (the only thing that can place an off-axis area).
+
+  const clockPiece = $derived<EditPiece | null>(
+    clockPick ? (layout.pieces.find((p) => p.id === clockPick!.pieceId) ?? null) : null,
+  );
+  /** Only a top-level area carries keystones, so only one can be clock-picked. */
+  const canClockPick = (p: EditPiece | null | undefined): boolean =>
+    !!p && p.piece_type === "area" && !p.parent_area_id;
+
+  function beginClockPick(pieceId: string, viaKey: boolean): void {
+    clockPick = { pieceId, viaKey, candidate: null };
+  }
+  function onClockHover(index: number | null, pointer: { x: number; y: number }): void {
+    if (!clockPick || !clockPiece) return;
+    const cands = cornerCandidates(clockPiece, layout);
+    const centroid = orientedFootprint(clockPiece, layout)?.centroid ?? clockPiece.position;
+    clockPick.candidate = pickCornerByDirection(cands, centroid, pointer, {
+      previous: clockPick.candidate ?? index,
+    });
+  }
+  function onClockCommit(index: number): void {
+    if (!clockPiece) return;
+    const p = clockPiece;
+    const twin = p.twin_id ? layout.pieces.find((q) => q.id === p.twin_id) : undefined;
+    const snapshot = [p, ...(twin ? [twin] : [])].map((q) => ({
+      id: q.id,
+      keystones: q.keystones?.map((k) => ({ ...k })),
+    }));
+    if (setCornerAnchor(layout, p.id, index)) {
+      lastPin = { label: p.name ?? p.id, pieces: snapshot };
+      // Apply the snap once, so the piece lands on the distances the picker's
+      // preview just showed. Without this the preview promises 13.5″ and the
+      // commit leaves 13.47″ — off-grid, warning lit, until the author happens to
+      // nudge it.
+      if (snapEnabled && !p.parent_area_id) {
+        const s = snapToKeystoneGrid(p, board, p.position, snapStep);
+        if (s) movePiece(layout, p.id, s.position);
+      }
+    }
+    clockPick = null;
+  }
+  function onreplacekeystone(id: string, index: number, k: EditKeystone): void {
+    replaceKeystone(layout, id, index, k);
+  }
+  /** Prefill for the typed-distance solver, from the selection's current pose. */
+  const solverSeed = $derived(
+    selectedPiece && !selectedPiece.parent_area_id
+      ? suggestSolverSeed(selectedPiece, layout, board, snapStep)
+      : null,
+  );
+
+  function undoPin(): void {
+    if (!lastPin) return;
+    for (const snap of lastPin.pieces) {
+      const p = layout.pieces.find((q) => q.id === snap.id);
+      if (p) p.keystones = snap.keystones?.length ? snap.keystones : undefined;
+    }
+    lastPin = null;
+  }
+
+  // Delete/Backspace removes the selected piece; Escape leaves clock mode for the
+  // typed-distance solver; K re-picks a corner on the selection. None of them fire
+  // while the caret is in a text field (the title input, inspector fields), where
+  // those keys edit text.
+  function isTextTarget(target: EventTarget | null): boolean {
+    const t = target as HTMLElement | null;
+    return (
+      !!t &&
       (t.tagName === "INPUT" ||
         t.tagName === "TEXTAREA" ||
         t.tagName === "SELECT" ||
         t.isContentEditable)
-    ) {
+    );
+  }
+  function onKeydown(e: KeyboardEvent): void {
+    if (isTextTarget(e.target) || libraryOpen) return;
+    if (e.key === "Escape") {
+      if (!clockPick) return;
+      clockPick = null;
+      // Reveal + seed the keystone method; the Inspector picks the 2- or 3-line
+      // form by whether the piece is axis-aligned.
+      solverFocus++;
+      e.preventDefault();
       return;
     }
+    if ((e.key === "k" || e.key === "K") && !e.repeat) {
+      if (!clockPick && canClockPick(selectedPiece) && selectedId) {
+        beginClockPick(selectedId, true);
+        e.preventDefault();
+      }
+      return;
+    }
+    if (e.key !== "Delete" && e.key !== "Backspace") return;
+    if (!selectedId) return;
     e.preventDefault();
     remove(selectedId);
+  }
+  function onKeyup(e: KeyboardEvent): void {
+    if (e.key !== "k" && e.key !== "K") return;
+    if (!clockPick?.viaKey) return;
+    if (clockPick.candidate !== null) {
+      // Held K, swivelled to a corner, released: commit it.
+      onClockCommit(clockPick.candidate);
+      return;
+    }
+    // Tapped K without swivelling anywhere. Don't punish that by cancelling —
+    // stay in the pick and let a click choose the corner, the same as after a
+    // drop. Clearing `viaKey` stops a later stray keyup from committing.
+    clockPick.viaKey = false;
   }
 
   let copied = $state(false);
@@ -290,6 +559,7 @@
 
 <svelte:window
   onkeydown={onKeydown}
+  onkeyup={onKeyup}
   onpointermove={onDragPointerMove}
   onpointerup={onDragPointerUp}
   onpointercancel={onDragCancel}
@@ -321,6 +591,29 @@
       >
         {keystoneFacing ? "↻ Facing on" : "↻ Facing off"}
       </button>
+      <button
+        class="sym {snapEnabled ? 'on' : ''}"
+        aria-pressed={snapEnabled}
+        onclick={() => (snapEnabled = !snapEnabled)}
+        title="Snap a dragged area so its printed keystone distances land on clean increments (hold Alt to suspend)"
+      >
+        {snapEnabled ? "⌗ Snap on" : "⌗ Snap off"}
+      </button>
+      <select
+        class="ctrl"
+        aria-label="Snap increment"
+        value={String(snapStep)}
+        onchange={(e) => (snapStep = Number(e.currentTarget.value))}
+      >
+        <option value="0.25">¼″</option>
+        <option value="0.5">½″</option>
+        <option value="1">1″</option>
+      </select>
+      {#if lastPin}
+        <button class="sym" onclick={undoPin} title="Restore the keystones {lastPin.label} had before the last corner pick">
+          ↶ Undo pin
+        </button>
+      {/if}
       <button
         class="sym"
         onclick={onreanchor}
@@ -368,6 +661,7 @@
 
   <main>
     <aside class="rail palette-rail">
+      <Worklist {layout} onstampset={addTerrainSet} />
       <Palette
         {areas}
         {features}
@@ -388,36 +682,104 @@
         aria-label="Layout title"
         placeholder="Untitled layout"
       />
-      <Board
-        bind:this={boardRef}
-        {layout}
-        {resolved}
-        {selectedId}
-        {selectedPiece}
-        solver={solverViz}
-        {zones}
-        {divider}
-        {markers}
-        {showKeystones}
-        {keystoneFacing}
-        {warnPieceIds}
-        onselect={(id) => (selectedId = id)}
-        {onmove}
-        {onorient}
-      />
-      {#if warnings.length > 0}
-        <div class="warnings" role="status">
-          <span class="warn-head">⚠ {warnings.length} to review</span>
-          <ul>
-            {#each warnings as w, i (i)}
-              <li class="warn {w.kind}">{w.message}</li>
+      {#if import.meta.env.DEV}
+        <section class="battlemaster-import" aria-label="Battlemaster projection">
+          <strong><a href={battlemasterProjection?.source.public_data_docs ?? "https://battlemaster.online"} target="_blank" rel="noreferrer">Battlemaster</a> overlay</strong>
+          <button type="button" onclick={importBattlemaster} disabled={battlemasterLoading}>
+            {battlemasterLoading ? "Loading…" : battlemasterProjection ? "Refresh source" : "Load live source"}
+          </button>
+          <select
+            aria-label="Battlemaster layout"
+            value={battlemasterSelectedId}
+            onchange={(event) => onBattlemasterLayoutChange(event.currentTarget.value)}
+            disabled={!battlemasterProjection}
+          >
+            <option value="">Choose layout</option>
+            {#each battlemasterProjection?.terrain_layouts ?? [] as projected (projected.id)}
+              <option value={projected.id}>{projected.name}</option>
             {/each}
-          </ul>
-        </div>
+          </select>
+          {#if selectedBattlemasterLayout}
+            <label class="battlemaster-opacity">
+              Overlay
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                aria-label="Battlemaster overlay opacity"
+                bind:value={battlemasterOverlayOpacity}
+              />
+              <output>{Math.round(battlemasterOverlayOpacity * 100)}%</output>
+            </label>
+          {/if}
+          <span class="battlemaster-note">
+            {#if battlemasterError}
+              <span class="battlemaster-error" role="status">{battlemasterError}</span>
+            {:else if battlemasterSource}
+              {battlemasterProjection?.terrain_layouts.length ?? 0} layouts · {battlemasterSource} · load the map PDF below
+            {:else}
+              Imports 40kdc schema shapes; it does not modify repository data.
+            {/if}
+          </span>
+        </section>
       {/if}
+      <ReferenceBackground
+        layout={selectedBattlemasterLayout ?? layout}
+        bind:opacity={referenceOpacity}
+        bind:fit={referenceFit}
+        bind:terrainOpacity
+        onimage={(image) => (referenceImage = image)}
+      />
+      <div class="board-stage">
+        <Board
+          bind:this={boardRef}
+          {layout}
+          {resolved}
+          {selectedId}
+          {selectedPiece}
+          solver={solverViz}
+          {zones}
+          {divider}
+          {markers}
+          {showKeystones}
+          {keystoneFacing}
+          {warnPieceIds}
+          {referenceImage}
+          {referenceOpacity}
+          {referenceFit}
+          {terrainOpacity}
+          snap={{ enabled: snapEnabled, step: snapStep }}
+          {clockPiece}
+          clockCandidate={clockPick?.candidate ?? null}
+          onselect={(id) => (selectedId = id)}
+          {onmove}
+          {onorient}
+          onclockhover={onClockHover}
+          onclockcommit={onClockCommit}
+          onclockcancel={() => (clockPick = null)}
+        />
+        {#if battlemasterProjection && selectedBattlemasterLayout}
+          <ProjectedBattlemasterBoard
+            layout={selectedBattlemasterLayout}
+            templates={battlemasterProjection.terrain_templates}
+            opacity={battlemasterOverlayOpacity}
+          />
+        {/if}
+      </div>
       <p class="status">
-        {layout.pieces.length} pieces · drag to move · rotate/flip handles on the selected piece
-        {#if symmetric}· edits mirror across the centre{/if}
+        {#if clockPiece}
+          Pick the keystone corner — point at it and click · <kbd>Esc</kbd> for the keystone method
+        {:else}
+          {#if battlemasterProjection && battlemasterSelectedId}
+            {layout.pieces.length} editable pieces · Battlemaster comparison overlay · adjust its opacity above
+          {:else}
+            {layout.pieces.length} pieces · drag to move · rotate/flip handles on the selected piece
+            {#if symmetric}· edits mirror across the centre{/if}
+            {#if snapEnabled && selectedPiece && snapAnchorOf(selectedPiece)}· snapping to {snapStep}″ (Alt to suspend){/if}
+            {#if selectedPiece && !selectedPiece.parent_area_id && selectedPiece.piece_type === "area" && !snapAnchorOf(selectedPiece)}· <kbd>K</kbd> to pin a corner{/if}
+          {/if}
+        {/if}
       </p>
     </section>
 
@@ -435,13 +797,27 @@
         {onparent}
         {onsnapcenter}
         {onsnapcorner}
+        {onseatcorner}
         {onobjectiverole}
         onsolverhover={(ref) => (solverHover = ref)}
         onsolverlines={(lines) => (solverLines = lines)}
         keystones={selectedKeystones}
         onaddkeystone={(id, k) => addKeystone(layout, id, k)}
         onremovekeystone={(id, i) => removeKeystone(layout, id, i)}
+        {onreplacekeystone}
+        {solverFocus}
+        {solverSeed}
       />
+      {#if warnings.length > 0}
+        <section class="warnings" role="status" aria-label="Layout issues">
+          <span class="warn-head">⚠ {warnings.length} to review</span>
+          <ul>
+            {#each warnings as w, i (i)}
+              <li class="warn {w.kind}">{w.message}</li>
+            {/each}
+          </ul>
+        </section>
+      {/if}
       <section class="export">
         <h2>
           Canonical JSON
@@ -509,9 +885,14 @@
     min-height: 0;
     min-width: 0;
   }
-  .canvas :global(.board) {
+  .board-stage {
+    position: relative;
     flex: 1 1 auto;
     min-height: 0;
+  }
+  .board-stage :global(.board) {
+    width: 100%;
+    height: 100%;
   }
   .layout-title {
     flex: 0 0 auto;
@@ -534,6 +915,72 @@
     border-color: var(--accent);
     background: var(--bg);
   }
+  .battlemaster-import {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem 0.65rem;
+    margin: 0 0 0.55rem;
+    padding: 0.45rem 0.55rem;
+    color: var(--text-dim);
+    background: var(--surface-2);
+    border: 1px solid var(--rim-strong);
+    border-radius: 4px;
+    font-size: 0.78rem;
+  }
+  .battlemaster-import strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .battlemaster-import button,
+  .battlemaster-import select {
+    padding: 0.2rem 0.45rem;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--rim-strong);
+    border-radius: 4px;
+    font: inherit;
+  }
+  .battlemaster-import button {
+    cursor: pointer;
+  }
+  .battlemaster-import button:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: var(--accent-fill);
+  }
+  .battlemaster-import button:focus-visible,
+  .battlemaster-import select:focus-visible,
+  .battlemaster-import input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .battlemaster-import button:disabled,
+  .battlemaster-import select:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+  .battlemaster-opacity {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+  }
+  .battlemaster-opacity input {
+    width: 6rem;
+    accent-color: var(--accent);
+  }
+  .battlemaster-opacity output {
+    min-width: 2.5rem;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .battlemaster-note {
+    flex: 1 1 20rem;
+    color: var(--text-mute);
+  }
+  .battlemaster-error {
+    color: var(--danger, #9d3029);
+  }
   .layout-title::placeholder {
     color: var(--text-mute);
   }
@@ -549,16 +996,14 @@
     flex: 0 0 auto;
   }
   .warnings {
-    flex: 0 0 auto;
-    margin: 0.5rem 0 0;
+    max-block-size: 13rem;
+    overflow-y: auto;
+    margin: 0.75rem 0;
     padding: 0.5rem 0.7rem;
     border: 1px solid oklch(0.6 0.14 70);
-    border-left-width: 3px;
     border-radius: 4px;
     background: oklch(0.7 0.13 70 / 0.12);
     font-size: 0.78rem;
-    max-height: 8.5rem;
-    overflow-y: auto;
   }
   .warn-head {
     font-weight: 600;

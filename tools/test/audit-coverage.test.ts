@@ -96,6 +96,7 @@ describe("computeCoverage", () => {
     // parameterless flag effects are correct with an empty modifier — NOT stubs
     expect(hasEmptyModifier({ type: "deep-strike", target: "unit", modifier: {} })).toBe(false);
     expect(hasEmptyModifier({ type: "fight-first", target: "unit", modifier: {} })).toBe(false);
+    expect(hasEmptyModifier({ type: "model-destruction", target: "bearer", modifier: {} })).toBe(false);
     // a fully-specified modifier is not a stub
     expect(hasEmptyModifier({ type: "roll-modifier", modifier: { roll: "hit", operation: "add", value: 1 } })).toBe(false);
     // a type that carries no modifier (e.g. a container) is not itself a stub

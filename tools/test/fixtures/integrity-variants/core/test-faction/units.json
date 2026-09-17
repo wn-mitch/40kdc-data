@@ -1,0 +1,5 @@
+[
+  { "id": "boyz", "faction_keywords": [], "weapon_ids": ["choppa-boyz", "slugga", "shoota", "big-shoota-boyz"] },
+  { "id": "beast-snagga-boyz", "faction_keywords": [], "weapon_ids": ["choppa-beast-snagga-boyz"] },
+  { "id": "special-squad", "faction_keywords": [], "weapon_ids": ["shoota"] }
+]

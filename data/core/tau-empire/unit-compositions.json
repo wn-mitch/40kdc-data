@@ -342,7 +342,63 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 28.5
-        }
+        },
+        "loadout_variants": [
+          {
+            "name": "Kroot Farstalker",
+            "weapon_ids": [
+              "farstalker-firearm",
+              "kroot-pistol",
+              "close-combat-weapon"
+            ],
+            "max_count": 8
+          },
+          {
+            "name": "Kroot Farstalker w/ Farstalker firearm and Pech'ra",
+            "weapon_ids": [
+              "kroot-pistol",
+              "farstalker-firearm",
+              "close-combat-weapon"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Kroot Farstalker w/ Dvorgite skinner",
+            "weapon_ids": [
+              "dvorgite-skinner",
+              "kroot-pistol",
+              "close-combat-weapon"
+            ]
+          },
+          {
+            "name": "Kroot Farstalker w/ Londaxi tribalest",
+            "weapon_ids": [
+              "londaxi-tribalest",
+              "kroot-pistol",
+              "close-combat-weapon"
+            ]
+          }
+        ],
+        "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Kroot Farstalker",
+              "Kroot Farstalker w/ Farstalker firearm and Pech'ra"
+            ],
+            "count": 9,
+            "per_models": 0,
+            "scope": "model-row"
+          },
+          {
+            "variant_names": [
+              "Kroot Farstalker w/ Dvorgite skinner",
+              "Kroot Farstalker w/ Londaxi tribalest"
+            ],
+            "count": 1,
+            "per_models": 0,
+            "scope": "model-row"
+          }
+        ]
       },
       {
         "name": "Kroot Hound",
@@ -522,7 +578,38 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 25
-        }
+        },
+        "loadout_variants": [
+          {
+            "name": "Fire Warrior w/ pulse carbine",
+            "weapon_ids": [
+              "pulse-pistol",
+              "close-combat-weapon-strike-team",
+              "pulse-carbine"
+            ],
+            "max_count": 9
+          },
+          {
+            "name": "Fire Warrior w/ pulse rifle",
+            "weapon_ids": [
+              "pulse-pistol",
+              "close-combat-weapon-strike-team",
+              "pulse-rifle"
+            ],
+            "max_count": 9
+          }
+        ],
+        "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Fire Warrior w/ pulse carbine",
+              "Fire Warrior w/ pulse rifle"
+            ],
+            "count": 9,
+            "per_models": 0,
+            "scope": "model-row"
+          }
+        ]
       }
     ],
     "game_version": {
@@ -562,7 +649,8 @@
         "default_weapon_ids": [
           "fusion-eliminator",
           "xv-pulse-pistol",
-          "shardstorm-burst-system"
+          "shardstorm-burst-system",
+          "mv15-gun-drone"
         ]
       },
       {
@@ -576,8 +664,9 @@
         },
         "default_weapon_ids": [
           "ion-scattercannon",
+          "xv-pulse-pistol",
           "shardstorm-burst-system",
-          "xv-pulse-pistol"
+          "mv15-gun-drone"
         ]
       }
     ],
@@ -998,6 +1087,37 @@
           "close-combat-weapon",
           "krootox-fists",
           "repeater-cannon"
+        ],
+        "loadout_variants": [
+          {
+            "name": "Krootox Rider w/ repeater cannon",
+            "weapon_ids": [
+              "close-combat-weapon",
+              "krootox-fists",
+              "repeater-cannon"
+            ],
+            "max_count": 3
+          },
+          {
+            "name": "Krootox Rider w/ tanglecannon",
+            "weapon_ids": [
+              "close-combat-weapon",
+              "krootox-fists",
+              "tanglecannon"
+            ],
+            "max_count": 3
+          }
+        ],
+        "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Krootox Rider w/ repeater cannon",
+              "Krootox Rider w/ tanglecannon"
+            ],
+            "count": 3,
+            "per_models": 0,
+            "scope": "model-row"
+          }
         ]
       }
     ],
@@ -1049,12 +1169,14 @@
           "diameter": 50
         },
         "default_weapon_ids": [
+          "flechette-launcher",
+          "high-energy-fusion-blaster",
+          "high-energy-fusion-blaster",
+          "light-missile-pod",
           "pulse-pistol-commander-shadowsun",
           "battlesuit-fists-commander-shadowsun",
-          "high-energy-fusion-blaster",
-          "high-energy-fusion-blaster",
-          "flechette-launcher",
-          "light-missile-pod"
+          "advanced-guardian-drone",
+          "command-link-drone-aura"
         ]
       }
     ],
@@ -1336,8 +1458,20 @@
       {
         "name": "Tidewall Shieldline",
         "min": 1,
-        "max": 2,
+        "max": 1,
         "is_leader_model": false,
+        "default_weapon_ids": [],
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        }
+      },
+      {
+        "name": "Tidewall Defence Platform",
+        "min": 0,
+        "max": 1,
+        "is_leader_model": false,
+        "default_weapon_ids": [],
         "base_size_mm": {
           "shape": "hull",
           "draft": true
@@ -1347,7 +1481,32 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Tidewall Shieldline",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Tidewall Shieldline",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Tidewall Defence Platform",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   },
   {
     "unit_id": "broadside-battlesuits",
@@ -1356,7 +1515,21 @@
       {
         "name": "Broadside Shas’vre",
         "min": 1,
-        "max": 3,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        },
+        "default_weapon_ids": [
+          "crushing-bulk",
+          "heavy-rail-rifle"
+        ]
+      },
+      {
+        "name": "Broadside Shas’ui",
+        "min": 0,
+        "max": 2,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
@@ -1371,7 +1544,46 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Broadside Shas’vre",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Broadside Shas’vre",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Broadside Shas’ui",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Broadside Shas’vre",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Broadside Shas’ui",
+            "min": 2,
+            "max": 2
+          }
+        ]
+      }
+    ]
   },
   {
     "unit_id": "commander-in-enforcer-battlesuit",
@@ -1896,6 +2108,213 @@
             "name": "Kroot Flesh Shaper",
             "min": 1,
             "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "commander-cloudspear",
+    "faction_id": "tau-empire",
+    "models": [
+      {
+        "name": "Commander Cloudspear",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        },
+        "default_weapon_ids": [
+          "airbursting-fragmentation-projector",
+          "battlesuit-fists-commander-in-enforcer-battlesuit",
+          "plasma-rifle-commander-in-enforcer-battlesuit"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Commander Cloudspear",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "sudden-dawn-cadre-breacher-team",
+    "faction_id": "tau-empire",
+    "models": [
+      {
+        "name": "Sha'sui",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "gun-stocks",
+          "pulse-blaster",
+          "pulse-pistol"
+        ]
+      },
+      {
+        "name": "Breacher Team",
+        "min": 9,
+        "max": 9,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "gun-stocks",
+          "pulse-blaster",
+          "pulse-pistol"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Sha'sui",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Breacher Team",
+            "min": 9,
+            "max": 9
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "sudden-dawn-cadre-devilfish",
+    "faction_id": "tau-empire",
+    "models": [
+      {
+        "name": "Devilfish",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "flying-base",
+          "size": "large",
+          "draft": true,
+          "width": 120,
+          "length": 92
+        },
+        "default_weapon_ids": [
+          "accelerator-burst-cannon",
+          "armoured-hull-devilfish",
+          "twin-pulse-carbine"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Devilfish",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "sudden-dawn-cadre-pathfinder-team",
+    "faction_id": "tau-empire",
+    "models": [
+      {
+        "name": "Pathfinder Shas'ui",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "gun-stocks",
+          "pulse-carbine",
+          "pulse-pistol"
+        ]
+      },
+      {
+        "name": "Pathfinder with Pulse Pistol, Rail Rifle and Close Combat Weapon",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "gun-stocks",
+          "pulse-pistol",
+          "rail-rifle"
+        ]
+      },
+      {
+        "name": "Pathfinder with Pulse Carbine, Pulse Pistol and Close Combat Weapon",
+        "min": 6,
+        "max": 6,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "gun-stocks",
+          "pulse-carbine",
+          "pulse-pistol"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Pathfinder Shas'ui",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Pathfinder with Pulse Pistol, Rail Rifle and Close Combat Weapon",
+            "min": 3,
+            "max": 3
+          },
+          {
+            "name": "Pathfinder with Pulse Carbine, Pulse Pistol and Close Combat Weapon",
+            "min": 6,
+            "max": 6
           }
         ]
       }

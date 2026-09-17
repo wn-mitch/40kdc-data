@@ -11,7 +11,7 @@ export {
   orientedOffsets,
   TerrainResolveError,
 } from "./resolve.js";
-export type { Keystone, ResolvedPiece, Vec2 as ResolvedVec2 } from "./resolve.js";
+export type { Keystone, ResolvedPiece, ResolvedWall, Vec2 as ResolvedVec2 } from "./resolve.js";
 export {
   solveCentroid,
   solveCentroidTriangulated,

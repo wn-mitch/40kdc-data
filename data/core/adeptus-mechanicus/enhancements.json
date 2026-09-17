@@ -15,7 +15,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cd27aee1-4eb0-5695-a0b3-93165e389558"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1f064d32-3467-4925-944a-95bedd92c0b5"
+      }
+    ]
   },
   {
     "id": "malphonic-susurrus-rad-zone-corps",
@@ -33,7 +43,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "25bcf628-9264-586c-adde-9c07cd1d186b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4a33a897-bd07-4d57-a477-ef7ebf8dab38"
+      }
+    ]
   },
   {
     "id": "peerless-eradicator-rad-zone-corps",
@@ -51,7 +71,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "031e9d53-b366-5438-b7f2-1a1a1531b1b2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6f6d7403-0605-4345-b7d6-d304b861a7a0"
+      }
+    ]
   },
   {
     "id": "autoclavic-denunciation-rad-zone-corps",
@@ -69,7 +99,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ec15b168-0be9-5cca-9101-49d385fcc0b9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0f7669e1-e987-4557-9722-4aa1f8742217"
+      }
+    ]
   },
   {
     "id": "cantic-thrallnet-skitarii-hunter-cohort",
@@ -77,7 +117,7 @@
     "detachment_id": "skitarii-hunter-cohort",
     "cost": 25,
     "keyword_restrictions": [
-      "Adeptus Mechanicus"
+      "Marshal"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -87,7 +127,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "29533c45-5ac9-5017-9a11-b9e9d6a7f6fa"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ed85c897-b376-40d3-a8c5-fd768af38aad"
+      }
+    ]
   },
   {
     "id": "clandestine-infiltrator-skitarii-hunter-cohort",
@@ -95,7 +145,7 @@
     "detachment_id": "skitarii-hunter-cohort",
     "cost": 15,
     "keyword_restrictions": [
-      "Adeptus Mechanicus"
+      "Skitarii"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -105,7 +155,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "444487bb-2953-53fb-ba72-0db27ee30b70"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ef50da0d-ca9d-49d9-b0db-d990d60b1c07"
+      }
+    ]
   },
   {
     "id": "veiled-hunter-skitarii-hunter-cohort",
@@ -113,7 +173,7 @@
     "detachment_id": "skitarii-hunter-cohort",
     "cost": 10,
     "keyword_restrictions": [
-      "Adeptus Mechanicus"
+      "Marshal"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -123,7 +183,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "28254d08-497e-5759-a52f-61e38bc35dd7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "29e86eee-3ac2-41fa-89f9-947e1ab06958"
+      }
+    ]
   },
   {
     "id": "battle-sphere-uplink-skitarii-hunter-cohort",
@@ -131,7 +201,7 @@
     "detachment_id": "skitarii-hunter-cohort",
     "cost": 25,
     "keyword_restrictions": [
-      "Adeptus Mechanicus"
+      "Skitarii"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -141,7 +211,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9485f4a4-92f9-5a36-b059-e9fd1f67f9b4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "58fc4af1-244f-47be-9b1c-bcf2fe9b5be9"
+      }
+    ]
   },
   {
     "id": "mechanicus-locum-data-psalm-conclave",
@@ -149,7 +229,7 @@
     "detachment_id": "data-psalm-conclave",
     "cost": 5,
     "keyword_restrictions": [
-      "Adeptus Mechanicus"
+      "Tech-Priest"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -159,7 +239,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "388d8fcb-af6c-5948-a8ad-767cfe0daba5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "728a30a4-6408-4ab1-b1f2-54e7da8cacee"
+      }
+    ]
   },
   {
     "id": "mantle-of-the-gnosticarch-data-psalm-conclave",
@@ -167,7 +257,7 @@
     "detachment_id": "data-psalm-conclave",
     "cost": 10,
     "keyword_restrictions": [
-      "Adeptus Mechanicus"
+      "Tech-Priest"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -177,7 +267,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fbebe6be-ffe7-5df8-8b9d-ac302cb60b25"
+      },
+      {
+        "namespace": "mfm",
+        "id": "081fbb43-b5b8-460b-820a-179b8029f596"
+      }
+    ]
   },
   {
     "id": "data-blessed-autosermon-data-psalm-conclave",
@@ -185,7 +285,7 @@
     "detachment_id": "data-psalm-conclave",
     "cost": 15,
     "keyword_restrictions": [
-      "Adeptus Mechanicus"
+      "Tech-Priest"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -195,7 +295,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dba5244d-a62e-515b-8254-6bee594810f7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d4aeb0cd-dfbc-41c0-a8e3-8a2fe63df492"
+      }
+    ]
   },
   {
     "id": "temporcopia-data-psalm-conclave",
@@ -203,7 +313,7 @@
     "detachment_id": "data-psalm-conclave",
     "cost": 20,
     "keyword_restrictions": [
-      "Adeptus Mechanicus"
+      "Tech-Priest"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -213,7 +323,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "462314ea-589b-56e8-84ac-2490972d175e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "43866891-3180-4b74-8e66-f85748cef297"
+      }
+    ]
   },
   {
     "id": "magos-explorator-maniple",
@@ -221,7 +341,7 @@
     "detachment_id": "explorator-maniple",
     "cost": 10,
     "keyword_restrictions": [
-      "Adeptus Mechanicus"
+      "Tech-Priest"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -231,7 +351,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "91082c55-b9f8-59d2-8cf0-d2feeb9a84c3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a60919d3-d61d-4958-a6a0-e50e1a996174"
+      }
+    ]
   },
   {
     "id": "genetor-explorator-maniple",
@@ -239,7 +369,7 @@
     "detachment_id": "explorator-maniple",
     "cost": 20,
     "keyword_restrictions": [
-      "Adeptus Mechanicus"
+      "Tech-Priest"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -249,7 +379,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "921da230-c6cd-50ff-9264-a734997a2568"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f129d8e9-3079-4b45-bf8c-74e62b1d5eb8"
+      }
+    ]
   },
   {
     "id": "logis-explorator-maniple",
@@ -257,7 +397,7 @@
     "detachment_id": "explorator-maniple",
     "cost": 15,
     "keyword_restrictions": [
-      "Adeptus Mechanicus"
+      "Tech-Priest"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -267,7 +407,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "42b7bc02-b938-59d3-b0ca-f1617c562e52"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0cb351b2-a2c6-4fdf-964f-83281828a311"
+      }
+    ]
   },
   {
     "id": "artisan-explorator-maniple",
@@ -275,7 +425,7 @@
     "detachment_id": "explorator-maniple",
     "cost": 10,
     "keyword_restrictions": [
-      "Adeptus Mechanicus"
+      "Tech-Priest"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -285,7 +435,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bc85acc5-ea99-5315-b819-e0d975499852"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2209e188-e543-49d4-ad5c-e599bd1b94fb"
+      }
+    ]
   },
   {
     "id": "necromechanic-cohort-cybernetica",
@@ -293,7 +453,7 @@
     "detachment_id": "cohort-cybernetica",
     "cost": 20,
     "keyword_restrictions": [
-      "Adeptus Mechanicus"
+      "Tech-Priest"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -303,7 +463,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9a0482f9-53fb-55d1-9d29-da648b905ecd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "843a24a0-aa26-4ceb-a889-356c2fcb0f97"
+      }
+    ]
   },
   {
     "id": "lord-of-machines-cohort-cybernetica",
@@ -311,7 +481,7 @@
     "detachment_id": "cohort-cybernetica",
     "cost": 15,
     "keyword_restrictions": [
-      "Adeptus Mechanicus"
+      "Tech-Priest"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -321,7 +491,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "256987eb-9c6a-5eb7-aa13-3729b9e0ae4f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ef617056-0ddf-415e-944f-36e532ec8bbd"
+      }
+    ]
   },
   {
     "id": "emotionless-clarity-cohort-cybernetica",
@@ -329,7 +509,7 @@
     "detachment_id": "cohort-cybernetica",
     "cost": 10,
     "keyword_restrictions": [
-      "Adeptus Mechanicus"
+      "Tech-Priest"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -339,7 +519,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7e1dabc2-4432-5d35-bc98-34801054216c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7e67367c-3895-4f5d-ba86-03c83bc17a70"
+      }
+    ]
   },
   {
     "id": "arch-negator-cohort-cybernetica",
@@ -347,7 +537,7 @@
     "detachment_id": "cohort-cybernetica",
     "cost": 5,
     "keyword_restrictions": [
-      "Adeptus Mechanicus"
+      "Tech-Priest"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -357,7 +547,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ea352670-c330-5228-9c70-8cbdee1db70a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "04ebb33a-9b1f-4190-beea-d34b105f73ae"
+      }
+    ]
   },
   {
     "id": "transoracular-dyad-wafers-haloscreed-battle-clade",
@@ -365,7 +565,7 @@
     "detachment_id": "haloscreed-battle-clade",
     "cost": 15,
     "keyword_restrictions": [
-      "Adeptus Mechanicus"
+      "Cybernetica Datasmith"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -375,7 +575,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bfdab3d4-94c0-5a26-91de-b4e1f539b463"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2a96585b-c6fd-4271-b617-56698f4df264"
+      }
+    ]
   },
   {
     "id": "cognitive-reinforcement-haloscreed-battle-clade",
@@ -396,6 +606,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Cybernetica Datasmith"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "49d1f2c3-7059-521f-9a65-d6dc3ba2df90"
+      },
+      {
+        "namespace": "mfm",
+        "id": "759463d8-4ddf-45e0-ad4b-153abeca1b16"
+      }
     ]
   },
   {
@@ -414,16 +634,23 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "62697234-3f53-5eb3-8153-dccc61514eca"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a6da199-5297-4eb9-b320-5ab60423d571"
+      }
+    ]
   },
   {
     "id": "inloaded-lethality-haloscreed-battle-clade",
     "name": "Inloaded Lethality",
     "detachment_id": "haloscreed-battle-clade",
     "cost": 15,
-    "keyword_restrictions": [
-      "Adeptus Mechanicus"
-    ],
     "ability_id": null,
     "is_unique": true,
     "game_version": {
@@ -432,7 +659,25 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Manipulus"
+      ],
+      [
+        "Dominus"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "90d27e04-0aef-5ce2-aa57-0e9b66d1e713"
+      },
+      {
+        "namespace": "mfm",
+        "id": "246ea89e-51d1-4660-92bd-64baaac14039"
+      }
+    ]
   },
   {
     "id": "explorator-dispensation-cohort-acquisitus",
@@ -440,6 +685,7 @@
     "detachment_id": "cohort-acquisitus",
     "cost": 20,
     "keyword_restrictions": [
+      "Adeptus Mechanicus",
       "Skitarii Marshal"
     ],
     "ability_id": "explorator-dispensation-cohort-acquisitus",
@@ -450,7 +696,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "359740e1-1e73-5501-b14e-e8a477797b75"
+      },
+      {
+        "namespace": "mfm",
+        "id": "070d6e51-e685-4f6b-bfa2-64f2d6807ce3"
+      }
+    ]
   },
   {
     "id": "stealth-screened-cybercanids-upgrade-cohort-acquisitus",
@@ -458,6 +714,7 @@
     "detachment_id": "cohort-acquisitus",
     "cost": 15,
     "keyword_restrictions": [
+      "Adeptus Mechanicus",
       "Serberys Raiders"
     ],
     "ability_id": "stealth-screened-cybercanids-cohort-acquisitus",
@@ -468,7 +725,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b06a9cc0-cf90-52fa-895d-25888fde7d80"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5a7312e4-d267-4775-a7e6-1328941bfc9f"
+      }
+    ]
   },
   {
     "id": "vinghs-wafers-of-dynamism-lords-of-the-forge",
@@ -476,6 +743,7 @@
     "detachment_id": "lords-of-the-forge",
     "cost": 25,
     "keyword_restrictions": [
+      "Adeptus Mechanicus",
       "Cybernetica Datasmith"
     ],
     "ability_id": "vinghs-wafers-of-dynamism-lords-of-the-forge",
@@ -486,7 +754,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "681a416f-628b-5227-a982-843c26ce274e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2869e91e-b7a6-41b0-ab24-b01ca6a55a29"
+      }
+    ]
   },
   {
     "id": "tl-4-9-lords-of-the-forge",
@@ -494,6 +772,7 @@
     "detachment_id": "lords-of-the-forge",
     "cost": 30,
     "keyword_restrictions": [
+      "Adeptus Mechanicus",
       "Tech-Priest"
     ],
     "ability_id": "tl-4-9-lords-of-the-forge",
@@ -504,7 +783,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1260edbc-07ac-5262-9e28-5ba895b81bad"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a05131fc-4a8b-4fda-ab70-f07856ba0161"
+      }
+    ]
   },
   {
     "id": "voltagheist-reliquary-luminen-auto-choir",
@@ -512,6 +801,7 @@
     "detachment_id": "luminen-auto-choir",
     "cost": 15,
     "keyword_restrictions": [
+      "Adeptus Mechanicus",
       "Tech-Priest"
     ],
     "ability_id": "voltagheist-reliquary-luminen-auto-choir",
@@ -522,7 +812,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5d0a1650-f484-5831-a64f-5a15086c2a55"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d3483e81-3fdd-47d9-b2cf-9c1b54bf4589"
+      }
+    ]
   },
   {
     "id": "electromiasmic-brazier-luminen-auto-choir",
@@ -530,6 +830,7 @@
     "detachment_id": "luminen-auto-choir",
     "cost": 10,
     "keyword_restrictions": [
+      "Adeptus Mechanicus",
       "Tech-Priest"
     ],
     "ability_id": "electromiasmic-brazier-luminen-auto-choir",
@@ -540,7 +841,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "73f8c280-0740-5f56-9bfe-211338ef087a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f8645d3a-a3b2-49df-a2c3-172d8825cceb"
+      }
+    ]
   },
   {
     "id": "omnicogitator-eradication-cohort",
@@ -548,7 +859,8 @@
     "detachment_id": "eradication-cohort",
     "cost": 25,
     "keyword_restrictions": [
-      "Skitarii Marshal"
+      "Marshal",
+      "Skitarii"
     ],
     "ability_id": "omnicogitator-eradication-cohort",
     "is_unique": true,
@@ -558,7 +870,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4601a831-1424-5065-b032-291f1e519f91"
+      },
+      {
+        "namespace": "mfm",
+        "id": "570fca29-c0d1-4e3c-a3e3-219719fba559"
+      }
+    ]
   },
   {
     "id": "martial-signatum-amplificator-eradication-cohort",
@@ -576,7 +898,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fec2c887-eea9-5941-8782-0ef874c4fb4e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9fb4f320-8870-48c5-9e73-76725e9691fa"
+      }
+    ]
   },
   {
     "id": "belicosa-class-capacitor-vanes-eradication-cohort",
@@ -594,7 +926,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "af511214-22ba-5abc-bf07-61ce0a936259"
+      },
+      {
+        "namespace": "mfm",
+        "id": "90b8de0c-70e0-4aae-85b7-0b45e64ecbf6"
+      }
+    ]
   },
   {
     "id": "omnissiahs-fury-eradication-cohort",
@@ -602,7 +944,8 @@
     "detachment_id": "eradication-cohort",
     "cost": 10,
     "keyword_restrictions": [
-      "Skitarii Marshal"
+      "Marshal",
+      "Skitarii"
     ],
     "ability_id": "omnissiahs-fury-eradication-cohort",
     "is_unique": true,
@@ -612,7 +955,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4a868ef1-6f4b-51e5-a606-a270a24c1ae6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "36413881-7693-4d35-b23a-27a39aedfe12"
+      }
+    ]
   },
   {
     "id": "empowered-mechanisms-purge-corps-deltic-9",
@@ -629,10 +982,15 @@
     ],
     "points_provisional": false,
     "keyword_restrictions": [
-      "Purge Corps Deltic-9",
-      "Serberys Sulphurhounds"
+      "Purge Corps Serberys Sulphurhounds"
     ],
-    "upgrade_tag": true
+    "upgrade_tag": true,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c434dc26-c687-4677-b72d-c879da0c169b"
+      }
+    ]
   },
   {
     "id": "miniaturised-autosimulacra-purge-corps-deltic-9",
@@ -649,8 +1007,13 @@
     ],
     "points_provisional": false,
     "keyword_restrictions": [
-      "Purge Corps Deltic-9",
-      "Tech-Priest Manipulus"
+      "Manipulus Skand"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6827bb88-e15b-4ae2-ac1a-00c20a4d9612"
+      }
     ]
   }
 ]

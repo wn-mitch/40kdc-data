@@ -7,7 +7,7 @@
     "keyword_restrictions": [
       "T’au Empire"
     ],
-    "ability_id": null,
+    "ability_id": "exemplar-of-the-kauyon-kauyon",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -18,6 +18,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Shaper"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8c120023-0f8b-55d7-85cd-6765a44f959e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "27f8a5da-290d-4f58-882b-6f364d2e4658"
+      }
     ]
   },
   {
@@ -28,7 +38,7 @@
     "keyword_restrictions": [
       "T’au Empire"
     ],
-    "ability_id": null,
+    "ability_id": "precision-of-the-patient-hunter-kauyon",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -36,7 +46,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "29296910-5b8c-540b-ab72-c9b1ea5c2fea"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7c538bba-1367-4adc-b54b-bea749daa8a5"
+      }
+    ]
   },
   {
     "id": "solid-image-projection-unit-kauyon",
@@ -46,7 +66,7 @@
     "keyword_restrictions": [
       "T’au Empire"
     ],
-    "ability_id": null,
+    "ability_id": "solid-image-projection-unit-kauyon",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -54,7 +74,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "33ecd95e-b225-5df8-95a8-5868b525e957"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2c695a2e-16e1-49c3-a9d7-1645494408ed"
+      }
+    ]
   },
   {
     "id": "through-unity-devastation-kauyon",
@@ -64,7 +94,7 @@
     "keyword_restrictions": [
       "T’au Empire"
     ],
-    "ability_id": null,
+    "ability_id": "through-unity-devastation-kauyon",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -75,6 +105,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Shaper"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "01adb5f1-71b3-5f21-9e7f-74cbcdc16337"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f65de9ae-c750-4ab8-bbb6-6459f9787c12"
+      }
     ]
   },
   {
@@ -85,7 +125,7 @@
     "keyword_restrictions": [
       "T’au Empire"
     ],
-    "ability_id": null,
+    "ability_id": "exemplar-of-the-montka-montka",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -96,17 +136,27 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Shaper"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fbc88955-2fbc-5236-aea0-0ec4a425ff98"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2b8f734a-448c-4013-9cc3-77acb6a3dae5"
+      }
     ]
   },
   {
     "id": "strike-swiftly-montka",
     "name": "Strike Swiftly",
     "detachment_id": "montka",
-    "cost": 35,
+    "cost": 45,
     "keyword_restrictions": [
       "T’au Empire"
     ],
-    "ability_id": null,
+    "ability_id": "strike-swiftly-montka",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -114,7 +164,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "72d589d7-722c-5334-955a-32c5fd615fb8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f4e9290f-d6cd-469b-94cc-cf7b908c59ad"
+      }
+    ]
   },
   {
     "id": "strategic-conqueror-montka",
@@ -124,7 +184,7 @@
     "keyword_restrictions": [
       "T’au Empire"
     ],
-    "ability_id": null,
+    "ability_id": "strategic-conqueror-montka",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -132,7 +192,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3f177ab3-2406-5f35-85e7-d5774b796c6c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1ff1cc2a-ba28-4e1b-aee4-78c67b35a4de"
+      }
+    ]
   },
   {
     "id": "coordinated-exploitation-montka",
@@ -142,7 +212,7 @@
     "keyword_restrictions": [
       "T’au Empire"
     ],
-    "ability_id": null,
+    "ability_id": "coordinated-exploitation-montka",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -153,6 +223,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Shaper"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "20524ae6-2307-571b-9577-a9d7f87c9793"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ee09770e-ecef-40eb-9435-f17af1b050ec"
+      }
     ]
   },
   {
@@ -161,9 +241,10 @@
     "detachment_id": "retaliation-cadre",
     "cost": 15,
     "keyword_restrictions": [
+      "Battlesuit",
       "T’au Empire"
     ],
-    "ability_id": null,
+    "ability_id": "puretide-engram-neurochip-retaliation-cadre",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -171,7 +252,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6ddf03da-bea2-574b-a9e0-9d7bab291bfd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f3733128-fb19-45f4-ab71-558181da1a31"
+      }
+    ]
   },
   {
     "id": "starflare-ignition-system-retaliation-cadre",
@@ -179,9 +270,10 @@
     "detachment_id": "retaliation-cadre",
     "cost": 20,
     "keyword_restrictions": [
+      "Battlesuit",
       "T’au Empire"
     ],
-    "ability_id": null,
+    "ability_id": "starflare-ignition-system-retaliation-cadre",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -189,7 +281,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "50829442-b8f8-5239-b6ff-cd0c76363cbd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "846a78e3-fdb6-40a7-b6cb-5d3a01d40e16"
+      }
+    ]
   },
   {
     "id": "internal-grenade-racks-retaliation-cadre",
@@ -197,9 +299,10 @@
     "detachment_id": "retaliation-cadre",
     "cost": 20,
     "keyword_restrictions": [
+      "Battlesuit",
       "T’au Empire"
     ],
-    "ability_id": null,
+    "ability_id": "internal-grenade-racks-retaliation-cadre",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -207,7 +310,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3a97deaf-f8fd-565c-a814-1ad2ef8043c0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f73f4a42-c4b1-4ef7-bd9c-deaf79bc413d"
+      }
+    ]
   },
   {
     "id": "prototype-weapon-system-retaliation-cadre",
@@ -215,9 +328,10 @@
     "detachment_id": "retaliation-cadre",
     "cost": 15,
     "keyword_restrictions": [
+      "Battlesuit",
       "T’au Empire"
     ],
-    "ability_id": null,
+    "ability_id": "prototype-weapon-system-retaliation-cadre",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -225,7 +339,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0b1943f2-5578-50ec-a573-bcd8a232a7fc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1c7e5e47-c87c-411b-aac3-feb27ca0260c"
+      }
+    ]
   },
   {
     "id": "kroothawk-flock-kroot-hunting-pack",
@@ -233,9 +357,9 @@
     "detachment_id": "kroot-hunting-pack",
     "cost": 10,
     "keyword_restrictions": [
-      "T’au Empire"
+      "Kroot"
     ],
-    "ability_id": null,
+    "ability_id": "kroothawk-flock-kroot-hunting-pack",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -243,7 +367,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "17da6ed3-c85a-511c-ad45-7e0be55ff920"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b0b02250-29bc-4b8f-b501-a007e6fb45e6"
+      }
+    ]
   },
   {
     "id": "nomadic-hunter-kroot-hunting-pack",
@@ -251,9 +385,9 @@
     "detachment_id": "kroot-hunting-pack",
     "cost": 20,
     "keyword_restrictions": [
-      "T’au Empire"
+      "Trail Shaper"
     ],
-    "ability_id": null,
+    "ability_id": "nomadic-hunter-kroot-hunting-pack",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -261,7 +395,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "09da85e4-09bd-56c8-bd4b-2ccc0f601cc9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7e5ea128-b5a8-4540-b84b-6b74bca2da44"
+      }
+    ]
   },
   {
     "id": "root-carved-weapons-kroot-hunting-pack",
@@ -269,9 +413,9 @@
     "detachment_id": "kroot-hunting-pack",
     "cost": 10,
     "keyword_restrictions": [
-      "T’au Empire"
+      "War Shaper"
     ],
-    "ability_id": null,
+    "ability_id": "root-carved-weapons-kroot-hunting-pack",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -279,7 +423,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7f52d920-8122-5c00-bf6b-fa7367bc6ea3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4dd7d360-96a8-4d06-a4b6-37db141d8b80"
+      }
+    ]
   },
   {
     "id": "borthrod-gland-kroot-hunting-pack",
@@ -287,9 +441,9 @@
     "detachment_id": "kroot-hunting-pack",
     "cost": 15,
     "keyword_restrictions": [
-      "T’au Empire"
+      "Flesh Shaper"
     ],
-    "ability_id": null,
+    "ability_id": "borthrod-gland-kroot-hunting-pack",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -297,7 +451,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "088bdb63-3026-54b3-b4a1-7dd2eda2754d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9082456d-f1cc-460d-84b1-3dd8318b052c"
+      }
+    ]
   },
   {
     "id": "student-of-kauyon-auxiliary-cadre",
@@ -305,9 +469,10 @@
     "detachment_id": "auxiliary-cadre",
     "cost": 20,
     "keyword_restrictions": [
-      "T’au Empire"
+      "Kroot",
+      "Shaper"
     ],
-    "ability_id": null,
+    "ability_id": "student-of-kauyon-auxiliary-cadre",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -315,7 +480,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "03698bfd-6d3c-5ebb-8fb7-12dcef811d7d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "aa6050b1-4d24-4801-930e-e3871441ac4d"
+      }
+    ]
   },
   {
     "id": "admired-leader-auxiliary-cadre",
@@ -325,7 +500,7 @@
     "keyword_restrictions": [
       "T’au Empire"
     ],
-    "ability_id": null,
+    "ability_id": "admired-leader-auxiliary-cadre",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -336,6 +511,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Kroot"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "45b3735b-d683-52e1-93ed-299855354423"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e168fe57-5411-4ee4-978e-afa421d8fd5e"
+      }
     ]
   },
   {
@@ -380,9 +565,9 @@
     "detachment_id": "experimental-prototype-cadre",
     "cost": 15,
     "keyword_restrictions": [
-      "T’au Empire"
+      "Battlesuit"
     ],
-    "ability_id": null,
+    "ability_id": "supernova-launcher-experimental-prototype-cadre",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -390,7 +575,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "21ac89ed-99ab-5546-9a18-ea026bb45336"
+      },
+      {
+        "namespace": "mfm",
+        "id": "db116728-4b55-4323-8ed9-60397162dc82"
+      }
+    ]
   },
   {
     "id": "thermoneutronic-projector-experimental-prototype-cadre",
@@ -398,9 +593,9 @@
     "detachment_id": "experimental-prototype-cadre",
     "cost": 15,
     "keyword_restrictions": [
-      "T’au Empire"
+      "Battlesuit"
     ],
-    "ability_id": null,
+    "ability_id": "thermoneutronic-projector-experimental-prototype-cadre",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -408,7 +603,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "018f33eb-508d-581f-a37c-eb1caf4f5a16"
+      },
+      {
+        "namespace": "mfm",
+        "id": "302188cd-822a-40bd-93b3-8ccf7e50e1b7"
+      }
+    ]
   },
   {
     "id": "plasma-accelerator-rifle-experimental-prototype-cadre",
@@ -416,9 +621,9 @@
     "detachment_id": "experimental-prototype-cadre",
     "cost": 20,
     "keyword_restrictions": [
-      "T’au Empire"
+      "Battlesuit"
     ],
-    "ability_id": null,
+    "ability_id": "plasma-accelerator-rifle-experimental-prototype-cadre",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -426,7 +631,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1d05b80c-1e2b-53d0-931a-3b4cdd59cf9a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bbb5af4d-2fed-4d0e-9e75-7e533cb8d72b"
+      }
+    ]
   },
   {
     "id": "fusion-blades-experimental-prototype-cadre",
@@ -452,6 +667,7 @@
     "detachment_id": "advanced-acquisition-cadre",
     "cost": 15,
     "keyword_restrictions": [
+      "Stealth Battlesuits",
       "T’au Empire"
     ],
     "ability_id": "negation-emitters-advanced-acquisition-cadre",
@@ -462,16 +678,23 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "43c723a8-44ad-54fc-8c10-77f413b85070"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0add3662-993d-4f60-b3bc-32084767e11b"
+      }
+    ]
   },
   {
     "id": "unmasking-suite-upgrade-advanced-acquisition-cadre",
     "name": "Unmasking Suite (Upgrade)",
     "detachment_id": "advanced-acquisition-cadre",
     "cost": 15,
-    "keyword_restrictions": [
-      "T’au Empire"
-    ],
     "ability_id": "unmasking-suite-advanced-acquisition-cadre",
     "is_unique": true,
     "game_version": {
@@ -480,7 +703,28 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "keyword_restriction_groups": [
+      [
+        "Ghostkeel"
+      ],
+      [
+        "Pathfinder Team"
+      ],
+      [
+        "Stealth Battlesuits"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "684e2efa-cf7e-517c-9080-a1a340f0531e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ebd0e184-f531-4a41-a7d2-51a7ae9bcd17"
+      }
+    ]
   },
   {
     "id": "earth-caste-modifications-sudden-dawn-cadre",
@@ -497,8 +741,14 @@
     ],
     "points_provisional": false,
     "keyword_restrictions": [
-      "Commander in Enforcer Battlesuit",
-      "Sudden Dawn Cadre"
+      "Commander Cloudspear"
+    ],
+    "ability_id": "earth-caste-modifications-sudden-dawn-cadre",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ceebb987-c76b-4834-8d70-6f1cc0c5e3ee"
+      }
     ]
   },
   {
@@ -516,9 +766,15 @@
     ],
     "points_provisional": false,
     "keyword_restrictions": [
-      "Devilfish",
-      "Sudden Dawn Cadre"
+      "Sudden Dawn Cadre Devilfish"
     ],
-    "upgrade_tag": true
+    "upgrade_tag": true,
+    "ability_id": "proximity-scanners-sudden-dawn-cadre",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3513ccb4-3398-47a4-9518-5cc2ab78b9cb"
+      }
+    ]
   }
 ]

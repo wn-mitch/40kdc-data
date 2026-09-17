@@ -29,7 +29,7 @@ Each line is exactly one valid JSON object terminated by `\n`. UTF-8, no BOM. Li
 The first request after launch is always:
 
 ```json
-{"op":"init","spec_version":1,"locale":"C","tz":"UTC","seed":0}
+{"op":"init","args":{"spec_version":1,"locale":"C","tz":"UTC","seed":0}}
 ```
 
 The runner responds with:
@@ -99,6 +99,7 @@ The `query` enum covers the read paths on `Dataset`:
 | `wargear_options_of`     | `{"unitId":"<id>"}`                  | ordered list of wargear-option ids |
 | `base_loadout`           | `{"unitId":"<id>","modelCount":"<n>"}` | sorted list of `"id:count"` strings |
 | `maximal_loadout`        | `{"unitId":"<id>","modelCount":"<n>"}` | sorted list of `"id:count"` strings |
+| `loadout_candidates`     | `{"unitId":"<id>","factionId"?:"<id>","modelCount":"<n>","limit"?:"<n>"}` | ordered list of encoded candidates |
 | `phases_of`              | `{"abilityId":"<id>"}`               | ordered list of phase enum values |
 | `faction_of`             | `{"unitId":"<id>"}`                  | faction id or null |
 | `abilities_of_faction`   | `{"factionId":"<id>"}`               | ordered list of ability ids |
@@ -106,6 +107,8 @@ The `query` enum covers the read paths on `Dataset`:
 | `eligible_abilities`     | `{"input":…,"phase":"<phase>"}`      | ordered list of `{kind, abilityId}` |
 
 Ordering semantics for each query are documented per-area in `CONFORMANCE.md`. The runner protocol itself is opaque to whether the order is load-bearing — it simply emits whatever the implementation's public API returns.
+
+`loadout_candidates` selects every composition tier whose summed model-row range contains `modelCount`, in tier declaration order (or the top-level model rows when there are no tiers). For each applicable tier it enumerates exact row allocations by pure descending recursive enumeration: model-row declaration order, with each row's count visited from its feasible high end down to its low end. Within each row, declared variants precede their compatible option states in canonical provenance order. It emits `"<witness> => <counts>"`; a variant-free witness is the nonzero model rows in declaration order as `<name>×<count>`, separated by `;`, while variant selections retain their variant identity in the witness; counts are ascending `id:count` pairs separated by `,`. Encoded candidates are globally deduplicated by first occurrence and emitted in that deterministic traversal order (witness groups retain their first-seen traversal order). Traversal stops after finding distinct `limit + 1` legal encodings, returning the first `limit` plus the final `"…truncated"` marker; `limit` defaults to 256, and `limit=0` returns the marker iff any legal candidate exists. The limit does not make proof of no solution universally bounded: rejected, duplicate, and no-solution branches may still require exhaustive search. Exact legality is independent of this output traversal and limit and remains exhaustive. A missing composition or model count admitted by no tier returns an empty list.
 
 ### `check_unit_legality`
 
@@ -274,8 +277,9 @@ Replays `ops` over a fresh `PlayerGame` and returns its state plus derived
 totals: `{"rounds":[{"primary":<int>,"secondary":<int>}, …5],"handIds":[<string>,
 …],"log":[{"cardId":<string>,"round":<int>,"vp":<int>}, …],"primary":<int>,
 "secondary":<int>,"total":<int>}`. Op kinds: `draw` (`cardId`); `score-secondary`
-(`cardId`, `round`, `asserted`) banks `min(turn, cap)`, logs it, discards from
-hand; `score-primary` (`cardId`, `round`, `asserted`, `roundCap?`, `gameCap?`)
+(`cardId`, `round`, `asserted`, `roundCap?`, `gameCap?`) banks `min(turn, cap)`,
+clamped by the optional per-round and per-game secondary ceilings, logs it,
+discards from hand; `score-primary` (`cardId`, `round`, `asserted`, `roundCap?`, `gameCap?`)
 stores the round's raw `scoreTurn` through the cap clamp; `set-primary` (`round`,
 `vp`, `roundCap?`, `gameCap?`) clamps `vp` to the round cap **and** the remaining
 per-game room; `remove-score` (`index`) reverses a logged scoring. `total` is
@@ -299,21 +303,23 @@ Maps two grand totals onto the WTC 20-point result. Response value is
 {"op":"resolve_terrain","args":{"layout":{…TerrainLayout…},"templates":[{…TerrainTemplate…}, …]}}
 ```
 
-Resolves a template-anchored terrain layout to absolute board-space polygon
-vertices (board inches, y-down). `layout` is a `terrain-layout` document;
-`templates` is the catalog its piece `template` references resolve against
-(passed inline so the op is dataset-independent). Response value is
-`{"pieces": [{"id": <string|null>, "name": <string|null>, "piece_type":
-"area"|"feature", "floor": <int>, "vertices": [{"x": <num>, "y": <num>}, …]},
-…]}`.
+Resolves a template-anchored terrain layout to absolute board-space geometry
+(board inches, y-down). `layout` is a `terrain-layout` document; `templates` is
+the catalog its piece `template` references resolve against (passed inline so
+the op is dataset-independent). Response value is `{"pieces": [...]}`. Every
+resolved piece contains `id`, `name`, `piece_type`, `floor`, and `vertices`.
+Feature templates additionally propagate `has_roof` and `terrain_category` when
+present, plus `walls` as board-space polylines with their optional `thickness`.
 
 Pieces are emitted in `layout.pieces` order; an area piece that instances a
 template carrying composed `features` emits those features immediately after it,
-in template-declaration order. Vertices are rounded to 4 dp; the differ compares
-them with float tolerance (`5e-4`) and the identity fields exactly. Equivalent
-to TS `resolveLayout(layout, templates)` / Rust `resolve_layout(&layout,
-&templates)`. A layout that references a missing template, or a piece with
-neither `footprint` nor `template`, returns `error_kind: "INVALID_INPUT"`.
+in template-declaration order. A composed feature's resolved ID is namespaced by
+its parent piece ID (`<parent>--<feature>`) so separate instances cannot collide.
+Vertices and wall points are rounded to 4 dp; the differ compares coordinates
+with float tolerance (`5e-4`) and all other fields exactly. Equivalent to TS
+`resolveLayout(layout, templates)` / Rust `resolve_layout(&layout, &templates)`.
+A layout that references a missing template, or a piece with neither `footprint`
+nor `template`, returns `error_kind: "INVALID_INPUT"`.
 
 The transform contract (mirror → rotate → translate about the footprint
 centroid; clockwise rotation in the y-down frame) is specified in CONFORMANCE.md

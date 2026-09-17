@@ -7,6 +7,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "515471d3fffad0c0f128e72d29f4077ec0c91f5d5c801bf0e0efc3efb8bf7348",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -41,6 +42,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -85,6 +87,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
     "version": "2025-q3",
     "effect": {
       "type": "feel-no-pain",
@@ -112,6 +115,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "499e7ca90779f97aa7cdd28fbfb3a420e09ec0dca9353de723807f633b1e36a7",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -145,6 +149,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "2afa67a0868278f3756199ebb0172bd4d678efa31de7119f8389757827d4b21e",
     "version": "2025-q3",
     "effect": {
       "type": "stat-modifier",
@@ -173,6 +178,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
     "version": "2025-q3",
     "effect": {
       "type": "deep-strike",
@@ -197,6 +203,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
     "version": "2025-q3",
     "effect": {
       "type": "ability-grant",
@@ -223,6 +230,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "98fc5d0ec136db92dbaf4239c7ea51df203850797714bd06c55387dada576772",
     "version": "2025-q3",
     "effect": {
       "type": "cp-refund",
@@ -249,6 +257,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "f9bde73efd0a714dcd7de4cc30859c409e0535d9dfd87fc10c4a8034837ec282",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -301,6 +310,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "48abdaff7f9f986c7464892c1a014938cdc6bf241654dc37cfdbbf0adcc8b9c2",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -335,6 +345,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "31d06f446524facd1975a55d93610fde2f3baceeb3c1a436a08a0fec343fb026",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -370,6 +381,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
     "version": "2025-q3",
     "effect": {
       "type": "movement-modifier",
@@ -453,6 +465,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "392dd836fe1a5c269be6cb61a9368372458348a6487b2435a7b0ae80c875cf23",
     "version": "2025-q3",
     "effect": {
       "type": "resurrection",
@@ -541,6 +554,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "9216ab16de6014f5b93d492d7ddde76e2352e1161d48f9d868f4ba107517f23a",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -573,6 +587,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "362acf3a25fcba869b910223c2ddfa7371fd481987b715562a5ab41504a5c443",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -638,12 +653,14 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "d0ade2ca50807d083cf321ca030d52a1c4544ec4ca739ec1a4890a63f3ac1aa2",
     "version": "2025-q3",
     "effect": {
       "type": "feel-no-pain",
       "target": "unit",
       "modifier": {
-        "threshold": 4
+        "threshold": 4,
+        "scope": "psychic"
       }
     },
     "scope": {
@@ -664,6 +681,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "2bb6174fbe23e34798b4b44f06231c2cf2ffd7921dd4dc4713f0f9589868ec70",
     "version": "2025-q3",
     "effect": {
       "type": "sequence",
@@ -706,6 +724,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "c61132b8b764afe816d94c79637370bbfec332fd18df8c7a7ac9802600bca631",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -743,6 +762,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "9badd3e78221cb9c85d8ef35759c2114208e7a7d0e11a66af3d377c4b4ca1f05",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -792,6 +812,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "600c430b0fc12c163da5176869bf84be1443016f39d8ef0011d06028811c7d00",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -800,7 +821,7 @@
       },
       "effect": {
         "type": "stat-modifier",
-        "target": "self",
+        "target": "unit",
         "modifier": {
           "stat": "Sv",
           "operation": "set",
@@ -827,6 +848,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "d80acbee2500c4d6606bfbf8921363c2bff4480dbee2cf1b695db998a5a27a41",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -864,6 +886,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "df8d2d762cc8136e411f1d28601f4933bc1baf3ea2af13b7fdaef4e8a1c6fbfb",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -901,6 +924,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "acf0130816b58d9f65765a32e969283513e64a05329c351a73d237a8a173ea92",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -936,6 +960,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "027c169ff9149c1bf42bf47a1fff0f4a0e66bcf6bcf5ddd0f48c8ddaa44e69fa",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -986,6 +1011,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "49cd58670b7ca0cdd9dad6f27cfae3ac233fc26f6535c0aea8c674ec41dc8326",
     "version": "2025-q3",
     "effect": {
       "type": "ability-grant",
@@ -1012,6 +1038,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "152ab6121dce539fe4e3a3760a9edf0b0b163e1bcc10d9447e1e0c9f61262a37",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1054,6 +1081,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "f7b8c8798e183f868b209dadccbeea108a62bd46a742595074439ed1cee5675b",
     "version": "2025-q3",
     "effect": {
       "type": "leadership-modifier",
@@ -1081,6 +1109,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "0a5a1c2fa83f04b06c4fd9a8c78b29fb44558cde5ea8333958017cc2ab857d6c",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1114,6 +1143,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1157,6 +1187,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "16010a62cee922f83fc5ad092cb3d1bf066d98273bd49b344b3e0dab6733826d",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1192,6 +1223,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "e4b360f0b9ab91d0441f948615317740b876b78471a5bfe72251beb31916b320",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1224,6 +1256,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "b7ff8ebbbbc472aa2dc6fe5fd2250c73bf22266233c38339038a8d6668e91fde",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1256,6 +1289,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "a5d515a8e43790d9dfe2997f34d181fe5edd5f78a37f3d563367a377d6722a14",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1303,6 +1337,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "7e0bcde68ad20fa8adedc20e796af870d1c3aed10a77c8b9842edbd4f230efde",
     "version": "2025-q3",
     "effect": {
       "type": "stat-modifier",
@@ -1331,6 +1366,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "db5f2bae245a8eb3cca1df9d81a364c92d2b3958c0471ebd7f0f15e2bd8a0f90",
     "version": "2025-q3",
     "effect": {
       "type": "attack-restriction",
@@ -1357,6 +1393,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "a2de412f3c95c44725479d5934a5e04042a32f4d37af9b8959dccd8641fe143b",
     "version": "2025-q3",
     "effect": {
       "type": "resource-gain",
@@ -1389,6 +1426,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "50158d0651f9a51133c8e4f64611863e8378aae739812a58eec2ac0155095170",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1457,6 +1495,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
     "version": "2025-q3",
     "effect": {
       "type": "unit-keyword",
@@ -1483,6 +1522,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "696e85410d1504e334e39448b79cf3e7142cb1bea30a6cda4877394900a46f8c",
     "version": "2025-q3",
     "effect": {
       "type": "re-roll",
@@ -1510,6 +1550,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "4602dc7a8b6287c375cd0aebfba1914c9f22c93f20797716a1006551a5ef7d5a",
     "version": "2025-q3",
     "effect": {
       "type": "re-roll",
@@ -1537,6 +1578,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "71f22703f4d6f50fe5dcc81323a1ef66423412c6fd3beeaed0df9a9d9d0b26d9",
     "version": "2025-q3",
     "effect": {
       "type": "fight-first",
@@ -1561,6 +1603,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "97e888af23148ae67829335b14b9e547038266533f8a93a670de3e06b8f14cf0",
     "version": "2025-q3",
     "effect": {
       "type": "targeting-permission",
@@ -1589,6 +1632,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "af68b5d3ed4dc59dee7ae13f46d42733a335979b997741e4ba2c866d2381e419",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1624,6 +1668,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "50abfa531feeebeda388d39ecae4272c43a09d5c2477e04197a91458b9522d04",
     "version": "2025-q3",
     "effect": {
       "type": "cp-refund",
@@ -1640,7 +1685,9 @@
       "daemonifuge"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "disputed": true,
+    "dispute_notes": "Dangling reference: references stratagem id \"fire-overwatch-or-heroic\", which no stratagem file defines; the intended stratagem is unrecoverable from the encoding."
   },
   {
     "ability_id": "firing-deck-2",
@@ -1650,6 +1697,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
     "version": "2025-q3",
     "effect": {
       "type": "ability-grant",
@@ -1677,6 +1725,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "4b19112f35e85157ac580964d95c0983124bc05f5573dd530567b407558b2e6c",
     "version": "2025-q3",
     "effect": {
       "type": "resurrection",
@@ -1704,6 +1753,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "05ee6f5a96280213cfcbd53c1a4cf1dca8ac07ceab87b753cb1e8b4cc873526d",
     "version": "2025-q3",
     "effect": {
       "type": "sequence",
@@ -1747,6 +1797,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "802738c553eca7a83924aa2868459973e0366d15d29611c5811084dcf8f3f672",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1784,6 +1835,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "4ee26e7889783ca8f35b248aaea021ebd1bda369108aab65e455a99add69e918",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1819,6 +1871,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "4b26303e351e1a976044235a1b48f365091d27c8bdeaf5720177c82d3222d4b3",
     "version": "2025-q3",
     "effect": {
       "type": "ability-grant",
@@ -1839,12 +1892,13 @@
   },
   {
     "ability_id": "the-pulpit-of-saint-holline-s-basilica",
-    "name": "The Pulpit of Saint Holline’s Basilica",
+    "name": "The Pulpit of Saint Holline\u2019s Basilica",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "6c1a73f0bbabc3b9f641b93d8842c0578831ff2a12cd643f2a5023d2a8751987",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1879,6 +1933,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "0b36290756bd677905f9c46e98521acc567a5fa6e4d53c5fcb42500bf9709023",
     "version": "2025-q3",
     "effect": {
       "type": "cp-gain",
@@ -1905,6 +1960,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "f9996ab2d7695592b072c2025bf75cd9c71696144512fb0c054611ab11dfe887",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -1950,6 +2006,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "96bb8f7cb3cf6dd2c7e81d2fa1c782d90b2be6ea2925a98f2476673478ce377c",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -2001,6 +2058,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "51abd9145f5aa949fd9ae789ef3e66c7dec8bdf2567726a932b56e9e5594795c",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -2033,6 +2091,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "62076bb0a3c6d5d3200f25ba9badf1a70e18607ed29341ad54eef65dbc382b38",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -2067,6 +2126,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "62076bb0a3c6d5d3200f25ba9badf1a70e18607ed29341ad54eef65dbc382b38",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -2101,6 +2161,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "5008701954158a429caa28c3939f3fe8cd069d2383039f4e0df0b80b40a6edeb",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -2137,6 +2198,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "574c5c6cae7a8e3854cea667c659057c283fb8e759b4037eea7c6c03799afcd3",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -2186,6 +2248,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "7050aa347cc35c0a851d54ecfa29e6c54011a49d2532ddf7657fc700505c6914",
     "version": "2025-q3",
     "effect": {
       "type": "movement-modifier",
@@ -2217,6 +2280,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "e4d42a8b34c98977943ecf465ea17b4ef3d162b6ca7d287f69cc9637fff4f07e",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -2249,6 +2313,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "517ab09bf410896f7c5b5460047297ca76db5c329cf721a647327da4c1ff61f2",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -2347,6 +2412,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "8a1e483edd968274a3ffa9dba8dfba1c1ec76b22fb83896dca198ff841d23352",
     "version": "2025-q3",
     "effect": {
       "type": "feel-no-pain",
@@ -2373,6 +2439,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "4798160f01f8ab199c44fac55b08b391fe88af890e58460110558f639084f1bb",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -2426,6 +2493,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "b7839c91742ce711a4223df21826be04e6f781c4b938441d5e232b1abcecd9b2",
     "version": "2025-q3",
     "effect": {
       "type": "objective-control-modifier",
@@ -2446,12 +2514,13 @@
   },
   {
     "ability_id": "the-emperor-s-grace",
-    "name": "The Emperor’s Grace",
+    "name": "The Emperor\u2019s Grace",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "b972e1d4220303ab2968b6a3f80a8707a20809450085f8fd99ef82f7fc60e3d3",
     "version": "2025-q3",
     "effect": {
       "type": "invulnerable-save",
@@ -2468,7 +2537,11 @@
       "canoness"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1
+    }
   },
   {
     "ability_id": "null-rod",
@@ -2478,12 +2551,14 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "8d4ecaf4bc5376859c907837d331200a09bc9becd80c12beffaee456ec145f74",
     "version": "2025-q3",
     "effect": {
       "type": "feel-no-pain",
       "target": "unit",
       "modifier": {
-        "threshold": 4
+        "threshold": 4,
+        "scope": "psychic"
       }
     },
     "scope": {
@@ -2504,6 +2579,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "32482748f2beff836c1de4ba9d978f9e7fc46930ce3a7075d94ef72fd9bfe86b",
     "version": "2025-q3",
     "effect": {
       "type": "re-roll",
@@ -2525,12 +2601,13 @@
   },
   {
     "ability_id": "auto-tapestry-of-the-emperor-s-judgement",
-    "name": "Auto-Tapestry of the Emperor’s Judgement",
+    "name": "Auto-Tapestry of the Emperor\u2019s Judgement",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "d29f8a9b12868eecfcb139cea7cfd28dad7c4576452cc1a62fd14c9c51b6c492",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -2565,6 +2642,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "e624adaec2fa39ee32b9172fc89247c13568c1d0cd7e5fc8a4579637cd4e968a",
     "version": "2025-q3",
     "effect": {
       "type": "sequence",
@@ -2651,6 +2729,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
     "version": "2025-q3",
     "effect": {
       "type": "ability-grant",
@@ -2678,6 +2757,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "ec448e25edb0e59f4330bacfe329c3ec0eecacbcf9914e0d0bb83b360825e828",
     "version": "2025-q3",
     "effect": {
       "type": "ability-grant",
@@ -2707,6 +2787,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -2750,6 +2831,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "c2a52923e2c59a15ddaf1012389f7a1314a5714bce46fc613340bd5f8169890a",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -2785,6 +2867,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "11960dfafa7f5a1b3b878b37274b616bb3971f2b9238ca32347281d020af25ce",
     "version": "2025-q3",
     "effect": {
       "type": "sequence",
@@ -2855,6 +2938,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "3fa58ad179811c1e598fc098c1649d4d83d8ab7e2b8fd2d218830bfdba4b5137",
     "version": "2025-q3",
     "effect": {
       "type": "replace-roll-from-pool",
@@ -2893,6 +2977,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "06f441deeb201392e43f4b27b075f372bd3eb317bd56579d1ef4e608b63a953a",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -2941,6 +3026,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "d3a3aaed5cb3a609087ef761623a0174f3127416b837c28a2e227502a4e25b75",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3000,6 +3086,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "087b44ed38695d1de9ae3bdfbe125db62cab2628202d091b0f06bd0eed629fcc",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3034,6 +3121,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "a8177eab90f97a8dc6face5b78adcbbce28c6c4b3f99473ec393b09eb3e5536e",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3067,6 +3155,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "00f88b179e31999f192e017dd90fff89846b6e9b4da3844183cbc32a3aec2aca",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3102,6 +3191,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "0b320f57b0ee93b359070c245d46f3a04135841182c66f333bcf3e6410c4b9f4",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3140,6 +3230,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "6b9af5be0d626f0057de70ff6cf3e754bb1171753fb586310e6058f8105fc836",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3174,6 +3265,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "563ca2435140a3dbb7cacdd15af1cd6d799ac77cb4028a2e27ffc62697bead40",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3207,6 +3299,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "c82bab8b52ee3428a82513a052108221ade48f8370a7f7483c94f73a6802181b",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3241,6 +3334,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "18034fe556fc191228968da74bbce46f281ed5ac563ad2c28043b623b20c0072",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3291,6 +3385,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "ce38e29f5a571a93fa55833670f4e9e19aae59bd14ace15ddd0f3eb531ed307b",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3324,6 +3419,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "5d0d6264a09f161d4dc7dce3b6ee269a048cc9d4d7ce041e45452dfc5e3b2c79",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3380,6 +3476,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "5776a454c0b6dfcbc297bda522764bf5fdc4fbe2bab45bb04bbf93de85fb5c3b",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3415,6 +3512,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "560e411dd072a8bf6c9621b51aed4ec2eaf20135c842468c01e92ef28325141f",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3494,6 +3592,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "7951fb435bfd4e6d394343befb397bd36ef8748bf2b16c9099b13407dcdff4fe",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3531,6 +3630,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "e04a75f7c9cdbdbfdeaccaf55fc6c9ef67d638045705d0fe6c3603ba185f78ab",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3589,6 +3689,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "918da98709e15af2290198b545a464c876ff81fa6565ee1e26847a4549c071d7",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3642,6 +3743,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "40a9f2fb5363abfcca0ee78a45764cee75955bb8dfd5dd2e9275e7c3c72be8c9",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3695,6 +3797,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "595d567ec4907b4ffb007884f68f4247f7c91b382b837f2b2da182d68849e732",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -3724,6 +3827,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "7666e45e7bfb23fc68c5b4ac7ca1f5cd74b7cb42a1f9f81aaba95a6802e4c70d",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -3774,6 +3878,7 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
+    "source_digest": "02ce06d0b4ed3bd991bb0feab7f4f646e3a318e1eb9b5970346f7def36b741d2",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
@@ -3823,5 +3928,2335 @@
     "ability_type": "unit",
     "behavior": "activated",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+  },
+  {
+    "ability_id": "boundless-zeal-penitent-host",
+    "name": "Boundless Zeal",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "4c31041586746ac5d2ae74257919b0fbfc2081cdc97b6e4fa747bc3db9fda984",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "penitent-host",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "fallback-and-act",
+      "target": "unit",
+      "modifier": {}
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "The unit is eligible to shoot or declare a charge in a turn in which it Fell Back; Penitent units are eligible to shoot and declare a charge instead."
+  },
+  {
+    "ability_id": "devout-fanaticism-penitent-host",
+    "name": "Devout Fanaticism",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "50b05046da075241731433b917e0a91269ab807a16643aaf757cdfe2997afad0",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "penitent-host",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "movement-modifier",
+      "target": "unit",
+      "modifier": {
+        "move_type": "surge",
+        "distance": "D6"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Penitent"
+      ]
+    },
+    "community_notes": "Used in your opponent's Shooting phase just after an enemy unit has shot at your unit."
+  },
+  {
+    "ability_id": "final-redemption-penitent-host",
+    "name": "Final Redemption",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "f6bb06dc9c5c0ce0f1ffa8ecf88c14f4639ccf2656fb987cdaac2ae9bf5cb5f0",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "penitent-host",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "objective-control-modifier",
+      "target": "unit",
+      "modifier": {
+        "sticky": true
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Penitent"
+      ]
+    },
+    "community_notes": "Used on a Penitent unit that was just destroyed while within range of an objective marker you controlled: that objective remains under your control until your opponent's Level of Control exceeds yours at the end of a phase."
+  },
+  {
+    "ability_id": "lash-of-guilt-penitent-host",
+    "name": "Lash of Guilt",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "1ccd62b47e24c583459421f764cdbd0cb132adc90d226c78ad1941d93aa59c07",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "penitent-host",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "unit",
+          "modifier": {
+            "ability_id": "charge-after-advance"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "unit-has-keyword",
+            "parameters": {
+              "keyword": "Penitent Engines"
+            }
+          },
+          "effect": {
+            "type": "ability-grant",
+            "target": "unit",
+            "modifier": {
+              "grant_type": "advance-6-instead-of-roll"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Penitent"
+      ]
+    },
+    "community_notes": "Used just before the unit Advances. Penitent Engines units do not make an Advance roll; instead add 6\" to their Move characteristic until the end of the phase."
+  },
+  {
+    "ability_id": "passion-of-the-penitent-penitent-host",
+    "name": "Passion of the Penitent",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "18f21240a3172c76a2782018844994603880183cef947a51b59bab0a7c16b28f",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "penitent-host",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is-type",
+        "parameters": {
+          "attack_type": "melee"
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "unit",
+        "modifier": {
+          "roll": "hit",
+          "critical_on": 5
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Penitent"
+      ]
+    },
+    "community_notes": "Only attacks made by Penitent models in the unit benefit."
+  },
+  {
+    "ability_id": "purity-of-suffering-penitent-host",
+    "name": "Purity of Suffering",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "5e1bf797f80135123bc3b428f5485f78c1f4cfdc5880950f783e58d75a2cf256",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "penitent-host",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "unit",
+      "modifier": {
+        "threshold": 4
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Penitent"
+      ]
+    },
+    "community_notes": "Only Penitent models in the unit gain the Feel No Pain 4+ ability."
+  },
+  {
+    "ability_id": "divine-intervention-hallowed-martyrs",
+    "name": "Divine Intervention",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "8fc09cc4a4ffbe41b2f0e021ee130dd058e8bc5e59db63e018b85c9885efa929",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "hallowed-martyrs",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    },
+    "effect": {
+      "type": "resurrection",
+      "target": "self",
+      "modifier": {
+        "timing": "end-of-phase",
+        "placement": "closest-to-destruction",
+        "wounds_remaining": "D3"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas",
+        "Character"
+      ]
+    },
+    "community_notes": "You can discard 1-3 Miracle dice when using this Stratagem; the model returns with D3 wounds remaining plus 1 per Miracle dice discarded (up to its starting wounds), unengaged, not part of an Attached unit, with a Starting Strength of 1. Saint Celestine cannot be selected; the same Character cannot be selected more than once per battle."
+  },
+  {
+    "ability_id": "praise-the-fallen-hallowed-martyrs",
+    "name": "Praise the Fallen",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "15fb58649e599ba4358dc24d401bf71b52045bd0cd99b1d5018319368b6a6eea",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "hallowed-martyrs",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "shoot-as-if-shooting-phase"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Used in your opponent's Shooting phase just after an enemy unit has shot and destroyed one or more models in your unit; your unit must target only that enemy unit, and only if it is an eligible target."
+  },
+  {
+    "ability_id": "righteous-vengeance-hallowed-martyrs",
+    "name": "Righteous Vengeance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "92faedfc37aa198c9f24c53d5f33c52572033e00ec38a339bc80669498ee9317",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "hallowed-martyrs",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is-type",
+            "parameters": {
+              "attack_type": "melee"
+            }
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "all-failures"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "unit-below-half-strength",
+            "parameters": {}
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "unit",
+            "modifier": {
+              "roll": "wound",
+              "subset": "all-failures"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    }
+  },
+  {
+    "ability_id": "sanctified-immolation-hallowed-martyrs",
+    "name": "Sanctified Immolation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "866dce8782c791c11444964de91742a052b219e13a5197fbebea9d0965309b48",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "hallowed-martyrs",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "auto-result",
+      "target": "self",
+      "modifier": {
+        "test": "deadly-demise",
+        "result": "pass"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas",
+        "Vehicle"
+      ]
+    },
+    "community_notes": "Used on a Vehicle model with the Deadly Demise ability that was just destroyed: do not roll for Deadly Demise; mortal wounds are automatically inflicted."
+  },
+  {
+    "ability_id": "spirit-of-the-martyr-hallowed-martyrs",
+    "name": "Spirit of the Martyr",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "4641de0f9eb8141dce74b7d643306e9b2911a5f0fb2cef2e4b0b3a2037cda03b",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "hallowed-martyrs",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "has-fought-this-phase",
+            "parameters": {}
+          }
+        ]
+      },
+      "effect": {
+        "type": "fight-on-death",
+        "target": "unit",
+        "modifier": {}
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Each destroyed model that has not fought this phase fights after the attacking unit finishes its attacks and is then removed from play."
+  },
+  {
+    "ability_id": "suffering-and-sacrifice-hallowed-martyrs",
+    "name": "Suffering and Sacrifice",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "c2020e60d7244e3dcdbbf16742a36f2f71d005f63146d8232d17a3a5577a8c90",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "hallowed-martyrs",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "attack-restriction",
+      "target": "attacker",
+      "modifier": {
+        "restriction": "must-target-designated-unit"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Used at the start of the Fight phase on one Infantry or Walker unit: until the end of the phase, each enemy model within Engagement Range of your unit must select your unit as the target of its attacks."
+  },
+  {
+    "ability_id": "blazing-ire-bringers-of-flame",
+    "name": "Blazing Ire",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "b564f2b31d2e7f0b8b7c02204712b3cac7fb72b1b120cd4d7f8e5d57cbae2dc3",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "bringers-of-flame",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "disembark",
+          "target": "unit",
+          "modifier": {}
+        },
+        {
+          "type": "ability-grant",
+          "target": "unit",
+          "modifier": {
+            "grant_type": "shoot-as-if-shooting-phase"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas",
+        "Transport"
+      ]
+    },
+    "community_notes": "Used in your opponent's Shooting phase just after an enemy unit has shot at your Transport: one embarked unit can disembark as if it were your Movement phase, then shoot as if it were your Shooting phase, targeting only the attacking enemy unit (and only if it is an eligible target)."
+  },
+  {
+    "ability_id": "carry-forth-the-faithful-bringers-of-flame",
+    "name": "Carry Forth the Faithful",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "3b39810fe83cf0a694853bb75a046a45eb0bae2f800add5616257360d72c5603",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "bringers-of-flame",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "self",
+          "modifier": {
+            "roll": "advance",
+            "result_scope": "any-result"
+          }
+        },
+        {
+          "type": "disembark-after-move",
+          "target": "unit",
+          "modifier": {
+            "after": "advance",
+            "counts_as_normal_move": true,
+            "can_charge": false
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas",
+        "Transport"
+      ]
+    },
+    "community_notes": "Used just before the Transport Advances: re-roll its Advance rolls, and units can disembark from it even though it Advanced. Units that do so count as having made a Normal move and cannot declare a charge this turn."
+  },
+  {
+    "ability_id": "cleansing-flames-bringers-of-flame",
+    "name": "Cleansing Flames",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "cac647670511c2de2706b3e507d08e578f599fbcb6536c0c7e3f67217a17f1ce",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "bringers-of-flame",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Devastating Wounds"
+        ],
+        "weapon_type": "ranged",
+        "weapon_keyword": "Torrent"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Targets one unit that has not been selected to shoot this phase; only Torrent weapons gain [Devastating Wounds]."
+  },
+  {
+    "ability_id": "righteous-blows-bringers-of-flame",
+    "name": "Righteous Blows",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "a63531324d0ab42fc3190f2e9632d5ba98b0c6a56fdbac47b1820f8d87c8d3f3",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "bringers-of-flame",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Lethal Hits"
+        ],
+        "weapon_type": "melee"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "If one or more enemy models are destroyed by those weapons this phase, one destroyed model's unit must take a Battle-shock test (rider not encoded)."
+  },
+  {
+    "ability_id": "rites-of-fire-bringers-of-flame",
+    "name": "Rites of Fire",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "eba19fd4088a8a04acee672bc02446caad126ece2c0a6316b97dbb4427417b9a",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "bringers-of-flame",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "disembarked-from-transport",
+        "parameters": {}
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "unit",
+        "modifier": {
+          "roll": "wound",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Ranged attacks only, against enemy units within 6\" that are also within range of an objective marker (target conditions not encoded). If enemy models are destroyed by those attacks, one destroyed model's unit must take a Battle-shock test (rider not encoded)."
+  },
+  {
+    "ability_id": "shield-of-aversion-bringers-of-flame",
+    "name": "Shield of Aversion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "bf7d20d05da342c56a296cdbdb3a275ed9d080fd99937a2129eecc9ec5d85fb5",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "bringers-of-flame",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "attack-restriction",
+      "target": "unit",
+      "modifier": {
+        "restriction": "worsen-incoming-ap",
+        "value": 1
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Lasts until the attacking unit has finished making its attacks."
+  },
+  {
+    "ability_id": "bastion-of-faith-champions-of-faith",
+    "name": "Bastion of Faith",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "3b78a2724f07dc90b7f3e105e454634186da26d0678ef3107f73b4d7854bd1c7",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "champions-of-faith",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "unit",
+      "modifier": {
+        "roll": "hit",
+        "operation": "subtract",
+        "value": 1,
+        "incoming": true
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Celestian Sacresants"
+      ]
+    },
+    "community_notes": "If your unit is Righteous, you can also select one other Celestian Sacresants unit (not Battle-shocked, within 6\") to receive the same protection (extension not encoded)."
+  },
+  {
+    "ability_id": "indefatigable-dedication-champions-of-faith",
+    "name": "Indefatigable Dedication",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "a6cba8df14853a40ef114933646f61fcba410a305a742941c7a8e120a2a35b90",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "champions-of-faith",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "act-after-move",
+        "moves": [
+          "fall-back"
+        ],
+        "acts": [
+          "shoot"
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Used just after the unit Falls Back. If the unit is Righteous, it is eligible to shoot and declare a charge in a turn in which it Fell Back instead (escalation not encoded)."
+  },
+  {
+    "ability_id": "path-of-the-righteous-champions-of-faith",
+    "name": "Path of the Righteous",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "783bdecfe46c980d608bb4f71026059fc0a64ff78f4a39906c960f913470740f",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "champions-of-faith",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "movement-modifier",
+          "target": "unit",
+          "modifier": {
+            "move_type": "pile-in",
+            "distance": 6
+          }
+        },
+        {
+          "type": "movement-modifier",
+          "target": "unit",
+          "modifier": {
+            "move_type": "consolidation",
+            "distance": 6
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "If the unit is Righteous, those moves do not need to end closer to the closest enemy model, provided they end as close as possible to the closest enemy unit (relaxation not encoded)."
+  },
+  {
+    "ability_id": "shield-of-denial-champions-of-faith",
+    "name": "Shield of Denial",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "4d819285a412171d6df4852c8efd86f7401c461a28e1bb0b6aa33213c463f6eb",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "champions-of-faith",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "unit",
+      "modifier": {
+        "threshold": 6,
+        "scope": "mortal"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Used just after a mortal wound is allocated to the unit. If the unit is Righteous, the Feel No Pain is 5+ against mortal wounds instead (escalation not encoded)."
+  },
+  {
+    "ability_id": "suffer-not-the-unfaithful-champions-of-faith",
+    "name": "Suffer Not the Unfaithful",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "535550f59a03485f01832f3e46d719e5a457e31a14ab55c2f5343829924fa23f",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "champions-of-faith",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "choice",
+      "choice_label": "Select one ability",
+      "options": [
+        {
+          "type": "keyword-grant",
+          "target": "unit",
+          "modifier": {
+            "keywords": [
+              "Lethal Hits"
+            ]
+          }
+        },
+        {
+          "type": "keyword-grant",
+          "target": "unit",
+          "modifier": {
+            "keywords": [
+              "Sustained Hits 1"
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "The unit must be Righteous and not have been selected to shoot or fight this phase."
+  },
+  {
+    "ability_id": "to-the-heart-of-heresy-champions-of-faith",
+    "name": "To the Heart of Heresy",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "df2469d30d9fb3fe92d3600bcd727e484df9ce6a42d6104bf4513a32570c60a6",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "champions-of-faith",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "unit",
+      "modifier": {
+        "stat": "S",
+        "operation": "add",
+        "value": 1,
+        "weapon_type": "melee"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "If the unit is Righteous, also improve the Armour Penetration characteristic of its melee weapons by 1 until the end of the phase (rider not encoded)."
+  },
+  {
+    "ability_id": "angelic-descent-army-of-faith",
+    "name": "Angelic Descent",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "20b6d4b43313e65a02b7136cf54f9a4f1eff8f7a60a7b8c5e6d8f10ae880e44f",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "army-of-faith",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "movement-modifier",
+      "target": "unit",
+      "modifier": {
+        "move_type": "redeploy",
+        "to_reserves": true,
+        "condition": {
+          "type": "engagement-state",
+          "parameters": {
+            "state": "not-in-engagement-range"
+          }
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas",
+        "Jump Pack"
+      ]
+    },
+    "community_notes": "Used at the end of your opponent's Fight phase: remove the unit from the battlefield and place it into Strategic Reserves."
+  },
+  {
+    "ability_id": "blinding-radiance-army-of-faith",
+    "name": "Blinding Radiance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "e9f658e6450434d62ceaeb07cb6e96a7e485562c2ee55ddea879e610ea81ef88",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "army-of-faith",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "unit",
+      "modifier": {
+        "roll": "hit",
+        "operation": "subtract",
+        "value": 1,
+        "incoming": true
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Targets one Infantry unit that was selected as a target, or one friendly Jump Pack unit within 3\" of such a unit. If a Jump Pack unit was targeted, friendly Infantry units within 3\" of it also impose -1 to Hit (extension not encoded)."
+  },
+  {
+    "ability_id": "divine-guidance-army-of-faith",
+    "name": "Divine Guidance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "7a71aac4ccbab17dbbf59ff19f457258cdff523e55b0b55ec4090c6e2f1c97b1",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "army-of-faith",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "unit",
+      "modifier": {
+        "stat": "AP",
+        "operation": "add",
+        "value": -1
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "If one or more enemy models are destroyed by those attacks, you gain 1 Miracle dice (rider not encoded)."
+  },
+  {
+    "ability_id": "faith-and-fury-army-of-faith",
+    "name": "Faith and Fury",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "9ca80b811603ab752fa746c18679e57c69853b86daa9c42d7cadc7fcc0ca1e63",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "army-of-faith",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "keyword-grant",
+      "target": "unit",
+      "modifier": {
+        "keywords": [
+          "Lance"
+        ],
+        "weapon_type": "melee"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "If one or more enemy models are destroyed by the unit's attacks this phase, you gain 1 Miracle dice (rider not encoded)."
+  },
+  {
+    "ability_id": "light-of-the-emperor-army-of-faith",
+    "name": "Light of the Emperor",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "76f187500c36192d5fd22569524bb3617e0e136d00b9f5f9498a711c6598432f",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "army-of-faith",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "modifier-immunity",
+          "target": "unit",
+          "modifier": {
+            "scope": "characteristics"
+          }
+        },
+        {
+          "type": "roll-modifier",
+          "target": "unit",
+          "modifier": {
+            "roll": "any",
+            "operation": "ignore-modifiers"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "The blessed unit can ignore modifiers to its models' profile characteristics, its weapons' WS/BS, and any roll or test made for it (excluding saving throw modifiers). If the unit has the Jump Pack keyword, friendly Adepta Sororitas units within 3\" are also blessed (extension not encoded)."
+  },
+  {
+    "ability_id": "shield-of-faith-army-of-faith",
+    "name": "Shield of Faith",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "b65250c06faf08a865aa3e73dcd27fb5db28392a7def92e339a03a5b531282c9",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "army-of-faith",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "unit",
+      "modifier": {
+        "threshold": 5,
+        "scope": "mortal"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Used just after the unit suffers a mortal wound; can instead target one friendly Jump Pack unit within 3\" of it, in which case friendly Adepta Sororitas units within 3\" of that unit also gain the Feel No Pain (extension not encoded)."
+  },
+  {
+    "ability_id": "fervent-devotion-sanctuary-guardians",
+    "name": "Fervent Devotion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "f8ab9d1423f77b3c779e0d859fdc330a42bb206ace3658c9ec3171564774663d",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "sanctuary-guardians",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "ability-grant",
+      "target": "unit",
+      "modifier": {
+        "grant_type": "act-after-move",
+        "moves": [
+          "advance",
+          "fall-back"
+        ],
+        "acts": [
+          "shoot",
+          "charge"
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Sanctuary Guardians"
+      ]
+    },
+    "community_notes": "Used when the unit is selected to make an Advance or Fall Back move: that move does not prevent it from being eligible to shoot or declare a charge."
+  },
+  {
+    "ability_id": "fires-of-damnation-sanctuary-guardians",
+    "name": "Fires of Damnation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "09252ba3b1cf115a63bd4b490c4a44d3d8a46d956480670cc066b42d44809646",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "sanctuary-guardians",
+    "ability_type": "stratagem",
+    "behavior": "activated",
+    "effect": {
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "unit",
+          "modifier": {
+            "stat": "A",
+            "operation": "set",
+            "value": 6,
+            "weapon_keyword": "Torrent"
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "unit",
+          "modifier": {
+            "stat": "AP",
+            "operation": "add",
+            "value": -1
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Sanctuary Guardians"
+      ]
+    },
+    "community_notes": "Used when the unit is selected to shoot or fight: its Torrent weapons have an Attacks characteristic of 6, and all of its attacks improve their Armour Penetration by 1."
+  },
+  {
+    "ability_id": "take-cover-sanctuary-guardians",
+    "name": "Take Cover",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "b75213bf9db2da46c2dc780308af5f423dbee8795bcc4a287af63dc86eb4b016",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "sanctuary-guardians",
+    "ability_type": "stratagem",
+    "behavior": "reactive",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "unit",
+      "modifier": {
+        "roll": "save",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Sanctuary Guardians"
+      ]
+    },
+    "community_notes": "Used when an enemy unit targets your unit while it is within a terrain area; Arco-flagellants units cannot be selected."
+  },
+  {
+    "ability_id": "psalm-of-righteous-judgement-penitent-host",
+    "name": "Psalm of Righteous Judgement",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "6976defccd4b55de9a3562c0628b00d7a7157f9a5fa36c321d94595232903997",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "penitent-host",
+    "ability_type": "enhancement",
+    "behavior": "reactive",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "self",
+          "modifier": {
+            "pool_id": "miracle-dice-pool",
+            "amount": 1
+          }
+        },
+        {
+          "type": "pool-add-die",
+          "target": "self",
+          "modifier": {
+            "pool_id": "miracle-dice-pool",
+            "value": 6
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "While the bearer is on the battlefield, each time an enemy unit is destroyed by a Penitent unit from your army, you can discard 1 Miracle dice and then gain 1 Miracle dice showing a value of 6."
+  },
+  {
+    "ability_id": "verse-of-holy-piety-penitent-host",
+    "name": "Verse of Holy Piety",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "1a39903aa641ea32104a5d8baa5db3a6fb5d7369c92bbcb980fd1a0bd818cdde",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "penitent-host",
+    "ability_type": "enhancement",
+    "behavior": "activated",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    },
+    "effect": {
+      "type": "rule-state",
+      "target": "unit",
+      "modifier": {
+        "direction": "granted",
+        "rule_kind": "ability",
+        "rule": "desperate-for-redemption"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "battle-round"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Penitent"
+      ]
+    },
+    "community_notes": "Once per battle, at the start of the battle round, select one Vow of Atonement (see the Desperate for Redemption detachment rule): until the start of the next battle round it is active for the bearer's unit in addition to any active for your army, even if already selected this battle."
+  },
+  {
+    "ability_id": "refrain-of-enduring-faith-penitent-host",
+    "name": "Refrain of Enduring Faith",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "c3d03656cba8733bfe8e06a559c45711f3b9f44740bc1db17cd6d62a6ca57dda",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "penitent-host",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "model-is-leader",
+        "parameters": {}
+      },
+      "effect": {
+        "type": "invulnerable-save",
+        "target": "unit",
+        "modifier": {
+          "invuln_sv": 5
+        }
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Penitent"
+      ]
+    }
+  },
+  {
+    "ability_id": "catechism-of-divine-penitence-penitent-host",
+    "name": "Catechism of Divine Penitence",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "1ab7090db2f682aeafb24492316e72acc28e9eec755e641ad27ad08f2fa70013",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "penitent-host",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "unit-keyword-grant",
+      "target": "self",
+      "modifier": {
+        "keyword": "PENITENT"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Canoness, Palatine or Ministorum Priest model only."
+  },
+  {
+    "ability_id": "saintly-example-hallowed-martyrs",
+    "name": "Saintly Example",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "662f356c7cee02547822f385b7714d8ed238f92c6b758297871adcc1f6d16304",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "hallowed-martyrs",
+    "ability_type": "enhancement",
+    "behavior": "reactive",
+    "effect": {
+      "type": "resource-gain",
+      "target": "self",
+      "modifier": {
+        "pool_id": "miracle-dice-pool",
+        "amount": "1D3"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "When the bearer is destroyed, you gain an additional D3 Miracle dice."
+  },
+  {
+    "ability_id": "through-suffering-strength-hallowed-martyrs",
+    "name": "Through Suffering, Strength",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "1e7659c19f05021ddbbcb42319770a21616cfb9c26a238ae4cee1a536c6d6b17",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "hallowed-martyrs",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "self",
+          "modifier": {
+            "stat": "A",
+            "operation": "add",
+            "value": 1,
+            "weapon_type": "melee"
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "self",
+          "modifier": {
+            "stat": "S",
+            "operation": "add",
+            "value": 1,
+            "weapon_type": "melee"
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "self",
+          "modifier": {
+            "stat": "D",
+            "operation": "add",
+            "value": 1,
+            "weapon_type": "melee"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "If the bearer has lost one or more wounds, the bonus is +2 to each characteristic instead (escalation not encoded)."
+  },
+  {
+    "ability_id": "chaplet-of-sacrifice-hallowed-martyrs",
+    "name": "Chaplet of Sacrifice",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "73cbe0f80b1f9db8f68b6dfbf42aca4f5d7e4205abe0d0952235268d8f8a57b0",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "hallowed-martyrs",
+    "ability_type": "enhancement",
+    "behavior": "activated",
+    "effect": {
+      "type": "re-roll",
+      "target": "self",
+      "modifier": {
+        "roll": "miracle-dice",
+        "result_scope": "any-result"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "At the end of your Command phase, if the bearer is on the battlefield, re-roll 1 Miracle dice from your pool and return it showing the new result; if the bearer's unit is below its Starting Strength, re-roll up to 3 Miracle dice instead."
+  },
+  {
+    "ability_id": "mantle-of-ophelia-hallowed-martyrs",
+    "name": "Mantle of Ophelia",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "6a11931d755b7d4131fb6eb9e49e8950f4a2a763ea86256344e0e83088ee5a6a",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "hallowed-martyrs",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "self",
+      "modifier": {
+        "stat": "D",
+        "operation": "set",
+        "value": 1,
+        "incoming": true
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Canoness or Palatine model only: each time an attack is allocated to the bearer, change the Damage characteristic of that attack to 1."
+  },
+  {
+    "ability_id": "righteous-rage-bringers-of-flame",
+    "name": "Righteous Rage",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "9df9130713507e1f202005483eb22cf67f117cd08738538765ac18bb2385adde",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "bringers-of-flame",
+    "ability_type": "enhancement",
+    "behavior": "activated",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "self",
+          "modifier": {
+            "pool_id": "miracle-dice-pool",
+            "amount": 1
+          }
+        },
+        {
+          "type": "rules-bundle",
+          "steps": [
+            {
+              "type": "stat-modifier",
+              "target": "self",
+              "modifier": {
+                "stat": "A",
+                "operation": "add",
+                "value": 1,
+                "weapon_type": "melee"
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "self",
+              "modifier": {
+                "stat": "S",
+                "operation": "add",
+                "value": 1,
+                "weapon_type": "melee"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Each time the bearer is selected to fight, you can first discard up to 3 Miracle dice; the bonus is +1 Attacks and +1 Strength per die discarded."
+  },
+  {
+    "ability_id": "manual-of-saint-griselda-bringers-of-flame",
+    "name": "Manual of Saint Griselda",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "07e1be2d155fd9a1efa52012eee114a54f3bc9a3799143ae71566bfc437211f5",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "bringers-of-flame",
+    "ability_type": "enhancement",
+    "behavior": "activated",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "self",
+          "modifier": {
+            "pool_id": "miracle-dice-pool",
+            "amount": 2
+          }
+        },
+        {
+          "type": "resource-gain",
+          "target": "self",
+          "modifier": {
+            "pool_id": "miracle-dice-pool",
+            "amount": 1
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "At the start of your Command phase, you can discard up to 2 Miracle dice; the gained Miracle dice shows a value equal to the sum of the discarded dice (maximum 6)."
+  },
+  {
+    "ability_id": "fire-and-fury-bringers-of-flame",
+    "name": "Fire and Fury",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "64410f6110cc228995a5e54defd64c261e80df009c88b4e6122e21bb214b9741",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "bringers-of-flame",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "model-is-leader",
+        "parameters": {}
+      },
+      "effect": {
+        "type": "rules-bundle",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "unit",
+            "modifier": {
+              "stat": "A",
+              "operation": "add",
+              "value": 1,
+              "weapon_keyword": "Torrent"
+            }
+          },
+          {
+            "type": "keyword-grant",
+            "target": "unit",
+            "modifier": {
+              "keywords": [
+                "Sustained Hits 1"
+              ],
+              "weapon_type": "ranged"
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Torrent weapons get +1 Attacks; all other ranged weapons in the led unit have [Sustained Hits 1]."
+  },
+  {
+    "ability_id": "iron-surplice-of-saint-istalela-bringers-of-flame",
+    "name": "Iron Surplice of Saint Istalela",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "5130951217deaa78f6cca92cdb0f6219ed0984fc0a8541dbd66b45f6e3c22604",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "bringers-of-flame",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "self",
+          "modifier": {
+            "stat": "Sv",
+            "operation": "set",
+            "value": 2
+          }
+        },
+        {
+          "type": "feel-no-pain",
+          "target": "self",
+          "modifier": {
+            "threshold": 5
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Canoness or Palatine model only."
+  },
+  {
+    "ability_id": "triptych-of-judgement-champions-of-faith",
+    "name": "Triptych of Judgement",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "db34039738b46920cfdf64ff1c2d8f64c187a301932b1f6a378a79969c60e462",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "champions-of-faith",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "modifier-immunity",
+          "target": "unit",
+          "modifier": {
+            "scope": "characteristics"
+          }
+        },
+        {
+          "type": "roll-modifier",
+          "target": "unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "ignore-modifiers"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Each time a model in the bearer's unit makes an attack, you can ignore modifiers to that attack's BS/WS and/or modifiers to the Hit roll."
+  },
+  {
+    "ability_id": "mark-of-devotion-champions-of-faith",
+    "name": "Mark of Devotion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "3ef4ac143eac20485743fa018ed92f23e1ae794e341182a5d1c659c365f1a61a",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "champions-of-faith",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "self",
+      "modifier": {
+        "stat": "A",
+        "operation": "add",
+        "value": 1,
+        "weapon_type": "melee"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "While the bearer's unit is Righteous, the bonus is +2 Attacks and +1 Damage instead (escalation not encoded)."
+  },
+  {
+    "ability_id": "eyes-of-the-oracle-champions-of-faith",
+    "name": "Eyes of the Oracle",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "7a5be1357ca86254c6505b35f9a6fd03181963edb6c5ab4c1589db38d06a7307",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "champions-of-faith",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "keyword-grant",
+          "target": "self",
+          "modifier": {
+            "keywords": [
+              "Precision"
+            ]
+          }
+        },
+        {
+          "type": "cp-on-destroy",
+          "target": "self",
+          "modifier": {
+            "enemy_keyword": "Character",
+            "amount": 1
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "The bearer's weapons have [Precision]; each time the bearer's unit destroys an enemy Character model, you gain 1CP."
+  },
+  {
+    "ability_id": "sanctified-amulet-champions-of-faith",
+    "name": "Sanctified Amulet",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "2cab02e2bdf0f40f845fe99d312e72a005691fd03257d70079e6b9b3b18d8d35",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "champions-of-faith",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "attack-restriction",
+      "target": "self",
+      "modifier": {
+        "restriction": "reinforcement-denial",
+        "range": 12
+      }
+    },
+    "scope": {
+      "range": "aura-12",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    }
+  },
+  {
+    "ability_id": "litanies-of-faith-army-of-faith",
+    "name": "Litanies of Faith",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "8b315c38d0babf6ab7d26c0d33955c9560661b290ca27ddc0588074d023ea746",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "army-of-faith",
+    "ability_type": "enhancement",
+    "behavior": "activated",
+    "effect": {
+      "type": "resource-gain",
+      "target": "self",
+      "modifier": {
+        "pool_id": "miracle-dice-pool",
+        "amount": 1
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "battle"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Canoness or Palatine model only. At the start of your Command phase, if the bearer is on the battlefield, take a Leadership test for it; the Miracle dice is gained only if the test is passed (gate not encoded)."
+  },
+  {
+    "ability_id": "blade-of-saint-ellynor-army-of-faith",
+    "name": "Blade of Saint Ellynor",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "e7b8ae5e3c1adf31dd62e0a339b6b561ba7f515a2a3dc95ba60d53c3d156c04b",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "army-of-faith",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "self",
+          "modifier": {
+            "stat": "S",
+            "operation": "add",
+            "value": 1,
+            "weapon_type": "melee"
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "self",
+          "modifier": {
+            "stat": "AP",
+            "operation": "add",
+            "value": -1,
+            "weapon_type": "melee"
+          }
+        },
+        {
+          "type": "keyword-grant",
+          "target": "self",
+          "modifier": {
+            "keywords": [
+              "Precision"
+            ],
+            "weapon_type": "melee"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Each time the bearer fights, if one or more enemy models are destroyed by those attacks, you gain 1 Miracle dice (rider not encoded)."
+  },
+  {
+    "ability_id": "divine-aspect-army-of-faith",
+    "name": "Divine Aspect",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "b3148a322088ad5991a6a79b700951de94396f159536fa87db5b6e22d824a6b7",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "army-of-faith",
+    "ability_type": "enhancement",
+    "behavior": "activated",
+    "effect": {
+      "type": "battle-shock-test",
+      "target": "target",
+      "modifier": {}
+    },
+    "scope": {
+      "range": "aura-12",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "In your Movement phase, select one enemy unit within 12\" of the bearer; it must take a Battle-shock test. If the test is failed, you gain 1 Miracle dice (rider not encoded)."
+  },
+  {
+    "ability_id": "triptych-of-the-macharian-crusade-army-of-faith",
+    "name": "Triptych of the Macharian Crusade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "14541b7b31a0fa29ba2280df21cecf0853c3567528b3fed28ddf36c20f0569e2",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "army-of-faith",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "auto-result",
+      "target": "self",
+      "modifier": {
+        "roll": "save",
+        "result": "pass"
+      }
+    },
+    "scope": {
+      "range": "self",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ]
+    },
+    "community_notes": "Applies only to saving throws substituted with an Act of Faith: that saving throw is successful irrespective of the value of the Miracle dice used."
+  },
+  {
+    "ability_id": "divine-miracle-sanctuary-guardians",
+    "name": "Divine Miracle",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "55ce8743657c19e31214695d1e235bd85ab052f4855ecfc55d9f9f3be3c9aecc",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "sanctuary-guardians",
+    "ability_type": "enhancement",
+    "behavior": "activated",
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "unit"
+    },
+    "effect": {
+      "type": "heal-wounds",
+      "target": "unit",
+      "modifier": {
+        "amount": "D3+2"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "phase"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Sanctuary Guardians",
+        "Battle Sisters Squad"
+      ]
+    },
+    "community_notes": "Upgrade for a Sanctuary Guardians Battle Sisters Squad unit: once per battle, at the start of any phase, the unit heals D3+2 wounds."
+  },
+  {
+    "ability_id": "righteous-fervour-sanctuary-guardians",
+    "name": "Righteous Fervour",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "source_digest": "ee09c29df29a6da660ac54e941e8ec1db5af2b628df34f12268b755048f03fb6",
+    "version": "2025-q3",
+    "supersedes": null,
+    "unit_ids": [],
+    "faction_id": "adepta-sororitas",
+    "detachment_id": "sanctuary-guardians",
+    "ability_type": "enhancement",
+    "behavior": "passive",
+    "effect": {
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "self",
+          "modifier": {
+            "stat": "D",
+            "operation": "add",
+            "value": 1,
+            "weapon_type": "melee"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is-type",
+            "parameters": {
+              "attack_type": "melee"
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "unit",
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "permanent"
+    },
+    "applies_to": {
+      "required_keywords": [
+        "Sanctuary Guardians",
+        "Canoness"
+      ]
+    },
+    "community_notes": "The bearer's melee attacks have +1 Damage; the bearer's unit adds 1 to Wound rolls for melee attacks."
   }
 ]

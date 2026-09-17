@@ -15,7 +15,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "235afd61-7464-4805-924d-79b590885c13"
+      }
+    ]
   },
   {
     "id": "animus-curse-cryptek-conclave",
@@ -35,7 +41,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "20ad86e3-197f-5596-84d7-0b16feb407e5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d81174bc-3902-4673-8877-81a77d855d7f"
+      }
+    ]
   },
   {
     "id": "blood-fuelled-cruelty-annihilation-legion",
@@ -54,7 +70,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9a68d335-74a9-562d-aaf7-e7307e262698"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bd84a85a-bbce-4556-9a53-7e8561b4e48d"
+      }
+    ]
   },
   {
     "id": "chronodistortion-pantheon-of-woe",
@@ -73,7 +99,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "eb0a2556-e172-59de-ab32-55cb6890184a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47e62a42-0362-482f-a699-146aefd5e33c"
+      }
+    ]
   },
   {
     "id": "chronoshift-starshatter-arsenal",
@@ -92,7 +128,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "26fbbe90-1d00-5f73-8c86-f6fbff1adf5c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1b7e64e2-00bb-48a9-a88e-6c35d4aa0961"
+      }
+    ]
   },
   {
     "id": "cosmic-precision-hypercrypt-legion",
@@ -111,7 +157,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ffdfde65-e982-5db4-9bcc-1ccc34c06e81"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c7bc6a8b-a3df-4947-9fca-c5929fa38502"
+      }
+    ]
   },
   {
     "id": "cosmic-storm-the-phaerons-armoury",
@@ -129,7 +185,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b61377b7-dd86-5cb2-85c5-3f7ad06f4420"
+      },
+      {
+        "namespace": "mfm",
+        "id": "699ac868-919e-490d-8e00-c86730312e2f"
+      }
+    ]
   },
   {
     "id": "countertemporal-shift-canoptek-court",
@@ -148,7 +214,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3b141f21-ec52-501e-8a63-05b973c22951"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7582da67-6a97-40e3-a652-6e676553c1b8"
+      }
+    ]
   },
   {
     "id": "curse-of-the-cryptek-canoptek-court",
@@ -168,7 +244,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f17d5ed3-f61a-567d-b2f9-461eed423b7a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c0a9369e-f600-4bff-afe3-953de7887c21"
+      }
+    ]
   },
   {
     "id": "cynosure-of-eradication-canoptek-court",
@@ -188,7 +274,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7012710f-9923-5c0c-bc16-05c726407f74"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d50a8525-0cda-4481-b35a-0166906008ce"
+      }
+    ]
   },
   {
     "id": "dimensional-corridor-hypercrypt-legion",
@@ -207,7 +303,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "35fa9965-c9bb-5df8-9635-65cca14a246d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "48e3617a-2f72-4a1f-b43a-411e82417805"
+      }
+    ]
   },
   {
     "id": "dimensional-tunnel-starshatter-arsenal",
@@ -226,7 +332,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f78e3892-2913-55ca-9111-4f7104db6513"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4dda0a2c-d13c-46a2-8807-339b631a53c9"
+      }
+    ]
   },
   {
     "id": "disharmonisation-cascade-pantheon-of-woe",
@@ -249,7 +365,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c236587e-6f3f-5062-a3e1-28d457193578"
+      },
+      {
+        "namespace": "mfm",
+        "id": "72d226c7-b702-49e6-8bc3-224596ffa74f"
+      }
+    ]
   },
   {
     "id": "dominance-protocols-hand-of-the-dynasty",
@@ -267,7 +393,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a096e0d5-69d2-5557-b5d4-69992306646a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "04c6e3ba-873f-4909-be7e-2c2e3fdc8bdc"
+      }
+    ]
   },
   {
     "id": "driven-to-butchery-cursed-legion",
@@ -287,7 +423,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "54297f79-09f4-51ae-ae8b-edbf11c25453"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4996a9fc-7ffd-4ed2-9cfa-2ca4f88cd4dc"
+      }
+    ]
   },
   {
     "id": "endless-servitude-starshatter-arsenal",
@@ -306,7 +452,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "db173d66-9dd9-5300-90db-b150c88437c8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a54493a2-8aa5-437f-b720-6012b12bf67d"
+      }
+    ]
   },
   {
     "id": "enslaved-artifice-obeisance-phalanx",
@@ -326,7 +482,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "080ee195-d375-548f-b1c3-817d0f38e8de"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dae0deca-9c4c-416b-91c6-dfd9eab452c3"
+      }
+    ]
   },
   {
     "id": "entrophasic-aura-targeting-pantheon-of-woe",
@@ -346,7 +512,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d47c8669-3842-59db-9c0b-a9c47501fc38"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bd719fd8-c130-4638-a987-e9623994298e"
+      }
+    ]
   },
   {
     "id": "entropic-damping-hypercrypt-legion",
@@ -365,7 +541,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f917788b-9320-55d8-970e-783088e66236"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4c4d4778-c7da-4a19-b7e8-d14c1c4ef657"
+      }
+    ]
   },
   {
     "id": "evasive-protocols-skyshroud-spearhead",
@@ -383,7 +569,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "061d9eef-ad62-5866-bcc4-385bb56d2650"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2d178a91-fe95-4fcf-a613-af03204721ea"
+      }
+    ]
   },
   {
     "id": "gauss-storm-amonhotekhs-guard",
@@ -401,7 +597,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d2ab2c1b-9744-4545-995c-e41df16e488c"
+      }
+    ]
   },
   {
     "id": "hyperphasic-recall-hypercrypt-legion",
@@ -421,7 +623,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8b94121f-f054-50b2-b98e-4f8fda9e8d7e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6682be5a-c7e3-4124-8ff3-cd13904b179c"
+      }
+    ]
   },
   {
     "id": "image-of-death-cursed-legion",
@@ -441,7 +653,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3f206f61-9f84-58e2-b49f-b67e37d3e725"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a1713dd1-cc81-4060-834e-f9cd1990ab99"
+      }
+    ]
   },
   {
     "id": "insanitys-ire-annihilation-legion",
@@ -460,7 +682,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "40626f0f-55b6-5e7a-a645-1fb9d4c9cccf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "da6881d3-ab86-4662-b18b-f557cf325716"
+      }
+    ]
   },
   {
     "id": "masks-of-death-annihilation-legion",
@@ -480,7 +712,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cea99773-4039-5909-b6ee-64c81c05223c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4d06f60e-e46d-4f28-b1c2-c9c10c7176a2"
+      }
+    ]
   },
   {
     "id": "mass-transmogrification-pantheon-of-woe",
@@ -500,7 +742,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8dc612d3-3ec0-5cbb-b624-c57a3ebbc0b1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dea22a72-cf52-4048-9b2b-cae66ae1f747"
+      }
+    ]
   },
   {
     "id": "merciless-reclamation-starshatter-arsenal",
@@ -520,7 +772,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "93102d77-2717-580d-a217-d479a94a260b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fbcf624c-34ed-4f2c-b43a-4eb2ea002cb9"
+      }
+    ]
   },
   {
     "id": "methodical-murder-cursed-legion",
@@ -540,7 +802,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c80dbbc0-55dc-519b-8a55-df0b52fd4bf6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "12fb9bc1-173f-4e4c-8c6b-7e9c03a33b0c"
+      }
+    ]
   },
   {
     "id": "microscarab-swarm-cryptek-conclave",
@@ -560,7 +832,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "def6c1b5-e2ec-50ce-bc46-04f36b945451"
+      },
+      {
+        "namespace": "mfm",
+        "id": "faa6ca0c-12bb-4e2b-8d3d-519132a0cd1f"
+      }
+    ]
   },
   {
     "id": "molecular-erosion-pantheon-of-woe",
@@ -579,7 +861,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b9838b15-4d00-5807-90d7-f4d35517e8f9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "11086e3e-5d79-4cdf-86a2-0515e1b13cbb"
+      }
+    ]
   },
   {
     "id": "molecular-targeting-cryptek-conclave",
@@ -599,7 +891,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f06fa0ef-917a-57c2-955d-325a082d942c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6bf52360-b8b5-446e-9492-171c06106583"
+      }
+    ]
   },
   {
     "id": "mortis-protocols-cursed-legion",
@@ -619,7 +921,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "56e5e43e-c54a-558c-89b8-8bc45cf1a517"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1d4c0eee-97be-4b2b-b6c4-68c80570dd7b"
+      }
+    ]
   },
   {
     "id": "murderous-reanimation-annihilation-legion",
@@ -638,7 +950,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e6776b4e-f366-54ee-bb13-f977b67cf427"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b3f0ef16-4876-4de4-a6e5-c70510bec244"
+      }
+    ]
   },
   {
     "id": "nanoassembly-protocols-obeisance-phalanx",
@@ -658,7 +980,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8e11bc9f-ff06-5876-b3b9-1e6f8b9fcc8a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5ed9cb6e-a512-495d-af01-3e55d9966ca4"
+      }
+    ]
   },
   {
     "id": "nanosaturation-hand-of-the-dynasty",
@@ -676,7 +1008,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "87472d72-c476-54a5-b519-292a20f13eb4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0392e335-7659-4de7-ab32-7ca23098775d"
+      }
+    ]
   },
   {
     "id": "omnilocked-strafing-skyshroud-spearhead",
@@ -694,7 +1036,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d140bf34-d627-5ce4-adb8-630338cdb27f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1552aa4a-a1a1-4c80-aa9a-11d8b475bd0c"
+      }
+    ]
   },
   {
     "id": "particle-pulse-the-phaerons-armoury",
@@ -712,7 +1064,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0363682b-d1af-54c1-8056-23a5b9d1655b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eaf20df4-cdc2-4c4c-a038-1a6f59e1c7ba"
+      }
+    ]
   },
   {
     "id": "phase-melding-pantheon-of-woe",
@@ -731,7 +1093,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ef2e051f-6a3c-573a-8646-4cba770e8bef"
+      },
+      {
+        "namespace": "mfm",
+        "id": "45720a4c-c9df-4d50-aba2-787547b5fba8"
+      }
+    ]
   },
   {
     "id": "pitiless-hunters-annihilation-legion",
@@ -750,7 +1122,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "710dc3fb-d350-580c-b7ac-0595e149ba2f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9f6c6462-97e6-47a3-a412-8137d91d959d"
+      }
+    ]
   },
   {
     "id": "potentiality-syphon-cryptek-conclave",
@@ -769,7 +1151,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "295b44dc-27ac-5e8a-9a30-9350bc4c6940"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3e59f5da-b1cd-4db6-92d7-b8ec7655958d"
+      }
+    ]
   },
   {
     "id": "protocol-of-the-conquering-tyrant-awakened-dynasty",
@@ -788,7 +1180,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "072db439-ac34-5e0d-86ef-33a934397d15"
+      },
+      {
+        "namespace": "mfm",
+        "id": "368292f0-5a8b-440c-9f46-08b699362b2e"
+      }
+    ]
   },
   {
     "id": "protocol-of-the-eternal-revenant-awakened-dynasty",
@@ -811,7 +1213,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "53f83d54-b38f-5dd5-8b9f-3204ffd1c274"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bf930024-606b-48bf-a177-fe9638bff082"
+      }
+    ]
   },
   {
     "id": "protocol-of-the-hungry-void-awakened-dynasty",
@@ -830,7 +1242,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d5cfd1ca-eec9-52be-8bae-ec975ceab06d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "189e9a56-08ba-4f1d-91fe-86a29a58fc97"
+      }
+    ]
   },
   {
     "id": "protocol-of-the-sudden-storm-awakened-dynasty",
@@ -849,7 +1271,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "eea0dbfe-e39a-585f-804e-8c38a78bb620"
+      },
+      {
+        "namespace": "mfm",
+        "id": "715892f9-4eab-4736-b3aa-cf87a1da9612"
+      }
+    ]
   },
   {
     "id": "protocol-of-the-undying-legions-awakened-dynasty",
@@ -869,7 +1301,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f36a9052-ac71-5b35-97c5-9cea1e3cb857"
+      },
+      {
+        "namespace": "mfm",
+        "id": "23e7987e-8c84-4854-a160-0cf2f495a0f9"
+      }
+    ]
   },
   {
     "id": "protocol-of-the-vengeful-stars-awakened-dynasty",
@@ -888,7 +1330,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c0862c12-ded7-5ddb-aaf2-7ce126463cf5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9e221cad-ccda-413e-95af-7322a2b63356"
+      }
+    ]
   },
   {
     "id": "quantum-deflection-hypercrypt-legion",
@@ -908,7 +1360,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7fe0131f-9c6f-5b13-bcf6-b8592c8dab5e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "34e9b24d-0cfa-4679-8fd5-a2ee1485e03b"
+      }
+    ]
   },
   {
     "id": "reactive-reposition-starshatter-arsenal",
@@ -927,7 +1389,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "067d8a01-0401-5459-b6ed-522a41d0c89f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "decee713-1187-4087-85ab-4be9ac262689"
+      }
+    ]
   },
   {
     "id": "reactive-subroutines-canoptek-court",
@@ -946,7 +1418,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4d8ddd2e-da21-5b87-b9d6-dba99968b0cd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eca2a44c-dcdd-4484-af45-2f09ce8dc313"
+      }
+    ]
   },
   {
     "id": "reanimation-crypts-hypercrypt-legion",
@@ -965,7 +1447,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "700ce6a1-58f5-54e6-990d-50eebd491cc0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bcb05d5f-6aac-4430-b908-c9cb3bef18a1"
+      }
+    ]
   },
   {
     "id": "reinforced-resilience-amonhotekhs-guard",
@@ -983,7 +1475,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a374ab23-5cc9-4eca-97e4-54dfc8cd461f"
+      }
+    ]
   },
   {
     "id": "sentinels-of-eternity-obeisance-phalanx",
@@ -1002,7 +1500,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9c0ad6d2-1a56-5802-970b-ffce6c598a24"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8ed9b3af-6af9-4ae0-b3d8-23c4c33d3247"
+      }
+    ]
   },
   {
     "id": "solar-pulse-canoptek-court",
@@ -1021,7 +1529,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "05958ce3-37ae-5d7b-b68f-1ea63900fee8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9c1084ea-a988-41ae-9e7e-93fff8618e30"
+      }
+    ]
   },
   {
     "id": "spreading-madness-cursed-legion",
@@ -1040,7 +1558,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "23196a40-7b69-5ce9-abe9-75ebcdf506e6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d51f2004-facc-4f30-95bd-efeac95a5493"
+      }
+    ]
   },
   {
     "id": "suboptimal-facade-canoptek-court",
@@ -1059,7 +1587,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "93813cd1-c590-51e7-9d02-c0387ac61678"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d24d049f-0cf6-4a7f-bb6c-7094b86c7c3e"
+      }
+    ]
   },
   {
     "id": "subsurface-quantumweave-the-phaerons-armoury",
@@ -1078,7 +1616,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "22c4c17e-7b64-515f-b2e8-809216b5b0bb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c2ffac1d-7059-4e1f-bda2-8fb6ce20d1e3"
+      }
+    ]
   },
   {
     "id": "suffer-no-rival-obeisance-phalanx",
@@ -1097,7 +1645,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4c7b5337-cb96-5343-9092-c2ab8563c90f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4df51b07-bd1d-4510-9088-4734099be4cb"
+      }
+    ]
   },
   {
     "id": "swift-as-death-skyshroud-spearhead",
@@ -1115,7 +1673,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8c594234-c510-50b2-8e8c-83cea9f47a74"
+      },
+      {
+        "namespace": "mfm",
+        "id": "874e4636-8478-4672-9aa1-eeb1980acfc1"
+      }
+    ]
   },
   {
     "id": "synergistic-empowerment-cryptek-conclave",
@@ -1134,7 +1702,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "01eb1d93-4823-5b73-abed-911b2dd24e4c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cd990928-7ba9-4233-8360-25dc7fdab369"
+      }
+    ]
   },
   {
     "id": "territorial-obsession-obeisance-phalanx",
@@ -1153,7 +1731,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dc6ec107-5e31-58b7-ab92-80643e7d3783"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a1f9d428-e9d5-484e-9791-7d0dcca30a6d"
+      }
+    ]
   },
   {
     "id": "the-spoor-of-frailty-annihilation-legion",
@@ -1173,7 +1761,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e92b5fd9-d23e-5f63-8311-1be6f869a3be"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e911cb72-8416-456b-b29b-9d7e78845c3f"
+      }
+    ]
   },
   {
     "id": "unnatural-aggression-cursed-legion",
@@ -1192,7 +1790,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a885c645-ea98-5a63-ac1e-b1f4745a9edb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a9f9bd7e-5a0c-4af9-a8c7-aa0ac894811b"
+      }
+    ]
   },
   {
     "id": "untapped-power-cryptek-conclave",
@@ -1211,7 +1819,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fa695769-c703-59a4-a41e-dcf43b53f7db"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2ef0dfd3-90d5-4fbf-9aa3-c82c414bfb21"
+      }
+    ]
   },
   {
     "id": "unyielding-forms-starshatter-arsenal",
@@ -1231,7 +1849,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3b548210-fc11-58f5-80a1-8220c2b02c6e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5290c04e-be06-416f-a408-6bd7aa84319c"
+      }
+    ]
   },
   {
     "id": "will-of-the-conqueror-hand-of-the-dynasty",
@@ -1249,7 +1877,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "67b709ee-a1f7-5fc8-a373-560628694a49"
+      },
+      {
+        "namespace": "mfm",
+        "id": "60f51362-3af6-4281-a6ba-0ee35d3b8be3"
+      }
+    ]
   },
   {
     "id": "your-time-is-nigh-obeisance-phalanx",
@@ -1272,6 +1910,16 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "15585868-4f61-5e47-811c-9606f103815d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "49d8d3ef-e674-40ca-96a0-d9502b574465"
+      }
+    ]
   }
 ]

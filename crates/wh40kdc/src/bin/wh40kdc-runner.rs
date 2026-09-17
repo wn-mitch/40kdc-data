@@ -461,6 +461,18 @@ fn handle_check_unit_legality(state: &mut RunnerState, args: &Value) -> Value {
     ok_value(Value::Array(encoded))
 }
 
+/// Read a count argument that the protocol writes as a decimal string but that
+/// the TS/Python/Go runners also accept as a JSON number (`Number(...)`,
+/// `int(...)`, `asInt(...)`). Accepting both keeps the four runners
+/// interchangeable for the same corpus case.
+fn json_u64(value: &Value) -> Option<u64> {
+    match value {
+        Value::String(s) => s.parse().ok(),
+        Value::Number(n) => n.as_u64(),
+        _ => None,
+    }
+}
+
 /// Parse a battle-size label into the importer's [`BattleSize`]; `None` for an
 /// absent or unrecognised value (matches the TS `battleSize as BattleSize | null`).
 fn parse_battle_size(args: &Value, key: &str) -> Option<wh40kdc::import::BattleSize> {
@@ -498,6 +510,18 @@ fn handle_check_roster_legality(state: &mut RunnerState, args: &Value) -> Value 
         })
         .unwrap_or_default();
 
+    let keyword_overrides: Vec<Vec<String>> = units_in
+        .iter()
+        .map(|u| {
+            u.get("keywordOverrides")
+                .and_then(Value::as_array)
+                .into_iter()
+                .flatten()
+                .filter_map(Value::as_str)
+                .map(str::to_string)
+                .collect()
+        })
+        .collect();
     let units: Vec<wh40kdc::NormUnit> = units_in
         .iter()
         .map(|u| {
@@ -545,7 +569,11 @@ fn handle_check_roster_legality(state: &mut RunnerState, args: &Value) -> Value 
         units,
     };
 
-    let result = wh40kdc::validate_roster_core(&spec, state.dataset());
+    let result = wh40kdc::validate_roster_core_with_keyword_overrides(
+        &spec,
+        state.dataset(),
+        &keyword_overrides,
+    );
     let mut lines: Vec<String> = Vec::new();
     for u in &result.units {
         for v in &u.violations {
@@ -774,6 +802,37 @@ fn handle_linked_query(state: &mut RunnerState, args: &Value) -> Value {
                 .collect();
             encoded.sort_by(|a, b| a.as_str().unwrap_or("").cmp(b.as_str().unwrap_or("")));
             ok_value(Value::Array(encoded))
+        }
+        "loadout_candidates" => {
+            let id = str_arg("unitId");
+            let unit = if str_arg("factionId").is_empty() {
+                ds.units.get_any(id)
+            } else {
+                ds.units.get_in_faction(id, str_arg("factionId"))
+            };
+            let Some(unit) = unit else {
+                return err_value(
+                    ErrorKind::UnknownEntity,
+                    Some(json!({ "kind": "unit", "id": id })),
+                );
+            };
+            let composition = ds.unit_compositions.iter().find(|c| {
+                c.unit_id.as_str() == id && c.faction_id.as_str() == unit.faction_id.as_str()
+            });
+            let models = composition.map(|c| wh40kdc::loadout_models(&c.models));
+            let tiers = composition.map(|c| wh40kdc::loadout_tiers(&c.tiers));
+            let limit = input
+                .get("limit")
+                .and_then(json_u64)
+                .and_then(|n| usize::try_from(n).ok());
+            ok_value(json!(wh40kdc::loadout_candidates(
+                unit,
+                input.get("modelCount").and_then(json_u64).unwrap_or(0),
+                &ds.wargear_options_of(unit),
+                models.as_deref(),
+                tiers.as_deref(),
+                limit
+            )))
         }
         "phases_of" => {
             let id = str_arg("abilityId");
@@ -1432,7 +1491,8 @@ fn handle_score_state(state: &mut RunnerState, args: &Value) -> Value {
                     };
                 if kind == "score-secondary" {
                     let vp = score_secondary_event(&asserted, card, pg.approach);
-                    pg = score_secondary(&pg, round, cid, vp);
+                    let (rc, gc) = optional_caps(op);
+                    pg = score_secondary(&pg, round, cid, vp, rc, gc);
                 } else {
                     // The app path: compute the round's raw total, then clamp on store.
                     let (rc, gc) = optional_caps(op);
@@ -1712,5 +1772,19 @@ mod self_tests {
     fn spec_version_loads() {
         let v = load_spec_version();
         assert!(v >= 1, "spec version: {v}");
+    }
+
+    /// The protocol writes counts as decimal strings, but the TS/Python/Go
+    /// runners also accept a bare JSON number for the same corpus case; a
+    /// number must not fall through to the caller's default.
+    #[test]
+    fn json_u64_accepts_string_and_number() {
+        assert_eq!(json_u64(&json!("32")), Some(32));
+        assert_eq!(json_u64(&json!(32)), Some(32));
+        assert_eq!(json_u64(&json!(0)), Some(0));
+        assert_eq!(json_u64(&json!("abc")), None);
+        assert_eq!(json_u64(&json!(-1)), None);
+        assert_eq!(json_u64(&json!(1.5)), None);
+        assert_eq!(json_u64(&Value::Null), None);
     }
 }

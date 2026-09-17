@@ -46,6 +46,16 @@ export type EngineInput = {
 
 export type EngineOutput = { stages: Stage[]; resolved: ResolvedModifiers };
 
+/** Whether a weapon profile may select this target under profile-level restrictions such as Hunter. */
+export function profileCanTarget(profile: Weapon["profiles"][number], target: Unit): boolean {
+  const restrictions = profile.target_restrictions;
+  if (!restrictions) return true;
+  const keywords = new Set(unitKeywordsLower(target));
+  const required = restrictions.required_keywords_any ?? [];
+  if (required.length > 0 && !required.some((keyword) => keywords.has(keyword.toLowerCase()))) return false;
+  return !(restrictions.excluded_keywords ?? []).some((keyword) => keywords.has(keyword.toLowerCase()));
+}
+
 /**
  * Compute the expected per-stage projection for one (attacker, target, buffs)
  * triple. The dataset defaults to the embedded one — pass an alternate when
@@ -63,6 +73,11 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   if (!unitProfile) {
     throw new RangeError(
       `crunch: target.profileIndex=${input.target.profileIndex} is out of range for unit ${input.target.unit.id}`,
+    );
+  }
+  if (!profileCanTarget(weaponProfile, input.target.unit)) {
+    throw new RangeError(
+      `crunch: weapon ${input.attacker.weapon.id} profile ${input.attacker.profileIndex} cannot target unit ${input.target.unit.id}`,
     );
   }
 
@@ -88,7 +103,9 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   const rapidFireExtraPerModel = rapidFire && halfRange ? evalStatValue(rapidFire.parameters?.value) : 0;
   const blast = findKeyword(resolved, "blast");
   const targetModelCount = input.target.modelCount ?? input.target.unit.model_count?.min ?? 1;
-  const blastExtraPerModel = blast ? Math.floor(targetModelCount / 5) : 0;
+  const blastExtraPerModel = blast
+    ? Math.floor(targetModelCount / 5) * evalStatValue(blast.parameters?.value ?? 1)
+    : 0;
   const attacks = input.modelsFiring * (attacksPerModel + rapidFireExtraPerModel + blastExtraPerModel);
   stages.push({
     name: "attacks",
@@ -275,6 +292,7 @@ function unitKeywordsLower(unit: Unit): string[] {
   return out;
 }
 
+
 function profileBuffsFor(
   attacker: AttackProfileRef,
   dataset: Dataset,
@@ -290,11 +308,12 @@ function profileBuffsFor(
   if (!profile) return [];
   const out: Buff[] = [];
   for (const ref of profile.keywords ?? []) {
+    const parameters = ref.parameters as Record<string, unknown> | undefined;
     const view = dataset.weaponKeywords.get(ref.keyword_id);
     if (!view) continue;
     out.push(
       ...view.getBuffs(
-        ref.parameters as Record<string, unknown> | undefined,
+        parameters,
         attacker.weapon.id,
         ctx,
       ),

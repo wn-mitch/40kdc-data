@@ -46,6 +46,13 @@ export type StatValue = number | string;
  */
 export type ContributorRef = string;
 /**
+ * Known external source identities. More than one id per namespace and cross-entity fan-out are valid.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "external-reference-list".
+ */
+export type ExternalReferenceList = ExternalReference[];
+/**
  * The five official game phases. Unchanged between 10th and 11th edition — 11e reorders Pile In timing within the Fight phase but adds no top-level phase.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -103,6 +110,7 @@ export type GameEvent =
   | "fall-back-move"
   | "falls-back"
   | "charge-move"
+  | "end-of-charge-move"
   | "charge-declaration"
   | "moved-through-terrain"
   | "moved-through-tall-terrain"
@@ -112,6 +120,7 @@ export type GameEvent =
   | "after-hit-roll"
   | "before-wound-roll"
   | "after-wound-roll"
+  | "attack-scores-wound"
   | "before-save-roll"
   | "after-save-roll"
   | "before-damage-roll"
@@ -137,7 +146,18 @@ export type GameEvent =
   | "on-damage-allocated"
   | "battle-shock-test"
   | "leadership-test"
-  | "desperate-escape-test";
+  | "desperate-escape-test"
+  | "stratagem-targeted"
+  | "ability-target-selected"
+  | "end-of-opponent-charge-phase"
+  | "enemy-unit-completed-shooting-targeting-bearer"
+  | "enemy-unit-selects-bearer-as-charge-target"
+  | "enemy-unit-targets-bearer"
+  | "enemy-unit-completed-fall-back-from-bearer"
+  | "act-of-faith-completed"
+  | "act-of-faith-performed"
+  | "miracle-die-generated"
+  | "enemy-unit-selected-charge-targets-before-charge-move";
 /**
  * 11e battle size, which sets the army's points limit and detachment-point budget: 'incursion' = 1000 pts / 2 detachment points; 'strike-force' = 2000 pts / 3 detachment points.
  *
@@ -280,21 +300,32 @@ export type AbilityCondition1 = SimpleCondition | CompoundCondition;
  */
 export type AbilityEffect =
   | SingleEffect
+  | StanceSelectEffect
   | ChoiceEffect
   | SequenceEffect
+  | RulesBundleEffect
+  | NamedEffect
   | DiceGatedEffect
+  | DiceTableEffect
   | ConditionalEffect
   | DicePoolAllocationEffect
   | SelectUnitsEffect
+  | ForEachUnitEffect
   | MovementModifierEffect
   | AuraEffect
-  | LeaderModelAbilityGrantEffect
-  | PersistentDesignationEffect
   | DesignateTargetEffect
-  | StanceSelectEffect
   | RiskRewardEffect
   | IssueOrdersEffect
-  | ResourceActionMenuEffect;
+  | ResourceActionMenuEffect
+  | LeaderModelAbilityGrantEffect
+  | PersistentDesignationEffect
+  | NoEffectEffect
+  | SelectObjectiveEffect
+  | ForEachObjectiveEffect
+  | PairedDesignationEffect
+  | MiracleDieOperationEffect
+  | FormationAttachmentGrantEffect
+  | AttachmentEligibilityInheritEffect;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "single-effect".
@@ -303,70 +334,88 @@ export type SingleEffect = {
   [k: string]: unknown;
 } & {
   type:
-    | "stat-modifier"
-    | "roll-modifier"
-    | "re-roll"
-    | "mortal-wounds"
-    | "feel-no-pain"
-    | "invulnerable-save"
-    | "ward"
-    | "keyword-grant"
-    | "unit-keyword"
+    | "ability-grant"
+    | "attack-restriction"
+    | "auto-result"
+    | "battle-shock-test"
+    | "bs-modifier"
+    | "charge-roll-modifier"
+    | "cp-gain"
+    | "cp-on-destroy"
+    | "cp-refund"
+    | "damage-reduction"
     | "deep-strike"
+    | "disembark"
+    | "disembark-after-move"
+    | "engagement-passthrough"
     | "fallback-and-act"
+    | "feel-no-pain"
+    | "fight-eligibility-extension"
     | "fight-first"
     | "fight-last"
-    | "shoot-on-death"
     | "fight-on-death"
-    | "objective-control-modifier"
+    | "firing-deck"
+    | "flyover"
+    | "heal-wounds"
+    | "hazard-rolls"
+    | "invulnerable-save"
+    | "keyword-grant"
     | "leadership-modifier"
-    | "damage-reduction"
-    | "attack-restriction"
-    | "ability-grant"
-    | "cp-gain"
-    | "cp-refund"
     | "model-destruction"
-    | "resurrection"
+    | "modifier-immunity"
+    | "mortal-wounds"
+    | "detection-range-modifier"
+    | "named-region-state"
+    | "objective-control-modifier"
+    | "objective-tag"
+    | "pool-add-die"
+    | "re-roll"
+    | "recovery-pool"
+    | "remove-battle-shock"
+    | "set-battle-shock"
+    | "replace-roll-from-pool"
+    | "resource-clear"
     | "resource-gain"
     | "resource-spend"
-    | "charge-roll-modifier"
-    | "terrain-area-tag"
-    | "objective-tag"
-    | "unit-tag"
-    | "bs-modifier"
-    | "engagement-passthrough"
-    | "strategic-reserves-arrival"
-    | "remove-battle-shock"
-    | "unit-keyword-grant"
-    | "auto-result"
-    | "firing-deck"
-    | "disembark-after-move"
-    | "disembark"
+    | "resurrection"
+    | "roll-modifier"
     | "rule-state"
-    | "pool-add-die"
-    | "replace-roll-from-pool"
-    | "flyover"
-    | "cp-on-destroy"
-    | "battle-shock-test"
-    | "modifier-immunity"
+    | "shoot-on-death"
+    | "stat-modifier"
     | "stratagem-cost-modifier"
+    | "stratagem-targeting-permission"
+    | "strategic-reserves-arrival"
     | "targeting-permission"
+    | "tracking-token"
+    | "transport-capacity-conversion"
+    | "terrain-area-tag"
     | "unit-attachment"
-    | "fight-eligibility-extension"
-    | "resource-clear"
-    | "named-region-state";
+    | "unit-keyword"
+    | "unit-keyword-grant"
+    | "unit-tag"
+    | "ward"
+    | "unit-division"
+    | "desperate-escape"
+    | "reactive-charge"
+    | "ability-usage-limit"
+    | "deadly-demise-threshold"
+    | "embark";
   target:
     | "self"
     | "bearer"
     | "unit"
     | "attached-unit"
+    | "selected-models-unit"
     | "attacker"
     | "defender"
     | "target"
+    | "targets-of-selected-unit-attacks"
     | "friendly-within-aura"
     | "enemy-within-aura"
     | "all-friendly"
-    | "all-enemy";
+    | "all-enemy"
+    | "destroyed-model"
+    | "triggering-unit";
   modifier?: {
     [k: string]: unknown;
   };
@@ -379,21 +428,32 @@ export type SingleEffect = {
  */
 export type EffectNode =
   | SingleEffect
+  | StanceSelectEffect
   | ChoiceEffect
   | SequenceEffect
+  | RulesBundleEffect
+  | NamedEffect
   | DiceGatedEffect
+  | DiceTableEffect
   | ConditionalEffect
   | DicePoolAllocationEffect
   | SelectUnitsEffect
+  | ForEachUnitEffect
   | MovementModifierEffect
   | AuraEffect
-  | LeaderModelAbilityGrantEffect
-  | PersistentDesignationEffect
   | DesignateTargetEffect
-  | StanceSelectEffect
   | RiskRewardEffect
   | IssueOrdersEffect
-  | ResourceActionMenuEffect;
+  | ResourceActionMenuEffect
+  | LeaderModelAbilityGrantEffect
+  | PersistentDesignationEffect
+  | NoEffectEffect
+  | SelectObjectiveEffect
+  | ForEachObjectiveEffect
+  | PairedDesignationEffect
+  | MiracleDieOperationEffect
+  | FormationAttachmentGrantEffect
+  | AttachmentEligibilityInheritEffect;
 export type AbilityCondition2 = SimpleCondition | CompoundCondition;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -408,9 +468,37 @@ export type DiceRequirementSpec =
       any_of: [DiceRequirement, DiceRequirement, ...DiceRequirement[]];
     };
 /**
- * Predicate that BLOCKS starting the action while it holds (Sensor Sweep: a unit cannot start this action if there is only one operation marker on the battlefield).
+ * Predicate on the candidate before selecting it. Event-bound history can refer to the attack sequence that caused this selection.
  */
 export type AbilityCondition3 = SimpleCondition | CompoundCondition;
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "event-or-selection-reference".
+ */
+export type EventOrSelectionReference = EventBoundReference | SelectionReference;
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "paired-unit-selector".
+ */
+export type PairedUnitSelector = {
+  owner: "friendly" | "enemy";
+  count?: 1;
+  selection_mode?: "any-number";
+  requires_ability?: string;
+  visible_to?: SelectionReference;
+  selection_limit?: {
+    count: number;
+    period: "turn" | "phase" | "battle-round" | "battle";
+  };
+  bind_as: string;
+} & PairedUnitSelector1;
+export type PairedUnitSelector1 = {
+  [k: string]: unknown;
+};
+/**
+ * Predicate that BLOCKS starting the action while it holds (Sensor Sweep: a unit cannot start this action if there is only one operation marker on the battlefield).
+ */
+export type AbilityCondition4 = SimpleCondition | CompoundCondition;
 /**
  * AND set: the target must carry every keyword listed here.
  */
@@ -433,21 +521,32 @@ export type GameModes3 = [GameModeId, ...GameModeId[]];
 export type GameModes4 = [GameModeId, ...GameModeId[]];
 export type AbilityEffect1 =
   | SingleEffect
+  | StanceSelectEffect
   | ChoiceEffect
   | SequenceEffect
+  | RulesBundleEffect
+  | NamedEffect
   | DiceGatedEffect
+  | DiceTableEffect
   | ConditionalEffect
   | DicePoolAllocationEffect
   | SelectUnitsEffect
+  | ForEachUnitEffect
   | MovementModifierEffect
   | AuraEffect
-  | LeaderModelAbilityGrantEffect
-  | PersistentDesignationEffect
   | DesignateTargetEffect
-  | StanceSelectEffect
   | RiskRewardEffect
   | IssueOrdersEffect
-  | ResourceActionMenuEffect;
+  | ResourceActionMenuEffect
+  | LeaderModelAbilityGrantEffect
+  | PersistentDesignationEffect
+  | NoEffectEffect
+  | SelectObjectiveEffect
+  | ForEachObjectiveEffect
+  | PairedDesignationEffect
+  | MiracleDieOperationEffect
+  | FormationAttachmentGrantEffect
+  | AttachmentEligibilityInheritEffect;
 /**
  * Game modes this unit is legal or authored for; absent implies matched-play.
  *
@@ -461,16 +560,62 @@ export type GameModes5 = [GameModeId, ...GameModeId[]];
  */
 export type GameModes6 = [GameModeId, ...GameModeId[]];
 /**
+ * The keyword applies only when the target has at least one listed keyword.
+ *
+ * @minItems 1
+ */
+export type KeywordList8 = [Keyword, ...Keyword[]];
+/**
+ * The keyword does not apply when the target has any listed keyword.
+ */
+export type KeywordList9 = Keyword[];
+/**
+ * The profile can target a unit carrying at least one listed keyword.
+ *
+ * @minItems 1
+ */
+export type KeywordList10 = [Keyword, ...Keyword[]];
+/**
+ * The profile cannot target a unit carrying any listed keyword.
+ */
+export type KeywordList11 = Keyword[];
+/**
  * Game modes this weapon is legal or authored for; absent implies matched-play.
  *
  * @minItems 1
  */
 export type GameModes7 = [GameModeId, ...GameModeId[]];
 /**
+ * For reactive abilities: the game event(s) this ability fires on, plus structured guards. One trigger object, OR an array of trigger objects — the ability fires on ANY listed trigger (models multi-event reactions like 'set up OR ends a move'). See `$defs/trigger`.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "ability-trigger".
+ */
+export type AbilityTrigger = Trigger | [Trigger, ...Trigger[]];
+/**
+ * attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "scope-duration".
+ */
+export type ScopeDuration =
+  | "phase"
+  | "turn"
+  | "battle-round"
+  | "battle"
+  | "until-next-command-phase"
+  | "until-next-movement-phase"
+  | "until-next-battle-round"
+  | "until-start-next-turn"
+  | "one-use"
+  | "permanent"
+  | "attack-sequence"
+  | "resolution";
+/**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "condition".
  */
-export type AbilityCondition4 = SimpleCondition | CompoundCondition;
+export type AbilityCondition5 = SimpleCondition | CompoundCondition;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "rule-state-core-rule-slug".
@@ -486,31 +631,74 @@ export type RuleStateCoreRuleSlug =
   | "desperate-escape";
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "transport-occupancy-subject-kind".
+ */
+export type TransportOccupancySubjectKind = "unit-models" | "single-model";
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "transport-eligibility".
+ */
+export type TransportEligibility = {
+  [k: string]: unknown;
+};
+/**
+ * Gate shared by the default and qualified branches, evaluated on each current attack, without gating production of the named region.
+ */
+export type AbilityCondition6 = SimpleCondition | CompoundCondition;
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "effect".
  */
 export type AbilityEffect2 =
   | SingleEffect
+  | StanceSelectEffect
   | ChoiceEffect
   | SequenceEffect
+  | RulesBundleEffect
+  | NamedEffect
   | DiceGatedEffect
+  | DiceTableEffect
   | ConditionalEffect
   | DicePoolAllocationEffect
   | SelectUnitsEffect
+  | ForEachUnitEffect
   | MovementModifierEffect
   | AuraEffect
-  | LeaderModelAbilityGrantEffect
-  | PersistentDesignationEffect
   | DesignateTargetEffect
-  | StanceSelectEffect
   | RiskRewardEffect
   | IssueOrdersEffect
-  | ResourceActionMenuEffect;
+  | ResourceActionMenuEffect
+  | LeaderModelAbilityGrantEffect
+  | PersistentDesignationEffect
+  | NoEffectEffect
+  | SelectObjectiveEffect
+  | ForEachObjectiveEffect
+  | PairedDesignationEffect
+  | MiracleDieOperationEffect
+  | FormationAttachmentGrantEffect
+  | AttachmentEligibilityInheritEffect;
 
 /**
  * Auto-generated by tools/src/bundle-schemas.ts. Single self-contained schema for Rust codegen — do not edit by hand.
  */
 export interface KdcBundledSchemas {
   [k: string]: unknown;
+}
+/**
+ * A stable identifier assigned to the same entity by an external data source.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "external-reference".
+ */
+export interface ExternalReference {
+  /**
+   * Open source namespace, such as 'mfm', 'bsdata', or 'game-datacards'.
+   */
+  namespace: string;
+  /**
+   * Identifier exactly as assigned by the external source.
+   */
+  id: string;
 }
 /**
  * A 2D point in board inches. Origin at a board corner; JSON uses y-down (downstream renderers may flip to y-up).
@@ -521,6 +709,22 @@ export interface KdcBundledSchemas {
 export interface Vec2 {
   x: number;
   y: number;
+}
+/**
+ * A wall polyline: an open path of 2+ vertices with optional thickness, in the same local frame as the footprint.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "wall".
+ */
+export interface Wall {
+  /**
+   * @minItems 2
+   */
+  points: [Vec2, Vec2, ...Vec2[]];
+  /**
+   * Wall thickness in inches. Omit for thin walls.
+   */
+  thickness?: number;
 }
 /**
  * A model's base. 'round' carries 'diameter'; 'oval' carries 'width'+'length'. 'flying-base' (with 'size': small/large), 'hull', and 'unique' are categories the GW base-size guide gives without standard millimetre dimensions; entries carrying such a category, or any millimetre value not taken from an authoritative source, set 'draft': true to mark them for later hand-authoring.
@@ -747,6 +951,7 @@ export interface UnitMinimum {
  */
 export interface Detachment {
   id: EntityId;
+  external_refs?: ExternalReferenceList;
   name: string;
   faction_id: EntityId;
   /**
@@ -795,6 +1000,7 @@ export interface Detachment {
  */
 export interface Enhancement {
   id: EntityId;
+  external_refs?: ExternalReferenceList;
   name: string;
   detachment_id: EntityId;
   cost: number;
@@ -811,7 +1017,19 @@ export interface Enhancement {
    */
   max_targets?: number;
   keyword_restrictions?: KeywordList;
+  /**
+   * Alternative bearer eligibility groups. Every keyword in one group is required (AND), while satisfying any group is sufficient (OR). When present, this supersedes the legacy flat `keyword_restrictions` field.
+   *
+   * @minItems 1
+   */
+  keyword_restriction_groups?: [[Keyword, ...Keyword[]], ...[Keyword, ...Keyword[]][]];
   exclusion_keywords?: KeywordList | null;
+  /**
+   * Additional bodyguard units the bearer may attach to because it carries this enhancement.
+   *
+   * @minItems 1
+   */
+  attachment_bodyguard_ids?: [EntityId, ...EntityId[]];
   ability_id?: EntityId | null;
   is_unique?: boolean;
   game_version: GameVersionReference;
@@ -825,15 +1043,18 @@ export interface Enhancement {
  */
 export interface Faction {
   id: EntityId;
+  external_refs?: ExternalReferenceList;
   name: string;
   parent_faction_id?: EntityId | null;
   game_version: GameVersionReference;
   keywords?: KeywordList;
   aliases?: string[];
   /**
-   * Reference to the faction-wide ability (e.g., Oath of Moment)
+   * References to the faction-wide abilities in display order
+   *
+   * @minItems 1
    */
-  faction_rule_id?: EntityId | null;
+  faction_rule_ids: [EntityId, ...EntityId[]];
   /**
    * URL to the faction's logo/emblem image.
    */
@@ -958,7 +1179,7 @@ export interface MissionMatchup {
   game_version: GameVersionReference;
 }
 /**
- * An 11e primary mission (the objective a player scores). Which mission a player plays is selected by the Force Disposition matchup matrix (see mission-matchup), keyed on the player's own disposition and their opponent's. Victory points are capped per game and per battle round.
+ * An 11e primary mission (the objective a player scores). Its structured scoring rules live in the same-id primary record in data/core/mission-cards.json and the package's mission-card collection. Which mission a player plays is selected by the Force Disposition matchup matrix (see mission-matchup), keyed on the player's own disposition and their opponent's. Victory points are capped per game and per battle round.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "mission".
@@ -982,6 +1203,14 @@ export interface Mission {
    * Maximum primary VP scorable in a single battle round. 11e default is 15.
    */
   vp_per_round_cap?: number;
+  /**
+   * Maximum secondary VP scorable across the whole game. 11e default is 45.
+   */
+  secondary_vp_per_game_cap?: number;
+  /**
+   * Maximum secondary VP scorable in a single battle round. 11e default is 15.
+   */
+  secondary_vp_per_round_cap?: number;
   /**
    * Ids of the deployment-pattern entities (maps) this mission can be played on. Empty until the per-mission maps are confirmed.
    */
@@ -1113,7 +1342,7 @@ export interface SecondaryCard {
       use_limit_scope?: "per-turn" | "per-game";
       completes?: AbilityCondition1;
       effect?: AbilityEffect;
-      restrictions?: AbilityCondition3;
+      restrictions?: AbilityCondition4;
     },
     ...{
       /**
@@ -1147,7 +1376,7 @@ export interface SecondaryCard {
       use_limit_scope?: "per-turn" | "per-game";
       completes?: AbilityCondition1;
       effect?: AbilityEffect;
-      restrictions?: AbilityCondition3;
+      restrictions?: AbilityCondition4;
     }[]
   ];
   /**
@@ -1206,6 +1435,9 @@ export interface ArmyCompositionPredicate1 {
  * via the `definition` "simple-condition".
  */
 export interface SimpleCondition {
+  /**
+   *  target-is-visible tests whether the target of the current attack is visible to its attacking model (not whether some other model can see it). within-range-of-objective subject:target tests the attack target; controlled_by qualifies the SAME marker, not an unrelated controlled objective.
+   */
   type:
     | "phase-is"
     | "timing-is"
@@ -1223,6 +1455,7 @@ export interface SimpleCondition {
     | "has-lost-wounds"
     | "wounds-remaining-at-or-below"
     | "was-hit-by-attack"
+    | "wounds-lost-from-attack"
     | "opponent-unit-within-range"
     | "within-range-of-objective"
     | "attack-is-type"
@@ -1254,7 +1487,30 @@ export interface SimpleCondition {
     | "faction-rule-active"
     | "battle-round"
     | "token-count-at-or-above"
-    | "unit-was-in-engagement-range-of";
+    | "unit-was-in-engagement-range-of"
+    | "unit-model-count"
+    | "uniform-ranged-loadout"
+    | "all-attacks-target-same-unit"
+    | "target-is-visible"
+    | "ability-window-capacity"
+    | "candidate-eligible-in-ability-window"
+    | "unit-is-led-by"
+    | "on-battlefield"
+    | "target-within-half-weapon-range"
+    | "has-destroyed"
+    | "roll-succeeded"
+    | "unit-selected-to-shoot-this-phase"
+    | "eligible-to-shoot"
+    | "selection-has-keyword"
+    | "target-of-triggering-charge"
+    | "every-model-within-range-of-bearer"
+    | "event-source-is-bearer-unit"
+    | "event-source-is-attached-unit"
+    | "miracle-die-generation-reason"
+    | "miracle-die-generation-timing"
+    | "destroyed-event-within-range"
+    | "destroyed-by-friendly-unit";
+  of?: "bearer" | "unit" | "led-unit" | "attacker" | "defender" | "target" | "friendly" | "enemy";
   parameters?: {
     [k: string]: unknown;
   };
@@ -1285,11 +1541,39 @@ export interface Scaling {
     | "enemy-models-in-range"
     | "friendly-models-in-range"
     | "models-in-bearer-unit"
+    | "models-in-or-embarked-in-bearer"
     | "enemy-units-in-range"
     | "wounds-lost";
   within_inches?: number;
   round?: "down" | "up";
   max_value?: number;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "stance-select-effect".
+ */
+export interface StanceSelectEffect {
+  type: "stance-select";
+  mode: "re-selectable" | "consumable";
+  scope?: "army" | "unit";
+  select?: string;
+  /**
+   * @minItems 2
+   */
+  options: [
+    {
+      name: string;
+      effect: EffectNode;
+    },
+    {
+      name: string;
+      effect: EffectNode;
+    },
+    ...{
+      name: string;
+      effect: EffectNode;
+    }[]
+  ];
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -1302,6 +1586,15 @@ export interface ChoiceEffect {
    */
   options: [EffectNode, EffectNode, ...EffectNode[]];
   choice_label?: string;
+  choice_prompt?: string;
+  /**
+   * Minimum number of distinct options selected at this activation; defaults to one.
+   */
+  min_choices?: number;
+  /**
+   * Maximum number of distinct options selected at this activation; defaults to one.
+   */
+  max_choices?: number;
   [k: string]: unknown;
 }
 /**
@@ -1315,6 +1608,88 @@ export interface SequenceEffect {
    */
   steps: [EffectNode, ...EffectNode[]];
   [k: string]: unknown;
+}
+/**
+ * A reusable named ability's complete effect bundle. Other abilities grant it through an ability-grant effect whose modifier.ability_id names the containing ability.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "rules-bundle-effect".
+ */
+export interface RulesBundleEffect {
+  type: "rules-bundle";
+  /**
+   * @minItems 1
+   */
+  steps: [EffectNode, ...EffectNode[]];
+}
+/**
+ * A named sub-ability embedded in a larger rules bundle.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "named-effect".
+ */
+export interface NamedEffect {
+  type: "named-effect";
+  name: string;
+  kind?: "psychic";
+  level?: number;
+  effect: EffectNode;
+  /**
+   * Whether the controlling player may decline to use this named sub-ability.
+   */
+  optional?: boolean;
+  /**
+   * A prerequisite cost: the nested effect is granted only after this complete cost is paid. An optional named effect may be declined without paying it.
+   */
+  cost?:
+    | SingleEffect
+    | StanceSelectEffect
+    | ChoiceEffect
+    | SequenceEffect
+    | RulesBundleEffect
+    | NamedEffect
+    | DiceGatedEffect
+    | DiceTableEffect
+    | ConditionalEffect
+    | DicePoolAllocationEffect
+    | SelectUnitsEffect
+    | ForEachUnitEffect
+    | MovementModifierEffect
+    | AuraEffect
+    | DesignateTargetEffect
+    | RiskRewardEffect
+    | IssueOrdersEffect
+    | ResourceActionMenuEffect
+    | LeaderModelAbilityGrantEffect
+    | PersistentDesignationEffect
+    | NoEffectEffect
+    | SelectObjectiveEffect
+    | ForEachObjectiveEffect
+    | PairedDesignationEffect
+    | MiracleDieOperationEffect
+    | FormationAttachmentGrantEffect
+    | AttachmentEligibilityInheritEffect;
+  /**
+   * Expiration of this sub-effect, independently of sibling rules in an enclosing bundle.
+   */
+  duration?:
+    | "phase"
+    | "turn"
+    | "battle-round"
+    | "battle"
+    | "until-next-command-phase"
+    | "until-next-movement-phase"
+    | "until-next-battle-round"
+    | "until-start-next-turn"
+    | "one-use"
+    | "permanent"
+    | "attack-sequence"
+    | "resolution";
+  /**
+   * Reactive event for this sub-ability. When nested inside an activated effect, the subscription exists only for the enclosing effect duration.
+   */
+  trigger?: Trigger | [Trigger, ...Trigger[]];
+  usage?: AbilityUsage;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -1333,7 +1708,68 @@ export interface DiceGatedEffect {
   comparison?: "gte" | "lte" | "gt" | "lt" | "eq";
   on_success?: EffectNode | null;
   on_fail?: EffectNode | null;
+  /**
+   * Perform the named actual 2D6 test using the subject's current Leadership and normal applicable modifiers and reroll permissions. A Battle-shock failure inflicts Battle-shock as well as resolving on_fail; a Leadership test does not.
+   */
+  test?: {
+    kind: "leadership" | "battle-shock";
+    subject: "unit" | "self" | "target";
+    /**
+     * @minItems 1
+     */
+    modifiers?: [
+      {
+        condition: AbilityCondition2;
+        value: number;
+      },
+      ...{
+        condition: AbilityCondition2;
+        value: number;
+      }[]
+    ];
+  };
+  /**
+   * Binds this D6 result for an immediate nested consumer; a consumer refers to it only as {roll_var: ID}.
+   */
+  roll_var?: string;
   [k: string]: unknown;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "dice-table-effect".
+ */
+export interface DiceTableEffect {
+  type: "dice-table";
+  /**
+   * One closed die whose faces are covered exactly once by outcomes.
+   */
+  dice: "D3" | "D6";
+  /**
+   * @minItems 2
+   */
+  outcomes: [
+    {
+      /**
+       * @minItems 1
+       */
+      results: [number, ...number[]];
+      effect: EffectNode;
+    },
+    {
+      /**
+       * @minItems 1
+       */
+      results: [number, ...number[]];
+      effect: EffectNode;
+    },
+    ...{
+      /**
+       * @minItems 1
+       */
+      results: [number, ...number[]];
+      effect: EffectNode;
+    }[]
+  ];
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -1394,25 +1830,66 @@ export interface SelectUnitsEffect {
    * Legacy selectors omit min_count and retain up-to semantics. Bounded authoring requires min_count, max_count, and owner, with min_count <= max_count.
    */
   selector: {
-    min_count?: number;
-    max_count: number;
-    keywords?: string[];
-    owner: "friendly" | "enemy";
-    /**
-     * Distance from bearer to each selected unit.
-     */
-    range_inches?: number;
-    /**
-     * When true, each selected candidate must be visible to the bearer.
-     */
-    visibility_required?: boolean;
-    /**
-     * Candidate engagement relation to the bearer; evaluated independently of range_inches.
-     */
-    engagement_relation?: "any" | "engaged-with-bearer" | "not-engaged-with-bearer";
+    [k: string]: unknown;
   };
   effect: EffectNode;
   [k: string]: unknown;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "for-each-unit-effect".
+ */
+export interface ForEachUnitEffect {
+  type: "for-each-unit";
+  selector: {
+    owner: "friendly" | "enemy";
+    /**
+     * Every listed keyword is required on each matching unit.
+     *
+     * @minItems 1
+     */
+    keywords?: [string, ...string[]];
+    /**
+     * Whether each iteration binds a whole unit or one matching model.
+     */
+    target_kind?: "unit" | "model";
+    within_inches?: number;
+    /**
+     * Candidate engagement relation to the bearer or bearer-unit.
+     */
+    engagement_relation?: "engaged-with-bearer" | "not-engaged-with-bearer";
+    /**
+     * Origin of the engagement_relation gate.
+     */
+    reference?: "bearer" | "bearer-unit";
+    /**
+     * Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.
+     */
+    member_of?: "bearer-unit";
+    /**
+     * Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords.
+     *
+     * @minItems 1
+     */
+    model_names?: [string, ...string[]];
+    /**
+     * A candidate with any listed keyword is excluded.
+     *
+     * @minItems 1
+     */
+    excluded_keywords?: [string, ...string[]];
+    bind_as?: string;
+    eligibility?: AbilityCondition2;
+    within_objective?: SelectionReference;
+  };
+  effect: EffectNode;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "selection-reference".
+ */
+export interface SelectionReference {
+  selection_var: string;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -1469,6 +1946,37 @@ export interface MovementModifierEffect {
     };
     condition?: AbilityCondition2;
   };
+  /**
+   * Resolve this effect only after the target actually completes the granted move (including a legal zero-distance move). Declining to make the move does not resolve this effect. Uses the enclosing duration for lasting follow-up effects.
+   */
+  after_move?:
+    | SingleEffect
+    | StanceSelectEffect
+    | ChoiceEffect
+    | SequenceEffect
+    | RulesBundleEffect
+    | NamedEffect
+    | DiceGatedEffect
+    | DiceTableEffect
+    | ConditionalEffect
+    | DicePoolAllocationEffect
+    | SelectUnitsEffect
+    | ForEachUnitEffect
+    | MovementModifierEffect
+    | AuraEffect
+    | DesignateTargetEffect
+    | RiskRewardEffect
+    | IssueOrdersEffect
+    | ResourceActionMenuEffect
+    | LeaderModelAbilityGrantEffect
+    | PersistentDesignationEffect
+    | NoEffectEffect
+    | SelectObjectiveEffect
+    | ForEachObjectiveEffect
+    | PairedDesignationEffect
+    | MiracleDieOperationEffect
+    | FormationAttachmentGrantEffect
+    | AttachmentEligibilityInheritEffect;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -1479,11 +1987,21 @@ export interface AuraEffect {
   target: "enemy-within-aura" | "friendly-within-aura";
   modifier: {
     range?: number | [number, ...number[]];
-    emitter_filter?: KeywordFilter;
-    recipient_filter?: KeywordFilter;
     range_bonus?: number;
     of?: string;
     effect?: EffectNode;
+    eligible?: {
+      /**
+       * @minItems 1
+       */
+      required_keywords?: [string, ...string[]];
+      /**
+       * @minItems 1
+       */
+      excluded_keywords?: [string, ...string[]];
+    };
+    emitter_filter?: KeywordFilter;
+    recipient_filter?: KeywordFilter;
   };
 }
 /**
@@ -1503,92 +2021,6 @@ export interface KeywordFilter {
   excluded_keywords?: [string, ...string[]];
 }
 /**
- * Resolve the attached qualifying leader model and dispatch a targetless effect to that model while it leads the bearer unit.
- *
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "leader-model-ability-grant-effect".
- */
-export interface LeaderModelAbilityGrantEffect {
-  type: "leader-model-ability-grant";
-  source: "bearer-unit";
-  beneficiary: "leading-leader-model" | "attached-character-leader";
-  leader_filter?: {
-    identity?: string;
-    /**
-     * @minItems 1
-     */
-    keywords?: [string, ...string[]];
-  };
-  attached_unit_filter: [string, ...string[]] | null;
-  duration: "while-leading";
-  grant: {
-    recipient: "beneficiary";
-    effect: BeneficiaryBoundEffectNode;
-  };
-  recipient_binding: "beneficiary-only";
-}
-/**
- * Targetless effect dispatched to a relation-resolved beneficiary model; bearer and unit targets are intentionally not representable.
- *
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "beneficiary-bound-effect-node".
- */
-export interface BeneficiaryBoundEffectNode {
-  type: string;
-  modifier?: {
-    [k: string]: unknown;
-  };
-  scaling?: Scaling;
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "persistent-designation-effect".
- */
-export interface PersistentDesignationEffect {
-  type: "persistent-designation";
-  designation: string;
-  select: {
-    scope: "enemy-unit" | "objective-marker";
-    count?: 1;
-    timing: string;
-    selection_policy: "one-time";
-  };
-  /**
-   * The retained reference is consumed by the bearer model only; the renderer names both the bearer recipient and the exact selected-reference relation.
-   */
-  consumer: {
-    /**
-     * Resolve this relation from the bearer to its retained enemy unit or marker; do not substitute a generic target or nearby-object predicate.
-     */
-    relation: "attacks-selected-unit" | "within-selected-marker";
-    /**
-     * For the seed, beneficiary bearer resolves to this model; the selected unit or marker is never the effect recipient.
-     */
-    beneficiary: "bearer";
-    /**
-     * Nested effects target the bearer. Objective Control operation set is an assignment and renders as setting the characteristic to the value, not as a signed delta.
-     */
-    effect:
-      | SingleEffect
-      | ChoiceEffect
-      | SequenceEffect
-      | DiceGatedEffect
-      | ConditionalEffect
-      | DicePoolAllocationEffect
-      | SelectUnitsEffect
-      | MovementModifierEffect
-      | AuraEffect
-      | LeaderModelAbilityGrantEffect
-      | PersistentDesignationEffect
-      | DesignateTargetEffect
-      | StanceSelectEffect
-      | RiskRewardEffect
-      | IssueOrdersEffect
-      | ResourceActionMenuEffect;
-  };
-  duration: "phase" | "turn" | "battle-round" | "battle" | "until-next-command-phase";
-}
-/**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "designate-target-effect".
  */
@@ -1599,39 +2031,59 @@ export interface DesignateTargetEffect {
     scope: "enemy-unit" | "friendly-unit";
     count?: number;
     timing?: string;
+    within_inches?: number;
+    /**
+     * Explicit built-in origin of range and visibility gates, matching select-units.
+     */
+    reference?: "bearer" | "bearer-unit";
+    visibility_required?: boolean;
+    /**
+     * @minItems 1
+     */
+    keywords?: [string, ...string[]];
+    keyword_match?: "all" | "any";
+    eligibility?: AbilityCondition3;
+    visible_to?: SelectionReference;
+    /**
+     * @minItems 1
+     */
+    excluded_keywords?: [string, ...string[]];
+    bind_as?: string;
+    within_inches_from?: SelectionReference;
+    /**
+     * Maximum selections of this same target by this ability across the whole army in the named period.
+     */
+    selection_limit?: {
+      count: number;
+      period: "phase" | "turn" | "battle-round" | "battle";
+    };
   };
   applies: {
-    to: "target" | "attackers-of-target";
+    to: "target" | "attackers-of-target" | "bearer-attacks-target" | "bound-unit-attacks-reference";
     effect: EffectNode;
+    /**
+     * All keywords required on each individual friendly attacking MODEL, not on its unit. Only meaningful with to:attackers-of-target.
+     *
+     * @minItems 1
+     */
+    attacker_keywords?: [string, ...string[]];
+    /**
+     * All keywords required on the attacking model's UNIT, including attached-unit keyword unions. Does not require those keywords on the individual model. Only meaningful with to:attackers-of-target.
+     *
+     * @minItems 1
+     */
+    attacker_unit_keywords?: [string, ...string[]];
+    beneficiary?: EventOrSelectionReference;
+    reference?: SelectionReference;
   };
   duration?: "phase" | "turn" | "battle-round" | "battle" | "until-next-command-phase";
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "stance-select-effect".
+ * via the `definition` "event-bound-reference".
  */
-export interface StanceSelectEffect {
-  type: "stance-select";
-  mode: "re-selectable" | "consumable";
-  scope?: "army" | "unit";
-  select?: string;
-  /**
-   * @minItems 2
-   */
-  options: [
-    {
-      name: string;
-      effect: EffectNode;
-    },
-    {
-      name: string;
-      effect: EffectNode;
-    },
-    ...{
-      name: string;
-      effect: EffectNode;
-    }[]
-  ];
+export interface EventBoundReference {
+  event_var: string;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -1772,6 +2224,358 @@ export interface ResourceActionMenuTrigger {
   binds_event_variable?: string;
 }
 /**
+ * Resolve the attached qualifying leader model and dispatch a targetless effect to that model while it leads the bearer unit.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "leader-model-ability-grant-effect".
+ */
+export interface LeaderModelAbilityGrantEffect {
+  type: "leader-model-ability-grant";
+  source: "bearer-unit";
+  beneficiary: "leading-leader-model" | "attached-character-leader";
+  leader_filter?: {
+    identity?: string;
+    /**
+     * @minItems 1
+     */
+    keywords?: [string, ...string[]];
+  };
+  attached_unit_filter: [string, ...string[]] | null;
+  duration: "while-leading";
+  grant: {
+    recipient: "beneficiary";
+    effect: BeneficiaryBoundEffectNode;
+  };
+  recipient_binding: "beneficiary-only";
+}
+/**
+ * Targetless effect dispatched to a relation-resolved beneficiary model; bearer and unit targets are intentionally not representable.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "beneficiary-bound-effect-node".
+ */
+export interface BeneficiaryBoundEffectNode {
+  type: string;
+  modifier?: {
+    [k: string]: unknown;
+  };
+  scaling?: Scaling;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "persistent-designation-effect".
+ */
+export interface PersistentDesignationEffect {
+  type: "persistent-designation";
+  operation?: "establish" | "replace";
+  designation: string;
+  select: {
+    scope: "enemy-unit" | "objective-marker";
+    count?: 1;
+    timing: string;
+    selection_policy: "one-time" | "replace-on-destroyed";
+    allow_while_embarked?: boolean;
+    bind_as?: string;
+  };
+  /**
+   * Resolve the declared bearer-model or unit beneficiary against the exact retained reference.
+   */
+  consumer?: {
+    /**
+     * Resolve this relation from the declared beneficiary to its retained unit or marker, not a generic target or nearby object.
+     */
+    relation: "attacks-selected-unit" | "within-selected-marker";
+    beneficiary: "bearer" | "unit";
+    /**
+     * Nested effects apply to the declared beneficiary. An Objective Control set operation assigns the value, not a signed delta.
+     */
+    effect:
+      | SingleEffect
+      | StanceSelectEffect
+      | ChoiceEffect
+      | SequenceEffect
+      | RulesBundleEffect
+      | NamedEffect
+      | DiceGatedEffect
+      | DiceTableEffect
+      | ConditionalEffect
+      | DicePoolAllocationEffect
+      | SelectUnitsEffect
+      | ForEachUnitEffect
+      | MovementModifierEffect
+      | AuraEffect
+      | DesignateTargetEffect
+      | RiskRewardEffect
+      | IssueOrdersEffect
+      | ResourceActionMenuEffect
+      | LeaderModelAbilityGrantEffect
+      | PersistentDesignationEffect
+      | NoEffectEffect
+      | SelectObjectiveEffect
+      | ForEachObjectiveEffect
+      | PairedDesignationEffect
+      | MiracleDieOperationEffect
+      | FormationAttachmentGrantEffect
+      | AttachmentEligibilityInheritEffect;
+    reference?: SelectionReference;
+  };
+  duration: "phase" | "turn" | "battle-round" | "battle" | "until-next-command-phase";
+  lifecycle?: {
+    replace: {
+      event: "on-unit-destroyed";
+      reference: SelectionReference;
+      optional: boolean;
+    };
+    exclusivity: "one-active-per-bearer-unit";
+    expiry: "battle-end";
+  };
+}
+/**
+ * Resolve no effect; does not create attacks, damage, selections, or secondary events.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "no-effect-effect".
+ */
+export interface NoEffectEffect {
+  type: "no-effect";
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "select-objective-effect".
+ */
+export interface SelectObjectiveEffect {
+  type: "select-objective";
+  selector: ObjectiveSelector;
+  effect: EffectNode;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "objective-selector".
+ */
+export interface ObjectiveSelector {
+  count: 1;
+  range_inches?: number;
+  origin?: "bearer" | "bearer-unit";
+  controlled_by?: "your-army" | "opponent";
+  requires_unit?: {
+    owner: "friendly" | "enemy";
+    requires_ability: string;
+    relation: "within-range";
+  };
+  selection_limit?: {
+    count: number;
+    period: "turn" | "phase" | "battle-round" | "battle";
+  };
+  bind_as: string;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "for-each-objective-effect".
+ */
+export interface ForEachObjectiveEffect {
+  type: "for-each-objective";
+  selector: ObjectiveSelector;
+  effect: EffectNode;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "paired-designation-effect".
+ */
+export interface PairedDesignationEffect {
+  type: "paired-designation";
+  duration: "phase";
+  observer: {
+    role: "observer";
+    selector: PairedUnitSelector & {
+      owner?: "friendly";
+      selection_mode: "any-number";
+      [k: string]: unknown;
+    };
+  };
+  spotted: {
+    role: "spotted";
+    selector: PairedUnitSelector & {
+      owner?: "enemy";
+      count: 1;
+      [k: string]: unknown;
+    };
+  };
+  guided: {
+    role: "guided";
+    owner: "friendly";
+    requires_ability: string;
+    excludes: SelectionReference;
+    while_attacking: SelectionReference;
+  };
+  observer_eligibility: AbilityCondition2;
+  effects: EffectNode;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "miracle-die-operation-effect".
+ */
+export interface MiracleDieOperationEffect {
+  type: "miracle-die-operation";
+  target: "self";
+  modifier: {
+    operation:
+      | "reroll-generated-result"
+      | "set-generated-value-without-roll"
+      | "set-used-value"
+      | "reroll-retained-and-return";
+    die?: MiracleDieReference;
+    value?: number;
+    pool_id: "miracle-dice-pool";
+    resource_label: "Miracle dice";
+    stage?: "before-pool-add" | "before-act-of-faith-resolution";
+    selection?: {
+      count:
+        | 1
+        | {
+            minimum: 1;
+            maximum: 1 | 3;
+          };
+      from: "dice-used-in-triggering-act-of-faith" | "retained-pool-dice";
+      policy: "controller-chooses";
+    };
+    optional?: boolean;
+  };
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "miracle-die-reference".
+ */
+export interface MiracleDieReference {
+  die_var: string;
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "formation-attachment-grant-effect".
+ */
+export interface FormationAttachmentGrantEffect {
+  type: "formation-attachment-grant";
+  source: "self" | "bearer-unit";
+  beneficiary: "self" | "attached-leader-model";
+  formation_event: "declare-battle-formations";
+  attachment: {
+    leader_id?: EntityId;
+    bodyguard_id: EntityId;
+  };
+  grant: {
+    recipient: "beneficiary";
+    effect: BeneficiaryBoundEffectNode;
+  };
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "attachment-eligibility-inherit-effect".
+ */
+export interface AttachmentEligibilityInheritEffect {
+  type: "attachment-eligibility-inherit";
+  target: "self";
+  modifier: {
+    leader_id: EntityId;
+    required_leader_ability: "Leader";
+    from_bodyguard_id: EntityId;
+    to_bodyguard_id: EntityId;
+  };
+}
+/**
+ * A single reactive trigger: the game `event` (closed dispatch key), `subject` (whose action triggered it), `proximity` (spatial gate in inches), optional `move_types` (restricts a move event to given move kinds), `condition` (extra gate reusing the condition tree), `optional` ('you can' reactions), `cost` (stratagem-style CP), and `window` (how long the granted reaction stays open).
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "trigger".
+ */
+export interface Trigger {
+  event: GameEvent;
+  subject?:
+    | "self"
+    | "bearer"
+    | "friendly-unit"
+    | "enemy-unit"
+    | "any-unit"
+    | "model-in-bearer"
+    | "friendly-model"
+    | "enemy-model";
+  /**
+   * Bind a destruction event to its actual causing model or unit. Supplying attack_type or weapon_keyword further requires a qualifying attack by that source.
+   */
+  caused_by?: {
+    source: "bearer-model" | "bearer-unit";
+    attack_type?: "melee" | "ranged";
+    weapon_keyword?: string;
+  };
+  proximity?: {
+    of?: "self" | "bearer" | "attached-unit" | "bearer-unit";
+    range: number;
+  };
+  /**
+   * Restricts a move-related event (e.g. enemy-unit-ended-move) to these move kinds — e.g. [normal, advance, fall-back] for 'a Normal, Advance or Fall Back move'.
+   *
+   * @minItems 1
+   */
+  move_types?: ["normal" | "advance" | "fall-back" | "charge", ...("normal" | "advance" | "fall-back" | "charge")[]];
+  condition?: AbilityCondition2;
+  optional?: boolean;
+  cost?: {
+    cp?: number;
+  };
+  window?: string;
+  binds_event_variable?: string;
+  /**
+   * Filter an ability-target-selected event by its source ability and source unit. The trigger subject is the selected unit. This does not infer that the source ability was used from a tag or phase.
+   */
+  source_ability?: {
+    ability_id: EntityId;
+    owner: "friendly" | "enemy";
+    /**
+     * All keywords required on the unit using the named source ability, not on the selected target.
+     *
+     * @minItems 1
+     */
+    keywords: [string, ...string[]];
+  };
+  /**
+   * All keywords required on the event subject itself: the triggering unit or individual model, not the ability bearer.
+   *
+   * @minItems 1
+   */
+  subject_keywords?: [string, ...string[]];
+  /**
+   * The event subject must have none of these keywords.
+   *
+   * @minItems 1
+   */
+  subject_excluded_keywords?: [string, ...string[]];
+  /**
+   * Binds the generated Miracle die identity from a resource-generation trigger; consumers refer only as {die_var: ID}.
+   */
+  binds_die_variable?: string;
+  /**
+   * Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}.
+   */
+  binds_selected_die_variable?: string;
+}
+/**
+ * How often the ability may be used, beyond what scope.duration captures. `scope.duration: one-use` already models 'once per battle'; this models finer limits (once per turn/phase, N per battle) and an optional per-army/unit/model granularity.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "ability-usage".
+ */
+export interface AbilityUsage {
+  frequency:
+    | "once-per-turn"
+    | "once-per-phase"
+    | "once-per-battle-round"
+    | "once-per-command-phase"
+    | "once-per-opponent-turn"
+    | "n-per-battle"
+    | "first-this-battle"
+    | "first-time-this-phase";
+  count?: number;
+  per?: "army" | "unit" | "model";
+}
+/**
  * A CP-costed ability usable during specific game phases.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -1779,6 +2583,7 @@ export interface ResourceActionMenuTrigger {
  */
 export interface Stratagem {
   id: EntityId;
+  external_refs?: ExternalReferenceList;
   name: string;
   /**
    * Whether this is a universal core stratagem or tied to a specific detachment
@@ -2082,6 +2887,20 @@ export interface TerrainTemplate {
    * 11e terrain category (§13.02–13.05). Applies to kind: "feature". Dense features enable the Hidden rule; light features provide cover but not obscuring.
    */
   terrain_category?: "exposed" | "light" | "dense";
+  /**
+   * Wall polylines for this feature, in the same local frame as `footprint`. Meaningful for `kind: "feature"`.
+   */
+  walls?: Wall[];
+  /**
+   * Whether this feature has a roof. Meaningful for `kind: "feature"`.
+   */
+  has_roof?: boolean;
+  /**
+   * High-resolution boundary polygon for this template's base plate (the full die-cut nub outline). When present, rendering tools should prefer this over `footprint` for display; the resolver continues to use `footprint` for centroid and placement math. In the same local-inches frame as `footprint`.
+   *
+   * @minItems 3
+   */
+  outline?: [Vec2, Vec2, Vec2, ...Vec2[]];
   game_version: GameVersionReference;
 }
 /**
@@ -2105,6 +2924,9 @@ export interface UnitComposition {
       profile_name?: string | null;
       min: number;
       max: number;
+      /**
+       * The model's no-choice equipment multiset, used by base_loadout. It must describe a legal default configuration even when whole-model variants are present; it does not implicitly add another selectable variant.
+       */
       default_weapon_ids?: EntityId[];
       is_leader_model?: boolean;
       base_size_mm?: BaseSize1;
@@ -2112,12 +2934,95 @@ export interface UnitComposition {
        * Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to "hull".
        */
       hull_shape_id?: EntityId | null;
+      /**
+       * Mutually exclusive whole-model loadout alternatives, expressed as named peers rather than deltas against default_weapon_ids. Each selected variant supplies one model's complete initial equipment multiset; repeated IDs preserve multiplicity. Compatible item-level wargear_options may transform that loadout but must satisfy the resulting variant's selection limits and all equipment budgets. When absent, models start with default_weapon_ids. When present, default_weapon_ids still governs base_loadout and is not replaced.
+       *
+       * @minItems 1
+       */
+      loadout_variants?: [
+        {
+          /**
+           * The source peer's own model name (e.g. "Boy w/ Big shoota"). Unique within this model row.
+           */
+          name: string;
+          /**
+           * This variant's complete per-model equipment multiset. Every ID must be in the owning unit's weapon_ids or resolve to faction wargear. Repeated IDs mean multiple copies; an empty multiset is not a loadout.
+           *
+           * @minItems 1
+           */
+          weapon_ids: [EntityId, ...EntityId[]];
+          /**
+           * Ceiling on how many models of this row may take this variant, when the source states one on the variant itself. Shared and ratio-scaled ceilings live in `loadout_variant_budgets` instead.
+           */
+          max_count?: number;
+        },
+        ...{
+          /**
+           * The source peer's own model name (e.g. "Boy w/ Big shoota"). Unique within this model row.
+           */
+          name: string;
+          /**
+           * This variant's complete per-model equipment multiset. Every ID must be in the owning unit's weapon_ids or resolve to faction wargear. Repeated IDs mean multiple copies; an empty multiset is not a loadout.
+           *
+           * @minItems 1
+           */
+          weapon_ids: [EntityId, ...EntityId[]];
+          /**
+           * Ceiling on how many models of this row may take this variant, when the source states one on the variant itself. Shared and ratio-scaled ceilings live in `loadout_variant_budgets` instead.
+           */
+          max_count?: number;
+        }[]
+      ];
+      /**
+       * Caps over how many variant selections this model row may make, counting SELECTED VARIANTS rather than final weapon ids (two variants sharing a weapon must not charge each other's allowance). A singleton `variant_names` is an individual cap, several names a shared pool, and intersecting budgets a ratio plus a hard ceiling. The selected count across `variant_names` must not exceed `floor(scope_model_count * count / per_models)`, or simply `count` when `per_models` is 0.
+       *
+       * @minItems 1
+       */
+      loadout_variant_budgets?: [
+        {
+          /**
+           * The `loadout_variants[].name` values sharing this allowance. Every name must exist in this same model row.
+           *
+           * @minItems 1
+           */
+          variant_names: [string, ...string[]];
+          count: number;
+          /**
+           * Models required per `count` selections. 0 means the flat limit `count`, independent of squad size.
+           */
+          per_models: number;
+          /**
+           * Which model count scales the allowance: the whole unit, or just this model row.
+           */
+          scope: "unit" | "model-row";
+        },
+        ...{
+          /**
+           * The `loadout_variants[].name` values sharing this allowance. Every name must exist in this same model row.
+           *
+           * @minItems 1
+           */
+          variant_names: [string, ...string[]];
+          count: number;
+          /**
+           * Models required per `count` selections. 0 means the flat limit `count`, independent of squad size.
+           */
+          per_models: number;
+          /**
+           * Which model count scales the allowance: the whole unit, or just this model row.
+           */
+          scope: "unit" | "model-row";
+        }[]
+      ];
     },
     ...{
       name: string;
       profile_name?: string | null;
       min: number;
       max: number;
+      /**
+       * The model's no-choice equipment multiset, used by base_loadout. It must describe a legal default configuration even when whole-model variants are present; it does not implicitly add another selectable variant.
+       */
       default_weapon_ids?: EntityId[];
       is_leader_model?: boolean;
       base_size_mm?: BaseSize1;
@@ -2125,6 +3030,86 @@ export interface UnitComposition {
        * Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to "hull".
        */
       hull_shape_id?: EntityId | null;
+      /**
+       * Mutually exclusive whole-model loadout alternatives, expressed as named peers rather than deltas against default_weapon_ids. Each selected variant supplies one model's complete initial equipment multiset; repeated IDs preserve multiplicity. Compatible item-level wargear_options may transform that loadout but must satisfy the resulting variant's selection limits and all equipment budgets. When absent, models start with default_weapon_ids. When present, default_weapon_ids still governs base_loadout and is not replaced.
+       *
+       * @minItems 1
+       */
+      loadout_variants?: [
+        {
+          /**
+           * The source peer's own model name (e.g. "Boy w/ Big shoota"). Unique within this model row.
+           */
+          name: string;
+          /**
+           * This variant's complete per-model equipment multiset. Every ID must be in the owning unit's weapon_ids or resolve to faction wargear. Repeated IDs mean multiple copies; an empty multiset is not a loadout.
+           *
+           * @minItems 1
+           */
+          weapon_ids: [EntityId, ...EntityId[]];
+          /**
+           * Ceiling on how many models of this row may take this variant, when the source states one on the variant itself. Shared and ratio-scaled ceilings live in `loadout_variant_budgets` instead.
+           */
+          max_count?: number;
+        },
+        ...{
+          /**
+           * The source peer's own model name (e.g. "Boy w/ Big shoota"). Unique within this model row.
+           */
+          name: string;
+          /**
+           * This variant's complete per-model equipment multiset. Every ID must be in the owning unit's weapon_ids or resolve to faction wargear. Repeated IDs mean multiple copies; an empty multiset is not a loadout.
+           *
+           * @minItems 1
+           */
+          weapon_ids: [EntityId, ...EntityId[]];
+          /**
+           * Ceiling on how many models of this row may take this variant, when the source states one on the variant itself. Shared and ratio-scaled ceilings live in `loadout_variant_budgets` instead.
+           */
+          max_count?: number;
+        }[]
+      ];
+      /**
+       * Caps over how many variant selections this model row may make, counting SELECTED VARIANTS rather than final weapon ids (two variants sharing a weapon must not charge each other's allowance). A singleton `variant_names` is an individual cap, several names a shared pool, and intersecting budgets a ratio plus a hard ceiling. The selected count across `variant_names` must not exceed `floor(scope_model_count * count / per_models)`, or simply `count` when `per_models` is 0.
+       *
+       * @minItems 1
+       */
+      loadout_variant_budgets?: [
+        {
+          /**
+           * The `loadout_variants[].name` values sharing this allowance. Every name must exist in this same model row.
+           *
+           * @minItems 1
+           */
+          variant_names: [string, ...string[]];
+          count: number;
+          /**
+           * Models required per `count` selections. 0 means the flat limit `count`, independent of squad size.
+           */
+          per_models: number;
+          /**
+           * Which model count scales the allowance: the whole unit, or just this model row.
+           */
+          scope: "unit" | "model-row";
+        },
+        ...{
+          /**
+           * The `loadout_variants[].name` values sharing this allowance. Every name must exist in this same model row.
+           *
+           * @minItems 1
+           */
+          variant_names: [string, ...string[]];
+          count: number;
+          /**
+           * Models required per `count` selections. 0 means the flat limit `count`, independent of squad size.
+           */
+          per_models: number;
+          /**
+           * Which model count scales the allowance: the whole unit, or just this model row.
+           */
+          scope: "unit" | "model-row";
+        }[]
+      ];
     }[]
   ];
   /**
@@ -2221,6 +3206,7 @@ export interface UnitKeyword {
  */
 export interface Unit {
   id: EntityId;
+  external_refs?: ExternalReferenceList;
   name: string;
   /**
    * Alternate names this unit is known by (e.g. spelling variants in other tools' roster exports). Consulted by name lookup so an import matches despite a spelling difference; never displayed.
@@ -2338,6 +3324,14 @@ export interface Unit {
   keywords?: KeywordList;
   faction_keywords?: KeywordList;
   /**
+   * Keywords granted to this unit only when roster construction satisfies the source condition. Conditions are conjunctive within an entry; entries are independent grants.
+   */
+  conditional_keywords?: {
+    keyword: Keyword;
+    required_detachment_id?: EntityId | null;
+    required_faction_keyword?: Keyword | null;
+  }[];
+  /**
    * Faction keywords whose armies are barred from taking this otherwise-generic unit. Used where the game removes a generic unit from a specific sub-faction without printing a replacement (e.g. Black Templars cannot field Librarians; Deathwatch cannot field the generic Tactical Squad). An army may take this unit only if none of its faction keywords appear here. Absent/empty = available to every keyword-eligible army. Distinct from `faction_keywords`, which is the positive access list; this is the negative one for the rare exclusions a flat shared pool cannot otherwise express.
    */
   excluded_faction_keywords?: KeywordList | null;
@@ -2380,7 +3374,7 @@ export interface Unit {
   game_modes?: GameModes5;
 }
 /**
- * A wargear option available to models within a unit: a weapon/wargear swap, a pure add-on, or a choice between alternatives. Models start with the unit's base loadout; an option modifies that loadout for the number of models its `model_constraint` permits.
+ * An item-level weapon/wargear swap, addition, or choice available to models within a unit. An option transforms a model's default or selected whole-model loadout only when its model constraints and replacement prerequisites are satisfied. Whole-model alternatives belong in the composition's loadout_variants; applying an option must not bypass the resulting variant's selection limits or the unit's equipment budgets.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "wargear-option".
@@ -2432,6 +3426,7 @@ export interface WargearOption {
  */
 export interface Wargear {
   id: EntityId;
+  external_refs?: ExternalReferenceList;
   name: string;
   category?: string | null;
   game_version: GameVersionReference;
@@ -2473,6 +3468,7 @@ export interface WeaponKeyword {
  */
 export interface Weapon {
   id: EntityId;
+  external_refs?: ExternalReferenceList;
   name: string;
   type: "ranged" | "melee";
   /**
@@ -2501,14 +3497,23 @@ export interface Weapon {
       keywords?: {
         keyword_id: EntityId;
         /**
-         * Reference-site parameters conforming to the catalog entry's required_parameters. Only the three documented keys are accepted; any other key is invalid.
+         * Reference-site parameters conforming to the catalog entry's required parameters and optional target-keyword applicability gates.
          */
         parameters?: {
           value?: StatValue;
           target_keyword?: string;
           threshold?: number;
+          required_target_keywords_any?: KeywordList8;
+          excluded_target_keywords?: KeywordList9;
         };
       }[];
+      /**
+       * Target legality for this profile. Distinct from Anti and other effects that modify attacks after a legal target is selected.
+       */
+      target_restrictions?: {
+        required_keywords_any?: KeywordList10;
+        excluded_keywords?: KeywordList11;
+      } | null;
     },
     ...{
       name: string;
@@ -2528,45 +3533,27 @@ export interface Weapon {
       keywords?: {
         keyword_id: EntityId;
         /**
-         * Reference-site parameters conforming to the catalog entry's required_parameters. Only the three documented keys are accepted; any other key is invalid.
+         * Reference-site parameters conforming to the catalog entry's required parameters and optional target-keyword applicability gates.
          */
         parameters?: {
           value?: StatValue;
           target_keyword?: string;
           threshold?: number;
+          required_target_keywords_any?: KeywordList8;
+          excluded_target_keywords?: KeywordList9;
         };
       }[];
+      /**
+       * Target legality for this profile. Distinct from Anti and other effects that modify attacks after a legal target is selected.
+       */
+      target_restrictions?: {
+        required_keywords_any?: KeywordList10;
+        excluded_keywords?: KeywordList11;
+      } | null;
     }[]
   ];
   game_version: GameVersionReference;
   game_modes?: GameModes7;
-}
-/**
- * A single reactive trigger: the game `event` (closed dispatch key), `subject` (whose action triggered it), `proximity` (spatial gate in inches), optional `move_types` (restricts a move event to given move kinds), `condition` (extra gate reusing the condition tree), `optional` ('you can' reactions), `cost` (stratagem-style CP), and `window` (how long the granted reaction stays open).
- *
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "trigger".
- */
-export interface Trigger {
-  event: GameEvent;
-  subject?: "self" | "bearer" | "friendly-unit" | "enemy-unit" | "any-unit" | "model-in-bearer";
-  proximity?: {
-    of?: "self" | "bearer" | "attached-unit";
-    range: number;
-  };
-  /**
-   * Restricts a move-related event (e.g. enemy-unit-ended-move) to these move kinds — e.g. [normal, advance, fall-back] for 'a Normal, Advance or Fall Back move'.
-   *
-   * @minItems 1
-   */
-  move_types?: ["normal" | "advance" | "fall-back" | "charge", ...("normal" | "advance" | "fall-back" | "charge")[]];
-  condition?: AbilityCondition2;
-  optional?: boolean;
-  cost?: {
-    cp?: number;
-  };
-  window?: string;
-  binds_event_variable?: string;
 }
 /**
  * Community-authored structured representation of what a game ability does. NOT GW text.
@@ -2579,6 +3566,10 @@ export interface AbilityDSLEntry {
   name: string;
   authored_by: ContributorRef;
   game_version: GameVersionReference;
+  /**
+   * SHA-256 of the NORMALISED printed rule this annotation was authored against — one-way, so the rule text itself stays outside this repository. Normalisation (defined once in tools/src/source-digest.ts) casefolds, folds Unicode, keeps the rule-significant operators + - = < > / % and replaces other punctuation with spaces, so reprint noise and quote style leave the digest unchanged while a changed value or an added condition changes it. Optional: absent means the source was never fingerprinted, which `npm run audit:source-digest` reports as untracked rather than current. Records source-content identity, not release history — consumers must not select, order or supersede abilities by it.
+   */
+  source_digest?: string;
   version?: DataslateVersion;
   supersedes?: DataslateVersion | null;
   unit_ids?: EntityId[];
@@ -2596,26 +3587,9 @@ export interface AbilityDSLEntry {
    */
   behavior?: "passive" | "activated" | "reactive" | "aura";
   effect: AbilityEffect1;
-  /**
-   * For reactive abilities: the game event(s) this ability fires on, plus structured guards. One trigger object, OR an array of trigger objects — the ability fires on ANY listed trigger (models multi-event reactions like 'set up OR ends a move'). See `$defs/trigger`.
-   */
-  trigger?: Trigger | [Trigger, ...Trigger[]];
+  trigger?: AbilityTrigger;
   scope: AbilityScope;
-  /**
-   * How often the ability may be used, beyond what scope.duration captures. `scope.duration: one-use` already models 'once per battle'; this models finer limits (once per turn/phase, N per battle) and an optional per-army/unit/model granularity.
-   */
-  usage?: {
-    frequency:
-      | "once-per-turn"
-      | "once-per-phase"
-      | "once-per-command-phase"
-      | "once-per-opponent-turn"
-      | "n-per-battle"
-      | "first-this-battle"
-      | "first-time-this-phase";
-    count?: number;
-    per?: "army" | "unit" | "model";
-  };
+  usage?: AbilityUsage;
   /**
    * Static, human-curated keyword filter naming which datasheet units this ability benefits, for roster-side highlighting. A unit matches when it carries every keyword in `required_keywords` (across its `keywords` + `faction_keywords`) and none in `excluded_keywords`. This is a denormalized projection distinct from the runtime `effect` condition tree (which mixes static class, runtime-granted markers, and timing gates and must not be scraped for scope). Absent/null means no resolvable unit scope — consumers render no highlight rather than guess.
    */
@@ -2650,16 +3624,9 @@ export interface AbilityScope {
     | "any-visible"
     | "any-on-battlefield"
     | "terrain-within-range";
-  duration: "phase" | "turn" | "battle-round" | "battle" | "until-next-command-phase" | "one-use" | "permanent";
+  duration: ScopeDuration;
   range_inches?: number;
   [k: string]: unknown;
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "event-bound-reference".
- */
-export interface EventBoundReference {
-  event_var: string;
 }
 /**
  * Token/resource count keyed by the three supported battle sizes. The renderer intentionally refers players to the accompanying table rather than spelling these values out.
@@ -2795,6 +3762,10 @@ export interface NamedRegionProducer {
   additive_extensions: {
     kind: string;
     source_gate: NamedRegionSourceGate;
+    radius_inches?: number;
+    activation?: {
+      event: "continuous";
+    };
     [k: string]: unknown;
   }[];
 }
@@ -2818,6 +3789,7 @@ export interface NamedRegionConsumer {
   qualified_condition: AbilityCondition2;
   default_branch: NamedRegionBranch;
   qualified_branch: NamedRegionBranch;
+  attack_condition?: AbilityCondition6;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -2828,6 +3800,13 @@ export interface NamedRegionState {
   producer: NamedRegionProducer;
   consumer: NamedRegionConsumer;
   branch_precedence: "qualified-replaces-default";
+}
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "roll-reference".
+ */
+export interface RollReference {
+  roll_var: string;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema

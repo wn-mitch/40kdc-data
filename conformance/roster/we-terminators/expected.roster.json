@@ -17,7 +17,7 @@
     }
   ],
   "battle_size": "strike-force",
-  "force_disposition": null,
+  "force_disposition": "purge-the-foe",
   "points": {
     "declared_limit": 2000,
     "detachment_cap": 3,
@@ -55,6 +55,32 @@
             "candidates": []
           },
           "count": 1
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Daemon Prince of Khorne",
+          "count": 1,
+          "wargear": [
+            {
+              "ref": {
+                "id": "infernal-cannon",
+                "raw_name": "Infernal cannon",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "hellforged-weapons",
+                "raw_name": "Hellforged weapons",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
         }
       ],
       "leader_attachment": null

@@ -7,12 +7,46 @@ import "math"
 
 var engineDispatchKeywords = map[string]bool{
 	"lethal-hits": true, "sustained-hits": true, "devastating-wounds": true,
-	"anti": true, "melta": true, "rapid-fire": true, "torrent": true,
+	"anti": true, "melta": true, "rapid-fire": true, "torrent": true, "blast": true,
 	"ignores-cover": true,
+}
+
+func keywordAppliesToTarget(parameters map[string]any, ctx map[string]any) bool {
+	targetKeywords := map[string]bool{}
+	for _, keyword := range getList(ctx, "targetKeywords") {
+		if value, ok := keyword.(string); ok {
+			targetKeywords[lower(value)] = true
+		}
+	}
+	required := getList(parameters, "required_target_keywords_any")
+	if len(required) > 0 {
+		matched := false
+		for _, keyword := range required {
+			if value, ok := keyword.(string); ok && targetKeywords[lower(value)] {
+				matched = true
+				break
+			}
+		}
+		if !matched {
+			return false
+		}
+	}
+	for _, keyword := range getList(parameters, "excluded_target_keywords") {
+		if value, ok := keyword.(string); ok && targetKeywords[lower(value)] {
+			return false
+		}
+	}
+	return true
 }
 
 func buffsFromKeyword(keywordID, weaponID string, effect any, parameters map[string]any, ctx map[string]any) []any {
 	source := map[string]any{"kind": "weapon-keyword", "weaponId": weaponID, "keywordId": keywordID}
+	if !keywordAppliesToTarget(parameters, ctx) {
+		return nil
+	}
+	if keywordID == "blast" && parameters["value"] == nil {
+		return nil
+	}
 	if engineDispatchKeywords[keywordID] {
 		ref := map[string]any{"keyword_id": keywordID}
 		if parameters != nil {
@@ -42,7 +76,7 @@ func kwWalk(node any, source map[string]any, ctx map[string]any) []any {
 		return kwKeywordGrant(n, source)
 	case "conditional":
 		return kwConditional(n, source, ctx)
-	case "sequence":
+	case "rules-bundle", "sequence":
 		return kwWalkChildren(getList(n, "steps"), source, ctx)
 	}
 	return nil

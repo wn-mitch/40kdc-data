@@ -1,48 +1,47 @@
 # MFM detachment fields — APPLIED
 
-Fill-only reconcile of `tags` (mutual-exclusivity unique keyword → slug),
-`restrictions.required_keywords` (chapter-lock applicability keyword), and
-`detachment_rule_ids` (named-rule → ability link, written only when the slug
-resolves to an authored ability). Authored values are confirmed or surfaced
-for review, never overwritten. Rule prose is authored separately — untouched.
+Authoritative reconcile of `tags` (mutual-exclusivity unique keyword → slug)
+and `restrictions.required_keywords` (chapter-lock applicability keyword).
+`detachment_rule_ids` remains resolve-gated and fill-only. Rule prose is
+authored separately and is untouched.
 
-| Dir | Matched | tags-fill | tags-ok | tags-rev | req-fill | req-ok | req-rev | rule-fill | rule-ok | rule-rev | rule-unauth |
-|---|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|
-| adepta-sororitas | 9 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 8 | 0 | 1 |
-| adeptus-astartes | 16 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 14 | 0 | 2 |
-| adeptus-custodes | 10 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 9 | 0 | 1 |
-| adeptus-mechanicus | 11 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 10 | 0 | 1 |
-| aeldari | 16 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 15 | 0 | 1 |
-| agents-of-the-imperium | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 | 0 | 1 |
-| astra-militarum | 12 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 10 | 1 | 1 |
-| black-templars | 7 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
-| blood-angels | 9 | 0 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 9 |
-| chaos-daemons | 9 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 9 | 0 | 0 |
-| chaos-knights | 8 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 8 | 0 | 0 |
-| chaos-space-marines | 18 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 16 | 1 | 1 |
-| dark-angels | 9 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 9 |
-| death-guard | 10 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 9 | 0 | 1 |
-| deathwatch | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| drukhari | 10 | 0 | 6 | 0 | 0 | 0 | 0 | 0 | 9 | 0 | 1 |
-| emperors-children | 11 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 10 | 0 | 1 |
-| genestealer-cults | 10 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 9 | 0 | 1 |
-| grey-knights | 10 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 9 | 0 | 1 |
-| imperial-fists | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 |
-| imperial-knights | 8 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 8 | 0 | 0 |
-| iron-hands | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 |
-| leagues-of-votann | 11 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 10 | 0 | 1 |
-| necrons | 13 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 12 | 0 | 1 |
-| orks | 13 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 11 | 1 | 1 |
-| raven-guard | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 |
-| salamanders | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 |
-| space-wolves | 8 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
-| tau-empire | 8 | 0 | 1 | 3 | 0 | 0 | 0 | 0 | 7 | 0 | 1 |
-| thousand-sons | 10 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 9 | 0 | 1 |
-| tyranids | 11 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 10 | 0 | 1 |
-| ultramarines | 2 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 2 |
-| white-scars | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 |
-| world-eaters | 9 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 8 | 0 | 1 |
-| **TOTAL** | **290** | **0** | **53** | **4** | **0** | **7** | **0** | **0** | **225** | **3** | **62** |
+| Dir | Matched | tags-chg | tags-ok | req-chg | req-ok | rule-fill | rule-ok | rule-rev | rule-unauth |
+|---|--:|--:|--:|--:|--:|--:|--:|--:|--:|
+| adepta-sororitas | 9 | 0 | 9 | 0 | 9 | 0 | 8 | 0 | 1 |
+| adeptus-astartes | 17 | 0 | 17 | 0 | 17 | 0 | 14 | 0 | 3 |
+| adeptus-custodes | 10 | 0 | 10 | 0 | 10 | 0 | 9 | 0 | 1 |
+| adeptus-mechanicus | 11 | 0 | 11 | 0 | 11 | 0 | 10 | 0 | 1 |
+| aeldari | 16 | 0 | 16 | 0 | 16 | 0 | 15 | 0 | 1 |
+| agents-of-the-imperium | 6 | 0 | 6 | 0 | 6 | 0 | 5 | 0 | 1 |
+| astra-militarum | 12 | 0 | 12 | 0 | 12 | 0 | 10 | 1 | 1 |
+| black-templars | 7 | 0 | 7 | 0 | 7 | 0 | 0 | 0 | 7 |
+| blood-angels | 9 | 0 | 9 | 0 | 9 | 0 | 0 | 0 | 9 |
+| chaos-daemons | 9 | 0 | 9 | 0 | 9 | 0 | 9 | 0 | 0 |
+| chaos-knights | 8 | 0 | 8 | 0 | 8 | 0 | 8 | 0 | 0 |
+| chaos-space-marines | 18 | 0 | 18 | 0 | 18 | 0 | 16 | 1 | 1 |
+| dark-angels | 9 | 0 | 9 | 0 | 9 | 0 | 0 | 0 | 9 |
+| death-guard | 10 | 0 | 10 | 0 | 10 | 0 | 9 | 0 | 1 |
+| deathwatch | 1 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 1 |
+| drukhari | 10 | 0 | 10 | 0 | 10 | 0 | 9 | 0 | 1 |
+| emperors-children | 11 | 0 | 11 | 0 | 11 | 0 | 10 | 0 | 1 |
+| genestealer-cults | 10 | 0 | 10 | 0 | 10 | 0 | 9 | 0 | 1 |
+| grey-knights | 10 | 0 | 10 | 0 | 10 | 0 | 9 | 0 | 1 |
+| imperial-fists | 1 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 1 |
+| imperial-knights | 8 | 0 | 8 | 0 | 8 | 0 | 8 | 0 | 0 |
+| iron-hands | 1 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 1 |
+| leagues-of-votann | 11 | 0 | 11 | 0 | 11 | 0 | 10 | 0 | 1 |
+| necrons | 13 | 0 | 13 | 0 | 13 | 0 | 12 | 0 | 1 |
+| orks | 15 | 0 | 15 | 0 | 15 | 0 | 0 | 15 | 0 |
+| raven-guard | 1 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 1 |
+| salamanders | 1 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 1 |
+| space-wolves | 8 | 0 | 8 | 0 | 8 | 0 | 0 | 0 | 8 |
+| tau-empire | 8 | 0 | 8 | 0 | 8 | 0 | 7 | 0 | 1 |
+| thousand-sons | 10 | 0 | 10 | 0 | 10 | 0 | 9 | 0 | 1 |
+| tyranids | 11 | 0 | 11 | 0 | 11 | 0 | 10 | 0 | 1 |
+| ultramarines | 2 | 0 | 2 | 0 | 2 | 0 | 0 | 0 | 2 |
+| white-scars | 1 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 1 |
+| world-eaters | 9 | 0 | 9 | 0 | 9 | 0 | 8 | 0 | 1 |
+| **TOTAL** | **293** | **0** | **293** | **0** | **293** | **0** | **214** | **17** | **62** |
 
 ## adepta-sororitas
 - detachment_rule_ids UNAUTHORED sanctuary-guardians: dump rule(s) [blessed-believers] have no authored ability yet
@@ -50,6 +49,7 @@ for review, never overwritten. Rule prose is authored separately — untouched.
 ## adeptus-astartes
 - detachment_rule_ids UNAUTHORED subversion-assets: dump rule(s) [nowhere-to-hide] have no authored ability yet
 - detachment_rule_ids UNAUTHORED assault-force: dump rule(s) [indomitable-resolve] have no authored ability yet
+- detachment_rule_ids UNAUTHORED vengeful-hosts: dump rule(s) [imperator-unleashed] have no authored ability yet
 
 ## adeptus-custodes
 - detachment_rule_ids UNAUTHORED tristraens-gilded-blades: dump rule(s) [fearless-and-unrelenting] have no authored ability yet
@@ -127,15 +127,27 @@ for review, never overwritten. Rule prose is authored separately — untouched.
 - detachment_rule_ids UNAUTHORED hammer-of-avernii: dump rule(s) [calculated-annihilation, recalculating] have no authored ability yet
 
 ## leagues-of-votann
-- tags REVIEW hearthguard-covenant: authored [hearthguard] vs dump [hearthband]
 - detachment_rule_ids UNAUTHORED bane-slayers-bulwark: dump rule(s) [secure-resources] have no authored ability yet
 
 ## necrons
 - detachment_rule_ids UNAUTHORED amonhotekhs-guard: dump rule(s) [territorial-imperatives] have no authored ability yet
 
 ## orks
-- detachment_rule_ids REVIEW more-dakka: authored [dakka-dakka-dakka-more-dakka] vs dump [dakka-dakka-dakka]
-- detachment_rule_ids UNAUTHORED ardmob: dump rule(s) [ard-as-nails] have no authored ability yet
+- detachment_rule_ids REVIEW dread-mob: authored [try-dat-button-dread-mob] vs dump [try-dat-button]
+- detachment_rule_ids REVIEW blitz-brigade: authored [eager-for-the-fight] vs dump [unstoppable-momentum]
+- detachment_rule_ids REVIEW kult-of-speed: authored [adrenaline-junkies-kult-of-speed] vs dump [adrenaline-junkies]
+- detachment_rule_ids REVIEW da-big-hunt: authored [da-hunt-is-on-da-big-hunt] vs dump [da-hunt-is-on]
+- detachment_rule_ids REVIEW war-horde: authored [get-stuck-in-war-horde] vs dump [get-stuck-in]
+- detachment_rule_ids REVIEW bully-boyz: authored [displays-of-savagery-bully-boyz] vs dump [displays-of-savagery]
+- detachment_rule_ids REVIEW green-tide: authored [mob-handed-brutality-green-tide] vs dump [mob-handed-brutality]
+- detachment_rule_ids REVIEW taktikal-brigade: authored [suspiciously-well-organised-taktikal-brigade] vs dump [suspiciously-well-organised]
+- detachment_rule_ids REVIEW brute-bosses: authored [ard-as-nails-brute-bosses] vs dump [ard-as-nails]
+- detachment_rule_ids REVIEW flyboyz: authored [skyborne-loons-flyboyz] vs dump [skyborne-loons]
+- detachment_rule_ids REVIEW madcap-meks: authored [try-dat-button-madcap-meks, unpredictable-genius-madcap-meks] vs dump [unpredictable-genius]
+- detachment_rule_ids REVIEW runt-swarm: authored [sneaky-little-gitz-runt-swarm] vs dump [sneaky-little-gitz]
+- detachment_rule_ids REVIEW shoota-boyz: authored [dakka-dakka-dakka-shoota-boyz] vs dump [dakka-dakka-dakka]
+- detachment_rule_ids REVIEW wreckas: authored [wreckin-and-lootin-wreckas] vs dump [wreckin-and-lootin]
+- detachment_rule_ids REVIEW wurrband: authored [powers-of-da-waaagh-wurrband] vs dump [powers-of-da-waaagh]
 
 ## raven-guard
 - detachment_rule_ids UNAUTHORED shadowmark-talon: dump rule(s) [masters-of-shadow, unparalleled-tactician] have no authored ability yet
@@ -154,9 +166,6 @@ for review, never overwritten. Rule prose is authored separately — untouched.
 - detachment_rule_ids UNAUTHORED askars-wolfpack: dump rule(s) [hidden-hunters] have no authored ability yet
 
 ## tau-empire
-- tags REVIEW retaliation-cadre: authored [retaliation] vs dump [battlesuit]
-- tags REVIEW experimental-prototype-cadre: authored [retaliation] vs dump [battlesuit]
-- tags REVIEW auxiliary-cadre: authored [auxiliaries] vs dump [auxiliary]
 - detachment_rule_ids UNAUTHORED sudden-dawn-cadre: dump rule(s) [co-ordinated-eradication] have no authored ability yet
 
 ## thousand-sons

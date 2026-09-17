@@ -3,43 +3,43 @@ import {
   parseSource,
   entryKind,
   entryToText,
-  loadIndex,
+  loadFactionIndex,
   _clearMemCache,
   DEFAULT_SOURCE,
-  type StoreIndex,
 } from "./source-store.js";
 
 describe("parseSource", () => {
-  it("resolves owner/repo to a main-branch raw index URL", () => {
+  it("resolves owner/repo to a main-branch raw base URL", () => {
     const p = parseSource("wn-mitch/40kdc-abilities");
-    expect(p.indexUrl).toBe(
-      "https://raw.githubusercontent.com/wn-mitch/40kdc-abilities/main/index.json",
+    expect(p.baseUrl).toBe(
+      "https://raw.githubusercontent.com/wn-mitch/40kdc-abilities/main",
     );
     expect(p.label).toBe("wn-mitch/40kdc-abilities@main");
   });
 
   it("honours an explicit @ref", () => {
     const p = parseSource("bmerrill17/40kdc-abilities@dev");
-    expect(p.indexUrl).toBe(
-      "https://raw.githubusercontent.com/bmerrill17/40kdc-abilities/dev/index.json",
+    expect(p.baseUrl).toBe(
+      "https://raw.githubusercontent.com/bmerrill17/40kdc-abilities/dev",
     );
     expect(p.label).toBe("bmerrill17/40kdc-abilities@dev");
   });
 
   it("blank falls back to the default source", () => {
-    expect(parseSource("").indexUrl).toBe(parseSource(DEFAULT_SOURCE).indexUrl);
+    expect(parseSource("").baseUrl).toBe(parseSource(DEFAULT_SOURCE).baseUrl);
     expect(parseSource("   ").label).toBe(parseSource(DEFAULT_SOURCE).label);
   });
 
-  it("accepts a raw base URL and appends index.json", () => {
-    expect(parseSource("https://example.com/store/").indexUrl).toBe(
-      "https://example.com/store/index.json",
+  it("accepts a raw base URL", () => {
+    expect(parseSource("https://example.com/store/").baseUrl).toBe(
+      "https://example.com/store",
     );
   });
 
-  it("accepts a direct index.json URL unchanged", () => {
-    const url = "https://example.com/store/index.json";
-    expect(parseSource(url).indexUrl).toBe(url);
+  it("normalizes a direct index.json URL to its containing directory", () => {
+    expect(parseSource("https://example.com/store/index.json").baseUrl).toBe(
+      "https://example.com/store",
+    );
   });
 
   it("rejects malformed specs", () => {
@@ -70,39 +70,40 @@ describe("entryKind / entryToText", () => {
   });
 });
 
-describe("loadIndex", () => {
+
+describe("loadFactionIndex", () => {
   beforeEach(() => _clearMemCache());
 
-  const sample: StoreIndex = {
-    "deep-strike": { faction: "core", raw_text: "Set up in reserves." },
-  };
-
-  function fakeFetch(ok: boolean, body: unknown): typeof fetch {
-    return (async () =>
-      ({
-        ok,
-        status: ok ? 200 : 404,
-        statusText: ok ? "OK" : "Not Found",
-        json: async () => body,
-      }) as Response) as unknown as typeof fetch;
-  }
-
-  it("fetches and counts the index", async () => {
-    const res = await loadIndex("owner/repo@x", { fetchImpl: fakeFetch(true, sample) });
-    expect(res.count).toBe(1);
-    expect(res.index["deep-strike"].raw_text).toBe("Set up in reserves.");
-    expect(res.label).toBe("owner/repo@x");
+  it("loads only core plus the selected faction and overlays duplicate ids", async () => {
+    const requests: string[] = [];
+    const fetchImpl = (async (url: string) => {
+      requests.push(url);
+      const body = url.endsWith("/core.json")
+        ? [{ ability_id: "leader", faction_id: "core", raw_text: "Core leader." }]
+        : [{ ability_id: "leader", faction_id: "orks", raw_text: "Orks leader." }];
+      return { ok: true, status: 200, statusText: "OK", json: async () => body } as Response;
+    }) as typeof fetch;
+    const result = await loadFactionIndex("owner/repo@main", "orks", { fetchImpl });
+    expect(result.index.leader.raw_text).toBe("Orks leader.");
+    expect(requests).toEqual([
+      "https://raw.githubusercontent.com/owner/repo/main/core.json",
+      "https://raw.githubusercontent.com/owner/repo/main/orks.json",
+    ]);
   });
 
-  it("throws on a non-ok response", async () => {
-    await expect(
-      loadIndex("owner/repo@y", { fetchImpl: fakeFetch(false, null) }),
-    ).rejects.toThrow(/404/);
+  it("rejects a faction file containing another faction's record", async () => {
+    const fetchImpl = (async (url: string) => {
+      const body = url.endsWith("/core.json") ? [] : [{ ability_id: "leader", faction_id: "tyranids" }];
+      return { ok: true, status: 200, statusText: "OK", json: async () => body } as Response;
+    }) as typeof fetch;
+    await expect(loadFactionIndex("owner/repo@main", "orks", { fetchImpl })).rejects.toThrow(/Invalid ability entry/);
   });
 
-  it("rejects a non-object index", async () => {
-    await expect(
-      loadIndex("owner/repo@z", { fetchImpl: fakeFetch(true, [1, 2, 3]) }),
-    ).rejects.toThrow(/object map/);
+  it("rejects malformed text fields before caching", async () => {
+    const fetchImpl = (async (url: string) => {
+      const body = url.endsWith("/core.json") ? [] : [{ ability_id: "leader", faction_id: "orks", raw_text: 42 }];
+      return { ok: true, status: 200, statusText: "OK", json: async () => body } as Response;
+    }) as typeof fetch;
+    await expect(loadFactionIndex("owner/repo@main", "orks", { fetchImpl })).rejects.toThrow(/Invalid ability entry/);
   });
 });

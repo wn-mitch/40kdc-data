@@ -7,7 +7,7 @@
  * carrying `victoryPoints`, `victoryPointsCap`, `isCumulative`,
  * `isMutuallyExclusive`, and (secondary only) a `scoringType`
  * (standard/fixed/tactical). The repo models the same cards in
- * `data/core/secondary-cards.json` as an `awards[]` array of DSL-triggered VP
+ * `data/core/mission-cards.json` as an `awards[]` array of DSL-triggered VP
  * blocks. This ingest pulls the dump-authoritative numbers into those awards.
  *
  * MATCH: both `card_type:"secondary"` (all 18 dump `secondary_mission`s) and
@@ -55,7 +55,7 @@ import {
 } from "./loader.js";
 import { CORE_DIR, readJsonArray } from "./repo-files.js";
 import type { StagedWrite } from "./apply.js";
-const CARDS_PATH = path.join(CORE_DIR, "secondary-cards.json");
+const MISSION_CARDS_PATH = path.join(CORE_DIR, "mission-cards.json");
 const MISSIONS_PATH = path.join(CORE_DIR, "missions.json");
 
 /** Scoring-track tag on an award; `undefined` is the flat "scores either way" track. */
@@ -308,6 +308,8 @@ interface MissionPackFacts {
   source: string;
   roundCap: number;
   gameCap: number;
+  secondaryRoundCap: number;
+  secondaryGameCap: number;
 }
 
 /** Repo mission id → its pack's source name + primary-VP caps (generic primaries only). */
@@ -331,6 +333,8 @@ export function missionEntityCanon(dump: MfmDump): Map<string, MissionPackFacts>
       source,
       roundCap: pack.primaryMissionScoreBattleRoundLimit,
       gameCap: pack.primaryMissionScoreGameLimit,
+      secondaryRoundCap: pack.secondaryMissionScoreBattleRoundLimit,
+      secondaryGameCap: pack.secondaryMissionScoreGameLimit,
     });
   }
   return out;
@@ -380,6 +384,8 @@ export function reconcileMissionEntities(dump: MfmDump): MissionEntityReport {
     for (const [field, dumpVal] of [
       ["vp_per_round_cap", facts.roundCap],
       ["vp_per_game_cap", facts.gameCap],
+      ["secondary_vp_per_round_cap", facts.secondaryRoundCap],
+      ["secondary_vp_per_game_cap", facts.secondaryGameCap],
     ] as const) {
       const authored = m[field] as number | undefined;
       if (authored === dumpVal) report.capConfirmed++;
@@ -412,7 +418,7 @@ export interface MissionsReport {
 
 export function runMissions(dump: MfmDump, _write: boolean): MissionsReport {
   const canon = buildMissionScoringCanon(dump);
-  const cards = readJsonArray<Card>(CARDS_PATH);
+  const cards = readJsonArray<Card>(MISSION_CARDS_PATH);
 
   const report: MissionsReport = {
     matched: 0,
@@ -464,7 +470,7 @@ export function runMissions(dump: MfmDump, _write: boolean): MissionsReport {
   report.dumpOnly = [...canon.keys()].filter((id) => !matchedIds.has(id)).sort();
   // Persist in the file's hand-authored compact style so the diff is only the
   // changed values, not a full reflow.
-  if (dirty) report.staged.push({ path: CARDS_PATH, value: cards, text: formatCompact(cards) });
+  if (dirty) report.staged.push({ path: MISSION_CARDS_PATH, value: cards, text: formatCompact(cards) });
   // The mission-entity reconcile (missions.json) stages independently.
   report.staged.push(...report.entities.staged);
   return report;

@@ -26,9 +26,9 @@ units.find("Kharn")!.abilities
 
 ## What This Is Not
 
-This is not a database of game rules. Ability text is never stored here — it's replaced by the [Ability DSL](#ability-dsl), a community-authored structured language that expresses what abilities *do* without reproducing copyrighted text.
-
-Stat lines and point costs are included. These are numerical facts, not creative expression.
+This is not a database of source rules prose. Source prose is kept outside the
+public dataset. The package contains structured mechanical representations,
+generated descriptions, stat lines, and point costs.
 
 ## IP Stance
 
@@ -37,8 +37,8 @@ Stat lines and point costs are included. These are numerical facts, not creative
 | Stat lines (M, T, W, Sv, etc.) | Yes | Numerical facts |
 | Point costs | Yes | Numerical facts |
 | Weapon stats (A, S, AP, D) | Yes | Numerical facts |
-| Ability text | **No** | Creative expression — replaced by DSL |
-| Rules text | **No** | Creative expression |
+| Source ability prose | **No** | Kept in private authoring inputs |
+| Source rules prose | **No** | Kept outside the public dataset |
 | Artwork / logos | **No** | Creative IP |
 
 ## Quick Start
@@ -105,7 +105,9 @@ that — but it is the supported entry point for cross-language verification.
 
 ## Ability DSL
 
-Instead of storing ability text, 40kdc builds structured game trees that express what abilities *do*. Game mechanics aren't copyrightable — only their expression is. The DSL is a new expression authored by the community.
+40kdc builds community-authored structured game trees that express what abilities
+do. A deterministic describer renders those trees for consumers; it does not
+consult source prose.
 
 An ability entry composes four primitives:
 
@@ -221,6 +223,34 @@ are held in behavioral agreement by a shared conformance corpus in
 `±5e-4` per cruncher stage; byte-equal export goldens otherwise), the same
 inputs produce the same outputs in every language. See [`CONFORMANCE.md`](CONFORMANCE.md)
 for what's pinned, the per-area invariants, and the contribution rules.
+
+## Contributors and acknowledgements
+
+40kdc-data is sustained by people who build its schemas, author and correct its
+data, maintain its ports, and provide upstream community resources. Major,
+long-running contributions include:
+
+- [@wn-mitch](https://github.com/wn-mitch) — project creator and maintainer;
+  schema and data architecture, ingestion and authoring systems, and the
+  TypeScript, Rust, Python, and Go packages.
+- **Oberyn ([@bmerrill17](https://github.com/bmerrill17))** — foundational
+  project and data work; ability-authoring and ingestion infrastructure,
+  canonical ability IDs, raw-text store tooling, detachment-rule
+  reconciliation, and MFM synchronization.
+- [@Cmnspro](https://github.com/Cmnspro) — ongoing roster-legality, wargear,
+  ability-link, and faction-asset contributions.
+- [@stopsign002](https://github.com/stopsign002) — repeated live-datasheet,
+  points, wargear, and shared-unit corrections.
+- [@superwutz](https://github.com/superwutz) and
+  [Battlemaster](https://battlemaster.online) — structured terrain-layout data
+  and its [public Data API](https://battlemaster.online/v1/public/docs#tag/data),
+  used with permission.
+
+Many other contributors have supplied data corrections, schema improvements,
+tests, and tooling. GitHub's
+[contributors page](https://github.com/wn-mitch/40kdc-data/graphs/contributors)
+is the durable, complete record of accepted code contributions; issue reports,
+reviews, and community research are valued even when they do not appear there.
 
 ## Licensing
 

@@ -241,9 +241,9 @@ def test_enumerate_forgefiend_configs(ds: Dataset) -> None:
         "Ectoplasma cannon + Hades autocannon",
     }
     assert en.counts_known is False
-    # MFM v1.0 (11e launch) reprices the Forgefiend to 160 for the 1st-2nd unit;
-    # the maw swap is free, so every config stays at 160.
-    assert all(c.points == 160 for c in en.configs)
+    # MFM data_version 909 reprices the Forgefiend to 140 for the 1st–2nd unit;
+    # the maw swap is free, so every config stays at 140.
+    assert all(c.points == 140 for c in en.configs)
 
 
 def test_enumerate_defiler_configs_are_mutually_exclusive(ds: Dataset) -> None:

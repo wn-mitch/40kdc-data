@@ -38,6 +38,13 @@ export function totalArmyPoints(roster: Roster): number {
   }
   return total;
 }
+export function attachmentToken(u: RosterUnit): string | null {
+  const attachment = u.leader_attachment;
+  if (!attachment) return null;
+  const provisional = attachment.provisional ? " [provisional]" : "";
+  return `Attachment: ${attachment.role} -> ${attachment.bodyguard_ref.raw_name}${provisional}`;
+}
+
 
 /**
  * Heuristic re-derivation of which units would carry a `CharN:` prefix on
@@ -63,10 +70,9 @@ export function charSlotAssignment(units: readonly RosterUnit[]): (number | null
   return result;
 }
 
-/** Render a loadout group's per-model weapons, sorted by display name, with `Nx` for counts >1. */
+/** Render a loadout group's per-model weapons in their source order, with `Nx` for counts >1. */
 export function groupWeaponsText(wargear: readonly RosterWargear[]): string {
-  return [...wargear]
-    .sort((a, b) => a.ref.raw_name.localeCompare(b.ref.raw_name))
+  return wargear
     .map((w) => (w.count > 1 ? `${w.count}x ${w.ref.raw_name}` : w.ref.raw_name))
     .join(", ");
 }

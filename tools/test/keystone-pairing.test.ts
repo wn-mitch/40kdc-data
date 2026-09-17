@@ -1,9 +1,9 @@
 /**
  * Keystone pairing invariant over the shipped layout data: every authored
  * measurement keystone has its point-reflected mirror on the piece's
- * 180°-symmetry twin, so layout cards print dimension lines for both
- * players' halves. The layout editor maintains this on add/remove;
- * `src/migrate-keystone-twins.ts` back-fills (and `--check` re-audits) it.
+ * 180°-symmetry twin, except the declared Battlemaster source nudge. The layout
+ * editor maintains this on add/remove; `src/migrate-keystone-twins.ts`
+ * back-fills (and `--check` re-audits) it.
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -20,17 +20,17 @@ describe("keystone twin pairing (shipped data)", () => {
   const layouts = read<TerrainLayout[]>("terrain-layouts.json");
   const templates = read<TerrainTemplate[]>("terrain-templates.json");
 
-  it("every keystone has its mirror on the symmetry twin", () => {
+  it("every non-exempt keystone has its mirror on the symmetry twin", () => {
     const report = pairKeystones(layouts, templates, false);
     expect(
       report.additions.map((a) => `${a.layoutId}/${a.fromPieceId} -> ${a.pieceId}`),
     ).toEqual([]);
   });
 
-  it("no keystone-bearing piece is unpairable", () => {
+  it("has no unexpected unpairable keystone-bearing pieces", () => {
     // A warning means a piece the mirroring can't handle mechanically
-    // (no twin, parented feature, asymmetric vertex) — those need a
-    // hand-authored counterpart, not silence.
+    // (no twin, parented feature, asymmetric vertex) without a declared source
+    // exception; those need a hand-authored counterpart, not silence.
     const report = pairKeystones(layouts, templates, false);
     expect(report.warnings).toEqual([]);
   });

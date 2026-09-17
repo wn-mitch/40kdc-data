@@ -16,8 +16,8 @@
 use std::collections::HashMap;
 
 use crate::data::battle_sizes::points_limit_for_battle_size;
-use crate::data::pricing::base_unit_points;
-use crate::generated::Unit;
+use crate::data::pricing::{host_points_tiers, host_unit_points};
+use crate::generated::{Faction, Unit};
 use crate::import::BattleSize;
 use crate::Dataset;
 
@@ -50,12 +50,12 @@ pub struct CandidateCost {
 }
 
 /// The cheapest cost to field one more copy of `unit` at army ordinal
-/// `next_ordinal` — the minimum over its points tiers, taking it at its
-/// smallest legal size. Zero when the unit has no points tiers.
-fn cheapest_next_copy(unit: &Unit, next_ordinal: u64) -> u64 {
-    unit.points
-        .iter()
-        .map(|t| base_unit_points(unit, t.models.get(), next_ordinal))
+/// `next_ordinal` — the minimum over the tiers in effect for `host_faction`'s
+/// army, taking it at its smallest legal size. Zero when there are no tiers.
+fn cheapest_next_copy(unit: &Unit, next_ordinal: u64, host_faction: Option<&Faction>) -> u64 {
+    host_points_tiers(unit, host_faction)
+        .into_iter()
+        .map(|t| host_unit_points(unit, t.models, next_ordinal, host_faction))
         .min()
         .unwrap_or(0)
 }
@@ -82,6 +82,9 @@ pub fn candidate_affordability(spec: &AffordabilitySpec, dataset: &Dataset) -> V
     };
 
     // Running total of the current list (ordinal-aware) + enhancement costs.
+    // Host-aware: foreign units with an `allied_points` entry for this army
+    // price from that entry (see `host_points_tiers`).
+    let host_faction = faction.and_then(|f| dataset.factions.get(f));
     let mut ordinals: HashMap<String, u64> = HashMap::new();
     let mut spent: u64 = 0;
     for u in &spec.units {
@@ -90,7 +93,7 @@ pub fn candidate_affordability(spec: &AffordabilitySpec, dataset: &Dataset) -> V
         };
         let ord = ordinals.entry(u.unit_id.clone()).or_insert(0);
         *ord += 1;
-        spent += base_unit_points(view, u.model_count, *ord);
+        spent += host_unit_points(view, u.model_count, *ord, host_faction);
         if let Some(enh_id) = &u.enhancement_id {
             spent += dataset
                 .enhancements
@@ -129,7 +132,7 @@ pub fn candidate_affordability(spec: &AffordabilitySpec, dataset: &Dataset) -> V
             continue;
         };
         let next_ordinal = ordinals.get(&unit_id).copied().unwrap_or(0) + 1;
-        let next_copy_cost = cheapest_next_copy(view, next_ordinal);
+        let next_copy_cost = cheapest_next_copy(view, next_ordinal, host_faction);
         let affordable = match remaining {
             None => true,
             Some(r) => (next_copy_cost as i64) <= r,

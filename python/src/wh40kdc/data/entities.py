@@ -57,8 +57,9 @@ class UnitView:
         faction_id = self.raw.get("faction_id", "")
         return _resolve_all(
             self.raw.get("weapon_ids"),
-            lambda id_: self._ds.weapons.get_in_faction(id_, faction_id)
-            or self._ds.weapons.get_any(id_),
+            lambda id_: (
+                self._ds.weapons.get_in_faction(id_, faction_id) or self._ds.weapons.get_any(id_)
+            ),
         )
 
     @property
@@ -70,14 +71,49 @@ class UnitView:
         faction_id = self.raw.get("faction_id", "")
         return _resolve_all(
             self.raw.get("ability_ids"),
-            lambda id_: self._ds.abilities.get_in_faction(id_, faction_id)
-            or self._ds.abilities.get_any(id_),
+            lambda id_: (
+                self._ds.abilities.get_in_faction(id_, faction_id)
+                or self._ds.abilities.get_any(id_)
+            ),
         )
 
     @property
     def wargear_options(self) -> list[dict[str, Any]]:
         """Wargear options (weapon swaps, add-ons, choices) authored for this unit."""
         return self._ds.wargear_options_of(self.raw)
+
+    @property
+    def faction_id(self) -> str:
+        return self.raw["faction_id"]
+
+    @property
+    def role(self) -> str | None:
+        return self.raw.get("role")
+
+    @property
+    def keywords(self) -> list[str]:
+        return self.raw.get("keywords") or []
+
+    @property
+    def faction_keywords(self) -> list[str]:
+        return self.raw.get("faction_keywords") or []
+
+    @property
+    def model_count(self) -> dict[str, Any] | None:
+        return self.raw.get("model_count")
+
+    @property
+    def points(self) -> list[dict[str, Any]]:
+        return self.raw.get("points") or []
+
+    @property
+    def profiles(self) -> list[dict[str, Any]]:
+        """All stat profiles for this unit (at least one is always present)."""
+        return self.raw["profiles"]
+
+    @property
+    def profile_count(self) -> int:
+        return len(self.raw["profiles"])
 
     def profile_at(self, i: int = 0) -> dict[str, Any]:
         """The stat profile at index ``i`` (default 0)."""
@@ -157,6 +193,57 @@ class AbilityView:
         when the ability declares no scope."""
         return [u for u in candidates if self.affects_unit(u)]
 
+    def _resolve_rules_bundles(
+        self,
+        effect: Any,
+        seen: frozenset[str] | None = None,
+    ) -> Any:
+        """Expand entity-backed grants into reusable bundle effect trees.
+
+        Unresolved, malformed, and cyclic references remain untouched so the
+        DSL translator emits its normal unsupported diagnostic.
+        """
+        seen = seen or frozenset([self.id])
+        if isinstance(effect, list):
+            copy: list[Any] | None = None
+            for index, value in enumerate(effect):
+                resolved = self._resolve_rules_bundles(value, seen)
+                if resolved is not value:
+                    if copy is None:
+                        copy = list(effect)
+                    copy[index] = resolved
+            return copy if copy is not None else effect
+        if not isinstance(effect, dict):
+            return effect
+
+        modifier = effect.get("modifier")
+        ability_id = modifier.get("ability_id") if isinstance(modifier, dict) else None
+        if (
+            effect.get("type") == "ability-grant"
+            and isinstance(modifier, dict)
+            and modifier.get("rules_bundle") is True
+            and isinstance(ability_id, str)
+            and ability_id not in seen
+        ):
+            faction_id = self.raw.get("faction_id")
+            target = (
+                self._ds.abilities.get_in_faction(ability_id, faction_id)
+                if isinstance(faction_id, str)
+                else None
+            ) or self._ds.abilities.get_any(ability_id)
+            target_effect = target.raw.get("effect") if target is not None else None
+            if isinstance(target_effect, dict) and target_effect.get("type") == "rules-bundle":
+                return self._resolve_rules_bundles(target_effect, seen | frozenset([ability_id]))
+
+        copy_dict: dict[str, Any] | None = None
+        for key, value in effect.items():
+            resolved = self._resolve_rules_bundles(value, seen)
+            if resolved is not value:
+                if copy_dict is None:
+                    copy_dict = dict(effect)
+                copy_dict[key] = resolved
+        return copy_dict if copy_dict is not None else effect
+
     def get_buffs(
         self,
         source: dict[str, Any],
@@ -181,7 +268,12 @@ class AbilityView:
         from wh40kdc.cruncher.from_dsl import effect_to_buffs
 
         ctx = context if context is not None else {"phase": "shooting"}
-        translated = effect_to_buffs(self.raw.get("effect"), source, ctx, perspective)
+        translated = effect_to_buffs(
+            self._resolve_rules_bundles(self.raw.get("effect")),
+            source,
+            ctx,
+            perspective,
+        )
         # A range-scoped ability (DSL scope.range_inches, e.g. a "within 18\""
         # reroll) gates on distance to the target. Stamp it here, not in the
         # effect translator, so the effect-translation corpus (bare effects) is
@@ -227,6 +319,19 @@ class WeaponView:
     def units(self) -> list[UnitView]:
         """Units that list this weapon in their ``weapon_ids``."""
         return self._ds.units_with_weapon(self.raw["id"])
+
+    @property
+    def type(self) -> str:
+        return self.raw["type"]
+
+    @property
+    def profiles(self) -> list[dict[str, Any]]:
+        """All stat profiles for this weapon (at least one is always present)."""
+        return self.raw["profiles"]
+
+    @property
+    def profile_count(self) -> int:
+        return len(self.raw["profiles"])
 
     def profile_at(self, i: int = 0) -> dict[str, Any]:
         """The stat profile at index ``i`` (default 0)."""

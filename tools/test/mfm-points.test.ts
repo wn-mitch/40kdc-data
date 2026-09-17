@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { MfmDump } from "../src/mfm/loader.js";
-import { deriveDatasheet } from "../src/mfm/points.js";
+import { deriveDatasheet, routeChapterTwin } from "../src/mfm/points.js";
 
 /**
  * Points derivation: composition.points × Σ(miniature max) for the tier size,
@@ -132,5 +132,85 @@ describe("deriveDatasheet", () => {
       ],
     });
     expect(deriveDatasheet(d, "ds").ambiguous).toBe(false);
+  });
+});
+
+describe("routeChapterTwin", () => {
+  const native = [
+    { models: 5, cost: 85 },
+    { models: 10, cost: 160 },
+  ];
+
+  it("routes a repricing twin's tiers to allied_points under its home faction", () => {
+    const next = routeChapterTwin({ points: native }, "blood-angels", [
+      { models: 5, models_max: 5, cost: 95 },
+      { models: 10, models_max: 10, cost: 180 },
+    ]);
+    expect(next).toEqual([
+      { models: 5, cost: 95, host_faction: "blood-angels" },
+      { models: 10, cost: 180, host_faction: "blood-angels" },
+    ]);
+  });
+
+  it("keeps other hosts' entries and replaces only its own", () => {
+    const rec = {
+      points: [{ models: 1, cost: 240 }],
+      allied_points: [
+        { models: 1, cost: 230, host_faction: "blood-angels" },
+        { models: 1, cost: 235, host_faction: "space-wolves" },
+      ],
+    };
+    const next = routeChapterTwin(rec, "space-wolves", [
+      { models: 1, models_max: 1, cost: 230 },
+    ]);
+    expect(next).toEqual([
+      { models: 1, cost: 230, host_faction: "blood-angels" },
+      { models: 1, cost: 230, host_faction: "space-wolves" },
+    ]);
+  });
+
+  it("contributes nothing for an identically-priced twin and clears its stale entries", () => {
+    const rec = {
+      points: native,
+      allied_points: [{ models: 5, cost: 95, host_faction: "blood-angels" }],
+    };
+    const next = routeChapterTwin(rec, "blood-angels", [
+      { models: 5, models_max: 5, cost: 85 },
+      { models: 10, models_max: 10, cost: 160 },
+    ]);
+    expect(next).toEqual([]);
+  });
+
+  it("drops twin tiers at sizes the native table doesn't price (optional attachments)", () => {
+    // Outrider-ATV shape: the chapter table also prices a 1-model attachment
+    // the repo's native tiers don't model.
+    const next = routeChapterTwin(
+      { points: [{ models: 3, cost: 70 }, { models: 6, cost: 140 }] },
+      "blood-angels",
+      [
+        { models: 3, models_max: 3, cost: 75 },
+        { models: 6, models_max: 6, cost: 140 },
+        { models: 1, models_max: 1, cost: 60 },
+      ]
+    );
+    expect(next).toEqual([
+      { models: 3, cost: 75, host_faction: "blood-angels" },
+      { models: 6, cost: 140, host_faction: "blood-angels" },
+    ]);
+  });
+
+  it("carries ordinal bands through to the host entries", () => {
+    const banded = [
+      { models: 5, cost: 85, unit_count_min: 1, unit_count_max: 2 },
+      { models: 5, cost: 95, unit_count_min: 3, unit_count_max: null },
+    ];
+    const next = routeChapterTwin({ points: banded }, "blood-angels", [
+      { models: 5, models_max: 5, cost: 95, unit_count_min: 1, unit_count_max: 2 },
+      { models: 5, models_max: 5, cost: 105, unit_count_min: 3, unit_count_max: null },
+    ]);
+    expect(next).toEqual([
+      { models: 5, cost: 95, unit_count_min: 1, unit_count_max: 2, host_faction: "blood-angels" },
+      { models: 5, cost: 105, unit_count_min: 3, unit_count_max: null, host_faction: "blood-angels" },
+    ]);
   });
 });

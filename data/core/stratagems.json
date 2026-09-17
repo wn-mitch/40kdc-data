@@ -16,11 +16,17 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "command-re-roll",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "423c91b3-aaa4-4629-bba6-b4ef2355cd1c"
+      }
+    ]
   },
   {
     "id": "counter-offensive",
@@ -35,7 +41,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "counter-offensive",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -58,11 +64,17 @@
         "Character"
       ]
     },
-    "ability_id": null,
+    "ability_id": "epic-challenge",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9e84ecda-6e1a-4740-9dbf-e46b609e1d74"
+      }
+    ]
   },
   {
     "id": "insane-bravery",
@@ -77,11 +89,17 @@
     "player_turn": "your-turn",
     "timing": "once-per-battle",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "insane-bravery",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ab3c2b39-7af0-4602-bff9-9c218277f9fa"
+      }
+    ]
   },
   {
     "id": "explosives",
@@ -101,11 +119,17 @@
         "Grenades"
       ]
     },
-    "ability_id": null,
+    "ability_id": "explosives",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d57d3583-efec-4344-bd18-10e13bb5ef40"
+      }
+    ]
   },
   {
     "id": "crushing-impact",
@@ -125,11 +149,17 @@
         "Vehicle"
       ]
     },
-    "ability_id": null,
+    "ability_id": "crushing-impact",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "67deb45f-23e8-492b-9372-de586c0dfd61"
+      }
+    ]
   },
   {
     "id": "rapid-ingress",
@@ -144,11 +174,17 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "rapid-ingress",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a5e58471-6de3-4bf7-b91e-b8a0b27f058d"
+      }
+    ]
   },
   {
     "id": "fire-overwatch",
@@ -164,11 +200,17 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-turn",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "fire-overwatch",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5447addb-20a3-48e5-8db9-41b4066a39cd"
+      }
+    ]
   },
   {
     "id": "smokescreen",
@@ -187,11 +229,17 @@
         "Smoke"
       ]
     },
-    "ability_id": null,
+    "ability_id": "smokescreen",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "cef0a3bd-a7f0-49d3-8c38-96fc5dcddaca"
+      }
+    ]
   },
   {
     "id": "heroic-intervention",
@@ -206,10 +254,16 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-turn",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "heroic-intervention",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ab1efe2c-3ca0-4e83-820c-16d31abea44d"
+      }
+    ]
   }
 ]

@@ -17,7 +17,7 @@
     }
   ],
   "battle_size": "strike-force",
-  "force_disposition": null,
+  "force_disposition": "take-and-hold",
   "points": {
     "declared_limit": 1995,
     "detachment_cap": 3,
@@ -279,9 +279,9 @@
         },
         {
           "ref": {
-            "id": null,
+            "id": "collar-of-khorne",
             "raw_name": "Collar of Khorne",
-            "resolved": false,
+            "resolved": true,
             "candidates": []
           },
           "count": 5
@@ -306,18 +306,13 @@
   "diagnostics": {
     "resolved_units": 5,
     "unresolved_units": 0,
-    "resolved_weapons": 10,
-    "unresolved_weapons": 2,
+    "resolved_weapons": 11,
+    "unresolved_weapons": 1,
     "warnings": [
       {
         "code": "weapon-unresolved",
         "message": "Weapon name did not match any 40kdc weapon.",
         "raw_name": "Burning maw"
-      },
-      {
-        "code": "weapon-unresolved",
-        "message": "Weapon name did not match any 40kdc weapon.",
-        "raw_name": "Collar of Khorne"
       },
       {
         "code": "points-mismatch",

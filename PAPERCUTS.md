@@ -34,6 +34,7 @@ Impeccable setup documents a repo-local .claude loader path, but this repository
 ## 2026-08-06T20:55:48Z — gpt-5.6-sol
 
 The campaign skill and agent outputs referenced tools/src/translate/cli.ts, but that path does not exist; attempting the documented translation validation command failed before validation and required locating the current CLI.
+
 ## 2026-08-07T15:27:24Z — openai-codex/gpt-5.6-sol
 
 jq was invoked over multiple faction JSON files without slurping, producing one report per file and exiting 5 instead of one corpus-wide enum summary; use jq -s/add for this lookup.
@@ -90,7 +91,155 @@ The Bun-backed JS eval cannot import the graph runtime because it depends on Nod
 
 gh pr create in the jj workspace failed because the workspace has no .git directory. Pass --repo explicitly when opening PRs from /Users/will.mitchell/40kdc-dsl.
 
+## 2026-08-20T19:13:10Z — gpt-5.6
+
+The Codex workspace ran out of disk space during a JSON write because a 335 MB OCR orientation scratch directory remained under /tmp; the failed write had to be verified before retrying after cleanup.
+
+## 2026-08-20T22:37:07Z — gpt-5.6-sol
+
+The pack extractor resolves PDF and store arguments against the repository root even when invoked from tools; passing ../_private from the tools cwd escaped the repo and failed before extraction.
+
+## 2026-08-20T22:51:02Z — gpt-5.6-sol
+
+python/.venv is editable-installed against /private/tmp/40kdc-maps-ci-fix rather than this workspace, so focused pytest silently exercised stale source until PYTHONPATH=python/src was set.
+
+## 2026-08-20T22:57:16Z — gpt-5.6-sol
+
+npm run mfm:golden silently rewrote the committed MFM 925 golden and gaps from the local stale data_version 895 dump; the command needs a downgrade guard before writing.
+
+## 2026-08-21T00:00:39Z — openai-codex/gpt-5.6-sol
+
+author:ingest resolves manifest paths from tools/ despite AGENTS.md saying tool path args resolve from the repo root; a documented repo-relative _private/manifests path was reported missing.
+
+## 2026-08-21T00:17:58Z — openai-codex/gpt-5.6-sol
+
+AGENTS.md documents an upstream remote for 40kdc-data, but this workspace has no upstream remote;  fails and the actual canonical remote must be inferred from repository metadata.
+
+## 2026-08-21T00:37:55Z — openai-codex/gpt-5.6-sol
+
+The advertised silent-failure-hunter and pr-test-analyzer agents failed immediately with 'No model selected', so their review slices could not run.
+
+## 2026-08-21T04:19:52Z — codex
+
+author:input hard-fails when the optional ~/army-assist checkout is absent, even though the sibling raw-text store already contains the required rules; this blocks refreshing source-grounded repair inputs.
+
+## 2026-08-21T14:07:44Z — openai-codex/gpt-5.6-sol
+
+tsx -e could not resolve a local TypeScript module imported with a .js suffix, despite repository source imports using extensionless TypeScript paths; the validation one-liner failed before execution.
+
+## 2026-08-21T14:10:07Z — openai-codex/gpt-5.6-sol
+
+Codex raw-store records can carry phases: null despite phase comparison code expecting arrays; jq phase audits must normalize with // [].
+
+## 2026-08-21T14:30:08Z — openai-codex/gpt-5.6-sol
+
+The new just regen recipe attempted a global editable pip install on macOS and failed under PEP 668, blocking preflight despite all Python tooling already being installed. Regeneration should not mutate the package environment.
+
+## 2026-08-21T16:30:16Z — gpt-5.6-sol
+
+Temporary model-adapter PATH omitted the active NVM bin, so npm failed before running; prepend /tmp to the inherited PATH instead.
+
+## 2026-08-21T16:47:45Z — gpt-5.6-sol
+
+The raw-text store's verification script writes a 4.9 MiB unignored dist/bundle-abilities.json, which jj refuses to snapshot; verification requires manually deleting this transient output.
+
+## 2026-08-21T16:57:34Z — gpt-5.6-sol
+
+gh cannot infer a repository from a colocated jj workspace that lacks a .git directory; raw-store PR commands must pass the explicit -R repository.
+
+## 2026-08-28T15:11:14Z — openai-codex/gpt-5.6-sol
+
+A live Battlemaster re-projection strips committed keystones, but the documented derive-keystones --rederive follow-up now fails on a 0.5-inch pairing difference in bm-disrupt-vs-disrupt-01, preventing the projected data from being restored.
+
+## 2026-08-28T16:19:22Z — openai-codex
+
+The layout-editor workspace has no local Prettier binary, so its ordinary npx prettier command fails; formatting must be invoked through the root tools workspace.
+
+## 2026-08-28T16:29:49Z — openai-codex
+
+The layout-editor production build emitted its bundle-size table but then hung until the 10-minute command timeout while a persistent Vite dev server was running; the same build normally exits in seconds.
+
+## 2026-09-03T19:08:57Z — codex
+
+Phase 5 names the audit as npx tsx tools/src/audit-loadout-coverage.ts, but I reflexively ran the tools-only npm script from the repository root; npm failed before regeneration and made no project changes.
+
+## 2026-09-03T19:18:39Z — codex
+
+I ran a jq probe with a literal TARGET placeholder instead of first extracting the BSData target id; it returned an empty result and provided no diagnostic value.
+
+## 2026-09-03T19:23:34Z — codex
+
+This installed jj version has no archive subcommand, so the planned whole-parent materialization failed before comparison; use jj file show per composition instead.
+<<<<<<< conflict 1 of 1
++++++++ qotqmzzv 02ae2248 "chore: Release 1.4.3" (rebase destination)
+
+## 2026-09-08T16:37:21Z — gpt-6-astra
+
+The supplied review appeared only as truncated inline text, with no recoverable attachment URI. Earlier local exports were different reviews, so the full finding inventory requires the original Markdown upload.
+
+## 2026-09-08T16:49:20Z — gpt-6-astra
+
+The CLI rejects --list-models; model availability is exposed by omp models find, while pi/task must first be resolved through omp config get modelRoles.
+
+## 2026-09-08T18:08:23Z — gpt-6-astra
+
+Eval's edit bridge takes an undocumented input field and returns hasError instead of throwing; unchecked calls left an intended edit unapplied. The bash wildcard expansion also emitted nonexistent suffix paths rather than matching full paths.
+
+## 2026-09-08T19:03:03Z — gpt-6-astra
+
+Runner protocol documentation showed init fields at top level, but the actual runner requires args; corrected the example. Rust codegen also requires refreshing the schema bundle first, and its flattener accepts only whole-file or top-level definition references.
+
+## 2026-09-08T19:18:01Z — gpt-6-astra
+
+Rust loadout coverage is not a standalone integration target; cargo test --test loadout fails. Use cargo test -p wh40kdc loadout to select the embedded and API tests.
+
+## 2026-09-08T20:51:05Z — gpt-6-astra
+
+A subagent reported private JSON proposal paths that were absent from the parent workspace. Recovering and publishing the existing artifacts required a second handoff before validation could run.
+
+## 2026-09-10T14:09:16Z — openai-codex/gpt-5.6-sol
+
+A jj log query failed because GitHub exposed an external-fork PR SHA that the local jj repo had not fetched. Check ref availability or add the contributor remote before including external PR SHAs in one revision set.
+
+## 2026-09-10T14:19:43Z — openai-codex/gpt-5.6-sol
+
+A PR data-review subagent ran to completion but yielded null data, so the canonical data and stock-loadout audit had to be dispatched again.
+
+## 2026-09-15T00:05:56Z — openai-codex/gpt-5.6-sol
+
+ast_edit matched all faction JSON properties but proposed invalid arrays by stripping captured string quotes, forcing a parsed JSON codemod fallback.
+
+## 2026-09-15T00:13:12Z — openai-codex/gpt-5.6-sol
+
+just preflight fails by design on intended uncommitted generated artifacts, so it cannot serve as a pre-commit gate for schema changes; use verify-regen-stable plus test-all before committing, then preflight.
+
+## 2026-09-15T00:17:01Z — openai-codex/gpt-5.6-sol
+
+Example-local npm test and check failed because workspace dependencies were absent; the repository requires npm ci at the monorepo root before example validation.
+
+## 2026-09-15T00:30:03Z — openai-codex/gpt-5.6-sol
+
+gh pr merge failed in a jj detached working copy because it tried to determine a current git branch; pass -R owner/repo so the operation does not depend on checkout state.
+
+## 2026-09-15T00:55:38Z — openai-codex/gpt-5.6-sol
+
+Local npm credentials are unavailable, so accidental release cleanup must run through the authenticated GitHub Actions publish environment.
+
+## 2026-09-15T20:01:25Z — openai-codex/gpt-5.6-sol
+
+A shell glob for optional per-faction artifacts expanded through every data/core child, causing cp to report dozens of expected missing paths after copying valid files. Use an explicit file list or nullglob-capable invocation for heterogeneous trees.
+
+## 2026-09-15T20:04:36Z — openai-codex/gpt-5.6-sol
+
+Running npm test from tools with the repository-relative tools/test path made Vitest find no files because its root is already tools/. Use test/validate.test.ts or validate.test.ts from that workspace.
+
+## 2026-09-15T20:09:55Z — openai-codex/gpt-5.6-sol
+
+npm pack --dry-run --json interleaves prepack lifecycle output with JSON, so piping directly to jq fails and closes stdout, causing the postbuild audit to crash with EPIPE. Run prepack prerequisites separately and use --ignore-scripts for machine-readable inspection.
+
+## 2026-09-16T18:32:13Z — openai-codex/gpt-5.6-sol
+
+The browser tab.run context exposes Puppeteer, not Playwright: page.locator(...).count() is unavailable despite locator-style APIs being common elsewhere. Use page.99520eval/querySelectorAll for DOM counts.
+
 ## 2026-08-25T21:00:09Z — gpt-5.6
-
 The persistent Bun eval kernel cannot import node:sqlite, so graph workflow smoke tests require a separate Node invocation despite the workflow's Node runtime.
-

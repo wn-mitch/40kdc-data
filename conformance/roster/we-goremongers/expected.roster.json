@@ -17,7 +17,7 @@
     }
   ],
   "battle_size": "strike-force",
-  "force_disposition": null,
+  "force_disposition": "purge-the-foe",
   "points": {
     "declared_limit": 2000,
     "detachment_cap": 3,

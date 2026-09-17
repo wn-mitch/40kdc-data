@@ -380,54 +380,12 @@
     "faction_id": "chaos-daemons",
     "models": [
       {
-        "name": "Iridescent Horror",
-        "profile_name": "Pink Horror",
-        "min": 1,
-        "max": 1,
-        "default_weapon_ids": [
-          "coruscating-flames"
-        ],
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
-      },
-      {
         "name": "Pink Horror",
-        "min": 8,
-        "max": 8,
+        "min": 10,
+        "max": 10,
         "default_weapon_ids": [
           "coruscating-pink-flames",
           "pink-claws"
-        ],
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
-      },
-      {
-        "name": "Brimstone Horror",
-        "min": 1,
-        "max": 1,
-        "default_weapon_ids": [
-          "yellow-claws",
-          "coruscating-yellow-flames"
-        ],
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
-      },
-      {
-        "name": "Blue Horror",
-        "min": 0,
-        "max": 1,
-        "default_weapon_ids": [
-          "blue-claws",
-          "coruscating-blue-flames"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -439,7 +397,18 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Pink Horror",
+            "min": 10,
+            "max": 10
+          }
+        ]
+      }
+    ]
   },
   {
     "unit_id": "infernal-enrapturess",
@@ -886,13 +855,11 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "default_weapon_ids": [],
         "base_size_mm": {
           "shape": "hull",
           "draft": true
-        },
-        "default_weapon_ids": [
-          "feculent-gnarlmaw"
-        ]
+        }
       }
     ],
     "game_version": {
@@ -1577,8 +1544,9 @@
           "length": 42
         },
         "default_weapon_ids": [
+          "scalding-roar",
           "soul-rending-fangs",
-          "scalding-roar"
+          "brass-collar-of-bloody-vengeance"
         ]
       }
     ],
@@ -1749,13 +1717,11 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
+        "default_weapon_ids": [],
         "base_size_mm": {
           "shape": "hull",
           "draft": true
-        },
-        "default_weapon_ids": [
-          "skull-altar"
-        ]
+        }
       }
     ],
     "game_version": {
@@ -1848,40 +1814,12 @@
     "faction_id": "chaos-daemons",
     "models": [
       {
-        "name": "Iridescent Horror",
-        "profile_name": "Blue Horror",
-        "min": 1,
-        "max": 1,
-        "default_weapon_ids": [
-          "coruscating-flames"
-        ],
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 25
-        }
-      },
-      {
         "name": "Blue Horror",
-        "min": 9,
-        "max": 9,
+        "min": 10,
+        "max": 10,
         "default_weapon_ids": [
           "blue-claws",
           "coruscating-blue-flames"
-        ],
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 25
-        }
-      },
-      {
-        "name": "Brimstone Horror",
-        "min": 0,
-        "max": 1,
-        "default_weapon_ids": [
-          "yellow-claws",
-          "coruscating-yellow-flames"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -1893,7 +1831,18 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Blue Horror",
+            "min": 10,
+            "max": 10
+          }
+        ]
+      }
+    ]
   },
   {
     "unit_id": "the-blue-scribes",
@@ -2132,7 +2081,8 @@
         },
         "default_weapon_ids": [
           "burning-roar",
-          "gore-drenched-fangs"
+          "gore-drenched-fangs",
+          "collar-of-khorne"
         ]
       },
       {
@@ -2146,7 +2096,8 @@
           "length": 35.5
         },
         "default_weapon_ids": [
-          "gore-drenched-fangs"
+          "gore-drenched-fangs",
+          "collar-of-khorne"
         ]
       }
     ],

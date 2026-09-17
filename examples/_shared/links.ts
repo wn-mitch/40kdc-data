@@ -18,6 +18,7 @@ export const LIST_BUILDER_URL = "https://list-builder.alpacasoft.dev";
 export const HULL_TRACER_URL = "https://hull-tracer.alpacasoft.dev";
 export const TEAMS_PLANNER_URL = "https://teams-planner.alpacasoft.dev";
 export const DATA_EXPLORER_URL = "https://data-explorer.alpacasoft.dev";
+export const CODEX_URL = "https://codex.alpacasoft.dev";
 export const ATC_VIEWER_URL = "https://atc.alpacasoft.dev";
 
 /**
@@ -34,6 +35,7 @@ export const APPS: AppEntry[] = [
   { id: "teams-planner", label: "Teams Planner", tag: "disposition coverage", url: TEAMS_PLANNER_URL },
   { id: "hull-tracer", label: "Hull Tracer", tag: "collision outlines", url: HULL_TRACER_URL },
   { id: "data-explorer", label: "Data Explorer", tag: "dataset browser", url: DATA_EXPLORER_URL },
+  { id: "codex", label: "Codex", tag: "faction reader", url: CODEX_URL },
   { id: "atc-viewer", label: "ATC Viewer", tag: "opponent lists", url: ATC_VIEWER_URL },
 ];
 

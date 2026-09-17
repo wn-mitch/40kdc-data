@@ -5,9 +5,9 @@
     "detachment_id": "unforgiven-task-force",
     "cost": 25,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "shroud-of-heroes-unforgiven-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -15,7 +15,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b8e5f60e-910d-5852-9a4b-2fa5f15e97a8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f488a9d7-69fb-42d4-9c8b-96860cf8e5b5"
+      }
+    ]
   },
   {
     "id": "stubborn-tenacity-unforgiven-task-force",
@@ -23,9 +33,9 @@
     "detachment_id": "unforgiven-task-force",
     "cost": 15,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "stubborn-tenacity-unforgiven-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -33,7 +43,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "14f870ba-8d76-5b39-8a21-1a8826fbd76a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7018776e-8c69-4371-b038-0d6dd2fe8537"
+      }
+    ]
   },
   {
     "id": "weapons-of-the-first-legion-unforgiven-task-force",
@@ -41,9 +61,9 @@
     "detachment_id": "unforgiven-task-force",
     "cost": 15,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "weapons-of-the-first-legion-unforgiven-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -51,17 +71,24 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "64bc284a-3168-50fa-b6b4-6f707fc9ece4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3d01d429-55f8-49ab-ae1a-8999e67393e1"
+      }
+    ]
   },
   {
     "id": "pennant-of-remembrance-unforgiven-task-force",
     "name": "Pennant of Remembrance",
     "detachment_id": "unforgiven-task-force",
     "cost": 10,
-    "keyword_restrictions": [
-      "Dark Angels"
-    ],
-    "ability_id": null,
+    "ability_id": "pennant-of-remembrance-unforgiven-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -69,7 +96,25 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Ancient"
+      ],
+      [
+        "Bladeguard Ancient"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e51576d7-2dfb-5b1c-803b-e78810a201c0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8b6de18b-cb40-49eb-9eb3-3ece326ec681"
+      }
+    ]
   },
   {
     "id": "champion-of-the-deathwing-inner-circle-task-force",
@@ -77,9 +122,9 @@
     "detachment_id": "inner-circle-task-force",
     "cost": 15,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Deathwing"
     ],
-    "ability_id": null,
+    "ability_id": "champion-of-the-deathwing-inner-circle-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -87,7 +132,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2694b15a-fd6d-54ef-88c3-2adc17193af6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "28e99366-170a-49c2-a572-6740ee178f95"
+      }
+    ]
   },
   {
     "id": "eye-of-the-unseen-inner-circle-task-force",
@@ -95,9 +150,9 @@
     "detachment_id": "inner-circle-task-force",
     "cost": 10,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Deathwing"
     ],
-    "ability_id": null,
+    "ability_id": "eye-of-the-unseen-inner-circle-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -105,7 +160,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "73051580-cffe-55fb-b517-7a031d684671"
+      },
+      {
+        "namespace": "mfm",
+        "id": "054b3f70-e4e8-47aa-9b84-aa490c5470ab"
+      }
+    ]
   },
   {
     "id": "singular-will-inner-circle-task-force",
@@ -113,9 +178,9 @@
     "detachment_id": "inner-circle-task-force",
     "cost": 20,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Deathwing"
     ],
-    "ability_id": null,
+    "ability_id": "singular-will-inner-circle-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -123,7 +188,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f598cc52-f48c-52ef-9a83-647b4ecf69e0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c2acfc37-96f6-487a-89fa-b11e08271d53"
+      }
+    ]
   },
   {
     "id": "deathwing-assault-inner-circle-task-force",
@@ -131,9 +206,9 @@
     "detachment_id": "inner-circle-task-force",
     "cost": 30,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Deathwing"
     ],
-    "ability_id": null,
+    "ability_id": "deathwing-assault-inner-circle-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -141,7 +216,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a4e6c46f-24e8-545c-906e-6a5ddfa489bc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fe92aec6-d66b-41ec-90f3-3f13c9bf83b4"
+      }
+    ]
   },
   {
     "id": "calibanite-armaments-lions-blade-task-force",
@@ -149,9 +234,9 @@
     "detachment_id": "lions-blade-task-force",
     "cost": 15,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "calibanite-armaments-lions-blade-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -159,7 +244,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b5d37345-de0b-5559-930a-f107e5dee9cf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e1d0fc18-e30e-464d-a00b-6a7d603ef76d"
+      }
+    ]
   },
   {
     "id": "lord-of-the-hunt-lions-blade-task-force",
@@ -167,9 +262,9 @@
     "detachment_id": "lions-blade-task-force",
     "cost": 15,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Ravenwing"
     ],
-    "ability_id": null,
+    "ability_id": "lord-of-the-hunt-lions-blade-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -177,17 +272,24 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "08cd6939-399e-5351-9a94-2749f24fc2ce"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b6976f53-56e6-427e-8025-17a0fd869ccb"
+      }
+    ]
   },
   {
     "id": "stalwart-champion-lions-blade-task-force",
     "name": "Stalwart Champion",
     "detachment_id": "lions-blade-task-force",
-    "cost": 25,
-    "keyword_restrictions": [
-      "Dark Angels"
-    ],
-    "ability_id": null,
+    "cost": 15,
+    "ability_id": "stalwart-champion-lions-blade-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -195,7 +297,28 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Captain"
+      ],
+      [
+        "Lieutenant"
+      ],
+      [
+        "Chaplain"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "36f98806-41c1-5ceb-844f-416d6fc48c89"
+      },
+      {
+        "namespace": "mfm",
+        "id": "34a55249-41f7-4844-a9bc-dd8fa2a3f779"
+      }
+    ]
   },
   {
     "id": "fulgus-magna-lions-blade-task-force",
@@ -203,9 +326,9 @@
     "detachment_id": "lions-blade-task-force",
     "cost": 20,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Deathwing"
     ],
-    "ability_id": null,
+    "ability_id": "fulgus-magna-lions-blade-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -213,7 +336,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "472ce887-c7e0-5060-a1d9-e29fcc85ae53"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a41f22d-c7d2-440e-aa5a-4fa1720ce6f0"
+      }
+    ]
   },
   {
     "id": "tempered-in-battle-aura-wrath-of-the-rock",
@@ -221,9 +354,9 @@
     "detachment_id": "wrath-of-the-rock",
     "cost": 10,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "tempered-in-battle-aura-wrath-of-the-rock",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -231,7 +364,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2db303c9-bf24-554d-a834-a8b67f55fca3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3bf50f51-983c-4f56-9583-bdba799ca433"
+      }
+    ]
   },
   {
     "id": "ancient-weapons-wrath-of-the-rock",
@@ -239,9 +382,9 @@
     "detachment_id": "wrath-of-the-rock",
     "cost": 25,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "ancient-weapons-wrath-of-the-rock",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -249,7 +392,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "65f84628-2383-5b5f-bd67-ea4467187c0e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7a78a4d3-88ce-42df-886e-11cebcceef73"
+      }
+    ]
   },
   {
     "id": "lord-of-the-ravenwing-wrath-of-the-rock",
@@ -257,9 +410,9 @@
     "detachment_id": "wrath-of-the-rock",
     "cost": 10,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Ravenwing"
     ],
-    "ability_id": null,
+    "ability_id": "lord-of-the-ravenwing-wrath-of-the-rock",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -267,7 +420,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6cd4526b-d626-54aa-8cd5-b6032774a4a4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fae9fa78-a95e-4371-a5be-7be6cbeefb09"
+      }
+    ]
   },
   {
     "id": "petition-of-stability-upgrade-dark-age-arsenal",
@@ -275,9 +438,9 @@
     "detachment_id": "dark-age-arsenal",
     "cost": 15,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "petition-of-stability-upgrade-dark-age-arsenal",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -285,7 +448,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "330b292c-c6be-564c-ba84-0824758e1bcb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "34c67621-cf92-43fb-bb99-27e26996b22a"
+      }
+    ]
   },
   {
     "id": "entreaty-of-perpetual-ardour-upgrade-dark-age-arsenal",
@@ -293,9 +466,10 @@
     "detachment_id": "dark-age-arsenal",
     "cost": 15,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Adeptus Astartes",
+      "Hellblaster Squad"
     ],
-    "ability_id": null,
+    "ability_id": "entreaty-of-perpetual-ardour-upgrade-dark-age-arsenal",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -303,7 +477,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cf733a68-2453-5724-9d19-32b5ec07aedc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "920bc2f1-9845-4a2a-8eb7-a1cb23d07025"
+      }
+    ]
   },
   {
     "id": "thundercowl-turbines-upgrade-darkflight-pursuit",
@@ -311,9 +495,10 @@
     "detachment_id": "darkflight-pursuit",
     "cost": 15,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Fly",
+      "Ravenwing"
     ],
-    "ability_id": null,
+    "ability_id": "thundercowl-turbines-upgrade-darkflight-pursuit",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -321,7 +506,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a0ed4377-f487-59d0-b4f5-34f81986f310"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3acf1c14-1d0f-45ad-b54f-f1fc2217f7e8"
+      }
+    ]
   },
   {
     "id": "nightforged-battery-upgrade-darkflight-pursuit",
@@ -329,9 +524,10 @@
     "detachment_id": "darkflight-pursuit",
     "cost": 15,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Dark Angels",
+      "Land Speeder Vengeance"
     ],
-    "ability_id": null,
+    "ability_id": "nightforged-battery-upgrade-darkflight-pursuit",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -339,7 +535,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c3fd9eab-b3e7-5174-ac62-dcc52ee25eb5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "84035a88-b9d8-41f1-b290-a04b7e4b71d5"
+      }
+    ]
   },
   {
     "id": "limitless-zeal-interrogation-conclave",
@@ -347,9 +553,9 @@
     "detachment_id": "interrogation-conclave",
     "cost": 10,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Chaplain"
     ],
-    "ability_id": null,
+    "ability_id": "limitless-zeal-interrogation-conclave",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -357,7 +563,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "793ae3ec-6d6d-59b0-9dfc-e564420d8cfb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "03dfe16d-4040-47f6-8c90-14fb12660d7a"
+      }
+    ]
   },
   {
     "id": "inescapable-interrogation-interrogation-conclave",
@@ -365,9 +581,9 @@
     "detachment_id": "interrogation-conclave",
     "cost": 20,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Chaplain"
     ],
-    "ability_id": null,
+    "ability_id": "inescapable-interrogation-interrogation-conclave",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -375,7 +591,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e28263f6-2296-5223-99b6-9cf5a6e17861"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a0af2727-f3c3-47c4-850f-727a3f10748d"
+      }
+    ]
   },
   {
     "id": "master-crafted-weapon-company-of-hunters",
@@ -383,9 +609,9 @@
     "detachment_id": "company-of-hunters",
     "cost": 10,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Ravenwing"
     ],
-    "ability_id": null,
+    "ability_id": "master-crafted-weapon-company-of-hunters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -393,7 +619,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "729697e1-ab1c-57fa-b8fc-306944cef46a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "931a0683-a764-44a2-8f87-a1f6a1d70cc4"
+      }
+    ]
   },
   {
     "id": "mounted-strategist-company-of-hunters",
@@ -401,9 +637,9 @@
     "detachment_id": "company-of-hunters",
     "cost": 30,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Ravenwing"
     ],
-    "ability_id": null,
+    "ability_id": "mounted-strategist-company-of-hunters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -411,7 +647,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b06d3c5a-f692-5427-bc16-583d493040f1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4daafbc1-b2f2-4b00-93a8-0782204c523c"
+      }
+    ]
   },
   {
     "id": "master-of-manoeuvre-company-of-hunters",
@@ -419,9 +665,9 @@
     "detachment_id": "company-of-hunters",
     "cost": 15,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Ravenwing"
     ],
-    "ability_id": null,
+    "ability_id": "master-of-manoeuvre-company-of-hunters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -429,17 +675,27 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "31f46dce-1bad-59a8-83d4-e5e0775ad882"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a53cebd0-37f0-4c2b-b590-e66fe25f8387"
+      }
+    ]
   },
   {
     "id": "recon-hunter-company-of-hunters",
     "name": "Recon Hunter",
     "detachment_id": "company-of-hunters",
-    "cost": 20,
+    "cost": 30,
     "keyword_restrictions": [
-      "Dark Angels"
+      "Ravenwing"
     ],
-    "ability_id": null,
+    "ability_id": "recon-hunter-company-of-hunters",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -447,7 +703,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "15247bb5-72dd-50b3-80ea-b93d7534a175"
+      },
+      {
+        "namespace": "mfm",
+        "id": "98482be9-4f60-4c8e-847d-b0760af85084"
+      }
+    ]
   },
   {
     "id": "the-imperiums-sword-1st-company-task-force",
@@ -457,7 +723,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "the-imperiums-sword-1st-company-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -465,7 +731,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4a2c7146-f28c-5aca-a474-5f31c926e122"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0d51b8da-5971-4be9-88f9-635033ca3cfe"
+      }
+    ]
   },
   {
     "id": "fear-made-manifest-aura-1st-company-task-force",
@@ -475,7 +751,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "fear-made-manifest-aura-1st-company-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -483,7 +759,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "24f60613-38dd-5eb5-8ed5-9693025be41b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "87168a69-23a5-40c5-b943-c302160019b7"
+      }
+    ]
   },
   {
     "id": "rites-of-war-1st-company-task-force",
@@ -491,9 +777,10 @@
     "detachment_id": "1st-company-task-force",
     "cost": 10,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Adeptus Astartes",
+      "Terminator"
     ],
-    "ability_id": null,
+    "ability_id": "rites-of-war-1st-company-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -501,7 +788,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f2ec9b9f-42a5-59df-9cd1-f7038fbe00e6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c8f28a58-eefa-4c34-94e8-5dbf475724b0"
+      }
+    ]
   },
   {
     "id": "iron-resolve-1st-company-task-force",
@@ -509,9 +806,10 @@
     "detachment_id": "1st-company-task-force",
     "cost": 15,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Adeptus Astartes",
+      "Terminator"
     ],
-    "ability_id": null,
+    "ability_id": "iron-resolve-1st-company-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -519,17 +817,27 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a8af0e4c-4b79-59fc-a477-a08050a3d532"
+      },
+      {
+        "namespace": "mfm",
+        "id": "864b0e6a-9580-4fd4-ac41-b31e1afbb1ce"
+      }
+    ]
   },
   {
     "id": "artificer-armour-gladius-task-force",
     "name": "Artificer Armour",
     "detachment_id": "gladius-task-force",
-    "cost": 10,
+    "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "artificer-armour-gladius-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -537,7 +845,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4d709e6f-5df2-5dad-9336-f1c45dc51538"
+      },
+      {
+        "namespace": "mfm",
+        "id": "32c6e6cd-2f06-4773-8875-8410e5df2caf"
+      }
+    ]
   },
   {
     "id": "the-honour-vehement-gladius-task-force",
@@ -547,7 +865,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "the-honour-vehement-gladius-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -555,7 +873,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "412f0a13-1519-5630-9ab5-dd3b1a1fe185"
+      },
+      {
+        "namespace": "mfm",
+        "id": "57200c62-5d47-4622-a062-41e1bc1241c9"
+      }
+    ]
   },
   {
     "id": "adept-of-the-codex-gladius-task-force",
@@ -563,9 +891,9 @@
     "detachment_id": "gladius-task-force",
     "cost": 20,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Captain"
     ],
-    "ability_id": null,
+    "ability_id": "adept-of-the-codex-gladius-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -573,7 +901,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9cb3de18-43d4-5460-bdc2-6ae1e0ddf250"
+      },
+      {
+        "namespace": "mfm",
+        "id": "662cabfc-815d-4760-bfd8-2a13752d5d6d"
+      }
+    ]
   },
   {
     "id": "fire-discipline-gladius-task-force",
@@ -583,7 +921,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "fire-discipline-gladius-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -591,7 +929,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "434a7131-db08-5164-b3ca-36574558ab6d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d3be1512-5719-483c-98c8-bda76a604897"
+      }
+    ]
   },
   {
     "id": "fury-of-the-storm-stormlance-task-force",
@@ -599,9 +947,10 @@
     "detachment_id": "stormlance-task-force",
     "cost": 25,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Adeptus Astartes",
+      "Mounted"
     ],
-    "ability_id": null,
+    "ability_id": "fury-of-the-storm-stormlance-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -609,7 +958,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b9e6aee3-4723-503c-8e8d-bd1d7834e3b1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8b881334-b47a-4003-8180-10a83f4e619c"
+      }
+    ]
   },
   {
     "id": "portents-of-wisdom-stormlance-task-force",
@@ -619,7 +978,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "portents-of-wisdom-stormlance-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -627,7 +986,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0cbbb2c4-de01-504d-bea2-f17ed25b1ce6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ff718e2a-85d8-489a-ab1b-82edac80b281"
+      }
+    ]
   },
   {
     "id": "feinting-withdrawal-stormlance-task-force",
@@ -637,7 +1006,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "feinting-withdrawal-stormlance-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -645,7 +1014,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "aa6b25eb-1650-5648-82a9-2b3da536d9b5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fcd001f8-37ab-4286-adcf-634ce8f99e68"
+      }
+    ]
   },
   {
     "id": "hunters-instincts-stormlance-task-force",
@@ -653,9 +1032,10 @@
     "detachment_id": "stormlance-task-force",
     "cost": 25,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Adeptus Astartes",
+      "Mounted"
     ],
-    "ability_id": null,
+    "ability_id": "hunters-instincts-stormlance-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -663,7 +1043,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bb6045d2-1d27-5c9e-985a-c2f55739b442"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9de0ec29-0a7f-462a-8528-eb2486c5ad1c"
+      }
+    ]
   },
   {
     "id": "celerity-librarius-conclave",
@@ -671,9 +1061,10 @@
     "detachment_id": "librarius-conclave",
     "cost": 35,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Adeptus Astartes",
+      "Psyker"
     ],
-    "ability_id": null,
+    "ability_id": "celerity-librarius-conclave",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -681,7 +1072,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2e7f8a38-b53b-51bd-8765-732e7c42da88"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3e97912d-7be4-4e5e-ac6e-3546499a99eb"
+      }
+    ]
   },
   {
     "id": "prescience-librarius-conclave",
@@ -689,9 +1090,10 @@
     "detachment_id": "librarius-conclave",
     "cost": 20,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Adeptus Astartes",
+      "Psyker"
     ],
-    "ability_id": null,
+    "ability_id": "prescience-librarius-conclave",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -699,7 +1101,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c5eb4843-eb05-5245-8943-d2e6faa55711"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8843eb88-f4b3-400a-ac4c-7cd729c02109"
+      }
+    ]
   },
   {
     "id": "obfuscation-librarius-conclave",
@@ -707,9 +1119,10 @@
     "detachment_id": "librarius-conclave",
     "cost": 25,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Adeptus Astartes",
+      "Psyker"
     ],
-    "ability_id": null,
+    "ability_id": "obfuscation-librarius-conclave",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -717,17 +1130,28 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1f4dc518-f163-5c94-921d-70d64dd157d0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bdf317ad-808b-4b3a-bc76-791106087c2e"
+      }
+    ]
   },
   {
     "id": "temporal-corridor-librarius-conclave",
     "name": "Temporal Corridor",
     "detachment_id": "librarius-conclave",
-    "cost": 15,
+    "cost": 25,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Adeptus Astartes",
+      "Psyker"
     ],
-    "ability_id": null,
+    "ability_id": "temporal-corridor-librarius-conclave",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -735,17 +1159,28 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f6fbb2d6-59e9-5298-9fe1-3b0441818c44"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d0ec4815-3cd2-4b50-9a56-d79fc45c0097"
+      }
+    ]
   },
   {
     "id": "fusillade-librarius-conclave",
     "name": "Fusillade",
     "detachment_id": "librarius-conclave",
-    "cost": 20,
+    "cost": 25,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Adeptus Astartes",
+      "Psyker"
     ],
-    "ability_id": null,
+    "ability_id": "fusillade-librarius-conclave",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -753,7 +1188,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "32523c3f-6f24-5b3b-8983-ec0fb840e224"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fea43e27-8188-40d1-84b2-f2c4b9f4e717"
+      }
+    ]
   },
   {
     "id": "the-blade-driven-deep-vanguard-spearhead",
@@ -761,9 +1206,10 @@
     "detachment_id": "vanguard-spearhead",
     "cost": 25,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Adeptus Astartes",
+      "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "the-blade-driven-deep-vanguard-spearhead",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -771,7 +1217,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cd078b19-4649-5561-8565-127a665abacc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e8edbda1-6f9f-4b5a-afab-85f6597cb6a6"
+      }
+    ]
   },
   {
     "id": "ghostweave-cloak-vanguard-spearhead",
@@ -781,7 +1237,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "ghostweave-cloak-vanguard-spearhead",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -789,7 +1245,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8f6ecaa3-6f62-5a52-8f95-4564b26c61a6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "acbf2d07-94a9-4518-91aa-1bfdaa4dac9d"
+      }
+    ]
   },
   {
     "id": "execute-and-redeploy-vanguard-spearhead",
@@ -797,9 +1263,9 @@
     "detachment_id": "vanguard-spearhead",
     "cost": 20,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Phobos"
     ],
-    "ability_id": null,
+    "ability_id": "execute-and-redeploy-vanguard-spearhead",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -807,7 +1273,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "57226bf2-e350-508d-9639-1f26dfed5fbc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fe6379ca-8bff-4b14-b151-b7c78a474701"
+      }
+    ]
   },
   {
     "id": "shadow-war-veteran-vanguard-spearhead",
@@ -815,9 +1291,9 @@
     "detachment_id": "vanguard-spearhead",
     "cost": 30,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Phobos"
     ],
-    "ability_id": null,
+    "ability_id": "shadow-war-veteran-vanguard-spearhead",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -825,7 +1301,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "12b9a3fd-ff01-5b25-af44-6cfca1d66735"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cf924c8f-ade9-4e26-9084-32084640c0bb"
+      }
+    ]
   },
   {
     "id": "laurels-of-thunder-orbital-assault-force",
@@ -835,7 +1321,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "laurels-of-thunder-orbital-assault-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -843,7 +1329,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8fdbc970-f436-564b-9b11-7827f944c77c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "01a45158-4dab-455c-870b-5abc083c2292"
+      }
+    ]
   },
   {
     "id": "veteran-of-the-vanguard-orbital-assault-force",
@@ -853,7 +1349,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "veteran-of-the-vanguard-orbital-assault-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -861,7 +1357,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4d8329ec-7b4b-5abc-a647-a2c9ceb3cbe3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4d288693-6483-4250-98d0-29c21fb619d6"
+      }
+    ]
   },
   {
     "id": "orbital-uplink-reliquary-orbital-assault-force",
@@ -871,7 +1377,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "orbital-uplink-reliquary-orbital-assault-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -879,7 +1385,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "da419432-a155-59f2-89c2-14f1e1151a35"
+      },
+      {
+        "namespace": "mfm",
+        "id": "48ec1dc9-7311-4433-aa81-21e6b2543d35"
+      }
+    ]
   },
   {
     "id": "indomitable-fury-anvil-siege-force",
@@ -887,9 +1403,9 @@
     "detachment_id": "anvil-siege-force",
     "cost": 20,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Gravis"
     ],
-    "ability_id": null,
+    "ability_id": "indomitable-fury-anvil-siege-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -897,7 +1413,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cc5079b7-8c91-56db-b2f1-7eff40e657ba"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6d349369-ebe6-4cc5-a08f-ceb01a0f6e00"
+      }
+    ]
   },
   {
     "id": "fleet-commander-anvil-siege-force",
@@ -905,9 +1431,9 @@
     "detachment_id": "anvil-siege-force",
     "cost": 15,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Captain"
     ],
-    "ability_id": null,
+    "ability_id": "fleet-commander-anvil-siege-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -915,7 +1441,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0a77a36a-7b74-5d56-90a1-1e16202bff56"
+      },
+      {
+        "namespace": "mfm",
+        "id": "30a283fb-29f5-40f1-a772-d23c32c3f075"
+      }
+    ]
   },
   {
     "id": "stoic-defender-anvil-siege-force",
@@ -925,7 +1461,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "stoic-defender-anvil-siege-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -933,7 +1469,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9967b592-08ff-508f-a921-8d9460cb1090"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a185dec-e874-4f9e-ab48-6296f1ba5221"
+      }
+    ]
   },
   {
     "id": "architect-of-war-anvil-siege-force",
@@ -943,7 +1489,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "architect-of-war-anvil-siege-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -951,7 +1497,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a0ba7ea7-a824-5f02-8c53-8297c52fb63a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3fc43d3f-e342-4c47-be47-b988e604f8f9"
+      }
+    ]
   },
   {
     "id": "champion-of-humanity-firestorm-assault-force",
@@ -959,9 +1515,9 @@
     "detachment_id": "firestorm-assault-force",
     "cost": 10,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Tacticus"
     ],
-    "ability_id": null,
+    "ability_id": "champion-of-humanity-firestorm-assault-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -969,7 +1525,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "07c9c6f0-11c8-5186-8e53-f243ae8e2955"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6d5f55c0-9345-469b-98ce-fbf748a47b24"
+      }
+    ]
   },
   {
     "id": "war-tempered-artifice-firestorm-assault-force",
@@ -977,9 +1543,10 @@
     "detachment_id": "firestorm-assault-force",
     "cost": 25,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Adeptus Astartes",
+      "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "war-tempered-artifice-firestorm-assault-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -987,7 +1554,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bbee7fe8-95d2-54aa-9717-819f41c43458"
+      },
+      {
+        "namespace": "mfm",
+        "id": "28a17ead-dfe3-4bb6-b02e-52c329cce8a2"
+      }
+    ]
   },
   {
     "id": "forged-in-battle-firestorm-assault-force",
@@ -997,7 +1574,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "forged-in-battle-firestorm-assault-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1005,7 +1582,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3b19c653-ba11-5a54-b79e-6aa10202716d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "aa134fac-8a68-4362-99fc-b664711d39c4"
+      }
+    ]
   },
   {
     "id": "adamantine-mantle-firestorm-assault-force",
@@ -1015,7 +1602,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "adamantine-mantle-firestorm-assault-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1023,7 +1610,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "575ab892-ee42-5a77-ac03-3ba2d15ddbc4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a02bb3db-b4bd-4a43-b357-db06895ae216"
+      }
+    ]
   },
   {
     "id": "target-augury-web-ironstorm-spearhead",
@@ -1031,9 +1628,9 @@
     "detachment_id": "ironstorm-spearhead",
     "cost": 30,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Techmarine"
     ],
-    "ability_id": null,
+    "ability_id": "target-augury-web-ironstorm-spearhead",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1041,17 +1638,27 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "921cf245-5483-501c-9265-e0c4a6fb7d5f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d8f14666-8a59-43cf-ab2e-ae009229be08"
+      }
+    ]
   },
   {
     "id": "the-flesh-is-weak-ironstorm-spearhead",
     "name": "The Flesh Is Weak",
     "detachment_id": "ironstorm-spearhead",
-    "cost": 10,
+    "cost": 20,
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "the-flesh-is-weak-ironstorm-spearhead",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1059,7 +1666,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9eb00f98-c37a-5c5f-bcb0-ac333e9e2ce3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f60cf1af-30e3-4a74-9b73-e5263614cc1a"
+      }
+    ]
   },
   {
     "id": "adept-of-the-omnissiah-ironstorm-spearhead",
@@ -1067,9 +1684,9 @@
     "detachment_id": "ironstorm-spearhead",
     "cost": 35,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Techmarine"
     ],
-    "ability_id": null,
+    "ability_id": "adept-of-the-omnissiah-ironstorm-spearhead",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1077,7 +1694,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ba6fc9de-1c80-5004-a3f7-e84299fa84bf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0c21dd37-cff5-4099-9cab-3cc4027d8a3b"
+      }
+    ]
   },
   {
     "id": "master-of-machine-war-ironstorm-spearhead",
@@ -1087,7 +1714,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "master-of-machine-war-ironstorm-spearhead",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1095,7 +1722,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6118f2bb-ba8d-5f62-8a53-46afdca11793"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5f214ddc-52dd-4708-90ca-30490888b747"
+      }
+    ]
   },
   {
     "id": "bellicose-weapon-spirits-upgrade-fulguris-task-force",
@@ -1103,9 +1740,9 @@
     "detachment_id": "fulguris-task-force",
     "cost": 15,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Speeder"
     ],
-    "ability_id": null,
+    "ability_id": "bellicose-weapon-spirits-upgrade-fulguris-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1113,7 +1750,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e5ba5535-44ea-5304-9d09-afd3ec1a6a05"
+      },
+      {
+        "namespace": "mfm",
+        "id": "391bec78-d8a0-4e58-8763-80bc3d8a35a9"
+      }
+    ]
   },
   {
     "id": "raptorial-cogitator-core-upgrade-fulguris-task-force",
@@ -1121,9 +1768,9 @@
     "detachment_id": "fulguris-task-force",
     "cost": 15,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Speeder"
     ],
-    "ability_id": null,
+    "ability_id": "raptorial-cogitator-core-upgrade-fulguris-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1131,7 +1778,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6233ba2f-7b39-58fb-9fb6-b3e5e9afd8fe"
+      },
+      {
+        "namespace": "mfm",
+        "id": "83b8281f-2251-4981-a7e7-1a1ce57ef483"
+      }
+    ]
   },
   {
     "id": "shroud-field-subversion-assets",
@@ -1139,9 +1796,9 @@
     "detachment_id": "subversion-assets",
     "cost": 20,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Phobos"
     ],
-    "ability_id": null,
+    "ability_id": "shroud-field-subversion-assets",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1149,7 +1806,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dfb6257d-e6ff-54a4-b4a9-c4a9979e649c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "76def3ae-75ca-49ea-9c82-beaf9768e305"
+      }
+    ]
   },
   {
     "id": "death-in-the-dark-upgrade-subversion-assets",
@@ -1157,9 +1824,10 @@
     "detachment_id": "subversion-assets",
     "cost": 15,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Infantry",
+      "Phobos"
     ],
-    "ability_id": null,
+    "ability_id": "death-in-the-dark-upgrade-subversion-assets",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1167,7 +1835,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6e4a4dd3-9c72-5165-84ec-9cefdf925da6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d35fc0b6-7216-4afd-95f9-2dcea3719bf4"
+      }
+    ]
   },
   {
     "id": "liberator-armoured-speartip",
@@ -1177,7 +1855,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "liberator-armoured-speartip",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1185,7 +1863,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a0f1b3b8-0c6e-5f3f-9e87-5606a5686cc8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "15332181-801e-4865-b53a-b183decefe03"
+      }
+    ]
   },
   {
     "id": "tip-of-the-spear-armoured-speartip",
@@ -1195,7 +1883,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "tip-of-the-spear-armoured-speartip",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1203,17 +1891,24 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "72470662-801b-530b-89c0-fccb2789803d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "11750a06-78b2-4ad9-8e19-24d83bc78038"
+      }
+    ]
   },
   {
     "id": "shock-deployment-armoured-speartip",
     "name": "Shock Deployment",
     "detachment_id": "armoured-speartip",
     "cost": 20,
-    "keyword_restrictions": [
-      "Adeptus Astartes"
-    ],
-    "ability_id": null,
+    "ability_id": "shock-deployment-armoured-speartip",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1221,7 +1916,27 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Adeptus Astartes",
+        "Terminator"
+      ],
+      [
+        "Adeptus Astartes",
+        "Gravis"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b8b892d2-4310-55f8-8666-d22a19cd139f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1816609d-be8c-4b19-bf30-7b04cf8d4536"
+      }
+    ]
   },
   {
     "id": "armoured-commander-armoured-speartip",
@@ -1231,7 +1946,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "armoured-commander-armoured-speartip",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1239,7 +1954,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d21d9dc5-82f3-5999-8f5e-4d34eddf7d4d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2e2430fb-29d3-4b29-a856-142f9c9d9f4d"
+      }
+    ]
   },
   {
     "id": "eye-of-the-primarch-bastion-task-force",
@@ -1249,7 +1974,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "eye-of-the-primarch-bastion-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1257,7 +1982,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "64a0d503-17bd-5736-aa95-99290ebc9402"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f80a835c-9d3f-424c-b3f6-39b1b9c38b0d"
+      }
+    ]
   },
   {
     "id": "hero-of-the-chapter-bastion-task-force",
@@ -1267,7 +2002,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "hero-of-the-chapter-bastion-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1275,7 +2010,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a80ca031-a992-5eb9-bf32-5147a0eb5a3d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1b46835e-a785-4a31-8f8f-a80b27136279"
+      }
+    ]
   },
   {
     "id": "blades-of-valour-bastion-task-force",
@@ -1285,7 +2030,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "blades-of-valour-bastion-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1293,7 +2038,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b44835e9-3b16-512a-a48f-72fcbabcd780"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eaac3c39-f06a-476a-acae-7993c8c45b38"
+      }
+    ]
   },
   {
     "id": "bombast-omnivox-bastion-task-force",
@@ -1303,7 +2058,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "bombast-omnivox-bastion-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1311,7 +2066,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e861301f-5b21-507f-aad4-36cc43e84f59"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6bb6e923-c0f4-4e50-a6a8-876df81e1f6b"
+      }
+    ]
   },
   {
     "id": "honour-indefatigable-ceramite-sentinels",
@@ -1319,9 +2084,9 @@
     "detachment_id": "ceramite-sentinels",
     "cost": 25,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Gravis"
     ],
-    "ability_id": null,
+    "ability_id": "honour-indefatigable-ceramite-sentinels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1329,7 +2094,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "44935542-b9b4-586d-8188-428bad45cb6c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "91d775b5-371e-4792-a94e-f6ca26914b29"
+      }
+    ]
   },
   {
     "id": "castellum-omnivox-ceramite-sentinels",
@@ -1339,7 +2114,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "castellum-omnivox-ceramite-sentinels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1347,7 +2122,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2f2a68f8-b4c5-5dd4-86a9-620a7f3f951e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "83e29590-a55f-46fb-bc3e-e12acb1495d6"
+      }
+    ]
   },
   {
     "id": "defensive-mastery-ceramite-sentinels",
@@ -1357,7 +2142,7 @@
     "keyword_restrictions": [
       "Adeptus Astartes"
     ],
-    "ability_id": null,
+    "ability_id": "defensive-mastery-ceramite-sentinels",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1365,7 +2150,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "94b15e03-a909-53f0-bfc0-6b6fa9213ca5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eb8d8f07-1274-495d-9bd7-d18f4aff2324"
+      }
+    ]
   },
   {
     "id": "redoubtable-machine-spirit-headhunter-task-force",
@@ -1373,9 +2168,10 @@
     "detachment_id": "headhunter-task-force",
     "cost": 25,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Adeptus Astartes",
+      "Vehicle"
     ],
-    "ability_id": null,
+    "ability_id": "redoubtable-machine-spirit-headhunter-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1383,7 +2179,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "06e10b1c-5802-5136-94d8-e3230c0bbad4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fb42248c-8de6-42bb-a457-555e04ae072f"
+      }
+    ]
   },
   {
     "id": "gunnery-honours-headhunter-task-force",
@@ -1391,9 +2197,10 @@
     "detachment_id": "headhunter-task-force",
     "cost": 20,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Adeptus Astartes",
+      "Vehicle"
     ],
-    "ability_id": null,
+    "ability_id": "gunnery-honours-headhunter-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1401,7 +2208,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ed6d6451-7590-5cb4-ab3b-43b7cff79301"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5ccc7aed-b0a4-4c09-824d-f3ec62055676"
+      }
+    ]
   },
   {
     "id": "firestorm-coordinators-headhunter-task-force",
@@ -1409,9 +2226,10 @@
     "detachment_id": "headhunter-task-force",
     "cost": 20,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Adeptus Astartes",
+      "Vehicle"
     ],
-    "ability_id": null,
+    "ability_id": "firestorm-coordinators-headhunter-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1419,7 +2237,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "70fccdda-0584-5876-b27d-23ce0b670411"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6e9bfaba-0954-4037-806b-32af5791e117"
+      }
+    ]
   },
   {
     "id": "astartes-tank-ace-aura-headhunter-task-force",
@@ -1427,9 +2255,10 @@
     "detachment_id": "headhunter-task-force",
     "cost": 40,
     "keyword_restrictions": [
-      "Adeptus Astartes"
+      "Adeptus Astartes",
+      "Vehicle"
     ],
-    "ability_id": null,
+    "ability_id": "astartes-tank-ace-aura-headhunter-task-force",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1437,14 +2266,24 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6d89ae63-b7c2-572d-92e6-2639d07db5fc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8b00b0ce-52cd-46a3-9adb-b39c5dc2058c"
+      }
+    ]
   },
   {
     "id": "dedicated-gunship-orbital-assault-force",
     "name": "Dedicated Gunship",
     "detachment_id": "orbital-assault-force",
     "cost": 15,
-    "ability_id": null,
+    "ability_id": "dedicated-gunship-orbital-assault-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -1453,6 +2292,16 @@
     "keyword_restrictions": [
       "Adeptus Astartes",
       "Terminator"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0d6b8702-1a01-59b7-a870-b62bc6044b94"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a1a228a3-4faf-4a78-8c83-519af462b425"
+      }
     ]
   },
   {
@@ -1470,10 +2319,16 @@
     ],
     "points_provisional": false,
     "keyword_restrictions": [
-      "Bladeguard Veteran Squad",
-      "Vengeful Brethren"
+      "Vengeful Brethren Bladeguard Veteran Squad"
     ],
-    "upgrade_tag": true
+    "upgrade_tag": true,
+    "ability_id": "dutiful-defenders-the-vengeful-brethren",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "997e3cbb-8a59-4792-9dc8-7f4227fa3ad1"
+      }
+    ]
   },
   {
     "id": "supreme-combatant-the-vengeful-brethren",
@@ -1490,8 +2345,44 @@
     ],
     "points_provisional": false,
     "keyword_restrictions": [
+      "Captain",
       "Gravis",
       "Vengeful Brethren"
+    ],
+    "ability_id": "supreme-combatant-the-vengeful-brethren",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "dd22151f-003c-4223-b891-e5386fbe33d4"
+      }
+    ]
+  },
+  {
+    "id": "deathwing-assault-wrath-of-the-rock",
+    "name": "Deathwing Assault",
+    "detachment_id": "wrath-of-the-rock",
+    "cost": 15,
+    "ability_id": "deathwing-assault-wrath-of-the-rock",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Deathwing"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "761a1eab-21c7-5267-8091-d01ddbbae8e3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "86ded505-6108-45eb-948b-bc2ddbef5b96"
+      }
     ]
   }
 ]

@@ -29,6 +29,33 @@ fn is_melee_profile(profile: &WeaponProfilesItem) -> bool {
     matches!(&profile.range, Some(WeaponProfilesItemRange::String(s)) if s == "Melee")
 }
 
+/// Whether a weapon profile may select this target under profile-level restrictions such as Hunter.
+pub fn profile_can_target(profile: &WeaponProfilesItem, target: &Unit) -> bool {
+    let Some(restrictions) = &profile.target_restrictions else {
+        return true;
+    };
+    let target_keywords = unit_keywords_lower(target);
+    if let Some(required) = &restrictions.required_keywords_any {
+        if !required.iter().any(|keyword| {
+            target_keywords
+                .iter()
+                .any(|target| target.eq_ignore_ascii_case(keyword))
+        }) {
+            return false;
+        }
+    }
+    if let Some(excluded) = &restrictions.excluded_keywords {
+        if excluded.iter().any(|keyword| {
+            target_keywords
+                .iter()
+                .any(|target| target.eq_ignore_ascii_case(keyword))
+        }) {
+            return false;
+        }
+    }
+    true
+}
+
 /// A weapon + which of its `profiles[]` to fire. Borrows the catalog record
 /// so the engine never owns the dataset.
 #[derive(Clone, Copy, Debug)]
@@ -100,6 +127,11 @@ pub enum CruncherError {
         unit_id: String,
         profile_index: usize,
     },
+    TargetIneligible {
+        weapon_id: String,
+        profile_index: usize,
+        unit_id: String,
+    },
     MissingHitStat {
         weapon_id: String,
         profile_index: usize,
@@ -124,6 +156,14 @@ impl fmt::Display for CruncherError {
             } => write!(
                 f,
                 "crunch: target.profile_index={profile_index} is out of range for unit {unit_id}"
+            ),
+            Self::TargetIneligible {
+                weapon_id,
+                profile_index,
+                unit_id,
+            } => write!(
+                f,
+                "crunch: weapon {weapon_id} profile {profile_index} cannot target unit {unit_id}"
             ),
             Self::MissingHitStat {
                 weapon_id,
@@ -171,6 +211,13 @@ pub fn crunch(
             unit_id: input.target.unit.id.to_string(),
             profile_index: input.target.profile_index,
         })?;
+    if !profile_can_target(weapon_profile, input.target.unit) {
+        return Err(CruncherError::TargetIneligible {
+            weapon_id: input.attacker.weapon.id.to_string(),
+            profile_index: input.attacker.profile_index,
+            unit_id: input.target.unit.id.to_string(),
+        });
+    }
 
     let target_keywords = unit_keywords_lower(input.target.unit);
     let mut ctx = input.context.clone();
@@ -206,11 +253,14 @@ pub fn crunch(
             .map(|mc| mc.min.get())
             .unwrap_or(1)
     });
-    let blast_extra_per_model = if blast.is_some() {
-        (target_model_count / 5) as f64
-    } else {
-        0.0
-    };
+    let blast_extra_per_model = blast
+        .map(|keyword| {
+            let value = parameter(keyword, "value")
+                .map(|parameter| eval_param_value(Some(parameter)))
+                .unwrap_or(1.0);
+            (target_model_count / 5) as f64 * value
+        })
+        .unwrap_or(0.0);
     let models_firing = input.models_firing as f64;
     let attacks =
         models_firing * (attacks_per_model + rapid_fire_extra_per_model + blast_extra_per_model);
@@ -555,6 +605,28 @@ fn unit_keywords_lower(unit: &Unit) -> Vec<String> {
     out
 }
 
+fn keyword_applies_to_target(parameters: Option<&Value>, ctx: &EngineContext) -> bool {
+    let target_keywords = ctx.target_keywords.as_deref().unwrap_or_default();
+    let matches_target = |keyword: &Value| {
+        keyword.as_str().is_some_and(|candidate| {
+            target_keywords
+                .iter()
+                .any(|target| target.eq_ignore_ascii_case(candidate))
+        })
+    };
+    if parameters
+        .and_then(|value| value.get("required_target_keywords_any"))
+        .and_then(Value::as_array)
+        .is_some_and(|required| !required.iter().any(matches_target))
+    {
+        return false;
+    }
+    !parameters
+        .and_then(|value| value.get("excluded_target_keywords"))
+        .and_then(Value::as_array)
+        .is_some_and(|excluded| excluded.iter().any(matches_target))
+}
+
 /// Walk the attacker's weapon profile keywords through
 /// [`buffs_from_keyword`], looking each one up in the dataset's
 /// weapon-keyword catalog. Keywords missing from the catalog drop silently
@@ -582,6 +654,9 @@ fn profile_buffs_for(
             .parameters
             .as_ref()
             .and_then(|p| serde_json::to_value(p).ok());
+        if !keyword_applies_to_target(params_value.as_ref(), ctx) {
+            continue;
+        }
         out.extend(buffs_from_keyword(
             &keyword_id,
             &weapon_id,

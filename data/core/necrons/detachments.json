@@ -25,6 +25,12 @@
     "detachment_points": 2,
     "force_dispositions": [
       "priority-assets"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "115f16a7-2641-415c-967c-cb8a370eb229"
+      }
     ]
   },
   {
@@ -53,6 +59,12 @@
     "detachment_points": 3,
     "force_dispositions": [
       "priority-assets"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "225b9e9c-7ebe-413f-a079-087bc98f380a"
+      }
     ]
   },
   {
@@ -63,8 +75,8 @@
     "enhancement_ids": [
       "destroyer-ankh-cursed-legion",
       "murdermind-cursed-legion",
-      "mask-of-the-nekrosor-cursed-legion",
-      "cursed-circlet-cursed-legion"
+      "cursed-circlet-cursed-legion",
+      "mark-of-the-nekrosor-cursed-legion"
     ],
     "stratagem_ids": [
       "methodical-murder-cursed-legion",
@@ -81,6 +93,12 @@
     "detachment_points": 2,
     "force_dispositions": [
       "purge-the-foe"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "412b33ad-7e6f-45a3-8638-ae880be94b9f"
+      }
     ]
   },
   {
@@ -109,6 +127,12 @@
     "detachment_points": 2,
     "force_dispositions": [
       "purge-the-foe"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4694ac41-4340-4e85-8824-5c47555f8c12"
+      }
     ]
   },
   {
@@ -140,6 +164,12 @@
     ],
     "tags": [
       "hypercrypt"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "489fc222-d9a1-4220-9ef2-9747c2fea283"
+      }
     ]
   },
   {
@@ -147,7 +177,12 @@
     "name": "Pantheon of Woe",
     "faction_id": "necrons",
     "detachment_rule_id": "cosmic-distortion",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "singularity-matrix-pantheon-of-woe",
+      "quantum-goad-pantheon-of-woe",
+      "animus-damper-pantheon-of-woe",
+      "reletavistic-tether-pantheon-of-woe"
+    ],
     "stratagem_ids": [
       "entrophasic-aura-targeting-pantheon-of-woe",
       "chronodistortion-pantheon-of-woe",
@@ -162,7 +197,13 @@
     },
     "detachment_points": 2,
     "force_dispositions": [
-      "purge-the-foe"
+      "disruption"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a7ec286c-a305-435b-b402-91140c67d809"
+      }
     ]
   },
   {
@@ -191,6 +232,12 @@
     "detachment_points": 2,
     "force_dispositions": [
       "disruption"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "df0e5858-2c4a-486b-b693-8971f837388d"
+      }
     ]
   },
   {
@@ -219,6 +266,12 @@
     "detachment_points": 3,
     "force_dispositions": [
       "take-and-hold"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e40617a8-ec95-44e2-bc46-956a6fac4538"
+      }
     ]
   },
   {
@@ -250,6 +303,12 @@
     ],
     "tags": [
       "dynasty"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ef55259d-3884-4b3b-b215-08ab337d4a24"
+      }
     ]
   },
   {
@@ -276,6 +335,12 @@
     ],
     "tags": [
       "dynasty"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "8e281a27-1d5a-415b-8b92-34cd0ed53b63"
+      }
     ]
   },
   {
@@ -299,6 +364,12 @@
     "detachment_points": 1,
     "force_dispositions": [
       "reconnaissance"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "cd5f7a63-6d73-4094-9977-e8b7530d1a8f"
+      }
     ]
   },
   {
@@ -308,7 +379,8 @@
     "detachment_rule_id": "empowered-engines",
     "enhancement_ids": [
       "prelocational-optimiser-the-phaerons-armoury",
-      "mortality-shroud-aura-the-phaerons-armoury"
+      "mortality-shroud-aura-the-phaerons-armoury",
+      "mortality-shroud-aura-upgrade-the-phaerons-armoury"
     ],
     "stratagem_ids": [
       "subsurface-quantumweave-the-phaerons-armoury",
@@ -325,6 +397,12 @@
     ],
     "tags": [
       "hypercrypt"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3818a5e4-5d1a-410b-a63f-9a850b923635"
+      }
     ]
   },
   {
@@ -345,6 +423,12 @@
     "detachment_points": 1,
     "force_dispositions": [
       "take-and-hold"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4077647f-9af3-4900-a123-2b7fabb66454"
+      }
     ]
   }
 ]

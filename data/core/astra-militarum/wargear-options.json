@@ -239,7 +239,8 @@
         "flamer"
       ],
       [
-        "hot-shot-laspistol"
+        "hot-shot-laspistol",
+        "medi-pack"
       ]
     ],
     "model_constraint": {
@@ -261,7 +262,8 @@
         "regimental-standard"
       ],
       [
-        "hot-shot-laspistol"
+        "hot-shot-laspistol",
+        "medi-pack"
       ]
     ],
     "model_constraint": {
@@ -1714,7 +1716,8 @@
     ],
     "replacement_choice": [
       [
-        "hot-shot-laspistol"
+        "hot-shot-laspistol",
+        "melta-mine"
       ],
       [
         "plasma-gun-kasrkin"
@@ -2015,6 +2018,9 @@
     "replacement_choice": [
       [
         "regimental-standard"
+      ],
+      [
+        "medi-pack"
       ],
       [
         "master-vox"
@@ -2351,6 +2357,23 @@
     "model_constraint": {
       "model_name": "Death Korps Trooper",
       "any_number": true
+    }
+  },
+  {
+    "id": "death-korps-of-krieg-wgo-mfm-6",
+    "unit_id": "death-korps-of-krieg",
+    "faction_id": "astra-militarum",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement": [
+      "death-korps-medi-pack"
+    ],
+    "model_constraint": {
+      "model_name": "Death Korps Trooper",
+      "per_n_models": 10
     }
   },
   {
@@ -2758,16 +2781,16 @@
     ],
     "replacement_choice": [
       [
-        "plasma-gun"
+        "flamer"
       ],
       [
         "grenade-launcher"
       ],
       [
-        "flamer"
+        "meltagun"
       ],
       [
-        "meltagun"
+        "plasma-gun"
       ]
     ],
     "model_constraint": {
@@ -3744,7 +3767,8 @@
       "trench-club-krieg-combat-engineers"
     ],
     "replacement": [
-      "close-combat-weapon-krieg-combat-engineers"
+      "close-combat-weapon-krieg-combat-engineers",
+      "remote-mine"
     ],
     "model_constraint": {
       "model_name": "Krieg Combat Engineer",
@@ -4029,7 +4053,8 @@
     },
     "is_free": true,
     "replacement": [
-      "vox-caster"
+      "vox-caster",
+      "vox-relay-beacon"
     ],
     "model_constraint": {
       "model_name": "Recon Trooper",

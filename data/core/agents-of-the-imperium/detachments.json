@@ -22,9 +22,15 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": 3,
+    "detachment_points": 2,
     "force_dispositions": [
-      "disruption"
+      "reconnaissance"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4a6a098b-92a6-44f1-8b4f-a7ba168ba049"
+      }
     ]
   },
   {
@@ -50,9 +56,15 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": 3,
+    "detachment_points": 2,
     "force_dispositions": [
-      "purge-the-foe"
+      "take-and-hold"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6a6e3903-1b61-4706-8fc7-e48729a9880d"
+      }
     ]
   },
   {
@@ -60,7 +72,12 @@
     "name": "Veiled Blade Elimination Force",
     "faction_id": "agents-of-the-imperium",
     "detachment_rule_id": "extremis-sanction",
-    "enhancement_ids": [],
+    "enhancement_ids": [
+      "intraneural-biotech-veiled-blade-elimination-force",
+      "decoy-targets-veiled-blade-elimination-force",
+      "esoteric-explosives-veiled-blade-elimination-force",
+      "micromelta-rounds-veiled-blade-elimination-force"
+    ],
     "stratagem_ids": [
       "prime-target-veiled-blade-elimination-force",
       "hyperstimms-veiled-blade-elimination-force",
@@ -73,9 +90,15 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": 3,
+    "detachment_points": 1,
     "force_dispositions": [
-      "reconnaissance"
+      "disruption"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "be6ba720-81c6-4dbc-8a37-1d61b4564f60"
+      }
     ]
   },
   {
@@ -101,9 +124,15 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": 3,
+    "detachment_points": 2,
     "force_dispositions": [
       "purge-the-foe"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e072fa96-aa3e-4a5f-ba03-376879f16c7f"
+      }
     ]
   },
   {
@@ -129,9 +158,15 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "detachment_points": 3,
+    "detachment_points": 2,
     "force_dispositions": [
       "priority-assets"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e89bc216-2de7-4cf9-a640-2dcbfde06b56"
+      }
     ]
   },
   {
@@ -152,6 +187,12 @@
     "detachment_points": 1,
     "force_dispositions": [
       "purge-the-foe"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b43cf4e2-b7be-491a-809a-5c2e9ae36723"
+      }
     ]
   }
 ]

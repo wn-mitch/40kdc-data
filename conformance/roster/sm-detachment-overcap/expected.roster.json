@@ -46,7 +46,35 @@
       "is_warlord": false,
       "enhancement": null,
       "enhancement_points": null,
-      "wargear": [],
+      "wargear": [
+        {
+          "ref": {
+            "id": "armoured-hull-gladiator-lancer",
+            "raw_name": "Armoured Hull",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "defensive-array-gladiator-lancer",
+            "raw_name": "Defensive Array",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "lancer-laser-destroyer",
+            "raw_name": "Lancer laser destroyer",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
       "leader_attachment": null
     },
     {
@@ -61,7 +89,53 @@
       "is_warlord": false,
       "enhancement": null,
       "enhancement_points": null,
-      "wargear": [],
+      "wargear": [
+        {
+          "ref": {
+            "id": "fragstorm-grenade-launchers-redemptor-dreadnought",
+            "raw_name": "Fragstorm Grenade Launchers",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "heavy-flamer-redemptor-dreadnought",
+            "raw_name": "Heavy Flamer",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "heavy-onslaught-gatling-cannon",
+            "raw_name": "Heavy onslaught gatling cannon",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "redemptor-fist",
+            "raw_name": "Redemptor fist",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
+            "id": "storm-bolters-redemptor-dreadnought",
+            "raw_name": "Storm Bolters",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        }
+      ],
       "leader_attachment": null
     }
   ],
@@ -72,7 +146,7 @@
   "diagnostics": {
     "resolved_units": 2,
     "unresolved_units": 0,
-    "resolved_weapons": 0,
+    "resolved_weapons": 8,
     "unresolved_weapons": 0,
     "warnings": [
       {

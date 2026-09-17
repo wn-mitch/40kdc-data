@@ -4,6 +4,76 @@ package wh40kdc
 // (eligible_abilities / buffs_for / defensive_buffs_for). Go mirror of the
 // buff-translation halves of python .../data/entities.py and dataset.py.
 
+// resolveRulesBundles expands entity-backed grants into reusable bundle effect
+// trees. Unresolved, malformed, and cyclic references remain untouched so the
+// DSL translator emits its normal unsupported diagnostic.
+func (a *AbilityView) resolveRulesBundles(value any, seen map[string]bool) (any, bool) {
+	switch node := value.(type) {
+	case []any:
+		var copy []any
+		for i, child := range node {
+			resolved, changed := a.resolveRulesBundles(child, seen)
+			if changed {
+				if copy == nil {
+					copy = append([]any(nil), node...)
+				}
+				copy[i] = resolved
+			}
+		}
+		if copy != nil {
+			return copy, true
+		}
+		return value, false
+	case map[string]any:
+		if getStr(node, "type") == "ability-grant" {
+			modifier, _ := getMap(node, "modifier")
+			abilityID := getStr(modifier, "ability_id")
+			rulesBundle, _ := modifier["rules_bundle"].(bool)
+			if rulesBundle && abilityID != "" && !seen[abilityID] {
+				factionID := getStr(a.Raw, "faction_id")
+				var target *AbilityView
+				var ok bool
+				if factionID != "" {
+					target, ok = a.ds.Abilities.GetInFaction(abilityID, factionID)
+				}
+				if !ok {
+					target, ok = a.ds.Abilities.GetAny(abilityID)
+				}
+				if ok {
+					targetEffect := target.Raw["effect"]
+					if targetMap, isMap := targetEffect.(map[string]any); isMap &&
+						getStr(targetMap, "type") == "rules-bundle" {
+						nextSeen := make(map[string]bool, len(seen)+1)
+						for id := range seen {
+							nextSeen[id] = true
+						}
+						nextSeen[abilityID] = true
+						resolved, _ := a.resolveRulesBundles(targetEffect, nextSeen)
+						return resolved, true
+					}
+				}
+			}
+		}
+
+		var copy map[string]any
+		for key, child := range node {
+			resolved, changed := a.resolveRulesBundles(child, seen)
+			if changed {
+				if copy == nil {
+					copy = cloneMap(node)
+				}
+				copy[key] = resolved
+			}
+		}
+		if copy != nil {
+			return copy, true
+		}
+		return value, false
+	default:
+		return value, false
+	}
+}
+
 // describeBuffs is the full DSL->Buff translation (applied/unsupported/
 // activatable), with a range-scoped ability's scope.range_inches stamped onto
 // every emitted buff as applicableWhen.maxRangeInches.
@@ -11,7 +81,8 @@ func (a *AbilityView) describeBuffs(source map[string]any, ctx map[string]any, p
 	if ctx == nil {
 		ctx = map[string]any{"phase": "shooting"}
 	}
-	translated := effectToBuffs(a.Raw["effect"], source, ctx, perspective)
+	resolvedEffect, _ := a.resolveRulesBundles(a.Raw["effect"], map[string]bool{a.ID(): true})
+	translated := effectToBuffs(resolvedEffect, source, ctx, perspective)
 	scope, _ := getMap(a.Raw, "scope")
 	rngVal := scope["range_inches"]
 	if !isNumber(rngVal) {

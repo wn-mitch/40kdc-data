@@ -2,6 +2,7 @@
 + LIST NAME: Terminator Loadout Decomposition
 + FACTION KEYWORD: World Eaters
 + DETACHMENT: Berzerker Warband
++ FORCE DISPOSITION: Purge The Foe
 + TOTAL ARMY POINTS: 725pts
 + POINTS LIMIT: 2000pts
 +
@@ -13,16 +14,17 @@
 BATTLELINE
 
 Char1: 1x Daemon Prince of Khorne (200 pts)
-1 with Infernal cannon, Hellforged weapons, Warlord
+• 1x Daemon Prince of Khorne: Infernal cannon, Hellforged weapons, Warlord
 
 10x Chaos Terminators (350 pts)
-2 with Chainfist, Combi-weapon
-4 with Combi-weapon, Power fist
-2 with Paired accursed weapons
-2 with Power fist, Reaper autocannon
+• 1x World Eaters Terminator Champion: Chainfist, Combi-weapon
+• 4x World Eaters Terminator: Combi-weapon, Power fist
+• 2x World Eaters Terminator: Paired accursed weapons
+• 2x World Eaters Terminator: Power fist, Reaper autocannon
+• 1x World Eaters Terminator: Chainfist, Combi-weapon
 
 5x Chaos Terminators (175 pts)
-1 with Chainfist, Combi-weapon
-2 with Combi-weapon, Power fist
-1 with Paired accursed weapons
-1 with Power fist, Reaper autocannon
+• 1x World Eaters Terminator Champion: Chainfist, Combi-weapon
+• 2x World Eaters Terminator: Combi-weapon, Power fist
+• 1x World Eaters Terminator: Paired accursed weapons
+• 1x World Eaters Terminator: Power fist, Reaper autocannon

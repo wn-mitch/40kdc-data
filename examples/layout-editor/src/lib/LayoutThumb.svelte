@@ -35,7 +35,7 @@
     {#if divider}
       <line x1={divider.from.x} y1={divider.from.y} x2={divider.to.x} y2={divider.to.y} class="divider" />
     {/if}
-    {#each resolved as p, i (p.id ?? i)}
+    {#each resolved as p, i}
       <polygon points={pts(p.vertices)} class="piece {p.piece_type}" />
     {/each}
   </g>

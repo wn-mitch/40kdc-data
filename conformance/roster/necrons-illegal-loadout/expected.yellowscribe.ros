@@ -37,7 +37,7 @@
             </profile>
             <profile name="Resurrection Orb" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, after being attached to a unit, return 1 destroyed model to the unit with full wounds.</characteristic>
+                <characteristic name="Description">Once per battle, while this model is leading a unit, return 1 destroyed model to the unit with full wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -62,6 +62,21 @@
                         <characteristic name="AP">-3</characteristic>
                         <characteristic name="D">2</characteristic>
                         <characteristic name="Keywords">Devastating Wounds</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit0-m0-w1" name="Tachyon arrow" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Tachyon arrow" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">72"</characteristic>
+                        <characteristic name="A">1</characteristic>
+                        <characteristic name="BS">2+</characteristic>
+                        <characteristic name="S">16</characteristic>
+                        <characteristic name="AP">-5</characteristic>
+                        <characteristic name="D">D6+2</characteristic>
+                        <characteristic name="Keywords">One Shot</characteristic>
                       </characteristics>
                     </profile>
                   </profiles>

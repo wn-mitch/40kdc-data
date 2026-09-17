@@ -1,0 +1,19 @@
+{
+  "name": "big shoota excludes lethal hits against knight paladin",
+  "attacker": { "weaponId": "big-shoota", "profileIndex": 0 },
+  "modelsFiring": 1,
+  "target": { "unitId": "knight-paladin", "profileIndex": 0 },
+  "context": { "phase": "shooting" },
+  "buffs": [],
+  "expected": {
+    "stages": {
+      "attacks": 3,
+      "hits": 1,
+      "wounds": 0.1667,
+      "unsaved": 0.0556,
+      "damage": 0.0556,
+      "after-fnp": 0.0556,
+      "models-killed": 0.0021
+    }
+  }
+}

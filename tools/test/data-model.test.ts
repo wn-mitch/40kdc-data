@@ -15,23 +15,61 @@ import {
 import { RAW_DATA } from "../src/data/bundle.generated.js";
 
 describe("terrain (embedded catalog + layout resolution)", () => {
-  it("embeds the 11e template catalog and migrated layouts", () => {
-    // 5 areas + 11 GW features (walls/old corners/old scenery removed; see the
-    // catalog-correction migration), plus the KOTC `impassable-wall`. Pieces
-    // carrying an elevated platform expose `upper_floor`; elevated-only / solid
-    // pieces set `ground_accessible: false`. Plus the two dense KOTC ruin area
-    // templates (`kotc-ruin-inner`, `kotc-ruin-deployment`).
-    expect(dataset.terrainTemplates.all.length).toBe(19);
+  it("embeds the 11e template catalog and imported layouts", () => {
+    // 19 canonical/KOTC templates plus Battlemaster REST API's 13 feature and
+    // 44 composed area variants (minor count variance when BM adds layout
+    // variety). Composed areas retain their source scenery as child features.
+    expect(dataset.terrainTemplates.all.length).toBeGreaterThanOrEqual(70);
+    const rawTemplateIds = RAW_DATA.terrainTemplates.map(
+      (template) => template.id,
+    );
+    expect(new Set(rawTemplateIds).size).toBe(rawTemplateIds.length);
+    const sampleComposite = dataset.terrainTemplates.all.find(
+      (t) =>
+        t.kind === "area" &&
+        t.source === "battlemaster-11e" &&
+        (t.features?.length ?? 0) > 0,
+    );
+    expect(sampleComposite?.features?.length).toBeGreaterThanOrEqual(1);
     expect(dataset.terrainTemplates.get("area-large")).toBeDefined();
-    expect(dataset.terrainTemplates.get("kotc-ruin-inner")?.terrain_category).toBe("dense");
-    expect(dataset.terrainTemplates.get("kotc-ruin-deployment")?.terrain_category).toBe("dense");
-    expect(dataset.terrainTemplates.get("corner-ruin-balanced-left")?.upper_floor).toBeDefined();
-    expect(dataset.terrainTemplates.get("gantry")?.ground_accessible).toBe(false);
-    expect(dataset.terrainTemplates.get("impassable-wall")?.ground_accessible).toBe(false);
+    expect(
+      dataset.terrainTemplates.get("kotc-ruin-inner")?.terrain_category,
+    ).toBe("dense");
+    expect(
+      dataset.terrainTemplates.get("kotc-ruin-deployment")?.terrain_category,
+    ).toBe("dense");
+    expect(
+      dataset.terrainTemplates.get("corner-ruin-balanced-left")?.upper_floor,
+    ).toBeDefined();
+    expect(dataset.terrainTemplates.get("gantry")?.ground_accessible).toBe(
+      false,
+    );
+    expect(
+      dataset.terrainTemplates.get("impassable-wall")?.ground_accessible,
+    ).toBe(false);
     // removed in the catalog correction
     expect(dataset.terrainTemplates.get("wall-medium")).toBeUndefined();
     expect(dataset.terrainTemplates.get("scaffold")).toBeUndefined();
-    expect(dataset.terrainLayouts.get("take-and-hold-mirror-1")).toBeDefined();
+    // BM REST API feature templates carry wall polylines
+    const wallTemplate = dataset.terrainTemplates.all.find(
+      (t) =>
+        t.kind === "feature" &&
+        t.source === "battlemaster-11e" &&
+        (t.walls?.length ?? 0) > 0,
+    );
+    expect(wallTemplate).toBeDefined();
+    expect(wallTemplate!.walls![0]!.points.length).toBeGreaterThanOrEqual(2);
+    // BM REST API area templates carry high-res outlines
+    const outlineTemplate = dataset.terrainTemplates.all.find(
+      (t) =>
+        t.kind === "area" &&
+        t.source === "battlemaster-11e" &&
+        (t.outline?.length ?? 0) > 0,
+    );
+    expect(outlineTemplate).toBeDefined();
+    expect(outlineTemplate!.outline!.length).toBeGreaterThanOrEqual(100);
+    // Layouts exist with the REST API id scheme
+    expect(dataset.terrainLayouts.get("bm-take-vs-take-01")).toBeDefined();
     // The KOTC colosseum is a first-class dataset layout on a 36×36 board.
     const colosseum = dataset.terrainLayouts.get("kotc-colosseum");
     expect(colosseum?.board).toEqual({ width: 36, height: 36 });
@@ -42,19 +80,56 @@ describe("terrain (embedded catalog + layout resolution)", () => {
   });
 
   it("exposes the new layout classification fields", () => {
-    expect(dataset.terrainLayouts.get("take-and-hold-mirror-1")!.deployment_pattern_id).toBe(
-      "tipping-point",
-    );
-    const sd = dataset.terrainLayouts.get("take-and-hold-vs-purge-the-foe-2")!;
+    expect(
+      dataset.terrainLayouts.get("bm-take-vs-take-01")!.deployment_pattern_id,
+    ).toBe("tipping-point");
+    const sd = dataset.terrainLayouts.get("bm-take-vs-purge-02")!;
     expect(sd.deployment_pattern_id).toBe("search-and-destroy");
     expect(sd.mission_matchup_id).toBe("take-and-hold-vs-purge-the-foe");
     expect(sd.variant).toBe(2);
+    for (const layout of dataset.terrainLayouts.all.filter(
+      (candidate) => candidate.source === "battlemaster-11e",
+    )) {
+      const centerPieces = (layout.pieces ?? []).filter(
+        (piece) => piece.objective_role === "center",
+      );
+      expect(centerPieces).toHaveLength(2);
+      expect(centerPieces[0]!.link_group).toBe(centerPieces[1]!.link_group);
+    }
+  });
+
+  it("places Take vs Recon objectives on their marked terrain areas", () => {
+    const layout = dataset.terrainLayouts.get("bm-take-vs-recon-01")!;
+    const markers = Object.fromEntries(
+      layout.pieces
+        .filter((piece) => piece.is_objective)
+        .map((piece) => [
+          piece.id,
+          {
+            role: piece.objective_role,
+            position: piece.objective?.position,
+          },
+        ]),
+    );
+
+    expect(markers).toEqual({
+      "area-02": { role: "center", position: { x: 29.9985, y: 21.0015 } },
+      "area-03": { role: "home", position: { x: 51.4985, y: 12.7515 } },
+      "area-06": { role: "center", position: { x: 30.0015, y: 22.9985 } },
+      "area-07": { role: "home", position: { x: 8.5015, y: 31.2485 } },
+      "area-11": { role: "expansion", position: { x: 16.5015, y: 9.7515 } },
+      "area-12": { role: "expansion", position: { x: 43.4985, y: 34.2485 } },
+    });
   });
 
   it("resolveTerrain produces on-board polygons (mirror of Rust resolve_terrain)", () => {
-    const layout = dataset.terrainLayouts.get("take-and-hold-mirror-1")!;
+    const layout = dataset.terrainLayouts.get("bm-take-vs-take-01")!;
     const resolved = dataset.resolveTerrain(layout);
     expect(resolved.length).toBeGreaterThan(0);
+    const resolvedIds = resolved
+      .map((piece) => piece.id)
+      .filter((id): id is string => id !== null);
+    expect(new Set(resolvedIds).size).toBe(resolvedIds.length);
     for (const p of resolved) {
       expect(p.vertices.length).toBeGreaterThanOrEqual(3);
       for (const v of p.vertices) {
@@ -64,6 +139,25 @@ describe("terrain (embedded catalog + layout resolution)", () => {
         expect(v.y).toBeLessThanOrEqual(45);
       }
     }
+  });
+});
+
+describe("mission cards (embedded primary and secondary rules)", () => {
+  it("resolves a mission to its same-id primary scoring card", () => {
+    expect(dataset.missionCards.all).toHaveLength(43);
+    expect(
+      dataset.missionCards.all.filter((card) => card.card_type === "primary"),
+    ).toHaveLength(25);
+    expect(
+      dataset.missionCards.all.filter((card) => card.card_type === "secondary"),
+    ).toHaveLength(18);
+
+    const mission = dataset.missions.get("determined-acquisition");
+    expect(mission).toBeDefined();
+    const card = dataset.missionCards.get(mission!.id);
+    expect(card?.id).toBe(mission!.id);
+    expect(card?.card_type).toBe("primary");
+    expect(card?.awards?.length).toBeGreaterThan(0);
   });
 });
 
@@ -86,7 +180,9 @@ describe("normalizeName", () => {
   });
 
   it("is idempotent on already-normalized input", () => {
-    expect(normalizeName(normalizeName("Khârn the Betrayer"))).toBe("kharn the betrayer");
+    expect(normalizeName(normalizeName("Khârn the Betrayer"))).toBe(
+      "kharn the betrayer",
+    );
   });
 });
 
@@ -112,13 +208,23 @@ describe("Collection.find / findAll", () => {
     const all = units.findAll("Ministorum Priest");
     expect(all.length).toBe(3);
     expect(new Set(all.map((u) => u.faction?.id))).toEqual(
-      new Set(["adepta-sororitas", "agents-of-the-imperium", "astra-militarum"]),
+      new Set([
+        "adepta-sororitas",
+        "agents-of-the-imperium",
+        "astra-militarum",
+      ]),
     );
   });
 
   it("byFaction disambiguates a unit shared across factions", () => {
-    for (const f of ["adepta-sororitas", "agents-of-the-imperium", "astra-militarum"]) {
-      expect(units.byFaction(f).some((u) => u.id === "ministorum-priest")).toBe(true);
+    for (const f of [
+      "adepta-sororitas",
+      "agents-of-the-imperium",
+      "astra-militarum",
+    ]) {
+      expect(units.byFaction(f).some((u) => u.id === "ministorum-priest")).toBe(
+        true,
+      );
     }
   });
 
@@ -143,12 +249,16 @@ describe("Collection.find / findAll", () => {
   });
 
   it("get() throws for a shared ability id resolved without a faction (dev guard)", () => {
-    expect(() => abilities.get("idol-of-blessed-blood")).toThrow(/Ambiguous ability lookup/);
+    expect(() => abilities.get("idol-of-blessed-blood")).toThrow(
+      /Ambiguous ability lookup/,
+    );
     expect(abilities.getAny("idol-of-blessed-blood")).toBeDefined();
   });
 
   it("getInFaction returns undefined when the id is absent from the faction", () => {
-    expect(units.getInFaction("chaos-land-raider", "adepta-sororitas")).toBeUndefined();
+    expect(
+      units.getInFaction("chaos-land-raider", "adepta-sororitas"),
+    ).toBeUndefined();
   });
 
   it("get() throws for a shared chassis id resolved without a faction (dev guard)", () => {
@@ -156,14 +266,51 @@ describe("Collection.find / findAll", () => {
     // a faction-blind get() of an id under several factions would return the
     // first-registered copy (wrong keywords/points). vitest runs outside
     // production, so it throws.
-    expect(() => units.get("chaos-land-raider")).toThrow(/Ambiguous unit lookup/);
+    expect(() => units.get("chaos-land-raider")).toThrow(
+      /Ambiguous unit lookup/,
+    );
     // getAny is the explicit opt-out for genuinely faction-unknown callers
     // (roster import, the conformance runner) — first-wins, never throws.
     expect(units.getAny("chaos-land-raider")).toBeDefined();
     // The scoped accessor is unaffected.
-    expect(units.getInFaction("chaos-land-raider", "world-eaters")?.raw.faction_id).toBe(
-      "world-eaters",
-    );
+    expect(
+      units.getInFaction("chaos-land-raider", "world-eaters")?.raw.faction_id,
+    ).toBe("world-eaters");
+  });
+});
+
+describe("Collection.byExternalRef", () => {
+  it("returns every record for a many-to-many external identity", () => {
+    type Item = {
+      id: string;
+      external_refs: { namespace: string; id: string }[];
+    };
+    const collection = new Collection<Item, Item>({
+      items: [
+        {
+          id: "first",
+          external_refs: [
+            { namespace: "source", id: "shared" },
+            { namespace: "source", id: "alternate" },
+          ],
+        },
+        {
+          id: "second",
+          external_refs: [{ namespace: "source", id: "shared" }],
+        },
+      ],
+      idOf: (item) => item.id,
+      externalRefsOf: (item) => item.external_refs,
+      wrap: (item) => item,
+    });
+
+    expect(
+      collection.byExternalRef("source", "shared").map((item) => item.id),
+    ).toEqual(["first", "second"]);
+    expect(
+      collection.byExternalRef("source", "alternate").map((item) => item.id),
+    ).toEqual(["first"]);
+    expect(collection.byExternalRef("source", "missing")).toEqual([]);
   });
 });
 
@@ -191,7 +338,10 @@ describe("Collection id-alias resolution (renamed ids)", () => {
 
   it("consults idAliases only on a byId miss (canonical id always wins)", () => {
     // A synthetic collection: the alias must never shadow a live canonical id.
-    const coll = new Collection<{ id: string; name: string }, { id: string; name: string }>({
+    const coll = new Collection<
+      { id: string; name: string },
+      { id: string; name: string }
+    >({
       items: [
         { id: "new-x", name: "New X" },
         { id: "old-x", name: "Old X (still live)" },
@@ -241,7 +391,9 @@ describe("internationalization (diacritic- and punctuation-insensitive lookup)",
   it("does not over-collapse genuinely distinct names", () => {
     expect(normalizeName("Khârn")).not.toBe(normalizeName("Kâhl"));
     // an exact unique name must not pull in unrelated entities
-    expect(units.findAll("Khârn the Betrayer").map((u) => u.id)).toEqual(["kharn-the-betrayer"]);
+    expect(units.findAll("Khârn the Betrayer").map((u) => u.id)).toEqual([
+      "kharn-the-betrayer",
+    ]);
   });
 });
 
@@ -252,13 +404,18 @@ describe("Kharn proof (the headline one-liner)", () => {
     expect(kharn).toBeDefined();
     expect(kharn!.faction?.id).toBe("world-eaters");
     expect(kharn!.weapons.length).toBe(2);
-    expect(kharn!.abilities.map((a) => a.id).sort()).toEqual(
-      ["berzerker-frenzy", "leader", "legendary-killer", "the-betrayer"],
-    );
+    expect(kharn!.abilities.map((a) => a.id).sort()).toEqual([
+      "berzerker-frenzy",
+      "leader",
+      "legendary-killer",
+      "the-betrayer",
+    ]);
   });
 
   it("filters abilities by phase", () => {
-    const shooting = kharn!.abilities.filter((a) => a.phases.includes("shooting"));
+    const shooting = kharn!.abilities.filter((a) =>
+      a.phases.includes("shooting"),
+    );
     expect(shooting.map((a) => a.id)).toEqual(["berzerker-frenzy"]);
   });
 });
@@ -267,11 +424,119 @@ describe("AbilityView.phases (joined via phase-mappings)", () => {
   it("unions phases across a mapping", () => {
     // deadly-demise-d3 is a shared id (per-faction copies) — phase-mappings
     // key on the bare ability id, so any copy carries the same phases.
-    expect(abilities.getAny("deadly-demise-d3")?.phases.sort()).toEqual(["fight", "shooting"]);
+    expect(abilities.getAny("deadly-demise-d3")?.phases.sort()).toEqual([
+      "fight",
+      "shooting",
+    ]);
   });
 
   it("is empty for an ability with no phase-mapping", () => {
     expect(abilities.getAny("leader")?.phases).toEqual([]);
+  });
+});
+
+describe("AbilityView reusable rules bundles", () => {
+  it("expands an entity-backed grant before translating buffs", () => {
+    const ds = new Dataset({
+      ...emptyRawData(),
+      abilities: [
+        {
+          ability_id: "shared-rules",
+          name: "Shared Rules",
+          authored_by: "40kdc-community",
+          faction_id: "orks",
+          game_version: { edition: "11th", dataslate: "test" },
+          effect: {
+            type: "rules-bundle",
+            steps: [
+              {
+                type: "re-roll",
+                target: "unit",
+                modifier: { roll: "hit", subset: "ones" },
+              },
+              {
+                type: "re-roll",
+                target: "unit",
+                modifier: { roll: "wound", subset: "ones" },
+              },
+            ],
+          },
+          scope: { range: "unit", duration: "permanent" },
+        } as never,
+        {
+          ability_id: "bundle-grant",
+          name: "Bundle Grant",
+          authored_by: "40kdc-community",
+          faction_id: "orks",
+          game_version: { edition: "11th", dataslate: "test" },
+          effect: {
+            type: "ability-grant",
+            target: "unit",
+            modifier: { ability_id: "shared-rules", rules_bundle: true },
+          },
+          scope: { range: "unit", duration: "permanent" },
+        } as never,
+        {
+          ability_id: "cycle-a",
+          name: "Cycle A",
+          authored_by: "40kdc-community",
+          faction_id: "orks",
+          game_version: { edition: "11th", dataslate: "test" },
+          effect: {
+            type: "rules-bundle",
+            steps: [
+              {
+                type: "ability-grant",
+                target: "unit",
+                modifier: { ability_id: "cycle-b", rules_bundle: true },
+              },
+            ],
+          },
+          scope: { range: "unit", duration: "permanent" },
+        } as never,
+        {
+          ability_id: "cycle-b",
+          name: "Cycle B",
+          authored_by: "40kdc-community",
+          faction_id: "orks",
+          game_version: { edition: "11th", dataslate: "test" },
+          effect: {
+            type: "rules-bundle",
+            steps: [
+              {
+                type: "ability-grant",
+                target: "unit",
+                modifier: { ability_id: "cycle-a", rules_bundle: true },
+              },
+            ],
+          },
+        } as never,
+      ],
+    });
+
+    const result = ds.abilities
+      .getInFaction("bundle-grant", "orks")!
+      .describeBuffs(
+        { kind: "ability", abilityId: "bundle-grant", abilityKind: "unit" },
+        { phase: "shooting" },
+      );
+
+    expect(result.applied.map((buff) => buff.contribution)).toEqual([
+      { type: "reroll", roll: "hit", subset: "ones" },
+      { type: "reroll", roll: "wound", subset: "ones" },
+    ]);
+    expect(result.unsupported).toEqual([]);
+
+    const cyclic = ds.abilities
+      .getInFaction("cycle-a", "orks")!
+      .describeBuffs(
+        { kind: "ability", abilityId: "cycle-a", abilityKind: "unit" },
+        { phase: "shooting" },
+      );
+    expect(cyclic.applied).toEqual([]);
+    expect(cyclic.unsupported.map(({ reason }) => reason)).toEqual([
+      'effect type "ability-grant" is not modelled by the buff layer',
+    ]);
   });
 });
 
@@ -292,6 +557,45 @@ describe("reverse links", () => {
     const we = factions.find("World Eaters")!;
     expect(we.units.length).toBeGreaterThan(0);
     expect(we.weapons.length).toBeGreaterThan(0);
+  });
+});
+
+describe("unit-scoped weapon profiles", () => {
+  it("links Vanguard Veterans to their distinct master-crafted power weapon", () => {
+    const id =
+      "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs";
+    const unit = units.getInFaction(
+      "vanguard-veteran-squad-with-jump-packs",
+      "adeptus-astartes",
+    );
+
+    expect(unit).toBeDefined();
+    expect(unit!.raw.weapon_ids).toContain(id);
+    expect(unit!.raw.weapon_ids).not.toContain("master-crafted-power-weapon");
+    const option = unit!.wargearOptions.find(
+      (entry) =>
+        entry.id === "vanguard-veteran-squad-with-jump-packs-wgo-mfm-2",
+    );
+    expect(option).toBeDefined();
+    expect(option!.replacement_choice).toEqual([
+      [id, "plasma-pistol-vanguard-veteran-squad-with-jump-packs"],
+      [id, "heavy-bolt-pistol-vanguard-veteran-squad-with-jump-packs"],
+    ]);
+
+    const scoped = unit!.weapons.find((weapon) => weapon.id === id);
+    expect(scoped?.profiles).toHaveLength(1);
+    expect(scoped?.profiles[0]).toMatchObject({
+      stats: { A: 3, S: 5, AP: -2, D: 2, WS: 3 },
+      keywords: [],
+    });
+
+    expect(
+      weapons.getInFaction("master-crafted-power-weapon", "adeptus-astartes")
+        ?.profiles[0],
+    ).toMatchObject({
+      stats: { A: 7, WS: 2 },
+      keywords: [{ keyword_id: "lethal-hits" }],
+    });
   });
 });
 
@@ -322,16 +626,18 @@ describe("bodyguardsAttachableFrom", () => {
 
   it("is the inverse of leadersAttachableTo", () => {
     // palatine → battle-sisters-squad, and battle-sisters-squad → palatine.
-    expect(dataset.bodyguardsAttachableFrom("palatine").map((b) => b.id)).toContain(
-      "battle-sisters-squad",
-    );
-    expect(dataset.leadersAttachableTo("battle-sisters-squad").map((l) => l.id)).toContain(
-      "palatine",
-    );
+    expect(
+      dataset.bodyguardsAttachableFrom("palatine").map((b) => b.id),
+    ).toContain("battle-sisters-squad");
+    expect(
+      dataset.leadersAttachableTo("battle-sisters-squad").map((l) => l.id),
+    ).toContain("palatine");
   });
 
   it("returns an empty array for a non-leader unit", () => {
-    expect(dataset.bodyguardsAttachableFrom("battle-sisters-squad")).toEqual([]);
+    expect(dataset.bodyguardsAttachableFrom("battle-sisters-squad")).toEqual(
+      [],
+    );
   });
 
   it("returns an empty array for an unknown unit id", () => {
@@ -376,6 +682,20 @@ describe("collection integrity", () => {
     expect(abilities.size).toBeGreaterThan(0);
   });
 
+  it("links every declared Tyranids faction rule to a faction ability", () => {
+    const tyranids = factions.get("tyranids");
+    expect(tyranids?.raw.faction_rule_ids).toEqual([
+      "shadow-in-the-warp",
+      "synapse",
+    ]);
+
+    for (const ruleId of tyranids!.raw.faction_rule_ids) {
+      expect(abilities.getInFaction(ruleId, "tyranids")?.raw.ability_type).toBe(
+        "faction",
+      );
+    }
+  });
+
   it("deduplicates abilities by (faction_id, id) — every faction's copy retained", () => {
     // A shared ability_id keeps one copy per faction (the copies legitimately
     // diverge); only true within-faction duplicates collapse.
@@ -383,7 +703,9 @@ describe("collection integrity", () => {
     expect(new Set(keys).size).toBe(keys.length);
     // idol-of-blessed-blood exists under both world-eaters and
     // chaos-space-marines — both copies must survive dedupe.
-    expect(abilities.all.filter((a) => a.id === "idol-of-blessed-blood").length).toBe(2);
+    expect(
+      abilities.all.filter((a) => a.id === "idol-of-blessed-blood").length,
+    ).toBe(2);
   });
 
   it("folds shared _core abilities into the collection", () => {
@@ -399,13 +721,19 @@ describe("collection integrity", () => {
     for (const f of ["world-eaters", "chaos-space-marines"]) {
       const unit = units.getInFaction("khorne-lord-of-skulls", f)!;
       const idol = unit.abilities.find((a) => a.id === "idol-of-blessed-blood");
-      expect(idol, `idol-of-blessed-blood on ${f} lord of skulls`).toBeDefined();
+      expect(
+        idol,
+        `idol-of-blessed-blood on ${f} lord of skulls`,
+      ).toBeDefined();
       expect(idol!.raw.faction_id).toBe(f);
     }
   });
 
   it("falls back to the faction-less _core pool for ids outside the unit's faction", () => {
-    const ability = { name: "Benefit of Cover", ability_id: "benefit-of-cover" };
+    const ability = {
+      name: "Benefit of Cover",
+      ability_id: "benefit-of-cover",
+    };
     const ds = new Dataset({
       ...emptyRawData(),
       units: [

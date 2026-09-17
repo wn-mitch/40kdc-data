@@ -63,6 +63,26 @@ const writeJSON = (p: string, v: Json): void => writeFileSync(p, JSON.stringify(
 const baseName = (name: string): string => kebab(String(name ?? "").replace(/\([^)]*\)/g, " "));
 const matchKey = (detachmentId: string | null | undefined, name: string): string =>
   `${detachmentId ?? ""}::${baseName(name)}`;
+const versionKey = (entry: Json): string =>
+  `${entry.game_version?.edition ?? ""}::${entry.game_version?.dataslate ?? ""}`;
+const scopedKey = (entry: Json, key: string): string => `${versionKey(entry)}::${key}`;
+
+function addToIndex<T>(index: Map<string, T[]>, key: string, value: T): void {
+  const values = index.get(key);
+  if (values) values.push(value);
+  else index.set(key, [value]);
+}
+
+function detachmentRuleIds(
+  exactRules: string[] | undefined,
+  fallbackRules: string[] | undefined,
+): string[] {
+  const exact = [...new Set(exactRules ?? [])].sort();
+  if (exact.length > 0) return exact;
+
+  const fallback = [...new Set(fallbackRules ?? [])];
+  return fallback.length === 1 ? fallback : [];
+}
 
 export interface ReconcileReport {
   faction: string;
@@ -106,28 +126,43 @@ export function reconcileFaction(faction: string, core: CoreFiles, abilities: Js
   };
 
   // ── Build ability indexes ────────────────────────────────────────────
-  // (type, detachment_id, base-name) → ability ids (list, to detect collisions)
+  // Entity identity is snapshot-scoped: historical and current rules may share
+  // the same detachment and display name without both attaching to today's core.
   const byKey = new Map<string, Json[]>();
+  const abilityById = new Map<string, Json>(abilities.map((ability) => [ability.ability_id, ability]));
   const usedAbilityIds = new Set<string>(); // abilities matched to a core entity
-  const unitToAbilities = new Map<string, string[]>(); // unit_id → ability ids (inverse index)
-  const detachmentRules = new Map<string, string[]>(); // detachment_id → detachment-rule ability ids
+  const unitToAbilities = new Map<string, string[]>(); // unit_id → ability ids across snapshots
+  const detachmentRules = new Map<string, string[]>(); // snapshot + detachment_id → rule ability ids
+  const allDetachmentRules = new Map<string, string[]>(); // detachment_id → rule ability ids across snapshots
   for (const a of abilities) {
     if (a.ability_type === "stratagem" || a.ability_type === "enhancement") {
-      const k = `${a.ability_type}|${matchKey(a.detachment_id, a.name)}`;
-      (byKey.get(k) ?? byKey.set(k, []).get(k)!).push(a);
+      const key = `${a.ability_type}|${scopedKey(a, matchKey(a.detachment_id, a.name))}`;
+      addToIndex(byKey, key, a);
     }
     if (a.ability_type === "detachment" && a.detachment_id) {
-      (detachmentRules.get(a.detachment_id) ?? detachmentRules.set(a.detachment_id, []).get(a.detachment_id)!).push(a.ability_id);
+      addToIndex(detachmentRules, scopedKey(a, a.detachment_id), a.ability_id);
+      addToIndex(allDetachmentRules, a.detachment_id, a.ability_id);
     }
-    for (const u of a.unit_ids ?? []) {
-      (unitToAbilities.get(u) ?? unitToAbilities.set(u, []).get(u)!).push(a.ability_id);
+    for (const unitId of a.unit_ids ?? []) {
+      addToIndex(unitToAbilities, unitId, a.ability_id);
     }
   }
 
   // ── stratagems / enhancements: set ability_id by match ───────────────
   const linkByType = (entities: Json[] | undefined, type: "stratagem" | "enhancement", bucket: ReconcileReport["stratagems"]) => {
     for (const e of entities ?? []) {
-      const matches = byKey.get(`${type}|${matchKey(e.detachment_id, e.name)}`) ?? [];
+      const matches = byKey.get(`${type}|${scopedKey(e, matchKey(e.detachment_id, e.name))}`) ?? [];
+      if (matches.length === 0 && e.ability_id) {
+        const linked = abilityById.get(e.ability_id);
+        const isHistoricalIdentity = linked?.ability_type === type
+          && linked.detachment_id === e.detachment_id
+          && baseName(linked.name) === baseName(e.name);
+        if (isHistoricalIdentity) {
+          usedAbilityIds.add(e.ability_id);
+          bucket.alreadyLinked++;
+          continue;
+        }
+      }
       if (matches.length === 0) {
         bucket.orphanCore.push(e.id);
         continue;
@@ -178,17 +213,24 @@ export function reconcileFaction(faction: string, core: CoreFiles, abilities: Js
 
   // ── detachments: set detachment_rule_ids (plural) ───────────────────
   const coreDetIds = new Set((core.detachments ?? []).map((d) => d.id));
+  const coreDetVersions = new Set((core.detachments ?? []).map((d) => scopedKey(d, d.id)));
   for (const d of core.detachments ?? []) {
-    const rules = detachmentRules.get(d.id) ?? [];
+    const rules = detachmentRuleIds(
+      detachmentRules.get(scopedKey(d, d.id)),
+      allDetachmentRules.get(d.id),
+    );
     if (rules.length === 0) {
       report.detachments.orphanCore.push(d.id);
       continue;
     }
     rules.forEach((r) => usedAbilityIds.add(r));
-    const merged = [...new Set([...(d.detachment_rule_ids ?? []), ...rules])].sort();
-    const before = JSON.stringify(d.detachment_rule_ids ?? null);
-    if (before !== JSON.stringify(merged)) {
-      d.detachment_rule_ids = merged;
+    const singularRule = rules.length === 1 ? rules[0] : null;
+    if (
+      JSON.stringify(d.detachment_rule_ids ?? null) !== JSON.stringify(rules)
+      || (d.detachment_rule_id ?? null) !== singularRule
+    ) {
+      d.detachment_rule_ids = rules;
+      d.detachment_rule_id = singularRule;
       report.detachments.ruleIdsSet++;
     }
     if (rules.length > 1) report.detachments.multiRule.push({ detachment_id: d.id, ability_ids: rules });
@@ -198,6 +240,11 @@ export function reconcileFaction(faction: string, core: CoreFiles, abilities: Js
   for (const a of abilities) {
     if (!["stratagem", "enhancement", "detachment"].includes(a.ability_type)) continue;
     if (usedAbilityIds.has(a.ability_id)) continue;
+    if (
+      a.detachment_id
+      && coreDetIds.has(a.detachment_id)
+      && !coreDetVersions.has(scopedKey(a, a.detachment_id))
+    ) continue; // historical rule for a detachment whose core record has moved to a newer snapshot
     // a detachment-rule whose detachment_id simply has no core detachment, or a
     // stratagem/enhancement that matched nothing → its core entity is missing.
     report.missingCoreEntities.push({

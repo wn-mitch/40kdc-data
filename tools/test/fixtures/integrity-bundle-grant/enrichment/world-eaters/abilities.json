@@ -1,0 +1,38 @@
+[
+  {
+    "ability_id": "bundle-target",
+    "effect": { "type": "rules-bundle", "target": "self", "steps": [] }
+  },
+  {
+    "ability_id": "ordinary-target",
+    "effect": { "type": "stat-modifier", "target": "self", "modifier": { "stat": "T", "operation": "add", "value": 1 } }
+  },
+  {
+    "ability_id": "valid-bundle-grant",
+    "effect": {
+      "type": "ability-grant",
+      "modifier": { "ability_id": "bundle-target", "rules_bundle": true }
+    }
+  },
+  {
+    "ability_id": "dangling-bundle-grant",
+    "effect": {
+      "type": "ability-grant",
+      "modifier": { "ability_id": "missing-bundle", "rules_bundle": true }
+    }
+  },
+  {
+    "ability_id": "foreign-bundle-grant",
+    "effect": {
+      "type": "ability-grant",
+      "modifier": { "ability_id": "foreign-bundle", "rules_bundle": true }
+    }
+  },
+  {
+    "ability_id": "ordinary-bundle-grant",
+    "effect": {
+      "type": "ability-grant",
+      "modifier": { "ability_id": "ordinary-target", "rules_bundle": true }
+    }
+  }
+]

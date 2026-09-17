@@ -2,6 +2,7 @@
 + LIST NAME: Blood for the Blood God
 + FACTION KEYWORD: World Eaters
 + DETACHMENT: Berzerker Warband
++ FORCE DISPOSITION: Purge The Foe
 + TOTAL ARMY POINTS: 75pts
 + POINTS LIMIT: 2000pts
 +
@@ -13,5 +14,6 @@
 BATTLELINE
 
 8x Goremongers (75 pts)
-7 with Autopistol, Chainblade, Close combat weapon
-1 with Autopistol, Blood harpoon, Close combat weapon
+• 1x Blood Herald: Autopistol, Chainblade, Close combat weapon
+• 6x Goremongers: Autopistol, Chainblade, Close combat weapon
+• 1x Goremongers: Autopistol, Blood harpoon, Close combat weapon

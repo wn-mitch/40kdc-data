@@ -22,4 +22,5 @@ Char1: 1x Grand Master in Nemesis Dreadknight (245 pts)
 Enhancement: Pyresoul (Psychic) (+20 pts)
 
 10x Purifier Squad (250 pts)
-1 with Purifying Flame, 9x Storm bolter
+• 1x Knight of the Flame: Nemesis force weapon, Purifying Flame, Storm bolter
+• 9x Purifier: Nemesis force weapon, Purifying Flame, Storm bolter

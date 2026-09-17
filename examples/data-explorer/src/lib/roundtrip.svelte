@@ -4,9 +4,9 @@
   import type { AbilityView } from "@alpaca-software/40kdc-data";
   import { explorer } from "./store.svelte.js";
   import { notes, fingerprintText } from "./notes.svelte.js";
-  import { groupAbilities } from "./ability-groups.js";
+  import { groupAbilities } from "../../../_shared/ability-groups.js";
   import {
-    loadIndex,
+    loadFactionIndex,
     entryKind,
     entryToText,
     type StoreIndex,
@@ -26,6 +26,7 @@
   let count = $state(0);
   let specInput = $state(explorer.sourceSpec);
   let copyState = $state<"idle" | "json" | "error">("idle");
+  let loadedFaction = $state<string | null>(null);
 
   // ── Embedding-veracity report ─────────────────────────────────────────────
   let veracityError = $state<string | null>(null);
@@ -169,13 +170,20 @@
   });
 
   async function load(force = false): Promise<void> {
+    if (!explorer.factionId) {
+      index = {};
+      count = 0;
+      loadedFaction = null;
+      return;
+    }
     loading = true;
     error = null;
     try {
-      const res = await loadIndex(explorer.sourceSpec, { force });
+      const res = await loadFactionIndex(explorer.sourceSpec, explorer.factionId, { force });
       index = res.index;
       sourceLabel = res.label;
       count = res.count;
+      loadedFaction = explorer.factionId;
     } catch (e) {
       error = e instanceof Error ? e.message : String(e);
       index = null;
@@ -190,14 +198,15 @@
   }
 
   $effect(() => {
-    // Lazy first load when the view is opened.
-    if (index === null && !loading && !error) void load();
+    if ((!index && !loading && !error) || loadedFaction !== explorer.factionId) void load();
   });
 
   function buildRecords(): FlaggedRecord[] {
     const out: FlaggedRecord[] = [];
     for (const id of notes.exportableIds()) {
-      const a = abilities.get(id);
+      const a =
+        (explorer.factionId ? abilities.getInFaction(id, explorer.factionId) : undefined) ??
+        abilities.getAny(id);
       const n = notes.get(id);
       let desc = "";
       try {

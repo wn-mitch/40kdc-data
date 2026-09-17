@@ -1,12 +1,16 @@
 <script lang="ts">
   import Handles from "./Handles.svelte";
+  import ClockPicker from "./ClockPicker.svelte";
   import {
     boardOf,
     orientedFootprint,
-    upperFloorBoardVerts,
+    upperFloorPolygons,
     isGroundBlocked,
     bbox,
     keystoneDisplays,
+    snapToKeystoneGrid,
+    KEYSTONE_INCREMENT,
+    referenceImageBox,
     templateById,
     type EditLayout,
     type EditPiece,
@@ -19,9 +23,10 @@
     type DeployZone,
     type TerritoryDivider,
     type ObjectiveMarker,
+    type ReferenceFit,
   } from "./model.js";
   import type { ResolvedPiece } from "@alpaca-software/40kdc-data";
-  import { facingAngle } from "../../../_shared/layout-geometry.js";
+  import { facingAngle, formatKeystoneDistance, rendersAsWallsOnly } from "../../../_shared/layout-geometry.js";
 
   interface Props {
     layout: EditLayout;
@@ -38,9 +43,25 @@
     keystoneFacing?: boolean;
     /** Resolved ids of pieces named by a "needs review" warning, outlined on the board. */
     warnPieceIds?: Set<string>;
+    /** Ephemeral reference image: a rendered Event Companion page, or a chosen photo. */
+    referenceImage?: string | null;
+    referenceOpacity?: number;
+    /** How that image is fitted over the board — turn, nudge and zoom. See `referenceImageBox`. */
+    referenceFit?: ReferenceFit;
+    /** Opacity of the authored terrain/grid overlay, leaving the reference image fully visible. */
+    terrainOpacity?: number;
+    /** ¼″ keystone-grid snapping for armed top-level areas. Alt suspends it live. */
+    snap?: { enabled: boolean; step: number };
+    /** The piece whose keystone anchor is being picked, if any (clock mode). */
+    clockPiece?: EditPiece | null;
+    /** The corner index under the pointer during a clock pick. */
+    clockCandidate?: number | null;
     onselect: (id: string | null) => void;
     onmove: (id: string, position: Vec2) => void;
     onorient: (id: string, patch: { rotation_degrees?: number; mirror?: Mirror }) => void;
+    onclockhover?: (index: number | null, pointer: Vec2) => void;
+    onclockcommit?: (index: number) => void;
+    onclockcancel?: () => void;
   }
   let {
     layout,
@@ -54,9 +75,19 @@
     showKeystones = true,
     keystoneFacing = false,
     warnPieceIds = new Set<string>(),
+    referenceImage = null,
+    referenceOpacity = 0.45,
+    referenceFit = {},
+    terrainOpacity = 1,
+    snap = { enabled: true, step: KEYSTONE_INCREMENT },
+    clockPiece = null,
+    clockCandidate = null,
     onselect,
     onmove,
     onorient,
+    onclockhover,
+    onclockcommit,
+    onclockcancel,
   }: Props = $props();
 
   // The board is shown rotated 90° CW for portrait terrain cards. Board coords stay
@@ -65,9 +96,15 @@
   // active layout's extents (the 60×44 standard, or a per-layout override).
   const board = $derived(boardOf(layout));
   const centre = $derived({ x: board.width / 2, y: board.height / 2 });
+  const referenceBox = $derived(referenceImageBox(board, referenceFit));
   let gEl = $state<SVGGElement | null>(null);
   let svgEl = $state<SVGSVGElement | null>(null);
-  let drag = $state<{ id: string; offset: Vec2 } | null>(null);
+  let drag = $state<{ id: string; offset: Vec2; from: Vec2; moved: boolean } | null>(null);
+  // The clock picker shields the board, so a drag begun before it mounted could
+  // never be released onto a piece — drop it rather than leave it live.
+  $effect(() => {
+    if (clockPiece) drag = null;
+  });
 
   /**
    * Map a client-space point into board inches, for drops that originate
@@ -97,7 +134,10 @@
   function toDisplay(b: Vec2): Vec2 {
     return { x: board.height - b.y, y: b.x };
   }
-  const clamp = (n: number, hi: number): number => Math.max(0, Math.min(hi, Math.round(n * 100) / 100));
+  // 4-dp, matching `clampToBoard` — a snapped centroid is generally not a round
+  // number, and rounding it to 2-dp would push its printed distance off the ¼″ mark
+  // the snap just put it on.
+  const clamp = (n: number, hi: number): number => Math.max(0, Math.min(hi, Math.round(n * 1e4) / 1e4));
 
   function onPointerDown(e: PointerEvent, p: ResolvedPiece): void {
     if (!p.id) return;
@@ -110,12 +150,30 @@
     // Drag in board space; for a parented feature the stored centroid is
     // area-local, so anchor the grab offset to its board-space centroid.
     const c = orientedFootprint(piece, layout)?.centroid ?? piece.position;
-    drag = { id: p.id, offset: { x: b.x - c.x, y: b.y - c.y } };
+    drag = { id: p.id, offset: { x: b.x - c.x, y: b.y - c.y }, from: b, moved: false };
   }
+  /** Board inches the pointer must travel before a press counts as a drag, so
+   *  clicking a piece to select it never moves (or snaps) it. */
+  const DRAG_EPS_IN = 0.05;
   function onPointerMove(e: PointerEvent): void {
     if (!drag) return;
     const b = toBoard(e);
-    onmove(drag.id, { x: clamp(b.x - drag.offset.x, board.width), y: clamp(b.y - drag.offset.y, board.height) });
+    if (!drag.moved) {
+      if (Math.hypot(b.x - drag.from.x, b.y - drag.from.y) < DRAG_EPS_IN) return;
+      drag.moved = true;
+    }
+    const raw = { x: b.x - drag.offset.x, y: b.y - drag.offset.y };
+    // Snap an ARMED top-level area to the ¼″ grid of its own printed distances —
+    // never to a grid on the centroid, which would put every measurement off-mark.
+    // Alt suspends it live (read per-move, so it can be pressed mid-drag), and a
+    // parented feature or a piece with no 1H+1V anchor drags exactly as before.
+    const piece = layout.pieces.find((q) => q.id === drag!.id);
+    const snapped =
+      snap.enabled && !e.altKey && piece && !piece.parent_area_id
+        ? snapToKeystoneGrid(piece, board, raw, snap.step)
+        : null;
+    const at = snapped?.position ?? raw;
+    onmove(drag.id, { x: clamp(at.x, board.width), y: clamp(at.y, board.height) });
   }
   function endDrag(): void {
     drag = null;
@@ -128,11 +186,7 @@
   const editById = $derived(new Map(layout.pieces.map((p) => [p.id, p])));
 
   // Upper-floor platforms across the layout (dashed overlays).
-  const uppers = $derived(
-    layout.pieces
-      .map((p) => ({ id: p.id, verts: upperFloorBoardVerts(p, layout) }))
-      .filter((u): u is { id: string; verts: Vec2[] } => !!u.verts),
-  );
+  const uppers = $derived(upperFloorPolygons(layout));
 
   const selOriented = $derived<OrientedFootprint | null>(
     selectedPiece ? orientedFootprint(selectedPiece, layout) : null,
@@ -228,7 +282,7 @@
         from,
         to: t,
         labelAt: labelAnchor(from, t),
-        text: d.distance != null ? `${Math.round(d.distance * 100) / 100}″` : "?",
+        text: d.distance != null ? formatKeystoneDistance(d.distance, p.rotation_degrees) : "?",
         invalid: d.distance == null,
         // Face the piece's player when the toggle is on and an overlay divider
         // exists; 0 keeps today's upright labels.
@@ -263,6 +317,20 @@
 >
   <g class="board-layer" bind:this={gEl} transform="translate({board.height},0) rotate(90)">
     <rect x="0" y="0" width={board.width} height={board.height} class="board-bg" />
+    {#if referenceImage}
+      <image
+        href={referenceImage}
+        x={referenceBox.x}
+        y={referenceBox.y}
+        width={referenceBox.width}
+        height={referenceBox.height}
+        transform={referenceBox.transform}
+        preserveAspectRatio="none"
+        opacity={referenceOpacity}
+        pointer-events="none"
+      />
+    {/if}
+    <g class="map-content" opacity={terrainOpacity}>
 
     <!-- deployment zones (under the grid, like the printed card) -->
     {#each zones as z, i (z.player + i)}
@@ -291,23 +359,38 @@
       <line x1={divider.from.x} y1={divider.from.y} x2={divider.to.x} y2={divider.to.y} class="divider" />
     {/if}
 
-    {#each resolved as p (p.id ?? p.name)}
+    {#each resolved as p, pi}
       {@const ep = p.id ? editById.get(p.id) : undefined}
       {@const tplCat = templateById(ep?.template)?.terrain_category ?? ''}
-      <polygon
-        points={pts(p)}
-        class="piece {p.piece_type} {tplCat} {ep?.terrain === false ? 'empty' : ''} {p.id === selectedId
-          ? 'selected'
-          : ''} {p.id === twinId
-          ? 'twin'
-          : ''} {ep && isGroundBlocked(ep) ? 'blocked' : ''} {p.id && warnPieceIds.has(p.id)
-          ? 'needs-review'
-          : ''}"
-        role="button"
-        tabindex="0"
-        aria-label={p.name ?? p.id ?? "piece"}
-        onpointerdown={(e) => onPointerDown(e, p)}
-      />
+      {#if !rendersAsWallsOnly(p)}
+        <polygon
+          points={pts(p)}
+          class="piece {p.piece_type} {tplCat} {ep?.terrain === false ? 'empty' : ''} {p.id === selectedId
+            ? 'selected'
+            : ''} {p.id === twinId
+            ? 'twin'
+            : ''} {ep && isGroundBlocked(ep) ? 'blocked' : ''} {p.id && warnPieceIds.has(p.id)
+            ? 'needs-review'
+            : ''}"
+          role="button"
+          tabindex="0"
+          aria-label={p.name ?? p.id ?? "piece"}
+          onpointerdown={(e) => onPointerDown(e, p)}
+        />
+      {/if}
+    {/each}
+
+    <!-- wall polylines: resolved board-space walls from feature templates -->
+    {#each resolved as p, pi}
+      {#if p.walls}
+        {#each p.walls as w, wi}
+          <polyline
+            points={polyPts(w.points)}
+            class="wall {p.terrain_category ?? ''}"
+            stroke-width={w.thickness ?? 0.25}
+          />
+        {/each}
+      {/if}
     {/each}
 
     {#each uppers as u (u.id)}
@@ -361,13 +444,32 @@
       <circle cx={selOriented.centroid.x} cy={selOriented.centroid.y} r="0.3" class="anchor" />
     {/if}
 
-    {#if selectedPiece}
+    {#if selectedPiece && !clockPiece}
       <Handles piece={selectedPiece} {layout} {toBoard} {pxPerInch} onorient={(patch) => onorient(selectedPiece.id, patch)} />
     {/if}
+
+    <!-- Last child of the rotated group: SVG paint/hit order puts the picker's
+         shield above every polygon AND every handle grip. -->
+    {#if clockPiece}
+      <ClockPicker
+        layer="board"
+        piece={clockPiece}
+        {layout}
+        {toBoard}
+        {toDisplay}
+        {pxPerInch}
+        candidate={clockCandidate}
+        step={snap.step}
+        onhover={(i, at) => onclockhover?.(i, at)}
+        oncommit={(i) => onclockcommit?.(i)}
+        oncancel={() => onclockcancel?.()}
+      />
+    {/if}
+    </g>
   </g>
 
   <!-- upright label layer (not rotated) -->
-  <g class="labels">
+  <g class="labels" opacity={terrainOpacity}>
     {#each edgeLabels as l (l.text)}
       <text x={l.at.x} y={l.at.y} class="edge-label">{l.text}</text>
     {/each}
@@ -395,6 +497,21 @@
       {@const d = toDisplay(g.labelAt)}
       <text x={d.x} y={d.y} transform="rotate({g.angle}, {d.x}, {d.y})" class="keystone-label {g.invalid ? 'invalid' : ''}">{g.text}</text>
     {/each}
+    {#if clockPiece}
+      <ClockPicker
+        layer="labels"
+        piece={clockPiece}
+        {layout}
+        {toBoard}
+        {toDisplay}
+        {pxPerInch}
+        candidate={clockCandidate}
+        step={snap.step}
+        onhover={() => {}}
+        oncommit={() => {}}
+        oncancel={() => {}}
+      />
+    {/if}
   </g>
 </svg>
 
@@ -531,6 +648,20 @@
     stroke: oklch(0.58 0.21 25);
     stroke-width: 0.22;
     stroke-dasharray: 0.4 0.3;
+  }
+  .wall {
+    fill: none;
+    stroke: oklch(0.3 0.04 30);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+  }
+  .wall.dense {
+    stroke: oklch(0.28 0.06 150);
+  }
+  .wall.light {
+    stroke: oklch(0.35 0.05 60);
+    stroke-dasharray: 0.4 0.25;
   }
   .upper {
     fill: none;

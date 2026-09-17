@@ -36,9 +36,43 @@ def _str(v: Any) -> str:
     return str(v)
 
 
+def condition_subject(
+    condition: Condition,
+    implicit: str,
+    legacy_subjects: dict[str, str] | None = None,
+) -> str:
+    """Resolve explicit ``of`` before a predicate's legacy subject parameter."""
+    explicit_subjects = {
+        "bearer": "this model",
+        "unit": "the unit",
+        "led-unit": "the unit this model leads",
+        "attacker": "the attacking unit",
+        "defender": "the target unit",
+        "target": "the target unit",
+        "friendly": "the friendly unit",
+        "enemy": "the enemy unit",
+    }
+    explicit = condition.get("of")
+    if isinstance(explicit, str):
+        return explicit_subjects.get(explicit, implicit)
+    legacy = (condition.get("parameters") or {}).get("subject")
+    if isinstance(legacy, str):
+        return (legacy_subjects or {}).get(legacy, implicit)
+    return implicit
+
+
 def _count(n: Any, noun: str) -> str:
     """``2`` + ``objective`` → ``2+ objectives``. All regular plurals here."""
     return f"{_str(n)}+ {noun}s"
+
+
+def _or_list(items: list[str]) -> str:
+    """Oxford-free disjunction matching the TypeScript condition renderer."""
+    if len(items) <= 1:
+        return items[0] if items else ""
+    if len(items) == 2:
+        return f"{items[0]} or {items[1]}"
+    return f"{', '.join(items[:-1])} or {items[-1]}"
 
 
 def _round_number(v: Any) -> float | int | None:
@@ -79,12 +113,12 @@ _TIMING_ALIASES: dict[str, str] = {
     "model-destroyed": "on-model-destroyed",
     "on-destroyed": "on-unit-destroyed",
     "before-this-model-removed": "before-bearer-removed",
-    "command-phase": "start-of-command-phase",
     "reinforcements-step": "reinforcements",
     "setup": "unit-set-up",
     "set-up-this-turn": "unit-set-up",
     "after-move-through-terrain-over-4-inches": "moved-through-tall-terrain",
     "after-moving-through-tall-terrain": "moved-through-tall-terrain",
+    "when-selected-to-shoot": "selected-to-shoot",
     "when-this-unit-selected-to-shoot": "selected-to-shoot",
 }
 
@@ -98,11 +132,13 @@ _TIMING_ONLY_PHRASES: dict[str, str] = {
     "first-this-battle": "the first time this battle",
     "first-time-this-phase": "the first time this phase",
     "in-reserves": "while it is in Reserves",
+    "command-phase": "during the Command phase",
     "shooting-phase": "in the Shooting phase",
     "start-of-fight-phase": "at the start of the Fight phase",
     "first-movement-phase": "in your first Movement phase",
     "start-of-first-battle-round": "at the start of the first battle round",
     "start-of-movement-phase": "at the start of the Movement phase",
+    "start-of-shooting-phase": "at the start of your Shooting phase",
     "shooting-or-fight-phase": "in the Shooting or Fight phase",
     "this-model-starts-or-ends-a-move": "each time this model starts or ends a move",
     "end-of-normal-move": "when the unit ends a Normal move",
@@ -171,6 +207,7 @@ _EVENT_PHRASES: dict[str, str] = {
     "fall-back-move": "when the unit makes a Fall Back move",
     "falls-back": "when the unit Falls Back",
     "charge-move": "when the unit makes a Charge move",
+    "end-of-charge-move": "after the unit ends a Charge move",
     "moved-through-terrain": "when the unit moves through terrain",
     "moved-through-tall-terrain": 'when the unit moves through terrain over 4" tall',
     "enemy-unit-ended-move": "an enemy unit ends a move",
@@ -178,7 +215,7 @@ _EVENT_PHRASES: dict[str, str] = {
     "before-hit-roll": "before a Hit roll is made",
     "after-hit-roll": "after a Hit roll is made",
     "before-wound-roll": "before a Wound roll is made",
-    "after-wound-roll": "after a Wound roll is made",
+    "attack-scores-wound": "each time an attack scores a wound",
     "before-save-roll": "before a saving throw is made",
     "after-save-roll": "after a saving throw is made",
     "before-damage-roll": "before a Damage roll is made",
@@ -205,6 +242,23 @@ _EVENT_PHRASES: dict[str, str] = {
     "battle-shock-test": "when the unit takes a Battle-shock test",
     "leadership-test": "when the unit takes a Leadership test",
     "desperate-escape-test": "when the unit takes a Desperate Escape test",
+    "end-of-opponent-charge-phase": "at the end of the opponent's Charge phase",
+    (
+        "enemy-unit-completed-shooting-targeting-bearer"
+    ): "after an enemy unit has shot and targeted this unit",
+    (
+        "enemy-unit-selects-bearer-as-charge-target"
+    ): "when an enemy unit selects this unit as a charge target",
+    "enemy-unit-targets-bearer": "when an enemy unit targets this unit",
+    (
+        "enemy-unit-completed-fall-back-from-bearer"
+    ): "after an enemy unit within Engagement Range of this unit completes a Fall Back move",
+    "act-of-faith-completed": "after an Act of Faith is completed",
+    "act-of-faith-performed": "when an Act of Faith is performed",
+    "miracle-die-generated": "when a Miracle die is generated",
+    (
+        "enemy-unit-selected-charge-targets-before-charge-move"
+    ): "after an enemy unit selects targets for its charge but before it makes a Charge move",
 }
 
 
@@ -232,13 +286,36 @@ def _region_membership_phrase(p: dict[str, Any], negated: bool = False) -> str:
     return f"{'not ' if negated else ''}{subject} is {relation} {region}"
 
 
+def describe_selection_eligibility(c: Condition) -> str:
+    """Render a condition as a predicate on an already-named candidate unit."""
+    if c.get("type") == "is-battle-shocked" and not c.get("operator"):
+        return "that is not Battle-shocked" if c.get("negated") else "that is Battle-shocked"
+    phrase = describe_condition(c)
+    if phrase.startswith("the unit is "):
+        return f"that is {phrase[len('the unit is ') :]}"
+    if phrase.startswith("not the unit is "):
+        return f"that is not {phrase[len('not the unit is ') :]}"
+    if phrase.startswith("the unit has "):
+        return f"with {phrase[len('the unit has ') :]}"
+    return f"if {phrase}"
+
+
 def describe_condition(c: Condition) -> str:
     # Compound nodes first — join the operands with lowercase connectives.
     operands = c.get("operands")
     if c.get("operator") == "and" and operands:
-        return " and ".join(describe_condition(o) for o in operands)
+        return " and ".join(
+            f"({describe_condition(o)})" if o.get("operator") == "or" else describe_condition(o)
+            for o in operands
+        )
     if c.get("operator") == "or" and operands:
-        return " or ".join(describe_condition(o) for o in operands)
+        if all(not o.get("negated") and o.get("type") == "unit-has-keyword" for o in operands):
+            keywords = [_str((o.get("parameters") or {}).get("keyword")) for o in operands]
+            return f"the unit has the {_or_list(keywords)} keywords"
+        return " or ".join(
+            f"({describe_condition(o)})" if o.get("operator") == "and" else describe_condition(o)
+            for o in operands
+        )
     if c.get("operator") == "not" and operands:
         return f"not ({', '.join(describe_condition(o) for o in operands)})"
 
@@ -246,9 +323,55 @@ def describe_condition(c: Condition) -> str:
     p = c.get("parameters") or {}
     ctype = c.get("type")
 
+    if ctype == "target-of-triggering-charge":
+        return f"{negate}the unit was selected as a target of that charge"
+    if ctype == "every-model-within-range-of-bearer":
+        return (
+            f'{negate}every model in the unit is within {_str(p.get("range"))}" of this Transport'
+        )
+    if ctype == "roll-succeeded":
+        return f"{negate}the triggering {dekebab(_str(p.get('roll')))} roll succeeded"
+    if ctype == "on-battlefield":
+        who = (
+            f"the {_str(p.get('model_name'))} model"
+            if p.get("model_name") is not None
+            else "the unit"
+            if p.get("subject") == "unit"
+            else "the target unit"
+            if p.get("subject") == "target"
+            else "this model"
+        )
+        return f"{negate}{who} is on the battlefield"
+    if ctype == "target-within-half-weapon-range":
+        return f"{negate}the target is within half the attacking weapon's range"
+    if ctype == "has-destroyed":
+        who = (
+            "the unit"
+            if p.get("subject") == "unit"
+            else "the target unit"
+            if p.get("subject") == "target"
+            else "this model"
+        )
+        victim_keyword_phrase = (
+            f" {' '.join(_str(keyword) for keyword in p['victim_keywords'])}"
+            if isinstance(p.get("victim_keywords"), list)
+            else ""
+        )
+        victims = _count(
+            p.get("count_min") if p.get("count_min") is not None else 1,
+            f"{_str(p.get('victim_owner'))}{victim_keyword_phrase} {_str(p.get('victim_kind'))}",
+        )
+        window = (
+            "with its just-resolved attacks"
+            if p.get("window") == "just-finished-attack-sequence"
+            else f"during {dekebab(_str(p.get('window')))}"
+        )
+        return f"{negate}{who} has destroyed {victims} {window}"
     # ── Ability-DSL conditions ───────────────────────────────────────────────
     if ctype == "phase-is":
-        return f"{negate}during the {_str(p.get('phase'))} phase"
+        phase = _str(p.get("phase"))
+        phase_name = "Command" if phase in ("command", "command-phase") else phase
+        return f"{negate}during the {phase_name} phase"
     if ctype == "timing-is":
         timing = p.get("timing")
         return negated_timing(timing) if c.get("negated") else describe_timing(timing)
@@ -262,7 +385,7 @@ def describe_condition(c: Condition) -> str:
             whose = "either player's"
         return f"{negate}in {whose} turn"
     if ctype == "charged-this-turn":
-        return f"{negate}the unit charged this turn"
+        return f"{negate}{condition_subject(c, 'the unit')} charged this turn"
     if ctype == "advanced-this-turn":
         return f"{negate}the unit advanced this turn"
     if ctype == "remained-stationary":
@@ -270,25 +393,56 @@ def describe_condition(c: Condition) -> str:
     if ctype == "unit-below-starting-strength":
         return f"{negate}the unit is below starting strength"
     if ctype == "unit-below-half-strength":
-        who = "target unit" if p.get("subject") == "target" else "unit"
-        return f"{negate}the {who} is below half strength"
+        who = condition_subject(c, "the unit", {"target": "the target unit"})
+        return f"{negate}{who} is below half strength"
     if ctype == "unit-has-keyword":
         return f'{negate}the unit has "{_str(p.get("keyword"))}"'
+    if ctype == "unit-model-count":
+        return (
+            f"{negate}the unit contains {_str(p.get('count_min'))}+ {_str(p.get('keyword'))} models"
+        )
+    if ctype == "uniform-ranged-loadout":
+        keyword = f"{_str(p.get('model_keyword'))} " if p.get("model_keyword") else ""
+        return (
+            f"{negate}all ranged weapons equipped by each {keyword}model in the unit are the same"
+        )
+    if ctype == "all-attacks-target-same-unit":
+        attack_type = f"{_str(p.get('attack_type'))} " if p.get("attack_type") else ""
+        return f"{negate}all of the unit's {attack_type}attacks target the same enemy unit"
     if ctype == "target-has-keyword":
         return f'{negate}the target has "{_str(p.get("keyword"))}"'
     if ctype == "model-is-leader":
         return f"{negate}the model is leading a unit"
+    if ctype == "unit-is-led-by":
+        return f"{negate}this unit is being led by an {_str(p.get('keyword'))} model"
     if ctype == "is-attached":
         kw = f"{_str(p.get('keyword'))} " if p.get("keyword") else ""
-        return f"{negate}attached to a {kw}unit"
+        return f"{negate}the model is leading a {kw}unit"
     if ctype == "attack-is-type":
         if p.get("comparison") == "strength-greater-than-toughness":
             return f"{negate}when this attack's Strength is greater than the target's Toughness"
         if p.get("comparison") is not None:
             return f"{negate}when {dekebab(_str(p.get('comparison')))}"
         return f"{negate}for {_str(p.get('attack_type'))} attacks"
+    if ctype == "unit-selected-to-shoot-this-phase":
+        return f"{negate}the unit has been selected to shoot this phase"
+    if ctype == "eligible-to-shoot":
+        return f"{negate}the unit is eligible to shoot"
+    if ctype == "selection-has-keyword":
+        selection = p.get("selection")
+        selected = "the selected unit"
+        if isinstance(selection, dict):
+            if "observer_for" in selection:
+                reference = selection.get("observer_for")
+                if isinstance(reference, dict) and "selection_var" in reference:
+                    selected = "the Observer unit that marked the bound " + _str(
+                        reference.get("selection_var")
+                    ).replace("_", " ")
+            elif "selection_var" in selection:
+                selected = "the bound " + _str(selection.get("selection_var")).replace("_", " ")
+        return f"{negate}{selected} has the {_str(p.get('keyword'))} keyword"
     if ctype == "is-battle-shocked":
-        return f"{negate}the unit is battle-shocked"
+        return f"{negate}{condition_subject(c, 'the unit')} is battle-shocked"
     if ctype == "has-lost-wounds":
         return f"{negate}the model has lost wounds"
     if ctype == "wounds-remaining-at-or-below":
@@ -304,11 +458,20 @@ def describe_condition(c: Condition) -> str:
             else "the unit"
         )
         atk = f"{_str(p.get('attack_type'))} " if p.get("attack_type") else ""
-        weapon = f" by {_str(p.get('weapon_name'))}" if p.get("weapon_name") else ""
+        keyword = (
+            f"[{dekebab(_str(p.get('weapon_keyword'))).upper()}]" if p.get("weapon_keyword") else ""
+        )
+        weapon = (
+            f" by {_str(p.get('weapon_name'))}{f' (with {keyword})' if keyword else ''}"
+            if p.get("weapon_name")
+            else f" made with a {keyword} weapon"
+            if keyword
+            else ""
+        )
         source = p.get("source")
         bound_source = (
-            " from that enemy unit"
-            if isinstance(source, dict) and source.get("event_var") is not None
+            " from the triggering unit"
+            if isinstance(source, dict) and "event_var" in source
             else f" from {_str(source)}"
             if source is not None
             else ""
@@ -323,6 +486,11 @@ def describe_condition(c: Condition) -> str:
             return f"{negate}{subject} was hit by {n}+ {atk}attacks{weapon}{bound_source}{window}"
         attack = "an attack" if not atk else f"a {atk}attack"
         return f"{negate}{subject} was hit by {attack}{weapon}{bound_source}{window}"
+    if ctype == "wounds-lost-from-attack":
+        subject = "the target" if p.get("subject") == "target" else "the unit"
+        attack_type = f"{_str(p.get('attack_type'))} " if p.get("attack_type") else ""
+        source = " from the triggering attacks" if p.get("source") == "triggering-attacks" else ""
+        return f"{negate}{subject} lost one or more wounds from {attack_type}attacks{source}"
     if ctype == "opponent-unit-within-range":
         if p.get("weapon_name") is not None:
             within = f"range of {dekebab(_str(p.get('weapon_name')))}"
@@ -337,6 +505,23 @@ def describe_condition(c: Condition) -> str:
             within = "engagement range" if range_ == "engagement" else f'{_str(range_)}"'
         return f"{negate}an enemy unit is within {within}"
     if ctype == "unit-within-range-of":
+        if isinstance(p.get("keywords"), list):
+            who = (
+                "this model"
+                if p.get("subject") == "self"
+                else "the triggering unit"
+                if p.get("subject") == "triggering-unit"
+                else "the unit"
+            )
+            distance = (
+                "Engagement Range" if p.get("range") == "engagement" else f'{_str(p.get("range"))}"'
+            )
+            owner = "friendly" if p.get("target_type") == "friendly-keyword" else "enemy"
+            keyword_text = " and ".join(_str(k) for k in p["keywords"])
+            return (
+                f"{negate}{who} is within {distance} of one or more {owner} units "
+                f"with all of {keyword_text}"
+            )
         tt = _str(p.get("target_type") if p.get("target_type") is not None else "target")
         # Targets that name a specific model, not a radius — no inches apply.
         if tt == "closest-eligible":
@@ -354,9 +539,65 @@ def describe_condition(c: Condition) -> str:
         dist = f'{_str(p.get("range"))}"' if p.get("range") is not None else '?"'
         return f"{negate}within {dist} of {who}"
     if ctype == "within-range-of-objective":
-        return f"{negate}within range of an objective"
+        if p.get("subject") is None and p.get("controlled_by") is None:
+            return f"{negate}within range of an objective"
+        who = (
+            "the target unit"
+            if p.get("subject") == "target"
+            else "the attacking unit"
+            if p.get("subject") == "attacker"
+            else "the unit"
+        )
+        control = (
+            " you control"
+            if p.get("controlled_by") == "your-army"
+            else " your opponent controls"
+            if p.get("controlled_by") == "opponent"
+            else ""
+        )
+        return f"{negate}{who} is within range of an objective marker{control}"
+    if ctype == "event-source-is-bearer-unit":
+        return f"{negate}the triggering event was performed by this unit"
+    if ctype == "event-source-is-attached-unit":
+        return f"{negate}the triggering Act of Faith was performed by the unit this model leads"
+    if ctype == "miracle-die-generation-reason":
+        generation_keyword_phrase = (
+            " ".join(_str(k) for k in p.get("keywords") or [])
+            if isinstance(p.get("keywords"), list)
+            else ""
+        )
+        return (
+            f"{negate}the Miracle die was gained because "
+            f"a friendly {generation_keyword_phrase} unit or model was destroyed"
+        )
+    if ctype == "miracle-die-generation-timing":
+        return f"{negate}the Miracle die was gained at the start of the battle round"
+    if ctype == "destroyed-event-within-range":
+        return (
+            f'{negate}that destroyed unit or model was within {_str(p.get("range"))}" of this model'
+        )
+    if ctype == "destroyed-by-friendly-unit":
+        destroyer_keyword_phrase = (
+            " ".join(_str(k) for k in p.get("keywords") or [])
+            if isinstance(p.get("keywords"), list)
+            else ""
+        )
+        return f"{negate}the unit was destroyed by a friendly {destroyer_keyword_phrase} unit"
+    if ctype == "target-is-visible":
+        return f"{negate}the target is visible to the attacking model"
     if ctype == "has-fought-this-phase":
-        return f"{negate}has fought this phase"
+        who = (
+            "this model "
+            if p.get("subject") == "self"
+            else "the destroyed model "
+            if p.get("subject") == "destroyed-model"
+            else "the unit "
+            if p.get("subject") == "unit"
+            else "the target unit "
+            if p.get("subject") == "target"
+            else ""
+        )
+        return f"{negate}{who}has fought this phase"
     if ctype == "destroyed-by-attack-type":
         if p.get("attack_type") == "any":
             return f"{negate}destroyed by any attack"
@@ -371,7 +612,7 @@ def describe_condition(c: Condition) -> str:
             f"{dekebab(_sv(p.get('comparison')))} the target's {_sv(p.get('target_stat'))}"
         )
     if ctype == "made-ingress-move-this-turn":
-        return f"{negate}the unit made an ingress move this turn"
+        return f"{negate}the unit made an ingress move (including a Deep Strike setup) this turn"
     if ctype == "engagement-state":
         state = p.get("state")
         if state is None:
@@ -385,16 +626,22 @@ def describe_condition(c: Condition) -> str:
             return f"{negate}the unit is within Engagement Range"
         return f"{negate}the unit is {dekebab(st)}"
     if ctype == "unit-was-in-engagement-range-of":
-        # `object` is a bound event-variable reference (schema
-        # `#/$defs/event-bound-reference`, e.g. the enemy unit a sibling
-        # trigger's `binds_event_variable` names as the one that ended a Fall
-        # Back move). `event_var` is an internal linking id, never rendered —
-        # the relationship always reads as "that enemy unit", with no game
-        # phase assumed.
         snapshot_point = "the turn" if p.get("snapshot") == "turn-start" else "the phase"
         return (
-            f"{negate}the selected friendly unit started {snapshot_point} "
-            "within Engagement Range of that enemy unit"
+            f"{negate}the selected friendly unit started {snapshot_point} within Engagement "
+            "Range of that enemy unit"
+        )
+    if ctype == "ability-window-capacity":
+        source = (p.get("source_ability") or {}).get("ability_id")
+        return (
+            f"{negate}the {dekebab(_str(source))} ability had unused selection capacity at "
+            "the end of the opponent's previous turn"
+        )
+    if ctype == "candidate-eligible-in-ability-window":
+        source = (p.get("source_ability") or {}).get("ability_id")
+        return (
+            f"{negate}the candidate was eligible for the {dekebab(_str(source))} ability at "
+            "the end of the opponent's previous turn"
         )
     if ctype == "disposition-matches":
         d = _str(p.get("disposition"))
@@ -534,12 +781,12 @@ def describe_condition(c: Condition) -> str:
         if p.get("in_enemy_dz"):
             s += " in the enemy deployment zone"
         return s
+    if ctype == "region-membership":
+        return _region_membership_phrase(p, bool(c.get("negated")))
     if ctype == "terrain-area-control":
         min_models = p.get("min_models")
         n = min_models if min_models is not None else 1
         return f"{negate}you control a terrain area with {_str(n)}+ models"
-    if ctype == "region-membership":
-        return _region_membership_phrase(p, bool(c.get("negated")))
     if ctype == "territory-control":
         ref = p.get("territory_ref")
         ref = ref if ref is not None else "your-territory"

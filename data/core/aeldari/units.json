@@ -59,7 +59,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "ca40-4a0d-567-852"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "b3bccfe6-2efd-5765-8c51-58307e0eaffc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e3979ddc-002a-4c1d-bf14-df8351627264"
+      }
+    ]
   },
   {
     "id": "shadow-weaver-platform",
@@ -115,7 +129,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "2c93-f32d-64ea-b829"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "5b886812-0db5-5310-9561-2db356700b30"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bdbcfbe9-007b-420a-8843-e90b259c9f86"
+      }
+    ]
   },
   {
     "id": "striking-scorpions",
@@ -190,7 +218,30 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "wargear_budgets": [
+      {
+        "items": [
+          "aspect-shrine-token"
+        ],
+        "count": 2,
+        "per_models": 10
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "c90f-a8e5-6afa-eb91"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "8b475d6d-ea2c-53f6-8ab3-4e31da4ddc2c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3826f303-240a-48bb-9521-407efca7c00f"
+      }
+    ]
   },
   {
     "id": "eldrad-ulthran",
@@ -212,7 +263,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 130
+        "cost": 120
       }
     ],
     "keywords": [
@@ -251,7 +302,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "f48e-276e-a997-c90e"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "07769191-da02-50bd-b2dd-3c3a4e90c01a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2d1c505d-c908-4f0a-adbe-09a629ef2b0c"
+      }
+    ]
   },
   {
     "id": "wraithlord",
@@ -314,7 +379,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "b9e9-397e-d83a-f77a"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "97d00630-43f0-5063-9c3b-a23f407385bf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "84f96802-860d-4058-badd-7e2e12bd007e"
+      }
+    ]
   },
   {
     "id": "wave-serpent",
@@ -336,7 +415,15 @@
     "points": [
       {
         "models": 1,
-        "cost": 125
+        "cost": 115,
+        "unit_count_min": 1,
+        "unit_count_max": 3
+      },
+      {
+        "models": 1,
+        "cost": 125,
+        "unit_count_min": 4,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -386,7 +473,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "ad88-f706-318c-e70e"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "09b47c07-47b5-53d3-8758-9a4705bbb61a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5fe4e548-edb1-4ce3-90eb-fb4e0a4ab7bb"
+      }
+    ]
   },
   {
     "id": "yvraine",
@@ -447,7 +548,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "ada5-25ce-d5d5-4ccb"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "4fe3eb62-3ab8-50a4-bbbc-2886a6cef808"
+      },
+      {
+        "namespace": "mfm",
+        "id": "db20a3df-7600-4d3a-a74d-f67f50610f8b"
+      }
+    ]
   },
   {
     "id": "corsair-voidscarred",
@@ -468,24 +583,24 @@
     "points": [
       {
         "models": 5,
-        "cost": 80
+        "cost": 70
       },
       {
         "models": 6,
         "models_max": 13,
-        "cost": 160
+        "cost": 140
       },
       {
         "models": 6,
-        "cost": 160
+        "cost": 140
       },
       {
         "models": 7,
-        "cost": 160
+        "cost": 140
       },
       {
         "models": 8,
-        "cost": 160
+        "cost": 140
       }
     ],
     "keywords": [
@@ -539,6 +654,13 @@
     "wargear_budgets": [
       {
         "items": [
+          "faolchu"
+        ],
+        "count": 1,
+        "per_models": 0
+      },
+      {
+        "items": [
           "shuriken-cannon-corsair-voidscarred",
           "wraithcannon"
         ],
@@ -552,6 +674,20 @@
         ],
         "count": 2,
         "per_models": 10
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "cbb7-6669-a014-36fe"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "e9ea6d32-6a27-5001-b786-4eed3a007a31"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ff6c74d5-c2ad-4f9c-980c-baeacbadd918"
       }
     ]
   },
@@ -612,7 +748,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "9940-a69b-682e-ccf4"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "34ab4d87-ae76-58d1-96b7-eb47d553562e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c7aa8f91-c6d4-4b1e-9771-95e49422244c"
+      }
+    ]
   },
   {
     "id": "autarch",
@@ -634,7 +784,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 85
+        "cost": 75
       }
     ],
     "keywords": [
@@ -677,7 +827,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "df57-7a59-75eb-ce63"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "0debaad1-ddae-5650-8b46-e72bf0dcf222"
+      },
+      {
+        "namespace": "mfm",
+        "id": "37bea6d2-5b75-4ede-acf7-5961c0d6ea80"
+      }
+    ]
   },
   {
     "id": "ynnari-incubi",
@@ -761,7 +925,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5bf7-f905-8fab-43b4"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "bbfc6817-e5b3-5182-96b8-a51ef0485629"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9e742f49-645c-4e87-9727-a16559087af5"
+      }
+    ]
   },
   {
     "id": "fire-dragons",
@@ -853,7 +1031,30 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "wargear_budgets": [
+      {
+        "items": [
+          "aspect-shrine-token"
+        ],
+        "count": 1,
+        "per_models": 5
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5374-9e93-8af2-819e"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "dd651ab0-2c1d-548b-bfc2-9720ebf428ed"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e6422e2a-6934-4f5d-91d9-a855d0edd686"
+      }
+    ]
   },
   {
     "id": "asurmen",
@@ -914,7 +1115,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "828d-840a-9a67-9074"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "a45ca96b-644e-570a-916e-7e8fd860b06b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d7c61e16-4b79-4bfd-a219-afd567369de8"
+      }
+    ]
   },
   {
     "id": "storm-guardians",
@@ -946,7 +1161,7 @@
     "points": [
       {
         "models": 11,
-        "cost": 110
+        "cost": 100
       }
     ],
     "keywords": [
@@ -1007,6 +1222,20 @@
         ],
         "count": 2,
         "per_models": 0
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5452-c4a7-59fb-f05c"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "f439bfc5-13ef-56e7-a954-091dedf6b831"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7acff5c2-f08a-42f8-9546-25caf2c4645d"
       }
     ]
   },
@@ -1070,7 +1299,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "82ac-7d93-df55-5504"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "fddee6b2-53f6-55f6-9b20-4c62e2f0832b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "63855280-a167-4d1e-85d4-9bfb07f51585"
+      }
+    ]
   },
   {
     "id": "warlock-skyrunners",
@@ -1136,7 +1379,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "support",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "f52d-1814-7d66-1f7b"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "df03cabd-1f69-527a-9cc0-54db4c434d27"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0f78c89b-03cb-4c7e-977b-ef2a8f859b1b"
+      }
+    ]
   },
   {
     "id": "lhykhis",
@@ -1200,7 +1457,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "8bbc-7ae0-5d5c-a105"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "39ec1ea5-25d2-5049-b59b-d49b9e17d20d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cb0a74f7-432a-4e70-ae78-cc8df6e42d01"
+      }
+    ]
   },
   {
     "id": "death-jester",
@@ -1222,7 +1493,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 80
+        "cost": 70
       }
     ],
     "keywords": [
@@ -1258,7 +1529,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5768-1f87-3a16-d901"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "df8d1aa0-9916-5aad-82c7-7385c70f3822"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3ec2afc4-c1fa-42ce-9c0a-7f5cf5c9a3f4"
+      }
+    ]
   },
   {
     "id": "prince-yriel",
@@ -1319,7 +1604,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "54dc-aa1f-817a-a5c5"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "3d23908b-2375-537d-92c2-66b388b7374c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "55d8777e-a3ea-4838-9171-015f06fa5aa8"
+      }
+    ]
   },
   {
     "id": "the-yncarne",
@@ -1381,7 +1680,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "68fb-4b6f-2bf8-7105"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "2906941e-fa4b-5aa4-bb53-72cf83da47f1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "56a49059-c5b3-4eda-9d69-89437d799a5e"
+      }
+    ]
   },
   {
     "id": "farseer-skyrunner",
@@ -1403,7 +1716,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 60
       }
     ],
     "keywords": [
@@ -1445,7 +1758,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "833b-55bc-73be-8862"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "08f7afa4-1e01-54f1-a3ac-854d1be37640"
+      },
+      {
+        "namespace": "mfm",
+        "id": "513fa1e5-be19-4e00-8a13-6c3014d24fc8"
+      }
+    ]
   },
   {
     "id": "solitaire",
@@ -1504,7 +1831,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "f88f-60c5-3daf-3d2f"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "ce7717de-ecfc-57bc-809a-5644eaac1162"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6ceafe5d-f8b8-499f-a410-d7dd07b29f51"
+      }
+    ]
   },
   {
     "id": "maugan-ra",
@@ -1563,7 +1904,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "6f18-95b7-2662-8925"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "a3dff7ee-a03f-5c56-b1fb-259bc952131e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e2592764-a979-4b75-b6a9-5413403af7c8"
+      }
+    ]
   },
   {
     "id": "corsair-skyreavers",
@@ -1584,29 +1939,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 80,
-        "unit_count_min": 1,
-        "unit_count_max": 2
+        "cost": 75
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 150,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 5,
-        "cost": 90,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 6,
-        "models_max": 10,
-        "cost": 160,
-        "unit_count_min": 3,
-        "unit_count_max": null
+        "cost": 140
       }
     ],
     "keywords": [
@@ -1662,6 +2000,20 @@
         "count": 2,
         "per_models": 5,
         "duplicate_limit": 1
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "662e-14c3-c894-e830"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "c260bf10-7228-56f7-8635-42e695ef0878"
+      },
+      {
+        "namespace": "mfm",
+        "id": "abbfd108-e443-4168-acbd-034c8ba605c7"
       }
     ]
   },
@@ -1734,7 +2086,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "e78a-4442-4ed2-66bf"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "dff35a09-3399-56d0-8c16-3801f800357d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "58815823-64b1-455c-953d-a28d4ce507fc"
+      }
+    ]
   },
   {
     "id": "phantom-titan",
@@ -1796,7 +2162,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "79b3-2cd1-d7b4-d7b1"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "0239a89d-d163-59e4-837c-334d92d94c71"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c680a0cd-db4a-467a-a4fe-aaf3feb0b2fc"
+      }
+    ]
   },
   {
     "id": "avatar-of-khaine",
@@ -1818,7 +2198,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 265
+        "cost": 250
       }
     ],
     "keywords": [
@@ -1853,7 +2233,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "554c-8b4f-1059-28a7"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "1d6fbd02-6561-5fdb-b508-d72fe040c550"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1f4ac739-28b1-4367-b840-96bb109db719"
+      }
+    ]
   },
   {
     "id": "war-walkers",
@@ -1874,11 +2268,11 @@
     "points": [
       {
         "models": 1,
-        "cost": 85
+        "cost": 80
       },
       {
         "models": 2,
-        "cost": 170
+        "cost": 160
       }
     ],
     "keywords": [
@@ -1915,7 +2309,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "bcec-dc54-9242-4e13"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "91d66514-b08f-545c-ab78-e48c999d8e90"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b77a7259-c507-4293-a579-f83a8b721a54"
+      }
+    ]
   },
   {
     "id": "kharseth",
@@ -1976,7 +2384,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "4273-173c-e850-4071"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "70ee16c6-66dd-5be5-9775-2ff0dc380f27"
+      },
+      {
+        "namespace": "mfm",
+        "id": "01a4fa2a-f4ac-433e-babd-1510a3efbb05"
+      }
+    ]
   },
   {
     "id": "hemlock-wraithfighter",
@@ -2033,7 +2455,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "551b-900c-3681-8f11"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "66e01aea-5635-5298-9471-a3bb4f982a95"
+      },
+      {
+        "namespace": "mfm",
+        "id": "43987656-6bea-4207-ac98-0594117baf37"
+      }
+    ]
   },
   {
     "id": "wraithknight",
@@ -2054,13 +2490,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 415,
+        "cost": 385,
         "unit_count_min": 1,
         "unit_count_max": 1
       },
       {
         "models": 1,
-        "cost": 435,
+        "cost": 405,
         "unit_count_min": 2,
         "unit_count_max": null
       }
@@ -2110,6 +2546,20 @@
       {
         "item_id": "heavy-wraithcannon",
         "cost": 10
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "bfd-df5a-b358-4cf9"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "fd526d7e-34b9-517a-bab1-b7baa1e1c1e4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cac85f15-389a-45cf-888d-e17b3285fbe5"
       }
     ]
   },
@@ -2194,6 +2644,20 @@
         "count": 2,
         "per_models": 6
       }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "915d-ad53-9518-7a85"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "3b91e522-6c44-543d-9d9c-3104b3d29fed"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3466c7d1-88b5-43c7-a36c-a6bd011837ed"
+      }
     ]
   },
   {
@@ -2225,7 +2689,7 @@
     "points": [
       {
         "models": 5,
-        "cost": 100,
+        "cost": 95,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -2238,7 +2702,7 @@
       },
       {
         "models": 5,
-        "cost": 115,
+        "cost": 110,
         "unit_count_min": 3,
         "unit_count_max": null
       },
@@ -2289,7 +2753,30 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "wargear_budgets": [
+      {
+        "items": [
+          "aspect-shrine-token"
+        ],
+        "count": 2,
+        "per_models": 10
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "240f-70a4-7ba7-a538"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "54f6fc00-6f4a-5639-82fc-f3a31357345b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "044776e7-57a6-4034-b0dd-278e4994433e"
+      }
+    ]
   },
   {
     "id": "wraithguard",
@@ -2343,7 +2830,31 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "conditional_keywords": [
+      {
+        "keyword": "Battleline",
+        "required_detachment_id": "spirit-conclave"
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5049-c34-3679-6ab9"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "5aa4-107-d7ee-f0f3"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "527e915f-9575-5968-99bf-04dae1d145d0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c62c8f1b-28f6-494c-a470-d8392cd5cdfd"
+      }
+    ]
   },
   {
     "id": "fuegan",
@@ -2404,7 +2915,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "9262-3993-1368-be5a"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "147ca91a-b950-53fd-988f-b9f657b1f38f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6e9e71f4-0b58-4065-a6f3-15f65ac0561d"
+      }
+    ]
   },
   {
     "id": "ynnari-succubus",
@@ -2462,7 +2987,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "c2e0-ca3e-e8c1-e019"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "3e1e9765-82dd-597e-8085-305f25db81d6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6e79d22c-2544-4a1a-8a28-402c29cb1853"
+      }
+    ]
   },
   {
     "id": "shining-spears",
@@ -2493,12 +3032,12 @@
     "points": [
       {
         "models": 3,
-        "cost": 105
+        "cost": 100
       },
       {
         "models": 4,
         "models_max": 6,
-        "cost": 210
+        "cost": 200
       }
     ],
     "keywords": [
@@ -2538,7 +3077,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "433-faed-ea62-c531"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "f5f48c3a-78bc-5ecc-81f1-9de5a9b5bd12"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d8674cf5-67be-442b-a62f-9cee56a84256"
+      }
+    ]
   },
   {
     "id": "the-visarch",
@@ -2560,7 +3113,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 90
+        "cost": 80
       }
     ],
     "keywords": [
@@ -2595,7 +3148,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "support",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "dd79-c2fe-59d6-d2"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "ebc4b618-c08e-5c19-9633-3a9c63bc3ec3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "60d72f94-af3d-4cb2-a5ad-b555eabd4e46"
+      }
+    ]
   },
   {
     "id": "corsair-voidreavers",
@@ -2682,6 +3249,20 @@
         "count": 1,
         "per_models": 10
       }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "cc68-ad19-7285-7a11"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "cf793a0d-edbd-55f6-946b-3021177779f1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "31b968ee-7bb9-4a50-972e-f0c72921727a"
+      }
     ]
   },
   {
@@ -2736,7 +3317,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5df4-e13a-f6f4-b672"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "f43d8589-7c91-5d94-88ed-641032febd5a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5e228e4e-0288-4713-bbfd-573150464935"
+      }
+    ]
   },
   {
     "id": "shadowseer",
@@ -2758,7 +3353,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 60
+        "cost": 50
       }
     ],
     "keywords": [
@@ -2797,7 +3392,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "8c34-52ba-cbd0-9ca4"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "1b5d57e8-e866-5fa1-a017-dd224ae1a3c3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "556550dd-0a58-4ba4-8232-f15522c6c12b"
+      }
+    ]
   },
   {
     "id": "jain-zar",
@@ -2858,7 +3467,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "77f9-e8de-225f-9e68"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "750c6e6e-773d-591a-8e2a-f2e26b2e4573"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3c4f61dd-6963-4b5d-9226-9c8e8c158f65"
+      }
+    ]
   },
   {
     "id": "warp-spiders",
@@ -2889,7 +3512,7 @@
     "points": [
       {
         "models": 5,
-        "cost": 115,
+        "cost": 105,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -2902,14 +3525,14 @@
       },
       {
         "models": 5,
-        "cost": 130,
+        "cost": 125,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 215,
+        "cost": 220,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2952,7 +3575,30 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "wargear_budgets": [
+      {
+        "items": [
+          "aspect-shrine-token"
+        ],
+        "count": 1,
+        "per_models": 5
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "57ec-47a8-a59a-6a46"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "2e5ac6c6-6fa1-5004-b268-249397354dd6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "433a2ffb-6bf7-4992-9172-797ed3021d4e"
+      }
+    ]
   },
   {
     "id": "dark-reapers",
@@ -2983,12 +3629,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 100
+        "cost": 95
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 210
+        "cost": 200
       }
     ],
     "keywords": [
@@ -3024,7 +3670,30 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "wargear_budgets": [
+      {
+        "items": [
+          "aspect-shrine-token"
+        ],
+        "count": 2,
+        "per_models": 10
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "6863-bf42-238a-fd0b"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "5f7a4231-39b5-5746-b5a0-c1adb7fa87f1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d177c3dc-aefe-4152-be46-ca6336fd6b3d"
+      }
+    ]
   },
   {
     "id": "ynnari-kabalite-warriors",
@@ -3116,6 +3785,20 @@
         "count": 1,
         "per_models": 0
       }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "807b-0b72-5908-a3d4"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "ca3f76a7-10ce-5023-a9bc-d86dc90feea4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "47e06e14-9426-4412-b054-7507aff89061"
+      }
     ]
   },
   {
@@ -3176,7 +3859,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "e011-d99d-f0de-5289"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "587ed562-f847-58b6-9366-8e9245b9ac6f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "aaab9ad1-60ff-4413-9b3e-6ec778142b4f"
+      }
+    ]
   },
   {
     "id": "shroud-runners",
@@ -3198,7 +3895,7 @@
     "points": [
       {
         "models": 3,
-        "cost": 95
+        "cost": 90
       },
       {
         "models": 4,
@@ -3242,7 +3939,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "c1ff-dc11-9853-e3e3"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "d336eae8-70ca-574e-9717-99835426785d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a3607c4b-ac69-4702-9afc-1189902bcd93"
+      }
+    ]
   },
   {
     "id": "warlock",
@@ -3264,7 +3975,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 45
+        "cost": 40
       }
     ],
     "keywords": [
@@ -3301,7 +4012,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "support"
+    "attachment_role": "support",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "291f-2885-4512-f0cd"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "c9393df2-5191-5d34-b260-5dbafbfa7deb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "abd458d7-cbc1-4934-aeaa-d9adb92b37cb"
+      }
+    ]
   },
   {
     "id": "wraithknight-with-ghostglaive",
@@ -3322,13 +4047,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 405,
+        "cost": 380,
         "unit_count_min": 1,
         "unit_count_max": 1
       },
       {
         "models": 1,
-        "cost": 425,
+        "cost": 400,
         "unit_count_min": 2,
         "unit_count_max": null
       }
@@ -3370,7 +4095,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "d756-653a-872b-5c1b"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "a0c8dc26-bb31-55cf-a491-e6eb3bc89296"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e4c530ff-d042-4f57-9d13-17bb571cdbc4"
+      }
+    ]
   },
   {
     "id": "ynnari-wyches",
@@ -3426,7 +4165,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "36fd-7c3f-b728-c5d4"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "b0e663dc-f350-5e63-81ba-443b94577bf8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d98898c3-e537-4bda-bbb2-ce594c85dfe2"
+      }
+    ]
   },
   {
     "id": "warlock-conclave",
@@ -3489,7 +4242,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "support",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "d61-c058-6bd1-112f"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "9a4c27e9-42d1-5228-8f74-43a7871b709e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9c2d2509-9e9b-4ae0-88f3-4867ccfc3f7e"
+      }
+    ]
   },
   {
     "id": "farseer",
@@ -3511,7 +4278,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 65
       }
     ],
     "keywords": [
@@ -3548,7 +4315,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "b2f5-8219-f875-917e"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "05ee8795-7154-5b71-bac6-a5d0f00b9d14"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ba95dc03-fa3c-4139-b11d-bbb3c1f4ff12"
+      }
+    ]
   },
   {
     "id": "night-spinner",
@@ -3615,7 +4396,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "908a-fc2b-5a53-599f"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "d06e11cd-84bf-5174-8f23-096d8322ee71"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ab22daee-3036-433e-89ff-1f2452dda6e8"
+      }
+    ]
   },
   {
     "id": "autarch-wayleaper",
@@ -3637,7 +4432,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 80
+        "cost": 70
       }
     ],
     "keywords": [
@@ -3681,7 +4476,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "497a-263e-966a-5a15"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "78b09f0d-6943-5caa-9c6f-683f9ddfe3c5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c6f451e4-a570-40ba-8274-9ad6fbace4c6"
+      }
+    ]
   },
   {
     "id": "dire-avengers",
@@ -3712,12 +4521,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 75
+        "cost": 70
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 150
+        "cost": 140
       }
     ],
     "keywords": [
@@ -3754,7 +4563,30 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "wargear_budgets": [
+      {
+        "items": [
+          "aspect-shrine-token"
+        ],
+        "count": 2,
+        "per_models": 10
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "e6c2-f3b2-6d3e-c3d3"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "1aa15be4-e8f8-516d-bcc3-1cce97f1143c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2b1f2b92-4f3a-4c7e-a10b-f33385622fee"
+      }
+    ]
   },
   {
     "id": "howling-banshees",
@@ -3827,7 +4659,30 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "wargear_budgets": [
+      {
+        "items": [
+          "aspect-shrine-token"
+        ],
+        "count": 2,
+        "per_models": 10
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "7fcb-9262-474a-7cec"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "f919ee87-1632-5d48-baf1-39f3534a169a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dbf44164-23a5-46b7-98de-896e8b672051"
+      }
+    ]
   },
   {
     "id": "falcon",
@@ -3898,7 +4753,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1d83-167-486c-bac4"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "2ece8450-cd96-54db-9eea-f29ec2b1616d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "898d61ff-ef9b-4fba-9c59-ea5086d53fac"
+      }
+    ]
   },
   {
     "id": "windriders",
@@ -3924,7 +4793,7 @@
       {
         "models": 4,
         "models_max": 6,
-        "cost": 160
+        "cost": 170
       }
     ],
     "keywords": [
@@ -3959,7 +4828,27 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "conditional_keywords": [
+      {
+        "keyword": "Battleline",
+        "required_detachment_id": "windrider-host"
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "592a-b255-6c58-19ec"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "e92afdeb-bee6-5c0a-bfc5-453ab2f9baa8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "667dd08c-3eab-46a8-978c-0b38631a26ee"
+      }
+    ]
   },
   {
     "id": "troupe-master",
@@ -4020,7 +4909,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "dada-b81b-37bd-1f3b"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "058d7578-2cb1-5b5e-bc57-f17c171ea9f0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "093c7dca-b073-4264-afba-4a204c5a34c0"
+      }
+    ]
   },
   {
     "id": "rangers",
@@ -4081,7 +4984,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "b98b-701f-9c0c-5437"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "854a02eb-6a01-5734-a1b6-43a5de76571f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "216b62f1-59f1-4a8e-827c-acc9b75aa07a"
+      }
+    ]
   },
   {
     "id": "crimson-hunter",
@@ -4139,7 +5056,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "90c9-aaac-5ef8-f043"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "8a6759ff-6329-522a-a734-a677658dfa40"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7f74a1fd-efb4-469b-bbfb-2f47cd430d83"
+      }
+    ]
   },
   {
     "id": "ynnari-raider",
@@ -4161,7 +5092,15 @@
     "points": [
       {
         "models": 1,
-        "cost": 80
+        "cost": 70,
+        "unit_count_min": 1,
+        "unit_count_max": 3
+      },
+      {
+        "models": 1,
+        "cost": 80,
+        "unit_count_min": 4,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -4205,7 +5144,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "8e15-3c74-d36f-7669"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "0b9d8c30-7c0a-5c63-957d-2bcd995b45ef"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b4a8ac96-a4a8-48de-96c0-b1e1ce21e9e9"
+      }
+    ]
   },
   {
     "id": "starfangs",
@@ -4269,7 +5222,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "a074-87f8-810d-492a"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "58590bca-05ef-591a-886d-aa1a8ea25a2a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5aadd8b8-9ea1-4081-a819-d7d41f0593c6"
+      }
+    ]
   },
   {
     "id": "skyweavers",
@@ -4290,12 +5257,12 @@
     "points": [
       {
         "models": 2,
-        "cost": 105
+        "cost": 95
       },
       {
         "models": 3,
         "models_max": 4,
-        "cost": 210
+        "cost": 190
       }
     ],
     "keywords": [
@@ -4334,7 +5301,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "9270-4b93-ca59-f3ed"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "220255f7-7940-52f9-802b-2354b0943d98"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2fee31a0-319c-4c25-ac53-7b57adb728c7"
+      }
+    ]
   },
   {
     "id": "ynnari-archon",
@@ -4393,7 +5374,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5f10-27fc-f1e4-af90"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "e08fada9-0eac-5675-8a21-250246ba3265"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8a0fb91f-6dda-4fb3-9517-f835f9787afd"
+      }
+    ]
   },
   {
     "id": "baharroth",
@@ -4457,7 +5452,21 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "8732-df2f-a542-805f"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "723f90b5-bacb-5347-8a66-8eb48e0ffdaa"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c5693ad4-6d69-4284-9633-0b948cb58ee7"
+      }
+    ]
   },
   {
     "id": "wraithblades",
@@ -4511,7 +5520,27 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "conditional_keywords": [
+      {
+        "keyword": "Battleline",
+        "required_detachment_id": "spirit-conclave"
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "bb4f-4359-cc16-e6d5"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "9c9af29d-b7a3-5de1-8ff6-41a86a998ca7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4c95c0ca-b577-4488-be04-473a7e72c4c9"
+      }
+    ]
   },
   {
     "id": "troupe",
@@ -4597,6 +5626,30 @@
         "count": 4,
         "per_models": 10
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Battleline",
+        "required_detachment_id": "ghosts-of-the-webway"
+      },
+      {
+        "keyword": "Battleline",
+        "required_detachment_id": "serpents-brood"
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "dac1-6a7f-a06a-82cf"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "1238411f-7d33-52d3-8fdc-4259230538fe"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c8d1dad9-ecf7-4a27-a061-0826eda8454c"
+      }
     ]
   },
   {
@@ -4619,7 +5672,15 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 65,
+        "unit_count_min": 1,
+        "unit_count_max": 3
+      },
+      {
+        "models": 1,
+        "cost": 75,
+        "unit_count_min": 4,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -4664,7 +5725,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5443-6671-baeb-77a3"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "9633aba8-242a-5c78-b093-7f8353cf09c5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "267dfaac-4730-4a93-b5f8-37aa9568494d"
+      }
+    ]
   },
   {
     "id": "vyper",
@@ -4726,7 +5801,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "d5e3-30bd-71e8-314b"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "bef7a396-f60e-5db3-8150-f802a6d7af53"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d9a726bd-59bb-4421-95d2-970b8e9aec44"
+      }
+    ]
   },
   {
     "id": "spiritseer",
@@ -4748,7 +5837,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 55
+        "cost": 50
       }
     ],
     "keywords": [
@@ -4784,7 +5873,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "e53b-7d09-eb7c-c6c7"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "da7696c5-35af-571b-8891-c7f8e87f0353"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5641a746-fd07-46ad-b416-15e532e1fe79"
+      }
+    ]
   },
   {
     "id": "starweaver",
@@ -4806,7 +5909,15 @@
     "points": [
       {
         "models": 1,
-        "cost": 80
+        "cost": 70,
+        "unit_count_min": 1,
+        "unit_count_max": 3
+      },
+      {
+        "models": 1,
+        "cost": 80,
+        "unit_count_min": 4,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -4849,7 +5960,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "854b-f8e-28fa-8c24"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "a2ab60bb-cde1-5c04-9a9e-ab83e75b5b83"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8136c172-2a66-43ba-9b50-666244369f26"
+      }
+    ]
   },
   {
     "id": "kygharils-protectors-dire-avengers",
@@ -4858,6 +5983,16 @@
     "profiles": [
       {
         "name": "Dire Avengers Exarch",
+        "M": 7,
+        "T": 3,
+        "W": 1,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 1
+      },
+      {
+        "name": "Dire Avenger",
         "M": 7,
         "T": 3,
         "W": 1,
@@ -4886,6 +6021,14 @@
       "min": 5,
       "max": 5
     },
+    "weapon_ids": [
+      "avenger-shuriken-catapult",
+      "power-glaive",
+      "weapon-strike"
+    ],
+    "ability_ids": [
+      "battle-focus"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -4898,7 +6041,13 @@
     "base_size_mm": {
       "shape": "round",
       "diameter": 28.5
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fabc435d-8f73-4659-8748-a8aeb22a467c"
+      }
+    ]
   },
   {
     "id": "kygharils-protectors-warp-spiders",
@@ -4907,6 +6056,16 @@
     "profiles": [
       {
         "name": "Warp Spider",
+        "M": 12,
+        "T": 3,
+        "W": 1,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 1
+      },
+      {
+        "name": "Warp Spider Exarch",
         "M": 12,
         "T": 3,
         "W": 1,
@@ -4937,6 +6096,15 @@
       "min": 5,
       "max": 5
     },
+    "weapon_ids": [
+      "death-spinner",
+      "death-weavers",
+      "powerblades",
+      "weapon-strike"
+    ],
+    "ability_ids": [
+      "battle-focus"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -4949,7 +6117,13 @@
     "base_size_mm": {
       "shape": "round",
       "diameter": 28.5
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0e152f7b-273f-4777-9a91-f2d41df046cc"
+      }
+    ]
   },
   {
     "id": "kygharils-protectors-wraithblades",
@@ -4986,6 +6160,12 @@
       "min": 5,
       "max": 5
     },
+    "weapon_ids": [
+      "ghostaxe"
+    ],
+    "ability_ids": [
+      "battle-focus"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -4998,7 +6178,13 @@
     "base_size_mm": {
       "shape": "round",
       "diameter": 40
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "889190ed-7749-4faa-aff9-fe9143598d3f"
+      }
+    ]
   },
   {
     "id": "spiritseer-kygharil",
@@ -5038,6 +6224,13 @@
       "min": 1,
       "max": 1
     },
+    "weapon_ids": [
+      "shuriken-pistol-spiritseer",
+      "witch-staff"
+    ],
+    "ability_ids": [
+      "battle-focus"
+    ],
     "game_version": {
       "edition": "11th",
       "dataslate": "launch"
@@ -5050,6 +6243,307 @@
     "base_size_mm": {
       "shape": "round",
       "diameter": 25
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2fdd95a6-8895-4d9d-b9e6-2552f0444409"
+      }
+    ]
+  },
+  {
+    "id": "clanblade",
+    "name": "Clanblade",
+    "faction_id": "aeldari",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Clanblade",
+        "M": 10,
+        "T": 5,
+        "W": 4,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 70
+      }
+    ],
+    "keywords": [
+      "Aeldari",
+      "Character",
+      "Exodite",
+      "Mobile",
+      "Mounted"
+    ],
+    "faction_keywords": [
+      "Asuryani"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "drakesteed-fangs-and-talons",
+      "moonblades",
+      "solar-carbine"
+    ],
+    "ability_ids": [
+      "battle-focus",
+      "leader"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "cd29-5c1d-1a53-0537"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "9da81102-c662-5e9c-bd60-98aebc0c7737"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b1c71485-4ec5-42d3-8734-75c65c06542d"
+      }
+    ]
+  },
+  {
+    "id": "dragon-knights",
+    "name": "Dragon Knights",
+    "faction_id": "aeldari",
+    "profiles": [
+      {
+        "name": "Dragon Knight",
+        "M": 10,
+        "T": 5,
+        "W": 4,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 2
+      },
+      {
+        "name": "Dragon Knight Leader",
+        "M": 10,
+        "T": 5,
+        "W": 4,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 90
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 180
+      }
+    ],
+    "keywords": [
+      "Aeldari",
+      "Exodite",
+      "Mobile",
+      "Mounted"
+    ],
+    "faction_keywords": [
+      "Asuryani"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 6
+    },
+    "weapon_ids": [
+      "drakesteed-fangs-and-talons",
+      "laser-lance",
+      "solar-carbine"
+    ],
+    "ability_ids": [
+      "battle-focus"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "wargear_budgets": [
+      {
+        "items": [
+          "drakolithe-once-per-battle-per-token"
+        ],
+        "count": 2,
+        "per_models": 3
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "4d0c-e3fd-ee80-ddbf"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "a98326a4-e30d-53b6-b8cc-fee14dc525ca"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6f4e0db3-bffc-45b9-82c1-1affd0bc3c2b"
+      }
+    ]
+  },
+  {
+    "id": "leystalker",
+    "name": "Leystalker",
+    "faction_id": "aeldari",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Leystalker",
+        "M": 10,
+        "T": 5,
+        "W": 4,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 80
+      }
+    ],
+    "keywords": [
+      "Aeldari",
+      "Character",
+      "Exodite",
+      "Mobile",
+      "Mounted"
+    ],
+    "faction_keywords": [
+      "Asuryani"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "drakesteed-fangs-and-talons",
+      "hunting-blades",
+      "long-rifle"
+    ],
+    "ability_ids": [
+      "battle-focus",
+      "lone-operative",
+      "scouts-9",
+      "stealth"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "f66d-451d-f4ae-c2e9"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "25a0bf52-9041-5226-9402-d81d6f74ac69"
+      },
+      {
+        "namespace": "mfm",
+        "id": "78a3db58-ac77-4dbb-98bb-2f9a14c77858"
+      }
+    ]
+  },
+  {
+    "id": "stonesinger",
+    "name": "Stonesinger",
+    "faction_id": "aeldari",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Stonesinger",
+        "M": 10,
+        "T": 5,
+        "W": 4,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 60
+      }
+    ],
+    "keywords": [
+      "Aeldari",
+      "Character",
+      "Exodite",
+      "Mobile",
+      "Mounted",
+      "Psyker"
+    ],
+    "faction_keywords": [
+      "Asuryani"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "drakesteed-fangs-and-talons",
+      "song-of-waning",
+      "solar-carbine",
+      "stone-stave",
+      "venomcrest-spit"
+    ],
+    "ability_ids": [
+      "battle-focus"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "attachment_role": "support",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "09eb-a43e-0524-28f5"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "b5b01452-2df4-5e7e-9d0f-16d4cb8bdf87"
+      },
+      {
+        "namespace": "mfm",
+        "id": "aefe4dde-664d-4e23-8e32-ade6c9c568a4"
+      }
+    ]
   }
 ]

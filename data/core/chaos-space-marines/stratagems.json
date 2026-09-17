@@ -15,7 +15,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7de59a05-7aa1-4f5b-8a88-ca643f9447dd"
+      }
+    ]
   },
   {
     "id": "armour-of-corruption-warpstrike-champions",
@@ -34,7 +40,17 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "type": "strategic-ploy"
+    "type": "strategic-ploy",
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ba964792-5fdb-569d-89f3-19011f5a35ba"
+      },
+      {
+        "namespace": "mfm",
+        "id": "aebb7533-d9f6-473f-908f-e99d1577f45f"
+      }
+    ]
   },
   {
     "id": "at-the-tyrants-command-hurons-marauders",
@@ -53,7 +69,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "414d8580-c55e-580e-a6c2-8418c2dedf01"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0c1f1317-4869-45fb-b99d-9b15be40a66b"
+      }
+    ]
   },
   {
     "id": "autostimulants-creations-of-bile",
@@ -72,7 +98,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "71770a73-8529-59ad-a1e2-2664b378658b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "56a33e7d-abb1-4e71-a0d9-a70805fc8461"
+      }
+    ]
   },
   {
     "id": "balefire-boon-cult-of-the-arkifane",
@@ -92,7 +128,17 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "type": "battle-tactic"
+    "type": "battle-tactic",
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "92a65644-0621-5d60-85c6-dee177692156"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b851a9d9-4f75-4968-a7c4-8903bcd801c1"
+      }
+    ]
   },
   {
     "id": "biomechanoid-regeneration-cult-of-the-arkifane",
@@ -111,7 +157,17 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "type": "epic-deed"
+    "type": "epic-deed",
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3c5734bc-7fb1-5ada-930f-b131e7fd9b57"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d79b41a0-37ef-42ce-821e-9022d683bd6a"
+      }
+    ]
   },
   {
     "id": "black-crusade-veterans-of-the-long-war",
@@ -130,7 +186,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fecc5990-d853-5df2-91a0-2903a47a0b16"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a215fd24-e15d-4808-93d2-67da59819f5d"
+      }
+    ]
   },
   {
     "id": "bloody-example-dread-talons",
@@ -149,7 +215,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6efa1bac-148b-5b12-842d-5748a88470a4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1b71ddf7-84d0-4241-a7ed-0a46dc61f9d3"
+      }
+    ]
   },
   {
     "id": "bringers-of-despair-veterans-of-the-long-war",
@@ -168,7 +244,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4fe9c6f1-6fdb-57c9-bcae-84bf26b1341d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "664cb026-2bd0-43c1-98b4-ff3636a3dbff"
+      }
+    ]
   },
   {
     "id": "brutal-attrition-fellhammer-siege-host",
@@ -187,7 +273,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "033f24b2-eeab-514b-85d4-4d0c2f1298a2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f316b9c0-c11b-4477-bb0c-28b426664773"
+      }
+    ]
   },
   {
     "id": "chosen-for-glory-chaos-cult",
@@ -207,7 +303,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d1b97a72-ca2d-5546-b21b-f01af4e77649"
+      },
+      {
+        "namespace": "mfm",
+        "id": "06a95cb7-e9b6-4b07-aac5-7ecb27a0e19f"
+      }
+    ]
   },
   {
     "id": "coils-of-deception-deceptors",
@@ -226,7 +332,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8cf0897e-42a8-5e59-923e-f4bcc498cdfa"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6b02c8cd-1fe6-4bcc-86f9-94b904586241"
+      }
+    ]
   },
   {
     "id": "contemptuous-disregard-veterans-of-the-long-war",
@@ -246,7 +362,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5e28084b-9550-561b-986c-5517b45e85e0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fef09a92-d6c5-4819-a57b-4eff4c8b5ab7"
+      }
+    ]
   },
   {
     "id": "corrupted-munitions-renegade-warband",
@@ -265,7 +391,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e45bf53a-5aa0-59ed-bfb0-e9bc0caaefcb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2876b144-3e84-42ec-90ba-2736e2efdb69"
+      }
+    ]
   },
   {
     "id": "crazed-focus-chaos-cult",
@@ -284,7 +420,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d82c45c1-ae46-58ce-af88-014452ffcf2a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "10738da7-fbb3-4a3b-8f16-de400702fd2f"
+      }
+    ]
   },
   {
     "id": "daemonic-frenzy-zarkans-daemonkin",
@@ -302,7 +448,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "550616b5-0357-437c-8d95-093d2df301cb"
+      }
+    ]
   },
   {
     "id": "daemonic-possession-soulforged-warpack",
@@ -321,7 +473,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6306dd39-897a-5e71-a8f4-166962f6db54"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d3143f1b-4e27-49b1-91d8-968dba1e0561"
+      }
+    ]
   },
   {
     "id": "delayed-mutations-creations-of-bile",
@@ -340,7 +502,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f6c4d23f-ab64-5812-9f69-e3121f9cdc08"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e1548e11-7a37-484e-a3bc-91c933f4fce3"
+      }
+    ]
   },
   {
     "id": "depthless-cruelty-dread-talons",
@@ -359,7 +531,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0815d5b4-1c74-59f7-a264-e5f77baa1130"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dfd93880-0f0c-451d-a583-ae840e5c5aec"
+      }
+    ]
   },
   {
     "id": "desperate-pledge-soulforged-warpack",
@@ -379,7 +561,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8d467cb1-ea55-568c-84fa-07096c975f64"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c3a40b78-d68c-44cf-a75e-f9a841690720"
+      }
+    ]
   },
   {
     "id": "detonator-deceptors",
@@ -402,7 +594,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "adb137c6-599d-5ec9-8b28-277f41e9c9e4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "080791fa-87de-4075-a61d-aef212481c70"
+      }
+    ]
   },
   {
     "id": "diabolic-regeneration-creations-of-bile",
@@ -421,7 +623,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "017025c3-eac6-52d0-b257-da8a62dce08a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cb91d94b-b677-4d93-97c9-948778bd19b2"
+      }
+    ]
   },
   {
     "id": "empyric-dislocation-warpstrike-champions",
@@ -441,7 +653,17 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "type": "battle-tactic"
+    "type": "battle-tactic",
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ab5f3f11-e1ff-5d34-b252-0f78ca2cb08d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6572fbd6-499b-46a8-ac6d-48a290969bb0"
+      }
+    ]
   },
   {
     "id": "encircling-surge-hurons-marauders",
@@ -460,7 +682,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3de8f0df-a755-5a07-b3ba-5aa55367baea"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ee2d962b-b4e2-4e90-9603-a88639a9c409"
+      }
+    ]
   },
   {
     "id": "endless-ire-veterans-of-the-long-war",
@@ -483,7 +715,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "97f85589-f78e-5ae5-93ee-f0bc7baeee5b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "12bbec31-3f3d-47ef-90f1-8e2b192c9c8a"
+      }
+    ]
   },
   {
     "id": "eternal-hate-pactbound-zealots",
@@ -502,7 +744,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "39215416-8f78-56a0-9ca8-bd64c640b0fb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e6703f06-549a-43fd-926d-34f5f5af65a2"
+      }
+    ]
   },
   {
     "id": "eye-of-the-gods-pactbound-zealots",
@@ -521,7 +773,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f95d48fb-8bc4-5a99-a6b4-438559df0f50"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6db426b9-51c3-4b16-9240-f0b25c6cecae"
+      }
+    ]
   },
   {
     "id": "feeding-frenzy-soulforged-warpack",
@@ -540,7 +802,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "53b691fa-6c40-5676-a3c8-c1a10a49017d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "221dfc91-eb13-41bc-9aa4-4c043813f83e"
+      }
+    ]
   },
   {
     "id": "festering-miasma-pactbound-zealots",
@@ -559,7 +831,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "86115939-ac20-5245-b7d0-12959d482faf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fe88b41d-bc36-4aea-9351-7cd09f219955"
+      }
+    ]
   },
   {
     "id": "fleshy-curse-cabal-of-chaos",
@@ -577,7 +859,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "da317f3e-cdd1-5334-afd5-389ea3a03d9a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "05d446e3-c5e0-4803-ab80-a921fb9decda"
+      }
+    ]
   },
   {
     "id": "forge-fire-surge-cult-of-the-arkifane",
@@ -596,7 +888,17 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "type": "strategic-ploy"
+    "type": "strategic-ploy",
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6858c840-f990-5ea8-9c89-b8aae12a51c1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c45b573d-c5e1-495f-b216-2f6b5510bcfa"
+      }
+    ]
   },
   {
     "id": "from-all-sides-deceptors",
@@ -615,7 +917,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d21248ed-50cd-536c-82bd-0a0d5378e26e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "67aa0902-a907-48b0-b675-c891a322b560"
+      }
+    ]
   },
   {
     "id": "glut-of-souls-soulforged-warpack",
@@ -634,7 +946,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "839fc7c2-ff35-5448-8330-90382ff4ced6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dfde687f-6328-4f6c-acf7-a75783ba08a7"
+      }
+    ]
   },
   {
     "id": "hardened-killers-hurons-marauders",
@@ -653,7 +975,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dfb81cd7-bb97-58f7-bd4d-63e1b087e487"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3f670811-2b11-430a-9b5f-bd34a6cb9070"
+      }
+    ]
   },
   {
     "id": "horrific-incursion-nightmare-hunt",
@@ -672,7 +1004,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3d91293d-0a04-5a20-8b24-2577dc30fa4f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d799468b-ab94-4dde-808e-ce25c182ca18"
+      }
+    ]
   },
   {
     "id": "infernal-sacrifice-chaos-cult",
@@ -691,7 +1033,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3a6cd037-e8e0-51dd-9c52-745985e220a0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "95bd643e-d349-4e22-8626-d63f639092f4"
+      }
+    ]
   },
   {
     "id": "infernal-vigour-cabal-of-chaos",
@@ -709,7 +1061,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "aa4ed3fe-bcae-59a8-9139-d82712329e9b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "19f1117a-ccf0-4294-865e-d7d8a9796123"
+      }
+    ]
   },
   {
     "id": "let-the-galaxy-burn-veterans-of-the-long-war",
@@ -728,7 +1090,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8bdb0621-c586-511c-8746-ae9eafc2afb2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8cfa3ae5-3836-474c-96de-6a7d8e93a9ad"
+      }
+    ]
   },
   {
     "id": "malicious-surge-nightmare-hunt",
@@ -747,7 +1119,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3cc2f54d-cba4-5147-a2fb-b134d8ab5d2f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b61af755-d2b0-4ba1-8d38-0fd543973185"
+      }
+    ]
   },
   {
     "id": "masters-are-watching-creations-of-bile",
@@ -766,7 +1148,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d6783df9-5316-5ca1-83a3-c93ecff54754"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cc625f76-31e8-4bb0-8371-5ea312839633"
+      }
+    ]
   },
   {
     "id": "merciless-pursuit-dread-talons",
@@ -785,7 +1177,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "759c4a49-8d62-5392-b1c4-630ca11c25f3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4e357f19-ff11-43b7-9a73-aecbffe9ef2e"
+      }
+    ]
   },
   {
     "id": "millennia-of-experience-veterans-of-the-long-war",
@@ -804,7 +1206,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4c0c0599-ff47-5a4f-af36-028a8e222e1f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "96bbeca0-3b1e-477d-a987-521b6a567582"
+      }
+    ]
   },
   {
     "id": "monstrous-visages-creations-of-bile",
@@ -824,7 +1236,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1c027875-85be-5a66-bdc9-07fdfff20e61"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3baae1e2-4413-4abd-af9e-6d2f92c7697e"
+      }
+    ]
   },
   {
     "id": "mortal-thralls-chaos-cult",
@@ -843,7 +1265,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8ca9e76d-59c3-5629-ad47-9c6faa0f3e35"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9a27195a-09a7-4099-918d-6852da9ff8b5"
+      }
+    ]
   },
   {
     "id": "never-outgunned-renegade-warband",
@@ -863,7 +1295,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "08ed3141-7083-5fc6-8ea8-ebdf87b679b8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2450c8e6-3267-4a09-a69d-6c4bd59c8a9d"
+      }
+    ]
   },
   {
     "id": "opportunistic-raiders-renegade-raiders",
@@ -882,7 +1324,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3ae4ef7a-ef35-5c5b-921c-6be1e7cab7a5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "175b4c62-1cfb-48be-8d7e-79ab04c132b2"
+      }
+    ]
   },
   {
     "id": "persistent-assailants-fellhammer-siege-host",
@@ -901,7 +1353,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3ff7a1aa-b63a-500b-bf56-ab027fc3303e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ed0eb481-f786-4a56-a1de-d50549105c9a"
+      }
+    ]
   },
   {
     "id": "pick-them-off-deceptors",
@@ -920,7 +1382,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "23c494f6-d659-59fd-b263-055c242ffd65"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e8020e11-f553-4ed4-948e-347f01ef29b2"
+      }
+    ]
   },
   {
     "id": "pitiless-cannonade-fellhammer-siege-host",
@@ -939,7 +1411,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c64bbb4f-c5b4-56c5-b93b-1a9a7f8911c5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "36a8343a-24de-4281-b3d7-208d3e80f83e"
+      }
+    ]
   },
   {
     "id": "pitiless-hunters-dread-talons",
@@ -958,7 +1440,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3ee4e32a-8b5b-5c67-adc4-635fb9d41102"
+      },
+      {
+        "namespace": "mfm",
+        "id": "42fff50b-51e8-4ba3-bc58-20e300b582cb"
+      }
+    ]
   },
   {
     "id": "plunging-talons-murdertalon-raiders",
@@ -976,7 +1468,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1e877e60-dd4e-552f-827a-a25d08b942e3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5549aaa3-79e6-4861-8aa1-c55b3e482390"
+      }
+    ]
   },
   {
     "id": "point-blank-destruction-fellhammer-siege-host",
@@ -995,7 +1497,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3b12b861-f1fd-5db1-ab4f-e11a19fdea2f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3327c4a2-167a-4491-8a36-3fbce7dc75d3"
+      }
+    ]
   },
   {
     "id": "portal-of-spite-warpstrike-champions",
@@ -1014,7 +1526,17 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "type": "battle-tactic"
+    "type": "battle-tactic",
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "26ade695-5885-560c-ac8d-9c12ebcb94bb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c570b172-cb7c-4175-84a7-ffde6dfaae7f"
+      }
+    ]
   },
   {
     "id": "predatory-pursuit-soulforged-warpack",
@@ -1033,7 +1555,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e6fef757-2b71-5cf2-8dd0-430384e80617"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2985f43c-656c-4961-bab1-bb5e33b76eb7"
+      }
+    ]
   },
   {
     "id": "prey-on-the-weak-nightmare-hunt",
@@ -1053,7 +1585,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5dd7c994-3660-5b2f-a624-a3c076d22bc3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "890d6b50-7450-4d35-b72f-7539dbcda123"
+      }
+    ]
   },
   {
     "id": "profane-zeal-pactbound-zealots",
@@ -1073,7 +1615,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6dc8b9be-98aa-5fe6-bce2-222d32037885"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cb33d278-6858-4542-9e84-530fa215296d"
+      }
+    ]
   },
   {
     "id": "raking-pass-murdertalon-raiders",
@@ -1091,7 +1643,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "64c6d69c-a0a1-5235-8060-9bbf1bf54e12"
+      },
+      {
+        "namespace": "mfm",
+        "id": "89e9b913-8d2d-450e-bd5a-a43552f6497c"
+      }
+    ]
   },
   {
     "id": "reavers-flurry-hurons-marauders",
@@ -1110,7 +1672,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "efcf6e62-08ca-5291-8691-4ba822c8392b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cbe69988-a5c2-472c-9111-a8b2bebba098"
+      }
+    ]
   },
   {
     "id": "reavers-haste-renegade-raiders",
@@ -1129,7 +1701,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b31fc0d2-de5c-587a-bd2d-5da935948f46"
+      },
+      {
+        "namespace": "mfm",
+        "id": "061789a4-030f-4b28-b7a8-4ac77d6ee146"
+      }
+    ]
   },
   {
     "id": "reavers-reaction-renegade-warband",
@@ -1148,7 +1730,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "92db74b9-42d5-542d-b5f3-7fbb1b569efd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fc6381ae-c435-45a0-93d6-bf04b75dd7ad"
+      }
+    ]
   },
   {
     "id": "reckless-haste-chaos-cult",
@@ -1167,7 +1759,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e178fa99-fdbc-5252-8c18-64ad6d14eb08"
+      },
+      {
+        "namespace": "mfm",
+        "id": "493d6676-1628-4f8b-a968-e484b3f18571"
+      }
+    ]
   },
   {
     "id": "relentless-pursuit-deceptors",
@@ -1186,7 +1788,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dff52fc0-05fc-58b5-98f8-09f1a76e32e0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "134f5a12-8920-4d0b-8dfc-1930baac45e1"
+      }
+    ]
   },
   {
     "id": "relentless-terror-dread-talons",
@@ -1205,7 +1817,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c2993b05-c427-5179-8f62-16e7e5dde404"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ad5a314b-d919-4652-bfaf-062487cc3170"
+      }
+    ]
   },
   {
     "id": "relentless-terror-nightmare-hunt",
@@ -1224,7 +1846,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "28dc8d66-6242-5657-9dcd-2101fcdf3d07"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ffd86142-03d7-4627-84c4-0a5496752315"
+      }
+    ]
   },
   {
     "id": "renegade-claim-renegade-warband",
@@ -1243,7 +1875,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b739f23e-4f8f-5f9e-a7f1-260f31f709a8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "453d428b-902e-4e49-82ce-23bb5ff71e02"
+      }
+    ]
   },
   {
     "id": "ruinations-bounty-devotees-of-destruction",
@@ -1261,7 +1903,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f2a31f7b-9480-53be-8af5-37a1a03bbd11"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2fb3b94d-9f11-42b5-8321-2697f3cb7faa"
+      }
+    ]
   },
   {
     "id": "ruinous-raid-renegade-raiders",
@@ -1281,7 +1933,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6e872405-501e-5888-a718-e6760a395852"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8f6e5a7b-0441-4710-a201-c58d12b08949"
+      }
+    ]
   },
   {
     "id": "sadistic-display-nightmare-hunt",
@@ -1300,7 +1962,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "53ec71f0-723b-5884-b6ab-8520d7198105"
+      },
+      {
+        "namespace": "mfm",
+        "id": "916111e7-e9bc-4796-8814-c236bdfc12f0"
+      }
+    ]
   },
   {
     "id": "scour-and-seize-renegade-raiders",
@@ -1319,7 +1991,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "76041f2d-654e-55df-871b-f4e46910f485"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7707cad-872d-4c6a-9c9b-7d1ab3c0d35b"
+      }
+    ]
   },
   {
     "id": "scrambled-coordinates-deceptors",
@@ -1338,7 +2020,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "acf6a561-f08d-558c-92b2-090cad0e940f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6f1d9eca-a4b8-4170-a7a2-94f5dd3efe77"
+      }
+    ]
   },
   {
     "id": "screaming-descent-dread-talons",
@@ -1357,7 +2049,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3e02cc2f-2a7f-50f2-981e-c7290f6dcfc4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "870347a2-86d0-4210-a83b-19665ac604ae"
+      }
+    ]
   },
   {
     "id": "seize-the-prize-hurons-marauders",
@@ -1376,7 +2078,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "186a2d71-6bd5-562c-b6ad-e5be386c5a34"
+      },
+      {
+        "namespace": "mfm",
+        "id": "158784e5-c154-4fd6-b348-abd9ec8fbf99"
+      }
+    ]
   },
   {
     "id": "selfless-demise-chaos-cult",
@@ -1395,7 +2107,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8c5a4a3b-edd5-5be8-9c3e-58385195ae99"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4df69e02-faa4-4151-ab62-2907667638d6"
+      }
+    ]
   },
   {
     "id": "siegebreaker-strike-warpstrike-champions",
@@ -1414,7 +2136,17 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "type": "strategic-ploy"
+    "type": "strategic-ploy",
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "342afbf9-d23e-5c2a-9931-60cd4a25a374"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3810e6a7-25be-4932-8b5f-6e30447ba08b"
+      }
+    ]
   },
   {
     "id": "siegecraft-fellhammer-siege-host",
@@ -1433,7 +2165,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8e8e1923-ace0-51d3-bcaf-fa390fbda9fe"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9fc7bc0d-4ea9-4303-a98a-314f391ffa4c"
+      }
+    ]
   },
   {
     "id": "skinshift-pactbound-zealots",
@@ -1452,7 +2194,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1e67526a-2af4-502c-acab-1fc494567123"
+      },
+      {
+        "namespace": "mfm",
+        "id": "932cfa33-d782-4175-9ae5-d50d133fb156"
+      }
+    ]
   },
   {
     "id": "snare-of-fire-devotees-of-destruction",
@@ -1470,7 +2222,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "15651aa9-487d-5b93-82cb-7dad9012fd5b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "745df7da-fca8-4e24-8ded-90e223e549a3"
+      }
+    ]
   },
   {
     "id": "soul-tally-offering-cult-of-the-arkifane",
@@ -1509,7 +2271,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8e67e619-c79e-50b4-95a6-44149b14796e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7bdf601f-7b49-492a-affa-a5a0d33deb9c"
+      }
+    ]
   },
   {
     "id": "specimens-for-the-spider-creations-of-bile",
@@ -1528,7 +2300,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9ffe4b33-4478-52e4-b98d-70c9ab4992d2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1767ab6e-a886-4960-9ddb-fa81d3ba97bc"
+      }
+    ]
   },
   {
     "id": "steadfast-determination-fellhammer-siege-host",
@@ -1547,7 +2329,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e981092b-18e0-509b-9fd8-c29379c4be32"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7c923572-d246-407e-bcc1-44e9222569fe"
+      }
+    ]
   },
   {
     "id": "talons-sunk-deep-nightmare-hunt",
@@ -1567,7 +2359,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bd5f566a-a576-54ca-b1b0-95a31fefa178"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5966ecaf-dbbb-4c4f-b24a-f1da41fbc804"
+      }
+    ]
   },
   {
     "id": "to-the-favoured-the-spoils-hurons-marauders",
@@ -1586,7 +2388,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "312f9d9e-c280-5df7-b876-a8a9a75cf395"
+      },
+      {
+        "namespace": "mfm",
+        "id": "87960f12-4cb6-4813-806b-8a860bf0fe3d"
+      }
+    ]
   },
   {
     "id": "torpefying-refrain-pactbound-zealots",
@@ -1605,7 +2417,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8fd074a0-77e1-571d-81d8-3241f8425b5d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6cd05b7f-7cf7-425d-b1df-dcfae80dfdf7"
+      }
+    ]
   },
   {
     "id": "touch-of-the-arkifane-cult-of-the-arkifane",
@@ -1628,7 +2450,17 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "type": "battle-tactic"
+    "type": "battle-tactic",
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fa8fff35-ccbf-5286-b476-327c5af2e955"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a27ff889-96c3-4d57-93ec-088bf5d884eb"
+      }
+    ]
   },
   {
     "id": "undying-hatred-devotees-of-destruction",
@@ -1646,7 +2478,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a278489e-0907-55bd-a896-fc204f634228"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9c3df035-418b-40af-9cff-e2a96fefeddc"
+      }
+    ]
   },
   {
     "id": "undying-hatred-renegade-warband",
@@ -1665,7 +2507,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0581bf87-5cc8-561b-9cf5-5926241a9861"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f31223c6-bc58-46c7-9f42-f063d739d8ef"
+      }
+    ]
   },
   {
     "id": "unfailingly-obdurate-renegade-raiders",
@@ -1685,7 +2537,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e200b0e0-6b92-5e10-bcbb-4e383a459cc0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e38ba41a-8fc3-4b8f-9bd9-ca46d0235f51"
+      }
+    ]
   },
   {
     "id": "unholy-fortitude-cult-of-the-arkifane",
@@ -1704,7 +2566,17 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "type": "strategic-ploy"
+    "type": "strategic-ploy",
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c93c4d28-ecf5-56fb-90bb-996f9d9a2378"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b25009cd-dd67-424d-81b2-fdd1a6d906cb"
+      }
+    ]
   },
   {
     "id": "unstoppable-rampage-soulforged-warpack",
@@ -1724,7 +2596,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ae8f749d-facc-525b-9986-3711f279b2db"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8e93c539-17da-4522-acc5-19ec3f61df8a"
+      }
+    ]
   },
   {
     "id": "vengeful-destruction-renegade-warband",
@@ -1744,7 +2626,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0fff2b11-7ad4-5730-b983-618e4b0e12e1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e3a9dcd4-c4c4-464d-9544-4578cf4493a2"
+      }
+    ]
   },
   {
     "id": "vindictive-strategy-zarkans-daemonkin",
@@ -1763,7 +2655,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3f152432-f3ab-426e-b2b0-0b8994e054f0"
+      }
+    ]
   },
   {
     "id": "warp-flicker-warpstrike-champions",
@@ -1782,7 +2680,17 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "type": "strategic-ploy"
+    "type": "strategic-ploy",
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fb034044-1db2-5651-92c9-72aa1a1c1377"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fcba9999-aac7-401e-a003-d62a3fc7b517"
+      }
+    ]
   },
   {
     "id": "warp-tainted-warpstrike-champions",
@@ -1801,7 +2709,17 @@
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
     },
-    "type": "strategic-ploy"
+    "type": "strategic-ploy",
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9d3ecab3-daab-59e3-a22e-48d6cd6d9108"
+      },
+      {
+        "namespace": "mfm",
+        "id": "de5a28db-7648-4d72-84ee-76f005d3dac5"
+      }
+    ]
   },
   {
     "id": "warp-twisted-terrors-murdertalon-raiders",
@@ -1819,7 +2737,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "69b30efc-dcfe-557f-acff-539a9935c05e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b41a5d58-9921-4660-ae55-92778020727b"
+      }
+    ]
   },
   {
     "id": "warpcharged-engines-renegade-raiders",
@@ -1838,7 +2766,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "724ddc08-4556-58a9-a981-db70fdcc3724"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e66eed41-c56b-4279-bd17-6730b64d986c"
+      }
+    ]
   },
   {
     "id": "wreathed-in-warpflame-cabal-of-chaos",
@@ -1856,6 +2794,16 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d2caa3a9-c363-57e2-941f-3372428853a6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f2ea7f7b-8a98-4850-8acd-b3e32c3261ad"
+      }
+    ]
   }
 ]

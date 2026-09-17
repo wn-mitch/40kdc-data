@@ -139,10 +139,89 @@ def _js_round(x: float) -> float:
 def _round4(v: Vec2) -> Vec2:
     return {"x": _js_round(v["x"] * 1e4) / 1e4, "y": _js_round(v["y"] * 1e4) / 1e4}
 
+def _resolve_walls(
+    walls: list[dict[str, Any]] | None,
+    footprint: dict[str, Any],
+    position: Vec2,
+    rotation: float,
+    mirror: str,
+) -> list[dict[str, Any]] | None:
+    if not walls:
+        return None
+    centroid = polygon_centroid(footprint_vertices(footprint))
+    resolved = []
+    for wall in walls:
+        points = []
+        for point in wall["points"]:
+            oriented = _orient(
+                {
+                    "x": point["x"] - centroid["x"],
+                    "y": point["y"] - centroid["y"],
+                },
+                rotation,
+                mirror,
+            )
+            points.append(
+                _round4(
+                    {
+                        "x": oriented["x"] + position["x"],
+                        "y": oriented["y"] + position["y"],
+                    }
+                )
+            )
+        entry: dict[str, Any] = {"points": points}
+        if "thickness" in wall:
+            entry["thickness"] = wall["thickness"]
+        resolved.append(entry)
+    return resolved
 
-def resolve_layout(
-    layout: dict[str, Any], templates: list[dict[str, Any]]
-) -> list[dict[str, Any]]:
+
+def _resolve_walls_composed(
+    walls: list[dict[str, Any]] | None,
+    footprint: dict[str, Any],
+    feature_position: Vec2,
+    feature_rotation: float,
+    feature_mirror: str,
+    area_position: Vec2,
+    area_rotation: float,
+    area_mirror: str,
+) -> list[dict[str, Any]] | None:
+    if not walls:
+        return None
+    centroid = polygon_centroid(footprint_vertices(footprint))
+    resolved = []
+    for wall in walls:
+        points = []
+        for point in wall["points"]:
+            local = _orient(
+                {
+                    "x": point["x"] - centroid["x"],
+                    "y": point["y"] - centroid["y"],
+                },
+                feature_rotation,
+                feature_mirror,
+            )
+            area_local = {
+                "x": local["x"] + feature_position["x"],
+                "y": local["y"] + feature_position["y"],
+            }
+            oriented = _orient(area_local, area_rotation, area_mirror)
+            points.append(
+                _round4(
+                    {
+                        "x": oriented["x"] + area_position["x"],
+                        "y": oriented["y"] + area_position["y"],
+                    }
+                )
+            )
+        entry: dict[str, Any] = {"points": points}
+        if "thickness" in wall:
+            entry["thickness"] = wall["thickness"]
+        resolved.append(entry)
+    return resolved
+
+
+def resolve_layout(layout: dict[str, Any], templates: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Resolve a layout to absolute board-space vertices per piece.
 
     ``templates`` is the catalog a piece's ``template`` references resolve
@@ -199,38 +278,67 @@ def resolve_layout(
                         }
                     )
                 )
-            out.append(
-                {
-                    **resolved_id_name(piece),
-                    "piece_type": piece_type,
-                    "floor": piece.get("floor") or 0,
-                    "vertices": vertices,
-                }
-            )
-            continue
-
-        # Unparented area or feature: place directly in board space.
-        vertices = [
-            _round4(v) for v in _place_footprint(fp, piece["position"], rotation, mirror)
-        ]
-        out.append(
-            {
+            template = by_id.get(piece["template"]) if piece.get("template") else None
+            resolved_parented = {
                 **resolved_id_name(piece),
                 "piece_type": piece_type,
                 "floor": piece.get("floor") or 0,
                 "vertices": vertices,
             }
-        )
+            if template:
+                walls = _resolve_walls_composed(
+                    template.get("walls"),
+                    fp,
+                    piece["position"],
+                    rotation,
+                    mirror,
+                    parent["position"],
+                    a_rot,
+                    a_mirror,
+                )
+                if walls:
+                    resolved_parented["walls"] = walls
+                if template.get("has_roof"):
+                    resolved_parented["has_roof"] = True
+                if template.get("terrain_category"):
+                    resolved_parented["terrain_category"] = template["terrain_category"]
+            out.append(resolved_parented)
+            continue
+
+        # Unparented area or feature: place directly in board space.
+        vertices = [_round4(v) for v in _place_footprint(fp, piece["position"], rotation, mirror)]
+        template = by_id.get(piece["template"]) if piece.get("template") else None
+        resolved_piece = {
+            **resolved_id_name(piece),
+            "piece_type": piece_type,
+            "floor": piece.get("floor") or 0,
+            "vertices": vertices,
+        }
+        if template:
+            walls = _resolve_walls(
+                template.get("walls"),
+                fp,
+                piece["position"],
+                rotation,
+                mirror,
+            )
+            if walls:
+                resolved_piece["walls"] = walls
+            if template.get("has_roof"):
+                resolved_piece["has_roof"] = True
+            if template.get("terrain_category"):
+                resolved_piece["terrain_category"] = template["terrain_category"]
+        out.append(resolved_piece)
 
         # Expand an area template's composed features, carried through this
         # area's placement (same composition math as a parented feature).
         if piece.get("template"):
             t = by_id.get(piece["template"])
-            for feat in (t or {}).get("features") or []:
+            for feature_index, feat in enumerate((t or {}).get("features") or []):
                 ft = by_id.get(feat["template"])
                 if ft is None:
                     raise TerrainResolveError(
-                        f'{where}: composed feature references unknown template '
+                        f"{where}: composed feature references unknown template "
                         f'"{feat["template"]}"'
                     )
                 area_local = _place_footprint(
@@ -250,14 +358,35 @@ def resolve_layout(
                             }
                         )
                     )
-                out.append(
-                    {
-                        "id": feat.get("id"),
-                        "name": ft.get("name"),
-                        "piece_type": "feature",
-                        "floor": feat.get("floor") or 0,
-                        "vertices": feat_verts,
-                    }
+                feature_id = feat.get("id")
+                if piece.get("id"):
+                    feature_id = (
+                        f'{piece["id"]}--'
+                        f'{feature_id or f"feature-{feature_index + 1}"}'
+                    )
+                resolved_feature = {
+                    "id": feature_id,
+                    "name": ft.get("name"),
+                    "piece_type": "feature",
+                    "floor": feat.get("floor") or 0,
+                    "vertices": feat_verts,
+                }
+                walls = _resolve_walls_composed(
+                    ft.get("walls"),
+                    ft["footprint"],
+                    feat["position"],
+                    feat.get("rotation_degrees") or 0,
+                    feat.get("mirror") or "none",
+                    piece["position"],
+                    rotation,
+                    mirror,
                 )
+                if walls:
+                    resolved_feature["walls"] = walls
+                if ft.get("has_roof"):
+                    resolved_feature["has_roof"] = True
+                if ft.get("terrain_category"):
+                    resolved_feature["terrain_category"] = ft["terrain_category"]
+                out.append(resolved_feature)
 
     return out

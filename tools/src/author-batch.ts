@@ -65,6 +65,10 @@ export interface Proposal {
   proposed_scope?: Json;
   /** Ability-level behavior the repair pass inferred (passive/activated/reactive/aura). */
   proposed_behavior?: string;
+  /** Optional ability-level fields inferred by the repair pass. Explicit null removes a stale field. */
+  proposed_trigger?: Json | null;
+  proposed_usage?: Json | null;
+  proposed_applies_to?: Json | null;
   verdict?: { severity: string; faithful: boolean; issue: string } | null;
   final_faithful: boolean;
   error?: string;
@@ -78,6 +82,31 @@ export interface Proposal {
   src_hash?: string;
 }
 
+
+/** Parse the first JSON object from Claude CLI output, ignoring trailing client warnings. */
+export function parseClaudeEnvelope(stdout: string): Json {
+  const start = stdout.indexOf("{");
+  if (start < 0) throw new Error("response contains no JSON object");
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+  for (let i = start; i < stdout.length; i++) {
+    const char = stdout[i];
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (char === "\\") escaped = true;
+      else if (char === "\"") inString = false;
+      continue;
+    }
+    if (char === "\"") inString = true;
+    else if (char === "{") depth++;
+    else if (char === "}") {
+      depth--;
+      if (depth === 0) return JSON.parse(stdout.slice(start, i + 1));
+    }
+  }
+  throw new Error("response contains incomplete JSON");
+}
 // ─── claude CLI bridge (subscription, structured output) ─────────────
 
 /** One batched, structured `claude -p` call. Resolves to the validated object. */
@@ -91,7 +120,7 @@ export function callClaude(system: string, user: string, schema: Json, model: st
       (err, stdout) => {
         if (err && !stdout) return rej(err);
         try {
-          const env = JSON.parse(stdout);
+          const env = parseClaudeEnvelope(stdout);
           if (env.is_error) return rej(new Error(env.result ?? "claude error"));
           if (!env.structured_output) return rej(new Error("no structured_output in response"));
           res(env.structured_output);
@@ -110,7 +139,7 @@ const CLASSIFY_SYSTEM =
   `effect_type — pick the SINGLE best of:\n` +
   `  stat-modifier {operation:"add"|"subtract"|"set", stat:"A"|"S"|"T"|"Sv"|"AP"|"OC"|"Ld", value:int}\n` +
   `  roll-modifier {operation:"add"|"subtract", roll:"hit"|"wound"|"save"|"charge", value:int}\n` +
-  `  re-roll {roll:"hit"|"wound"|"save"|"damage"|"charge", subset:"ones"|"all-failures"} — ONLY combat dice, NOT Battle-shock/Leadership\n` +
+  `  re-roll {roll:"hit"|"wound"|"save"|"charge"|"damage"|"advance"|"surge"|"normal-move-distance"|"any"|"all", subset:"ones"|"all-failures", count?:positive-int} for pass/fail dice, or {roll:"hit"|"wound"|"save"|"charge"|"damage"|"advance"|"surge"|"normal-move-distance"|"any"|"all", result_scope:"any-result", count?:positive-int} when any result can be re-rolled; count means up to that many qualifying rolls within the ability's active window — ONLY combat/movement dice, NOT Battle-shock/Leadership\n` +
   `  leadership-modifier {test:"battle-shock", operation:"re-roll"} or {operation:"add"|"subtract", value:int} — USE for Battle-shock/Leadership rerolls or Ld changes\n` +
   `  mortal-wounds {count:int|"D3"|"D6"} ; feel-no-pain {threshold:int} ; invulnerable-save {invuln_sv:int}\n` +
   `  keyword-grant {keywords:[ "lethal-hits"|"sustained-hits"|"devastating-wounds"|"twin-linked"|... ]} (ARRAY)\n` +
@@ -123,14 +152,14 @@ const CLASSIFY_SYSTEM =
   `condition_kind — DEFAULT "none". Only set if the rule EXPLICITLY restricts: "phase" (+condition_param = phase name), "vs-keyword" (+param=keyword), ` +
   `"charged", "stationary", "below-half", "below-starting", "attached", "leading". Do NOT add a phase condition just because the ability operates in a phase. ` +
   `If the rule needs a compound/event trigger (e.g. a dice roll, an either/or choice, or "when a friendly VEHICLE is destroyed within 12\\"") set complex=true.\n` +
-  `scope_range — EXACTLY one of "self"|"unit"|"attached"|"aura-6"|"aura-9"|"aura-12"|"aura-custom"|"engagement-range"|"any-visible"|"any-on-battlefield"|"terrain-within-range" (a distance from the bearer; NEVER a target like "all-friendly"/"friendly-within-aura"). For an army-wide detachment/faction buff ("all friendly X units"), use "unit". scope_duration — "phase"|"turn"|"battle-round"|"battle"|"until-next-command-phase"|"one-use"|"permanent".\n` +
+  `scope_range — EXACTLY one of "self"|"unit"|"attached"|"aura-6"|"aura-9"|"aura-12"|"aura-custom"|"engagement-range"|"any-visible"|"any-on-battlefield"|"terrain-within-range" (a distance from the bearer; NEVER a target like "all-friendly"/"friendly-within-aura"). For an army-wide detachment/faction buff ("all friendly X units"), use "unit". scope_duration — "phase"|"turn"|"battle-round"|"battle"|"until-next-command-phase"|"until-next-battle-round"|"until-start-next-turn"|"one-use"|"permanent".\n` +
   `target — "self"|"unit"|"friendly-within-aura"|"enemy-within-aura"|"attacker"|"defender"|... (only values from the schema enum).\n` +
   `Never copy rule text into any field. Give confidence and a one-sentence reasoning.`;
 
 export const VERIFY_SYSTEM =
   `You judge whether authored DSL faithfully captures a 40k rule. The DSL includes scope {range,duration} — credit the aura/range/duration when it is in scope (do NOT flag "missing 6\\" aura" if scope.range is "aura-6"). ` +
   `Be strict about the core mechanic: wrong effect type, wrong stat/roll, wrong value, a condition the rule does NOT state (phantom), a stated condition that is missing, or modeling a Leadership/Battle-shock re-roll as a combat re-roll. ` +
-  `severity "ok" = core mechanic + conditions + scope correct; "minor" = core correct but a secondary detail imperfect; "wrong" = core mechanic wrong. Return one verdict per ability, echoing its ability_id.`;
+  `severity "ok" = every stated mechanic, condition, usage/timing gate, target restriction, attack subtype, and scope detail is represented; "minor" = core correct but any secondary stated detail is imperfect; "wrong" = core mechanic wrong. Set faithful=true ONLY with severity "ok"; any omitted or imperfect stated detail requires faithful=false. Return one verdict per ability, echoing its ability_id.`;
 
 const CLASSIFY_SCHEMA = {
   type: "object", additionalProperties: false,
@@ -170,36 +199,52 @@ export const VERIFY_SCHEMA = {
 // as the flat-form path validates `buildEntry` output.
 
 export const REPAIR_SYSTEM =
-  `You repair Warhammer 40k ability DSL. You are given a rule, a DRAFT effect that an earlier flat-form pass produced, and the EXACT gap a verifier found (usually a missing trigger or compound condition). Emit the COMPLETE nested effect tree that fixes the gap. Never copy rule text into any field.\n\n` +
+  `You repair Warhammer 40k ability DSL. You are given a rule and a DRAFT ability that an earlier pass produced. Emit the COMPLETE ability mechanics that fix the verifier's exact gap. The effect tree and scope are required. Return trigger, usage, and applies_to when the rule needs them; use null only to remove a stale draft field. Never copy rule text into any field.\n\n` +
   `An effect node is ONE of:\n` +
-  `  • a leaf: {type, target, modifier} — type ∈ [stat-modifier, roll-modifier, re-roll, mortal-wounds, feel-no-pain, invulnerable-save, ward, keyword-grant, movement-modifier, deep-strike, fallback-and-act, fight-first, fight-last, shoot-on-death, fight-on-death, objective-control-modifier, leadership-modifier, damage-reduction, attack-restriction, ability-grant, cp-gain, cp-refund, model-destruction, resurrection, resource-gain, resource-spend, charge-roll-modifier, terrain-area-tag, bs-modifier, engagement-passthrough]; target ∈ [self, bearer, unit, attached-unit, attacker, defender, friendly-within-aura, enemy-within-aura, all-friendly, all-enemy]\n` +
+  `  • a leaf: {type, target, modifier} — type ∈ [stat-modifier, roll-modifier, re-roll, mortal-wounds, feel-no-pain, invulnerable-save, ward, keyword-grant, movement-modifier, deep-strike, fallback-and-act, fight-first, fight-last, shoot-on-death, fight-on-death, objective-control-modifier, leadership-modifier, damage-reduction, attack-restriction, ability-grant, cp-gain, cp-refund, model-destruction, resurrection, resource-gain, resource-spend, charge-roll-modifier, terrain-area-tag, bs-modifier, engagement-passthrough, detection-range-modifier, hazard-rolls]; target ∈ [self, bearer, unit, attached-unit, attacker, defender, friendly-within-aura, enemy-within-aura, all-friendly, all-enemy]\n` +
   `  • conditional: {type:"conditional", condition, effect}\n` +
   `  • sequence: {type:"sequence", steps:[effect, ...]} — multiple effects that all apply\n` +
+  `  • rules-bundle: {type:"rules-bundle", steps:[effect, ...]} — the complete reusable effect set of the containing named ability; grant it elsewhere with ability-grant.modifier {ability_id, rules_bundle:true}\n` +
   `  • choice: {type:"choice", options:[effect, ...], choice_label?} — pick exactly one\n` +
-  `  • dice-gated: {type:"dice-gated", dice:"D6"|..., threshold:int, comparison?:"greater-or-equal"|..., on_success:effect, on_fail?:effect}\n` +
-  `  • dice-pool-allocation: {type:"dice-pool-allocation", pool:{count,die}, max_activations:int, options:[{name, requirement, effect}, ...]}\n\n` +
+  `  • select-units: {type:"select-units", selector:{owner:"friendly"|"enemy", target_kind?:"unit"|"model", count:1, keywords?:[...], range_inches?:number, visibility_required?:boolean, engagement_relation?:"any"|"engaged-with-bearer"|"not-engaged-with-bearer", eligibility?:condition}, effect} — use this wrapper whenever the rule selects exactly one eligible unit or model; target_kind defaults to "unit", while target_kind:"model" binds nested target:"unit" effects to that selected model; count:1 enforces the one-target binding\n` +
+  `  • for-each-unit: {type:"for-each-unit", selector:{owner:"friendly"|"enemy", keywords?:[...], within_inches?:number}, effect} — independently resolve the effect once for every matching unit; keywords are all required\n` +
+  `  • dice-gated: {type:"dice-gated", dice:"D6"|..., threshold:int, comparison?:"gte"|"lte"|"gt"|"lt"|"eq", on_success:effect, on_fail?:effect}\n` +
+  `  • dice-table: {type:"dice-table", dice:"D3"|"D6", outcomes:[{results:[1,...], effect}, ...]} — one closed die whose outcome rows cover every face exactly once; use this instead of nested dice-gated effects when each face has a different result\n` +
+  `  • dice-pool-allocation: {type:"dice-pool-allocation", pool:{count,die}, max_activations:int, options:[{name, requirement:{type:"pair"|"triple"|"single"|"run",min_value:1..6}, effect}, ...]} — ONLY for allocating an already-rolled dice pool by pair/triple/single/run requirements; never use it for an ordinary D6 outcome table\n\n` +
   `A condition is ONE of:\n` +
-  `  • simple: {type, parameters:{...}} — ALL params go UNDER "parameters", never as top-level keys (e.g. {"type":"unit-has-keyword","parameters":{"keyword":"VEHICLE"}}, NOT {"type":"unit-has-keyword","keyword":"VEHICLE"}). type ∈ [phase-is{phase}, timing-is{timing}, player-turn-is{turn}, unit-below-starting-strength, unit-below-half-strength, unit-has-keyword{keyword}, unit-within-range-of{target_type}, model-is-leader, target-has-keyword{keyword}, charged-this-turn, advanced-this-turn, remained-stationary, is-battle-shocked, has-lost-wounds, was-hit-by-attack{subject?:"self"|"target",attack_type?,weapon_name?,count_min?}, opponent-unit-within-range, within-range-of-objective, attack-is-type{attack_type}, has-fought-this-phase, destroyed-by-attack-type{attack_type}, controls-objective, is-attached, terrain-area-control, engagement-state, territory-control, fights-first, disposition-matches, units-destroyed{side,window,count_min}, units-destroyed-comparison, objective-majority, attack-stat-compare{attacker_stat,comparison:"greater-than"|"less-than"|"greater-or-equal"|"less-or-equal"|"equal",target_stat} (e.g. attack S greater than unit T), made-ingress-move-this-turn]\n` +
+  `  • simple: {type, parameters:{...}} — ALL params go UNDER "parameters", never as top-level keys (e.g. {"type":"unit-has-keyword","parameters":{"keyword":"VEHICLE"}}, NOT {"type":"unit-has-keyword","keyword":"VEHICLE"}). type ∈ [phase-is{phase}, timing-is{timing}, player-turn-is{turn}, unit-below-starting-strength, unit-below-half-strength, unit-has-keyword{keyword}, unit-model-count{keyword,count_min}, uniform-ranged-loadout{model_keyword?}, all-attacks-target-same-unit{attack_type?}, unit-within-range-of{target_type}, model-is-leader, target-has-keyword{keyword}, charged-this-turn, advanced-this-turn, remained-stationary, is-battle-shocked, has-lost-wounds, was-hit-by-attack{subject?:"self"|"target",attack_type?,weapon_name?,count_min?}, opponent-unit-within-range, within-range-of-objective, attack-is-type{attack_type}, has-fought-this-phase, destroyed-by-attack-type{attack_type}, controls-objective, is-attached, terrain-area-control, engagement-state, territory-control, fights-first, disposition-matches, units-destroyed{side,window,count_min}, units-destroyed-comparison, objective-majority, attack-stat-compare{attacker_stat,comparison:"greater-than"|"less-than"|"greater-or-equal"|"less-or-equal"|"equal",target_stat} (e.g. attack S greater than unit T), made-ingress-move-this-turn]\n` +
   `  • compound: {operator:"and"|"or"|"not", operands:[condition, ...]} — use "not" with ONE operand to negate (e.g. "while not Battle-shocked" → {operator:"not", operands:[{type:"is-battle-shocked"}]}). Nest compounds freely.\n\n` +
-  `Encode reactive/event triggers as a conditional whose condition is the trigger (e.g. an enemy destroyed a model nearby → destroyed-by-attack-type / opponent-unit-within-range). Encode "first time per turn"/"once per game" by choosing the correct timing condition; do not invent fields.\n` +
-  `scope = {range, duration}: range ∈ [self, unit, attached, aura-6, aura-9, aura-12, aura-custom, engagement-range, any-visible, any-on-battlefield, terrain-within-range] — this is the COMPLETE list. range is a distance from the bearer and is NEVER a target value: do NOT put "all-friendly"/"friendly-within-aura"/"all-enemy" here (those are effect targets). For an army-wide detachment/faction buff ("all friendly X units"), use range "unit" and express the audience via the effect target / applies_to keywords. duration ∈ [phase, turn, battle-round, battle, until-next-command-phase, one-use, permanent]. Credit the aura in scope.range, NOT as a condition.\n` +
+  `Encode reactive/event timing with the ability-level trigger when the event vocabulary below has an exact match. Put compound runtime guards in trigger.condition. If no exact event exists, keep the timing as a conditional effect rather than inventing an event. Encode frequency with ability-level usage; do not invent timing condition strings for frequency.\n` +
+  `scope = {range, duration}: range ∈ [self, unit, attached, aura-6, aura-9, aura-12, aura-custom, engagement-range, any-visible, any-on-battlefield, terrain-within-range] — this is the COMPLETE list. range is a distance from the bearer and is NEVER a target value: do NOT put "all-friendly"/"friendly-within-aura"/"all-enemy" here (those are effect targets). For an army-wide detachment/faction buff ("all friendly X units"), use range "unit" and express the audience via the effect target / applies_to keywords. duration ∈ [phase, turn, battle-round, battle, until-next-command-phase, until-next-movement-phase, until-next-battle-round, until-start-next-turn, one-use, permanent, attack-sequence, resolution]. Use until-start-next-turn exactly when the rule says "until the start of your next turn"; that is not equivalent to battle-round or until-next-command-phase.\n` +
+  `Ability-level trigger is an EVENT OBJECT, never a condition: {event, subject, proximity?:{of,range}, move_types?:["normal"|"advance"|"fall-back"|"charge"], condition?:condition, optional?:boolean, cost?:{cp}, window?:string, binds_event_variable?:string}. event MUST be one of [start-of-phase,end-of-phase,start-of-turn,end-of-turn,stratagem-targeted,ability-target-selected,start-of-opponent-turn,end-of-opponent-turn,start-of-battle-round,start-of-command-phase,declare-battle-formations,post-deployment,unit-set-up,set-up-from-reserves,arrives-from-strategic-reserves,starts-in-strategic-reserves,game-start-in-reserves,deep-strike-setup,reinforcements,normal-move,advance-move,advances,fall-back-move,falls-back,charge-move,end-of-charge-move,charge-declaration,moved-through-terrain,moved-through-tall-terrain,enemy-unit-ended-move,enemy-unit-fell-back,before-hit-roll,after-hit-roll,before-wound-roll,after-wound-roll,before-save-roll,after-save-roll,before-damage-roll,after-damage-roll,before-charge-roll,after-charge-roll,before-advance-roll,after-advance-roll,before-battle-shock,after-battle-shock,on-unit-selected,selected-to-shoot,selected-to-fight,selected-to-advance,after-unit-resolves-attacks,after-scoring-hit,after-enemy-unit-fires,on-unit-destroyed,on-model-destroyed,first-model-destroyed,before-bearer-removed,enemy-unit-destroyed-in-melee,on-damage-allocated,battle-shock-test,leadership-test,desperate-escape-test]. subject MUST be self|bearer|friendly-unit|enemy-unit|any-unit|model-in-bearer. If no canonical event exactly fits, omit trigger and keep the timing as a condition; NEVER put {type,parameters} or {operator,operands} in trigger. usage = {frequency:"once-per-turn"|"once-per-phase"|"once-per-battle-round"|"once-per-command-phase"|"once-per-opponent-turn"|"n-per-battle"|"first-this-battle"|"first-time-this-phase", count?:int, per?:"army"|"unit"|"model"}. There is no once-per-battle frequency: use n-per-battle with count:1. applies_to = {required_keywords?:[...], excluded_keywords?:[...]} for static bearer/datasheet eligibility such as "WARBOSS model only". Do not duplicate a trigger as a timing condition when trigger expresses it exactly.\n` +
   `behavior ∈ [passive, activated, reactive, aura].\n\n` +
   `CANONICAL MODIFIER KEYS — use ONLY the keys listed per type; never invent a key (an unknown key is silently ignored by consumers and corrupts the data):\n` +
   `  stat-modifier.modifier: {stat, operation:"add"|"subtract"|"set", value:int}. stat ∈ [A,S,T,Sv,AP,OC,Ld,M,W,D] ONLY (use "M" for Move, never "Move"/"range"; weapon range is NOT a unit stat). operation:"set" IS allowed for "characteristic of N" rules (e.g. OC of 9). Optional narrowing: attack_type:"melee"|"ranged", weapon_type:"melee"|"ranged", weapon_name:"<weapon>" for a single named weapon, or weapon_keyword:"<ability>" to restrict to weapons with a keyword like "Torrent"/"Blast"/"Pistol". Do NOT use weapon_filter/model_filter.\n` +
-  `  roll-modifier.modifier: {roll:"hit"|"wound"|"save"|"charge"|"damage", operation, value}. re-roll.modifier: {roll, subset:"ones"|"all-failures"}. Optional attack_type/weapon_type/weapon_name/weapon_keyword as above.\n` +
+  `  roll-modifier.modifier: {roll:"hit"|"wound"|"save"|"charge"|"damage", operation, value}. re-roll.modifier: {roll:"hit"|"wound"|"save"|"charge"|"damage"|"advance"|"surge"|"normal-move-distance"|"any"|"all", subset:"ones"|"all-failures", count?:positive-int} for pass/fail dice, or {roll:"hit"|"wound"|"save"|"charge"|"damage"|"advance"|"surge"|"normal-move-distance"|"any"|"all", result_scope:"any-result", count?:positive-int} when the player can re-roll any result. count means up to that many qualifying rolls within the ability's active window; omit it only for an uncapped permission. Optional attack_type/weapon_type/weapon_name/weapon_keyword as above.\n` +
   `  keyword-grant.modifier: {keywords:[...]} (array) — combat keywords as written ("Lethal Hits","Sustained Hits 1","Twin-linked"). Optional weapon_type:"melee"|"ranged", weapon_name, weapon_keyword.\n` +
-  `  feel-no-pain.modifier:{threshold:int}; damage-reduction.modifier:{reduction:int}; bs-modifier.modifier:{operation,value}; ability-grant.modifier:{grant_type:"kebab-label"}; objective-control-modifier.modifier:{operation:"add"|"set",value} or {sticky:true}; movement-modifier.modifier:{move_type:"kebab",value}; deep-strike.modifier:{} (parameterless).\n` +
-  `  SCALING ("X per N models/units"): add a sibling \`scaling\`:{per:int, of:"enemy-models-in-range"|"friendly-models-in-range"|"models-in-bearer-unit"|"enemy-units-in-range"|"wounds-lost", within_inches?:int, round?:"down"|"up"} to the leaf and set modifier.value to the PER-INCREMENT amount (e.g. "+2 A per 5 enemy models within 6\\"" → {type:"stat-modifier",...,modifier:{stat:"A",operation:"add",value:2,attack_type:"melee"},scaling:{per:5,of:"enemy-models-in-range",within_inches:6}}). Do NOT flatten the scaling away.\n\n` +
+  `  feel-no-pain.modifier:{threshold:int}; damage-reduction.modifier:{reduction:int}; bs-modifier.modifier:{operation,value}; detection-range-modifier.modifier:{operation:"add"|"subtract",value:int}; hazard-rolls.modifier:{engaged_keyword,additional_per_engaged_unit,roll_modifier_if_battle_shocked?}; model-destruction.modifier:{count?:int|dice-expression,model_keyword?:string}; mortal-wounds.modifier may use {dice,per_model:"this"|"target",model_relation?:"engaged-with-target",comparison,threshold,mortal_per_success}; remove-battle-shock has target and no modifier; ability-grant.modifier:{grant_type:"kebab-label",enabled?:boolean} or {ability_id:"entity-id",rules_bundle:true,enabled?:boolean}; use the latter to grant or disable a named reusable rule such as riled-up. objective-control-modifier.modifier:{operation:"add"|"set",value} or {sticky:true}; movement-modifier.modifier uses ONLY {move_type?:"normal"|"advance"|"pile-in"|"consolidation"|"reactive"|"surge"|"redeploy"|"scout"|"infiltrate"|"shoot-and-scoot", distance?:int|dice-expression, passthrough?:["non-titanic-models"|"friendly-vehicles"|"friendly-monsters"|"terrain-le-4"|"tall-terrain"|"all-terrain"], vertical_limit?:int, ignore_vertical?:boolean, replaces_default?:boolean, to_reserves?:boolean, applies_to_moves?:["normal"|"advance"|"fall-back"|"charge"]}. Use distance, NEVER value. deep-strike.modifier:{} (parameterless).\n` +
+  `  SCALING ("X per N models/units"): add a sibling \`scaling\`:{per:int, of:"enemy-models-in-range"|"friendly-models-in-range"|"models-in-bearer-unit"|"models-in-or-embarked-in-bearer"|"enemy-units-in-range"|"wounds-lost", within_inches?:int, round?:"down"|"up"} to the leaf and set modifier.value to the PER-INCREMENT amount (e.g. "+2 A per 5 enemy models within 6\\"" → {type:"stat-modifier",...,modifier:{stat:"A",operation:"add",value:2,attack_type:"melee"},scaling:{per:5,of:"enemy-models-in-range",within_inches:6}}). Do NOT flatten the scaling away.\n\n` +
   `dice-gated.comparison ∈ ["gte","lte","gt","lt","eq"] (use "gte" for "on a 2+"). dice e.g. "D6","2D6"; threshold int. on_success/on_fail are effect nodes.\n` +
   `ENCODING THE RESIDUE — these ARE expressible, do not punt on them:\n` +
   `  • "roll a D6, on 2+ <effect>" → dice-gated {dice:"D6", threshold:2, comparison:"gte", on_success:<effect>}.\n` +
   `  • "select one of N abilities/effects" → choice {options:[<effect>,...]}.\n` +
   `  • "re-roll Battle-shock/Leadership tests" → leadership-modifier {test:"battle-shock", operation:"re-roll"} (NOT a combat re-roll).\n` +
   `  • deployment/redeploy ("set up in Strategic Reserves", "set up anywhere >9\\"", "redeploy after deployment") → deep-strike, or ability-grant {grant_type:"<descriptive-kebab>"} for a named deployment rule.\n` +
-  `  • "move through terrain" → movement-modifier {move_type:"through-terrain"}.\n` +
+  `  • "move through terrain" → movement-modifier {target, modifier:{passthrough:["all-terrain"]}}; "move through non-Titanic models" → {passthrough:["non-titanic-models"]}. Do not invent a move_type for traversal permissions.\n` +
   `  • "characteristic of N" → the matching stat/OC modifier with operation:"set".\n` +
   `  • "when/if this unit WAS HIT by one or more attacks" → was-hit-by-attack {subject:"self"} (NOT has-lost-wounds — a hit that is saved still counts). "if an enemy unit was hit by [the bearer's] attacks" (offensive follow-up like grav-pinning) → was-hit-by-attack {subject:"target"}; narrow with attack_type/weapon_name when the rule names the weapon.\n\n` +
-  `Set unencodable:true ONLY when the rule is NOT an in-battle ability effect at all — army-construction ("you can include one X per Y", "cannot include A with B"), roster selection ("cannot be your Warlord"), model geometry/transport-capacity declarations, or roll-off/meta procedures. For those, return your best partial effect and explain. Everything that IS an in-battle effect must be encoded with the grammar above. Give confidence + one-sentence reasoning.`;
+  `FIDELITY EXTENSIONS (all fields below are schema-backed; do not replace them with invented modifier keys):\n` +
+  `  for-each-unit.selector {owner:"friendly", target_kind:"model", member_of:"bearer-unit", keywords:[...]} filters EACH individual model in the bearer's current unit. Attached-unit keyword unions cannot qualify a Leader that lacks the model keyword. Nested target:"unit" binds to the selected model.\n` +
+  `  select-units.selector.reference:"bearer"|"bearer-unit" defines the range/engagement origin. selector.selection_limit:{count,period:"turn"|"phase"|"battle-round"|"battle"} limits EACH selected target across ALL bearers in the army, separately from ability usage.\n` +
+  `  A real Leadership test is dice-gated {dice:"2D6",threshold:"leadership",comparison:"gte",test:{kind:"leadership",subject:"unit"|"self"},on_success}. This uses current Leadership and test modifiers/permissions, not a fixed 6 and not Battle-shock. Use {type:"no-effect"} for a no-result dice-table band.\n` +
+  `  trigger event:"stratagem-targeted" binds the current use. stratagem-cost-modifier.modifier {operation:"decrease",amount:1,applies_to:"triggering-stratagem-use"} reduces cost before payment (floor 0); it is neither a refund nor set-to-zero. set-to requires set_to. A separate stratagem-targeting-permission {exception:"already-targeted-different-unit-this-phase",stratagem:<id>} grants ONLY the named repeated-use exception.\n` +
+  `  trigger event:"ability-target-selected" carries source_ability:{ability_id,owner,keywords}. subject identifies the selected target; source_ability filters the ability and unit that selected it. These are different actors. trigger.proximity.of:"bearer-unit" measures from the bearer's unit.\n` +
+  `  unit-within-range-of parameters:{target_type:"friendly-keyword"|"enemy-keyword",keywords:[...],range:<inches>|"engagement",subject:"self"|"unit"|"triggering-unit"} tests all keywords on the SAME nearby unit. within-range-of-objective parameters:{subject:"target"|"unit",controlled_by?:"your-army"|"opponent"} binds range and control to the SAME marker. target-is-visible means visible to the individual attacking model.\n` +
+  `  designate-target.select.eligibility can require a hit in the bound triggering attack sequence. applies.attacker_keywords filters individual attacking MODEL keywords, only with to:"attackers-of-target". movement-modifier.after_move is an effect node resolved ONLY if the move is actually made; declining the move never applies its follow-up.\n` +
+  `  objective-control-modifier.modifier {sticky:true,retake:"opponent-control-greater-at-phase-end"} retains a marker until the opponent's Level of Control exceeds yours at a phase end. re-roll.modifier.optional:false makes the re-roll mandatory; result_scope:"any-result" is a full re-roll including successful results.\n` +
+  `  named-region-state.modifier.producer.additive_extensions can use kind:"unit-proximity",radius_inches,activation:{event:"continuous"},source_gate:{gate_ref,owner:"owner-army",unit_predicate:{faction,keywords}}. This is a continuously updated union of unit-centred areas, not an objective extension. consumer.attack_condition gates BOTH default and qualified effects, not region production. Qualified conditions may compose keyword OR whole-unit region membership. Reuse the current full named-region schema and Power Matrix/Flow of Magic patterns.\n` +
+  `  scope.duration:"attack-sequence" expires after the currently selected unit finishes its attacks. "resolution" is this activation only, not once per battle. Do not put army-wide audience predicates in applies_to (reserved for static bearer eligibility).\n` +
+  `Set unencodable:true when ANY material claim has no faithful current-schema representation, including in-battle mechanics. Such proposals are blocked from application; record the precise gap in reasoning, never in community_notes. Do not force the rule into a neighboring effect or invent a grant. Give confidence and one-sentence reasoning.`;
 
 export const REPAIR_SCHEMA = {
   type: "object", additionalProperties: false,
@@ -210,6 +255,9 @@ export const REPAIR_SCHEMA = {
       effect: { type: "object", additionalProperties: true },
       scope: { type: "object", additionalProperties: true },
       behavior: { type: "string" },
+      trigger: { oneOf: [{ type: "object", additionalProperties: true }, { type: "array", items: { type: "object", additionalProperties: true } }, { type: "null" }] },
+      usage: { oneOf: [{ type: "object", additionalProperties: true }, { type: "null" }] },
+      applies_to: { oneOf: [{ type: "object", additionalProperties: true }, { type: "null" }] },
       unencodable: { type: "boolean" },
       confidence: { enum: ["high", "medium", "low"] },
       reasoning: { type: "string" },
@@ -247,10 +295,18 @@ export function assembleEffect(form: Json): { effect: Json; scope: Json } {
   return { effect, scope: { range: form.scope_range, duration: form.scope_duration } };
 }
 
+function authoringNote(entry: Json): string {
+  const isNonProvisional11e = entry.game_version?.edition === "11th"
+    && entry.game_version?.dataslate !== "pre-launch-provisional";
+  return isNonProvisional11e
+    ? "community-authored from 11e source"
+    : "community-authored from 10e source (provisional 11e); see #21";
+}
+
 /** Splice the authored effect+scope onto the original entry, preserving metadata. */
 export function buildEntry(original: Json, form: Json): Json {
   const { effect, scope } = assembleEffect(form);
-  return { ...original, effect, scope, community_notes: "community-authored from 10e source (provisional 11e); see #21" };
+  return { ...original, effect, scope, community_notes: authoringNote(original) };
 }
 
 const BEHAVIOR_VALUES = new Set(["passive", "activated", "reactive", "aura"]);
@@ -278,16 +334,37 @@ const CANONICAL_MODIFIER_KEYS: Record<string, Set<string>> = {
   // weapon_name, so the data can carry them without risking a silent over-apply.
   "stat-modifier": new Set(["stat", "operation", "value", "attack_type", "weapon_type", "weapon_name", "weapon_keyword"]),
   "roll-modifier": new Set(["roll", "operation", "value", "attack_type", "weapon_type", "weapon_name", "weapon_keyword", "critical_on", "uses", "context"]),
-  "re-roll": new Set(["roll", "subset", "attack_type", "weapon_type", "weapon_name", "weapon_keyword", "max_rerolls", "uses", "context"]),
+  "re-roll": new Set(["roll", "subset", "result_scope", "count", "attack_type", "weapon_type", "weapon_name", "weapon_keyword", "uses", "context", "optional"]),
   "keyword-grant": new Set(["keyword", "keywords", "weapon_type", "weapon_name", "weapon_keyword"]),
   "bs-modifier": new Set(["operation", "value", "attack_type"]),
   "feel-no-pain": new Set(["threshold"]),
   "damage-reduction": new Set(["reduction", "amount"]),
 };
 const CANONICAL_STATS = new Set(["A", "S", "T", "Sv", "AP", "OC", "Ld", "M", "W", "D", "Damage", "BS", "WS"]);
-const CANONICAL_ROLLS = new Set(["hit", "wound", "save", "charge", "damage", "advance", "any", "all"]);
+const CANONICAL_ROLLS = new Set([
+  "hit",
+  "wound",
+  "save",
+  "charge",
+  "damage",
+  "advance",
+  "surge",
+  "normal-move-distance",
+  "any",
+  "all",
+]);
 const CANONICAL_SUBSETS = new Set(["ones", "all-failures"]);
+const CANONICAL_RESULT_SCOPES = new Set(["any-result"]);
 const CANONICAL_ATTACK_TYPES = new Set(["melee", "ranged"]);
+const CANONICAL_PHASES = new Set(["command", "movement", "shooting", "charge", "fight"]);
+const CANONICAL_PLAYER_TURNS = new Set(["your", "your-turn", "own", "opponent", "opponent-turn"]);
+const CANONICAL_CONDITION_CHILD_KEYS = new Set([
+  "condition",
+  "eligibility",
+  "attack_condition",
+  "qualified_condition",
+  "requires",
+]);
 
 /**
  * Walk an effect tree and flag any cruncher-interpreted leaf whose modifier
@@ -305,9 +382,19 @@ export function lintCanonical(effect: Json): { canonical: boolean; issues: strin
   // unevaluatable — the buff never fires. Existing data is 680 nested / 0 top-level.
   const visitCondition = (c: Json): void => {
     if (!c || typeof c !== "object") return;
+    if (Array.isArray(c)) {
+      c.forEach(visitCondition);
+      return;
+    }
     if (Array.isArray(c.operands)) return c.operands.forEach(visitCondition); // compound {operator, operands}
     if (typeof c.type === "string") {
       for (const k of Object.keys(c)) if (k !== "type" && k !== "parameters" && k !== "negated") issues.push(`condition ${c.type}: param "${k}" must live under "parameters"`);
+      if (c.type === "phase-is" && !CANONICAL_PHASES.has(String(c.parameters?.phase))) {
+        issues.push(`condition phase-is: unknown phase "${String(c.parameters?.phase)}"`);
+      }
+      if (c.type === "player-turn-is" && !CANONICAL_PLAYER_TURNS.has(String(c.parameters?.turn))) {
+        issues.push(`condition player-turn-is: unknown turn "${String(c.parameters?.turn)}"`);
+      }
     }
   };
   const visit = (node: Json): void => {
@@ -321,11 +408,19 @@ export function lintCanonical(effect: Json): { canonical: boolean; issues: strin
       if (type === "stat-modifier" && m.stat != null && !CANONICAL_STATS.has(String(m.stat))) issues.push(`stat-modifier: unknown stat "${String(m.stat)}"`);
       if ((type === "roll-modifier" || type === "re-roll") && m.roll != null && !CANONICAL_ROLLS.has(String(m.roll))) issues.push(`${type}: unknown roll "${String(m.roll)}"`);
       if (m.subset != null && !CANONICAL_SUBSETS.has(String(m.subset))) issues.push(`${type}: unknown subset "${String(m.subset)}"`);
+      if (m.result_scope != null && !CANONICAL_RESULT_SCOPES.has(String(m.result_scope))) issues.push(`${type}: unknown result_scope "${String(m.result_scope)}"`);
+      if (type === "re-roll" && (m.subset != null) === (m.result_scope != null)) {
+        issues.push(`${type}: modifier must carry exactly one of subset or result_scope`);
+      }
       if (m.attack_type != null && !CANONICAL_ATTACK_TYPES.has(String(m.attack_type))) issues.push(`${type}: unknown attack_type "${String(m.attack_type)}"`);
     }
-    if (node.condition) visitCondition(node.condition);
-    // Recurse through the wrapper kinds (conditional/sequence/choice/dice-*).
-    for (const key of ["effect", "steps", "options", "on_success", "on_fail"]) if (node[key]) visit(node[key]);
+    // Traverse every nested object rather than naming current wrapper fields.
+    // The effect schema is intentionally extensible; a new wrapper must not
+    // create an unchecked path to a cruncher-interpreted leaf.
+    for (const [key, child] of Object.entries(node)) {
+      if (CANONICAL_CONDITION_CHILD_KEYS.has(key)) visitCondition(child);
+      visit(child);
+    }
   };
   visit(effect);
   return { canonical: issues.length === 0, issues };
@@ -338,9 +433,20 @@ export function lintCanonical(effect: Json): { canonical: boolean; issues: strin
  * `behavior` is an ability-level field; only set it when the model returned a
  * valid enum value (an invalid one would just fail AJV and lose the whole entry).
  */
-export function buildRepairedEntry(original: Json, effect: Json, scope: Json, behavior?: string): Json {
-  const entry: Json = { ...original, effect, scope, community_notes: "community-authored from 10e source (provisional 11e); see #21" };
+export function buildRepairedEntry(
+  original: Json,
+  effect: Json,
+  scope: Json,
+  behavior?: string,
+  fields: { trigger?: Json | null; usage?: Json | null; applies_to?: Json | null } = {},
+): Json {
+  const entry: Json = { ...original, effect, scope, community_notes: authoringNote(original) };
   if (behavior && BEHAVIOR_VALUES.has(behavior)) entry.behavior = behavior;
+  for (const key of ["trigger", "usage", "applies_to"] as const) {
+    if (!Object.prototype.hasOwnProperty.call(fields, key)) continue;
+    if (fields[key] == null) delete entry[key];
+    else entry[key] = fields[key];
+  }
   return entry;
 }
 
@@ -348,9 +454,19 @@ export function buildRepairedEntry(original: Json, effect: Json, scope: Json, be
 
 export interface GateOpts { minConfidence: "high" | "medium"; includeComplex: boolean }
 
+/**
+ * A verdict is gateable only when the verifier explicitly found the proposal
+ * faithful with no omissions. The persisted summary must agree, but cannot
+ * replace the verifier's detailed result.
+ */
+function isFaithfulVerdict(verdict: Proposal["verdict"]): boolean {
+  if (!verdict || verdict.faithful !== true) return false;
+  return verdict.severity === "ok";
+}
+
 /** Whether a proposal is safe to apply automatically. */
 export function passesGate(p: Proposal, opts: GateOpts): boolean {
-  if (!p.schema_valid || !p.final_faithful) return false;
+  if (!p.schema_valid || !p.final_faithful || !isFaithfulVerdict(p.verdict) || p.unencodable) return false;
   if (p.confidence === "low") return false;
   if (opts.minConfidence === "high" && p.confidence !== "high") return false;
   // A repaired proposal IS the full nested tree, so `complex` no longer means
@@ -361,6 +477,11 @@ export function passesGate(p: Proposal, opts: GateOpts): boolean {
   if (p.repaired) return p.canonical !== false;
   if (p.complex && !opts.includeComplex) return false;
   return true;
+}
+
+/** Default apply fills structural stubs; replacing authored effects requires --reauthor. */
+export function canReplaceEffect(proposal: Proposal, effect: Json, opts: GateOpts & { reauthor: boolean }): boolean {
+  return passesGate(proposal, opts) && (opts.reauthor || hasEmptyModifier(effect));
 }
 
 // ─── batching helpers ────────────────────────────────────────────────
@@ -392,29 +513,29 @@ const classifyUserPrompt = (items: Json[]): string =>
   `Classify each ability below. Return results[] (one per ability, echo its ability_id):\n\n` +
   items.map((it) => `- ability_id: ${it.ability_id}\n  name: ${it.name}\n  rule: ${it.src?.description ?? "(none)"}`).join("\n");
 
-export const verifyUserPrompt = (entries: { ability_id: string; rule: string; effect: Json; scope: Json }[]): string =>
+export const verifyUserPrompt = (entries: { ability_id: string; rule: string; effect: Json; scope: Json; behavior?: string; trigger?: Json; usage?: Json; applies_to?: Json }[]): string =>
   `Judge each authored DSL against its rule. Return results[] (one per ability, echo its ability_id):\n\n` +
-  entries.map((e) => `- ability_id: ${e.ability_id}\n  rule: ${e.rule}\n  authored: ${JSON.stringify({ effect: e.effect, scope: e.scope })}`).join("\n");
+  entries.map((e) => `- ability_id: ${e.ability_id}\n  rule: ${e.rule}\n  authored: ${JSON.stringify({ effect: e.effect, scope: e.scope, behavior: e.behavior, trigger: e.trigger, usage: e.usage, applies_to: e.applies_to })}`).join("\n");
 
 export const repairUserPrompt = (items: { ability_id: string; rule: string; draft: Json; issue: string }[]): string =>
-  `Repair each ability's DSL. Emit the full nested effect tree + scope + behavior that fixes the stated gap. Return results[] (one per ability, echo its ability_id):\n\n` +
+  `Repair each ability's DSL. Emit the full effect tree + scope + behavior and any trigger, usage, or applies_to fields needed to fix the stated gap. Return results[] (one per ability, echo its ability_id):\n\n` +
   items.map((it) =>
-    `- ability_id: ${it.ability_id}\n  rule: ${it.rule || "(none)"}\n  draft_effect: ${JSON.stringify(it.draft ?? null)}\n  gap_to_fix: ${it.issue || "(verifier produced no issue — re-author faithfully from the rule)"}`,
+    `- ability_id: ${it.ability_id}\n  rule: ${it.rule || "(none)"}\n  draft_ability: ${JSON.stringify(it.draft ?? null)}\n  gap_to_fix: ${it.issue || "(verifier produced no issue — re-author faithfully from the rule)"}`,
   ).join("\n\n");
 
 // ─── propose ─────────────────────────────────────────────────────────
 
-interface ProposeOpts { batch: number; model: string; fresh?: boolean; concurrency?: number }
+interface ProposeOpts { batch: number; model: string; fresh?: boolean; concurrency?: number; stubsOnly?: boolean }
 
 async function proposeFaction(faction: string, opts: ProposeOpts, validate: (x: unknown) => boolean): Promise<Json> {
   const inputPath = resolve(INPUT_DIR, `${faction}.json`);
   if (!existsSync(inputPath)) return { faction, skipped: "no author-input" };
-  const input: Json[] = readJSON(inputPath).filter((e: Json) => e.resolved);
-  if (input.length === 0) return { faction, skipped: "no resolved stubs" };
-
   const original = new Map<string, Json>();
   for (const a of readJSON(resolve(ENRICHMENT_ROOT, faction, "abilities.json")) as Json[]) original.set(a.ability_id, a);
-
+  const input = readJSON(inputPath)
+    .filter((e: Json) => e.resolved)
+    .filter((e: Json) => !opts.stubsOnly || hasEmptyModifier(original.get(e.ability_id)?.effect));
+  if (input.length === 0) return { faction, skipped: opts.stubsOnly ? "no resolved stubs" : "no resolved source rules" };
   // Resume: reuse prior proposals whose source rule is unchanged (skip errored ones so
   // they get retried). A checkpoint is written after every batch, so an interrupted run
   // loses at most the batch in flight. `--fresh` forces a full re-propose.
@@ -481,8 +602,11 @@ async function proposeFaction(faction: string, opts: ProposeOpts, validate: (x: 
       proposals.push({
         ability_id: b.it.ability_id, name: b.it.name, faction,
         effect_type: b.form.effect_type, complex: b.form.complex, confidence: b.form.confidence,
-        schema_valid: b.schemaValid, proposed_effect: b.entry.effect, proposed_scope: b.entry.scope,
-        verdict, final_faithful: !!verdict?.faithful && b.schemaValid,
+        schema_valid: b.schemaValid,
+        proposed_effect: b.entry.effect,
+        proposed_scope: b.entry.scope,
+        verdict,
+        final_faithful: b.schemaValid && isFaithfulVerdict(verdict),
       });
     }
     for (const p of proposals) if (p.src_hash == null) p.src_hash = hashById.get(p.ability_id);
@@ -537,7 +661,22 @@ async function repairFaction(faction: string, opts: RepairOpts, validate: (x: un
     let results: Json[];
     try {
       ({ results } = await callClaude(REPAIR_SYSTEM,
-        repairUserPrompt(batch.map(({ p }) => ({ ability_id: p.ability_id, rule: srcById.get(p.ability_id) ?? "", draft: p.proposed_effect, issue: p.verdict?.issue ?? "" }))),
+        repairUserPrompt(batch.map(({ p }) => {
+          const orig = original.get(p.ability_id) ?? {};
+          return {
+            ability_id: p.ability_id,
+            rule: srcById.get(p.ability_id) ?? "",
+            draft: {
+              effect: p.proposed_effect,
+              scope: p.proposed_scope ?? orig.scope,
+              behavior: p.proposed_behavior ?? orig.behavior,
+              trigger: Object.prototype.hasOwnProperty.call(p, "proposed_trigger") ? p.proposed_trigger : orig.trigger,
+              usage: Object.prototype.hasOwnProperty.call(p, "proposed_usage") ? p.proposed_usage : orig.usage,
+              applies_to: Object.prototype.hasOwnProperty.call(p, "proposed_applies_to") ? p.proposed_applies_to : orig.applies_to,
+            },
+            issue: p.verdict?.issue ?? "",
+          };
+        })),
         REPAIR_SCHEMA, opts.model));
     } catch (e) {
       process.stderr.write(`  ${faction}: repair batch failed (${(e as Error).message.slice(0, 80)}) — skipping ${batch.length}\n`);
@@ -550,7 +689,11 @@ async function repairFaction(faction: string, opts: RepairOpts, validate: (x: un
       const r = byId.get(p.ability_id);
       const orig = original.get(p.ability_id);
       if (!r || !orig) continue; // model dropped it / live entry gone — leave the proposal as-is
-      const entry = buildRepairedEntry(orig, r.effect, r.scope, r.behavior);
+      const fields: { trigger?: Json | null; usage?: Json | null; applies_to?: Json | null } = {};
+      for (const key of ["trigger", "usage", "applies_to"] as const) {
+        if (Object.prototype.hasOwnProperty.call(r, key)) fields[key] = r[key];
+      }
+      const entry = buildRepairedEntry(orig, r.effect, r.scope, r.behavior, fields);
       built.push({ idx, p, r, entry, schemaValid: validate(entry), canonical: lintCanonical(r.effect).canonical });
     }
 
@@ -561,7 +704,16 @@ async function repairFaction(faction: string, opts: RepairOpts, validate: (x: un
     if (toVerify.length > 0) {
       try {
         const { results: vs } = await callClaude(VERIFY_SYSTEM,
-          verifyUserPrompt(toVerify.map((b) => ({ ability_id: b.p.ability_id, rule: srcById.get(b.p.ability_id) ?? "", effect: b.entry.effect, scope: b.entry.scope }))),
+          verifyUserPrompt(toVerify.map((b) => ({
+            ability_id: b.p.ability_id,
+            rule: srcById.get(b.p.ability_id) ?? "",
+            effect: b.entry.effect,
+            scope: b.entry.scope,
+            behavior: b.entry.behavior,
+            trigger: b.entry.trigger,
+            usage: b.entry.usage,
+            applies_to: b.entry.applies_to,
+          }))),
           VERIFY_SCHEMA, opts.model);
         for (const v of vs) verdicts.set(v.ability_id, v);
       } catch (e) {
@@ -580,8 +732,11 @@ async function repairFaction(faction: string, opts: RepairOpts, validate: (x: un
         proposed_effect: b.entry.effect,
         proposed_scope: b.entry.scope,
         proposed_behavior: behavior,
+        proposed_trigger: b.entry.trigger ?? null,
+        proposed_usage: b.entry.usage ?? null,
+        proposed_applies_to: b.entry.applies_to ?? null,
         verdict,
-        final_faithful: !!verdict?.faithful && b.schemaValid && b.canonical,
+        final_faithful: b.schemaValid && b.canonical && isFaithfulVerdict(verdict),
         repaired: true,
         unencodable: !!b.r.unencodable,
       };
@@ -604,9 +759,9 @@ async function repairFaction(faction: string, opts: RepairOpts, validate: (x: un
 
 // ─── apply ───────────────────────────────────────────────────────────
 
-interface ApplyOpts extends GateOpts { dryRun: boolean }
+interface ApplyOpts extends GateOpts { dryRun: boolean; reauthor: boolean }
 
-/** Splice gated proposals into the live abilities.json — only over surviving stubs. */
+/** Splice gated proposals into live abilities; authored entries require explicit reauthor mode. */
 function applyFaction(faction: string, opts: ApplyOpts): Json {
   const proposalsPath = resolve(OUT_DIR, `${faction}.json`);
   if (!existsSync(proposalsPath)) return { faction, skipped: "no proposals — run propose first" };
@@ -619,15 +774,25 @@ function applyFaction(faction: string, opts: ApplyOpts): Json {
   let applied = 0;
   const skipped: { id: string; why: string }[] = [];
   for (const p of proposals) {
-    if (!passesGate(p, opts)) { skipped.push({ id: p.ability_id, why: "gate" }); continue; }
     const entry = byId.get(p.ability_id);
     if (!entry) { skipped.push({ id: p.ability_id, why: "gone" }); continue; }
-    // Never clobber work that's no longer a stub (idempotent + safe to re-run).
-    if (!hasEmptyModifier(entry.effect)) { skipped.push({ id: p.ability_id, why: "not-a-stub" }); continue; }
+    if (!canReplaceEffect(p, entry.effect, opts)) {
+      skipped.push({ id: p.ability_id, why: passesGate(p, opts) ? "not-a-stub" : "gate" });
+      continue;
+    }
     entry.effect = p.proposed_effect;
     entry.scope = p.proposed_scope;
     if (p.proposed_behavior && BEHAVIOR_VALUES.has(p.proposed_behavior)) entry.behavior = p.proposed_behavior;
-    entry.community_notes = "community-authored from 10e source (provisional 11e); see #21";
+    for (const [proposalKey, entryKey] of [
+      ["proposed_trigger", "trigger"],
+      ["proposed_usage", "usage"],
+      ["proposed_applies_to", "applies_to"],
+    ] as const) {
+      if (!Object.prototype.hasOwnProperty.call(p, proposalKey)) continue;
+      if (p[proposalKey] == null) delete entry[entryKey];
+      else entry[entryKey] = p[proposalKey];
+    }
+    entry.community_notes = authoringNote(entry);
     applied++;
   }
   if (!opts.dryRun && applied > 0) writeJSON(abilitiesPath, abilities);
@@ -709,7 +874,7 @@ async function main(): Promise<void> {
     return;
   }
   if (!["propose", "repair", "apply"].includes(mode) || !target) {
-    console.error("Usage:\n  author-batch propose <faction|--all> [--batch N] [--model M] [--concurrency N] [--fresh]\n  author-batch repair  <faction|--all> [--types t1,t2] [--batch N] [--model M] [--concurrency N]\n  author-batch apply   <faction|--all> [--min-confidence high|medium] [--include-complex] [--dry-run]\n  author-batch review");
+    console.error("Usage:\n  author-batch propose <faction|--all> [--batch N] [--model M] [--concurrency N] [--fresh] [--stubs-only]\n  author-batch repair  <faction|--all> [--types t1,t2] [--batch N] [--model M] [--concurrency N]\n  author-batch apply   <faction|--all> [--min-confidence high|medium] [--include-complex] [--reauthor] [--dry-run]\n  author-batch review");
     process.exit(1);
   }
 
@@ -718,7 +883,7 @@ async function main(): Promise<void> {
     const validateFn = ajv.getSchema(ABILITY_SCHEMA_ID);
     if (!validateFn) throw new Error(`ability schema not loaded: ${ABILITY_SCHEMA_ID}`);
     const validate = (x: unknown): boolean => !!validateFn(x);
-    const opts: ProposeOpts = { batch: Number(flag(argv, "--batch")) || 15, model: flag(argv, "--model") ?? "claude-haiku-4-5", fresh: argv.includes("--fresh"), concurrency: Number(flag(argv, "--concurrency")) || 1 };
+    const opts: ProposeOpts = { batch: Number(flag(argv, "--batch")) || 15, model: flag(argv, "--model") ?? "claude-haiku-4-5", fresh: argv.includes("--fresh"), concurrency: Number(flag(argv, "--concurrency")) || 1, stubsOnly: argv.includes("--stubs-only") };
     const summary: Json[] = [];
     for (const f of factionList(target, INPUT_DIR)) {
       try {
@@ -766,6 +931,7 @@ async function main(): Promise<void> {
     minConfidence: flag(argv, "--min-confidence") === "high" ? "high" : "medium",
     includeComplex: argv.includes("--include-complex"),
     dryRun: argv.includes("--dry-run"),
+    reauthor: argv.includes("--reauthor"),
   };
   const summary = factionList(target, OUT_DIR).map((f) => applyFaction(f, opts));
   console.log(JSON.stringify(summary, null, 2));

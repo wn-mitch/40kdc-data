@@ -57,6 +57,22 @@ pub enum Mirror {
     Vertical,
 }
 
+/// A wall polyline in a template's local frame.
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq)]
+pub struct Wall {
+    pub points: Vec<Vec2>,
+    #[serde(default)]
+    pub thickness: Option<f64>,
+}
+
+/// A wall polyline resolved into board space.
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq)]
+pub struct ResolvedWall {
+    pub points: Vec<Vec2>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thickness: Option<f64>,
+}
+
 /// A scenery feature composed onto an area template, in the area-local frame.
 #[derive(Deserialize, Serialize, Clone, Debug)]
 pub struct ComposedFeature {
@@ -83,6 +99,12 @@ pub struct TerrainTemplate {
     pub footprint: Footprint,
     #[serde(default)]
     pub features: Option<Vec<ComposedFeature>>,
+    #[serde(default)]
+    pub walls: Option<Vec<Wall>>,
+    #[serde(default)]
+    pub has_roof: Option<bool>,
+    #[serde(default)]
+    pub terrain_category: Option<String>,
 }
 
 /// A board edge a card dimension is measured from. left/right pin x;
@@ -171,6 +193,12 @@ pub struct ResolvedPiece {
     pub piece_type: String,
     pub floor: u64,
     pub vertices: Vec<Vec2>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub walls: Option<Vec<ResolvedWall>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub has_roof: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub terrain_category: Option<String>,
 }
 
 /// Error raised when a layout references a missing template or has a piece with
@@ -301,6 +329,86 @@ fn place_footprint(fp: &Footprint, position: Vec2, rotation: f64, mirror: Mirror
         .collect()
 }
 
+fn resolve_walls(
+    walls: Option<&Vec<Wall>>,
+    fp: &Footprint,
+    position: Vec2,
+    rotation: f64,
+    mirror: Mirror,
+) -> Option<Vec<ResolvedWall>> {
+    walls.map(|entries| {
+        let centroid = polygon_centroid(&footprint_vertices(fp));
+        entries
+            .iter()
+            .map(|wall| ResolvedWall {
+                points: wall
+                    .points
+                    .iter()
+                    .map(|point| {
+                        let oriented = orient(
+                            Vec2 {
+                                x: point.x - centroid.x,
+                                y: point.y - centroid.y,
+                            },
+                            rotation,
+                            mirror,
+                        );
+                        round4(Vec2 {
+                            x: oriented.x + position.x,
+                            y: oriented.y + position.y,
+                        })
+                    })
+                    .collect(),
+                thickness: wall.thickness,
+            })
+            .collect()
+    })
+}
+
+fn resolve_walls_composed(
+    walls: Option<&Vec<Wall>>,
+    fp: &Footprint,
+    feature_position: Vec2,
+    feature_rotation: f64,
+    feature_mirror: Mirror,
+    area_position: Vec2,
+    area_rotation: f64,
+    area_mirror: Mirror,
+) -> Option<Vec<ResolvedWall>> {
+    walls.map(|entries| {
+        let centroid = polygon_centroid(&footprint_vertices(fp));
+        entries
+            .iter()
+            .map(|wall| ResolvedWall {
+                points: wall
+                    .points
+                    .iter()
+                    .map(|point| {
+                        let local = orient(
+                            Vec2 {
+                                x: point.x - centroid.x,
+                                y: point.y - centroid.y,
+                            },
+                            feature_rotation,
+                            feature_mirror,
+                        );
+                        let area_local = Vec2 {
+                            x: local.x + feature_position.x,
+                            y: local.y + feature_position.y,
+                        };
+                        let oriented = orient(area_local, area_rotation, area_mirror);
+                        round4(Vec2 {
+                            x: oriented.x + area_position.x,
+                            y: oriented.y + area_position.y,
+                        })
+                    })
+                    .collect(),
+                thickness: wall.thickness,
+            })
+            .collect()
+    })
+}
+
 /// Resolve a layout to absolute board-space vertices per piece.
 pub fn resolve_layout(
     layout: &TerrainLayout,
@@ -371,12 +479,32 @@ pub fn resolve_layout(
                     })
                 })
                 .collect();
+            let template = piece
+                .template
+                .as_deref()
+                .and_then(|template_id| by_id.get(template_id).copied());
             out.push(ResolvedPiece {
                 id: piece.id.clone(),
                 name: piece.name.clone(),
                 piece_type,
                 floor: piece.floor.unwrap_or(0),
                 vertices,
+                walls: template.and_then(|value| {
+                    resolve_walls_composed(
+                        value.walls.as_ref(),
+                        &fp,
+                        piece.position,
+                        rotation,
+                        mirror,
+                        parent.position,
+                        a_rot,
+                        a_mirror,
+                    )
+                }),
+                has_roof: template
+                    .and_then(|value| value.has_roof)
+                    .filter(|value| *value),
+                terrain_category: template.and_then(|value| value.terrain_category.clone()),
             });
             continue;
         }
@@ -385,19 +513,30 @@ pub fn resolve_layout(
             .into_iter()
             .map(round4)
             .collect();
+        let template = piece
+            .template
+            .as_deref()
+            .and_then(|template_id| by_id.get(template_id).copied());
         out.push(ResolvedPiece {
             id: piece.id.clone(),
             name: piece.name.clone(),
             piece_type,
             floor: piece.floor.unwrap_or(0),
             vertices,
+            walls: template.and_then(|value| {
+                resolve_walls(value.walls.as_ref(), &fp, piece.position, rotation, mirror)
+            }),
+            has_roof: template
+                .and_then(|value| value.has_roof)
+                .filter(|value| *value),
+            terrain_category: template.and_then(|value| value.terrain_category.clone()),
         });
 
         // Expand an area template's composed features, carried through this
         // area's placement.
         if let Some(tid) = &piece.template {
             if let Some(t) = by_id.get(tid.as_str()) {
-                for feat in t.features.iter().flatten() {
+                for (feature_index, feat) in t.features.iter().flatten().enumerate() {
                     let ft = by_id.get(feat.template.as_str()).ok_or_else(|| {
                         TerrainResolveError(format!(
                             "{where_}: composed feature references unknown template \"{}\"",
@@ -420,12 +559,33 @@ pub fn resolve_layout(
                             })
                         })
                         .collect();
+                    let feature_id = match (&piece.id, &feat.id) {
+                        (Some(parent_id), Some(feature_id)) => {
+                            Some(format!("{parent_id}--{feature_id}"))
+                        }
+                        (Some(parent_id), None) => {
+                            Some(format!("{parent_id}--feature-{}", feature_index + 1))
+                        }
+                        (None, feature_id) => feature_id.clone(),
+                    };
                     out.push(ResolvedPiece {
-                        id: feat.id.clone(),
+                        id: feature_id,
                         name: ft.name.clone(),
                         piece_type: "feature".into(),
                         floor: feat.floor,
                         vertices: feat_verts,
+                        walls: resolve_walls_composed(
+                            ft.walls.as_ref(),
+                            &ft.footprint,
+                            feat.position,
+                            feat.rotation_degrees.unwrap_or(0.0),
+                            feat.mirror,
+                            piece.position,
+                            rotation,
+                            mirror,
+                        ),
+                        has_roof: ft.has_roof.filter(|value| *value),
+                        terrain_category: ft.terrain_category.clone(),
                     });
                 }
             }
@@ -606,6 +766,9 @@ mod keystone_tests {
                 width: 6.0,
                 height: 4.0,
             },
+            walls: None,
+            has_roof: None,
+            terrain_category: None,
             features: None,
         }]
     }

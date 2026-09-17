@@ -5,7 +5,7 @@
     "detachment_id": "veterans-of-the-long-war",
     "cost": 15,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Chaos Lord"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -15,7 +15,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ed0bd884-8288-5067-b03c-bf76317d845b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bbb3e0d9-7b24-4897-9fb2-960322f1fdad"
+      }
+    ]
   },
   {
     "id": "talisman-of-burning-blood-pactbound-zealots",
@@ -23,7 +33,8 @@
     "detachment_id": "pactbound-zealots",
     "cost": 15,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes",
+      "Khorne"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -33,7 +44,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7d123c70-9338-51a2-9b5b-73780fa22ec1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fcd7d534-d0e1-4aad-9872-32329d49349d"
+      }
+    ]
   },
   {
     "id": "eye-of-tzeentch-pactbound-zealots",
@@ -41,7 +62,8 @@
     "detachment_id": "pactbound-zealots",
     "cost": 15,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes",
+      "Tzeentch"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -51,7 +73,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ba738e16-a2d3-5990-a09c-7323a100132b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b2aa8014-d614-43ab-8a2e-83dc885bd0a1"
+      }
+    ]
   },
   {
     "id": "eager-for-vengeance-veterans-of-the-long-war",
@@ -59,7 +91,7 @@
     "detachment_id": "veterans-of-the-long-war",
     "cost": 20,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -72,6 +104,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Damned"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "350c51e9-4df3-537a-857c-4ad9e32773f9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "be6c68b6-1a7c-43f4-a442-0f16d5c2567b"
+      }
     ]
   },
   {
@@ -80,7 +122,7 @@
     "detachment_id": "veterans-of-the-long-war",
     "cost": 15,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -93,6 +135,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Damned"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1c53a156-4fbe-5113-8d12-6b54aa5c92d2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cf67a7ad-2c73-4e76-89cb-af8ffb2df41b"
+      }
     ]
   },
   {
@@ -101,7 +153,8 @@
     "detachment_id": "pactbound-zealots",
     "cost": 15,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes",
+      "Nurgle"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -111,7 +164,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e98d53e6-ee57-5632-82a5-d9a63764ee0b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "62d74a78-a612-4b67-b12c-b46f55cd47ea"
+      }
+    ]
   },
   {
     "id": "mark-of-legend-veterans-of-the-long-war",
@@ -119,7 +182,7 @@
     "detachment_id": "veterans-of-the-long-war",
     "cost": 10,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -132,6 +195,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Damned"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "32ff35a7-b195-5df3-931b-6469a385a58f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c34b0df0-dd01-4bd1-abef-0822612598e0"
+      }
     ]
   },
   {
@@ -140,7 +213,8 @@
     "detachment_id": "pactbound-zealots",
     "cost": 15,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes",
+      "Slaanesh"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -150,7 +224,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1faa1ad1-0812-5e84-82ae-5f0bef098da7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2d4f3432-7ff2-4796-8f71-0f7b5800a3a2"
+      }
+    ]
   },
   {
     "id": "falsehood-deceptors",
@@ -158,7 +242,7 @@
     "detachment_id": "deceptors",
     "cost": 10,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Chaos Lord"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -172,6 +256,16 @@
     "exclusion_keywords": [
       "Jump Pack",
       "Terminator"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8732f991-197d-5688-a402-edf8eeef7f09"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c1e501a3-0bed-4536-9ee3-ee0f883e737a"
+      }
     ]
   },
   {
@@ -180,7 +274,8 @@
     "detachment_id": "deceptors",
     "cost": 10,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes",
+      "Infantry"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -190,7 +285,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d2053a9d-03f8-52ff-880f-e0f82b92f916"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eb2472a2-ce74-4e93-be22-a5e84d02fe04"
+      }
+    ]
   },
   {
     "id": "shroud-of-obfuscation-deceptors",
@@ -198,7 +303,8 @@
     "detachment_id": "deceptors",
     "cost": 15,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes",
+      "Infantry"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -208,7 +314,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "16960629-98cd-50a0-b098-1e59efb03e7c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4619045f-80b0-4a61-9859-e808b38c2e34"
+      }
+    ]
   },
   {
     "id": "soul-link-deceptors",
@@ -216,7 +332,8 @@
     "detachment_id": "deceptors",
     "cost": 5,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes",
+      "Infantry"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -226,7 +343,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d8a88fdd-8928-5dc8-ac37-10b7f0fd7a31"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f7646e99-5ac1-483b-92e1-0ff76c88546d"
+      }
+    ]
   },
   {
     "id": "despots-claim-renegade-raiders",
@@ -234,7 +361,7 @@
     "detachment_id": "renegade-raiders",
     "cost": 15,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -244,7 +371,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "171eb7bd-11f7-58c7-a903-86bb2c0b122c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "623135d0-6c2a-4cb8-82a9-a94fa0e42bb6"
+      }
+    ]
   },
   {
     "id": "dread-reaver-renegade-raiders",
@@ -252,7 +389,7 @@
     "detachment_id": "renegade-raiders",
     "cost": 15,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -262,7 +399,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8afe93fb-3c4e-53fc-b7ae-6b55d9d95db6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b713218d-834b-4d0a-8c59-bca40b9e548a"
+      }
+    ]
   },
   {
     "id": "mark-of-the-hound-renegade-raiders",
@@ -270,7 +417,7 @@
     "detachment_id": "renegade-raiders",
     "cost": 25,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -280,7 +427,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "96f6e541-740c-5fc1-bbf2-96a807278db4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d8f3b863-f305-4a11-aa76-5f5770aa5baa"
+      }
+    ]
   },
   {
     "id": "tyrants-lash-renegade-raiders",
@@ -288,7 +445,7 @@
     "detachment_id": "renegade-raiders",
     "cost": 20,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -298,7 +455,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4ee7d739-44f6-5eba-a47e-0db2f7798598"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7759d7e1-664d-491a-a321-9cc86ece466e"
+      }
+    ]
   },
   {
     "id": "nights-shroud-dread-talons",
@@ -306,7 +473,7 @@
     "detachment_id": "dread-talons",
     "cost": 10,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Chaos Lord"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -319,6 +486,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Terminator"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "af4e3937-a94f-59fd-b695-5bfa194e2e9b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d239ad4c-30b9-4d7d-803d-bfa976b2c2d2"
+      }
     ]
   },
   {
@@ -327,7 +504,7 @@
     "detachment_id": "dread-talons",
     "cost": 10,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -337,7 +514,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9bad5511-edbe-5a3b-a669-5296f669356a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1469ec99-1372-4098-ba8d-03597847c550"
+      }
+    ]
   },
   {
     "id": "warp-fuelled-thrusters-dread-talons",
@@ -345,7 +532,8 @@
     "detachment_id": "dread-talons",
     "cost": 20,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Chaos Lord",
+      "Jump Pack"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -355,7 +543,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "646b6e4e-def8-5751-8469-ce4ae529b9ea"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3e2ff959-3e7f-4aef-a353-9dff3d0ee385"
+      }
+    ]
   },
   {
     "id": "eater-of-dread-dread-talons",
@@ -363,7 +561,7 @@
     "detachment_id": "dread-talons",
     "cost": 15,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -373,7 +571,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "960b6c11-f3b6-53b6-8cc3-74fbb2f60549"
+      },
+      {
+        "namespace": "mfm",
+        "id": "94ebb4b4-b415-4d10-b6c2-cba8fc3e8fe0"
+      }
+    ]
   },
   {
     "id": "bastion-plate-fellhammer-siege-host",
@@ -381,7 +589,7 @@
     "detachment_id": "fellhammer-siege-host",
     "cost": 10,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Chaos Lord"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -394,6 +602,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Jump Pack"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "00e5eba4-ab57-5c20-a613-15dac305d883"
+      },
+      {
+        "namespace": "mfm",
+        "id": "449203c0-c0cf-44e3-8cc3-7ed306483ef7"
+      }
     ]
   },
   {
@@ -402,7 +620,7 @@
     "detachment_id": "fellhammer-siege-host",
     "cost": 20,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -412,7 +630,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3653a798-0371-5e0f-bf8b-bfe5de266b1e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "932bbd91-d803-4dda-bb86-7ca9253a1803"
+      }
+    ]
   },
   {
     "id": "ironbound-enmity-fellhammer-siege-host",
@@ -420,7 +648,7 @@
     "detachment_id": "fellhammer-siege-host",
     "cost": 15,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -430,7 +658,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b0dfa4e6-b058-526d-bb4e-2a9bb1a6332b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "21b97ac4-0081-470d-910f-2e7c4d54b4a7"
+      }
+    ]
   },
   {
     "id": "iron-artifice-fellhammer-siege-host",
@@ -438,7 +676,8 @@
     "detachment_id": "fellhammer-siege-host",
     "cost": 10,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes",
+      "Infantry"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -448,16 +687,23 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "900223bd-ea7e-59a7-b026-238a4877adac"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b76d0a7a-fc2f-4f5e-a569-ead3c9e8af46"
+      }
+    ]
   },
   {
     "id": "cultists-brand-chaos-cult",
     "name": "Cultist’s Brand",
     "detachment_id": "chaos-cult",
     "cost": 30,
-    "keyword_restrictions": [
-      "Chaos Space Marines"
-    ],
     "ability_id": null,
     "is_unique": true,
     "game_version": {
@@ -466,7 +712,25 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Dark Apostle"
+      ],
+      [
+        "Damned"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2d81b49f-7799-5463-a9e0-abf47dac3676"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c28652a7-7aec-4419-b363-9fff30f03509"
+      }
+    ]
   },
   {
     "id": "amulet-of-tainted-vigour-chaos-cult",
@@ -474,7 +738,7 @@
     "detachment_id": "chaos-cult",
     "cost": 20,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Dark Apostle"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -484,16 +748,23 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f590db44-f22d-570a-bbc5-b787aec40562"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5f90fdca-b95b-46bb-818d-cb9344162f4d"
+      }
+    ]
   },
   {
     "id": "incendiary-goad-chaos-cult",
     "name": "Incendiary Goad",
     "detachment_id": "chaos-cult",
     "cost": 25,
-    "keyword_restrictions": [
-      "Chaos Space Marines"
-    ],
     "ability_id": null,
     "is_unique": true,
     "game_version": {
@@ -502,16 +773,31 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Dark Apostle"
+      ],
+      [
+        "Damned"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9f7bc8e8-07aa-5c67-8c18-6098d4c0f9c0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f8585ef9-bd3d-4536-99b2-d02ab20921da"
+      }
+    ]
   },
   {
     "id": "warped-foresight-chaos-cult",
     "name": "Warped Foresight",
     "detachment_id": "chaos-cult",
     "cost": 10,
-    "keyword_restrictions": [
-      "Chaos Space Marines"
-    ],
     "ability_id": null,
     "is_unique": true,
     "game_version": {
@@ -520,7 +806,25 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Damned"
+      ],
+      [
+        "Dark Apostle"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "28950123-24ae-530d-aa5f-ddd4a709b8a5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f3f59b36-f262-4dec-9a7a-9df55f658f00"
+      }
+    ]
   },
   {
     "id": "invigorated-mechatendrils-soulforged-warpack",
@@ -528,7 +832,7 @@
     "detachment_id": "soulforged-warpack",
     "cost": 15,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Warpsmith"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -538,15 +842,25 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ab2e563d-b992-562d-895b-362665ed45e2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "163a57f4-8b75-4ef4-b9db-bc8272981dd2"
+      }
+    ]
   },
   {
     "id": "tempting-addendum-soulforged-warpack",
     "name": "Tempting Addendum",
     "detachment_id": "soulforged-warpack",
-    "cost": 25,
+    "cost": 40,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -556,7 +870,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0892f47f-3960-5d97-b8bf-e529ec836419"
+      },
+      {
+        "namespace": "mfm",
+        "id": "93079aa9-a7c7-4192-85b8-5e2375c6f36f"
+      }
+    ]
   },
   {
     "id": "forges-blessing-soulforged-warpack",
@@ -564,7 +888,7 @@
     "detachment_id": "soulforged-warpack",
     "cost": 20,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -574,7 +898,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b7da65e6-b822-5f46-9e81-f341b5fd9950"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ba117705-e7a3-45a4-ace6-4cc32afb9d46"
+      }
+    ]
   },
   {
     "id": "soul-harvester-soulforged-warpack",
@@ -582,7 +916,7 @@
     "detachment_id": "soulforged-warpack",
     "cost": 15,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -592,7 +926,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8bd73345-00d9-57a3-84e5-08abb492a988"
+      },
+      {
+        "namespace": "mfm",
+        "id": "60ea41ac-a0e2-425e-a3b3-3993d9418974"
+      }
+    ]
   },
   {
     "id": "surgical-precision-creations-of-bile",
@@ -600,7 +944,7 @@
     "detachment_id": "creations-of-bile",
     "cost": 10,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -613,6 +957,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Damned"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "64dc6b59-1fab-5b35-ad4c-acc7bf4938d6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a75445ba-2c59-4eeb-a687-6239357ea9cb"
+      }
     ]
   },
   {
@@ -621,7 +975,7 @@
     "detachment_id": "creations-of-bile",
     "cost": 15,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Chaos Lord"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -631,7 +985,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e1e54ad6-7652-5466-8fd2-f5e6b2e46a32"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b75b9a64-a5bb-4f4d-8f77-1661f71300ab"
+      }
+    ]
   },
   {
     "id": "helm-of-all-seeing-creations-of-bile",
@@ -639,7 +1003,8 @@
     "detachment_id": "creations-of-bile",
     "cost": 25,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes",
+      "Infantry"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -652,6 +1017,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Damned"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ffbe0176-fcad-5e60-9158-baf694ea28f7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7aa81bf9-495a-445a-aa37-ecb5c5c624e8"
+      }
     ]
   },
   {
@@ -660,7 +1035,8 @@
     "detachment_id": "creations-of-bile",
     "cost": 35,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes",
+      "Infantry"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -673,6 +1049,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Damned"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a1ed1f61-1472-5d94-838a-db074e9bb13f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8d4d1353-1300-47e2-85eb-80baa8e149df"
+      }
     ]
   },
   {
@@ -681,7 +1067,7 @@
     "detachment_id": "cabal-of-chaos",
     "cost": 10,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": "touched-by-the-warp-cabal-of-chaos",
     "is_unique": true,
@@ -694,6 +1080,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Khorne"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a1afa5f2-84e2-57f2-b344-770e75a9fe51"
+      },
+      {
+        "namespace": "mfm",
+        "id": "91ff4c53-0812-4603-b6ac-8c82eb9a44cb"
+      }
     ]
   },
   {
@@ -702,7 +1098,7 @@
     "detachment_id": "nightmare-hunt",
     "cost": 25,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Chaos Lord"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -712,7 +1108,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "aa0e849e-5f9c-5e81-840b-ed2359b0e27b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "004d85d1-b422-420d-9f03-e78dae340e0f"
+      }
+    ]
   },
   {
     "id": "warp-fuelled-thrusters-nightmare-hunt",
@@ -720,7 +1126,8 @@
     "detachment_id": "nightmare-hunt",
     "cost": 20,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Chaos Lord",
+      "Jump Pack"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -730,7 +1137,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7eeb242e-874e-5532-85a0-2e16e12bfeb2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c3742651-2de1-40a8-8b49-0ddb90a82f41"
+      }
+    ]
   },
   {
     "id": "terrorglut-parasite-nightmare-hunt",
@@ -738,7 +1155,7 @@
     "detachment_id": "nightmare-hunt",
     "cost": 20,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -748,7 +1165,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a1026e90-1e4e-53d3-8914-e95dc6b8a9b9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2efbb05a-f0b4-48b8-99ba-4ff146d18ab1"
+      }
+    ]
   },
   {
     "id": "sorrowscent-vulture-nightmare-hunt",
@@ -756,7 +1183,8 @@
     "detachment_id": "nightmare-hunt",
     "cost": 35,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Chaos Lord",
+      "Jump Pack"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -766,7 +1194,20 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "attachment_bodyguard_ids": [
+      "warp-talons"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f87e220c-1edc-53cc-a2eb-db1588862d44"
+      },
+      {
+        "namespace": "mfm",
+        "id": "65980ad3-eae6-4374-9540-13e6becd6513"
+      }
+    ]
   },
   {
     "id": "voice-of-the-tyrant-hurons-marauders",
@@ -774,7 +1215,7 @@
     "detachment_id": "hurons-marauders",
     "cost": 25,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -787,6 +1228,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Damned"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5138ba87-4a1c-5113-abe9-67aef4ea05fd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1d1aaf8e-9ae4-4643-a109-064b389a8370"
+      }
     ]
   },
   {
@@ -795,7 +1246,7 @@
     "detachment_id": "hurons-marauders",
     "cost": 20,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -808,6 +1259,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Damned"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d0e982a8-5b48-55d9-b2cc-564b055dd007"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6330ad11-860b-4a54-a626-e33768713b83"
+      }
     ]
   },
   {
@@ -816,7 +1277,7 @@
     "detachment_id": "hurons-marauders",
     "cost": 25,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -829,6 +1290,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Damned"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "75980f5f-1900-5c3b-bfd0-97ebaeff2622"
+      },
+      {
+        "namespace": "mfm",
+        "id": "994771ac-14b5-40c7-8ade-01bae240edae"
+      }
     ]
   },
   {
@@ -837,7 +1308,7 @@
     "detachment_id": "hurons-marauders",
     "cost": 30,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -847,7 +1318,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dbd3df0d-680e-5fe1-893c-3d42acece5a0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "09c85dbd-492c-4df7-b190-e122e8d8c512"
+      }
+    ]
   },
   {
     "id": "weaponised-hatred-renegade-warband",
@@ -855,7 +1336,7 @@
     "detachment_id": "renegade-warband",
     "cost": 35,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -865,7 +1346,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "17425590-a421-5173-bbf4-0a647dccba6d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f3e11e61-1c52-4720-bbc0-36275e2c7944"
+      }
+    ]
   },
   {
     "id": "eyes-of-the-hunter-renegade-warband",
@@ -873,7 +1364,7 @@
     "detachment_id": "renegade-warband",
     "cost": 15,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -883,7 +1374,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f65fa385-53fd-502d-b70d-da8a7705b7ad"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b633020e-f18a-4a29-b2a7-2de5fcb08c2c"
+      }
+    ]
   },
   {
     "id": "fratricidal-trophies-renegade-warband",
@@ -891,7 +1392,8 @@
     "detachment_id": "renegade-warband",
     "cost": 5,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes",
+      "Terminator"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -901,7 +1403,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "988ec801-cb47-500e-9667-e29d763f7e34"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a6e84089-17c1-4a92-86fa-2471be66c71d"
+      }
+    ]
   },
   {
     "id": "empyric-symbiote-renegade-warband",
@@ -909,7 +1421,7 @@
     "detachment_id": "renegade-warband",
     "cost": 15,
     "keyword_restrictions": [
-      "Chaos Space Marines"
+      "Heretic Astartes"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -919,7 +1431,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "036c63d2-5308-58b2-95e3-9f530d3a29dd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e6de1854-8e17-4bec-aa86-2a3c67c1fb36"
+      }
+    ]
   },
   {
     "id": "conduit-of-chaos-cabal-of-chaos",
@@ -927,8 +1449,8 @@
     "detachment_id": "cabal-of-chaos",
     "cost": 20,
     "keyword_restrictions": [
-      "Heretic Astartes",
-      "Daemon"
+      "Daemon",
+      "Heretic Astartes"
     ],
     "ability_id": "conduit-of-chaos-cabal-of-chaos",
     "is_unique": true,
@@ -941,6 +1463,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Khorne"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7f540ca6-107c-5827-b8a2-aed3b5a94324"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d5097c0b-09a5-4a90-821f-58d20bf7f336"
+      }
     ]
   },
   {
@@ -959,7 +1491,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "88648717-ec06-5297-8ff5-6b26ea6922ef"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9acd6b69-8648-42c3-82ac-db6f9c4c9bd9"
+      }
+    ]
   },
   {
     "id": "eye-of-oblivion-devotees-of-destruction",
@@ -977,7 +1519,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "281ebd7b-daa3-59f1-ae94-5d759a6d30f5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dad856fe-095a-46ab-b437-bda85629b2d8"
+      }
+    ]
   },
   {
     "id": "shadowcowl-talisman-murdertalon-raiders",
@@ -985,7 +1537,8 @@
     "detachment_id": "murdertalon-raiders",
     "cost": 20,
     "keyword_restrictions": [
-      "Chaos Lord with Jump Pack"
+      "Chaos Lord with Jump Pack",
+      "Heretic Astartes"
     ],
     "ability_id": "shadowcowl-talisman-murdertalon-raiders",
     "is_unique": true,
@@ -995,7 +1548,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ee90cec5-7b71-5410-a400-6663642b1597"
+      },
+      {
+        "namespace": "mfm",
+        "id": "66eae82a-c460-42b5-9d4e-8f3be77fae03"
+      }
+    ]
   },
   {
     "id": "pact-of-cursed-pinions-murdertalon-raiders",
@@ -1003,7 +1566,8 @@
     "detachment_id": "murdertalon-raiders",
     "cost": 20,
     "keyword_restrictions": [
-      "Chaos Lord with Jump Pack"
+      "Chaos Lord with Jump Pack",
+      "Heretic Astartes"
     ],
     "ability_id": "pact-of-cursed-pinions-murdertalon-raiders",
     "is_unique": true,
@@ -1013,7 +1577,20 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "attachment_bodyguard_ids": [
+      "warp-talons"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "020e79f4-7d7b-5e84-b396-0f7c4a296651"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fb3a3dfd-c4f0-4908-b0b4-ddc1da594d6a"
+      }
+    ]
   },
   {
     "id": "infernal-fulgurite-warpstrike-champions",
@@ -1034,6 +1611,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Damned"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6dbfe4ba-6366-5135-9f19-9fc9cdd2c48d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d0d2d556-92b1-4d76-9158-b410650285f5"
+      }
     ]
   },
   {
@@ -1052,7 +1639,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8fea0c4f-0292-55ed-8c1f-0a4e260604ef"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6af69b46-850c-47aa-9dc5-183ee6d7ea41"
+      }
+    ]
   },
   {
     "id": "akshurs-binding-runes-warpstrike-champions",
@@ -1070,7 +1667,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5a5a8f65-7a53-5783-b489-49b2f2f70a24"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e27113b8-e4c1-4f22-8869-b20acd87589b"
+      }
+    ]
   },
   {
     "id": "tzagulla-warpstrike-champions",
@@ -1088,7 +1695,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9b4fdf5e-eac4-5335-b2cb-471045943ac1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "992754f1-6976-4e97-88ac-c42b83f54d8e"
+      }
+    ]
   },
   {
     "id": "wyredjinn-cult-of-the-arkifane",
@@ -1109,6 +1726,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Damned"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c5b7258a-2b11-5a88-8771-d649c11fc0e3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9599c27c-d1ce-4006-a6e8-e2adb2d65798"
+      }
     ]
   },
   {
@@ -1130,6 +1757,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Damned"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9eebefd5-1b95-59be-a795-647704545261"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f3bde6ed-505b-419d-8db9-5c8d9c4d0bff"
+      }
     ]
   },
   {
@@ -1151,6 +1788,16 @@
     "max_targets": 1,
     "exclusion_keywords": [
       "Damned"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "eb537155-200f-5aa8-9ab7-e824e39ab102"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dfaa5e58-2707-488e-a8d5-2a72aaf8d9d6"
+      }
     ]
   },
   {
@@ -1169,7 +1816,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "62d5b6b8-416f-5f40-8eef-56b50d3b4430"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cbe268b4-d3fc-4235-9e0f-9186b25e74d4"
+      }
+    ]
   },
   {
     "id": "infernal-infusion-zarkans-daemonkin",
@@ -1188,6 +1845,12 @@
     "keyword_restrictions": [
       "Master of Possession",
       "Zarkan's Daemonkin"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "62d03b18-0075-4b52-8b53-fadbc253fadb"
+      }
     ]
   },
   {
@@ -1205,9 +1868,14 @@
     ],
     "points_provisional": false,
     "keyword_restrictions": [
-      "Possessed",
-      "Zarkan's Daemonkin"
+      "Zarkan's Daemonkin Possessed"
     ],
-    "upgrade_tag": true
+    "upgrade_tag": true,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a917fba0-b0a2-4103-a2a9-647ee9bf7467"
+      }
+    ]
   }
 ]

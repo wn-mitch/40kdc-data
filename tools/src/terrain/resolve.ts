@@ -78,6 +78,11 @@ export interface ComposedFeature {
   floor?: number;
 }
 
+export interface Wall {
+  points: Vec2[];
+  thickness?: number;
+}
+
 export interface TerrainTemplate {
   id: string;
   name?: string;
@@ -88,6 +93,9 @@ export interface TerrainTemplate {
   default_terrain_area_keywords?: string[];
   features?: ComposedFeature[];
   terrain_category?: string;
+  walls?: Wall[];
+  has_roof?: boolean;
+  outline?: Vec2[];
 }
 
 export interface LayoutPiece {
@@ -113,6 +121,11 @@ export interface TerrainLayout {
   pieces?: LayoutPiece[];
 }
 
+export interface ResolvedWall {
+  points: Vec2[];
+  thickness?: number;
+}
+
 export interface ResolvedPiece {
   /** Layout-local id when present, else the piece name, else null. */
   id: string | null;
@@ -121,6 +134,10 @@ export interface ResolvedPiece {
   floor: number;
   /** Absolute board-space polygon vertices, y-down. */
   vertices: Vec2[];
+  /** Resolved wall polylines in board space. Only present for feature pieces whose template carries walls. */
+  walls?: ResolvedWall[];
+  has_roof?: boolean;
+  terrain_category?: string;
 }
 
 const DEG = Math.PI / 180;
@@ -171,7 +188,10 @@ export function polygonCentroid(verts: Vec2[]): Vec2 {
     cy += (a.y + b.y) * cross;
   }
   if (twiceArea === 0) {
-    const mean = verts.reduce((acc, v) => ({ x: acc.x + v.x, y: acc.y + v.y }), { x: 0, y: 0 });
+    const mean = verts.reduce(
+      (acc, v) => ({ x: acc.x + v.x, y: acc.y + v.y }),
+      { x: 0, y: 0 },
+    );
     return { x: mean.x / n, y: mean.y / n };
   }
   return { x: cx / (3 * twiceArea), y: cy / (3 * twiceArea) };
@@ -209,10 +229,16 @@ function orient(v: Vec2, rotation: number, mirror: Mirror): Vec2 {
  * card-measurement solver inverts to recover the centroid. Vertex order matches
  * {@link footprintVertices}.
  */
-export function orientedOffsets(footprint: Footprint, rotation: number, mirror: Mirror): Vec2[] {
+export function orientedOffsets(
+  footprint: Footprint,
+  rotation: number,
+  mirror: Mirror,
+): Vec2[] {
   const verts = footprintVertices(footprint);
   const c = polygonCentroid(verts);
-  return verts.map((v) => orient({ x: v.x - c.x, y: v.y - c.y }, rotation, mirror));
+  return verts.map((v) =>
+    orient({ x: v.x - c.x, y: v.y - c.y }, rotation, mirror),
+  );
 }
 
 /**
@@ -237,11 +263,83 @@ function placeFootprint(
 
 const TWO_DP_ROUND = 1e4;
 function round4(v: Vec2): Vec2 {
-  return { x: Math.round(v.x * TWO_DP_ROUND) / TWO_DP_ROUND, y: Math.round(v.y * TWO_DP_ROUND) / TWO_DP_ROUND };
+  return {
+    x: Math.round(v.x * TWO_DP_ROUND) / TWO_DP_ROUND,
+    y: Math.round(v.y * TWO_DP_ROUND) / TWO_DP_ROUND,
+  };
 }
 
-function resolvedIdName(piece: { id?: string; name?: string }): { id: string | null; name: string | null } {
+/**
+ * Transform wall polylines from a feature template's local frame to an
+ * arbitrary target frame, using the same centroid-relative mirror→rotate→translate
+ * pipeline as footprint vertices.
+ */
+function resolveWalls(
+  walls: Wall[] | undefined,
+  fp: Footprint,
+  position: Vec2,
+  rotation: number,
+  mirror: Mirror,
+): ResolvedWall[] | undefined {
+  if (!walls || walls.length === 0) return undefined;
+  const c = polygonCentroid(footprintVertices(fp));
+  return walls.map((w) => {
+    const pts = w.points.map((p) => {
+      const o = orient({ x: p.x - c.x, y: p.y - c.y }, rotation, mirror);
+      return round4({ x: o.x + position.x, y: o.y + position.y });
+    });
+    const rw: ResolvedWall = { points: pts };
+    if (w.thickness !== undefined) rw.thickness = w.thickness;
+    return rw;
+  });
+}
+
+function resolveWallsComposed(
+  walls: Wall[] | undefined,
+  fp: Footprint,
+  featPosition: Vec2,
+  featRotation: number,
+  featMirror: Mirror,
+  areaPosition: Vec2,
+  areaRotation: number,
+  areaMirror: Mirror,
+): ResolvedWall[] | undefined {
+  if (!walls || walls.length === 0) return undefined;
+  const c = polygonCentroid(footprintVertices(fp));
+  return walls.map((w) => {
+    const pts = w.points.map((p) => {
+      const local = orient(
+        { x: p.x - c.x, y: p.y - c.y },
+        featRotation,
+        featMirror,
+      );
+      const areaLocal = {
+        x: local.x + featPosition.x,
+        y: local.y + featPosition.y,
+      };
+      const o = orient(areaLocal, areaRotation, areaMirror);
+      return round4({ x: o.x + areaPosition.x, y: o.y + areaPosition.y });
+    });
+    const rw: ResolvedWall = { points: pts };
+    if (w.thickness !== undefined) rw.thickness = w.thickness;
+    return rw;
+  });
+}
+
+function resolvedIdName(piece: { id?: string; name?: string }): {
+  id: string | null;
+  name: string | null;
+} {
   return { id: piece.id ?? null, name: piece.name ?? null };
+}
+
+function resolvedComposedId(
+  parent: LayoutPiece,
+  feature: ComposedFeature,
+  featureIndex: number,
+): string | null {
+  if (!parent.id) return feature.id ?? null;
+  return `${parent.id}--${feature.id ?? `feature-${featureIndex + 1}`}`;
 }
 
 export class TerrainResolveError extends Error {}
@@ -250,7 +348,10 @@ export class TerrainResolveError extends Error {}
  * Resolve a layout to absolute board-space vertices per piece. `templates` is
  * the catalog a piece's `template` references resolve against.
  */
-export function resolveLayout(layout: TerrainLayout, templates: TerrainTemplate[]): ResolvedPiece[] {
+export function resolveLayout(
+  layout: TerrainLayout,
+  templates: TerrainTemplate[],
+): ResolvedPiece[] {
   const byId = new Map<string, TerrainTemplate>();
   for (const t of templates) byId.set(t.id, t);
 
@@ -258,14 +359,22 @@ export function resolveLayout(layout: TerrainLayout, templates: TerrainTemplate[
   const areasById = new Map<string, LayoutPiece>();
   for (const p of pieces) if (p.id) areasById.set(p.id, p);
 
-  const footprintOf = (piece: { template?: string; footprint?: Footprint }, where: string): Footprint => {
+  const footprintOf = (
+    piece: { template?: string; footprint?: Footprint },
+    where: string,
+  ): Footprint => {
     if (piece.footprint) return piece.footprint;
     if (piece.template) {
       const t = byId.get(piece.template);
-      if (!t) throw new TerrainResolveError(`${where}: unknown template "${piece.template}"`);
+      if (!t)
+        throw new TerrainResolveError(
+          `${where}: unknown template "${piece.template}"`,
+        );
       return t.footprint;
     }
-    throw new TerrainResolveError(`${where}: piece has neither footprint nor template`);
+    throw new TerrainResolveError(
+      `${where}: piece has neither footprint nor template`,
+    );
   };
 
   const out: ResolvedPiece[] = [];
@@ -275,37 +384,90 @@ export function resolveLayout(layout: TerrainLayout, templates: TerrainTemplate[
     const fp = footprintOf(piece, where);
     const rotation = piece.rotation_degrees ?? 0;
     const mirror = piece.mirror ?? "none";
-    const pieceType = piece.piece_type ?? (piece.parent_area_id ? "feature" : "area");
+    const pieceType =
+      piece.piece_type ?? (piece.parent_area_id ? "feature" : "area");
 
     if (piece.parent_area_id) {
       // Feature placed in its parent area's centroid-local frame.
       const parent = areasById.get(piece.parent_area_id);
       if (!parent) {
-        throw new TerrainResolveError(`${where}: unknown parent_area_id "${piece.parent_area_id}"`);
+        throw new TerrainResolveError(
+          `${where}: unknown parent_area_id "${piece.parent_area_id}"`,
+        );
       }
       const areaLocal = placeFootprint(fp, piece.position, rotation, mirror);
       const aRot = parent.rotation_degrees ?? 0;
       const aMirror = parent.mirror ?? "none";
       const vertices = areaLocal.map((p) => {
         const o = orient(p, aRot, aMirror);
-        return round4({ x: o.x + parent.position.x, y: o.y + parent.position.y });
+        return round4({
+          x: o.x + parent.position.x,
+          y: o.y + parent.position.y,
+        });
       });
-      out.push({ ...resolvedIdName(piece), piece_type: pieceType, floor: piece.floor ?? 0, vertices });
+      const tpl = piece.template ? byId.get(piece.template) : undefined;
+      const resolved: ResolvedPiece = {
+        ...resolvedIdName(piece),
+        piece_type: pieceType,
+        floor: piece.floor ?? 0,
+        vertices,
+      };
+      if (tpl) {
+        const rw = resolveWallsComposed(
+          tpl.walls,
+          fp,
+          piece.position,
+          rotation,
+          mirror,
+          parent.position,
+          aRot,
+          aMirror,
+        );
+        if (rw) resolved.walls = rw;
+        if (tpl.has_roof) resolved.has_roof = true;
+        if (tpl.terrain_category)
+          resolved.terrain_category = tpl.terrain_category;
+      }
+      out.push(resolved);
       continue;
     }
 
     // Unparented area or feature: place directly in board space.
-    const vertices = placeFootprint(fp, piece.position, rotation, mirror).map(round4);
-    out.push({ ...resolvedIdName(piece), piece_type: pieceType, floor: piece.floor ?? 0, vertices });
+    const vertices = placeFootprint(fp, piece.position, rotation, mirror).map(
+      round4,
+    );
+    const tplUnparented = piece.template ? byId.get(piece.template) : undefined;
+    const resolvedPiece: ResolvedPiece = {
+      ...resolvedIdName(piece),
+      piece_type: pieceType,
+      floor: piece.floor ?? 0,
+      vertices,
+    };
+    if (tplUnparented) {
+      const rw = resolveWalls(
+        tplUnparented.walls,
+        fp,
+        piece.position,
+        rotation,
+        mirror,
+      );
+      if (rw) resolvedPiece.walls = rw;
+      if (tplUnparented.has_roof) resolvedPiece.has_roof = true;
+      if (tplUnparented.terrain_category)
+        resolvedPiece.terrain_category = tplUnparented.terrain_category;
+    }
+    out.push(resolvedPiece);
 
     // Expand an area template's composed features, carried through this area's
     // placement (same composition math as a parented feature).
     if (piece.template) {
       const t = byId.get(piece.template);
-      for (const feat of t?.features ?? []) {
+      for (const [featureIndex, feat] of (t?.features ?? []).entries()) {
         const ft = byId.get(feat.template);
         if (!ft) {
-          throw new TerrainResolveError(`${where}: composed feature references unknown template "${feat.template}"`);
+          throw new TerrainResolveError(
+            `${where}: composed feature references unknown template "${feat.template}"`,
+          );
         }
         const areaLocal = placeFootprint(
           ft.footprint,
@@ -315,15 +477,33 @@ export function resolveLayout(layout: TerrainLayout, templates: TerrainTemplate[
         );
         const featVerts = areaLocal.map((p) => {
           const o = orient(p, rotation, mirror);
-          return round4({ x: o.x + piece.position.x, y: o.y + piece.position.y });
+          return round4({
+            x: o.x + piece.position.x,
+            y: o.y + piece.position.y,
+          });
         });
-        out.push({
-          id: feat.id ?? null,
+        const resolvedFeat: ResolvedPiece = {
+          id: resolvedComposedId(piece, feat, featureIndex),
           name: ft.name ?? null,
           piece_type: "feature",
           floor: feat.floor ?? 0,
           vertices: featVerts,
-        });
+        };
+        const rw = resolveWallsComposed(
+          ft.walls,
+          ft.footprint,
+          feat.position,
+          feat.rotation_degrees ?? 0,
+          feat.mirror ?? "none",
+          piece.position,
+          rotation,
+          mirror,
+        );
+        if (rw) resolvedFeat.walls = rw;
+        if (ft.has_roof) resolvedFeat.has_roof = true;
+        if (ft.terrain_category)
+          resolvedFeat.terrain_category = ft.terrain_category;
+        out.push(resolvedFeat);
       }
     }
   }

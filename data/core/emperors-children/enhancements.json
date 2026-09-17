@@ -7,7 +7,7 @@
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "steeped-in-suffering-mercurial-host",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -15,7 +15,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1a39a862-5a66-5624-b7d5-1f7f83c33b12"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4d0851fe-8c7b-4423-b688-916ad670d63e"
+      }
+    ]
   },
   {
     "id": "intoxicating-musk-mercurial-host",
@@ -25,7 +35,7 @@
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "intoxicating-musk-mercurial-host",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -33,7 +43,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0b8bf59f-1469-56ae-8653-0b469623ab47"
+      },
+      {
+        "namespace": "mfm",
+        "id": "addaeefd-98ba-4ecc-acec-f55d28e38593"
+      }
+    ]
   },
   {
     "id": "tactical-perfection-mercurial-host",
@@ -43,7 +63,7 @@
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "tactical-perfection-mercurial-host",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -51,7 +71,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b95a9a1f-7272-5226-953d-b6e652236838"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3fa02c55-1307-4ca9-bd55-e3e2b86b8ffb"
+      }
+    ]
   },
   {
     "id": "loathsome-dexterity-mercurial-host",
@@ -61,7 +91,7 @@
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "loathsome-dexterity-mercurial-host",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -69,7 +99,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0a02647a-fa33-5ec4-bf5b-ec34f45afd94"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4ecb24ca-7312-4d15-ad0c-b88bef6419a6"
+      }
+    ]
   },
   {
     "id": "faultless-opportunist-peerless-bladesmen",
@@ -79,7 +119,7 @@
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "faultless-opportunist-peerless-bladesmen",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -87,7 +127,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0b41aec2-0f69-5128-8dd8-2276505902bd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6babab2f-4899-48f8-abb1-3e7584deb179"
+      }
+    ]
   },
   {
     "id": "blinding-speed-peerless-bladesmen",
@@ -97,7 +147,7 @@
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "blinding-speed-peerless-bladesmen",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -105,7 +155,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8dc938f6-5588-5f05-a0aa-bd7365509c1c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a1f791ea-398b-4724-9736-83bd81581abc"
+      }
+    ]
   },
   {
     "id": "distortion-peerless-bladesmen",
@@ -115,7 +175,7 @@
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "distortion-peerless-bladesmen",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -123,7 +183,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4f2670fd-1d61-508b-878e-ef7eec8d950f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "75e69566-9f5c-408f-8780-7581588e4710"
+      }
+    ]
   },
   {
     "id": "rise-to-the-challenge-peerless-bladesmen",
@@ -131,9 +201,10 @@
     "detachment_id": "peerless-bladesmen",
     "cost": 30,
     "keyword_restrictions": [
-      "Emperor’s Children"
+      "Emperor’s Children",
+      "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "rise-to-the-challenge-peerless-bladesmen",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -141,7 +212,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3eaa513d-00c9-55ff-917b-9872ec76d672"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dd010efd-f66d-46e4-b43b-3e110b2d1314"
+      }
+    ]
   },
   {
     "id": "sublime-prescience-rapid-evisceration",
@@ -149,9 +230,10 @@
     "detachment_id": "rapid-evisceration",
     "cost": 25,
     "keyword_restrictions": [
-      "Emperor’s Children"
+      "Emperor’s Children",
+      "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "sublime-prescience-rapid-evisceration",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -159,7 +241,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8babde3c-c087-5232-a28f-914fa546adff"
+      },
+      {
+        "namespace": "mfm",
+        "id": "45d5debe-c37f-453f-b98f-f049f9d71019"
+      }
+    ]
   },
   {
     "id": "spearhead-striker-rapid-evisceration",
@@ -167,9 +259,10 @@
     "detachment_id": "rapid-evisceration",
     "cost": 20,
     "keyword_restrictions": [
-      "Emperor’s Children"
+      "Emperor’s Children",
+      "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "spearhead-striker-rapid-evisceration",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -177,7 +270,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2bf0fa02-7798-50be-9a24-faca927bda1a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "31f120c2-edb7-4134-a0cb-6d6dd1cdd9c8"
+      }
+    ]
   },
   {
     "id": "accomplished-tactician-rapid-evisceration",
@@ -185,9 +288,10 @@
     "detachment_id": "rapid-evisceration",
     "cost": 35,
     "keyword_restrictions": [
-      "Emperor’s Children"
+      "Emperor’s Children",
+      "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "accomplished-tactician-rapid-evisceration",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -195,7 +299,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "217e11e6-dd51-5c98-8617-02143f5b9d2a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "763c0219-611e-44d7-9cea-fb6fe920290e"
+      }
+    ]
   },
   {
     "id": "heretek-adept-rapid-evisceration",
@@ -203,9 +317,10 @@
     "detachment_id": "rapid-evisceration",
     "cost": 35,
     "keyword_restrictions": [
-      "Emperor’s Children"
+      "Emperor’s Children",
+      "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "heretek-adept-rapid-evisceration",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -213,7 +328,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2b8d98c0-655c-59da-a863-c872e8fe9bd7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1f87a1d3-1319-475b-9cea-34ce5b50cd05"
+      }
+    ]
   },
   {
     "id": "empyric-suffusion-carnival-of-excess",
@@ -223,7 +348,7 @@
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "empyric-suffusion-carnival-of-excess",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -231,7 +356,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "caa05d6e-5fe2-5151-82fa-6652a118d7b5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0bb7a6f7-15fe-4401-a732-e4010cb1ee7f"
+      }
+    ]
   },
   {
     "id": "dark-blessings-carnival-of-excess",
@@ -239,9 +374,10 @@
     "detachment_id": "carnival-of-excess",
     "cost": 10,
     "keyword_restrictions": [
-      "Emperor’s Children"
+      "Emperor’s Children",
+      "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "dark-blessings-carnival-of-excess",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -249,17 +385,27 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c1fafb51-9a68-5e11-bea2-53b2226a62fc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4dd6dec8-03dc-4b0a-919a-b00c3c34f726"
+      }
+    ]
   },
   {
     "id": "possessed-blade-carnival-of-excess",
     "name": "Possessed Blade",
     "detachment_id": "carnival-of-excess",
-    "cost": 25,
+    "cost": 35,
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "possessed-blade-carnival-of-excess",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -267,17 +413,24 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b1d04762-e8c7-5d36-af61-84a95336cb70"
+      },
+      {
+        "namespace": "mfm",
+        "id": "efd6eed5-0e4d-48be-bb5e-adeb57d9e386"
+      }
+    ]
   },
   {
     "id": "warp-walker-carnival-of-excess",
     "name": "Warp Walker",
     "detachment_id": "carnival-of-excess",
-    "cost": 30,
-    "keyword_restrictions": [
-      "Emperor’s Children"
-    ],
-    "ability_id": null,
+    "cost": 35,
+    "ability_id": "warp-walker-carnival-of-excess",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -285,7 +438,25 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Emperor’s Children"
+      ],
+      [
+        "Keeper of Secrets"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "487a0f1c-d22b-511d-b4a6-36cd283369eb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f8a976fd-eb1b-401d-8b99-50155fb04f4c"
+      }
+    ]
   },
   {
     "id": "pledge-to-eternal-servitude-coterie-of-the-conceited",
@@ -313,7 +484,7 @@
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "pledge-of-dark-glory-coterie-of-the-conceited",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -321,7 +492,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b29cc47c-7425-5975-a3dd-79b24c68e4ad"
+      },
+      {
+        "namespace": "mfm",
+        "id": "739f0185-c80c-4793-8479-1d28bbad8a25"
+      }
+    ]
   },
   {
     "id": "pledge-of-mortal-pain-coterie-of-the-conceited",
@@ -331,7 +512,7 @@
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "pledge-of-mortal-pain-coterie-of-the-conceited",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -339,7 +520,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dfb19287-4c63-570a-a1b9-371207bd000c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fe544c22-edb1-4842-a623-13d58dfdb514"
+      }
+    ]
   },
   {
     "id": "pledge-of-unholy-fortune-coterie-of-the-conceited",
@@ -349,7 +540,7 @@
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "pledge-of-unholy-fortune-coterie-of-the-conceited",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -357,7 +548,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e0a5122c-eff4-574e-90a6-c27776101c6d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0b59609f-428b-4e25-9ad8-69f147e52643"
+      }
+    ]
   },
   {
     "id": "eager-to-prove-slaaneshs-chosen",
@@ -367,7 +568,7 @@
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "eager-to-prove-slaaneshs-chosen",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -375,7 +576,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "20583488-9b1a-5bda-849d-ef80d4aab6f4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b26e88ce-98ee-401d-a5c3-f12564e770e4"
+      }
+    ]
   },
   {
     "id": "repulsed-by-weakness-slaaneshs-chosen",
@@ -385,7 +596,7 @@
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "repulsed-by-weakness-slaaneshs-chosen",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -393,7 +604,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "73e0ef95-c1f1-5873-bc6e-5b1950892b8f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "18a6a5e5-3967-472a-aeed-7d8695b6f581"
+      }
+    ]
   },
   {
     "id": "proud-and-vainglorious-slaaneshs-chosen",
@@ -403,7 +624,7 @@
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "proud-and-vainglorious-slaaneshs-chosen",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -411,7 +632,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f63f079e-9727-5e05-9d1f-a252c8396d14"
+      },
+      {
+        "namespace": "mfm",
+        "id": "81c3ada4-c8c2-4493-948d-ac3e1d4838a0"
+      }
+    ]
   },
   {
     "id": "slayer-of-champions-slaaneshs-chosen",
@@ -421,7 +652,7 @@
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "slayer-of-champions-slaaneshs-chosen",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -429,7 +660,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "41909ad2-b4c4-50c9-9d10-80da6b7da09b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5b2cfa1f-d5ff-4096-a600-0edf9c647213"
+      }
+    ]
   },
   {
     "id": "tears-of-the-phoenix-court-of-the-phoenician",
@@ -439,7 +680,7 @@
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "tears-of-the-phoenix-court-of-the-phoenician",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -447,7 +688,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6d8d13ad-cca9-5621-ba51-2c2f55d0ca98"
+      },
+      {
+        "namespace": "mfm",
+        "id": "14a01847-ae60-4d88-bd34-4d87d799058d"
+      }
+    ]
   },
   {
     "id": "exalted-patron-court-of-the-phoenician",
@@ -455,9 +706,9 @@
     "detachment_id": "court-of-the-phoenician",
     "cost": 15,
     "keyword_restrictions": [
-      "Emperor’s Children"
+      "Lord Exultant"
     ],
-    "ability_id": null,
+    "ability_id": "exalted-patron-court-of-the-phoenician",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -465,7 +716,20 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "attachment_bodyguard_ids": [
+      "flawless-blades"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "90317c17-03c6-53f0-a794-6e5f021f5ca5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "533b3db0-dd34-4863-84a7-bcd2eff86ea4"
+      }
+    ]
   },
   {
     "id": "soulstain-made-manifest-court-of-the-phoenician",
@@ -475,7 +739,7 @@
     "keyword_restrictions": [
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "soulstain-made-manifest-court-of-the-phoenician",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -483,7 +747,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b8966815-0d09-545e-b9f5-2a555ccad148"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3381eeb8-1b99-4039-892c-43be6cb455a2"
+      }
+    ]
   },
   {
     "id": "spiritsliver-court-of-the-phoenician",
@@ -491,9 +765,10 @@
     "detachment_id": "court-of-the-phoenician",
     "cost": 20,
     "keyword_restrictions": [
+      "Daemon Prince",
       "Emperor’s Children"
     ],
-    "ability_id": null,
+    "ability_id": "spiritsliver-court-of-the-phoenician",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -501,7 +776,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "01c88b81-71f9-59b7-8076-1bec0205bec0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cff5cb21-f229-467b-bbd6-faf82240043b"
+      }
+    ]
   },
   {
     "id": "cacophonic-accompaniment-elegant-brutes",
@@ -509,7 +794,8 @@
     "detachment_id": "elegant-brutes",
     "cost": 20,
     "keyword_restrictions": [
-      "Emperor's Children"
+      "Emperor’s Children",
+      "Lord Kakophonist"
     ],
     "ability_id": "cacophonic-accompaniment-elegant-brutes",
     "is_unique": true,
@@ -519,7 +805,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3ea0ed08-371c-5d57-b321-c95b776031cc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "364cea95-8b5d-480c-930c-22d543f96013"
+      }
+    ]
   },
   {
     "id": "frenzied-ferocity-upgrade-elegant-brutes",
@@ -527,7 +823,7 @@
     "detachment_id": "elegant-brutes",
     "cost": 15,
     "keyword_restrictions": [
-      "Emperor's Children",
+      "Emperor’s Children",
       "Terminator Squad"
     ],
     "ability_id": "frenzied-ferocity-elegant-brutes",
@@ -538,7 +834,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a74fdb27-0670-5d78-804f-d3ab420b24ce"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7949eef1-dbe1-42e6-9742-e18fea8532fe"
+      }
+    ]
   },
   {
     "id": "euphoric-crown-frenzied-host",
@@ -546,7 +852,8 @@
     "detachment_id": "frenzied-host",
     "cost": 20,
     "keyword_restrictions": [
-      "Emperor's Children"
+      "Emperor’s Children",
+      "Lord Exultant"
     ],
     "ability_id": "euphoric-crown-frenzied-host",
     "is_unique": true,
@@ -556,7 +863,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3fb2f06b-2270-595d-956d-97e7a1f4fb8b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "07b233f5-b9d7-40a8-b114-06c572e45886"
+      }
+    ]
   },
   {
     "id": "howling-plate-frenzied-host",
@@ -564,7 +881,8 @@
     "detachment_id": "frenzied-host",
     "cost": 20,
     "keyword_restrictions": [
-      "Emperor's Children"
+      "Emperor’s Children",
+      "Lord Exultant"
     ],
     "ability_id": "howling-plate-frenzied-host",
     "is_unique": true,
@@ -574,7 +892,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "62a4e845-ac9b-5573-b270-a0cd0b223ac6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d4fcc7d3-1641-42fa-a300-9ba09b6776fb"
+      }
+    ]
   },
   {
     "id": "eager-patrons-upgrade-spectacle-of-slaughter",
@@ -582,7 +910,7 @@
     "detachment_id": "spectacle-of-slaughter",
     "cost": 20,
     "keyword_restrictions": [
-      "Emperor's Children",
+      "Emperor’s Children",
       "Flawless Blades"
     ],
     "ability_id": "eager-patrons-spectacle-of-slaughter",
@@ -593,7 +921,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "88cc8546-6b3b-5a21-91f3-cc8aa724f1f6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "87003c53-7a8a-49f0-bcc3-f07e7749ba3b"
+      }
+    ]
   },
   {
     "id": "beguiling-grotesquerie-upgrade-spectacle-of-slaughter",
@@ -601,7 +939,7 @@
     "detachment_id": "spectacle-of-slaughter",
     "cost": 15,
     "keyword_restrictions": [
-      "Emperor's Children",
+      "Emperor’s Children",
       "Flawless Blades"
     ],
     "ability_id": "beguiling-grotesquerie-spectacle-of-slaughter",
@@ -612,7 +950,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "24adc4fd-6fb2-5a90-ae9d-44c3962102c5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "efd71a11-ec2e-4043-a91a-de8a553280dd"
+      }
+    ]
   },
   {
     "id": "invigorating-agonies-callous-blades",
@@ -631,6 +979,13 @@
     "keyword_restrictions": [
       "Callous Blades",
       "Lord Exultant"
+    ],
+    "ability_id": "invigorating-agonies-callous-blades",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4ec252c3-9192-4177-86a0-0545576b2b07"
+      }
     ]
   },
   {
@@ -648,9 +1003,43 @@
     ],
     "points_provisional": false,
     "keyword_restrictions": [
-      "Callous Blades",
-      "Infractors"
+      "Callous Blades Infractors"
     ],
-    "upgrade_tag": true
+    "upgrade_tag": true,
+    "ability_id": "martial-perfection-callous-blades",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e61d3f70-e8b4-4f55-9641-2ab44322eb0d"
+      }
+    ]
+  },
+  {
+    "id": "pledge-of-eternal-servitude-coterie-of-the-conceited",
+    "name": "Pledge of Eternal Servitude",
+    "detachment_id": "coterie-of-the-conceited",
+    "cost": 25,
+    "ability_id": "pledge-of-eternal-servitude-coterie-of-the-conceited",
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Emperor’s Children"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8f76e73a-48c6-5ff9-b4ae-2029781a7b99"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9cdee23e-2fc9-4ed4-a179-a6519ad59020"
+      }
+    ]
   }
 ]

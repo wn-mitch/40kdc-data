@@ -12,7 +12,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@alpaca-software/40kdc-data": "*"
+    "@alpaca-software/40kdc-data": "*",
+    "pdfjs-dist": "^3.11.174"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^5.0.0",

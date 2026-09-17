@@ -16,6 +16,7 @@ Python mirror of ``tools/src/data/loadout.ts`` /
 from __future__ import annotations
 
 import math
+from collections.abc import Iterator
 from typing import Any
 
 WargearOption = dict[str, Any]
@@ -24,6 +25,18 @@ Unit = dict[str, Any]
 # optional ``default_weapon_ids`` (list, may be empty/absent), and
 # ``is_leader_model`` (bool). Pass the unit's ``unit_composition.models`` here.
 LoadoutModel = dict[str, Any]
+LOADOUT_CANDIDATES_DEFAULT_LIMIT = 256
+LOADOUT_CANDIDATES_TRUNCATED = "…truncated"
+
+
+def _js_locale_key(value: str) -> str:
+    """The ordering domain here is canonical entity ids: lowercase ASCII letters,
+    digits, and hyphens. In that domain the repository's Node ``localeCompare``
+    ordering is ordinal, and Python compares ``str`` by code point, so the string
+    is its own sort key. Kept as a named function to mark the ``localeCompare``
+    mirror points in the solver. Entity ids are schema-normalized before reaching
+    loadout solving."""
+    return value
 
 
 def option_cap(
@@ -135,6 +148,15 @@ def _has_recorded_defaults(models: list[LoadoutModel] | None) -> bool:
     return all((m.get("default_weapon_ids") or []) for m in models)
 
 
+def _has_recorded_loadout_bases(models: list[LoadoutModel] | None) -> bool:
+    """True when every model row has defaults or whole-model alternatives."""
+    model_rows = models or []
+    return bool(model_rows) and all(
+        (model.get("default_weapon_ids") or []) or (model.get("loadout_variants") or [])
+        for model in model_rows
+    )
+
+
 def _allocate_models(
     models: list[LoadoutModel],
     model_count: int,
@@ -142,10 +164,9 @@ def _allocate_models(
     """Allocate ``model_count`` models across the composition's model-types.
 
     Each leader is taken at its ``min`` (in declared order, never exceeding the
-    remaining count), then the non-leader "bulk" types absorb the rest — each its
-    ``min`` first, then any leftover to the bulk type with the largest ``max``.
-    Deterministic; mirrored across implementations and pinned by the conformance
-    corpus.
+    remaining count), then non-leader types take their minima and fill in
+    descending maximum order without exceeding row caps. Equal maxima retain
+    declaration order. Without non-leader rows, leaders fill under the same caps.
     """
     out: list[list[Any]] = [[model, 0] for model in models]
     remaining = max(0, model_count)
@@ -160,17 +181,19 @@ def _allocate_models(
     if not bulk:
         # No non-leader type: pour any remainder onto the leaders (largest max first).
         bulk = list(out)
-    # Each bulk type takes its min, then the remainder lands on the largest-max type.
+    # Fill only unmet minima; all-leader compositions were already seated above.
     for row in bulk:
-        c = min(row[0].get("min") or 0, remaining)
+        c = min(max(0, (row[0].get("min") or 0) - row[1]), remaining)
         row[1] += c
         remaining -= c
-    if remaining > 0 and bulk:
-        sink = bulk[0]
+    if remaining > 0:
+        bulk.sort(key=lambda row: row[0].get("max") or 0, reverse=True)
         for row in bulk:
-            if (row[0].get("max") or 0) > (sink[0].get("max") or 0):
-                sink = row
-        sink[1] += remaining
+            count = min(remaining, max(0, (row[0].get("max") or 0) - row[1]))
+            row[1] += count
+            remaining -= count
+            if remaining == 0:
+                break
     return [(row[0], row[1]) for row in out]
 
 
@@ -257,7 +280,11 @@ def _to_multiset(ids: list[str]) -> dict[str, int]:
 
 def _sorted_group_weapons(m: dict[str, int]) -> list[dict[str, Any]]:
     """Group weapons in a stable, language-agnostic order (by id) for cross-impl parity."""
-    return [{"id": id_, "count": c} for id_, c in sorted(m.items()) if c > 0]
+    return [
+        {"id": id_, "count": c}
+        for id_, c in sorted(m.items(), key=lambda item: _js_locale_key(item[0]))
+        if c > 0
+    ]
 
 
 def _option_bundles(option: WargearOption) -> list[list[str]]:
@@ -287,10 +314,12 @@ def _assign_row_counts(
             rows_with[id_] = rows_with.get(id_, 0) + 1
 
     def min_of(i: int) -> int:
-        return max(0, models[i].get("min") or 0)
+        value = models[i].get("min")
+        return max(0, value if value is not None else 0)
 
     def max_of(i: int) -> int:
-        return max(min_of(i), models[i].get("max") or min_of(i))
+        value = models[i].get("max")
+        return max(min_of(i), value if value is not None else min_of(i))
 
     out = [min_of(i) for i in range(len(models))]
     total = sum(out)
@@ -347,133 +376,449 @@ def _assign_row_counts(
     return out
 
 
+def _iter_candidate_row_counts(models: list[LoadoutModel], model_count: int) -> Iterator[list[int]]:
+    """Stream every bounded row allocation without retaining the full product."""
+    mins = [max(0, model["min"] if model.get("min") is not None else 0) for model in models]
+    maxs = [
+        max(mins[i], model["max"] if model.get("max") is not None else mins[i])
+        for i, model in enumerate(models)
+    ]
+    suffix_min = [0] * (len(models) + 1)
+    suffix_max = [0] * (len(models) + 1)
+    for i in range(len(models) - 1, -1, -1):
+        suffix_min[i] = suffix_min[i + 1] + mins[i]
+        suffix_max[i] = suffix_max[i + 1] + maxs[i]
+    current = [0] * len(models)
+
+    def visit(i: int, remaining: int) -> Iterator[list[int]]:
+        if i == len(models):
+            if remaining == 0:
+                yield list(current)
+            return
+        if remaining < suffix_min[i] or remaining > suffix_max[i]:
+            return
+        lo = max(mins[i], remaining - suffix_max[i + 1])
+        hi = min(maxs[i], remaining - suffix_min[i + 1])
+        for count in range(hi, lo - 1, -1):
+            current[i] = count
+            yield from visit(i + 1, remaining - count)
+
+    yield from visit(0, max(0, model_count))
+
+
+def _candidate_row_counts(
+    models: list[LoadoutModel],
+    model_count: int,
+    counts: dict[str, int],
+) -> list[list[int]]:
+    """Return every bounded row allocation, with the historical heuristic first."""
+    preferred = _assign_row_counts(models, model_count, counts)
+    mins = [max(0, model["min"] if model.get("min") is not None else 0) for model in models]
+    maxs = [
+        max(mins[i], model["max"] if model.get("max") is not None else mins[i])
+        for i, model in enumerate(models)
+    ]
+    suffix_min = [0] * (len(models) + 1)
+    suffix_max = [0] * (len(models) + 1)
+    for i in range(len(models) - 1, -1, -1):
+        suffix_min[i] = suffix_min[i + 1] + mins[i]
+        suffix_max[i] = suffix_max[i + 1] + maxs[i]
+
+    generated: list[list[int]] = []
+    current = [0] * len(models)
+
+    def visit(i: int, remaining: int) -> None:
+        if i == len(models):
+            if remaining == 0:
+                generated.append(list(current))
+            return
+        if remaining < suffix_min[i] or remaining > suffix_max[i]:
+            return
+        lo = max(mins[i], remaining - suffix_max[i + 1])
+        hi = min(maxs[i], remaining - suffix_min[i + 1])
+        for count in range(hi, lo - 1, -1):
+            current[i] = count
+            visit(i + 1, remaining - count)
+
+    visit(0, max(0, model_count))
+    out: list[list[int]] = []
+    seen: set[tuple[int, ...]] = set()
+    for allocation in [preferred, *generated]:
+        key = tuple(allocation)
+        if sum(allocation) == model_count and key not in seen:
+            seen.add(key)
+            out.append(allocation)
+    return out
+
+
 def _multiset_key(m: dict[str, int]) -> str:
     """A stable key for a weapon multiset: ``count:id`` parts in id order, joined by
     ``|``; zero/negative entries dropped. Mirror of the TS ``multisetKey``."""
-    return "|".join(f"{c}:{id_}" for id_, c in sorted(m.items()) if c > 0)
+    return "|".join(
+        f"{c}:{id_}"
+        for id_, c in sorted(m.items(), key=lambda item: _js_locale_key(item[0]))
+        if c > 0
+    )
 
 
 def _enumerate_row_candidates(
     base: dict[str, int],
     row_name: str | None,
     options: list[WargearOption],
+    used_variant_budgets: list[str] | None = None,
 ) -> list[dict[str, Any]]:
-    """Enumerate every legal single-model loadout for one composition row: from the
-    row's base defaults, apply any compatible subset of the options scoping to this
-    row (unscoped, or matching ``row_name``). An option applies only when all its
-    ``replaces`` weapons are present (a slot swapped at most once), used at most once
-    per model; each ``replacement_choice`` branch is a distinct transformation. Caps
-    are charged globally by the assignment search, so two derivations of the same
-    weapon set with different option usage are kept distinct. Mirror of the TS
-    ``enumerateRowCandidates``."""
-    applicable: list[int] = []
-    for i, option in enumerate(options):
-        c = option.get("model_constraint")
-        name = c.get("model_name") if c else None
-        if name is None or name == row_name:
-            applicable.append(i)
+    """Enumerate compatible option transformations of one complete base loadout."""
+    applicable = [
+        index
+        for index, option in enumerate(options)
+        if (option.get("model_constraint") or {}).get("model_name") in (None, row_name)
+    ]
+    variant_uses = list(used_variant_budgets or [])
 
-    def state_key(w: dict[str, int], used: list[int]) -> str:
-        return f"{_multiset_key(w)}#{','.join(str(u) for u in used)}"
+    def state_key(weapons: dict[str, int], used: list[int]) -> str:
+        return (
+            f"{_multiset_key(weapons)}#{','.join(map(str, sorted(used)))}#{','.join(variant_uses)}"
+        )
 
     result: list[dict[str, Any]] = []
-    seen: set[str] = {state_key(base, [])}
+    seen = {state_key(base, [])}
     queue: list[tuple[dict[str, int], list[int]]] = [(dict(base), [])]
     head = 0
     while head < len(queue):
         weapons, used = queue[head]
         head += 1
         result.append(
-            {"weapons": weapons, "used_options": used, "key": _multiset_key(weapons)}
+            {
+                "weapons": weapons,
+                "used_options": used,
+                "used_variant_budgets": list(variant_uses),
+                "key": _multiset_key(weapons),
+            }
         )
         for oi in applicable:
-            if oi in used:
+            option = options[oi]
+            replaces = list(option.get("replaces") or [])
+            uses = used.count(oi)
+            constraint = option.get("model_constraint") or {}
+            limit = constraint.get("max_count", 1) if not replaces else 1
+            if uses >= limit:
                 continue
-            replaces = list(options[oi].get("replaces") or [])
-            if not all(weapons.get(id_, 0) >= 1 for id_ in replaces):
+            required = _to_multiset(replaces)
+            if any(weapons.get(id_, 0) < count for id_, count in required.items()):
                 continue
-            for bundle in _option_bundles(options[oi]):
+            for bundle in _option_bundles(option):
                 if not bundle:
                     continue
-                w = dict(weapons)
+                updated = dict(weapons)
                 for id_ in replaces:
-                    w[id_] = w.get(id_, 0) - 1
+                    updated[id_] = updated.get(id_, 0) - 1
                 for id_ in bundle:
-                    w[id_] = w.get(id_, 0) + 1
-                w = {id_: n for id_, n in w.items() if n > 0}
-                new_used = sorted([*used, oi])
-                k = state_key(w, new_used)
-                if k in seen:
-                    continue
-                seen.add(k)
-                queue.append((w, new_used))
+                    updated[id_] = updated.get(id_, 0) + 1
+                updated = {id_: count for id_, count in updated.items() if count > 0}
+                next_used = sorted([*used, oi])
+                key = state_key(updated, next_used)
+                if key not in seen:
+                    seen.add(key)
+                    queue.append((updated, next_used))
     return result
+
+
+def _row_candidates(
+    row: LoadoutModel, row_index: int, row_count: int, unit_count: int, options: list[WargearOption]
+) -> tuple[list[dict[str, Any]], dict[str, int]]:
+    """Build complete bases, variant caps, and compatible options for one row."""
+    caps = {
+        f"{row_index}:{index}": _variant_budget_cap(budget, unit_count, row_count)
+        for index, budget in enumerate(row.get("loadout_variant_budgets") or [])
+    }
+    variants = row.get("loadout_variants") or []
+    if not variants:
+        return (
+            _enumerate_row_candidates(
+                _to_multiset(row.get("default_weapon_ids") or []), row.get("name"), options
+            ),
+            caps,
+        )
+
+    variant_uses: list[list[str]] = []
+    for vi, variant in enumerate(variants):
+        token = f"{row_index}:variant:{vi}"
+        caps[token] = min(row_count, variant.get("max_count", row_count))
+        uses = [token]
+        for bi, budget in enumerate(row.get("loadout_variant_budgets") or []):
+            if variant.get("name") in (budget.get("variant_names") or []):
+                uses.append(f"{row_index}:{bi}")
+        variant_uses.append(uses)
+
+    candidates: dict[str, dict[str, Any]] = {}
+    states: dict[str, dict[str, Any]] = {}
+    for vi, variant in enumerate(variants):
+        for candidate in _enumerate_row_candidates(
+            _to_multiset(variant.get("weapon_ids") or []),
+            row.get("name"),
+            options,
+            variant_uses[vi],
+        ):
+            cost = len(candidate["used_options"])
+            state = states.get(candidate["key"])
+            if state is None:
+                state = {"candidates": [], "origin_variants": [vi], "min_options": cost}
+                states[candidate["key"]] = state
+            elif cost < state["min_options"]:
+                state["min_options"] = cost
+                state["origin_variants"] = [vi]
+            elif cost == state["min_options"] and vi not in state["origin_variants"]:
+                state["origin_variants"].append(vi)
+            state["candidates"].append(candidate)
+
+    # Normalize each final equipment state to its closest whole-model alternatives.
+    # Optional extras must not hide an alternative and let its cap be bypassed.
+    # Keep every option provenance: a longer route may use a different allowance.
+    for state in states.values():
+        for vi in state["origin_variants"]:
+            for candidate in state["candidates"]:
+                selected = dict(candidate)
+                selected["used_variant_budgets"] = variant_uses[vi]
+                selected["variant_name"] = variants[vi].get("name")
+                candidates[
+                    f"{candidate['key']}#{','.join(map(str, candidate['used_options']))}"
+                    f"#{variants[vi].get('name') or ''}"
+                ] = selected
+    return list(candidates.values()), caps
+
+
+def _options_with_printed_unit_abilities(
+    unit: Unit, options: list[WargearOption], counts: dict[str, int]
+) -> list[WargearOption]:
+    reachable = {
+        id_
+        for option in options
+        for ids in (
+            option.get("replaces") or [],
+            option.get("replacement") or [],
+            *(option.get("replacement_choice") or []),
+        )
+        for id_ in ids
+    }
+    additions = [
+        {
+            "id": f"{unit['id']}-printed-ability-{id_}",
+            "unit_id": unit["id"],
+            "faction_id": unit.get("faction_id"),
+            "game_version": unit.get("game_version"),
+            "is_free": True,
+            "replacement": [id_],
+            "model_constraint": {"max_count": counts[id_]},
+        }
+        for id_ in (unit.get("ability_ids") or [])
+        if counts.get(id_, 0) > 0 and id_ not in reachable
+    ]
+    return list(options) if not additions else [*options, *additions]
 
 
 def _solve_assignment(
     rows: list[dict[str, Any]],
-    bag: dict[str, int],
+    lower: dict[str, int],
+    upper: dict[str, int],
     option_caps: list[int],
+    variant_caps: dict[str, int] | None = None,
+    on_solution: Any = None,
 ) -> list[dict[str, Any]] | None:
-    """A complete, deterministic exact-cover search: distribute each row's models
-    across its candidate loadouts so the chosen weapons sum to ``bag`` exactly without
-    exceeding any option's cap. Rows in order; within a row, candidates in their
-    pre-sorted order, trying the largest feasible count first; residual + usage prune
-    dead branches. Returns the first solution found (so identical inputs yield
-    identical groupings everywhere) as per-candidate picks, or ``None`` when no exact
-    partition exists. Mirror of the TS ``solveAssignment``."""
-    residual = dict(bag)
-    usage = [0] * len(option_caps)
+    """Deterministically search bounded row candidates; callbacks may cancel."""
+    remaining_lower, remaining_upper = dict(lower), dict(upper)
+    option_usage = [0] * len(option_caps)
+    variant_caps = variant_caps or {}
+    variant_usage: dict[str, int] = {}
     picks: list[tuple[int, int, int]] = []
+
+    def snapshot() -> list[dict[str, Any]]:
+        return [
+            {
+                "ri": ri,
+                "name": rows[ri]["name"],
+                "weapons": rows[ri]["candidates"][ci]["weapons"],
+                "variant_name": rows[ri]["candidates"][ci].get("variant_name"),
+                "count": count,
+            }
+            for ri, ci, count in picks
+        ]
 
     def assign_row(ri: int) -> bool:
         if ri == len(rows):
-            return all(c == 0 for c in residual.values())
+            if any(count > 0 for count in remaining_lower.values()):
+                return False
+            if on_solution is not None:
+                return bool(on_solution(snapshot()))
+            return True
         return distribute(ri, 0, rows[ri]["count"])
 
     def distribute(ri: int, ci: int, left: int) -> bool:
         row = rows[ri]
-        cands = row["candidates"]
-        if ci == len(cands):
+        if ci == len(row["candidates"]):
             return left == 0 and assign_row(ri + 1)
-        cand = cands[ci]
-        weapons = cand["weapons"]
-        used = cand["used_options"]
-        hi = left
-        for id_, per in weapons.items():
+        candidate = row["candidates"][ci]
+        high = left
+        for id_, per in candidate["weapons"].items():
             if per > 0:
-                hi = min(hi, residual.get(id_, 0) // per)
-        for oi in used:
-            hi = min(hi, option_caps[oi] - usage[oi])
-        hi = max(0, hi)
-        for take in range(hi, -1, -1):
-            for id_, per in weapons.items():
-                residual[id_] = residual.get(id_, 0) - per * take
-            for oi in used:
-                usage[oi] += take
-            if take > 0:
+                high = min(high, remaining_upper.get(id_, 0) // per)
+        for oi in set(candidate["used_options"]):
+            per_model = candidate["used_options"].count(oi)
+            high = min(high, (option_caps[oi] - option_usage[oi]) // per_model)
+        for token in set(candidate.get("used_variant_budgets") or []):
+            per_model = candidate["used_variant_budgets"].count(token)
+            high = min(
+                high,
+                (variant_caps.get(token, 0) - variant_usage.get(token, 0)) // per_model,
+            )
+        for take in range(max(0, high), -1, -1):
+            for id_, per in candidate["weapons"].items():
+                remaining_lower[id_] = remaining_lower.get(id_, 0) - per * take
+                remaining_upper[id_] = remaining_upper.get(id_, 0) - per * take
+            for oi in candidate["used_options"]:
+                option_usage[oi] += take
+            for token in candidate.get("used_variant_budgets") or []:
+                variant_usage[token] = variant_usage.get(token, 0) + take
+            if take:
                 picks.append((ri, ci, take))
             if distribute(ri, ci + 1, left - take):
                 return True
-            if take > 0:
+            if take:
                 picks.pop()
-            for oi in used:
-                usage[oi] -= take
-            for id_, per in weapons.items():
-                residual[id_] = residual.get(id_, 0) + per * take
+            for token in candidate.get("used_variant_budgets") or []:
+                variant_usage[token] -= take
+            for oi in candidate["used_options"]:
+                option_usage[oi] -= take
+            for id_, per in candidate["weapons"].items():
+                remaining_lower[id_] = remaining_lower.get(id_, 0) + per * take
+                remaining_upper[id_] = remaining_upper.get(id_, 0) + per * take
         return False
 
-    if not assign_row(0):
-        return None
+    finished = assign_row(0)
+    return snapshot() if finished and on_solution is None else None
+
+
+def _groups_from_solution(solution: list[dict[str, Any]]) -> list[LoadoutGroup]:
+    by_group: dict[str, dict[str, Any]] = {}
+    for item in solution:
+        key = _multiset_key(item["weapons"])
+        group_key = f"{item['name'] or ''}##{key}"
+        current = by_group.get(group_key)
+        if current is not None:
+            current["count"] += item["count"]
+        else:
+            by_group[group_key] = {
+                "ri": item["ri"],
+                "name": item["name"],
+                "weapons": item["weapons"],
+                "count": item["count"],
+                "key": key,
+            }
+    live = [group for group in by_group.values() if group["count"] > 0]
+    live.sort(key=lambda group: (group["ri"], -group["count"], _js_locale_key(group["key"])))
     return [
         {
-            "ri": ri,
-            "name": rows[ri]["name"],
-            "weapons": rows[ri]["candidates"][ci]["weapons"],
-            "count": count,
+            "model_name": group["name"],
+            "count": group["count"],
+            "weapons": _sorted_group_weapons(group["weapons"]),
         }
-        for ri, ci, count in picks
+        for group in live
     ]
+
+
+def complete_loadout(
+    unit: Unit,
+    model_count: int,
+    options: list[WargearOption],
+    models: list[LoadoutModel] | None,
+    explicit_counts: dict[str, int],
+) -> dict[str, Any] | None:
+    n = max(0, int(model_count))
+    if n == 0 or not _has_recorded_loadout_bases(models):
+        return None
+    assert models is not None
+
+    strict_lower = {id_: count for id_, count in explicit_counts.items() if count > 0}
+    lower_variants = [strict_lower]
+    default_ids = {id_ for model in models for id_ in (model.get("default_weapon_ids") or [])}
+    repeated_co_items: set[str] = set()
+    for option in options:
+        occurrences: dict[str, int] = {}
+        for branch in option.get("replacement_choice") or []:
+            if len(branch) < 2:
+                continue
+            for id_ in dict.fromkeys(branch):
+                occurrences[id_] = occurrences.get(id_, 0) + 1
+        for id_, count in occurrences.items():
+            if count >= 2 and id_ not in default_ids:
+                repeated_co_items.add(id_)
+    relaxed_lower = dict(strict_lower)
+    for id_ in repeated_co_items:
+        relaxed_lower.pop(id_, None)
+    if len(relaxed_lower) != len(strict_lower):
+        lower_variants.append(relaxed_lower)
+
+    effective_options = _options_with_printed_unit_abilities(unit, options, explicit_counts)
+    for lower in lower_variants:
+        for row_counts in _candidate_row_counts(models, n, lower):
+            fixed_models = [
+                {**model, "min": row_counts[index], "max": row_counts[index]}
+                for index, model in enumerate(models)
+            ]
+            default_counts: dict[str, int] = {}
+            for index, model in enumerate(fixed_models):
+                count = row_counts[index]
+                if count <= 0:
+                    continue
+                for id_ in model.get("default_weapon_ids") or []:
+                    default_counts[id_] = default_counts.get(id_, 0) + count
+            upper = dict(default_counts)
+            for id_, explicit in explicit_counts.items():
+                upper[id_] = max(explicit, upper.get(id_, 0))
+
+            option_caps = [option_cap(option, n, fixed_models) for option in effective_options]
+            rows: list[dict[str, Any]] = []
+            variant_caps: dict[str, int] = {}
+            for index, model in enumerate(fixed_models):
+                count = row_counts[index]
+                if count <= 0:
+                    continue
+                prepared, caps = _row_candidates(model, index, count, n, effective_options)
+                variant_caps.update(caps)
+                candidates = [
+                    candidate
+                    for candidate in prepared
+                    if all(
+                        per <= 0 or upper.get(id_, 0) >= per
+                        for id_, per in candidate["weapons"].items()
+                    )
+                    and all(option_caps[oi] >= 1 for oi in candidate["used_options"])
+                ]
+                candidates.sort(
+                    key=lambda candidate: (
+                        -sum(
+                            min(candidate["weapons"].get(id_, 0), required)
+                            for id_, required in lower.items()
+                        ),
+                        len(candidate["used_options"]),
+                        _js_locale_key(candidate["key"]),
+                        _js_locale_key(",".join(map(str, candidate["used_options"]))),
+                    )
+                )
+                rows.append({"name": model.get("name"), "count": count, "candidates": candidates})
+            solution = _solve_assignment(rows, lower, upper, option_caps, variant_caps)
+            if solution is None:
+                continue
+            groups = _groups_from_solution(solution)
+            counts: dict[str, int] = {}
+            for group in groups:
+                for weapon in group["weapons"]:
+                    counts[weapon["id"]] = (
+                        counts.get(weapon["id"], 0) + weapon["count"] * group["count"]
+                    )
+            if _budget_violations(unit, n, counts):
+                continue
+            return {"counts": counts, "groups": groups if n > 1 else None}
+    return None
 
 
 def group_loadout(
@@ -483,74 +828,53 @@ def group_loadout(
     models: list[LoadoutModel] | None,
     counts: dict[str, int],
 ) -> list[LoadoutGroup] | None:
-    """Decompose a unit's flat loadout into per-model-type groups.
-
-    :func:`_assign_row_counts` fixes each row's model count; :func:`_solve_assignment`
-    then searches, completely and deterministically, for an assignment of each row's
-    models to legal per-model loadouts (:func:`_enumerate_row_candidates`) whose
-    weapons sum to ``counts`` exactly while respecting every option's
-    :func:`option_cap`. Returns ``None`` only when no such exact partition exists
-    (single model, no recorded per-model defaults, or a genuinely indivisible bag) so
-    callers omit ``loadout_groups`` and renderers keep their unit-wide rendering.
-    Mirror of the TS ``groupLoadout``.
-    """
-    if model_count <= 1 or not _has_recorded_defaults(models):
+    """Prove and decompose a flat loadout across every feasible model allocation."""
+    n = max(0, int(model_count))
+    variants = any(model.get("loadout_variants") for model in models or [])
+    if (n <= 1 and not variants) or not _has_recorded_loadout_bases(models):
         return None
     assert models is not None
 
-    bag = {id_: c for id_, c in counts.items() if c > 0}
-    row_n = _assign_row_counts(models, model_count, bag)
-    option_caps = [option_cap(o, model_count, models) for o in options]
-
-    rows: list[dict[str, Any]] = []
-    for i, model in enumerate(models):
-        k = row_n[i]
-        if k == 0:
-            continue
-        base = _to_multiset(model.get("default_weapon_ids") or [])
-        candidates = _enumerate_row_candidates(base, model.get("name"), options)
-        candidates.sort(
-            key=lambda cand: (
-                cand["key"],
-                len(cand["used_options"]),
-                ",".join(str(u) for u in cand["used_options"]),
+    bag = {id_: count for id_, count in counts.items() if count > 0}
+    effective_options = _options_with_printed_unit_abilities(unit, options, bag)
+    for row_counts in _candidate_row_counts(models, n, bag):
+        fixed_models = [
+            {**model, "min": row_counts[index], "max": row_counts[index]}
+            for index, model in enumerate(models)
+        ]
+        option_caps = [option_cap(option, n, fixed_models) for option in effective_options]
+        rows: list[dict[str, Any]] = []
+        variant_caps: dict[str, int] = {}
+        for index, model in enumerate(fixed_models):
+            count = row_counts[index]
+            if count <= 0:
+                continue
+            prepared, caps = _row_candidates(model, index, count, n, effective_options)
+            variant_caps.update(caps)
+            candidates = [
+                candidate
+                for candidate in prepared
+                if all(
+                    per <= 0 or bag.get(id_, 0) >= per for id_, per in candidate["weapons"].items()
+                )
+                and all(option_caps[oi] >= 1 for oi in candidate["used_options"])
+            ]
+            candidates.sort(
+                key=lambda candidate: (
+                    _js_locale_key(candidate["key"]),
+                    len(candidate["used_options"]),
+                    _js_locale_key(",".join(map(str, candidate["used_options"]))),
+                )
             )
-        )
-        rows.append({"name": model.get("name"), "count": k, "candidates": candidates})
+            rows.append({"name": model.get("name"), "count": count, "candidates": candidates})
 
-    solution = _solve_assignment(rows, bag, option_caps)
-    if solution is None:
-        return None
-
-    # Merge identical (model-type, loadout) picks, then order deterministically: by
-    # row (leaders lead), then larger groups before smaller, then by canonical key.
-    by_group: dict[str, dict[str, Any]] = {}
-    for s in solution:
-        key = _multiset_key(s["weapons"])
-        gkey = f"{s['name'] or ''}##{key}"
-        cur = by_group.get(gkey)
-        if cur is not None:
-            cur["count"] += s["count"]
-        else:
-            by_group[gkey] = {
-                "ri": s["ri"],
-                "name": s["name"],
-                "weapons": s["weapons"],
-                "count": s["count"],
-                "key": key,
-            }
-    live = [g for g in by_group.values() if g["count"] > 0]
-    live.sort(key=lambda g: (g["ri"], -g["count"], g["key"]))
-    if not live:
-        return None
-    return [
-        {
-            "model_name": g["name"],
-            "count": g["count"],
-            "weapons": _sorted_group_weapons(g["weapons"]),
-        }
-        for g in live
-    ]
+        solution = _solve_assignment(rows, bag, bag, option_caps, variant_caps)
+        if solution is None:
+            continue
+        groups = _groups_from_solution(solution)
+        if groups:
+            return groups
+    return None
 
 
 def _clamp_flat_budgets(unit: Unit, counts: dict[str, int]) -> None:
@@ -616,6 +940,25 @@ def weapon_bounds(
         for id_, n in add_mult.items():
             b = bounds.get(id_, {"min": 0, "max": 0})
             bounds[id_] = {"min": b["min"], "max": b["max"] + cap * n}
+    if models and any(model.get("loadout_variants") for model in models):
+        # A per-item envelope is deliberately looser than full structured
+        # legality, which also enforces shared option and variant allowances.
+        bounds.clear()
+        for allocation in _candidate_row_counts(models, max(0, int(model_count)), {}):
+            totals: dict[str, int] = {}
+            for index, row in enumerate(models):
+                count = allocation[index]
+                if count <= 0:
+                    continue
+                candidates, _ = _row_candidates(row, index, count, model_count, options)
+                maxima: dict[str, int] = {}
+                for candidate in candidates:
+                    for id_, per_model in candidate["weapons"].items():
+                        maxima[id_] = max(maxima.get(id_, 0), per_model)
+                for id_, maximum in maxima.items():
+                    totals[id_] = totals.get(id_, 0) + maximum * count
+            for id_, maximum in totals.items():
+                bounds[id_] = {"min": 0, "max": max(bounds.get(id_, {}).get("max", 0), maximum)}
     # A single-weapon flat budget caps the weapon's ceiling regardless of how
     # many swap slots can add it (see :func:`_clamp_flat_budgets`), so an
     # editor/salvo input clamped against these bounds can never reach an
@@ -659,8 +1002,9 @@ def validate_loadout(
     models: list[LoadoutModel] | None = None,
 ) -> list[dict[str, str]]:
     """Report every weapon/wargear count that falls outside its valid range."""
+    budgets = _budget_violations(unit, model_count, counts)
     bounds = weapon_bounds(unit, model_count, options, models)
-    out: list[dict[str, str]] = []
+    bound_violations: list[dict[str, str]] = []
     # Items governed by a shared-allowance budget are policed solely by
     # :func:`_budget_violations`; their per-id ``weapon_bounds`` max is derived
     # from the dump's cross-product loadout branches (the unreliable signal the
@@ -675,15 +1019,47 @@ def validate_loadout(
         if b is None:
             continue
         if n > b["max"]:
-            out.append(
+            bound_violations.append(
                 {"id": id_, "code": "exceeds-max", "message": f"{id_}: {n} exceeds max {b['max']}"}
             )
         elif n < b["min"]:
-            out.append(
+            bound_violations.append(
                 {"id": id_, "code": "below-min", "message": f"{id_}: {n} below min {b['min']}"}
             )
+
+    has_variants = bool(models and any(model.get("loadout_variants") for model in models))
+    if has_variants and _has_recorded_loadout_bases(models):
+        # A source/import bag is sparse: first report independently knowable
+        # bounds and budgets, then allow the solver to fill omitted defaults.
+        if budgets or bound_violations:
+            out = [*budgets, *bound_violations]
+            out.sort(key=lambda violation: (violation["id"], violation["code"]))
+            return out
+        valid_counts = all(isinstance(count, int) and count >= 0 for count in counts.values())
+        if (
+            valid_counts
+            and complete_loadout(unit, model_count, options, models, counts) is not None
+        ):
+            return []
+        return [
+            {
+                "id": unit["id"],
+                "code": "swap-conflict",
+                "message": (
+                    f"{unit['id']}: equipment cannot be assigned to legal whole-model loadouts"
+                ),
+            }
+        ]
+
+    if (
+        models is not None
+        and len(models) > 1
+        and group_loadout(unit, model_count, options, models, counts) is not None
+    ):
+        return budgets
+    out = bound_violations
     out.extend(_swap_conflicts(unit, model_count, options, counts, models))
-    out.extend(_budget_violations(unit, model_count, counts))
+    out.extend(budgets)
     # Deterministic order so the result is stable for cross-impl comparison.
     out.sort(key=lambda v: (v["id"], v["code"]))
     return out
@@ -740,8 +1116,7 @@ def _budget_violations(
                             "id": id_,
                             "code": "exceeds-allowance",
                             "message": (
-                                f"{id_}: {n} exceeds per-item duplicate cap "
-                                f"{dup_cap} ({dup_limit})"
+                                f"{id_}: {n} exceeds per-item duplicate cap {dup_cap} ({dup_limit})"
                             ),
                         }
                     )
@@ -808,6 +1183,168 @@ def check_unit_legality(
         if first is None:
             first = violations
     return first or []
+
+
+def _encode_candidate(witness: list[str], counts: dict[str, int]) -> str:
+    encoded_counts = ",".join(
+        f"{id_}:{count}" for id_, count in sorted(counts.items()) if count > 0
+    )
+    return f"{';'.join(witness)} => {encoded_counts}"
+
+
+def _variant_budget_cap(budget: dict[str, Any], unit_count: int, row_count: int) -> int:
+    per_models = budget.get("per_models") or 0
+    count = budget.get("count") or 0
+    if per_models == 0:
+        return count
+    models = unit_count if budget.get("scope") == "unit" else row_count
+    return math.floor(models * count / per_models)
+
+
+def loadout_candidates(
+    unit: Unit,
+    model_count: int,
+    options: list[WargearOption],
+    models: list[LoadoutModel] | None = None,
+    tiers: list[dict[str, Any]] | None = None,
+    limit: int | None = None,
+) -> list[str]:
+    """Stream canonical candidates until the distinct ``cap + 1`` boundary.
+
+    Traversal order is part of the unreleased API: containing tiers, bounded row
+    allocations, rows, then declared variants. Deduplication retains that first
+    occurrence and storage never exceeds the observable result boundary.
+    An empty result still requires exhausting the legal search space to prove that
+    no candidate exists.
+    """
+    total = max(0, int(model_count))
+    cap = max(0, int(limit if limit is not None else LOADOUT_CANDIDATES_DEFAULT_LIMIT))
+    base = models or []
+    row_sets = (
+        [
+            rows
+            for tier in tiers or []
+            if (rows := _tier_models(tier, base))
+            and sum(max(0, row.get("min") or 0) for row in rows)
+            <= total
+            <= sum(max(row.get("min") or 0, row.get("max") or 0) for row in rows)
+        ]
+        if tiers
+        else [base]
+        if base
+        else []
+    )
+    first_seen: set[str] = set()
+    out: list[str] = []
+
+    def record(candidate: str) -> bool:
+        """Record the first occurrence and stop once the marker is determined."""
+        if candidate in first_seen:
+            return False
+        first_seen.add(candidate)
+        out.append(candidate)
+        return len(out) > cap
+
+    stop = False
+    for rows in row_sets:
+        if stop:
+            break
+        has_variants = any(row.get("loadout_variants") for row in rows)
+        for allocation in _iter_candidate_row_counts(rows, total):
+            if not has_variants:
+                counts: dict[str, int] = {}
+                if _has_recorded_defaults(rows):
+                    for index, count in enumerate(allocation):
+                        for id_ in rows[index].get("default_weapon_ids") or []:
+                            counts[id_] = counts.get(id_, 0) + count
+                else:
+                    for id_ in _base_weapon_ids(unit, options):
+                        counts[id_] = counts.get(id_, 0) + total
+                stop = record(
+                    _encode_candidate(
+                        [
+                            f"{rows[index].get('name') or ''}×{count}"
+                            for index, count in enumerate(allocation)
+                            if count
+                        ],
+                        counts,
+                    )
+                )
+                if stop:
+                    break
+                continue
+
+            fixed = [
+                {**row, "min": allocation[index], "max": allocation[index]}
+                for index, row in enumerate(rows)
+            ]
+            option_caps = [option_cap(option, total, fixed) for option in options]
+            solver_rows: list[dict[str, Any]] = []
+            variant_caps: dict[str, int] = {}
+            upper: dict[str, int] = {}
+            for index, row in enumerate(rows):
+                count = allocation[index]
+                if not count:
+                    continue
+                row_candidates, caps = _row_candidates(row, index, count, total, options)
+                declared_variants = {
+                    f"{index}:variant:{variant_index}": variant_index
+                    for variant_index, _ in enumerate(row.get("loadout_variants") or [])
+                }
+
+                def candidate_order(
+                    candidate: dict[str, Any],
+                    declared_variants: dict[str, int] = declared_variants,
+                ) -> tuple[Any, ...]:
+                    variant_index = 0
+                    for token in candidate.get("used_variant_budgets") or []:
+                        if token in declared_variants:
+                            variant_index = declared_variants[token]
+                            break
+                    return (
+                        variant_index,
+                        _js_locale_key(candidate["key"]),
+                        tuple(sorted(candidate["used_options"])),
+                        tuple(sorted(candidate.get("used_variant_budgets") or [])),
+                    )
+
+                row_candidates.sort(key=candidate_order)
+                variant_caps.update(caps)
+                maxima: dict[str, int] = {}
+                for candidate in row_candidates:
+                    for id_, per_model in candidate["weapons"].items():
+                        maxima[id_] = max(maxima.get(id_, 0), per_model)
+                for id_, maximum in maxima.items():
+                    upper[id_] = upper.get(id_, 0) + maximum * count
+                solver_rows.append(
+                    {"name": row.get("name"), "count": count, "candidates": row_candidates}
+                )
+
+            def accept(solution: list[dict[str, Any]]) -> bool:
+                nonlocal stop
+                counts: dict[str, int] = {}
+                witness_counts: dict[str, int] = {}
+                witness_order: list[str] = []
+                for group in solution:
+                    label = group.get("variant_name") or group.get("name") or ""
+                    if label not in witness_counts:
+                        witness_order.append(label)
+                        witness_counts[label] = 0
+                    witness_counts[label] += group["count"]
+                    for id_, per_model in group["weapons"].items():
+                        counts[id_] = counts.get(id_, 0) + per_model * group["count"]
+                if not _budget_violations(unit, total, counts):
+                    stop = record(
+                        _encode_candidate(
+                            [f"{name}×{witness_counts[name]}" for name in witness_order], counts
+                        )
+                    )
+                return stop
+
+            _solve_assignment(solver_rows, {}, upper, option_caps, variant_caps, accept)
+            if stop:
+                break
+    return [*out[:cap], LOADOUT_CANDIDATES_TRUNCATED] if len(out) > cap else out
 
 
 def _swap_conflicts(

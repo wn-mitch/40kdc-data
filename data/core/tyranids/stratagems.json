@@ -17,7 +17,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "93b609eb-8591-5697-9b0e-9fae17e5c880"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dba23d7e-df57-434f-8829-03cbfe84d881"
+      }
+    ]
   },
   {
     "id": "adaptive-optimisation-subterranean-assault",
@@ -36,7 +46,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5525693c-4628-5e40-9382-ac2838a4ab7f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "635d6424-caa2-4515-8c84-86ae2c8a7fac"
+      }
+    ]
   },
   {
     "id": "adrenal-surge-invasion-fleet",
@@ -55,7 +75,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ed69918e-5987-542f-8907-409ad8ba1dd4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "24f62921-b739-47bd-aa17-1191ae56f23a"
+      }
+    ]
   },
   {
     "id": "alien-physiology-warrior-bioform-onslaught",
@@ -74,7 +104,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a1904356-e88f-5f35-93fb-b181d20d0036"
+      },
+      {
+        "namespace": "mfm",
+        "id": "61097980-8f90-4f13-b2bd-33fd3c629761"
+      }
+    ]
   },
   {
     "id": "assassin-beasts-vanguard-onslaught",
@@ -93,7 +133,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f6f3fe48-52c3-58e5-9e1c-c0a8efbd74a3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cd3aa920-f0a8-4468-adf6-66a30c2ed7c0"
+      }
+    ]
   },
   {
     "id": "bounding-advance-unending-swarm",
@@ -112,7 +162,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "de79f437-5f38-5cb5-83c5-a956b9474b22"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d6d95f2e-da94-4979-83a9-1651076c015d"
+      }
+    ]
   },
   {
     "id": "broodguard-impulse-assimilation-swarm",
@@ -135,7 +195,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "621e0067-156f-55b9-b8ad-a432092c738e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2824ee77-aa79-49dd-a64b-d5b19a7d1776"
+      }
+    ]
   },
   {
     "id": "brute-speed-the-vardenghast-swarm",
@@ -153,7 +223,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "61b6a073-84cf-4e5a-92fc-69f972d0f6ae"
+      }
+    ]
   },
   {
     "id": "catalytic-biofortification-talons-of-the-norn-queen",
@@ -175,7 +251,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0ea31bb9-403c-5ae5-93bb-1d7429b6571e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a00e9bdd-8eb5-4f20-bf21-965bc8aa1ded"
+      }
+    ]
   },
   {
     "id": "corrosive-viscera-crusher-stampede",
@@ -195,7 +281,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9606d163-6c65-5fc6-9d08-3fe03b1e6bf8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4eda0f28-b1e6-4fde-a29f-cd036624b045"
+      }
+    ]
   },
   {
     "id": "counterpredation-ambush-predators",
@@ -213,7 +309,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "64740d56-84fd-5c2b-9118-8c155fa162ef"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0c67be9d-bb57-48fd-8552-913f37a136fc"
+      }
+    ]
   },
   {
     "id": "death-frenzy-invasion-fleet",
@@ -232,7 +338,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a24d2c42-f7b7-5774-871e-761a3a5914a5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bf5968dd-0618-40b2-a285-368ee238e92f"
+      }
+    ]
   },
   {
     "id": "endless-swarm-invasion-fleet",
@@ -251,7 +367,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8c7865b7-8a6e-585c-9064-4c52a405fd46"
+      },
+      {
+        "namespace": "mfm",
+        "id": "98b54a9e-d3df-4554-9a20-8905cbed45aa"
+      }
+    ]
   },
   {
     "id": "enfilading-emergence-subterranean-assault",
@@ -270,7 +396,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "67413239-0ee4-5b56-86ba-e5806a9bea74"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c2caac9f-93d9-4f86-97c2-9eb33a793628"
+      }
+    ]
   },
   {
     "id": "hypersensory-adaptations-ambush-predators",
@@ -288,7 +424,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5f112073-d3d6-5b1a-9258-a2b90abead49"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d953a37a-ce80-47a9-a78f-1dedc9677eda"
+      }
+    ]
   },
   {
     "id": "hypersensory-scillia-vanguard-onslaught",
@@ -307,7 +453,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2ca233eb-02b5-5e07-b0b0-2f636ec9fb94"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c8cba01d-68b8-4dd2-9d54-22bca4e1430f"
+      }
+    ]
   },
   {
     "id": "imperative-dominance-synaptic-nexus",
@@ -326,7 +482,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9a2e27a3-e674-54e2-a6c7-7c7cb1959b91"
+      },
+      {
+        "namespace": "mfm",
+        "id": "df3dd602-22be-4491-aff7-bba6e9cb711a"
+      }
+    ]
   },
   {
     "id": "invisible-hunter-vanguard-onslaught",
@@ -345,7 +511,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "78b2f9c1-d336-50ba-b998-62bd57a6486f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f9647596-d66d-45c0-8368-33d60eb4c022"
+      }
+    ]
   },
   {
     "id": "irresistible-will-synaptic-nexus",
@@ -365,7 +541,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3b72304d-d3e9-5d2c-b09d-1fc8355ade46"
+      },
+      {
+        "namespace": "mfm",
+        "id": "db5121c6-af18-4550-bd1c-f83ae29ab4df"
+      }
+    ]
   },
   {
     "id": "lesser-prey-talons-of-the-norn-queen",
@@ -383,7 +569,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b234aad3-44ca-5b69-8105-cf3f38cdf8d8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "96e02332-a1cf-4bc9-b9a1-5a9b6738c765"
+      }
+    ]
   },
   {
     "id": "massive-impact-crusher-stampede",
@@ -402,7 +598,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "68415937-7276-5e6e-a56e-44af601e5baa"
+      },
+      {
+        "namespace": "mfm",
+        "id": "42217b60-b61a-4b9f-8b50-4ecbc176daf8"
+      }
+    ]
   },
   {
     "id": "override-instincts-synaptic-nexus",
@@ -421,7 +627,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "258134ed-7d5b-5601-827c-599e13d849d3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eb498987-86b1-47ce-9038-f2c1e361b313"
+      }
+    ]
   },
   {
     "id": "overrun-invasion-fleet",
@@ -440,7 +656,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7a9009b2-adc0-5d1e-9f21-697f1b3a12d3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4dade65d-e014-4cc0-8807-566d7a0a7502"
+      }
+    ]
   },
   {
     "id": "parasitic-payload-warrior-bioform-onslaught",
@@ -459,7 +685,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5e4085c5-310a-5720-a4ea-018b7af379f2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ad6bd914-db0f-43be-95c1-aae0515947a1"
+      }
+    ]
   },
   {
     "id": "predatory-imperative-invasion-fleet",
@@ -478,7 +714,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6c8e8057-9beb-59d9-bc8c-120def3deeea"
+      },
+      {
+        "namespace": "mfm",
+        "id": "336dbd7d-cab2-46ed-8e10-f617f5bfa784"
+      }
+    ]
   },
   {
     "id": "preservation-imperative-unending-swarm",
@@ -497,7 +743,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ab0d2b48-f2a6-57f7-bdcd-67f27990d0db"
+      },
+      {
+        "namespace": "mfm",
+        "id": "339e5598-3a43-4dad-b380-903e3f06137c"
+      }
+    ]
   },
   {
     "id": "rampaging-monstrosities-crusher-stampede",
@@ -516,7 +772,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0732210d-9d63-579a-ad8f-fcbd76281337"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6777fd41-b27a-42d8-bb39-0d47cec99788"
+      }
+    ]
   },
   {
     "id": "rapacious-hunger-assimilation-swarm",
@@ -535,7 +801,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a4c05cac-a473-51e0-b058-9db7cdc51b97"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b91f04dc-d3b5-4640-96ec-cecabece8674"
+      }
+    ]
   },
   {
     "id": "rapid-regeneration-invasion-fleet",
@@ -555,7 +831,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c4a03cfd-7919-57dd-8716-d1940dadae8e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fd4cd9bf-d7b1-4225-a64b-e3ee837fe4b6"
+      }
+    ]
   },
   {
     "id": "reclaim-biomass-assimilation-swarm",
@@ -578,7 +864,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "72cc25b6-2564-50fb-b451-af346a2e0446"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dc252802-8084-4670-9feb-6ec2d389a58f"
+      }
+    ]
   },
   {
     "id": "reinforced-hive-node-synaptic-nexus",
@@ -598,7 +894,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bc33dfb5-cd07-58b4-8a4f-d83a9d7b7fa5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5eeb38ef-6c42-47a4-b504-d526b50c67df"
+      }
+    ]
   },
   {
     "id": "replenishing-swarms-subterranean-assault",
@@ -617,7 +923,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ec458322-41f3-58d4-8f8f-65f67b9d1075"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ecb83170-e09b-4f62-864a-70ce83835d7f"
+      }
+    ]
   },
   {
     "id": "restorative-impulse-warrior-bioform-onslaught",
@@ -655,7 +971,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5a592f1b-36e3-58b8-8856-8139c8c15abc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "165a3089-53d8-465b-b49a-d1bddd69ac1d"
+      }
+    ]
   },
   {
     "id": "savage-roar-crusher-stampede",
@@ -674,7 +1000,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0912b88e-63f3-5fb9-ba9b-a5424acdfc4a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "73c612be-28f7-4329-acfa-97e55aa8071b"
+      }
+    ]
   },
   {
     "id": "scanner-gheist-ambush-predators",
@@ -692,7 +1028,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3ed8c185-6fe8-5091-a24b-13c42dd92cda"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3e7a59f3-d04c-4c11-9a3d-b895f553d589"
+      }
+    ]
   },
   {
     "id": "secure-biomass-assimilation-swarm",
@@ -711,7 +1057,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "44672126-34e3-51f0-8295-cdd338cc8a2e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "58be2d55-0238-466d-9419-1b9e71710d4d"
+      }
+    ]
   },
   {
     "id": "seeded-broods-vanguard-onslaught",
@@ -730,7 +1086,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6760a78f-ac82-5438-82b8-279a6df01a47"
+      },
+      {
+        "namespace": "mfm",
+        "id": "99e70f67-a7e4-484a-846a-0f255d1839e6"
+      }
+    ]
   },
   {
     "id": "skulking-hunters-the-vardenghast-swarm",
@@ -748,7 +1114,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "58d53fee-ffbc-444e-b3f1-cef55a5af094"
+      }
+    ]
   },
   {
     "id": "spontaneous-hypercorrosion-warrior-bioform-onslaught",
@@ -788,7 +1160,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b0649b40-f441-5e19-b425-1c10a320927d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ebaed1fb-6016-4854-8068-eb013d8ebe2a"
+      }
+    ]
   },
   {
     "id": "swarm-guided-salvoes-crusher-stampede",
@@ -807,7 +1189,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d8df04b2-c924-5d71-8a7b-5cad0de76a5e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ff939b18-014a-4295-8557-4da856bce0b3"
+      }
+    ]
   },
   {
     "id": "swarm-marked-the-vardenghast-swarm",
@@ -825,7 +1217,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "091de73b-108e-4dd8-8c45-9bf0e9774c22"
+      }
+    ]
   },
   {
     "id": "swarming-assault-subterranean-assault",
@@ -844,7 +1242,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "46d0f536-0425-5c5d-821f-18bb2d12d9cd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e70cac37-cb3f-4b01-8643-faf7ce0b88e0"
+      }
+    ]
   },
   {
     "id": "swarming-masses-unending-swarm",
@@ -864,7 +1272,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "98b0a490-9aab-52a3-b87e-d61e26aa8ff0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "87d7b3cf-4231-4fdd-949f-3718bb1cc569"
+      }
+    ]
   },
   {
     "id": "synaptic-amplification-warrior-bioform-onslaught",
@@ -903,7 +1321,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d3bfea24-8ec8-5dfa-a7d5-558fa82f8b16"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a99b6843-3daa-403b-b821-899554e6cca7"
+      }
+    ]
   },
   {
     "id": "synaptic-goading-unending-swarm",
@@ -926,7 +1354,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f5df4cd1-7aa1-5f3c-aeda-73a7217e56f4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1c8f1a2a-6d2b-4416-b096-a62a4d31f66f"
+      }
+    ]
   },
   {
     "id": "synaptic-micronodes-warrior-bioform-onslaught",
@@ -945,7 +1383,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "79c83eaf-96b8-555d-82e0-1d3e00d9fd0b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fa256edd-ee08-4aab-b65a-6ef131bf98aa"
+      }
+    ]
   },
   {
     "id": "synaptic-shield-warrior-bioform-onslaught",
@@ -982,7 +1430,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8daa7393-b2fd-5465-9bb0-78b07e1c0729"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ef33df89-bcee-4d3a-8cc5-1aac7fc319e5"
+      }
+    ]
   },
   {
     "id": "teeming-masses-unending-swarm",
@@ -1002,7 +1460,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5921b3e4-035b-5a8e-aa09-cf5c08028d32"
+      },
+      {
+        "namespace": "mfm",
+        "id": "53d214eb-47e8-4ace-a623-07a7927197be"
+      }
+    ]
   },
   {
     "id": "the-smothering-shadow-synaptic-nexus",
@@ -1025,7 +1493,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6957fa79-bf35-56ee-899e-aee86fd5a475"
+      },
+      {
+        "namespace": "mfm",
+        "id": "abdd31fd-aea3-4c87-9614-9d41adc6f9c5"
+      }
+    ]
   },
   {
     "id": "tunnel-network-subterranean-assault",
@@ -1044,7 +1522,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a3a9edff-37fe-57f4-95dd-6b5a25f00cd0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1c5b4774-8038-41a4-b2e0-1b4e0bf3ac5e"
+      }
+    ]
   },
   {
     "id": "tyrannoformed-assimilation-swarm",
@@ -1063,7 +1551,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3faae854-6452-52e9-ab87-c567be621ffb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ad2cf20b-b006-4d15-9aa9-e62e25d74cab"
+      }
+    ]
   },
   {
     "id": "unending-waves-unending-swarm",
@@ -1086,7 +1584,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cb2a5016-67d5-545c-a634-62f75a3a602a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6d5a57e0-09a8-4421-8563-855c07ad24f3"
+      }
+    ]
   },
   {
     "id": "unseen-lurkers-vanguard-onslaught",
@@ -1105,7 +1613,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cc2e91bb-cb77-51e9-a387-95000b8c0f17"
+      },
+      {
+        "namespace": "mfm",
+        "id": "01ac5989-ef6d-4d4b-a3ff-c9b389972480"
+      }
+    ]
   },
   {
     "id": "untrammelled-ferocity-crusher-stampede",
@@ -1124,6 +1642,16 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9f77fb00-ea59-56e7-9146-e930eb6b7692"
+      },
+      {
+        "namespace": "mfm",
+        "id": "03b603f2-e334-45c0-b6bd-22f1d83487be"
+      }
+    ]
   }
 ]

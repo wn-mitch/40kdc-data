@@ -136,7 +136,7 @@
             "resolved": true,
             "candidates": []
           },
-          "count": 1
+          "count": 10
         },
         {
           "ref": {
@@ -145,7 +145,84 @@
             "resolved": true,
             "candidates": []
           },
-          "count": 9
+          "count": 10
+        },
+        {
+          "ref": {
+            "id": "nemesis-force-weapon-purifier-squad",
+            "raw_name": "Nemesis force weapon",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 10
+        }
+      ],
+      "loadout_groups": [
+        {
+          "model_name": "Knight of the Flame",
+          "count": 1,
+          "wargear": [
+            {
+              "ref": {
+                "id": "nemesis-force-weapon-purifier-squad",
+                "raw_name": "Nemesis force weapon",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "purifying-flame",
+                "raw_name": "Purifying Flame",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "storm-bolter",
+                "raw_name": "Storm bolter",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model_name": "Purifier",
+          "count": 9,
+          "wargear": [
+            {
+              "ref": {
+                "id": "nemesis-force-weapon-purifier-squad",
+                "raw_name": "Nemesis force weapon",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "purifying-flame",
+                "raw_name": "Purifying Flame",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            },
+            {
+              "ref": {
+                "id": "storm-bolter",
+                "raw_name": "Storm bolter",
+                "resolved": true,
+                "candidates": []
+              },
+              "count": 1
+            }
+          ]
         }
       ],
       "leader_attachment": null
@@ -158,7 +235,7 @@
   "diagnostics": {
     "resolved_units": 3,
     "unresolved_units": 0,
-    "resolved_weapons": 8,
+    "resolved_weapons": 9,
     "unresolved_weapons": 0,
     "warnings": []
   }

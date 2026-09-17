@@ -20,7 +20,11 @@
  * factions.find("World Eaters")!.units.length;
  */
 export { Dataset } from "./dataset.js";
-export type { StackableBuff, StackableBuffGroup, ReactiveTrigger } from "./dataset.js";
+export type {
+  StackableBuff,
+  StackableBuffGroup,
+  ReactiveTrigger,
+} from "./dataset.js";
 export { Collection } from "./collection.js";
 export type { CollectionConfig } from "./collection.js";
 export {
@@ -32,7 +36,7 @@ export {
 } from "./entities.js";
 export { normalizeName, stripLeadingThe } from "./normalize.js";
 export { isMeleeProfile } from "./weapon-profile.js";
-export type { WeaponProfile } from "./weapon-profile.js";
+export type { UnitProfile, WeaponProfile } from "./weapon-profile.js";
 export { emptyRawData } from "./types.js";
 export type { RawData } from "./types.js";
 
@@ -45,6 +49,10 @@ export {
   clampWeaponCount,
   validateLoadout,
   groupLoadout,
+  completeLoadout,
+  loadoutCandidates,
+  LOADOUT_CANDIDATES_DEFAULT_LIMIT,
+  LOADOUT_CANDIDATES_TRUNCATED,
 } from "./loadout.js";
 export type {
   Loadout,
@@ -53,10 +61,17 @@ export type {
   LoadoutModel,
   LoadoutGroup,
   LoadoutGroupWeapon,
+  CompletedLoadout,
 } from "./loadout.js";
 
 // Unit point-cost maths: ordinal-aware tier selection over `points` bands.
-export { baseUnitPoints, pointsTierMissing, wargearPoints } from "./pricing.js";
+export {
+  baseUnitPoints,
+  hostPointsTiers,
+  hostUnitPoints,
+  pointsTierMissing,
+  wargearPoints,
+} from "./pricing.js";
 
 // The cruncher surface — buff types + the engine — re-exported from the data
 // package so downstream callers can import their whole 40kdc API from
@@ -115,9 +130,16 @@ export type {
   RosterViolationCode,
   NormRoster,
 } from "./roster-resolve.js";
-export { pointsLimitForBattleSize, detachmentCapForBattleSize } from "./battle-sizes.js";
+export {
+  pointsLimitForBattleSize,
+  detachmentCapForBattleSize,
+} from "./battle-sizes.js";
 export { candidateAffordability } from "./affordability.js";
-export type { AffordabilitySpec, AffordabilityUnit, CandidateCost } from "./affordability.js";
+export type {
+  AffordabilitySpec,
+  AffordabilityUnit,
+  CandidateCost,
+} from "./affordability.js";
 
 import { Dataset } from "./dataset.js";
 
@@ -150,11 +172,11 @@ export const stratagems = dataset.stratagems;
 export const wargearOptions = dataset.wargearOptions;
 /** All non-weapon wargear items (icons, attachments). */
 export const wargear = dataset.wargear;
-/** All missions. */
+/** Mission metadata. Resolve its primary rule card with `missionCards.get(mission.id)`. */
 export const missions = dataset.missions;
 /** All mission matchups. */
 export const missionMatchups = dataset.missionMatchups;
-/** All secondary mission cards. */
+/** All primary and secondary mission cards. */
 export const missionCards = dataset.missionCards;
 /** All deployment patterns. */
 export const deploymentPatterns = dataset.deploymentPatterns;

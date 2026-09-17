@@ -59,6 +59,26 @@
             ]
           },
           {
+            "id": "cfg-force-disposition",
+            "name": "Force Disposition",
+            "type": "upgrade",
+            "number": 1,
+            "categories": [
+              {
+                "name": "Configuration",
+                "primary": true
+              }
+            ],
+            "selections": [
+              {
+                "id": "cfg-force-disposition-val",
+                "name": "Reconnaissance",
+                "type": "upgrade",
+                "number": 1
+              }
+            ]
+          },
+          {
             "id": "u-0",
             "name": "War Dog Brigand",
             "type": "model",
@@ -205,6 +225,11 @@
               {
                 "name": "Faction: Chaos Knights",
                 "primary": false
+              },
+              {
+                "id": "40kdc-keyword-0",
+                "name": "Character",
+                "primary": false
               }
             ],
             "costs": [
@@ -324,6 +349,11 @@
             "categories": [
               {
                 "name": "Faction: Chaos Knights",
+                "primary": false
+              },
+              {
+                "id": "40kdc-keyword-0",
+                "name": "Character",
                 "primary": false
               }
             ],
@@ -624,6 +654,11 @@
               {
                 "name": "Faction: Chaos Knights",
                 "primary": false
+              },
+              {
+                "id": "40kdc-keyword-0",
+                "name": "Character",
+                "primary": false
               }
             ],
             "costs": [
@@ -896,8 +931,8 @@
             ],
             "selections": [
               {
-                "id": "u14-model",
-                "name": "Nurglings",
+                "id": "u14-model-0",
+                "name": "Nurgling Swarm",
                 "type": "model",
                 "number": 3,
                 "selections": [
@@ -937,8 +972,8 @@
             ],
             "selections": [
               {
-                "id": "u15-model",
-                "name": "Nurglings",
+                "id": "u15-model-0",
+                "name": "Nurgling Swarm",
                 "type": "model",
                 "number": 3,
                 "selections": [

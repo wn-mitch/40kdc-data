@@ -1,80 +1,26 @@
 {
   "generatedFrom": "tools/src/audit-loadout-coverage.ts",
-  "totalSkeletons": 8,
-  "byFaction": {
+  "totalSkeletons": 0,
+  "byFaction": {},
+  "totalWeaponless": 8,
+  "weaponlessByFaction": {
     "adeptus-astartes": [
-      {
-        "faction": "adeptus-astartes",
-        "unit_id": "drop-pod",
-        "missing": [
-          "weapons",
-          "wargear-options"
-        ]
-      }
+      "drop-pod"
     ],
     "astra-militarum": [
-      {
-        "faction": "astra-militarum",
-        "unit_id": "aegis-defence-line",
-        "missing": [
-          "weapons",
-          "wargear-options"
-        ]
-      },
-      {
-        "faction": "astra-militarum",
-        "unit_id": "cyclops-demolition-vehicle",
-        "missing": [
-          "weapons",
-          "wargear-options"
-        ]
-      }
+      "aegis-defence-line",
+      "cyclops-demolition-vehicle"
     ],
     "chaos-daemons": [
-      {
-        "faction": "chaos-daemons",
-        "unit_id": "feculent-gnarlmaw",
-        "missing": [
-          "weapons",
-          "wargear-options"
-        ]
-      },
-      {
-        "faction": "chaos-daemons",
-        "unit_id": "skull-altar",
-        "missing": [
-          "weapons",
-          "wargear-options"
-        ]
-      }
+      "feculent-gnarlmaw",
+      "skull-altar"
     ],
     "tau-empire": [
-      {
-        "faction": "tau-empire",
-        "unit_id": "tidewall-shieldline",
-        "missing": [
-          "weapons",
-          "wargear-options"
-        ]
-      }
+      "tidewall-shieldline"
     ],
     "tyranids": [
-      {
-        "faction": "tyranids",
-        "unit_id": "mucolid-spores",
-        "missing": [
-          "weapons",
-          "wargear-options"
-        ]
-      },
-      {
-        "faction": "tyranids",
-        "unit_id": "spore-mines",
-        "missing": [
-          "weapons",
-          "wargear-options"
-        ]
-      }
+      "mucolid-spores",
+      "spore-mines"
     ]
   }
 }

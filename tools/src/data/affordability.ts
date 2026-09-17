@@ -18,11 +18,11 @@
  * @packageDocumentation
  */
 import type { BattleSize } from "../import/types.js";
-import type { Unit } from "../generated.js";
+import type { Faction, Unit } from "../generated.js";
 import type { Dataset } from "./dataset.js";
 import type { UnitView } from "./entities.js";
 import { pointsLimitForBattleSize } from "./battle-sizes.js";
-import { baseUnitPoints } from "./pricing.js";
+import { hostPointsTiers, hostUnitPoints } from "./pricing.js";
 
 /** One unit already in the list (fixes the running total + per-datasheet ordinals). */
 export interface AffordabilityUnit {
@@ -50,12 +50,16 @@ export interface CandidateCost {
 }
 
 /** The cheapest cost to field one more copy of `view` at army ordinal `nextOrdinal`. */
-function cheapestNextCopy(view: UnitView, nextOrdinal: number): number {
-  const tiers = (view.raw as Unit).points ?? [];
+function cheapestNextCopy(
+  view: UnitView,
+  nextOrdinal: number,
+  hostFaction?: Faction | null,
+): number {
+  const tiers = hostPointsTiers(view.raw as Unit, hostFaction);
   if (tiers.length === 0) return 0;
   let min = Infinity;
   for (const t of tiers) {
-    const cost = baseUnitPoints(view.raw, t.models, nextOrdinal);
+    const cost = hostUnitPoints(view.raw, t.models, nextOrdinal, hostFaction);
     if (cost < min) min = cost;
   }
   return min === Infinity ? 0 : min;
@@ -78,6 +82,9 @@ export function candidateAffordability(spec: AffordabilitySpec, dataset: Dataset
   };
 
   // Running total of the current list (ordinal-aware) + enhancement costs.
+  // Host-aware: foreign units with an allied_points entry for this army price
+  // from that entry (see hostPointsTiers).
+  const hostFaction = spec.factionId ? dataset.factions.get(spec.factionId)?.raw : undefined;
   const ordinals = new Map<string, number>();
   let spent = 0;
   for (const u of spec.units) {
@@ -85,7 +92,7 @@ export function candidateAffordability(spec: AffordabilitySpec, dataset: Dataset
     if (!view) continue;
     const ord = (ordinals.get(u.unitId) ?? 0) + 1;
     ordinals.set(u.unitId, ord);
-    spent += baseUnitPoints(view.raw, u.modelCount, ord);
+    spent += hostUnitPoints(view.raw, u.modelCount, ord, hostFaction);
     if (u.enhancementId) spent += dataset.enhancements.get(u.enhancementId)?.cost ?? 0;
   }
 
@@ -103,7 +110,7 @@ export function candidateAffordability(spec: AffordabilitySpec, dataset: Dataset
     const view = resolve(unitId);
     if (!view) continue;
     const nextOrdinal = (ordinals.get(unitId) ?? 0) + 1;
-    const nextCopyCost = cheapestNextCopy(view, nextOrdinal);
+    const nextCopyCost = cheapestNextCopy(view, nextOrdinal, hostFaction);
     out.push({ unitId: view.id, nextCopyCost, affordable: nextCopyCost <= remaining });
   }
   out.sort((a, b) => (a.nextCopyCost === b.nextCopyCost ? a.unitId.localeCompare(b.unitId) : a.nextCopyCost - b.nextCopyCost));

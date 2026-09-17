@@ -7,7 +7,7 @@
     "keyword_restrictions": [
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "oathbound-speculator-needgaard-oathband",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -15,7 +15,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1f4fd983-4f36-5c05-83f3-5e76115ad482"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dcc9fd81-0cb0-477b-9941-5f05fedf753f"
+      }
+    ]
   },
   {
     "id": "dead-reckoning-needgaard-oathband",
@@ -33,7 +43,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "320dda5f-2cda-56f3-98c4-3280475e2c3c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4124d5f9-6f7b-48d2-a87c-e03789a5d688"
+      }
+    ]
   },
   {
     "id": "iron-ambassador-needgaard-oathband",
@@ -51,7 +71,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "84f9f0f1-3c9d-51fa-8cc0-3deece55a060"
+      },
+      {
+        "namespace": "mfm",
+        "id": "03bcbf6f-e06f-4fe1-b393-5308acad4591"
+      }
+    ]
   },
   {
     "id": "ancestral-crest-needgaard-oathband",
@@ -69,7 +99,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "77bdbf0a-354e-5ae7-9cb1-2087b292e42b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "21db28c0-ee78-4beb-a273-b157bf69d799"
+      }
+    ]
   },
   {
     "id": "bastion-shield-hearthband",
@@ -87,7 +127,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "23084a50-172b-5bfa-8661-bc525451a3d6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b39ba051-9928-4883-8783-40a27ff07d66"
+      }
+    ]
   },
   {
     "id": "quake-multigenerator-hearthband",
@@ -95,6 +145,7 @@
     "detachment_id": "hearthband",
     "cost": 15,
     "keyword_restrictions": [
+      "Kâhl",
       "Leagues of Votann"
     ],
     "ability_id": null,
@@ -105,7 +156,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3f38ee73-9040-57bb-baf9-ce5e4ab38518"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cc75d3c5-6ce3-4757-ae31-b83fb7461869"
+      }
+    ]
   },
   {
     "id": "ironskein-hearthband",
@@ -123,7 +184,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a20fc92a-8bb2-51ea-bfb2-795fbc7ca32d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f7cc3d3b-4d28-4911-8718-85f6c4043c8c"
+      }
+    ]
   },
   {
     "id": "high-kahl-hearthband",
@@ -131,6 +202,7 @@
     "detachment_id": "hearthband",
     "cost": 30,
     "keyword_restrictions": [
+      "Kâhl",
       "Leagues of Votann"
     ],
     "ability_id": null,
@@ -141,7 +213,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d2d93b50-34f1-5355-94f3-56715af08882"
+      },
+      {
+        "namespace": "mfm",
+        "id": "097dc0a6-1f0b-4875-988c-a490ba350fe3"
+      }
+    ]
   },
   {
     "id": "eye-for-weakness-persecution-prospect",
@@ -159,7 +241,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7ee81a55-8d1c-526a-a8c2-e345ca06236e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cbcb0741-dced-40e8-99ab-9628de3fb0ac"
+      }
+    ]
   },
   {
     "id": "writ-of-acquisition-persecution-prospect",
@@ -177,7 +269,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6294cfd9-b1f6-5398-8f4f-67a3fb0a0ff2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5f317a7d-ad39-4e52-864a-449c99c4c154"
+      }
+    ]
   },
   {
     "id": "surgical-saboteur-persecution-prospect",
@@ -195,7 +297,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c9e4a927-bd8b-5874-90c3-0ad38d931975"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2b1df662-1cae-4854-9ee8-3539a0574eb0"
+      }
+    ]
   },
   {
     "id": "nomad-strategist-persecution-prospect",
@@ -213,7 +325,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ca9696b8-231c-587e-b66f-cc4939c4f7c1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3b97f702-1196-4138-8035-2bce01244422"
+      }
+    ]
   },
   {
     "id": "delvewerke-navigator-delve-assault-shift",
@@ -231,7 +353,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6d0341c2-74dc-5afb-ae39-ca6faebd89e8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ca90ac74-54bf-4507-9f77-9502c5731006"
+      }
+    ]
   },
   {
     "id": "multiwave-system-jammer-delve-assault-shift",
@@ -249,7 +381,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "12dc847d-41b6-534c-8660-f183ebf403b5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a4d8a0f5-a641-4d7d-bdef-1e44c21feb08"
+      }
+    ]
   },
   {
     "id": "quake-supervisor-delve-assault-shift",
@@ -267,7 +409,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "17ed857c-e91d-5521-acda-0d47bf02e7ee"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ab0a026e-6604-4425-8a3f-7adff3375e2d"
+      }
+    ]
   },
   {
     "id": "piledriver-delve-assault-shift",
@@ -285,7 +437,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e2a6bc2b-8708-5bc5-8768-de783ce2b659"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7372f00c-a1dd-4b7c-9097-1d03686078f4"
+      }
+    ]
   },
   {
     "id": "tactical-alchemy-brandfast-oathband",
@@ -293,7 +455,7 @@
     "detachment_id": "brandfast-oathband",
     "cost": 10,
     "keyword_restrictions": [
-      "Leagues of Votann"
+      "Kâhl"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -303,7 +465,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c0d86460-3b33-58c0-b460-3341149dd596"
+      },
+      {
+        "namespace": "mfm",
+        "id": "60408170-1bb2-498f-814e-d410806b3d04"
+      }
+    ]
   },
   {
     "id": "trivarg-cyber-implant-brandfast-oathband",
@@ -321,7 +493,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c6f12eb0-90ab-581e-a3bd-827e17b5615a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "35318eb6-0912-4912-9d7a-ddd32af5c735"
+      }
+    ]
   },
   {
     "id": "precursive-judgement-brandfast-oathband",
@@ -329,7 +511,7 @@
     "detachment_id": "brandfast-oathband",
     "cost": 15,
     "keyword_restrictions": [
-      "Leagues of Votann"
+      "Kâhl"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -339,7 +521,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bd3d1b7f-4950-552c-bef3-9a7220f1c579"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eb49d974-a626-42c8-b2de-25a21172bb37"
+      }
+    ]
   },
   {
     "id": "signature-restoration-brandfast-oathband",
@@ -347,7 +539,7 @@
     "detachment_id": "brandfast-oathband",
     "cost": 5,
     "keyword_restrictions": [
-      "Leagues of Votann"
+      "Brôkhyr"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -357,7 +549,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ee57261e-b6df-5d20-98ae-b83f16735675"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bbd55155-caaa-414c-88cd-0c8d259e6f2c"
+      }
+    ]
   },
   {
     "id": "farstryder-node-hearthfyre-arsenal",
@@ -382,9 +584,6 @@
     "name": "Calculated Tenacity",
     "detachment_id": "hearthfyre-arsenal",
     "cost": 15,
-    "keyword_restrictions": [
-      "Leagues of Votann"
-    ],
     "ability_id": null,
     "is_unique": true,
     "game_version": {
@@ -393,7 +592,25 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Brôkhyr"
+      ],
+      [
+        "Memnyr Strategist"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d3070477-6902-55a0-a3c7-72511e7a482a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b48ffd02-ce7e-41c0-aa75-fc375e1fe200"
+      }
+    ]
   },
   {
     "id": "mantle-of-elders-hearthfyre-arsenal",
@@ -401,7 +618,7 @@
     "detachment_id": "hearthfyre-arsenal",
     "cost": 10,
     "keyword_restrictions": [
-      "Leagues of Votann"
+      "Memnyr Strategist"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -411,7 +628,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "db17f290-6dca-5f70-9174-1fa8633e6f0a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a8a6b0c-b298-4e3e-9c84-7ca2ccacc27f"
+      }
+    ]
   },
   {
     "id": "graviton-vault-hearthfyre-arsenal",
@@ -419,7 +646,7 @@
     "detachment_id": "hearthfyre-arsenal",
     "cost": 5,
     "keyword_restrictions": [
-      "Leagues of Votann"
+      "Brôkhyr"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -429,7 +656,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "16e39fe6-2165-5842-9c65-34c80e853187"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f2eb2bd9-6e9d-47dc-b2c5-80633c0b88ca"
+      }
+    ]
   },
   {
     "id": "mercenary-prospector-mercenary-oathband",
@@ -437,7 +674,7 @@
     "detachment_id": "mercenary-oathband",
     "cost": 20,
     "keyword_restrictions": [
-      "Leagues of Votann"
+      "Kâhl"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -447,7 +684,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2a1e524b-0474-5c77-a0b0-6fd74a50d2be"
+      },
+      {
+        "namespace": "mfm",
+        "id": "891874c8-87e5-4a6f-9b8c-3769ead4a93a"
+      }
+    ]
   },
   {
     "id": "metaphysical-brokerage-mercenary-oathband",
@@ -455,7 +702,7 @@
     "detachment_id": "mercenary-oathband",
     "cost": 20,
     "keyword_restrictions": [
-      "Leagues of Votann"
+      "Memnyr Strategist"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -465,7 +712,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "79679ca0-566c-541c-8ee4-245b24c4fae0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c1bbb1c3-c469-464b-b37e-2f45895ef645"
+      }
+    ]
   },
   {
     "id": "etacarn-sb9-targeting-implant-mercenary-oathband",
@@ -483,7 +740,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ea6af81d-99d5-50d0-8e0f-b210724fa0a7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8777d61f-6b9a-45ab-b0c2-639a917452e2"
+      }
+    ]
   },
   {
     "id": "asset-manipulator-mercenary-oathband",
@@ -501,15 +768,26 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3a73a88b-defa-5f28-9249-b37c33ac889d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c719e55c-ede4-4422-999b-11b166a3e0d7"
+      }
+    ]
   },
   {
     "id": "saturation-rounds-upgrade-armoured-trailblazers",
     "name": "Saturation Rounds (Upgrade)",
     "detachment_id": "armoured-trailblazers",
-    "cost": 10,
+    "cost": 15,
     "keyword_restrictions": [
-      "Leagues of Votann"
+      "Leagues of Votann",
+      "Sagitaur"
     ],
     "ability_id": "saturation-rounds-armoured-trailblazers",
     "is_unique": true,
@@ -519,7 +797,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0dc7b19f-3f94-559c-a5ed-3f70fb4545a4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "27e25b2c-5cf3-47df-8e2b-a3dff31cdd95"
+      }
+    ]
   },
   {
     "id": "optimised-attack-lines-upgrade-armoured-trailblazers",
@@ -527,7 +815,8 @@
     "detachment_id": "armoured-trailblazers",
     "cost": 15,
     "keyword_restrictions": [
-      "Leagues of Votann"
+      "Leagues of Votann",
+      "Sagitaur"
     ],
     "ability_id": "optimised-attack-lines-armoured-trailblazers",
     "is_unique": true,
@@ -537,7 +826,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "951f6fa9-6fcb-5a20-a5b9-7ecc30ee2d1d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "413cc70c-8df1-4d24-828b-3cbfde7af684"
+      }
+    ]
   },
   {
     "id": "pan-spectral-lockons-upgrade-farseekers",
@@ -545,7 +844,7 @@
     "detachment_id": "farseekers",
     "cost": 10,
     "keyword_restrictions": [
-      "Leagues of Votann"
+      "Pioneers"
     ],
     "ability_id": "pan-spectral-lockons-farseekers",
     "is_unique": true,
@@ -555,7 +854,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2b9908b3-1caa-5097-b0d6-5c94c476aab3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "07fa1867-192c-4271-b3e3-926e7e1b2e52"
+      }
+    ]
   },
   {
     "id": "ironskein-hearthguard-covenant",
@@ -563,7 +872,7 @@
     "detachment_id": "hearthguard-covenant",
     "cost": 10,
     "keyword_restrictions": [
-      "Leagues of Votann"
+      "Kâhl"
     ],
     "ability_id": "ironskein-hearthguard-covenant",
     "is_unique": true,
@@ -573,7 +882,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "093580cc-a816-515d-91d2-316b4cbbff6e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e39596ad-bfd4-4548-b115-a5d5f63a2fba"
+      }
+    ]
   },
   {
     "id": "brokhyr-barrage-bane-slayers-bulwark",
@@ -590,10 +909,15 @@
     ],
     "points_provisional": false,
     "keyword_restrictions": [
-      "Bane-Slayer's Bulwark",
-      "Thunderkyn"
+      "Bane Slayer's Bulwark Brokhyr Thunderkyn"
     ],
-    "upgrade_tag": true
+    "upgrade_tag": true,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f8a1fc4c-65b9-466e-90b7-eb939120033c"
+      }
+    ]
   },
   {
     "id": "indomitable-exemplar-bane-slayers-bulwark",
@@ -612,6 +936,101 @@
     "keyword_restrictions": [
       "Bane-Slayer's Bulwark",
       "Einhyr Champion"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e3c2c751-53b4-478f-8946-25eddca7c871"
+      }
+    ]
+  },
+  {
+    "id": "shroudwerke-talismans-upgrade-farseekers",
+    "name": "Shroudwërke Talismans (Upgrade)",
+    "detachment_id": "farseekers",
+    "cost": 15,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Yaegirs"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1362283d-3e19-5c9d-9813-5bdfa3d9a82c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1bbe32e3-9196-4f6a-9b1b-bbec55014700"
+      }
+    ]
+  },
+  {
+    "id": "farstrydr-node-hearthfyre-arsenal",
+    "name": "Fârstrydr Node",
+    "detachment_id": "hearthfyre-arsenal",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Memnyr Strategist"
+      ],
+      [
+        "Brôkhyr"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7684e4c7-384f-50f9-bc3d-dc099cadaf7b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f032aa6f-36db-4f80-b411-c04b7ff0754b"
+      }
+    ]
+  },
+  {
+    "id": "high-kahl-hearthguard-covenant",
+    "name": "High Kâhl",
+    "detachment_id": "hearthguard-covenant",
+    "cost": 30,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Kâhl"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fd98a2f0-a24b-58d0-8402-4f5f3f75b2bc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "db1f418e-0896-46e8-8fe2-197c29b9a36c"
+      }
     ]
   }
 ]

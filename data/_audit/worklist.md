@@ -5,38 +5,45 @@ structural stub — an effect carrying an empty-modifier placeholder node that s
 DSL authored. This is the actionable counterpart to the per-faction `stub*` counts in
 [`CONTRIBUTING.md`](../../CONTRIBUTING.md) and [`summary.md`](summary.md).
 
-Total: 38 stub abilities.
+Total: 45 stub abilities.
 
 | faction | ability | shape | needs |
 |---|---|---|---|
+| adepta-sororitas | blazing-ire-bringers-of-flame | sequence | effect type "disembark" is not modelled by the buff layer |
+| adepta-sororitas | divine-aspect-army-of-faith | battle-shock-test | effect type "battle-shock-test" is not modelled by the buff layer |
+| adeptus-astartes | burning-vengeance-firestorm-assault-force | sequence | effect type "disembark" is not modelled by the buff layer |
 | adeptus-astartes | heroes-of-ultramar | unit-attachment | effect type "unit-attachment" is not modelled by the buff layer |
 | adeptus-astartes | mission-tactics | stat-modifier | stat-modifier: operation "undefined" not supported |
+| adeptus-astartes | onslaught-of-fire-firestorm-assault-force | sequence | empty modifier |
 | adeptus-astartes | sagas | stat-modifier | stat-modifier: operation "undefined" not supported |
+| adeptus-astartes | strike-from-the-shadows-vanguard-spearhead | sequence | stat-modifier on "BS" is outside the damage path |
+| adeptus-custodes | desperations-price-null-maiden-vigil | battle-shock-test | effect type "battle-shock-test" is not modelled by the buff layer |
+| adeptus-custodes | huntress-eye-null-maiden-vigil | battle-shock-test | effect type "battle-shock-test" is not modelled by the buff layer |
+| adeptus-custodes | inspirational-exemplar-auric-champions | remove-battle-shock | effect type "remove-battle-shock" is not modelled by the buff layer |
+| adeptus-custodes | shoulder-the-mantle-auric-champions | unit-attachment | effect type "unit-attachment" is not modelled by the buff layer |
 | aeldari | far-reaching-doom | stat-modifier | stat-modifier: operation "undefined" not supported |
 | aeldari | support-artillery | unit-attachment | effect type "unit-attachment" is not modelled by the buff layer |
-| astra-militarum | aerial-deployment | conditional | empty modifier |
 | astra-militarum | brutal-disciplinarian | select-units | effect type "remove-battle-shock" is not modelled by the buff layer |
-| chaos-knights | flush-the-quarry-helhunt-lance | conditional | effect type "movement-modifier" is not modelled by the buff layer |
-| chaos-knights | imperious-advance-traitoris-lance | conditional | effect type "movement-modifier" is not modelled by the buff layer |
 | chaos-space-marines | frenzy | stat-modifier | stat-modifier: operation "undefined" not supported |
 | chaos-space-marines | masters-of-the-maelstrom | unit-attachment | effect type "unit-attachment" is not modelled by the buff layer |
 | chaos-space-marines | super-heavy-war-engine | stat-modifier | stat-modifier: operation "undefined" not supported |
 | chaos-space-marines | the-scent-of-blood | stat-modifier | stat-modifier: operation "undefined" not supported |
 | chaos-space-marines | wracking-agonies-psychic | stat-modifier | stat-modifier: operation "undefined" not supported |
+| dark-angels | overpowering-exaction-lions-blade-task-force | battle-shock-test | effect type "battle-shock-test" is not modelled by the buff layer |
 | death-guard | daemonforge | stat-modifier | stat-modifier: operation "undefined" not supported |
 | death-guard | dark-ascension-aura | stat-modifier | stat-modifier: operation "undefined" not supported |
 | death-guard | frenzy | stat-modifier | stat-modifier: operation "undefined" not supported |
 | death-guard | mind-breaking-mutations-aura | stat-modifier | stat-modifier: operation "undefined" not supported |
 | drukhari | exacting-cruelty | stat-modifier | stat-modifier: operation "undefined" not supported |
-| emperors-children | daemonic-patrons | sequence | empty modifier |
 | emperors-children | mind-breaking-mutations-aura | stat-modifier | stat-modifier: operation "undefined" not supported |
+| emperors-children | reactive-disembarkation-rapid-evisceration | disembark | effect type "disembark" is not modelled by the buff layer |
 | emperors-children | the-scent-of-blood | stat-modifier | stat-modifier: operation "undefined" not supported |
 | genestealer-cults | hordes-of-the-faithful | stat-modifier | stat-modifier: operation "undefined" not supported |
-| genestealer-cults | underground-egress | conditional | empty modifier |
-| grey-knights | hallowed-ground | sequence | effect type "terrain-area-tag" is not modelled by the buff layer |
-| necrons | engrammatic-logic | select-units | effect type "remove-battle-shock" is not modelled by the buff layer |
-| orks | aerial-deployment | conditional | empty modifier |
-| orks | tuff-git-blitz-brigade | remove-battle-shock | effect type "remove-battle-shock" is not modelled by the buff layer |
+| necrons | engrammatic-logic | select-units | selection/history/model/attack predicates are not resolved by the buff engine |
+| orks | da-grand-warlords-ladz | stat-modifier | stat-modifier: operation "undefined" not supported |
+| orks | makari-hoist-dat-banner | stat-modifier | stat-modifier: operation "undefined" not supported |
+| orks | nazdregs-know-wotz | stat-modifier | stat-modifier: operation "undefined" not supported |
+| orks | supreme-kunnin | stat-modifier | stat-modifier: operation "undefined" not supported |
 | thousand-sons | daemonforge | stat-modifier | stat-modifier: operation "undefined" not supported |
 | thousand-sons | dark-ascension-aura | stat-modifier | stat-modifier: operation "undefined" not supported |
 | thousand-sons | frenzy | stat-modifier | stat-modifier: operation "undefined" not supported |

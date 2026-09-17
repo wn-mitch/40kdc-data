@@ -326,13 +326,8 @@
     "replaces": [
       "boltgun"
     ],
-    "replacement_choice": [
-      [
-        "meltagun"
-      ],
-      [
-        "plasma-gun"
-      ]
+    "replacement": [
+      "meltagun"
     ],
     "model_constraint": {
       "model_name": "Tormentor",
@@ -341,6 +336,26 @@
   },
   {
     "id": "tormentors-wgo-mfm-4",
+    "unit_id": "tormentors",
+    "faction_id": "emperors-children",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement": [
+      "plasma-gun"
+    ],
+    "model_constraint": {
+      "model_name": "Tormentor",
+      "per_n_models": 5
+    }
+  },
+  {
+    "id": "tormentors-wgo-mfm-5",
     "unit_id": "tormentors",
     "faction_id": "emperors-children",
     "game_version": {

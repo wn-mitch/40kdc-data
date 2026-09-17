@@ -12,6 +12,7 @@ type normUnit struct {
 	isWarlord         bool
 	enhancementID     string
 	leaderBodyguardID string
+	keywordOverrides  []string
 	counts            map[string]int
 }
 
@@ -67,7 +68,22 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		}
 		return nil
 	}
-	keywordSet := func(view *UnitView) map[string]struct{} {
+	// The army faction's keywords ([Imperium, Adeptus Astartes, Blood Angels]
+	// for a chapter): every unit in the faction's pool owns them — the
+	// <CHAPTER>-style keyword that chapter-shared datasheet records can't
+	// carry. Granted with the same subset rule that scopes a chapter's unit
+	// pool, so allied units never gain them.
+	var armyKeywords []string
+	if spec.factionID != "" {
+		if fac, ok := ds.Factions.Get(spec.factionID); ok {
+			armyKeywords = getStrList(fac.Raw, "keywords")
+		}
+	}
+	armyKeywordSet := map[string]struct{}{}
+	for _, k := range armyKeywords {
+		armyKeywordSet[k] = struct{}{}
+	}
+	keywordSet := func(view *UnitView, overrides []string) map[string]struct{} {
 		s := map[string]struct{}{}
 		for _, k := range getStrList(view.Raw, "keywords") {
 			s[k] = struct{}{}
@@ -75,14 +91,45 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		for _, k := range getStrList(view.Raw, "faction_keywords") {
 			s[k] = struct{}{}
 		}
+		s[getStr(view.Raw, "name")] = struct{}{}
+		if len(armyKeywordSet) > 0 {
+			inPool := true
+			for _, k := range getStrList(view.Raw, "faction_keywords") {
+				if _, ok := armyKeywordSet[k]; !ok {
+					inPool = false
+					break
+				}
+			}
+			if inPool {
+				for _, k := range armyKeywords {
+					s[k] = struct{}{}
+				}
+			}
+		}
+		for _, grantAny := range getList(view.Raw, "conditional_keywords") {
+			grant, ok := asMap(grantAny)
+			if !ok {
+				continue
+			}
+			if requiredDetachmentID := getStr(grant, "required_detachment_id"); requiredDetachmentID != "" &&
+				!contains(spec.detachmentIDs, requiredDetachmentID) {
+				continue
+			}
+			if requiredFactionKeyword := getStr(grant, "required_faction_keyword"); requiredFactionKeyword != "" {
+				if _, ok := armyKeywordSet[requiredFactionKeyword]; !ok {
+					continue
+				}
+			}
+			s[getStr(grant, "keyword")] = struct{}{}
+		}
+		for _, keyword := range overrides {
+			s[keyword] = struct{}{}
+		}
 		return s
 	}
 	isCharacter := func(view *UnitView) bool {
 		r := getStr(view.Raw, "role")
-		if r == "character" || r == "epic-hero" {
-			return true
-		}
-		return contains(getStrList(view.Raw, "keywords"), "Character")
+		return r == "character" || r == "epic-hero" || contains(getStrList(view.Raw, "keywords"), "Character")
 	}
 
 	views := make([]*UnitView, len(spec.units))
@@ -104,25 +151,14 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		})
 	}
 
-	// Resolved detachments (drop ids absent from the dataset); primary = first.
+	// Resolved detachments (drop ids absent from the dataset).
 	var detachments []map[string]any
 	// Shared detachment ids (Codex chapters) resolve within the roster's
 	// faction; fall back first-wins when the spec names no faction.
 	for _, id := range spec.detachmentIDs {
-		d, ok := any(nil), false
-		if spec.factionID != "" {
-			d, ok = ds.Detachments.GetInFaction(id, spec.factionID)
+		if detachment := lookupDetachment(ds, id, spec.factionID); detachment != nil {
+			detachments = append(detachments, detachment)
 		}
-		if !ok {
-			d, ok = ds.Detachments.GetAny(id)
-		}
-		if ok {
-			detachments = append(detachments, d.(map[string]any))
-		}
-	}
-	var primary map[string]any
-	if len(detachments) > 0 {
-		primary = detachments[0]
 	}
 
 	// --- Enhancements: per-unit eligibility + army-wide uniqueness. -----------
@@ -142,15 +178,43 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		if !contains(spec.detachmentIDs, getStr(enh, "detachment_id")) {
 			errV("enhancement-wrong-detachment", enhID, idx)
 		}
-		if !isCharacter(view) && enh["upgrade_tag"] != true {
+		if !isCharacter(view) && !contains(su.keywordOverrides, "Character") && enh["upgrade_tag"] != true {
 			errV("enhancement-on-non-character", enhID, idx)
 		}
-		kws := keywordSet(view)
-		for _, k := range getStrList(enh, "keyword_restrictions") {
-			if _, has := kws[k]; !has {
-				errV("enhancement-keyword-mismatch", enhID, idx)
-				break
+		kws := keywordSet(view, su.keywordOverrides)
+		eligible := true
+		if rawGroups, present := enh["keyword_restriction_groups"]; present && rawGroups != nil {
+			eligible = false
+			groups, _ := asList(rawGroups)
+			for _, rawGroup := range groups {
+				group, _ := asList(rawGroup)
+				groupEligible := true
+				for _, rawKeyword := range group {
+					keyword, ok := rawKeyword.(string)
+					if !ok {
+						groupEligible = false
+						break
+					}
+					if _, has := kws[keyword]; !has {
+						groupEligible = false
+						break
+					}
+				}
+				if groupEligible {
+					eligible = true
+					break
+				}
 			}
+		} else {
+			for _, keyword := range getStrList(enh, "keyword_restrictions") {
+				if _, has := kws[keyword]; !has {
+					eligible = false
+					break
+				}
+			}
+		}
+		if !eligible {
+			errV("enhancement-keyword-mismatch", enhID, idx)
 		}
 		for _, k := range getStrList(enh, "exclusion_keywords") {
 			if _, has := kws[k]; has {
@@ -179,15 +243,32 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		}
 		if su.leaderBodyguardID != "" {
 			eligible := bodyguardEligibleIDs(ds, view.ID())
+			if su.enhancementID != "" {
+				if enhancementAny, ok := ds.Enhancements.Get(su.enhancementID); ok {
+					for _, bodyguardID := range getStrList(enhancementAny.(map[string]any), "attachment_bodyguard_ids") {
+						eligible[bodyguardID] = struct{}{}
+					}
+				}
+			}
 			if _, ok := eligible[su.leaderBodyguardID]; !ok {
 				errV("leader-attachment-illegal", view.ID(), idx)
 			}
-		} else if getStr(view.Raw, "attachment_role") == "support" {
+		} else if getStr(view.Raw, "attachment_role") == "support" &&
+			(isCharacter(view) || contains(su.keywordOverrides, "Character")) {
 			errV("leader-must-attach", view.ID(), idx)
 		}
 	}
 
 	// --- Points total (ordinal-aware) + enhancement costs. --------------------
+	// Host-aware: a foreign unit with an allied_points entry for this army
+	// (Agents' Imperium price, a chapter's reprice of a shared datasheet)
+	// prices from that entry, not its native table.
+	var rosterFaction map[string]any
+	if spec.factionID != "" {
+		if f, ok := ds.Factions.Get(spec.factionID); ok {
+			rosterFaction = f.Raw
+		}
+	}
 	ordinals := map[string]int{}
 	total := 0
 	for idx, su := range spec.units {
@@ -197,7 +278,7 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		}
 		ord := ordinals[su.unitID] + 1
 		ordinals[su.unitID] = ord
-		total += baseUnitPoints(view.Raw, su.modelCount, ord)
+		total += hostUnitPoints(view.Raw, su.modelCount, ord, rosterFaction)
 		total += wargearPoints(view.Raw, su.counts)
 		if su.enhancementID != "" {
 			if eAny, ok := ds.Enhancements.Get(su.enhancementID); ok {
@@ -220,15 +301,23 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 	}
 
 	// --- Force disposition (advisory / warn). ---------------------------------
+	// Any selected detachment may grant the pick; detachments whose data does
+	// not record force_dispositions (key absent or null) are skipped, and when
+	// none record them the check is inconclusive and stays silent.
 	if spec.forceDisposition == nil {
 		push("warn", "disposition-not-picked", "roster", -1)
-	} else if primary != nil {
-		// `primary?.force_dispositions` truthy in TS: the key is present and not
-		// null (an empty array still triggers the membership check).
-		if fd, ok := primary["force_dispositions"]; ok && fd != nil {
-			if !contains(toStrList(fd), *spec.forceDisposition) {
-				push("warn", "disposition-invalid", *spec.forceDisposition, -1)
+	} else {
+		recorded, granted := false, false
+		for _, d := range detachments {
+			if fd, ok := d["force_dispositions"]; ok && fd != nil {
+				recorded = true
+				if contains(toStrList(fd), *spec.forceDisposition) {
+					granted = true
+				}
 			}
+		}
+		if recorded && !granted {
+			push("warn", "disposition-invalid", *spec.forceDisposition, -1)
 		}
 	}
 
@@ -258,7 +347,7 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 			if view == nil {
 				continue
 			}
-			kws := keywordSet(view)
+			kws := keywordSet(view, spec.units[idx].keywordOverrides)
 			for _, k := range required {
 				if _, has := kws[k]; !has {
 					errV("detachment-restriction-required", view.ID(), idx)
@@ -322,11 +411,11 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 			keyword := getStr(um, "keyword")
 			minN := asInt(um["min"])
 			count := 0
-			for _, v := range views {
+			for idx, v := range views {
 				if v == nil {
 					continue
 				}
-				if _, has := keywordSet(v)[keyword]; has {
+				if _, has := keywordSet(v, spec.units[idx].keywordOverrides)[keyword]; has {
 					count++
 				}
 			}

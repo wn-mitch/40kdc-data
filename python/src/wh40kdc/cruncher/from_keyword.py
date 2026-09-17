@@ -6,9 +6,9 @@ Two paths converge here:
 1. **DSL walk**, for keywords whose catalog ``effect`` is non-null
    (``twin-linked``, ``heavy``). The walker handles a deliberately small
    subset of nodes and produces buffs with ``source.kind = "weapon-keyword"``.
-2. **Id dispatch**, for the eight rules whose catalog ``effect`` is null
-   because the DSL has no primitive for them yet. These are surfaced as
-   ``extra-keyword`` buffs so the engine can dispatch its math directly.
+2. **Id dispatch**, for rules whose catalog ``effect`` is null because the DSL
+   has no primitive for them yet. These are surfaced as ``extra-keyword`` buffs
+   so the engine can dispatch their math directly.
 
 Unrecognised nodes drop silently in M1.
 
@@ -32,6 +32,7 @@ ENGINE_DISPATCH_KEYWORDS = frozenset(
         "melta",
         "rapid-fire",
         "torrent",
+        "blast",
         "ignores-cover",
     ]
 )
@@ -39,6 +40,21 @@ ENGINE_DISPATCH_KEYWORDS = frozenset(
 
 def _is_object(value: Any) -> TypeGuard[dict[str, Any]]:
     return isinstance(value, dict)
+
+
+def _keyword_applies_to_target(parameters: dict[str, Any] | None, context: EngineContext) -> bool:
+    if parameters is None:
+        return True
+    target_keywords = {str(keyword).lower() for keyword in context.get("targetKeywords") or []}
+    required = parameters.get("required_target_keywords_any")
+    if isinstance(required, list) and not any(
+        isinstance(keyword, str) and keyword.lower() in target_keywords for keyword in required
+    ):
+        return False
+    excluded = parameters.get("excluded_target_keywords")
+    return not isinstance(excluded, list) or not any(
+        isinstance(keyword, str) and keyword.lower() in target_keywords for keyword in excluded
+    )
 
 
 def buffs_from_keyword(
@@ -57,6 +73,10 @@ def buffs_from_keyword(
         "weaponId": weapon_id,
         "keywordId": keyword_id,
     }
+    if not _keyword_applies_to_target(parameters, context):
+        return []
+    if keyword_id == "blast" and (parameters is None or "value" not in parameters):
+        return []
 
     if keyword_id in ENGINE_DISPATCH_KEYWORDS:
         ref: dict[str, Any] = {"keyword_id": keyword_id}
@@ -84,7 +104,7 @@ def _walk(node: Any, source: BuffSource, ctx: EngineContext) -> list[Buff]:
         return _keyword_grant_buffs(node, source)
     if node_type == "conditional":
         return _conditional_buffs(node, source, ctx)
-    if node_type == "sequence":
+    if node_type in ("rules-bundle", "sequence"):
         return _walk_children(node.get("steps"), source, ctx)
     return []
 

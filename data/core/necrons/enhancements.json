@@ -15,7 +15,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d4085d5d-f60f-5619-9448-e09a0c0d9baa"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eff15605-8995-4196-a6fb-220bf5a2fe87"
+      }
+    ]
   },
   {
     "id": "nether-realm-casket-awakened-dynasty",
@@ -33,7 +43,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "99c29c93-cfb6-5e60-a755-eea343aaf6e3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "682ea8a8-adb8-4f7f-96e4-8d991d22b7fa"
+      }
+    ]
   },
   {
     "id": "phasal-subjugator-aura-awakened-dynasty",
@@ -51,7 +71,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dbebee83-08f5-5685-989c-9c7396b11518"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a6e993f2-c457-4c04-b5f9-c1a7deda2c37"
+      }
+    ]
   },
   {
     "id": "enaegic-dermal-bond-awakened-dynasty",
@@ -69,7 +99,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7f07ac14-7ddc-5ae3-96bd-365962c8fe05"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9eaf87ca-f192-4962-abfe-71524fc8f81f"
+      }
+    ]
   },
   {
     "id": "eternal-madness-annihilation-legion",
@@ -87,7 +127,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ec922dd9-6e51-53bf-86d1-944752a8c5c9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "aa693e14-91a3-4e4a-9183-573cb4aa21fa"
+      }
+    ]
   },
   {
     "id": "ingrained-superiority-annihilation-legion",
@@ -105,7 +155,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "20785df6-57a6-5d81-86dd-538cf6d9de53"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f8e6d080-6a6c-432b-8196-e26598cd7fda"
+      }
+    ]
   },
   {
     "id": "soulless-reaper-annihilation-legion",
@@ -113,7 +173,7 @@
     "detachment_id": "annihilation-legion",
     "cost": 15,
     "keyword_restrictions": [
-      "Necrons"
+      "Destroyer Cult"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -123,7 +183,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4bb62d0e-aa5b-52c6-9c99-999772f0ec0a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3af567c0-7dff-4339-840d-fa480262dacd"
+      }
+    ]
   },
   {
     "id": "eldritch-nightmare-annihilation-legion",
@@ -131,7 +201,7 @@
     "detachment_id": "annihilation-legion",
     "cost": 10,
     "keyword_restrictions": [
-      "Necrons"
+      "Destroyer Cult"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -141,7 +211,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e67e2823-eaa9-588d-8095-8ef4fa7ff1d7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "641e56b1-8ea2-4cf2-9674-9e9ca06d0152"
+      }
+    ]
   },
   {
     "id": "dimensional-sanctum-canoptek-court",
@@ -149,7 +229,7 @@
     "detachment_id": "canoptek-court",
     "cost": 20,
     "keyword_restrictions": [
-      "Necrons"
+      "Cryptek"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -159,7 +239,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a53eb657-505c-5aeb-ac03-2bbb2e40c71e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b6b83c22-ccc1-4e7b-8abe-ab09ddd291c9"
+      }
+    ]
   },
   {
     "id": "hyperphasic-fulcrum-canoptek-court",
@@ -167,7 +257,7 @@
     "detachment_id": "canoptek-court",
     "cost": 15,
     "keyword_restrictions": [
-      "Necrons"
+      "Cryptek"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -177,7 +267,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6397de0f-8d86-53a2-ac1d-ad70646dae8c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "59555bf5-512b-46c7-af47-3fa1ef0a3735"
+      }
+    ]
   },
   {
     "id": "autodivinator-canoptek-court",
@@ -185,7 +285,7 @@
     "detachment_id": "canoptek-court",
     "cost": 15,
     "keyword_restrictions": [
-      "Necrons"
+      "Cryptek"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -195,7 +295,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c6a156b5-4bc1-5499-962f-a79f47be0a10"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8d688ef0-fa91-4738-89b0-f499cc15f348"
+      }
+    ]
   },
   {
     "id": "metalodermal-tesla-weave-canoptek-court",
@@ -203,7 +313,7 @@
     "detachment_id": "canoptek-court",
     "cost": 10,
     "keyword_restrictions": [
-      "Necrons"
+      "Cryptek"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -213,7 +323,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "906f1800-2cbc-5139-8539-9c33ee88ad50"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e3c724a0-84ca-4170-96c1-226b30a0e432"
+      }
+    ]
   },
   {
     "id": "honourable-combatant-obeisance-phalanx",
@@ -221,7 +341,7 @@
     "detachment_id": "obeisance-phalanx",
     "cost": 10,
     "keyword_restrictions": [
-      "Necrons"
+      "Overlord"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -231,7 +351,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6fbfabb0-a8b0-575e-895c-db821b8bd37e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "35957742-a019-46a2-ac63-785d6901f3de"
+      }
+    ]
   },
   {
     "id": "unflinching-will-obeisance-phalanx",
@@ -239,7 +369,7 @@
     "detachment_id": "obeisance-phalanx",
     "cost": 20,
     "keyword_restrictions": [
-      "Necrons"
+      "Overlord"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -249,7 +379,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2900511c-26b6-506c-9e0e-ad050e205e75"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fe31d690-e8f6-4014-a53e-7b3db86f5a6e"
+      }
+    ]
   },
   {
     "id": "warrior-noble-obeisance-phalanx",
@@ -257,7 +397,7 @@
     "detachment_id": "obeisance-phalanx",
     "cost": 15,
     "keyword_restrictions": [
-      "Necrons"
+      "Overlord"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -267,7 +407,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d1964c81-ca98-5a43-978e-152223e5527e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "58ac4996-1d83-4a02-91d8-debebcf6de1c"
+      }
+    ]
   },
   {
     "id": "eternal-conqueror-obeisance-phalanx",
@@ -275,7 +425,7 @@
     "detachment_id": "obeisance-phalanx",
     "cost": 25,
     "keyword_restrictions": [
-      "Necrons"
+      "Overlord"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -285,7 +435,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b80285b9-fa99-5938-92ea-95a374d888f1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c1efe3ab-2501-4c4a-9f40-57900b8bb968"
+      }
+    ]
   },
   {
     "id": "dimensional-overseer-hypercrypt-legion",
@@ -303,7 +463,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "af68dafc-237c-5909-abaa-b03f5528b7ed"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4addb0fb-7504-4355-94e8-92842d42cd67"
+      }
+    ]
   },
   {
     "id": "arisen-tyrant-hypercrypt-legion",
@@ -321,7 +491,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "200e6b8b-a05c-5dfd-a0ac-722b66bd8dc0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8c2bb7c9-5cf9-4e3d-bc08-955f0e9b595a"
+      }
+    ]
   },
   {
     "id": "hyperspatial-transfer-node-hypercrypt-legion",
@@ -339,7 +519,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dc02c094-29d5-5d96-b6a4-bc57b1c12613"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dedd4e7b-9ddc-4edd-8a45-512061651b17"
+      }
+    ]
   },
   {
     "id": "osteoclave-fulcrum-hypercrypt-legion",
@@ -357,16 +547,23 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c89e4fbb-8873-5574-a303-ef7c3ac099d1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c1641e5f-db23-49aa-905f-12b1833efcf1"
+      }
+    ]
   },
   {
     "id": "dread-majesty-aura-starshatter-arsenal",
     "name": "Dread Majesty (Aura)",
     "detachment_id": "starshatter-arsenal",
     "cost": 30,
-    "keyword_restrictions": [
-      "Necrons"
-    ],
     "ability_id": null,
     "is_unique": true,
     "game_version": {
@@ -375,7 +572,25 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Overlord"
+      ],
+      [
+        "Catacomb Command Barge"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a6b333fd-72fe-53ad-93c0-9f9c00236a98"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9cfca145-bcf9-4be7-989e-79a7e295b209"
+      }
+    ]
   },
   {
     "id": "miniaturised-nebuloscope-starshatter-arsenal",
@@ -393,7 +608,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "50c90a4f-3cfd-5872-a313-4b6ea82a57f1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dec27f61-8026-4986-872b-5ad9c8b34084"
+      }
+    ]
   },
   {
     "id": "demanding-leader-starshatter-arsenal",
@@ -411,7 +636,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d9459c14-56d6-5b6b-ab5e-5fefbcff8849"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ac65e460-3330-4cd2-a8da-1cce0de6fd6d"
+      }
+    ]
   },
   {
     "id": "chrono-impedance-fields-starshatter-arsenal",
@@ -429,16 +664,23 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2374c36f-54cc-56eb-b688-4468cea68c4b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "27ae0787-64b1-4e1e-840d-027f27eb996f"
+      }
+    ]
   },
   {
     "id": "destroyer-ankh-cursed-legion",
     "name": "Destroyer Ankh",
     "detachment_id": "cursed-legion",
     "cost": 20,
-    "keyword_restrictions": [
-      "Necrons"
-    ],
     "ability_id": null,
     "is_unique": true,
     "game_version": {
@@ -447,7 +689,25 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "keyword_restriction_groups": [
+      [
+        "Catacomb Command Barge"
+      ],
+      [
+        "Overlord"
+      ]
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4b389eff-917f-5805-ba45-9fede2df4a69"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a17450e0-31f1-4b21-8952-5ea5c5bf7496"
+      }
+    ]
   },
   {
     "id": "murdermind-cursed-legion",
@@ -455,7 +715,7 @@
     "detachment_id": "cursed-legion",
     "cost": 15,
     "keyword_restrictions": [
-      "Necrons"
+      "Cryptek"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -465,25 +725,23 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "mask-of-the-nekrosor-cursed-legion",
-    "name": "Mask of the Nekrosor",
-    "detachment_id": "cursed-legion",
-    "cost": 20,
-    "keyword_restrictions": [
-      "Necrons"
+    "max_targets": 1,
+    "attachment_bodyguard_ids": [
+      "lokhust-destroyers",
+      "lokhust-heavy-destroyers",
+      "ophydian-destroyers",
+      "skorpekh-destroyers"
     ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c732feaa-faf2-5731-b402-052814fdd71c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "597b7938-15dd-4b21-adf6-c4c544287010"
+      }
+    ]
   },
   {
     "id": "cursed-circlet-cursed-legion",
@@ -491,7 +749,7 @@
     "detachment_id": "cursed-legion",
     "cost": 25,
     "keyword_restrictions": [
-      "Necrons"
+      "Destroyer Cult"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -501,7 +759,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5e9a77a7-b835-53ab-b7b7-25f2c8a452f2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d90084f1-087a-43f8-82fa-a6b95fad38d9"
+      }
+    ]
   },
   {
     "id": "quantum-abacus-cryptek-conclave",
@@ -519,7 +787,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c8705359-1575-5cf4-b33b-7eed2af3cac7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7a7f27f7-f4ab-4335-bc72-68979fc1e293"
+      }
+    ]
   },
   {
     "id": "atomic-disintegrators-cryptek-conclave",
@@ -527,7 +805,7 @@
     "detachment_id": "cryptek-conclave",
     "cost": 10,
     "keyword_restrictions": [
-      "Necrons"
+      "Cryptek"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -537,7 +815,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2f8d622c-90eb-5961-be5b-95ce8dae0676"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a06e781e-1b76-4e89-8c7e-06d8df86c172"
+      }
+    ]
   },
   {
     "id": "gauntlet-of-compression-cryptek-conclave",
@@ -555,7 +843,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c4b6ddee-7aa6-5abc-8c02-6def3ff251bc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6e0e59cb-c41f-4cb0-a009-c962aad3d392"
+      }
+    ]
   },
   {
     "id": "gravitic-bolas-cryptek-conclave",
@@ -563,7 +861,7 @@
     "detachment_id": "cryptek-conclave",
     "cost": 15,
     "keyword_restrictions": [
-      "Necrons"
+      "Cryptek"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -573,7 +871,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "383ae074-a7c5-56b2-b3bb-8042a485e740"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1a9b09ed-4256-40d8-962f-aacc25948e46"
+      }
+    ]
   },
   {
     "id": "enlivened-sentinels-upgrade-hand-of-the-dynasty",
@@ -581,6 +889,7 @@
     "detachment_id": "hand-of-the-dynasty",
     "cost": 20,
     "keyword_restrictions": [
+      "Necron Warriors",
       "Necrons"
     ],
     "ability_id": "enlivened-sentinels-hand-of-the-dynasty",
@@ -591,7 +900,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "462defc9-b7b3-5347-9a11-c30d5f3abc9b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "08785e77-dca3-4170-ac4b-67317a780156"
+      }
+    ]
   },
   {
     "id": "tools-of-dominion-upgrade-hand-of-the-dynasty",
@@ -599,6 +918,7 @@
     "detachment_id": "hand-of-the-dynasty",
     "cost": 15,
     "keyword_restrictions": [
+      "Immortals",
       "Necrons"
     ],
     "ability_id": "tools-of-dominion-hand-of-the-dynasty",
@@ -609,7 +929,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c7ebd9fd-8127-57b4-bd07-2d1b8c9ff151"
+      },
+      {
+        "namespace": "mfm",
+        "id": "28910499-26bf-4cf0-823a-17462276ea57"
+      }
+    ]
   },
   {
     "id": "recursive-reanimation-upgrade-skyshroud-spearhead",
@@ -617,7 +947,8 @@
     "detachment_id": "skyshroud-spearhead",
     "cost": 5,
     "keyword_restrictions": [
-      "Necrons"
+      "Necrons",
+      "Tomb Blades"
     ],
     "ability_id": "recursive-reanimation-skyshroud-spearhead",
     "is_unique": true,
@@ -627,7 +958,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8a1a9ddb-54a1-5390-a5b7-3eea7294a284"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b2fa2253-d5ff-4771-960a-a6a5c0bd9ebb"
+      }
+    ]
   },
   {
     "id": "deepening-madness-upgrade-skyshroud-spearhead",
@@ -635,7 +976,8 @@
     "detachment_id": "skyshroud-spearhead",
     "cost": 20,
     "keyword_restrictions": [
-      "Necrons"
+      "Destroyer Cult",
+      "Mounted"
     ],
     "ability_id": "deepening-madness-skyshroud-spearhead",
     "is_unique": true,
@@ -645,7 +987,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "06c8a2b1-36b1-525b-86f8-7f6618f4a5f8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c173a0bd-085d-42db-ac95-5c7ab17a267f"
+      }
+    ]
   },
   {
     "id": "prelocational-optimiser-the-phaerons-armoury",
@@ -663,7 +1015,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "27892177-61f2-5c79-8304-9909a85a632b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "72dc72d3-3e78-48d4-a16e-396f635c8e07"
+      }
+    ]
   },
   {
     "id": "mortality-shroud-aura-the-phaerons-armoury",
@@ -698,8 +1060,13 @@
     ],
     "points_provisional": false,
     "keyword_restrictions": [
-      "Amonhotekh's Guard",
-      "Overlord"
+      "Overlord Amonhotekh"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "78e7ca8e-1321-4a1c-9b04-2383ca1a2572"
+      }
     ]
   },
   {
@@ -717,9 +1084,187 @@
     ],
     "points_provisional": false,
     "keyword_restrictions": [
-      "Amonhotekh's Guard",
-      "Necron Warriors"
+      "Amonhotekh's Guard Necron Warriors"
     ],
-    "upgrade_tag": true
+    "upgrade_tag": true,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "90ecb256-bc18-494a-89a9-57bba7ac455b"
+      }
+    ]
+  },
+  {
+    "id": "singularity-matrix-pantheon-of-woe",
+    "name": "Singularity Matrix",
+    "detachment_id": "pantheon-of-woe",
+    "cost": 45,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "DNU",
+      "Necrons"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0032c15c-0d9f-5f7f-b961-287d32f28540"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5891f379-74fa-4612-a40e-9d7bc454efbf"
+      }
+    ]
+  },
+  {
+    "id": "quantum-goad-pantheon-of-woe",
+    "name": "Quantum Goad",
+    "detachment_id": "pantheon-of-woe",
+    "cost": 45,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "DNU",
+      "Necrons"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f51cf3a5-8a00-5be6-a3d7-0681f6a18526"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a9283134-4bcb-4f19-9511-362685ef5be4"
+      }
+    ]
+  },
+  {
+    "id": "animus-damper-pantheon-of-woe",
+    "name": "Animus Damper",
+    "detachment_id": "pantheon-of-woe",
+    "cost": 35,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "DNU",
+      "Necrons"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bd9bdaeb-3a8e-5f8f-8768-9182486de9d6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a0198bd7-14b1-4f97-a4fa-e977a89cea4d"
+      }
+    ]
+  },
+  {
+    "id": "reletavistic-tether-pantheon-of-woe",
+    "name": "Reletavistic Tether",
+    "detachment_id": "pantheon-of-woe",
+    "cost": 40,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "DNU",
+      "Necrons"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1e2b0519-eeac-5062-a529-1b6bc12a75c5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bfe156a7-f7d9-40f9-9bb7-07ba81009036"
+      }
+    ]
+  },
+  {
+    "id": "mark-of-the-nekrosor-cursed-legion",
+    "name": "Mark of the Nekrosor",
+    "detachment_id": "cursed-legion",
+    "cost": 20,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": false,
+    "max_targets": 1,
+    "keyword_restrictions": [
+      "Destroyer Cult"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8d71f910-697e-50e0-9bea-a7c734ecae52"
+      },
+      {
+        "namespace": "mfm",
+        "id": "767a6e78-8eda-4299-ad7f-e0614152a40d"
+      }
+    ]
+  },
+  {
+    "id": "mortality-shroud-aura-upgrade-the-phaerons-armoury",
+    "name": "Mortality Shroud (Aura) (Upgrade)",
+    "detachment_id": "the-phaerons-armoury",
+    "cost": 10,
+    "ability_id": null,
+    "is_unique": true,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "points_provisional": false,
+    "upgrade_tag": true,
+    "max_targets": 3,
+    "keyword_restrictions": [
+      "Necrons",
+      "Obelisk"
+    ],
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4da23ba5-692e-5c16-8839-ab46ebb9d6ad"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d1c6a70c-f9f2-444d-acb6-cdfdcc9f6e72"
+      }
+    ]
   }
 ]

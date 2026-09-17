@@ -6,6 +6,9 @@
   "type": "object",
   "properties": {
     "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "external_refs": {
+      "$ref": "../defs/common.schema.json#/$defs/external-reference-list"
+    },
     "name": { "type": "string", "minLength": 1, "maxLength": 128 },
     "parent_faction_id": {
       "oneOf": [
@@ -16,12 +19,12 @@
     "game_version": { "$ref": "../defs/game-version-ref.schema.json" },
     "keywords": { "$ref": "../defs/common.schema.json#/$defs/keyword-list" },
     "aliases": { "type": "array", "items": { "type": "string" } },
-    "faction_rule_id": {
-      "oneOf": [
-        { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
-        { "type": "null" }
-      ],
-      "description": "Reference to the faction-wide ability (e.g., Oath of Moment)"
+    "faction_rule_ids": {
+      "type": "array",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "References to the faction-wide abilities in display order"
     },
     "logo_url": {
       "type": "string",
@@ -29,6 +32,6 @@
       "description": "URL to the faction's logo/emblem image."
     }
   },
-  "required": ["id", "name", "game_version"],
+  "required": ["id", "name", "game_version", "faction_rule_ids"],
   "additionalProperties": false
 }

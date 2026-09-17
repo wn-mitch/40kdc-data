@@ -33,7 +33,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "61fd76a9-aabb-5b3b-ac01-4bb8b438f06c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ece354bb-d294-47aa-bff4-efb684b77443"
+      }
+    ]
   },
   {
     "id": "magos-questoris-questor-forgepact",
@@ -41,7 +51,7 @@
     "detachment_id": "questor-forgepact",
     "cost": 20,
     "keyword_restrictions": [
-      "Imperial Knights"
+      "Tech-Priest"
     ],
     "ability_id": null,
     "is_unique": true,
@@ -51,7 +61,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0f51fb69-3363-5061-86a6-fac63e126541"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5f24fb60-771e-4b8e-b83b-c6710c57ed13"
+      }
+    ]
   },
   {
     "id": "vocifer-magnificat-aura-questor-forgepact",
@@ -87,7 +107,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "95f3734c-a94d-5d00-9855-ce28f8699bf7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dd84557f-e965-4256-bb3d-99a588e0f98b"
+      }
+    ]
   },
   {
     "id": "bearer-of-the-evanescent-ion-valourstrike-lance",
@@ -105,7 +135,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2c28a347-9701-53d0-9ae0-657be01f38dd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5e130c62-8760-4161-8090-b0b5a1e49cc0"
+      }
+    ]
   },
   {
     "id": "bearer-of-the-judicants-helm-valourstrike-lance",
@@ -123,7 +163,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b8fadecf-f29a-5d10-8703-1b80bcec9ed3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "464d34c9-9ef4-4120-9894-b08d3263286a"
+      }
+    ]
   },
   {
     "id": "bearer-of-the-lancers-sigil-valourstrike-lance",
@@ -141,7 +191,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ce3b68fe-d38e-54be-9c05-9650f60dd448"
+      },
+      {
+        "namespace": "mfm",
+        "id": "42f69b7d-431d-49d1-ba12-528ab0c5e8ee"
+      }
+    ]
   },
   {
     "id": "acquisitor-at-arms-gate-warden-lance",
@@ -159,7 +219,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "423f956d-5bbe-5ff9-a984-0e92c1f88bb5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ff6239d3-8d8c-43e4-871d-0adbeb14564e"
+      }
+    ]
   },
   {
     "id": "purgations-hand-gate-warden-lance",
@@ -177,7 +247,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1217969e-e209-5bf9-abee-e1e2bacdc3ce"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cd1b2e62-6be8-4f90-8f93-df67c0408195"
+      }
+    ]
   },
   {
     "id": "augury-halo-gate-warden-lance",
@@ -195,7 +275,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5d9f06d1-ee4c-5c98-a67e-78b750118cf4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2085c68c-e175-4f84-9196-5aefcc3e6fda"
+      }
+    ]
   },
   {
     "id": "vengeful-tread-gate-warden-lance",
@@ -213,7 +303,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "520c0dee-9836-50ae-989f-39618039dd53"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d43c45ab-6a94-4a6a-94e1-45742749f9df"
+      }
+    ]
   },
   {
     "id": "herald-of-triumph-questoris-companions",
@@ -231,7 +331,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fbf00b30-9431-5710-a42b-71c04206546a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "35d11a0b-ae7d-4e53-bbd9-79c5ad287c3c"
+      }
+    ]
   },
   {
     "id": "wyrmslayer-divination-questoris-companions",
@@ -249,7 +359,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "961e3ae7-7406-5189-b43a-5b35f210156f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a8074148-447b-4f6b-8b12-b8d4caec36b7"
+      }
+    ]
   },
   {
     "id": "pennant-of-silvered-fury-questoris-companions",
@@ -267,7 +387,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "327298b2-3840-5c26-8017-ecaad98e8899"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3e7ec35c-7e28-40fd-99ad-6326fe7d3101"
+      }
+    ]
   },
   {
     "id": "crushing-condemnation-questoris-companions",
@@ -285,7 +415,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d7f686d8-d3fc-547b-b947-4cc13676e178"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3e495152-2763-497f-8fea-c3f123bc75f7"
+      }
+    ]
   },
   {
     "id": "mentors-pride-spearhead-at-arms",
@@ -303,7 +443,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "14d3dfeb-cf75-5523-9c55-a0accaeb693c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6c06821d-a66f-4817-a4db-d586bc26733a"
+      }
+    ]
   },
   {
     "id": "fables-of-nightmare-spearhead-at-arms",
@@ -321,7 +471,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "86b97438-9e5f-518b-aaa9-2765f30f4c07"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a0317440-3ea2-4b33-9f51-fa195f50471f"
+      }
+    ]
   },
   {
     "id": "tales-of-heroism-spearhead-at-arms",
@@ -339,7 +499,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ee9136a8-9383-5ca9-b964-93df6be2b1c9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2851bbad-fde7-4087-8aaf-9ba2bf66e70e"
+      }
+    ]
   },
   {
     "id": "martial-tuition-spearhead-at-arms",
@@ -357,7 +527,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d2b9ea01-b021-54db-88d2-8b2713e0b77e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "da877648-2082-4539-bf80-6bbf523eda89"
+      }
+    ]
   },
   {
     "id": "blessed-plate-dominus-foebreakers",
@@ -365,6 +545,7 @@
     "detachment_id": "dominus-foebreakers",
     "cost": 30,
     "keyword_restrictions": [
+      "Dominus",
       "Imperial Knights"
     ],
     "ability_id": "blessed-plate-dominus-foebreakers",
@@ -375,7 +556,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ba8d63c3-9271-567e-aa07-24819b38d3f8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5ee94026-3b68-4f72-b840-8e69eb1dc02d"
+      }
+    ]
   },
   {
     "id": "archeotech-autoloaders-dominus-foebreakers",
@@ -383,6 +574,7 @@
     "detachment_id": "dominus-foebreakers",
     "cost": 25,
     "keyword_restrictions": [
+      "Dominus",
       "Imperial Knights"
     ],
     "ability_id": "archeotech-autoloaders-dominus-foebreakers",
@@ -393,7 +585,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f1998eca-968d-53a5-a8f2-7357748e84d1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "65a68828-64e4-4730-8d90-a3c972fad08b"
+      }
+    ]
   },
   {
     "id": "gyro-optimised-actuators-upgrade-throne-bonded-outriders",
@@ -401,7 +603,6 @@
     "detachment_id": "throne-bonded-outriders",
     "cost": 15,
     "keyword_restrictions": [
-      "Imperial Knights",
       "Armiger"
     ],
     "ability_id": "gyro-optimised-actuators-throne-bonded-outriders",
@@ -412,7 +613,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "896d9b76-ad2c-5fb1-9a08-5b9fa074328d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "649d8237-fd55-4663-a10e-7846287e5368"
+      }
+    ]
   },
   {
     "id": "ancestral-overbleed-upgrade-throne-bonded-outriders",
@@ -420,7 +631,6 @@
     "detachment_id": "throne-bonded-outriders",
     "cost": 10,
     "keyword_restrictions": [
-      "Imperial Knights",
       "Armiger"
     ],
     "ability_id": "ancestral-overbleed-throne-bonded-outriders",
@@ -431,7 +641,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "46b8149a-0264-50a6-90b3-8395b87ed482"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bf648f70-ce48-47e4-a700-47e06887b2bb"
+      }
+    ]
   },
   {
     "id": "mysterious-guardian-freeblade-company",
@@ -449,7 +669,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "490219cb-97a8-551c-815c-bad981e2fb0e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "062c115d-820f-4719-829e-0df211f841e9"
+      }
+    ]
   },
   {
     "id": "sanctuary-freeblade-company",
@@ -467,7 +697,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4662e900-a5f9-5c11-9ca7-87926b440656"
+      },
+      {
+        "namespace": "mfm",
+        "id": "45391896-5ae3-4cb5-a2fe-d3f400f7f454"
+      }
+    ]
   },
   {
     "id": "bringer-of-justice-freeblade-company",
@@ -485,7 +725,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "506321c5-fe6d-502e-a158-3371f51c44ad"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e7d774f1-6f22-4767-a7ef-4a430a90b70d"
+      }
+    ]
   },
   {
     "id": "hunters-eye-freeblade-company",
@@ -503,6 +753,16 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bf304ae9-60dc-5afd-956a-014c2c24989c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0e5596b1-2034-4c60-9e46-8d6126057c8b"
+      }
+    ]
   }
 ]

@@ -103,6 +103,21 @@
       "enum": ["exposed", "light", "dense"],
       "description": "11e terrain category (§13.02–13.05). Applies to kind: \"feature\". Dense features enable the Hidden rule; light features provide cover but not obscuring."
     },
+    "walls": {
+      "type": "array",
+      "description": "Wall polylines for this feature, in the same local frame as `footprint`. Meaningful for `kind: \"feature\"`.",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/wall" }
+    },
+    "has_roof": {
+      "type": "boolean",
+      "description": "Whether this feature has a roof. Meaningful for `kind: \"feature\"`."
+    },
+    "outline": {
+      "type": "array",
+      "description": "High-resolution boundary polygon for this template's base plate (the full die-cut nub outline). When present, rendering tools should prefer this over `footprint` for display; the resolver continues to use `footprint` for centroid and placement math. In the same local-inches frame as `footprint`.",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/vec2" },
+      "minItems": 3
+    },
     "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
   },
   "required": ["id", "name", "kind", "footprint", "game_version"],

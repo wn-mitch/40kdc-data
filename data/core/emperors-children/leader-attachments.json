@@ -42,5 +42,15 @@
       "edition": "11th",
       "dataslate": "launch"
     }
+  },
+  {
+    "leader_id": "lord-kaphrael-of-the-callous-blades",
+    "eligible_bodyguard_ids": [
+      "callous-blades-infractors"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
   }
 ]

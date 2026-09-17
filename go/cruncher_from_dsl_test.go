@@ -178,3 +178,67 @@ func TestPersistentDesignationRequiresRetainedSelectionState(t *testing.T) {
 		t.Fatalf("reason = %#v", reason)
 	}
 }
+
+func TestRulesBundleWalksEveryEffectStep(t *testing.T) {
+	effect := map[string]any{
+		"type": "rules-bundle",
+		"steps": []any{
+			map[string]any{
+				"type":     "re-roll",
+				"target":   "unit",
+				"modifier": map[string]any{"roll": "hit", "subset": "ones"},
+			},
+			map[string]any{
+				"type":     "re-roll",
+				"target":   "unit",
+				"modifier": map[string]any{"roll": "wound", "subset": "ones"},
+			},
+		},
+	}
+	out := effectToBuffs(
+		effect,
+		namedRegionSource(),
+		map[string]any{"phase": "shooting"},
+		"attacker",
+	)
+	if len(out.applied) != 2 || len(out.unsupported) != 0 {
+		t.Fatalf("translation = %#v", out)
+	}
+}
+
+func TestBlastZeroPreservesZeroExtraAttacks(t *testing.T) {
+	ds := EmbeddedDataset()
+	target, ok := ds.Units.GetInFaction("cultist-mob", "chaos-space-marines")
+	if !ok {
+		t.Fatal("cultist-mob missing")
+	}
+	weapon := map[string]any{
+		"id": "zero-blast",
+		"profiles": []any{
+			map[string]any{
+				"name":  "Zero Blast",
+				"range": 24,
+				"stats": map[string]any{"A": 2.0, "BS": 4.0, "S": 4.0, "AP": 0.0, "D": 1.0},
+				"keywords": []any{
+					map[string]any{
+						"keyword_id": "blast",
+						"parameters": map[string]any{"value": 0.0},
+					},
+				},
+			},
+		},
+	}
+	stages, _, err := crunch(map[string]any{
+		"attacker":     map[string]any{"weapon": weapon, "profileIndex": 0},
+		"target":       map[string]any{"unit": target.Raw, "profileIndex": 0, "modelCount": 10.0},
+		"modelsFiring": 1.0,
+		"buffs":        []any{},
+		"context":      map[string]any{"phase": "shooting"},
+	}, ds)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := stages[0]["expected"]; got != 2.0 {
+		t.Fatalf("attacks = %v, want 2", got)
+	}
+}

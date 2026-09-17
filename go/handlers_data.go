@@ -91,6 +91,11 @@ func (s *RunnerState) handleCheckRosterLegality(args any) map[string]any {
 			isWarlord:  u["isWarlord"] == true,
 			counts:     map[string]int{},
 		}
+		for _, keywordAny := range getList(u, "keywordOverrides") {
+			if keyword, ok := keywordAny.(string); ok {
+				nu.keywordOverrides = append(nu.keywordOverrides, keyword)
+			}
+		}
 		if e, ok := u["enhancementId"].(string); ok {
 			nu.enhancementID = e
 		}
@@ -266,6 +271,28 @@ func (s *RunnerState) handleLinkedQuery(args any) map[string]any {
 		}
 		sort.Strings(strs)
 		return okResp(toAnyList(strs))
+	case "loadout_candidates":
+		u, ok := ds.Units.GetAny(unitID)
+		if factionID := getStr(in, "factionId"); factionID != "" {
+			u, ok = ds.Units.GetInFaction(unitID, factionID)
+		}
+		if !ok {
+			return unknownUnit()
+		}
+		var models, tiers []any
+		for _, cAny := range ds.UnitCompositions {
+			c, _ := asMap(cAny)
+			if getStr(c, "unit_id") == unitID && getStr(c, "faction_id") == getStr(u.Raw, "faction_id") {
+				models, tiers = getList(c, "models"), getList(c, "tiers")
+				break
+			}
+		}
+		var limit *int
+		if in["limit"] != nil {
+			n := asInt(in["limit"])
+			limit = &n
+		}
+		return okResp(toAnyList(LoadoutCandidates(u.Raw, asInt(in["modelCount"]), ds.wargearOptionsOf(u.Raw), models, tiers, limit)))
 	case "phases_of":
 		ab, ok := ds.Abilities.GetAny(getStr(in, "abilityId"))
 		if !ok {

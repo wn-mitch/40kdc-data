@@ -8,6 +8,9 @@ export * from "./generated.js";
 // shared Ability-DSL condition humanizer). Cross-impl pinned by conformance.
 export * from "./translate/index.js";
 
+// Describer views permit partial trigger and usage blocks.
+export type { AbilityTrigger, AbilityUsage } from "./translate/index.js";
+
 // `ScoringTrigger` is emitted by both ./generated.js (schema-derived) and
 // ./translate (hand-authored). They are structurally identical; disambiguate the
 // two wildcard re-exports in favour of the generated, schema-canonical type.
@@ -37,6 +40,7 @@ export {
 } from "./terrain/index.js";
 export type {
   ResolvedPiece,
+  ResolvedWall,
   ResolvedVec2,
   BoardEdge,
   FeatureRef,

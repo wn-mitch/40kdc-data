@@ -17,7 +17,7 @@
     }
   ],
   "battle_size": "strike-force",
-  "force_disposition": null,
+  "force_disposition": "reconnaissance",
   "points": {
     "declared_limit": 2000,
     "detachment_cap": 3,
@@ -35,6 +35,9 @@
       "model_count": 1,
       "points": 150,
       "is_warlord": false,
+      "keyword_overrides": [
+        "Character"
+      ],
       "enhancement": {
         "id": "preyslayers-mantle-houndpack-lance",
         "raw_name": "Preyslayer's Mantle",
@@ -126,6 +129,9 @@
       "model_count": 1,
       "points": 130,
       "is_warlord": true,
+      "keyword_overrides": [
+        "Character"
+      ],
       "enhancement": null,
       "enhancement_points": null,
       "wargear": [
@@ -211,12 +217,6 @@
     "unresolved_units": 0,
     "resolved_weapons": 10,
     "unresolved_weapons": 0,
-    "warnings": [
-      {
-        "code": "multi-force",
-        "message": "Source list contains more than one faction; the primary faction was used for scoping.",
-        "raw_name": null
-      }
-    ]
+    "warnings": []
   }
 }

@@ -1,6 +1,9 @@
 package wh40kdc
 
-import "math"
+import (
+	"math"
+	"strconv"
+)
 
 // Terrain layout resolver + keystone derivation. Go mirror of
 // python .../terrain/resolve.py and keystones.py, pinned by
@@ -125,6 +128,100 @@ func numOr0(v any) float64 {
 	return f
 }
 
+func resolveWalls(
+	walls []any,
+	footprint map[string]any,
+	position vec2,
+	rotation float64,
+	mirror string,
+) ([]any, error) {
+	if len(walls) == 0 {
+		return nil, nil
+	}
+	vertices, err := footprintVertices(footprint)
+	if err != nil {
+		return nil, err
+	}
+	centroid := polygonCentroid(vertices)
+	resolved := make([]any, 0, len(walls))
+	for _, wallAny := range walls {
+		wall, _ := asMap(wallAny)
+		points := make([]any, 0, len(getList(wall, "points")))
+		for _, pointAny := range getList(wall, "points") {
+			point, _ := asMap(pointAny)
+			oriented := orient(
+				vec2{
+					numOr0(point["x"]) - centroid.x,
+					numOr0(point["y"]) - centroid.y,
+				},
+				rotation,
+				mirror,
+			)
+			points = append(points, vec2JSON(round4(vec2{
+				oriented.x + position.x,
+				oriented.y + position.y,
+			})))
+		}
+		entry := map[string]any{"points": points}
+		if thickness, ok := wall["thickness"]; ok {
+			entry["thickness"] = thickness
+		}
+		resolved = append(resolved, entry)
+	}
+	return resolved, nil
+}
+
+func resolveWallsComposed(
+	walls []any,
+	footprint map[string]any,
+	featurePosition vec2,
+	featureRotation float64,
+	featureMirror string,
+	areaPosition vec2,
+	areaRotation float64,
+	areaMirror string,
+) ([]any, error) {
+	if len(walls) == 0 {
+		return nil, nil
+	}
+	vertices, err := footprintVertices(footprint)
+	if err != nil {
+		return nil, err
+	}
+	centroid := polygonCentroid(vertices)
+	resolved := make([]any, 0, len(walls))
+	for _, wallAny := range walls {
+		wall, _ := asMap(wallAny)
+		points := make([]any, 0, len(getList(wall, "points")))
+		for _, pointAny := range getList(wall, "points") {
+			point, _ := asMap(pointAny)
+			local := orient(
+				vec2{
+					numOr0(point["x"]) - centroid.x,
+					numOr0(point["y"]) - centroid.y,
+				},
+				featureRotation,
+				featureMirror,
+			)
+			areaLocal := vec2{
+				local.x + featurePosition.x,
+				local.y + featurePosition.y,
+			}
+			oriented := orient(areaLocal, areaRotation, areaMirror)
+			points = append(points, vec2JSON(round4(vec2{
+				oriented.x + areaPosition.x,
+				oriented.y + areaPosition.y,
+			})))
+		}
+		entry := map[string]any{"points": points}
+		if thickness, ok := wall["thickness"]; ok {
+			entry["thickness"] = thickness
+		}
+		resolved = append(resolved, entry)
+	}
+	return resolved, nil
+}
+
 // resolveLayout resolves a layout to absolute board-space vertices per piece.
 func resolveLayout(layout map[string]any, templates []any) ([]map[string]any, error) {
 	byID := map[string]map[string]any{}
@@ -207,6 +304,30 @@ func resolveLayout(layout map[string]any, templates []any) ([]map[string]any, er
 			rec["piece_type"] = pieceType
 			rec["floor"] = floor
 			rec["vertices"] = vertices
+			if template := byID[getStr(piece, "template")]; template != nil {
+				walls, err := resolveWallsComposed(
+					getList(template, "walls"),
+					fp,
+					posOf(piece),
+					rotation,
+					mirror,
+					ppos,
+					aRot,
+					aMirror,
+				)
+				if err != nil {
+					return nil, err
+				}
+				if len(walls) > 0 {
+					rec["walls"] = walls
+				}
+				if hasRoof, _ := template["has_roof"].(bool); hasRoof {
+					rec["has_roof"] = true
+				}
+				if category := getStr(template, "terrain_category"); category != "" {
+					rec["terrain_category"] = category
+				}
+			}
 			out = append(out, rec)
 			continue
 		}
@@ -223,13 +344,34 @@ func resolveLayout(layout map[string]any, templates []any) ([]map[string]any, er
 		rec["piece_type"] = pieceType
 		rec["floor"] = floor
 		rec["vertices"] = vertices
+		if template := byID[getStr(piece, "template")]; template != nil {
+			walls, err := resolveWalls(
+				getList(template, "walls"),
+				fp,
+				posOf(piece),
+				rotation,
+				mirror,
+			)
+			if err != nil {
+				return nil, err
+			}
+			if len(walls) > 0 {
+				rec["walls"] = walls
+			}
+			if hasRoof, _ := template["has_roof"].(bool); hasRoof {
+				rec["has_roof"] = true
+			}
+			if category := getStr(template, "terrain_category"); category != "" {
+				rec["terrain_category"] = category
+			}
+		}
 		out = append(out, rec)
 
 		// Expand an area template's composed features.
 		if tmpl := getStr(piece, "template"); tmpl != "" {
 			t := byID[tmpl]
 			ppos := posOf(piece)
-			for _, featAny := range getList(t, "features") {
+			for featureIndex, featAny := range getList(t, "features") {
 				feat, _ := asMap(featAny)
 				ft, ok := byID[getStr(feat, "template")]
 				if !ok {
@@ -245,13 +387,48 @@ func resolveLayout(layout map[string]any, templates []any) ([]map[string]any, er
 					o := orient(p, rotation, mirror)
 					featVerts[i] = vec2JSON(round4(vec2{o.x + ppos.x, o.y + ppos.y}))
 				}
-				out = append(out, map[string]any{
-					"id":         feat["id"],
+				featureID := getStr(feat, "id")
+				if parentID := getStr(piece, "id"); parentID != "" {
+					if featureID == "" {
+						featureID = "feature-" + strconv.Itoa(featureIndex+1)
+					}
+					featureID = parentID + "--" + featureID
+				}
+				resolvedFeature := map[string]any{
+					"id":         nil,
 					"name":       ft["name"],
 					"piece_type": "feature",
 					"floor":      numOr0(feat["floor"]),
 					"vertices":   featVerts,
-				})
+				}
+				if featureID != "" {
+					resolvedFeature["id"] = featureID
+				} else if id, ok := feat["id"]; ok {
+					resolvedFeature["id"] = id
+				}
+				walls, err := resolveWallsComposed(
+					getList(ft, "walls"),
+					ffp,
+					posOf(feat),
+					numOr0(feat["rotation_degrees"]),
+					strOr(feat, "mirror", "none"),
+					ppos,
+					rotation,
+					mirror,
+				)
+				if err != nil {
+					return nil, err
+				}
+				if len(walls) > 0 {
+					resolvedFeature["walls"] = walls
+				}
+				if hasRoof, _ := ft["has_roof"].(bool); hasRoof {
+					resolvedFeature["has_roof"] = true
+				}
+				if category := getStr(ft, "terrain_category"); category != "" {
+					resolvedFeature["terrain_category"] = category
+				}
+				out = append(out, resolvedFeature)
 			}
 		}
 	}

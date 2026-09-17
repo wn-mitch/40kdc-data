@@ -15,7 +15,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4bcddb0e-2706-5496-80e0-cf7e2d5964df"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b1e5d251-8382-4010-827d-33168f5950c6"
+      }
+    ]
   },
   {
     "id": "tyrants-shadow-traitoris-lance",
@@ -33,7 +43,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9d3ed713-fe6d-5a29-a3ad-db108f76a874"
+      },
+      {
+        "namespace": "mfm",
+        "id": "42f2f727-3476-45eb-920c-1dc6ca5abef8"
+      }
+    ]
   },
   {
     "id": "malevolent-heraldry-traitoris-lance",
@@ -51,7 +71,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a885bd69-471b-588b-b99f-239dff3c6b71"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2c95162a-d073-40b7-842e-5e1d847fd9eb"
+      }
+    ]
   },
   {
     "id": "veil-of-medrengard-traitoris-lance",
@@ -69,7 +99,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bee3cd67-8201-5849-ba8b-49565825a001"
+      },
+      {
+        "namespace": "mfm",
+        "id": "23f176f3-52df-4f8d-ae85-85d2774a4677"
+      }
+    ]
   },
   {
     "id": "knight-diabolus-infernal-lance",
@@ -87,7 +127,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d639b6cb-9564-5e4c-9609-7031344dbbe8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "93205b5a-0d2e-44ba-bec0-0aa2e0638143"
+      }
+    ]
   },
   {
     "id": "blasphemous-engine-infernal-lance",
@@ -105,7 +155,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e71be72a-00bd-521e-9713-a6d82ebda313"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cff79aee-3352-436d-adfa-6e11703ffdfd"
+      }
+    ]
   },
   {
     "id": "fleshmetal-fusion-infernal-lance",
@@ -123,7 +183,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "df808a93-6f0d-5ff4-95cb-0c8655a36191"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b2f712f0-d376-473f-bf23-f2dc789347ae"
+      }
+    ]
   },
   {
     "id": "bestial-aspect-infernal-lance",
@@ -141,7 +211,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b752c854-a928-5e7a-b41b-2b661aca3f53"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c497c2f9-7d5f-40d9-ab4a-94ea722296b0"
+      }
+    ]
   },
   {
     "id": "throne-mechanicum-of-skulls-lords-of-dread",
@@ -159,7 +239,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d5370464-4321-50f0-8f9d-2be8b4e36edc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3b7b0990-8084-4017-b6ea-08e2d8b2e70c"
+      }
+    ]
   },
   {
     "id": "blade-of-celerity-lords-of-dread",
@@ -177,7 +267,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "59fac307-6842-53db-8be9-e267b1731a37"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3d51794a-1ab6-4fe9-8c9f-8c0b1088456d"
+      }
+    ]
   },
   {
     "id": "warp-borne-stalker-lords-of-dread",
@@ -195,7 +295,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "734b4c68-2eb5-506a-a67c-bab89d2c37f8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7f71e5b1-cae6-4207-bb8e-12b57b3e4fa5"
+      }
+    ]
   },
   {
     "id": "putrid-carapace-lords-of-dread",
@@ -213,7 +323,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c0c2ff80-90d6-5f5a-9afa-f5fa79ac8a34"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6d9fb6cc-05ac-4f9d-a8ac-52ca06c2dffa"
+      }
+    ]
   },
   {
     "id": "mirror-of-fates-lords-of-dread",
@@ -231,7 +351,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "de237341-9be8-5813-8fba-0a302ed40f90"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cd9eb5d6-ac62-480f-8735-f40176d6768e"
+      }
+    ]
   },
   {
     "id": "blessing-of-the-dark-master-lords-of-dread",
@@ -249,7 +379,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9e42ee3a-31ec-5125-95d6-987e42e7f21c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e17d089a-c6be-42b1-b8e3-58c1b044c352"
+      }
+    ]
   },
   {
     "id": "preyslayers-mantle-houndpack-lance",
@@ -257,7 +397,7 @@
     "detachment_id": "houndpack-lance",
     "cost": 15,
     "keyword_restrictions": [
-      "Chaos Knights"
+      "War Dog"
     ],
     "ability_id": "preyslayers-mantle-houndpack-lance",
     "is_unique": true,
@@ -267,7 +407,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2134c628-e8ff-53d9-bf3b-6a61d4f0fc50"
+      },
+      {
+        "namespace": "mfm",
+        "id": "faf6d66a-fc30-47e3-9feb-9c152a57f5b8"
+      }
+    ]
   },
   {
     "id": "final-howl-aura-houndpack-lance",
@@ -275,7 +425,7 @@
     "detachment_id": "houndpack-lance",
     "cost": 20,
     "keyword_restrictions": [
-      "Chaos Knights"
+      "War Dog"
     ],
     "ability_id": "final-howl-aura-houndpack-lance",
     "is_unique": true,
@@ -285,7 +435,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fb736fa3-3388-576b-af0d-84e154de7ee5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "66e3a448-c167-4e33-9149-be2a8412c009"
+      }
+    ]
   },
   {
     "id": "loping-predator-houndpack-lance",
@@ -293,7 +453,7 @@
     "detachment_id": "houndpack-lance",
     "cost": 10,
     "keyword_restrictions": [
-      "Chaos Knights"
+      "War Dog"
     ],
     "ability_id": "loping-predator-houndpack-lance",
     "is_unique": true,
@@ -303,7 +463,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "52ed06c8-a642-59b1-b657-b79e5a3a9e4e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "edf77a51-682c-47f0-8182-4dd874f96f3d"
+      }
+    ]
   },
   {
     "id": "panoply-of-the-cursed-knights-houndpack-lance",
@@ -311,7 +481,7 @@
     "detachment_id": "houndpack-lance",
     "cost": 15,
     "keyword_restrictions": [
-      "Chaos Knights"
+      "War Dog"
     ],
     "ability_id": "panoply-of-the-cursed-knights-houndpack-lance",
     "is_unique": true,
@@ -321,7 +491,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5e38ce54-95ed-54ca-ad5d-08933b042ce0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "917b0195-7e5e-4a65-919b-821fd441782f"
+      }
+    ]
   },
   {
     "id": "pterrorshade-rookery-bastions-of-tyranny",
@@ -329,6 +509,7 @@
     "detachment_id": "bastions-of-tyranny",
     "cost": 20,
     "keyword_restrictions": [
+      "Chaos Knights",
       "Knight Tyrant"
     ],
     "ability_id": "pterrorshade-rookery-bastions-of-tyranny",
@@ -339,7 +520,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "54421a01-a821-5376-ac75-57ebc2bc68c7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4d3b271f-aae1-4f3e-9cf2-2984b590a6cd"
+      }
+    ]
   },
   {
     "id": "hate-filled-dominion-bastions-of-tyranny",
@@ -347,6 +538,7 @@
     "detachment_id": "bastions-of-tyranny",
     "cost": 20,
     "keyword_restrictions": [
+      "Chaos Knights",
       "Knight Tyrant"
     ],
     "ability_id": "hate-filled-dominion-bastions-of-tyranny",
@@ -357,7 +549,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "93f3df24-9613-57d8-a22e-757b13d5fe36"
+      },
+      {
+        "namespace": "mfm",
+        "id": "809f4b45-88f7-4501-81cf-90eaf80733d9"
+      }
+    ]
   },
   {
     "id": "soul-spoor-auspicator-upgrade-hunting-warpack",
@@ -375,7 +577,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e4841287-8730-5298-a098-01c84135f17e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "881abba9-9fb0-4210-b4a5-bc9d130bdec2"
+      }
+    ]
   },
   {
     "id": "snarling-rivalry-upgrade-hunting-warpack",
@@ -393,7 +605,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": true,
-    "max_targets": 3
+    "max_targets": 3,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5098cb85-b699-535b-ba07-a7a5982556da"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d9e7e955-a716-415b-8a50-04ff6e82c8cb"
+      }
+    ]
   },
   {
     "id": "cruel-lashmaster-aura-iconoclast-fiefdom",
@@ -411,7 +633,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "30f29803-374b-5031-a51e-40ddc678d8a2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1fd8ab9e-795a-440f-a6e0-c312215e75a1"
+      }
+    ]
   },
   {
     "id": "iconoclast-idol-aura-iconoclast-fiefdom",
@@ -429,7 +661,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2a46b67f-5f7d-58db-9d13-d814df93f47d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e75d1793-4a21-4660-bc71-95565f2ed6bd"
+      }
+    ]
   },
   {
     "id": "hunters-helm-helhunt-lance",
@@ -447,7 +689,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d4e955db-757a-5145-ae04-718c801a3f67"
+      },
+      {
+        "namespace": "mfm",
+        "id": "02c6c488-0263-4fd6-8898-2a574521f2e3"
+      }
+    ]
   },
   {
     "id": "octagram-of-conjuration-helhunt-lance",
@@ -465,7 +717,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "32381b91-7926-5181-824b-d687afc62363"
+      },
+      {
+        "namespace": "mfm",
+        "id": "69a95917-ceb4-4b5c-93b9-f952d63d8258"
+      }
+    ]
   },
   {
     "id": "throne-tyrannicus-helhunt-lance",
@@ -473,7 +735,8 @@
     "detachment_id": "helhunt-lance",
     "cost": 25,
     "keyword_restrictions": [
-      "Chaos Knights"
+      "Chaos Knights",
+      "Titanic"
     ],
     "ability_id": "throne-tyrannicus-helhunt-lance",
     "is_unique": true,
@@ -483,7 +746,17 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1e4b05cf-db1c-5c0f-857e-78ca89c6a0c7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "821d06bf-e282-4083-a2e0-111d23acd369"
+      }
+    ]
   },
   {
     "id": "aspect-of-the-beast-helhunt-lance",
@@ -501,6 +774,16 @@
     },
     "points_provisional": false,
     "upgrade_tag": false,
-    "max_targets": 1
+    "max_targets": 1,
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8fb831e8-8eef-57e9-b911-7db0b072fd41"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e56eebbb-250c-41b3-9da9-3a0ef397f00a"
+      }
+    ]
   }
 ]

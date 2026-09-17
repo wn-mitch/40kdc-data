@@ -100,6 +100,7 @@ fn event_phrase(e: &str) -> Option<&'static str> {
         "fall-back-move" => "when the unit makes a Fall Back move",
         "falls-back" => "when the unit Falls Back",
         "charge-move" => "when the unit makes a Charge move",
+        "end-of-charge-move" => "after the unit ends a Charge move",
         "charge-declaration" => "when a Charge is declared",
         "moved-through-terrain" => "when the unit moves through terrain",
         "moved-through-tall-terrain" => "when the unit moves through terrain over 4\" tall",
@@ -109,6 +110,7 @@ fn event_phrase(e: &str) -> Option<&'static str> {
         "after-hit-roll" => "after a Hit roll is made",
         "before-wound-roll" => "before a Wound roll is made",
         "after-wound-roll" => "after a Wound roll is made",
+        "attack-scores-wound" => "each time an attack scores a wound",
         "before-save-roll" => "before a saving throw is made",
         "after-save-roll" => "after a saving throw is made",
         "before-damage-roll" => "before a Damage roll is made",
@@ -135,6 +137,23 @@ fn event_phrase(e: &str) -> Option<&'static str> {
         "battle-shock-test" => "when the unit takes a Battle-shock test",
         "leadership-test" => "when the unit takes a Leadership test",
         "desperate-escape-test" => "when the unit takes a Desperate Escape test",
+        "end-of-opponent-charge-phase" => "at the end of the opponent's Charge phase",
+        "enemy-unit-completed-shooting-targeting-bearer" => {
+            "after an enemy unit has shot and targeted this unit"
+        }
+        "enemy-unit-selects-bearer-as-charge-target" => {
+            "when an enemy unit selects this unit as a charge target"
+        }
+        "enemy-unit-targets-bearer" => "when an enemy unit targets this unit",
+        "enemy-unit-completed-fall-back-from-bearer" => {
+            "after an enemy unit within Engagement Range of this unit completes a Fall Back move"
+        }
+        "act-of-faith-completed" => "after an Act of Faith is completed",
+        "act-of-faith-performed" => "when an Act of Faith is performed",
+        "miracle-die-generated" => "when a Miracle die is generated",
+        "enemy-unit-selected-charge-targets-before-charge-move" => {
+            "after an enemy unit selects targets for its charge but before it makes a Charge move"
+        }
         _ => return None,
     };
     Some(mapped)
@@ -149,7 +168,6 @@ pub(super) fn event_clause(e: &str) -> String {
         None => format!("when {}", dekebab(e)),
     }
 }
-
 /// Legacy `timing-is` string → its canonical `GameEvent` token. Mirrors
 /// `TIMING_ALIASES`; applied before the `EVENT_PHRASES` lookup in
 /// [`describe_timing`].
@@ -170,12 +188,12 @@ fn timing_alias(t: &str) -> Option<&'static str> {
         "model-destroyed" => "on-model-destroyed",
         "on-destroyed" => "on-unit-destroyed",
         "before-this-model-removed" => "before-bearer-removed",
-        "command-phase" => "start-of-command-phase",
         "reinforcements-step" => "reinforcements",
         "setup" => "unit-set-up",
         "set-up-this-turn" => "unit-set-up",
         "after-move-through-terrain-over-4-inches" => "moved-through-tall-terrain",
         "after-moving-through-tall-terrain" => "moved-through-tall-terrain",
+        "when-selected-to-shoot" => "selected-to-shoot",
         "when-this-unit-selected-to-shoot" => "selected-to-shoot",
         _ => return None,
     })
@@ -192,8 +210,9 @@ fn timing_only_phrase(t: &str) -> Option<&'static str> {
         "first-time-this-phase" => "the first time this phase",
         "in-reserves" => "while it is in Reserves",
         "shooting-phase" => "in the Shooting phase",
+        "command-phase" => "during the Command phase",
+        "start-of-shooting-phase" => "at the start of your Shooting phase",
         "start-of-fight-phase" => "at the start of the Fight phase",
-        "first-movement-phase" => "in your first Movement phase",
         "start-of-first-battle-round" => "at the start of the first battle round",
         "start-of-movement-phase" => "at the start of the Movement phase",
         "shooting-or-fight-phase" => "in the Shooting or Fight phase",
@@ -208,11 +227,7 @@ fn timing_only_phrase(t: &str) -> Option<&'static str> {
     })
 }
 
-/// A `timing-is` token → natural GW-voice clause. `timing-is` has been unified
-/// onto the game-event vocabulary: a timing-only phrase wins first, otherwise
-/// the token is canonicalized (via [`timing_alias`]) and rendered through the
-/// shared [`event_phrase`] map; the `after-`/`on-`/`-destroyed`/`at` fallbacks
-/// run on the *original* token.
+/// A `timing-is` token → natural GW-voice clause.
 pub(super) fn describe_timing(t: &str) -> String {
     if let Some(p) = timing_only_phrase(t) {
         return p.to_string();
@@ -233,9 +248,7 @@ pub(super) fn describe_timing(t: &str) -> String {
     format!("at {}", dekebab(t))
 }
 
-/// `timing-is` negation, generic over every [`describe_timing`] phrase: a
-/// `when …` clause becomes `unless …`; anything else is bare-prepended with
-/// `unless `. Mirrors the TS `negatedTiming` helper.
+/// `timing-is` negation, generic over every `describe_timing` phrase.
 pub(super) fn negated_timing(t: &str) -> String {
     let phrase = describe_timing(t);
     match phrase.strip_prefix("when ") {
@@ -356,19 +369,61 @@ pub fn describe_condition(c: &Condition) -> String {
 
 pub(super) fn describe_node(n: &ConditionNode) -> String {
     match n {
-        ConditionNode::CompoundCondition(c) => {
-            let parts: Vec<String> = c.operands.iter().map(describe_node).collect();
-            match c.operator {
-                CompoundConditionOperator::And => parts.join(" and "),
-                CompoundConditionOperator::Or => parts.join(" or "),
-                CompoundConditionOperator::Not => format!("not ({})", parts.join(", ")),
+        ConditionNode::CompoundCondition(c) => match c.operator {
+            CompoundConditionOperator::And => c
+                .operands
+                .iter()
+                .map(|node| describe_compound_operand(node, CompoundConditionOperator::Or))
+                .collect::<Vec<_>>()
+                .join(" and "),
+            CompoundConditionOperator::Or => {
+                if c.operands.iter().all(|operand| {
+                    matches!(
+                        operand,
+                        ConditionNode::SimpleCondition(simple)
+                            if !simple.negated
+                                && simple.type_ == SimpleConditionType::UnitHasKeyword
+                    )
+                }) {
+                    let keywords = c
+                        .operands
+                        .iter()
+                        .filter_map(|operand| match operand {
+                            ConditionNode::SimpleCondition(simple) => {
+                                simple.parameters.get("keyword").map(effect::jval)
+                            }
+                            _ => None,
+                        })
+                        .collect::<Vec<_>>();
+                    let keyword_list = match keywords.len() {
+                        0 => String::new(),
+                        1 => keywords[0].clone(),
+                        2 => format!("{} or {}", keywords[0], keywords[1]),
+                        n => format!("{} or {}", keywords[..n - 1].join(", "), keywords[n - 1]),
+                    };
+                    format!("the unit has the {keyword_list} keywords")
+                } else {
+                    c.operands
+                        .iter()
+                        .map(|node| describe_compound_operand(node, CompoundConditionOperator::And))
+                        .collect::<Vec<_>>()
+                        .join(" or ")
+                }
             }
-        }
+            CompoundConditionOperator::Not => format!(
+                "not ({})",
+                c.operands
+                    .iter()
+                    .map(describe_node)
+                    .collect::<Vec<_>>()
+                    .join(", ")
+            ),
+        },
         ConditionNode::SimpleCondition(s) => describe_simple(s),
     }
 }
 
-fn region_membership_phrase(p: &Map<String, Value>, negated: bool) -> String {
+pub(crate) fn region_membership_phrase(p: &Map<String, Value>, negated: bool) -> String {
     let raw = p
         .get("region_id")
         .or_else(|| po(p, "state_ref").and_then(|r| r.get("region_id")))
@@ -385,11 +440,7 @@ fn region_membership_phrase(p: &Map<String, Value>, negated: bool) -> String {
         })
         .collect::<Vec<_>>()
         .join(" ");
-    let relation = match ps(p, "relation") {
-        Some("wholly-within") => "wholly within",
-        Some(value) => value,
-        None => "within",
-    };
+    let relation = dekebab(ps(p, "relation").unwrap_or("within"));
     let subject = if ps(p, "unit_scope") == Some("whole-unit") {
         "every model in the eligible attacking unit"
     } else {
@@ -402,13 +453,43 @@ fn region_membership_phrase(p: &Map<String, Value>, negated: bool) -> String {
     )
 }
 
+/// Explicit `of` wins; legacy parameter subjects apply only where that
+/// predicate historically consumed them.
+pub(super) fn condition_subject(
+    s: &SimpleCondition,
+    implicit: &str,
+    legacy_subject: Option<&str>,
+) -> String {
+    let explicit = match s.of.as_ref().map(ToString::to_string).as_deref() {
+        Some("bearer") => Some("this model"),
+        Some("unit") => Some("the unit"),
+        Some("led-unit") => Some("the unit this model leads"),
+        Some("attacker") => Some("the attacking unit"),
+        Some("defender" | "target") => Some("the target unit"),
+        Some("friendly") => Some("the friendly unit"),
+        Some("enemy") => Some("the enemy unit"),
+        _ => None,
+    };
+    explicit.or(legacy_subject).unwrap_or(implicit).to_string()
+}
+
 fn describe_simple(s: &SimpleCondition) -> String {
     let negate = if s.negated { "not " } else { "" };
     let p = &s.parameters;
     use SimpleConditionType as T;
     match s.type_ {
         // ── Ability-DSL conditions ──────────────────────────────────────────
-        T::PhaseIs => format!("{negate}during the {} phase", pj(p, "phase")),
+        T::PhaseIs => {
+            let phase = pj(p, "phase");
+            format!(
+                "{negate}during the {} phase",
+                if phase == "command" || phase == "command-phase" {
+                    "Command"
+                } else {
+                    &phase
+                }
+            )
+        }
         T::TimingIs => {
             let timing = ps(p, "timing").unwrap_or("?");
             if s.negated {
@@ -425,7 +506,9 @@ fn describe_simple(s: &SimpleCondition) -> String {
             };
             format!("{negate}in {turn} turn")
         }
-        T::ChargedThisTurn => format!("{negate}the unit charged this turn"),
+        T::ChargedThisTurn => {
+            format!("{negate}{} charged this turn", condition_subject(s, "the unit", None))
+        }
         T::AdvancedThisTurn => format!("{negate}the unit advanced this turn"),
         T::DisembarkedFromTransport => {
             format!("{negate}the unit disembarked from a Transport this turn")
@@ -451,24 +534,49 @@ fn describe_simple(s: &SimpleCondition) -> String {
         T::RemainedStationary => format!("{negate}the unit remained stationary"),
         T::UnitBelowStartingStrength => format!("{negate}the unit is below starting strength"),
         T::UnitBelowHalfStrength => {
-            let who = if pj(p, "subject") == "target" {
-                "target unit"
+            let legacy_subject = if ps(p, "subject") == Some("target") {
+                Some("the target unit")
             } else {
-                "unit"
+                None
             };
-            format!("{negate}the {who} is below half strength")
+            format!(
+                "{negate}{} is below half strength",
+                condition_subject(s, "the unit", legacy_subject)
+            )
         }
         T::UnitHasKeyword => format!("{negate}the unit has \"{}\"", pj(p, "keyword")),
+        T::UnitModelCount => format!(
+            "{negate}the unit contains {}+ {} models",
+            pj(p, "count_min"),
+            pj(p, "keyword")
+        ),
+        T::UniformRangedLoadout => {
+            let keyword = ps(p, "model_keyword")
+                .map(|value| format!("{value} "))
+                .unwrap_or_default();
+            format!("{negate}all ranged weapons equipped by each {keyword}model in the unit are the same")
+        }
+        T::AllAttacksTargetSameUnit => {
+            let attack_type = ps(p, "attack_type")
+                .map(|value| format!("{value} "))
+                .unwrap_or_default();
+            format!("{negate}all of the unit's {attack_type}attacks target the same enemy unit")
+        }
         T::TargetHasKeyword => {
             format!("{negate}the target has \"{}\"", pj(p, "keyword"))
         }
+        T::UnitIsLedBy => format!(
+            "{negate}this unit is being led by an {} model",
+            pj(p, "keyword")
+        ),
         T::ModelIsLeader => format!("{negate}the model is leading a unit"),
+        T::TargetIsVisible => format!("{negate}the target is visible to the attacking model"),
         T::IsAttached => {
             let kw = match ps(p, "keyword") {
                 Some(k) => format!("{k} "),
                 None => String::new(),
             };
-            format!("{negate}attached to a {kw}unit")
+            format!("{negate}the model is leading a {kw}unit")
         }
         T::AttackIsType => {
             match ps(p, "comparison") {
@@ -479,7 +587,12 @@ fn describe_simple(s: &SimpleCondition) -> String {
                 None => format!("{negate}for {} attacks", pj(p, "attack_type")),
             }
         }
-        T::IsBattleShocked => format!("{negate}the unit is battle-shocked"),
+        T::IsBattleShocked => {
+            format!(
+                "{negate}{} is battle-shocked",
+                condition_subject(s, "the unit", None)
+            )
+        }
         T::HasLostWounds => format!("{negate}the model has lost wounds"),
         T::WoundsRemainingAtOrBelow => format!(
             "{negate}the model has {} or fewer wounds remaining",
@@ -501,7 +614,7 @@ fn describe_simple(s: &SimpleCondition) -> String {
             };
             let bound_source = match p.get("source") {
                 Some(Value::Object(source)) if source.get("event_var").is_some() => {
-                    " from that enemy unit".to_string()
+                    " from the triggering unit".to_string()
                 }
                 Some(v) if !v.is_null() => format!(" from {}", effect::jval(v)),
                 _ => String::new(),
@@ -521,6 +634,22 @@ fn describe_simple(s: &SimpleCondition) -> String {
             } else {
                 format!("{negate}{subject} was hit by a {atk}attack{weapon}{bound_source}{window}")
             }
+        }
+        T::WoundsLostFromAttack => {
+            let subject = if ps(p, "subject") == Some("target") {
+                "the target"
+            } else {
+                "the unit"
+            };
+            let attack_type = ps(p, "attack_type")
+                .map(|value| format!("{value} "))
+                .unwrap_or_default();
+            let source = if ps(p, "source") == Some("triggering-attacks") {
+                " from the triggering attacks"
+            } else {
+                ""
+            };
+            format!("{negate}{subject} lost one or more wounds from {attack_type}attacks{source}")
         }
         T::OpponentUnitWithinRange => {
             let rv = ["range", "range_inches", "within_inches"]
@@ -542,6 +671,29 @@ fn describe_simple(s: &SimpleCondition) -> String {
             format!("{negate}an enemy unit is within {r}")
         }
         T::UnitWithinRangeOf => {
+            if let Some(keywords) = p.get("keywords").and_then(Value::as_array) {
+                let who = match ps(p, "subject") {
+                    Some("self") => "this model",
+                    Some("triggering-unit") => "the triggering unit",
+                    _ => "the unit",
+                };
+                let distance = if ps(p, "range") == Some("engagement") {
+                    "Engagement Range".to_string()
+                } else {
+                    format!("{}\"", pj(p, "range"))
+                };
+                let owner = if ps(p, "target_type") == Some("friendly-keyword") {
+                    "friendly"
+                } else {
+                    "enemy"
+                };
+                let keywords = keywords
+                    .iter()
+                    .map(effect::jval)
+                    .collect::<Vec<_>>()
+                    .join(" and ");
+                return format!("{negate}{who} is within {distance} of one or more {owner} units with all of {keywords}");
+            }
             let tt = ps(p, "target_type").unwrap_or("target");
             if tt == "closest-eligible" {
                 let within = if pnn(p, "range") {
@@ -568,8 +720,78 @@ fn describe_simple(s: &SimpleCondition) -> String {
                 format!("{negate}within {dist} of {who}")
             }
         }
-        T::WithinRangeOfObjective => format!("{negate}within range of an objective"),
-        T::HasFoughtThisPhase => format!("{negate}has fought this phase"),
+        T::WithinRangeOfObjective => {
+            if !pnn(p, "subject") && !pnn(p, "controlled_by") {
+                return format!("{negate}within range of an objective");
+            }
+            let who = match ps(p, "subject") {
+                Some("target") => "the target unit",
+                Some("attacker") => "the attacking unit",
+                _ => "the unit",
+            };
+            let control = match ps(p, "controlled_by") {
+                Some("your-army") => " you control",
+                Some("opponent") => " your opponent controls",
+                _ => "",
+            };
+            format!("{negate}{who} is within range of an objective marker{control}")
+        }
+        T::OnBattlefield => {
+            let who = if pnn(p, "model_name") {
+                format!("the {} model", pj(p, "model_name"))
+            } else {
+                match ps(p, "subject") {
+                    Some("unit") => "the unit".to_string(),
+                    Some("target") => "the target unit".to_string(),
+                    _ => "this model".to_string(),
+                }
+            };
+            format!("{negate}{who} is on the battlefield")
+        }
+        T::TargetWithinHalfWeaponRange => {
+            format!("{negate}the target is within half the attacking weapon's range")
+        }
+        T::HasDestroyed => {
+            let who = match ps(p, "subject") {
+                Some("unit") => "the unit",
+                Some("target") => "the target unit",
+                _ => "this model",
+            };
+            let keywords = p
+                .get("victim_keywords")
+                .and_then(Value::as_array)
+                .map(|items| {
+                    format!(
+                        " {}",
+                        items.iter().map(effect::jval).collect::<Vec<_>>().join(" ")
+                    )
+                })
+                .unwrap_or_default();
+            let victims = count(
+                pu(p, "count_min", 1),
+                &format!("{}{} {}", pj(p, "victim_owner"), keywords, pj(p, "victim_kind")),
+            );
+            let window = if ps(p, "window") == Some("just-finished-attack-sequence") {
+                "with its just-resolved attacks".to_string()
+            } else {
+                format!("during {}", dekebab(&pj(p, "window")))
+            };
+            format!("{negate}{who} has destroyed {victims} {window}")
+        }
+        T::RollSucceeded => format!(
+            "{negate}the triggering {} roll succeeded",
+            dekebab(&pj(p, "roll"))
+        ),
+        T::HasFoughtThisPhase => {
+            let who = match ps(p, "subject") {
+                Some("self") => "this model ",
+                Some("destroyed-model") => "the destroyed model ",
+                Some("unit") => "the unit ",
+                Some("target") => "the target unit ",
+                _ => "",
+            };
+            format!("{negate}{who}has fought this phase")
+        }
         T::DestroyedByAttackType => {
             if pj(p, "attack_type") == "any" {
                 format!("{negate}destroyed by any attack")
@@ -822,7 +1044,15 @@ fn describe_simple(s: &SimpleCondition) -> String {
             format!(
                 "{negate}the selected friendly unit started {snapshot_point} within Engagement Range of that enemy unit"
             )
-        }
+        },
+        T::AbilityWindowCapacity => format!(
+            "{negate}the {} ability had unused selection capacity at the end of the opponent's previous turn",
+            dekebab(p.get("source_ability").and_then(|source| source.get("ability_id")).and_then(Value::as_str).unwrap_or("undefined"))
+        ),
+        T::CandidateEligibleInAbilityWindow => format!(
+            "{negate}the candidate was eligible for the {} ability at the end of the opponent's previous turn",
+            dekebab(p.get("source_ability").and_then(|source| source.get("ability_id")).and_then(Value::as_str).unwrap_or("undefined"))
+        ),
         T::FightsFirst => format!("{negate}the unit has Fights First"),
         T::DispositionMatches => match ps(p, "disposition") {
             Some("strategic-reserves") => format!("{negate}the unit is in Strategic Reserves"),
@@ -837,7 +1067,75 @@ fn describe_simple(s: &SimpleCondition) -> String {
             dekebab(ps(p, "comparison").unwrap_or("")),
             ps(p, "target_stat").unwrap_or(""),
         ),
-        T::MadeIngressMoveThisTurn => format!("{negate}the unit made an ingress move this turn"),
+        T::TargetOfTriggeringCharge => {
+            format!("{negate}the unit was selected as a target of that charge")
+        }
+        T::EveryModelWithinRangeOfBearer => format!(
+            "{negate}every model in the unit is within {}\" of this Transport",
+            pj(p, "range")
+        ),
+        T::UnitSelectedToShootThisPhase => {
+            format!("{negate}the unit has been selected to shoot this phase")
+        }
+        T::EligibleToShoot => format!("{negate}the unit is eligible to shoot"),
+        T::SelectionHasKeyword => {
+            let selected = p
+                .get("selection")
+                .and_then(Value::as_object)
+                .map(|selection| {
+                    if let Some(reference) = selection.get("observer_for").and_then(Value::as_object)
+                    {
+                        if let Some(variable) = reference.get("selection_var") {
+                            return format!(
+                                "the Observer unit that marked the bound {}",
+                                effect::jval(variable).replace('_', " ")
+                            );
+                        }
+                    } else if let Some(variable) = selection.get("selection_var") {
+                        return format!(
+                            "the bound {}",
+                            effect::jval(variable).replace('_', " ")
+                        );
+                    }
+                    "the selected unit".to_string()
+                })
+                .unwrap_or_else(|| "the selected unit".to_string());
+            format!("{negate}{selected} has the {} keyword", pj(p, "keyword"))
+        }
+        T::EventSourceIsBearerUnit => {
+            format!("{negate}the triggering event was performed by this unit")
+        }
+        T::EventSourceIsAttachedUnit => {
+            format!("{negate}the triggering Act of Faith was performed by the unit this model leads")
+        }
+        T::MiracleDieGenerationReason => {
+            let keywords = p
+                .get("keywords")
+                .and_then(Value::as_array)
+                .map(|items| items.iter().map(effect::jval).collect::<Vec<_>>().join(" "))
+                .unwrap_or_default();
+            format!(
+                "{negate}the Miracle die was gained because a friendly {keywords} unit or model was destroyed"
+            )
+        }
+        T::MiracleDieGenerationTiming => {
+            format!("{negate}the Miracle die was gained at the start of the battle round")
+        }
+        T::DestroyedEventWithinRange => format!(
+            "{negate}that destroyed unit or model was within {}\" of this model",
+            pj(p, "range")
+        ),
+        T::DestroyedByFriendlyUnit => {
+            let keywords = p
+                .get("keywords")
+                .and_then(Value::as_array)
+                .map(|items| items.iter().map(effect::jval).collect::<Vec<_>>().join(" "))
+                .unwrap_or_default();
+            format!("{negate}the unit was destroyed by a friendly {keywords} unit")
+        }
+        T::MadeIngressMoveThisTurn => format!(
+            "{negate}the unit made an ingress move (including a Deep Strike setup) this turn"
+        ),
     }
 }
 
@@ -885,6 +1183,7 @@ mod tests {
         let parameters = params.as_object().cloned().unwrap_or_default();
         Condition(ConditionNode::SimpleCondition(SimpleCondition {
             negated: false,
+            of: None,
             parameters,
             type_,
         }))
@@ -913,5 +1212,14 @@ mod tests {
             )),
             "1+ enemy units destroyed this turn"
         );
+    }
+}
+
+fn describe_compound_operand(node: &ConditionNode, opposite: CompoundConditionOperator) -> String {
+    let text = describe_node(node);
+    if matches!(node, ConditionNode::CompoundCondition(c) if c.operator == opposite) {
+        format!("({text})")
+    } else {
+        text
     }
 }

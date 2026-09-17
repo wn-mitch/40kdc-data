@@ -55,14 +55,14 @@ describe("resolveDetachment", () => {
 
 describe("resolveAbility", () => {
   it("returns undefined for null/absent/unknown ids", () => {
-    expect(resolveAbility(null)).toBeUndefined();
-    expect(resolveAbility(undefined)).toBeUndefined();
-    expect(resolveAbility("")).toBeUndefined();
-    expect(resolveAbility("definitely-not-an-ability-xyz")).toBeUndefined();
+    expect(resolveAbility(null, "adepta-sororitas")).toBeUndefined();
+    expect(resolveAbility(undefined, "adepta-sororitas")).toBeUndefined();
+    expect(resolveAbility("", "adepta-sororitas")).toBeUndefined();
+    expect(resolveAbility("definitely-not-an-ability-xyz", "adepta-sororitas")).toBeUndefined();
   });
 
   it("resolves a known ability to name + describer output", () => {
-    const r = resolveAbility("the-blood-of-martyrs");
+    const r = resolveAbility("the-blood-of-martyrs", "adepta-sororitas");
     expect(r).toBeDefined();
     expect(r!.id).toBe("the-blood-of-martyrs");
     expect(typeof r!.name).toBe("string");

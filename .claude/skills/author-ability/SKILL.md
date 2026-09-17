@@ -204,8 +204,8 @@ If the user points at a file elsewhere, copy it under `_private/sources/` first.
 ## IP safety (non-negotiable)
 
 - Raw GW rule text goes ONLY to git-ignored / out-of-repo places: `_private/**`,
-  `data/_audit/author-input/<faction>.json`, and the `40kdc-abilities` store. **Never**
-  into a committed `data/enrichment/**` field, and never write a manifest under `tools/`.
+  the ignored `data/_audit/author-input/<faction>.json` workspace, and the private
+  `40kdc-abilities` store. Never write it into a tracked repository file.
 - Never commit source PDFs. Don't paste prose into `name` / `community_notes` / any DSL
   field (the audit flags it `gw-leak`). Names are factual labels and are fine.
 
@@ -223,7 +223,7 @@ manifest per faction.
 - **PDF:** `pdftotext -layout _private/sources/<f>.pdf _private/extracted/<f>.txt`, then
   read it. NOTE: two-column packs flatten with left/right columns interleaved —
   reconstruct each rule's full text carefully.
-- **JSON:** parse the army-assist / `reauthor-input` shape (`name`, `unit_ids`,
+- **JSON:** parse a private source JSON shape (`name`, `unit_ids`,
   `src.description`, `phases`) or a simple `{name, text, unit, faction}` list.
 
 ### 2. Gather faction reference (for accurate unit_ids + dedup)

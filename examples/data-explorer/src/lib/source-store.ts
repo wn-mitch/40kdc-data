@@ -31,8 +31,8 @@ export type StoreIndex = Record<string, StoreEntry>;
 export interface ParsedSource {
   /** Human-readable label for status display. */
   label: string;
-  /** Absolute URL of the store's `index.json`. */
-  indexUrl: string;
+  /** Absolute URL of the store directory. */
+  baseUrl: string;
 }
 
 /**
@@ -45,10 +45,10 @@ export function parseSource(spec: string): ParsedSource {
   if (!s) return parseSource(DEFAULT_SOURCE);
 
   if (/^https?:\/\//i.test(s)) {
-    const indexUrl = /\.json($|\?)/i.test(s)
-      ? s
-      : s.replace(/\/+$/, "") + "/index.json";
-    return { label: s, indexUrl };
+    const baseUrl = /\.json($|\?)/i.test(s)
+      ? s.replace(/\/[^/]*\.json(?:\?.*)?$/i, "")
+      : s.replace(/\/+$/, "");
+    return { label: s, baseUrl };
   }
 
   const m = s.match(/^([^/\s@]+)\/([^/\s@]+)(?:@(.+))?$/);
@@ -62,7 +62,7 @@ export function parseSource(spec: string): ParsedSource {
   const ref = (m[3] ?? "main").trim() || "main";
   return {
     label: `${owner}/${repo}@${ref}`,
-    indexUrl: `https://raw.githubusercontent.com/${owner}/${repo}/${ref}/index.json`,
+    baseUrl: `https://raw.githubusercontent.com/${owner}/${repo}/${ref}`,
   };
 }
 
@@ -119,35 +119,45 @@ export interface LoadResult {
   count: number;
 }
 
-/**
- * Fetch (and cache) the store index for a source spec. `fetchImpl` is injectable
- * for tests; `force` bypasses both caches to re-fetch.
- */
-export async function loadIndex(
+
+export async function loadFactionIndex(
   spec: string,
+  factionId: string,
   opts: { fetchImpl?: typeof fetch; force?: boolean } = {},
 ): Promise<LoadResult> {
-  const { indexUrl, label } = parseSource(spec);
+  const { baseUrl, label } = parseSource(spec);
+  const cacheKey = `${baseUrl}#${factionId}`;
   const fetchImpl = opts.fetchImpl ?? fetch;
-
   if (!opts.force) {
-    const cached = memCache.get(indexUrl) ?? lsGet(indexUrl);
-    if (cached) {
-      memCache.set(indexUrl, cached);
-      return { index: cached, label, count: Object.keys(cached).length };
+    const cached = memCache.get(cacheKey) ?? lsGet(cacheKey);
+    if (cached) return { index: cached, label, count: Object.keys(cached).length };
+  }
+  const load = async (url: string, expectedFaction: string): Promise<StoreIndex> => {
+    const response = await fetchImpl(url);
+    if (response.status === 404) return {};
+    if (!response.ok) throw new Error(`Fetch failed (${response.status} ${response.statusText}) for ${url}`);
+    const entries = await response.json() as unknown;
+    if (!Array.isArray(entries)) throw new Error(`Unexpected index shape from ${url} (expected an array).`);
+    const index: StoreIndex = {};
+    for (const candidate of entries) {
+      if (typeof candidate !== "object" || candidate === null) throw new Error(`Invalid ability entry in ${url}`);
+      const entry = candidate as StoreEntry & { ability_id?: unknown; faction_id?: unknown };
+      const textFields: (keyof StoreEntry)[] = ["raw_text", "when", "target", "effect", "restrictions"];
+      if (
+        typeof entry.ability_id !== "string" ||
+        entry.ability_id.trim() === "" ||
+        entry.faction_id !== expectedFaction ||
+        textFields.some((field) => entry[field] !== undefined && typeof entry[field] !== "string") ||
+        index[entry.ability_id]
+      ) throw new Error(`Invalid ability entry in ${url}`);
+      index[entry.ability_id] = { faction: entry.faction_id, raw_text: entry.raw_text, when: entry.when, target: entry.target, effect: entry.effect, restrictions: entry.restrictions };
     }
-  }
-
-  const res = await fetchImpl(indexUrl);
-  if (!res.ok) {
-    throw new Error(`Fetch failed (${res.status} ${res.statusText}) for ${indexUrl}`);
-  }
-  const index = (await res.json()) as StoreIndex;
-  if (typeof index !== "object" || index === null || Array.isArray(index)) {
-    throw new Error(`Unexpected index shape from ${indexUrl} (expected an object map).`);
-  }
-  memCache.set(indexUrl, index);
-  lsSet(indexUrl, index);
+    return index;
+  };
+  const [core, faction] = await Promise.all([load(`${baseUrl}/core.json`, "core"), load(`${baseUrl}/${factionId}.json`, factionId)]);
+  const index = { ...core, ...faction };
+  memCache.set(cacheKey, index);
+  lsSet(cacheKey, index);
   return { index, label, count: Object.keys(index).length };
 }
 

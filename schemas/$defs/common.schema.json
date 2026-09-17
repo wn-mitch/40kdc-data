@@ -49,6 +49,38 @@
       "type": "string",
       "description": "GitHub handle or '40kdc-community'"
     },
+    "external-reference": {
+      "type": "object",
+      "description": "A stable identifier assigned to the same entity by an external data source.",
+      "properties": {
+        "namespace": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "description": "Open source namespace, such as 'mfm', 'bsdata', or 'game-datacards'."
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "description": "Identifier exactly as assigned by the external source."
+        }
+      },
+      "required": [
+        "namespace",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "external-reference-list": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/external-reference"
+      },
+      "uniqueItems": true,
+      "description": "Known external source identities. More than one id per namespace and cross-entity fan-out are valid."
+    },
     "phase": {
       "type": "string",
       "enum": [
@@ -58,7 +90,7 @@
         "charge",
         "fight"
       ],
-      "description": "The five official game phases. Unchanged between 10th and 11th edition \u2014 11e reorders Pile In timing within the Fight phase but adds no top-level phase."
+      "description": "The five official game phases. Unchanged between 10th and 11th edition — 11e reorders Pile In timing within the Fight phase but adds no top-level phase."
     },
     "phase-list": {
       "type": "array",
@@ -115,6 +147,7 @@
         "fall-back-move",
         "falls-back",
         "charge-move",
+        "end-of-charge-move",
         "charge-declaration",
         "moved-through-terrain",
         "moved-through-tall-terrain",
@@ -124,6 +157,7 @@
         "after-hit-roll",
         "before-wound-roll",
         "after-wound-roll",
+        "attack-scores-wound",
         "before-save-roll",
         "after-save-roll",
         "before-damage-roll",
@@ -149,7 +183,18 @@
         "on-damage-allocated",
         "battle-shock-test",
         "leadership-test",
-        "desperate-escape-test"
+        "desperate-escape-test",
+        "stratagem-targeted",
+        "ability-target-selected",
+        "end-of-opponent-charge-phase",
+        "enemy-unit-completed-shooting-targeting-bearer",
+        "enemy-unit-selects-bearer-as-charge-target",
+        "enemy-unit-targets-bearer",
+        "enemy-unit-completed-fall-back-from-bearer",
+        "act-of-faith-completed",
+        "act-of-faith-performed",
+        "miracle-die-generated",
+        "enemy-unit-selected-charge-targets-before-charge-move"
       ]
     },
     "battle-size": {
@@ -208,7 +253,7 @@
       "additionalProperties": false
     },
     "footprint": {
-      "description": "A terrain piece's 2D footprint in local inches (y-down): an axis-aligned rectangle with its min corner at the local origin, a right triangle with the right angle at the local origin and legs along +x/+y, or an explicit polygon (>= 3 points). The placement resolver re-centers the footprint on its polygon area centroid, so the local-origin convention does not affect where the piece lands \u2014 only its shape matters.",
+      "description": "A terrain piece's 2D footprint in local inches (y-down): an axis-aligned rectangle with its min corner at the local origin, a right triangle with the right angle at the local origin and legs along +x/+y, or an explicit polygon (>= 3 points). The placement resolver re-centers the footprint on its polygon area centroid, so the local-origin convention does not affect where the piece lands — only its shape matters.",
       "oneOf": [
         {
           "type": "object",
@@ -275,6 +320,28 @@
           "additionalProperties": false
         }
       ]
+    },
+    "wall": {
+      "type": "object",
+      "description": "A wall polyline: an open path of 2+ vertices with optional thickness, in the same local frame as the footprint.",
+      "properties": {
+        "points": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/vec2"
+          },
+          "minItems": 2
+        },
+        "thickness": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Wall thickness in inches. Omit for thin walls."
+        }
+      },
+      "required": [
+        "points"
+      ],
+      "additionalProperties": false
     },
     "terrain-area-keyword": {
       "type": "string",

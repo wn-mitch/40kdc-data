@@ -552,6 +552,7 @@
         "min": 3,
         "max": 6,
         "is_leader_model": false,
+        "default_weapon_ids": [],
         "base_size_mm": {
           "shape": "round",
           "diameter": 25
@@ -1249,6 +1250,7 @@
         "min": 1,
         "max": 2,
         "is_leader_model": false,
+        "default_weapon_ids": [],
         "base_size_mm": {
           "shape": "round",
           "diameter": 40
@@ -1585,6 +1587,35 @@
         "default_weapon_ids": [
           "chitinous-claws-and-teeth-hive-guard",
           "shockcannon"
+        ],
+        "loadout_variants": [
+          {
+            "name": "Hive Guard w/ shockcannon",
+            "weapon_ids": [
+              "chitinous-claws-and-teeth-hive-guard",
+              "shockcannon"
+            ],
+            "max_count": 6
+          },
+          {
+            "name": "Hive Guard w/ impaler cannon",
+            "weapon_ids": [
+              "chitinous-claws-and-teeth-hive-guard",
+              "impaler-cannon"
+            ],
+            "max_count": 6
+          }
+        ],
+        "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Hive Guard w/ shockcannon",
+              "Hive Guard w/ impaler cannon"
+            ],
+            "count": 6,
+            "per_models": 0,
+            "scope": "model-row"
+          }
         ]
       }
     ],
@@ -2139,6 +2170,180 @@
             "name": "The Red Terror",
             "min": 1,
             "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "terror-of-vardenghast",
+    "faction_id": "tyranids",
+    "models": [
+      {
+        "name": "Terror of Vardenghast",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        },
+        "default_weapon_ids": [
+          "prime-talons"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Terror of Vardenghast",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "vardenghast-swarm-barbgaunts",
+    "faction_id": "tyranids",
+    "models": [
+      {
+        "name": "Barbgaunt",
+        "min": 5,
+        "max": 5,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "barblauncher",
+          "chitinous-claws-and-teeth-barbgaunts"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Barbgaunt",
+            "min": 5,
+            "max": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "vardenghast-swarm-psychophage",
+    "faction_id": "tyranids",
+    "models": [
+      {
+        "name": "Psychophage",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 120,
+          "length": 92
+        },
+        "default_weapon_ids": [
+          "psychoclastic-torrent",
+          "talons-and-betentacled-maw"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Psychophage",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "vardenghast-swarm-termagants",
+    "faction_id": "tyranids",
+    "models": [
+      {
+        "name": "Termagant",
+        "min": 10,
+        "max": 10,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "chitinous-claws-and-teeth-termagants",
+          "fleshborer"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Termagant",
+            "min": 10,
+            "max": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "vardenghast-swarm-von-ryans-leapers",
+    "faction_id": "tyranids",
+    "models": [
+      {
+        "name": "Von Ryan's Leaper",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "leapers-talons"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Von Ryan's Leaper",
+            "min": 3,
+            "max": 3
           }
         ]
       }

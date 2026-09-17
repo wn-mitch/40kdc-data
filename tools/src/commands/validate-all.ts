@@ -1,15 +1,18 @@
 import { createValidator } from "../schema-loader.js";
-import { validateFiles } from "../validate.js";
+import { validateFiles, validatePublicSourceBoundary } from "../validate.js";
 import { checkReferentialIntegrity } from "../integrity.js";
 import { formatReport, type ReporterMode } from "../report.js";
 import type { ValidationResult } from "../validate.js";
 
-export async function validateAllCommand(opts: { reporter: string }): Promise<void> {
+export async function validateAllCommand(opts: {
+  reporter: string;
+}): Promise<void> {
   const ajv = createValidator();
   const mode = opts.reporter as ReporterMode;
 
   const coreResult = await validateFiles(ajv, "core/**/*.json");
   const enrichmentResult = await validateFiles(ajv, "enrichment/**/*.json");
+  const sourceBoundary = await validatePublicSourceBoundary();
 
   const combined: ValidationResult = {
     totalFiles: coreResult.totalFiles + enrichmentResult.totalFiles,
@@ -23,9 +26,18 @@ export async function validateAllCommand(opts: { reporter: string }): Promise<vo
   // Cross-entity referential integrity (ability-ref resolution, faction_keyword
   // membership) — checks that per-file JSON Schema validation cannot express.
   const integrity = await checkReferentialIntegrity();
-  console.log(formatReport(integrity, mode, "40kdc Referential Integrity Report"));
+  console.log(
+    formatReport(integrity, mode, "40kdc Referential Integrity Report"),
+  );
+  console.log(
+    formatReport(sourceBoundary, mode, "40kdc Public Source Boundary Report"),
+  );
 
-  if (combined.failed > 0 || integrity.failed > 0) {
+  if (
+    combined.failed > 0 ||
+    integrity.failed > 0 ||
+    sourceBoundary.failed > 0
+  ) {
     process.exit(1);
   }
 }

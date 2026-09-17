@@ -12,11 +12,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "a-tempting-trap-kauyon",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b1132aa3-2de4-5b08-a70b-e34b31ddfc3d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "23171018-281d-4321-a2fe-c65dd5a6fb08"
+      }
+    ]
   },
   {
     "id": "a-trap-well-laid-kroot-hunting-pack",
@@ -32,11 +42,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "a-trap-well-laid-kroot-hunting-pack",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b3b87ba2-8066-5cd2-aedd-5bebf852f774"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7ce53326-264e-4abf-8421-d137129a0665"
+      }
+    ]
   },
   {
     "id": "aggressive-mobility-montka",
@@ -51,11 +71,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "aggressive-mobility-montka",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "879bcf3c-7a1f-5c3a-a394-b170f7de8650"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dc0729c7-424b-43d1-a8f9-5e72e7cd8001"
+      }
+    ]
   },
   {
     "id": "alien-expertise-auxiliary-cadre",
@@ -70,11 +100,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "alien-expertise-auxiliary-cadre",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "df194ac2-9e97-5f72-b303-b8a39db3c021"
+      },
+      {
+        "namespace": "mfm",
+        "id": "24ada660-2a7c-4f77-8047-06363398fecf"
+      }
+    ]
   },
   {
     "id": "automated-repair-drones-experimental-prototype-cadre",
@@ -111,7 +151,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6fdd8c91-2a64-59e9-94e1-54aee49e98ce"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f14c3b61-256c-4279-8161-8f663422a056"
+      }
+    ]
   },
   {
     "id": "combat-debarkation-montka",
@@ -126,11 +176,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "combat-debarkation-montka",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "99bc33b3-83ad-5886-b568-bc99289382ca"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cd08bab5-7d0c-4d36-beee-02d895c8b60d"
+      }
+    ]
   },
   {
     "id": "combat-embarkation-kauyon",
@@ -145,11 +205,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "combat-embarkation-kauyon",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9364c511-9b2b-5239-907f-4c64bf7cafd7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "78b24ebd-df58-4657-a68e-1a04cbc09eed"
+      }
+    ]
   },
   {
     "id": "coordinate-to-engage-kauyon",
@@ -164,11 +234,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "coordinate-to-engage-kauyon",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2642040b-bd46-5aff-bc7d-cd1077a05555"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1d4a3379-8785-4d9d-b18e-4ddd744e8390"
+      }
+    ]
   },
   {
     "id": "counterfire-defence-systems-montka",
@@ -183,11 +263,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "counterfire-defence-systems-montka",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c0e2da84-ac0a-5916-99ad-04f0ff34c67c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "450d8520-3527-4c3d-bbdb-a5361f7d6ab0"
+      }
+    ]
   },
   {
     "id": "emp-grenades-kroot-hunting-pack",
@@ -203,11 +293,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "emp-grenades-kroot-hunting-pack",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7abc8715-25ee-594f-90cf-78caa31d0412"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6ed24703-1b7e-465b-9b31-0cfc693d0ed0"
+      }
+    ]
   },
   {
     "id": "experimental-ammunition-experimental-prototype-cadre",
@@ -222,11 +322,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "experimental-ammunition-experimental-prototype-cadre",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f0b13fea-6614-58dc-a1bb-4a441e33eccf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f69888d4-7f69-4346-9092-8f79fb3f0c1e"
+      }
+    ]
   },
   {
     "id": "experimental-modifications-auxiliary-cadre",
@@ -242,11 +352,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "experimental-modifications-auxiliary-cadre",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "33ac4db0-baf6-5ab8-9453-3092c077a72e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f2aeddba-542d-4aa0-b1ac-1c6a39580385"
+      }
+    ]
   },
   {
     "id": "experimental-weaponry-experimental-prototype-cadre",
@@ -284,11 +404,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "fail-safe-detonator-retaliation-cadre",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f29d95b8-3174-5ff1-bcf0-b54e88658fbf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "95f3d7cd-07f9-4e45-bc44-9726c1bc9843"
+      }
+    ]
   },
   {
     "id": "focused-fire-montka",
@@ -303,11 +433,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "focused-fire-montka",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b5c4f53e-af13-5507-a02f-643d8ce946d8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "44f34886-982e-453b-8806-1e2e4cd315e1"
+      }
+    ]
   },
   {
     "id": "grav-inhibitor-field-retaliation-cadre",
@@ -322,11 +462,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "grav-inhibitor-field-retaliation-cadre",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "00b92da1-4106-5db5-a30b-8cc1e280212e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9407280f-4465-43e9-abdb-d886ff13c2db"
+      }
+    ]
   },
   {
     "id": "guerrilla-warriors-kroot-hunting-pack",
@@ -341,11 +491,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "guerrilla-warriors-kroot-hunting-pack",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9ab8d24a-cd85-5091-8458-b48a63a1d5f8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2df11243-da47-4f8c-bf17-f91404d2188c"
+      }
+    ]
   },
   {
     "id": "guided-by-unity-auxiliary-cadre",
@@ -363,7 +523,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5f8c1db8-f483-5108-b14c-e5d9978c6fb1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dd153b7c-abbb-4c2f-a989-bcb394ba8986"
+      }
+    ]
   },
   {
     "id": "guided-fire-auxiliary-cadre",
@@ -397,11 +567,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "hidden-hunters-kroot-hunting-pack",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bde43123-a2b1-5d3a-8fbf-85fac4e2706a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "79b6e0f4-1c0a-48e0-8cb3-1113e34fcfb9"
+      }
+    ]
   },
   {
     "id": "interlocking-manouevres-auxiliary-cadre",
@@ -439,11 +619,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "join-the-hunt-kroot-hunting-pack",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bc085bca-5aaf-5a84-932f-29782ae4f2e7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ba1b2a77-2dac-41f6-8f04-d4f62d742208"
+      }
+    ]
   },
   {
     "id": "marker-beacon-advanced-acquisition-cadre",
@@ -461,7 +651,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "57058f2e-5100-55f3-8d52-020ce444af9f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b492e5a2-0a34-4aed-9d80-c6824c7036b9"
+      }
+    ]
   },
   {
     "id": "microdrone-support-advanced-acquisition-cadre",
@@ -479,7 +679,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "efc153d3-3281-53f7-9aea-2c55be52f35b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c9e0a100-3f0b-4154-a6bf-13a748a4ede9"
+      }
+    ]
   },
   {
     "id": "multisensory-scanning-auxiliary-cadre",
@@ -552,11 +762,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "photon-grenades-kauyon",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "d3400580-1b05-5c46-ba3a-d49c8ce1af02"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2d3f8d51-3433-49b5-8d7e-95b41aef56e5"
+      }
+    ]
   },
   {
     "id": "pinpoint-counter-offensive-montka",
@@ -575,11 +795,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "pinpoint-counter-offensive-montka",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2a5ffa9d-9e7e-59f6-8bf1-fb6eebdb925e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "149c7f84-6ffc-41aa-963b-979ff4466856"
+      }
+    ]
   },
   {
     "id": "point-blank-ambush-kauyon",
@@ -594,11 +824,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "point-blank-ambush-kauyon",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "05c331a7-755b-5fb8-9d94-e8cd592a1930"
+      },
+      {
+        "namespace": "mfm",
+        "id": "64ac8db1-bb2c-495b-82db-64ae980f215d"
+      }
+    ]
   },
   {
     "id": "pulse-onslaught-montka",
@@ -613,11 +853,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "pulse-onslaught-montka",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9cacb8fa-e5e5-5868-9e5b-21a8cb2340bd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "78f2df6d-2fe6-418c-bc1b-52720d8f10d4"
+      }
+    ]
   },
   {
     "id": "rapid-acquisition-sudden-dawn-cadre",
@@ -635,7 +885,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "df52cb54-926e-4674-bec8-ffa0f8f9f077"
+      }
+    ]
   },
   {
     "id": "reactive-impact-dampeners-experimental-prototype-cadre",
@@ -671,11 +927,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "stimm-injectors-retaliation-cadre",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "38fd0e3e-9208-5d2b-8ec8-221f06bdb19b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7b887c0-722a-4c93-b146-c3f7b23d815d"
+      }
+    ]
   },
   {
     "id": "suppressing-fire-sudden-dawn-cadre",
@@ -693,7 +959,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "af84591d-2433-4909-92bf-63d3cee6c3c5"
+      }
+    ]
   },
   {
     "id": "swift-embarkation-sudden-dawn-cadre",
@@ -711,7 +983,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fb81cbac-1a34-46d8-af61-38774d3ff627"
+      }
+    ]
   },
   {
     "id": "the-arrokon-protocol-retaliation-cadre",
@@ -726,11 +1004,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "the-arrokon-protocol-retaliation-cadre",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4b324146-eab6-5d9d-a6f9-542e95d97983"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cfe18c6e-317d-493e-bd95-b399118541c2"
+      }
+    ]
   },
   {
     "id": "the-grisly-feast-kroot-hunting-pack",
@@ -745,11 +1033,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "the-grisly-feast-kroot-hunting-pack",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "de1b4e12-d9e3-5037-8294-4114f0600b23"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e593f0d6-574f-4f70-bc24-8994151eda75"
+      }
+    ]
   },
   {
     "id": "the-shortened-blade-retaliation-cadre",
@@ -764,11 +1062,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "the-shortened-blade-retaliation-cadre",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0b53b6f1-6906-511b-a950-90fc7ea2b2cb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f5b85c81-ee8c-416d-813d-d9aa50e99d19"
+      }
+    ]
   },
   {
     "id": "the-torchstar-gambit-retaliation-cadre",
@@ -783,11 +1091,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "the-torchstar-gambit-retaliation-cadre",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3ae4d318-ec42-58f9-b14f-7b66adbce3b2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8c7a9424-c797-483b-aa5c-4253dffe9bc2"
+      }
+    ]
   },
   {
     "id": "threat-assessment-analyser-experimental-prototype-cadre",
@@ -821,10 +1139,20 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "wall-of-mirrors-kauyon",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2b4d2e28-dd3e-5b61-ac04-e23f2fe48201"
+      },
+      {
+        "namespace": "mfm",
+        "id": "af04ff7f-25c5-4765-909f-b140862097e3"
+      }
+    ]
   }
 ]

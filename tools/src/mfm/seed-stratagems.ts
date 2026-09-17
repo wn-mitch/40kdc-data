@@ -33,13 +33,19 @@ import { readJsonArray, CORE_DIR } from "./repo-files.js";
 import { repoDirs, repoDirForFactionName } from "./faction-map.js";
 import type { StagedWrite } from "./apply.js";
 import { modeOfPublication } from "./game-mode.js";
-import { stratagemRepoId, buildStratCanon, deriveTrigger } from "./stratagems.js";
+import {
+  stratagemRepoId,
+  buildStratCanon,
+  deriveTrigger,
+} from "./stratagems.js";
+import { acceptedGapIds } from "./accepted-gaps.js";
 
 const PROVISIONAL = { edition: "11th", dataslate: "pre-launch-provisional" };
 const DEFAULT_TIMING = "once-per-phase";
 
 interface SeedStratRecord {
   id: string;
+  external_refs: { namespace: string; id: string }[];
   name: string;
   category: "core" | "detachment";
   type?: string;
@@ -62,6 +68,8 @@ export interface StratSeedReport {
   skippedNoDir: string[];
   /** No canon row (unsluggable / missing name). */
   skippedNoCanon: string[];
+  /** Dump rows excluded by an existing detachment's exact current roster. */
+  skippedOutsideRoster: string[];
   /** Coreless (no detachment) dump stratagems, held for manual review — the 12
    *  universal core stratagems are already complete in the repo, so a coreless
    *  "new-in-dump" is a spelling/scoping mismatch with an existing core entity
@@ -69,21 +77,56 @@ export interface StratSeedReport {
   skippedCoreless: string[];
 }
 
+type DetachmentRoster = Map<string, Set<string>>;
+
+function readDetachmentRosters(dir: string): DetachmentRoster {
+  const detachmentPath = path.join(CORE_DIR, dir, "detachments.json");
+  const rosters: DetachmentRoster = new Map();
+  if (!fs.existsSync(detachmentPath)) return rosters;
+
+  for (const detachment of readJsonArray<{
+    id: string;
+    stratagem_ids?: string[];
+  }>(detachmentPath)) {
+    if (detachment.stratagem_ids) {
+      rosters.set(detachment.id, new Set(detachment.stratagem_ids));
+    }
+  }
+  return rosters;
+}
+
+function rosterFor(
+  rostersByDirectory: Map<string, DetachmentRoster>,
+  dir: string,
+  detachmentId: string,
+): Set<string> | undefined {
+  let rosters = rostersByDirectory.get(dir);
+  if (!rosters) {
+    rosters = readDetachmentRosters(dir);
+    rostersByDirectory.set(dir, rosters);
+  }
+  return rosters.get(detachmentId);
+}
+
 export function seedStratagems(
   dump: MfmDump,
   opts: { includeCombatPatrol?: boolean } = {},
 ): StratSeedReport {
+  const rostersByDirectory = new Map<string, DetachmentRoster>();
+  const acceptedStratagemsByDirectory = new Map<string, ReadonlySet<string>>();
   const canon = buildStratCanon(dump);
   const detById = dump.byId("detachment");
 
   const rootPath = path.join(CORE_DIR, "stratagems.json");
   const dirPaths = new Map<string, string>();
-  for (const dir of repoDirs()) dirPaths.set(dir, path.join(CORE_DIR, dir, "stratagems.json"));
+  for (const dir of repoDirs())
+    dirPaths.set(dir, path.join(CORE_DIR, dir, "stratagems.json"));
 
   // Lazily-loaded live arrays keyed by file path; appended in place, staged once.
   const arrays = new Map<string, SeedStratRecord[]>();
   const load = (p: string): SeedStratRecord[] => {
-    if (!arrays.has(p)) arrays.set(p, fs.existsSync(p) ? readJsonArray<SeedStratRecord>(p) : []);
+    if (!arrays.has(p))
+      arrays.set(p, fs.existsSync(p) ? readJsonArray<SeedStratRecord>(p) : []);
     return arrays.get(p)!;
   };
 
@@ -99,17 +142,13 @@ export function seedStratagems(
     skippedNoDir: [],
     skippedNoCanon: [],
     skippedCoreless: [],
+    skippedOutsideRoster: [],
   };
   const touched = new Set<string>();
 
   for (const s of dump.table("stratagem")) {
     const id = stratagemRepoId(dump, s);
     if (!id || repoIds.has(id)) continue;
-
-    if (!opts.includeCombatPatrol && modeOfPublication(dump, s.publicationId) === "combat-patrol") {
-      report.heldBackCombatPatrol.push(id);
-      continue;
-    }
 
     const c = canon.get(id);
     if (!c) {
@@ -129,22 +168,49 @@ export function seedStratagems(
     let detachment_id: string | undefined;
     {
       const fkId = dump.factionKeywordOfDetachment(s.detachmentId);
-      const fkName = fkId ? dump.enName(dump.byId("faction_keyword").get(fkId)) : undefined;
+      const fkName = fkId
+        ? dump.enName(dump.byId("faction_keyword").get(fkId))
+        : undefined;
       const dir = repoDirForFactionName(fkName);
       if (!dir) {
         report.skippedNoDir.push(id);
         continue;
       }
-      targetPath = dirPaths.get(dir) ?? path.join(CORE_DIR, dir, "stratagems.json");
+      targetPath =
+        dirPaths.get(dir) ?? path.join(CORE_DIR, dir, "stratagems.json");
       dirLabel = dir;
       const dn = dump.enName(detById.get(s.detachmentId));
       detachment_id = dn ? nameToId(dn) : undefined;
+      let acceptedStratagems = acceptedStratagemsByDirectory.get(dir);
+      if (!acceptedStratagems) {
+        acceptedStratagems = acceptedGapIds("stratagems", dir);
+        acceptedStratagemsByDirectory.set(dir, acceptedStratagems);
+      }
+      if (acceptedStratagems.has(id)) {
+        report.skippedOutsideRoster.push(id);
+        continue;
+      }
+      if (
+        !opts.includeCombatPatrol &&
+        modeOfPublication(dump, s.publicationId) === "combat-patrol"
+      ) {
+        report.heldBackCombatPatrol.push(id);
+        continue;
+      }
+      if (
+        detachment_id &&
+        rosterFor(rostersByDirectory, dir, detachment_id)?.has(id) === false
+      ) {
+        report.skippedOutsideRoster.push(id);
+        continue;
+      }
     }
 
     const en = (s.localisations?.en ?? {}) as { whenRules?: string };
     const derived = deriveTrigger(en.whenRules);
     const rec: SeedStratRecord = {
       id,
+      external_refs: [{ namespace: "mfm", id: s.id! }],
       name: dump.enName(s)!,
       category: c.category,
       ...(c.type ? { type: c.type } : {}),

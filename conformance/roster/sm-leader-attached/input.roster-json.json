@@ -83,7 +83,7 @@
       "wargear": [
         {
           "ref": {
-            "id": "heavy-bolt-pistol",
+            "id": "heavy-bolt-pistol-assault-intercessor-squad",
             "raw_name": "Heavy bolt pistol",
             "resolved": true,
             "candidates": []
@@ -116,7 +116,7 @@
             },
             {
               "ref": {
-                "id": "heavy-bolt-pistol",
+                "id": "heavy-bolt-pistol-assault-intercessor-squad",
                 "raw_name": "Heavy bolt pistol",
                 "resolved": true,
                 "candidates": []
@@ -140,7 +140,7 @@
             },
             {
               "ref": {
-                "id": "heavy-bolt-pistol",
+                "id": "heavy-bolt-pistol-assault-intercessor-squad",
                 "raw_name": "Heavy bolt pistol",
                 "resolved": true,
                 "candidates": []

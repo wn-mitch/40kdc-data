@@ -238,6 +238,7 @@
       ]
     },
     "expected": [
+      "army|warn|disposition-invalid:purge-the-foe",
       "u0|error|enhancement-wrong-detachment:helm-of-brazen-ire-berzerker-warband"
     ]
   },
@@ -332,6 +333,7 @@
       ]
     },
     "expected": [
+      "army|warn|disposition-invalid:purge-the-foe",
       "u0|error|leader-must-attach:master-of-executions"
     ]
   },
@@ -414,6 +416,34 @@
     ]
   },
   {
+    "name": "disposition-granted-by-secondary-detachment",
+    "note": "The pick may be granted by ANY selected detachment, not only the primary: reconnaissance comes from librarius-conclave (second), so no disposition-invalid fires.",
+    "args": {
+      "factionId": "adeptus-astartes",
+      "battleSize": "strike-force",
+      "forceDisposition": "reconnaissance",
+      "detachments": [
+        {
+          "id": "1st-company-task-force"
+        },
+        {
+          "id": "librarius-conclave"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "captain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": []
+  },
+  {
     "name": "detachment-tag-conflict",
     "args": {
       "factionId": "chaos-space-marines",
@@ -421,7 +451,7 @@
       "forceDisposition": "priority-assets",
       "detachments": [
         {
-          "id": "devotees-of-destruction"
+          "id": "nightmare-hunt"
         },
         {
           "id": "murdertalon-raiders"
@@ -439,7 +469,8 @@
       ]
     },
     "expected": [
-      "army|error|detachment-tag-conflict:nightmare"
+      "army|error|detachment-tag-conflict:nightmare",
+      "army|warn|disposition-invalid:priority-assets"
     ]
   },
   {
@@ -540,7 +571,7 @@
   },
   {
     "name": "points-over-limit-from-wargear-costs",
-    "note": "6 Terminator Assault Squads at 6 models = 1860 base (legal at 2000), but each squad's five thunder hammers (wargear_costs 5 pts each = 25/squad, +150) push the army to 2010 — over the limit. points-over-limit here is produced ONLY by charging wargear_costs over the loadout, so every port must sum them identically (issue 75).",
+    "note": "6 Terminator Assault Squads at 6 models = 1860 base (legal at 2000), but each squad's five thunder hammers (wargear_costs 5 pts each = 25/squad, +150) push the army to 2010 \u2014 over the limit. points-over-limit here is produced ONLY by charging wargear_costs over the loadout, so every port must sum them identically (issue 75).",
     "args": {
       "factionId": "adeptus-astartes",
       "battleSize": "strike-force",
@@ -615,6 +646,345 @@
     },
     "expected": [
       "army|error|points-over-limit:roster"
+    ]
+  },
+  {
+    "name": "chapter-keyword-enhancement-legal",
+    "args": {
+      "factionId": "blood-angels",
+      "battleSize": "strike-force",
+      "forceDisposition": "take-and-hold",
+      "detachments": [
+        {
+          "id": "liberator-assault-group"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "chaplain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": "gift-of-foresight-liberator-assault-group",
+          "leaderBodyguardId": null,
+          "counts": {
+            "crozius-arcanum": 1,
+            "absolvor-bolt-pistol": 1
+          }
+        }
+      ]
+    },
+    "expected": []
+  },
+  {
+    "name": "chapter-keyword-enhancement-terminator-mismatch",
+    "args": {
+      "factionId": "blood-angels",
+      "battleSize": "strike-force",
+      "forceDisposition": "take-and-hold",
+      "detachments": [
+        {
+          "id": "orbital-assault-force"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "chaplain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": "dedicated-gunship-orbital-assault-force",
+          "leaderBodyguardId": null,
+          "counts": {
+            "crozius-arcanum": 1,
+            "absolvor-bolt-pistol": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u0|error|enhancement-keyword-mismatch:dedicated-gunship-orbital-assault-force"
+    ]
+  },
+  {
+    "name": "chapter-restriction-own-pool-legal",
+    "args": {
+      "factionId": "ultramarines",
+      "battleSize": "strike-force",
+      "forceDisposition": "priority-assets",
+      "detachments": [
+        {
+          "id": "blade-of-ultramar"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "chaplain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "crozius-arcanum": 1,
+            "absolvor-bolt-pistol": 1
+          }
+        }
+      ]
+    },
+    "expected": []
+  },
+  {
+    "name": "chapter-restriction-cross-chapter-violated",
+    "args": {
+      "factionId": "adeptus-astartes",
+      "battleSize": "strike-force",
+      "forceDisposition": "priority-assets",
+      "detachments": [
+        {
+          "id": "blade-of-ultramar"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "chaplain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {
+            "crozius-arcanum": 1,
+            "absolvor-bolt-pistol": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u0|error|detachment-restriction-required:chaplain"
+    ]
+  },
+  {
+    "name": "allied-pricing-legal-at-limit",
+    "note": "8 Vindicare Assassins in a Blood Angels host army price at their Imperium allied_points cost (125, native 110): exactly 1000 at incursion. Pins that host-army pricing selects the allied table for a foreign unit whose host_faction keyword the army's faction carries.",
+    "args": {
+      "factionId": "blood-angels",
+      "battleSize": "incursion",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "wrath-of-the-doomed"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "vindicare-assassin",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "vindicare-assassin",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "vindicare-assassin",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "vindicare-assassin",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "vindicare-assassin",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "vindicare-assassin",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "vindicare-assassin",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "vindicare-assassin",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": []
+  },
+  {
+    "name": "allied-pricing-points-over-limit",
+    "note": "The 9th Vindicare totals 1125 under allied pricing vs 990 native — points-over-limit fires ONLY when the Imperium allied_points entry is applied.",
+    "args": {
+      "factionId": "blood-angels",
+      "battleSize": "incursion",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "wrath-of-the-doomed"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "vindicare-assassin",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "vindicare-assassin",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "vindicare-assassin",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "vindicare-assassin",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "vindicare-assassin",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "vindicare-assassin",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "vindicare-assassin",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "vindicare-assassin",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "vindicare-assassin",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "army|error|points-over-limit:roster"
+    ]
+  },
+  {
+    "name": "enhancement-keyword-or-group-eligible",
+    "args": {
+      "factionId": "genestealer-cults",
+      "battleSize": "strike-force",
+      "forceDisposition": "take-and-hold",
+      "detachments": [
+        {
+          "id": "biosanctic-broodsurge"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "patriarch",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": "predatory-instincts-biosanctic-broodsurge",
+          "leaderBodyguardId": null,
+          "counts": {
+            "patriarchs-claws": 1
+          }
+        }
+      ]
+    },
+    "expected": []
+  },
+  {
+    "name": "enhancement-keyword-or-group-ineligible",
+    "args": {
+      "factionId": "genestealer-cults",
+      "battleSize": "strike-force",
+      "forceDisposition": "take-and-hold",
+      "detachments": [
+        {
+          "id": "biosanctic-broodsurge"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "magus",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": "predatory-instincts-biosanctic-broodsurge",
+          "leaderBodyguardId": null,
+          "counts": {
+            "force-stave": 1,
+            "autopistol-magus": 1
+          }
+        }
+      ]
+    },
+    "expected": [
+      "u0|error|enhancement-keyword-mismatch:predatory-instincts-biosanctic-broodsurge"
     ]
   }
 ]

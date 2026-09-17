@@ -83,6 +83,7 @@ class Dataset:
         self.units: Collection[dict[str, Any], UnitView] = Collection(
             raw["units"],
             id_of=lambda u: u["id"],
+            external_refs_of=lambda u: u.get("external_refs"),
             # The same unit id is shared across factions (e.g.
             # ministorum-priest); keep each faction's copy, collapse only true
             # within-faction duplicates.
@@ -100,6 +101,7 @@ class Dataset:
         self.weapons: Collection[dict[str, Any], WeaponView] = Collection(
             raw["weapons"],
             id_of=lambda w: w["id"],
+            external_refs_of=lambda w: w.get("external_refs"),
             name_of=lambda w: w.get("name"),
             # A bare weapon id is shared across factions with divergent stats; key
             # on (faction_id, id) so every faction's copy is kept and a unit
@@ -123,6 +125,7 @@ class Dataset:
         self.factions: Collection[dict[str, Any], FactionView] = Collection(
             raw["factions"],
             id_of=lambda f: f["id"],
+            external_refs_of=lambda f: f.get("external_refs"),
             name_of=lambda f: f.get("name"),
             id_aliases=embedded_registry_aliases(),
             wrap=lambda f: FactionView(f, self),
@@ -148,9 +151,7 @@ class Dataset:
         )
 
         # Id-bearing collections without bespoke views (records returned as-is).
-        self.target_profiles = id_collection(
-            raw["target_profiles"], lambda p: p.get("faction_id")
-        )
+        self.target_profiles = id_collection(raw["target_profiles"], lambda p: p.get("faction_id"))
         # The generic Codex Space Marine detachments are replicated into every
         # Codex-compatible chapter/supplement view (shared id, distinct faction);
         # keep each faction's copy, collapse only within-faction dupes — mirroring
@@ -158,6 +159,7 @@ class Dataset:
         self.detachments = Collection(
             raw["detachments"],
             id_of=lambda d: d["id"],
+            external_refs_of=lambda d: d.get("external_refs"),
             name_of=lambda d: d.get("name"),
             dedupe_key_of=lambda d: f"{d['faction_id']}::{d['id']}",
             faction_of=lambda d: d.get("faction_id"),
@@ -191,6 +193,12 @@ class Dataset:
         self.game_versions: list[dict[str, Any]] = raw["game_versions"]
         self.interaction_flags: list[dict[str, Any]] = raw["interaction_flags"]
         self.phase_mappings: list[dict[str, Any]] = raw["phase_mappings"]
+
+        # (unit id, faction id) → its composition row; first-wins on duplicates, as
+        # the linear search it replaces returned the first hit.
+        self._composition_by_unit: dict[tuple[Any, Any], dict[str, Any]] = {}
+        for c in self.unit_compositions:
+            self._composition_by_unit.setdefault((c.get("unit_id"), c.get("faction_id")), c)
 
         # `source_type:source_id` → unioned phases.
         self._phase_index: dict[str, list[str]] = {}
@@ -394,9 +402,7 @@ class Dataset:
         shared across factions reuses the same option ids for different swaps, so the
         lookup never unions across factions. Empty for a unit with no options.
         """
-        return self._wargear_options_by_unit.get(
-            f"{unit['faction_id']}::{unit['id']}", []
-        )
+        return self._wargear_options_by_unit.get(f"{unit['faction_id']}::{unit['id']}", [])
 
     def unit_composition_of(self, unit: dict[str, Any]) -> dict[str, Any] | None:
         """The unit-composition row for the given unit, faction-scoped.
@@ -405,15 +411,7 @@ class Dataset:
         both ``unit_id`` and ``faction_id``. ``None`` when the unit has no
         recorded composition. Mirror of TS ``unitCompositionOf``.
         """
-        return next(
-            (
-                c
-                for c in self.unit_compositions
-                if c.get("unit_id") == unit["id"]
-                and c.get("faction_id") == unit.get("faction_id")
-            ),
-            None,
-        )
+        return self._composition_by_unit.get((unit["id"], unit.get("faction_id")))
 
     def leaders_attachable_to(self, bodyguard_unit_id: str) -> list[UnitView]:
         """Leaders whose leader-attachment data lists the unit among its bodyguards.
@@ -491,9 +489,7 @@ class Dataset:
         penalties). ``weaponProfiles`` are ignored under target perspective."""
         return self._collect_buffs(input, context, "target")
 
-    def stackable_buffs_for(
-        self, input: dict[str, Any], context: dict[str, Any]
-    ) -> dict[str, Any]:
+    def stackable_buffs_for(self, input: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """Enumerate every attacker-side buff a unit could stack in
         ``context`` as toggleable levers plus their activation groups.
 
@@ -581,9 +577,7 @@ class Dataset:
         unit = self.units.get_any(input.get("unitId") or "")
         return unit.raw.get("faction_id") if unit is not None else None
 
-    def _derived_context(
-        self, input: dict[str, Any], context: dict[str, Any]
-    ) -> dict[str, Any]:
+    def _derived_context(self, input: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """Clone the caller's context, deriving ``attackerAttached`` from a
         non-empty ``attachedUnitIds`` when not explicitly set."""
         ctx = dict(context)

@@ -1,15 +1,15 @@
 /**
- * build-abilities-index — regenerate the out-of-repo store's index.json from the
- * faction store files + core.json, keyed by the canonical ability_id. Stratagems
- * carry structured when/target/effect/restrictions; everything else carries
- * raw_text. The publish (build-abilities.mjs) embeds this index.
+ * build-abilities-index — regenerate the out-of-repo store's index.json from
+ * faction store files + core.json, keyed by faction then canonical ability_id.
+ * Stratagems carry structured when/target/effect/restrictions; everything else
+ * carries raw_text. The publish (build-abilities.mjs) embeds this index.
  *
  * Usage: npx tsx tools/src/build-abilities-index.ts [--store <dir>] [--dry-run]
  */
-import { readFileSync, writeFileSync, existsSync, readdirSync } from "node:fs";
-import { resolve, join } from "node:path";
+import { writeFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-
+import { buildRawTextIndex } from "./author-ingest.js";
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const REPO = resolve(__dirname, "../..");
 const args = process.argv.slice(2);
@@ -17,27 +17,13 @@ const flag = (n: string): string | undefined => { const i = args.indexOf(n); ret
 const STORE_ROOT = resolve(REPO, flag("--store") ?? "../40kdc-abilities");
 const DRY = args.includes("--dry-run");
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Json = any;
-const index: Record<string, Json> = {};
+const index = buildRawTextIndex(STORE_ROOT);
 let strat = 0, prose = 0;
-for (const f of readdirSync(STORE_ROOT)) {
-  if (!f.endsWith(".json") || f.startsWith("bundle-") || f === "index.json") continue;
-  let arr: Json;
-  try { arr = JSON.parse(readFileSync(join(STORE_ROOT, f), "utf-8")); } catch { continue; }
-  if (!Array.isArray(arr)) continue;
-  const faction = f.replace(/\.json$/, "");
-  for (const e of arr) {
-    if (!e.ability_id) continue;
-    const fac = e.faction_id ?? faction;
-    if (e.ability_type === "stratagem" && (e.when || e.effect)) {
-      const rec: Json = { faction: fac, when: e.when ?? "", target: e.target ?? "", effect: e.effect ?? "" };
-      if (e.restrictions) rec.restrictions = e.restrictions;
-      index[e.ability_id] = rec; strat++;
-    } else if (e.raw_text) {
-      index[e.ability_id] = { faction: fac, raw_text: e.raw_text }; prose++;
-    }
+for (const factionIndex of Object.values(index)) {
+  for (const entry of Object.values(factionIndex)) {
+    if (typeof entry.raw_text === "string") prose++;
+    else strat++;
   }
 }
-if (!DRY) writeFileSync(join(STORE_ROOT, "index.json"), JSON.stringify(index, null, 2) + "\n");
-console.log(`index: ${Object.keys(index).length} entries (${strat} structured stratagems, ${prose} prose)${DRY ? "  (dry-run)" : ""}`);
+if (!DRY) writeFileSync(resolve(STORE_ROOT, "index.json"), JSON.stringify(index, null, 2) + "\n");
+console.log(`index: ${strat + prose} entries (${strat} structured stratagems, ${prose} prose)${DRY ? "  (dry-run)" : ""}`);

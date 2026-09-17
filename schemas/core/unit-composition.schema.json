@@ -25,6 +25,7 @@
           "min": { "type": "integer", "minimum": 0 },
           "max": { "type": "integer", "minimum": 1 },
           "default_weapon_ids": {
+            "description": "The model's no-choice equipment multiset, used by base_loadout. It must describe a legal default configuration even when whole-model variants are present; it does not implicitly add another selectable variant.",
             "type": "array",
             "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" }
           },
@@ -39,6 +40,62 @@
               { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
               { "type": "null" }
             ]
+          },
+          "loadout_variants": {
+            "description": "Mutually exclusive whole-model loadout alternatives, expressed as named peers rather than deltas against default_weapon_ids. Each selected variant supplies one model's complete initial equipment multiset; repeated IDs preserve multiplicity. Compatible item-level wargear_options may transform that loadout but must satisfy the resulting variant's selection limits and all equipment budgets. When absent, models start with default_weapon_ids. When present, default_weapon_ids still governs base_loadout and is not replaced.",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "The source peer's own model name (e.g. \"Boy w/ Big shoota\"). Unique within this model row.",
+                  "type": "string",
+                  "minLength": 1
+                },
+                "weapon_ids": {
+                  "description": "This variant's complete per-model equipment multiset. Every ID must be in the owning unit's weapon_ids or resolve to faction wargear. Repeated IDs mean multiple copies; an empty multiset is not a loadout.",
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" }
+                },
+                "max_count": {
+                  "description": "Ceiling on how many models of this row may take this variant, when the source states one on the variant itself. Shared and ratio-scaled ceilings live in `loadout_variant_budgets` instead.",
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": ["name", "weapon_ids"],
+              "additionalProperties": false
+            }
+          },
+          "loadout_variant_budgets": {
+            "description": "Caps over how many variant selections this model row may make, counting SELECTED VARIANTS rather than final weapon ids (two variants sharing a weapon must not charge each other's allowance). A singleton `variant_names` is an individual cap, several names a shared pool, and intersecting budgets a ratio plus a hard ceiling. The selected count across `variant_names` must not exceed `floor(scope_model_count * count / per_models)`, or simply `count` when `per_models` is 0.",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "variant_names": {
+                  "description": "The `loadout_variants[].name` values sharing this allowance. Every name must exist in this same model row.",
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "type": "string", "minLength": 1 }
+                },
+                "count": { "type": "integer", "minimum": 1 },
+                "per_models": {
+                  "description": "Models required per `count` selections. 0 means the flat limit `count`, independent of squad size.",
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "scope": {
+                  "description": "Which model count scales the allowance: the whole unit, or just this model row.",
+                  "enum": ["unit", "model-row"]
+                }
+              },
+              "required": ["variant_names", "count", "per_models", "scope"],
+              "additionalProperties": false
+            }
           }
         },
         "required": ["name", "min", "max"],

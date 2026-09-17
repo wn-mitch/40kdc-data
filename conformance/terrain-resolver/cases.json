@@ -66,7 +66,24 @@
           "type": "rectangle",
           "width": 7,
           "height": 0.25
-        }
+        },
+        "walls": [
+          {
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 7,
+                "y": 0
+              }
+            ],
+            "thickness": 0.5
+          }
+        ],
+        "has_roof": true,
+        "terrain_category": "dense"
       }
     ],
     "layout": {
@@ -179,7 +196,24 @@
           "type": "rectangle",
           "width": 7,
           "height": 0.25
-        }
+        },
+        "walls": [
+          {
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 7,
+                "y": 0
+              }
+            ],
+            "thickness": 0.5
+          }
+        ],
+        "has_roof": true,
+        "terrain_category": "dense"
       }
     ],
     "layout": {
@@ -288,7 +322,24 @@
           "type": "rectangle",
           "width": 7,
           "height": 0.25
-        }
+        },
+        "walls": [
+          {
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 7,
+                "y": 0
+              }
+            ],
+            "thickness": 0.5
+          }
+        ],
+        "has_roof": true,
+        "terrain_category": "dense"
       }
     ],
     "layout": {
@@ -401,7 +452,24 @@
           "type": "rectangle",
           "width": 7,
           "height": 0.25
-        }
+        },
+        "walls": [
+          {
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 7,
+                "y": 0
+              }
+            ],
+            "thickness": 0.5
+          }
+        ],
+        "has_roof": true,
+        "terrain_category": "dense"
       }
     ],
     "layout": {
@@ -515,7 +583,24 @@
           "type": "rectangle",
           "width": 7,
           "height": 0.25
-        }
+        },
+        "walls": [
+          {
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 7,
+                "y": 0
+              }
+            ],
+            "thickness": 0.5
+          }
+        ],
+        "has_roof": true,
+        "terrain_category": "dense"
       }
     ],
     "layout": {
@@ -629,7 +714,24 @@
           "type": "rectangle",
           "width": 7,
           "height": 0.25
-        }
+        },
+        "walls": [
+          {
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 7,
+                "y": 0
+              }
+            ],
+            "thickness": 0.5
+          }
+        ],
+        "has_roof": true,
+        "terrain_category": "dense"
       }
     ],
     "layout": {
@@ -743,7 +845,24 @@
           "type": "rectangle",
           "width": 7,
           "height": 0.25
-        }
+        },
+        "walls": [
+          {
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 7,
+                "y": 0
+              }
+            ],
+            "thickness": 0.5
+          }
+        ],
+        "has_roof": true,
+        "terrain_category": "dense"
       }
     ],
     "layout": {
@@ -857,7 +976,24 @@
           "type": "rectangle",
           "width": 7,
           "height": 0.25
-        }
+        },
+        "walls": [
+          {
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 7,
+                "y": 0
+              }
+            ],
+            "thickness": 0.5
+          }
+        ],
+        "has_roof": true,
+        "terrain_category": "dense"
       }
     ],
     "layout": {
@@ -971,7 +1107,24 @@
           "type": "rectangle",
           "width": 7,
           "height": 0.25
-        }
+        },
+        "walls": [
+          {
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 7,
+                "y": 0
+              }
+            ],
+            "thickness": 0.5
+          }
+        ],
+        "has_roof": true,
+        "terrain_category": "dense"
       }
     ],
     "layout": {
@@ -1085,7 +1238,24 @@
           "type": "rectangle",
           "width": 7,
           "height": 0.25
-        }
+        },
+        "walls": [
+          {
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 7,
+                "y": 0
+              }
+            ],
+            "thickness": 0.5
+          }
+        ],
+        "has_roof": true,
+        "terrain_category": "dense"
       }
     ],
     "layout": {
@@ -1174,7 +1344,24 @@
           "type": "rectangle",
           "width": 7,
           "height": 0.25
-        }
+        },
+        "walls": [
+          {
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 7,
+                "y": 0
+              }
+            ],
+            "thickness": 0.5
+          }
+        ],
+        "has_roof": true,
+        "terrain_category": "dense"
       }
     ],
     "layout": {
@@ -1220,7 +1407,7 @@
           ]
         },
         {
-          "id": "back-wall",
+          "id": "a1--back-wall",
           "name": "Long Wall",
           "piece_type": "feature",
           "floor": 0,
@@ -1241,10 +1428,27 @@
               "x": 32.875,
               "y": 25.5
             }
-          ]
+          ],
+          "walls": [
+            {
+              "points": [
+                {
+                  "x": 33.125,
+                  "y": 25.5
+                },
+                {
+                  "x": 33.125,
+                  "y": 18.5
+                }
+              ],
+              "thickness": 0.5
+            }
+          ],
+          "has_roof": true,
+          "terrain_category": "dense"
         },
         {
-          "id": "side-wall",
+          "id": "a1--side-wall",
           "name": "Long Wall",
           "piece_type": "feature",
           "floor": 0,
@@ -1265,7 +1469,24 @@
               "x": 26.5,
               "y": 27.125
             }
-          ]
+          ],
+          "walls": [
+            {
+              "points": [
+                {
+                  "x": 26.5,
+                  "y": 26.875
+                },
+                {
+                  "x": 33.5,
+                  "y": 26.875
+                }
+              ],
+              "thickness": 0.5
+            }
+          ],
+          "has_roof": true,
+          "terrain_category": "dense"
         }
       ]
     }
@@ -1291,7 +1512,24 @@
           "type": "rectangle",
           "width": 7,
           "height": 0.25
-        }
+        },
+        "walls": [
+          {
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 7,
+                "y": 0
+              }
+            ],
+            "thickness": 0.5
+          }
+        ],
+        "has_roof": true,
+        "terrain_category": "dense"
       }
     ],
     "layout": {
@@ -1367,7 +1605,24 @@
               "x": 32.875,
               "y": 25.5
             }
-          ]
+          ],
+          "walls": [
+            {
+              "points": [
+                {
+                  "x": 33.125,
+                  "y": 25.5
+                },
+                {
+                  "x": 33.125,
+                  "y": 18.5
+                }
+              ],
+              "thickness": 0.5
+            }
+          ],
+          "has_roof": true,
+          "terrain_category": "dense"
         }
       ]
     }

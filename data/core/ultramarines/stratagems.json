@@ -17,7 +17,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "047abff7-881b-534c-81a3-9324b62982e7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f5e96655-9f3c-4570-b2b9-1b2a74516770"
+      }
+    ]
   },
   {
     "id": "ultramarian-adaptivity-blade-of-ultramar",
@@ -36,7 +46,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0b1a33c8-9415-5e89-86ce-0cc0ccb39671"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5127c9a9-15a7-4d65-aed3-45f77cf1d522"
+      }
+    ]
   },
   {
     "id": "exemplary-vigilance-blade-of-ultramar",
@@ -55,7 +75,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "758e61a2-9156-547d-9a9b-f2c639b65394"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b2164541-e3d7-4bb3-9503-d7c814c32142"
+      }
+    ]
   },
   {
     "id": "tactical-foresight-blade-of-ultramar",
@@ -75,7 +105,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "755a5054-d0b4-51a6-9620-44c700b7fb04"
+      },
+      {
+        "namespace": "mfm",
+        "id": "fb3e8228-00f0-4f82-935f-d6b1b6024e6a"
+      }
+    ]
   },
   {
     "id": "practical-tactics-blade-of-ultramar",
@@ -94,7 +134,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "33c3c863-cf83-5063-8e11-d42d4c969493"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e2f14ddb-9fa9-48a2-8558-46e00387bb87"
+      }
+    ]
   },
   {
     "id": "courage-and-honour-blade-of-ultramar",
@@ -113,7 +163,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "01c3d857-0775-5c30-b273-a11798be0e76"
+      },
+      {
+        "namespace": "mfm",
+        "id": "024374e3-1440-4742-a13e-a6502e551dc8"
+      }
+    ]
   },
   {
     "id": "crusading-conquerors-reclamation-force",
@@ -132,7 +192,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7d82c245-9af1-582d-b759-1dc64620995e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a2d042cc-28da-4fc0-b159-5ccfb5faf864"
+      }
+    ]
   },
   {
     "id": "scions-of-guilliman-reclamation-force",
@@ -151,7 +221,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "30d9b211-b886-564d-bd0a-75874cd30d11"
+      },
+      {
+        "namespace": "mfm",
+        "id": "03408210-0d4d-42ee-9cc6-bda19d39bf69"
+      }
+    ]
   },
   {
     "id": "furious-dedication-reclamation-force",
@@ -171,7 +251,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6669bd83-42f1-509e-82cd-229b2e66a9a8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1de1e05c-c7d7-4aa4-8fbb-75e03745debd"
+      }
+    ]
   },
   {
     "id": "ultramarian-destiny-reclamation-force",
@@ -190,7 +280,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2ed4c899-e722-5944-8bbb-6f2641f4b3c9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "46851625-ef9a-4701-bcbe-63a099e02d77"
+      }
+    ]
   },
   {
     "id": "fight-to-the-end-reclamation-force",
@@ -209,7 +309,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b40b869e-42bd-5387-bac8-1dea8192443a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dc074fb8-f64e-4735-b9c9-b10f47f4083c"
+      }
+    ]
   },
   {
     "id": "marching-ever-on-reclamation-force",
@@ -228,7 +338,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "25d4f563-4c96-568c-8537-b46c584f8cac"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3da72d7a-1a26-4a5e-9bac-a52561ed2a35"
+      }
+    ]
   },
   {
     "id": "heroes-of-the-chapter-1st-company-task-force",
@@ -244,11 +364,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "heroes-of-the-chapter-1st-company-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ba52c4b7-d02f-58f5-ae4f-bb4a306bebeb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "06423f32-dc7b-43d8-8feb-65f462b5c8b6"
+      }
+    ]
   },
   {
     "id": "legendary-fortitude-1st-company-task-force",
@@ -263,11 +393,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "legendary-fortitude-1st-company-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "96474c36-7071-5481-98c6-42e0effdbbe1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6525f05c-d6ef-435d-b59b-83c9b1ee4c0c"
+      }
+    ]
   },
   {
     "id": "terrifying-proficiency-1st-company-task-force",
@@ -282,11 +422,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "terrifying-proficiency-1st-company-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "035ca6bf-6189-556c-a7c1-a1a8d255d220"
+      },
+      {
+        "namespace": "mfm",
+        "id": "33129f94-2402-4249-8849-f07538730ed4"
+      }
+    ]
   },
   {
     "id": "duty-and-honour-1st-company-task-force",
@@ -301,11 +451,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "duty-and-honour-1st-company-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dcb7dd62-edc6-5e55-9348-e0b4bb349fc9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "64923c21-5845-4888-9aa9-9038bdce515a"
+      }
+    ]
   },
   {
     "id": "orbital-teleportarium-1st-company-task-force",
@@ -320,11 +480,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "orbital-teleportarium-1st-company-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ca5b11d9-705f-5a0d-8ac4-7f318a45b22d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5589b725-ecd7-41f0-b459-0bbed900ffef"
+      }
+    ]
   },
   {
     "id": "honour-the-chapter-gladius-task-force",
@@ -339,11 +509,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "honour-the-chapter-gladius-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "30da4e47-ad99-5741-b5ee-df815671730c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c055b116-504d-418e-9e52-0951913d32e5"
+      }
+    ]
   },
   {
     "id": "storm-of-fire-gladius-task-force",
@@ -358,11 +538,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "storm-of-fire-gladius-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "95b498b1-c31b-5be2-8fb7-218acebc8b1f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "07ce705a-e059-48a8-8dec-1d83b27162f0"
+      }
+    ]
   },
   {
     "id": "only-in-death-does-duty-end-gladius-task-force",
@@ -377,11 +567,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "only-in-death-does-duty-end-gladius-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f6306a57-1d27-5e76-b6c5-255f687400b3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "be905c00-8306-4b94-b024-daa173af45e3"
+      }
+    ]
   },
   {
     "id": "adaptive-strategy-gladius-task-force",
@@ -396,11 +596,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "adaptive-strategy-gladius-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "79411679-f156-527e-ba7f-aa1f1866d76a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "65f32f5f-2ce7-4cba-b5df-587638af8528"
+      }
+    ]
   },
   {
     "id": "squad-tactics-gladius-task-force",
@@ -415,11 +625,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "squad-tactics-gladius-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "aab8b643-c005-5a34-8f9b-4475efaad72d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "14c98a7e-0020-4269-a679-99d1e40d4e4c"
+      }
+    ]
   },
   {
     "id": "blitzing-fusillade-stormlance-task-force",
@@ -434,11 +654,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "blitzing-fusillade-stormlance-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "64cdc8de-a700-5094-9f21-1ab7fa951a37"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8fd86a3f-9b2e-42c2-a4c9-55e9bbc2ab4d"
+      }
+    ]
   },
   {
     "id": "shock-assault-stormlance-task-force",
@@ -453,11 +683,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "shock-assault-stormlance-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "159845df-4ca9-5efb-9225-f5b63d1bbe05"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dd4d6731-dd3d-4b45-9721-add5b7ac613d"
+      }
+    ]
   },
   {
     "id": "ride-hard-ride-fast-stormlance-task-force",
@@ -472,11 +712,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "ride-hard-ride-fast-stormlance-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "03beb96c-9aaf-5c84-97df-a9d96e9de8d3"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8e81e95a-22ff-4aa2-aa33-754b64fbb814"
+      }
+    ]
   },
   {
     "id": "wind-swift-evasion-stormlance-task-force",
@@ -491,11 +741,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "wind-swift-evasion-stormlance-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8f009121-ad40-5eb6-8339-12099275f3f6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "97f24038-3b98-4140-8b29-3167c7dfd01a"
+      }
+    ]
   },
   {
     "id": "full-throttle-stormlance-task-force",
@@ -510,11 +770,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "full-throttle-stormlance-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9e2620a3-0a22-5764-841e-80790b14f7df"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b1a41a8f-ad96-4a14-9794-5549fef75ede"
+      }
+    ]
   },
   {
     "id": "strike-from-the-shadows-vanguard-spearhead",
@@ -529,11 +799,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "strike-from-the-shadows-vanguard-spearhead",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1ea7627b-fbf5-5dee-81a3-820c21159a0a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2c55924e-6941-4332-bd1a-aa474581fad2"
+      }
+    ]
   },
   {
     "id": "surgical-strikes-vanguard-spearhead",
@@ -548,11 +828,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "surgical-strikes-vanguard-spearhead",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "73fe091e-7619-59b7-802b-c581323b72c7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "715656ae-384c-4b07-a709-b5519e16f0e6"
+      }
+    ]
   },
   {
     "id": "calculated-feint-vanguard-spearhead",
@@ -567,11 +857,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "calculated-feint-vanguard-spearhead",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1c6e7ff6-00bf-53fe-9e12-6a96876c6833"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f8956478-ef64-4e96-ba30-4d8f5467509f"
+      }
+    ]
   },
   {
     "id": "guerrilla-tactics-vanguard-spearhead",
@@ -586,11 +886,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "guerrilla-tactics-vanguard-spearhead",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4b549e5f-41d4-54db-b1a5-b554c4ff6036"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ddb58103-adaa-4b54-8cdb-05ef2c2dcd2e"
+      }
+    ]
   },
   {
     "id": "a-deadly-prize-vanguard-spearhead",
@@ -605,11 +915,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "a-deadly-prize-vanguard-spearhead",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dab9d67a-ec49-5efe-a4fd-a16e97c33bee"
+      },
+      {
+        "namespace": "mfm",
+        "id": "479f9124-f497-49ba-aa57-b5bd6dced46f"
+      }
+    ]
   },
   {
     "id": "suppression-strafing-orbital-assault-force",
@@ -624,11 +944,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "suppression-strafing-orbital-assault-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "72599ac1-f613-52fc-b3f4-4d7e190f2bfd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a0a9cd06-14de-4c8f-ab3f-8a44f65a47cf"
+      }
+    ]
   },
   {
     "id": "blind-screen-orbital-assault-force",
@@ -643,11 +973,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "blind-screen-orbital-assault-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "172ef6b3-653a-502b-8ef3-817e6f5f0fe8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "dd818b80-27a5-4b4d-b0ed-ac7e5b769bfe"
+      }
+    ]
   },
   {
     "id": "tactical-decapitation-orbital-assault-force",
@@ -663,11 +1003,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "tactical-decapitation-orbital-assault-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dfe03025-f56b-52de-923d-15b8abd9de47"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7cac734b-0aa3-4cc8-a869-0c52cddac5b5"
+      }
+    ]
   },
   {
     "id": "shock-onslaught-orbital-assault-force",
@@ -682,11 +1032,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "shock-onslaught-orbital-assault-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b55e5ff2-f3eb-5103-ac08-dbdb1ca5c796"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4138f4fd-20d9-4e5f-97e5-c065bb12adae"
+      }
+    ]
   },
   {
     "id": "onward-for-the-emperor-orbital-assault-force",
@@ -701,11 +1061,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "onward-for-the-emperor-orbital-assault-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e5013bbc-6c99-5b36-93c0-6b027dfe9097"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5ebe01fd-a152-4b94-bf5d-236b6403faae"
+      }
+    ]
   },
   {
     "id": "battle-drill-recall-anvil-siege-force",
@@ -720,11 +1090,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "battle-drill-recall-anvil-siege-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "82d880d5-1cae-528e-b62b-b29cc40d2b55"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c4be5f8e-562c-4805-bc00-aad3fa8e99f8"
+      }
+    ]
   },
   {
     "id": "no-threat-too-great-anvil-siege-force",
@@ -739,11 +1119,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "no-threat-too-great-anvil-siege-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1992f707-53d5-54f9-9e49-d2e8a5e90161"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d5a92214-c343-4bfb-879e-9f067f42503e"
+      }
+    ]
   },
   {
     "id": "rigid-discipline-anvil-siege-force",
@@ -758,11 +1148,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "rigid-discipline-anvil-siege-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "b75b2ee1-1b15-57b5-81cd-47b7d2107074"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d3f3fd1c-68e2-4fe0-b199-391011b22105"
+      }
+    ]
   },
   {
     "id": "not-one-backwards-step-anvil-siege-force",
@@ -777,11 +1177,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "not-one-backwards-step-anvil-siege-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2f28cb67-7455-5a98-a5c4-b82cc8d55cd9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "785677c5-013d-4173-8c1b-e81b052065f2"
+      }
+    ]
   },
   {
     "id": "hail-of-vengeance-anvil-siege-force",
@@ -796,11 +1206,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "hail-of-vengeance-anvil-siege-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6e351576-1601-5e1c-8cf7-15abfbf3365b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a8a38f4c-44fd-4620-84d5-221c143fdbce"
+      }
+    ]
   },
   {
     "id": "crucible-of-battle-firestorm-assault-force",
@@ -816,11 +1236,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "crucible-of-battle-firestorm-assault-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "fd1faaa6-48cf-5963-8a74-fab8c708684d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "acb62a30-656d-4994-ac0b-2f1f29f41d43"
+      }
+    ]
   },
   {
     "id": "onslaught-of-fire-firestorm-assault-force",
@@ -835,11 +1265,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "onslaught-of-fire-firestorm-assault-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "efbe0264-1096-5951-8ee2-2b43df9f8e0d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6602438d-0065-4144-8df2-00a495e664e2"
+      }
+    ]
   },
   {
     "id": "burning-vengeance-firestorm-assault-force",
@@ -854,11 +1294,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "burning-vengeance-firestorm-assault-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0d2fe222-c947-5b6b-95e0-f8bae79f72a7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cb6f4527-0f7d-40a8-93ae-fc3151d69d23"
+      }
+    ]
   },
   {
     "id": "immolation-protocols-firestorm-assault-force",
@@ -873,11 +1323,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "immolation-protocols-firestorm-assault-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "17c87e2d-8ecb-52c9-9622-da6a09025980"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a3195f2f-f195-4286-bc99-09ae17814e5e"
+      }
+    ]
   },
   {
     "id": "rapid-embarkation-firestorm-assault-force",
@@ -892,11 +1352,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "rapid-embarkation-firestorm-assault-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dc0fe097-e5f0-5833-987b-f9fc1314ea4e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b33f5dad-69d9-4e9d-a3e1-8f8fcb4057d5"
+      }
+    ]
   },
   {
     "id": "unbowed-conviction-ironstorm-spearhead",
@@ -911,11 +1381,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "unbowed-conviction-ironstorm-spearhead",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "58946a78-8cbd-55fa-9806-25a4ae188033"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a282b244-52c2-468c-8b2d-7887009a1228"
+      }
+    ]
   },
   {
     "id": "mercy-is-weakness-ironstorm-spearhead",
@@ -931,11 +1411,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "mercy-is-weakness-ironstorm-spearhead",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f9d9b3f0-db17-56d3-b7c3-85b45b61deec"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a6c31db3-14f8-4d8a-a25f-46fc6428ada8"
+      }
+    ]
   },
   {
     "id": "vengeful-animus-ironstorm-spearhead",
@@ -954,11 +1444,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "vengeful-animus-ironstorm-spearhead",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0048ce0b-2972-5848-97de-fdcca2111272"
+      },
+      {
+        "namespace": "mfm",
+        "id": "95d70201-f7be-4981-b611-375aeca3f4ab"
+      }
+    ]
   },
   {
     "id": "ancient-fury-ironstorm-spearhead",
@@ -973,11 +1473,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "ancient-fury-ironstorm-spearhead",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "aefbfc88-f88a-5aa6-8b3f-1f68120c6636"
+      },
+      {
+        "namespace": "mfm",
+        "id": "07c5c566-9c8f-4037-85e0-02be57f30805"
+      }
+    ]
   },
   {
     "id": "power-of-the-machine-spirit-ironstorm-spearhead",
@@ -992,11 +1502,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "power-of-the-machine-spirit-ironstorm-spearhead",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e858124c-2593-53dc-8b44-de00f59c7a32"
+      },
+      {
+        "namespace": "mfm",
+        "id": "de1df29b-b5b9-43ea-88a8-6d5099f8750f"
+      }
+    ]
   },
   {
     "id": "data-link-augury-fulguris-task-force",
@@ -1010,11 +1530,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "data-link-augury-fulguris-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cb1d54cb-b006-51ef-b465-a1961ff2ea4e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d6f4436d-bf82-446b-a11b-780296eab536"
+      }
+    ]
   },
   {
     "id": "reactive-evasion-fulguris-task-force",
@@ -1028,11 +1558,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "reactive-evasion-fulguris-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "92462495-0970-58ec-a856-81e6479442ca"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1c250b90-5d7e-46fa-8fb3-6b521b17608c"
+      }
+    ]
   },
   {
     "id": "anti-grav-surge-fulguris-task-force",
@@ -1046,11 +1586,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "anti-grav-surge-fulguris-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7a0d8045-0600-5423-9666-407a637ee268"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b82cb0a7-9708-4fdb-863e-2bb41d4f6dee"
+      }
+    ]
   },
   {
     "id": "adaptive-operations-subversion-assets",
@@ -1064,11 +1614,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "adaptive-operations-subversion-assets",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6cc39e0f-72c0-5a8e-9513-dc55a2d0dc59"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a0720d22-addd-498f-afc8-f31e333747fe"
+      }
+    ]
   },
   {
     "id": "cloaked-position-subversion-assets",
@@ -1082,11 +1642,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "cloaked-position-subversion-assets",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e15f5918-bfdb-583b-9157-4e7ab16c324e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "962dc773-9882-46b4-9737-2b92b361e495"
+      }
+    ]
   },
   {
     "id": "machine-wrath-armoured-speartip",
@@ -1105,11 +1675,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "machine-wrath-armoured-speartip",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "52f1a77f-b920-5e52-b1ca-5f7292c61a4a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d0f7ea35-148a-4868-897d-cbbc200d815a"
+      }
+    ]
   },
   {
     "id": "ceramite-sledgehammer-armoured-speartip",
@@ -1124,11 +1704,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "ceramite-sledgehammer-armoured-speartip",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "38d14e10-1a05-5793-8af0-b74f44d77fab"
+      },
+      {
+        "namespace": "mfm",
+        "id": "14145498-0d5f-409f-926a-023ee8b5d26b"
+      }
+    ]
   },
   {
     "id": "advanced-deployment-armoured-speartip",
@@ -1143,11 +1733,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "advanced-deployment-armoured-speartip",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "1a5f5897-d8e6-542d-b9b3-2a6238c6658d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bf423f02-f60e-4422-adac-7da5f00bc5c1"
+      }
+    ]
   },
   {
     "id": "purgation-doctrine-armoured-speartip",
@@ -1162,11 +1762,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "purgation-doctrine-armoured-speartip",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "cb967ad1-4b1d-52ce-85d0-85a4b7df0813"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2915804d-209d-48e9-95e1-8a1ca387ad8c"
+      }
+    ]
   },
   {
     "id": "codex-discipline-bastion-task-force",
@@ -1182,11 +1792,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "codex-discipline-bastion-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "3965e647-f7c9-54db-b1e0-ef20be1befe5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b79464c8-d554-4720-9b75-7d48ad1454d6"
+      }
+    ]
   },
   {
     "id": "shock-bombardment-bastion-task-force",
@@ -1202,11 +1822,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "shock-bombardment-bastion-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "67e2706b-9075-5e30-99ad-4388c359d34d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ef39d403-61d0-486b-b172-85cb9555fa79"
+      }
+    ]
   },
   {
     "id": "guided-disruption-bastion-task-force",
@@ -1222,11 +1852,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "guided-disruption-bastion-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f5d57930-361b-5204-8e76-e32560aa67e1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7c0da99f-c645-4b51-b145-5b9cf61f5a5d"
+      }
+    ]
   },
   {
     "id": "angels-defiant-bastion-task-force",
@@ -1242,11 +1882,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "angels-defiant-bastion-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "616f398a-b1cd-522e-bd1c-89c879d31ccb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8aa79799-c501-4907-858c-63559c810778"
+      }
+    ]
   },
   {
     "id": "light-of-vengeance-bastion-task-force",
@@ -1262,11 +1912,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "light-of-vengeance-bastion-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f3b43983-bd91-5e9d-ac42-3a81c91524a8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "88477031-d757-4918-82f9-a7c3e949008b"
+      }
+    ]
   },
   {
     "id": "heresy-undone-bastion-task-force",
@@ -1282,11 +1942,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "heresy-undone-bastion-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2407ec58-6bca-5b29-9a79-e67672bdc6d6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b167e9a1-e72e-49a4-9131-1feb084ad7bd"
+      }
+    ]
   },
   {
     "id": "unyielding-might-ceramite-sentinels",
@@ -1301,11 +1971,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "unyielding-might-ceramite-sentinels",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f24e0ce5-ec23-5a4c-93eb-c818209d8e5d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "20843126-7ad3-4368-bdba-6fc715bafabb"
+      }
+    ]
   },
   {
     "id": "stand-to-the-end-ceramite-sentinels",
@@ -1320,11 +2000,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "stand-to-the-end-ceramite-sentinels",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2d480929-5f18-5d51-a515-39436f581538"
+      },
+      {
+        "namespace": "mfm",
+        "id": "127b27ae-4656-4840-9362-e82c0d1dd235"
+      }
+    ]
   },
   {
     "id": "priority-strike-ceramite-sentinels",
@@ -1340,11 +2030,21 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "priority-strike-ceramite-sentinels",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "95dc0401-9762-5395-8903-6e48f7570d53"
+      },
+      {
+        "namespace": "mfm",
+        "id": "234149a5-d3b8-4204-ad8e-15e797077811"
+      }
+    ]
   },
   {
     "id": "augmented-targeting-ceramite-sentinels",
@@ -1359,11 +2059,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "augmented-targeting-ceramite-sentinels",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "8f82ee1b-143b-5226-ac41-bf95c1836f7e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b9894e70-4267-4344-aeb6-038746a63de3"
+      }
+    ]
   },
   {
     "id": "evasive-repositioning-ceramite-sentinels",
@@ -1378,11 +2088,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "evasive-repositioning-ceramite-sentinels",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ec56919d-3c54-5f62-85a7-7929a5e83089"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5c0b9aab-254c-47c3-b554-523d54f159dd"
+      }
+    ]
   },
   {
     "id": "rapid-gunnery-headhunter-task-force",
@@ -1397,11 +2117,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "rapid-gunnery-headhunter-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bd8b0cdc-5c76-5e56-9d8e-ba3fec3d07a1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "edf27bd5-ca47-48f0-b6f8-afcbb323b67b"
+      }
+    ]
   },
   {
     "id": "reactive-repositioning-headhunter-task-force",
@@ -1416,11 +2146,21 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "reactive-repositioning-headhunter-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ff53346f-afcf-5984-9a26-117ba1c6818e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "37ae8e5f-b8e5-4566-af22-d370a1a2806c"
+      }
+    ]
   },
   {
     "id": "target-weak-point-headhunter-task-force",
@@ -1435,11 +2175,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "target-weak-point-headhunter-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "feb7bae4-ac65-5c32-84a4-708e98bd4a2f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "02c615e1-a6c1-4a12-ab10-334cdd64dc94"
+      }
+    ]
   },
   {
     "id": "kill-shot-headhunter-task-force",
@@ -1454,11 +2204,21 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "kill-shot-headhunter-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e27a9e5e-feeb-5506-8044-0aad081eabe8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e18e9e2e-166f-4b09-aa71-a939be148dbc"
+      }
+    ]
   },
   {
     "id": "machine-vengeance-headhunter-task-force",
@@ -1473,10 +2233,20 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "machine-vengeance-headhunter-task-force",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5e8c6d75-182d-5ce5-8f3d-65654c4ebbb0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0c9c11fb-4109-4334-ae01-5f5f5b7445bc"
+      }
+    ]
   }
 ]

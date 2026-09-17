@@ -41,6 +41,38 @@ func profileBuffsFor(attacker map[string]any, ds *Dataset, ctx map[string]any) [
 	return manualWeaponKeywordBuffs(attacker, ds, ctx)
 }
 
+func profileCanTarget(profile map[string]any, target map[string]any) bool {
+	restrictions, ok := getMap(profile, "target_restrictions")
+	if !ok {
+		return true
+	}
+	targetKeywords := map[string]bool{}
+	for _, keyword := range append(getList(target, "keywords"), getList(target, "faction_keywords")...) {
+		if value, ok := keyword.(string); ok {
+			targetKeywords[lower(value)] = true
+		}
+	}
+	required := getList(restrictions, "required_keywords_any")
+	if len(required) > 0 {
+		matched := false
+		for _, keyword := range required {
+			if value, ok := keyword.(string); ok && targetKeywords[lower(value)] {
+				matched = true
+				break
+			}
+		}
+		if !matched {
+			return false
+		}
+	}
+	for _, keyword := range getList(restrictions, "excluded_keywords") {
+		if value, ok := keyword.(string); ok && targetKeywords[lower(value)] {
+			return false
+		}
+	}
+	return true
+}
+
 func manualWeaponKeywordBuffs(attacker map[string]any, ds *Dataset, ctx map[string]any) []any {
 	weapon, _ := getMap(attacker, "weapon")
 	profiles := getList(weapon, "profiles")
@@ -89,6 +121,10 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 		return nil, nil, &crunchError{"crunch: target.profileIndex out of range for unit " + getStr(unit, "id")}
 	}
 	unitProfile, _ := asMap(unitProfiles[targetProfileIndex])
+	if !profileCanTarget(weaponProfile, unit) {
+		return nil, nil, &crunchError{msg: "crunch: weapon " + getStr(weapon, "id") +
+			" profile " + strconv.Itoa(profileIndex) + " cannot target unit " + getStr(unit, "id")}
+	}
 
 	targetKeywords := unitKeywordsLower(unit)
 	ctx := cloneMap(getMapOr(input, "context"))
@@ -137,7 +173,11 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	}
 	blastExtra := 0.0
 	if blast != nil {
-		blastExtra = math.Floor(tmc / 5)
+		value, err := evalStatValue(paramValue(blast, "value"))
+		if err != nil {
+			value = 1
+		}
+		blastExtra = math.Floor(tmc/5) * value
 	}
 	modelsFiring, _ := num(input["modelsFiring"])
 	attacks := modelsFiring * (attacksPerModel + rapidFireExtra + blastExtra)

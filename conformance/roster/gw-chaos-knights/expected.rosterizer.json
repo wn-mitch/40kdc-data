@@ -32,6 +32,11 @@
           "quantity": 1
         },
         {
+          "item": "Force Disposition§Reconnaissance",
+          "name": "Reconnaissance",
+          "quantity": 1
+        },
+        {
           "item": "Battle Size§Strike Force (2000 Point limit)",
           "name": "Strike Force (2000 Point limit)",
           "quantity": 1
@@ -136,6 +141,11 @@
                 "item": "Trait§Warlord",
                 "name": "Warlord",
                 "quantity": 1
+              },
+              {
+                "item": "Character§Detachment Character",
+                "name": "Detachment Character",
+                "quantity": 1
               }
             ]
           }
@@ -205,6 +215,13 @@
                 "name": "Havoc multi-launcher",
                 "quantity": 1
               }
+            ],
+            "traits": [
+              {
+                "item": "Character§Detachment Character",
+                "name": "Detachment Character",
+                "quantity": 1
+              }
             ]
           }
         },
@@ -348,6 +365,13 @@
               {
                 "item": "Weapon§Slaughterclaw",
                 "name": "Slaughterclaw",
+                "quantity": 1
+              }
+            ],
+            "traits": [
+              {
+                "item": "Character§Detachment Character",
+                "name": "Detachment Character",
                 "quantity": 1
               }
             ]
@@ -471,9 +495,18 @@
           "assets": {
             "included": [
               {
-                "item": "Weapon§Diseased claws and teeth",
-                "name": "Diseased claws and teeth",
-                "quantity": 3
+                "item": "Model§Nurgling Swarm",
+                "name": "Nurgling Swarm",
+                "quantity": 3,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Diseased claws and teeth",
+                      "name": "Diseased claws and teeth",
+                      "quantity": 3
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -490,9 +523,18 @@
           "assets": {
             "included": [
               {
-                "item": "Weapon§Diseased claws and teeth",
-                "name": "Diseased claws and teeth",
-                "quantity": 3
+                "item": "Model§Nurgling Swarm",
+                "name": "Nurgling Swarm",
+                "quantity": 3,
+                "assets": {
+                  "included": [
+                    {
+                      "item": "Weapon§Diseased claws and teeth",
+                      "name": "Diseased claws and teeth",
+                      "quantity": 3
+                    }
+                  ]
+                }
               }
             ]
           }

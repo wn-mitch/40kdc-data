@@ -8,10 +8,9 @@ import { runFactionFields, type DirFactionResult } from "../src/mfm/faction-fiel
 /**
  * WS3 faction-field reconcile over the real GW MFM dump (gitignored, so CI without
  * it skips this). Asserts the fill-only / confirm / review contract:
- *   - a single-army-rule faction confirms its authored faction_rule_id,
- *   - the parenthetical-stripped army-rule name matches the authored slug,
- *   - a faction whose authored rule is NOT among its owned army rules is surfaced
- *     for review and NEVER overwritten,
+ *   - authored faction_rule_ids confirm against owned rules as an unordered set,
+ *   - mismatched authored and owned rule arrays are both surfaced for review,
+ *   - authored arrays are never overwritten,
  *   - a chapter confirms parent_faction_id: adeptus-astartes,
  *   - the localized common name is appended to aliases,
  *   - and runFactionFields only stages files it actually changed.
@@ -26,21 +25,22 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("faction-fields over the real
     byDir = new Map<string, DirFactionResult>(report.dirs.map((d) => [d.dir, d]));
   });
 
-  it("confirms a single-rule faction's authored faction_rule_id", () => {
+  it("confirms an authored faction rule array", () => {
     expect(byDir.get("adepta-sororitas")?.ruleConfirmed).toBe(true);
   });
 
-  it("confirms an authored slug whose dump name carries a stripped parenthetical", () => {
-    // Death Guard authored "nurgles-gift"; the dump names it "Nurgle's Gift (Aura)".
-    expect(byDir.get("death-guard")?.ruleConfirmed).toBe(true);
-    expect(byDir.get("death-guard")?.ruleReview).toBeUndefined();
+  it("reports both authored and owned rule sets without overwriting authored ids", () => {
+    const dg = byDir.get("death-guard");
+    expect(dg?.ruleConfirmed).toBeFalsy();
+    expect(dg?.ruleReview).toEqual({
+      authored: ["nurgle-s-gift-aura"],
+      candidates: ["nurgles-gift", "pact-of-decay"],
+    });
+    expect(dg?.ruleFilled).toBeUndefined();
   });
 
-  it("surfaces (never overwrites) a rule not among the faction's owned army rules", () => {
-    const ba = byDir.get("blood-angels");
-    expect(ba?.ruleFilled).toBeUndefined();
-    expect(ba?.ruleReview?.authored).toBe("the-red-thirst");
-    expect(ba?.ruleReview?.candidates).toContain("the-sons-of-sanguinius");
+  it("confirms multi-rule factions by order-insensitive set equality", () => {
+    expect(byDir.get("tyranids")?.ruleConfirmed).toBe(true);
   });
 
   it("confirms a chapter's parent faction", () => {

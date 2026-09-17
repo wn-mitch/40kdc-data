@@ -1527,7 +1527,13 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 80
-        }
+        },
+        "default_weapon_ids": [
+          "enmitic-disintegrators",
+          "unmaker-gauntlet",
+          "blade-tail-and-whip-coils",
+          "nullstone-field-generator-aura"
+        ]
       }
     ],
     "game_version": {
@@ -1903,8 +1909,9 @@
         "max": 1,
         "default_weapon_ids": [
           "sceptre-of-eternal-glory",
-          "scythe-of-dust",
-          "staff-of-stars"
+          "staff-of-stars",
+          "weapons-of-the-final-triarch",
+          "scythe-of-dust"
         ],
         "is_leader_model": true,
         "base_size_mm": {
@@ -2064,6 +2071,228 @@
             "name": "Canoptek Spyder",
             "min": 2,
             "max": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "amonhotekhs-guard-canoptek-doomstalker",
+    "faction_id": "necrons",
+    "models": [
+      {
+        "name": "Canoptek Doomstalker",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 90
+        },
+        "default_weapon_ids": [
+          "doomsday-blaster",
+          "twin-gauss-flayer",
+          "doomstalker-limbs"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Canoptek Doomstalker",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "amonhotekhs-guard-canoptek-scarab-swarms",
+    "faction_id": "necrons",
+    "models": [
+      {
+        "name": "Canoptek Scarab Swarm",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "feeder-mandibles"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Canoptek Scarab Swarm",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "amonhotekhs-guard-necron-warriors",
+    "faction_id": "necrons",
+    "models": [
+      {
+        "name": "Necron Warrior with Gauss Flayer and Combat Attachments",
+        "min": 5,
+        "max": 5,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "gauss-flayer",
+          "close-combat-weapon"
+        ]
+      },
+      {
+        "name": "Necron Warrior with Gauss Reaper and Combat Attachments",
+        "min": 5,
+        "max": 5,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "gauss-reaper",
+          "close-combat-weapon"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Necron Warrior with Gauss Flayer and Combat Attachments",
+            "min": 5,
+            "max": 5
+          },
+          {
+            "name": "Necron Warrior with Gauss Reaper and Combat Attachments",
+            "min": 5,
+            "max": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "amonhotekhs-guard-skorpekh-destroyers",
+    "faction_id": "necrons",
+    "models": [
+      {
+        "name": "Skorpekh Destroyer with Plasmacyte",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        },
+        "default_weapon_ids": [
+          "skorpekh-hyperphase-weapons"
+        ]
+      },
+      {
+        "name": "Skorpekh Destroyer",
+        "min": 2,
+        "max": 2,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        },
+        "default_weapon_ids": [
+          "skorpekh-hyperphase-weapons"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Skorpekh Destroyer with Plasmacyte",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Skorpekh Destroyer",
+            "min": 2,
+            "max": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "overlord-amonhotekh",
+    "faction_id": "necrons",
+    "models": [
+      {
+        "name": "Overlord Amonhotekh",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "tachyon-arrow",
+          "overlords-blade"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Overlord Amonhotekh",
+            "min": 1,
+            "max": 1
           }
         ]
       }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { Dataset } from "../src/data/dataset.js";
-import { crunch, type EngineInput } from "../src/cruncher/index.js";
+import { crunch, profileCanTarget, type EngineInput } from "../src/cruncher/index.js";
 
 const ds = Dataset.embedded();
 
@@ -44,7 +44,7 @@ function inputFor(
 
 describe("crunch: bolt-rifle vs intercessor", () => {
   // bolt-rifle profile 0: A=2, S=4, AP=-1, D=1, BS=3; keywords [assault, heavy].
-  // intercessor-squad profile 0: T=4, W=2, Sv=3, OC=2, Ld=6.
+  // intercessor-squad profile 0: T=5, W=2, Sv=3, OC=2, Ld=6.
   // 5 firing models, not stationary (so Heavy is gated off).
   it("matches hand-derived numbers without rerolls or modifiers", () => {
     const out = crunch(
@@ -58,17 +58,17 @@ describe("crunch: bolt-rifle vs intercessor", () => {
     near(stage(out, "attacks"), 10, "attacks");
     // hits: 10 × 4/6 = 6.6667
     near(stage(out, "hits"), 10 * 4 / 6, "hits");
-    // wound: S4 vs T4 → 4+, P(wound)=3/6=0.5
-    near(stage(out, "wounds"), (10 * 4 / 6) * 0.5, "wounds");
+    // wound: S4 vs T5 → 5+, P(wound)=2/6=1/3
+    near(stage(out, "wounds"), (10 * 4 / 6) * (2 / 6), "wounds");
     // save: Sv3 - AP(-1) = 4+, P(save)=3/6=0.5; unsaved = wounds × 0.5
-    const wounds = (10 * 4) / 6 * 0.5;
+    const wounds = (10 * 4) / 6 * (2 / 6);
     const unsaved = wounds * 0.5;
     near(stage(out, "unsaved"), unsaved, "unsaved");
     // damage: 1 per hit
     near(stage(out, "damage"), unsaved, "damage");
     // no FNP
     near(stage(out, "after-fnp"), unsaved, "after-fnp");
-    // models killed: damage / W; cap at model count (10 by default for intercessors min=10? unknown).
+    // models killed: damage / W; cap at the squad's minimum size.
     const W = 2;
     const targetModels = ds.units.getAny("intercessor-squad")!.raw.model_count?.min ?? 1;
     near(stage(out, "models-killed"), Math.min(targetModels, unsaved / W), "models-killed");
@@ -239,5 +239,42 @@ describe("crunch: attack-scoped invulnerable save (issue #87)", () => {
     );
     // no ranged/unconditional invuln → effective save armour 6+ → unsaved 5/6.
     near(stage(out, "unsaved") / stage(out, "wounds"), 5 / 6, "melee invuln not leaked to ranged");
+  });
+});
+
+describe("Codex profile targeting", () => {
+  it("rejects Hunter profiles against units without an eligible keyword", () => {
+    const hunter = ds.weapons.getAny("rokkit-launcha-tankbustas")!;
+    const knight = ds.units.getAny("knight-paladin")!;
+    const cultists = ds.units.getAny("cultist-mob")!;
+
+    expect(profileCanTarget(hunter.profileAt(1), knight.raw)).toBe(true);
+    expect(profileCanTarget(hunter.profileAt(1), cultists.raw)).toBe(false);
+  });
+
+  it("filters conditional weapon keywords by target keyword", () => {
+    const weapon = ds.weapons.getAny("big-shoota")!.raw;
+    const cultists = ds.units.getAny("cultist-mob")!.raw;
+    const knight = ds.units.getAny("knight-paladin")!.raw;
+    const base = {
+      attacker: { weapon, profileIndex: 0 },
+      modelsFiring: 1,
+      buffs: [],
+      context: { phase: "shooting" as const },
+    };
+
+    const vsCultists = crunch({ ...base, target: { unit: cultists, profileIndex: 0 } });
+    const vsKnight = crunch({ ...base, target: { unit: knight, profileIndex: 0 } });
+
+    expect(vsCultists.resolved.extraKeywords.some((entry) => entry.keywordRef.keyword_id === "lethal-hits")).toBe(true);
+    expect(vsKnight.resolved.extraKeywords.some((entry) => entry.keywordRef.keyword_id === "lethal-hits")).toBe(false);
+  });
+
+  it("multiplies Blast bonuses by the keyword value", () => {
+    const output = crunch(
+      inputFor("lobba", 0, 1, "cultist-mob", { phase: "shooting" }, [], 10),
+    );
+
+    expect(stage(output, "attacks")).toBe(9.5);
   });
 });

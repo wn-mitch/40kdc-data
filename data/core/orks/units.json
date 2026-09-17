@@ -1,3287 +1,5 @@
 [
   {
-    "id": "weirdboy",
-    "name": "Weirdboy",
-    "faction_id": "orks",
-    "role": "character",
-    "profiles": [
-      {
-        "name": "Weirdboy",
-        "M": 6,
-        "T": 5,
-        "W": 4,
-        "Sv": 5,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 65
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Psyker",
-      "Weirdboy"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 40
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "eadbanger",
-      "weirdboy-staff"
-    ],
-    "ability_ids": [
-      "da-jump-psychic",
-      "deadly-demise-d3",
-      "leader",
-      "waaagh-energy"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader"
-  },
-  {
-    "id": "megatrakk-scrapjet",
-    "name": "Megatrakk Scrapjet",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Megatrakk Scrapjet",
-        "M": 12,
-        "T": 7,
-        "W": 9,
-        "Sv": 4,
-        "invuln_sv": 6,
-        "Ld": 7,
-        "OC": 3
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 75
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Speed Freeks",
-      "Megatrakk Scrapjet"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 150,
-      "length": 95
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "nose-drill",
-      "rokkit-kannon",
-      "twin-big-shoota",
-      "wing-missiles"
-    ],
-    "ability_ids": [
-      "deadly-demise-1",
-      "drill-through"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "warbikers",
-    "name": "Warbikers",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Warbiker",
-        "M": 12,
-        "T": 6,
-        "W": 3,
-        "Sv": 4,
-        "invuln_sv": 6,
-        "Ld": 7,
-        "OC": 2
-      },
-      {
-        "name": "Boss Nob on Warbike",
-        "M": 12,
-        "T": 6,
-        "W": 4,
-        "Sv": 4,
-        "invuln_sv": 6,
-        "Ld": 7,
-        "OC": 2
-      }
-    ],
-    "points": [
-      {
-        "models": 3,
-        "cost": 60
-      },
-      {
-        "models": 4,
-        "models_max": 6,
-        "cost": 120
-      }
-    ],
-    "keywords": [
-      "Mounted",
-      "Grenades",
-      "Speed Freeks",
-      "Warbikers"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 75,
-      "length": 42
-    },
-    "model_count": {
-      "min": 3,
-      "max": 6
-    },
-    "weapon_ids": [
-      "big-choppa",
-      "choppa",
-      "close-combat-weapon",
-      "power-klaw",
-      "slugga",
-      "twin-dakkagun"
-    ],
-    "ability_ids": [
-      "drive-by-dakka"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "deffkoptas",
-    "name": "Deffkoptas",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Deffkoptas",
-        "M": 12,
-        "T": 6,
-        "W": 4,
-        "Sv": 4,
-        "invuln_sv": 6,
-        "Ld": 7,
-        "OC": 2
-      }
-    ],
-    "points": [
-      {
-        "models": 3,
-        "cost": 75
-      },
-      {
-        "models": 4,
-        "models_max": 6,
-        "cost": 140
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Fly",
-      "Grenades",
-      "Speed Freeks",
-      "Deffkoptas"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 75,
-      "length": 42
-    },
-    "model_count": {
-      "min": 3,
-      "max": 6
-    },
-    "weapon_ids": [
-      "kopta-rokkits",
-      "kustom-mega-blasta",
-      "slugga",
-      "spinnin-blades"
-    ],
-    "ability_ids": [
-      "deep-strike",
-      "deff-from-above"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "kustom-boosta-blasta",
-    "name": "Kustom Boosta-blasta",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Kustom Boosta-blasta",
-        "M": 12,
-        "T": 7,
-        "W": 9,
-        "Sv": 4,
-        "invuln_sv": 6,
-        "Ld": 7,
-        "OC": 3
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 70
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Grenades",
-      "Speed Freeks",
-      "Kustom Boost-blasta"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 150,
-      "length": 95
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "burna-exhausts",
-      "grot-blasta",
-      "rivet-kannon",
-      "spiked-ram"
-    ],
-    "ability_ids": [
-      "rivetin-dakka",
-      "deadly-demise-1"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "painboy",
-    "name": "Painboy",
-    "faction_id": "orks",
-    "role": "character",
-    "profiles": [
-      {
-        "name": "Painboy",
-        "M": 6,
-        "T": 5,
-        "W": 3,
-        "Sv": 5,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 80
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Painboy"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 32
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "power-klaw",
-      "urty-syringe"
-    ],
-    "ability_ids": [
-      "dok-s-toolz",
-      "grot-orderly",
-      "hold-still-and-say-aargh",
-      "leader"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "support"
-  },
-  {
-    "id": "killa-kans",
-    "name": "Killa Kans",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Killa Kans",
-        "M": 6,
-        "T": 6,
-        "W": 5,
-        "Sv": 3,
-        "invuln_sv": 6,
-        "Ld": 8,
-        "OC": 2
-      }
-    ],
-    "points": [
-      {
-        "models": 3,
-        "cost": 120,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 4,
-        "models_max": 6,
-        "cost": 240,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 3,
-        "cost": 130,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 4,
-        "models_max": 6,
-        "cost": 250,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Walker",
-      "Grots",
-      "Killa Kans"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 60
-    },
-    "model_count": {
-      "min": 3,
-      "max": 6
-    },
-    "weapon_ids": [
-      "grotzooka",
-      "kan-klaw",
-      "kan-shoota",
-      "rokkit-launcha",
-      "skorcha"
-    ],
-    "ability_ids": [
-      "shooty-power-trip",
-      "deadly-demise-1"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "lootas",
-    "name": "Lootas",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Loota",
-        "M": 6,
-        "T": 5,
-        "W": 1,
-        "Sv": 5,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 5,
-        "cost": 50,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 10,
-        "cost": 100,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 5,
-        "cost": 60,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 10,
-        "cost": 110,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Lootas"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 32
-    },
-    "model_count": {
-      "min": 5,
-      "max": 10
-    },
-    "weapon_ids": [
-      "big-shoota",
-      "close-combat-weapon",
-      "deffgun",
-      "kustom-mega-blasta",
-      "rokkit-launcha-lootas"
-    ],
-    "ability_ids": [
-      "dat-s-our-loot"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "big-mek",
-    "name": "Big Mek",
-    "faction_id": "orks",
-    "role": "character",
-    "profiles": [
-      {
-        "name": "Big Mek",
-        "M": 6,
-        "T": 5,
-        "W": 6,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 70
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Grenades",
-      "Mek",
-      "Big Mek"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 50
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "drilla",
-      "kustom-mega-blasta",
-      "power-klaw-big-mek",
-      "traktor-blasta"
-    ],
-    "ability_ids": [
-      "leader",
-      "more-dakka",
-      "shokk-boosta"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader"
-  },
-  {
-    "id": "squighog-boyz",
-    "name": "Squighog Boyz",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Squighog Boy",
-        "M": 10,
-        "T": 7,
-        "W": 3,
-        "Sv": 4,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 2
-      },
-      {
-        "name": "Nob on Smasha Squig",
-        "M": 10,
-        "T": 7,
-        "W": 4,
-        "Sv": 4,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 2
-      }
-    ],
-    "points": [
-      {
-        "models": 4,
-        "cost": 140
-      },
-      {
-        "models": 8,
-        "cost": 270
-      }
-    ],
-    "keywords": [
-      "Mounted",
-      "Beast Snagga",
-      "Grenades",
-      "Squighog Boyz"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 75,
-      "length": 42
-    },
-    "model_count": {
-      "min": 4,
-      "max": 8
-    },
-    "weapon_ids": [
-      "big-choppa-squighog-boyz",
-      "saddlegit-weapons",
-      "slugga",
-      "squig-jaws",
-      "stikka"
-    ],
-    "ability_ids": [
-      "bomb-squig",
-      "feel-no-pain-5",
-      "wild-ride"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "warboss-in-mega-armour",
-    "name": "Warboss in Mega Armour",
-    "faction_id": "orks",
-    "role": "character",
-    "profiles": [
-      {
-        "name": "Warboss in Mega Armour",
-        "M": 5,
-        "T": 6,
-        "W": 7,
-        "Sv": 2,
-        "invuln_sv": 5,
-        "Ld": 6,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 80
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Mega Armour",
-      "Warboss",
-      "Warboss in Mega Armour"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 50
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "big-shoota-warboss-in-mega-armour",
-      "uge-choppa"
-    ],
-    "ability_ids": [
-      "dead-brutal",
-      "leader",
-      "might-is-right"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader"
-  },
-  {
-    "id": "wazbom-blastajet",
-    "name": "Wazbom Blastajet",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Wazbom Blastajet",
-        "M": 20,
-        "T": 9,
-        "W": 12,
-        "Sv": 3,
-        "invuln_sv": 6,
-        "Ld": 7,
-        "OC": 0
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 165
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Aircraft",
-      "Fly",
-      "Grenades",
-      "Speed Freeks",
-      "Wazbom Blastajet"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 150,
-      "length": 95
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "armoured-hull",
-      "smasha-gun",
-      "twin-supa-shoota",
-      "twin-tellyport-mega-blasta",
-      "twin-wazbom-mega-kannon"
-    ],
-    "ability_ids": [
-      "blastajet-attack-run",
-      "blastajet-force-field",
-      "deadly-demise-d3"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "battlewagon",
-    "name": "Battlewagon",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Battlewagon",
-        "M": 10,
-        "T": 10,
-        "W": 16,
-        "Sv": 3,
-        "invuln_sv": 6,
-        "Ld": 7,
-        "OC": 5
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 145
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Transport",
-      "Battlewagon"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "hull",
-      "draft": true
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "big-shoota",
-      "deff-rolla",
-      "grabbin-klaw",
-      "kannon",
-      "killkannon",
-      "lobba",
-      "tracks-and-wheels",
-      "wreckin-ball",
-      "zzap-gun"
-    ],
-    "ability_ids": [
-      "ard-case",
-      "deadly-demise-d6",
-      "firing-deck-11",
-      "ramshackle-but-rugged"
-    ],
-    "transport_capacity": {
-      "capacity": 22
-    },
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "wargear_costs": [
-      {
-        "item_id": "ard-case",
-        "cost": 15
-      }
-    ]
-  },
-  {
-    "id": "boss-snikrot",
-    "name": "Boss Snikrot",
-    "faction_id": "orks",
-    "role": "epic-hero",
-    "profiles": [
-      {
-        "name": "Boss Snikrot",
-        "M": 6,
-        "T": 5,
-        "W": 6,
-        "Sv": 5,
-        "invuln_sv": 5,
-        "Ld": 6,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 75
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Grenades",
-      "Smoke",
-      "Epic Hero",
-      "Boss Snikrot"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 40
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "morks-teeth",
-      "slugga-boss-snikrot"
-    ],
-    "ability_ids": [
-      "infiltrators",
-      "kunnin-infiltrator",
-      "leader",
-      "lone-operative",
-      "red-skull-kommandos",
-      "stealth"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader"
-  },
-  {
-    "id": "morkanaut",
-    "name": "Morkanaut",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Morkanaut",
-        "M": 8,
-        "T": 12,
-        "W": 20,
-        "Sv": 3,
-        "invuln_sv": 5,
-        "Ld": 7,
-        "OC": 8
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 270,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 1,
-        "cost": 290,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Titanic",
-      "Towering",
-      "Transport",
-      "Walker",
-      "Morkanaut"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 170,
-      "length": 109
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "klaw-of-mork",
-      "kustom-mega-blasta",
-      "kustom-mega-zappa",
-      "rokkit-launcha-morkanaut",
-      "twin-big-shoota"
-    ],
-    "ability_ids": [
-      "big-an-shooty",
-      "clankin-forward",
-      "deadly-demise-d6"
-    ],
-    "transport_capacity": {
-      "capacity": 12
-    },
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "ghazghkull-thraka",
-    "name": "Ghazghkull Thraka",
-    "faction_id": "orks",
-    "role": "epic-hero",
-    "profiles": [
-      {
-        "name": "Ghazghkull Thraka",
-        "M": 5,
-        "T": 6,
-        "W": 10,
-        "Sv": 2,
-        "invuln_sv": 4,
-        "Ld": 6,
-        "OC": 4
-      },
-      {
-        "name": "Makari",
-        "M": 5,
-        "T": 6,
-        "W": 1,
-        "Sv": 7,
-        "invuln_sv": 4,
-        "Ld": 8,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 2,
-        "cost": 235
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Epic Hero",
-      "Warboss",
-      "Ghazgkull Thraka"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 80
-    },
-    "model_count": {
-      "min": 2,
-      "max": 2
-    },
-    "weapon_ids": [
-      "gorks-klaw",
-      "makaris-stabba",
-      "morks-roar"
-    ],
-    "ability_ids": [
-      "ghazghkull-s-waaagh-banner-aura",
-      "leader",
-      "prophet-of-da-great-waaagh",
-      "supreme-commander"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader"
-  },
-  {
-    "id": "breaka-boyz",
-    "name": "Breaka Boyz",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Breaka Boy",
-        "M": 6,
-        "T": 5,
-        "W": 2,
-        "Sv": 4,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 6,
-        "cost": 125,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 6,
-        "cost": 135,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Grenades",
-      "Breaka Boyz"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 32
-    },
-    "model_count": {
-      "min": 6,
-      "max": 6
-    },
-    "weapon_ids": [
-      "choppa-breaka-boyz",
-      "knucklebustas",
-      "rokkit-pistol",
-      "smash-hammer",
-      "tankhammer"
-    ],
-    "ability_ids": [
-      "attached-unit",
-      "bomb-squigs",
-      "trophy-hunters"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "stompa",
-    "name": "Stompa",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Stompa",
-        "M": 10,
-        "T": 14,
-        "W": 30,
-        "Sv": 2,
-        "invuln_sv": 6,
-        "Ld": 6,
-        "OC": 12
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 600,
-        "unit_count_min": 1,
-        "unit_count_max": 1
-      },
-      {
-        "models": 1,
-        "cost": 700,
-        "unit_count_min": 2,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Transport",
-      "Titanic",
-      "Towering",
-      "Walker",
-      "Stompa"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "hull",
-      "draft": true
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "big-shoota",
-      "deffkannon",
-      "mega-choppa",
-      "skorcha",
-      "supa-gatler",
-      "supa-rokkits",
-      "twin-big-shoota"
-    ],
-    "ability_ids": [
-      "deadly-demise-2d6",
-      "stompin-forward",
-      "waaagh-effigy-aura"
-    ],
-    "transport_capacity": {
-      "capacity": 22
-    },
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "biged-bossbunka",
-    "name": "Big’ed Bossbunka",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Big’ed Bossbunka",
-        "M": 0,
-        "T": 10,
-        "W": 12,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 0
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 135
-      }
-    ],
-    "keywords": [
-      "Fortification",
-      "Vehicle",
-      "Transport",
-      "Big’ed Bossbunka"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "hull",
-      "draft": true
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "big-shoota",
-      "gaze-of-gork"
-    ],
-    "ability_ids": [
-      "deadly-demise-d3",
-      "firing-deck-11",
-      "fortification",
-      "ramshackle-cover",
-      "shoutin-pole-aura",
-      "waaagh"
-    ],
-    "transport_capacity": {
-      "capacity": 11
-    },
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "tankbustas",
-    "name": "Tankbustas",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Boss Nob",
-        "M": 6,
-        "T": 5,
-        "W": 2,
-        "Sv": 4,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      },
-      {
-        "name": "Tankbusta",
-        "M": 6,
-        "T": 5,
-        "W": 2,
-        "Sv": 4,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 6,
-        "cost": 125,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 6,
-        "cost": 135,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Grenades",
-      "Tankbustas"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 32
-    },
-    "model_count": {
-      "min": 6,
-      "max": 6
-    },
-    "weapon_ids": [
-      "choppa-tankbustas",
-      "close-combat-weapon-tankbustas",
-      "rokkit-launcha-tankbustas",
-      "rokkit-pistol",
-      "smash-hammer"
-    ],
-    "ability_ids": [
-      "pulsa-rokkit",
-      "tank-hunters"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "kommandos",
-    "name": "Kommandos",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Kommando",
-        "M": 6,
-        "T": 5,
-        "W": 1,
-        "Sv": 5,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      },
-      {
-        "name": "Boss Nob",
-        "M": 6,
-        "T": 5,
-        "W": 2,
-        "Sv": 5,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 10,
-        "cost": 120
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Grenades",
-      "Smoke",
-      "Kommandos"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 32
-    },
-    "model_count": {
-      "min": 10,
-      "max": 10
-    },
-    "weapon_ids": [
-      "big-choppa-kommandos",
-      "breacha-ram",
-      "burna",
-      "choppa",
-      "close-combat-weapon",
-      "kustom-shoota",
-      "power-klaw",
-      "rokkit-launcha-kommandos",
-      "slugga"
-    ],
-    "ability_ids": [
-      "distraction-grot",
-      "patrol-squad",
-      "sneaky-gitz",
-      "stealth",
-      "infiltrators"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "wargear_budgets": [
-      {
-        "items": [
-          "burna"
-        ],
-        "count": 1,
-        "per_models": 0
-      },
-      {
-        "items": [
-          "rokkit-launcha-kommandos"
-        ],
-        "count": 1,
-        "per_models": 0
-      },
-      {
-        "items": [
-          "kustom-shoota"
-        ],
-        "count": 2,
-        "per_models": 0
-      },
-      {
-        "items": [
-          "breacha-ram"
-        ],
-        "count": 1,
-        "per_models": 0
-      }
-    ]
-  },
-  {
-    "id": "boyz",
-    "name": "Boyz",
-    "faction_id": "orks",
-    "role": "battleline",
-    "profiles": [
-      {
-        "name": "Boy",
-        "M": 6,
-        "T": 5,
-        "W": 1,
-        "Sv": 5,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 2
-      },
-      {
-        "name": "Boss Nob",
-        "M": 6,
-        "T": 5,
-        "W": 2,
-        "Sv": 5,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 2
-      }
-    ],
-    "points": [
-      {
-        "models": 10,
-        "cost": 75
-      },
-      {
-        "models": 11,
-        "models_max": 20,
-        "cost": 150
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Battleline",
-      "Mob",
-      "Grenades",
-      "Boyz"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 32
-    },
-    "model_count": {
-      "min": 10,
-      "max": 20
-    },
-    "weapon_ids": [
-      "big-choppa",
-      "big-shoota",
-      "choppa",
-      "close-combat-weapon",
-      "kombi-weapon",
-      "power-klaw",
-      "rokkit-launcha-boyz",
-      "shoota",
-      "slugga"
-    ],
-    "ability_ids": [
-      "bodyguard",
-      "get-da-good-bitz"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "wargear_budgets": [
-      {
-        "items": [
-          "big-shoota",
-          "rokkit-launcha-boyz"
-        ],
-        "count": 1,
-        "per_models": 10
-      }
-    ]
-  },
-  {
-    "id": "trukk",
-    "name": "Trukk",
-    "faction_id": "orks",
-    "role": "dedicated-transport",
-    "profiles": [
-      {
-        "name": "Trukk",
-        "M": 12,
-        "T": 8,
-        "W": 10,
-        "Sv": 4,
-        "invuln_sv": 6,
-        "Ld": 7,
-        "OC": 2
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 65
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Transport",
-      "Dedicated Transport",
-      "Trukk"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "hull",
-      "draft": true
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "big-shoota",
-      "spiked-wheels",
-      "wreckin-ball"
-    ],
-    "ability_ids": [
-      "firing-deck-12",
-      "grot-riggers",
-      "deadly-demise-d3"
-    ],
-    "transport_capacity": {
-      "capacity": 12,
-      "exclusion_keywords": [
-        "Jump Pack"
-      ]
-    },
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "painboss",
-    "name": "Painboss",
-    "faction_id": "orks",
-    "role": "character",
-    "profiles": [
-      {
-        "name": "Painboss",
-        "M": 6,
-        "T": 5,
-        "W": 4,
-        "Sv": 4,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 60
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Beast Snagga",
-      "Painboss"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 40
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "beast-snagga-klaw"
-    ],
-    "ability_ids": [
-      "leader",
-      "sawbonez",
-      "feel-no-pain-5"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader"
-  },
-  {
-    "id": "gorkanaut",
-    "name": "Gorkanaut",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Gorkanaut",
-        "M": 8,
-        "T": 12,
-        "W": 20,
-        "Sv": 3,
-        "invuln_sv": 6,
-        "Ld": 7,
-        "OC": 8
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 255,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 1,
-        "cost": 275,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Titanic",
-      "Towering",
-      "Walker",
-      "Transport",
-      "Gorkanaut"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 170,
-      "length": 109
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "deffstorm-mega-shoota",
-      "klaw-of-gork",
-      "rokkit-launcha-gorkanaut",
-      "skorcha",
-      "twin-big-shoota"
-    ],
-    "ability_ids": [
-      "big-an-stompy",
-      "deadly-demise-d6"
-    ],
-    "transport_capacity": {
-      "capacity": 12,
-      "exclusion_keywords": [
-        "Jump Pack"
-      ]
-    },
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "mek-gunz",
-    "name": "Mek Gunz",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Mek Gunz",
-        "M": 3,
-        "T": 5,
-        "W": 6,
-        "Sv": 5,
-        "invuln_sv": 6,
-        "Ld": 8,
-        "OC": 2
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 45,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 2,
-        "cost": 90,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 3,
-        "cost": 135,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 1,
-        "cost": 55,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 2,
-        "cost": 100,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 3,
-        "cost": 145,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Grots",
-      "Mek Gunz"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "hull",
-      "draft": true
-    },
-    "model_count": {
-      "min": 1,
-      "max": 3
-    },
-    "weapon_ids": [
-      "bubblechukka",
-      "grot-crew",
-      "kustom-mega-kannon",
-      "smasha-gun-mek-gunz",
-      "traktor-kannon"
-    ],
-    "ability_ids": [
-      "splat"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "stormboyz",
-    "name": "Stormboyz",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Stormboy",
-        "M": 12,
-        "T": 5,
-        "W": 1,
-        "Sv": 5,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      },
-      {
-        "name": "Boss Nob",
-        "M": 12,
-        "T": 5,
-        "W": 2,
-        "Sv": 5,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 5,
-        "cost": 65
-      },
-      {
-        "models": 6,
-        "models_max": 10,
-        "cost": 130
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Jump Pack",
-      "Fly",
-      "Grenades",
-      "Stormboyz"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 32
-    },
-    "model_count": {
-      "min": 5,
-      "max": 10
-    },
-    "weapon_ids": [
-      "choppa",
-      "power-klaw",
-      "slugga"
-    ],
-    "ability_ids": [
-      "full-throttle-kult-of-speed",
-      "deep-strike"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "flash-gitz",
-    "name": "Flash Gitz",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Flash Git",
-        "M": 6,
-        "T": 5,
-        "W": 2,
-        "Sv": 4,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 5,
-        "cost": 75,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 10,
-        "cost": 150,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 5,
-        "cost": 85,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 10,
-        "cost": 160,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Grenades",
-      "Flash Gitz"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 40
-    },
-    "model_count": {
-      "min": 5,
-      "max": 10
-    },
-    "weapon_ids": [
-      "choppa-flash-gitz",
-      "snazzgun"
-    ],
-    "ability_ids": [
-      "ammo-runt",
-      "gun-crazy-show-offs"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "blitza-bommer",
-    "name": "Blitza-bommer",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Blitza-bommer",
-        "M": 20,
-        "T": 9,
-        "W": 12,
-        "Sv": 3,
-        "invuln_sv": 6,
-        "Ld": 7,
-        "OC": 0
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 105
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Aircraft",
-      "Fly",
-      "Speed Freeks",
-      "Blitza-bommer"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 120,
-      "length": 92
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "armoured-hull",
-      "big-shoota",
-      "twin-supa-shoota-blitza-bommer"
-    ],
-    "ability_ids": [
-      "boom-bomb",
-      "deadly-demise-d3"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "deff-dread",
-    "name": "Deff Dread",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Deff Dread",
-        "M": 8,
-        "T": 9,
-        "W": 8,
-        "Sv": 2,
-        "invuln_sv": 6,
-        "Ld": 7,
-        "OC": 3
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 110,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 1,
-        "cost": 120,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Walker",
-      "Deff Dread"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 60
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "big-shoota",
-      "dread-klaw",
-      "kustom-mega-blasta",
-      "rokkit-launcha-deff-dread",
-      "skorcha",
-      "stompy-feet"
-    ],
-    "ability_ids": [
-      "piston-driven-brutality",
-      "deadly-demise-1"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "wurrboy",
-    "name": "Wurrboy",
-    "faction_id": "orks",
-    "role": "character",
-    "profiles": [
-      {
-        "name": "Wurrboy",
-        "M": 6,
-        "T": 5,
-        "W": 4,
-        "Sv": 5,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 60
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Psyker",
-      "Beast Snagga",
-      "Wurrboy"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 32
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "close-combat-weapon-wurrboy",
-      "eyez-of-mork"
-    ],
-    "ability_ids": [
-      "feel-no-pain-6",
-      "leader",
-      "roar-of-mork-psychic",
-      "unstable-oracle",
-      "deadly-demise-d3"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader"
-  },
-  {
-    "id": "beastboss",
-    "name": "Beastboss",
-    "faction_id": "orks",
-    "role": "character",
-    "profiles": [
-      {
-        "name": "Beastboss",
-        "M": 6,
-        "T": 5,
-        "W": 6,
-        "Sv": 4,
-        "invuln_sv": 5,
-        "Ld": 6,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 80
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Beast Snagga",
-      "Warboss",
-      "Beastboss"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 50
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "beast-snagga-klaw-beastboss",
-      "beastchoppa",
-      "shoota-beastboss"
-    ],
-    "ability_ids": [
-      "beastboss",
-      "ferocious-rage",
-      "leader",
-      "feel-no-pain-6"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader"
-  },
-  {
-    "id": "dakkajet",
-    "name": "Dakkajet",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Dakkajet",
-        "M": 20,
-        "T": 9,
-        "W": 12,
-        "Sv": 3,
-        "invuln_sv": 6,
-        "Ld": 7,
-        "OC": 0
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 125
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Fly",
-      "Aircraft",
-      "Speed Freeks",
-      "Dakkajet"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 120,
-      "length": 92
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "armoured-hull",
-      "twin-supa-shoota-dakkajet"
-    ],
-    "ability_ids": [
-      "dakkastorm-kult-of-speed",
-      "deadly-demise-d3"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "big-mek-in-mega-armour",
-    "name": "Big Mek in Mega Armour",
-    "faction_id": "orks",
-    "role": "character",
-    "profiles": [
-      {
-        "name": "Big Mek in Mega Armour",
-        "M": 5,
-        "T": 6,
-        "W": 5,
-        "Sv": 2,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 80
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Mega Armour",
-      "Mek",
-      "Big Mek in Mega Armour"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 40
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "killsaw",
-      "kombi-weapon",
-      "kustom-mega-blasta",
-      "kustom-shoota",
-      "power-klaw-big-mek-in-mega-armour",
-      "tellyport-blasta"
-    ],
-    "ability_ids": [
-      "fix-dat-armour-up",
-      "grot-oiler",
-      "kustom-force-field",
-      "leader",
-      "more-dakka"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader"
-  },
-  {
-    "id": "rukkatrukk-squigbuggy",
-    "name": "Rukkatrukk Squigbuggy",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Rukkatrukk Squigbuggy",
-        "M": 12,
-        "T": 7,
-        "W": 9,
-        "Sv": 4,
-        "invuln_sv": 6,
-        "Ld": 7,
-        "OC": 3
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 85
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Speed Freeks",
-      "Rukkatrukk Squigbuggy"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 150,
-      "length": 95
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "saw-blades",
-      "sawn-off-shotgun",
-      "squig-launchas"
-    ],
-    "ability_ids": [
-      "buzzer-squigs",
-      "squig-mine",
-      "deadly-demise-1"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "beast-snagga-boyz",
-    "name": "Beast Snagga Boyz",
-    "faction_id": "orks",
-    "role": "battleline",
-    "profiles": [
-      {
-        "name": "Beast Snagga Boy",
-        "M": 6,
-        "T": 5,
-        "W": 1,
-        "Sv": 5,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 2
-      },
-      {
-        "name": "Beast Snagga Nob",
-        "M": 6,
-        "T": 5,
-        "W": 2,
-        "Sv": 5,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 2
-      }
-    ],
-    "points": [
-      {
-        "models": 10,
-        "cost": 90
-      },
-      {
-        "models": 11,
-        "models_max": 20,
-        "cost": 170
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Mob",
-      "Battleline",
-      "Beast Snagga",
-      "Beast Snagga Boyz"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 32
-    },
-    "model_count": {
-      "min": 10,
-      "max": 20
-    },
-    "weapon_ids": [
-      "choppa-beast-snagga-boyz",
-      "close-combat-weapon-beast-snagga-boyz",
-      "power-snappa",
-      "slugga",
-      "thump-gun"
-    ],
-    "ability_ids": [
-      "monster-hunters",
-      "feel-no-pain-6"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "wargear_budgets": [
-      {
-        "items": [
-          "close-combat-weapon-beast-snagga-boyz",
-          "thump-gun"
-        ],
-        "count": 2,
-        "per_models": 10
-      }
-    ]
-  },
-  {
-    "id": "deffkilla-wartrike",
-    "name": "Deffkilla Wartrike",
-    "faction_id": "orks",
-    "role": "character",
-    "profiles": [
-      {
-        "name": "Deffkilla Wartrike",
-        "M": 12,
-        "T": 6,
-        "W": 9,
-        "Sv": 4,
-        "invuln_sv": 5,
-        "Ld": 6,
-        "OC": 3
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 70
-      }
-    ],
-    "keywords": [
-      "Mounted",
-      "Character",
-      "Warboss",
-      "Speed Freeks",
-      "Deffkilla Wartrike"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 150,
-      "length": 95
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "boomstikks",
-      "killa-jet",
-      "snagga-klaw"
-    ],
-    "ability_ids": [
-      "fuel-mixa-grot",
-      "leader",
-      "speedboss",
-      "deadly-demise-1"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader"
-  },
-  {
-    "id": "mek",
-    "name": "Mek",
-    "faction_id": "orks",
-    "role": "character",
-    "profiles": [
-      {
-        "name": "Mek",
-        "M": 6,
-        "T": 5,
-        "W": 4,
-        "Sv": 5,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 45
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Mek"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 32
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "close-combat-weapon-mek",
-      "killsaw-mek",
-      "kustom-mega-slugga"
-    ],
-    "ability_ids": [
-      "know-wotz",
-      "leader",
-      "mekaniak"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader"
-  },
-  {
-    "id": "shokkjump-dragsta",
-    "name": "Shokkjump Dragsta",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Shokkjump Dragsta",
-        "M": 12,
-        "T": 7,
-        "W": 9,
-        "Sv": 4,
-        "invuln_sv": 6,
-        "Ld": 7,
-        "OC": 3
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 70
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Speed Freeks",
-      "Shokkjump Dragsta"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 150,
-      "length": 95
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "kustom-shokk-rifle",
-      "rokkits",
-      "saw-blades"
-    ],
-    "ability_ids": [
-      "shokk-tunnel",
-      "deadly-demise-1"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "mozrog-skragbad",
-    "name": "Mozrog Skragbad",
-    "faction_id": "orks",
-    "role": "epic-hero",
-    "profiles": [
-      {
-        "name": "Mozrog Skragbad",
-        "M": 10,
-        "T": 8,
-        "W": 8,
-        "Sv": 3,
-        "invuln_sv": 4,
-        "Ld": 6,
-        "OC": 3
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 125
-      }
-    ],
-    "keywords": [
-      "Mounted",
-      "Character",
-      "Beast Snagga",
-      "Epic Hero",
-      "Warboss",
-      "Mozrog Skragbad"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 80
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "big-chompas-jaws",
-      "gutrippa",
-      "thump-gun"
-    ],
-    "ability_ids": [
-      "da-bigger-dey-iz",
-      "leader",
-      "one-last-kill",
-      "feel-no-pain-5"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader"
-  },
-  {
-    "id": "zodgrod-wortsnagga",
-    "name": "Zodgrod Wortsnagga",
-    "faction_id": "orks",
-    "role": "epic-hero",
-    "profiles": [
-      {
-        "name": "Zodgrod Wortsnagga",
-        "M": 6,
-        "T": 5,
-        "W": 5,
-        "Sv": 5,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 80
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Epic Hero",
-      "Zodgrod Wortsnagga"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 50
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "da-grabzappa",
-      "squigstoppa"
-    ],
-    "ability_ids": [
-      "leader",
-      "special-dose",
-      "super-runts",
-      "feel-no-pain-6"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader"
-  },
-  {
-    "id": "gretchin",
-    "name": "Gretchin",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Gretchin",
-        "M": 6,
-        "T": 2,
-        "W": 1,
-        "Sv": 7,
-        "invuln_sv": null,
-        "Ld": 8,
-        "OC": 2
-      },
-      {
-        "name": "Runtherd",
-        "M": 6,
-        "T": 5,
-        "W": 2,
-        "Sv": 5,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 11,
-        "cost": 45
-      },
-      {
-        "models": 22,
-        "cost": 80
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Grots",
-      "Gretchin"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 25
-    },
-    "model_count": {
-      "min": 11,
-      "max": 22
-    },
-    "weapon_ids": [
-      "close-combat-weapon-gretchin",
-      "grot-blasta",
-      "runtherd-tools",
-      "slugga"
-    ],
-    "ability_ids": [
-      "runtherd",
-      "thievin-scavengers"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "big-mek-with-shokk-attack-gun",
-    "name": "Big Mek with Shokk Attack Gun",
-    "faction_id": "orks",
-    "role": "character",
-    "profiles": [
-      {
-        "name": "Big Mek with Shokk Attack Gun",
-        "M": 6,
-        "T": 5,
-        "W": 5,
-        "Sv": 4,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 70,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 1,
-        "cost": 80,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Grenades",
-      "Mek",
-      "Big Mek with Shokk Attack Gun"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 40
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "close-combat-weapon-big-mek-with-shokk-attack-gun",
-      "shokk-attack-gun"
-    ],
-    "ability_ids": [
-      "deranged-snotling-assault",
-      "grot-assistant",
-      "leader"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader"
-  },
-  {
-    "id": "kill-rig",
-    "name": "Kill Rig",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Kill Rig",
-        "M": 10,
-        "T": 10,
-        "W": 16,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 5
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 145
-      }
-    ],
-    "keywords": [
-      "Monster",
-      "Transport",
-      "Psyker",
-      "Beast Snagga",
-      "Kill Rig"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 170,
-      "length": 109
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "butcha-boyz",
-      "eavy-lobba",
-      "savage-horns-and-hooves",
-      "saw-blades-kill-rig",
-      "stikka-kannon",
-      "wurrtower"
-    ],
-    "ability_ids": [
-      "spirit-of-gork-psychic",
-      "feel-no-pain-6",
-      "deadly-demise-d6"
-    ],
-    "transport_capacity": {
-      "capacity": 11
-    },
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "burna-boyz",
-    "name": "Burna Boyz",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Burna Boy",
-        "M": 6,
-        "T": 5,
-        "W": 1,
-        "Sv": 5,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 5,
-        "cost": 60
-      },
-      {
-        "models": 10,
-        "cost": 120
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Burna Boyz"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 32
-    },
-    "model_count": {
-      "min": 5,
-      "max": 10
-    },
-    "weapon_ids": [
-      "big-shoota",
-      "burna",
-      "close-combat-weapon-burna-boyz",
-      "cuttin-flames",
-      "kustom-mega-blasta",
-      "rokkit-launcha-burna-boyz"
-    ],
-    "ability_ids": [
-      "pyromaniaks"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "nobz",
-    "name": "Nobz",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Nob",
-        "M": 6,
-        "T": 5,
-        "W": 2,
-        "Sv": 4,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 5,
-        "cost": 105,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 6,
-        "models_max": 10,
-        "cost": 210,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 5,
-        "cost": 115,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 6,
-        "models_max": 10,
-        "cost": 220,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Grenades",
-      "Nobz"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 32
-    },
-    "model_count": {
-      "min": 5,
-      "max": 10
-    },
-    "weapon_ids": [
-      "big-choppa",
-      "close-combat-weapon-nobz",
-      "kombi-weapon",
-      "power-klaw",
-      "slugga"
-    ],
-    "ability_ids": [
-      "da-boss-ladz"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "beastboss-on-squigosaur",
-    "name": "Beastboss on Squigosaur",
-    "faction_id": "orks",
-    "role": "character",
-    "profiles": [
-      {
-        "name": "Beastboss on Squigosaur",
-        "M": 10,
-        "T": 8,
-        "W": 8,
-        "Sv": 3,
-        "invuln_sv": 5,
-        "Ld": 6,
-        "OC": 3
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 95
-      }
-    ],
-    "keywords": [
-      "Mounted",
-      "Character",
-      "Beast Snagga",
-      "Warboss",
-      "Beastboss on Squigosaur"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 80
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "beastchoppa",
-      "slugga",
-      "squigosaurs-jaws",
-      "thump-gun"
-    ],
-    "ability_ids": [
-      "leader",
-      "single-minded-predator",
-      "thundering-stampede",
-      "feel-no-pain-5"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "attachment_role": "leader"
-  },
-  {
-    "id": "meganobz",
-    "name": "Meganobz",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Meganobz",
-        "M": 5,
-        "T": 6,
-        "W": 3,
-        "Sv": 2,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 2,
-        "cost": 60,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 3,
-        "cost": 90,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 4,
-        "models_max": 5,
-        "cost": 150,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 6,
-        "cost": 180,
-        "unit_count_min": 1,
-        "unit_count_max": 2
-      },
-      {
-        "models": 2,
-        "cost": 80,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 3,
-        "cost": 110,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 4,
-        "models_max": 5,
-        "cost": 170,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      },
-      {
-        "models": 6,
-        "cost": 200,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Grenades",
-      "Mega Armour",
-      "Meganobz"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 40
-    },
-    "model_count": {
-      "min": 2,
-      "max": 6
-    },
-    "weapon_ids": [
-      "killsaw-meganobz",
-      "kombi-weapon",
-      "kustom-shoota",
-      "power-klaw",
-      "twin-killsaw"
-    ],
-    "ability_ids": [
-      "krumpin-time"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "boomdakka-snazzwagon",
-    "name": "Boomdakka Snazzwagon",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Boomdakka Snazzwagon",
-        "M": 12,
-        "T": 7,
-        "W": 9,
-        "Sv": 4,
-        "invuln_sv": 6,
-        "Ld": 7,
-        "OC": 3
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 70
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Grenades",
-      "Speed Freeks",
-      "Boomdakka Snazzwagon"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 150,
-      "length": 95
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "big-shoota",
-      "grot-blasta",
-      "mek-speshul",
-      "spiked-wheels-boomdakka-snazzwagon"
-    ],
-    "ability_ids": [
-      "billowing-fumes-aura",
-      "deadly-demise-1"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
     "id": "gargantuan-squiggoth",
     "name": "Gargantuan Squiggoth",
     "faction_id": "orks",
@@ -3348,449 +66,21 @@
       "dataslate": "launch"
     },
     "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "burna-bommer",
-    "name": "Burna-bommer",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Burna-bommer",
-        "M": 20,
-        "T": 9,
-        "W": 12,
-        "Sv": 3,
-        "invuln_sv": 6,
-        "Ld": 7,
-        "OC": 0
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 115
-      }
-    ],
-    "keywords": [
-      "Vehicle",
-      "Fly",
-      "Aircraft",
-      "Speed Freeks",
-      "Burna-bommer"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 120,
-      "length": 92
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "armoured-hull",
-      "skorcha-missile-rack",
-      "twin-big-shoota",
-      "twin-supa-shoota-burna-bommer"
-    ],
-    "ability_ids": [
-      "burna-bomb",
-      "deadly-demise-d3"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "hunta-rig",
-    "name": "Hunta Rig",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Hunta Rig",
-        "M": 10,
-        "T": 10,
-        "W": 16,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 5
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 125
-      }
-    ],
-    "keywords": [
-      "Monster",
-      "Transport",
-      "Beast Snagga",
-      "Hunta Rig"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "oval",
-      "width": 170,
-      "length": 109
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "butcha-boyz",
-      "eavy-lobba",
-      "savage-horns-and-hooves",
-      "saw-blades-hunta-rig",
-      "stikka-kannon"
-    ],
-    "ability_ids": [
-      "on-da-hunt",
-      "feel-no-pain-6",
-      "firing-deck-11",
-      "deadly-demise-d6"
-    ],
-    "transport_capacity": {
-      "capacity": 21
-    },
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false
-  },
-  {
-    "id": "warboss",
-    "name": "Warboss",
-    "faction_id": "orks",
-    "role": "character",
-    "profiles": [
-      {
-        "name": "Warboss",
-        "M": 6,
-        "T": 5,
-        "W": 6,
-        "Sv": 4,
-        "invuln_sv": 5,
-        "Ld": 6,
-        "OC": 1
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 75
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Grenades",
-      "Warboss"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 40
-    },
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "weapon_ids": [
-      "attack-squig",
-      "big-choppa-warboss",
-      "kombi-weapon",
-      "power-klaw-warboss",
-      "twin-sluggas"
-    ],
-    "ability_ids": [
-      "da-biggest-and-da-best",
-      "leader"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
     "points_provisional": false,
-    "attachment_role": "leader"
-  },
-  {
-    "id": "bannernob",
-    "name": "Bannernob",
-    "faction_id": "orks",
-    "role": "character",
-    "profiles": [
+    "external_refs": [
       {
-        "name": "Bannernob",
-        "M": 6,
-        "T": 5,
-        "W": 4,
-        "Sv": 4,
-        "invuln_sv": 5,
-        "Ld": 7,
-        "OC": 6
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 50
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Bannernob"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "weapon_ids": [
-      "shoota",
-      "choppa-bannernob"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 40
-    },
-    "attachment_role": "support"
-  },
-  {
-    "id": "big-mek-dakkarig",
-    "name": "Big Mek Dakkarig",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Big Mek Dakkarig",
-        "M": 8,
-        "T": 8,
-        "W": 11,
-        "Sv": 3,
-        "invuln_sv": 5,
-        "Ld": 7,
-        "OC": 3
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 100,
-        "unit_count_min": 1,
-        "unit_count_max": 2
+        "namespace": "bsdata",
+        "id": "aeed-c6d9-4b90-376a"
       },
       {
-        "models": 1,
-        "cost": 110,
-        "unit_count_min": 3,
-        "unit_count_max": null
-      }
-    ],
-    "keywords": [
-      "Walker",
-      "Big Mek",
-      "Dakkarig"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "weapon_ids": [
-      "blitzkannon",
-      "rokkit-launcha-big-mek-dakkarig",
-      "stompy-feet-big-mek-dakkarig"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 90
-    }
-  },
-  {
-    "id": "bigboss",
-    "name": "Bigboss",
-    "faction_id": "orks",
-    "role": "character",
-    "profiles": [
+        "namespace": "game-datacards",
+        "id": "3928904f-341e-5718-a995-6a87f94d00f6"
+      },
       {
-        "name": "Bigboss",
-        "M": 6,
-        "T": 5,
-        "W": 5,
-        "Sv": 4,
-        "invuln_sv": null,
-        "Ld": 7,
-        "OC": 1
+        "namespace": "mfm",
+        "id": "85400667-20b1-4a24-ac2b-ce42c3101749"
       }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 55
-      }
-    ],
-    "keywords": [
-      "Infantry",
-      "Character",
-      "Bigboss"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "weapon_ids": [
-      "slugga-bigboss",
-      "two-handed-big-choppa"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 40
-    },
-    "attachment_role": "leader"
-  },
-  {
-    "id": "wartrakk",
-    "name": "Wartrakk",
-    "faction_id": "orks",
-    "profiles": [
-      {
-        "name": "Wartrakk",
-        "M": 12,
-        "T": 6,
-        "W": 7,
-        "Sv": 4,
-        "invuln_sv": 6,
-        "Ld": 7,
-        "OC": 3
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 60
-      }
-    ],
-    "keywords": [
-      "Mounted",
-      "Speed Freeks",
-      "Wartrakk"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "weapon_ids": [
-      "kustom-shoota",
-      "rokkit-launcha-wartrakk",
-      "choppa"
     ]
-  },
-  {
-    "id": "wazdakka-gutsmek",
-    "name": "Wazdakka Gutsmek",
-    "faction_id": "orks",
-    "role": "epic-hero",
-    "profiles": [
-      {
-        "name": "Wazdakka Gutsmek",
-        "M": 14,
-        "T": 8,
-        "W": 10,
-        "Sv": 3,
-        "invuln_sv": 4,
-        "Ld": 6,
-        "OC": 3
-      }
-    ],
-    "points": [
-      {
-        "models": 1,
-        "cost": 175
-      }
-    ],
-    "keywords": [
-      "Mounted",
-      "Vehicle",
-      "Speed Freeks",
-      "Epic Hero",
-      "Smoke",
-      "Character",
-      "Wazdakka Gutsmek"
-    ],
-    "faction_keywords": [
-      "Orks"
-    ],
-    "model_count": {
-      "min": 1,
-      "max": 1
-    },
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_legend": false,
-    "points_provisional": false,
-    "weapon_ids": [
-      "grabba-dragga",
-      "psyko-gatler",
-      "fixits-wrench",
-      "speeding-bulk-and-flaming-exhaust"
-    ],
-    "base_size_mm": {
-      "shape": "round",
-      "diameter": 120
-    }
   },
   {
     "id": "ardmob-boyz",
@@ -3845,7 +135,30 @@
       "combat-patrol"
     ],
     "is_legend": false,
-    "points_provisional": false
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "63cdcf67-14f9-4233-94eb-e9fc83540fc4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e6444013-4fb5-42af-92a0-9da6cccf630c"
+      }
+    ],
+    "weapon_ids": [
+      "big-choppa",
+      "kombi-rokkit",
+      "kombi-shoota",
+      "kustom-shoota",
+      "choppa",
+      "shoota",
+      "slugga"
+    ],
+    "ability_ids": [
+      "waaagh",
+      "grab-dat-scrap"
+    ]
   },
   {
     "id": "ardmob-gretchin",
@@ -3893,7 +206,22 @@
     "base_size_mm": {
       "shape": "round",
       "diameter": 25
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "78cd83a9-847c-4329-b799-a8b94c237fd1"
+      }
+    ],
+    "weapon_ids": [
+      "blasta",
+      "lobbin-bombs",
+      "scavenged-shivs"
+    ],
+    "ability_ids": [
+      "grot-infestation-once-per-battle-per-unit",
+      "waaagh"
+    ]
   },
   {
     "id": "ardmob-warboss",
@@ -3943,7 +271,21 @@
     "base_size_mm": {
       "shape": "round",
       "diameter": 50
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9c76c38d-b347-447f-8c4d-9345578deca1"
+      }
+    ],
+    "weapon_ids": [
+      "kustom-choppa",
+      "kustom-shoota"
+    ],
+    "ability_ids": [
+      "smash-em-up",
+      "waaagh"
+    ]
   },
   {
     "id": "ardmob-wartrakk",
@@ -3992,7 +334,22 @@
       "shape": "oval",
       "width": 105,
       "length": 70
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "114ad759-bfc7-47fc-835b-2926d40e7ec6"
+      }
+    ],
+    "weapon_ids": [
+      "choppa",
+      "kustom-shoota",
+      "rokkit-launcha"
+    ],
+    "ability_ids": [
+      "indiscriminate-detonations",
+      "waaagh"
+    ]
   },
   {
     "id": "ardmob-weirdboy",
@@ -4042,6 +399,4391 @@
     "base_size_mm": {
       "shape": "round",
       "diameter": 50
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "67524464-74a5-4718-9f39-41153ad1f501"
+      }
+    ],
+    "weapon_ids": [
+      "psychic-powers",
+      "waaagh-staff"
+    ],
+    "ability_ids": [
+      "totem-of-mork-psychic",
+      "waaagh"
+    ]
+  },
+  {
+    "id": "weirdboy",
+    "name": "Weirdboy",
+    "faction_id": "orks",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Weirdboy",
+        "M": 6,
+        "T": 5,
+        "W": 4,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 65
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Character",
+      "Psyker",
+      "Weirdboy"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "power-vomit",
+      "copper-staff"
+    ],
+    "ability_ids": [
+      "da-jump-psychic",
+      "waaagh-energy",
+      "warpath-psychic-weirdboy"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "attachment_role": "support",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "260d-9ce4-ea1f-a957"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "21308fb3-2753-5c17-a04d-7b8bc695fbbb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7691a766-172f-4011-807d-a9af6f9d7ceb"
+      }
+    ]
+  },
+  {
+    "id": "warbikers",
+    "name": "Warbikers",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Warbiker",
+        "M": 12,
+        "T": 6,
+        "W": 3,
+        "Sv": 4,
+        "invuln_sv": 6,
+        "Ld": 7,
+        "OC": 2
+      },
+      {
+        "name": "Boss Nob on Warbike",
+        "M": 12,
+        "T": 6,
+        "W": 4,
+        "Sv": 4,
+        "invuln_sv": 6,
+        "Ld": 7,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 75
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 140
+      }
+    ],
+    "keywords": [
+      "Mounted",
+      "Grenades",
+      "Speed Freeks",
+      "Warbikers"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 75,
+      "length": 42
+    },
+    "model_count": {
+      "min": 3,
+      "max": 6
+    },
+    "weapon_ids": [
+      "big-choppa",
+      "choppa",
+      "close-combat-weapon",
+      "power-klaw",
+      "slugga",
+      "twin-dakkagun"
+    ],
+    "ability_ids": [
+      "drive-by-dakka",
+      "high-speed-carnage"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "is_legend": false,
+    "points_provisional": false
+  },
+  {
+    "id": "deffkoptas",
+    "name": "Deffkoptas",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Deffkoptas",
+        "M": 12,
+        "T": 6,
+        "W": 4,
+        "Sv": 4,
+        "invuln_sv": 6,
+        "Ld": 7,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 80,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 160,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 3,
+        "cost": 90,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 170,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Fly",
+      "Grenades",
+      "Speed Freeks",
+      "Deffkoptas"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 75,
+      "length": 42
+    },
+    "model_count": {
+      "min": 3,
+      "max": 6
+    },
+    "weapon_ids": [
+      "kustom-mega-blasta",
+      "slugga",
+      "spinnin-blades",
+      "choppa",
+      "rokkit-launcha"
+    ],
+    "ability_ids": [
+      "aerial-manoeuvres",
+      "deep-strike",
+      "deff-from-above"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "2d6e-aa3b-c28c-5ef0"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "99d257a5-ca17-5cdf-96a1-7473031a1259"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1502e293-1237-4c81-9cb4-d913ba23b246"
+      }
+    ]
+  },
+  {
+    "id": "painboy",
+    "name": "Painboy",
+    "faction_id": "orks",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Painboy",
+        "M": 6,
+        "T": 5,
+        "W": 3,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 45
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Character",
+      "Painboy"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "urty-syringe",
+      "doks-toolz"
+    ],
+    "ability_ids": [
+      "cork-dat-red-bit",
+      "crude-surgery",
+      "dok-s-toolz",
+      "grot-orderly",
+      "hold-still-and-say-aargh"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "attachment_role": "support",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "7669-1442-2c0b-e0c9"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "233c4eaf-0ffd-51c8-816d-3a05bb14b6bf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e5028623-8bef-4f11-9084-3fb20212307b"
+      }
+    ]
+  },
+  {
+    "id": "killa-kans",
+    "name": "Killa Kans",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Killa Kans",
+        "M": 8,
+        "T": 7,
+        "W": 5,
+        "Sv": 3,
+        "invuln_sv": 6,
+        "Ld": 8,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 130,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 260,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 3,
+        "cost": 150,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 280,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Walker",
+      "Grots",
+      "Killa Kans"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    },
+    "model_count": {
+      "min": 3,
+      "max": 6
+    },
+    "weapon_ids": [
+      "kan-klaw",
+      "kan-blasta"
+    ],
+    "ability_ids": [
+      "shooty-power-trip",
+      "spiteful-power-trip"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "8c36-c946-2e0f-f648"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "17461bcd-24d2-580b-b1e4-aa86fdaaf5bf"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f49b305a-f2eb-4a3c-a090-931958c6f53b"
+      }
+    ]
+  },
+  {
+    "id": "big-mek",
+    "name": "Big Mek",
+    "faction_id": "orks",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Big Mek",
+        "M": 6,
+        "T": 5,
+        "W": 6,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 85,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 95,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Character",
+      "Grenades",
+      "Mek",
+      "Big Mek"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "drilla",
+      "kustom-mega-blasta",
+      "power-klaw-big-mek",
+      "traktor-blasta"
+    ],
+    "ability_ids": [
+      "more-dakka",
+      "shokk-boosta"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "fbee-427a-1c46-f621"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "6868b71c-9c3a-5064-a377-e11a4d158e5a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f1b5d961-a505-4806-85b7-311b64fc8697"
+      }
+    ]
+  },
+  {
+    "id": "squighog-boyz",
+    "name": "Squighog Boyz",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Squighog Boy",
+        "M": 10,
+        "T": 6,
+        "W": 3,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 2
+      },
+      {
+        "name": "Nob on Smasha Squig",
+        "M": 10,
+        "T": 6,
+        "W": 4,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 4,
+        "cost": 140,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 8,
+        "cost": 280,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 4,
+        "cost": 160,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 8,
+        "cost": 300,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Mounted",
+      "Beast Snagga",
+      "Explosives",
+      "Mobile"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 75,
+      "length": 42
+    },
+    "model_count": {
+      "min": 4,
+      "max": 8
+    },
+    "weapon_ids": [
+      "big-choppa-squighog-boyz",
+      "slugga",
+      "squig-jaws",
+      "stikka",
+      "saddlegits-shiv"
+    ],
+    "ability_ids": [
+      "bomb-squig",
+      "bomb-squig-squighog-boyz",
+      "brutal-impact",
+      "wild-ride"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "6a83-8e1f-63ef-50c3"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "576c28c7-b40a-5ad3-a820-bd80cf729190"
+      },
+      {
+        "namespace": "mfm",
+        "id": "50c806c7-a2ee-45d1-916a-94984e19b06e"
+      }
+    ]
+  },
+  {
+    "id": "warboss-in-mega-armour",
+    "name": "Warboss in Mega Armour",
+    "faction_id": "orks",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Warboss in Mega Armour",
+        "M": 5,
+        "T": 6,
+        "W": 7,
+        "Sv": 2,
+        "invuln_sv": 5,
+        "Ld": 6,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 125,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 140,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Character",
+      "Mega Armour",
+      "Warboss",
+      "Warboss in Mega Armour"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "big-shoota-warboss-in-mega-armour",
+      "uge-choppa"
+    ],
+    "ability_ids": [
+      "dead-brutal",
+      "intimidating-motivation",
+      "krushin-impetus"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "494b-11ce-5af-5b50"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "043501a6-a92e-5b75-b153-7d70ceb9ffcc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8728a0a4-4d67-4cb4-bde1-02710547bf45"
+      }
+    ]
+  },
+  {
+    "id": "wazbom-blastajet",
+    "name": "Wazbom Blastajet",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Wazbom Blastajet",
+        "M": 20,
+        "T": 9,
+        "W": 12,
+        "Sv": 3,
+        "invuln_sv": 6,
+        "Ld": 7,
+        "OC": 0
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 215,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 235,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Aircraft",
+      "Fly",
+      "Grenades",
+      "Speed Freeks",
+      "Wazbom Blastajet"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 150,
+      "length": 95
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "smasha-gun",
+      "armoured-impact",
+      "dual-wazbom-mega-kannon",
+      "dual-tellyport-mega-blasta",
+      "dual-supa-shoota"
+    ],
+    "ability_ids": [
+      "blastajet-attack-run",
+      "blastajet-force-field",
+      "go-fer-da-waz-spot"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3832-ad97-2b3b-8775"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "5b0506a2-f061-5d06-b6b8-5b9bb351eada"
+      },
+      {
+        "namespace": "mfm",
+        "id": "36dc2926-66df-4ea5-a02e-d4732617025f"
+      }
+    ]
+  },
+  {
+    "id": "battlewagon",
+    "name": "Battlewagon",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Battlewagon",
+        "M": 10,
+        "T": 10,
+        "W": 16,
+        "Sv": 3,
+        "invuln_sv": 6,
+        "Ld": 7,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 150,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 160,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Transport",
+      "Battlewagon"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "big-shoota",
+      "grabbin-klaw",
+      "wreckin-ball",
+      "crushin-bulk"
+    ],
+    "ability_ids": [
+      "ard-case",
+      "deadly-demise-d6",
+      "firing-deck-11",
+      "mobile-fortress",
+      "ramshackle-but-rugged"
+    ],
+    "transport_capacity": {
+      "capacity": 22
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "conditional_keywords": [
+      {
+        "keyword": "Wagon",
+        "required_detachment_id": "rollin-deff"
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "306a-b2ac-aaf1-9a7c"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "acda7dbd-3e08-583d-a83d-5085f32f80ee"
+      },
+      {
+        "namespace": "mfm",
+        "id": "1c9d82f2-a0cd-4991-8653-e955460637b3"
+      }
+    ]
+  },
+  {
+    "id": "boss-snikrot",
+    "name": "Boss Snikrot",
+    "faction_id": "orks",
+    "role": "epic-hero",
+    "profiles": [
+      {
+        "name": "Boss Snikrot",
+        "M": 6,
+        "T": 5,
+        "W": 6,
+        "Sv": 5,
+        "invuln_sv": 5,
+        "Ld": 6,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 80
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Character",
+      "Epic Hero",
+      "Explosives",
+      "Smoke"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "slugga-boss-snikrot",
+      "morks-teef"
+    ],
+    "ability_ids": [
+      "infiltrators",
+      "kunnin-infiltrator",
+      "lone-operative",
+      "out-from-da-shadows",
+      "red-skull-kommandos",
+      "stealth"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "e651-5901-35e5-dc35"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "68d7d3de-7926-54df-8238-c1ed05b23fef"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ca1b7913-c219-4acb-b6bb-a95e669c4ae5"
+      }
+    ]
+  },
+  {
+    "id": "morkanaut",
+    "name": "Morkanaut",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Morkanaut",
+        "M": 8,
+        "T": 12,
+        "W": 20,
+        "Sv": 3,
+        "invuln_sv": 5,
+        "Ld": 7,
+        "OC": 8
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 345,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 375,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Titanic",
+      "Towering",
+      "Transport",
+      "Walker",
+      "Morkanaut"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 170,
+      "length": 109
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "klaw-of-mork",
+      "kustom-mega-blasta",
+      "kustom-mega-zappa",
+      "rokkit-launcha-morkanaut",
+      "dual-big-shoota"
+    ],
+    "ability_ids": [
+      "big-an-shooty",
+      "clankin-forward",
+      "gut-hatch"
+    ],
+    "transport_capacity": {
+      "capacity": 12
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "9ee5-2b39-de06-dda6"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "c33dd7fe-1ade-5788-bf63-5b801dfef7f1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b3a5277b-0a65-47a7-925c-f7622cda3dd3"
+      }
+    ]
+  },
+  {
+    "id": "ghazghkull-thraka",
+    "name": "Ghazghkull Thraka",
+    "faction_id": "orks",
+    "role": "epic-hero",
+    "profiles": [
+      {
+        "name": "Ghazghkull Thraka",
+        "M": 8,
+        "T": 10,
+        "W": 16,
+        "Sv": 2,
+        "invuln_sv": 4,
+        "Ld": 6,
+        "OC": 4
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 300
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Character",
+      "Epic Hero",
+      "Explosives",
+      "Warboss"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 80
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "morks-roar",
+      "gorks-klaw",
+      "adamantine-eadbutt"
+    ],
+    "ability_ids": [
+      "da-grand-warlords-ladz",
+      "makari-hoist-dat-banner",
+      "prophet-of-da-great-waaagh",
+      "supreme-commander"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "4ea0-6b70-c17c-bc00"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "de55-e326-8a31-d7b0"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "5eaa496c-6dd6-5387-8308-d5e62f207d0c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "85197265-dcd6-4f1c-b699-cacba1b123c6"
+      }
+    ]
+  },
+  {
+    "id": "breaka-boyz",
+    "name": "Breaka Boyz",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Breaka Boy",
+        "M": 6,
+        "T": 5,
+        "W": 3,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 6,
+        "cost": 135,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 6,
+        "cost": 145,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Grenades",
+      "Breaka Boyz"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
+    "model_count": {
+      "min": 6,
+      "max": 6
+    },
+    "weapon_ids": [
+      "choppa-breaka-boyz",
+      "knucklebustas",
+      "rokkit-pistol",
+      "smash-hammer",
+      "tankhammer"
+    ],
+    "ability_ids": [
+      "attached-unit",
+      "bomb-squigs",
+      "trophy-hunters"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "a596-3d99-257e-0ea1"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "e6f29289-8f7a-5a70-829c-f4b4146917c1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9c5dc3fe-b149-4aa5-9973-6e95ad2dac8b"
+      }
+    ]
+  },
+  {
+    "id": "stompa",
+    "name": "Stompa",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Stompa",
+        "M": 10,
+        "T": 14,
+        "W": 30,
+        "Sv": 2,
+        "invuln_sv": 6,
+        "Ld": 6,
+        "OC": 12
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 700,
+        "unit_count_min": 1,
+        "unit_count_max": 1
+      },
+      {
+        "models": 1,
+        "cost": 800,
+        "unit_count_min": 2,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Transport",
+      "Titanic",
+      "Towering",
+      "Walker",
+      "Stompa"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "big-shoota",
+      "mega-choppa",
+      "skorcha",
+      "supa-gatler",
+      "deffkannon-and-supa-rokkits"
+    ],
+    "ability_ids": [
+      "deadly-demise-2d6",
+      "idol-of-belligerence",
+      "stompin-forward",
+      "waaagh-effigy-aura"
+    ],
+    "transport_capacity": {
+      "capacity": 22
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "6c08-9131-14a3-a3b4"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "4a9a33db-6bd9-570c-8a96-6a7841919d6b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f89e7381-3eea-46b0-8339-860fa41cb77a"
+      }
+    ]
+  },
+  {
+    "id": "biged-bossbunka",
+    "name": "Big’ed Bossbunka",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Big’ed Bossbunka",
+        "M": 0,
+        "T": 10,
+        "W": 12,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 0
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 135
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Fortification",
+      "Frame",
+      "Transport"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "big-shoota",
+      "gaze-of-gork"
+    ],
+    "ability_ids": [
+      "deadly-demise-d3",
+      "fortification",
+      "ramshackle-cover",
+      "raucous-occupants",
+      "shoutin-pole-aura"
+    ],
+    "transport_capacity": {
+      "capacity": 11
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "b82a-6b65-7050-ac48"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "369edbf5-b08e-58f4-a738-ff558e09a9f1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "72f4b744-afbe-4846-9ec6-2c4a34674a48"
+      }
+    ]
+  },
+  {
+    "id": "tankbustas",
+    "name": "Tankbustas",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Boss Nob",
+        "M": 6,
+        "T": 5,
+        "W": 3,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      },
+      {
+        "name": "Tankbusta",
+        "M": 6,
+        "T": 5,
+        "W": 2,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 6,
+        "cost": 145,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 6,
+        "cost": 135,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Grenades",
+      "Tankbustas"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
+    "model_count": {
+      "min": 6,
+      "max": 6
+    },
+    "weapon_ids": [
+      "choppa-tankbustas",
+      "close-combat-weapon-tankbustas",
+      "rokkit-launcha-tankbustas",
+      "rokkit-pistol",
+      "smash-hammer"
+    ],
+    "ability_ids": [
+      "bomb-squigs",
+      "pulsa-rokkit",
+      "rokkit-barrage",
+      "tank-hunters"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "wargear_budgets": [
+      {
+        "items": [
+          "pulsa-rokkit"
+        ],
+        "count": 2,
+        "per_models": 0,
+        "duplicate_limit": 1
+      }
+    ]
+  },
+  {
+    "id": "kommandos",
+    "name": "Kommandos",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Kommando",
+        "M": 6,
+        "T": 5,
+        "W": 1,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      },
+      {
+        "name": "Boss Nob",
+        "M": 6,
+        "T": 5,
+        "W": 3,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 10,
+        "cost": 125
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Grenades",
+      "Smoke",
+      "Kommandos"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
+    "model_count": {
+      "min": 10,
+      "max": 10
+    },
+    "weapon_ids": [
+      "big-choppa-kommandos",
+      "breacha-ram",
+      "burna-kommandos",
+      "choppa",
+      "kustom-shoota-kommandos",
+      "power-klaw",
+      "rokkit-launcha-kommandos",
+      "slugga"
+    ],
+    "ability_ids": [
+      "bomb-squig-kommandos",
+      "distraction-grot",
+      "found-em",
+      "nowhere-to-hide",
+      "patrol-squad",
+      "sneaky-gitz",
+      "taktikal-know-wotz"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "wargear_budgets": [
+      {
+        "items": [
+          "kustom-shoota-kommandos"
+        ],
+        "count": 2,
+        "per_models": 0
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "303-267f-e45c-6aa9"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "907ea7d6-7868-508c-874b-15982396713d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4476a990-945b-406e-a44f-f5f02cf7c3d4"
+      }
+    ]
+  },
+  {
+    "id": "boyz",
+    "name": "Boyz",
+    "faction_id": "orks",
+    "role": "battleline",
+    "profiles": [
+      {
+        "name": "Boy",
+        "M": 6,
+        "T": 5,
+        "W": 1,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 2
+      },
+      {
+        "name": "Boss Nob",
+        "M": 6,
+        "T": 5,
+        "W": 3,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 10,
+        "cost": 75,
+        "unit_count_min": 1,
+        "unit_count_max": 3
+      },
+      {
+        "models": 11,
+        "models_max": 20,
+        "cost": 160,
+        "unit_count_min": 1,
+        "unit_count_max": 3
+      },
+      {
+        "models": 10,
+        "cost": 85,
+        "unit_count_min": 4,
+        "unit_count_max": null
+      },
+      {
+        "models": 11,
+        "models_max": 20,
+        "cost": 170,
+        "unit_count_min": 4,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Battleline",
+      "Explosives",
+      "Mob"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
+    "model_count": {
+      "min": 10,
+      "max": 20
+    },
+    "weapon_ids": [
+      "big-shoota-boyz",
+      "burna-boyz-unit",
+      "kombi-rokkit-boyz",
+      "kombi-skorcha-boyz",
+      "kustom-shoota-boyz",
+      "rokkit-launcha-boyz",
+      "shoota-boyz-unit",
+      "slugga",
+      "big-choppa-boyz",
+      "choppa-boyz",
+      "kustom-choppa-boyz",
+      "power-klaw-boyz"
+    ],
+    "ability_ids": [
+      "ammo-runts",
+      "bodyguard",
+      "get-da-good-bitz",
+      "never-too-busy-to-fight",
+      "tide-of-muscle"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "wargear_budgets": [
+      {
+        "items": [
+          "big-shoota",
+          "rokkit-launcha-boyz"
+        ],
+        "count": 1,
+        "per_models": 10
+      }
+    ]
+  },
+  {
+    "id": "trukk",
+    "name": "Trukk",
+    "faction_id": "orks",
+    "role": "dedicated-transport",
+    "profiles": [
+      {
+        "name": "Trukk",
+        "M": 12,
+        "T": 8,
+        "W": 10,
+        "Sv": 4,
+        "invuln_sv": 6,
+        "Ld": 7,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 60,
+        "unit_count_min": 1,
+        "unit_count_max": 3
+      },
+      {
+        "models": 1,
+        "cost": 70,
+        "unit_count_min": 4,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Transport",
+      "Dedicated Transport",
+      "Trukk"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "dual-big-shoota",
+      "spiked-ram",
+      "rokkit-launcha",
+      "grabbin-klaw",
+      "buzzsaw"
+    ],
+    "ability_ids": [
+      "firing-deck-12",
+      "grot-riggers",
+      "pillin-out"
+    ],
+    "transport_capacity": {
+      "capacity": 12,
+      "exclusion_keywords": [
+        "Jump Pack"
+      ]
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1291-7ba8-2c5a-4a92"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "7fdf8eed-2556-52b8-b54f-ad8be211aef0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c168aeaf-e2f6-483e-9bc6-c334b720c8be"
+      }
+    ]
+  },
+  {
+    "id": "painboss",
+    "name": "Painboss",
+    "faction_id": "orks",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Painboss",
+        "M": 6,
+        "T": 5,
+        "W": 4,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 60,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 70,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Character",
+      "Beast Snagga",
+      "Painboss"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "beast-snagga-klaw"
+    ],
+    "ability_ids": [
+      "hardy-bioniks",
+      "push-dat-bit-back-in",
+      "runnin-wiv-da-herd",
+      "sawbonez"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "attachment_role": "support",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "a74a-107a-e2ac-7e4c"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "00de84f1-3352-56ca-944e-a272f9101301"
+      },
+      {
+        "namespace": "mfm",
+        "id": "db0dcb52-1257-44f2-9d7f-07e419f8c2fa"
+      }
+    ]
+  },
+  {
+    "id": "gorkanaut",
+    "name": "Gorkanaut",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Gorkanaut",
+        "M": 8,
+        "T": 12,
+        "W": 20,
+        "Sv": 3,
+        "invuln_sv": 6,
+        "Ld": 7,
+        "OC": 8
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 325,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 355,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Titanic",
+      "Towering",
+      "Walker",
+      "Transport",
+      "Gorkanaut"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 170,
+      "length": 109
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "deffstorm-mega-shoota",
+      "klaw-of-gork",
+      "rokkit-launcha-gorkanaut",
+      "skorcha",
+      "dual-big-shoota"
+    ],
+    "ability_ids": [
+      "big-an-stompy",
+      "gut-hatch"
+    ],
+    "transport_capacity": {
+      "capacity": 12,
+      "exclusion_keywords": [
+        "Jump Pack"
+      ]
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "56d6-a7fc-fa08-4345"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "4ffe5482-08d8-5c01-bf59-a4bb152fd94e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f7abac94-2442-4805-81c9-9a56a2448d10"
+      }
+    ]
+  },
+  {
+    "id": "mek-gunz",
+    "name": "Mek Gunz",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Mek Gunz",
+        "M": 3,
+        "T": 6,
+        "W": 6,
+        "Sv": 5,
+        "invuln_sv": 6,
+        "Ld": 8,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 55,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 2,
+        "cost": 110,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 3,
+        "cost": 165,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 65,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 2,
+        "cost": 120,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 3,
+        "cost": 175,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Grots",
+      "Mek Gunz"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "hull",
+      "draft": true
+    },
+    "model_count": {
+      "min": 1,
+      "max": 3
+    },
+    "weapon_ids": [
+      "bubblechukka",
+      "kustom-mega-kannon",
+      "smasha-gun-mek-gunz",
+      "traktor-kannon",
+      "scavenged-shivs"
+    ],
+    "ability_ids": [
+      "madcap-artillery",
+      "splat"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "b37a-8686-db2c-8cbd"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "71a0da31-35c6-57d1-89b9-ca161b90bb1b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "776a3fba-6bf3-42e9-a41a-f137c4c8053e"
+      }
+    ]
+  },
+  {
+    "id": "stormboyz",
+    "name": "Stormboyz",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Stormboy",
+        "M": 12,
+        "T": 5,
+        "W": 1,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      },
+      {
+        "name": "Boss Nob",
+        "M": 12,
+        "T": 5,
+        "W": 3,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 5,
+        "cost": 70
+      },
+      {
+        "models": 6,
+        "models_max": 10,
+        "cost": 140
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Jump Pack",
+      "Fly",
+      "Grenades",
+      "Stormboyz"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
+    "model_count": {
+      "min": 5,
+      "max": 10
+    },
+    "weapon_ids": [
+      "choppa",
+      "power-klaw",
+      "slugga",
+      "kustom-choppa"
+    ],
+    "ability_ids": [
+      "full-throttle-kult-of-speed",
+      "rokkit-charge"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "conditional_keywords": [
+      {
+        "keyword": "Battleline",
+        "required_detachment_id": "taktikal-brigade"
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "4adf-8249-c6b2-dd4f"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "9fae7cc2-0704-5d98-9819-5c9164820636"
+      },
+      {
+        "namespace": "mfm",
+        "id": "cc2fce5d-ed17-4064-a8aa-7286b5ce54c9"
+      }
+    ]
+  },
+  {
+    "id": "flash-gitz",
+    "name": "Flash Gitz",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Flash Git",
+        "M": 6,
+        "T": 5,
+        "W": 3,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 5,
+        "cost": 105,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 6,
+        "models_max": 10,
+        "cost": 210,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 5,
+        "cost": 135,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 6,
+        "models_max": 10,
+        "cost": 240,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Grenades",
+      "Flash Gitz"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "model_count": {
+      "min": 5,
+      "max": 10
+    },
+    "weapon_ids": [
+      "choppa-flash-gitz",
+      "snazzgun"
+    ],
+    "ability_ids": [
+      "ammo-runt",
+      "big-spender",
+      "gun-crazy-show-offs"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1de9-b138-28a1-9c4b"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "65c-aa48-f306-465a"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "2505a4c1-5b1a-55ab-8340-c2a874d71104"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a8848006-145a-4941-a1b1-be910f71c7a7"
+      }
+    ]
+  },
+  {
+    "id": "blitza-bommer",
+    "name": "Blitza-bommer",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Blitza-bommer",
+        "M": 20,
+        "T": 9,
+        "W": 12,
+        "Sv": 3,
+        "invuln_sv": 6,
+        "Ld": 7,
+        "OC": 0
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 115
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Aircraft",
+      "Fly",
+      "Speed Freeks",
+      "Blitza-bommer"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "big-shoota",
+      "armoured-impact",
+      "dual-supa-shoota"
+    ],
+    "ability_ids": [
+      "boom-bomb"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "a20-d3af-2c3e-3267"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "ba29c558-0f38-5882-ab34-2fc2a149f7c0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ec718ab5-ef45-4887-bbc9-0db34bde5431"
+      }
+    ]
+  },
+  {
+    "id": "deff-dread",
+    "name": "Deff Dread",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Deff Dread",
+        "M": 8,
+        "T": 9,
+        "W": 8,
+        "Sv": 2,
+        "invuln_sv": 6,
+        "Ld": 7,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 130,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 140,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Walker",
+      "Deff Dread"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "big-shoota",
+      "dread-klaw",
+      "kustom-mega-blasta",
+      "rokkit-launcha-deff-dread",
+      "skorcha",
+      "extra-klaw"
+    ],
+    "ability_ids": [
+      "deadly-demise-1",
+      "dread-ard",
+      "piston-driven-brutality"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "1594-b986-e77e-d89d"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "a7a7a663-bd7e-55fc-b41c-6402d2745af4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "914f5a07-e9e1-4cad-a149-fd7b0d07298a"
+      }
+    ]
+  },
+  {
+    "id": "beastboss",
+    "name": "Beastboss",
+    "faction_id": "orks",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Beastboss",
+        "M": 6,
+        "T": 6,
+        "W": 6,
+        "Sv": 4,
+        "invuln_sv": 5,
+        "Ld": 6,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 85
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Character",
+      "Beast Snagga",
+      "Warboss",
+      "Beastboss"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "shoota-beastboss",
+      "beast-snagga-klaw-and-beastchoppa"
+    ],
+    "ability_ids": [
+      "beastboss",
+      "dodge-dis",
+      "ferocious-rage",
+      "keep-huntin",
+      "leader"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "5a5d-c5a4-39b8-4a3f"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "6acd203a-43b6-5fd6-9737-949144462427"
+      },
+      {
+        "namespace": "mfm",
+        "id": "32b88410-dc45-48ea-b070-f0e0154b5327"
+      }
+    ]
+  },
+  {
+    "id": "dakkajet",
+    "name": "Dakkajet",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Dakkajet",
+        "M": 20,
+        "T": 9,
+        "W": 12,
+        "Sv": 3,
+        "invuln_sv": 6,
+        "Ld": 7,
+        "OC": 0
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 125
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Fly",
+      "Aircraft",
+      "Speed Freeks",
+      "Dakkajet"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "armoured-impact",
+      "dual-supa-shoota"
+    ],
+    "ability_ids": [
+      "strafing-run"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3b42-b41f-d11e-bdca"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "9640f5b7-a970-5211-b77d-f607db6edf47"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4186d0d0-2abb-4c28-91a4-1e5b81a7e0b0"
+      }
+    ]
+  },
+  {
+    "id": "big-mek-in-mega-armour",
+    "name": "Big Mek in Mega Armour",
+    "faction_id": "orks",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Big Mek in Mega Armour",
+        "M": 5,
+        "T": 6,
+        "W": 5,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 90
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Character",
+      "Mega Armour",
+      "Mek",
+      "Big Mek in Mega Armour"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "killsaw",
+      "kombi-weapon",
+      "kustom-mega-blasta",
+      "kustom-shoota",
+      "power-klaw-big-mek-in-mega-armour",
+      "tellyport-blasta"
+    ],
+    "ability_ids": [
+      "fix-dat-armour-up",
+      "grot-oiler",
+      "kustom-force-field",
+      "more-dakka"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "95e9-6da3-5e75-2566"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "2b660da7-5b42-5386-a510-b6f835cf5be2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c074df95-5b3d-49b3-8b6f-bfa9918bd8a0"
+      }
+    ]
+  },
+  {
+    "id": "beast-snagga-boyz",
+    "name": "Beast Snagga Boyz",
+    "faction_id": "orks",
+    "role": "battleline",
+    "profiles": [
+      {
+        "name": "Beast Snagga Boy",
+        "M": 6,
+        "T": 5,
+        "W": 1,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 2
+      },
+      {
+        "name": "Beast Snagga Nob",
+        "M": 6,
+        "T": 5,
+        "W": 2,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 10,
+        "cost": 90
+      },
+      {
+        "models": 11,
+        "models_max": 20,
+        "cost": 170
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Battleline",
+      "Beast Snagga",
+      "Mob"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
+    "model_count": {
+      "min": 10,
+      "max": 20
+    },
+    "weapon_ids": [
+      "choppa-beast-snagga-boyz",
+      "close-combat-weapon-beast-snagga-boyz",
+      "power-snappa",
+      "slugga",
+      "thump-gun"
+    ],
+    "ability_ids": [
+      "feel-no-pain-6",
+      "mobbed",
+      "monster-hunters"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "wargear_budgets": [
+      {
+        "items": [
+          "close-combat-weapon-beast-snagga-boyz",
+          "thump-gun"
+        ],
+        "count": 1,
+        "per_models": 10
+      }
+    ]
+  },
+  {
+    "id": "deffkilla-wartrike",
+    "name": "Deffkilla Wartrike",
+    "faction_id": "orks",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Deffkilla Wartrike",
+        "M": 12,
+        "T": 6,
+        "W": 9,
+        "Sv": 4,
+        "invuln_sv": 5,
+        "Ld": 6,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 80
+      }
+    ],
+    "keywords": [
+      "Mounted",
+      "Character",
+      "Warboss",
+      "Speed Freeks",
+      "Deffkilla Wartrike"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 150,
+      "length": 95
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "boomstikks",
+      "killa-jet",
+      "snagga-klaw"
+    ],
+    "ability_ids": [
+      "fuel-mixa-grot",
+      "full-throttle",
+      "get-back-in-da-race",
+      "speedboss"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "ca85-1d18-dc30-d64e"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "76ae3494-a689-5dd3-92e6-99d47032ef82"
+      },
+      {
+        "namespace": "mfm",
+        "id": "61f7eb94-3def-4e9b-94fb-44548a36dc27"
+      }
+    ]
+  },
+  {
+    "id": "mek",
+    "name": "Mek",
+    "faction_id": "orks",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Mek",
+        "M": 6,
+        "T": 5,
+        "W": 4,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 45
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Character",
+      "Mek"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "kustom-mega-slugga",
+      "meks-toolz"
+    ],
+    "ability_ids": [
+      "clever-know-wots",
+      "know-wotz",
+      "kustom-dakka",
+      "mekaniak"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "attachment_role": "support",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3b2-8c11-616a-1005"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "0d7f5f3a-61ae-5be6-9cbb-217e8b4a9421"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b92b38a2-55a2-4fba-8d36-56d254b9813f"
+      }
+    ]
+  },
+  {
+    "id": "mozrog-skragbad",
+    "name": "Mozrog Skragbad",
+    "faction_id": "orks",
+    "role": "epic-hero",
+    "profiles": [
+      {
+        "name": "Mozrog Skragbad",
+        "M": 10,
+        "T": 9,
+        "W": 10,
+        "Sv": 3,
+        "invuln_sv": 4,
+        "Ld": 6,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 170
+      }
+    ],
+    "keywords": [
+      "Mounted",
+      "Character",
+      "Beast Snagga",
+      "Epic Hero",
+      "Warboss",
+      "Mozrog Skragbad"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 80
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "big-chompas-jaws",
+      "gutrippa",
+      "thump-gun"
+    ],
+    "ability_ids": [
+      "beast-snagga-following",
+      "da-bigger-dey-iz",
+      "one-last-kill"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "b42b-ea0-38f1-6300"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "9fef8723-d3b7-5638-8b79-5ed7e3399ef4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2f346abf-971d-4e4d-a528-7d7a820c605f"
+      }
+    ]
+  },
+  {
+    "id": "zodgrod-wortsnagga",
+    "name": "Zodgrod Wortsnagga",
+    "faction_id": "orks",
+    "role": "epic-hero",
+    "profiles": [
+      {
+        "name": "Zodgrod Wortsnagga",
+        "M": 6,
+        "T": 5,
+        "W": 5,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 50
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Character",
+      "Epic Hero",
+      "Zodgrod Wortsnagga"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 50
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "da-grabzappa",
+      "squigstoppa"
+    ],
+    "ability_ids": [
+      "special-dose",
+      "super-runts"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "ce45-db08-3795-18a9"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "5c0a00c4-5adf-501e-856d-ab55f4bf892a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0ab156a5-a197-44b1-a7fa-ee0ab31defbd"
+      }
+    ]
+  },
+  {
+    "id": "gretchin",
+    "name": "Gretchin",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Gretchin",
+        "M": 6,
+        "T": 2,
+        "W": 1,
+        "Sv": 6,
+        "invuln_sv": null,
+        "Ld": 8,
+        "OC": 1
+      },
+      {
+        "name": "Runtherd",
+        "M": 6,
+        "T": 5,
+        "W": 2,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 10,
+        "cost": 45
+      },
+      {
+        "models": 11,
+        "models_max": 20,
+        "cost": 80
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Grots",
+      "Gretchin"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
+    "model_count": {
+      "min": 10,
+      "max": 20
+    },
+    "weapon_ids": [
+      "grot-blasta",
+      "scavenged-shivs"
+    ],
+    "ability_ids": [
+      "downtrodden",
+      "runtherd",
+      "thievin-scavengers"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "conditional_keywords": [
+      {
+        "keyword": "Battleline",
+        "required_detachment_id": "dread-mob"
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "0206-4864-9594-65a0"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "43dd-f974-3fc8-8abc"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "de8f-24f9-c543-92b7"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "c137a3eb-f513-5d58-9659-b9ca41e61b6b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e526e829-57ea-445d-b69d-5b4b2fa394eb"
+      }
+    ]
+  },
+  {
+    "id": "big-mek-with-shokk-attack-gun",
+    "name": "Big Mek with Shokk Attack Gun",
+    "faction_id": "orks",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Big Mek with Shokk Attack Gun",
+        "M": 6,
+        "T": 5,
+        "W": 5,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 95,
+        "unit_count_min": 1,
+        "unit_count_max": 1
+      },
+      {
+        "models": 1,
+        "cost": 105,
+        "unit_count_min": 2,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Character",
+      "Grenades",
+      "Mek",
+      "Big Mek with Shokk Attack Gun"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "shokk-attack-gun",
+      "big-meks-toolz"
+    ],
+    "ability_ids": [
+      "deranged-snotling-assault",
+      "grot-assistant",
+      "more-dakka",
+      "support-bubble"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "dde2-ca42-e3bc-2ef6"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "36485c40-7cb8-5bf4-ba24-1f287dd37a13"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e9066eed-965d-4e48-b462-02d66ff2a047"
+      }
+    ]
+  },
+  {
+    "id": "kill-rig",
+    "name": "Kill Rig",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Kill Rig",
+        "M": 10,
+        "T": 10,
+        "W": 16,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 175,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 185,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Monster",
+      "Transport",
+      "Psyker",
+      "Beast Snagga",
+      "Kill Rig"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 170,
+      "length": 109
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "butcha-boyz",
+      "eavy-lobba",
+      "savage-horns-and-hooves",
+      "saw-blades-kill-rig",
+      "stikka-kannon",
+      "wurrtower"
+    ],
+    "ability_ids": [
+      "beastscent-psychic",
+      "spirit-of-gork-psychic",
+      "warpath-psychic-kill-rig",
+      "wurrboy-psychic"
+    ],
+    "transport_capacity": {
+      "capacity": 11
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "conditional_keywords": [
+      {
+        "keyword": "Wagon",
+        "required_detachment_id": "rollin-deff"
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "eb21-c97f-2d9a-b363"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "c70f4da0-73a6-5bb0-9c6f-893a5a9f42b1"
+      },
+      {
+        "namespace": "mfm",
+        "id": "40287b42-ee16-4ae4-8cbb-96e87d827a0b"
+      }
+    ]
+  },
+  {
+    "id": "nobz",
+    "name": "Nobz",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Nob",
+        "M": 6,
+        "T": 5,
+        "W": 3,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 5,
+        "cost": 105,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 6,
+        "models_max": 10,
+        "cost": 250,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 5,
+        "cost": 115,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 6,
+        "models_max": 10,
+        "cost": 220,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Explosives"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
+    "model_count": {
+      "min": 5,
+      "max": 10
+    },
+    "weapon_ids": [
+      "big-skorcha-nobz",
+      "kustom-shoota-nobz",
+      "kombi-rokkit-nobz",
+      "big-choppa-nobz",
+      "kustom-choppa-nobz",
+      "kustom-krumpa",
+      "paired-kustom-krumpas"
+    ],
+    "ability_ids": [
+      "ammo-runts",
+      "da-boss-ladz",
+      "get-out-da-way",
+      "paired-krumpas"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "wargear_budgets": [
+      {
+        "items": [
+          "ammo-runt"
+        ],
+        "count": 1,
+        "per_models": 5
+      }
+    ]
+  },
+  {
+    "id": "beastboss-on-squigosaur",
+    "name": "Beastboss on Squigosaur",
+    "faction_id": "orks",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Beastboss on Squigosaur",
+        "M": 10,
+        "T": 9,
+        "W": 10,
+        "Sv": 3,
+        "invuln_sv": 5,
+        "Ld": 6,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 140,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 155,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Mounted",
+      "Character",
+      "Beast Snagga",
+      "Warboss",
+      "Beastboss on Squigosaur"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 80
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "beastchoppa",
+      "slugga",
+      "squigosaurs-jaws",
+      "thump-gun"
+    ],
+    "ability_ids": [
+      "boss-of-da-hunt",
+      "feel-no-pain-5",
+      "keep-huntin",
+      "single-minded-predator",
+      "thundering-stampede"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "a8b7-351-d911-a4d6"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "b2154bb5-34f0-5c55-adda-b29d978fab29"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c338b81f-4198-4721-8fb4-7daf22eca5cd"
+      }
+    ]
+  },
+  {
+    "id": "meganobz",
+    "name": "Meganobz",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Meganobz",
+        "M": 5,
+        "T": 6,
+        "W": 3,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 2,
+        "cost": 75,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 3,
+        "cost": 110,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 4,
+        "models_max": 5,
+        "cost": 185,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 6,
+        "cost": 225,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 2,
+        "cost": 115,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 3,
+        "cost": 150,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 4,
+        "models_max": 5,
+        "cost": 225,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 6,
+        "cost": 265,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Grenades",
+      "Mega Armour",
+      "Meganobz"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "model_count": {
+      "min": 2,
+      "max": 6
+    },
+    "weapon_ids": [
+      "killsaw-meganobz",
+      "kombi-weapon",
+      "kustom-shoota-meganobz",
+      "power-klaw-meganobz",
+      "twin-killsaw"
+    ],
+    "ability_ids": [
+      "arrogant-invulnerability",
+      "krumpin-time"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "7067-34f4-5272-e05f"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "4a45c36d-652e-5cdb-a08d-a28f6644b794"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3bd34d99-cc45-4b10-9829-ad114eb8b614"
+      }
+    ],
+    "wargear_costs": [
+      {
+        "item_id": "twin-killsaw",
+        "cost": 5
+      }
+    ]
+  },
+  {
+    "id": "burna-bommer",
+    "name": "Burna-bommer",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Burna-bommer",
+        "M": 20,
+        "T": 9,
+        "W": 12,
+        "Sv": 3,
+        "invuln_sv": 6,
+        "Ld": 7,
+        "OC": 0
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 125
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Fly",
+      "Aircraft",
+      "Speed Freeks",
+      "Burna-bommer"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "skorcha-missile-rack",
+      "armoured-impact",
+      "dual-big-shoota",
+      "dual-supa-shoota"
+    ],
+    "ability_ids": [
+      "burna-bomb"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "93a1-386a-e40f-472f"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "d471c801-89cf-5dab-925e-b441ee59b812"
+      },
+      {
+        "namespace": "mfm",
+        "id": "85e33a56-f6fa-46ef-a868-aec1a2949e99"
+      }
+    ]
+  },
+  {
+    "id": "hunta-rig",
+    "name": "Hunta Rig",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Hunta Rig",
+        "M": 10,
+        "T": 10,
+        "W": 16,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 165,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 175,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Monster",
+      "Transport",
+      "Beast Snagga",
+      "Hunta Rig"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 170,
+      "length": 109
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "butcha-boyz",
+      "eavy-lobba",
+      "savage-horns-and-hooves",
+      "saw-blades-hunta-rig",
+      "stikka-kannon"
+    ],
+    "ability_ids": [
+      "fully-loaded-butchery",
+      "on-da-hunt",
+      "tramplasquig-charge"
+    ],
+    "transport_capacity": {
+      "capacity": 21
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "conditional_keywords": [
+      {
+        "keyword": "Wagon",
+        "required_detachment_id": "rollin-deff"
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "70de-d621-8465-f7b8"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "5680837d-12d4-5c28-9b6e-6ceb36083c1c"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8214c6e2-2233-4229-a9d9-3257fe8dbe22"
+      }
+    ]
+  },
+  {
+    "id": "warboss",
+    "name": "Warboss",
+    "faction_id": "orks",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Warboss",
+        "M": 6,
+        "T": 5,
+        "W": 6,
+        "Sv": 4,
+        "invuln_sv": 5,
+        "Ld": 6,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 100
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Character",
+      "Grenades",
+      "Warboss"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "power-klaw-warboss",
+      "kustom-choppa",
+      "kustom-shoota",
+      "kombi-rokkit",
+      "kombi-skorcha"
+    ],
+    "ability_ids": [
+      "boss-armour-runt",
+      "da-biggest-and-da-best",
+      "intimidating-motivation",
+      "might-is-right"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "attachment_role": "leader",
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "2efc-c4b3-2ecc-5a37"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "4adbb8b3-5ea7-5582-b45b-ba8626da7226"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d7d98a90-7e1d-4432-976e-9219baece76c"
+      }
+    ]
+  },
+  {
+    "id": "bannernob",
+    "name": "Bannernob",
+    "faction_id": "orks",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Bannernob",
+        "M": 6,
+        "T": 5,
+        "W": 4,
+        "Sv": 4,
+        "invuln_sv": 5,
+        "Ld": 7,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 35
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Character",
+      "Bannernob"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "shoota",
+      "kustom-choppa"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "attachment_role": "support",
+    "ability_ids": [
+      "waaagh",
+      "waaagh-banner"
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "3b35-92f5-bd1a-af8d"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "c0accbee-164d-562e-8664-5f09c94d4b60"
+      },
+      {
+        "namespace": "mfm",
+        "id": "73c5ba73-501a-41df-81d5-80c7db95c59c"
+      }
+    ]
+  },
+  {
+    "id": "big-mek-dakkarig",
+    "name": "Big Mek Dakkarig",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Big Mek Dakkarig",
+        "M": 8,
+        "T": 8,
+        "W": 11,
+        "Sv": 3,
+        "invuln_sv": 5,
+        "Ld": 7,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 135,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 145,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Walker",
+      "Big Mek",
+      "Dakkarig"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "blitzkannon",
+      "stompy-feet-big-mek-dakkarig",
+      "multi-busta-launcha"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 90
+    },
+    "ability_ids": [
+      "blitz-dem-gitz",
+      "dakkablitz",
+      "even-more-dakka"
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "78a7-cf35-aa8d-c420"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "06c3635f-f230-5169-ac9a-7a8e178bc831"
+      },
+      {
+        "namespace": "mfm",
+        "id": "087d21d9-47b7-4d5f-a207-aed4005f0dcb"
+      }
+    ]
+  },
+  {
+    "id": "bigboss",
+    "name": "Bigboss",
+    "faction_id": "orks",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Bigboss",
+        "M": 6,
+        "T": 5,
+        "W": 5,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 50
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Character",
+      "Bigboss"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "slugga-bigboss",
+      "big-choppa"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "attachment_role": "support",
+    "ability_ids": [
+      "breakin-heads",
+      "smashin-da-eads",
+      "somethin-to-prove"
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "181e-be55-d9c6-2b69"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "896fbbfc-fa19-5dfd-b78b-a6692a2cd436"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a7a56757-d2be-4487-af71-55715c66a767"
+      }
+    ]
+  },
+  {
+    "id": "wazdakka-gutsmek",
+    "name": "Wazdakka Gutsmek",
+    "faction_id": "orks",
+    "role": "epic-hero",
+    "profiles": [
+      {
+        "name": "Wazdakka Gutsmek",
+        "M": 14,
+        "T": 8,
+        "W": 10,
+        "Sv": 3,
+        "invuln_sv": 4,
+        "Ld": 6,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 200
+      }
+    ],
+    "keywords": [
+      "Mounted",
+      "Vehicle",
+      "Speed Freeks",
+      "Epic Hero",
+      "Smoke",
+      "Character",
+      "Wazdakka Gutsmek"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "grabba-dragga",
+      "psyko-gatler",
+      "fixits-wrench",
+      "speeding-bulk-and-flaming-exhaust"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 120
+    },
+    "ability_ids": [
+      "fixit-da-grot",
+      "full-throttle",
+      "pulse-jet",
+      "shokk-attack-engine",
+      "throttlerokkit-shokka-engine",
+      "turbo-engine"
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "2ab7-ab71-0af4-5d39"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "3cee164b-75d7-5440-b295-0cbc7efbe88f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "007dd4d3-a1d8-441c-9581-6c2d6b466deb"
+      }
+    ]
+  },
+  {
+    "id": "gunwagon",
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "55544ca0-7f7a-56f2-9dcd-551f4a3b4ed2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e42d2971-db7d-4901-8036-735b3e7cf278"
+      }
+    ],
+    "name": "Gunwagon",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Gunwagon",
+        "M": 10,
+        "T": 12,
+        "W": 16,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 150,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 160,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Transport",
+      "Vehicle",
+      "Wagon"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "kannon",
+      "killkannon",
+      "zzap-gun",
+      "big-shoota",
+      "grabbin-klaw",
+      "lobba",
+      "wreckin-ball"
+    ],
+    "wargear_costs": [
+      {
+        "item_id": "zzap-gun",
+        "cost": 10
+      }
+    ]
+  },
+  {
+    "id": "nazdreg",
+    "name": "Nazdreg",
+    "faction_id": "orks",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Nazdreg",
+        "M": 5,
+        "T": 7,
+        "W": 8,
+        "Sv": 2,
+        "invuln_sv": 5,
+        "Ld": 6,
+        "OC": 1
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Character",
+      "Epic Hero",
+      "Explosives",
+      "Mega Armour",
+      "Warboss"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "kustom-blasta-x",
+      "kustom-blasta-x-melee",
+      "moonchewa"
+    ],
+    "ability_ids": [
+      "intimidating-motivation",
+      "nazdregs-know-wotz",
+      "supreme-kunnin",
+      "waaagh",
+      "leader",
+      "deep-strike"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "is_legend": false,
+    "points_provisional": true,
+    "attachment_role": "leader",
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
     }
+  },
+  {
+    "id": "rukkatrukk-squigbuggies",
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ce6b76e5-7e0d-5043-9c51-cf4b83cf2cd9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8111429e-0358-4760-b435-1f77c43125d0"
+      }
+    ],
+    "name": "Rukkatrukk Squigbuggies",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Rukkatrukk Squigbuggy",
+        "M": 12,
+        "T": 7,
+        "W": 9,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 85
+      },
+      {
+        "models": 2,
+        "cost": 160
+      }
+    ],
+    "keywords": [
+      "Explosives",
+      "Speed Freeks",
+      "Vehicle"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 2
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 150
+    },
+    "weapon_ids": [
+      "saw-blades",
+      "sawn-off-shotgun",
+      "squig-launchas"
+    ],
+    "ability_ids": [
+      "squig-barrage",
+      "waaagh",
+      "deadly-demise-1"
+    ]
+  },
+  {
+    "id": "runtherd",
+    "name": "Runtherd",
+    "faction_id": "orks",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Runtherd",
+        "M": 6,
+        "T": 5,
+        "W": 3,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Character"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "slugga",
+      "runtherd-tools"
+    ],
+    "ability_ids": [
+      "thatll-learn-ya",
+      "waaagh"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "is_legend": false,
+    "points_provisional": true,
+    "attachment_role": "support",
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    }
+  },
+  {
+    "id": "warbuggies",
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2b2c9f57-a3f8-523c-bcc8-7469aedc5952"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9bac8fe0-9305-4e46-b8d1-8a2dc6c9052d"
+      }
+    ],
+    "name": "Warbuggies",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Warbuggy",
+        "M": 12,
+        "T": 7,
+        "W": 9,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 70
+      },
+      {
+        "models": 2,
+        "cost": 130
+      }
+    ],
+    "keywords": [
+      "Explosives",
+      "Speed Freeks",
+      "Vehicle"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 2
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 150
+    },
+    "weapon_ids": [
+      "mek-speshul",
+      "rivet-kannon"
+    ]
+  },
+  {
+    "id": "wartrakks",
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "765a0bd1-0690-59bd-998d-271bd61c2dac"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a0a04c15-fee5-4144-9bb7-6d9fdc78fea1"
+      }
+    ],
+    "name": "Wartrakks",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Wartrakk",
+        "M": 12,
+        "T": 6,
+        "W": 7,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 70
+      },
+      {
+        "models": 2,
+        "cost": 130
+      }
+    ],
+    "keywords": [
+      "Mounted",
+      "Speed Freeks"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 2
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "kustom-choppa",
+      "kustom-shoota",
+      "multi-busta-launcha"
+    ],
+    "ability_ids": [
+      "bombdakka-support",
+      "bust-em",
+      "waaagh"
+    ]
   }
 ]

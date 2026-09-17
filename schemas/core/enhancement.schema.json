@@ -6,6 +6,9 @@
   "type": "object",
   "properties": {
     "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "external_refs": {
+      "$ref": "../defs/common.schema.json#/$defs/external-reference-list"
+    },
     "name": { "type": "string", "minLength": 1, "maxLength": 128 },
     "detachment_id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
     "cost": { "type": "integer", "minimum": 0 },
@@ -25,12 +28,33 @@
       "default": 1,
       "description": "Number of units this enhancement may be applied to. Only meaningful when `upgrade_tag` is true; defaults to 1."
     },
-    "keyword_restrictions": { "$ref": "../defs/common.schema.json#/$defs/keyword-list" },
+    "keyword_restrictions": {
+      "$ref": "../defs/common.schema.json#/$defs/keyword-list"
+    },
+    "keyword_restriction_groups": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "array",
+        "minItems": 1,
+        "uniqueItems": true,
+        "items": { "$ref": "../defs/common.schema.json#/$defs/keyword" }
+      },
+      "description": "Alternative bearer eligibility groups. Every keyword in one group is required (AND), while satisfying any group is sufficient (OR). When present, this supersedes the legacy flat `keyword_restrictions` field."
+    },
     "exclusion_keywords": {
       "oneOf": [
         { "$ref": "../defs/common.schema.json#/$defs/keyword-list" },
         { "type": "null" }
       ]
+    },
+    "attachment_bodyguard_ids": {
+      "type": "array",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "Additional bodyguard units the bearer may attach to because it carries this enhancement."
     },
     "ability_id": {
       "oneOf": [
@@ -46,5 +70,11 @@
     }
   },
   "required": ["id", "name", "detachment_id", "cost", "game_version"],
+  "allOf": [
+    {
+      "if": { "required": ["keyword_restrictions"] },
+      "then": { "not": { "required": ["keyword_restriction_groups"] } }
+    }
+  ],
   "additionalProperties": false
 }

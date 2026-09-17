@@ -1,5 +1,48 @@
 [
   {
+    "unit_id": "gargantuan-squiggoth",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "Gargantuan Squiggoth",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "hull",
+          "draft": true
+        },
+        "default_weapon_ids": [
+          "huge-tusks"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Gargantuan Squiggoth",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Gargantuan Squiggoth",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
     "unit_id": "weirdboy",
     "faction_id": "orks",
     "models": [
@@ -13,59 +56,20 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "weirdboy-staff",
-          "eadbanger"
+          "power-vomit",
+          "copper-staff"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
         "models": [
           {
             "name": "Weirdboy",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "megatrakk-scrapjet",
-    "faction_id": "orks",
-    "models": [
-      {
-        "name": "Megatrakk Scrapjet",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "oval",
-          "width": 150,
-          "length": 95
-        },
-        "default_weapon_ids": [
-          "wing-missiles",
-          "rokkit-kannon",
-          "twin-big-shoota",
-          "twin-big-shoota",
-          "nose-drill"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Megatrakk Scrapjet",
             "min": 1,
             "max": 1
           }
@@ -110,7 +114,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -158,7 +162,8 @@
           "length": 42
         },
         "default_weapon_ids": [
-          "kopta-rokkits",
+          "choppa",
+          "rokkit-launcha",
           "slugga",
           "spinnin-blades"
         ]
@@ -166,7 +171,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -190,44 +195,6 @@
     ]
   },
   {
-    "unit_id": "kustom-boosta-blasta",
-    "faction_id": "orks",
-    "models": [
-      {
-        "name": "Kustom Boosta-blasta",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "oval",
-          "width": 150,
-          "length": 95
-        },
-        "default_weapon_ids": [
-          "burna-exhausts",
-          "rivet-kannon",
-          "spiked-ram",
-          "grot-blasta"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Kustom Boosta-blasta",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
     "unit_id": "painboy",
     "faction_id": "orks",
     "models": [
@@ -241,14 +208,14 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "power-klaw",
-          "urty-syringe"
+          "urty-syringe",
+          "doks-toolz"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -276,14 +243,14 @@
           "diameter": 60
         },
         "default_weapon_ids": [
-          "kan-klaw",
-          "kan-shoota"
+          "kan-blasta",
+          "kan-klaw"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -301,75 +268,6 @@
             "name": "Killa Kan",
             "min": 4,
             "max": 6
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "lootas",
-    "faction_id": "orks",
-    "models": [
-      {
-        "name": "Spanner",
-        "profile_name": "Loota",
-        "min": 1,
-        "max": 2,
-        "default_weapon_ids": [
-          "big-shoota",
-          "close-combat-weapon"
-        ],
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
-      },
-      {
-        "name": "Loota",
-        "min": 4,
-        "max": 8,
-        "default_weapon_ids": [
-          "deffgun",
-          "close-combat-weapon"
-        ],
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Spanner",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Loota",
-            "min": 4,
-            "max": 4
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Spanner",
-            "min": 2,
-            "max": 2
-          },
-          {
-            "name": "Loota",
-            "min": 8,
-            "max": 8
           }
         ]
       }
@@ -396,7 +294,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -435,9 +333,9 @@
         "min": 3,
         "max": 6,
         "default_weapon_ids": [
-          "stikka",
-          "saddlegit-weapons",
-          "squig-jaws"
+          "saddlegits-shiv",
+          "squig-jaws",
+          "stikka"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -449,7 +347,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -503,7 +401,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -532,15 +430,15 @@
           "length": 95
         },
         "default_weapon_ids": [
+          "armoured-impact",
           "smasha-gun",
-          "armoured-hull",
-          "twin-wazbom-mega-kannon"
+          "dual-wazbom-mega-kannon"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -568,13 +466,13 @@
           "draft": true
         },
         "default_weapon_ids": [
-          "tracks-and-wheels"
+          "crushin-bulk"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -603,13 +501,13 @@
         },
         "default_weapon_ids": [
           "slugga-boss-snikrot",
-          "morks-teeth"
+          "morks-teef"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -638,11 +536,11 @@
           "length": 109
         },
         "default_weapon_ids": [
-          "kustom-mega-zappa",
+          "dual-big-shoota",
+          "dual-big-shoota",
           "klaw-of-mork",
           "kustom-mega-blasta",
-          "twin-big-shoota",
-          "twin-big-shoota",
+          "kustom-mega-zappa",
           "rokkit-launcha-morkanaut",
           "rokkit-launcha-morkanaut"
         ]
@@ -650,7 +548,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -673,43 +571,26 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "morks-roar",
-          "gorks-klaw"
-        ],
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 80
-        }
-      },
-      {
-        "name": "Makari",
-        "min": 1,
-        "max": 1,
-        "default_weapon_ids": [
-          "makaris-stabba"
+          "adamantine-eadbutt",
+          "gorks-klaw",
+          "morks-roar"
         ],
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 25
+          "diameter": 80
         }
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
         "models": [
           {
             "name": "Ghazghkull Thraka",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Makari",
             "min": 1,
             "max": 1
           }
@@ -722,21 +603,6 @@
     "faction_id": "orks",
     "models": [
       {
-        "name": "Boss Nob",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "rokkit-pistol",
-          "smash-hammer",
-          "choppa-breaka-boyz"
-        ]
-      },
-      {
         "name": "Breaka Boy",
         "min": 5,
         "max": 5,
@@ -747,25 +613,75 @@
         },
         "default_weapon_ids": [
           "smash-hammer"
+        ],
+        "loadout_variants": [
+          {
+            "name": "Breaka Boy",
+            "weapon_ids": [
+              "smash-hammer"
+            ],
+            "max_count": 5
+          },
+          {
+            "name": "Breaka Boy w/ Tankhammer",
+            "weapon_ids": [
+              "tankhammer"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Breaka Boy w/ Knucklebustas",
+            "weapon_ids": [
+              "knucklebustas"
+            ],
+            "max_count": 1
+          }
+        ],
+        "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Breaka Boy",
+              "Breaka Boy w/ Tankhammer",
+              "Breaka Boy w/ Knucklebustas"
+            ],
+            "count": 5,
+            "per_models": 0,
+            "scope": "model-row"
+          }
+        ]
+      },
+      {
+        "name": "Nob",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "choppa-breaka-boyz",
+          "rokkit-pistol",
+          "smash-hammer"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
         "models": [
           {
-            "name": "Boss Nob",
-            "min": 1,
-            "max": 1
-          },
-          {
             "name": "Breaka Boy",
             "min": 5,
             "max": 5
+          },
+          {
+            "name": "Nob",
+            "min": 1,
+            "max": 1
           }
         ]
       }
@@ -785,21 +701,21 @@
           "draft": true
         },
         "default_weapon_ids": [
+          "big-shoota",
+          "big-shoota",
+          "big-shoota",
+          "big-shoota",
+          "big-shoota",
+          "deffkannon-and-supa-rokkits",
           "mega-choppa",
           "skorcha",
-          "supa-gatler",
-          "twin-big-shoota",
-          "deffkannon",
-          "supa-rokkits",
-          "big-shoota",
-          "big-shoota",
-          "big-shoota"
+          "supa-gatler"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -818,7 +734,7 @@
     "faction_id": "orks",
     "models": [
       {
-        "name": "Big’ed Bossbunka",
+        "name": "Big 'Ed Bossbunka",
         "min": 1,
         "max": 1,
         "is_leader_model": false,
@@ -834,13 +750,13 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
         "models": [
           {
-            "name": "Big’ed Bossbunka",
+            "name": "Big 'Ed Bossbunka",
             "min": 1,
             "max": 1
           }
@@ -884,7 +800,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -908,50 +824,50 @@
     "faction_id": "orks",
     "models": [
       {
-        "name": "Boss Nob",
-        "min": 1,
-        "max": 1,
-        "default_weapon_ids": [
-          "choppa",
-          "slugga"
-        ],
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
-      },
-      {
         "name": "Kommando",
         "min": 9,
         "max": 9,
         "default_weapon_ids": [
-          "slugga",
-          "choppa"
+          "choppa",
+          "slugga"
         ],
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
         }
+      },
+      {
+        "name": "Nob",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "choppa",
+          "slugga"
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
         "models": [
           {
-            "name": "Boss Nob",
-            "min": 1,
-            "max": 1
-          },
-          {
             "name": "Kommando",
             "min": 9,
             "max": 9
+          },
+          {
+            "name": "Nob",
+            "min": 1,
+            "max": 1
           }
         ]
       }
@@ -962,37 +878,30 @@
     "faction_id": "orks",
     "models": [
       {
-        "name": "Boss Nob",
+        "name": "Nob",
         "min": 1,
-        "max": 1,
+        "max": 2,
         "default_weapon_ids": [
-          "big-choppa",
-          "slugga"
+          "kustom-choppa-boyz",
+          "kombi-skorcha-boyz"
         ],
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
+        "is_leader_model": true
       },
       {
         "name": "Boy",
         "min": 9,
-        "max": 19,
+        "max": 18,
         "default_weapon_ids": [
-          "slugga",
-          "choppa"
+          "choppa-boyz",
+          "shoota-boyz-unit",
+          "slugga"
         ],
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
+        "is_leader_model": false
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -1039,14 +948,14 @@
           "draft": true
         },
         "default_weapon_ids": [
-          "big-shoota",
-          "spiked-wheels"
+          "dual-big-shoota",
+          "spiked-ram"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -1080,7 +989,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -1109,10 +1018,10 @@
           "length": 109
         },
         "default_weapon_ids": [
-          "klaw-of-gork",
-          "twin-big-shoota",
-          "twin-big-shoota",
           "deffstorm-mega-shoota",
+          "dual-big-shoota",
+          "dual-big-shoota",
+          "klaw-of-gork",
           "rokkit-launcha-gorkanaut",
           "rokkit-launcha-gorkanaut",
           "skorcha"
@@ -1121,7 +1030,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -1140,7 +1049,7 @@
     "faction_id": "orks",
     "models": [
       {
-        "name": "Mek Gun",
+        "name": "Mek Gunz",
         "min": 1,
         "max": 3,
         "is_leader_model": false,
@@ -1149,20 +1058,20 @@
           "draft": true
         },
         "default_weapon_ids": [
-          "smasha-gun-mek-gunz",
-          "grot-crew"
+          "scavenged-shivs",
+          "smasha-gun-mek-gunz"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
         "models": [
           {
-            "name": "Mek Gun",
+            "name": "Mek Gunz",
             "min": 1,
             "max": 1
           }
@@ -1171,7 +1080,7 @@
       {
         "models": [
           {
-            "name": "Mek Gun",
+            "name": "Mek Gunz",
             "min": 2,
             "max": 2
           }
@@ -1180,7 +1089,7 @@
       {
         "models": [
           {
-            "name": "Mek Gun",
+            "name": "Mek Gunz",
             "min": 3,
             "max": 3
           }
@@ -1193,64 +1102,64 @@
     "faction_id": "orks",
     "models": [
       {
-        "name": "Boss Nob",
-        "min": 1,
-        "max": 1,
-        "default_weapon_ids": [
-          "slugga",
-          "choppa"
-        ],
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
-      },
-      {
         "name": "Stormboy",
         "min": 4,
         "max": 9,
         "default_weapon_ids": [
-          "slugga",
-          "choppa"
+          "choppa",
+          "slugga"
         ],
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
         }
+      },
+      {
+        "name": "nob",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "kustom-choppa",
+          "slugga"
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
         "models": [
           {
-            "name": "Boss Nob",
-            "min": 1,
-            "max": 1
-          },
-          {
             "name": "Stormboy",
             "min": 4,
             "max": 4
+          },
+          {
+            "name": "nob",
+            "min": 1,
+            "max": 1
           }
         ]
       },
       {
         "models": [
           {
-            "name": "Boss Nob",
-            "min": 1,
-            "max": 1
-          },
-          {
             "name": "Stormboy",
             "min": 5,
             "max": 9
+          },
+          {
+            "name": "nob",
+            "min": 1,
+            "max": 1
           }
         ]
       }
@@ -1292,7 +1201,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -1318,7 +1227,7 @@
           },
           {
             "name": "Flash Git",
-            "min": 4,
+            "min": 5,
             "max": 9
           }
         ]
@@ -1340,15 +1249,15 @@
           "length": 92
         },
         "default_weapon_ids": [
-          "armoured-hull",
+          "armoured-impact",
           "big-shoota",
-          "twin-supa-shoota-blitza-bommer"
+          "dual-supa-shoota"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -1376,58 +1285,21 @@
           "diameter": 60
         },
         "default_weapon_ids": [
-          "dread-klaw",
-          "dread-klaw",
           "big-shoota",
-          "big-shoota",
-          "stompy-feet"
+          "skorcha",
+          "dread-klaw"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
         "models": [
           {
             "name": "Deff Dread",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "wurrboy",
-    "faction_id": "orks",
-    "models": [
-      {
-        "name": "Wurrboy",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        },
-        "default_weapon_ids": [
-          "eyez-of-mork",
-          "close-combat-weapon-wurrboy"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Wurrboy",
             "min": 1,
             "max": 1
           }
@@ -1450,14 +1322,13 @@
         },
         "default_weapon_ids": [
           "shoota-beastboss",
-          "beast-snagga-klaw-beastboss",
-          "beastchoppa"
+          "beast-snagga-klaw-and-beastchoppa"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -1486,15 +1357,15 @@
           "length": 92
         },
         "default_weapon_ids": [
-          "armoured-hull",
-          "twin-supa-shoota-dakkajet",
-          "twin-supa-shoota-dakkajet"
+          "armoured-impact",
+          "dual-supa-shoota",
+          "dual-supa-shoota"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -1522,14 +1393,14 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "kustom-mega-blasta",
+          "kustom-shoota",
           "power-klaw-big-mek-in-mega-armour"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -1544,50 +1415,13 @@
     ]
   },
   {
-    "unit_id": "rukkatrukk-squigbuggy",
-    "faction_id": "orks",
-    "models": [
-      {
-        "name": "Rukkatrukk Squigbuggy",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "oval",
-          "width": 150,
-          "length": 95
-        },
-        "default_weapon_ids": [
-          "squig-launchas",
-          "saw-blades",
-          "sawn-off-shotgun"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Rukkatrukk Squigbuggy",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
     "unit_id": "beast-snagga-boyz",
     "faction_id": "orks",
     "models": [
       {
         "name": "Beast Snagga Nob",
         "min": 1,
-        "max": 1,
+        "max": 2,
         "default_weapon_ids": [
           "power-snappa",
           "slugga"
@@ -1601,7 +1435,7 @@
       {
         "name": "Beast Snagga Boy",
         "min": 9,
-        "max": 19,
+        "max": 18,
         "default_weapon_ids": [
           "slugga",
           "choppa-beast-snagga-boyz"
@@ -1615,7 +1449,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -1636,13 +1470,13 @@
         "models": [
           {
             "name": "Beast Snagga Nob",
-            "min": 1,
-            "max": 1
+            "min": 2,
+            "max": 2
           },
           {
             "name": "Beast Snagga Boy",
-            "min": 10,
-            "max": 19
+            "min": 18,
+            "max": 18
           }
         ]
       }
@@ -1671,7 +1505,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -1700,56 +1534,19 @@
         },
         "default_weapon_ids": [
           "kustom-mega-slugga",
-          "close-combat-weapon-mek"
+          "meks-toolz"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
         "models": [
           {
             "name": "Mek",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "shokkjump-dragsta",
-    "faction_id": "orks",
-    "models": [
-      {
-        "name": "Shokkjump Dragsta",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "oval",
-          "width": 150,
-          "length": 95
-        },
-        "default_weapon_ids": [
-          "rokkits",
-          "saw-blades",
-          "kustom-shokk-rifle"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Shokkjump Dragsta",
             "min": 1,
             "max": 1
           }
@@ -1779,7 +1576,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -1814,7 +1611,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -1833,26 +1630,12 @@
     "faction_id": "orks",
     "models": [
       {
-        "name": "Runtherd",
-        "min": 1,
-        "max": 2,
-        "default_weapon_ids": [
-          "runtherd-tools",
-          "slugga"
-        ],
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
-      },
-      {
         "name": "Gretchin",
         "min": 10,
         "max": 20,
         "default_weapon_ids": [
           "grot-blasta",
-          "close-combat-weapon-gretchin"
+          "scavenged-shivs"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -1863,16 +1646,11 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
         "models": [
-          {
-            "name": "Runtherd",
-            "min": 1,
-            "max": 1
-          },
           {
             "name": "Gretchin",
             "min": 10,
@@ -1883,13 +1661,8 @@
       {
         "models": [
           {
-            "name": "Runtherd",
-            "min": 2,
-            "max": 2
-          },
-          {
             "name": "Gretchin",
-            "min": 20,
+            "min": 11,
             "max": 20
           }
         ]
@@ -1911,13 +1684,13 @@
         },
         "default_weapon_ids": [
           "shokk-attack-gun",
-          "close-combat-weapon-big-mek-with-shokk-attack-gun"
+          "big-meks-toolz"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -1957,7 +1730,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -1972,111 +1745,22 @@
     ]
   },
   {
-    "unit_id": "burna-boyz",
-    "faction_id": "orks",
-    "models": [
-      {
-        "name": "Spanner",
-        "profile_name": "Burna Boy",
-        "min": 1,
-        "max": 2,
-        "default_weapon_ids": [
-          "close-combat-weapon-burna-boyz",
-          "big-shoota"
-        ],
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
-      },
-      {
-        "name": "Burna Boy",
-        "min": 4,
-        "max": 8,
-        "default_weapon_ids": [
-          "cuttin-flames",
-          "burna"
-        ],
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Spanner",
-            "min": 1,
-            "max": 1
-          },
-          {
-            "name": "Burna Boy",
-            "min": 4,
-            "max": 4
-          }
-        ]
-      },
-      {
-        "models": [
-          {
-            "name": "Spanner",
-            "min": 2,
-            "max": 2
-          },
-          {
-            "name": "Burna Boy",
-            "min": 8,
-            "max": 8
-          }
-        ]
-      }
-    ]
-  },
-  {
     "unit_id": "nobz",
     "faction_id": "orks",
     "models": [
       {
-        "name": "Boss Nob",
-        "profile_name": "Nob",
-        "min": 1,
-        "max": 1,
-        "default_weapon_ids": [
-          "slugga",
-          "big-choppa"
-        ],
-        "is_leader_model": true,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
-      },
-      {
         "name": "Nob",
-        "min": 4,
-        "max": 9,
+        "min": 5,
+        "max": 10,
         "default_weapon_ids": [
-          "slugga",
-          "big-choppa"
-        ],
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "round",
-          "diameter": 32
-        }
+          "kustom-krumpa",
+          "kustom-shoota-nobz"
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -2131,7 +1815,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -2154,19 +1838,83 @@
         "min": 2,
         "max": 6,
         "default_weapon_ids": [
-          "kustom-shoota",
-          "power-klaw"
+          "kustom-shoota-meganobz",
+          "power-klaw-meganobz"
         ],
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
           "diameter": 40
-        }
+        },
+        "loadout_variants": [
+          {
+            "name": "Meganob w/ Kustom shoota and power klaw",
+            "weapon_ids": [
+              "kustom-shoota-meganobz",
+              "power-klaw-meganobz"
+            ],
+            "max_count": 6
+          },
+          {
+            "name": "Meganob w/ Kombi-weapon and power klaw",
+            "weapon_ids": [
+              "kombi-weapon",
+              "power-klaw-meganobz"
+            ],
+            "max_count": 6
+          },
+          {
+            "name": "Meganob w/ Kombi-weapon and killsaw",
+            "weapon_ids": [
+              "kombi-weapon",
+              "killsaw-meganobz"
+            ],
+            "max_count": 6
+          },
+          {
+            "name": "Meganob w/ Kustom shoota and killsaw",
+            "weapon_ids": [
+              "kustom-shoota-meganobz",
+              "killsaw-meganobz"
+            ],
+            "max_count": 6
+          },
+          {
+            "name": "Meganob w/ Killsaw and power klaw",
+            "weapon_ids": [
+              "power-klaw-meganobz",
+              "killsaw-meganobz"
+            ],
+            "max_count": 6
+          },
+          {
+            "name": "Meganob w/ Twin killsaw",
+            "weapon_ids": [
+              "twin-killsaw"
+            ],
+            "max_count": 6
+          }
+        ],
+        "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Meganob w/ Kustom shoota and power klaw",
+              "Meganob w/ Kombi-weapon and power klaw",
+              "Meganob w/ Kombi-weapon and killsaw",
+              "Meganob w/ Kustom shoota and killsaw",
+              "Meganob w/ Killsaw and power klaw",
+              "Meganob w/ Twin killsaw"
+            ],
+            "count": 6,
+            "per_models": 0,
+            "scope": "model-row"
+          }
+        ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -2208,78 +1956,6 @@
     ]
   },
   {
-    "unit_id": "boomdakka-snazzwagon",
-    "faction_id": "orks",
-    "models": [
-      {
-        "name": "Boomdakka Snazzwagon",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "oval",
-          "width": 150,
-          "length": 95
-        },
-        "default_weapon_ids": [
-          "grot-blasta",
-          "big-shoota",
-          "mek-speshul",
-          "spiked-wheels-boomdakka-snazzwagon"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Boomdakka Snazzwagon",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "gargantuan-squiggoth",
-    "faction_id": "orks",
-    "models": [
-      {
-        "name": "Gargantuan Squiggoth",
-        "min": 1,
-        "max": 1,
-        "is_leader_model": false,
-        "base_size_mm": {
-          "shape": "hull",
-          "draft": true
-        },
-        "default_weapon_ids": [
-          "huge-tusks"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Gargantuan Squiggoth",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
     "unit_id": "burna-bommer",
     "faction_id": "orks",
     "models": [
@@ -2294,15 +1970,15 @@
           "length": 92
         },
         "default_weapon_ids": [
-          "twin-big-shoota",
-          "twin-supa-shoota-burna-bommer",
-          "armoured-hull"
+          "armoured-impact",
+          "dual-big-shoota",
+          "dual-supa-shoota"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -2341,7 +2017,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -2369,15 +2045,14 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "twin-sluggas",
-          "kombi-weapon",
-          "big-choppa-warboss"
+          "kustom-choppa",
+          "kustom-shoota"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -2401,13 +2076,13 @@
         "max": 1,
         "default_weapon_ids": [
           "shoota",
-          "choppa-bannernob"
+          "kustom-choppa"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -2431,14 +2106,14 @@
         "max": 1,
         "default_weapon_ids": [
           "blitzkannon",
-          "rokkit-launcha-big-mek-dakkarig",
+          "multi-busta-launcha",
           "stompy-feet-big-mek-dakkarig"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -2462,50 +2137,19 @@
         "max": 1,
         "default_weapon_ids": [
           "slugga-bigboss",
-          "two-handed-big-choppa"
+          "big-choppa"
         ]
       }
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
         "models": [
           {
             "name": "Bigboss",
-            "min": 1,
-            "max": 1
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "unit_id": "wartrakk",
-    "faction_id": "orks",
-    "models": [
-      {
-        "name": "Wartrakk",
-        "min": 1,
-        "max": 1,
-        "default_weapon_ids": [
-          "kustom-shoota",
-          "rokkit-launcha-wartrakk",
-          "choppa"
-        ]
-      }
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "tiers": [
-      {
-        "models": [
-          {
-            "name": "Wartrakk",
             "min": 1,
             "max": 1
           }
@@ -2531,7 +2175,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "launch"
+      "dataslate": "codex-orks"
     },
     "tiers": [
       {
@@ -2540,6 +2184,296 @@
             "name": "Wazdakka Gutsmek",
             "min": 1,
             "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "nazdreg",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "Nazdreg",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "kustom-blasta-x",
+          "kustom-blasta-x-melee",
+          "moonchewa"
+        ],
+        "is_leader_model": true
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Nazdreg",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "runtherd",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "Runtherd",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "slugga",
+          "runtherd-tools"
+        ],
+        "is_leader_model": true
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "codex-orks"
+    }
+  },
+  {
+    "unit_id": "ardmob-boyz",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "Boss Nob",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "big-choppa",
+          "kustom-shoota",
+          "slugga"
+        ],
+        "is_leader_model": true
+      },
+      {
+        "name": "Boyz",
+        "min": 9,
+        "max": 9,
+        "default_weapon_ids": [
+          "choppa",
+          "shoota",
+          "slugga"
+        ],
+        "is_leader_model": false
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Boss Nob",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Boyz",
+            "min": 9,
+            "max": 9
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "ardmob-gretchin",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "Gretchin",
+        "min": 10,
+        "max": 10,
+        "default_weapon_ids": [
+          "blasta",
+          "lobbin-bombs",
+          "scavenged-shivs"
+        ],
+        "is_leader_model": false
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Gretchin",
+            "min": 10,
+            "max": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "ardmob-warboss",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "Warboss",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "kustom-choppa",
+          "kustom-shoota"
+        ],
+        "is_leader_model": false
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Warboss",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "ardmob-wartrakk",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "Wartrakk",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "choppa",
+          "kustom-shoota",
+          "rokkit-launcha"
+        ],
+        "is_leader_model": false
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Wartrakk",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "ardmob-weirdboy",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "'Ardmob Weirdboy",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "psychic-powers",
+          "waaagh-staff"
+        ],
+        "is_leader_model": false
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "'Ardmob Weirdboy",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "rukkatrukk-squigbuggies",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "Rukkatrukk Squigbuggy",
+        "min": 1,
+        "max": 2,
+        "default_weapon_ids": [
+          "saw-blades",
+          "sawn-off-shotgun",
+          "squig-launchas"
+        ],
+        "is_leader_model": false
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Rukkatrukk Squigbuggy",
+            "min": 1,
+            "max": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "wartrakks",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "Wartrakk",
+        "min": 1,
+        "max": 2,
+        "default_weapon_ids": [
+          "kustom-choppa",
+          "kustom-shoota",
+          "multi-busta-launcha"
+        ],
+        "is_leader_model": false
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Wartrakk",
+            "min": 1,
+            "max": 2
           }
         ]
       }

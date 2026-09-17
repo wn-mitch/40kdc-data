@@ -4,6 +4,7 @@ import {
   buildEnhCanon,
   buildEnhFieldCanon,
   combatPatrolEnhIds,
+  reconcileEnhancementEligibility,
   runEnhancements,
 } from "../src/mfm/enhancements.js";
 
@@ -80,10 +81,8 @@ describe("buildEnhCanon", () => {
  *   - upgrade_tag           ← enhancementType === "upgrade"
  *   - max_targets           ← limit
  *   - exclusion_keywords    ← enhancement_excluded_keyword
- *   - keyword_restrictions  ← required-keyword-group keyword/faction-keyword members
- *                             + the datasheet-scoped group's datasheet name
- * Multi-group enhancements with divergent member sets are an OR the flat list can't
- * hold, and are flagged `keywordRestrictionsAmbiguous`.
+ *   - keyword_restrictions       ← legacy union of required-keyword members
+ *   - keyword_restriction_groups ← exact OR-of-AND eligibility groups
  */
 function fieldsDump(): MfmDump {
   return new MfmDump({
@@ -91,7 +90,10 @@ function fieldsDump(): MfmDump {
       detachment: [{ id: "det", publicationId: "p", localisations: { en: { name: "Chorus of Condemnation" } } }],
       keyword: [{ id: "k-inf", localisations: { en: { name: "Infantry" } } }],
       faction_keyword: [{ id: "fk-as", localisations: { en: { name: "Adepta Sororitas" } } }],
-      datasheet: [{ id: "ds-ex", localisations: { en: { name: "Exorcist" } } }],
+      datasheet: [
+        { id: "ds-ex", localisations: { en: { name: "Exorcist" } } },
+        { id: "ds-repentia", localisations: { en: { name: "Repentia Squad" } } },
+      ],
       enhancement: [
         // wargear upgrade: type=upgrade, limit=3, one group carrying datasheet Exorcist + fkw
         { id: "e-up", detachmentId: "det", enhancementType: "upgrade", limit: 3, basePointsCost: 15, localisations: { en: { name: "Symphonic Payload (Upgrade)" } } },
@@ -112,6 +114,12 @@ function fieldsDump(): MfmDump {
         { enhancementRequiredKeywordGroupId: "g-min", factionKeywordId: "fk-as" },
       ],
       enhancement_excluded_keyword: [{ enhancementId: "e-min", keywordId: "k-inf" }],
+      enhancement_bodyguard_group: [
+        { id: "bg-min", enhancementId: "e-min", bodyguardType: "leader", factionKeywordId: null },
+      ],
+      enhancement_bodyguard_group_datasheet: [
+        { enhancementBodyguardGroupId: "bg-min", datasheetId: "ds-repentia" },
+      ],
     },
   });
 }
@@ -124,6 +132,7 @@ describe("buildEnhFieldCanon", () => {
     expect(up!.upgrade_tag).toBe(true);
     expect(up!.max_targets).toBe(3);
     expect(up!.keyword_restrictions).toEqual(["Adepta Sororitas", "Exorcist"]);
+    expect(up!.keyword_restriction_groups).toEqual([["Adepta Sororitas", "Exorcist"]]);
     expect(up!.keywordRestrictionsAmbiguous).toBe(false);
     expect(up!.exclusion_keywords).toBeNull();
   });
@@ -133,15 +142,71 @@ describe("buildEnhFieldCanon", () => {
     expect(min.upgrade_tag).toBe(false);
     expect(min.max_targets).toBe(1);
     expect(min.keyword_restrictions).toEqual(["Adepta Sororitas"]);
+    expect(min.keyword_restriction_groups).toEqual([["Adepta Sororitas"]]);
     expect(min.exclusion_keywords).toEqual(["Infantry"]);
+    expect(min.attachment_bodyguard_ids).toEqual(["repentia-squad"]);
   });
 
-  it("flags a divergent multi-group enhancement as ambiguous", () => {
+  it("preserves divergent groups as explicit alternatives", () => {
     const multi = buildEnhFieldCanon(fieldsDump()).get("split-relic-chorus-of-condemnation")!;
     expect(multi.keywordRestrictionsAmbiguous).toBe(true);
-    // union across both groups; the flat list can't express the OR, so the reconcile
-    // will not overwrite/fill from it.
     expect(multi.keyword_restrictions).toEqual(["Exorcist", "Infantry"]);
+    expect(multi.keyword_restriction_groups).toEqual([["Infantry"], ["Exorcist"]]);
+  });
+});
+
+describe("authoritative enhancement eligibility", () => {
+  it("replaces contradictory stale fields with the single source group", () => {
+    const fields = buildEnhFieldCanon(fieldsDump()).get("plain-relic-chorus-of-condemnation")!;
+    const record = {
+      id: "stale",
+      name: "Fabricated Relic",
+      cost: 10,
+      keyword_restrictions: ["Stale"],
+      keyword_restriction_groups: [["Contradictory"]],
+      exclusion_keywords: ["Stale"],
+    };
+
+    const result = reconcileEnhancementEligibility(record, fields);
+
+    expect(result.eligibility?.to).toEqual({
+      keyword_restrictions: ["Adepta Sororitas"],
+      keyword_restriction_groups: null,
+    });
+    expect(result.exclusions?.to).toEqual(["Infantry"]);
+    expect(record).toMatchObject({
+      keyword_restrictions: ["Adepta Sororitas"],
+      exclusion_keywords: ["Infantry"],
+    });
+    expect(record).not.toHaveProperty("keyword_restriction_groups");
+  });
+
+  it("uses groups only for divergent source alternatives and clears both when absent", () => {
+    const multi = buildEnhFieldCanon(fieldsDump()).get("split-relic-chorus-of-condemnation")!;
+    const record = {
+      id: "stale",
+      name: "Fabricated Relic",
+      cost: 10,
+      keyword_restrictions: ["Stale"],
+      keyword_restriction_groups: [["Also stale"]],
+      exclusion_keywords: ["Stale"],
+    };
+
+    reconcileEnhancementEligibility(record, multi);
+    expect(record).toMatchObject({
+      keyword_restriction_groups: [["Infantry"], ["Exorcist"]],
+    });
+    expect(record).not.toHaveProperty("keyword_restrictions");
+
+    reconcileEnhancementEligibility(record, {
+      ...multi,
+      exclusion_keywords: null,
+      keyword_restrictions: null,
+      keyword_restriction_groups: null,
+    });
+    expect(record).not.toHaveProperty("keyword_restrictions");
+    expect(record).not.toHaveProperty("keyword_restriction_groups");
+    expect(record).not.toHaveProperty("exclusion_keywords");
   });
 });
 
@@ -153,6 +218,32 @@ describe("combatPatrolEnhIds", () => {
     expect(cp.size).toBe(1);
   });
 });
+
+describe("runEnhancements matched-play seeding", () => {
+  it("seeds a source-complete matched-play enhancement and links its detachment", () => {
+    const report = runEnhancements(dump(), false);
+    const id = "plain-relic-might-of-the-moritoi";
+    expect(report.seeded).toContainEqual({
+      dir: "adeptus-custodes",
+      id,
+      name: "Plain Relic",
+      detachment_id: "might-of-the-moritoi",
+    });
+    const enhancements = report.staged
+      .find((entry) => entry.path.endsWith("adeptus-custodes/enhancements.json"))
+      ?.value as { id: string }[];
+    expect(enhancements.some((entry) => entry.id === id)).toBe(true);
+    const detachments = report.staged
+      .find((entry) => entry.path.endsWith("adeptus-custodes/detachments.json"))
+      ?.value as { id: string; enhancement_ids?: string[] }[];
+    expect(
+      detachments
+        .find((entry) => entry.id === "might-of-the-moritoi")
+        ?.enhancement_ids,
+    ).toContain(id);
+  });
+});
+
 
 describe("runEnhancements Combat-Patrol filtering", () => {
   it("holds Combat-Patrol enhancements out of newInDump by default", () => {

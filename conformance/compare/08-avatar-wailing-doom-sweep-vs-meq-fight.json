@@ -11,7 +11,7 @@
   "phase": "fight",
   "modelsFiring": 1,
   "expected": {
-    "expectedKills": 5,
+    "expectedKills": 4.4444,
     "reaches": true,
     "withinHalfRange": false,
     "modelCount": 5

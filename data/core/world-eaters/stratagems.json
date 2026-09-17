@@ -15,7 +15,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "82796ffc-5e4d-5af8-bae7-158beca1bd4e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e164a302-d3ce-4b92-bc6b-fa64578c0661"
+      }
+    ]
   },
   {
     "id": "a-worthy-skull-khorne-daemonkin",
@@ -34,7 +44,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "28c1f8cd-4545-5561-9d2d-58deccba91eb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b0f2b123-0ea0-4278-a847-297e5a587a22"
+      }
+    ]
   },
   {
     "id": "aggressive-disembarkation-goretrack-onslaught",
@@ -53,7 +73,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f738bea0-e412-5cdf-837a-bbdb47bbfceb"
+      },
+      {
+        "namespace": "mfm",
+        "id": "69cb5193-34db-4e8d-8255-0e1fd86f4c95"
+      }
+    ]
   },
   {
     "id": "apoplectic-clarity-brazen-engines",
@@ -72,7 +102,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "bd483e76-c7a8-59df-8f07-b68159bf4f22"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6c0d3cba-0009-4679-a0bf-d310968ea8f0"
+      }
+    ]
   },
   {
     "id": "apoplectic-frenzy-berzerker-warband",
@@ -91,7 +131,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "115a0d0b-5a78-548b-b718-551cfd9fbd6e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a074046b-263b-40e9-b087-c8116b808e99"
+      }
+    ]
   },
   {
     "id": "aspire-to-infamy-vessels-of-wrath",
@@ -110,7 +160,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6fc34aeb-0f46-556e-899c-f93fcf7a4e87"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c719efe4-086b-4873-af62-1a50355b6c90"
+      }
+    ]
   },
   {
     "id": "berserk-resilience-frenzied-reavers",
@@ -128,7 +188,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "28f48ed7-7973-407d-a001-a1628c5bbc20"
+      }
+    ]
   },
   {
     "id": "berzerkers-wrath-berzerker-warband",
@@ -147,7 +213,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f78f53a4-d592-5979-99bd-8987ce2eb7e5"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a78bc86c-97d4-4a3a-b118-03833602ef3a"
+      }
+    ]
   },
   {
     "id": "blessing-of-burning-blood-khorne-daemonkin",
@@ -167,7 +243,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "90a05d7c-b995-56d9-a415-2fc75ea26518"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4713f814-b1e9-4d19-bad3-f6cac53d2c6e"
+      }
+    ]
   },
   {
     "id": "blood-offering-berzerker-warband",
@@ -190,7 +276,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "546d2e83-6191-562e-8af1-47418ba0b14b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0a6dd9bc-728d-49e8-acae-0e009cd475cc"
+      }
+    ]
   },
   {
     "id": "bloodthirsty-horde-cult-of-blood",
@@ -209,7 +305,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "6a39961b-10d8-5df6-9ee1-6e01b7e10ace"
+      },
+      {
+        "namespace": "mfm",
+        "id": "7274fdca-d105-4e7c-b43d-33b4f14b06ca"
+      }
+    ]
   },
   {
     "id": "bloody-vengeance-cult-of-blood",
@@ -232,7 +338,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5314ca30-a1cb-5849-9bec-cefa045b6b82"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5be7c5ee-4c1b-4518-811e-e016408359f1"
+      }
+    ]
   },
   {
     "id": "brazen-idol-cult-of-blood",
@@ -251,7 +367,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "21bab921-4064-5532-827f-9cdd7f0d77d9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b69dd944-2d43-407f-b0cf-04cd4e8c6e0b"
+      }
+    ]
   },
   {
     "id": "daemonic-fury-khorne-daemonkin",
@@ -270,7 +396,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "57acd8db-11ed-5a45-8e66-4fcce82d34ce"
+      },
+      {
+        "namespace": "mfm",
+        "id": "8f8bdb9a-b906-48e6-84f4-7ce1762cf19e"
+      }
+    ]
   },
   {
     "id": "daemonic-resistance-possessed-slaughterband",
@@ -290,7 +426,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "10d39589-481f-5751-8ea1-9e2e97ff949a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c52715e8-0449-4e3d-adb9-feece5be12c6"
+      }
+    ]
   },
   {
     "id": "daemonic-strength-possessed-slaughterband",
@@ -309,7 +455,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "52055d1e-eb49-518e-8967-fbf184582f96"
+      },
+      {
+        "namespace": "mfm",
+        "id": "885813ba-ec4e-4279-bd3b-b0ea000890cb"
+      }
+    ]
   },
   {
     "id": "daemontide-khorne-daemonkin",
@@ -328,7 +484,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "785da88f-b262-5bbb-8e69-699e98fcc306"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2781e4bd-c0bd-4260-9db6-f0b0f9f423c2"
+      }
+    ]
   },
   {
     "id": "drawn-to-the-slaughter-cult-of-blood",
@@ -351,7 +517,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "9ef83424-c2e8-5255-91b4-7c6fadc00c13"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b49c8e81-3fcd-4b69-837d-12cf2c81cd16"
+      }
+    ]
   },
   {
     "id": "endless-pursuit-of-violence-goretrack-onslaught",
@@ -370,7 +546,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "a15eb1e2-f3d0-5f9e-a14a-2517bfcd3848"
+      },
+      {
+        "namespace": "mfm",
+        "id": "66430c41-0abc-4cc7-a66b-0b80afd1db89"
+      }
+    ]
   },
   {
     "id": "fail-not-the-blood-god-cult-of-blood",
@@ -389,7 +575,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "431b01aa-693a-5401-ab07-72a9f7166976"
+      },
+      {
+        "namespace": "mfm",
+        "id": "409f0aeb-b3f6-4fe8-a40e-7ce539301fe6"
+      }
+    ]
   },
   {
     "id": "focused-ferocity-butchers-of-khorne",
@@ -407,7 +603,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "67593488-fbd9-55f9-9f76-f44046b4803f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ddce833e-6a6b-4621-8abd-4c2e764d798d"
+      }
+    ]
   },
   {
     "id": "frenzied-resilience-berzerker-warband",
@@ -426,7 +632,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "364dbf55-d7e2-5449-81bc-c929811c1c0e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "04245333-93c8-497c-9c6c-2bfe63210589"
+      }
+    ]
   },
   {
     "id": "full-throttle-assault-goretrack-onslaught",
@@ -445,7 +661,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "711e548f-b1e1-56c4-9814-c33c9f25bb66"
+      },
+      {
+        "namespace": "mfm",
+        "id": "787c9586-18f8-4868-a39b-cb1224f07d16"
+      }
+    ]
   },
   {
     "id": "fury-unleashed-goretrack-onslaught",
@@ -464,7 +690,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "603757a6-fab0-5a24-92d3-60fe94ce00f0"
+      },
+      {
+        "namespace": "mfm",
+        "id": "4fabb7be-cd2d-4c9c-9c65-0c811acfab9c"
+      }
+    ]
   },
   {
     "id": "goaded-to-fury-brazen-engines",
@@ -482,7 +718,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c60f8b05-b217-5e8f-b6dd-5824bfffa9de"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6cb814a5-e888-4417-9f00-b235ae453a5e"
+      }
+    ]
   },
   {
     "id": "hack-and-slash-berzerker-warband",
@@ -501,7 +747,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "f9af764a-2c67-5580-9818-643f1fa98469"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0e2f8b70-b049-4a99-8e6b-3f08fc3720b4"
+      }
+    ]
   },
   {
     "id": "horrifying-butchery-frenzied-reavers",
@@ -519,7 +775,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "85e8919c-08c1-4704-8278-3ef87608dcbc"
+      }
+    ]
   },
   {
     "id": "horrifying-violence-possessed-slaughterband",
@@ -538,7 +800,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "e574de77-43d5-54d1-8630-b6ef4e742d38"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ce58cdc0-e54e-4f20-82a4-bf31ac272939"
+      }
+    ]
   },
   {
     "id": "immortal-fury-possessed-slaughterband",
@@ -557,7 +829,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c2d3aa68-ff98-5af0-87b1-30ed8a823539"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9423da62-dfb4-441b-a6ee-f74d9f206786"
+      }
+    ]
   },
   {
     "id": "in-the-shadow-of-brass-idols-cult-of-blood",
@@ -577,7 +859,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "ad97a9cd-7b70-5077-ba2c-8155cff2432d"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b2c1204e-dc4a-4745-bf1e-76cffa675e99"
+      }
+    ]
   },
   {
     "id": "murder-call-khorne-daemonkin",
@@ -596,7 +888,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "58dd46dc-19ae-577e-b11e-fca00667d32f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f50c416d-0d3e-4810-b423-0ebdc30e962e"
+      }
+    ]
   },
   {
     "id": "punish-the-craven-vessels-of-wrath",
@@ -615,7 +917,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "7d2b5a84-eacf-5182-ba7c-eb98a703c7ee"
+      },
+      {
+        "namespace": "mfm",
+        "id": "e83b086e-2097-4448-8213-01f46e5bf436"
+      }
+    ]
   },
   {
     "id": "rabid-response-frenzied-reavers",
@@ -633,7 +945,13 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a2749f0f-4aa1-4375-b47e-11072270e164"
+      }
+    ]
   },
   {
     "id": "rapid-manifestation-possessed-slaughterband",
@@ -652,7 +970,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "4146e28a-e197-5fa7-ba5e-1907e4483198"
+      },
+      {
+        "namespace": "mfm",
+        "id": "0b7e14eb-65cc-4089-95e6-003585e7bdb0"
+      }
+    ]
   },
   {
     "id": "scorn-the-witch-vessels-of-wrath",
@@ -674,7 +1002,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "dce2c688-1a9f-5b65-bd0d-a5082f9bda6a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "059f08d4-8cb7-4a95-9670-8125006de9ef"
+      }
+    ]
   },
   {
     "id": "skulls-for-the-skull-throne-berzerker-warband",
@@ -693,7 +1031,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "243c7fb6-db13-5df2-9f5f-aab54e5c529f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "466b7b4b-19ce-4664-8710-a232078975c1"
+      }
+    ]
   },
   {
     "id": "smash-through-goretrack-onslaught",
@@ -712,7 +1060,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "886bb564-995a-52d5-a8ab-152c25af7e61"
+      },
+      {
+        "namespace": "mfm",
+        "id": "2531fac3-77d5-43a3-878b-ccad77d6a9cd"
+      }
+    ]
   },
   {
     "id": "summoned-by-slaughter-khorne-daemonkin",
@@ -735,7 +1093,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "0d8d6f2c-97d8-5814-924f-aeb9754422d2"
+      },
+      {
+        "namespace": "mfm",
+        "id": "f2266ae7-ff5d-441f-a28d-60e06d6949e9"
+      }
+    ]
   },
   {
     "id": "trail-of-destruction-brazen-engines",
@@ -753,7 +1121,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "03363867-3969-5479-b5f5-cc44e1d36d9a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6f84842b-c1a8-491e-9017-10178271d994"
+      }
+    ]
   },
   {
     "id": "unrelenting-advance-goretrack-onslaught",
@@ -772,7 +1150,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "5cffe4cb-2253-512c-8321-1f6c4c58784f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "54d25143-ef16-4283-a58d-6125d902dcaa"
+      }
+    ]
   },
   {
     "id": "warp-stalkers-possessed-slaughterband",
@@ -792,7 +1180,17 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "2d494bf8-f6f5-5fde-8dd8-b8f11d1b750b"
+      },
+      {
+        "namespace": "mfm",
+        "id": "eff41602-b19a-4905-9ed4-59b326645b14"
+      }
+    ]
   },
   {
     "id": "wrath-beyond-reason-butchers-of-khorne",
@@ -810,6 +1208,16 @@
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "game-datacards",
+        "id": "c0eb2b02-bcec-56d2-9895-2fab39173ea6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "80b51c8d-7da0-4c7a-9584-40a017ea2cfa"
+      }
+    ]
   }
 ]

@@ -10,7 +10,11 @@ import {
   type MfmSyncDependencies,
 } from "../src/mfm/sync.js";
 import type { ContractReport } from "../src/mfm/gen-dump-schema.js";
-import type { IngestMfmCommand, IngestMfmOptions } from "../src/ingest-mfm.js";
+import {
+  mergePointsAndCompositionTierWrites,
+  type IngestMfmCommand,
+  type IngestMfmOptions,
+} from "../src/ingest-mfm.js";
 
 const TEMP_DIR = mkdtempSync(path.join(tmpdir(), "mfm-sync-test-"));
 const DUMP_PATH = path.join(TEMP_DIR, "dump.json");
@@ -85,13 +89,15 @@ describe("MFM sync", () => {
     const calls: CommandCall[] = [];
     const runCommand: MfmSyncDependencies["runCommand"] = async (command, options) => {
       calls.push({ command, options });
-      if (command === "points") throw new Error("points failed");
+      if (command === "points-and-composition-tiers") throw new Error("price-size sync failed");
     };
 
     await expect(runMfmSync({ dumpPath: DUMP_PATH, write: true }, dependencies(calls, { runCommand }))).rejects.toThrow(
-      "points failed",
+      "price-size sync failed",
     );
-    expect(calls.map((call) => call.command)).toEqual(MFM_SYNC_COMMANDS.slice(0, MFM_SYNC_COMMANDS.indexOf("points") + 1));
+    expect(calls.map((call) => call.command)).toEqual(
+      MFM_SYNC_COMMANDS.slice(0, MFM_SYNC_COMMANDS.indexOf("points-and-composition-tiers") + 1),
+    );
   });
 
   it("runs the complete serialized Combat Patrol-inclusive transform sequence", async () => {
@@ -104,12 +110,37 @@ describe("MFM sync", () => {
     expect(log).toHaveBeenLastCalledWith("MFM_SYNC_OK data_version=867");
     log.mockRestore();
     expect(calls.map((call) => call.command)).toEqual(MFM_SYNC_COMMANDS);
-    expect(calls).toHaveLength(25);
+    expect(calls).toHaveLength(24);
     for (const call of calls) {
       expect(call.options).toEqual({ dumpPath: DUMP_PATH, write: true, includeCombatPatrol: true });
     }
     for (const command of ["seed-units", "seed-detachments", "seed-stratagems"] as const) {
       expect(calls.find((call) => call.command === command)?.options.includeCombatPatrol).toBe(true);
     }
+  });
+
+  it("preserves point tiers while adopting composition model counts", () => {
+    const unitsPath = "/data/core/orks/units.json";
+    const merged = mergePointsAndCompositionTierWrites(
+      [
+        {
+          path: unitsPath,
+          value: [{ id: "ghazghkull-thraka", model_count: { min: 1, max: 1 }, points: [{ models: 2, cost: 315 }] }],
+        },
+      ],
+      [
+        {
+          path: unitsPath,
+          value: [{ id: "ghazghkull-thraka", model_count: { min: 2, max: 2 }, points: [{ models: 1, cost: 285 }] }],
+        },
+      ],
+    );
+
+    expect(merged).toEqual([
+      {
+        path: unitsPath,
+        value: [{ id: "ghazghkull-thraka", model_count: { min: 2, max: 2 }, points: [{ models: 2, cost: 315 }] }],
+      },
+    ]);
   });
 });

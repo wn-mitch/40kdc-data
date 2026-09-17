@@ -29,7 +29,12 @@ export interface Loadout {
 /** A loadout-rule violation. `id` is the offending weapon/wargear id. */
 export interface Violation {
   id: string;
-  code: "exceeds-max" | "below-min" | "swap-conflict" | "exceeds-allowance" | "invalid-model-count";
+  code:
+    | "exceeds-max"
+    | "below-min"
+    | "swap-conflict"
+    | "exceeds-allowance"
+    | "invalid-model-count";
   message: string;
 }
 
@@ -102,7 +107,8 @@ function allReplacementIds(options: readonly WargearOption[]): Set<string> {
   const out = new Set<string>();
   for (const o of options) {
     for (const id of o.replacement ?? []) out.add(id);
-    for (const group of o.replacement_choice ?? []) for (const id of group) out.add(id);
+    for (const group of o.replacement_choice ?? [])
+      for (const id of group) out.add(id);
   }
   return out;
 }
@@ -125,10 +131,15 @@ function allReplacedIds(options: readonly WargearOption[]): Set<string> {
  * weapon (in `weapon_ids`, touched by no option) stays base, which is correct for
  * a vehicle's fixed main gun.
  */
-function baseWeaponIds(unit: Unit, options: readonly WargearOption[]): string[] {
+function baseWeaponIds(
+  unit: Unit,
+  options: readonly WargearOption[],
+): string[] {
   const added = allReplacementIds(options);
   const replaced = allReplacedIds(options);
-  return (unit.weapon_ids ?? []).filter((id) => replaced.has(id) || !added.has(id));
+  return (unit.weapon_ids ?? []).filter(
+    (id) => replaced.has(id) || !added.has(id),
+  );
 }
 
 /**
@@ -143,21 +154,62 @@ export interface LoadoutModel {
   max: number;
   default_weapon_ids?: readonly string[];
   is_leader_model?: boolean;
+  loadout_variants?: readonly LoadoutVariant[];
+  loadout_variant_budgets?: readonly LoadoutVariantBudget[];
+}
+
+export interface LoadoutVariant {
+  name?: string;
+  weapon_ids?: readonly string[];
+  max_count?: number;
+}
+
+export interface LoadoutVariantBudget {
+  variant_names?: readonly string[];
+  count?: number;
+  per_models?: number;
+  scope?: string;
+}
+
+export function variantBudgetCap(
+  budget: LoadoutVariantBudget,
+  unitModelCount: number,
+  rowModelCount: number,
+): number {
+  const count = budget.count ?? 0;
+  const perModels = budget.per_models ?? 0;
+  if (perModels === 0) return count;
+  const models = budget.scope === "unit" ? unitModelCount : rowModelCount;
+  return Math.floor((models * count) / perModels);
+}
+
+/** True when every model row has an explicit default or whole-model alternatives. */
+function hasRecordedLoadoutBases(
+  models: readonly LoadoutModel[] | undefined,
+): models is LoadoutModel[] {
+  return (
+    !!models?.length &&
+    models.every(
+      (model) =>
+        (model.default_weapon_ids?.length ?? 0) > 0 ||
+        (model.loadout_variants?.length ?? 0) > 0,
+    )
+  );
 }
 
 /** True when every model row records a non-empty default loadout. */
-function hasRecordedDefaults(models: readonly LoadoutModel[] | undefined): models is LoadoutModel[] {
-  return (
-    !!models && models.length > 0 && models.every((m) => (m.default_weapon_ids?.length ?? 0) > 0)
-  );
+function hasRecordedDefaults(
+  models: readonly LoadoutModel[] | undefined,
+): models is LoadoutModel[] {
+  return !!models?.length && models.every((model) => (model.default_weapon_ids?.length ?? 0) > 0);
 }
 
 /**
  * Allocate `modelCount` models across the composition's model-types: each leader
  * is taken at its `min` (in declared order, never exceeding the remaining count),
- * then the non-leader "bulk" types absorb the rest — each its `min` first, then
- * any leftover to the bulk type with the largest `max`. Deterministic; mirrored
- * across implementations and pinned by the conformance corpus.
+ * then non-leader types take their minima and fill in descending maximum order,
+ * without exceeding row caps. Equal maxima retain declaration order. With no
+ * non-leader rows, leaders fill the remainder under the same caps.
  */
 function allocateModels(
   models: readonly LoadoutModel[],
@@ -177,15 +229,20 @@ function allocateModels(
     // No non-leader type: pour any remainder onto the leaders (largest max first).
     bulk.push(...out);
   }
-  // Each bulk type takes its min, then the remainder lands on the largest-max type.
+  // Fill only unmet minima; all-leader compositions were already seated above.
   for (const row of bulk) {
-    const c = Math.min(row.model.min ?? 0, remaining);
+    const c = Math.min(Math.max(0, (row.model.min ?? 0) - row.count), remaining);
     row.count += c;
     remaining -= c;
   }
-  if (remaining > 0 && bulk.length > 0) {
-    const sink = bulk.reduce((a, b) => ((b.model.max ?? 0) > (a.model.max ?? 0) ? b : a));
-    sink.count += remaining;
+  if (remaining > 0) {
+    bulk.sort((a, b) => (b.model.max ?? 0) - (a.model.max ?? 0));
+    for (const row of bulk) {
+      const count = Math.min(remaining, Math.max(0, (row.model.max ?? 0) - row.count));
+      row.count += count;
+      remaining -= count;
+      if (remaining === 0) break;
+    }
   }
   return out;
 }
@@ -312,15 +369,39 @@ export function weaponBounds(
     // Forgefiend ectoplasma, and 2-particle-beamer Spyder at half its legal
     // count). Across branches an id's ceiling uses its largest single branch.
     const addMult = new Map<string, number>();
-    const branches = option.replacement ? [option.replacement] : (option.replacement_choice ?? []);
+    const branches = option.replacement
+      ? [option.replacement]
+      : (option.replacement_choice ?? []);
     for (const group of branches) {
       const per = new Map<string, number>();
       for (const id of group) per.set(id, (per.get(id) ?? 0) + 1);
-      for (const [id, n] of per) addMult.set(id, Math.max(addMult.get(id) ?? 0, n));
+      for (const [id, n] of per)
+        addMult.set(id, Math.max(addMult.get(id) ?? 0, n));
     }
     for (const [id, n] of addMult) {
       const b = bounds.get(id) ?? { min: 0, max: 0 };
       bounds.set(id, { min: b.min, max: b.max + cap * n });
+    }
+  }
+  if (models?.some((model) => model.loadout_variants?.length)) {
+    // Per-item bounds are an envelope, not proof that choices can coexist.
+    // Exact legality enforces the shared option and variant budgets.
+    bounds.clear();
+    for (const allocation of allocationsFor(models, modelCount)) {
+      const totals = new Map<string, number>();
+      for (let index = 0; index < models.length; index++) {
+        const count = allocation[index];
+        if (count === 0) continue;
+        const maxima = new Map<string, number>();
+        for (const candidate of rowCandidates(models[index], index, count, modelCount, options).candidates) {
+          for (const [id, perModel] of candidate.weapons)
+            maxima.set(id, Math.max(maxima.get(id) ?? 0, perModel));
+        }
+        for (const [id, maximum] of maxima)
+          totals.set(id, (totals.get(id) ?? 0) + maximum * count);
+      }
+      for (const [id, maximum] of totals)
+        bounds.set(id, { min: 0, max: Math.max(bounds.get(id)?.max ?? 0, maximum) });
     }
   }
   // A single-weapon flat budget caps the weapon's ceiling regardless of how many
@@ -330,7 +411,10 @@ export function weaponBounds(
     if (budget.items.length !== 1 || budget.per_models !== 0) continue;
     const b = bounds.get(budget.items[0]);
     if (b && b.max > budget.count) {
-      bounds.set(budget.items[0], { min: Math.min(b.min, budget.count), max: budget.count });
+      bounds.set(budget.items[0], {
+        min: Math.min(b.min, budget.count),
+        max: budget.count,
+      });
     }
   }
   return bounds;
@@ -399,7 +483,8 @@ function assignRowCounts(
 ): number[] {
   const rowDefaults = models.map((m) => toMultiset(m.default_weapon_ids ?? []));
   const rowsWith = new Map<string, number>();
-  for (const def of rowDefaults) for (const id of def.keys()) rowsWith.set(id, (rowsWith.get(id) ?? 0) + 1);
+  for (const def of rowDefaults)
+    for (const id of def.keys()) rowsWith.set(id, (rowsWith.get(id) ?? 0) + 1);
   const minOf = (i: number) => Math.max(0, models[i].min ?? 0);
   const maxOf = (i: number) => Math.max(minOf(i), models[i].max ?? minOf(i));
 
@@ -421,7 +506,11 @@ function assignRowCounts(
     let cap = Infinity;
     let saw = false;
     for (const [id, mult] of rowDefaults[i]) {
-      if ((rowsWith.get(id) ?? 0) === 1 && mult > 0 && (counts.get(id) ?? 0) > 0) {
+      if (
+        (rowsWith.get(id) ?? 0) === 1 &&
+        mult > 0 &&
+        (counts.get(id) ?? 0) > 0
+      ) {
         saw = true;
         cap = Math.min(cap, Math.floor((counts.get(id) ?? 0) / mult));
       }
@@ -437,7 +526,8 @@ function assignRowCounts(
   while (budget > 0) {
     let pick = -1;
     for (let i = 0; i < models.length; i++) {
-      if (headroom(i) <= 0 || models[i].is_leader_model || distinctive[i]) continue;
+      if (headroom(i) <= 0 || models[i].is_leader_model || distinctive[i])
+        continue;
       if (pick < 0 || headroom(i) > headroom(pick)) pick = i;
     }
     if (pick < 0)
@@ -450,6 +540,60 @@ function assignRowCounts(
     out[pick] += add;
     budget -= add;
   }
+  return out;
+}
+
+/**
+ * Every feasible per-row model allocation for `modelCount`, with the existing
+ * heuristic allocation first so established grouping output stays stable.
+ * Optional weapon-variant rows cannot be inferred reliably from their defaults
+ * alone because a replacement may remove the distinctive weapon; the exact
+ * loadout solver must therefore try the other bounded allocations too.
+ */
+function candidateRowCounts(
+  models: readonly LoadoutModel[],
+  modelCount: number,
+  counts: Map<string, number>,
+): number[][] {
+  const preferred = assignRowCounts(models, modelCount, counts);
+  const out: number[][] = [];
+  const seen = new Set<string>();
+  const add = (counts: number[]) => {
+    const key = counts.join(",");
+    if (!seen.has(key)) {
+      seen.add(key);
+      out.push(counts);
+    }
+  };
+  if (preferred.reduce((sum, count) => sum + count, 0) === modelCount &&
+      preferred.every((count, i) => count >= (models[i].min ?? 0) && count <= (models[i].max ?? models[i].min ?? 0)))
+    add(preferred);
+
+  const mins = models.map((model) => Math.max(0, model.min ?? 0));
+  const maxs = models.map((model, i) =>
+    Math.max(mins[i], model.max ?? mins[i]),
+  );
+  const suffixMin = Array(models.length + 1).fill(0) as number[];
+  const suffixMax = Array(models.length + 1).fill(0) as number[];
+  for (let i = models.length - 1; i >= 0; i--) {
+    suffixMin[i] = suffixMin[i + 1] + mins[i];
+    suffixMax[i] = suffixMax[i + 1] + maxs[i];
+  }
+
+  const current = Array(models.length).fill(0) as number[];
+  const visit = (i: number, remaining: number) => {
+    if (i === models.length) {
+      if (remaining === 0) add([...current]);
+      return;
+    }
+    const lo = Math.max(mins[i], remaining - suffixMax[i + 1]);
+    const hi = Math.min(maxs[i], remaining - suffixMin[i + 1]);
+    for (let count = hi; count >= lo; count--) {
+      current[i] = count;
+      visit(i + 1, remaining - count);
+    }
+  };
+  visit(0, Math.max(0, Math.floor(modelCount) || 0));
   return out;
 }
 
@@ -474,14 +618,44 @@ function multisetKey(m: Map<string, number>): string {
 
 /**
  * One legal single-model loadout for a composition row: the `weapons` a model can
- * carry, plus the global option indices whose application produced it (`usedOptions`,
- * each at most once) so the assignment search can charge per-option {@link optionCap}s.
- * `key` is the {@link multisetKey} of `weapons`, for deterministic ordering/grouping.
+ * carry, plus the global option indices whose application produced it (`usedOptions`;
+ * repeated indices represent repeated no-replacement additions) so the assignment
+ * search can charge per-option {@link optionCap}s.
  */
 interface RowCandidate {
   weapons: Map<string, number>;
   usedOptions: number[];
+  /** Every matching variant-budget allowance consumed by this model's base variant. */
+  usedVariantBudgets: string[];
+  variantIndex?: number;
+  variantName?: string;
   key: string;
+}
+
+/** How much of an explicit sparse selection one candidate satisfies by itself. */
+function explicitContribution(
+  candidate: RowCandidate,
+  required: ReadonlyMap<string, number>,
+): number {
+  let contribution = 0;
+  for (const [id, count] of candidate.weapons) {
+    const needed = required.get(id) ?? 0;
+    if (needed > 0) contribution += Math.min(count, needed);
+  }
+  return contribution;
+}
+
+function candidateCanBeSelected(
+  candidate: RowCandidate,
+  upper: ReadonlyMap<string, number>,
+  optionCaps: readonly number[],
+): boolean {
+  for (const [id, per] of candidate.weapons) {
+    if (per > 0 && (upper.get(id) ?? 0) < per) return false;
+  }
+  return candidate.usedOptions.every(
+    (optionIndex) => optionCaps[optionIndex] >= 1,
+  );
 }
 
 /**
@@ -500,6 +674,7 @@ function enumerateRowCandidates(
   base: Map<string, number>,
   rowName: string | null,
   options: readonly WargearOption[],
+  usedVariantBudgets: readonly string[] = [],
 ): RowCandidate[] {
   const applicable: number[] = [];
   for (let i = 0; i < options.length; i++) {
@@ -508,7 +683,7 @@ function enumerateRowCandidates(
   }
 
   const stateKey = (w: Map<string, number>, used: readonly number[]) =>
-    `${multisetKey(w)}#${[...used].sort((a, b) => a - b).join(",")}`;
+    `${multisetKey(w)}#${[...used].sort((a, b) => a - b).join(",")}#${usedVariantBudgets.join(",")}`;
 
   const result: RowCandidate[] = [];
   const seen = new Set<string>();
@@ -519,12 +694,23 @@ function enumerateRowCandidates(
 
   for (let head = 0; head < queue.length; head++) {
     const cur = queue[head];
-    result.push({ weapons: cur.weapons, usedOptions: cur.used, key: multisetKey(cur.weapons) });
+    result.push({
+      weapons: cur.weapons,
+      usedOptions: cur.used,
+      usedVariantBudgets: [...usedVariantBudgets],
+      key: multisetKey(cur.weapons),
+    });
     for (const oi of applicable) {
-      if (cur.used.includes(oi)) continue;
-      const replaces = options[oi].replaces ?? [];
-      if (!replaces.every((id) => (cur.weapons.get(id) ?? 0) >= 1)) continue;
-      for (const bundle of optionBundles(options[oi])) {
+      const option = options[oi];
+      const replaces = option.replaces ?? [];
+      let uses = 0;
+      for (const used of cur.used) if (used === oi) uses++;
+      const perModelLimit =
+        replaces.length === 0 ? (option.model_constraint?.max_count ?? 1) : 1;
+      if (uses >= perModelLimit) continue;
+      const required = toMultiset(replaces);
+      if ([...required].some(([id, count]) => (cur.weapons.get(id) ?? 0) < count)) continue;
+      for (const bundle of optionBundles(option)) {
         if (bundle.length === 0) continue;
         const w = new Map(cur.weapons);
         for (const id of replaces) w.set(id, (w.get(id) ?? 0) - 1);
@@ -541,6 +727,95 @@ function enumerateRowCandidates(
   return result;
 }
 
+/**
+ * Build one row's complete alternatives. A declared whole-model variant is a
+ * complete mutually-exclusive base configuration, never an additive option over
+ * the row default. Options are then applied only when their normal replacement
+ * preconditions hold. Variant-budget tokens preserve the selection identity even
+ * where two variants carry identical equipment.
+ */
+function rowCandidates(
+  row: LoadoutModel,
+  rowIndex: number,
+  rowCount: number,
+  unitCount: number,
+  options: readonly WargearOption[],
+): { candidates: RowCandidate[]; variantCaps: Map<string, number> } {
+  const variantCaps = new Map<string, number>();
+  for (let bi = 0; bi < (row.loadout_variant_budgets?.length ?? 0); bi++) {
+    variantCaps.set(
+      `${rowIndex}:${bi}`,
+      variantBudgetCap(row.loadout_variant_budgets![bi], unitCount, rowCount),
+    );
+  }
+  const variants = row.loadout_variants;
+  if (!variants?.length) {
+    return {
+      candidates: enumerateRowCandidates(
+        toMultiset(row.default_weapon_ids ?? []),
+        row.name ?? null,
+        options,
+      ),
+      variantCaps,
+    };
+  }
+  const variantUses = variants.map((variant, index) => {
+    const token = `${rowIndex}:variant:${index}`;
+    variantCaps.set(token, Math.min(rowCount, variant.max_count ?? rowCount));
+    const uses: string[] = [token];
+    for (let bi = 0; bi < (row.loadout_variant_budgets?.length ?? 0); bi++) {
+      if ((row.loadout_variant_budgets![bi].variant_names ?? []).includes(variant.name ?? "")) {
+        uses.push(`${rowIndex}:${bi}`);
+      }
+    }
+    return uses;
+  });
+  const candidates = new Map<string, RowCandidate>();
+  const states = new Map<string, {
+    candidates: RowCandidate[];
+    originVariants: number[];
+    minOptions: number;
+  }>();
+  for (let vi = 0; vi < variants.length; vi++) {
+    for (const candidate of enumerateRowCandidates(
+      toMultiset(variants[vi].weapon_ids ?? []),
+      row.name ?? null,
+      options,
+      variantUses[vi],
+    )) {
+      const cost = candidate.usedOptions.length;
+      let state = states.get(candidate.key);
+      if (!state) {
+        state = { candidates: [], originVariants: [vi], minOptions: cost };
+        states.set(candidate.key, state);
+      } else if (cost < state.minOptions) {
+        state.minOptions = cost;
+        state.originVariants = [vi];
+      } else if (cost === state.minOptions && !state.originVariants.includes(vi)) {
+        state.originVariants.push(vi);
+      }
+      state.candidates.push(candidate);
+    }
+  }
+  // Normalize each final equipment state to its closest whole-model alternatives.
+  // Optional extras must not hide an alternative and let its cap be bypassed.
+  // Keep every option provenance: a longer route may use a different allowance.
+  for (const state of states.values()) {
+    for (const vi of state.originVariants) {
+      for (const candidate of state.candidates) {
+        const selected = {
+          ...candidate,
+          usedVariantBudgets: variantUses[vi],
+          variantName: variants[vi].name,
+          variantIndex: vi,
+        };
+        candidates.set(`${candidate.key}#${candidate.usedOptions.join(",")}#${variants[vi].name}`, selected);
+      }
+    }
+  }
+  return { candidates: [...candidates.values()], variantCaps };
+}
+
 /** A composition row prepared for the assignment search: its model count + legal loadouts. */
 interface SolverRow {
   name: string | null;
@@ -548,28 +823,49 @@ interface SolverRow {
   candidates: RowCandidate[];
 }
 
+type LoadoutAssignment = {
+  ri: number;
+  name: string | null;
+  weapons: Map<string, number>;
+  count: number;
+  variantName?: string;
+}[];
+
 /**
- * A complete, deterministic exact-cover search: distribute each row's models across its
- * candidate loadouts so the chosen weapons sum to `bag` exactly, never exceeding any
- * option's `optionCaps` usage. Rows are taken in order; within a row, candidates in their
- * (pre-sorted) order, trying the largest feasible count first; the residual bag and
- * per-option usage prune branches that can't complete. Returns the first solution found
- * (so identical inputs yield identical groupings everywhere) as flat per-candidate picks,
- * or `null` when no exact partition exists. Unlike a greedy peeler, it finds a valid
- * partition whenever one exists.
+ * A complete, deterministic bounded-cover search: distribute each row's models
+ * across its candidate loadouts so every item count lands between `lower` and
+ * `upper`, never exceeding an option's usage cap. Exact grouping passes the
+ * same bag for both bounds; source-loadout completion gives omitted defaults a
+ * wider upper bound. Rows are taken in order; within a row, candidates in their
+ * pre-sorted order, trying the largest feasible count first. Without `onSolution`
+ * it returns the first solution; with it, it visits every solution until the
+ * callback returns `true`, then returns that final solution.
  */
 function solveAssignment(
   rows: readonly SolverRow[],
-  bag: Map<string, number>,
+  lower: Map<string, number>,
+  upper: Map<string, number>,
   optionCaps: readonly number[],
-): { ri: number; name: string | null; weapons: Map<string, number>; count: number }[] | null {
-  const residual = new Map(bag);
+  variantCaps: ReadonlyMap<string, number> = new Map(),
+  onSolution?: (solution: LoadoutAssignment) => boolean,
+): LoadoutAssignment | null {
+  const remainingLower = new Map(lower);
+  const remainingUpper = new Map(upper);
   const usage = optionCaps.map(() => 0);
+  const variantUsage = new Map<string, number>();
   const picks: { ri: number; ci: number; count: number }[] = [];
+  const snapshot = (): LoadoutAssignment => picks.map((p) => ({
+    ri: p.ri,
+    name: rows[p.ri].name,
+    weapons: rows[p.ri].candidates[p.ci].weapons,
+    variantName: rows[p.ri].candidates[p.ci].variantName,
+    count: p.count,
+  }));
 
   const assignRow = (ri: number): boolean => {
     if (ri === rows.length) {
-      for (const c of residual.values()) if (c !== 0) return false;
+      for (const c of remainingLower.values()) if (c > 0) return false;
+      if (onSolution) return onSolution(snapshot());
       return true;
     }
     return distribute(ri, 0, rows[ri].count);
@@ -581,29 +877,121 @@ function solveAssignment(
     const cand = row.candidates[ci];
     let hi = left;
     for (const [id, per] of cand.weapons) {
-      if (per > 0) hi = Math.min(hi, Math.floor((residual.get(id) ?? 0) / per));
+      if (per > 0)
+        hi = Math.min(hi, Math.floor((remainingUpper.get(id) ?? 0) / per));
     }
-    for (const oi of cand.usedOptions) hi = Math.min(hi, optionCaps[oi] - usage[oi]);
+    const optionUses = new Map<number, number>();
+    for (const oi of cand.usedOptions)
+      optionUses.set(oi, (optionUses.get(oi) ?? 0) + 1);
+    for (const [oi, perModel] of optionUses)
+      hi = Math.min(hi, Math.floor((optionCaps[oi] - usage[oi]) / perModel));
+    const variantUses = new Map<string, number>();
+    for (const token of cand.usedVariantBudgets)
+      variantUses.set(token, (variantUses.get(token) ?? 0) + 1);
+    for (const [token, perModel] of variantUses)
+      hi = Math.min(
+        hi,
+        Math.floor(((variantCaps.get(token) ?? 0) - (variantUsage.get(token) ?? 0)) / perModel),
+      );
     hi = Math.max(0, hi);
     for (let take = hi; take >= 0; take--) {
-      for (const [id, per] of cand.weapons) residual.set(id, (residual.get(id) ?? 0) - per * take);
+      for (const [id, per] of cand.weapons) {
+        remainingLower.set(id, (remainingLower.get(id) ?? 0) - per * take);
+        remainingUpper.set(id, (remainingUpper.get(id) ?? 0) - per * take);
+      }
       for (const oi of cand.usedOptions) usage[oi] += take;
+      for (const token of cand.usedVariantBudgets)
+        variantUsage.set(token, (variantUsage.get(token) ?? 0) + take);
       if (take > 0) picks.push({ ri, ci, count: take });
       if (distribute(ri, ci + 1, left - take)) return true;
       if (take > 0) picks.pop();
+      for (const token of cand.usedVariantBudgets)
+        variantUsage.set(token, (variantUsage.get(token) ?? 0) - take);
       for (const oi of cand.usedOptions) usage[oi] -= take;
-      for (const [id, per] of cand.weapons) residual.set(id, (residual.get(id) ?? 0) + per * take);
+      for (const [id, per] of cand.weapons) {
+        remainingLower.set(id, (remainingLower.get(id) ?? 0) + per * take);
+        remainingUpper.set(id, (remainingUpper.get(id) ?? 0) + per * take);
+      }
     }
     return false;
   };
 
   if (!assignRow(0)) return null;
-  return picks.map((p) => ({
-    ri: p.ri,
-    name: rows[p.ri].name,
-    weapons: rows[p.ri].candidates[p.ci].weapons,
-    count: p.count,
-  }));
+  return snapshot();
+}
+
+function groupsFromSolution(
+  solution: readonly {
+    ri: number;
+    name: string | null;
+    weapons: Map<string, number>;
+    count: number;
+  }[],
+): LoadoutGroup[] {
+  const byGroup = new Map<
+    string,
+    {
+      ri: number;
+      name: string | null;
+      weapons: Map<string, number>;
+      count: number;
+      key: string;
+    }
+  >();
+  for (const item of solution) {
+    const key = multisetKey(item.weapons);
+    const groupKey = `${item.name ?? ""}##${key}`;
+    const current = byGroup.get(groupKey);
+    if (current) current.count += item.count;
+    else {
+      byGroup.set(groupKey, {
+        ri: item.ri,
+        name: item.name,
+        weapons: item.weapons,
+        count: item.count,
+        key,
+      });
+    }
+  }
+  return [...byGroup.values()]
+    .filter((group) => group.count > 0)
+    .sort(
+      (a, b) => a.ri - b.ri || b.count - a.count || a.key.localeCompare(b.key),
+    )
+    .map((group) => ({
+      model_name: group.name,
+      count: group.count,
+      weapons: sortedGroupWeapons(group.weapons),
+    }));
+}
+
+function optionsWithPrintedUnitAbilities(
+  unit: Unit,
+  options: readonly WargearOption[],
+  counts: ReadonlyMap<string, number>,
+): WargearOption[] {
+  const reachable = new Set<string>();
+  for (const option of options) {
+    for (const id of option.replaces ?? []) reachable.add(id);
+    for (const id of option.replacement ?? []) reachable.add(id);
+    for (const branch of option.replacement_choice ?? []) {
+      for (const id of branch) reachable.add(id);
+    }
+  }
+  const additions = (unit.ability_ids ?? [])
+    .filter((id) => (counts.get(id) ?? 0) > 0 && !reachable.has(id))
+    .map(
+      (id): WargearOption => ({
+        id: `${unit.id}-printed-ability-${id}`,
+        unit_id: unit.id,
+        faction_id: unit.faction_id,
+        game_version: unit.game_version,
+        is_free: true,
+        replacement: [id],
+        model_constraint: { max_count: counts.get(id)! },
+      }),
+    );
+  return additions.length === 0 ? [...options] : [...options, ...additions];
 }
 
 /**
@@ -618,6 +1006,54 @@ function solveAssignment(
  * renderers fall back to their unit-wide rendering unchanged. Mirror of
  * `crates/wh40kdc/src/data/loadout.rs`.
  */
+function exactGroups(
+  unit: Unit,
+  modelCount: number,
+  options: readonly WargearOption[],
+  models: readonly LoadoutModel[],
+  counts: Map<string, number>,
+): LoadoutGroup[] | null {
+  const bag = new Map<string, number>();
+  for (const [id, c] of counts) if (c > 0) bag.set(id, c);
+  const effectiveOptions = optionsWithPrintedUnitAbilities(unit, options, bag);
+  for (const rowN of candidateRowCounts(models, modelCount, bag)) {
+    const fixedModels = models.map((model, i) => ({
+      ...model,
+      min: rowN[i],
+      max: rowN[i],
+    }));
+    const optionCaps = effectiveOptions.map((option) =>
+      optionCap(option, modelCount, fixedModels),
+    );
+    const rows: SolverRow[] = [];
+    const variantCaps = new Map<string, number>();
+    for (let i = 0; i < fixedModels.length; i++) {
+      const count = rowN[i];
+      if (count <= 0) continue;
+      const prepared = rowCandidates(
+        fixedModels[i],
+        i,
+        count,
+        modelCount,
+        effectiveOptions,
+      );
+      for (const [token, cap] of prepared.variantCaps) variantCaps.set(token, cap);
+      const candidates = prepared.candidates
+        .filter((candidate) => candidateCanBeSelected(candidate, bag, optionCaps))
+        .sort(
+          (a, b) =>
+            a.key.localeCompare(b.key) ||
+            a.usedOptions.length - b.usedOptions.length ||
+            a.usedOptions.join(",").localeCompare(b.usedOptions.join(",")),
+        );
+      rows.push({ name: fixedModels[i].name ?? null, count, candidates });
+    }
+    const solution = solveAssignment(rows, bag, bag, optionCaps, variantCaps);
+    if (solution) return groupsFromSolution(solution);
+  }
+  return null;
+}
+
 export function groupLoadout(
   unit: Unit,
   modelCount: number,
@@ -626,57 +1062,182 @@ export function groupLoadout(
   counts: Map<string, number>,
 ): LoadoutGroup[] | null {
   const n = Math.max(0, Math.floor(modelCount) || 0);
-  // Single-model units and units without recorded per-model defaults render fine
-  // from the aggregate; don't synthesise groups for them.
-  if (n <= 1 || !hasRecordedDefaults(models)) return null;
+  if (n <= 1 || !hasRecordedLoadoutBases(models)) return null;
+  return exactGroups(unit, n, options, models, counts);
+}
 
-  const bag = new Map<string, number>();
-  for (const [id, c] of counts) if (c > 0) bag.set(id, c);
+/** A source loadout completed with only omitted per-model defaults. */
+export interface CompletedLoadout {
+  counts: Map<string, number>;
+  groups: LoadoutGroup[] | null;
+}
 
-  const rowN = assignRowCounts(models, n, bag);
-  const optionCaps = options.map((o) => optionCap(o, n, models));
+/**
+ * Complete a partial source loadout without inventing optional selections.
+ *
+ * Roster text commonly omits weapons every model carries implicitly. For each
+ * valid composition allocation, this searches the same legal per-model
+ * candidates as {@link groupLoadout}, but permits each item up to the greater
+ * of its explicit count and its aggregate default count. Items absent from both
+ * the source and the defaults remain forbidden. The result therefore fills
+ * only defaults displaced as required by explicitly printed swaps.
+ */
+export function completeLoadout(
+  unit: Unit,
+  modelCount: number,
+  options: readonly WargearOption[],
+  models: readonly LoadoutModel[] | undefined,
+  explicitCounts: Map<string, number>,
+): CompletedLoadout | null {
+  const n = Math.max(0, Math.floor(modelCount) || 0);
+  if (n === 0 || !hasRecordedLoadoutBases(models)) return null;
 
-  const rows: SolverRow[] = [];
-  for (let i = 0; i < models.length; i++) {
-    const k = rowN[i];
-    if (k <= 0) continue;
-    const base = toMultiset(models[i].default_weapon_ids ?? []);
-    const candidates = enumerateRowCandidates(base, models[i].name ?? null, options).sort(
-      (a, b) =>
-        a.key.localeCompare(b.key) ||
-        a.usedOptions.length - b.usedOptions.length ||
-        a.usedOptions.join(",").localeCompare(b.usedOptions.join(",")),
-    );
-    rows.push({ name: models[i].name ?? null, count: k, candidates });
+  const strictLower = new Map<string, number>();
+  for (const [id, count] of explicitCounts) {
+    if (count > 0) strictLower.set(id, count);
   }
+  const lowerVariants = [strictLower];
 
-  const solution = solveAssignment(rows, bag, optionCaps);
-  if (!solution) return null;
-
-  // Merge identical (model-type, loadout) picks, then order deterministically: by row
-  // (leaders lead), then larger groups before smaller (bulk before variants), then by
-  // canonical loadout key. Stable across implementations and independent of the order
-  // the search happened to find picks in.
-  const byGroup = new Map<
-    string,
-    { ri: number; name: string | null; weapons: Map<string, number>; count: number; key: string }
-  >();
-  for (const s of solution) {
-    const key = multisetKey(s.weapons);
-    const gkey = `${s.name ?? ""}##${key}`;
-    const cur = byGroup.get(gkey);
-    if (cur) cur.count += s.count;
-    else byGroup.set(gkey, { ri: s.ri, name: s.name, weapons: s.weapons, count: s.count, key });
+  // Some source exporters double-count a secondary item shared by several
+  // branches of one choice (the primary selections are still exact). A weapon
+  // repeated in at least two multi-item branches is mechanically determined by
+  // those primary selections, so a second pass may derive its count rather than
+  // requiring the duplicated aggregate. Defaults are never relaxed.
+  const defaultIds = new Set(
+    models.flatMap((model) => model.default_weapon_ids ?? []),
+  );
+  const repeatedCoItems = new Set<string>();
+  for (const option of options) {
+    const occurrences = new Map<string, number>();
+    for (const branch of option.replacement_choice ?? []) {
+      if (branch.length < 2) continue;
+      for (const id of new Set(branch)) {
+        occurrences.set(id, (occurrences.get(id) ?? 0) + 1);
+      }
+    }
+    for (const [id, count] of occurrences) {
+      if (count >= 2 && !defaultIds.has(id)) repeatedCoItems.add(id);
+    }
   }
-  const live = [...byGroup.values()]
-    .filter((g) => g.count > 0)
-    .sort((a, b) => a.ri - b.ri || b.count - a.count || a.key.localeCompare(b.key));
-  if (live.length === 0) return null;
-  return live.map((g) => ({
-    model_name: g.name,
-    count: g.count,
-    weapons: sortedGroupWeapons(g.weapons),
-  }));
+  const relaxedLower = new Map(strictLower);
+  for (const id of repeatedCoItems) relaxedLower.delete(id);
+  if (relaxedLower.size !== strictLower.size) lowerVariants.push(relaxedLower);
+
+  const effectiveOptions = optionsWithPrintedUnitAbilities(
+    unit,
+    options,
+    explicitCounts,
+  );
+
+  for (const lower of lowerVariants) {
+    for (const rowCounts of candidateRowCounts(models, n, lower)) {
+      const fixedModels = models.map((model, index) => ({
+        ...model,
+        min: rowCounts[index],
+        max: rowCounts[index],
+      }));
+      const defaultCounts = new Map<string, number>();
+      for (let index = 0; index < fixedModels.length; index++) {
+        const count = rowCounts[index];
+        if (count <= 0) continue;
+        for (const id of fixedModels[index].default_weapon_ids ?? []) {
+          defaultCounts.set(id, (defaultCounts.get(id) ?? 0) + count);
+        }
+      }
+      const upper = new Map(defaultCounts);
+      for (const [id, explicit] of explicitCounts) {
+        upper.set(id, Math.max(explicit, upper.get(id) ?? 0));
+      }
+
+      const optionCaps = effectiveOptions.map((option) =>
+        optionCap(option, n, fixedModels),
+      );
+      const rows: SolverRow[] = [];
+      const variantCaps = new Map<string, number>();
+      for (let index = 0; index < fixedModels.length; index++) {
+        const count = rowCounts[index];
+        if (count <= 0) continue;
+        const prepared = rowCandidates(fixedModels[index], index, count, n, effectiveOptions);
+        for (const [token, cap] of prepared.variantCaps) variantCaps.set(token, cap);
+        const candidates = prepared.candidates
+          .filter((candidate) =>
+            candidateCanBeSelected(candidate, upper, optionCaps),
+          )
+          .sort(
+            (a, b) =>
+              explicitContribution(b, lower) - explicitContribution(a, lower) ||
+              a.usedOptions.length - b.usedOptions.length ||
+              a.key.localeCompare(b.key) ||
+              a.usedOptions.join(",").localeCompare(b.usedOptions.join(",")),
+          );
+        rows.push({
+          name: fixedModels[index].name ?? null,
+          count,
+          candidates,
+        });
+      }
+
+      const solution = solveAssignment(rows, lower, upper, optionCaps, variantCaps);
+      if (!solution) continue;
+      const groups = groupsFromSolution(solution);
+      const counts = new Map<string, number>();
+      for (const group of groups) {
+        for (const weapon of group.weapons) {
+          counts.set(
+            weapon.id,
+            (counts.get(weapon.id) ?? 0) + weapon.count * group.count,
+          );
+        }
+      }
+      if (budgetViolations(unit, n, counts).length > 0) continue;
+      return { counts, groups: n > 1 ? groups : null };
+    }
+  }
+  return null;
+}
+
+/** Report every explicitly submitted, non-budgeted count outside its computed range. */
+function boundViolations(
+  bounds: ReadonlyMap<string, WeaponBound>,
+  unit: Unit,
+  counts: ReadonlyMap<string, number>,
+): Violation[] {
+  // Items governed by a shared-allowance budget are policed solely by
+  // `budgetViolations` (the GW `limited_wargear_choice_set` cap). Their per-id
+  // `weaponBounds` max is derived from the dump's cross-product loadout branches
+  // — the unreliable signal the budget exists to replace (a weapon in several
+  // option branches sums an inflated bound) — so skip the per-id check for them.
+  const budgeted = new Set<string>();
+  for (const budget of unit.wargear_budgets ?? [])
+    for (const id of budget.items ?? []) budgeted.add(id);
+
+  const out: Violation[] = [];
+  for (const [id, count] of counts) {
+    if (budgeted.has(id)) continue;
+    const bound = bounds.get(id);
+    if (!bound) continue;
+    if (count > bound.max) {
+      out.push({
+        id,
+        code: "exceeds-max",
+        message: `${id}: ${count} exceeds max ${bound.max}`,
+      });
+    } else if (count < bound.min) {
+      out.push({
+        id,
+        code: "below-min",
+        message: `${id}: ${count} below min ${bound.min}`,
+      });
+    }
+  }
+  return out;
+}
+
+/** Stable public ordering for loadout validation output. */
+function sortViolations(violations: Violation[]): Violation[] {
+  return violations.sort((a, b) =>
+    a.id === b.id ? a.code.localeCompare(b.code) : a.id.localeCompare(b.id),
+  );
 }
 
 /** Report every weapon/wargear count that falls outside its valid range. */
@@ -687,30 +1248,28 @@ export function validateLoadout(
   counts: Map<string, number>,
   models?: readonly LoadoutModel[],
 ): Violation[] {
+  const budgets = budgetViolations(unit, modelCount, counts);
   const bounds = weaponBounds(unit, modelCount, options, models);
-  const out: Violation[] = [];
-  // Items governed by a shared-allowance budget are policed solely by
-  // `budgetViolations` (the GW `limited_wargear_choice_set` cap). Their per-id
-  // `weaponBounds` max is derived from the dump's cross-product loadout branches
-  // — the unreliable signal the budget exists to replace (a weapon in several
-  // option branches sums an inflated bound) — so skip the per-id check for them.
-  const budgeted = new Set<string>();
-  for (const b of unit.wargear_budgets ?? []) for (const id of b.items ?? []) budgeted.add(id);
-  for (const [id, n] of counts) {
-    if (budgeted.has(id)) continue;
-    const b = bounds.get(id);
-    if (!b) continue;
-    if (n > b.max) {
-      out.push({ id, code: "exceeds-max", message: `${id}: ${n} exceeds max ${b.max}` });
-    } else if (n < b.min) {
-      out.push({ id, code: "below-min", message: `${id}: ${n} below min ${b.min}` });
-    }
+  const perItemBounds = boundViolations(bounds, unit, counts);
+  const hasVariants = models?.some((model) => model.loadout_variants?.length) ?? false;
+
+  if (hasVariants && hasRecordedLoadoutBases(models)) {
+    // Source/import counts are sparse explicit selections. Report independently
+    // knowable bounds first; only a bounds-valid selection needs whole-model
+    // completion to determine whether omitted defaults make it legal.
+    const directViolations = [...perItemBounds, ...budgets];
+    if (directViolations.length > 0) return sortViolations(directViolations);
+    if (completeLoadout(unit, modelCount, options, models, counts) !== null) return [];
+    return [{
+      id: unit.id,
+      code: "swap-conflict",
+      message: `${unit.id}: equipment cannot be assigned to legal whole-model loadouts`,
+    }];
   }
-  out.push(...swapConflicts(unit, modelCount, options, counts, models));
-  out.push(...budgetViolations(unit, modelCount, counts));
-  // Deterministic order so the result is stable for cross-impl comparison.
-  out.sort((a, b) => (a.id === b.id ? a.code.localeCompare(b.code) : a.id.localeCompare(b.id)));
-  return out;
+
+  if ((models?.length ?? 0) > 1 && groupLoadout(unit, modelCount, options, models, counts) !== null) return budgets;
+  perItemBounds.push(...swapConflicts(unit, modelCount, options, counts, models), ...budgets);
+  return sortViolations(perItemBounds);
 }
 
 /**
@@ -782,7 +1341,10 @@ export interface LoadoutTier {
  * list the loadout maths consume for that tier. A tier row with no matching base
  * model keeps just its name/min/max.
  */
-function tierModels(tier: LoadoutTier, base: readonly LoadoutModel[]): LoadoutModel[] {
+function tierModels(
+  tier: LoadoutTier,
+  base: readonly LoadoutModel[],
+): LoadoutModel[] {
   const byName = new Map(base.map((m) => [m.name, m]));
   return tier.models.map((tm) => {
     const b = tm.name != null ? byName.get(tm.name) : undefined;
@@ -845,6 +1407,234 @@ export function checkUnitLegality(
 }
 
 /**
+ * Default ceiling on how many candidates {@link loadoutCandidates} returns.
+ * Part of the runner contract (`conformance/RUNNER_PROTOCOL.md`) and mirrored by
+ * every port, so a caller that omits `limit` gets the same truncation point in
+ * TypeScript, Rust, Python and Go.
+ */
+export const LOADOUT_CANDIDATES_DEFAULT_LIMIT = 256;
+
+/**
+ * The sentinel appended as the final entry when {@link loadoutCandidates} dropped
+ * candidates to honour `limit`. It is never a candidate encoding (no `" => "`),
+ * so a consumer can test for it by equality.
+ */
+export const LOADOUT_CANDIDATES_TRUNCATED = "…truncated";
+
+/**
+ * Yield every exact per-row model allocation of `total` models across `rows`: each
+ * row takes between its `min` and `max` (with `max` floored at `min`, matching
+ * {@link candidateRowCounts}) and the row counts sum to `total`. Yields no
+ * allocations when `total` is outside `[Σmin, Σmax]`, which is what makes the
+ * tier containment filter in {@link loadoutCandidates} an optimisation rather
+ * than a semantic gate. Enumeration is fixed (descending count per row, left to
+ * right) across implementations; it is the canonical traversal order for
+ * {@link loadoutCandidates}.
+ */
+function* allocationsFor(
+  rows: readonly LoadoutModel[],
+  total: number,
+): Generator<number[]> {
+  const mins = rows.map((r) => Math.max(0, r.min ?? 0));
+  const maxs = rows.map((r, i) => Math.max(mins[i], r.max ?? mins[i]));
+  const suffixMin = Array(rows.length + 1).fill(0) as number[];
+  const suffixMax = Array(rows.length + 1).fill(0) as number[];
+  for (let i = rows.length - 1; i >= 0; i--) {
+    suffixMin[i] = suffixMin[i + 1] + mins[i];
+    suffixMax[i] = suffixMax[i + 1] + maxs[i];
+  }
+  const current = Array(rows.length).fill(0) as number[];
+  function* visit(i: number, remaining: number): Generator<number[]> {
+    if (i === rows.length) {
+      if (remaining === 0) yield [...current];
+      return;
+    }
+    const lo = Math.max(mins[i], remaining - suffixMax[i + 1]);
+    const hi = Math.min(maxs[i], remaining - suffixMin[i + 1]);
+    for (let count = hi; count >= lo; count--) {
+      current[i] = count;
+      yield* visit(i + 1, remaining - count);
+    }
+  }
+  yield* visit(0, total);
+}
+
+/**
+ * The aggregate equipment one allocation fields, with **no** variant selection:
+ * each row contributes its allocated count × its `default_weapon_ids`. Falls back
+ * to the derived unit-wide base × `modelCount` when the rows do not all record
+ * defaults, exactly as {@link baseCounts} does — which is why a single-allocation
+ * unit's candidate counts equal its {@link baseLoadout}.
+ */
+function allocationCounts(
+  unit: Unit,
+  modelCount: number,
+  options: readonly WargearOption[],
+  rows: readonly LoadoutModel[],
+  allocation: readonly number[],
+): Map<string, number> {
+  const counts = new Map<string, number>();
+  if (hasRecordedDefaults(rows)) {
+    for (let i = 0; i < rows.length; i++) {
+      const count = allocation[i] ?? 0;
+      if (count === 0) continue;
+      for (const id of rows[i].default_weapon_ids ?? []) {
+        counts.set(id, (counts.get(id) ?? 0) + count);
+      }
+    }
+    return counts;
+  }
+  for (const id of baseWeaponIds(unit, options)) {
+    counts.set(id, (counts.get(id) ?? 0) + modelCount);
+  }
+  return counts;
+}
+
+/**
+ * The canonical `"<witness> => <counts>"` encoding of one candidate. The witness
+ * lists `<model row>×<count>` segments in row order, `;`-joined, skipping rows
+ * allocated zero models (a row that fields nothing is not part of the build); a
+ * variant selection appends `/<variant>` to the row name. The counts half is
+ * `id:count` pairs in ascending id order, `,`-joined. The whole string is opaque —
+ * it exists to be compared and sorted, not parsed (display names may contain any
+ * of the delimiters).
+ */
+function encodeCandidate(
+  witness: readonly string[],
+  counts: Map<string, number>,
+): string {
+  const encodedCounts = [...counts.entries()]
+    .filter(([, n]) => n > 0)
+    .sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0))
+    .map(([id, n]) => `${id}:${n}`)
+    .join(",");
+  return `${witness.join(";")} => ${encodedCounts}`;
+}
+/**
+ * Every legal squad build for `modelCount` models, encoded in deterministic
+ * canonical traversal order as `"<witness> => <counts>"` strings — the candidate
+ * generator a damage optimiser needs, without forcing one alternative into
+ * {@link baseLoadout}.
+ *
+ * Tiers are the size gate: when the composition declares them, every tier whose
+ * total range contains `modelCount` contributes its own bounded per-row
+ * allocations (so a size reachable only by taking two leaders is reachable here);
+ * with no tiers the top-level `models[]` envelope is enumerated directly. A size
+ * no tier admits yields the empty list, as does a unit with no composition rows —
+ * "no legal build" and "no modelled breakdown" are both honestly zero candidates.
+ *
+ * Results are globally deduped in first-seen traversal order (tiers, descending
+ * row allocations, rows, then declared variants and their option states), then
+ * truncated to `limit` (default {@link LOADOUT_CANDIDATES_DEFAULT_LIMIT}) with
+ * {@link LOADOUT_CANDIDATES_TRUNCATED} appended when a distinct `limit + 1`
+ * candidate exists. Allocations and assignments are streamed, so traversal stops
+ * immediately once that proof is found. Mirror of
+ * `crates/wh40kdc/src/data/loadout.rs`.
+ *
+ * Rows with `loadout_variants` enumerate every legal multiset of named variants;
+ * other rows contribute their recorded defaults exactly once.
+ */
+export function loadoutCandidates(
+  unit: Unit,
+  modelCount: number,
+  options: readonly WargearOption[],
+  models?: readonly LoadoutModel[],
+  tiers?: readonly LoadoutTier[],
+  limit?: number,
+): string[] {
+  const requested = limit ?? LOADOUT_CANDIDATES_DEFAULT_LIMIT;
+  const cap = Number.isFinite(requested)
+    ? Math.max(0, Math.floor(requested))
+    : LOADOUT_CANDIDATES_DEFAULT_LIMIT;
+  const total = Math.max(0, Math.floor(modelCount) || 0);
+  const base = models ?? [];
+  const rowSets: LoadoutModel[][] = [];
+  if (tiers?.length) {
+    for (const tier of tiers) {
+      const tm = tierModels(tier, base);
+      const min = tm.reduce((s, m) => s + Math.max(0, m.min ?? 0), 0);
+      const max = tm.reduce((s, m) => s + Math.max(m.min ?? 0, m.max ?? 0), 0);
+      if (total >= min && total <= max) rowSets.push(tm);
+    }
+  } else if (base.length > 0) {
+    rowSets.push([...base]);
+  }
+  // Keep only the canonical prefix and its truncation proof. A Set preserves
+  // first-seen order while deduplicating encodings across tiers and allocations.
+  const encoded = new Set<string>();
+  const retain = (candidate: string): boolean => {
+    if (encoded.has(candidate)) return false;
+    encoded.add(candidate);
+    return encoded.size > cap;
+  };
+  for (const rows of rowSets) {
+    for (const allocation of allocationsFor(rows, total)) {
+      if (!rows.some((row) => row.loadout_variants?.length)) {
+        const witness = rows.flatMap((row, index) =>
+          allocation[index] > 0 ? [`${row.name ?? ""}×${allocation[index]}`] : [],
+        );
+        if (retain(encodeCandidate(witness, allocationCounts(unit, total, options, rows, allocation))))
+          return [...encoded].slice(0, cap).concat(LOADOUT_CANDIDATES_TRUNCATED);
+        continue;
+      }
+      const fixedModels = rows.map((row, index) => ({ ...row, min: allocation[index], max: allocation[index] }));
+      const optionCaps = options.map((option) => optionCap(option, total, fixedModels));
+      const solverRows: SolverRow[] = [];
+      const variantCaps = new Map<string, number>();
+      const upper = new Map<string, number>();
+      for (let index = 0; index < rows.length; index++) {
+        const count = allocation[index];
+        if (count === 0) continue;
+        const prepared = rowCandidates(rows[index], index, count, total, options);
+        for (const [token, maximum] of prepared.variantCaps) variantCaps.set(token, maximum);
+        const rowMaxima = new Map<string, number>();
+        for (const candidate of prepared.candidates) {
+          for (const [id, perModel] of candidate.weapons)
+            rowMaxima.set(id, Math.max(rowMaxima.get(id) ?? 0, perModel));
+        }
+        for (const [id, maximum] of rowMaxima)
+          upper.set(id, (upper.get(id) ?? 0) + maximum * count);
+        const candidates = [...prepared.candidates].sort((a, b) => {
+          const variantOrder = (a.variantIndex ?? -1) - (b.variantIndex ?? -1);
+          if (variantOrder !== 0) return variantOrder;
+          if (a.key < b.key) return -1;
+          if (a.key > b.key) return 1;
+          const shared = Math.min(a.usedOptions.length, b.usedOptions.length);
+          for (let i = 0; i < shared; i++) {
+            const optionOrder = a.usedOptions[i] - b.usedOptions[i];
+            if (optionOrder !== 0) return optionOrder;
+          }
+          return a.usedOptions.length - b.usedOptions.length;
+        });
+        solverRows.push({ name: rows[index].name ?? null, count, candidates });
+      }
+      if (solveAssignment(solverRows, new Map(), upper, optionCaps, variantCaps, (solution) => {
+        const counts = new Map<string, number>();
+        const witnessCounts = new Map<string, number>();
+        for (const group of solution) {
+          const label = group.variantName ?? group.name ?? "";
+          witnessCounts.set(label, (witnessCounts.get(label) ?? 0) + group.count);
+          for (const [id, perModel] of group.weapons)
+            counts.set(id, (counts.get(id) ?? 0) + perModel * group.count);
+        }
+        if (budgetViolations(unit, total, counts).length > 0) return false;
+        return retain(
+          encodeCandidate(
+            [...witnessCounts].map(([name, count]) => `${name}×${count}`),
+            counts,
+          ),
+        );
+      }))
+        return [...encoded].slice(0, cap).concat(LOADOUT_CANDIDATES_TRUNCATED);
+    }
+  }
+  const out = [...encoded];
+  if (out.length <= cap) return out;
+  return [...out.slice(0, cap), LOADOUT_CANDIDATES_TRUNCATED];
+}
+
+
+/**
  * Swap-conservation violations the independent per-id {@link weaponBounds} can't
  * see: a model's replaceable slot holds the base weapon OR one of its swap
  * replacements, never both, so `count(base) + Σ count(its replacements)` cannot
@@ -870,7 +1660,8 @@ function swapConflicts(
   const baseIds = new Set(baseMap.keys());
   const addedBy = new Map<string, number>();
   for (const o of options) {
-    for (const id of o.replacement ?? []) addedBy.set(id, (addedBy.get(id) ?? 0) + 1);
+    for (const id of o.replacement ?? [])
+      addedBy.set(id, (addedBy.get(id) ?? 0) + 1);
     for (const g of o.replacement_choice ?? []) {
       for (const id of g) addedBy.set(id, (addedBy.get(id) ?? 0) + 1);
     }

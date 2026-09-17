@@ -20,7 +20,7 @@ from __future__ import annotations
 import json
 import math
 import sys
-from typing import Any, TypeGuard
+from typing import Any, TypeGuard, cast
 
 from wh40kdc._spec import SPEC_VERSION
 from wh40kdc._version import __version__ as IMPL_VERSION
@@ -29,7 +29,12 @@ from wh40kdc.cruncher import attribute_stages, crunch
 from wh40kdc.data.affordability import candidate_affordability
 from wh40kdc.data.base import encode_base
 from wh40kdc.data.dataset import Dataset
-from wh40kdc.data.loadout import base_loadout, check_unit_legality, maximal_loadout
+from wh40kdc.data.loadout import (
+    base_loadout,
+    check_unit_legality,
+    loadout_candidates,
+    maximal_loadout,
+)
 from wh40kdc.data.normalize import normalize_name
 from wh40kdc.data.roster import validate_roster_core
 from wh40kdc.export import EXPORT_FORMATS, export_roster
@@ -407,9 +412,7 @@ def _handle_linked_query(state: RunnerState, args: Any) -> Response:
                 return _err("UNKNOWN_ENTITY", {"kind": "unit", "id": input_.get("unitId")})
             # The corpus always supplies modelCount; missing coerces to 0.
             model_count = int(input_.get("modelCount") or 0)
-            comp = next(
-                (c for c in ds.unit_compositions if c.get("unit_id") == unit_id), None
-            )
+            comp = next((c for c in ds.unit_compositions if c.get("unit_id") == unit_id), None)
             fn = base_loadout if query == "base_loadout" else maximal_loadout
             lo = fn(
                 u.raw,
@@ -419,6 +422,34 @@ def _handle_linked_query(state: RunnerState, args: Any) -> Response:
             )
             # Encode the id→count map as sorted "id:count" strings for set compare.
             return _ok(sorted(f"{id_}:{n}" for id_, n in lo.items()))
+        if query == "loadout_candidates":
+            faction_id = input_.get("factionId")
+            u = (
+                ds.units.get_in_faction(unit_id, cast(str, faction_id))
+                if faction_id
+                else ds.units.get_any(unit_id)
+            )
+            if u is None:
+                return _err("UNKNOWN_ENTITY", {"kind": "unit", "id": input_.get("unitId")})
+            comp = next(
+                (
+                    c
+                    for c in ds.unit_compositions
+                    if c.get("unit_id") == unit_id
+                    and c.get("faction_id") == u.raw.get("faction_id")
+                ),
+                None,
+            )
+            return _ok(
+                loadout_candidates(
+                    u.raw,
+                    int(input_.get("modelCount") or 0),
+                    ds.wargear_options_of(u.raw),
+                    (comp or {}).get("models"),
+                    (comp or {}).get("tiers"),
+                    int(input_["limit"]) if input_.get("limit") is not None else None,
+                )
+            )
         if query == "phases_of":
             ab = ds.abilities.get_any(input_.get("abilityId") or "")
             if ab is None:
@@ -478,11 +509,7 @@ def _handle_linked_query(state: RunnerState, args: Any) -> Response:
         if query == "triggers_for_event":
             event = input_.get("event") or ""
             return _ok(
-                sorted(
-                    rt["ability_id"]
-                    for rt in ds.reactive_triggers()
-                    if rt["event"] == event
-                )
+                sorted(rt["ability_id"] for rt in ds.reactive_triggers() if rt["event"] == event)
             )
         return _err("INVALID_INPUT", {"detail": f"unknown linked_query: {query}"})
     except Exception as e:
@@ -807,7 +834,7 @@ def _handle_score_state(state: RunnerState, args: Any) -> Response:
                 return error
             assert resolved is not None
             vp = score_secondary_event(resolved, card, pg["approach"])
-            pg = score_secondary(pg, raw["round"], raw["cardId"], vp)
+            pg = score_secondary(pg, raw["round"], raw["cardId"], vp, _optional_caps(raw))
         elif kind == "score-primary":
             if not isinstance(raw.get("cardId"), str) or not _is_number(raw.get("round")):
                 return _err("INVALID_INPUT", {"detail": "score-primary needs cardId and round"})

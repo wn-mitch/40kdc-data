@@ -351,7 +351,45 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
-        }
+        },
+        "loadout_variants": [
+          {
+            "name": "Rubric Marine w/ inferno boltgun",
+            "weapon_ids": [
+              "inferno-boltgun",
+              "close-combat-weapon-rubric-marines"
+            ],
+            "max_count": 9
+          },
+          {
+            "name": "Rubric Marine w/ warpflamer",
+            "weapon_ids": [
+              "warpflamer",
+              "close-combat-weapon-rubric-marines"
+            ],
+            "max_count": 9
+          },
+          {
+            "name": "Rubric Marine w/ soulreaper cannon",
+            "weapon_ids": [
+              "close-combat-weapon-rubric-marines",
+              "soulreaper-cannon"
+            ],
+            "max_count": 1
+          }
+        ],
+        "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Rubric Marine w/ inferno boltgun",
+              "Rubric Marine w/ warpflamer",
+              "Rubric Marine w/ soulreaper cannon"
+            ],
+            "count": 9,
+            "per_models": 0,
+            "scope": "model-row"
+          }
+        ]
       }
     ],
     "game_version": {
@@ -590,7 +628,44 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 40
-        }
+        },
+        "loadout_variants": [
+          {
+            "name": "Scarab Occult Terminator w/ inferno combi-bolter and khopesh",
+            "weapon_ids": [
+              "inferno-combi-bolter",
+              "prosperine-khopesh"
+            ],
+            "max_count": 9
+          },
+          {
+            "name": "Scarab Occult Terminator w/ heavy warpflamer",
+            "weapon_ids": [
+              "heavy-warpflamer",
+              "prosperine-khopesh"
+            ],
+            "max_count": 2
+          },
+          {
+            "name": "Scarab Occult Terminator w/ soulreaper cannon",
+            "weapon_ids": [
+              "prosperine-khopesh",
+              "soulreaper-cannon"
+            ],
+            "max_count": 2
+          }
+        ],
+        "loadout_variant_budgets": [
+          {
+            "variant_names": [
+              "Scarab Occult Terminator w/ heavy warpflamer",
+              "Scarab Occult Terminator w/ soulreaper cannon"
+            ],
+            "count": 2,
+            "per_models": 0,
+            "scope": "model-row"
+          }
+        ]
       }
     ],
     "game_version": {
@@ -764,7 +839,42 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
-        }
+        },
+        "loadout_variants": [
+          {
+            "name": "Tzaangor w/ tzaangor blades",
+            "weapon_ids": [
+              "tzaangor-blades"
+            ],
+            "max_count": 19
+          },
+          {
+            "name": "Tzaangor w/ pistol and chainsword",
+            "weapon_ids": [
+              "autopistol",
+              "chainsword-tzaangors"
+            ],
+            "max_count": 19
+          },
+          {
+            "name": "Tzaangor w/ pistol and chainsword and brayhorn",
+            "weapon_ids": [
+              "autopistol",
+              "chainsword-tzaangors",
+              "brayhorn"
+            ],
+            "max_count": 1
+          },
+          {
+            "name": "Tzaangor w/ pistol and chainsword and herd banner",
+            "weapon_ids": [
+              "autopistol",
+              "chainsword-tzaangors",
+              "herd-banner"
+            ],
+            "max_count": 1
+          }
+        ]
       }
     ],
     "game_version": {
@@ -1163,6 +1273,203 @@
         "models": [
           {
             "name": "Defiler",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "kaaskrek",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Kaa'skrek",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "baleful-devolution",
+          "force-stave"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Kaa'skrek",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "prism-of-zadophon-rubric-marines",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Aspiring Sorcerer",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "force-weapon-rubric-marines",
+          "inferno-bolt-pistol-prism-of-zadophon",
+          "malefic-curse"
+        ]
+      },
+      {
+        "name": "Rubric Marine with Soulreaper Cannon and Stocks and Fists",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "soulreaper-cannon",
+          "stocks-and-fists"
+        ]
+      },
+      {
+        "name": "Rubric Marine with Inferno Boltgun and Stocks and Fists",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "inferno-boltgun",
+          "stocks-and-fists"
+        ]
+      },
+      {
+        "name": "Rubric Marine with Warpflamer and Stocks and Fists",
+        "min": 5,
+        "max": 5,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "warpflamer",
+          "stocks-and-fists"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Aspiring Sorcerer",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Rubric Marine with Soulreaper Cannon and Stocks and Fists",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Rubric Marine with Inferno Boltgun and Stocks and Fists",
+            "min": 3,
+            "max": 3
+          },
+          {
+            "name": "Rubric Marine with Warpflamer and Stocks and Fists",
+            "min": 5,
+            "max": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "prism-of-zadophon-tzaangor-enlightened",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Tzaangor Enlightened",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "divining-spear"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Tzaangor Enlightened",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "zadophon-the-soul-eater",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Zadophon the Soul Eater",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        },
+        "default_weapon_ids": [
+          "hellforged-weapons",
+          "infernal-cannon"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Zadophon the Soul Eater",
             "min": 1,
             "max": 1
           }
