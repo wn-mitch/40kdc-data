@@ -17,6 +17,26 @@
       "uniqueItems": true,
       "maxItems": 1
     },
+    "overridable_parameters": {
+      "type": "array",
+      "description": "Parameters that have a documented default and MAY be overridden by a variant. Distinct from required_parameters, which must be supplied: Deep Strike's distance defaults to 8\" but several factions ship a variant that overrides it (Deep Strike 6\"), so the distance is real and routinely changed even though the base ability takes no argument.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "default": {
+            "oneOf": [
+              { "type": "integer" },
+              { "type": "string", "minLength": 1 }
+            ]
+          },
+          "unit": { "type": "string", "minLength": 1 }
+        },
+        "required": ["name", "default"],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
     "effect": {
       "oneOf": [
         { "$ref": "../enrichment/ability-dsl/effect.schema.json" },

@@ -3364,11 +3364,14 @@ fn describe_single(e: &SingleEffect, ctx: &Ctx) -> String {
                 .unwrap_or_default();
             format!("every model in {subj} must take a Desperate Escape test{penalty}")
         }
-        T::ReactiveCharge => format!(
-            "{subj} can resolve a charge; if its charge-roll result is greater than {} after modifiers, change it to {}",
-            jv(m, "charge_roll_max_after_modifiers"),
-            jv(m, "charge_roll_max_after_modifiers")
-        ),
+        T::ReactiveCharge => match notnull(m, "charge_roll_max_after_modifiers") {
+            false => format!("{subj} can resolve a charge"),
+            true => format!(
+                "{subj} can resolve a charge; if its charge-roll result is greater than {} after modifiers, change it to {}",
+                jv(m, "charge_roll_max_after_modifiers"),
+                jv(m, "charge_roll_max_after_modifiers")
+            ),
+        },
         T::Embark => format!("{subj} can embark within this Transport"),
         T::LeadershipModifier => {
             let has_test = notnull(m, "test");

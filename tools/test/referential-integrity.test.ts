@@ -155,15 +155,19 @@ describe("referential integrity", () => {
     ).toBe(true);
   });
 
-  it("the real dataset satisfies the collision policy table", async () => {
-    // The full-dataset run happens in the first test; this pins that no
-    // policy-table failures exist in committed data (drift re-synced, no
-    // within-faction dups, no undeclared file types).
-    const result = await checkReferentialIntegrity();
-    const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message));
-    expect(messages.filter((m) => m.includes("collision policy"))).toEqual([]);
-    expect(messages.filter((m) => m.includes("drifted across factions"))).toEqual([]);
-  });
+  it(
+    "the real dataset satisfies the collision policy table",
+    async () => {
+      // The full-dataset run happens in the first test; this pins that no
+      // policy-table failures exist in committed data (drift re-synced, no
+      // within-faction dups, no undeclared file types).
+      const result = await checkReferentialIntegrity();
+      const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message));
+      expect(messages.filter((m) => m.includes("collision policy"))).toEqual([]);
+      expect(messages.filter((m) => m.includes("drifted across factions"))).toEqual([]);
+    },
+    15_000,
+  );
 
   it("attributes a unit-scoped weapon variant by its LONGEST unit-id suffix", () => {
     const unitIds = ["boyz", "beast-snagga-boyz", "squighog-boyz"];

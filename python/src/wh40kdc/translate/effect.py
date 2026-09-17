@@ -2694,6 +2694,8 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
         )
         return f"every model in {subj} must take a Desperate Escape test{penalty}"
     if etype == "reactive-charge":
+        if m.get("charge_roll_max_after_modifiers") is None:
+            return f"{subj} can resolve a charge"
         return (
             f"{subj} can resolve a charge; if its charge-roll result is greater than "
             f"{_jstr(m.get('charge_roll_max_after_modifiers'))} after modifiers, change it to "

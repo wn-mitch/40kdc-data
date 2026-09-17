@@ -2110,7 +2110,9 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       return `every model in ${subj} must take a Desperate Escape test${penalty}`;
     }
     case "reactive-charge":
-      return `${subj} can resolve a charge; if its charge-roll result is greater than ${jstr(m.charge_roll_max_after_modifiers)} after modifiers, change it to ${jstr(m.charge_roll_max_after_modifiers)}`;
+      return m.charge_roll_max_after_modifiers == null
+        ? `${subj} can resolve a charge`
+        : `${subj} can resolve a charge; if its charge-roll result is greater than ${jstr(m.charge_roll_max_after_modifiers)} after modifiers, change it to ${jstr(m.charge_roll_max_after_modifiers)}`;
     case "terrain-area-tag":
       return m.tag != null
         ? `the terrain area is marked as ${dekebab(jstr(m.tag))}`

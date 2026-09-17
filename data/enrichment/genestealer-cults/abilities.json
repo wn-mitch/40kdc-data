@@ -2282,11 +2282,9 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "ability-grant",
+      "type": "remove-battle-shock",
       "target": "friendly-within-aura",
-      "modifier": {
-        "grant_type": "remove-battle-shock"
-      }
+      "modifier": {}
     },
     "scope": {
       "range": "aura-custom",
