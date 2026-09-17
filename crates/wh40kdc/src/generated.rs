@@ -10564,6 +10564,2548 @@ pub struct GameVersionRef {
     pub dataslate: DataslateVersion,
     pub edition: Edition,
 }
+///`GrantType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "ability-range-modifier",
+///    "act-after-move",
+///    "act-after-shooting",
+///    "action-after-advance-fall-back",
+///    "action-after-fall-back",
+///    "action-and-shoot-eligibility",
+///    "action-eligibility",
+///    "action-eligibility-after-advance-or-fall-back",
+///    "activate-blessing-of-khorne",
+///    "activate-dread-ability",
+///    "add-embarked-oc-to-self-oc",
+///    "add-order",
+///    "additional-oath",
+///    "adjust-target-marker",
+///    "advance-6-instead-of-roll",
+///    "advance-and-charge",
+///    "advance-and-charge-if-selected-among-up-to-two-other-units",
+///    "advance-roll-set-to-six",
+///    "advance-through-all-models",
+///    "afflicted",
+///    "agile-manoeuvre-d6-add-1",
+///    "agile-manoeuvre-phase-limit-exemption",
+///    "all-blessings-of-khorne-active",
+///    "allied-astra-militarum-inclusion",
+///    "always-within-synapse-range",
+///    "apply-additional-plague",
+///    "apply-battle-shock",
+///    "army-composition-constraint",
+///    "army-list-allowance-one-inquisitorial-agents-unit-per-inquisitor",
+///    "army-list-allowance-one-voidsmen-at-arms-unit-per-voidfarers-character",
+///    "battle-focus",
+///    "battle-round-plus-one-for-arrival",
+///    "battle-shock-test",
+///    "battle-shock-test-re-roll",
+///    "battle-shocked-status",
+///    "battle-shocked-targeting-permission",
+///    "becomes-battle-shocked",
+///    "benefit-of-cover-against-triggering-attack",
+///    "blessings-of-khorne",
+///    "bodyguard-sacrifice-psychic-buff",
+///    "bomb-squig-first-sub-unit-found-em-second-sub-unit",
+///    "bondsman-select-three-armiger-12in",
+///    "bondsman-select-three-armiger-15in",
+///    "bonus-healing-d3",
+///    "boon-of-blood",
+///    "boost-psychic-test-via-mortal-wounds",
+///    "butcha-boyz-embarked-model-attack-scaling-2-cap-22",
+///    "cabal-of-sorcerers",
+///    "cannot-be-targeted-by-fire-overwatch",
+///    "cannot-be-warlord",
+///    "cannot-benefit-from-cover",
+///    "cannot-charge-this-turn",
+///    "cannot-embark-transport",
+///    "cannot-embark-venerable-land-raider",
+///    "cannot-have-benefit-of-cover",
+///    "cannot-use-personal-teleporters",
+///    "canticle",
+///    "charge-after-advance",
+///    "charge-after-advance-fallback",
+///    "charge-after-advance-or-fall-back",
+///    "charge-after-advance-or-fallback",
+///    "charge-after-disembark",
+///    "charge-after-fall-back",
+///    "charge-after-fallback",
+///    "charge-after-movement",
+///    "charge-eligibility-after-advance-or-fall-back",
+///    "charge-eligible-after-normal-move-disembark",
+///    "charge-ineligible",
+///    "charge-ineligible-for-remainder-of-turn",
+///    "choice",
+///    "contagion-range-extension-3",
+///    "contagion-range-modifier",
+///    "corsair-enhancement-selection",
+///    "counts-as-advanced-this-turn",
+///    "covered-in-squigs",
+///    "create-identical-replacement-unit",
+///    "crew-tokens",
+///    "critical-hit-on",
+///    "critical-wound-on-successful-wound-roll",
+///    "daemon-primarch-of-slaanesh-selection",
+///    "daemonic-rage",
+///    "dark-pact-both-abilities",
+///    "dark-pacts",
+///    "deadly-demise-choose-result",
+///    "deadly-demise-d6",
+///    "deadly-demise-disabled",
+///    "deadly-demise-threshold",
+///    "declare-charge",
+///    "deep-strike",
+///    "deep-strike-6",
+///    "deep-strike-6inch-exclusion",
+///    "deep-strike-for-selected-kroot-units",
+///    "deep-strike-within-flow-of-magic",
+///    "defence-line-section-assembly",
+///    "deferred-destroyed-model-removal",
+///    "deferred-removal-until-fought-or-end-of-phase",
+///    "delayed-model-removal",
+///    "deny-reinforcements-within-12",
+///    "designate-enemy-detection-range-modifier",
+///    "designate-target-marker",
+///    "designated-objective-oc-bonus",
+///    "desperate-escape",
+///    "desperate-escape-hazard-minus-one",
+///    "desperate-escape-tests-on-fall-back",
+///    "detachment-enhancements-gain-expended-state",
+///    "detachment-saga-completed",
+///    "detection-range-extended-6",
+///    "detection-range-minus-3-inches",
+///    "detection-range-modifier",
+///    "disembark-after-advance-charge",
+///    "disembarking-pulse-weapons-attack-bonus",
+///    "eadbanger-ranged-weapon-range-24in-bs-4plus",
+///    "eligible-to-declare-charge-after-fall-back",
+///    "eligible-to-fight-again",
+///    "eligible-to-start-action-after-advance-or-fall-back",
+///    "eligible-to-start-an-action-after-an-advance-move",
+///    "embark-after-enemy-shooting",
+///    "embark-after-fight",
+///    "embark-at-end-of-fight-phase",
+///    "embark-in-selected-transport",
+///    "embark-in-transport",
+///    "embark-when-charged",
+///    "empower-possessed-blade",
+///    "enable-rapid-disembark-for-embarked-units",
+///    "engaged-enemies-must-prefer-scintillating-legions-targets",
+///    "engaged-enemies-must-target-this-unit",
+///    "enhanced-foul-spores-aura-9",
+///    "enraged-abjuration",
+///    "enter-strategic-reserves",
+///    "expended-enhancement-cannot-be-used",
+///    "expended-enhancements-all-refreshed",
+///    "extend-bondsman-range",
+///    "extend-datasheet-aura-range",
+///    "extend-psychic-ability-range-6",
+///    "extend-ritual-range-6",
+///    "extended-fight-eligibility",
+///    "extended-order-range",
+///    "extra-leader-attachment",
+///    "extra-order",
+///    "extra-ritual-attempt",
+///    "extremis-double-ability-uses",
+///    "fade-back-agile-manoeuvre-free",
+///    "fallback-denial-on-leadership-failure",
+///    "fallback-exception",
+///    "fallback-hazard-auto-pass",
+///    "farsight-ethereal-mutual-exclusion",
+///    "fight-one-additional-time",
+///    "fire-overwatch-targeting-immunity",
+///    "flexible-strategic-reserves",
+///    "forced-battle-shock-roll",
+///    "forced-battle-shock-test",
+///    "found-em-first-sub-unit-bomb-squig-second-sub-unit",
+///    "free-tank-shock",
+///    "grenade-stratagem-free-use",
+///    "guided-units-lethal-hits-vs-spotted",
+///    "guided-units-sustained-hits-1-vs-spotted",
+///    "half-range-consideration",
+///    "harnessed-alien-instincts",
+///    "hazard-check-pair-per-selected-tagged-weapon",
+///    "hazard-roll-per-model",
+///    "heal-bonus",
+///    "heal-d3-wounds",
+///    "heal-wounds",
+///    "hero-of-hades-hive-ability",
+///    "heroic-intervention-at-0cp",
+///    "heroic-intervention-frequency-bypass",
+///    "heroic-intervention-limit-exempt",
+///    "icon-of-war-selection",
+///    "idol-of-blessed-blood",
+///    "idol-of-burning-wrath",
+///    "idol-of-infinite-rage",
+///    "ignore-hit-roll-modifiers",
+///    "ignore-move-and-advance-modifiers",
+///    "ignore-strategic-reserves-unit-cap",
+///    "improved-grenades-mortal-wound-threshold",
+///    "incoming-psychic-attacks-hazardous",
+///    "incoming-ranged-attacks-ignore-cover-through-end-of-next-friendly-turn",
+///    "incoming-unmodified-ranged-hit-results-one-through-three-fail",
+///    "increased-detection-range",
+///    "individual-model-deployment-within-12-coherency",
+///    "infiltrators",
+///    "infiltrators-for-selected-rubricae",
+///    "ingress-into-enemy-deployment-zone",
+///    "ingress-move",
+///    "ingress-within-6",
+///    "intervening-line-of-sight-cover",
+///    "into-strategic-reserves",
+///    "issue-extra-order-to-abhuman-unit",
+///    "issue-order-to-disembarked-regiment-unit",
+///    "issue-order-to-extra-platoon-units",
+///    "issue-order-to-multiple-units",
+///    "issue-orders",
+///    "issue-orders-regiment-up-to-2",
+///    "killing-blow-extended-round-4",
+///    "kindred-sorcery-choice-override",
+///    "leader-attachment",
+///    "leadership-test-or-3-mortal-wounds",
+///    "leadership-test-re-roll",
+///    "localised-stealth-projectors",
+///    "lone-operative",
+///    "lose-infantry-keyword",
+///    "make-a-blessings-of-khorne-roll-and-activate-one-additional-blessing",
+///    "make-one-hazard-roll",
+///    "mandatory-desperate-escape",
+///    "mandatory-warlord-designation",
+///    "may-start-in-reserves",
+///    "melee-cleave-increment-if-present",
+///    "melee-cleave-one-if-absent",
+///    "melee-critical-hit-on-5-plus",
+///    "melta-range-add-6",
+///    "might-of-khorne",
+///    "miracle-dice-reroll-before-pool",
+///    "miracle-dice-value-set-6",
+///    "mobbed-roll-adjustment-plus-one-or-minus-two-at-three-models",
+///    "mobile",
+///    "model-passthrough-excluding-monsters-and-vehicles",
+///    "models-within-3-are-eligible-to-fight-and-can-target-enemy-units-within-3",
+///    "move-does-not-prevent-action",
+///    "move-must-finish-in-objective-range",
+///    "move-through-models",
+///    "multi-target-attack",
+///    "multiple-orders",
+///    "multiple-orders-up-to-two",
+///    "must-be-warlord",
+///    "must-start-in-reserves",
+///    "mutated-objective-hazard",
+///    "no-advance-roll",
+///    "no-smoke",
+///    "normal-move-d3-plus-3-inches",
+///    "nurgle-gift",
+///    "nurgle-gift-as-death-guard-model",
+///    "oath-fulfilled",
+///    "optional-redeployment-selection",
+///    "optional-restore-three-lost-wounds",
+///    "orders-persist-during-battle-shock",
+///    "outflank-set-up-in-opponent-deployment-zone",
+///    "pact-both-abilities",
+///    "passenger-relocation-on-destruction",
+///    "patient-hunter-from-round-2",
+///    "perform-ingress-move",
+///    "perform-pulse-jet-move",
+///    "permit-embarked-units-assault-disembark",
+///    "persistent-orders",
+///    "pinned",
+///    "place-in-strategic-reserves",
+///    "place-into-strategic-reserves",
+///    "place-replacement-in-strategic-reserves",
+///    "place-selected-unit-in-strategic-reserves",
+///    "plague-selection",
+///    "platform-setup-and-move-override",
+///    "post-deployment-redeploy",
+///    "post-fallback-actions",
+///    "pregame-redeploy-up-to-three-infantry-units",
+///    "pregame-redeploy-up-to-three-infantry-units-may-enter-strategic-reserves",
+///    "pregame-redeploy-up-to-three-units-may-enter-strategic-reserves",
+///    "pregame-redeploy-up-to-two-regiment-or-squadron-units-may-enter-strategic-reserves",
+///    "primarch-of-the-first-legion-selection",
+///    "psychic-abilities",
+///    "psychic-abilities-level-one",
+///    "psychic-level-1",
+///    "psychic-level-2",
+///    "ranged-rapid-fire-floor-one-increment-existing",
+///    "ranged-weapon",
+///    "ranged-weapon-range-plus-3in",
+///    "ranged-weapon-range-plus-three-excluding-torrent",
+///    "re-roll-advance",
+///    "re-roll-channelling-die-at-vehicle-wound-cost",
+///    "re-roll-hazardous-tests-psychic",
+///    "re-roll-psychic-rolls",
+///    "reactive-charge",
+///    "reactive-embark-when-charged",
+///    "redeploy-heretic-astartes-to-reserves",
+///    "redeploy-on-battlefield",
+///    "redeploy-to-reserves",
+///    "redeploy-to-strategic-reserves",
+///    "redeploy-up-to-3-astra-militarum-to-strategic-reserves-override",
+///    "redeploy-up-to-three-friendly-orks-infantry",
+///    "redeployment-selection-cap-three",
+///    "reinforcement-any-of-turns-1-to-3",
+///    "reinforcements-first-three-movement-phases",
+///    "relics-of-matriarchs",
+///    "remain-hidden-after-shooting",
+///    "remove-already-destroyed-model-from-battlefield",
+///    "remove-battle-shock",
+///    "remove-battle-shocked-status",
+///    "remove-from-battlefield-after-resolution",
+///    "remove-hunter-organism",
+///    "replace-destroyed-unit-in-reserves",
+///    "replace-melee-attack-bonus-with-plus-two-at-eleven-models",
+///    "reroll-advance",
+///    "reroll-duplicate-random-results",
+///    "reserve-deployment-denial-aura-12",
+///    "reserves-limit-exempt",
+///    "reserves-limit-exempt-with-cargo",
+///    "restore-replacement-to-original-model-count-and-full-health",
+///    "restricted-from-warlord",
+///    "return-destroyed-models",
+///    "reuse-once-per-battle-ability",
+///    "riled-up-expiring-at-next-friendly-turn-boundary",
+///    "ritual-bonus-on-cabal-death",
+///    "roll-off-winner-chooses-redeploy-order",
+///    "same-unit-surge-move-up-to-d6",
+///    "scornful-analysis-designated",
+///    "scouts-6",
+///    "scouts-7",
+///    "scouts-9-transport",
+///    "select-doombolt-ignoring-attempt-limit",
+///    "select-new-quarry",
+///    "select-one-infantry-unit-gains-scouts-6",
+///    "select-up-to-two-ctan-powers-restrict-others",
+///    "selected-embarked-orks-infantry-disembark-move",
+///    "selective-from-pool",
+///    "set-up-as-close-as-possible-to-destroyed-location-unengaged",
+///    "shadow-form-ability-select",
+///    "shadow-of-chaos",
+///    "shaken-status",
+///    "share-war-dog-auras",
+///    "shoot-after-action",
+///    "shoot-after-advance",
+///    "shoot-after-advance-or-fall-back",
+///    "shoot-after-fall-back",
+///    "shoot-after-fallback",
+///    "shoot-again",
+///    "shoot-and-charge-after-advance-fall-back",
+///    "shoot-and-charge-after-fall-back",
+///    "shoot-as-if-shooting-phase",
+///    "shoot-out-of-phase",
+///    "shoot-while-hidden",
+///    "shoot-while-in-action",
+///    "shoot-while-performing-action",
+///    "shooting-does-not-prevent-hidden",
+///    "snap-shooting",
+///    "snap-shooting-response",
+///    "split-by-headtakers-hunting-wolves",
+///    "split-into-single-model-units",
+///    "split-unit-five-five",
+///    "spotted",
+///    "stand-on-terrain-sections",
+///    "stealth",
+///    "stratagem-cost-reduction",
+///    "stratagem-for-0cp",
+///    "stratagem-targetable-while-battle-shocked",
+///    "strategic-reserves-during-redeployment",
+///    "strategic-reserves-exempt",
+///    "strategic-reserves-override",
+///    "strategic-reserves-without-unit-limit",
+///    "summon-chaos-spawn-on-death",
+///    "summon-poxwalkers-strategic-reserves",
+///    "super-heavy-walker",
+///    "suppress-shot-target-hit-penalty",
+///    "suppressed",
+///    "surrogate-hosts",
+///    "swap-hostile-acquisition-and-fortify-takeover",
+///    "take-battle-shock-test",
+///    "take-to-the-skies",
+///    "tank-shock-zero-cp-unrestricted",
+///    "targetable-by-ranged-while-engaged",
+///    "temple-relics",
+///    "terminate-current-attack-sequence",
+///    "terror-of-khorne",
+///    "titanic-self-aura-inclusion",
+///    "transport-capacity-30-with-keyword-multipliers",
+///    "treat-battle-round-one-higher-for-reserves",
+///    "treat-roll-as-unmodified-6",
+///    "tunnel-marker-reserves-deployment",
+///    "unhideable-through-end-of-next-friendly-turn",
+///    "unmodified-hit-critical",
+///    "use-the-blue-horrors-datasheet",
+///    "vanguard-selection",
+///    "vengeance-move",
+///    "vow-of-atonement-selection",
+///    "warlord",
+///    "warmaster-selection",
+///    "weapon",
+///    "weapon-grant",
+///    "weapon-range-increase",
+///    "wholly-within-flow-of-magic",
+///    "withdraw-to-strategic-reserves",
+///    "wrathful-presence-selection"
+///  ],
+///  "$comment": "Frozen vocabulary for ability-grant modifier.grant_type, generated by tools/src/audit-grant-types.ts from audited usage across all factions. This is a snapshot of what exists, not an approved design: entries that duplicate a declared effect type, near-duplicates of each other, and single-use one-offs are all still present. Migrating those out shrinks the list; adding to it should require a reason."
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum GrantType {
+    #[serde(rename = "ability-range-modifier")]
+    AbilityRangeModifier,
+    #[serde(rename = "act-after-move")]
+    ActAfterMove,
+    #[serde(rename = "act-after-shooting")]
+    ActAfterShooting,
+    #[serde(rename = "action-after-advance-fall-back")]
+    ActionAfterAdvanceFallBack,
+    #[serde(rename = "action-after-fall-back")]
+    ActionAfterFallBack,
+    #[serde(rename = "action-and-shoot-eligibility")]
+    ActionAndShootEligibility,
+    #[serde(rename = "action-eligibility")]
+    ActionEligibility,
+    #[serde(rename = "action-eligibility-after-advance-or-fall-back")]
+    ActionEligibilityAfterAdvanceOrFallBack,
+    #[serde(rename = "activate-blessing-of-khorne")]
+    ActivateBlessingOfKhorne,
+    #[serde(rename = "activate-dread-ability")]
+    ActivateDreadAbility,
+    #[serde(rename = "add-embarked-oc-to-self-oc")]
+    AddEmbarkedOcToSelfOc,
+    #[serde(rename = "add-order")]
+    AddOrder,
+    #[serde(rename = "additional-oath")]
+    AdditionalOath,
+    #[serde(rename = "adjust-target-marker")]
+    AdjustTargetMarker,
+    #[serde(rename = "advance-6-instead-of-roll")]
+    Advance6InsteadOfRoll,
+    #[serde(rename = "advance-and-charge")]
+    AdvanceAndCharge,
+    #[serde(rename = "advance-and-charge-if-selected-among-up-to-two-other-units")]
+    AdvanceAndChargeIfSelectedAmongUpToTwoOtherUnits,
+    #[serde(rename = "advance-roll-set-to-six")]
+    AdvanceRollSetToSix,
+    #[serde(rename = "advance-through-all-models")]
+    AdvanceThroughAllModels,
+    #[serde(rename = "afflicted")]
+    Afflicted,
+    #[serde(rename = "agile-manoeuvre-d6-add-1")]
+    AgileManoeuvreD6Add1,
+    #[serde(rename = "agile-manoeuvre-phase-limit-exemption")]
+    AgileManoeuvrePhaseLimitExemption,
+    #[serde(rename = "all-blessings-of-khorne-active")]
+    AllBlessingsOfKhorneActive,
+    #[serde(rename = "allied-astra-militarum-inclusion")]
+    AlliedAstraMilitarumInclusion,
+    #[serde(rename = "always-within-synapse-range")]
+    AlwaysWithinSynapseRange,
+    #[serde(rename = "apply-additional-plague")]
+    ApplyAdditionalPlague,
+    #[serde(rename = "apply-battle-shock")]
+    ApplyBattleShock,
+    #[serde(rename = "army-composition-constraint")]
+    ArmyCompositionConstraint,
+    #[serde(rename = "army-list-allowance-one-inquisitorial-agents-unit-per-inquisitor")]
+    ArmyListAllowanceOneInquisitorialAgentsUnitPerInquisitor,
+    #[serde(
+        rename = "army-list-allowance-one-voidsmen-at-arms-unit-per-voidfarers-character"
+    )]
+    ArmyListAllowanceOneVoidsmenAtArmsUnitPerVoidfarersCharacter,
+    #[serde(rename = "battle-focus")]
+    BattleFocus,
+    #[serde(rename = "battle-round-plus-one-for-arrival")]
+    BattleRoundPlusOneForArrival,
+    #[serde(rename = "battle-shock-test")]
+    BattleShockTest,
+    #[serde(rename = "battle-shock-test-re-roll")]
+    BattleShockTestReRoll,
+    #[serde(rename = "battle-shocked-status")]
+    BattleShockedStatus,
+    #[serde(rename = "battle-shocked-targeting-permission")]
+    BattleShockedTargetingPermission,
+    #[serde(rename = "becomes-battle-shocked")]
+    BecomesBattleShocked,
+    #[serde(rename = "benefit-of-cover-against-triggering-attack")]
+    BenefitOfCoverAgainstTriggeringAttack,
+    #[serde(rename = "blessings-of-khorne")]
+    BlessingsOfKhorne,
+    #[serde(rename = "bodyguard-sacrifice-psychic-buff")]
+    BodyguardSacrificePsychicBuff,
+    #[serde(rename = "bomb-squig-first-sub-unit-found-em-second-sub-unit")]
+    BombSquigFirstSubUnitFoundEmSecondSubUnit,
+    #[serde(rename = "bondsman-select-three-armiger-12in")]
+    BondsmanSelectThreeArmiger12in,
+    #[serde(rename = "bondsman-select-three-armiger-15in")]
+    BondsmanSelectThreeArmiger15in,
+    #[serde(rename = "bonus-healing-d3")]
+    BonusHealingD3,
+    #[serde(rename = "boon-of-blood")]
+    BoonOfBlood,
+    #[serde(rename = "boost-psychic-test-via-mortal-wounds")]
+    BoostPsychicTestViaMortalWounds,
+    #[serde(rename = "butcha-boyz-embarked-model-attack-scaling-2-cap-22")]
+    ButchaBoyzEmbarkedModelAttackScaling2Cap22,
+    #[serde(rename = "cabal-of-sorcerers")]
+    CabalOfSorcerers,
+    #[serde(rename = "cannot-be-targeted-by-fire-overwatch")]
+    CannotBeTargetedByFireOverwatch,
+    #[serde(rename = "cannot-be-warlord")]
+    CannotBeWarlord,
+    #[serde(rename = "cannot-benefit-from-cover")]
+    CannotBenefitFromCover,
+    #[serde(rename = "cannot-charge-this-turn")]
+    CannotChargeThisTurn,
+    #[serde(rename = "cannot-embark-transport")]
+    CannotEmbarkTransport,
+    #[serde(rename = "cannot-embark-venerable-land-raider")]
+    CannotEmbarkVenerableLandRaider,
+    #[serde(rename = "cannot-have-benefit-of-cover")]
+    CannotHaveBenefitOfCover,
+    #[serde(rename = "cannot-use-personal-teleporters")]
+    CannotUsePersonalTeleporters,
+    #[serde(rename = "canticle")]
+    Canticle,
+    #[serde(rename = "charge-after-advance")]
+    ChargeAfterAdvance,
+    #[serde(rename = "charge-after-advance-fallback")]
+    ChargeAfterAdvanceFallback,
+    #[serde(rename = "charge-after-advance-or-fall-back")]
+    ChargeAfterAdvanceOrFallBack,
+    #[serde(rename = "charge-after-advance-or-fallback")]
+    ChargeAfterAdvanceOrFallback,
+    #[serde(rename = "charge-after-disembark")]
+    ChargeAfterDisembark,
+    #[serde(rename = "charge-after-fall-back")]
+    ChargeAfterFallBack,
+    #[serde(rename = "charge-after-fallback")]
+    ChargeAfterFallback,
+    #[serde(rename = "charge-after-movement")]
+    ChargeAfterMovement,
+    #[serde(rename = "charge-eligibility-after-advance-or-fall-back")]
+    ChargeEligibilityAfterAdvanceOrFallBack,
+    #[serde(rename = "charge-eligible-after-normal-move-disembark")]
+    ChargeEligibleAfterNormalMoveDisembark,
+    #[serde(rename = "charge-ineligible")]
+    ChargeIneligible,
+    #[serde(rename = "charge-ineligible-for-remainder-of-turn")]
+    ChargeIneligibleForRemainderOfTurn,
+    #[serde(rename = "choice")]
+    Choice,
+    #[serde(rename = "contagion-range-extension-3")]
+    ContagionRangeExtension3,
+    #[serde(rename = "contagion-range-modifier")]
+    ContagionRangeModifier,
+    #[serde(rename = "corsair-enhancement-selection")]
+    CorsairEnhancementSelection,
+    #[serde(rename = "counts-as-advanced-this-turn")]
+    CountsAsAdvancedThisTurn,
+    #[serde(rename = "covered-in-squigs")]
+    CoveredInSquigs,
+    #[serde(rename = "create-identical-replacement-unit")]
+    CreateIdenticalReplacementUnit,
+    #[serde(rename = "crew-tokens")]
+    CrewTokens,
+    #[serde(rename = "critical-hit-on")]
+    CriticalHitOn,
+    #[serde(rename = "critical-wound-on-successful-wound-roll")]
+    CriticalWoundOnSuccessfulWoundRoll,
+    #[serde(rename = "daemon-primarch-of-slaanesh-selection")]
+    DaemonPrimarchOfSlaaneshSelection,
+    #[serde(rename = "daemonic-rage")]
+    DaemonicRage,
+    #[serde(rename = "dark-pact-both-abilities")]
+    DarkPactBothAbilities,
+    #[serde(rename = "dark-pacts")]
+    DarkPacts,
+    #[serde(rename = "deadly-demise-choose-result")]
+    DeadlyDemiseChooseResult,
+    #[serde(rename = "deadly-demise-d6")]
+    DeadlyDemiseD6,
+    #[serde(rename = "deadly-demise-disabled")]
+    DeadlyDemiseDisabled,
+    #[serde(rename = "deadly-demise-threshold")]
+    DeadlyDemiseThreshold,
+    #[serde(rename = "declare-charge")]
+    DeclareCharge,
+    #[serde(rename = "deep-strike")]
+    DeepStrike,
+    #[serde(rename = "deep-strike-6")]
+    DeepStrike6,
+    #[serde(rename = "deep-strike-6inch-exclusion")]
+    DeepStrike6inchExclusion,
+    #[serde(rename = "deep-strike-for-selected-kroot-units")]
+    DeepStrikeForSelectedKrootUnits,
+    #[serde(rename = "deep-strike-within-flow-of-magic")]
+    DeepStrikeWithinFlowOfMagic,
+    #[serde(rename = "defence-line-section-assembly")]
+    DefenceLineSectionAssembly,
+    #[serde(rename = "deferred-destroyed-model-removal")]
+    DeferredDestroyedModelRemoval,
+    #[serde(rename = "deferred-removal-until-fought-or-end-of-phase")]
+    DeferredRemovalUntilFoughtOrEndOfPhase,
+    #[serde(rename = "delayed-model-removal")]
+    DelayedModelRemoval,
+    #[serde(rename = "deny-reinforcements-within-12")]
+    DenyReinforcementsWithin12,
+    #[serde(rename = "designate-enemy-detection-range-modifier")]
+    DesignateEnemyDetectionRangeModifier,
+    #[serde(rename = "designate-target-marker")]
+    DesignateTargetMarker,
+    #[serde(rename = "designated-objective-oc-bonus")]
+    DesignatedObjectiveOcBonus,
+    #[serde(rename = "desperate-escape")]
+    DesperateEscape,
+    #[serde(rename = "desperate-escape-hazard-minus-one")]
+    DesperateEscapeHazardMinusOne,
+    #[serde(rename = "desperate-escape-tests-on-fall-back")]
+    DesperateEscapeTestsOnFallBack,
+    #[serde(rename = "detachment-enhancements-gain-expended-state")]
+    DetachmentEnhancementsGainExpendedState,
+    #[serde(rename = "detachment-saga-completed")]
+    DetachmentSagaCompleted,
+    #[serde(rename = "detection-range-extended-6")]
+    DetectionRangeExtended6,
+    #[serde(rename = "detection-range-minus-3-inches")]
+    DetectionRangeMinus3Inches,
+    #[serde(rename = "detection-range-modifier")]
+    DetectionRangeModifier,
+    #[serde(rename = "disembark-after-advance-charge")]
+    DisembarkAfterAdvanceCharge,
+    #[serde(rename = "disembarking-pulse-weapons-attack-bonus")]
+    DisembarkingPulseWeaponsAttackBonus,
+    #[serde(rename = "eadbanger-ranged-weapon-range-24in-bs-4plus")]
+    EadbangerRangedWeaponRange24inBs4plus,
+    #[serde(rename = "eligible-to-declare-charge-after-fall-back")]
+    EligibleToDeclareChargeAfterFallBack,
+    #[serde(rename = "eligible-to-fight-again")]
+    EligibleToFightAgain,
+    #[serde(rename = "eligible-to-start-action-after-advance-or-fall-back")]
+    EligibleToStartActionAfterAdvanceOrFallBack,
+    #[serde(rename = "eligible-to-start-an-action-after-an-advance-move")]
+    EligibleToStartAnActionAfterAnAdvanceMove,
+    #[serde(rename = "embark-after-enemy-shooting")]
+    EmbarkAfterEnemyShooting,
+    #[serde(rename = "embark-after-fight")]
+    EmbarkAfterFight,
+    #[serde(rename = "embark-at-end-of-fight-phase")]
+    EmbarkAtEndOfFightPhase,
+    #[serde(rename = "embark-in-selected-transport")]
+    EmbarkInSelectedTransport,
+    #[serde(rename = "embark-in-transport")]
+    EmbarkInTransport,
+    #[serde(rename = "embark-when-charged")]
+    EmbarkWhenCharged,
+    #[serde(rename = "empower-possessed-blade")]
+    EmpowerPossessedBlade,
+    #[serde(rename = "enable-rapid-disembark-for-embarked-units")]
+    EnableRapidDisembarkForEmbarkedUnits,
+    #[serde(rename = "engaged-enemies-must-prefer-scintillating-legions-targets")]
+    EngagedEnemiesMustPreferScintillatingLegionsTargets,
+    #[serde(rename = "engaged-enemies-must-target-this-unit")]
+    EngagedEnemiesMustTargetThisUnit,
+    #[serde(rename = "enhanced-foul-spores-aura-9")]
+    EnhancedFoulSporesAura9,
+    #[serde(rename = "enraged-abjuration")]
+    EnragedAbjuration,
+    #[serde(rename = "enter-strategic-reserves")]
+    EnterStrategicReserves,
+    #[serde(rename = "expended-enhancement-cannot-be-used")]
+    ExpendedEnhancementCannotBeUsed,
+    #[serde(rename = "expended-enhancements-all-refreshed")]
+    ExpendedEnhancementsAllRefreshed,
+    #[serde(rename = "extend-bondsman-range")]
+    ExtendBondsmanRange,
+    #[serde(rename = "extend-datasheet-aura-range")]
+    ExtendDatasheetAuraRange,
+    #[serde(rename = "extend-psychic-ability-range-6")]
+    ExtendPsychicAbilityRange6,
+    #[serde(rename = "extend-ritual-range-6")]
+    ExtendRitualRange6,
+    #[serde(rename = "extended-fight-eligibility")]
+    ExtendedFightEligibility,
+    #[serde(rename = "extended-order-range")]
+    ExtendedOrderRange,
+    #[serde(rename = "extra-leader-attachment")]
+    ExtraLeaderAttachment,
+    #[serde(rename = "extra-order")]
+    ExtraOrder,
+    #[serde(rename = "extra-ritual-attempt")]
+    ExtraRitualAttempt,
+    #[serde(rename = "extremis-double-ability-uses")]
+    ExtremisDoubleAbilityUses,
+    #[serde(rename = "fade-back-agile-manoeuvre-free")]
+    FadeBackAgileManoeuvreFree,
+    #[serde(rename = "fallback-denial-on-leadership-failure")]
+    FallbackDenialOnLeadershipFailure,
+    #[serde(rename = "fallback-exception")]
+    FallbackException,
+    #[serde(rename = "fallback-hazard-auto-pass")]
+    FallbackHazardAutoPass,
+    #[serde(rename = "farsight-ethereal-mutual-exclusion")]
+    FarsightEtherealMutualExclusion,
+    #[serde(rename = "fight-one-additional-time")]
+    FightOneAdditionalTime,
+    #[serde(rename = "fire-overwatch-targeting-immunity")]
+    FireOverwatchTargetingImmunity,
+    #[serde(rename = "flexible-strategic-reserves")]
+    FlexibleStrategicReserves,
+    #[serde(rename = "forced-battle-shock-roll")]
+    ForcedBattleShockRoll,
+    #[serde(rename = "forced-battle-shock-test")]
+    ForcedBattleShockTest,
+    #[serde(rename = "found-em-first-sub-unit-bomb-squig-second-sub-unit")]
+    FoundEmFirstSubUnitBombSquigSecondSubUnit,
+    #[serde(rename = "free-tank-shock")]
+    FreeTankShock,
+    #[serde(rename = "grenade-stratagem-free-use")]
+    GrenadeStratagemFreeUse,
+    #[serde(rename = "guided-units-lethal-hits-vs-spotted")]
+    GuidedUnitsLethalHitsVsSpotted,
+    #[serde(rename = "guided-units-sustained-hits-1-vs-spotted")]
+    GuidedUnitsSustainedHits1VsSpotted,
+    #[serde(rename = "half-range-consideration")]
+    HalfRangeConsideration,
+    #[serde(rename = "harnessed-alien-instincts")]
+    HarnessedAlienInstincts,
+    #[serde(rename = "hazard-check-pair-per-selected-tagged-weapon")]
+    HazardCheckPairPerSelectedTaggedWeapon,
+    #[serde(rename = "hazard-roll-per-model")]
+    HazardRollPerModel,
+    #[serde(rename = "heal-bonus")]
+    HealBonus,
+    #[serde(rename = "heal-d3-wounds")]
+    HealD3Wounds,
+    #[serde(rename = "heal-wounds")]
+    HealWounds,
+    #[serde(rename = "hero-of-hades-hive-ability")]
+    HeroOfHadesHiveAbility,
+    #[serde(rename = "heroic-intervention-at-0cp")]
+    HeroicInterventionAt0cp,
+    #[serde(rename = "heroic-intervention-frequency-bypass")]
+    HeroicInterventionFrequencyBypass,
+    #[serde(rename = "heroic-intervention-limit-exempt")]
+    HeroicInterventionLimitExempt,
+    #[serde(rename = "icon-of-war-selection")]
+    IconOfWarSelection,
+    #[serde(rename = "idol-of-blessed-blood")]
+    IdolOfBlessedBlood,
+    #[serde(rename = "idol-of-burning-wrath")]
+    IdolOfBurningWrath,
+    #[serde(rename = "idol-of-infinite-rage")]
+    IdolOfInfiniteRage,
+    #[serde(rename = "ignore-hit-roll-modifiers")]
+    IgnoreHitRollModifiers,
+    #[serde(rename = "ignore-move-and-advance-modifiers")]
+    IgnoreMoveAndAdvanceModifiers,
+    #[serde(rename = "ignore-strategic-reserves-unit-cap")]
+    IgnoreStrategicReservesUnitCap,
+    #[serde(rename = "improved-grenades-mortal-wound-threshold")]
+    ImprovedGrenadesMortalWoundThreshold,
+    #[serde(rename = "incoming-psychic-attacks-hazardous")]
+    IncomingPsychicAttacksHazardous,
+    #[serde(
+        rename = "incoming-ranged-attacks-ignore-cover-through-end-of-next-friendly-turn"
+    )]
+    IncomingRangedAttacksIgnoreCoverThroughEndOfNextFriendlyTurn,
+    #[serde(rename = "incoming-unmodified-ranged-hit-results-one-through-three-fail")]
+    IncomingUnmodifiedRangedHitResultsOneThroughThreeFail,
+    #[serde(rename = "increased-detection-range")]
+    IncreasedDetectionRange,
+    #[serde(rename = "individual-model-deployment-within-12-coherency")]
+    IndividualModelDeploymentWithin12Coherency,
+    #[serde(rename = "infiltrators")]
+    Infiltrators,
+    #[serde(rename = "infiltrators-for-selected-rubricae")]
+    InfiltratorsForSelectedRubricae,
+    #[serde(rename = "ingress-into-enemy-deployment-zone")]
+    IngressIntoEnemyDeploymentZone,
+    #[serde(rename = "ingress-move")]
+    IngressMove,
+    #[serde(rename = "ingress-within-6")]
+    IngressWithin6,
+    #[serde(rename = "intervening-line-of-sight-cover")]
+    InterveningLineOfSightCover,
+    #[serde(rename = "into-strategic-reserves")]
+    IntoStrategicReserves,
+    #[serde(rename = "issue-extra-order-to-abhuman-unit")]
+    IssueExtraOrderToAbhumanUnit,
+    #[serde(rename = "issue-order-to-disembarked-regiment-unit")]
+    IssueOrderToDisembarkedRegimentUnit,
+    #[serde(rename = "issue-order-to-extra-platoon-units")]
+    IssueOrderToExtraPlatoonUnits,
+    #[serde(rename = "issue-order-to-multiple-units")]
+    IssueOrderToMultipleUnits,
+    #[serde(rename = "issue-orders")]
+    IssueOrders,
+    #[serde(rename = "issue-orders-regiment-up-to-2")]
+    IssueOrdersRegimentUpTo2,
+    #[serde(rename = "killing-blow-extended-round-4")]
+    KillingBlowExtendedRound4,
+    #[serde(rename = "kindred-sorcery-choice-override")]
+    KindredSorceryChoiceOverride,
+    #[serde(rename = "leader-attachment")]
+    LeaderAttachment,
+    #[serde(rename = "leadership-test-or-3-mortal-wounds")]
+    LeadershipTestOr3MortalWounds,
+    #[serde(rename = "leadership-test-re-roll")]
+    LeadershipTestReRoll,
+    #[serde(rename = "localised-stealth-projectors")]
+    LocalisedStealthProjectors,
+    #[serde(rename = "lone-operative")]
+    LoneOperative,
+    #[serde(rename = "lose-infantry-keyword")]
+    LoseInfantryKeyword,
+    #[serde(
+        rename = "make-a-blessings-of-khorne-roll-and-activate-one-additional-blessing"
+    )]
+    MakeABlessingsOfKhorneRollAndActivateOneAdditionalBlessing,
+    #[serde(rename = "make-one-hazard-roll")]
+    MakeOneHazardRoll,
+    #[serde(rename = "mandatory-desperate-escape")]
+    MandatoryDesperateEscape,
+    #[serde(rename = "mandatory-warlord-designation")]
+    MandatoryWarlordDesignation,
+    #[serde(rename = "may-start-in-reserves")]
+    MayStartInReserves,
+    #[serde(rename = "melee-cleave-increment-if-present")]
+    MeleeCleaveIncrementIfPresent,
+    #[serde(rename = "melee-cleave-one-if-absent")]
+    MeleeCleaveOneIfAbsent,
+    #[serde(rename = "melee-critical-hit-on-5-plus")]
+    MeleeCriticalHitOn5Plus,
+    #[serde(rename = "melta-range-add-6")]
+    MeltaRangeAdd6,
+    #[serde(rename = "might-of-khorne")]
+    MightOfKhorne,
+    #[serde(rename = "miracle-dice-reroll-before-pool")]
+    MiracleDiceRerollBeforePool,
+    #[serde(rename = "miracle-dice-value-set-6")]
+    MiracleDiceValueSet6,
+    #[serde(rename = "mobbed-roll-adjustment-plus-one-or-minus-two-at-three-models")]
+    MobbedRollAdjustmentPlusOneOrMinusTwoAtThreeModels,
+    #[serde(rename = "mobile")]
+    Mobile,
+    #[serde(rename = "model-passthrough-excluding-monsters-and-vehicles")]
+    ModelPassthroughExcludingMonstersAndVehicles,
+    #[serde(
+        rename = "models-within-3-are-eligible-to-fight-and-can-target-enemy-units-within-3"
+    )]
+    ModelsWithin3AreEligibleToFightAndCanTargetEnemyUnitsWithin3,
+    #[serde(rename = "move-does-not-prevent-action")]
+    MoveDoesNotPreventAction,
+    #[serde(rename = "move-must-finish-in-objective-range")]
+    MoveMustFinishInObjectiveRange,
+    #[serde(rename = "move-through-models")]
+    MoveThroughModels,
+    #[serde(rename = "multi-target-attack")]
+    MultiTargetAttack,
+    #[serde(rename = "multiple-orders")]
+    MultipleOrders,
+    #[serde(rename = "multiple-orders-up-to-two")]
+    MultipleOrdersUpToTwo,
+    #[serde(rename = "must-be-warlord")]
+    MustBeWarlord,
+    #[serde(rename = "must-start-in-reserves")]
+    MustStartInReserves,
+    #[serde(rename = "mutated-objective-hazard")]
+    MutatedObjectiveHazard,
+    #[serde(rename = "no-advance-roll")]
+    NoAdvanceRoll,
+    #[serde(rename = "no-smoke")]
+    NoSmoke,
+    #[serde(rename = "normal-move-d3-plus-3-inches")]
+    NormalMoveD3Plus3Inches,
+    #[serde(rename = "nurgle-gift")]
+    NurgleGift,
+    #[serde(rename = "nurgle-gift-as-death-guard-model")]
+    NurgleGiftAsDeathGuardModel,
+    #[serde(rename = "oath-fulfilled")]
+    OathFulfilled,
+    #[serde(rename = "optional-redeployment-selection")]
+    OptionalRedeploymentSelection,
+    #[serde(rename = "optional-restore-three-lost-wounds")]
+    OptionalRestoreThreeLostWounds,
+    #[serde(rename = "orders-persist-during-battle-shock")]
+    OrdersPersistDuringBattleShock,
+    #[serde(rename = "outflank-set-up-in-opponent-deployment-zone")]
+    OutflankSetUpInOpponentDeploymentZone,
+    #[serde(rename = "pact-both-abilities")]
+    PactBothAbilities,
+    #[serde(rename = "passenger-relocation-on-destruction")]
+    PassengerRelocationOnDestruction,
+    #[serde(rename = "patient-hunter-from-round-2")]
+    PatientHunterFromRound2,
+    #[serde(rename = "perform-ingress-move")]
+    PerformIngressMove,
+    #[serde(rename = "perform-pulse-jet-move")]
+    PerformPulseJetMove,
+    #[serde(rename = "permit-embarked-units-assault-disembark")]
+    PermitEmbarkedUnitsAssaultDisembark,
+    #[serde(rename = "persistent-orders")]
+    PersistentOrders,
+    #[serde(rename = "pinned")]
+    Pinned,
+    #[serde(rename = "place-in-strategic-reserves")]
+    PlaceInStrategicReserves,
+    #[serde(rename = "place-into-strategic-reserves")]
+    PlaceIntoStrategicReserves,
+    #[serde(rename = "place-replacement-in-strategic-reserves")]
+    PlaceReplacementInStrategicReserves,
+    #[serde(rename = "place-selected-unit-in-strategic-reserves")]
+    PlaceSelectedUnitInStrategicReserves,
+    #[serde(rename = "plague-selection")]
+    PlagueSelection,
+    #[serde(rename = "platform-setup-and-move-override")]
+    PlatformSetupAndMoveOverride,
+    #[serde(rename = "post-deployment-redeploy")]
+    PostDeploymentRedeploy,
+    #[serde(rename = "post-fallback-actions")]
+    PostFallbackActions,
+    #[serde(rename = "pregame-redeploy-up-to-three-infantry-units")]
+    PregameRedeployUpToThreeInfantryUnits,
+    #[serde(
+        rename = "pregame-redeploy-up-to-three-infantry-units-may-enter-strategic-reserves"
+    )]
+    PregameRedeployUpToThreeInfantryUnitsMayEnterStrategicReserves,
+    #[serde(rename = "pregame-redeploy-up-to-three-units-may-enter-strategic-reserves")]
+    PregameRedeployUpToThreeUnitsMayEnterStrategicReserves,
+    #[serde(
+        rename = "pregame-redeploy-up-to-two-regiment-or-squadron-units-may-enter-strategic-reserves"
+    )]
+    PregameRedeployUpToTwoRegimentOrSquadronUnitsMayEnterStrategicReserves,
+    #[serde(rename = "primarch-of-the-first-legion-selection")]
+    PrimarchOfTheFirstLegionSelection,
+    #[serde(rename = "psychic-abilities")]
+    PsychicAbilities,
+    #[serde(rename = "psychic-abilities-level-one")]
+    PsychicAbilitiesLevelOne,
+    #[serde(rename = "psychic-level-1")]
+    PsychicLevel1,
+    #[serde(rename = "psychic-level-2")]
+    PsychicLevel2,
+    #[serde(rename = "ranged-rapid-fire-floor-one-increment-existing")]
+    RangedRapidFireFloorOneIncrementExisting,
+    #[serde(rename = "ranged-weapon")]
+    RangedWeapon,
+    #[serde(rename = "ranged-weapon-range-plus-3in")]
+    RangedWeaponRangePlus3in,
+    #[serde(rename = "ranged-weapon-range-plus-three-excluding-torrent")]
+    RangedWeaponRangePlusThreeExcludingTorrent,
+    #[serde(rename = "re-roll-advance")]
+    ReRollAdvance,
+    #[serde(rename = "re-roll-channelling-die-at-vehicle-wound-cost")]
+    ReRollChannellingDieAtVehicleWoundCost,
+    #[serde(rename = "re-roll-hazardous-tests-psychic")]
+    ReRollHazardousTestsPsychic,
+    #[serde(rename = "re-roll-psychic-rolls")]
+    ReRollPsychicRolls,
+    #[serde(rename = "reactive-charge")]
+    ReactiveCharge,
+    #[serde(rename = "reactive-embark-when-charged")]
+    ReactiveEmbarkWhenCharged,
+    #[serde(rename = "redeploy-heretic-astartes-to-reserves")]
+    RedeployHereticAstartesToReserves,
+    #[serde(rename = "redeploy-on-battlefield")]
+    RedeployOnBattlefield,
+    #[serde(rename = "redeploy-to-reserves")]
+    RedeployToReserves,
+    #[serde(rename = "redeploy-to-strategic-reserves")]
+    RedeployToStrategicReserves,
+    #[serde(rename = "redeploy-up-to-3-astra-militarum-to-strategic-reserves-override")]
+    RedeployUpTo3AstraMilitarumToStrategicReservesOverride,
+    #[serde(rename = "redeploy-up-to-three-friendly-orks-infantry")]
+    RedeployUpToThreeFriendlyOrksInfantry,
+    #[serde(rename = "redeployment-selection-cap-three")]
+    RedeploymentSelectionCapThree,
+    #[serde(rename = "reinforcement-any-of-turns-1-to-3")]
+    ReinforcementAnyOfTurns1To3,
+    #[serde(rename = "reinforcements-first-three-movement-phases")]
+    ReinforcementsFirstThreeMovementPhases,
+    #[serde(rename = "relics-of-matriarchs")]
+    RelicsOfMatriarchs,
+    #[serde(rename = "remain-hidden-after-shooting")]
+    RemainHiddenAfterShooting,
+    #[serde(rename = "remove-already-destroyed-model-from-battlefield")]
+    RemoveAlreadyDestroyedModelFromBattlefield,
+    #[serde(rename = "remove-battle-shock")]
+    RemoveBattleShock,
+    #[serde(rename = "remove-battle-shocked-status")]
+    RemoveBattleShockedStatus,
+    #[serde(rename = "remove-from-battlefield-after-resolution")]
+    RemoveFromBattlefieldAfterResolution,
+    #[serde(rename = "remove-hunter-organism")]
+    RemoveHunterOrganism,
+    #[serde(rename = "replace-destroyed-unit-in-reserves")]
+    ReplaceDestroyedUnitInReserves,
+    #[serde(rename = "replace-melee-attack-bonus-with-plus-two-at-eleven-models")]
+    ReplaceMeleeAttackBonusWithPlusTwoAtElevenModels,
+    #[serde(rename = "reroll-advance")]
+    RerollAdvance,
+    #[serde(rename = "reroll-duplicate-random-results")]
+    RerollDuplicateRandomResults,
+    #[serde(rename = "reserve-deployment-denial-aura-12")]
+    ReserveDeploymentDenialAura12,
+    #[serde(rename = "reserves-limit-exempt")]
+    ReservesLimitExempt,
+    #[serde(rename = "reserves-limit-exempt-with-cargo")]
+    ReservesLimitExemptWithCargo,
+    #[serde(rename = "restore-replacement-to-original-model-count-and-full-health")]
+    RestoreReplacementToOriginalModelCountAndFullHealth,
+    #[serde(rename = "restricted-from-warlord")]
+    RestrictedFromWarlord,
+    #[serde(rename = "return-destroyed-models")]
+    ReturnDestroyedModels,
+    #[serde(rename = "reuse-once-per-battle-ability")]
+    ReuseOncePerBattleAbility,
+    #[serde(rename = "riled-up-expiring-at-next-friendly-turn-boundary")]
+    RiledUpExpiringAtNextFriendlyTurnBoundary,
+    #[serde(rename = "ritual-bonus-on-cabal-death")]
+    RitualBonusOnCabalDeath,
+    #[serde(rename = "roll-off-winner-chooses-redeploy-order")]
+    RollOffWinnerChoosesRedeployOrder,
+    #[serde(rename = "same-unit-surge-move-up-to-d6")]
+    SameUnitSurgeMoveUpToD6,
+    #[serde(rename = "scornful-analysis-designated")]
+    ScornfulAnalysisDesignated,
+    #[serde(rename = "scouts-6")]
+    Scouts6,
+    #[serde(rename = "scouts-7")]
+    Scouts7,
+    #[serde(rename = "scouts-9-transport")]
+    Scouts9Transport,
+    #[serde(rename = "select-doombolt-ignoring-attempt-limit")]
+    SelectDoomboltIgnoringAttemptLimit,
+    #[serde(rename = "select-new-quarry")]
+    SelectNewQuarry,
+    #[serde(rename = "select-one-infantry-unit-gains-scouts-6")]
+    SelectOneInfantryUnitGainsScouts6,
+    #[serde(rename = "select-up-to-two-ctan-powers-restrict-others")]
+    SelectUpToTwoCtanPowersRestrictOthers,
+    #[serde(rename = "selected-embarked-orks-infantry-disembark-move")]
+    SelectedEmbarkedOrksInfantryDisembarkMove,
+    #[serde(rename = "selective-from-pool")]
+    SelectiveFromPool,
+    #[serde(rename = "set-up-as-close-as-possible-to-destroyed-location-unengaged")]
+    SetUpAsCloseAsPossibleToDestroyedLocationUnengaged,
+    #[serde(rename = "shadow-form-ability-select")]
+    ShadowFormAbilitySelect,
+    #[serde(rename = "shadow-of-chaos")]
+    ShadowOfChaos,
+    #[serde(rename = "shaken-status")]
+    ShakenStatus,
+    #[serde(rename = "share-war-dog-auras")]
+    ShareWarDogAuras,
+    #[serde(rename = "shoot-after-action")]
+    ShootAfterAction,
+    #[serde(rename = "shoot-after-advance")]
+    ShootAfterAdvance,
+    #[serde(rename = "shoot-after-advance-or-fall-back")]
+    ShootAfterAdvanceOrFallBack,
+    #[serde(rename = "shoot-after-fall-back")]
+    ShootAfterFallBack,
+    #[serde(rename = "shoot-after-fallback")]
+    ShootAfterFallback,
+    #[serde(rename = "shoot-again")]
+    ShootAgain,
+    #[serde(rename = "shoot-and-charge-after-advance-fall-back")]
+    ShootAndChargeAfterAdvanceFallBack,
+    #[serde(rename = "shoot-and-charge-after-fall-back")]
+    ShootAndChargeAfterFallBack,
+    #[serde(rename = "shoot-as-if-shooting-phase")]
+    ShootAsIfShootingPhase,
+    #[serde(rename = "shoot-out-of-phase")]
+    ShootOutOfPhase,
+    #[serde(rename = "shoot-while-hidden")]
+    ShootWhileHidden,
+    #[serde(rename = "shoot-while-in-action")]
+    ShootWhileInAction,
+    #[serde(rename = "shoot-while-performing-action")]
+    ShootWhilePerformingAction,
+    #[serde(rename = "shooting-does-not-prevent-hidden")]
+    ShootingDoesNotPreventHidden,
+    #[serde(rename = "snap-shooting")]
+    SnapShooting,
+    #[serde(rename = "snap-shooting-response")]
+    SnapShootingResponse,
+    #[serde(rename = "split-by-headtakers-hunting-wolves")]
+    SplitByHeadtakersHuntingWolves,
+    #[serde(rename = "split-into-single-model-units")]
+    SplitIntoSingleModelUnits,
+    #[serde(rename = "split-unit-five-five")]
+    SplitUnitFiveFive,
+    #[serde(rename = "spotted")]
+    Spotted,
+    #[serde(rename = "stand-on-terrain-sections")]
+    StandOnTerrainSections,
+    #[serde(rename = "stealth")]
+    Stealth,
+    #[serde(rename = "stratagem-cost-reduction")]
+    StratagemCostReduction,
+    #[serde(rename = "stratagem-for-0cp")]
+    StratagemFor0cp,
+    #[serde(rename = "stratagem-targetable-while-battle-shocked")]
+    StratagemTargetableWhileBattleShocked,
+    #[serde(rename = "strategic-reserves-during-redeployment")]
+    StrategicReservesDuringRedeployment,
+    #[serde(rename = "strategic-reserves-exempt")]
+    StrategicReservesExempt,
+    #[serde(rename = "strategic-reserves-override")]
+    StrategicReservesOverride,
+    #[serde(rename = "strategic-reserves-without-unit-limit")]
+    StrategicReservesWithoutUnitLimit,
+    #[serde(rename = "summon-chaos-spawn-on-death")]
+    SummonChaosSpawnOnDeath,
+    #[serde(rename = "summon-poxwalkers-strategic-reserves")]
+    SummonPoxwalkersStrategicReserves,
+    #[serde(rename = "super-heavy-walker")]
+    SuperHeavyWalker,
+    #[serde(rename = "suppress-shot-target-hit-penalty")]
+    SuppressShotTargetHitPenalty,
+    #[serde(rename = "suppressed")]
+    Suppressed,
+    #[serde(rename = "surrogate-hosts")]
+    SurrogateHosts,
+    #[serde(rename = "swap-hostile-acquisition-and-fortify-takeover")]
+    SwapHostileAcquisitionAndFortifyTakeover,
+    #[serde(rename = "take-battle-shock-test")]
+    TakeBattleShockTest,
+    #[serde(rename = "take-to-the-skies")]
+    TakeToTheSkies,
+    #[serde(rename = "tank-shock-zero-cp-unrestricted")]
+    TankShockZeroCpUnrestricted,
+    #[serde(rename = "targetable-by-ranged-while-engaged")]
+    TargetableByRangedWhileEngaged,
+    #[serde(rename = "temple-relics")]
+    TempleRelics,
+    #[serde(rename = "terminate-current-attack-sequence")]
+    TerminateCurrentAttackSequence,
+    #[serde(rename = "terror-of-khorne")]
+    TerrorOfKhorne,
+    #[serde(rename = "titanic-self-aura-inclusion")]
+    TitanicSelfAuraInclusion,
+    #[serde(rename = "transport-capacity-30-with-keyword-multipliers")]
+    TransportCapacity30WithKeywordMultipliers,
+    #[serde(rename = "treat-battle-round-one-higher-for-reserves")]
+    TreatBattleRoundOneHigherForReserves,
+    #[serde(rename = "treat-roll-as-unmodified-6")]
+    TreatRollAsUnmodified6,
+    #[serde(rename = "tunnel-marker-reserves-deployment")]
+    TunnelMarkerReservesDeployment,
+    #[serde(rename = "unhideable-through-end-of-next-friendly-turn")]
+    UnhideableThroughEndOfNextFriendlyTurn,
+    #[serde(rename = "unmodified-hit-critical")]
+    UnmodifiedHitCritical,
+    #[serde(rename = "use-the-blue-horrors-datasheet")]
+    UseTheBlueHorrorsDatasheet,
+    #[serde(rename = "vanguard-selection")]
+    VanguardSelection,
+    #[serde(rename = "vengeance-move")]
+    VengeanceMove,
+    #[serde(rename = "vow-of-atonement-selection")]
+    VowOfAtonementSelection,
+    #[serde(rename = "warlord")]
+    Warlord,
+    #[serde(rename = "warmaster-selection")]
+    WarmasterSelection,
+    #[serde(rename = "weapon")]
+    Weapon,
+    #[serde(rename = "weapon-grant")]
+    WeaponGrant,
+    #[serde(rename = "weapon-range-increase")]
+    WeaponRangeIncrease,
+    #[serde(rename = "wholly-within-flow-of-magic")]
+    WhollyWithinFlowOfMagic,
+    #[serde(rename = "withdraw-to-strategic-reserves")]
+    WithdrawToStrategicReserves,
+    #[serde(rename = "wrathful-presence-selection")]
+    WrathfulPresenceSelection,
+}
+impl ::std::fmt::Display for GrantType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::AbilityRangeModifier => f.write_str("ability-range-modifier"),
+            Self::ActAfterMove => f.write_str("act-after-move"),
+            Self::ActAfterShooting => f.write_str("act-after-shooting"),
+            Self::ActionAfterAdvanceFallBack => {
+                f.write_str("action-after-advance-fall-back")
+            }
+            Self::ActionAfterFallBack => f.write_str("action-after-fall-back"),
+            Self::ActionAndShootEligibility => {
+                f.write_str("action-and-shoot-eligibility")
+            }
+            Self::ActionEligibility => f.write_str("action-eligibility"),
+            Self::ActionEligibilityAfterAdvanceOrFallBack => {
+                f.write_str("action-eligibility-after-advance-or-fall-back")
+            }
+            Self::ActivateBlessingOfKhorne => f.write_str("activate-blessing-of-khorne"),
+            Self::ActivateDreadAbility => f.write_str("activate-dread-ability"),
+            Self::AddEmbarkedOcToSelfOc => f.write_str("add-embarked-oc-to-self-oc"),
+            Self::AddOrder => f.write_str("add-order"),
+            Self::AdditionalOath => f.write_str("additional-oath"),
+            Self::AdjustTargetMarker => f.write_str("adjust-target-marker"),
+            Self::Advance6InsteadOfRoll => f.write_str("advance-6-instead-of-roll"),
+            Self::AdvanceAndCharge => f.write_str("advance-and-charge"),
+            Self::AdvanceAndChargeIfSelectedAmongUpToTwoOtherUnits => {
+                f.write_str("advance-and-charge-if-selected-among-up-to-two-other-units")
+            }
+            Self::AdvanceRollSetToSix => f.write_str("advance-roll-set-to-six"),
+            Self::AdvanceThroughAllModels => f.write_str("advance-through-all-models"),
+            Self::Afflicted => f.write_str("afflicted"),
+            Self::AgileManoeuvreD6Add1 => f.write_str("agile-manoeuvre-d6-add-1"),
+            Self::AgileManoeuvrePhaseLimitExemption => {
+                f.write_str("agile-manoeuvre-phase-limit-exemption")
+            }
+            Self::AllBlessingsOfKhorneActive => {
+                f.write_str("all-blessings-of-khorne-active")
+            }
+            Self::AlliedAstraMilitarumInclusion => {
+                f.write_str("allied-astra-militarum-inclusion")
+            }
+            Self::AlwaysWithinSynapseRange => f.write_str("always-within-synapse-range"),
+            Self::ApplyAdditionalPlague => f.write_str("apply-additional-plague"),
+            Self::ApplyBattleShock => f.write_str("apply-battle-shock"),
+            Self::ArmyCompositionConstraint => f.write_str("army-composition-constraint"),
+            Self::ArmyListAllowanceOneInquisitorialAgentsUnitPerInquisitor => {
+                f.write_str(
+                    "army-list-allowance-one-inquisitorial-agents-unit-per-inquisitor",
+                )
+            }
+            Self::ArmyListAllowanceOneVoidsmenAtArmsUnitPerVoidfarersCharacter => {
+                f.write_str(
+                    "army-list-allowance-one-voidsmen-at-arms-unit-per-voidfarers-character",
+                )
+            }
+            Self::BattleFocus => f.write_str("battle-focus"),
+            Self::BattleRoundPlusOneForArrival => {
+                f.write_str("battle-round-plus-one-for-arrival")
+            }
+            Self::BattleShockTest => f.write_str("battle-shock-test"),
+            Self::BattleShockTestReRoll => f.write_str("battle-shock-test-re-roll"),
+            Self::BattleShockedStatus => f.write_str("battle-shocked-status"),
+            Self::BattleShockedTargetingPermission => {
+                f.write_str("battle-shocked-targeting-permission")
+            }
+            Self::BecomesBattleShocked => f.write_str("becomes-battle-shocked"),
+            Self::BenefitOfCoverAgainstTriggeringAttack => {
+                f.write_str("benefit-of-cover-against-triggering-attack")
+            }
+            Self::BlessingsOfKhorne => f.write_str("blessings-of-khorne"),
+            Self::BodyguardSacrificePsychicBuff => {
+                f.write_str("bodyguard-sacrifice-psychic-buff")
+            }
+            Self::BombSquigFirstSubUnitFoundEmSecondSubUnit => {
+                f.write_str("bomb-squig-first-sub-unit-found-em-second-sub-unit")
+            }
+            Self::BondsmanSelectThreeArmiger12in => {
+                f.write_str("bondsman-select-three-armiger-12in")
+            }
+            Self::BondsmanSelectThreeArmiger15in => {
+                f.write_str("bondsman-select-three-armiger-15in")
+            }
+            Self::BonusHealingD3 => f.write_str("bonus-healing-d3"),
+            Self::BoonOfBlood => f.write_str("boon-of-blood"),
+            Self::BoostPsychicTestViaMortalWounds => {
+                f.write_str("boost-psychic-test-via-mortal-wounds")
+            }
+            Self::ButchaBoyzEmbarkedModelAttackScaling2Cap22 => {
+                f.write_str("butcha-boyz-embarked-model-attack-scaling-2-cap-22")
+            }
+            Self::CabalOfSorcerers => f.write_str("cabal-of-sorcerers"),
+            Self::CannotBeTargetedByFireOverwatch => {
+                f.write_str("cannot-be-targeted-by-fire-overwatch")
+            }
+            Self::CannotBeWarlord => f.write_str("cannot-be-warlord"),
+            Self::CannotBenefitFromCover => f.write_str("cannot-benefit-from-cover"),
+            Self::CannotChargeThisTurn => f.write_str("cannot-charge-this-turn"),
+            Self::CannotEmbarkTransport => f.write_str("cannot-embark-transport"),
+            Self::CannotEmbarkVenerableLandRaider => {
+                f.write_str("cannot-embark-venerable-land-raider")
+            }
+            Self::CannotHaveBenefitOfCover => f.write_str("cannot-have-benefit-of-cover"),
+            Self::CannotUsePersonalTeleporters => {
+                f.write_str("cannot-use-personal-teleporters")
+            }
+            Self::Canticle => f.write_str("canticle"),
+            Self::ChargeAfterAdvance => f.write_str("charge-after-advance"),
+            Self::ChargeAfterAdvanceFallback => {
+                f.write_str("charge-after-advance-fallback")
+            }
+            Self::ChargeAfterAdvanceOrFallBack => {
+                f.write_str("charge-after-advance-or-fall-back")
+            }
+            Self::ChargeAfterAdvanceOrFallback => {
+                f.write_str("charge-after-advance-or-fallback")
+            }
+            Self::ChargeAfterDisembark => f.write_str("charge-after-disembark"),
+            Self::ChargeAfterFallBack => f.write_str("charge-after-fall-back"),
+            Self::ChargeAfterFallback => f.write_str("charge-after-fallback"),
+            Self::ChargeAfterMovement => f.write_str("charge-after-movement"),
+            Self::ChargeEligibilityAfterAdvanceOrFallBack => {
+                f.write_str("charge-eligibility-after-advance-or-fall-back")
+            }
+            Self::ChargeEligibleAfterNormalMoveDisembark => {
+                f.write_str("charge-eligible-after-normal-move-disembark")
+            }
+            Self::ChargeIneligible => f.write_str("charge-ineligible"),
+            Self::ChargeIneligibleForRemainderOfTurn => {
+                f.write_str("charge-ineligible-for-remainder-of-turn")
+            }
+            Self::Choice => f.write_str("choice"),
+            Self::ContagionRangeExtension3 => f.write_str("contagion-range-extension-3"),
+            Self::ContagionRangeModifier => f.write_str("contagion-range-modifier"),
+            Self::CorsairEnhancementSelection => {
+                f.write_str("corsair-enhancement-selection")
+            }
+            Self::CountsAsAdvancedThisTurn => f.write_str("counts-as-advanced-this-turn"),
+            Self::CoveredInSquigs => f.write_str("covered-in-squigs"),
+            Self::CreateIdenticalReplacementUnit => {
+                f.write_str("create-identical-replacement-unit")
+            }
+            Self::CrewTokens => f.write_str("crew-tokens"),
+            Self::CriticalHitOn => f.write_str("critical-hit-on"),
+            Self::CriticalWoundOnSuccessfulWoundRoll => {
+                f.write_str("critical-wound-on-successful-wound-roll")
+            }
+            Self::DaemonPrimarchOfSlaaneshSelection => {
+                f.write_str("daemon-primarch-of-slaanesh-selection")
+            }
+            Self::DaemonicRage => f.write_str("daemonic-rage"),
+            Self::DarkPactBothAbilities => f.write_str("dark-pact-both-abilities"),
+            Self::DarkPacts => f.write_str("dark-pacts"),
+            Self::DeadlyDemiseChooseResult => f.write_str("deadly-demise-choose-result"),
+            Self::DeadlyDemiseD6 => f.write_str("deadly-demise-d6"),
+            Self::DeadlyDemiseDisabled => f.write_str("deadly-demise-disabled"),
+            Self::DeadlyDemiseThreshold => f.write_str("deadly-demise-threshold"),
+            Self::DeclareCharge => f.write_str("declare-charge"),
+            Self::DeepStrike => f.write_str("deep-strike"),
+            Self::DeepStrike6 => f.write_str("deep-strike-6"),
+            Self::DeepStrike6inchExclusion => f.write_str("deep-strike-6inch-exclusion"),
+            Self::DeepStrikeForSelectedKrootUnits => {
+                f.write_str("deep-strike-for-selected-kroot-units")
+            }
+            Self::DeepStrikeWithinFlowOfMagic => {
+                f.write_str("deep-strike-within-flow-of-magic")
+            }
+            Self::DefenceLineSectionAssembly => {
+                f.write_str("defence-line-section-assembly")
+            }
+            Self::DeferredDestroyedModelRemoval => {
+                f.write_str("deferred-destroyed-model-removal")
+            }
+            Self::DeferredRemovalUntilFoughtOrEndOfPhase => {
+                f.write_str("deferred-removal-until-fought-or-end-of-phase")
+            }
+            Self::DelayedModelRemoval => f.write_str("delayed-model-removal"),
+            Self::DenyReinforcementsWithin12 => {
+                f.write_str("deny-reinforcements-within-12")
+            }
+            Self::DesignateEnemyDetectionRangeModifier => {
+                f.write_str("designate-enemy-detection-range-modifier")
+            }
+            Self::DesignateTargetMarker => f.write_str("designate-target-marker"),
+            Self::DesignatedObjectiveOcBonus => {
+                f.write_str("designated-objective-oc-bonus")
+            }
+            Self::DesperateEscape => f.write_str("desperate-escape"),
+            Self::DesperateEscapeHazardMinusOne => {
+                f.write_str("desperate-escape-hazard-minus-one")
+            }
+            Self::DesperateEscapeTestsOnFallBack => {
+                f.write_str("desperate-escape-tests-on-fall-back")
+            }
+            Self::DetachmentEnhancementsGainExpendedState => {
+                f.write_str("detachment-enhancements-gain-expended-state")
+            }
+            Self::DetachmentSagaCompleted => f.write_str("detachment-saga-completed"),
+            Self::DetectionRangeExtended6 => f.write_str("detection-range-extended-6"),
+            Self::DetectionRangeMinus3Inches => {
+                f.write_str("detection-range-minus-3-inches")
+            }
+            Self::DetectionRangeModifier => f.write_str("detection-range-modifier"),
+            Self::DisembarkAfterAdvanceCharge => {
+                f.write_str("disembark-after-advance-charge")
+            }
+            Self::DisembarkingPulseWeaponsAttackBonus => {
+                f.write_str("disembarking-pulse-weapons-attack-bonus")
+            }
+            Self::EadbangerRangedWeaponRange24inBs4plus => {
+                f.write_str("eadbanger-ranged-weapon-range-24in-bs-4plus")
+            }
+            Self::EligibleToDeclareChargeAfterFallBack => {
+                f.write_str("eligible-to-declare-charge-after-fall-back")
+            }
+            Self::EligibleToFightAgain => f.write_str("eligible-to-fight-again"),
+            Self::EligibleToStartActionAfterAdvanceOrFallBack => {
+                f.write_str("eligible-to-start-action-after-advance-or-fall-back")
+            }
+            Self::EligibleToStartAnActionAfterAnAdvanceMove => {
+                f.write_str("eligible-to-start-an-action-after-an-advance-move")
+            }
+            Self::EmbarkAfterEnemyShooting => f.write_str("embark-after-enemy-shooting"),
+            Self::EmbarkAfterFight => f.write_str("embark-after-fight"),
+            Self::EmbarkAtEndOfFightPhase => f.write_str("embark-at-end-of-fight-phase"),
+            Self::EmbarkInSelectedTransport => {
+                f.write_str("embark-in-selected-transport")
+            }
+            Self::EmbarkInTransport => f.write_str("embark-in-transport"),
+            Self::EmbarkWhenCharged => f.write_str("embark-when-charged"),
+            Self::EmpowerPossessedBlade => f.write_str("empower-possessed-blade"),
+            Self::EnableRapidDisembarkForEmbarkedUnits => {
+                f.write_str("enable-rapid-disembark-for-embarked-units")
+            }
+            Self::EngagedEnemiesMustPreferScintillatingLegionsTargets => {
+                f.write_str("engaged-enemies-must-prefer-scintillating-legions-targets")
+            }
+            Self::EngagedEnemiesMustTargetThisUnit => {
+                f.write_str("engaged-enemies-must-target-this-unit")
+            }
+            Self::EnhancedFoulSporesAura9 => f.write_str("enhanced-foul-spores-aura-9"),
+            Self::EnragedAbjuration => f.write_str("enraged-abjuration"),
+            Self::EnterStrategicReserves => f.write_str("enter-strategic-reserves"),
+            Self::ExpendedEnhancementCannotBeUsed => {
+                f.write_str("expended-enhancement-cannot-be-used")
+            }
+            Self::ExpendedEnhancementsAllRefreshed => {
+                f.write_str("expended-enhancements-all-refreshed")
+            }
+            Self::ExtendBondsmanRange => f.write_str("extend-bondsman-range"),
+            Self::ExtendDatasheetAuraRange => f.write_str("extend-datasheet-aura-range"),
+            Self::ExtendPsychicAbilityRange6 => {
+                f.write_str("extend-psychic-ability-range-6")
+            }
+            Self::ExtendRitualRange6 => f.write_str("extend-ritual-range-6"),
+            Self::ExtendedFightEligibility => f.write_str("extended-fight-eligibility"),
+            Self::ExtendedOrderRange => f.write_str("extended-order-range"),
+            Self::ExtraLeaderAttachment => f.write_str("extra-leader-attachment"),
+            Self::ExtraOrder => f.write_str("extra-order"),
+            Self::ExtraRitualAttempt => f.write_str("extra-ritual-attempt"),
+            Self::ExtremisDoubleAbilityUses => {
+                f.write_str("extremis-double-ability-uses")
+            }
+            Self::FadeBackAgileManoeuvreFree => {
+                f.write_str("fade-back-agile-manoeuvre-free")
+            }
+            Self::FallbackDenialOnLeadershipFailure => {
+                f.write_str("fallback-denial-on-leadership-failure")
+            }
+            Self::FallbackException => f.write_str("fallback-exception"),
+            Self::FallbackHazardAutoPass => f.write_str("fallback-hazard-auto-pass"),
+            Self::FarsightEtherealMutualExclusion => {
+                f.write_str("farsight-ethereal-mutual-exclusion")
+            }
+            Self::FightOneAdditionalTime => f.write_str("fight-one-additional-time"),
+            Self::FireOverwatchTargetingImmunity => {
+                f.write_str("fire-overwatch-targeting-immunity")
+            }
+            Self::FlexibleStrategicReserves => f.write_str("flexible-strategic-reserves"),
+            Self::ForcedBattleShockRoll => f.write_str("forced-battle-shock-roll"),
+            Self::ForcedBattleShockTest => f.write_str("forced-battle-shock-test"),
+            Self::FoundEmFirstSubUnitBombSquigSecondSubUnit => {
+                f.write_str("found-em-first-sub-unit-bomb-squig-second-sub-unit")
+            }
+            Self::FreeTankShock => f.write_str("free-tank-shock"),
+            Self::GrenadeStratagemFreeUse => f.write_str("grenade-stratagem-free-use"),
+            Self::GuidedUnitsLethalHitsVsSpotted => {
+                f.write_str("guided-units-lethal-hits-vs-spotted")
+            }
+            Self::GuidedUnitsSustainedHits1VsSpotted => {
+                f.write_str("guided-units-sustained-hits-1-vs-spotted")
+            }
+            Self::HalfRangeConsideration => f.write_str("half-range-consideration"),
+            Self::HarnessedAlienInstincts => f.write_str("harnessed-alien-instincts"),
+            Self::HazardCheckPairPerSelectedTaggedWeapon => {
+                f.write_str("hazard-check-pair-per-selected-tagged-weapon")
+            }
+            Self::HazardRollPerModel => f.write_str("hazard-roll-per-model"),
+            Self::HealBonus => f.write_str("heal-bonus"),
+            Self::HealD3Wounds => f.write_str("heal-d3-wounds"),
+            Self::HealWounds => f.write_str("heal-wounds"),
+            Self::HeroOfHadesHiveAbility => f.write_str("hero-of-hades-hive-ability"),
+            Self::HeroicInterventionAt0cp => f.write_str("heroic-intervention-at-0cp"),
+            Self::HeroicInterventionFrequencyBypass => {
+                f.write_str("heroic-intervention-frequency-bypass")
+            }
+            Self::HeroicInterventionLimitExempt => {
+                f.write_str("heroic-intervention-limit-exempt")
+            }
+            Self::IconOfWarSelection => f.write_str("icon-of-war-selection"),
+            Self::IdolOfBlessedBlood => f.write_str("idol-of-blessed-blood"),
+            Self::IdolOfBurningWrath => f.write_str("idol-of-burning-wrath"),
+            Self::IdolOfInfiniteRage => f.write_str("idol-of-infinite-rage"),
+            Self::IgnoreHitRollModifiers => f.write_str("ignore-hit-roll-modifiers"),
+            Self::IgnoreMoveAndAdvanceModifiers => {
+                f.write_str("ignore-move-and-advance-modifiers")
+            }
+            Self::IgnoreStrategicReservesUnitCap => {
+                f.write_str("ignore-strategic-reserves-unit-cap")
+            }
+            Self::ImprovedGrenadesMortalWoundThreshold => {
+                f.write_str("improved-grenades-mortal-wound-threshold")
+            }
+            Self::IncomingPsychicAttacksHazardous => {
+                f.write_str("incoming-psychic-attacks-hazardous")
+            }
+            Self::IncomingRangedAttacksIgnoreCoverThroughEndOfNextFriendlyTurn => {
+                f.write_str(
+                    "incoming-ranged-attacks-ignore-cover-through-end-of-next-friendly-turn",
+                )
+            }
+            Self::IncomingUnmodifiedRangedHitResultsOneThroughThreeFail => {
+                f.write_str(
+                    "incoming-unmodified-ranged-hit-results-one-through-three-fail",
+                )
+            }
+            Self::IncreasedDetectionRange => f.write_str("increased-detection-range"),
+            Self::IndividualModelDeploymentWithin12Coherency => {
+                f.write_str("individual-model-deployment-within-12-coherency")
+            }
+            Self::Infiltrators => f.write_str("infiltrators"),
+            Self::InfiltratorsForSelectedRubricae => {
+                f.write_str("infiltrators-for-selected-rubricae")
+            }
+            Self::IngressIntoEnemyDeploymentZone => {
+                f.write_str("ingress-into-enemy-deployment-zone")
+            }
+            Self::IngressMove => f.write_str("ingress-move"),
+            Self::IngressWithin6 => f.write_str("ingress-within-6"),
+            Self::InterveningLineOfSightCover => {
+                f.write_str("intervening-line-of-sight-cover")
+            }
+            Self::IntoStrategicReserves => f.write_str("into-strategic-reserves"),
+            Self::IssueExtraOrderToAbhumanUnit => {
+                f.write_str("issue-extra-order-to-abhuman-unit")
+            }
+            Self::IssueOrderToDisembarkedRegimentUnit => {
+                f.write_str("issue-order-to-disembarked-regiment-unit")
+            }
+            Self::IssueOrderToExtraPlatoonUnits => {
+                f.write_str("issue-order-to-extra-platoon-units")
+            }
+            Self::IssueOrderToMultipleUnits => {
+                f.write_str("issue-order-to-multiple-units")
+            }
+            Self::IssueOrders => f.write_str("issue-orders"),
+            Self::IssueOrdersRegimentUpTo2 => {
+                f.write_str("issue-orders-regiment-up-to-2")
+            }
+            Self::KillingBlowExtendedRound4 => {
+                f.write_str("killing-blow-extended-round-4")
+            }
+            Self::KindredSorceryChoiceOverride => {
+                f.write_str("kindred-sorcery-choice-override")
+            }
+            Self::LeaderAttachment => f.write_str("leader-attachment"),
+            Self::LeadershipTestOr3MortalWounds => {
+                f.write_str("leadership-test-or-3-mortal-wounds")
+            }
+            Self::LeadershipTestReRoll => f.write_str("leadership-test-re-roll"),
+            Self::LocalisedStealthProjectors => {
+                f.write_str("localised-stealth-projectors")
+            }
+            Self::LoneOperative => f.write_str("lone-operative"),
+            Self::LoseInfantryKeyword => f.write_str("lose-infantry-keyword"),
+            Self::MakeABlessingsOfKhorneRollAndActivateOneAdditionalBlessing => {
+                f.write_str(
+                    "make-a-blessings-of-khorne-roll-and-activate-one-additional-blessing",
+                )
+            }
+            Self::MakeOneHazardRoll => f.write_str("make-one-hazard-roll"),
+            Self::MandatoryDesperateEscape => f.write_str("mandatory-desperate-escape"),
+            Self::MandatoryWarlordDesignation => {
+                f.write_str("mandatory-warlord-designation")
+            }
+            Self::MayStartInReserves => f.write_str("may-start-in-reserves"),
+            Self::MeleeCleaveIncrementIfPresent => {
+                f.write_str("melee-cleave-increment-if-present")
+            }
+            Self::MeleeCleaveOneIfAbsent => f.write_str("melee-cleave-one-if-absent"),
+            Self::MeleeCriticalHitOn5Plus => f.write_str("melee-critical-hit-on-5-plus"),
+            Self::MeltaRangeAdd6 => f.write_str("melta-range-add-6"),
+            Self::MightOfKhorne => f.write_str("might-of-khorne"),
+            Self::MiracleDiceRerollBeforePool => {
+                f.write_str("miracle-dice-reroll-before-pool")
+            }
+            Self::MiracleDiceValueSet6 => f.write_str("miracle-dice-value-set-6"),
+            Self::MobbedRollAdjustmentPlusOneOrMinusTwoAtThreeModels => {
+                f.write_str(
+                    "mobbed-roll-adjustment-plus-one-or-minus-two-at-three-models",
+                )
+            }
+            Self::Mobile => f.write_str("mobile"),
+            Self::ModelPassthroughExcludingMonstersAndVehicles => {
+                f.write_str("model-passthrough-excluding-monsters-and-vehicles")
+            }
+            Self::ModelsWithin3AreEligibleToFightAndCanTargetEnemyUnitsWithin3 => {
+                f.write_str(
+                    "models-within-3-are-eligible-to-fight-and-can-target-enemy-units-within-3",
+                )
+            }
+            Self::MoveDoesNotPreventAction => f.write_str("move-does-not-prevent-action"),
+            Self::MoveMustFinishInObjectiveRange => {
+                f.write_str("move-must-finish-in-objective-range")
+            }
+            Self::MoveThroughModels => f.write_str("move-through-models"),
+            Self::MultiTargetAttack => f.write_str("multi-target-attack"),
+            Self::MultipleOrders => f.write_str("multiple-orders"),
+            Self::MultipleOrdersUpToTwo => f.write_str("multiple-orders-up-to-two"),
+            Self::MustBeWarlord => f.write_str("must-be-warlord"),
+            Self::MustStartInReserves => f.write_str("must-start-in-reserves"),
+            Self::MutatedObjectiveHazard => f.write_str("mutated-objective-hazard"),
+            Self::NoAdvanceRoll => f.write_str("no-advance-roll"),
+            Self::NoSmoke => f.write_str("no-smoke"),
+            Self::NormalMoveD3Plus3Inches => f.write_str("normal-move-d3-plus-3-inches"),
+            Self::NurgleGift => f.write_str("nurgle-gift"),
+            Self::NurgleGiftAsDeathGuardModel => {
+                f.write_str("nurgle-gift-as-death-guard-model")
+            }
+            Self::OathFulfilled => f.write_str("oath-fulfilled"),
+            Self::OptionalRedeploymentSelection => {
+                f.write_str("optional-redeployment-selection")
+            }
+            Self::OptionalRestoreThreeLostWounds => {
+                f.write_str("optional-restore-three-lost-wounds")
+            }
+            Self::OrdersPersistDuringBattleShock => {
+                f.write_str("orders-persist-during-battle-shock")
+            }
+            Self::OutflankSetUpInOpponentDeploymentZone => {
+                f.write_str("outflank-set-up-in-opponent-deployment-zone")
+            }
+            Self::PactBothAbilities => f.write_str("pact-both-abilities"),
+            Self::PassengerRelocationOnDestruction => {
+                f.write_str("passenger-relocation-on-destruction")
+            }
+            Self::PatientHunterFromRound2 => f.write_str("patient-hunter-from-round-2"),
+            Self::PerformIngressMove => f.write_str("perform-ingress-move"),
+            Self::PerformPulseJetMove => f.write_str("perform-pulse-jet-move"),
+            Self::PermitEmbarkedUnitsAssaultDisembark => {
+                f.write_str("permit-embarked-units-assault-disembark")
+            }
+            Self::PersistentOrders => f.write_str("persistent-orders"),
+            Self::Pinned => f.write_str("pinned"),
+            Self::PlaceInStrategicReserves => f.write_str("place-in-strategic-reserves"),
+            Self::PlaceIntoStrategicReserves => {
+                f.write_str("place-into-strategic-reserves")
+            }
+            Self::PlaceReplacementInStrategicReserves => {
+                f.write_str("place-replacement-in-strategic-reserves")
+            }
+            Self::PlaceSelectedUnitInStrategicReserves => {
+                f.write_str("place-selected-unit-in-strategic-reserves")
+            }
+            Self::PlagueSelection => f.write_str("plague-selection"),
+            Self::PlatformSetupAndMoveOverride => {
+                f.write_str("platform-setup-and-move-override")
+            }
+            Self::PostDeploymentRedeploy => f.write_str("post-deployment-redeploy"),
+            Self::PostFallbackActions => f.write_str("post-fallback-actions"),
+            Self::PregameRedeployUpToThreeInfantryUnits => {
+                f.write_str("pregame-redeploy-up-to-three-infantry-units")
+            }
+            Self::PregameRedeployUpToThreeInfantryUnitsMayEnterStrategicReserves => {
+                f.write_str(
+                    "pregame-redeploy-up-to-three-infantry-units-may-enter-strategic-reserves",
+                )
+            }
+            Self::PregameRedeployUpToThreeUnitsMayEnterStrategicReserves => {
+                f.write_str(
+                    "pregame-redeploy-up-to-three-units-may-enter-strategic-reserves",
+                )
+            }
+            Self::PregameRedeployUpToTwoRegimentOrSquadronUnitsMayEnterStrategicReserves => {
+                f.write_str(
+                    "pregame-redeploy-up-to-two-regiment-or-squadron-units-may-enter-strategic-reserves",
+                )
+            }
+            Self::PrimarchOfTheFirstLegionSelection => {
+                f.write_str("primarch-of-the-first-legion-selection")
+            }
+            Self::PsychicAbilities => f.write_str("psychic-abilities"),
+            Self::PsychicAbilitiesLevelOne => f.write_str("psychic-abilities-level-one"),
+            Self::PsychicLevel1 => f.write_str("psychic-level-1"),
+            Self::PsychicLevel2 => f.write_str("psychic-level-2"),
+            Self::RangedRapidFireFloorOneIncrementExisting => {
+                f.write_str("ranged-rapid-fire-floor-one-increment-existing")
+            }
+            Self::RangedWeapon => f.write_str("ranged-weapon"),
+            Self::RangedWeaponRangePlus3in => f.write_str("ranged-weapon-range-plus-3in"),
+            Self::RangedWeaponRangePlusThreeExcludingTorrent => {
+                f.write_str("ranged-weapon-range-plus-three-excluding-torrent")
+            }
+            Self::ReRollAdvance => f.write_str("re-roll-advance"),
+            Self::ReRollChannellingDieAtVehicleWoundCost => {
+                f.write_str("re-roll-channelling-die-at-vehicle-wound-cost")
+            }
+            Self::ReRollHazardousTestsPsychic => {
+                f.write_str("re-roll-hazardous-tests-psychic")
+            }
+            Self::ReRollPsychicRolls => f.write_str("re-roll-psychic-rolls"),
+            Self::ReactiveCharge => f.write_str("reactive-charge"),
+            Self::ReactiveEmbarkWhenCharged => {
+                f.write_str("reactive-embark-when-charged")
+            }
+            Self::RedeployHereticAstartesToReserves => {
+                f.write_str("redeploy-heretic-astartes-to-reserves")
+            }
+            Self::RedeployOnBattlefield => f.write_str("redeploy-on-battlefield"),
+            Self::RedeployToReserves => f.write_str("redeploy-to-reserves"),
+            Self::RedeployToStrategicReserves => {
+                f.write_str("redeploy-to-strategic-reserves")
+            }
+            Self::RedeployUpTo3AstraMilitarumToStrategicReservesOverride => {
+                f.write_str(
+                    "redeploy-up-to-3-astra-militarum-to-strategic-reserves-override",
+                )
+            }
+            Self::RedeployUpToThreeFriendlyOrksInfantry => {
+                f.write_str("redeploy-up-to-three-friendly-orks-infantry")
+            }
+            Self::RedeploymentSelectionCapThree => {
+                f.write_str("redeployment-selection-cap-three")
+            }
+            Self::ReinforcementAnyOfTurns1To3 => {
+                f.write_str("reinforcement-any-of-turns-1-to-3")
+            }
+            Self::ReinforcementsFirstThreeMovementPhases => {
+                f.write_str("reinforcements-first-three-movement-phases")
+            }
+            Self::RelicsOfMatriarchs => f.write_str("relics-of-matriarchs"),
+            Self::RemainHiddenAfterShooting => {
+                f.write_str("remain-hidden-after-shooting")
+            }
+            Self::RemoveAlreadyDestroyedModelFromBattlefield => {
+                f.write_str("remove-already-destroyed-model-from-battlefield")
+            }
+            Self::RemoveBattleShock => f.write_str("remove-battle-shock"),
+            Self::RemoveBattleShockedStatus => {
+                f.write_str("remove-battle-shocked-status")
+            }
+            Self::RemoveFromBattlefieldAfterResolution => {
+                f.write_str("remove-from-battlefield-after-resolution")
+            }
+            Self::RemoveHunterOrganism => f.write_str("remove-hunter-organism"),
+            Self::ReplaceDestroyedUnitInReserves => {
+                f.write_str("replace-destroyed-unit-in-reserves")
+            }
+            Self::ReplaceMeleeAttackBonusWithPlusTwoAtElevenModels => {
+                f.write_str("replace-melee-attack-bonus-with-plus-two-at-eleven-models")
+            }
+            Self::RerollAdvance => f.write_str("reroll-advance"),
+            Self::RerollDuplicateRandomResults => {
+                f.write_str("reroll-duplicate-random-results")
+            }
+            Self::ReserveDeploymentDenialAura12 => {
+                f.write_str("reserve-deployment-denial-aura-12")
+            }
+            Self::ReservesLimitExempt => f.write_str("reserves-limit-exempt"),
+            Self::ReservesLimitExemptWithCargo => {
+                f.write_str("reserves-limit-exempt-with-cargo")
+            }
+            Self::RestoreReplacementToOriginalModelCountAndFullHealth => {
+                f.write_str(
+                    "restore-replacement-to-original-model-count-and-full-health",
+                )
+            }
+            Self::RestrictedFromWarlord => f.write_str("restricted-from-warlord"),
+            Self::ReturnDestroyedModels => f.write_str("return-destroyed-models"),
+            Self::ReuseOncePerBattleAbility => {
+                f.write_str("reuse-once-per-battle-ability")
+            }
+            Self::RiledUpExpiringAtNextFriendlyTurnBoundary => {
+                f.write_str("riled-up-expiring-at-next-friendly-turn-boundary")
+            }
+            Self::RitualBonusOnCabalDeath => f.write_str("ritual-bonus-on-cabal-death"),
+            Self::RollOffWinnerChoosesRedeployOrder => {
+                f.write_str("roll-off-winner-chooses-redeploy-order")
+            }
+            Self::SameUnitSurgeMoveUpToD6 => f.write_str("same-unit-surge-move-up-to-d6"),
+            Self::ScornfulAnalysisDesignated => {
+                f.write_str("scornful-analysis-designated")
+            }
+            Self::Scouts6 => f.write_str("scouts-6"),
+            Self::Scouts7 => f.write_str("scouts-7"),
+            Self::Scouts9Transport => f.write_str("scouts-9-transport"),
+            Self::SelectDoomboltIgnoringAttemptLimit => {
+                f.write_str("select-doombolt-ignoring-attempt-limit")
+            }
+            Self::SelectNewQuarry => f.write_str("select-new-quarry"),
+            Self::SelectOneInfantryUnitGainsScouts6 => {
+                f.write_str("select-one-infantry-unit-gains-scouts-6")
+            }
+            Self::SelectUpToTwoCtanPowersRestrictOthers => {
+                f.write_str("select-up-to-two-ctan-powers-restrict-others")
+            }
+            Self::SelectedEmbarkedOrksInfantryDisembarkMove => {
+                f.write_str("selected-embarked-orks-infantry-disembark-move")
+            }
+            Self::SelectiveFromPool => f.write_str("selective-from-pool"),
+            Self::SetUpAsCloseAsPossibleToDestroyedLocationUnengaged => {
+                f.write_str(
+                    "set-up-as-close-as-possible-to-destroyed-location-unengaged",
+                )
+            }
+            Self::ShadowFormAbilitySelect => f.write_str("shadow-form-ability-select"),
+            Self::ShadowOfChaos => f.write_str("shadow-of-chaos"),
+            Self::ShakenStatus => f.write_str("shaken-status"),
+            Self::ShareWarDogAuras => f.write_str("share-war-dog-auras"),
+            Self::ShootAfterAction => f.write_str("shoot-after-action"),
+            Self::ShootAfterAdvance => f.write_str("shoot-after-advance"),
+            Self::ShootAfterAdvanceOrFallBack => {
+                f.write_str("shoot-after-advance-or-fall-back")
+            }
+            Self::ShootAfterFallBack => f.write_str("shoot-after-fall-back"),
+            Self::ShootAfterFallback => f.write_str("shoot-after-fallback"),
+            Self::ShootAgain => f.write_str("shoot-again"),
+            Self::ShootAndChargeAfterAdvanceFallBack => {
+                f.write_str("shoot-and-charge-after-advance-fall-back")
+            }
+            Self::ShootAndChargeAfterFallBack => {
+                f.write_str("shoot-and-charge-after-fall-back")
+            }
+            Self::ShootAsIfShootingPhase => f.write_str("shoot-as-if-shooting-phase"),
+            Self::ShootOutOfPhase => f.write_str("shoot-out-of-phase"),
+            Self::ShootWhileHidden => f.write_str("shoot-while-hidden"),
+            Self::ShootWhileInAction => f.write_str("shoot-while-in-action"),
+            Self::ShootWhilePerformingAction => {
+                f.write_str("shoot-while-performing-action")
+            }
+            Self::ShootingDoesNotPreventHidden => {
+                f.write_str("shooting-does-not-prevent-hidden")
+            }
+            Self::SnapShooting => f.write_str("snap-shooting"),
+            Self::SnapShootingResponse => f.write_str("snap-shooting-response"),
+            Self::SplitByHeadtakersHuntingWolves => {
+                f.write_str("split-by-headtakers-hunting-wolves")
+            }
+            Self::SplitIntoSingleModelUnits => {
+                f.write_str("split-into-single-model-units")
+            }
+            Self::SplitUnitFiveFive => f.write_str("split-unit-five-five"),
+            Self::Spotted => f.write_str("spotted"),
+            Self::StandOnTerrainSections => f.write_str("stand-on-terrain-sections"),
+            Self::Stealth => f.write_str("stealth"),
+            Self::StratagemCostReduction => f.write_str("stratagem-cost-reduction"),
+            Self::StratagemFor0cp => f.write_str("stratagem-for-0cp"),
+            Self::StratagemTargetableWhileBattleShocked => {
+                f.write_str("stratagem-targetable-while-battle-shocked")
+            }
+            Self::StrategicReservesDuringRedeployment => {
+                f.write_str("strategic-reserves-during-redeployment")
+            }
+            Self::StrategicReservesExempt => f.write_str("strategic-reserves-exempt"),
+            Self::StrategicReservesOverride => f.write_str("strategic-reserves-override"),
+            Self::StrategicReservesWithoutUnitLimit => {
+                f.write_str("strategic-reserves-without-unit-limit")
+            }
+            Self::SummonChaosSpawnOnDeath => f.write_str("summon-chaos-spawn-on-death"),
+            Self::SummonPoxwalkersStrategicReserves => {
+                f.write_str("summon-poxwalkers-strategic-reserves")
+            }
+            Self::SuperHeavyWalker => f.write_str("super-heavy-walker"),
+            Self::SuppressShotTargetHitPenalty => {
+                f.write_str("suppress-shot-target-hit-penalty")
+            }
+            Self::Suppressed => f.write_str("suppressed"),
+            Self::SurrogateHosts => f.write_str("surrogate-hosts"),
+            Self::SwapHostileAcquisitionAndFortifyTakeover => {
+                f.write_str("swap-hostile-acquisition-and-fortify-takeover")
+            }
+            Self::TakeBattleShockTest => f.write_str("take-battle-shock-test"),
+            Self::TakeToTheSkies => f.write_str("take-to-the-skies"),
+            Self::TankShockZeroCpUnrestricted => {
+                f.write_str("tank-shock-zero-cp-unrestricted")
+            }
+            Self::TargetableByRangedWhileEngaged => {
+                f.write_str("targetable-by-ranged-while-engaged")
+            }
+            Self::TempleRelics => f.write_str("temple-relics"),
+            Self::TerminateCurrentAttackSequence => {
+                f.write_str("terminate-current-attack-sequence")
+            }
+            Self::TerrorOfKhorne => f.write_str("terror-of-khorne"),
+            Self::TitanicSelfAuraInclusion => f.write_str("titanic-self-aura-inclusion"),
+            Self::TransportCapacity30WithKeywordMultipliers => {
+                f.write_str("transport-capacity-30-with-keyword-multipliers")
+            }
+            Self::TreatBattleRoundOneHigherForReserves => {
+                f.write_str("treat-battle-round-one-higher-for-reserves")
+            }
+            Self::TreatRollAsUnmodified6 => f.write_str("treat-roll-as-unmodified-6"),
+            Self::TunnelMarkerReservesDeployment => {
+                f.write_str("tunnel-marker-reserves-deployment")
+            }
+            Self::UnhideableThroughEndOfNextFriendlyTurn => {
+                f.write_str("unhideable-through-end-of-next-friendly-turn")
+            }
+            Self::UnmodifiedHitCritical => f.write_str("unmodified-hit-critical"),
+            Self::UseTheBlueHorrorsDatasheet => {
+                f.write_str("use-the-blue-horrors-datasheet")
+            }
+            Self::VanguardSelection => f.write_str("vanguard-selection"),
+            Self::VengeanceMove => f.write_str("vengeance-move"),
+            Self::VowOfAtonementSelection => f.write_str("vow-of-atonement-selection"),
+            Self::Warlord => f.write_str("warlord"),
+            Self::WarmasterSelection => f.write_str("warmaster-selection"),
+            Self::Weapon => f.write_str("weapon"),
+            Self::WeaponGrant => f.write_str("weapon-grant"),
+            Self::WeaponRangeIncrease => f.write_str("weapon-range-increase"),
+            Self::WhollyWithinFlowOfMagic => f.write_str("wholly-within-flow-of-magic"),
+            Self::WithdrawToStrategicReserves => {
+                f.write_str("withdraw-to-strategic-reserves")
+            }
+            Self::WrathfulPresenceSelection => f.write_str("wrathful-presence-selection"),
+        }
+    }
+}
+impl ::std::str::FromStr for GrantType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "ability-range-modifier" => Ok(Self::AbilityRangeModifier),
+            "act-after-move" => Ok(Self::ActAfterMove),
+            "act-after-shooting" => Ok(Self::ActAfterShooting),
+            "action-after-advance-fall-back" => Ok(Self::ActionAfterAdvanceFallBack),
+            "action-after-fall-back" => Ok(Self::ActionAfterFallBack),
+            "action-and-shoot-eligibility" => Ok(Self::ActionAndShootEligibility),
+            "action-eligibility" => Ok(Self::ActionEligibility),
+            "action-eligibility-after-advance-or-fall-back" => {
+                Ok(Self::ActionEligibilityAfterAdvanceOrFallBack)
+            }
+            "activate-blessing-of-khorne" => Ok(Self::ActivateBlessingOfKhorne),
+            "activate-dread-ability" => Ok(Self::ActivateDreadAbility),
+            "add-embarked-oc-to-self-oc" => Ok(Self::AddEmbarkedOcToSelfOc),
+            "add-order" => Ok(Self::AddOrder),
+            "additional-oath" => Ok(Self::AdditionalOath),
+            "adjust-target-marker" => Ok(Self::AdjustTargetMarker),
+            "advance-6-instead-of-roll" => Ok(Self::Advance6InsteadOfRoll),
+            "advance-and-charge" => Ok(Self::AdvanceAndCharge),
+            "advance-and-charge-if-selected-among-up-to-two-other-units" => {
+                Ok(Self::AdvanceAndChargeIfSelectedAmongUpToTwoOtherUnits)
+            }
+            "advance-roll-set-to-six" => Ok(Self::AdvanceRollSetToSix),
+            "advance-through-all-models" => Ok(Self::AdvanceThroughAllModels),
+            "afflicted" => Ok(Self::Afflicted),
+            "agile-manoeuvre-d6-add-1" => Ok(Self::AgileManoeuvreD6Add1),
+            "agile-manoeuvre-phase-limit-exemption" => {
+                Ok(Self::AgileManoeuvrePhaseLimitExemption)
+            }
+            "all-blessings-of-khorne-active" => Ok(Self::AllBlessingsOfKhorneActive),
+            "allied-astra-militarum-inclusion" => Ok(Self::AlliedAstraMilitarumInclusion),
+            "always-within-synapse-range" => Ok(Self::AlwaysWithinSynapseRange),
+            "apply-additional-plague" => Ok(Self::ApplyAdditionalPlague),
+            "apply-battle-shock" => Ok(Self::ApplyBattleShock),
+            "army-composition-constraint" => Ok(Self::ArmyCompositionConstraint),
+            "army-list-allowance-one-inquisitorial-agents-unit-per-inquisitor" => {
+                Ok(Self::ArmyListAllowanceOneInquisitorialAgentsUnitPerInquisitor)
+            }
+            "army-list-allowance-one-voidsmen-at-arms-unit-per-voidfarers-character" => {
+                Ok(Self::ArmyListAllowanceOneVoidsmenAtArmsUnitPerVoidfarersCharacter)
+            }
+            "battle-focus" => Ok(Self::BattleFocus),
+            "battle-round-plus-one-for-arrival" => Ok(Self::BattleRoundPlusOneForArrival),
+            "battle-shock-test" => Ok(Self::BattleShockTest),
+            "battle-shock-test-re-roll" => Ok(Self::BattleShockTestReRoll),
+            "battle-shocked-status" => Ok(Self::BattleShockedStatus),
+            "battle-shocked-targeting-permission" => {
+                Ok(Self::BattleShockedTargetingPermission)
+            }
+            "becomes-battle-shocked" => Ok(Self::BecomesBattleShocked),
+            "benefit-of-cover-against-triggering-attack" => {
+                Ok(Self::BenefitOfCoverAgainstTriggeringAttack)
+            }
+            "blessings-of-khorne" => Ok(Self::BlessingsOfKhorne),
+            "bodyguard-sacrifice-psychic-buff" => Ok(Self::BodyguardSacrificePsychicBuff),
+            "bomb-squig-first-sub-unit-found-em-second-sub-unit" => {
+                Ok(Self::BombSquigFirstSubUnitFoundEmSecondSubUnit)
+            }
+            "bondsman-select-three-armiger-12in" => {
+                Ok(Self::BondsmanSelectThreeArmiger12in)
+            }
+            "bondsman-select-three-armiger-15in" => {
+                Ok(Self::BondsmanSelectThreeArmiger15in)
+            }
+            "bonus-healing-d3" => Ok(Self::BonusHealingD3),
+            "boon-of-blood" => Ok(Self::BoonOfBlood),
+            "boost-psychic-test-via-mortal-wounds" => {
+                Ok(Self::BoostPsychicTestViaMortalWounds)
+            }
+            "butcha-boyz-embarked-model-attack-scaling-2-cap-22" => {
+                Ok(Self::ButchaBoyzEmbarkedModelAttackScaling2Cap22)
+            }
+            "cabal-of-sorcerers" => Ok(Self::CabalOfSorcerers),
+            "cannot-be-targeted-by-fire-overwatch" => {
+                Ok(Self::CannotBeTargetedByFireOverwatch)
+            }
+            "cannot-be-warlord" => Ok(Self::CannotBeWarlord),
+            "cannot-benefit-from-cover" => Ok(Self::CannotBenefitFromCover),
+            "cannot-charge-this-turn" => Ok(Self::CannotChargeThisTurn),
+            "cannot-embark-transport" => Ok(Self::CannotEmbarkTransport),
+            "cannot-embark-venerable-land-raider" => {
+                Ok(Self::CannotEmbarkVenerableLandRaider)
+            }
+            "cannot-have-benefit-of-cover" => Ok(Self::CannotHaveBenefitOfCover),
+            "cannot-use-personal-teleporters" => Ok(Self::CannotUsePersonalTeleporters),
+            "canticle" => Ok(Self::Canticle),
+            "charge-after-advance" => Ok(Self::ChargeAfterAdvance),
+            "charge-after-advance-fallback" => Ok(Self::ChargeAfterAdvanceFallback),
+            "charge-after-advance-or-fall-back" => Ok(Self::ChargeAfterAdvanceOrFallBack),
+            "charge-after-advance-or-fallback" => Ok(Self::ChargeAfterAdvanceOrFallback),
+            "charge-after-disembark" => Ok(Self::ChargeAfterDisembark),
+            "charge-after-fall-back" => Ok(Self::ChargeAfterFallBack),
+            "charge-after-fallback" => Ok(Self::ChargeAfterFallback),
+            "charge-after-movement" => Ok(Self::ChargeAfterMovement),
+            "charge-eligibility-after-advance-or-fall-back" => {
+                Ok(Self::ChargeEligibilityAfterAdvanceOrFallBack)
+            }
+            "charge-eligible-after-normal-move-disembark" => {
+                Ok(Self::ChargeEligibleAfterNormalMoveDisembark)
+            }
+            "charge-ineligible" => Ok(Self::ChargeIneligible),
+            "charge-ineligible-for-remainder-of-turn" => {
+                Ok(Self::ChargeIneligibleForRemainderOfTurn)
+            }
+            "choice" => Ok(Self::Choice),
+            "contagion-range-extension-3" => Ok(Self::ContagionRangeExtension3),
+            "contagion-range-modifier" => Ok(Self::ContagionRangeModifier),
+            "corsair-enhancement-selection" => Ok(Self::CorsairEnhancementSelection),
+            "counts-as-advanced-this-turn" => Ok(Self::CountsAsAdvancedThisTurn),
+            "covered-in-squigs" => Ok(Self::CoveredInSquigs),
+            "create-identical-replacement-unit" => {
+                Ok(Self::CreateIdenticalReplacementUnit)
+            }
+            "crew-tokens" => Ok(Self::CrewTokens),
+            "critical-hit-on" => Ok(Self::CriticalHitOn),
+            "critical-wound-on-successful-wound-roll" => {
+                Ok(Self::CriticalWoundOnSuccessfulWoundRoll)
+            }
+            "daemon-primarch-of-slaanesh-selection" => {
+                Ok(Self::DaemonPrimarchOfSlaaneshSelection)
+            }
+            "daemonic-rage" => Ok(Self::DaemonicRage),
+            "dark-pact-both-abilities" => Ok(Self::DarkPactBothAbilities),
+            "dark-pacts" => Ok(Self::DarkPacts),
+            "deadly-demise-choose-result" => Ok(Self::DeadlyDemiseChooseResult),
+            "deadly-demise-d6" => Ok(Self::DeadlyDemiseD6),
+            "deadly-demise-disabled" => Ok(Self::DeadlyDemiseDisabled),
+            "deadly-demise-threshold" => Ok(Self::DeadlyDemiseThreshold),
+            "declare-charge" => Ok(Self::DeclareCharge),
+            "deep-strike" => Ok(Self::DeepStrike),
+            "deep-strike-6" => Ok(Self::DeepStrike6),
+            "deep-strike-6inch-exclusion" => Ok(Self::DeepStrike6inchExclusion),
+            "deep-strike-for-selected-kroot-units" => {
+                Ok(Self::DeepStrikeForSelectedKrootUnits)
+            }
+            "deep-strike-within-flow-of-magic" => Ok(Self::DeepStrikeWithinFlowOfMagic),
+            "defence-line-section-assembly" => Ok(Self::DefenceLineSectionAssembly),
+            "deferred-destroyed-model-removal" => Ok(Self::DeferredDestroyedModelRemoval),
+            "deferred-removal-until-fought-or-end-of-phase" => {
+                Ok(Self::DeferredRemovalUntilFoughtOrEndOfPhase)
+            }
+            "delayed-model-removal" => Ok(Self::DelayedModelRemoval),
+            "deny-reinforcements-within-12" => Ok(Self::DenyReinforcementsWithin12),
+            "designate-enemy-detection-range-modifier" => {
+                Ok(Self::DesignateEnemyDetectionRangeModifier)
+            }
+            "designate-target-marker" => Ok(Self::DesignateTargetMarker),
+            "designated-objective-oc-bonus" => Ok(Self::DesignatedObjectiveOcBonus),
+            "desperate-escape" => Ok(Self::DesperateEscape),
+            "desperate-escape-hazard-minus-one" => {
+                Ok(Self::DesperateEscapeHazardMinusOne)
+            }
+            "desperate-escape-tests-on-fall-back" => {
+                Ok(Self::DesperateEscapeTestsOnFallBack)
+            }
+            "detachment-enhancements-gain-expended-state" => {
+                Ok(Self::DetachmentEnhancementsGainExpendedState)
+            }
+            "detachment-saga-completed" => Ok(Self::DetachmentSagaCompleted),
+            "detection-range-extended-6" => Ok(Self::DetectionRangeExtended6),
+            "detection-range-minus-3-inches" => Ok(Self::DetectionRangeMinus3Inches),
+            "detection-range-modifier" => Ok(Self::DetectionRangeModifier),
+            "disembark-after-advance-charge" => Ok(Self::DisembarkAfterAdvanceCharge),
+            "disembarking-pulse-weapons-attack-bonus" => {
+                Ok(Self::DisembarkingPulseWeaponsAttackBonus)
+            }
+            "eadbanger-ranged-weapon-range-24in-bs-4plus" => {
+                Ok(Self::EadbangerRangedWeaponRange24inBs4plus)
+            }
+            "eligible-to-declare-charge-after-fall-back" => {
+                Ok(Self::EligibleToDeclareChargeAfterFallBack)
+            }
+            "eligible-to-fight-again" => Ok(Self::EligibleToFightAgain),
+            "eligible-to-start-action-after-advance-or-fall-back" => {
+                Ok(Self::EligibleToStartActionAfterAdvanceOrFallBack)
+            }
+            "eligible-to-start-an-action-after-an-advance-move" => {
+                Ok(Self::EligibleToStartAnActionAfterAnAdvanceMove)
+            }
+            "embark-after-enemy-shooting" => Ok(Self::EmbarkAfterEnemyShooting),
+            "embark-after-fight" => Ok(Self::EmbarkAfterFight),
+            "embark-at-end-of-fight-phase" => Ok(Self::EmbarkAtEndOfFightPhase),
+            "embark-in-selected-transport" => Ok(Self::EmbarkInSelectedTransport),
+            "embark-in-transport" => Ok(Self::EmbarkInTransport),
+            "embark-when-charged" => Ok(Self::EmbarkWhenCharged),
+            "empower-possessed-blade" => Ok(Self::EmpowerPossessedBlade),
+            "enable-rapid-disembark-for-embarked-units" => {
+                Ok(Self::EnableRapidDisembarkForEmbarkedUnits)
+            }
+            "engaged-enemies-must-prefer-scintillating-legions-targets" => {
+                Ok(Self::EngagedEnemiesMustPreferScintillatingLegionsTargets)
+            }
+            "engaged-enemies-must-target-this-unit" => {
+                Ok(Self::EngagedEnemiesMustTargetThisUnit)
+            }
+            "enhanced-foul-spores-aura-9" => Ok(Self::EnhancedFoulSporesAura9),
+            "enraged-abjuration" => Ok(Self::EnragedAbjuration),
+            "enter-strategic-reserves" => Ok(Self::EnterStrategicReserves),
+            "expended-enhancement-cannot-be-used" => {
+                Ok(Self::ExpendedEnhancementCannotBeUsed)
+            }
+            "expended-enhancements-all-refreshed" => {
+                Ok(Self::ExpendedEnhancementsAllRefreshed)
+            }
+            "extend-bondsman-range" => Ok(Self::ExtendBondsmanRange),
+            "extend-datasheet-aura-range" => Ok(Self::ExtendDatasheetAuraRange),
+            "extend-psychic-ability-range-6" => Ok(Self::ExtendPsychicAbilityRange6),
+            "extend-ritual-range-6" => Ok(Self::ExtendRitualRange6),
+            "extended-fight-eligibility" => Ok(Self::ExtendedFightEligibility),
+            "extended-order-range" => Ok(Self::ExtendedOrderRange),
+            "extra-leader-attachment" => Ok(Self::ExtraLeaderAttachment),
+            "extra-order" => Ok(Self::ExtraOrder),
+            "extra-ritual-attempt" => Ok(Self::ExtraRitualAttempt),
+            "extremis-double-ability-uses" => Ok(Self::ExtremisDoubleAbilityUses),
+            "fade-back-agile-manoeuvre-free" => Ok(Self::FadeBackAgileManoeuvreFree),
+            "fallback-denial-on-leadership-failure" => {
+                Ok(Self::FallbackDenialOnLeadershipFailure)
+            }
+            "fallback-exception" => Ok(Self::FallbackException),
+            "fallback-hazard-auto-pass" => Ok(Self::FallbackHazardAutoPass),
+            "farsight-ethereal-mutual-exclusion" => {
+                Ok(Self::FarsightEtherealMutualExclusion)
+            }
+            "fight-one-additional-time" => Ok(Self::FightOneAdditionalTime),
+            "fire-overwatch-targeting-immunity" => {
+                Ok(Self::FireOverwatchTargetingImmunity)
+            }
+            "flexible-strategic-reserves" => Ok(Self::FlexibleStrategicReserves),
+            "forced-battle-shock-roll" => Ok(Self::ForcedBattleShockRoll),
+            "forced-battle-shock-test" => Ok(Self::ForcedBattleShockTest),
+            "found-em-first-sub-unit-bomb-squig-second-sub-unit" => {
+                Ok(Self::FoundEmFirstSubUnitBombSquigSecondSubUnit)
+            }
+            "free-tank-shock" => Ok(Self::FreeTankShock),
+            "grenade-stratagem-free-use" => Ok(Self::GrenadeStratagemFreeUse),
+            "guided-units-lethal-hits-vs-spotted" => {
+                Ok(Self::GuidedUnitsLethalHitsVsSpotted)
+            }
+            "guided-units-sustained-hits-1-vs-spotted" => {
+                Ok(Self::GuidedUnitsSustainedHits1VsSpotted)
+            }
+            "half-range-consideration" => Ok(Self::HalfRangeConsideration),
+            "harnessed-alien-instincts" => Ok(Self::HarnessedAlienInstincts),
+            "hazard-check-pair-per-selected-tagged-weapon" => {
+                Ok(Self::HazardCheckPairPerSelectedTaggedWeapon)
+            }
+            "hazard-roll-per-model" => Ok(Self::HazardRollPerModel),
+            "heal-bonus" => Ok(Self::HealBonus),
+            "heal-d3-wounds" => Ok(Self::HealD3Wounds),
+            "heal-wounds" => Ok(Self::HealWounds),
+            "hero-of-hades-hive-ability" => Ok(Self::HeroOfHadesHiveAbility),
+            "heroic-intervention-at-0cp" => Ok(Self::HeroicInterventionAt0cp),
+            "heroic-intervention-frequency-bypass" => {
+                Ok(Self::HeroicInterventionFrequencyBypass)
+            }
+            "heroic-intervention-limit-exempt" => Ok(Self::HeroicInterventionLimitExempt),
+            "icon-of-war-selection" => Ok(Self::IconOfWarSelection),
+            "idol-of-blessed-blood" => Ok(Self::IdolOfBlessedBlood),
+            "idol-of-burning-wrath" => Ok(Self::IdolOfBurningWrath),
+            "idol-of-infinite-rage" => Ok(Self::IdolOfInfiniteRage),
+            "ignore-hit-roll-modifiers" => Ok(Self::IgnoreHitRollModifiers),
+            "ignore-move-and-advance-modifiers" => {
+                Ok(Self::IgnoreMoveAndAdvanceModifiers)
+            }
+            "ignore-strategic-reserves-unit-cap" => {
+                Ok(Self::IgnoreStrategicReservesUnitCap)
+            }
+            "improved-grenades-mortal-wound-threshold" => {
+                Ok(Self::ImprovedGrenadesMortalWoundThreshold)
+            }
+            "incoming-psychic-attacks-hazardous" => {
+                Ok(Self::IncomingPsychicAttacksHazardous)
+            }
+            "incoming-ranged-attacks-ignore-cover-through-end-of-next-friendly-turn" => {
+                Ok(Self::IncomingRangedAttacksIgnoreCoverThroughEndOfNextFriendlyTurn)
+            }
+            "incoming-unmodified-ranged-hit-results-one-through-three-fail" => {
+                Ok(Self::IncomingUnmodifiedRangedHitResultsOneThroughThreeFail)
+            }
+            "increased-detection-range" => Ok(Self::IncreasedDetectionRange),
+            "individual-model-deployment-within-12-coherency" => {
+                Ok(Self::IndividualModelDeploymentWithin12Coherency)
+            }
+            "infiltrators" => Ok(Self::Infiltrators),
+            "infiltrators-for-selected-rubricae" => {
+                Ok(Self::InfiltratorsForSelectedRubricae)
+            }
+            "ingress-into-enemy-deployment-zone" => {
+                Ok(Self::IngressIntoEnemyDeploymentZone)
+            }
+            "ingress-move" => Ok(Self::IngressMove),
+            "ingress-within-6" => Ok(Self::IngressWithin6),
+            "intervening-line-of-sight-cover" => Ok(Self::InterveningLineOfSightCover),
+            "into-strategic-reserves" => Ok(Self::IntoStrategicReserves),
+            "issue-extra-order-to-abhuman-unit" => Ok(Self::IssueExtraOrderToAbhumanUnit),
+            "issue-order-to-disembarked-regiment-unit" => {
+                Ok(Self::IssueOrderToDisembarkedRegimentUnit)
+            }
+            "issue-order-to-extra-platoon-units" => {
+                Ok(Self::IssueOrderToExtraPlatoonUnits)
+            }
+            "issue-order-to-multiple-units" => Ok(Self::IssueOrderToMultipleUnits),
+            "issue-orders" => Ok(Self::IssueOrders),
+            "issue-orders-regiment-up-to-2" => Ok(Self::IssueOrdersRegimentUpTo2),
+            "killing-blow-extended-round-4" => Ok(Self::KillingBlowExtendedRound4),
+            "kindred-sorcery-choice-override" => Ok(Self::KindredSorceryChoiceOverride),
+            "leader-attachment" => Ok(Self::LeaderAttachment),
+            "leadership-test-or-3-mortal-wounds" => {
+                Ok(Self::LeadershipTestOr3MortalWounds)
+            }
+            "leadership-test-re-roll" => Ok(Self::LeadershipTestReRoll),
+            "localised-stealth-projectors" => Ok(Self::LocalisedStealthProjectors),
+            "lone-operative" => Ok(Self::LoneOperative),
+            "lose-infantry-keyword" => Ok(Self::LoseInfantryKeyword),
+            "make-a-blessings-of-khorne-roll-and-activate-one-additional-blessing" => {
+                Ok(Self::MakeABlessingsOfKhorneRollAndActivateOneAdditionalBlessing)
+            }
+            "make-one-hazard-roll" => Ok(Self::MakeOneHazardRoll),
+            "mandatory-desperate-escape" => Ok(Self::MandatoryDesperateEscape),
+            "mandatory-warlord-designation" => Ok(Self::MandatoryWarlordDesignation),
+            "may-start-in-reserves" => Ok(Self::MayStartInReserves),
+            "melee-cleave-increment-if-present" => {
+                Ok(Self::MeleeCleaveIncrementIfPresent)
+            }
+            "melee-cleave-one-if-absent" => Ok(Self::MeleeCleaveOneIfAbsent),
+            "melee-critical-hit-on-5-plus" => Ok(Self::MeleeCriticalHitOn5Plus),
+            "melta-range-add-6" => Ok(Self::MeltaRangeAdd6),
+            "might-of-khorne" => Ok(Self::MightOfKhorne),
+            "miracle-dice-reroll-before-pool" => Ok(Self::MiracleDiceRerollBeforePool),
+            "miracle-dice-value-set-6" => Ok(Self::MiracleDiceValueSet6),
+            "mobbed-roll-adjustment-plus-one-or-minus-two-at-three-models" => {
+                Ok(Self::MobbedRollAdjustmentPlusOneOrMinusTwoAtThreeModels)
+            }
+            "mobile" => Ok(Self::Mobile),
+            "model-passthrough-excluding-monsters-and-vehicles" => {
+                Ok(Self::ModelPassthroughExcludingMonstersAndVehicles)
+            }
+            "models-within-3-are-eligible-to-fight-and-can-target-enemy-units-within-3" => {
+                Ok(Self::ModelsWithin3AreEligibleToFightAndCanTargetEnemyUnitsWithin3)
+            }
+            "move-does-not-prevent-action" => Ok(Self::MoveDoesNotPreventAction),
+            "move-must-finish-in-objective-range" => {
+                Ok(Self::MoveMustFinishInObjectiveRange)
+            }
+            "move-through-models" => Ok(Self::MoveThroughModels),
+            "multi-target-attack" => Ok(Self::MultiTargetAttack),
+            "multiple-orders" => Ok(Self::MultipleOrders),
+            "multiple-orders-up-to-two" => Ok(Self::MultipleOrdersUpToTwo),
+            "must-be-warlord" => Ok(Self::MustBeWarlord),
+            "must-start-in-reserves" => Ok(Self::MustStartInReserves),
+            "mutated-objective-hazard" => Ok(Self::MutatedObjectiveHazard),
+            "no-advance-roll" => Ok(Self::NoAdvanceRoll),
+            "no-smoke" => Ok(Self::NoSmoke),
+            "normal-move-d3-plus-3-inches" => Ok(Self::NormalMoveD3Plus3Inches),
+            "nurgle-gift" => Ok(Self::NurgleGift),
+            "nurgle-gift-as-death-guard-model" => Ok(Self::NurgleGiftAsDeathGuardModel),
+            "oath-fulfilled" => Ok(Self::OathFulfilled),
+            "optional-redeployment-selection" => Ok(Self::OptionalRedeploymentSelection),
+            "optional-restore-three-lost-wounds" => {
+                Ok(Self::OptionalRestoreThreeLostWounds)
+            }
+            "orders-persist-during-battle-shock" => {
+                Ok(Self::OrdersPersistDuringBattleShock)
+            }
+            "outflank-set-up-in-opponent-deployment-zone" => {
+                Ok(Self::OutflankSetUpInOpponentDeploymentZone)
+            }
+            "pact-both-abilities" => Ok(Self::PactBothAbilities),
+            "passenger-relocation-on-destruction" => {
+                Ok(Self::PassengerRelocationOnDestruction)
+            }
+            "patient-hunter-from-round-2" => Ok(Self::PatientHunterFromRound2),
+            "perform-ingress-move" => Ok(Self::PerformIngressMove),
+            "perform-pulse-jet-move" => Ok(Self::PerformPulseJetMove),
+            "permit-embarked-units-assault-disembark" => {
+                Ok(Self::PermitEmbarkedUnitsAssaultDisembark)
+            }
+            "persistent-orders" => Ok(Self::PersistentOrders),
+            "pinned" => Ok(Self::Pinned),
+            "place-in-strategic-reserves" => Ok(Self::PlaceInStrategicReserves),
+            "place-into-strategic-reserves" => Ok(Self::PlaceIntoStrategicReserves),
+            "place-replacement-in-strategic-reserves" => {
+                Ok(Self::PlaceReplacementInStrategicReserves)
+            }
+            "place-selected-unit-in-strategic-reserves" => {
+                Ok(Self::PlaceSelectedUnitInStrategicReserves)
+            }
+            "plague-selection" => Ok(Self::PlagueSelection),
+            "platform-setup-and-move-override" => Ok(Self::PlatformSetupAndMoveOverride),
+            "post-deployment-redeploy" => Ok(Self::PostDeploymentRedeploy),
+            "post-fallback-actions" => Ok(Self::PostFallbackActions),
+            "pregame-redeploy-up-to-three-infantry-units" => {
+                Ok(Self::PregameRedeployUpToThreeInfantryUnits)
+            }
+            "pregame-redeploy-up-to-three-infantry-units-may-enter-strategic-reserves" => {
+                Ok(Self::PregameRedeployUpToThreeInfantryUnitsMayEnterStrategicReserves)
+            }
+            "pregame-redeploy-up-to-three-units-may-enter-strategic-reserves" => {
+                Ok(Self::PregameRedeployUpToThreeUnitsMayEnterStrategicReserves)
+            }
+            "pregame-redeploy-up-to-two-regiment-or-squadron-units-may-enter-strategic-reserves" => {
+                Ok(
+                    Self::PregameRedeployUpToTwoRegimentOrSquadronUnitsMayEnterStrategicReserves,
+                )
+            }
+            "primarch-of-the-first-legion-selection" => {
+                Ok(Self::PrimarchOfTheFirstLegionSelection)
+            }
+            "psychic-abilities" => Ok(Self::PsychicAbilities),
+            "psychic-abilities-level-one" => Ok(Self::PsychicAbilitiesLevelOne),
+            "psychic-level-1" => Ok(Self::PsychicLevel1),
+            "psychic-level-2" => Ok(Self::PsychicLevel2),
+            "ranged-rapid-fire-floor-one-increment-existing" => {
+                Ok(Self::RangedRapidFireFloorOneIncrementExisting)
+            }
+            "ranged-weapon" => Ok(Self::RangedWeapon),
+            "ranged-weapon-range-plus-3in" => Ok(Self::RangedWeaponRangePlus3in),
+            "ranged-weapon-range-plus-three-excluding-torrent" => {
+                Ok(Self::RangedWeaponRangePlusThreeExcludingTorrent)
+            }
+            "re-roll-advance" => Ok(Self::ReRollAdvance),
+            "re-roll-channelling-die-at-vehicle-wound-cost" => {
+                Ok(Self::ReRollChannellingDieAtVehicleWoundCost)
+            }
+            "re-roll-hazardous-tests-psychic" => Ok(Self::ReRollHazardousTestsPsychic),
+            "re-roll-psychic-rolls" => Ok(Self::ReRollPsychicRolls),
+            "reactive-charge" => Ok(Self::ReactiveCharge),
+            "reactive-embark-when-charged" => Ok(Self::ReactiveEmbarkWhenCharged),
+            "redeploy-heretic-astartes-to-reserves" => {
+                Ok(Self::RedeployHereticAstartesToReserves)
+            }
+            "redeploy-on-battlefield" => Ok(Self::RedeployOnBattlefield),
+            "redeploy-to-reserves" => Ok(Self::RedeployToReserves),
+            "redeploy-to-strategic-reserves" => Ok(Self::RedeployToStrategicReserves),
+            "redeploy-up-to-3-astra-militarum-to-strategic-reserves-override" => {
+                Ok(Self::RedeployUpTo3AstraMilitarumToStrategicReservesOverride)
+            }
+            "redeploy-up-to-three-friendly-orks-infantry" => {
+                Ok(Self::RedeployUpToThreeFriendlyOrksInfantry)
+            }
+            "redeployment-selection-cap-three" => Ok(Self::RedeploymentSelectionCapThree),
+            "reinforcement-any-of-turns-1-to-3" => Ok(Self::ReinforcementAnyOfTurns1To3),
+            "reinforcements-first-three-movement-phases" => {
+                Ok(Self::ReinforcementsFirstThreeMovementPhases)
+            }
+            "relics-of-matriarchs" => Ok(Self::RelicsOfMatriarchs),
+            "remain-hidden-after-shooting" => Ok(Self::RemainHiddenAfterShooting),
+            "remove-already-destroyed-model-from-battlefield" => {
+                Ok(Self::RemoveAlreadyDestroyedModelFromBattlefield)
+            }
+            "remove-battle-shock" => Ok(Self::RemoveBattleShock),
+            "remove-battle-shocked-status" => Ok(Self::RemoveBattleShockedStatus),
+            "remove-from-battlefield-after-resolution" => {
+                Ok(Self::RemoveFromBattlefieldAfterResolution)
+            }
+            "remove-hunter-organism" => Ok(Self::RemoveHunterOrganism),
+            "replace-destroyed-unit-in-reserves" => {
+                Ok(Self::ReplaceDestroyedUnitInReserves)
+            }
+            "replace-melee-attack-bonus-with-plus-two-at-eleven-models" => {
+                Ok(Self::ReplaceMeleeAttackBonusWithPlusTwoAtElevenModels)
+            }
+            "reroll-advance" => Ok(Self::RerollAdvance),
+            "reroll-duplicate-random-results" => Ok(Self::RerollDuplicateRandomResults),
+            "reserve-deployment-denial-aura-12" => {
+                Ok(Self::ReserveDeploymentDenialAura12)
+            }
+            "reserves-limit-exempt" => Ok(Self::ReservesLimitExempt),
+            "reserves-limit-exempt-with-cargo" => Ok(Self::ReservesLimitExemptWithCargo),
+            "restore-replacement-to-original-model-count-and-full-health" => {
+                Ok(Self::RestoreReplacementToOriginalModelCountAndFullHealth)
+            }
+            "restricted-from-warlord" => Ok(Self::RestrictedFromWarlord),
+            "return-destroyed-models" => Ok(Self::ReturnDestroyedModels),
+            "reuse-once-per-battle-ability" => Ok(Self::ReuseOncePerBattleAbility),
+            "riled-up-expiring-at-next-friendly-turn-boundary" => {
+                Ok(Self::RiledUpExpiringAtNextFriendlyTurnBoundary)
+            }
+            "ritual-bonus-on-cabal-death" => Ok(Self::RitualBonusOnCabalDeath),
+            "roll-off-winner-chooses-redeploy-order" => {
+                Ok(Self::RollOffWinnerChoosesRedeployOrder)
+            }
+            "same-unit-surge-move-up-to-d6" => Ok(Self::SameUnitSurgeMoveUpToD6),
+            "scornful-analysis-designated" => Ok(Self::ScornfulAnalysisDesignated),
+            "scouts-6" => Ok(Self::Scouts6),
+            "scouts-7" => Ok(Self::Scouts7),
+            "scouts-9-transport" => Ok(Self::Scouts9Transport),
+            "select-doombolt-ignoring-attempt-limit" => {
+                Ok(Self::SelectDoomboltIgnoringAttemptLimit)
+            }
+            "select-new-quarry" => Ok(Self::SelectNewQuarry),
+            "select-one-infantry-unit-gains-scouts-6" => {
+                Ok(Self::SelectOneInfantryUnitGainsScouts6)
+            }
+            "select-up-to-two-ctan-powers-restrict-others" => {
+                Ok(Self::SelectUpToTwoCtanPowersRestrictOthers)
+            }
+            "selected-embarked-orks-infantry-disembark-move" => {
+                Ok(Self::SelectedEmbarkedOrksInfantryDisembarkMove)
+            }
+            "selective-from-pool" => Ok(Self::SelectiveFromPool),
+            "set-up-as-close-as-possible-to-destroyed-location-unengaged" => {
+                Ok(Self::SetUpAsCloseAsPossibleToDestroyedLocationUnengaged)
+            }
+            "shadow-form-ability-select" => Ok(Self::ShadowFormAbilitySelect),
+            "shadow-of-chaos" => Ok(Self::ShadowOfChaos),
+            "shaken-status" => Ok(Self::ShakenStatus),
+            "share-war-dog-auras" => Ok(Self::ShareWarDogAuras),
+            "shoot-after-action" => Ok(Self::ShootAfterAction),
+            "shoot-after-advance" => Ok(Self::ShootAfterAdvance),
+            "shoot-after-advance-or-fall-back" => Ok(Self::ShootAfterAdvanceOrFallBack),
+            "shoot-after-fall-back" => Ok(Self::ShootAfterFallBack),
+            "shoot-after-fallback" => Ok(Self::ShootAfterFallback),
+            "shoot-again" => Ok(Self::ShootAgain),
+            "shoot-and-charge-after-advance-fall-back" => {
+                Ok(Self::ShootAndChargeAfterAdvanceFallBack)
+            }
+            "shoot-and-charge-after-fall-back" => Ok(Self::ShootAndChargeAfterFallBack),
+            "shoot-as-if-shooting-phase" => Ok(Self::ShootAsIfShootingPhase),
+            "shoot-out-of-phase" => Ok(Self::ShootOutOfPhase),
+            "shoot-while-hidden" => Ok(Self::ShootWhileHidden),
+            "shoot-while-in-action" => Ok(Self::ShootWhileInAction),
+            "shoot-while-performing-action" => Ok(Self::ShootWhilePerformingAction),
+            "shooting-does-not-prevent-hidden" => Ok(Self::ShootingDoesNotPreventHidden),
+            "snap-shooting" => Ok(Self::SnapShooting),
+            "snap-shooting-response" => Ok(Self::SnapShootingResponse),
+            "split-by-headtakers-hunting-wolves" => {
+                Ok(Self::SplitByHeadtakersHuntingWolves)
+            }
+            "split-into-single-model-units" => Ok(Self::SplitIntoSingleModelUnits),
+            "split-unit-five-five" => Ok(Self::SplitUnitFiveFive),
+            "spotted" => Ok(Self::Spotted),
+            "stand-on-terrain-sections" => Ok(Self::StandOnTerrainSections),
+            "stealth" => Ok(Self::Stealth),
+            "stratagem-cost-reduction" => Ok(Self::StratagemCostReduction),
+            "stratagem-for-0cp" => Ok(Self::StratagemFor0cp),
+            "stratagem-targetable-while-battle-shocked" => {
+                Ok(Self::StratagemTargetableWhileBattleShocked)
+            }
+            "strategic-reserves-during-redeployment" => {
+                Ok(Self::StrategicReservesDuringRedeployment)
+            }
+            "strategic-reserves-exempt" => Ok(Self::StrategicReservesExempt),
+            "strategic-reserves-override" => Ok(Self::StrategicReservesOverride),
+            "strategic-reserves-without-unit-limit" => {
+                Ok(Self::StrategicReservesWithoutUnitLimit)
+            }
+            "summon-chaos-spawn-on-death" => Ok(Self::SummonChaosSpawnOnDeath),
+            "summon-poxwalkers-strategic-reserves" => {
+                Ok(Self::SummonPoxwalkersStrategicReserves)
+            }
+            "super-heavy-walker" => Ok(Self::SuperHeavyWalker),
+            "suppress-shot-target-hit-penalty" => Ok(Self::SuppressShotTargetHitPenalty),
+            "suppressed" => Ok(Self::Suppressed),
+            "surrogate-hosts" => Ok(Self::SurrogateHosts),
+            "swap-hostile-acquisition-and-fortify-takeover" => {
+                Ok(Self::SwapHostileAcquisitionAndFortifyTakeover)
+            }
+            "take-battle-shock-test" => Ok(Self::TakeBattleShockTest),
+            "take-to-the-skies" => Ok(Self::TakeToTheSkies),
+            "tank-shock-zero-cp-unrestricted" => Ok(Self::TankShockZeroCpUnrestricted),
+            "targetable-by-ranged-while-engaged" => {
+                Ok(Self::TargetableByRangedWhileEngaged)
+            }
+            "temple-relics" => Ok(Self::TempleRelics),
+            "terminate-current-attack-sequence" => {
+                Ok(Self::TerminateCurrentAttackSequence)
+            }
+            "terror-of-khorne" => Ok(Self::TerrorOfKhorne),
+            "titanic-self-aura-inclusion" => Ok(Self::TitanicSelfAuraInclusion),
+            "transport-capacity-30-with-keyword-multipliers" => {
+                Ok(Self::TransportCapacity30WithKeywordMultipliers)
+            }
+            "treat-battle-round-one-higher-for-reserves" => {
+                Ok(Self::TreatBattleRoundOneHigherForReserves)
+            }
+            "treat-roll-as-unmodified-6" => Ok(Self::TreatRollAsUnmodified6),
+            "tunnel-marker-reserves-deployment" => {
+                Ok(Self::TunnelMarkerReservesDeployment)
+            }
+            "unhideable-through-end-of-next-friendly-turn" => {
+                Ok(Self::UnhideableThroughEndOfNextFriendlyTurn)
+            }
+            "unmodified-hit-critical" => Ok(Self::UnmodifiedHitCritical),
+            "use-the-blue-horrors-datasheet" => Ok(Self::UseTheBlueHorrorsDatasheet),
+            "vanguard-selection" => Ok(Self::VanguardSelection),
+            "vengeance-move" => Ok(Self::VengeanceMove),
+            "vow-of-atonement-selection" => Ok(Self::VowOfAtonementSelection),
+            "warlord" => Ok(Self::Warlord),
+            "warmaster-selection" => Ok(Self::WarmasterSelection),
+            "weapon" => Ok(Self::Weapon),
+            "weapon-grant" => Ok(Self::WeaponGrant),
+            "weapon-range-increase" => Ok(Self::WeaponRangeIncrease),
+            "wholly-within-flow-of-magic" => Ok(Self::WhollyWithinFlowOfMagic),
+            "withdraw-to-strategic-reserves" => Ok(Self::WithdrawToStrategicReserves),
+            "wrathful-presence-selection" => Ok(Self::WrathfulPresenceSelection),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for GrantType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for GrantType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for GrantType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///A construction keyword a detachment grants to units matching a keyword filter. Blanket by default (every matching unit gains it); when `max_selected` is set, the keyword is instead granted to up to that many matching units of the player's choice (e.g. Houndpack Lance: 'select three WAR DOG units; they gain CHARACTER').
 ///
 /// <details><summary>JSON schema</summary>
@@ -13237,7 +15779,9 @@ impl<'de> ::serde::Deserialize<'de> for MissionSource {
 ///            "redeploy",
 ///            "scout",
 ///            "infiltrate",
-///            "shoot-and-scoot"
+///            "shoot-and-scoot",
+///            "ingress",
+///            "take-to-the-skies"
 ///          ]
 ///        },
 ///        "name": {
@@ -13266,6 +15810,10 @@ impl<'de> ::serde::Deserialize<'de> for MissionSource {
 ///        "vertical_limit": {
 ///          "type": "integer",
 ///          "minimum": 0.0
+///        },
+///        "waives_distance_penalty": {
+///          "type": "boolean",
+///          "$comment": "11e aircraft hover mode: taking to the skies subtracts 2\" from the move, and this ability removes that subtraction. Kept as its own field rather than a distance value because the result is the unit's Move characteristic, not a fixed number, and because the penalty applies only to this move kind."
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -13382,7 +15930,9 @@ pub struct MovementModifierEffect {
 ///        "redeploy",
 ///        "scout",
 ///        "infiltrate",
-///        "shoot-and-scoot"
+///        "shoot-and-scoot",
+///        "ingress",
+///        "take-to-the-skies"
 ///      ]
 ///    },
 ///    "name": {
@@ -13411,6 +15961,10 @@ pub struct MovementModifierEffect {
 ///    "vertical_limit": {
 ///      "type": "integer",
 ///      "minimum": 0.0
+///    },
+///    "waives_distance_penalty": {
+///      "type": "boolean",
+///      "$comment": "11e aircraft hover mode: taking to the skies subtracts 2\" from the move, and this ability removes that subtraction. Kept as its own field rather than a distance value because the result is the unit's Move characteristic, not a fixed number, and because the penalty applies only to this move kind."
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -13448,6 +16002,8 @@ pub struct MovementModifierEffectModifier {
     pub to_reserves: ::std::option::Option<bool>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub vertical_limit: ::std::option::Option<u64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub waives_distance_penalty: ::std::option::Option<bool>,
 }
 impl ::std::default::Default for MovementModifierEffectModifier {
     fn default() -> Self {
@@ -13465,6 +16021,7 @@ impl ::std::default::Default for MovementModifierEffectModifier {
             replaces_default: Default::default(),
             to_reserves: Default::default(),
             vertical_limit: Default::default(),
+            waives_distance_penalty: Default::default(),
         }
     }
 }
@@ -13780,7 +16337,9 @@ impl ::std::default::Default for MovementModifierEffectModifierMarker {
 ///    "redeploy",
 ///    "scout",
 ///    "infiltrate",
-///    "shoot-and-scoot"
+///    "shoot-and-scoot",
+///    "ingress",
+///    "take-to-the-skies"
 ///  ]
 ///}
 /// ```
@@ -13818,6 +16377,10 @@ pub enum MovementModifierEffectModifierMoveType {
     Infiltrate,
     #[serde(rename = "shoot-and-scoot")]
     ShootAndScoot,
+    #[serde(rename = "ingress")]
+    Ingress,
+    #[serde(rename = "take-to-the-skies")]
+    TakeToTheSkies,
 }
 impl ::std::fmt::Display for MovementModifierEffectModifierMoveType {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -13832,6 +16395,8 @@ impl ::std::fmt::Display for MovementModifierEffectModifierMoveType {
             Self::Scout => f.write_str("scout"),
             Self::Infiltrate => f.write_str("infiltrate"),
             Self::ShootAndScoot => f.write_str("shoot-and-scoot"),
+            Self::Ingress => f.write_str("ingress"),
+            Self::TakeToTheSkies => f.write_str("take-to-the-skies"),
         }
     }
 }
@@ -13851,6 +16416,8 @@ impl ::std::str::FromStr for MovementModifierEffectModifierMoveType {
             "scout" => Ok(Self::Scout),
             "infiltrate" => Ok(Self::Infiltrate),
             "shoot-and-scoot" => Ok(Self::ShootAndScoot),
+            "ingress" => Ok(Self::Ingress),
+            "take-to-the-skies" => Ok(Self::TakeToTheSkies),
             _ => Err("invalid value".into()),
         }
     }
@@ -29645,6 +32212,12 @@ impl ::std::convert::TryFrom<::std::string::String> for SimpleConditionType {
 ///      "$comment": "`named-region-state` carries its structured producer and consumer state in the modifier object."
 ///    },
 ///    {
+///      "$comment": "`deep-strike`: place during an ingress move, more than `distance` inches horizontally from every enemy unit, ignoring the opponent's deployment zone. `distance` defaults to 8 and several factions ship a variant that overrides it (Deep Strike 6\"). Distinct from `infiltrators`, which also measures from the opponent's deployment zone and applies during deployment rather than on arrival. NOTE: existing records spell this distance four different ways (min_distance, min_distance_from_enemy, range, distance_constraints), so the modifier is deliberately left open rather than closed — `distance` is the canonical spelling to migrate toward, not yet the only one."
+///    },
+///    {
+///      "$comment": "A bare `grant_type` must come from the frozen vocabulary. Left unconstrained, the value is invisible to AJV (it is just a string), is echoed back verbatim by the describer (\"psychic-abilities\" renders as \"gains the Psychic Abilities ability\"), and cannot be consumed by any engine — so the record asserts a name and no mechanic, and no fidelity metric over it can fail. Constraining it turns a silent gap into an authoring-time error."
+///    },
+///    {
 ///      "$comment": "A reusable rules-bundle grant is an entity-backed reference, not a free-form grant label."
 ///    }
 ///  ],
@@ -35984,6 +38557,40 @@ pub struct UnitConditionalKeywordsItem {
 ///      "maxLength": 128,
 ///      "minLength": 1
 ///    },
+///    "overridable_parameters": {
+///      "description": "Parameters that have a documented default and MAY be overridden by a variant. Distinct from required_parameters, which must be supplied: Deep Strike's distance defaults to 8\" but several factions ship a variant that overrides it (Deep Strike 6\"), so the distance is real and routinely changed even though the base ability takes no argument.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "default",
+///          "name"
+///        ],
+///        "properties": {
+///          "default": {
+///            "oneOf": [
+///              {
+///                "type": "integer"
+///              },
+///              {
+///                "type": "string",
+///                "minLength": 1
+///              }
+///            ]
+///          },
+///          "name": {
+///            "type": "string",
+///            "minLength": 1
+///          },
+///          "unit": {
+///            "type": "string",
+///            "minLength": 1
+///          }
+///        },
+///        "additionalProperties": false
+///      },
+///      "uniqueItems": true
+///    },
 ///    "required_parameters": {
 ///      "description": "Parameter keys that must be supplied at each reference site (e.g. Scouts 6\" → ['value']). Empty for abilities that take no number (Deep Strike, Infiltrators, Stealth).",
 ///      "type": "array",
@@ -36009,6 +38616,11 @@ pub struct UnitKeyword {
     pub game_version: GameVersionRef,
     pub id: EntityId,
     pub name: UnitKeywordName,
+    ///Parameters that have a documented default and MAY be overridden by a variant. Distinct from required_parameters, which must be supplied: Deep Strike's distance defaults to 8" but several factions ship a variant that overrides it (Deep Strike 6"), so the distance is real and routinely changed even though the base ability takes no argument.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub overridable_parameters: ::std::option::Option<
+        Vec<UnitKeywordOverridableParametersItem>,
+    >,
     ///Parameter keys that must be supplied at each reference site (e.g. Scouts 6" → ['value']). Empty for abilities that take no number (Deep Strike, Infiltrators, Stealth).
     pub required_parameters: Vec<UnitKeywordRequiredParametersItem>,
 }
@@ -36077,6 +38689,360 @@ impl ::std::convert::TryFrom<::std::string::String> for UnitKeywordName {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for UnitKeywordName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`UnitKeywordOverridableParametersItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "default",
+///    "name"
+///  ],
+///  "properties": {
+///    "default": {
+///      "oneOf": [
+///        {
+///          "type": "integer"
+///        },
+///        {
+///          "type": "string",
+///          "minLength": 1
+///        }
+///      ]
+///    },
+///    "name": {
+///      "type": "string",
+///      "minLength": 1
+///    },
+///    "unit": {
+///      "type": "string",
+///      "minLength": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitKeywordOverridableParametersItem {
+    pub default: UnitKeywordOverridableParametersItemDefault,
+    pub name: UnitKeywordOverridableParametersItemName,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub unit: ::std::option::Option<UnitKeywordOverridableParametersItemUnit>,
+}
+///`UnitKeywordOverridableParametersItemDefault`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "type": "string",
+///      "minLength": 1
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum UnitKeywordOverridableParametersItemDefault {
+    Integer(i64),
+    String(UnitKeywordOverridableParametersItemDefaultString),
+}
+impl ::std::str::FromStr for UnitKeywordOverridableParametersItemDefault {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if let Ok(v) = value.parse() {
+            Ok(Self::Integer(v))
+        } else if let Ok(v) = value.parse() {
+            Ok(Self::String(v))
+        } else {
+            Err("string conversion failed for all variants".into())
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitKeywordOverridableParametersItemDefault {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitKeywordOverridableParametersItemDefault {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitKeywordOverridableParametersItemDefault {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::fmt::Display for UnitKeywordOverridableParametersItemDefault {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match self {
+            Self::Integer(x) => x.fmt(f),
+            Self::String(x) => x.fmt(f),
+        }
+    }
+}
+impl ::std::convert::From<i64> for UnitKeywordOverridableParametersItemDefault {
+    fn from(value: i64) -> Self {
+        Self::Integer(value)
+    }
+}
+impl ::std::convert::From<UnitKeywordOverridableParametersItemDefaultString>
+for UnitKeywordOverridableParametersItemDefault {
+    fn from(value: UnitKeywordOverridableParametersItemDefaultString) -> Self {
+        Self::String(value)
+    }
+}
+///`UnitKeywordOverridableParametersItemDefaultString`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitKeywordOverridableParametersItemDefaultString(::std::string::String);
+impl ::std::ops::Deref for UnitKeywordOverridableParametersItemDefaultString {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitKeywordOverridableParametersItemDefaultString>
+for ::std::string::String {
+    fn from(value: UnitKeywordOverridableParametersItemDefaultString) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitKeywordOverridableParametersItemDefaultString {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for UnitKeywordOverridableParametersItemDefaultString {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitKeywordOverridableParametersItemDefaultString {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitKeywordOverridableParametersItemDefaultString {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for UnitKeywordOverridableParametersItemDefaultString {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`UnitKeywordOverridableParametersItemName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitKeywordOverridableParametersItemName(::std::string::String);
+impl ::std::ops::Deref for UnitKeywordOverridableParametersItemName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitKeywordOverridableParametersItemName>
+for ::std::string::String {
+    fn from(value: UnitKeywordOverridableParametersItemName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitKeywordOverridableParametersItemName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitKeywordOverridableParametersItemName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitKeywordOverridableParametersItemName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitKeywordOverridableParametersItemName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitKeywordOverridableParametersItemName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`UnitKeywordOverridableParametersItemUnit`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitKeywordOverridableParametersItemUnit(::std::string::String);
+impl ::std::ops::Deref for UnitKeywordOverridableParametersItemUnit {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitKeywordOverridableParametersItemUnit>
+for ::std::string::String {
+    fn from(value: UnitKeywordOverridableParametersItemUnit) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitKeywordOverridableParametersItemUnit {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitKeywordOverridableParametersItemUnit {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitKeywordOverridableParametersItemUnit {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitKeywordOverridableParametersItemUnit {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitKeywordOverridableParametersItemUnit {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,

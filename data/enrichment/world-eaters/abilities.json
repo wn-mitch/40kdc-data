@@ -6557,8 +6557,7 @@
       "type": "deep-strike",
       "target": "unit",
       "modifier": {
-        "min_distance": 6,
-        "replaces_default": true
+        "min_distance": 6
       }
     },
     "scope": {

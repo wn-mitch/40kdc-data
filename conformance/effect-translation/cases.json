@@ -1662,7 +1662,9 @@
           {
             "type": "deep-strike",
             "target": "self",
-            "modifier": {}
+            "modifier": {
+              "min_distance": 6
+            }
           },
           {
             "type": "keyword-grant",
@@ -1675,10 +1677,12 @@
             }
           },
           {
-            "type": "attack-restriction",
+            "type": "rule-state",
             "target": "self",
             "modifier": {
-              "restriction": "charge"
+              "direction": "suppressed",
+              "rule_kind": "core-rule",
+              "rule": "charge"
             }
           }
         ]
@@ -1689,7 +1693,7 @@
       "duration": "turn"
     },
     "expected": {
-      "text": "During the Movement phase, when the unit arrives as Reinforcements, until the end of the turn:\n  -> This model has the Deep Strike ability.\n  -> Dark Blessing weapons equipped by this model gain [SUSTAINED HITS D3].\n  -> This model: charge."
+      "text": "During the Movement phase, when the unit arrives as Reinforcements, until the end of the turn:\n  -> This model has the Deep Strike ability and can be set up more than 6\" from enemy models.\n  -> Dark Blessing weapons equipped by this model gain [SUSTAINED HITS D3].\n  -> This model cannot charge."
     }
   },
   {
@@ -4764,7 +4768,24 @@
     }
   },
   {
-    "caseId": "benedictions-of-the-omnissiah#132",
+    "caseId": "beguiling-aura#132",
+    "effect": {
+      "type": "attack-restriction",
+      "target": "self",
+      "modifier": {
+        "restriction": "removes-fallback-charge-restriction"
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "turn"
+    },
+    "expected": {
+      "text": "Until the end of the turn, this model: removes fallback charge restriction."
+    }
+  },
+  {
+    "caseId": "benedictions-of-the-omnissiah#133",
     "effect": {
       "type": "stance-select",
       "mode": "consumable",
@@ -4838,7 +4859,7 @@
     }
   },
   {
-    "caseId": "benefit-of-cover#133",
+    "caseId": "benefit-of-cover#134",
     "effect": {
       "type": "bs-modifier",
       "target": "attacker",
@@ -4856,7 +4877,7 @@
     }
   },
   {
-    "caseId": "berzerker-frenzy#134",
+    "caseId": "berzerker-frenzy#135",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -4896,7 +4917,7 @@
     }
   },
   {
-    "caseId": "big-bomms#135",
+    "caseId": "big-bomms#136",
     "effect": {
       "type": "mortal-wounds",
       "target": "target",
@@ -4916,7 +4937,7 @@
     }
   },
   {
-    "caseId": "big-booms#136",
+    "caseId": "big-booms#137",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -4942,7 +4963,7 @@
     }
   },
   {
-    "caseId": "bilious-blessing-lords-of-the-warp#137",
+    "caseId": "bilious-blessing-lords-of-the-warp#138",
     "effect": {
       "type": "mortal-wounds",
       "target": "enemy-within-aura",
@@ -4975,7 +4996,7 @@
     }
   },
   {
-    "caseId": "bio-minefield#138",
+    "caseId": "bio-minefield#139",
     "effect": {
       "type": "rule-state",
       "target": "enemy-within-aura",
@@ -4994,7 +5015,7 @@
     }
   },
   {
-    "caseId": "bio-stimulus-aura-vardenghast-swarm#139",
+    "caseId": "bio-stimulus-aura-vardenghast-swarm#140",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -5023,7 +5044,7 @@
     }
   },
   {
-    "caseId": "biomechanical-mutation-warpforged-cabal#140",
+    "caseId": "biomechanical-mutation-warpforged-cabal#141",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -5062,79 +5083,6 @@
     },
     "expected": {
       "text": "During the Command phase, in either player's turn, for the rest of the battle, friendly units within 6\" regain up to D3 lost wounds.\nApplies to: units with Thousand Sons."
-    }
-  },
-  {
-    "caseId": "black-rage#141",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "re-roll",
-          "target": "unit",
-          "modifier": {
-            "roll": "hit",
-            "subset": "all-failures",
-            "attack_type": "melee"
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "unit-within-range-of",
-                "negated": true,
-                "parameters": {
-                  "target_type": "friendly-keyword",
-                  "keyword": "Blood Angels Character",
-                  "range": 6
-                }
-              },
-              {
-                "type": "unit-within-range-of",
-                "negated": true,
-                "parameters": {
-                  "target_type": "friendly-keyword",
-                  "keyword": "Chaplain",
-                  "range": 12
-                }
-              }
-            ]
-          },
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "rule-state",
-                "target": "unit",
-                "modifier": {
-                  "direction": "suppressed",
-                  "rule_kind": "core-rule",
-                  "rule": "fall-back"
-                }
-              },
-              {
-                "type": "objective-control-modifier",
-                "target": "unit",
-                "modifier": {
-                  "stat": "OC",
-                  "operation": "set",
-                  "value": 0
-                }
-              }
-            ]
-          }
-        }
-      ]
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "expected": {
-      "text": "You can re-roll the Hit roll for melee attacks.\nIf not within 6\" of a friendly Blood Angels Character unit, if not within 12\" of a friendly Chaplain unit:\n  -> The unit cannot Fall Back.\n  -> Modify the unit's Objective Control characteristic to 0."
     }
   },
   {
@@ -12020,7 +11968,7 @@
               "type": "ability-grant",
               "target": "self",
               "modifier": {
-                "grant_type": "Stealth"
+                "grant_type": "stealth"
               }
             },
             {

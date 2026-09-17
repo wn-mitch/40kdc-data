@@ -2048,7 +2048,9 @@
           {
             "type": "deep-strike",
             "target": "self",
-            "modifier": {}
+            "modifier": {
+              "min_distance": 6
+            }
           },
           {
             "type": "keyword-grant",
@@ -2061,10 +2063,12 @@
             }
           },
           {
-            "type": "attack-restriction",
+            "type": "rule-state",
             "target": "self",
             "modifier": {
-              "restriction": "charge"
+              "direction": "suppressed",
+              "rule_kind": "core-rule",
+              "rule": "charge"
             }
           }
         ]
@@ -4749,7 +4753,9 @@
           "effect": {
             "type": "deep-strike",
             "target": "unit",
-            "modifier": {}
+            "modifier": {
+              "min_distance": 6
+            }
           }
         },
         {

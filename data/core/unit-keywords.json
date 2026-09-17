@@ -2,92 +2,326 @@
   {
     "id": "deadly-demise",
     "name": "Deadly Demise",
-    "required_parameters": ["value"],
-    "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "required_parameters": [
+      "value"
+    ],
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "timing-is",
+        "parameters": {
+          "timing": "before-bearer-removed"
+        }
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 6,
+        "comparison": "gte",
+        "on_success": {
+          "type": "mortal-wounds",
+          "target": "enemy-within-aura",
+          "modifier": {
+            "count": "value",
+            "range": 6
+          }
+        },
+        "on_fail": null
+      }
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "deep-strike",
     "name": "Deep Strike",
     "required_parameters": [],
-    "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "effect": {
+      "type": "deep-strike",
+      "target": "unit",
+      "modifier": {
+        "distance": "distance",
+        "ignores_deployment_zone": true
+      }
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "overridable_parameters": [
+      {
+        "name": "distance",
+        "default": 8,
+        "unit": "inches"
+      }
+    ]
   },
   {
     "id": "feel-no-pain",
     "name": "Feel No Pain",
-    "required_parameters": ["value"],
-    "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "required_parameters": [
+      "value"
+    ],
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "unit",
+      "modifier": {
+        "threshold": "value"
+      }
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "fights-first",
     "name": "Fights First",
     "required_parameters": [],
-    "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "effect": {
+      "type": "fight-first",
+      "target": "unit",
+      "modifier": {}
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "firing-deck",
     "name": "Firing Deck",
-    "required_parameters": ["value"],
-    "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "required_parameters": [
+      "value"
+    ],
+    "effect": {
+      "type": "firing-deck",
+      "target": "unit",
+      "modifier": {
+        "value": "value"
+      }
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "hover",
     "name": "Hover",
     "required_parameters": [],
-    "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "effect": {
+      "type": "movement-modifier",
+      "target": "self",
+      "modifier": {
+        "move_type": "take-to-the-skies",
+        "waives_distance_penalty": true
+      }
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "infiltrators",
     "name": "Infiltrators",
     "required_parameters": [],
-    "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "effect": {
+      "type": "movement-modifier",
+      "target": "unit",
+      "modifier": {
+        "move_type": "infiltrate",
+        "distance": 8
+      }
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "leader",
     "name": "Leader",
     "required_parameters": [],
-    "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "effect": {
+      "type": "unit-attachment",
+      "target": "unit",
+      "modifier": {
+        "slot": "leader",
+        "mandatory": false
+      }
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "lone-operative",
     "name": "Lone Operative",
     "required_parameters": [],
-    "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "effect": {
+      "type": "targeting-permission",
+      "target": "self",
+      "modifier": {
+        "attack_type": "ranged",
+        "gate": "within-range",
+        "range": "distance"
+      }
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "overridable_parameters": [
+      {
+        "name": "distance",
+        "default": 12,
+        "unit": "inches"
+      }
+    ]
   },
   {
     "id": "scouts",
     "name": "Scouts",
-    "required_parameters": ["value"],
-    "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "required_parameters": [
+      "value"
+    ],
+    "effect": {
+      "type": "movement-modifier",
+      "target": "unit",
+      "modifier": {
+        "move_type": "scout",
+        "distance": "value"
+      }
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "stealth",
     "name": "Stealth",
     "required_parameters": [],
-    "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "effect": {
+      "type": "roll-modifier",
+      "target": "attacker",
+      "modifier": {
+        "roll": "hit",
+        "operation": "subtract",
+        "value": 1
+      }
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "support",
     "name": "Support",
     "required_parameters": [],
-    "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "effect": {
+      "type": "unit-attachment",
+      "target": "unit",
+      "modifier": {
+        "slot": "support",
+        "mandatory": false
+      }
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   },
   {
     "id": "super-heavy-walker",
     "name": "Super-Heavy Walker",
     "required_parameters": [],
-    "effect": null,
-    "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" }
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "movement"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "movement-modifier",
+            "target": "self",
+            "modifier": {
+              "passthrough": [
+                "non-titanic-models",
+                "terrain-le-4"
+              ],
+              "applies_to_moves": [
+                "normal",
+                "advance",
+                "fall-back"
+              ]
+            }
+          },
+          {
+            "type": "engagement-passthrough",
+            "target": "self",
+            "modifier": {
+              "no_end_in_engagement": true,
+              "applies_to_moves": [
+                "normal",
+                "advance",
+                "fall-back"
+              ]
+            }
+          },
+          {
+            "type": "movement-modifier",
+            "target": "self",
+            "modifier": {
+              "passthrough": [
+                "tall-terrain"
+              ],
+              "applies_to_moves": [
+                "normal",
+                "advance",
+                "fall-back"
+              ]
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "timing-is",
+              "parameters": {
+                "timing": "moved-through-tall-terrain"
+              }
+            },
+            "effect": {
+              "type": "dice-gated",
+              "dice": "D6",
+              "threshold": 1,
+              "comparison": "eq",
+              "on_success": {
+                "type": "unit-tag",
+                "target": "self",
+                "modifier": {
+                  "tag": "battle-shocked"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   }
 ]

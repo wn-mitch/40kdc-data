@@ -1,7 +1,7 @@
 [
   {
     "ability_id": "angels-sacrifice-the-angelic-host",
-    "name": "Angel\u2019S Sacrifice",
+    "name": "Angel’S Sacrifice",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -159,11 +159,25 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "deep-strike",
-      "target": "unit",
-      "modifier": {
-        "range": 6
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "deep-strike",
+          "target": "unit",
+          "modifier": {
+            "min_distance": 6
+          }
+        },
+        {
+          "type": "rule-state",
+          "target": "unit",
+          "modifier": {
+            "direction": "suppressed",
+            "rule_kind": "core-rule",
+            "rule": "charge"
+          }
+        }
+      ]
     },
     "scope": {
       "range": "unit",
@@ -835,7 +849,7 @@
       "range": "unit",
       "duration": "phase"
     },
-    "community_notes": "Unit that made a Charge move this turn: choose +1 Strength or improved AP for melee weapons \u2014 or give in to the Red Thirst (unit becomes Battle-shocked) to take both"
+    "community_notes": "Unit that made a Charge move this turn: choose +1 Strength or improved AP for melee weapons — or give in to the Red Thirst (unit becomes Battle-shocked) to take both"
   },
   {
     "ability_id": "lost-to-rage-the-lost-brethren",
@@ -982,7 +996,7 @@
       "range": "unit",
       "duration": "turn"
     },
-    "community_notes": "Used just after the unit Advances: choose to shoot or charge this turn \u2014 or give in to the Red Thirst (unit becomes Battle-shocked) to do both"
+    "community_notes": "Used just after the unit Advances: choose to shoot or charge this turn — or give in to the Red Thirst (unit becomes Battle-shocked) to do both"
   },
   {
     "ability_id": "wrathful-rampage-the-lost-brethren",
@@ -1107,7 +1121,7 @@
       "range": "unit",
       "duration": "turn"
     },
-    "community_notes": "Used just after the unit Advances: choose to shoot or charge \u2014 or give in to the Red Thirst (unit becomes Battle-shocked) to do both"
+    "community_notes": "Used just after the unit Advances: choose to shoot or charge — or give in to the Red Thirst (unit becomes Battle-shocked) to do both"
   },
   {
     "ability_id": "angelic-grace-liberator-assault-group",
@@ -1188,7 +1202,7 @@
   },
   {
     "ability_id": "aura-of-the-angels-grace-legacy-of-grace",
-    "name": "Aura Of The Angel\u2019S Grace",
+    "name": "Aura Of The Angel’S Grace",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -1348,7 +1362,7 @@
       "range": "any-on-battlefield",
       "duration": "battle"
     },
-    "community_notes": "Used when a friendly Death Company unit is destroyed by an enemy unit: that enemy unit is hated for the rest of the battle \u2014 friendly Death Company attacks against it get +1 to Wound rolls"
+    "community_notes": "Used when a friendly Death Company unit is destroyed by an enemy unit: that enemy unit is hated for the rest of the battle — friendly Death Company attacks against it get +1 to Wound rolls"
   },
   {
     "ability_id": "inexorable-valour-encarmine-speartip",
@@ -1503,7 +1517,7 @@
   },
   {
     "ability_id": "rage-fuelled-response-wrath-of-the-doomed",
-    "name": "Rage\u2011Fuelled Response",
+    "name": "Rage‑Fuelled Response",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -1601,7 +1615,7 @@
       "range": "unit",
       "duration": "phase"
     },
-    "community_notes": "Choose Lance or Lethal Hits \u2014 or give in to the Red Thirst (unit becomes Battle-shocked) to take both. Target must not have been selected to fight this phase"
+    "community_notes": "Choose Lance or Lethal Hits — or give in to the Red Thirst (unit becomes Battle-shocked) to take both. Target must not have been selected to fight this phase"
   },
   {
     "ability_id": "relentless-assault-liberator-assault-group",
@@ -1666,7 +1680,7 @@
       "range": "unit",
       "duration": "turn"
     },
-    "community_notes": "Used just after the unit Falls Back: choose to shoot or charge \u2014 or give in to the Red Thirst (unit becomes Battle-shocked) to do both"
+    "community_notes": "Used just after the unit Falls Back: choose to shoot or charge — or give in to the Red Thirst (unit becomes Battle-shocked) to do both"
   },
   {
     "ability_id": "savage-echoes-liberator-assault-group",
@@ -1747,7 +1761,7 @@
       "range": "unit",
       "duration": "turn"
     },
-    "community_notes": "Unit just charged by an enemy unit: choose +1 Strength or +1 Attacks for melee weapons \u2014 or give in to the Red Thirst (unit becomes Battle-shocked) to take both"
+    "community_notes": "Unit just charged by an enemy unit: choose +1 Strength or +1 Attacks for melee weapons — or give in to the Red Thirst (unit becomes Battle-shocked) to take both"
   },
   {
     "ability_id": "show-no-mercy-sanguinary-spearhead",
@@ -1809,7 +1823,7 @@
   },
   {
     "ability_id": "soul-darkened-fury-legacy-of-grace",
-    "name": "Soul\u2011Darkened Fury",
+    "name": "Soul‑Darkened Fury",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -1867,7 +1881,7 @@
   },
   {
     "ability_id": "sanguinius-grace-the-lost-brethren",
-    "name": "Sanguinius\u2019 Grace",
+    "name": "Sanguinius’ Grace",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2007,7 +2021,7 @@
         "Death Company"
       ]
     },
-    "community_notes": "Once per battle, at the start of the Fight phase: select one enemy Character unit in Engagement Range and roll six D6 \u2014 each 4+ inflicts 1 mortal wound on a Character model in that unit"
+    "community_notes": "Once per battle, at the start of the Fight phase: select one enemy Character unit in Engagement Range and roll six D6 — each 4+ inflicts 1 mortal wound on a Character model in that unit"
   },
   {
     "ability_id": "vengeful-onslaught-the-lost-brethren",
@@ -2170,7 +2184,7 @@
   },
   {
     "ability_id": "archangels-shard-the-angelic-host",
-    "name": "Archangel\u2019s Shard",
+    "name": "Archangel’s Shard",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2535,7 +2549,7 @@
   },
   {
     "ability_id": "angels-fang-rage-cursed-onslaught",
-    "name": "Angel\u2019s Fang",
+    "name": "Angel’s Fang",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2742,7 +2756,7 @@
         "Psyker"
       ]
     },
-    "community_notes": "The Anti ability applies against all non-Monster, non-Vehicle units (modeled as Anti-Infantry 5+ \u2014 closest printed keyword)"
+    "community_notes": "The Anti ability applies against all non-Monster, non-Vehicle units (modeled as Anti-Infantry 5+ — closest printed keyword)"
   },
   {
     "ability_id": "aureole-of-the-angel-legacy-of-grace",
