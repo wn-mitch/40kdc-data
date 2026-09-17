@@ -11,24 +11,24 @@ frontmatter both pin it). Some agents spawn helper agents themselves (see `spawn
 
 - Frontmatter keys: `name`, `description`, `model`, `tools`, and optionally
   `spawns` and `output`. `name` matches the filename. `model` is the EXPLICIT
-  provider/model selection point. All 16 roles are pinned to
+  provider/model selection point. All 10 roles are pinned to
   `openai-codex/gpt-5.6-luna`; do NOT use bare model aliases here, because OMP fuzzy
   matching can resolve them to stale provider ids and account-level rate limits can
   kill nested spawns mid-run.
 - `spawns` (CSV/array of agent names) lets an agent spawn those helpers itself via
-  the task tool — the kroot shape-scout agents and arch-magos use it. Nested spawns
+  the task tool — the kroot shape-scout agents use it. Nested spawns
   need `task.maxRecursionDepth >= 2` (set in `.omp/config.yml`); keep spawn trees ONE
   level deep — a lead spawns leaf helpers as siblings, never a grandchild chain, which
   the depth cap silently strips (the child loses its task tool with no error).
 - `output` (a JSON Schema written as YAML) pins an agent's output shape on ANY spawn
-  path. A workflow `agent(prompt, {schema})` forces the shape, but a nested
+  path. A direct `agent(prompt, {schema})` spawn forces the shape, but a nested
   agent→agent spawn carries NO per-call schema — so every agent that another agent
-  spawns (the decomposers, data-enginseer, swarmlord, eversor, psyker, and the kroot
-  agents) declares `output`, kept byte-identical to the contract the workflow embeds.
+  spawns (swarmlord, eversor, psyker, and the kroot agents) declares `output`, so the
+  spawning agent reads a fixed shape instead of a free-form reply.
   Any opaque/pass-through object slot (`type: object` or `[object, "null"]` without
   explicit `properties`) MUST set `additionalProperties: true`; otherwise OpenAI/Codex
-  schema validation strips nested child evidence to `{}` and the workflow loses proof
-  that the spawned helper actually returned data.
+  schema validation strips nested child evidence to `{}` and the spawning agent loses
+  proof that the helper actually returned data.
 - `description` is the only text the spawning session sees when routing: it
   carries (1) the one-line role, (2) trigger examples, (3) the input contract in
   one clause, and (4) "Returns a single JSON object as final message."

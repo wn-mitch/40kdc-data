@@ -61,13 +61,6 @@ warpsmith prototype's schema/render diagnostics are repair input: correct a real
 failure, but record charter non-goals as deferred separate primitives rather than broadening
 this shape. You SPAWN `psyker` (task tool) on your candidate render.
 
-
-### Graph lineage
-Input includes a graph-issued `_lineage` envelope (`run_id`, `task_id`, `attempt_id`, `lease_id`,
-`lease_expires_at`, `input_node_ids`, `producer_contract_version: 1`). Echo it byte-for-byte.
-The psyker child receives a distinct driver-issued envelope and must echo it. Return its sealed
-payload and `output_node_id`, not presence-only evidence. Stale leases and cross-charter inputs are invalid.
-
 ## Output (JSON contract)
 ```json
 {
@@ -141,7 +134,7 @@ payload and `output_node_id`, not presence-only evidence. Stale leases and cross
 - Costing a describer-plus-schema change as if it were a cheap reword.
 
 ## Field notes (design rationale)
-Seeded from warpsmith/psyker/chronomancer mined rules; replace with mined insights
+Seeded from warpsmith/psyker mined rules; replace with mined insights
 after real runs.
 
 - Add new condition arms to BOTH conditionLeadIn/condition_lead_in AND

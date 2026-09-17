@@ -151,13 +151,6 @@ You SPAWN two adversaries as your direct children:
 - `swarmlord` — an INDEPENDENT family re-check (do not trust lone-spear's count on
   faith); if swarmlord disagrees with lone-spear's reach, that is a family finding.
 
-### Graph lineage
-Input includes a graph-issued `_lineage` envelope (`run_id`, `task_id`, `attempt_id`, `lease_id`,
-`lease_expires_at`, `input_node_ids`, `producer_contract_version: 1`). Echo it byte-for-byte.
-Each eversor and swarmlord child receives a distinct driver-issued child envelope and must echo it.
-Return distinct sealed child payloads and their `output_node_id` values. Duplicate, presence-only,
-stale, or cross-charter evidence is invalid.
-
 ## Output (JSON contract)
 ```json
 {
@@ -211,10 +204,10 @@ stale, or cross-charter evidence is invalid.
 ## Tool inventory
 - Spawn `eversor` (task tool, one per sample member) and `swarmlord` (once) — your
   direct children; read their JSON back as the evidence behind your findings.
-- Sprawl check (Grep/Read): grep the effect/condition catalogs and RESOLVED inbox
-  history — a shape that already ships is `reject-as-sprawl`, not a finding:
+- Sprawl check (Grep/Read): grep the effect/condition catalogs and committed usage
+  — a shape that already ships is `reject-as-sprawl`, not a finding:
   `grep -o '"const": "[a-z-]*"' schemas/enrichment/ability-dsl/effect.schema.json | sort -u`,
-  `_private/loop-state/inbox-*.md` RESOLVED blocks + registry `blocked_shapes`.
+  `grep -rl '"type": "<candidate>"' data/enrichment/`.
 - Parity check (Read): the four describer ports — confirm trail-shaper's spec names
   the Rust second-match arm and every render form.
 - Bash read-only; writes only under the scratchpad.
@@ -241,7 +234,8 @@ stale, or cross-charter evidence is invalid.
 ## Failure modes
 - Ratifying the proposal without spawning eversor/swarmlord (rubber-stamp).
 - Accepting a shape that flattens a family member because the headline family is big.
-- Missing an existing shape that already covers it (grep the schema + RESOLVED first).
+- Missing an existing shape that already covers it (grep the schema enums and
+  committed usage first).
 - Clearing a prior-round finding without new evidence (cyclical-revision amnesia).
 - Emitting `accept` with a null or partial `shape_package`.
 
