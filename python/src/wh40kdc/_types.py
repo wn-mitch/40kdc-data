@@ -324,6 +324,13 @@ class Enhancement(TypedDict):
     game_modes: NotRequired[GameModes]
 
 
+class ArmyConstructionRule(TypedDict):
+    type: Literal["faction-keyword-cohesion"]
+    base_faction_keyword: Keyword
+    additional_keyword_source: str
+    max_distinct: int
+
+
 class Faction(TypedDict):
     id: EntityId
     external_refs: NotRequired[ExternalReferenceList]
@@ -333,6 +340,7 @@ class Faction(TypedDict):
     keywords: NotRequired[KeywordList]
     aliases: NotRequired[list[str]]
     faction_rule_ids: list[EntityId]
+    army_construction_rules: NotRequired[list[ArmyConstructionRule]]
     logo_url: NotRequired[str]
 
 
@@ -1024,6 +1032,11 @@ class SingleEffect(TypedDict):
         "ability-usage-limit",
         "deadly-demise-threshold",
         "embark",
+        "eligibility-override",
+        "weapon-grant",
+        "mirror-triggering-choice",
+        "persistent-battlefield-marker-state",
+        "named-objective-state",
     ]
     target: Literal[
         "self",
@@ -1094,6 +1107,19 @@ AttackerKeyword: TypeAlias = str
 AttackerUnitKeyword: TypeAlias = str
 
 
+class Modifier3(TypedDict):
+    stance_id: EntityId
+    additional_selections: int
+    allocation: Literal["choose-one-option", "fixed-option"]
+    option_id: NotRequired[EntityId]
+
+
+class StanceSelectionCapacityEffect(TypedDict):
+    type: Literal["stance-selection-capacity"]
+    scope: NotRequired[Literal["army", "unit"]]
+    modifier: Modifier3
+
+
 class Eligible1(TypedDict):
     keyword: NotRequired[str]
 
@@ -1127,6 +1153,13 @@ ResourceGainBattleSizeCounts = TypedDict(
 class SharedUsage(TypedDict):
     unit_max_manoeuvres_per_phase: NotRequired[int]
     default_manoeuvre_max_per_phase: NotRequired[int]
+
+
+class Capacity(TypedDict):
+    amount: int
+    resource_label: str
+    ability_noun: str
+    refresh: Literal["battle-round", "turn", "phase", "battle"]
 
 
 class Cost1(TypedDict):
@@ -1248,6 +1281,18 @@ class BeneficiaryGate(TypedDict):
     faction: NotRequired[str]
     operator: Literal["and", "or"]
     keywords: list[Keyword2]
+
+
+SetupKeyword: TypeAlias = str
+
+
+class PersistentBattlefieldMarkerState(TypedDict):
+    marker_label: str
+    placement: Literal["bearer", "bearer-unit", "battlefield"]
+    setup_within_inches: NotRequired[float]
+    setup_keywords: NotRequired[list[SetupKeyword]]
+    consume: NotRequired[Literal["on-use", "never"]]
+    removed_by_enemy_within_inches: NotRequired[float]
 
 
 class KeywordFilter(TypedDict):
@@ -1465,7 +1510,7 @@ Selection = TypedDict(
 )
 
 
-class Modifier3(TypedDict):
+class Modifier4(TypedDict):
     operation: Literal[
         "reroll-generated-result",
         "set-generated-value-without-roll",
@@ -1484,7 +1529,7 @@ class Modifier3(TypedDict):
 class MiracleDieOperationEffect(TypedDict):
     type: Literal["miracle-die-operation"]
     target: Literal["self"]
-    modifier: Modifier3
+    modifier: Modifier4
 
 
 class Attachment(TypedDict):
@@ -1501,7 +1546,7 @@ class FormationAttachmentGrantEffect(TypedDict):
     grant: Grant
 
 
-class Modifier4(TypedDict):
+class Modifier5(TypedDict):
     leader_id: EntityId
     required_leader_ability: Literal["Leader"]
     from_bodyguard_id: EntityId
@@ -1511,7 +1556,7 @@ class Modifier4(TypedDict):
 class AttachmentEligibilityInheritEffect(TypedDict):
     type: Literal["attachment-eligibility-inherit"]
     target: Literal["self"]
-    modifier: Modifier4
+    modifier: Modifier5
 
 
 ScopeDuration: TypeAlias = Literal[
@@ -1721,6 +1766,7 @@ Condition: TypeAlias = ConditionNode
 EffectNode: TypeAlias = Union[
     SingleEffect,
     "StanceSelectEffect",
+    StanceSelectionCapacityEffect,
     "ChoiceEffect",
     "SequenceEffect",
     "RulesBundleEffect",
@@ -1799,6 +1845,7 @@ class DiceGatedEffect(TypedDict):
     comparison: NotRequired[Literal["gte", "lte", "gt", "lt", "eq"]]
     on_success: NotRequired[EffectNode | None]
     on_fail: NotRequired[EffectNode | None]
+    rider: NotRequired[bool]
     test: NotRequired[Test]
     roll_var: NotRequired[str]
 
@@ -1847,7 +1894,7 @@ class Selector(TypedDict):
     engagement_relation: NotRequired[
         Literal["any", "engaged-with-bearer", "not-engaged-with-bearer"]
     ]
-    reference: NotRequired[Literal["bearer", "bearer-unit"]]
+    reference: NotRequired[Literal["bearer", "bearer-unit", "bearer-transport"]]
     within_inches_from: NotRequired[SelectionReference]
     visible_to: NotRequired[SelectionReference]
     selection_limit: NotRequired[SelectionLimit]
@@ -1870,7 +1917,7 @@ class Selector1(TypedDict):
     engagement_relation: NotRequired[
         Literal["any", "engaged-with-bearer", "not-engaged-with-bearer"]
     ]
-    reference: NotRequired[Literal["bearer", "bearer-unit"]]
+    reference: NotRequired[Literal["bearer", "bearer-unit", "bearer-transport"]]
     within_inches_from: NotRequired[SelectionReference]
     visible_to: NotRequired[SelectionReference]
     selection_limit: NotRequired[SelectionLimit]
@@ -1888,10 +1935,11 @@ class SelectUnitsEffect(TypedDict):
 class Selector2(TypedDict):
     owner: Literal["friendly", "enemy"]
     keywords: NotRequired[list[Keyword2]]
+    keyword_match: NotRequired[Literal["all", "any"]]
     target_kind: NotRequired[Literal["unit", "model"]]
     within_inches: NotRequired[float]
     engagement_relation: NotRequired[Literal["engaged-with-bearer", "not-engaged-with-bearer"]]
-    reference: NotRequired[Literal["bearer", "bearer-unit"]]
+    reference: NotRequired[Literal["bearer", "bearer-unit", "bearer-transport"]]
     member_of: NotRequired[Literal["bearer-unit"]]
     model_names: NotRequired[list[ModelName]]
     excluded_keywords: NotRequired[list[ExcludedKeyword]]
@@ -1919,6 +1967,7 @@ class Modifier1(TypedDict):
             "scout",
             "infiltrate",
             "shoot-and-scoot",
+            "ingress",
         ]
     ]
     distance: NotRequired[int | str]
@@ -1986,7 +2035,7 @@ class Select(TypedDict):
     count: NotRequired[int]
     timing: NotRequired[str]
     within_inches: NotRequired[float]
-    reference: NotRequired[Literal["bearer", "bearer-unit"]]
+    reference: NotRequired[Literal["bearer", "bearer-unit", "bearer-transport"]]
     visibility_required: NotRequired[bool]
     keywords: NotRequired[list[Keyword2]]
     keyword_match: NotRequired[Literal["all", "any"]]
@@ -2074,6 +2123,7 @@ class ResourceActionMenuEffect(TypedDict):
     menu_id: str
     pool_id: str
     shared_usage: NotRequired[SharedUsage]
+    capacity: NotRequired[Capacity]
     actions: list[Action1]
 
 
@@ -2121,6 +2171,12 @@ class NamedRegionConsumer(TypedDict):
     default_branch: NamedRegionBranch
     qualified_branch: NamedRegionBranch
     attack_condition: NotRequired[Condition]
+
+
+class NamedObjectiveState(TypedDict):
+    state_label: str
+    resolution: EffectNode
+    clears: NotRequired[Literal["after-resolving", "end-of-turn", "never"]]
 
 
 class NamedRegionState(TypedDict):

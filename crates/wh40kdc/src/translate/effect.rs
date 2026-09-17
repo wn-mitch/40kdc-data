@@ -24,12 +24,14 @@ use crate::{
         PairedDesignationEffect, PersistentDesignationEffect,
         PersistentDesignationEffectConsumerRelation, PersistentDesignationEffectOperation,
         PersistentDesignationEffectSelectScope, ResourceActionMenuEffectActionsItemDuration,
-        ResourceActionMenuEffectActionsItemWhen, ResourceActionMenuEffectSharedUsage,
+        ResourceActionMenuEffectActionsItemWhen, ResourceActionMenuEffectCapacity,
+        ResourceActionMenuEffectCapacityRefresh, ResourceActionMenuEffectSharedUsage,
         ResourceActionMenuTrigger, ResourceActionMenuTriggerMoveTypesItem,
         ResourceActionMenuTriggerProximityOf, ResourceActionMenuTriggerSubject, Scaling, ScalingOf,
         ScalingRound, Scope, ScopeRange, SelectUnitsEffectSelector, SimpleConditionType,
-        SingleEffect, SingleEffectTarget, SingleEffectType, StanceSelectEffectMode, Trigger,
-        TriggerCausedBySource, TriggerMoveTypesItem, TriggerProximityOf,
+        SingleEffect, SingleEffectTarget, SingleEffectType, StanceSelectEffectMode,
+        StanceSelectionCapacityEffectModifierAllocation, Trigger, TriggerCausedBySource,
+        TriggerMoveTypesItem, TriggerProximityOf,
     },
     LeaderModelAbilityGrantEffectBeneficiary, ResourceActionMenuEffect,
     ResourceActionMenuEffectActionsItem,
@@ -130,6 +132,16 @@ const TITLE_SMALL: &[&str] = &[
 /// encodes the mechanic (`charge-after-advance`); the label is the published
 /// name players know (`Advance & Charge`). Mirror of `ABILITY_GRANT_LABELS` in
 /// `tools/src/translate/effect.ts`; applied only by the ability-grant describer.
+/// Curated display names for `weapon-grant` targets. The describer has no
+/// dataset access, so a granted weapon's printed name cannot be read from its
+/// record; unlisted ids fall back to Title Case, as granted-ability ids do.
+fn weapon_label(id: &str) -> String {
+    match id {
+        "imperiums-sword" => "Imperium's Sword".to_string(),
+        _ => title_case(id),
+    }
+}
+
 fn grant_label(id: &str) -> String {
     match id {
         "charge-after-advance" => "Advance & Charge".to_string(),
@@ -524,6 +536,8 @@ fn engagement_map(value: &Map<String, Value>) -> String {
     };
     let origin = if nstr(value, "reference") == Some("bearer-unit") {
         "this model's unit"
+    } else if nstr(value, "reference") == Some("bearer-transport") {
+        "this model's unit's Transport"
     } else {
         "the bearer"
     };
@@ -1163,6 +1177,72 @@ fn cap_word(s: &str) -> String {
 
 /// The keyword of a `not`-wrapping-a-single-`target-has-keyword` operand, else None.
 /// The aura-subject exclusion encoding, distinct from the bare negated form.
+/// Sentence list for a `persistent-battlefield-marker-state`: placement, then lifecycle.
+/// A roll-with-rider `sequence`: `[dice-gated rider, unconditional primary]`. The
+/// rider fires on the roll and the primary always resolves, so the sentence
+/// carries a mandatory "Regardless of the result" clause. Only a gate that
+/// declares `rider: true` qualifies; a structurally similar but genuinely gating
+/// sequence must not pick this up.
+fn roll_with_rider(steps: &[EffectNode], ctx: &Ctx) -> Option<String> {
+    if steps.len() != 2 {
+        return None;
+    }
+    let EffectNode::DiceGatedEffect(g) = &steps[0] else {
+        return None;
+    };
+    if g.rider != Some(true) {
+        return None;
+    }
+    let success = g.on_success.as_deref()?;
+    let comp = format_comparison(g.comparison, &g.threshold);
+    Some(format!(
+        "roll one {}. On {comp}, {}. Regardless of the result, {}",
+        dice_case(&Value::String(g.dice.clone())),
+        inline(success, ctx),
+        inline(&steps[1], ctx)
+    ))
+}
+
+fn marker_clauses(m: &serde_json::Map<String, Value>) -> Vec<String> {
+    let label = jv(m, "marker_label");
+    let placement = match nstr(m, "placement") {
+        Some("bearer") => "beside this model".to_string(),
+        Some("bearer-unit") => "beside this model's unit".to_string(),
+        Some("battlefield") => "anywhere on the battlefield".to_string(),
+        other => dekebab(other.unwrap_or("")),
+    };
+    let mut clauses = vec![format!("place a {label} marker {placement}")];
+    if let Some(range) = m.get("setup_within_inches").filter(|v| !v.is_null()) {
+        let kws: Vec<String> = m
+            .get("setup_keywords")
+            .and_then(Value::as_array)
+            .map(|values| values.iter().map(|k| title_case(&jval(k))).collect())
+            .unwrap_or_default();
+        let who = if kws.is_empty() {
+            "units".to_string()
+        } else {
+            format!("{} units", kws.join(" "))
+        };
+        clauses.push(format!(
+            "{who} may be set up within {}\" of this marker",
+            jval(range)
+        ));
+    }
+    if nstr(m, "consume") == Some("on-use") {
+        clauses.push("using the marker consumes it".to_string());
+    }
+    if let Some(range) = m
+        .get("removed_by_enemy_within_inches")
+        .filter(|v| !v.is_null())
+    {
+        clauses.push(format!(
+            "remove the marker if an enemy unit comes within {}\" of it",
+            jval(range)
+        ));
+    }
+    clauses
+}
+
 fn not_wrapped_target_keyword(n: &ConditionNode) -> Option<String> {
     if let ConditionNode::CompoundCondition(c) = n {
         if matches!(c.operator, CompoundConditionOperator::Not) && c.operands.len() == 1 {
@@ -2165,6 +2245,7 @@ fn movement_clause(m: &Map<String, Value>, subj: &str) -> String {
             }
         ),
         "surge" => format!("{subj} can make a Surge move{of_up_to}"),
+        "ingress" => format!("{subj} can make an Ingress move{of_up_to}"),
         "shoot-and-scoot" => {
             if inches.is_empty() {
                 format!("{subj} can Shoot and Scoot")
@@ -2453,6 +2534,33 @@ fn miracle_die_operation_clause(m: &Map<String, Value>) -> String {
             jv(m, "value")
         ),
         _ => format!("[{}]", jv(m, "operation")),
+    }
+}
+
+/// `engaged` -> `being within Engagement Range`: the leading clause of an eligibility waiver.
+fn ignored_restriction_phrase(id: &str) -> String {
+    match id {
+        "engaged" => "being within Engagement Range".to_string(),
+        "battle-shocked" => "Battle-shocked".to_string(),
+        "performing-action" => "starting an Action".to_string(),
+        "advanced" => "having Advanced".to_string(),
+        "fell-back" => "having Fallen Back".to_string(),
+        other => dekebab(other),
+    }
+}
+
+/// `start-action` -> `start an Action`: what the unit becomes eligible to do.
+fn eligible_activity_phrase(id: &str) -> String {
+    match id {
+        "start-action" => "start an Action".to_string(),
+        "shoot" => "shoot".to_string(),
+        "charge" => "declare a charge".to_string(),
+        "fight" => "fight".to_string(),
+        "move" => "move".to_string(),
+        "advance" => "Advance".to_string(),
+        "fall-back" => "Fall Back".to_string(),
+        "consolidate" => "Consolidate".to_string(),
+        other => dekebab(other),
     }
 }
 
@@ -2782,6 +2890,61 @@ fn describe_single(e: &SingleEffect, ctx: &Ctx) -> String {
             } else {
                 format!("{} gain {kw}", of_or_possessive(&subj, "weapons"))
             }
+        }
+        T::NamedObjectiveState => {
+            let resolution = m
+                .get("resolution")
+                .and_then(|raw| serde_json::from_value::<EffectNode>(raw.clone()).ok())
+                .map(|node| inline(&node, ctx))
+                .unwrap_or_else(|| "nothing happens".to_string());
+            let clear = match nstr(m, "clears") {
+                Some("after-resolving") => "; the mark is cleared once it resolves",
+                Some("end-of-turn") => "; the mark is cleared at the end of the turn",
+                _ => "",
+            };
+            format!(
+                "the objective is marked as a {} objective; {resolution}{clear}",
+                jv(m, "state_label")
+            )
+        }
+        T::PersistentBattlefieldMarkerState => marker_clauses(m).join("; "),
+        T::MirrorTriggeringChoice => {
+            let trail = m
+                .get("duration")
+                .filter(|v| !v.is_null())
+                .map(|d| format!(" {}", duration_clauses(&jval(d)).1))
+                .unwrap_or_default();
+            format!(
+                "{subj} receives the same {} the triggering unit selected with {}{trail}",
+                jv(m, "choice_label"),
+                title_case(&jv(m, "source_ability_id"))
+            )
+        }
+        T::WeaponGrant => {
+            let count = m.get("count").and_then(Value::as_u64).unwrap_or(1).max(1);
+            let plural = if count == 1 { "" } else { "s" };
+            format!(
+                "{subj} gains {count} {} weapon{plural}",
+                weapon_label(&jv(m, "weapon_id"))
+            )
+        }
+        T::EligibilityOverride => {
+            let joined = m
+                .get("ignored_restrictions")
+                .and_then(Value::as_array)
+                .map(|items| {
+                    items
+                        .iter()
+                        .map(|r| ignored_restriction_phrase(&jval(r)))
+                        .collect::<Vec<_>>()
+                        .join(" or ")
+                })
+                .filter(|s| !s.is_empty())
+                .unwrap_or_else(|| "no listed restriction".to_string());
+            format!(
+                "{joined} does not prevent {subj} from being eligible to {}",
+                eligible_activity_phrase(&jv(m, "activity"))
+            )
         }
         T::AbilityUsageLimit => format!(
             "{subj} can use the {} ability at most {} times per {}, replacing its usual usage limit",
@@ -3457,6 +3620,73 @@ fn describe_single(e: &SingleEffect, ctx: &Ctx) -> String {
         T::FightFirst => format!("{subj} {} the Fights First ability", agree(&subj, "has")),
         T::FightLast => format!("{subj} {} the Fights Last ability", agree(&subj, "has")),
         T::FightOnDeath => {
+            if let Some(gate) = m.get("gate").and_then(Value::as_object) {
+                let model_phrase = if e.target.to_string() == "destroyed-model" {
+                    "a model in this unit".to_string()
+                } else if subj == "this model" {
+                    "this model".to_string()
+                } else {
+                    format!("a model in {subj}")
+                };
+                let before = match m.get("eligibility").and_then(Value::as_object) {
+                    Some(el) => {
+                        let negated = el.get("negated").and_then(Value::as_bool).unwrap_or(false);
+                        if negated
+                            && el.get("type").and_then(Value::as_str) == Some("has-fought-this-phase")
+                        {
+                            let who = if el
+                                .get("parameters")
+                                .and_then(|p| p.get("subject"))
+                                .and_then(Value::as_str)
+                                == Some("self")
+                            {
+                                "this model"
+                            } else {
+                                "this unit"
+                            };
+                            format!(" before {who} has fought this phase")
+                        } else {
+                            serde_json::from_value::<ConditionNode>(Value::Object(el.clone()))
+                                .map(|n| format!(" {}", condition_lead_in(&n)))
+                                .unwrap_or_default()
+                        }
+                    }
+                    None => String::new(),
+                };
+                let mut adds = String::new();
+                for gm in gate.get("modifiers").and_then(Value::as_array).into_iter().flatten() {
+                    let cond = gm
+                        .get("condition")
+                        .cloned()
+                        .unwrap_or_else(|| Value::Object(Default::default()));
+                    if let Ok(n) = serde_json::from_value::<ConditionNode>(cond) {
+                        adds.push_str(&format!(
+                            ", adding {} {}",
+                            jval(gm.get("value").unwrap_or(&Value::Null)),
+                            condition_lead_in(&n)
+                        ));
+                    }
+                }
+                let comp: DiceGatedEffectComparison = gate
+                    .get("comparison")
+                    .cloned()
+                    .and_then(|v| serde_json::from_value(v).ok())
+                    .unwrap_or(DiceGatedEffectComparison::Gte);
+                let threshold = DiceGatedEffectThreshold::Integer(
+                    gate.get("threshold").and_then(Value::as_i64).unwrap_or(1),
+                );
+                let on = format_comparison(comp, &threshold);
+                let removal = if nstr(m, "removal") == Some("after-destroyed-model-fights") {
+                    ". Remove it after it has fought".to_string()
+                } else {
+                    ". Remove it after this unit has fought or at the end of the phase, whichever comes first"
+                        .to_string()
+                };
+                return format!(
+                    "each time {model_phrase} is destroyed{before}, roll one {}{adds}. On {on}, leave that model on the battlefield{removal}",
+                    dice_case(gate.get("dice").unwrap_or(&Value::Null))
+                );
+            }
             if nstr(m, "resolution") == Some("when-unit-fights") {
                 return format!(
                     "do not remove {subj} yet; when its unit is selected to fight, it can fight; remove it after its unit has finished fighting or at the end of the phase, whichever happens first"
@@ -3960,6 +4190,25 @@ fn describe_menu_action(a: &ResourceActionMenuEffectActionsItem, ctx: &Ctx) -> S
     format!("{label}: {}{usage}.", parts.join(", "))
 }
 
+/// The menu's per-refresh budget sentence, e.g. Librarius' Psyker Level.
+fn capacity_clause(capacity: Option<&ResourceActionMenuEffectCapacity>) -> String {
+    let Some(c) = capacity else {
+        return String::new();
+    };
+    let label = c.resource_label.as_str();
+    let noun = c.ability_noun.as_str();
+    let amount = c.amount.get();
+    let refresh = match c.refresh {
+        ResourceActionMenuEffectCapacityRefresh::BattleRound => "battle round",
+        ResourceActionMenuEffectCapacityRefresh::Turn => "turn",
+        ResourceActionMenuEffectCapacityRefresh::Phase => "phase",
+        ResourceActionMenuEffectCapacityRefresh::Battle => "battle",
+    };
+    format!(
+        "This unit has a {label} of {amount}. In each {refresh}, it can use {noun} abilities whose combined {label} does not exceed {amount}."
+    )
+}
+
 fn shared_usage_clause(shared: Option<&ResourceActionMenuEffectSharedUsage>) -> String {
     let Some(shared) = shared else {
         return String::new();
@@ -4175,12 +4424,15 @@ fn inline(e: &EffectNode, ctx: &Ctx) -> String {
             .map(|step| inline(step, ctx))
             .collect::<Vec<_>>()
             .join("; "),
-        EffectNode::SequenceEffect(s) => s
-            .steps
-            .iter()
-            .map(|st| inline(st, ctx))
-            .collect::<Vec<_>>()
-            .join("; "),
+        EffectNode::SequenceEffect(s) => match roll_with_rider(&s.steps, ctx) {
+            Some(rider) => rider,
+            None => s
+                .steps
+                .iter()
+                .map(|st| inline(st, ctx))
+                .collect::<Vec<_>>()
+                .join("; "),
+        },
         EffectNode::NamedEffect(n) => named_effect_inline(n, ctx),
         EffectNode::ChoiceEffect(c) => format!(
             "{}: {}",
@@ -4288,6 +4540,29 @@ fn inline(e: &EffectNode, ctx: &Ctx) -> String {
                 .collect::<Vec<_>>()
                 .join(" / ");
             format!("select one: {opts}")
+        }
+        EffectNode::StanceSelectionCapacityEffect(p) => {
+            let n = p.modifier.additional_selections.get();
+            let times = if n == 1 {
+                "one additional time".to_string()
+            } else {
+                format!("{n} additional times")
+            };
+            let option = p
+                .modifier
+                .option_id
+                .as_ref()
+                .map(|id| title_case(id.as_str()));
+            let subject = match (p.modifier.allocation, option) {
+                (StanceSelectionCapacityEffectModifierAllocation::FixedOption, Some(label)) => {
+                    label
+                }
+                _ => format!(
+                    "one option of {}",
+                    title_case(p.modifier.stance_id.as_str())
+                ),
+            };
+            format!("you can select {subject} {times} per battle")
         }
         EffectNode::RiskRewardEffect(r) => format!(
             "take a {} test (on a failure, {}), then {}",
@@ -4455,6 +4730,8 @@ fn select_units_subject(sel: &SelectUnitsEffectSelector) -> String {
             bound_origin.clone()
         } else if nstr(&value, "reference") == Some("bearer-unit") {
             " of this model's unit".to_string()
+        } else if nstr(&value, "reference") == Some("bearer-transport") {
+            " of this model's unit's Transport".to_string()
         } else {
             " of the bearer".to_string()
         };
@@ -4493,6 +4770,8 @@ fn select_units_engagement(sel: &SelectUnitsEffectSelector) -> String {
     };
     let origin = if nstr(&value, "reference") == Some("bearer-unit") {
         "this model's unit"
+    } else if nstr(&value, "reference") == Some("bearer-transport") {
+        "this model's unit's Transport"
     } else {
         "the bearer"
     };
@@ -4601,21 +4880,23 @@ fn for_each_unit_subject(selector: &impl serde::Serialize) -> String {
         .get("owner")
         .map(jval)
         .unwrap_or_else(|| "?".to_string());
-    let keywords = selector
+    let keyword_list: Vec<String> = selector
         .get("keywords")
         .and_then(Value::as_array)
-        .filter(|values| !values.is_empty())
         .map(|values| {
-            format!(
-                "{} ",
-                values
-                    .iter()
-                    .map(|value| title_case(&jval(value)))
-                    .collect::<Vec<_>>()
-                    .join(" ")
-            )
+            values
+                .iter()
+                .map(|value| title_case(&jval(value)))
+                .collect()
         })
         .unwrap_or_default();
+    let keywords = if keyword_list.is_empty() {
+        String::new()
+    } else if selector.get("keyword_match").and_then(Value::as_str) == Some("any") {
+        format!("{} ", or_list(&keyword_list))
+    } else {
+        format!("{} ", keyword_list.join(" "))
+    };
     let noun = if selector.get("target_kind").and_then(Value::as_str) == Some("model") {
         "model"
     } else {
@@ -4888,12 +5169,15 @@ fn block(e: &EffectNode, depth: usize, ctx: &Ctx) -> String {
             .map(|step| block(step, depth, ctx))
             .collect::<Vec<_>>()
             .join("\n"),
-        EffectNode::SequenceEffect(s) => s
-            .steps
-            .iter()
-            .map(|step| block(step, depth, ctx))
-            .collect::<Vec<_>>()
-            .join("\n"),
+        EffectNode::SequenceEffect(s) => match roll_with_rider(&s.steps, ctx) {
+            Some(rider) => format!("{indent}{arrow}{}.", capitalize(&rider)),
+            None => s
+                .steps
+                .iter()
+                .map(|step| block(step, depth, ctx))
+                .collect::<Vec<_>>()
+                .join("\n"),
+        },
         EffectNode::NamedEffect(n) => {
             if named_metadata(n).is_some() {
                 return format!(
@@ -5196,7 +5480,13 @@ fn block(e: &EffectNode, depth: usize, ctx: &Ctx) -> String {
             for action in &e.actions {
                 lines.push(format!("{indent}  - {}", describe_menu_action(action, ctx)));
             }
-            lines.join("\n")
+            let body = lines.join("\n");
+            let cap = capacity_clause(e.capacity.as_ref());
+            if cap.is_empty() {
+                body
+            } else {
+                format!("{indent}{cap}\n{body}")
+            }
         }
         EffectNode::NoEffectEffect(_)
         | EffectNode::SingleEffect(_)
@@ -5204,7 +5494,8 @@ fn block(e: &EffectNode, depth: usize, ctx: &Ctx) -> String {
         | EffectNode::AuraEffect(_)
         | EffectNode::MiracleDieOperationEffect(_)
         | EffectNode::FormationAttachmentGrantEffect(_)
-        | EffectNode::AttachmentEligibilityInheritEffect(_) => {
+        | EffectNode::AttachmentEligibilityInheritEffect(_)
+        | EffectNode::StanceSelectionCapacityEffect(_) => {
             format!("{indent}{arrow}{}.", capitalize(&inline(e, ctx)))
         }
     }
