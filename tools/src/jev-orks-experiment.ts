@@ -604,14 +604,132 @@ export function buildCohortStates(options: {
   return result;
 }
 
+/**
+ * The DSL's own effect vocabulary, frozen.
+ *
+ * `composition` and `primary_effect` are hand-written option sets, so they drift
+ * from the schema in both directions: they name labels the schema does not
+ * define, and they cannot name most of what it does. These lists are the
+ * schema's own partition — `STRUCTURED_EFFECT_NODES` are the effects carrying
+ * their own required structure, `CANONICAL_EFFECT_LEAVES` the generic
+ * `{type, target, modifier}` leaves — and `jev-orks-experiment.test.ts`
+ * derives both from `effect.schema.json`, so a schema change fails the suite
+ * instead of silently widening the drift.
+ *
+ * `LEGACY_EFFECT_ALIASES` are the four spellings the schema's own comment
+ * declares as proven-isomorphic migrations to a stat or roll modifier. They stay
+ * validator-legal for the records already carrying them, but the classifier must
+ * never emit one, so they are excluded from the canonical set.
+ */
+export const LEGACY_EFFECT_ALIASES = [
+  "bs-modifier",
+  "charge-roll-modifier",
+  "detection-range-modifier",
+  "leadership-modifier",
+] as const;
+
+export const STRUCTURED_EFFECT_NODES = [
+  "attachment-eligibility-inherit",
+  "aura",
+  "choice",
+  "conditional",
+  "designate-target",
+  "dice-gated",
+  "dice-pool-allocation",
+  "dice-table",
+  "for-each-objective",
+  "for-each-unit",
+  "formation-attachment-grant",
+  "issue-orders",
+  "leader-model-ability-grant",
+  "miracle-die-operation",
+  "movement-modifier",
+  "named-effect",
+  "no-effect",
+  "paired-designation",
+  "persistent-designation",
+  "resource-action-menu",
+  "risk-reward",
+  "rules-bundle",
+  "select-objective",
+  "select-units",
+  "sequence",
+  "stance-select",
+] as const;
+
+export const CANONICAL_EFFECT_LEAVES = [
+  "ability-grant",
+  "ability-usage-limit",
+  "attack-restriction",
+  "auto-result",
+  "battle-shock-test",
+  "cp-gain",
+  "cp-on-destroy",
+  "cp-refund",
+  "damage-reduction",
+  "deadly-demise-threshold",
+  "deep-strike",
+  "desperate-escape",
+  "disembark",
+  "disembark-after-move",
+  "embark",
+  "engagement-passthrough",
+  "fallback-and-act",
+  "feel-no-pain",
+  "fight-eligibility-extension",
+  "fight-first",
+  "fight-last",
+  "fight-on-death",
+  "firing-deck",
+  "flyover",
+  "hazard-rolls",
+  "heal-wounds",
+  "invulnerable-save",
+  "keyword-grant",
+  "model-destruction",
+  "modifier-immunity",
+  "mortal-wounds",
+  "named-region-state",
+  "objective-control-modifier",
+  "objective-tag",
+  "pool-add-die",
+  "re-roll",
+  "reactive-charge",
+  "recovery-pool",
+  "remove-battle-shock",
+  "replace-roll-from-pool",
+  "resource-clear",
+  "resource-gain",
+  "resource-spend",
+  "resurrection",
+  "roll-modifier",
+  "rule-state",
+  "set-battle-shock",
+  "shoot-on-death",
+  "stat-modifier",
+  "stratagem-cost-modifier",
+  "stratagem-targeting-permission",
+  "strategic-reserves-arrival",
+  "targeting-permission",
+  "terrain-area-tag",
+  "tracking-token",
+  "transport-capacity-conversion",
+  "unit-attachment",
+  "unit-division",
+  "unit-keyword",
+  "unit-keyword-grant",
+  "unit-tag",
+  "ward",
+] as const;
+
 const compositionCriteria = {
   leaf: "One atomic mechanic without a wrapper.",
   conditional: "One effect applies only when a condition is true.",
   sequence: "Two or more effects all resolve.",
   choice: "A player deliberately selects exactly one effect from a menu.",
   "dice-table": "A die result selects an outcome from an exhaustive table.",
-  "dice-count-choice": "The player chooses how many dice to roll and the number changes the consequences.",
-  selection: "The rule selects another unit or model before resolving an effect.",
+  "dice-pool-allocation": "The player chooses how many dice to roll and the number changes the consequences.",
+  "select-units": "The rule selects another unit or model before resolving an effect.",
   other: "The structure does not fit any listed composition.",
 } as const;
 
@@ -622,7 +740,6 @@ const primaryEffectCriteria = {
   "ability-grant": "Grant a named permission, mode, or ability.",
   "hazard-rolls": "Require one or more hazard rolls.",
   "mortal-wounds": "Inflict mortal wounds directly.",
-  restriction: "Prevent or require an action.",
   other: "None of the listed leaf families is the primary effect.",
 } as const;
 
@@ -1561,7 +1678,7 @@ function constructBombSquig(current: AnyRecord, claims: CandidateClaim[]): Const
 
 function constructTryDatButton(current: AnyRecord, claims: CandidateClaim[]): ConstructionResult {
   const gate = requirements(claims, {
-    composition: "dice-count-choice",
+    composition: "dice-pool-allocation",
     has_random_resolution: 1,
     has_deliberate_choice: 1,
     has_one_or_two_dice_choice: 1,
@@ -2048,7 +2165,7 @@ type RecipientReading = {
 
 /** The slot a composition reads its recipient from, for fallback reporting. */
 function recipientSlots(context: LeafContext): string[] {
-  return context.composition === "selection" ? ["selection_owner"] : ["recipient"];
+  return context.composition === "select-units" ? ["selection_owner"] : ["recipient"];
 }
 
 /**
@@ -2061,7 +2178,7 @@ function recipientTarget(
   composition: string | null,
 ): RecipientReading {
   const owner = slotOptions(readings, "selection_owner")[0];
-  if (composition === "selection" && owner) {
+  if (composition === "select-units" && owner) {
     return {
       target: owner === "enemy" ? "defender" : "unit",
       claim_ids: slotClaims(readings, ["selection_owner"]),
@@ -2416,17 +2533,17 @@ type FamilyContext = {
   readings: Map<string, SlotReading>;
 };
 
-const WRAPPING_COMPOSITIONS = ["leaf", "conditional", "selection"] as const;
+const WRAPPING_COMPOSITIONS = ["leaf", "conditional", "select-units"] as const;
 
 /**
  * A rule with several operative effects cannot be composed by a family that
  * authors one. Emitting the single effect the family understands would flatten
  * the others into nothing, which changes play rather than wording, so the
- * constructor declines and names the reason. A `selection` composition is
+ * constructor declines and names the reason. A `select-units` composition is
  * exempt because selection-then-effect is exactly what it models.
  */
 function multiEffectBlocker(context: FamilyContext): string | null {
-  if (broadValue(context.claims, "composition") === "selection") return null;
+  if (broadValue(context.claims, "composition") === "select-units") return null;
   if (!slotOptions(context.readings, "has_multiple_effects").includes("true")) return null;
   return "has_multiple_effects: the source states several effects and this family composes one";
 }

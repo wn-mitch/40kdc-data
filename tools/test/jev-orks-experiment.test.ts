@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import {
   DEFAULT_CORPUS,
   INITIAL_COHORT,
@@ -7,6 +7,10 @@ import {
   RANDOM_COHORT_2,
 } from "../src/jev-orks-experiment.js";
 import {
+  CANONICAL_EFFECT_LEAVES,
+  LEGACY_EFFECT_ALIASES,
+  STRUCTURED_EFFECT_NODES,
+  broadQuestions,
   claimsFromResponse,
   compileCondition,
   constructCandidate,
@@ -31,6 +35,8 @@ import {
   type CohortAbilityId,
   type CachedResponse,
 } from "../src/jev-orks-experiment.js";
+
+const SCHEMA = new URL("../../schemas/enrichment/ability-dsl/effect.schema.json", import.meta.url);
 
 const CURRENT = {
   ability_id: "fixture",
@@ -482,10 +488,10 @@ describe("JEV Ork experiment", () => {
       "leaf/mortal-wounds",
       "leaf/roll-modifier",
       "leaf/stat-modifier",
-      "selection/keyword-grant",
-      "selection/mortal-wounds",
-      "selection/roll-modifier",
-      "selection/stat-modifier",
+      "select-units/keyword-grant",
+      "select-units/mortal-wounds",
+      "select-units/roll-modifier",
+      "select-units/stat-modifier",
     ]);
   });
 
@@ -665,6 +671,37 @@ describe("JEV Ork experiment", () => {
     expect(reading.options).toEqual([]);
     expect(reading.evidence).toBe("undetermined");
     expect(reading.proposition).toBe(true);
+  });
+
+  it("keeps the classifier inside the DSL's own effect vocabulary", () => {
+    // The freeze: both lists are derived from the schema, so a schema change
+    // fails here rather than silently widening the drift between the labels the
+    // classifier can emit and the effects the DSL defines.
+    const schema = JSON.parse(readFileSync(SCHEMA, "utf8")) as {
+      $defs: Record<string, { properties?: { type?: { enum?: string[]; const?: string } } }>;
+    };
+    const single = schema.$defs["single-effect"].properties?.type?.enum ?? [];
+    const derivedLeaves = single
+      .filter((value) => !(LEGACY_EFFECT_ALIASES as readonly string[]).includes(value))
+      .sort();
+    const derivedNodes = Object.entries(schema.$defs)
+      .filter(([name, definition]) => name !== "single-effect" && definition.properties?.type?.const)
+      .map(([, definition]) => definition.properties!.type!.const!)
+      .sort();
+    expect([...CANONICAL_EFFECT_LEAVES].sort()).toEqual(derivedLeaves);
+    expect([...STRUCTURED_EFFECT_NODES].sort()).toEqual(derivedNodes);
+    // A deprecated spelling stays validator-legal but must never be emittable.
+    expect(derivedLeaves.some((value) => (LEGACY_EFFECT_ALIASES as readonly string[]).includes(value))).toBe(false);
+
+    // Every label the classifier can emit is a node, a canonical leaf, or a
+    // meta-value that says "none of the above".
+    const questions = broadQuestions() as Record<string, { criteria?: Record<string, unknown> }>;
+    for (const option of Object.keys(questions.composition.criteria ?? {})) {
+      expect([...STRUCTURED_EFFECT_NODES, "leaf", "other"]).toContain(option);
+    }
+    for (const option of Object.keys(questions.primary_effect.criteria ?? {})) {
+      expect([...CANONICAL_EFFECT_LEAVES, "other"]).toContain(option);
+    }
   });
 
   it("routes partial families into parameter-complete recursive question packets", () => {

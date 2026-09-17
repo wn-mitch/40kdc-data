@@ -18,19 +18,19 @@ works end to end: every ability yields confident, source-bound claims. The gap i
 | --- | --- |
 | Ork abilities with source text | 245 (12 supervised + 15 legacy + 218 sliced) |
 | Slices recorded | 15 / 15 (14 × 15, then 8) |
-| Question banks / cached responses | 245 banks / 2,275 response files |
-| Claims proposed | 13,079 (min 11, max 119, mean 53.4 per ability) |
-| Candidates **constructed** | 44 (8 accepted, 36 verification-rejected) |
-| Candidates **incomplete** | 201 |
+| Question banks / cached responses | 245 banks / 2,719 response files |
+| Claims proposed | 13,065 (min 11, max 119, mean 53.3 per ability) |
+| Candidates **constructed** | 47 (9 accepted, 38 verification-rejected) |
+| Candidates **incomplete** | 198 |
 | Round-trip buckets (245) | divergence 146, delegated 97, declared-approximation 2 |
 | Two-leg localiser (33 adjudicated) | exact 20, consistent 29 (see Stage 6) |
 | Repeatability | 1 ability × 3 runs: selection and construction stable, distribution not |
-| Observed cost | $0.205 of cache — 4,885,720 in / 1,428,483 out; budget $2 |
+| Observed cost | $0.240 of cache — 5,720,337 in / 1,669,266 out; budget $2 |
 
 Construction is no longer the whole gap. The four hand-written pilots remain
 (`bomb-squig`, `try-dat-button-dread-mob`, `waaagh-banner`,
-`where-dya-fink-youre-going-da-big-hunt`), and the family registry adds 31 more from the
-generic slots; the remaining 201 candidates each name the slot that blocked them.
+`where-dya-fink-youre-going-da-big-hunt`), and the family registry adds 43 more from the
+generic slots; the remaining 198 candidates each name the slot that blocked them.
 
 ## Pipeline
 
@@ -55,7 +55,10 @@ has_target_selection  has_trigger  has_usage_limit  likely_ontology_gap
 
 Every answer carries a probability, and the probabilities are the point — they are what
 the closure and acceptance gates read. `composition` and `primary_effect` together are
-the **family** the constructor dispatches on.
+the **family** the constructor dispatches on, so both vocabularies are frozen to the DSL's
+own effect partition (`CANONICAL_EFFECT_LEAVES` / `STRUCTURED_EFFECT_NODES`) and a test
+derives them from `effect.schema.json`, so the classifier can never emit a label the schema
+does not define. See N1c for the drift this closed and what it did not fix.
 
 ### Stage 2 — decomposition and refinement
 
@@ -348,40 +351,61 @@ not a threshold move.
 
 ### N1c — Register the `ability-grant` families
 
-**P0 — measured rather than assumed.** 81 abilities are still `unsupported family`, 75 of
-them `*/ability-grant` (`conditional` 54, `sequence` 9, `leaf` 6, `choice` 6). They cannot
-be authored from the slots: `granted_permission` is a seven-option vocabulary while the
-corpus carries **102 distinct `grant_type` values across 109 uses in Orks** — essentially
-one per rule. A generic constructor would emit a coarse label, which is the N6
-anti-pattern.
+**P0 — and the measurement moved the fix upstream twice.**
 
-The alternative — compile the condition from the slots, keep the record's own payload, and
-report the delegation — was measured through the shipped `compileCondition` on all 75:
+81 abilities are still `unsupported family`, 75 of them `*/ability-grant`. The payload
+question ("delegate the grant, or derive it?") is the wrong one: only **7 of the 75 records
+are literally `ability-grant`**. 40 are a `conditional` wrapping a real leaf (10
+`ability-grant`, 8 `keyword-grant`, 7 `sequence`, 4 `re-roll`, 3 `select-units`, 8
+singletons), 10 more are a bare `sequence`, 4 `keyword-grant`, 4 `movement-modifier`, 2
+`stat-modifier`, and the rest singletons. `primary_effect=ability-grant` is correct for
+about 17 of them.
 
-| compiled condition vs the record's | n | delegation would… |
-| --- | --- | --- |
-| record has none, compiled adds one | 22 | add a gate the record lacks |
-| overlapping (misses some, adds others) | 20 | replace a correct gate with a different one |
-| neither has one | 15 | be neutral |
-| compiled finds none where the record has one | 6 | **lose** a gate |
-| compiled is a subset | 5 | lose operands |
-| identical | 5 | be neutral |
-| compiled is a superset | 4 | add operands |
+#### The vocabulary drifts from the schema in both directions
 
-So delegation is not a blanket win: it would lose or replace a gate on 31 of 75. Two
-named defects drive the 20 overlapping cases, and neither is about the payload:
+`composition` and `primary_effect` are hand-written option sets. Checked against
+`effect.schema.json`'s own partition (62 canonical `single-effect` leaves after excluding
+the four declared migrations, 26 structured nodes, zero overlap):
 
-- **keywords that scope a range predicate are read as target gates.** The compiler has no
-  `keyword_*` role for "this keyword qualifies a `unit-within-range-of` predicate", so
-  `beast-snagga-following`'s one precise operand becomes three separate
-  `target-has-keyword` gates. Six abilities settle a keyword role on a record that uses a
-  range predicate, and the vocabulary has no option for it.
-- the residual turn over-assertion, now corrected above.
+| classifier label | status |
+| --- | --- |
+| `composition`: `conditional`, `sequence`, `choice`, `dice-table` | real nodes |
+| `composition`: `leaf`, `other` | meta-values ("no wrapper", "none of the above") |
+| `composition`: `selection`, `dice-count-choice` | **not schema types at all** (the nodes are `select-units`, `dice-pool-allocation`) |
+| `composition` missing | 14+ real nodes the corpus uses, incl. `for-each-unit`, `aura`, `designate-target`, `movement-modifier`, `dice-gated`, `rules-bundle`, `no-effect` |
+| `primary_effect`: `roll-modifier`, `stat-modifier`, `keyword-grant`, `ability-grant`, `hazard-rolls`, `mortal-wounds` | canonical leaves |
+| `primary_effect`: `restriction` | **neither a leaf nor a node** — the schema has `attack-restriction`, `targeting-permission`, `fight-eligibility-extension` |
+| `primary_effect` missing | 56 of the 62 canonical leaves |
 
-**Recommendation:** do not delegate yet. Close the `keyword_*` role gap first — it is one
-vocabulary option plus a compiler mapping, it is the same defect that would make any
-delegated candidate worse than the record, and it also sharpens the 44 already-constructed
-candidates. Decide the `ability-grant` shape after that, with the same measurement re-run.
+`CANONICAL_EFFECT_LEAVES`, `STRUCTURED_EFFECT_NODES` and `LEGACY_EFFECT_ALIASES` freeze the
+schema's partition, and a test derives both lists from `effect.schema.json` and asserts
+that every label the classifier can emit is a node, a canonical leaf, or a meta-value. A
+schema change now fails the suite instead of widening the drift.
+
+The three invented labels were replaced with real ones (`selection` → `select-units`,
+`dice-count-choice` → `dice-pool-allocation`, `restriction` dropped) and the corpus
+re-run. Construction went **44 → 47**, registered-family abilities **109 → 111** — and
+`conditional/ability-grant` went **up**, 54 → 59.
+
+#### What that tells us
+
+`ability-grant` is a *semantic* label competing with structural ones, so it absorbs
+whatever the structural vocabulary cannot name: with `restriction` removed, five of its
+abilities moved to `ability-grant` rather than to a leaf. Correcting the labels is
+necessary but not sufficient — the vocabulary has to grow the nodes the corpus actually
+uses before the attractor loses:
+
+| node the classifier cannot name | corpus uses |
+| --- | --- |
+| `dice-gated` | 34 |
+| `movement-modifier` | 15 |
+| `rules-bundle` | 4-6 |
+| `aura`, `for-each-unit`, `designate-target`, `no-effect` | 2-6 each |
+
+**Recommendation:** expand `composition` with those nodes (each is one option plus, where a
+builder does not exist yet, one small builder), then re-run this measurement. Keep
+delegation off the table — it would lose or replace a gate on 31 of 75 by the earlier
+measurement, and the payload question is downstream of the labelling one.
 
 ### N2 — Calibrate the localiser — **done for this round**
 
