@@ -443,20 +443,30 @@ at all:
 | distinct `ability_id` grants | 32 (291 uses, ~9 uses each) |
 | `grant_type` slugs that are *also* an ability id in the dataset | **19** |
 
-The last row is the tell: `deep-strike`, `stealth`, `infiltrators`, `lone-operative`,
-`scouts-6`, `scouts-7`, `deadly-demise-d6`, `dark-pacts` and ten others name abilities that
-already exist as entities, so the faithful encoding is
-`{type: "ability-grant", target, modifier: {ability_id: "…"}}` — which authors used
-correctly in 291 places. `grant_type` is where a rule went when its author could not (or did
-not) author the DSL, and an 84%-singleton distribution is what an escape hatch looks like
-after a long time in service.
+The last row needs care, and a first reading of it was wrong. Those 19 are **not** invented
+labels: `stealth` (8 uses) is granted by rules like Harbingers of Dread, `deep-strike` (4)
+by Fury From The Délve and Fire Riders, and `battle-focus` by Shepherds of the Dead as a
+friendly-within-aura grant — every one is a rule granting an ability that exists as an
+entity, which is exactly the pattern an aura like the Venomthropes' Stealth is meant to
+express. The defect is not the label. It is that **the schema has no field for it**:
+`#/$defs/grant-type` is a **379-value closed enum with no description** (it records usage
+rather than modelling it), the `ability-grant` branch declares only `grant_type`, and
+`modifier.ability_id` — used 130 times — is undeclared but permitted, so it is never
+validated against the dataset and never resolved.
 
-So the family is not blocked by a slot that cannot carry the payload. It is blocked by a
-label vocabulary that should mostly be **deleted**: re-encode the 19 ability references as
-`ability_id`, author or drop the ~321 singletons, and an `ability-grant` family then has a
-small honest vocabulary to consume. That makes this an authoring-and-deletion worklist (N6),
-not a question-shape change — and it removes the objection that a builder would have to
-collapse 380 meanings into six.
+So the honest statement is three-part, and none of it is mechanical:
+
+1. **Declare and validate the reference form.** Add a modelled field for "grants the ability
+   with id X" (resolving in the same faction, like every other `ability_id` reference) and
+   re-encode the 19 that fit — they are the *best-aged* part of the vocabulary, not the worst.
+2. **Work the 321 singletons** (84%) as an authoring or deletion worklist: each is either a
+   real rule that should be authored in DSL or a label to drop. That is the escape rope, and
+   the singleton list is the worklist.
+3. **Then** an `ability-grant` family has a small honest vocabulary to consume, and the
+   objection that a builder would collapse 380 meanings into six disappears.
+
+This is N6 (authoring-and-deletion) plus a small schema addition — not a question-shape
+change, and not a bulk re-encode.
 
 ### N1b-ii — `condition_relation` is asked, answered, and never read
 
