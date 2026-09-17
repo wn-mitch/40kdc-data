@@ -22,7 +22,7 @@ set shell := ["bash", "-uc"]
 ARTIFACTS := "tools/src/generated.ts \
 crates/wh40kdc/schemas/bundled.schema.json crates/wh40kdc/src/generated.rs crates/wh40kdc/src/data/bundle.generated.json \
 python/src/wh40kdc/_bundle.json python/src/wh40kdc/_spec.py python/src/wh40kdc/_types.py python/src/wh40kdc/schemas \
-go/bundle.json go/share_registry.json go/schemas go/spec.go \
+go/bundle.json go/share_registry.json go/schemas go/spec.go data/_audit/external-refs.json \
 conformance"
 
 # List recipes.
@@ -44,10 +44,10 @@ regen:
     cargo run -p xtask -- bundle-data
     python3 python/codegen/sync_bundle.py
     python3 python/codegen/sync_spec.py
-    cd python && python3 -m pip install -e ".[dev]" --quiet
     python3 python/codegen/gen_typeddicts.py
     bash go/codegen/sync.sh
-    cd tools && npm run build && npm run gen:conformance
+    cd tools && npm run codegen:data && npx tsc && npm run gen:conformance
+    cd tools && npm run audit:external-refs
 
 # Apply Rust + Go formatting (CI checks these; applying keeps a re-run clean).
 fmt:
@@ -58,12 +58,31 @@ fmt:
 # Drift gate: committed generated artifacts must equal what regen just produced.
 verify-clean:
     @echo "▸ checking generated artifacts match regen output (CI drift gate)"
-    @if [[ -n "$(jj diff --summary -- {{ARTIFACTS}})" ]]; then \
-        jj diff --summary -- {{ARTIFACTS}} >&2; \
+    @if jj root >/dev/null 2>&1; then \
+        drift=$(jj diff --name-only -r @ -- {{ARTIFACTS}}); \
+      elif git rev-parse --is-inside-work-tree >/dev/null 2>&1; then \
+        drift=$(git diff --name-only -- {{ARTIFACTS}}); \
+      else \
+        echo "✗ neither a git worktree nor a jj workspace; cannot verify generated drift." >&2; \
+        exit 1; \
+      fi; \
+      if [ -n "$drift" ]; then \
         echo "✗ generated artifacts drifted — regen changed them; commit the result (CI fails on this same diff)." >&2; \
+        printf '%s\n' "$drift" >&2; \
         exit 1; \
     fi
     @echo "  artifacts up to date."
+
+# Pre-commit drift gate: intended uncommitted generated outputs are the baseline.
+# Snapshot their bytes, regenerate, and require byte-for-byte stability.
+verify-regen-stable:
+    @before=$(mktemp); after=$(mktemp); trap 'rm -f "$before" "$after"' EXIT; \
+      find {{ARTIFACTS}} -type f -print0 2>/dev/null | sort -z | xargs -0 sha256sum >"$before"; \
+      just regen; \
+      find {{ARTIFACTS}} -type f -print0 2>/dev/null | sort -z | xargs -0 sha256sum >"$after"; \
+      if ! cmp -s "$before" "$after"; then \
+        echo "✗ regeneration changed the pre-gate generated snapshot." >&2; diff -u "$before" "$after" >&2 || true; exit 1; \
+      fi
 
 # All four language suites + conformance.
 test-all: test-ts test-rust test-python test-go conformance
@@ -71,7 +90,7 @@ test-all: test-ts test-rust test-python test-go conformance
 # TS: build + unit tests + data validation.
 test-ts:
     @echo "▸ TS: build + unit tests + data validation"
-    cd tools && npm run build && npm test && npm run validate
+    cd tools && npm run codegen:data && npx tsc && npm test && npm run validate
 
 # Rust: fmt-check + build + test.
 test-rust:
@@ -118,9 +137,17 @@ version-lockstep:
 mfm-contract mode="check":
     cd tools && npm run mfm:contract -- --{{mode}}
 
+# Download the current MFM snapshot to gitignored _private/dump.json.
+mfm-download:
+    cd tools && npm run mfm:download
+
 # Compare a pinned BSData checkout to MFM; warnings are written only under _private.
 mfm-bsdata bsdata ref:
     cd tools && npm run mfm:bsdata -- --bsdata "{{bsdata}}" --source-ref "{{ref}}"
+
+# Project whole-loadout model peers from the pinned 11e BSData catalogues.
+bsdata-loadout-variants *args:
+    cd tools && npm run bsdata:loadout-variants -- {{args}}
 
 # Regenerate the MFM completeness golden (data/_audit/mfm-golden.json + mfm-gaps.json).
 # Needs _private/dump.json locally; the artifacts are hand-committed and are NOT part of
@@ -128,4 +155,3 @@ mfm-bsdata bsdata ref:
 # then curate mfm-gaps.json for any newly-authored data (see test/mfm-completeness.test.ts).
 mfm-golden:
     cd tools && npm run mfm:golden
-
