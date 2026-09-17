@@ -513,6 +513,24 @@ for whenever that mechanism lands: an operand **choice** would confabulate (a fo
 cannot say "none", per law 2), so operands must be independent propositions; and propositions
 cost roughly one question per candidate operand per conditional ability.
 
+#### `names-existing-effect` is a hint, not a migration recipe
+
+The audit's second bucket names seven grant types that duplicate a declared effect node, which
+reads as a mechanical swap. Two are, and they are done: `battle-shock-test` (13 records) and
+`reactive-charge` (6). The rest are per-record contract work — `heal-wounds` (10) carries
+`amount`, `models`, `trigger`, `frequency`, `requires` and `amount_if_soul_forge` across its
+records, and `detection-range-modifier` (10) carries `value`, `unit`, `operation`,
+`range_inches` and `target_scope`. Moving those means deciding what the node owns, one type at
+a time.
+
+Migrating `reactive-charge` also showed why the bucket is worth doing even when it is not
+mechanical: the label hid **two** defects. The describer arm emitted its threshold clause
+unconditionally, so a rule with no threshold rendered `?` placeholders; and the schema
+*required* `charge_roll_max_after_modifiers`, though rules like Heroic Intervention state no
+threshold at all. Both are fixed — the arm now takes the absent branch, and the requirement is
+relaxed (widen-only; `modifier` itself is still required). Neither defect was visible while the
+rule was expressed as a grant label, which is the general argument for working this list.
+
 ### N2 — Calibrate the localiser — **done for this round**
 
 The instrument now separates *refuted* from *unproven*, faults on refutation only, takes
