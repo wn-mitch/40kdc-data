@@ -14,7 +14,7 @@
       }
     },
     "unit": {
-      "entities": 1094,
+      "entities": 1096,
       "with_external_refs": 1084,
       "covered_entities_by_namespace": {
         "bsdata": 983,
@@ -62,7 +62,7 @@
       }
     },
     "weapon": {
-      "entities": 3203,
+      "entities": 3255,
       "with_external_refs": 3092,
       "covered_entities_by_namespace": {
         "bsdata": 2817,

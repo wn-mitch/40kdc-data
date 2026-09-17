@@ -51,7 +51,8 @@
           "storm-bolter",
           "storm-bolter",
           "armoured-hull",
-          "lancer-laser-destroyer"
+          "lancer-laser-destroyer",
+          "defensive-array-gladiator-lancer"
         ]
       }
     ],
@@ -435,7 +436,9 @@
         "default_weapon_ids": [
           "sternguard-bolt-pistol",
           "sternguard-bolt-rifle",
-          "close-combat-weapon-sternguard-veteran-squad"
+          "close-combat-weapon-sternguard-veteran-squad",
+          "artificer-firearm-sternguard-veteran-squad",
+          "ceramite-fists-sternguard-veteran-squad"
         ]
       },
       {
@@ -619,7 +622,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Emperor’s Champion",
+        "name": "Emperor\u2019s Champion",
         "min": 1,
         "max": 1,
         "is_leader_model": false,
@@ -641,7 +644,7 @@
       {
         "models": [
           {
-            "name": "Emperor’s Champion",
+            "name": "Emperor\u2019s Champion",
             "min": 1,
             "max": 1
           }
@@ -663,8 +666,8 @@
           "diameter": 100
         },
         "default_weapon_ids": [
-          "storm-bolter",
-          "storm-bolter",
+          "storm-bolter-impulsor",
+          "storm-bolter-impulsor",
           "armoured-hull"
         ]
       }
@@ -777,7 +780,8 @@
           "armoured-hull",
           "twin-las-talon",
           "multi-melta",
-          "multi-melta"
+          "multi-melta",
+          "defensive-array-gladiator-valiant"
         ]
       }
     ],
@@ -848,7 +852,7 @@
         "default_weapon_ids": [
           "hunter-slayer-missile",
           "repulsor-defensive-array",
-          "heavy-onslaught-gatling-cannon",
+          "heavy-onslaught-gatling-cannon-repulsor",
           "twin-heavy-bolter",
           "armoured-hull-repulsor"
         ]
@@ -887,7 +891,8 @@
           "armoured-hull",
           "tempest-bolter",
           "tempest-bolter",
-          "twin-heavy-onslaught-gatling-cannon"
+          "twin-heavy-onslaught-gatling-cannon",
+          "defensive-array-gladiator-reaper"
         ]
       }
     ],
@@ -1979,7 +1984,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Lion El’Jonson",
+        "name": "Lion El\u2019Jonson",
         "min": 1,
         "max": 1,
         "is_leader_model": false,
@@ -2001,7 +2006,7 @@
       {
         "models": [
           {
-            "name": "Lion El’Jonson",
+            "name": "Lion El\u2019Jonson",
             "min": 1,
             "max": 1
           }
@@ -3328,7 +3333,8 @@
         },
         "default_weapon_ids": [
           "master-crafted-power-weapon-captain-in-gravis-armour",
-          "master-crafted-heavy-bolt-rifle"
+          "master-crafted-heavy-bolt-rifle",
+          "power-fist-captain-in-gravis-armour"
         ]
       }
     ],
@@ -3494,7 +3500,8 @@
         },
         "default_weapon_ids": [
           "assault-bolters",
-          "close-combat-weapon"
+          "close-combat-weapon",
+          "ceramite-fists-inceptor-squad"
         ]
       },
       {
@@ -3596,11 +3603,13 @@
           "diameter": 90
         },
         "default_weapon_ids": [
-          "onslaught-gatling-cannon",
-          "fragstorm-grenade-launcher",
-          "fragstorm-grenade-launcher",
+          "onslaught-gatling-cannon-storm-speeder-hailstrike",
+          "fragstorm-grenade-launcher-storm-speeder-hailstrike",
+          "fragstorm-grenade-launcher-storm-speeder-hailstrike",
           "close-combat-weapon-storm-speeder-hailstrike",
-          "twin-ironhail-heavy-stubber"
+          "twin-ironhail-heavy-stubber",
+          "armoured-impact",
+          "ironhail-heavy-stubber-array-storm-speeder-hailstrike"
         ]
       }
     ],
@@ -3662,7 +3671,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Kor’sarro Khan",
+        "name": "Kor\u2019sarro Khan",
         "min": 1,
         "max": 1,
         "is_leader_model": false,
@@ -3672,7 +3681,8 @@
         },
         "default_weapon_ids": [
           "bolt-pistol-korsarro-khan",
-          "moonfang"
+          "moonfang",
+          "anzuq-korsarro-khan"
         ]
       }
     ],
@@ -3684,7 +3694,7 @@
       {
         "models": [
           {
-            "name": "Kor’sarro Khan",
+            "name": "Kor\u2019sarro Khan",
             "min": 1,
             "max": 1
           }
@@ -3779,9 +3789,11 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-eradicator-squad",
           "melta-rifle",
-          "close-combat-weapon"
+          "close-combat-weapon",
+          "ceramite-fists-eradicator-squad",
+          "heavy-bolter-eradicator-squad"
         ]
       },
       {
@@ -3794,7 +3806,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-eradicator-squad",
           "close-combat-weapon",
           "melta-rifle"
         ]
@@ -3982,7 +3994,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "thunder-hammer",
+          "thunder-hammer-terminator-assault-squad",
           "storm-shield"
         ]
       },
@@ -3997,7 +4009,7 @@
         },
         "default_weapon_ids": [
           "storm-shield",
-          "thunder-hammer"
+          "thunder-hammer-terminator-assault-squad"
         ]
       }
     ],
@@ -4182,7 +4194,8 @@
         },
         "default_weapon_ids": [
           "twin-firestrike-las-talon",
-          "close-combat-weapon"
+          "close-combat-weapon",
+          "hovering-bulk-firestrike-servo-turrets"
         ]
       }
     ],
@@ -4229,7 +4242,8 @@
           "krakstorm-grenade-launcher",
           "krakstorm-grenade-launcher",
           "melta-destroyer",
-          "close-combat-weapon-storm-speeder-hammerstrike"
+          "close-combat-weapon-storm-speeder-hammerstrike",
+          "armoured-impact"
         ]
       }
     ],
@@ -4511,7 +4525,10 @@
           "thunderstrike-las-talon",
           "stormfury-missiles",
           "close-combat-weapon-storm-speeder-thunderstrike",
-          "twin-icarus-rocket-pod"
+          "twin-icarus-rocket-pod",
+          "armoured-impact",
+          "stormfury-missile-launcher-storm-speeder-thunderstrike",
+          "thunderstrike-icarus-rocket-pod-storm-speeder-thunderstrike"
         ]
       }
     ],
@@ -4815,7 +4832,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Vulkan He’stan",
+        "name": "Vulkan He\u2019stan",
         "min": 1,
         "max": 1,
         "is_leader_model": false,
@@ -4838,7 +4855,7 @@
       {
         "models": [
           {
-            "name": "Vulkan He’stan",
+            "name": "Vulkan He\u2019stan",
             "min": 1,
             "max": 1
           }
@@ -5505,8 +5522,9 @@
         },
         "default_weapon_ids": [
           "close-combat-weapon-lieutenant",
-          "master-crafted-bolter",
-          "bolt-pistol-lieutenant"
+          "master-crafted-bolter-lieutenant",
+          "bolt-pistol-lieutenant",
+          "ceramite-fists-lieutenant"
         ]
       }
     ],
@@ -5731,7 +5749,8 @@
         "default_weapon_ids": [
           "bolt-pistol",
           "bolt-sniper-rifle",
-          "close-combat-weapon"
+          "close-combat-weapon",
+          "ceramite-fists-eliminator-squad"
         ]
       },
       {
@@ -5783,7 +5802,7 @@
         "default_weapon_ids": [
           "astartes-chainsword-outrider-squad",
           "heavy-bolt-pistol",
-          "twin-bolt-rifle"
+          "twin-bolt-rifle-outrider-squad"
         ],
         "is_leader_model": true,
         "base_size_mm": {
@@ -5799,7 +5818,7 @@
         "default_weapon_ids": [
           "astartes-chainsword-outrider-squad",
           "heavy-bolt-pistol",
-          "twin-bolt-rifle"
+          "twin-bolt-rifle-outrider-squad"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -5813,10 +5832,13 @@
         "min": 0,
         "max": 1,
         "default_weapon_ids": [
-          "twin-bolt-rifle",
+          "twin-bolt-rifle-outrider-squad",
           "onslaught-gatling-cannon",
           "bolt-pistol",
-          "close-combat-weapon-outrider-squad"
+          "close-combat-weapon-outrider-squad",
+          "plasma-pistol-outrider-squad",
+          "power-weapon-outrider-squad",
+          "thunder-hammer"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -6261,7 +6283,8 @@
         "default_weapon_ids": [
           "heavy-bolt-pistol",
           "master-crafted-power-weapon-wardens-of-ultramar",
-          "storm-shield"
+          "storm-shield",
+          "ceramite-fists-wardens-of-ultramar"
         ],
         "is_leader_model": false
       },
@@ -6365,7 +6388,9 @@
           "heavy-flamer",
           "twin-fragstorm-grenade-launcher",
           "heavy-onslaught-gatling-cannon",
-          "redemptor-fist"
+          "redemptor-fist",
+          "fragstorm-grenade-launchers-redemptor-dreadnought",
+          "storm-bolters-redemptor-dreadnought"
         ]
       }
     ],
@@ -6401,7 +6426,8 @@
         "default_weapon_ids": [
           "close-combat-weapon-ancient",
           "bolt-pistol",
-          "bolt-rifle"
+          "bolt-rifle",
+          "ceramite-fists-ancient"
         ]
       }
     ],
@@ -6506,7 +6532,7 @@
         },
         "default_weapon_ids": [
           "paired-combat-blades-lieutenant-with-combi-weapon",
-          "combi-weapon"
+          "combi-weapon-lieutenant-with-combi-weapon"
         ]
       }
     ],
@@ -6751,7 +6777,9 @@
         },
         "default_weapon_ids": [
           "bolt-pistol",
-          "vanguard-veteran-weapon"
+          "vanguard-veteran-weapon",
+          "relic-blade-vanguard-veteran-squad-with-jump-packs",
+          "thunder-hammer"
         ]
       },
       {
@@ -6846,7 +6874,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-company-heroes",
           "bolt-rifle",
           "close-combat-weapon-company-heroes"
         ]
@@ -6861,7 +6889,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-company-heroes",
           "master-crafted-power-weapon-company-heroes"
         ]
       },
@@ -6875,10 +6903,11 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "bolt-pistol",
+          "bolt-pistol-company-heroes",
           "close-combat-weapon-company-heroes",
           "master-crafted-heavy-bolter",
-          "master-crafted-bolt-rifle"
+          "master-crafted-bolt-rifle",
+          "combat-knife-company-heroes"
         ]
       }
     ],
@@ -7290,9 +7319,10 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-pistol",
-          "bolt-rifle",
-          "close-combat-weapon"
+          "bolt-pistol-intercessor-squad",
+          "bolt-rifle-intercessor-squad",
+          "close-combat-weapon",
+          "close-combat-weapon-intercessor-squad"
         ]
       },
       {
@@ -7305,8 +7335,8 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "bolt-rifle",
-          "bolt-pistol",
+          "bolt-rifle-intercessor-squad",
+          "bolt-pistol-intercessor-squad",
           "close-combat-weapon"
         ]
       }
@@ -7524,9 +7554,10 @@
         },
         "default_weapon_ids": [
           "close-combat-weapon-invader-atv",
-          "twin-bolt-rifle",
-          "onslaught-gatling-cannon",
-          "bolt-pistol"
+          "twin-bolt-rifle-invader-atv",
+          "onslaught-gatling-cannon-invader-atv",
+          "bolt-pistol",
+          "armoured-impact-invader-atv"
         ]
       }
     ],
@@ -7562,7 +7593,8 @@
         "default_weapon_ids": [
           "bolt-pistol",
           "marksman-bolt-carbine",
-          "close-combat-weapon"
+          "close-combat-weapon",
+          "ceramite-fists-infiltrator-squad"
         ]
       },
       {
@@ -7633,7 +7665,8 @@
           "twin-storm-bolter-ballistus-dreadnought",
           "ballistus-lascannon",
           "armoured-feet",
-          "ballistus-missile-launcher"
+          "ballistus-missile-launcher",
+          "storm-bolters-ballistus-dreadnought"
         ]
       }
     ],
@@ -7810,7 +7843,8 @@
         "default_weapon_ids": [
           "master-crafted-bolt-carbine-lieutenant-in-phobos-armour",
           "paired-combat-blades-lieutenant-in-phobos-armour",
-          "bolt-pistol-lieutenant-in-phobos-armour"
+          "bolt-pistol-lieutenant-in-phobos-armour",
+          "monomolecular-combat-blades-lieutenant-in-phobos-armour"
         ]
       }
     ],
@@ -7948,10 +7982,11 @@
         },
         "default_weapon_ids": [
           "incendium-cannon",
-          "fragstorm-grenade-launcher",
+          "fragstorm-grenade-launcher-invictor-tactical-warsuit",
           "twin-ironhail-heavy-stubber",
           "invictor-fist",
-          "heavy-bolter-invictor-tactical-warsuit"
+          "heavy-bolter-invictor-tactical-warsuit",
+          "ironhail-heavy-stubbers-invictor-tactical-warsuit"
         ]
       }
     ],
@@ -7986,7 +8021,8 @@
         },
         "default_weapon_ids": [
           "heavy-bolt-pistol",
-          "close-combat-weapon-bladeguard-ancient"
+          "close-combat-weapon-bladeguard-ancient",
+          "relics-of-battle-bladeguard-ancient"
         ]
       }
     ],
@@ -9143,7 +9179,9 @@
           "onslaught-gatling-cannon",
           "multi-melta",
           "stormfury-missile-launcher",
-          "close-combat-weapon-land-speeder"
+          "close-combat-weapon-land-speeder",
+          "armoured-impact",
+          "pyrecannon"
         ]
       }
     ],
@@ -9312,5 +9350,55 @@
       "edition": "11th",
       "dataslate": "launch"
     }
+  },
+  {
+    "unit_id": "kaius-konorius",
+    "faction_id": "adeptus-astartes",
+    "models": [
+      {
+        "name": "Kaius Konorius",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "heavy-bolt-pistol-kaius-konorius",
+          "severance-and-rebuke"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "unit_id": "captain-on-bike",
+    "faction_id": "adeptus-astartes",
+    "models": [
+      {
+        "name": "Captain on Bike",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "heavy-bolt-pistol-captain-on-bike",
+          "master-crafted-power-weapon-captain-on-bike",
+          "twin-bolt-rifle"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Captain on Bike",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   }
 ]

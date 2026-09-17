@@ -58,6 +58,11 @@
                 "quantity": 1
               },
               {
+                "item": "Weapon§Defensive Array",
+                "name": "Defensive Array",
+                "quantity": 1
+              },
+              {
                 "item": "Weapon§Lancer laser destroyer",
                 "name": "Lancer laser destroyer",
                 "quantity": 1
@@ -82,6 +87,11 @@
           "assets": {
             "included": [
               {
+                "item": "Weapon§Fragstorm Grenade Launchers",
+                "name": "Fragstorm Grenade Launchers",
+                "quantity": 1
+              },
+              {
                 "item": "Weapon§Heavy flamer",
                 "name": "Heavy flamer",
                 "quantity": 1
@@ -94,6 +104,11 @@
               {
                 "item": "Weapon§Redemptor fist",
                 "name": "Redemptor fist",
+                "quantity": 1
+              },
+              {
+                "item": "Weapon§Storm Bolters",
+                "name": "Storm Bolters",
                 "quantity": 1
               },
               {

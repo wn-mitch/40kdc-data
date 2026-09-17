@@ -11,5 +11,5 @@
 + NUMBER OF UNITS: 2
 +++++++++++++++++++++++++++++++++++++++++++++++
 
-1x Gladiator Lancer (160 pts): Armoured hull, Lancer laser destroyer, 2x Storm bolter
-1x Redemptor Dreadnought (205 pts): Heavy flamer, Heavy onslaught gatling cannon, Redemptor fist, Twin fragstorm grenade launcher
+1x Gladiator Lancer (160 pts): Armoured hull, Defensive Array, Lancer laser destroyer, 2x Storm bolter
+1x Redemptor Dreadnought (205 pts): Fragstorm Grenade Launchers, Heavy flamer, Heavy onslaught gatling cannon, Redemptor fist, Storm Bolters, Twin fragstorm grenade launcher

@@ -107,14 +107,15 @@
     "expected": [
       "astartes-chainsword-intercessor-squad",
       "astartes-grenade-launcher",
-      "bolt-pistol",
-      "bolt-rifle",
+      "bolt-pistol-intercessor-squad",
+      "bolt-rifle-intercessor-squad",
       "close-combat-weapon",
       "hand-flamer",
       "plasma-pistol-intercessor-squad",
       "power-fist",
-      "power-weapon",
-      "thunder-hammer-intercessor-squad"
+      "power-weapon-intercessor-squad",
+      "thunder-hammer-intercessor-squad",
+      "close-combat-weapon-intercessor-squad"
     ]
   },
   {

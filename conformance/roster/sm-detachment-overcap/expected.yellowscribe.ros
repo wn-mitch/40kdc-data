@@ -30,9 +30,9 @@
           <categories>
             <category name="Faction: Adeptus Astartes"/>
             <category name="Vehicle"/>
-            <category name="Smoke"/>
+            <category name="Frame"/>
             <category name="Imperium"/>
-            <category name="Gladiator Lancer"/>
+            <category name="Smoke"/>
           </categories>
           <selections>
             <selection id="unit0-m0" name="Gladiator Lancer" type="model" number="1">
@@ -52,30 +52,45 @@
                     </profile>
                   </profiles>
                 </selection>
-                <selection id="unit0-m0-w1" name="Lancer laser destroyer" type="upgrade" number="1">
+                <selection id="unit0-m0-w1" name="Defensive Array" type="upgrade" number="1">
                   <profiles>
-                    <profile name="Lancer laser destroyer" typeName="Ranged Weapons">
+                    <profile name="Defensive Array" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">6</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Rapid Fire 6</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit0-m0-w2" name="Lancer laser destroyer" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Laser Destroyer" typeName="Ranged Weapons">
                       <characteristics>
                         <characteristic name="Range">72"</characteristic>
                         <characteristic name="A">2</characteristic>
                         <characteristic name="BS">3+</characteristic>
                         <characteristic name="S">14</characteristic>
-                        <characteristic name="AP">-4</characteristic>
+                        <characteristic name="AP">-5</characteristic>
                         <characteristic name="D">D6+3</characteristic>
                         <characteristic name="Keywords">Heavy</characteristic>
                       </characteristics>
                     </profile>
                   </profiles>
                 </selection>
-                <selection id="unit0-m0-w2" name="Storm bolter" type="upgrade" number="2">
+                <selection id="unit0-m0-w3" name="Storm bolter" type="upgrade" number="2">
                   <profiles>
-                    <profile name="Storm bolter" typeName="Ranged Weapons">
+                    <profile name="Storm Bolter" typeName="Ranged Weapons">
                       <characteristics>
                         <characteristic name="Range">24"</characteristic>
                         <characteristic name="A">2</characteristic>
                         <characteristic name="BS">3+</characteristic>
-                        <characteristic name="S">4</characteristic>
-                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
                         <characteristic name="Keywords">Rapid Fire 2</characteristic>
                       </characteristics>
@@ -98,6 +113,11 @@
                 <characteristic name="OC">4</characteristic>
               </characteristics>
             </profile>
+            <profile name="Invulnerable Save" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">4+ invulnerable save</characteristic>
+              </characteristics>
+            </profile>
             <profile name="Duty Eternal" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Each time an attack targets the unit, reduce the Damage of that attack by 1.</characteristic>
@@ -113,60 +133,89 @@
           <categories>
             <category name="Faction: Adeptus Astartes"/>
             <category name="Vehicle"/>
-            <category name="Walker"/>
-            <category name="Imperium"/>
             <category name="Dreadnought"/>
-            <category name="Redemptor Dreadnought"/>
+            <category name="Imperium"/>
+            <category name="Walker"/>
           </categories>
           <selections>
             <selection id="unit1-m0" name="Redemptor Dreadnought" type="model" number="1">
               <selections>
-                <selection id="unit1-m0-w0" name="Heavy flamer" type="upgrade" number="1">
+                <selection id="unit1-m0-w0" name="Fragstorm Grenade Launchers" type="upgrade" number="1">
                   <profiles>
-                    <profile name="Heavy flamer" typeName="Ranged Weapons">
+                    <profile name="Fragstorm Grenade Launchers" typeName="Ranged Weapons">
                       <characteristics>
-                        <characteristic name="Range">12"</characteristic>
-                        <characteristic name="A">D6</characteristic>
-                        <characteristic name="BS">N/A</characteristic>
-                        <characteristic name="S">5</characteristic>
+                        <characteristic name="Range">18"</characteristic>
+                        <characteristic name="A">6</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">4</characteristic>
                         <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords">Ignores Cover, Torrent</characteristic>
+                        <characteristic name="Keywords">Blast 2</characteristic>
                       </characteristics>
                     </profile>
                   </profiles>
                 </selection>
-                <selection id="unit1-m0-w1" name="Heavy onslaught gatling cannon" type="upgrade" number="1">
+                <selection id="unit1-m0-w1" name="Heavy flamer" type="upgrade" number="1">
                   <profiles>
-                    <profile name="Heavy onslaught gatling cannon" typeName="Ranged Weapons">
+                    <profile name="Heavy Flamer" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">12"</characteristic>
+                        <characteristic name="A">3</characteristic>
+                        <characteristic name="BS">N/A</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Ignores Cover, Torrent, Blast 2</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m0-w2" name="Heavy onslaught gatling cannon" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Heavy Onslaught Gatling Cannon" typeName="Ranged Weapons">
                       <characteristics>
                         <characteristic name="Range">24"</characteristic>
                         <characteristic name="A">12</characteristic>
                         <characteristic name="BS">3+</characteristic>
                         <characteristic name="S">6</characteristic>
-                        <characteristic name="AP">0</characteristic>
+                        <characteristic name="AP">-1</characteristic>
                         <characteristic name="D">1</characteristic>
-                        <characteristic name="Keywords">Devastating Wounds</characteristic>
+                        <characteristic name="Keywords">Devastating Wounds, Devastating Wounds, Sustained Hits 2, Devastating Wounds, Sustained Hits 2</characteristic>
                       </characteristics>
                     </profile>
                   </profiles>
                 </selection>
-                <selection id="unit1-m0-w2" name="Redemptor fist" type="upgrade" number="1">
+                <selection id="unit1-m0-w3" name="Redemptor fist" type="upgrade" number="1">
                   <profiles>
-                    <profile name="Redemptor fist" typeName="Melee Weapons">
+                    <profile name="Redemptor Fist" typeName="Melee Weapons">
                       <characteristics>
                         <characteristic name="Range">Melee</characteristic>
                         <characteristic name="A">5</characteristic>
                         <characteristic name="WS">3+</characteristic>
                         <characteristic name="S">12</characteristic>
-                        <characteristic name="AP">-2</characteristic>
-                        <characteristic name="D">3</characteristic>
+                        <characteristic name="AP">-3</characteristic>
+                        <characteristic name="D">D3+3</characteristic>
                         <characteristic name="Keywords"></characteristic>
                       </characteristics>
                     </profile>
                   </profiles>
                 </selection>
-                <selection id="unit1-m0-w3" name="Twin fragstorm grenade launcher" type="upgrade" number="1">
+                <selection id="unit1-m0-w4" name="Storm Bolters" type="upgrade" number="1">
+                  <profiles>
+                    <profile name="Storm Bolters" typeName="Ranged Weapons">
+                      <characteristics>
+                        <characteristic name="Range">24"</characteristic>
+                        <characteristic name="A">4</characteristic>
+                        <characteristic name="BS">3+</characteristic>
+                        <characteristic name="S">5</characteristic>
+                        <characteristic name="AP">-1</characteristic>
+                        <characteristic name="D">1</characteristic>
+                        <characteristic name="Keywords">Rapid Fire 4</characteristic>
+                      </characteristics>
+                    </profile>
+                  </profiles>
+                </selection>
+                <selection id="unit1-m0-w5" name="Twin fragstorm grenade launcher" type="upgrade" number="1">
                   <profiles>
                     <profile name="Twin fragstorm grenade launcher" typeName="Ranged Weapons">
                       <characteristics>

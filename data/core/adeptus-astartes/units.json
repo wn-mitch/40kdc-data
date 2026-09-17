@@ -107,9 +107,9 @@
     ],
     "keywords": [
       "Vehicle",
-      "Smoke",
+      "Frame",
       "Imperium",
-      "Gladiator Lancer"
+      "Smoke"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -128,7 +128,8 @@
       "icarus-rocket-pod",
       "ironhail-heavy-stubber",
       "lancer-laser-destroyer",
-      "storm-bolter"
+      "storm-bolter",
+      "defensive-array-gladiator-lancer"
     ],
     "ability_ids": [
       "aquilon-optics",
@@ -171,7 +172,7 @@
       {
         "name": "Terminator",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 3,
         "Sv": 2,
         "invuln_sv": 4,
@@ -193,8 +194,7 @@
     "keywords": [
       "Infantry",
       "Imperium",
-      "Terminator",
-      "Terminator Squad"
+      "Terminator"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -211,9 +211,9 @@
       "assault-cannon",
       "chainfist",
       "cyclone-missile-launcher",
-      "heavy-flamer",
+      "heavy-flamer-terminator-squad",
       "power-fist",
-      "power-weapon",
+      "power-weapon-terminator-squad",
       "storm-bolter"
     ],
     "ability_ids": [
@@ -664,7 +664,7 @@
       {
         "name": "Sternguard Veteran",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -707,10 +707,12 @@
       "combi-weapon-sternguard-veteran-squad",
       "power-fist-sternguard-veteran-squad",
       "power-weapon-sternguard-veteran-squad",
-      "pyrecannon",
+      "pyrecannon-sternguard-veteran-squad",
       "sternguard-bolt-pistol",
       "sternguard-bolt-rifle",
-      "sternguard-heavy-bolter"
+      "sternguard-heavy-bolter",
+      "artificer-firearm-sternguard-veteran-squad",
+      "ceramite-fists-sternguard-veteran-squad"
     ],
     "ability_ids": [
       "sternguard-focus",
@@ -806,12 +808,11 @@
     ],
     "keywords": [
       "Vehicle",
-      "Smoke",
-      "Grenades",
-      "Transport",
+      "Explosives",
+      "Frame",
       "Imperium",
-      "Land Raider",
-      "Land Raider Crusader"
+      "Smoke",
+      "Transport"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -828,7 +829,7 @@
       "armoured-tracks",
       "hunter-killer-missile",
       "hurricane-bolter",
-      "multi-melta",
+      "multi-melta-land-raider-crusader",
       "storm-bolter",
       "twin-assault-cannon"
     ],
@@ -1046,12 +1047,12 @@
   },
   {
     "id": "emperors-champion",
-    "name": "Emperor’s Champion",
+    "name": "Emperor\u2019s Champion",
     "faction_id": "adeptus-astartes",
     "role": "character",
     "profiles": [
       {
-        "name": "Emperor’s Champion",
+        "name": "Emperor\u2019s Champion",
         "M": 8,
         "T": 4,
         "W": 5,
@@ -1073,7 +1074,7 @@
       "Grenades",
       "Imperium",
       "Tacticus",
-      "Emperor’s Champion"
+      "Emperor\u2019s Champion"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -1150,10 +1151,10 @@
     ],
     "keywords": [
       "Vehicle",
-      "Transport",
       "Dedicated Transport",
+      "Frame",
       "Imperium",
-      "Impulsor"
+      "Transport"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -1169,10 +1170,10 @@
     "weapon_ids": [
       "armoured-hull",
       "bellicatus-missile-array",
-      "fragstorm-grenade-launcher",
+      "fragstorm-grenade-launcher-impulsor",
       "ironhail-heavy-stubber",
       "ironhail-skytalon-array",
-      "storm-bolter"
+      "storm-bolter-impulsor"
     ],
     "ability_ids": [
       "assault-vehicle",
@@ -1443,9 +1444,9 @@
     ],
     "keywords": [
       "Vehicle",
-      "Smoke",
+      "Frame",
       "Imperium",
-      "Gladiator Valiant"
+      "Smoke"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -1463,7 +1464,8 @@
       "icarus-rocket-pod",
       "ironhail-heavy-stubber",
       "multi-melta",
-      "twin-las-talon"
+      "twin-las-talon",
+      "defensive-array-gladiator-valiant"
     ],
     "ability_ids": [
       "priority-target-acquisition",
@@ -1605,10 +1607,10 @@
     ],
     "keywords": [
       "Vehicle",
-      "Smoke",
-      "Transport",
+      "Frame",
       "Imperium",
-      "Repulsor"
+      "Smoke",
+      "Transport"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -1623,7 +1625,7 @@
     },
     "weapon_ids": [
       "armoured-hull-repulsor",
-      "heavy-onslaught-gatling-cannon",
+      "heavy-onslaught-gatling-cannon-repulsor",
       "hunter-slayer-missile",
       "las-talon",
       "repulsor-defensive-array",
@@ -1705,9 +1707,9 @@
     ],
     "keywords": [
       "Vehicle",
-      "Smoke",
+      "Frame",
       "Imperium",
-      "Gladiator Reaper"
+      "Smoke"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -1725,7 +1727,8 @@
       "icarus-rocket-pod",
       "ironhail-heavy-stubber",
       "tempest-bolter",
-      "twin-heavy-onslaught-gatling-cannon"
+      "twin-heavy-onslaught-gatling-cannon",
+      "defensive-array-gladiator-reaper"
     ],
     "ability_ids": [
       "reaping-tally",
@@ -4073,12 +4076,12 @@
   },
   {
     "id": "lion-eljonson",
-    "name": "Lion El’Jonson",
+    "name": "Lion El\u2019Jonson",
     "faction_id": "adeptus-astartes",
     "role": "epic-hero",
     "profiles": [
       {
-        "name": "Lion El’Jonson",
+        "name": "Lion El\u2019Jonson",
         "M": 8,
         "T": 9,
         "W": 10,
@@ -4100,7 +4103,7 @@
       "Epic Hero",
       "Imperium",
       "Primarch",
-      "Lion El’Jonson"
+      "Lion El\u2019Jonson"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -5531,11 +5534,11 @@
     ],
     "keywords": [
       "Infantry",
+      "Captain",
       "Character",
-      "Grenades",
-      "Imperium",
+      "Explosives",
       "Gravis",
-      "Captain"
+      "Imperium"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -5608,12 +5611,12 @@
     ],
     "keywords": [
       "Infantry",
+      "Captain",
       "Character",
       "Epic Hero",
+      "Explosives",
       "Imperium",
-      "Tacticus",
-      "Captain",
-      "Adrax Agatone"
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -5667,7 +5670,7 @@
       {
         "name": "Assault Intercessor",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -5678,7 +5681,8 @@
     "points": [
       {
         "models": 5,
-        "cost": 75
+        "cost": 75,
+        "models_max": 9
       },
       {
         "models": 10,
@@ -5688,10 +5692,9 @@
     "keywords": [
       "Infantry",
       "Battleline",
-      "Grenades",
+      "Explosives",
       "Imperium",
-      "Tacticus",
-      "Assault Intercessor Squad"
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -5795,11 +5798,10 @@
     ],
     "keywords": [
       "Infantry",
-      "Jump Pack",
       "Fly",
-      "Imperium",
       "Gravis",
-      "Inceptor Squad"
+      "Imperium",
+      "Jump Pack"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -5815,7 +5817,8 @@
     "weapon_ids": [
       "assault-bolters",
       "close-combat-weapon",
-      "plasma-exterminators"
+      "plasma-exterminators",
+      "ceramite-fists-inceptor-squad"
     ],
     "ability_ids": [
       "meteoric-descent",
@@ -5851,12 +5854,12 @@
       {
         "name": "Ancient in Terminator Armour",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
         "Ld": 6,
-        "OC": 1
+        "OC": 2
       }
     ],
     "points": [
@@ -5974,9 +5977,11 @@
     },
     "weapon_ids": [
       "close-combat-weapon-storm-speeder-hailstrike",
-      "fragstorm-grenade-launcher",
-      "onslaught-gatling-cannon",
-      "twin-ironhail-heavy-stubber"
+      "fragstorm-grenade-launcher-storm-speeder-hailstrike",
+      "onslaught-gatling-cannon-storm-speeder-hailstrike",
+      "twin-ironhail-heavy-stubber",
+      "armoured-impact",
+      "ironhail-heavy-stubber-array-storm-speeder-hailstrike"
     ],
     "ability_ids": [
       "hailstrike",
@@ -6023,7 +6028,7 @@
       {
         "name": "Techmarine",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 2,
         "invuln_sv": null,
@@ -6092,12 +6097,12 @@
   },
   {
     "id": "korsarro-khan",
-    "name": "Kor’sarro Khan",
+    "name": "Kor\u2019sarro Khan",
     "faction_id": "adeptus-astartes",
     "role": "epic-hero",
     "profiles": [
       {
-        "name": "Kor’sarro Khan",
+        "name": "Kor\u2019sarro Khan",
         "M": 6,
         "T": 4,
         "W": 5,
@@ -6115,12 +6120,12 @@
     ],
     "keywords": [
       "Infantry",
+      "Captain",
       "Character",
       "Epic Hero",
+      "Explosives",
       "Imperium",
-      "Tacticus",
-      "Captain",
-      "Kor’sarro Khan"
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -6136,7 +6141,8 @@
     },
     "weapon_ids": [
       "bolt-pistol-korsarro-khan",
-      "moonfang"
+      "moonfang",
+      "anzuq-korsarro-khan"
     ],
     "ability_ids": [
       "leader"
@@ -6188,12 +6194,11 @@
     ],
     "keywords": [
       "Mounted",
+      "Captain",
       "Character",
       "Epic Hero",
-      "Imperium",
-      "Grenades",
-      "Captain",
-      "Suboden Khan"
+      "Explosives",
+      "Imperium"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -6266,14 +6271,15 @@
     ],
     "keywords": [
       "Infantry",
+      "Chapter Master",
       "Character",
       "Epic Hero",
+      "Explosives",
       "Fly",
-      "Jump Pack",
       "Imperium",
-      "Tacticus",
-      "Chapter Master",
-      "Aethon Shaan"
+      "Jump Pack",
+      "Smoke",
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -6366,10 +6372,9 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
-      "Imperium",
+      "Explosives",
       "Gravis",
-      "Eradicator Squad"
+      "Imperium"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -6383,10 +6388,12 @@
       "max": 6
     },
     "weapon_ids": [
-      "bolt-pistol",
+      "bolt-pistol-eradicator-squad",
       "close-combat-weapon",
       "melta-rifle",
-      "multi-melta-eradicator-squad"
+      "multi-melta-eradicator-squad",
+      "ceramite-fists-eradicator-squad",
+      "heavy-bolter-eradicator-squad"
     ],
     "ability_ids": [
       "total-obliteration"
@@ -6421,7 +6428,7 @@
       {
         "name": "Librarian",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": null,
@@ -6446,11 +6453,10 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
-      "Psyker",
+      "Explosives",
       "Imperium",
-      "Tacticus",
-      "Librarian"
+      "Psyker",
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -6506,7 +6512,7 @@
       {
         "name": "Darnath Lysander",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 7,
         "Sv": 2,
         "invuln_sv": 4,
@@ -6522,12 +6528,11 @@
     ],
     "keywords": [
       "Infantry",
+      "Captain",
       "Character",
       "Epic Hero",
       "Imperium",
-      "Terminator",
-      "Captain",
-      "Darnath Lysander"
+      "Terminator"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -6663,7 +6668,7 @@
       {
         "name": "Assault Terminator",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 3,
         "Sv": 2,
         "invuln_sv": 4,
@@ -6685,8 +6690,7 @@
     "keywords": [
       "Infantry",
       "Imperium",
-      "Terminator",
-      "Terminator Assault Squad"
+      "Terminator"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -6700,7 +6704,7 @@
       "max": 10
     },
     "weapon_ids": [
-      "thunder-hammer",
+      "thunder-hammer-terminator-assault-squad",
       "twin-lightning-claws-terminator-assault-squad"
     ],
     "ability_ids": [
@@ -6834,7 +6838,7 @@
       {
         "name": "Bladeguard Veteran",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 3,
         "Sv": 3,
         "invuln_sv": 4,
@@ -6859,7 +6863,8 @@
         "models": 3,
         "cost": 90,
         "unit_count_min": 3,
-        "unit_count_max": null
+        "unit_count_max": null,
+        "models_max": 5
       },
       {
         "models": 6,
@@ -6959,7 +6964,7 @@
     "profiles": [
       {
         "name": "Firestrike Servo-turrets",
-        "M": 3,
+        "M": 5,
         "T": 6,
         "W": 6,
         "Sv": 2,
@@ -6979,10 +6984,9 @@
       }
     ],
     "keywords": [
-      "Artillery",
       "Vehicle",
-      "Imperium",
-      "Firestrike Servo-turrets"
+      "Artillery",
+      "Imperium"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -6998,7 +7002,8 @@
     "weapon_ids": [
       "close-combat-weapon",
       "twin-firestrike-autocannon",
-      "twin-firestrike-las-talon"
+      "twin-firestrike-las-talon",
+      "hovering-bulk-firestrike-servo-turrets"
     ],
     "ability_ids": [
       "sentinel-protocols"
@@ -7075,7 +7080,8 @@
       "close-combat-weapon-storm-speeder-hammerstrike",
       "hammerstrike-missile-launcher",
       "krakstorm-grenade-launcher",
-      "melta-destroyer"
+      "melta-destroyer",
+      "armoured-impact"
     ],
     "ability_ids": [
       "hammerstrike",
@@ -7138,12 +7144,11 @@
     ],
     "keywords": [
       "Infantry",
+      "Captain",
       "Character",
       "Epic Hero",
-      "Imperium",
       "Gravis",
-      "Captain",
-      "Tor Garadon"
+      "Imperium"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -7197,11 +7202,11 @@
       {
         "name": "Judiciar",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": null,
-        "Ld": 5,
+        "Ld": 6,
         "OC": 1,
         "invuln_sv_melee": 4
       }
@@ -7216,8 +7221,7 @@
       "Infantry",
       "Character",
       "Imperium",
-      "Tacticus",
-      "Judiciar"
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -7269,7 +7273,7 @@
       {
         "name": "Victrix Honour Guard",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 3,
         "Sv": 2,
         "invuln_sv": null,
@@ -7308,8 +7312,7 @@
     "keywords": [
       "Infantry",
       "Imperium",
-      "Tacticus",
-      "Victrix Honour Guard"
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -7385,7 +7388,7 @@
       {
         "name": "Captain in Terminator Armour",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
@@ -7465,8 +7468,8 @@
       {
         "name": "Roboute Guilliman",
         "M": 8,
-        "T": 9,
-        "W": 10,
+        "T": 10,
+        "W": 16,
         "Sv": 2,
         "invuln_sv": 4,
         "Ld": 5,
@@ -7484,8 +7487,8 @@
       "Character",
       "Epic Hero",
       "Imperium",
-      "Primarch",
-      "Roboute Guilliman"
+      "Mobile",
+      "Primarch"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -7563,10 +7566,10 @@
     ],
     "keywords": [
       "Vehicle",
-      "Transport",
       "Dedicated Transport",
+      "Frame",
       "Imperium",
-      "Drop Pod"
+      "Transport"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -7624,7 +7627,7 @@
       {
         "name": "Captain with Jump Pack",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -7640,13 +7643,13 @@
     ],
     "keywords": [
       "Infantry",
+      "Captain",
       "Character",
-      "Jump Pack",
+      "Explosives",
       "Fly",
-      "Grenades",
       "Imperium",
-      "Tacticus",
-      "Captain"
+      "Jump Pack",
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -7661,7 +7664,7 @@
     },
     "weapon_ids": [
       "astartes-chainsword-captain-with-jump-pack",
-      "hand-flamer",
+      "hand-flamer-captain-with-jump-pack",
       "heavy-bolt-pistol-captain-with-jump-pack",
       "plasma-pistol",
       "power-fist-captain-with-jump-pack",
@@ -7754,7 +7757,10 @@
       "close-combat-weapon-storm-speeder-thunderstrike",
       "stormfury-missiles",
       "thunderstrike-las-talon",
-      "twin-icarus-rocket-pod"
+      "twin-icarus-rocket-pod",
+      "armoured-impact",
+      "stormfury-missile-launcher-storm-speeder-thunderstrike",
+      "thunderstrike-icarus-rocket-pod-storm-speeder-thunderstrike"
     ],
     "ability_ids": [
       "thunderstrike",
@@ -7944,7 +7950,7 @@
       {
         "name": "Librarian in Terminator Armour",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
@@ -7960,11 +7966,9 @@
     ],
     "keywords": [
       "Infantry",
-      "Character",
-      "Psyker",
       "Imperium",
-      "Terminator",
-      "Librarian"
+      "Psyker",
+      "Terminator"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -8127,12 +8131,12 @@
   },
   {
     "id": "vulkan-hestan",
-    "name": "Vulkan He’stan",
+    "name": "Vulkan He\u2019stan",
     "faction_id": "adeptus-astartes",
     "role": "epic-hero",
     "profiles": [
       {
-        "name": "Vulkan He’stan",
+        "name": "Vulkan He\u2019stan",
         "M": 6,
         "T": 4,
         "W": 5,
@@ -8152,11 +8156,9 @@
       "Infantry",
       "Character",
       "Epic Hero",
-      "Grenades",
+      "Explosives",
       "Imperium",
-      "Tacticus",
-      "Captain",
-      "Vulkan He’stan"
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -8289,9 +8291,9 @@
     "faction_id": "adeptus-astartes",
     "profiles": [
       {
-        "name": "Hellblaster",
+        "name": "Hellblaster Squad",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -8312,10 +8314,9 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
+      "Explosives",
       "Imperium",
-      "Tacticus",
-      "Hellblaster Squad"
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -8365,7 +8366,7 @@
     "role": "battleline",
     "profiles": [
       {
-        "name": "Heavy Intercessor",
+        "name": "Heavy Intercessor Squad",
         "M": 5,
         "T": 6,
         "W": 3,
@@ -8389,10 +8390,9 @@
     "keywords": [
       "Infantry",
       "Battleline",
-      "Grenades",
-      "Imperium",
+      "Explosives",
       "Gravis",
-      "Heavy Intercessor Squad"
+      "Imperium"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -8462,9 +8462,8 @@
       "Infantry",
       "Character",
       "Epic Hero",
-      "Imperium",
       "Gravis",
-      "Iron Father Feirros"
+      "Imperium"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -8558,10 +8557,9 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
-      "Smoke",
+      "Explosives",
       "Imperium",
-      "Scout Squad"
+      "Smoke"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -8631,7 +8629,7 @@
     "role": "epic-hero",
     "profiles": [
       {
-        "name": "Marneus Calgar in Armour of Antilochus",
+        "name": "Marneus Calgar",
         "M": 6,
         "T": 6,
         "W": 6,
@@ -8649,12 +8647,11 @@
     ],
     "keywords": [
       "Infantry",
+      "Chapter Master",
       "Character",
       "Epic Hero",
       "Imperium",
-      "Terminator",
-      "Chapter Master",
-      "Marneus Calgar"
+      "Terminator"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -8714,7 +8711,7 @@
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 6,
-        "OC": 3
+        "OC": 1
       }
     ],
     "points": [
@@ -8783,11 +8780,11 @@
     "profiles": [
       {
         "name": "Brutalis Dreadnought",
-        "M": 8,
+        "M": 10,
         "T": 10,
         "W": 12,
         "Sv": 2,
-        "invuln_sv": null,
+        "invuln_sv": 4,
         "Ld": 6,
         "OC": 4
       }
@@ -8808,10 +8805,9 @@
     ],
     "keywords": [
       "Vehicle",
-      "Walker",
-      "Imperium",
       "Dreadnought",
-      "Brutalis Dreadnought"
+      "Imperium",
+      "Walker"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -8871,7 +8867,7 @@
     "profiles": [
       {
         "name": "Librarian in Phobos Armour",
-        "M": 6,
+        "M": 8,
         "T": 4,
         "W": 4,
         "Sv": 3,
@@ -8889,11 +8885,10 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
-      "Psyker",
+      "Explosives",
       "Imperium",
       "Phobos",
-      "Librarian"
+      "Psyker"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -8950,7 +8945,7 @@
       {
         "name": "Apothecary",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": null,
@@ -9121,7 +9116,7 @@
       {
         "name": "Lieutenant",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": null,
@@ -9158,11 +9153,12 @@
       "bolt-pistol-lieutenant",
       "close-combat-weapon-lieutenant",
       "heavy-bolt-pistol-lieutenant",
-      "master-crafted-bolter",
+      "master-crafted-bolter-lieutenant",
       "master-crafted-power-weapon-lieutenant",
       "neo-volkite-pistol-lieutenant",
       "plasma-pistol",
-      "power-fist-lieutenant"
+      "power-fist-lieutenant",
+      "ceramite-fists-lieutenant"
     ],
     "ability_ids": [
       "leader",
@@ -9200,8 +9196,8 @@
       {
         "name": "Chief Librarian Tigurius",
         "M": 6,
-        "T": 4,
-        "W": 4,
+        "T": 5,
+        "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
         "Ld": 6,
@@ -9218,10 +9214,9 @@
       "Infantry",
       "Character",
       "Epic Hero",
+      "Explosives",
       "Psyker",
-      "Imperium",
-      "Tacticus",
-      "Chief Librarian Tigurius"
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -9357,7 +9352,7 @@
       {
         "name": "Captain Titus",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 6,
         "Sv": 3,
         "invuln_sv": 4,
@@ -9373,13 +9368,12 @@
     ],
     "keywords": [
       "Infantry",
+      "Captain",
       "Character",
       "Epic Hero",
+      "Explosives",
       "Imperium",
-      "Tacticus",
-      "Grenades",
-      "Captain",
-      "Titus"
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -9522,7 +9516,7 @@
     "profiles": [
       {
         "name": "Eliminator",
-        "M": 6,
+        "M": 8,
         "T": 4,
         "W": 2,
         "Sv": 3,
@@ -9539,10 +9533,10 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
+      "Explosives",
       "Imperium",
       "Phobos",
-      "Eliminator Squad"
+      "Smoke"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -9560,7 +9554,8 @@
       "bolt-sniper-rifle",
       "close-combat-weapon",
       "instigator-bolt-carbine",
-      "las-fusil"
+      "las-fusil",
+      "ceramite-fists-eliminator-squad"
     ],
     "ability_ids": [
       "mark-the-target",
@@ -9597,18 +9592,8 @@
       {
         "name": "Outrider",
         "M": 12,
-        "T": 5,
+        "T": 6,
         "W": 4,
-        "Sv": 3,
-        "invuln_sv": null,
-        "Ld": 6,
-        "OC": 2
-      },
-      {
-        "name": "Invader ATV",
-        "M": 12,
-        "T": 5,
-        "W": 8,
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 6,
@@ -9618,7 +9603,8 @@
     "points": [
       {
         "models": 3,
-        "cost": 70
+        "cost": 70,
+        "models_max": 5
       },
       {
         "models": 6,
@@ -9627,9 +9613,8 @@
     ],
     "keywords": [
       "Mounted",
-      "Grenades",
-      "Imperium",
-      "Outrider Squad"
+      "Explosives",
+      "Imperium"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -9650,7 +9635,10 @@
       "heavy-bolt-pistol",
       "multi-melta",
       "onslaught-gatling-cannon",
-      "twin-bolt-rifle"
+      "twin-bolt-rifle-outrider-squad",
+      "plasma-pistol-outrider-squad",
+      "power-weapon-outrider-squad",
+      "thunder-hammer"
     ],
     "ability_ids": [
       "thunderous-impact"
@@ -9704,9 +9692,9 @@
     "faction_id": "adeptus-astartes",
     "profiles": [
       {
-        "name": "Desolation Marine",
+        "name": "Desolation Squad",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -9730,10 +9718,9 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
+      "Explosives",
       "Imperium",
-      "Tacticus",
-      "Desolation Squad"
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -10125,7 +10112,7 @@
       {
         "name": "Cato Sicarius",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
@@ -10143,11 +10130,9 @@
       "Infantry",
       "Character",
       "Epic Hero",
+      "Explosives",
       "Imperium",
-      "Tacticus",
-      "Captain",
-      "Cato",
-      "Sicarius"
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -10199,12 +10184,42 @@
     "role": "epic-hero",
     "profiles": [
       {
-        "name": "Veteran Sergeant Metaurus",
+        "name": "Aemelia Minervas",
         "M": 6,
-        "T": 4,
+        "T": 3,
+        "W": 3,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 1
+      },
+      {
+        "name": "Ancient Gadriel",
+        "M": 6,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": null,
+        "Ld": 6,
+        "OC": 2
+      },
+      {
+        "name": "Dainal Kornelius",
+        "M": 6,
+        "T": 3,
+        "W": 3,
+        "Sv": 4,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 1
+      },
+      {
+        "name": "Gaius Silva",
+        "M": 6,
+        "T": 3,
+        "W": 3,
+        "Sv": 4,
+        "invuln_sv": 5,
         "Ld": 6,
         "OC": 1
       },
@@ -10215,6 +10230,16 @@
         "W": 3,
         "Sv": 4,
         "invuln_sv": null,
+        "Ld": 6,
+        "OC": 1
+      },
+      {
+        "name": "Veteran Sergeant Metaurus",
+        "M": 6,
+        "T": 5,
+        "W": 4,
+        "Sv": 3,
+        "invuln_sv": 4,
         "Ld": 6,
         "OC": 1
       }
@@ -10228,10 +10253,9 @@
     "keywords": [
       "Infantry",
       "Epic Hero",
-      "Grenades",
+      "Explosives",
       "Imperium",
-      "Tacticus",
-      "Wardens of Ultramar"
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -10249,7 +10273,8 @@
       "force-stave",
       "heavy-bolt-pistol",
       "master-crafted-power-weapon-wardens-of-ultramar",
-      "power-weapon-wardens-of-ultramar"
+      "power-weapon-wardens-of-ultramar",
+      "ceramite-fists-wardens-of-ultramar"
     ],
     "ability_ids": [
       "heroes-of-ultramar",
@@ -10290,7 +10315,7 @@
         "T": 10,
         "W": 12,
         "Sv": 2,
-        "invuln_sv": null,
+        "invuln_sv": 4,
         "Ld": 6,
         "OC": 4
       }
@@ -10311,10 +10336,9 @@
     ],
     "keywords": [
       "Vehicle",
-      "Walker",
-      "Imperium",
       "Dreadnought",
-      "Redemptor Dreadnought"
+      "Imperium",
+      "Walker"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -10335,7 +10359,9 @@
       "onslaught-gatling-cannon",
       "redemptor-fist",
       "twin-fragstorm-grenade-launcher",
-      "twin-storm-bolter-redemptor-dreadnought"
+      "twin-storm-bolter-redemptor-dreadnought",
+      "fragstorm-grenade-launchers-redemptor-dreadnought",
+      "storm-bolters-redemptor-dreadnought"
     ],
     "ability_ids": [
       "duty-eternal",
@@ -10383,12 +10409,12 @@
       {
         "name": "Ancient",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 6,
-        "OC": 1
+        "OC": 2
       }
     ],
     "points": [
@@ -10400,10 +10426,9 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
+      "Explosives",
       "Imperium",
-      "Tacticus",
-      "Ancient"
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -10420,7 +10445,8 @@
       "bolt-pistol",
       "bolt-rifle",
       "close-combat-weapon-ancient",
-      "power-weapon-ancient"
+      "power-weapon-ancient",
+      "ceramite-fists-ancient"
     ],
     "ability_ids": [
       "leader",
@@ -10539,7 +10565,7 @@
       {
         "name": "Chaplain in Terminator Armour",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
@@ -10617,7 +10643,7 @@
     "profiles": [
       {
         "name": "Lieutenant with Combi-weapon",
-        "M": 6,
+        "M": 8,
         "T": 4,
         "W": 4,
         "Sv": 3,
@@ -10635,11 +10661,10 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
+      "Explosives",
       "Imperium",
       "Phobos",
-      "Lieutenant",
-      "Lieutenant with Combi-weapon"
+      "Smoke"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -10653,7 +10678,7 @@
       "max": 1
     },
     "weapon_ids": [
-      "combi-weapon",
+      "combi-weapon-lieutenant-with-combi-weapon",
       "paired-combat-blades-lieutenant-with-combi-weapon"
     ],
     "ability_ids": [
@@ -10693,7 +10718,7 @@
     "profiles": [
       {
         "name": "Incursor",
-        "M": 6,
+        "M": 8,
         "T": 4,
         "W": 2,
         "Sv": 3,
@@ -10732,11 +10757,10 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
-      "Smoke",
+      "Explosives",
       "Imperium",
       "Phobos",
-      "Incursor Squad"
+      "Smoke"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -10797,7 +10821,7 @@
       {
         "name": "Assault Intercessors with Jump Packs",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -10822,7 +10846,8 @@
         "models": 5,
         "cost": 95,
         "unit_count_min": 3,
-        "unit_count_max": null
+        "unit_count_max": null,
+        "models_max": 9
       },
       {
         "models": 10,
@@ -10833,12 +10858,11 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
-      "Jump Pack",
+      "Explosives",
       "Fly",
       "Imperium",
-      "Tacticus",
-      "Assault Intercessors with Jump Packs"
+      "Jump Pack",
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -10939,12 +10963,11 @@
     ],
     "keywords": [
       "Infantry",
+      "Captain",
       "Character",
       "Epic Hero",
       "Imperium",
-      "Terminator",
-      "Captain",
-      "Caanok Var"
+      "Terminator"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -10999,7 +11022,7 @@
       {
         "name": "Vanguard Veteran with Jump Pack",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -11024,7 +11047,8 @@
         "models": 5,
         "cost": 110,
         "unit_count_min": 3,
-        "unit_count_max": null
+        "unit_count_max": null,
+        "models_max": 9
       },
       {
         "models": 10,
@@ -11035,12 +11059,11 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
-      "Jump Pack",
+      "Explosives",
       "Fly",
       "Imperium",
-      "Vanguard Veteran Squad",
-      "Vanguard Veteran Squad with Jump Packs"
+      "Jump Pack",
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -11061,7 +11084,9 @@
       "plasma-pistol-vanguard-veteran-squad-with-jump-packs",
       "vanguard-veteran-weapon",
       "master-crafted-power-weapon-vanguard-veteran-squad-with-jump-packs",
-      "heavy-bolt-pistol"
+      "heavy-bolt-pistol",
+      "relic-blade-vanguard-veteran-squad-with-jump-packs",
+      "thunder-hammer"
     ],
     "ability_ids": [
       "vanguard-assault",
@@ -11132,12 +11157,12 @@
       {
         "name": "Company Veteran",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 6,
-        "OC": 1
+        "OC": 2
       }
     ],
     "points": [
@@ -11148,10 +11173,9 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
+      "Explosives",
       "Imperium",
-      "Tacticus",
-      "Company Heroes"
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -11165,12 +11189,13 @@
       "max": 4
     },
     "weapon_ids": [
-      "bolt-pistol",
+      "bolt-pistol-company-heroes",
       "bolt-rifle",
       "close-combat-weapon-company-heroes",
       "master-crafted-bolt-rifle",
       "master-crafted-heavy-bolter",
-      "master-crafted-power-weapon-company-heroes"
+      "master-crafted-power-weapon-company-heroes",
+      "combat-knife-company-heroes"
     ],
     "ability_ids": [
       "command-squad",
@@ -11243,9 +11268,8 @@
     ],
     "keywords": [
       "Infantry",
-      "Imperium",
       "Gravis",
-      "Aggressor Squad"
+      "Imperium"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -11379,7 +11403,7 @@
       {
         "name": "Captain",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -11396,10 +11420,9 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
+      "Explosives",
       "Imperium",
-      "Tacticus",
-      "Captain"
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -11536,12 +11559,12 @@
       {
         "name": "Chaplain on Bike",
         "M": 12,
-        "T": 5,
+        "T": 6,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
         "Ld": 5,
-        "OC": 1
+        "OC": 2
       }
     ],
     "points": [
@@ -11552,10 +11575,10 @@
     ],
     "keywords": [
       "Mounted",
+      "Chaplain",
       "Character",
-      "Grenades",
-      "Imperium",
-      "Chaplain"
+      "Explosives",
+      "Imperium"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -11784,7 +11807,7 @@
     "profiles": [
       {
         "name": "Captain in Phobos Armour",
-        "M": 6,
+        "M": 8,
         "T": 4,
         "W": 5,
         "Sv": 3,
@@ -11801,11 +11824,11 @@
     ],
     "keywords": [
       "Infantry",
+      "Captain",
       "Character",
-      "Grenades",
+      "Explosives",
       "Imperium",
-      "Phobos",
-      "Captain"
+      "Phobos"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -11860,7 +11883,7 @@
       {
         "name": "Chaplain with Jump Pack",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 4,
@@ -11876,11 +11899,13 @@
     ],
     "keywords": [
       "Infantry",
+      "Chaplain",
       "Character",
-      "Jump Pack",
+      "Explosives",
       "Fly",
       "Imperium",
-      "Chaplain"
+      "Jump Pack",
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -11949,7 +11974,7 @@
       {
         "name": "Intercessor",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -11971,10 +11996,9 @@
     "keywords": [
       "Infantry",
       "Battleline",
-      "Grenades",
+      "Explosives",
       "Imperium",
-      "Tacticus",
-      "Intercessor Squad"
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -11990,14 +12014,15 @@
     "weapon_ids": [
       "astartes-chainsword-intercessor-squad",
       "astartes-grenade-launcher",
-      "bolt-pistol",
-      "bolt-rifle",
+      "bolt-pistol-intercessor-squad",
+      "bolt-rifle-intercessor-squad",
       "close-combat-weapon",
       "hand-flamer",
       "plasma-pistol-intercessor-squad",
       "power-fist",
-      "power-weapon",
-      "thunder-hammer-intercessor-squad"
+      "power-weapon-intercessor-squad",
+      "thunder-hammer-intercessor-squad",
+      "close-combat-weapon-intercessor-squad"
     ],
     "ability_ids": [
       "objective-secured",
@@ -12147,12 +12172,11 @@
     ],
     "keywords": [
       "Vehicle",
-      "Smoke",
-      "Grenades",
-      "Transport",
+      "Explosives",
+      "Frame",
       "Imperium",
-      "Land Raider",
-      "Land Raider Redeemer"
+      "Smoke",
+      "Transport"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -12318,11 +12342,11 @@
     ],
     "keywords": [
       "Vehicle",
-      "Smoke",
-      "Transport",
       "Dedicated Transport",
+      "Frame",
       "Imperium",
-      "Rhino"
+      "Smoke",
+      "Transport"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -12380,8 +12404,8 @@
     "profiles": [
       {
         "name": "Invader ATV",
-        "M": 12,
-        "T": 5,
+        "M": 10,
+        "T": 6,
         "W": 8,
         "Sv": 3,
         "invuln_sv": null,
@@ -12397,9 +12421,9 @@
     ],
     "keywords": [
       "Mounted",
-      "Grenades",
-      "Imperium",
-      "Invader ATV"
+      "Vehicle",
+      "Frame",
+      "Imperium"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -12416,8 +12440,9 @@
       "bolt-pistol",
       "close-combat-weapon-invader-atv",
       "multi-melta",
-      "onslaught-gatling-cannon",
-      "twin-bolt-rifle"
+      "onslaught-gatling-cannon-invader-atv",
+      "twin-bolt-rifle-invader-atv",
+      "armoured-impact-invader-atv"
     ],
     "ability_ids": [
       "outrider-escort"
@@ -12460,7 +12485,7 @@
     "profiles": [
       {
         "name": "Infiltrator",
-        "M": 6,
+        "M": 8,
         "T": 4,
         "W": 2,
         "Sv": 3,
@@ -12519,7 +12544,8 @@
     "weapon_ids": [
       "bolt-pistol",
       "close-combat-weapon",
-      "marksman-bolt-carbine"
+      "marksman-bolt-carbine",
+      "ceramite-fists-infiltrator-squad"
     ],
     "ability_ids": [
       "omni-scramblers",
@@ -12573,7 +12599,7 @@
         "T": 10,
         "W": 12,
         "Sv": 2,
-        "invuln_sv": null,
+        "invuln_sv": 4,
         "Ld": 6,
         "OC": 4
       }
@@ -12594,10 +12620,9 @@
     ],
     "keywords": [
       "Vehicle",
-      "Walker",
-      "Imperium",
       "Dreadnought",
-      "Ballistus Dreadnought"
+      "Imperium",
+      "Walker"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -12614,7 +12639,8 @@
       "armoured-feet",
       "ballistus-lascannon",
       "ballistus-missile-launcher",
-      "twin-storm-bolter-ballistus-dreadnought"
+      "twin-storm-bolter-ballistus-dreadnought",
+      "storm-bolters-ballistus-dreadnought"
     ],
     "ability_ids": [
       "ballistus-strike",
@@ -12653,9 +12679,9 @@
     "faction_id": "adeptus-astartes",
     "profiles": [
       {
-        "name": "Infernus Marine",
+        "name": "Infernus Squad",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -12676,10 +12702,9 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
+      "Explosives",
       "Imperium",
-      "Tacticus",
-      "Infernus Squad"
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -12746,14 +12771,13 @@
     ],
     "keywords": [
       "Infantry",
-      "Character",
-      "Epic Hero",
+      "Captain",
+      "Explosives",
       "Fly",
-      "Jump Pack",
       "Imperium",
+      "Jump Pack",
       "Phobos",
-      "Chapter Master",
-      "Kayvaan Shrike"
+      "Smoke"
     ],
     "faction_keywords": [
       "Adeptus Astartes",
@@ -12885,7 +12909,7 @@
     "profiles": [
       {
         "name": "Lieutenant in Phobos Armour",
-        "M": 6,
+        "M": 8,
         "T": 4,
         "W": 4,
         "Sv": 3,
@@ -12903,10 +12927,10 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
+      "Explosives",
       "Imperium",
       "Phobos",
-      "Lieutenant"
+      "Smoke"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -12922,7 +12946,8 @@
     "weapon_ids": [
       "bolt-pistol-lieutenant-in-phobos-armour",
       "master-crafted-bolt-carbine-lieutenant-in-phobos-armour",
-      "paired-combat-blades-lieutenant-in-phobos-armour"
+      "paired-combat-blades-lieutenant-in-phobos-armour",
+      "monomolecular-combat-blades-lieutenant-in-phobos-armour"
     ],
     "ability_ids": [
       "leader",
@@ -12960,7 +12985,7 @@
     "profiles": [
       {
         "name": "Reiver",
-        "M": 6,
+        "M": 8,
         "T": 4,
         "W": 2,
         "Sv": 3,
@@ -12982,11 +13007,10 @@
     ],
     "keywords": [
       "Infantry",
-      "Grenades",
-      "Smoke",
+      "Explosives",
       "Imperium",
       "Phobos",
-      "Reiver Squad"
+      "Smoke"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -13042,7 +13066,7 @@
       {
         "name": "Chaplain",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 4,
@@ -13059,7 +13083,7 @@
     "keywords": [
       "Infantry",
       "Character",
-      "Grenades",
+      "Explosives",
       "Imperium",
       "Tacticus",
       "Chaplain"
@@ -13112,8 +13136,8 @@
     "profiles": [
       {
         "name": "Invictor Tactical Warsuit",
-        "M": 8,
-        "T": 8,
+        "M": 10,
+        "T": 9,
         "W": 12,
         "Sv": 3,
         "invuln_sv": null,
@@ -13146,12 +13170,13 @@
       "max": 1
     },
     "weapon_ids": [
-      "fragstorm-grenade-launcher",
+      "fragstorm-grenade-launcher-invictor-tactical-warsuit",
       "heavy-bolter-invictor-tactical-warsuit",
       "incendium-cannon",
       "invictor-fist",
       "twin-ironhail-autocannon",
-      "twin-ironhail-heavy-stubber"
+      "twin-ironhail-heavy-stubber",
+      "ironhail-heavy-stubbers-invictor-tactical-warsuit"
     ],
     "ability_ids": [
       "scouts-8",
@@ -13188,12 +13213,12 @@
       {
         "name": "Bladeguard Ancient",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 4,
         "Ld": 6,
-        "OC": 1
+        "OC": 3
       }
     ],
     "points": [
@@ -13204,12 +13229,11 @@
     ],
     "keywords": [
       "Infantry",
-      "Character",
-      "Grenades",
-      "Imperium",
-      "Tacticus",
       "Ancient",
-      "Bladeguard Ancient"
+      "Character",
+      "Explosives",
+      "Imperium",
+      "Tacticus"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -13224,7 +13248,8 @@
     },
     "weapon_ids": [
       "close-combat-weapon-bladeguard-ancient",
-      "heavy-bolt-pistol"
+      "heavy-bolt-pistol",
+      "relics-of-battle-bladeguard-ancient"
     ],
     "ability_ids": [
       "deeds-of-heroism",
@@ -15075,10 +15100,9 @@
     ],
     "keywords": [
       "Infantry",
-      "Imperium",
+      "Explosives",
       "Gravis",
-      "Eradicator Squad",
-      "Eradicator Squad with Heavy Bolters"
+      "Imperium"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -15145,8 +15169,9 @@
     "keywords": [
       "Vehicle",
       "Fly",
+      "Frame",
       "Imperium",
-      "Land Speeder"
+      "Speeder"
     ],
     "faction_keywords": [
       "Adeptus Astartes"
@@ -15166,7 +15191,9 @@
       "multi-melta",
       "stormfury-missile-launcher",
       "close-combat-weapon-land-speeder",
-      "heavy-flamer"
+      "heavy-flamer",
+      "armoured-impact",
+      "pyrecannon"
     ],
     "conditional_keywords": [
       {
@@ -16391,5 +16418,90 @@
         "id": "2f3bb2ac-8cf3-4d85-a94a-60d737284e33"
       }
     ]
+  },
+  {
+    "id": "captain-on-bike",
+    "name": "Captain on Bike",
+    "faction_id": "adeptus-astartes",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Captain on Bike",
+        "M": 12,
+        "T": 6,
+        "W": 6,
+        "Sv": 3,
+        "invuln_sv": 4,
+        "Ld": 6,
+        "OC": 2
+      }
+    ],
+    "keywords": [
+      "Mounted",
+      "Character",
+      "Explosives",
+      "Imperium"
+    ],
+    "faction_keywords": [
+      "Adeptus Astartes"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "heavy-bolt-pistol-captain-on-bike",
+      "plasma-pistol",
+      "twin-bolt-rifle",
+      "master-crafted-power-weapon-captain-on-bike",
+      "thunder-hammer-captain-on-bike"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false
+  },
+  {
+    "id": "kaius-konorius",
+    "name": "Kaius Konorius",
+    "faction_id": "adeptus-astartes",
+    "role": "epic-hero",
+    "profiles": [
+      {
+        "name": "Kaius Konorius",
+        "M": 6,
+        "T": 5,
+        "W": 5,
+        "Sv": 2,
+        "invuln_sv": 4,
+        "Ld": 6,
+        "OC": 1
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Character",
+      "Epic Hero",
+      "Explosives",
+      "Tacticus"
+    ],
+    "faction_keywords": [
+      "Adeptus Astartes",
+      "Ultramarines"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "heavy-bolt-pistol-kaius-konorius",
+      "severance-and-rebuke"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false
   }
 ]

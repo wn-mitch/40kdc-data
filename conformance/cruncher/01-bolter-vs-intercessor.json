@@ -1,8 +1,14 @@
 {
   "name": "bolt-rifle x5 vs intercessor (vanilla, not stationary)",
-  "attacker": { "weaponId": "bolt-rifle", "profileIndex": 0 },
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 0
+  },
   "modelsFiring": 5,
-  "target": { "unitId": "intercessor-squad", "profileIndex": 0 },
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
   "context": {
     "phase": "shooting",
     "attackerStationary": false,
@@ -13,11 +19,11 @@
     "stages": {
       "attacks": 10,
       "hits": 6.6667,
-      "wounds": 3.3333,
-      "unsaved": 1.6667,
-      "damage": 1.6667,
-      "after-fnp": 1.6667,
-      "models-killed": 0.8333
+      "wounds": 2.2222,
+      "unsaved": 1.1111,
+      "damage": 1.1111,
+      "after-fnp": 1.1111,
+      "models-killed": 0.5556
     }
   }
 }

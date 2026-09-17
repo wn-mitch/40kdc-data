@@ -1,8 +1,14 @@
 {
   "name": "The Wailing Doom (Sweep melee profile) vs intercessor — melee profile of a ranged-typed weapon, fight phase (uses WS, does not throw)",
-  "attacker": { "weaponId": "the-wailing-doom", "profileIndex": 1 },
+  "attacker": {
+    "weaponId": "the-wailing-doom",
+    "profileIndex": 1
+  },
   "modelsFiring": 1,
-  "target": { "unitId": "intercessor-squad", "profileIndex": 0 },
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
   "context": {
     "phase": "fight",
     "attackerStationary": false,
@@ -13,11 +19,11 @@
     "stages": {
       "attacks": 12,
       "hits": 10,
-      "wounds": 8.3333,
-      "unsaved": 5.5556,
-      "damage": 11.1111,
-      "after-fnp": 11.1111,
-      "models-killed": 5
+      "wounds": 6.6667,
+      "unsaved": 4.4444,
+      "damage": 8.8889,
+      "after-fnp": 8.8889,
+      "models-killed": 4.4444
     }
   }
 }

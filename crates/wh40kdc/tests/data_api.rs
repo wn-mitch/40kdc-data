@@ -673,7 +673,7 @@ fn teq_profile_resolves_to_terminator_stats() {
         .find(|u| u.id.as_str() == p.unit_id.as_str())
         .expect("terminator-squad resolves in adeptus-astartes");
     let prof = &unit.profiles[0];
-    assert_eq!(prof.t.get(), 5);
+    assert_eq!(prof.t.get(), 6);
     assert_eq!(prof.sv, 2);
     assert_eq!(prof.invuln_sv, Some(4));
     assert_eq!(prof.w.get(), 3);

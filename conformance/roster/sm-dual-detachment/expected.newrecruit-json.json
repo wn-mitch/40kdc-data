@@ -111,7 +111,7 @@
               },
               {
                 "id": "w-1",
-                "name": "Lancer laser destroyer",
+                "name": "Defensive Array",
                 "type": "upgrade",
                 "number": 1,
                 "categories": [
@@ -123,6 +123,18 @@
               },
               {
                 "id": "w-2",
+                "name": "Lancer laser destroyer",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "id": "w-3",
                 "name": "Storm bolter",
                 "type": "upgrade",
                 "number": 2,
@@ -192,6 +204,18 @@
               },
               {
                 "id": "w-3",
+                "name": "Storm Bolters",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "id": "w-4",
                 "name": "Twin storm bolter",
                 "type": "upgrade",
                 "number": 1,

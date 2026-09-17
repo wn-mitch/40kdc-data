@@ -58,6 +58,15 @@
         },
         {
           "ref": {
+            "id": "defensive-array-gladiator-lancer",
+            "raw_name": "Defensive Array",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
             "id": "lancer-laser-destroyer",
             "raw_name": "Lancer laser destroyer",
             "resolved": true,
@@ -92,6 +101,15 @@
       "wargear": [
         {
           "ref": {
+            "id": "fragstorm-grenade-launchers-redemptor-dreadnought",
+            "raw_name": "Fragstorm Grenade Launchers",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
             "id": "heavy-flamer",
             "raw_name": "Heavy flamer",
             "resolved": true,
@@ -119,6 +137,15 @@
         },
         {
           "ref": {
+            "id": "storm-bolters-redemptor-dreadnought",
+            "raw_name": "Storm Bolters",
+            "resolved": true,
+            "candidates": []
+          },
+          "count": 1
+        },
+        {
+          "ref": {
             "id": "twin-fragstorm-grenade-launcher",
             "raw_name": "Twin fragstorm grenade launcher",
             "resolved": true,
@@ -137,7 +164,7 @@
   "diagnostics": {
     "resolved_units": 2,
     "unresolved_units": 0,
-    "resolved_weapons": 7,
+    "resolved_weapons": 10,
     "unresolved_weapons": 0,
     "warnings": [
       {

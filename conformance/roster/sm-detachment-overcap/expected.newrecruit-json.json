@@ -111,7 +111,7 @@
               },
               {
                 "id": "w-1",
-                "name": "Lancer laser destroyer",
+                "name": "Defensive Array",
                 "type": "upgrade",
                 "number": 1,
                 "categories": [
@@ -123,6 +123,18 @@
               },
               {
                 "id": "w-2",
+                "name": "Lancer laser destroyer",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "id": "w-3",
                 "name": "Storm bolter",
                 "type": "upgrade",
                 "number": 2,
@@ -156,7 +168,7 @@
             "selections": [
               {
                 "id": "w-0",
-                "name": "Heavy flamer",
+                "name": "Fragstorm Grenade Launchers",
                 "type": "upgrade",
                 "number": 1,
                 "categories": [
@@ -168,7 +180,7 @@
               },
               {
                 "id": "w-1",
-                "name": "Heavy onslaught gatling cannon",
+                "name": "Heavy flamer",
                 "type": "upgrade",
                 "number": 1,
                 "categories": [
@@ -180,7 +192,7 @@
               },
               {
                 "id": "w-2",
-                "name": "Redemptor fist",
+                "name": "Heavy onslaught gatling cannon",
                 "type": "upgrade",
                 "number": 1,
                 "categories": [
@@ -192,6 +204,30 @@
               },
               {
                 "id": "w-3",
+                "name": "Redemptor fist",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "id": "w-4",
+                "name": "Storm Bolters",
+                "type": "upgrade",
+                "number": 1,
+                "categories": [
+                  {
+                    "name": "Ranged Weapon",
+                    "primary": false
+                  }
+                ]
+              },
+              {
+                "id": "w-5",
                 "name": "Twin fragstorm grenade launcher",
                 "type": "upgrade",
                 "number": 1,

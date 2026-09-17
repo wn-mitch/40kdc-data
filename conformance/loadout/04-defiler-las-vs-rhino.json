@@ -18,7 +18,7 @@
   "distance": 15,
   "phase": "shooting",
   "expected": {
-    "damage": 5.5247,
-    "kills": 0.5525
+    "damage": 5.7305,
+    "kills": 0.573
   }
 }
