@@ -1,5 +1,10 @@
 # Provenance-Aware Truth Assembly
 
+> **Status:** the Mechanic Evidence Graph this describes is retired. The ability
+> pipeline is now the JEV experiment (`npm run experiment:jev-orks`), which keeps
+> the same provenance discipline — every claim is bound to the `source_digest` of
+> the text it was read from. Retained as design rationale, not as a work plan.
+
 ## Working thesis
 
 The goal is to author increasingly accurate representations of every game ability by assembling a growing corpus of facts.
@@ -322,4 +327,7 @@ The graph earns its complexity if it can answer dependence, invalidation, counte
 
 Start by specifying the candidate-hypothesis, evidence, dependency, confidence-state, and certificate wire models. Keep hard proof obligations separate from soft confidence updates. Then encode the three-ability experiment as a conformance fixture before changing storage or orchestration.
 
-Re-read `MECHANIC_EVIDENCE_GRAPH_ADVERSARIAL_REVIEW.md` for the implementation audit and generic-library path. The current workspace is based on `wnmitch/dsl-c011-certified-reuse`; `.omp/skills/dsl-campaign/graph/schema.js` has an uncommitted modification that must be treated as concurrent work and not overwritten.
+The ability half is implemented: the JEV pipeline (`npm run experiment:jev-orks`)
+constructs candidates from source-digest-bound claims and verifies them per ability.
+The evidence-kernel and adapter sketches above have no implementation — the graph
+that would have hosted them is retired.

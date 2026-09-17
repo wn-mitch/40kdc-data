@@ -25,7 +25,7 @@ last gate before the orchestrator applies anything.
 ```
 In `charter` mode, use read/grep evidence to ground the smallest exact/near family,
 freeze only its mechanic slice, list non-goals and deferred candidates, provide
-fabricated acceptance fixtures, and return the charter fields used by wf-shape-scout.
+fabricated acceptance fixtures, and return the charter fields the shape-scout consumes.
 Never include raw prose.
 
 ## Output (JSON contract)
@@ -86,8 +86,8 @@ format — the orchestrator writes them; you don't.
   check scalars against the prose, check canonical condition ids survive, check
   `dropped_clauses` is empty or [APPROX]-covered, check `applies_to: null` on
   army-wide rules.
-- Never let cosine gains launder lever regressions — if cogitator flagged a
-  regression, the re-author is rejected regardless of score.
+- Never let cosine gains launder lever regressions — a flagged lever regression
+  rejects the re-author regardless of score.
 - Rebuttals are allowed in both directions: an eversor/skeptic rejection can be
   overruled when the evidence says so (parent-card timing is the precedent), and
   your own review can be wrong — require CONSTRUCTIBLE evidence either way.

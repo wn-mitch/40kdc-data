@@ -53,27 +53,24 @@ notes, inbox entries, field notes — is own-words paraphrase.
 
 | responsibility grouping | agents | job |
 |---|---|---|
-| retrieval and verification | data-enginseer, target-dummy, chronomancer, vox-hound, skitarius, eversor | retrieval, WHO/WHEN/WHAT decomposition, mechanical gating, adversarial refutation |
-| engineering and expansion | psyker, warpsmith, swarmlord, cogitator, kroot-lone-spear, kroot-trail-shaper | describer QA, describer engineering, cross-faction expansion, cruncher-lever guarding, shape coverage-adjudication, shape describer-design |
-| assembly and curation | arch-magos, inquisitor, kroot-flesh-shaper, kroot-war-shaper | DSL assembly, coverage curation + final review, new-shape proposal, adversarial shape review |
+| shape proposal and review | kroot-flesh-shaper, kroot-war-shaper, eversor, inquisitor | new-shape proposal, adversarial shape review, adversarial refutation, coverage curation + chartering |
+| shape reach and describer | kroot-lone-spear, kroot-trail-shaper, swarmlord, psyker | family broadening, describer design, cross-faction coverage, describer QA |
+| implementation | warpsmith | describer engineering and the only repo writes |
 
 These groupings describe responsibilities only; they are not model tiers. Every listed role uses `openai-codex/gpt-5.6-luna`.
 
-The four `kroot-*` agents are the **shape-scout sub-suite** (`workflows/wf-shape-scout.js`):
+The four `kroot-*` agents are the **shape-scout sub-suite**:
 when an ability resists every existing shape, they design a NEW one rather than flatten
 it onto an over-similar neighbour (the necron obelisk-vs-tau collision). flesh-shaper
-proposes (spawning the decomposers + data-enginseer), lone-spear broadens the faithful
-family without flattening (spawning swarmlord), trail-shaper specs the describer
-(spawning psyker), and war-shaper adversarially reviews (spawning eversor + swarmlord)
-and emits the warpsmith-ready shape package.
+proposes (grounded in that ability's own JEV claims and candidate findings), lone-spear
+broadens the faithful family without flattening (spawning swarmlord), trail-shaper specs
+the describer (spawning psyker), and war-shaper adversarially reviews (spawning eversor +
+swarmlord) and emits the warpsmith-ready shape package.
 
-Typical author-loop wiring: inquisitor prioritizes → data-enginseer retrieves →
-target-dummy + chronomancer + vox-hound decompose in parallel (deferred `lookups_needed`
-route back to data-enginseer) → arch-magos assembles (revising on the FULL panel thread,
-not just the last round) → eversor panel refutes → skitarius gates → cogitator diffs
-levers → psyker/warpsmith handle describer findings → swarmlord scouts the next family →
-inquisitor reviews and loops. On a `needs-schema` family, the driver forks to the kroot
-shape-scout sub-loop.
+There is no autonomous loop: the worklist is the JEV candidate corpus (an ability's
+`unsupported family` key or a finding naming a slot no shape can carry), and the suite
+runs per ability with a human deciding what to work next. The pipeline proposes with
+measured confidence; acceptance is human.
 
 ## Cross-cutting field notes (mined)
 
