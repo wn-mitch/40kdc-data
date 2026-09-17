@@ -429,6 +429,30 @@ neutral-or-better, and the measurement has to be per-ability, not an aggregate: 
 draft of this section claimed the four lost constructions were flattened randomness, and
 the per-ability diff refuted it.
 
+#### The grant payload has no carrier
+
+Registering an `ability-grant` family was attempted from the artifacts of the last run and
+abandoned before any code: the family has nothing to build the payload from.
+
+Of the 82 candidates whose findings name `primary_effect=ability-grant`, the payload slot
+`granted_permission` is *settled* for 58 (probability >= 0.8; 11 mid-band, 10 below it, 3
+absent), so the slot is not the problem — its **resolution** is. It offers six options
+(`movement`, `shooting`, `charge`, `reroll`, `deployment`, `weapon-ability`, `other`), while
+`data/enrichment/**` uses **380 distinct `grant_type` slugs** — and the mapping is not a
+partition: `movement` alone could be `act-after-move` (20 uses), `ingress-move` (13),
+`charge-after-advance` (11), `advance-6-instead-of-roll`, or `place-into-strategic-reserves`;
+`deployment` could be `deep-strike`, `infiltrators`, or `scouts-6`. Emitting any single slug
+from a six-way slot collapses 380 meanings into 6, which is the flattening the corpus rules
+out — and unlike the vocabulary experiments above, there is no per-ability measurement that
+could make it neutral, because the flattening is in the payload, not the label.
+
+So `conditional/ability-grant` is not a missing-builder gap that a constructor can close.
+It is the same forced-choice disease as law 2, one level down: the payload question has to
+carry the grant's identity (a refinement enumerating the slugs *within* the settled
+permission, drawn from the DSL's own vocabulary) before a builder has anything faithful to
+consume. That makes the fix a question-shape change in the decomposition bank — i.e. N1b
+work wearing an N1c label — and it needs live calls, since a new question is a cache miss.
+
 ### N2 — Calibrate the localiser — **done for this round**
 
 The instrument now separates *refuted* from *unproven*, faults on refutation only, takes
