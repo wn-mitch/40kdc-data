@@ -243,3 +243,7 @@ The browser tab.run context exposes Puppeteer, not Playwright: page.locator(...)
 
 ## 2026-08-25T21:00:09Z — gpt-5.6
 The persistent Bun eval kernel cannot import node:sqlite, so graph workflow smoke tests require a separate Node invocation despite the workflow's Node runtime.
+
+## 2026-09-17T19:54:27Z — deepseek-v4-flash
+
+just preflight's python step runs 'pip install -e .[dev]' unconditionally, which a PEP-668 Homebrew python refuses, and the pre-existing editable install pointed at a *different* jj workspace (40kdc-data), so the Python suite would silently test another tree. Needed a workspace-local .venv plus 'pip install -e ./python[dev]' before the regen step (which requires datamodel_code_generator) would run at all.
