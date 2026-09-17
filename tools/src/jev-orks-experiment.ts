@@ -728,7 +728,6 @@ const compositionCriteria = {
   sequence: "Two or more effects all resolve.",
   choice: "A player deliberately selects exactly one effect from a menu.",
   "dice-table": "A die result selects an outcome from an exhaustive table.",
-  "dice-gated": "A die test decides whether the effect resolves at all.",
   "dice-pool-allocation": "The player chooses how many dice to roll and the number changes the consequences.",
   "select-units": "The rule selects another unit or model before resolving an effect.",
   other: "The structure does not fit any listed composition.",
@@ -2472,13 +2471,8 @@ function compileMortalWounds(context: LeafContext): EffectCompilation {
   const usedSlots = ["mortal_wound_resolution"];
 
   // A die the slot calls a `test-roll` gates the wounds rather than measuring
-  // them. The `dice-gated` composition adds that wrapper itself, so this guard
-  // only fires for the compositions that do not name it — emitting the bare
-  // node where a test exists would flatten the test into an unconditional
-  // effect, which changes play rather than wording.
-  if (context.composition === "dice-gated") {
-    return { effect: wounds, claim_ids: [...slotClaims(readings, usedSlots), ...claimIds], findings };
-  }
+  // them. Emitting the bare node where a test exists would flatten the test into
+  // an unconditional effect, which changes play rather than wording.
   const gate = diceGate(readings, state);
   if (!isGate(gate)) {
     const hasTest = literalReadings(readings, state, "dice").some((literal) => literal.options.includes("test-roll"));
@@ -2564,7 +2558,7 @@ type FamilyContext = {
   readings: Map<string, SlotReading>;
 };
 
-const WRAPPING_COMPOSITIONS = ["leaf", "conditional", "select-units", "dice-gated"] as const;
+const WRAPPING_COMPOSITIONS = ["leaf", "conditional", "select-units"] as const;
 
 /**
  * A rule with several operative effects cannot be composed by a family that
@@ -2638,18 +2632,6 @@ function constructWrapped(context: FamilyContext, leaf: EffectCompilation): Cons
       baseAbility(context.current, { type: "select-units", selector: selection.selector, effect: leaf.effect }),
       findings,
     );
-  }
-  if (composition === "dice-gated") {
-    const gate = diceGate(context.readings, context.state);
-    if (!isGate(gate)) {
-      return incomplete(context.claims, {
-        consumed: claimIds,
-        findings: [...findings, gate.finding],
-      });
-    }
-    findings.push(...fallbackFindings(context.readings, gate.used));
-    claimIds.push(...gate.claim_ids);
-    return constructed(context.claims, claimIds, baseAbility(context.current, gated(gate, leaf.effect)), findings);
   }
   return incomplete(context.claims, {
     consumed: claimIds,

@@ -19,9 +19,9 @@ works end to end: every ability yields confident, source-bound claims. The gap i
 | Ork abilities with source text | 245 (12 supervised + 15 legacy + 218 sliced) |
 | Slices recorded | 15 / 15 (14 × 15, then 8) |
 | Question banks / cached responses | 245 banks / 3,439 response files |
-| Claims proposed | 13,000 (min 11, max 120, mean 53.1 per ability) |
-| Candidates **constructed** | 43 (8 accepted, 35 verification-rejected) |
-| Candidates **incomplete** | 202 |
+| Claims proposed | 13,065 (min 11, max 119, mean 53.3 per ability) |
+| Candidates **constructed** | 47 (9 accepted, 38 verification-rejected) |
+| Candidates **incomplete** | 198 |
 | Round-trip buckets (245) | divergence 146, delegated 97, declared-approximation 2 |
 | Two-leg localiser (33 adjudicated) | exact 20, consistent 29 (see Stage 6) |
 | Repeatability | 1 ability × 3 runs: selection and construction stable, distribution not |
@@ -29,8 +29,8 @@ works end to end: every ability yields confident, source-bound claims. The gap i
 
 Construction is no longer the whole gap. The four hand-written pilots remain
 (`bomb-squig`, `try-dat-button-dread-mob`, `waaagh-banner`,
-`where-dya-fink-youre-going-da-big-hunt`), and the family registry adds 39 more from the
-generic slots; the remaining 202 candidates each name the slot that blocked them.
+`where-dya-fink-youre-going-da-big-hunt`), and the family registry adds 43 more from the
+generic slots; the remaining 198 candidates each name the slot that blocked them.
 
 ## Pipeline
 
@@ -412,15 +412,22 @@ constructions (47 → 38), because those rules relocated into labels that have n
 **Reverted.** The rule this earns: a vocabulary value is only added once a family can
 consume it, one node at a time, measuring each.
 
-`dice-gated` was the exception, because it has a builder (the gate assembly the
-mortal-wound compiler already used, extracted into `diceGate()`/`gated()`). It costs 4
-constructions (47 → 43) and shrinks nothing, but of the 8 rules it captures **5 carry a
-real `dice-gated` node in their authored record** — so those four were previously built
-*without* their gate, i.e. as flattened randomness, which the round trip's highest-severity
-class. The remaining three (`feel-no-pain-5`/`-6`, `too-arrogant-to-die-bully-boyz`) are
-the leaf-vocabulary gap again: `feel-no-pain` is a first-class leaf the classifier cannot
-name, so it reaches for the structure instead. Reverting `dice-gated` is one line if the
-coverage turns out to matter more than the four flattened candidates did.
+`dice-gated` looked like the exception, because it *has* a builder — the gate assembly the
+mortal-wound compiler already used, extracted into `diceGate()`/`gated()`. Isolated by
+removing only the vocabulary value and diffing per ability: **six abilities change status —
+one gained, five lost.** Four of the five that stop constructing have **no die in their
+source at all**, and none has a `dice-gated` node in its authored record, so they are
+mislabels the new value induced rather than flattened candidates. **Reverted**; the helpers
+stay, because the mortal-wound guard uses them.
+
+So the lesson is wider than builder availability: **a new vocabulary value costs coverage
+whenever the classifier over-applies it**, whether or not a builder exists. Both
+experiments lost coverage for exactly that reason — the six builder-less nodes by
+relocating rules into unbuildable labels, `dice-gated` by mislabelling five rules that are
+not die-gated. The vocabulary only grows where a value's *application* can be measured as
+neutral-or-better, and the measurement has to be per-ability, not an aggregate: the first
+draft of this section claimed the four lost constructions were flattened randomness, and
+the per-ability diff refuted it.
 
 ### N2 — Calibrate the localiser — **done for this round**
 
