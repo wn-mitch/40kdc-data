@@ -531,6 +531,34 @@ threshold at all. Both are fixed — the arm now takes the absent branch, and th
 relaxed (widen-only; `modifier` itself is still required). Neither defect was visible while the
 rule was expressed as a grant label, which is the general argument for working this list.
 
+### N1d — Describer gaps the vocabulary work exposed
+
+**P1.** Migrating grant labels to their declared nodes surfaced two renderer gaps, both the
+reactive-charge shape: defects the escape hatch hid, in the renderer rather than the schema.
+Neither is fixed.
+
+**The condition arm ignores a keyword it was handed.** `unit-within-range-of` renders its
+keyword only when `target_type` is `"friendly-keyword"`, but records pair `target_type:
+"friendly"` with `keyword` **12 times** against **10** uses of `friendly-keyword` — and
+`friendly-keyword` appears **nowhere in `condition.schema.json`**. The renderer is keyed on an
+enum value the schema does not model, so half the records that name an eligible keyword render
+as plain "a friendly unit": Icon of War's lead-in reads `within 6" of a friendly unit` where
+the source names a friendly BLOOD LEGIONS unit. Either the arm honours a present `keyword`
+under both target types, or the 12 records are re-encoded — and the same undeclared-field
+pattern as `ability_id` argues for declaring the field.
+
+**An aura-targeted re-roll renders without its recipient.** The `re-roll` arm emits an owner
+clause only for `self`, `bearer` and `selectedModel`, so Icon of War's
+`{target: "friendly-within-aura"}` branch reads "you can re-roll the Battle Shock roll",
+dropping "for that unit".
+
+**Mode note.** The label migrations that exposed these were applied by hand — grep, JSON
+edit, `npm run validate`, render — because the audit named the targets. That is the wrong
+instrument for corpus work: the round-trip's leg one and the claims/candidates machinery exist
+to find and verify exactly this class, and a hand pass neither measures the corpus nor leaves
+a claim trail. The audit is a worklist, not a migration tool. Corpus edits should be driven
+through the pipeline, with the audit supplying targets.
+
 ### N2 — Calibrate the localiser — **done for this round**
 
 The instrument now separates *refuted* from *unproven*, faults on refutation only, takes
