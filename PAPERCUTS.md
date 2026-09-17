@@ -298,3 +298,7 @@ referential-integrity's collision-policy test has a 5000ms default vitest timeou
 ## 2026-09-17T19:39:32Z — deepseek-v4-flash
 
 Widening an enum in effect.schema.json makes 'just regen' fail with a ~40-line recursive TypeScript union-mismatch dump (generated.ts widens automatically but hand-written interfaces in tools/src/translate/effect.ts do not), and the error names the deepest nested type rather than the stale interface, so the actual fix (width of one hand-written union) is hard to see.
+
+## 2026-09-17T20:30:20Z — deepseek/deepseek-v4-flash
+
+Adding @types/node to one npm workspace hoists it to the root node_modules/@types, so the Node types silently become ambient in every sibling workspace; it surfaced an unrelated setTimeout return-type error in examples/mechanic-evidence and forced a fix outside the workspace being changed.
