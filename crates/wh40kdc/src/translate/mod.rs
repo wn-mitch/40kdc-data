@@ -79,6 +79,7 @@ fn event_phrase(e: &str) -> Option<&'static str> {
         "end-of-phase" => "at the end of the phase",
         "start-of-turn" => "at the start of the turn",
         "end-of-turn" => "at the end of the turn",
+        "start-of-player-turn" => "at the start of your turn",
         "start-of-opponent-turn" => "at the start of the opponent's turn",
         "end-of-opponent-turn" => "at the end of the opponent's turn",
         "start-of-battle-round" => "at the start of the battle round",
@@ -505,6 +506,13 @@ fn describe_simple(s: &SimpleCondition) -> String {
                 _ => "either player's",
             };
             format!("{negate}in {turn} turn")
+        }
+        T::ArmyFactionIs => {
+            let faction = effect::title_case(&pj(p, "faction_id"));
+            format!(
+                "your army faction is {}{faction}",
+                if s.negated { "not " } else { "" }
+            )
         }
         T::ChargedThisTurn => {
             format!("{negate}{} charged this turn", condition_subject(s, "the unit", None))

@@ -163,7 +163,8 @@ describe("referential integrity", () => {
     const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message));
     expect(messages.filter((m) => m.includes("collision policy"))).toEqual([]);
     expect(messages.filter((m) => m.includes("drifted across factions"))).toEqual([]);
-  });
+    // A full-dataset run, like the first test; the 5 s default is too tight under suite load.
+  }, 15_000);
 
   it("attributes a unit-scoped weapon variant by its LONGEST unit-id suffix", () => {
     const unitIds = ["boyz", "beast-snagga-boyz", "squighog-boyz"];

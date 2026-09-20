@@ -302,3 +302,103 @@ Widening an enum in effect.schema.json makes 'just regen' fail with a ~40-line r
 ## 2026-09-17T20:30:20Z — deepseek/deepseek-v4-flash
 
 Adding @types/node to one npm workspace hoists it to the root node_modules/@types, so the Node types silently become ambient in every sibling workspace; it surfaced an unrelated setTimeout return-type error in examples/mechanic-evidence and forced a fix outside the workspace being changed.
+
+## 2026-09-20T20:07:47Z — openai-codex/gpt-5.6-sol
+
+The isolated evaluator initially staged composer.mjs but not parser.mjs, even though evaluation verifies both frozen bundle hashes; the container failed only after startup. The staging contract should enumerate every verified bundle.
+
+## 2026-09-22T14:36:03Z — openai-codex/gpt-5.6-sol
+
+Eval browser JavaScript rejected a TypeScript non-null assertion in an otherwise ordinary element lookup, forcing a retry with plain JavaScript.
+
+## 2026-09-23T15:19:02Z — sol
+
+The local Round-5 reviewer smoke could not bind its default port 4315 because another process already owns it; used a separate port to avoid disturbing that session.
+
+## 2026-09-23T17:14:12Z — openai-codex/gpt-6-sol
+
+Impeccable skill loader path from skill instructions is absent at .claude/skills, blocking its context preflight until its actual install path is located.
+
+## 2026-09-23T17:36:48Z — openai-codex/gpt-6-sol
+
+Node 24 node:sqlite StatementSync has no close() method; initial schema creation failed until statement.close calls were removed. Vitest 2/Vite 5 also misresolves static node:sqlite imports as sqlite, so local tests require createRequire for that built-in.
+
+## 2026-09-23T18:44:59Z — openai-codex/gpt-6-sol
+
+A concurrently running Vite dev server repeatedly reopened the Round 5C SQLite workbench during HMR and briefly blocked an init transaction; the bridge should close prior DB handles on hot reload, not only on HTTP server close.
+
+## 2026-09-23T19:12:27Z — gpt-6-sol
+
+Impeccable skill requires a repository-local .claude/skills/impeccable/scripts/load-context.mjs, but this repo has no such module; design context loader cannot run from its documented path.
+
+## 2026-09-23T19:37:17Z — gpt-6-sol
+
+The impeccable skill's documented .omp/agent/skills loader path does not exist; invoking node skill://impeccable/scripts/load-context.mjs works, but the first call dead-ends.
+
+## 2026-09-23T22:06:21Z — sol
+
+Impeccable skill loader command references .claude/skills/impeccable/scripts/load-context.mjs, which is absent in this checkout; UI preflight requires locating installed skill path instead.
+
+## 2026-09-24T01:31:02Z — sol
+
+Reading agent://FixtureRuleProposal through Eval appended an identical-output advisory after JSON; writing that text as a response file made import-work fail JSON parsing, requiring JSONDecoder.raw_decode to isolate the payload.
+
+## 2026-09-24T02:12:10Z — gpt-6-sol
+
+The browser text selector timed out on the Source-shape census disclosure even though observe exposed it; targeting the summary element directly is needed for this smoke check.
+
+## 2026-09-24T02:13:06Z — gpt-6-sol
+
+Running UI smoke while a parallel agent edits imported workbench modules causes Vite to reload and collapse the census editor, invalidating element selectors; wait for source edits to settle before browser interaction.
+
+## 2026-09-24T14:12:35Z — gpt-6-sol
+
+The language-server references request for createEscalation returned no server despite TypeScript project setup, so its direct callers had to be located by repository search before changing the API.
+
+## 2026-09-24T14:22:45Z — gpt-6-sol
+
+The impeccable skill's repo-relative context-loader command was absent, and an inferred installed path also failed; running node with the skill:// loader from repo cwd worked. A home-wide glob for the loader timed out and did not locate it.
+
+## 2026-09-24T15:08:39Z — openai-codex/gpt-6-sol
+
+Full tools Vitest run timed out on the referential-integrity real-dataset check at the 5s default; this obscures unrelated reviewer verification and requires a targeted rerun with a longer timeout.
+
+## 2026-09-24T15:35:04Z — gpt-6-sol
+
+The default Vitest 5s timeout expires in referential-integrity's real-dataset collision policy check under the full preflight load, despite validation succeeding; rerun with --testTimeout 30000.
+
+## 2026-09-24T15:42:52Z — gpt-6-sol
+
+Vitest --maxWorkers 4 alone fails before tests with minThreads/maxThreads conflict on this machine; supply --minWorkers alongside it when capping concurrency.
+
+## 2026-09-24T16:16:05Z — gpt-6-sol
+
+Round5C gaps use a type column, not category; an assumed aggregate query failed before producing the low-hanging-fruit queue. Check the SQLite table shape before reporting gap counts.
+
+## 2026-09-24T17:17:07Z — gpt-6-sol
+
+Bun Eval cannot import the Round5C stamps module because a dependency redeclares __dirname in its module runtime; use Node with tsx for direct domain calls instead.
+
+## 2026-09-24T17:25:17Z — gpt-6-sol
+
+Comparing all pages of six stamp previews timed out after three minutes; each page appears to recompute corpus matching, so use bounded first-page samples and preview totals for triage.
+
+## 2026-09-24T20:42:11Z — openai-codex/gpt-6-sol
+
+The lsp references call for tools/src/translate/condition.ts returned no language server, so callsites needed text inspection instead.
+
+## 2026-09-24T20:50:31Z — openai-codex/gpt-6-sol
+
+Assumed python/tests/test_translate.py existed; pytest failed before running tests. Locate test filename before invoking focused suite.
+
+## 2026-09-24T21:05:33Z — openai-codex/gpt-6-sol
+
+getQueue initializes the workbench even for a read-only inspection; opening a read-only SQLite connection fails with attempt to write a readonly database. Copy the database before diagnostics.
+
+## 2026-09-24T21:44:51Z — sol
+
+LSP rename for a local React helper reported no language server, so callsites require anchored edits; review UI TypeScript is excluded from tools/tsconfig.json and needs an explicit type-check command.
+
+## 2026-09-25T17:34:57Z — claude-opus-5-5
+
+omp config list rejects --config, so an isolation overlay can only be verified by a live model call's token count; the Round 5C OMP driver was probed that way.

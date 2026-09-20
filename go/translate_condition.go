@@ -145,6 +145,7 @@ var eventPhrases = map[string]string{
 	"end-of-phase":                                   "at the end of the phase",
 	"start-of-turn":                                  "at the start of the turn",
 	"end-of-turn":                                    "at the end of the turn",
+	"start-of-player-turn":                           "at the start of your turn",
 	"start-of-opponent-turn":                         "at the start of the opponent's turn",
 	"end-of-opponent-turn":                           "at the end of the opponent's turn",
 	"start-of-battle-round":                          "at the start of the battle round",
@@ -390,6 +391,14 @@ func describeCondition(c map[string]any) string {
 			whose = "the opponent's"
 		}
 		return negate + "in " + whose + " turn"
+	case "army-faction-is":
+		// The negation folds into the verb ("is not X") rather than taking the
+		// generic "not " prefix, which would read "not your army faction is X".
+		verb := "is"
+		if c["negated"] == true {
+			verb = "is not"
+		}
+		return "your army faction " + verb + " " + titleCase(cstr(p["faction_id"]))
 	case "charged-this-turn":
 		return negate + conditionSubject(c, "the unit", nil) + " charged this turn"
 	case "advanced-this-turn":

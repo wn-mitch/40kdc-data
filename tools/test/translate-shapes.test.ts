@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 
-import { describeAbility, type Effect } from "../src/translate/index.js";
+import { describeAbility, describeCondition, type Effect } from "../src/translate/index.js";
+import { describeTiming } from "../src/translate/condition.js";
 
 /**
  * Describer pins for the three Ability-DSL effect leaves added in 1.0.14
@@ -16,6 +17,27 @@ import { describeAbility, type Effect } from "../src/translate/index.js";
 function render(effect: Effect, scope: Record<string, unknown> = { range: "unit", duration: "permanent" }): string {
   return describeAbility({ effect, scope } as Parameters<typeof describeAbility>[0]);
 }
+
+describe("army faction and turn-start vocabulary", () => {
+  it("distinguishes the player's turn from the opponent's turn and the battle round", () => {
+    expect(describeTiming("start-of-player-turn")).toBe("at the start of your turn");
+    expect(describeTiming("start-of-opponent-turn")).toBe("at the start of the opponent's turn");
+    expect(describeTiming("start-of-battle-round")).toBe("at the start of the battle round");
+  });
+
+  it("tests the army faction rather than a unit keyword, including negation", () => {
+    const condition = { type: "army-faction-is", parameters: { faction_id: "adepta-sororitas" } };
+    expect(describeCondition(condition)).toBe("your army faction is Adepta Sororitas");
+    expect(describeCondition({ ...condition, negated: true })).toBe("your army faction is not Adepta Sororitas");
+    expect(describeCondition({
+      type: "army-faction-is",
+      parameters: { faction_id: "agents-of-the-imperium" },
+    })).toBe("your army faction is Agents of the Imperium");
+    expect(render({ type: "conditional", condition, effect: { type: "no-effect" } })).toContain(
+      "If your army faction is Adepta Sororitas",
+    );
+  });
+});
 
 describe("modifier-immunity", () => {
   it("ignores modifiers to characteristics", () => {

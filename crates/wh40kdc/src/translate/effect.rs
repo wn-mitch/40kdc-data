@@ -817,7 +817,9 @@ fn leader_model_ability_grant_clause(p: &LeaderModelAbilityGrantEffect, ctx: &Ct
 }
 
 /// kebab/space → Title Case (`deep-strike` → `Deep Strike`, small words stay lowercase mid-phrase).
-fn title_case(s: &str) -> String {
+/// Shared with the condition renderer (`mod.rs`) so faction/rule display names
+/// have exactly one implementation.
+pub(super) fn title_case(s: &str) -> String {
     dekebab(s)
         .split(' ')
         .enumerate()
@@ -1439,6 +1441,7 @@ fn condition_lead_in(n: &ConditionNode) -> String {
                     }
                     _ => "in either player's turn".to_string(),
                 },
+                T::ArmyFactionIs => format!("if {}", describe_node(n)),
                 T::ModelIsLeader => "while this model leads a unit".to_string(),
                 T::ChargedThisTurn => {
                     format!(

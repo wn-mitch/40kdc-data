@@ -28,6 +28,23 @@ export function dekebab(s: string): string {
   return s.replace(/-/g, " ");
 }
 
+const TITLE_SMALL: Record<string, true> = {
+  of: true, or: true, and: true, the: true, a: true, an: true,
+  to: true, in: true, on: true, for: true, with: true,
+};
+
+/** Kebab-case identifier to a display name with lowercase linking words. */
+export function titleCase(s: string): string {
+  return dekebab(s)
+    .split(" ")
+    .map((word, index) =>
+      index > 0 && TITLE_SMALL[word.toLowerCase()]
+        ? word.toLowerCase()
+        : word ? word[0].toUpperCase() + word.slice(1) : word,
+    )
+    .join(" ");
+}
+
 function str(v: unknown): string {
   if (v == null) return "?";
   return typeof v === "string" ? v : String(v);
@@ -158,6 +175,7 @@ const EVENT_PHRASES: Record<string, string> = {
   "end-of-phase": "at the end of the phase",
   "start-of-turn": "at the start of the turn",
   "end-of-turn": "at the end of the turn",
+  "start-of-player-turn": "at the start of your turn",
   "start-of-opponent-turn": "at the start of the opponent's turn",
   "end-of-opponent-turn": "at the end of the opponent's turn",
   "start-of-battle-round": "at the start of the battle round",
@@ -320,6 +338,10 @@ export function describeCondition(c: Condition): string {
             ? "the opponent's"
             : "either player's";
       return `${negate}in ${phrase} turn`;
+    }
+    case "army-faction-is": {
+      const faction = titleCase(str(p.faction_id));
+      return `your army faction is ${c.negated ? "not " : ""}${faction}`;
     }
     case "charged-this-turn":
       return `${negate}${conditionSubject(c, "the unit")} charged this turn`;

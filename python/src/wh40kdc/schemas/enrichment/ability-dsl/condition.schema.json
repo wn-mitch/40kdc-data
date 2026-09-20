@@ -37,6 +37,7 @@
             "phase-is",
             "timing-is",
             "player-turn-is",
+            "army-faction-is",
             "unit-below-starting-strength",
             "unit-below-half-strength",
             "unit-has-keyword",
@@ -159,6 +160,31 @@
                 }
               }
             }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "army-faction-is"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "faction_id": {
+                    "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                  }
+                },
+                "required": ["faction_id"]
+              }
+            },
+            "required": ["parameters"]
           }
         },
         {

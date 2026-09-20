@@ -128,6 +128,7 @@
         "end-of-phase",
         "start-of-turn",
         "end-of-turn",
+        "start-of-player-turn",
         "start-of-opponent-turn",
         "end-of-opponent-turn",
         "start-of-battle-round",

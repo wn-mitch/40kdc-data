@@ -25,6 +25,9 @@ from wh40kdc.translate.condition import (
     event_clause,
     negated_timing,
 )
+from wh40kdc.translate.condition import (
+    title_case as _title_case,
+)
 
 Effect = dict[str, Any]
 Ctx = dict[str, Any]
@@ -393,9 +396,6 @@ def _capitalize(s: str) -> str:
     return s if s == "" else s[0].upper() + s[1:]
 
 
-_TITLE_SMALL = {"of", "or", "and", "the", "a", "an", "to", "in", "on", "for", "with"}
-
-
 def _persistent_designation_name(designation: Any, scope: Any) -> str:
     label = _title_case(_jstr(designation))
     if scope == "objective-marker":
@@ -517,19 +517,6 @@ def _eligible_activity_phrase(activity: str) -> str:
         "fall-back": "Fall Back",
         "consolidate": "Consolidate",
     }.get(activity, dekebab(activity))
-
-
-def _title_case(s: str) -> str:
-    words = dekebab(s).split(" ")
-    out = []
-    for i, w in enumerate(words):
-        if w == "":
-            out.append(w)
-        elif i > 0 and w.lower() in _TITLE_SMALL:
-            out.append(w.lower())
-        else:
-            out.append(w[0].upper() + w[1:])
-    return " ".join(out)
 
 
 # Curated display labels for granted-ability ids whose Title-Cased slug reads

@@ -33,6 +33,9 @@ import { pathToFileURL } from "node:url";
 import { loadDump, type MfmDump } from "./loader.js";
 import { REPO_ROOT } from "./repo-files.js";
 import { nameToId } from "../converters/id-generator.js";
+import { assembleStoreSource, storeSource } from "./store-source.js";
+export { assembleStoreSource, storeSource };
+export type { StoreSourceAssembly, StoreSourceFragment } from "./store-source.js";
 
 const DEFAULT_STORE = path.join(process.env.HOME ?? "", "40kdc-abilities", "index.json");
 const DEFAULT_OUT = path.join(REPO_ROOT, "_private", "source-corpus.json");
@@ -273,15 +276,6 @@ function buildDumpIndex(dump: MfmDump): DumpIndex {
   return { detachmentScoped, unitScoped, bareRule, bareDetachment };
 }
 
-/** The store's two record shapes reduced to one source string. */
-function storeSource(entry: Record<string, unknown>): string | null {
-  if (typeof entry.raw_text === "string" && entry.raw_text.trim()) return entry.raw_text.trim();
-  const parts = (["when", "target", "effect", "restrictions"] as const)
-    .map((k) => entry[k])
-    .filter((v): v is string => typeof v === "string" && v.trim().length > 0)
-    .map((v) => v.trim());
-  return parts.length ? parts.join("\n") : null;
-}
 
 /**
  * Resolve one faction's copy from the raw-text store's composite index.

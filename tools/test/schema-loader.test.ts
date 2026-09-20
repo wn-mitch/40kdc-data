@@ -100,6 +100,22 @@ describe("schema-loader", () => {
     );
   });
 
+  it("requires a valid army faction ID and accepts distinct turn-start events", () => {
+    const ajv = createValidator();
+    const condition = ajv.getSchema(
+      "https://40kdc.dev/schemas/enrichment/ability-dsl/condition.schema.json",
+    )!;
+    const event = ajv.getSchema(
+      "https://40kdc.dev/schemas/defs/common.schema.json#/$defs/game-event",
+    )!;
+    expect(condition({ type: "army-faction-is", parameters: { faction_id: "adepta-sororitas" } })).toBe(true);
+    expect(condition({ type: "army-faction-is" })).toBe(false);
+    expect(condition({ type: "army-faction-is", parameters: { faction_id: "Adepta Sororitas" } })).toBe(false);
+    for (const kind of ["start-of-battle-round", "start-of-player-turn", "start-of-opponent-turn"]) {
+      expect(event(kind)).toBe(true);
+    }
+  });
+
   it("can retrieve a schema by $id for validation", () => {
     const ajv = createValidator();
     const validate = ajv.getSchema(

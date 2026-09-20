@@ -14,7 +14,7 @@
  * Unknown leaf types degrade to a deterministic bracketed form (`[the-type]`).
  */
 
-import { conditionSubject, dekebab, describeCondition, describeSelectionEligibility, describeTiming, eventClause, negatedTiming, type Condition } from "./condition.js";
+import { conditionSubject, dekebab, describeCondition, describeSelectionEligibility, describeTiming, eventClause, negatedTiming, titleCase, type Condition } from "./condition.js";
 
 /** Independent all-required/none-excluded keyword predicate for aura roles. */
 export interface KeywordFilter {
@@ -443,8 +443,6 @@ function capitalize(s: string): string {
   return s.length === 0 ? s : s[0].toUpperCase() + s.slice(1);
 }
 
-/** Small words kept lowercase mid-phrase in Title Case (`Benefit of Cover`, not `Benefit Of Cover`). */
-const TITLE_SMALL = new Set(["of", "or", "and", "the", "a", "an", "to", "in", "on", "for", "with"]);
 
 /**
  * Curated display labels for granted-ability ids whose Title-Cased slug reads
@@ -636,17 +634,6 @@ function persistentDesignationReplacement(e: Effect): string {
   return `when ${previous} is destroyed, ${replacement?.optional ? "you may" : "you must"} select one new enemy unit${label} to replace this bearer unit's existing designation${selectionBinding(select)}. Its existing effects apply to the new target without changing the designation's battle-end expiry${embarked}`;
 }
 
-/** kebab/space token → Title Case (`deep-strike` → `Deep Strike`, `shoot-and-scoot` → `Shoot and Scoot`). */
-function titleCase(s: string): string {
-  return dekebab(s)
-    .split(" ")
-    .map((w, i) => {
-      if (w.length === 0) return w;
-      if (i > 0 && TITLE_SMALL.has(w.toLowerCase())) return w.toLowerCase();
-      return w[0].toUpperCase() + w.slice(1);
-    })
-    .join(" ");
-}
 
 /**
  * A GW weapon keyword token → bracketed caps (`lethal-hits` → `[LETHAL HITS]`).

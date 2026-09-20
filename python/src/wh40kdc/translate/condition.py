@@ -21,6 +21,31 @@ def dekebab(s: str) -> str:
     return s.replace("-", " ")
 
 
+# Small words kept lowercase mid-phrase in Title Case (`Benefit of Cover`, not
+# `Benefit Of Cover`). Mirrors TS ``TITLE_SMALL`` / Go ``titleSmall``.
+_TITLE_SMALL = {"of", "or", "and", "the", "a", "an", "to", "in", "on", "for", "with"}
+
+
+def title_case(s: str) -> str:
+    """kebab-case id → its display name in Title Case.
+
+    Small words stay lowercase mid-phrase, so a faction id reads as its printed
+    name: ``adepta-sororitas`` → ``Adepta Sororitas``, ``agents-of-the-imperium``
+    → ``Agents of the Imperium`` (mirrors TS ``titleCase`` / Go ``titleCase``).
+    Shared with the effect describer (``title_case as _title_case``) and used by
+    the army-faction clause; it lives here because ``effect`` imports this module,
+    so the shared helper cannot live there."""
+    out = []
+    for i, w in enumerate(dekebab(s).split(" ")):
+        if w == "":
+            out.append(w)
+        elif i > 0 and w.lower() in _TITLE_SMALL:
+            out.append(w.lower())
+        else:
+            out.append(w[0].upper() + w[1:])
+    return " ".join(out)
+
+
 def _str(v: Any) -> str:
     """TS ``str``: null/undefined → "?", else JS ``String(v)``."""
     if v is None:
@@ -186,6 +211,7 @@ _EVENT_PHRASES: dict[str, str] = {
     "start-of-turn": "at the start of the turn",
     "charge-declaration": "when a Charge is declared",
     "end-of-turn": "at the end of the turn",
+    "start-of-player-turn": "at the start of your turn",
     "start-of-opponent-turn": "at the start of the opponent's turn",
     "end-of-opponent-turn": "at the end of the opponent's turn",
     "start-of-battle-round": "at the start of the battle round",
@@ -384,6 +410,11 @@ def describe_condition(c: Condition) -> str:
         else:
             whose = "either player's"
         return f"{negate}in {whose} turn"
+    if ctype == "army-faction-is":
+        # The negation folds into the verb ("is not X") rather than taking the
+        # generic "not " prefix, which would read "not your army faction is X".
+        verb = "is not" if c.get("negated") else "is"
+        return f"your army faction {verb} {title_case(_str(p.get('faction_id')))}"
     if ctype == "charged-this-turn":
         return f"{negate}{condition_subject(c, 'the unit')} charged this turn"
     if ctype == "advanced-this-turn":

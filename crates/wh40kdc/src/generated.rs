@@ -10023,6 +10023,7 @@ for FormationAttachmentGrantEffectSource {
 ///    "end-of-phase",
 ///    "start-of-turn",
 ///    "end-of-turn",
+///    "start-of-player-turn",
 ///    "start-of-opponent-turn",
 ///    "end-of-opponent-turn",
 ///    "start-of-battle-round",
@@ -10115,6 +10116,8 @@ pub enum GameEvent {
     StartOfTurn,
     #[serde(rename = "end-of-turn")]
     EndOfTurn,
+    #[serde(rename = "start-of-player-turn")]
+    StartOfPlayerTurn,
     #[serde(rename = "start-of-opponent-turn")]
     StartOfOpponentTurn,
     #[serde(rename = "end-of-opponent-turn")]
@@ -10257,6 +10260,7 @@ impl ::std::fmt::Display for GameEvent {
             Self::EndOfPhase => f.write_str("end-of-phase"),
             Self::StartOfTurn => f.write_str("start-of-turn"),
             Self::EndOfTurn => f.write_str("end-of-turn"),
+            Self::StartOfPlayerTurn => f.write_str("start-of-player-turn"),
             Self::StartOfOpponentTurn => f.write_str("start-of-opponent-turn"),
             Self::EndOfOpponentTurn => f.write_str("end-of-opponent-turn"),
             Self::StartOfBattleRound => f.write_str("start-of-battle-round"),
@@ -10351,6 +10355,7 @@ impl ::std::str::FromStr for GameEvent {
             "end-of-phase" => Ok(Self::EndOfPhase),
             "start-of-turn" => Ok(Self::StartOfTurn),
             "end-of-turn" => Ok(Self::EndOfTurn),
+            "start-of-player-turn" => Ok(Self::StartOfPlayerTurn),
             "start-of-opponent-turn" => Ok(Self::StartOfOpponentTurn),
             "end-of-opponent-turn" => Ok(Self::EndOfOpponentTurn),
             "start-of-battle-round" => Ok(Self::StartOfBattleRound),
@@ -30195,6 +30200,7 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///        "phase-is",
 ///        "timing-is",
 ///        "player-turn-is",
+///        "army-faction-is",
 ///        "unit-below-starting-strength",
 ///        "unit-below-half-strength",
 ///        "unit-has-keyword",
@@ -30401,6 +30407,7 @@ impl ::std::convert::TryFrom<::std::string::String> for SimpleConditionOf {
 ///    "phase-is",
 ///    "timing-is",
 ///    "player-turn-is",
+///    "army-faction-is",
 ///    "unit-below-starting-strength",
 ///    "unit-below-half-strength",
 ///    "unit-has-keyword",
@@ -30492,6 +30499,8 @@ pub enum SimpleConditionType {
     TimingIs,
     #[serde(rename = "player-turn-is")]
     PlayerTurnIs,
+    #[serde(rename = "army-faction-is")]
+    ArmyFactionIs,
     #[serde(rename = "unit-below-starting-strength")]
     UnitBelowStartingStrength,
     #[serde(rename = "unit-below-half-strength")]
@@ -30635,6 +30644,7 @@ impl ::std::fmt::Display for SimpleConditionType {
             Self::PhaseIs => f.write_str("phase-is"),
             Self::TimingIs => f.write_str("timing-is"),
             Self::PlayerTurnIs => f.write_str("player-turn-is"),
+            Self::ArmyFactionIs => f.write_str("army-faction-is"),
             Self::UnitBelowStartingStrength => {
                 f.write_str("unit-below-starting-strength")
             }
@@ -30737,6 +30747,7 @@ impl ::std::str::FromStr for SimpleConditionType {
             "phase-is" => Ok(Self::PhaseIs),
             "timing-is" => Ok(Self::TimingIs),
             "player-turn-is" => Ok(Self::PlayerTurnIs),
+            "army-faction-is" => Ok(Self::ArmyFactionIs),
             "unit-below-starting-strength" => Ok(Self::UnitBelowStartingStrength),
             "unit-below-half-strength" => Ok(Self::UnitBelowHalfStrength),
             "unit-has-keyword" => Ok(Self::UnitHasKeyword),

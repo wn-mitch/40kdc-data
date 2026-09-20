@@ -2413,53 +2413,65 @@
     "ability_type": "unit",
     "behavior": "passive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "target-has-keyword",
-        "parameters": {
-          "keyword": "Character"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "self",
-            "modifier": {
-              "roll": "hit",
-              "attack_type": "melee",
-              "subset": "all-failures"
-            }
+      "type": "rules-bundle",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is-type",
+                "parameters": {
+                  "attack_type": "melee"
+                }
+              },
+              {
+                "type": "target-has-keyword",
+                "parameters": {
+                  "keyword": "CHARACTER"
+                }
+              }
+            ]
           },
-          {
-            "type": "re-roll",
-            "target": "self",
-            "modifier": {
-              "roll": "wound",
-              "attack_type": "melee",
-              "subset": "all-failures"
-            }
-          },
-          {
-            "type": "cp-on-destroy",
-            "target": "self",
-            "modifier": {
-              "amount": 1,
-              "enemy_keyword": "Character"
-            }
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "re-roll",
+                "target": "self",
+                "modifier": {
+                  "roll": "hit",
+                  "attack_type": "melee",
+                  "subset": "all-failures"
+                }
+              },
+              {
+                "type": "re-roll",
+                "target": "self",
+                "modifier": {
+                  "roll": "wound",
+                  "attack_type": "melee",
+                  "subset": "all-failures"
+                }
+              }
+            ]
           }
-        ]
-      }
+        },
+        {
+          "type": "cp-on-destroy",
+          "target": "self",
+          "modifier": {
+            "amount": 1,
+            "enemy_keyword": "CHARACTER",
+            "per": "model"
+          }
+        }
+      ]
     },
     "scope": {
       "range": "self",
       "duration": "permanent"
-    },
-    "trigger": {
-      "event": "before-hit-roll",
-      "subject": "self",
-      "optional": true
     }
   },
   {
