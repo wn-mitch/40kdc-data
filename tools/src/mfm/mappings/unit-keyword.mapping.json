@@ -111,6 +111,61 @@
       ],
       "reason": "MFM supplies vocabulary and per-miniature assignment evidence that seed-units currently materializes on unit records; it does not seed universal unit-keyword catalog records."
     },
+    "/overridable_parameters": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "MFM records the keyword label only and has no notion of a parameter that carries a default and may be overridden by a variant. The distinction is repository knowledge read out of the printed rule: Deep Strike's distance defaults to 8\" and six factions ship a variant that overrides it."
+    },
+    "/overridable_parameters/*": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "One entry per overridable parameter; no MFM attribute corresponds to it."
+    },
+    "/overridable_parameters/*/default": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "The default comes from the printed rule text, which MFM does not carry as structured data."
+    },
+    "/overridable_parameters/*/name": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "Parameter name is repository vocabulary, not an MFM field."
+    },
+    "/overridable_parameters/*/unit": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "Unit of measure is repository vocabulary, not an MFM field."
+    },
     "/required_parameters": {
       "provenance": "repo-authored",
       "coverage": "unimplemented",

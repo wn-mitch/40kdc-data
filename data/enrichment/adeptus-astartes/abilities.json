@@ -14652,11 +14652,9 @@
         "type": "sequence",
         "steps": [
           {
-            "type": "ability-grant",
+            "type": "battle-shock-test",
             "target": "enemy-within-aura",
-            "modifier": {
-              "grant_type": "battle-shock-test"
-            }
+            "modifier": {}
           },
           {
             "type": "conditional",
@@ -16271,11 +16269,9 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ability-grant",
+          "type": "battle-shock-test",
           "target": "target",
-          "modifier": {
-            "grant_type": "battle-shock-test"
-          }
+          "modifier": {}
         },
         {
           "type": "roll-modifier",
@@ -19195,11 +19191,9 @@
       "subject": "enemy-unit"
     },
     "effect": {
-      "type": "ability-grant",
+      "type": "reactive-charge",
       "target": "unit",
-      "modifier": {
-        "grant_type": "reactive-charge"
-      }
+      "modifier": {}
     },
     "scope": {
       "range": "unit",

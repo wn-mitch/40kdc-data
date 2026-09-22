@@ -710,7 +710,7 @@
             "type": "deep-strike",
             "target": "self",
             "modifier": {
-              "min_distance_from_enemy": 6
+              "min_distance": 6
             }
           },
           {
@@ -3483,7 +3483,7 @@
   },
   {
     "ability_id": "omnissiah-s-blessing",
-    "name": "Omnissiah\u2019s Blessing",
+    "name": "Omnissiah’s Blessing",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -4313,17 +4313,19 @@
             "type": "sequence",
             "steps": [
               {
-                "type": "ability-grant",
+                "type": "deep-strike",
                 "target": "self",
                 "modifier": {
-                  "grant_type": "meteoric-descent-placement-beyond-three-inches"
+                  "min_distance": 6
                 }
               },
               {
-                "type": "attack-restriction",
+                "type": "rule-state",
                 "target": "self",
                 "modifier": {
-                  "restriction_type": "cannot-declare-charge"
+                  "direction": "suppressed",
+                  "rule_kind": "core-rule",
+                  "rule": "charge"
                 }
               }
             ]
@@ -7040,7 +7042,7 @@
       "range": "unit",
       "duration": "permanent"
     },
-    "community_notes": "[APPROX] Applies to SQUADRON units on Advance (no Advance roll, +6\" Move). The clause allowing the Advance move to pass through \u2014 but not end within \u2014 enemy Engagement Range is not encoded. Full rule in raw-text store."
+    "community_notes": "[APPROX] Applies to SQUADRON units on Advance (no Advance roll, +6\" Move). The clause allowing the Advance move to pass through — but not end within — enemy Engagement Range is not encoded. Full rule in raw-text store."
   },
   {
     "ability_id": "born-soldiers",
@@ -7484,7 +7486,7 @@
     "usage": {
       "frequency": "once-per-turn"
     },
-    "community_notes": "[APPROX] The selected unit must be Battle-shocked and contain 2+ models, and the cost \u2014 one model in that unit is destroyed \u2014 is not encoded; the selector captures only the friendly ASTRA MILITARUM INFANTRY within 12\" constraint. Full rule in raw-text store."
+    "community_notes": "[APPROX] The selected unit must be Battle-shocked and contain 2+ models, and the cost — one model in that unit is destroyed — is not encoded; the selector captures only the friendly ASTRA MILITARUM INFANTRY within 12\" constraint. Full rule in raw-text store."
   },
   {
     "ability_id": "icon-of-discipline",

@@ -26,7 +26,6 @@ Browser open waited on Vite networkidle0 and timed out because the dev UI keeps 
 
 Impeccable skill required .claude/skills/impeccable/scripts/load-context.mjs, but the prescribed project-relative path does not exist in this workspace, blocking its non-optional context loader.
 
-
 ## 2026-08-06T15:26:09Z — gpt-5.6-sol
 
 Impeccable setup documents a repo-local .claude loader path, but this repository only exposes the skill through skill://, causing the prescribed command to fail before context loading.
@@ -170,8 +169,6 @@ I ran a jq probe with a literal TARGET placeholder instead of first extracting t
 ## 2026-09-03T19:23:34Z — codex
 
 This installed jj version has no archive subcommand, so the planned whole-parent materialization failed before comparison; use jj file show per composition instead.
-<<<<<<< conflict 1 of 1
-+++++++ qotqmzzv 02ae2248 "chore: Release 1.4.3" (rebase destination)
 
 ## 2026-09-08T16:37:21Z — gpt-6-astra
 
@@ -240,3 +237,23 @@ npm pack --dry-run --json interleaves prepack lifecycle output with JSON, so pip
 ## 2026-09-16T18:32:13Z — openai-codex/gpt-5.6-sol
 
 The browser tab.run context exposes Puppeteer, not Playwright: page.locator(...).count() is unavailable despite locator-style APIs being common elsewhere. Use page.99520eval/querySelectorAll for DOM counts.
+
+## 2026-09-17T00:45:03Z — openai-codex/gpt-5.6-sol
+
+The ideonomy-rich skill's documented picker discovery searched ~/.claude/plugins and ~/.claude/skills but found no installation, so the command failed before producing a tuple.
+
+## 2026-09-17T00:45:27Z — openai-codex/gpt-5.6-sol
+
+The ideonomy-rich skill says figlet is installed and preferred, but figlet is unavailable; the required banner needs a manual or remote fallback.
+
+## 2026-09-17T11:42:44Z — openai-codex/gpt-5.6-sol
+
+The repository root has no npm test script even though the experiment lives under tools; running the obvious root command fails and requires switching to tools.
+
+## 2026-09-17T11:43:00Z — openai-codex/gpt-5.6-sol
+
+The JEV experiment CLI treats --help as a cache-only execution instead of documenting flags, so discovering invocation behavior requires reading code or relying on prior context.
+
+## 2026-09-17T12:06:40Z — openai-codex/gpt-5.6-sol
+
+The workstation lacks shuf, so reproducibly selecting a one-time random cohort from newline-delimited IDs requires a language one-liner or another sampler.

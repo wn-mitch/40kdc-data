@@ -2956,6 +2956,9 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 		}
 		return "every model in " + subj + " must take a Desperate Escape test" + penalty
 	case "reactive-charge":
+		if m["charge_roll_max_after_modifiers"] == nil {
+			return subj + " can resolve a charge"
+		}
 		return subj + " can resolve a charge; if its charge-roll result is greater than " + ejstr(m["charge_roll_max_after_modifiers"]) + " after modifiers, change it to " + ejstr(m["charge_roll_max_after_modifiers"])
 	case "terrain-area-tag":
 		if m["tag"] != nil {

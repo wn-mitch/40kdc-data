@@ -7,7 +7,7 @@
     ResolvedPiece,
     Vec2,
   } from "./layout-geometry.js";
-  import { pieceRenderKey } from "./layout-geometry.js";
+  import { pieceRenderKey, rendersAsWallsOnly } from "./layout-geometry.js";
 
   // Read-only GW-style terrain card: the resolved layout drawn portrait
   // (board rotated 90° CW, like the printed cards and the layout editor) with
@@ -61,7 +61,20 @@
     {/if}
 
     {#each pieces as p, i (pieceRenderKey(p, i))}
-      <polygon points={pts(p.vertices)} class="piece {p.piece_type} {pieceCategories.get(p.id ?? '') ?? ''}" />
+      {#if !rendersAsWallsOnly(p)}
+        <polygon points={pts(p.vertices)} class="piece {p.piece_type} {pieceCategories.get(p.id ?? '') ?? ''}" />
+      {/if}
+    {/each}
+
+    <!-- wall polylines: resolved board-space walls from feature templates -->
+    {#each pieces as p, i (`wall-${pieceRenderKey(p, i)}`)}
+      {#each p.walls ?? [] as w, wi (`wall-${pieceRenderKey(p, i)}-${wi}`)}
+        <polyline
+          points={pts(w.points)}
+          class="wall {p.terrain_category ?? ''}"
+          stroke-width={w.thickness ?? 0.25}
+        />
+      {/each}
     {/each}
 
     {#each markers as m, i (i)}
@@ -120,6 +133,20 @@
   }
   .piece {
     stroke-width: 0.18;
+  }
+  .wall {
+    fill: none;
+    stroke: oklch(0.3 0.04 30);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+  }
+  .wall.dense {
+    stroke: oklch(0.28 0.06 150);
+  }
+  .wall.light {
+    stroke: oklch(0.35 0.05 60);
+    stroke-dasharray: 0.4 0.25;
   }
   .piece.area {
     fill: oklch(0.62 0.13 250 / 0.28);

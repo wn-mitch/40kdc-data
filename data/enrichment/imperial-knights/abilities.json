@@ -1981,11 +1981,9 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "ability-grant",
+      "type": "remove-battle-shock",
       "target": "unit",
-      "modifier": {
-        "grant_type": "remove-battle-shock"
-      }
+      "modifier": {}
     },
     "scope": {
       "range": "aura-12",

@@ -822,7 +822,7 @@
   },
   {
     "ability_id": "tome-skull",
-    "name": "Tome\u2010skull",
+    "name": "Tome‐skull",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -998,7 +998,7 @@
   },
   {
     "ability_id": "ancient-s-banner",
-    "name": "Ancient\u2019s Banner",
+    "name": "Ancient’s Banner",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -1385,7 +1385,7 @@
   },
   {
     "ability_id": "dead-shot",
-    "name": "Dead\u2010shot",
+    "name": "Dead‐shot",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -1737,14 +1737,16 @@
                 "type": "deep-strike",
                 "target": "self",
                 "modifier": {
-                  "placement_restriction": "more-than-6-horizontally-from-all-enemy-units"
+                  "min_distance": 6
                 }
               },
               {
-                "type": "ability-grant",
+                "type": "rule-state",
                 "target": "self",
                 "modifier": {
-                  "grant_type": "charge-ineligible"
+                  "direction": "suppressed",
+                  "rule_kind": "core-rule",
+                  "rule": "charge"
                 }
               }
             ]
@@ -2193,7 +2195,7 @@
   },
   {
     "ability_id": "glovodan-psyber-eagle",
-    "name": "Glovodan Psyber\u2010eagle",
+    "name": "Glovodan Psyber‐eagle",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2742,7 +2744,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "[APPROX] After deployment, select up to D3 Imperium Battleline units (modeled as a flat 3 \u2014 the selector count cannot be a dice expression) and redeploy them; the option to set those redeployed units up in Strategic Reserves (regardless of the usual reserve limit) is not modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] After deployment, select up to D3 Imperium Battleline units (modeled as a flat 3 — the selector count cannot be a dice expression) and redeploy them; the option to set those redeployed units up in Strategic Reserves (regardless of the usual reserve limit) is not modeled. Full rule in raw-text store."
   },
   {
     "ability_id": "healing-serum",
@@ -3095,7 +3097,7 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "detachment_id": "veiled-blade-elimination-force",
-    "community_notes": "[APPROX] When this model is targeted with the Grenades Stratagem, it inflicts a mortal wound on each D6 of 3+ instead of 4+ \u2014 a modifier to another Stratagem's dice, not directly expressible. Full rule in raw-text store."
+    "community_notes": "[APPROX] When this model is targeted with the Grenades Stratagem, it inflicts a mortal wound on each D6 of 3+ instead of 4+ — a modifier to another Stratagem's dice, not directly expressible. Full rule in raw-text store."
   },
   {
     "ability_id": "intraneural-biotech",
@@ -3125,7 +3127,7 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "detachment_id": "veiled-blade-elimination-force",
-    "community_notes": "[APPROX] Encodes the \u22121 CP when this Eversor Assassin is targeted with the Heroic Intervention Stratagem; the clauses that the use is allowed regardless of other uses of that Stratagem this phase and does not prevent other uses of it are not modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] Encodes the −1 CP when this Eversor Assassin is targeted with the Heroic Intervention Stratagem; the clauses that the use is allowed regardless of other uses of that Stratagem this phase and does not prevent other uses of it are not modeled. Full rule in raw-text store."
   },
   {
     "ability_id": "micromelta-rounds",
@@ -3356,7 +3358,7 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "detachment_id": "veiled-blade-elimination-force",
-    "community_notes": "[APPROX] Encodes the base \u22121 to the charging enemy unit's Charge roll; when the protected unit is a Vindicare Assassin the penalty is \u22122 instead, which is not separately modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] Encodes the base −1 to the charging enemy unit's Charge roll; when the protected unit is a Vindicare Assassin the penalty is −2 instead, which is not separately modeled. Full rule in raw-text store."
   },
   {
     "ability_id": "ensnaring-trap-veiled-blade-elimination-force",
@@ -3567,7 +3569,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21. Applies while this model is leading a unit; the \u22121 to Hit and \u22121 to Wound affect Psychic Attacks targeting the led unit."
+    "community_notes": "community-authored from 11e Imperial Agents faction pack; see #21. Applies while this model is leading a unit; the −1 to Hit and −1 to Wound affect Psychic Attacks targeting the led unit."
   },
   {
     "ability_id": "vox-cast-proclamations-aura",
@@ -3826,7 +3828,7 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "[APPROX] Encodes the 2\u20135 D6 result (\u22121 to the dominated enemy Infantry unit's Hit rolls). The selection is one enemy Infantry unit within 12\" and visible; the D6=1 branch (bearer suffers D3 mortal wounds) and D6=6 branch (target not eligible to shoot) are not modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] Encodes the 2–5 D6 result (−1 to the dominated enemy Infantry unit's Hit rolls). The selection is one enemy Infantry unit within 12\" and visible; the D6=1 branch (bearer suffers D3 mortal wounds) and D6=6 branch (target not eligible to shoot) are not modeled. Full rule in raw-text store."
   },
   {
     "ability_id": "catechism-of-death",
@@ -4548,7 +4550,7 @@
       "range": "any-on-battlefield",
       "duration": "until-next-command-phase"
     },
-    "community_notes": "[APPROX] At the start of your Command phase, pick one option. Eliminate marks one enemy unit (Agents attacks against it +1 Hit); Acquire selects one objective marker and buffs Agents units within range of THAT marker (+1 Ld, +1 OC, 5+ invuln) \u2014 the objective-marker selection is generalized to any controlled/within-range objective. Full rule in raw-text store."
+    "community_notes": "[APPROX] At the start of your Command phase, pick one option. Eliminate marks one enemy unit (Agents attacks against it +1 Hit); Acquire selects one objective marker and buffs Agents units within range of THAT marker (+1 Ld, +1 OC, 5+ invuln) — the objective-marker selection is generalized to any controlled/within-range objective. Full rule in raw-text store."
   },
   {
     "ability_id": "root-out-heresy",

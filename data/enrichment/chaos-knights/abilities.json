@@ -2593,7 +2593,7 @@
               "type": "ability-grant",
               "target": "self",
               "modifier": {
-                "grant_type": "Stealth"
+                "grant_type": "stealth"
               }
             },
             {
@@ -3117,7 +3117,7 @@
       "type": "ability-grant",
       "target": "self",
       "modifier": {
-        "grant_type": "Stealth"
+        "grant_type": "stealth"
       }
     },
     "scope": {
@@ -3801,7 +3801,7 @@
       "type": "ability-grant",
       "target": "self",
       "modifier": {
-        "grant_type": "Super-heavy Walker"
+        "grant_type": "super-heavy-walker"
       }
     },
     "scope": {
@@ -4159,7 +4159,7 @@
           "type": "ability-grant",
           "target": "unit",
           "modifier": {
-            "grant_type": "Stealth"
+            "grant_type": "stealth"
           }
         },
         {

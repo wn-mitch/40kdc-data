@@ -168,7 +168,7 @@
     "unit_ids": [],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub \u2014 needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "scuttling-walker",
@@ -364,7 +364,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub \u2014 needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "deadly-demise-1",
@@ -1748,16 +1748,16 @@
         "type": "deep-strike",
         "target": "self",
         "modifier": {
-          "distance_constraints": [
+          "min_distance": [
             {
-              "target_keyword": "AFFLICTED",
-              "minimum_distance": 6
+              "keyword": "AFFLICTED",
+              "distance": 6
             },
             {
-              "target_keyword": null,
-              "minimum_distance": 9
+              "distance": 8
             }
-          ]
+          ],
+          "ignores_deployment_zone": true
         }
       }
     },
@@ -1770,7 +1770,7 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "Re-authored against the 11e source: the prior record measured 9\" from non-AFFLICTED enemy units, the source states 8\". Distance constraints moved from `distance_constraints` to the canonical `min_distance` array, where an entry without a keyword is the fallback."
   },
   {
     "ability_id": "virulent-aura",
@@ -2182,7 +2182,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub \u2014 needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "devoted-to-destruction",
@@ -2340,7 +2340,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated stub \u2014 needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
+    "community_notes": "auto-generated stub — needs manual authoring (source: 10e Datasheets_abilities; rules text omitted for IP)"
   },
   {
     "ability_id": "tank-hunters",
@@ -3214,7 +3214,7 @@
   },
   {
     "ability_id": "nurgle-s-gift-aura",
-    "name": "Nurgle\u2019s Gift (Aura)",
+    "name": "Nurgle’s Gift (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
