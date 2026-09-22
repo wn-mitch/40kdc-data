@@ -2229,7 +2229,7 @@ function genEffectTranslation(): void {
         modifier: {
           direction: "granted",
           rule_kind: "faction-rule",
-          rule: "oath-of-moment",
+          rule: "combat-doctrines",
         },
       },
       scope: { range: "self", duration: "phase" },
@@ -3346,6 +3346,158 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/reroll-count-one-of-one", effect: {
       type: "re-roll", target: "unit",
       modifier: { roll: "hit", subset: "ones", count: 1 },
+    } },
+    { caseId: "fidelity/stance-selection-capacity-fixed-option", effect: {
+      type: "stance-selection-capacity",
+      modifier: {
+        stance_id: "combat-doctrines",
+        option_id: "assault-doctrine",
+        additional_selections: 1,
+        allocation: "fixed-option",
+      },
+    } },
+    { caseId: "fidelity/eligibility-override-open-restriction", effect: {
+      type: "eligibility-override",
+      target: "unit",
+      modifier: {
+        activity: "charge",
+        ignored_restrictions: ["advanced", "some-new-blocker"],
+      },
+    } },
+    { caseId: "fidelity/resource-action-menu-capacity", effect: {
+      type: "resource-action-menu",
+      menu_id: "chief-librarian-psychic-abilities",
+      pool_id: "psychic-level",
+      capacity: {
+        amount: 3,
+        resource_label: "Psychic Level",
+        ability_noun: "Psychic",
+        refresh: "battle-round",
+      },
+      actions: [
+        {
+          id: "prescience",
+          label: "Prescience",
+          when: { event: "start-of-phase" },
+          cost: { pool_id: "psychic-level", amount: 2, resource_label: "Psychic Level" },
+          effect: { type: "stat-modifier", target: "unit", modifier: { stat: "Sv", operation: "add", value: -1 } },
+        },
+      ],
+    } },
+    { caseId: "fidelity/roll-with-rider", effect: {
+      type: "sequence",
+      steps: [
+        { type: "dice-gated", rider: true, dice: "D6", threshold: 1, comparison: "eq",
+          on_success: { type: "set-battle-shock", target: "unit" } },
+        { type: "stat-modifier", target: "unit", modifier: { stat: "Sv", operation: "improve", value: 1 } },
+      ],
+    } },
+    { caseId: "fidelity/roll-with-rider-absent-is-a-gate", effect: {
+      type: "sequence",
+      steps: [
+        { type: "dice-gated", dice: "D6", threshold: 1, comparison: "eq",
+          on_success: { type: "set-battle-shock", target: "unit" } },
+        { type: "stat-modifier", target: "unit", modifier: { stat: "Sv", operation: "improve", value: 1 } },
+      ],
+    } },
+    { caseId: "fidelity/named-objective-state-self-clearing", effect: {
+      type: "named-objective-state",
+      target: "objective",
+      modifier: {
+        state_label: "Mortis Snares",
+        clears: "after-resolving",
+        resolution: { type: "mortal-wounds", target: "unit", modifier: { amount: "D3" } },
+      },
+    } },
+    { caseId: "fidelity/named-objective-state-persistent", effect: {
+      type: "named-objective-state",
+      target: "objective",
+      modifier: {
+        state_label: "Mortis Snares",
+        resolution: { type: "mortal-wounds", target: "unit", modifier: { amount: 1 } },
+      },
+    } },
+    { caseId: "fidelity/persistent-marker-full", effect: {
+      type: "persistent-battlefield-marker-state",
+      target: "self",
+      modifier: {
+        marker_label: "Teleport Homer",
+        placement: "bearer",
+        setup_within_inches: 6,
+        consume: "on-use",
+        removed_by_enemy_within_inches: 3,
+      },
+    } },
+    { caseId: "fidelity/persistent-marker-keyword-scoped", effect: {
+      type: "persistent-battlefield-marker-state",
+      target: "self",
+      modifier: {
+        marker_label: "Teleport Homer",
+        placement: "battlefield",
+        setup_within_inches: 6,
+        setup_keywords: ["terminator"],
+      },
+    } },
+    { caseId: "fidelity/reference-bearer-transport", effect: {
+      type: "select-units",
+      selector: { owner: "friendly", reference: "bearer-transport", range_inches: 6, count: 1 },
+      effect: { type: "stat-modifier", target: "unit", modifier: { stat: "Ld", operation: "add", value: 1 } },
+    } },
+    { caseId: "fidelity/mirror-triggering-choice", effect: {
+      type: "mirror-triggering-choice",
+      target: "unit",
+      modifier: { source_ability_id: "strategic-acumen", choice_label: "Combat Doctrine", duration: "until-next-command-phase" },
+    } },
+    { caseId: "fidelity/keyword-match-all-default", effect: {
+      type: "for-each-unit",
+      selector: { owner: "friendly", keywords: ["adeptus-astartes", "black-templars"] },
+      effect: { type: "stat-modifier", target: "unit", modifier: { stat: "Ld", operation: "add", value: 1 } },
+    } },
+    { caseId: "fidelity/keyword-match-any", effect: {
+      type: "for-each-unit",
+      selector: { owner: "friendly", keywords: ["adeptus-astartes", "black-templars"], keyword_match: "any" },
+      effect: { type: "stat-modifier", target: "unit", modifier: { stat: "Ld", operation: "add", value: 1 } },
+    } },
+    { caseId: "fidelity/move-type-ingress", effect: {
+      type: "movement-modifier", target: "unit",
+      modifier: { move_type: "ingress", distance: 6 },
+    } },
+    { caseId: "fidelity/fight-on-death-gate-plain", effect: {
+      type: "fight-on-death",
+      target: "destroyed-model",
+      modifier: {
+        eligibility: { type: "has-fought-this-phase", negated: true },
+        gate: { dice: "D6", threshold: 4, comparison: "gte", modifiers: [] },
+        resolution: "when-unit-fights",
+        removal: "after-unit-fights-or-phase-end",
+      },
+    } },
+    { caseId: "fidelity/fight-on-death-gate-modified-roll", effect: {
+      type: "fight-on-death",
+      target: "destroyed-model",
+      modifier: {
+        eligibility: { type: "has-fought-this-phase", negated: true },
+        gate: {
+          dice: "D6",
+          threshold: 4,
+          comparison: "gte",
+          modifiers: [
+            { condition: { type: "faction-rule-active", parameters: { rule: "assault-doctrine" } }, value: 1 },
+          ],
+        },
+        resolution: "when-unit-fights",
+        removal: "after-unit-fights-or-phase-end",
+      },
+    } },
+    { caseId: "fidelity/weapon-grant-curated-label", effect: {
+      type: "weapon-grant",
+      target: "bearer",
+      modifier: { weapon_id: "imperiums-sword", count: 1 },
+    } },
+    { caseId: "fidelity/weapon-grant-slug-fallback", effect: {
+      type: "weapon-grant",
+      target: "unit",
+      modifier: { weapon_id: "some-new-blade" },
     } },
     { caseId: "fidelity/for-each-unit-engaged-with-bearer-unit", effect: {
       type: "for-each-unit",

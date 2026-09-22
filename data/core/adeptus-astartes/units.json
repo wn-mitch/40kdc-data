@@ -4120,10 +4120,10 @@
       "fealty"
     ],
     "ability_ids": [
+      "combat-doctrines",
       "dark-angels-bodyguard",
       "deep-strike",
       "fights-first",
-      "oath-of-moment",
       "primarch-of-the-first-legion",
       "supreme-commander",
       "the-emperors-shield"
@@ -4879,9 +4879,9 @@
     "ability_ids": [
       "astartes-shield",
       "attached-unit",
+      "combat-doctrines",
       "death-to-the-alien",
-      "mission-tactics",
-      "oath-of-moment"
+      "mission-tactics"
     ],
     "game_version": {
       "edition": "11th",
@@ -6701,8 +6701,8 @@
       "twin-lightning-claws-terminator-assault-squad"
     ],
     "ability_ids": [
+      "combat-doctrines",
       "deep-strike",
-      "oath-of-moment",
       "storm-shield",
       "teleport-homer",
       "terminatus-assault"
@@ -9061,8 +9061,8 @@
     ],
     "ability_ids": [
       "assault-ramp",
-      "deadly-demise-d6",
-      "oath-of-moment"
+      "combat-doctrines",
+      "deadly-demise-d6"
     ],
     "transport_capacity": {
       "capacity": 12
@@ -12010,8 +12010,8 @@
       "close-combat-weapon-intercessor-squad"
     ],
     "ability_ids": [
-      "objective-secured",
-      "target-elimination"
+      "bolter-discipline",
+      "tactical-mainstay"
     ],
     "game_version": {
       "edition": "11th",

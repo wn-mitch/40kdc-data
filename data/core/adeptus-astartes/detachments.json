@@ -37,7 +37,7 @@
     "id": "gladius-task-force",
     "name": "Gladius Task Force",
     "faction_id": "adeptus-astartes",
-    "detachment_rule_id": "combat-doctrines",
+    "detachment_rule_id": "codex-discipline",
     "enhancement_ids": [
       "artificer-armour-gladius-task-force",
       "the-honour-vehement-gladius-task-force",

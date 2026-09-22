@@ -12,6 +12,7 @@ export const MECHANIC_TERMINAL_EFFECT_TYPES = Object.freeze([
   'no-effect',
   'miracle-die-operation',
   'attachment-eligibility-inherit',
+  'stance-selection-capacity',
 ])
 
 const IDENTIFIER = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*(?:\.[a-z][a-z0-9]*(?:-[a-z0-9]+)*)+$/

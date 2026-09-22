@@ -19,6 +19,7 @@ tools/src/share/registry.generated.ts
 .DS_Store
 /.humanlayer/
 *.log
+PAPERCUTS.md
 
 # Local secrets — never commit (e.g. Patreon OAuth client/creator credentials).
 .env

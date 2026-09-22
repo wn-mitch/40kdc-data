@@ -104,6 +104,7 @@
     "pretest": "npm run codegen:data",
     "test": "vitest run",
     "demo:rube-goldberg": "tsx src/rube-goldberg.ts",
+    "damage:stack": "tsx src/stack-damage.ts",
     "derive:keystones": "tsx src/derive-keystones.ts"
   },
   "dependencies": {

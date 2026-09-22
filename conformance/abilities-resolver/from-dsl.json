@@ -1,25 +1,62 @@
 {
-  "name": "DSL→Buff translations for canonical abilities (attacker-perspective, fight phase)",
+  "name": "DSL\u2192Buff translations for canonical abilities (attacker-perspective, fight phase)",
   "cases": [
     {
-      "abilityId": "oath-of-moment",
-      "source": { "kind": "ability", "abilityId": "oath-of-moment", "abilityKind": "army" },
-      "context": { "phase": "fight" },
+      "_comment": "Combat Doctrines is the Codex army rule. Only Devastator is buff-bearing ([ASSAULT] on ranged weapons), so it surfaces as an opt-in lever in the stance's mutually-exclusive group; Assault and Tactical are opaque eligibility grants and carry no buff.",
+      "abilityId": "combat-doctrines",
+      "source": {
+        "kind": "ability",
+        "abilityId": "combat-doctrines",
+        "abilityKind": "army"
+      },
+      "context": {
+        "phase": "fight"
+      },
       "expected": {
-        "applied": [
-          { "type": "reroll", "roll": "hit", "subset": "all-failures" }
-        ],
-        "unsupportedReasons": []
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "combat-doctrines#Devastator Doctrine",
+            "label": "Devastator Doctrine",
+            "group": {
+              "id": "combat-doctrines?stance",
+              "maxActivations": 1
+            },
+            "buffs": [
+              {
+                "type": "extra-keyword",
+                "keywordRef": {
+                  "keyword_id": "assault"
+                }
+              }
+            ]
+          }
+        ]
       }
     },
     {
       "abilityId": "templar-vows",
-      "source": { "kind": "ability", "abilityId": "templar-vows", "abilityKind": "army" },
-      "context": { "phase": "fight" },
+      "source": {
+        "kind": "ability",
+        "abilityId": "templar-vows",
+        "abilityKind": "army"
+      },
+      "context": {
+        "phase": "fight"
+      },
       "expected": {
         "applied": [
-          { "type": "wound-mod", "value": 1 },
-          { "type": "extra-keyword", "keywordRef": { "keyword_id": "precision" } }
+          {
+            "type": "wound-mod",
+            "value": 1
+          },
+          {
+            "type": "extra-keyword",
+            "keywordRef": {
+              "keyword_id": "precision"
+            }
+          }
         ],
         "unsupportedReasons": [
           "re-roll on \"charge\" (subset \"all-failures\") is outside the damage path"
@@ -28,8 +65,14 @@
     },
     {
       "abilityId": "berzerker-frenzy",
-      "source": { "kind": "ability", "abilityId": "berzerker-frenzy", "abilityKind": "unit" },
-      "context": { "phase": "fight" },
+      "source": {
+        "kind": "ability",
+        "abilityId": "berzerker-frenzy",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "fight"
+      },
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
@@ -38,8 +81,14 @@
     },
     {
       "abilityId": "blessings-of-khorne",
-      "source": { "kind": "ability", "abilityId": "blessings-of-khorne", "abilityKind": "army" },
-      "context": { "phase": "fight" },
+      "source": {
+        "kind": "ability",
+        "abilityId": "blessings-of-khorne",
+        "abilityKind": "army"
+      },
+      "context": {
+        "phase": "fight"
+      },
       "expected": {
         "applied": [],
         "unsupportedReasons": [],
@@ -47,28 +96,52 @@
           {
             "id": "blessings-of-khorne#Martial Excellence",
             "label": "Martial Excellence",
-            "group": { "id": "blessings-of-khorne", "maxActivations": 2 },
+            "group": {
+              "id": "blessings-of-khorne",
+              "maxActivations": 2
+            },
             "buffs": [
               {
                 "type": "extra-keyword",
-                "keywordRef": { "keyword_id": "sustained-hits", "parameters": { "value": 1 } }
+                "keywordRef": {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
               }
             ]
           },
           {
             "id": "blessings-of-khorne#Warp Blades",
             "label": "Warp Blades",
-            "group": { "id": "blessings-of-khorne", "maxActivations": 2 },
+            "group": {
+              "id": "blessings-of-khorne",
+              "maxActivations": 2
+            },
             "buffs": [
-              { "type": "extra-keyword", "keywordRef": { "keyword_id": "lethal-hits" } }
+              {
+                "type": "extra-keyword",
+                "keywordRef": {
+                  "keyword_id": "lethal-hits"
+                }
+              }
             ]
           },
           {
             "id": "blessings-of-khorne#Decapitating Strikes",
             "label": "Decapitating Strikes",
-            "group": { "id": "blessings-of-khorne", "maxActivations": 2 },
+            "group": {
+              "id": "blessings-of-khorne",
+              "maxActivations": 2
+            },
             "buffs": [
-              { "type": "extra-keyword", "keywordRef": { "keyword_id": "devastating-wounds" } }
+              {
+                "type": "extra-keyword",
+                "keywordRef": {
+                  "keyword_id": "devastating-wounds"
+                }
+              }
             ]
           }
         ]
@@ -77,17 +150,28 @@
     {
       "_comment": "Core rule 19.04, attacker side: a model-scoped keyword grant ('the bearer has the Psyker keyword') applies when the bearer is the unit being crunched.",
       "abilityId": "psychic-gifts",
-      "source": { "kind": "ability", "abilityId": "psychic-gifts", "abilityKind": "unit" },
-      "context": { "phase": "fight" },
+      "source": {
+        "kind": "ability",
+        "abilityId": "psychic-gifts",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "fight"
+      },
       "expected": {
         "applied": [
-          { "type": "extra-keyword", "keywordRef": { "keyword_id": "psyker" } }
+          {
+            "type": "extra-keyword",
+            "keywordRef": {
+              "keyword_id": "psyker"
+            }
+          }
         ],
         "unsupportedReasons": []
       }
     },
     {
-      "_comment": "…and stays on that model when pooled in from an attached member — the gate is perspective-independent, so an attached character's personal grant never rides the squad's weapons.",
+      "_comment": "\u2026and stays on that model when pooled in from an attached member \u2014 the gate is perspective-independent, so an attached character's personal grant never rides the squad's weapons.",
       "abilityId": "psychic-gifts",
       "source": {
         "kind": "ability",
@@ -95,7 +179,9 @@
         "abilityKind": "attached",
         "sourceUnitId": "inquisitor"
       },
-      "context": { "phase": "fight" },
+      "context": {
+        "phase": "fight"
+      },
       "expected": {
         "applied": [],
         "unsupportedReasons": [
@@ -112,10 +198,17 @@
         "abilityKind": "attached",
         "sourceUnitId": "bigboss"
       },
-      "context": { "phase": "fight" },
+      "context": {
+        "phase": "fight"
+      },
       "expected": {
         "applied": [
-          { "type": "extra-keyword", "keywordRef": { "keyword_id": "sustained-hits" } }
+          {
+            "type": "extra-keyword",
+            "keywordRef": {
+              "keyword_id": "sustained-hits"
+            }
+          }
         ],
         "unsupportedReasons": []
       }

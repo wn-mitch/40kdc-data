@@ -26775,5 +26775,28 @@
       "edition": "11th",
       "dataslate": "launch"
     }
+  },
+  {
+    "id": "imperiums-sword",
+    "name": "Imperium's Sword",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Imperium's Sword",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 7,
+          "AP": -3,
+          "D": 3,
+          "WS": 2
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
   }
 ]

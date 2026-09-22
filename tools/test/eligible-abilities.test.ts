@@ -4,7 +4,7 @@ import { Dataset } from "../src/data/dataset.js";
 const ds = Dataset.embedded();
 
 describe("Dataset.eligibleAbilities", () => {
-  it("surfaces the Oath of Moment faction rule for adeptus-astartes units", () => {
+  it("surfaces the Combat Doctrines faction rule for adeptus-astartes units", () => {
     const intercessor = ds.units.find("Intercessor Squad");
     expect(intercessor, "intercessor-squad missing").toBeDefined();
     const result = ds.eligibleAbilities(
@@ -12,7 +12,7 @@ describe("Dataset.eligibleAbilities", () => {
       "shooting",
     );
     const armyIds = result.filter((e) => e.source.kind === "army").map((e) => e.ability.id);
-    expect(armyIds).toContain("oath-of-moment");
+    expect(armyIds).toContain("combat-doctrines");
   });
 
   it("returns nothing for an unknown unit", () => {
@@ -21,16 +21,15 @@ describe("Dataset.eligibleAbilities", () => {
 
   it("filters by phase", () => {
     const intercessor = ds.units.find("Intercessor Squad")!;
-    // Pick a phase Oath of Moment doesn't trigger in — the faction rule is
-    // phase-permissive (no explicit phase-mapping), so the resolver keeps it
-    // available everywhere. This test pins that "no mapping = surface in
-    // every phase" behaviour against accidental tightening.
+    // The army rule is phase-permissive (no explicit phase-mapping), so the
+    // resolver keeps it available everywhere. This test pins that
+    // "no mapping = surface in every phase" behaviour against tightening.
     const inCommand = ds.eligibleAbilities(
       { unitId: intercessor.id, factionId: "adeptus-astartes" },
       "command",
     );
     const armyIds = inCommand.filter((e) => e.source.kind === "army").map((e) => e.ability.id);
-    expect(armyIds).toContain("oath-of-moment");
+    expect(armyIds).toContain("combat-doctrines");
   });
 
   it("includes the unit's own ability_ids", () => {
@@ -89,26 +88,22 @@ describe("Dataset.eligibleAbilities", () => {
 });
 
 describe("Dataset.buffsFor (M2 — abilities)", () => {
-  it("Oath of Moment contributes a hit reroll", () => {
+  it("Combat Doctrines is a stance: nothing auto-applies, Devastator surfaces as a lever", () => {
     const intercessor = ds.units.find("Intercessor Squad")!;
-    const buffs = ds.buffsFor(
-      { unitId: intercessor.id, factionId: "adeptus-astartes" },
-      { phase: "shooting" },
-    );
-    // Oath of Moment marks one enemy unit; attacks against it re-roll the Hit
-    // roll. (The +1 to Wound is a mono-codex roster precondition, carried in
-    // community_notes rather than the runtime buff layer.)
-    const rerolls = buffs.filter((b) => b.contribution.type === "reroll");
-    const rerollTypes = rerolls.map((b) =>
-      b.contribution.type === "reroll" ? b.contribution.roll : null,
-    );
-    expect(rerollTypes).toContain("hit");
-    expect(rerollTypes).not.toContain("wound");
-    // And it's tagged as army-source.
-    const oathSourced = rerolls.filter(
-      (b) => b.source.kind === "ability" && b.source.abilityId === "oath-of-moment",
-    );
-    expect(oathSourced.length).toBe(1);
+    const ctx = { phase: "shooting" as const };
+    const input = { unitId: intercessor.id, factionId: "adeptus-astartes" };
+    // The army rule is a player-selected stance, so the attacker walk applies
+    // no army-sourced buff — a passive reroll here would mean the rule was
+    // modelled as always-on again.
+    const armyBuffs = ds
+      .buffsFor(input, ctx)
+      .filter((b) => b.source.kind === "ability" && b.source.abilityKind === "army");
+    expect(armyBuffs).toEqual([]);
+    // Its one buff-bearing option is offered as a mutually-exclusive lever.
+    const { buffs: levers } = ds.stackableBuffsFor(input, ctx);
+    const devastator = levers.find((l) => l.id === "combat-doctrines#Devastator Doctrine");
+    expect(devastator, "Devastator Doctrine lever missing").toBeDefined();
+    expect(devastator!.group).toBe("combat-doctrines?stance");
   });
 
   it("respects optedInStratagemIds — stratagems are excluded by default", () => {
@@ -126,17 +121,19 @@ describe("Dataset.buffsFor (M2 — abilities)", () => {
 
   it("concatenates weapon-profile keyword buffs with ability buffs", () => {
     const intercessor = ds.units.find("Intercessor Squad")!;
-    const buffs = ds.buffsFor(
-      {
-        unitId: intercessor.id,
-        factionId: "adeptus-astartes",
-        weaponProfiles: [{ weaponId: "bolt-rifle", profileIndex: 0 }],
-      },
-      { phase: "shooting", attackerStationary: true },
+    const base = { unitId: intercessor.id, factionId: "adeptus-astartes" };
+    const ctx = { phase: "shooting" as const, attackerStationary: true };
+    const withoutWeapon = ds.buffsFor(base, ctx);
+    const withWeapon = ds.buffsFor(
+      { ...base, weaponProfiles: [{ weaponId: "bolt-rifle", profileIndex: 0 }] },
+      ctx,
     );
-    // Heavy (stationary) buff from bolt-rifle + Oath of Moment rerolls.
-    const sources = buffs.map((b) => `${b.source.kind}:${"keywordId" in b.source ? b.source.keywordId : b.source.kind === "ability" ? b.source.abilityId : ""}`);
-    expect(sources).toContain("weapon-keyword:heavy");
-    expect(sources).toContain("ability:oath-of-moment");
+    // The profile's Heavy (stationary) keyword contributes a buff the bare
+    // ability walk does not produce: the two sources concatenate onto one stack.
+    const keywords = (bs: typeof withWeapon) =>
+      bs.map((b) => `${b.source.kind}:${"keywordId" in b.source ? b.source.keywordId : ""}`);
+    expect(keywords(withWeapon)).toContain("weapon-keyword:heavy");
+    expect(keywords(withoutWeapon)).not.toContain("weapon-keyword:heavy");
+    expect(withWeapon.length).toBeGreaterThan(withoutWeapon.length);
   });
 });

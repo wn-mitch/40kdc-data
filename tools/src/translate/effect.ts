@@ -87,7 +87,7 @@ export interface Effect {
     owner?: string;
     target_kind?: "unit" | "model";
     member_of?: "bearer-unit";
-    reference?: "bearer" | "bearer-unit";
+    reference?: "bearer" | "bearer-unit" | "bearer-transport";
     origin?: "bearer" | "bearer-unit";
     controlled_by?: "your-army" | "opponent";
     requires_unit?: { owner: string; requires_ability: string; relation: "within-range" };
@@ -158,6 +158,12 @@ export interface Effect {
   // resource-action-menu
   menu_id?: string;
   pool_id?: string;
+  capacity?: {
+    amount: number;
+    resource_label: string;
+    ability_noun: string;
+    refresh: string;
+  };
   shared_usage?: {
     unit_max_manoeuvres_per_phase?: number;
     default_manoeuvre_max_per_phase?: number;
@@ -309,7 +315,7 @@ function selectUnitsSubject(sel: Record<string, unknown> = {}): string {
     sel.within_inches != null
       ? ` within ${jstr(sel.within_inches)}"${boundOrigin}`
       : sel.range_inches != null
-        ? ` within ${jstr(sel.range_inches)} inches${boundOrigin || ` of ${sel.reference === "bearer-unit" ? "this model's unit" : "the bearer"}`}`
+        ? ` within ${jstr(sel.range_inches)} inches${boundOrigin || ` of ${referenceOrigin(sel.reference)}`}`
         : "";
   const visible = sel.visible_to
     ? ` visible to ${selectionRefName(sel.visible_to, "the bound source unit")}`
@@ -337,7 +343,7 @@ function selectionLimitPhrase(limit: { count: number; period: string }, noun: st
 function selectUnitsEngagement(sel: Record<string, unknown> = {}): string {
   const parts: string[] = [];
   const noun = sel.target_kind === "model" ? "model" : "unit";
-  const origin = sel.reference === "bearer-unit" ? "this model's unit" : "the bearer";
+  const origin = referenceOrigin(sel.reference);
   if (sel.engagement_relation === "engaged-with-bearer") parts.push(`For each selected ${noun}, it must be within Engagement Range of ${origin}.`);
   if (sel.engagement_relation === "not-engaged-with-bearer") parts.push(`For each selected ${noun}, it must not be within Engagement Range of ${origin}.`);
   const limit = sel.selection_limit as { count: number; period: string } | undefined;
@@ -393,13 +399,27 @@ function leaderModelAbilityGrantClause(e: Effect, ctx: Ctx): string {
 }
 
 /** "enemy unit within 6\"" — the `for-each-unit` selector phrase. */
+/** Range/engagement origin phrase for a selector's `reference`. */
+function referenceOrigin(reference: unknown): string {
+  if (reference === "bearer-transport") return "this model's unit's Transport";
+  return reference === "bearer-unit" ? "this model's unit" : "the bearer";
+}
+
 function forEachUnitSubject(sel: Record<string, unknown> = {}): string {
-  const keywords = Array.isArray(sel.keywords) ? `${sel.keywords.map((keyword) => titleCase(jstr(keyword))).join(" ")} ` : "";
+  const keywordList = Array.isArray(sel.keywords)
+    ? sel.keywords.map((keyword) => titleCase(jstr(keyword)))
+    : [];
+  const keywords =
+    keywordList.length === 0
+      ? ""
+      : sel.keyword_match === "any"
+        ? `${orList(keywordList)} `
+        : `${keywordList.join(" ")} `;
   const within = [
     sel.within_inches != null ? ` within ${jstr(sel.within_inches)}"` : "",
     sel.within_objective ? ` within range of ${selectionRefName(sel.within_objective, "the selected objective marker")}` : "",
   ].join("");
-  const origin = sel.reference === "bearer-unit" ? "this model's unit" : "the bearer";
+  const origin = referenceOrigin(sel.reference);
   const engagement =
     sel.engagement_relation === "engaged-with-bearer"
       ? ` in Engagement Range of ${origin}`
@@ -446,6 +466,21 @@ function grantLabel(id: string): string {
 }
 
 /**
+ * Curated display names for weapons referenced by `weapon-grant`. The describer
+ * has no dataset access in any port, so a granted weapon's printed name (with
+ * its spacing and apostrophes) cannot be read from the weapon record; ids with
+ * no entry fall back to Title Case, exactly as granted-ability ids do.
+ */
+const WEAPON_LABELS: Record<string, string> = {
+  "imperiums-sword": "Imperium's Sword",
+};
+
+/** The display name for a granted weapon id: a curated override, else Title Case. */
+function weaponLabel(id: string): string {
+  return WEAPON_LABELS[id] ?? titleCase(id);
+}
+
+/**
  * "(your Suppressed target)" — a designate-target mark's parenthetical. A
  * designation slug that already ends in "target" keeps its own noun
  * ("bio-stimulus-target" → "(your Bio Stimulus Target)", not "… Target target").
@@ -459,7 +494,7 @@ type DesignationSelection = {
   scope?: string;
   timing?: string;
   within_inches?: number;
-  reference?: "bearer" | "bearer-unit";
+  reference?: "bearer" | "bearer-unit" | "bearer-transport";
   visibility_required?: boolean;
   within_inches_from?: { selection_var: string };
   visible_to?: { selection_var: string };
@@ -476,7 +511,7 @@ function designationTargetSubjectBase(sel: DesignationSelection): string {
   const keywords = Array.isArray(sel.keywords) ? sel.keywords.map((keyword) => titleCase(jstr(keyword))) : [];
   const keywordJoin = sel.keyword_match === "any" ? " or " : " ";
   const keywordText = keywords.length > 0 ? ` ${keywords.join(keywordJoin)}` : "";
-  const reference = sel.reference === "bearer-unit" ? "this model's unit" : "the bearer";
+  const reference = referenceOrigin(sel.reference);
   const origin = sel.within_inches_from
     ? ` of ${selectionRefName(sel.within_inches_from, "the bound source unit")}`
     : sel.reference ? ` of ${reference}` : "";
@@ -1021,6 +1056,22 @@ function describeMenuAction(a: MenuAction, ctx: Ctx): string {
   return `${label}: ${body}${usageNote}.`;
 }
 
+/** `capacity` → the menu's per-refresh budget sentence. `""` when absent. */
+function capacityClause(capacity: Effect["capacity"]): string {
+  if (!capacity) return "";
+  const label = jstr(capacity.resource_label);
+  const noun = jstr(capacity.ability_noun);
+  const amount = jstr(capacity.amount);
+  const refresh =
+    {
+      "battle-round": "battle round",
+      turn: "turn",
+      phase: "phase",
+      battle: "battle",
+    }[jstr(capacity.refresh)] ?? dekebab(jstr(capacity.refresh));
+  return `This unit has a ${label} of ${amount}. In each ${refresh}, it can use ${noun} abilities whose combined ${label} does not exceed ${amount}.`;
+}
+
 /** `shared_usage` → a menu-level sentence fragment ("a unit may perform at most one action per phase; unless stated otherwise, a given action may be triggered once per phase"). `""` when absent. */
 function sharedUsageClause(su: Effect["shared_usage"]): string {
   if (!su) return "";
@@ -1388,6 +1439,8 @@ function movementClause(m: Record<string, unknown>, subj: string): string {
       return `${subj} can Consolidate up to${inches || ' 3"'}`;
     case "surge":
       return `${subj} can make a Surge move${ofUpTo}`;
+    case "ingress":
+      return `${subj} can make an Ingress move${ofUpTo}`;
     case "shoot-and-scoot":
       return inches
         ? `${subj} can shoot and then make a Normal move${ofUpTo}`
@@ -1549,6 +1602,73 @@ function diceTableInline(e: Effect, ctx: Ctx): string {
     (outcome) => `on ${diceTableResultLabel(outcome.results)}, ${describeEffectInline(outcome.effect ?? {}, ctx)}`
   );
   return `roll one ${diceCase(e.dice)}: ${outcomes.join("; ")}`;
+}
+
+/** `engaged` → `being within Engagement Range` — the leading clause of an eligibility waiver. */
+function ignoredRestrictionPhrase(id: string): string {
+  return (
+    {
+      engaged: "being within Engagement Range",
+      "battle-shocked": "Battle-shocked",
+      "performing-action": "starting an Action",
+      advanced: "having Advanced",
+      "fell-back": "having Fallen Back",
+    }[id] ?? dekebab(id)
+  );
+}
+
+/** `start-action` → `start an Action` — what the unit becomes eligible to do. */
+function eligibleActivityPhrase(id: string): string {
+  return (
+    {
+      "start-action": "start an Action",
+      shoot: "shoot",
+      charge: "declare a charge",
+      fight: "fight",
+      move: "move",
+      advance: "Advance",
+      "fall-back": "Fall Back",
+      consolidate: "Consolidate",
+    }[id] ?? dekebab(id)
+  );
+}
+
+/** Sentence list for a `persistent-battlefield-marker-state` marker: placement first, then lifecycle. */
+function markerClauses(m: Record<string, unknown>): string[] {
+  const label = jstr(m.marker_label);
+  const where =
+    {
+      bearer: "beside this model",
+      "bearer-unit": "beside this model's unit",
+      battlefield: "anywhere on the battlefield",
+    }[jstr(m.placement)] ?? dekebab(jstr(m.placement));
+  const clauses = [`place a ${label} marker ${where}`];
+  if (m.setup_within_inches != null) {
+    const kws = Array.isArray(m.setup_keywords) ? m.setup_keywords.map((k) => titleCase(jstr(k))) : [];
+    const who = kws.length ? `${kws.join(" ")} units` : "units";
+    clauses.push(`${who} may be set up within ${jstr(m.setup_within_inches)}" of this marker`);
+  }
+  if (m.consume === "on-use") clauses.push("using the marker consumes it");
+  if (m.removed_by_enemy_within_inches != null)
+    clauses.push(`remove the marker if an enemy unit comes within ${jstr(m.removed_by_enemy_within_inches)}" of it`);
+  return clauses;
+}
+
+/**
+ * A roll-with-rider `sequence`: `[dice-gated rider, unconditional primary]`. The
+ * rider fires on the roll; the primary always resolves. The leading "Regardless
+ * of the result" is required so the rider cannot be misread as a gate on the
+ * primary. Only compositions whose gate declares `rider: true` qualify — a
+ * structurally similar but genuinely gating sequence must not pick this up.
+ */
+function rollWithRider(steps: Effect[], ctx: Ctx): string | null {
+  if (steps.length !== 2) return null;
+  const [first, second] = steps;
+  if (first?.type !== "dice-gated" || (first as { rider?: unknown }).rider !== true) return null;
+  const g = first as { dice?: unknown; comparison?: unknown; threshold?: unknown; on_success?: Effect | null };
+  if (g.on_success == null) return null;
+  const comp = formatComparison(jstr(g.comparison ?? "gte"), g.threshold);
+  return `roll one ${diceCase(g.dice)}. On ${comp}, ${describeEffectInline(g.on_success, ctx)}. Regardless of the result, ${describeEffectInline(second, ctx)}`;
 }
 
 function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
@@ -1970,7 +2090,34 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       return `${subj} ${v(subj, "has")} the Fights First ability`;
     case "fight-last":
       return `${subj} ${v(subj, "has")} the Fights Last ability`;
-    case "fight-on-death":
+    case "fight-on-death": {
+      const gate = m.gate as
+        | { dice?: unknown; threshold?: unknown; comparison?: unknown; modifiers?: { condition?: Condition; value?: unknown }[] }
+        | undefined;
+      if (gate) {
+        const modelPhrase =
+          e.target === "destroyed-model"
+            ? "a model in this unit"
+            : subj === "this model"
+              ? "this model"
+              : `a model in ${subj}`;
+        const elig = m.eligibility as Condition | undefined;
+        const before =
+          elig && elig.negated && elig.type === "has-fought-this-phase"
+            ? ` before ${elig.parameters?.subject === "self" ? "this model" : "this unit"} has fought this phase`
+            : elig
+              ? ` ${conditionLeadIn(elig)}`
+              : "";
+        const adds = (gate.modifiers ?? [])
+          .map((gm) => `, adding ${jstr(gm.value)} ${conditionLeadIn(gm.condition ?? {})}`)
+          .join("");
+        const on = formatComparison(jstr(gate.comparison ?? "gte"), gate.threshold);
+        const removal =
+          m.removal === "after-destroyed-model-fights"
+            ? ". Remove it after it has fought"
+            : ". Remove it after this unit has fought or at the end of the phase, whichever comes first";
+        return `each time ${modelPhrase} is destroyed${before}, roll one ${diceCase(jstr(gate.dice))}${adds}. On ${on}, leave that model on the battlefield${removal}`;
+      }
       if (m.resolution === "when-unit-fights")
         return `do not remove ${subj} yet; when its unit is selected to fight, it can fight; remove it after its unit has finished fighting or at the end of the phase, whichever happens first`;
       if (m.resolution === "after-attacking-unit-finishes")
@@ -1978,6 +2125,7 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       return subj === "this model"
         ? `each time this model is destroyed, it can fight before being removed from play`
         : `each time a model in ${subj} is destroyed, it can fight before being removed from play`;
+    }
     case "shoot-on-death":
       return subj === "this model"
         ? `each time this model is destroyed, it can shoot before being removed from play`
@@ -2130,8 +2278,10 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
         return describeNamedRegionConditional(e.effect.modifier ?? {}, e.condition ?? {}, ctx);
       return `${conditionLeadIn(e.condition ?? {})}, ${describeEffectInline(e.effect ?? {}, ctx)}`;
     case "rules-bundle":
-    case "sequence":
-      return (e.steps ?? []).map((s) => describeEffectInline(s, ctx)).join("; ");
+    case "sequence": {
+      const rider = rollWithRider(e.steps ?? [], ctx);
+      return rider ?? (e.steps ?? []).map((s) => describeEffectInline(s, ctx)).join("; ");
+    }
     case "named-effect": {
       const level = e.kind === "psychic" && e.level != null ? ` (Psychic level ${jstr(e.level)})` : "";
       if (e.cost || e.duration || e.trigger || e.usage) {
@@ -2202,6 +2352,51 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
     }
     case "stance-select":
       return `select one: ${(e.options ?? []).map((o) => `${jstr(o.name)} (${describeEffectInline(o.effect ?? {}, ctx)})`).join(" / ")}`;
+    case "stance-selection-capacity": {
+      const m = (e.modifier ?? {}) as {
+        stance_id?: unknown;
+        option_id?: unknown;
+        additional_selections?: unknown;
+        allocation?: unknown;
+      };
+      const n = Number(m.additional_selections) || 1;
+      const times = n === 1 ? "one additional time" : `${jstr(n)} additional times`;
+      const subject =
+        m.allocation === "fixed-option" && m.option_id != null
+          ? titleCase(jstr(m.option_id))
+          : `one option of ${titleCase(jstr(m.stance_id))}`;
+      return `you can select ${subject} ${times} per battle`;
+    }
+    case "persistent-battlefield-marker-state":
+      return markerClauses(m).join("; ");
+    case "named-objective-state": {
+      const resolution = m.resolution ? describeEffectInline(m.resolution as Effect, ctx) : "nothing happens";
+      const clear =
+        m.clears === "after-resolving"
+          ? "; the mark is cleared once it resolves"
+          : m.clears === "end-of-turn"
+            ? "; the mark is cleared at the end of the turn"
+            : "";
+      return `the objective is marked as a ${jstr(m.state_label)} objective; ${resolution}${clear}`;
+    }
+    case "mirror-triggering-choice": {
+      const trail = m.duration != null ? ` ${durationClauses(jstr(m.duration)).trail}` : "";
+      return `${subj} receives the same ${jstr(m.choice_label)} the triggering unit selected with ${titleCase(jstr(m.source_ability_id))}${trail}`;
+    }
+    case "weapon-grant": {
+      const g = (e.modifier ?? {}) as { weapon_id?: unknown; count?: unknown };
+      const count = Number(g.count ?? 1) || 1;
+      const subject = e.target === "self" || e.target === "bearer" ? "this model" : "this unit";
+      return `${subject} gains ${jstr(count)} ${weaponLabel(jstr(g.weapon_id))} weapon${count === 1 ? "" : "s"}`;
+    }
+    case "eligibility-override": {
+      const waiver = (e.modifier ?? {}) as { activity?: unknown; ignored_restrictions?: unknown };
+      const restrictions = (Array.isArray(waiver.ignored_restrictions) ? waiver.ignored_restrictions : [])
+        .map((r) => ignoredRestrictionPhrase(jstr(r)))
+        .join(" or ");
+      const subject = e.target === "self" || e.target === "bearer" ? "this model" : "this unit";
+      return `${restrictions || "no listed restriction"} does not prevent ${subject} from being eligible to ${eligibleActivityPhrase(jstr(waiver.activity))}`;
+    }
     case "risk-reward":
       return `take a ${testName(e.risk?.test)} test (on a failure, ${e.risk?.on_fail ? describeEffectInline(e.risk.on_fail, ctx) : "suffer a consequence"}), then ${describeEffectInline(e.reward ?? {}, ctx)}`;
     case "issue-orders":
@@ -2503,10 +2698,11 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       return `${indent}${arrow}${capitalize(conditionLeadIn(e.condition ?? {}))}, ${describeEffectInline(inner, ctx)}.`;
     }
     case "rules-bundle":
-    case "sequence":
-      return (e.steps ?? [])
-        .map((s) => describeEffect(s, depth, ctx))
-        .join("\n");
+    case "sequence": {
+      const rider = rollWithRider(e.steps ?? [], ctx);
+      if (rider) return `${indent}${arrow}${capitalize(rider)}.`;
+      return (e.steps ?? []).map((s) => describeEffect(s, depth, ctx)).join("\n");
+    }
     case "named-effect": {
       if (e.cost || e.duration || e.trigger || e.usage) return `${indent}${arrow}${capitalize(describeEffectInline(e, ctx))}.`;
       const level = e.kind === "psychic" && e.level != null ? ` (Psychic level ${jstr(e.level)})` : "";
@@ -2659,7 +2855,8 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       for (const action of e.actions ?? []) {
         lines.push(`${indent}  - ${describeMenuAction(action, ctx)}`);
       }
-      return lines.join("\n");
+      const cap = capacityClause(e.capacity);
+      return cap ? `${indent}${cap}\n${lines.join("\n")}` : lines.join("\n");
     }
     default:
       // Leaf at block position — render as a single capitalized sentence.

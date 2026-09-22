@@ -88,7 +88,11 @@ def _select_units_subject(sel: Any) -> str:
             )
         else:
             origin_ref = (
-                "this model's unit" if sel.get("reference") == "bearer-unit" else "the bearer"
+                "this model's unit's Transport"
+                if sel.get("reference") == "bearer-transport"
+                else "this model's unit"
+                if sel.get("reference") == "bearer-unit"
+                else "the bearer"
             )
             origin = f" of {origin_ref}"
         within = f" within {_jstr(sel['range_inches'])} inches{origin}"
@@ -127,7 +131,13 @@ def _select_units_engagement(sel: Any) -> str:
     sel = sel or {}
     parts: list[str] = []
     noun = "model" if sel.get("target_kind") == "model" else "unit"
-    origin = "this model's unit" if sel.get("reference") == "bearer-unit" else "the bearer"
+    origin = (
+        "this model's unit's Transport"
+        if sel.get("reference") == "bearer-transport"
+        else "this model's unit"
+        if sel.get("reference") == "bearer-unit"
+        else "the bearer"
+    )
     if sel.get("engagement_relation") == "engaged-with-bearer":
         parts.append(f"For each selected {noun}, it must be within Engagement Range of {origin}.")
     if sel.get("engagement_relation") == "not-engaged-with-bearer":
@@ -224,11 +234,65 @@ def _leader_model_ability_grant_clause(e: Effect, ctx: Ctx) -> str:
     return f"while {leader} leads {source}, {rendered}"
 
 
+def _roll_with_rider(steps: list[Any], ctx: Ctx | None) -> str | None:
+    """A roll-with-rider `sequence`: [dice-gated rider, unconditional primary].
+
+    The rider fires on the roll and the primary always resolves, so the sentence
+    carries a mandatory "Regardless of the result" clause. Only a gate that
+    declares `rider: true` qualifies - a structurally similar but genuinely
+    gating sequence must not pick this up.
+    """
+    if len(steps) != 2:
+        return None
+    first = steps[0] if isinstance(steps[0], dict) else {}
+    if first.get("type") != "dice-gated" or first.get("rider") is not True:
+        return None
+    success = first.get("on_success")
+    if not isinstance(success, dict):
+        return None
+    comp = _format_comparison(first.get("comparison") or "gte", first.get("threshold"))
+    return (
+        f"roll one {_dice_case(first.get('dice'))}. On {comp}, "
+        f"{describe_effect_inline(success, ctx)}. Regardless of the result, "
+        f"{describe_effect_inline(steps[1], ctx)}"
+    )
+
+
+def _marker_clauses(m: dict[str, Any]) -> list[str]:
+    """Sentence list for a `persistent-battlefield-marker-state`: placement, then lifecycle."""
+    placement = {
+        "bearer": "beside this model",
+        "bearer-unit": "beside this model's unit",
+        "battlefield": "anywhere on the battlefield",
+    }.get(_jstr(m.get("placement")), dekebab(_jstr(m.get("placement"))))
+    clauses = [f"place a {_jstr(m.get('marker_label'))} marker {placement}"]
+    if m.get("setup_within_inches") is not None:
+        kws = [_title_case(_jstr(k)) for k in m.get("setup_keywords") or []]
+        who = f"{' '.join(kws)} units" if kws else "units"
+        clauses.append(
+            f'{who} may be set up within {_jstr(m.get("setup_within_inches"))}" of this marker'
+        )
+    if m.get("consume") == "on-use":
+        clauses.append("using the marker consumes it")
+    if m.get("removed_by_enemy_within_inches") is not None:
+        clauses.append(
+            f'remove the marker if an enemy unit comes within '
+            f'{_jstr(m.get("removed_by_enemy_within_inches"))}" of it'
+        )
+    return clauses
+
+
 def _for_each_unit_subject(selector: Any) -> str:
     """The candidate phrase for an independently resolved unit iteration."""
     selector = selector or {}
     owner = _jstr(selector.get("owner"))
-    keywords = " ".join(_title_case(_jstr(keyword)) for keyword in selector.get("keywords") or [])
+    keyword_list = [_title_case(_jstr(keyword)) for keyword in selector.get("keywords") or []]
+    if not keyword_list:
+        keywords = ""
+    elif selector.get("keyword_match") == "any":
+        keywords = _or_list(keyword_list)
+    else:
+        keywords = " ".join(keyword_list)
     if selector.get("within_objective"):
         objective_ref = _selection_ref_name(
             selector.get("within_objective"),
@@ -239,7 +303,13 @@ def _for_each_unit_subject(selector: Any) -> str:
         within = f' within {_jstr(selector.get("within_inches"))}"'
     else:
         within = ""
-    origin = "this model's unit" if selector.get("reference") == "bearer-unit" else "the bearer"
+    origin = (
+        "this model's unit's Transport"
+        if selector.get("reference") == "bearer-transport"
+        else "this model's unit"
+        if selector.get("reference") == "bearer-unit"
+        else "the bearer"
+    )
     engagement = (
         f" in Engagement Range of {origin}"
         if selector.get("engagement_relation") == "engaged-with-bearer"
@@ -424,6 +494,31 @@ def _persistent_designation_replacement(e: Effect) -> str:
     )
 
 
+def _ignored_restriction_phrase(restriction: str) -> str:
+    """`engaged` -> `being within Engagement Range`: the leading clause of an eligibility waiver."""
+    return {
+        "engaged": "being within Engagement Range",
+        "battle-shocked": "Battle-shocked",
+        "performing-action": "starting an Action",
+        "advanced": "having Advanced",
+        "fell-back": "having Fallen Back",
+    }.get(restriction, dekebab(restriction))
+
+
+def _eligible_activity_phrase(activity: str) -> str:
+    """`start-action` -> `start an Action`: what the unit becomes eligible to do."""
+    return {
+        "start-action": "start an Action",
+        "shoot": "shoot",
+        "charge": "declare a charge",
+        "fight": "fight",
+        "move": "move",
+        "advance": "Advance",
+        "fall-back": "Fall Back",
+        "consolidate": "Consolidate",
+    }.get(activity, dekebab(activity))
+
+
 def _title_case(s: str) -> str:
     words = dekebab(s).split(" ")
     out = []
@@ -447,6 +542,18 @@ _ABILITY_GRANT_LABELS = {
     "charge-after-disembark": "Charge After Disembarking",
     "nurgle-s-gift-aura": "Nurgle's Gift (Aura)",
 }
+
+
+# Curated display names for `weapon-grant` targets. The describer has no dataset
+# access, so a granted weapon's printed name cannot be read from its record;
+# unlisted ids fall back to Title Case, as granted-ability ids do.
+_WEAPON_LABELS = {
+    "imperiums-sword": "Imperium's Sword",
+}
+
+
+def _weapon_label(id: str) -> str:
+    return _WEAPON_LABELS.get(id) or _title_case(id)
 
 
 def _grant_label(id: str) -> str:
@@ -1091,6 +1198,25 @@ def _describe_menu_action(a: dict[str, Any], ctx: Ctx) -> str:
         if p
     )
     return f"{label}: {body}{usage_note}."
+
+
+def _capacity_clause(capacity: dict[str, Any] | None) -> str:
+    """The menu's per-refresh budget sentence, e.g. Librarius' Psyker Level."""
+    if not capacity:
+        return ""
+    label = _jstr(capacity.get("resource_label"))
+    noun = _jstr(capacity.get("ability_noun"))
+    amount = _jstr(capacity.get("amount"))
+    refresh = {
+        "battle-round": "battle round",
+        "turn": "turn",
+        "phase": "phase",
+        "battle": "battle",
+    }.get(_jstr(capacity.get("refresh")), dekebab(_jstr(capacity.get("refresh"))))
+    return (
+        f"This unit has a {label} of {amount}. In each {refresh}, it can use {noun} "
+        f"abilities whose combined {label} does not exceed {amount}."
+    )
 
 
 def _shared_usage_clause(su: dict[str, Any] | None) -> str:
@@ -1757,6 +1883,8 @@ def _movement_clause(m: dict[str, Any], subj: str) -> str:
         return f"{subj} can Consolidate up to{consol_default}"
     if kind_str == "surge":
         return f"{subj} can make a Surge move{of_up_to}"
+    if kind_str == "ingress":
+        return f"{subj} can make an Ingress move{of_up_to}"
     if kind_str == "shoot-and-scoot":
         return (
             f"{subj} can shoot and then make a Normal move{of_up_to}"
@@ -2090,6 +2218,52 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
             f"{subj} can use the {_grant_label(_jstr(m.get('ability_id')))} ability at most "
             f"{_jstr(m.get('max_uses'))} times per {dekebab(_jstr(m.get('period')))}, "
             "replacing its usual usage limit"
+        )
+    if etype == "persistent-battlefield-marker-state":
+        return "; ".join(_marker_clauses(m))
+    if etype == "named-objective-state":
+        resolution = (
+            describe_effect_inline(m["resolution"], ctx)
+            if isinstance(m.get("resolution"), dict)
+            else "nothing happens"
+        )
+        if m.get("clears") == "after-resolving":
+            clear = "; the mark is cleared once it resolves"
+        elif m.get("clears") == "end-of-turn":
+            clear = "; the mark is cleared at the end of the turn"
+        else:
+            clear = ""
+        return (
+            f"the objective is marked as a {_jstr(m.get('state_label'))} objective; "
+            f"{resolution}{clear}"
+        )
+    if etype == "mirror-triggering-choice":
+        mirror_trail = (
+            f" {_duration_clauses(_jstr(m.get('duration')))[1]}"
+            if m.get("duration") is not None
+            else ""
+        )
+        return (
+            f"{subj} receives the same {_jstr(m.get('choice_label'))} the triggering unit "
+            f"selected with {_title_case(_jstr(m.get('source_ability_id')))}{mirror_trail}"
+        )
+    if etype == "weapon-grant":
+        grant_count = int(m.get("count") or 1) or 1
+        grant_subject = "this model" if e.get("target") in ("self", "bearer") else "this unit"
+        weapon_plural = "" if grant_count == 1 else "s"
+        return (
+            f"{grant_subject} gains {grant_count} {_weapon_label(_jstr(m.get('weapon_id')))} "
+            f"weapon{weapon_plural}"
+        )
+    if etype == "eligibility-override":
+        restrictions = " or ".join(
+            _ignored_restriction_phrase(_jstr(r))
+            for r in (m.get("ignored_restrictions") or [])
+        )
+        waiver_subject = "this model" if e.get("target") in ("self", "bearer") else "this unit"
+        return (
+            f"{restrictions or 'no listed restriction'} does not prevent {waiver_subject} "
+            f"from being eligible to {_eligible_activity_phrase(_jstr(m.get('activity')))}"
         )
     if etype == "deadly-demise-threshold":
         return (
@@ -2494,6 +2668,46 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
     if etype == "fight-last":
         return f"{subj} {_v(subj, 'has')} the Fights Last ability"
     if etype == "fight-on-death":
+        fod_gate = m.get("gate")
+        if isinstance(fod_gate, dict):
+            if e.get("target") == "destroyed-model":
+                fod_model = "a model in this unit"
+            elif subj == "this model":
+                fod_model = "this model"
+            else:
+                fod_model = f"a model in {subj}"
+            fod_before = ""
+            fod_elig = m.get("eligibility")
+            if isinstance(fod_elig, dict):
+                if fod_elig.get("negated") and fod_elig.get("type") == "has-fought-this-phase":
+                    fod_who = (
+                        "this model"
+                        if (fod_elig.get("parameters") or {}).get("subject") == "self"
+                        else "this unit"
+                    )
+                    fod_before = f" before {fod_who} has fought this phase"
+                else:
+                    fod_before = f" {_condition_lead_in(fod_elig)}"
+            fod_adds = "".join(
+                f", adding {gm.get('value')} {_condition_lead_in(gm.get('condition') or {})}"
+                for gm in (fod_gate.get("modifiers") or [])
+                if isinstance(gm, dict)
+            )
+            fod_on = _format_comparison(
+                fod_gate.get("comparison") or "gte", fod_gate.get("threshold")
+            )
+            if m.get("removal") == "after-destroyed-model-fights":
+                fod_removal = ". Remove it after it has fought"
+            else:
+                fod_removal = (
+                    ". Remove it after this unit has fought or at the end of the phase, "
+                    "whichever comes first"
+                )
+            return (
+                f"each time {fod_model} is destroyed{fod_before}, roll one "
+                f"{_dice_case(fod_gate.get('dice'))}{fod_adds}. On {fod_on}, leave that model on "
+                f"the battlefield{fod_removal}"
+            )
         if m.get("resolution") == "when-unit-fights":
             return (
                 f"do not remove {subj} yet; when its unit is selected to fight, it can fight; "
@@ -2722,7 +2936,11 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
         lead = _condition_lead_in(e.get("condition") or {})
         return f"{lead}, {describe_effect_inline(inner, ctx)}"
     if etype in ("rules-bundle", "sequence"):
-        return "; ".join(describe_effect_inline(s, ctx) for s in e.get("steps") or [])
+        steps = e.get("steps") or []
+        rider = _roll_with_rider(steps, ctx) if etype == "sequence" else None
+        if rider is not None:
+            return rider
+        return "; ".join(describe_effect_inline(s, ctx) for s in steps)
     if etype == "named-effect":
         level = (
             f" (Psychic level {_jstr(e.get('level'))})"
@@ -2852,6 +3070,15 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
             for o in e.get("options") or []
         )
         return f"select one: {opts}"
+    if etype == "stance-selection-capacity":
+        m = e.get("modifier") or {}
+        n = int(m.get("additional_selections") or 1)
+        times = "one additional time" if n == 1 else f"{_jstr(n)} additional times"
+        if m.get("allocation") == "fixed-option" and m.get("option_id") is not None:
+            subject = _title_case(_jstr(m.get("option_id")))
+        else:
+            subject = f"one option of {_title_case(_jstr(m.get('stance_id')))}"
+        return f"you can select {subject} {times} per battle"
     if etype == "risk-reward":
         risk = e.get("risk") or {}
         on_fail = risk.get("on_fail")
@@ -2915,7 +3142,11 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         lead = _capitalize(_condition_lead_in(e.get("condition") or {}))
         return f"{indent}{arrow}{lead}, {describe_effect_inline(inner, ctx)}."
     if etype in ("rules-bundle", "sequence"):
-        return "\n".join(describe_effect(s, depth, ctx) for s in e.get("steps") or [])
+        steps = e.get("steps") or []
+        rider = _roll_with_rider(steps, ctx) if etype == "sequence" else None
+        if rider is not None:
+            return f"{indent}{arrow}{_capitalize(rider)}."
+        return "\n".join(describe_effect(s, depth, ctx) for s in steps)
     if etype == "named-effect":
         if any(e.get(field) for field in ("cost", "duration", "trigger", "usage")):
             return f"{indent}{arrow}{_capitalize(describe_effect_inline(e, ctx))}."
@@ -3116,7 +3347,9 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         lines = [f"{indent}{arrow}{intro}:"]
         for action in e.get("actions") or []:
             lines.append(f"{indent}  - {_describe_menu_action(action, ctx)}")
-        return "\n".join(lines)
+        body = "\n".join(lines)
+        cap = _capacity_clause(e.get("capacity"))
+        return f"{indent}{cap}\n{body}" if cap else body
     # Leaf at block position — a single capitalized sentence.
     return f"{indent}{arrow}{_capitalize(describe_effect_inline(e, ctx))}."
 

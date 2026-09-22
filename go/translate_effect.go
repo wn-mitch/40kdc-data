@@ -66,6 +66,8 @@ func selectUnitsSubject(sel map[string]any) string {
 			origin = " of the bearer"
 			if sel["reference"] == "bearer-unit" {
 				origin = " of this model's unit"
+			} else if sel["reference"] == "bearer-transport" {
+				origin = " of this model's unit's Transport"
 			}
 		}
 		within = " within " + ejstr(sel["range_inches"]) + " inches" + origin
@@ -115,6 +117,8 @@ func selectUnitsEngagement(sel map[string]any) string {
 	}
 	if sel["reference"] == "bearer-unit" {
 		origin = "this model's unit"
+	} else if sel["reference"] == "bearer-transport" {
+		origin = "this model's unit's Transport"
 	}
 	if sel["engagement_relation"] == "engaged-with-bearer" {
 		parts = append(parts, "For each selected "+noun+", it must be within Engagement Range of "+origin+".")
@@ -172,10 +176,66 @@ func selectorEligibilityClause(sel map[string]any) string {
 }
 
 // forEachUnitSubject renders the closed for-each-unit selector.
+// markerClauses renders a persistent-battlefield-marker-state: placement first, then lifecycle.
+// rollWithRider detects a roll-with-rider sequence: [dice-gated rider, primary].
+// The rider fires on the roll and the primary always resolves, so the sentence
+// carries a mandatory "Regardless of the result" clause. Only a gate declaring
+// `rider: true` qualifies; a structurally similar but genuinely gating sequence
+// must not pick this up.
+func rollWithRider(steps []any, ctx map[string]any) (string, bool) {
+	if len(steps) != 2 {
+		return "", false
+	}
+	first, _ := asMap(steps[0])
+	if ejstr(first["type"]) != "dice-gated" || first["rider"] != true {
+		return "", false
+	}
+	success, ok := getMap(first, "on_success")
+	if !ok {
+		return "", false
+	}
+	second, _ := asMap(steps[1])
+	return "roll one " + diceCase(first["dice"]) + ". On " +
+		formatComparison(ejstr(first["comparison"]), first["threshold"]) + ", " +
+		describeEffectInline(success, ctx) + ". Regardless of the result, " +
+		describeEffectInline(second, ctx), true
+}
+
+func markerClauses(m map[string]any) []string {
+	label := ejstr(m["marker_label"])
+	placement := map[string]string{
+		"bearer":      "beside this model",
+		"bearer-unit": "beside this model's unit",
+		"battlefield": "anywhere on the battlefield",
+	}[ejstr(m["placement"])]
+	if placement == "" {
+		placement = dekebab(ejstr(m["placement"]))
+	}
+	clauses := []string{"place a " + label + " marker " + placement}
+	if m["setup_within_inches"] != nil {
+		var kws []string
+		for _, k := range getStrList(m, "setup_keywords") {
+			kws = append(kws, titleCase(k))
+		}
+		who := "units"
+		if len(kws) > 0 {
+			who = strings.Join(kws, " ") + " units"
+		}
+		clauses = append(clauses, who+" may be set up within "+ejstr(m["setup_within_inches"])+"\" of this marker")
+	}
+	if ejstr(m["consume"]) == "on-use" {
+		clauses = append(clauses, "using the marker consumes it")
+	}
+	if m["removed_by_enemy_within_inches"] != nil {
+		clauses = append(clauses, "remove the marker if an enemy unit comes within "+ejstr(m["removed_by_enemy_within_inches"])+"\" of it")
+	}
+	return clauses
+}
+
 func forEachUnitSubject(sel map[string]any) string {
-	var keywords []string
+	var keywordList []string
 	for _, keyword := range getStrList(sel, "keywords") {
-		keywords = append(keywords, titleCase(keyword))
+		keywordList = append(keywordList, titleCase(keyword))
 	}
 	within := ""
 	if sel["within_inches"] != nil {
@@ -188,6 +248,8 @@ func forEachUnitSubject(sel map[string]any) string {
 	origin := "the bearer"
 	if sel["reference"] == "bearer-unit" {
 		origin = "this model's unit"
+	} else if sel["reference"] == "bearer-transport" {
+		origin = "this model's unit's Transport"
 	}
 	if sel["engagement_relation"] == "engaged-with-bearer" {
 		engagement = " in Engagement Range of " + origin
@@ -195,8 +257,12 @@ func forEachUnitSubject(sel map[string]any) string {
 		engagement = " not in Engagement Range of " + origin
 	}
 	keywordText := ""
-	if len(keywords) > 0 {
-		keywordText = " " + strings.Join(keywords, " ")
+	if len(keywordList) > 0 {
+		if ejstr(sel["keyword_match"]) == "any" {
+			keywordText = " " + orList(keywordList)
+		} else {
+			keywordText = " " + strings.Join(keywordList, " ")
+		}
 	}
 	noun := "unit"
 	if sel["target_kind"] == "model" {
@@ -287,6 +353,20 @@ var abilityGrantLabels = map[string]string{
 }
 
 // grantLabel returns the curated label for a granted ability id, else Title Case.
+// weaponLabels holds curated display names for weapon-grant targets. The
+// describer has no dataset access, so a granted weapon's printed name cannot be
+// read from its record; unlisted ids fall back to Title Case.
+var weaponLabels = map[string]string{
+	"imperiums-sword": "Imperium's Sword",
+}
+
+func weaponLabel(id string) string {
+	if label, ok := weaponLabels[id]; ok {
+		return label
+	}
+	return titleCase(id)
+}
+
 func grantLabel(id string) string {
 	if label, ok := abilityGrantLabels[id]; ok {
 		return label
@@ -326,6 +406,8 @@ func designationTargetSubjectBase(sel map[string]any) string {
 	reference := "the bearer"
 	if sel["reference"] == "bearer-unit" {
 		reference = "this model's unit"
+	} else if sel["reference"] == "bearer-transport" {
+		reference = "this model's unit's Transport"
 	}
 	origin := ""
 	if sel["within_inches_from"] != nil {
@@ -744,6 +826,29 @@ func describeMenuAction(a map[string]any, ctx map[string]any) string {
 // ("a unit may perform at most one action per phase; unless stated
 // otherwise, a given action may be triggered once per phase"). "" when
 // absent.
+// capacityClause renders a resource-action-menu's per-refresh budget sentence,
+// e.g. Librarius' Psyker Level.
+func capacityClause(capacity map[string]any) string {
+	if capacity == nil {
+		return ""
+	}
+	label := ejstr(capacity["resource_label"])
+	noun := ejstr(capacity["ability_noun"])
+	amount := ejstr(capacity["amount"])
+	refresh := map[string]string{
+		"battle-round": "battle round",
+		"turn":         "turn",
+		"phase":        "phase",
+		"battle":       "battle",
+	}[ejstr(capacity["refresh"])]
+	if refresh == "" {
+		refresh = dekebab(ejstr(capacity["refresh"]))
+	}
+	return "This unit has a " + label + " of " + amount + ". In each " + refresh +
+		", it can use " + noun + " abilities whose combined " + label +
+		" does not exceed " + amount + "."
+}
+
 func sharedUsageClause(su map[string]any) string {
 	if su == nil {
 		return ""
@@ -1673,6 +1778,8 @@ func movementClause(m map[string]any, subj string) string {
 		return subj + " can Consolidate up to" + i
 	case "surge":
 		return subj + " can make a Surge move" + ofUpTo
+	case "ingress":
+		return subj + " can make an Ingress move" + ofUpTo
 	case "shoot-and-scoot":
 		if inches != "" {
 			return subj + " can shoot and then make a Normal move" + ofUpTo
@@ -2066,6 +2173,50 @@ func describeEffectInline(e map[string]any, ctx map[string]any) string {
 	return base
 }
 
+// ignoredRestrictionPhrase renders `engaged` as "being within Engagement Range":
+// the leading clause of an eligibility waiver.
+func ignoredRestrictionPhrase(id string) string {
+	switch id {
+	case "engaged":
+		return "being within Engagement Range"
+	case "battle-shocked":
+		return "Battle-shocked"
+	case "performing-action":
+		return "starting an Action"
+	case "advanced":
+		return "having Advanced"
+	case "fell-back":
+		return "having Fallen Back"
+	default:
+		return dekebab(id)
+	}
+}
+
+// eligibleActivityPhrase renders `start-action` as "start an Action": what the
+// unit becomes eligible to do.
+func eligibleActivityPhrase(id string) string {
+	switch id {
+	case "start-action":
+		return "start an Action"
+	case "shoot":
+		return "shoot"
+	case "charge":
+		return "declare a charge"
+	case "fight":
+		return "fight"
+	case "move":
+		return "move"
+	case "advance":
+		return "Advance"
+	case "fall-back":
+		return "Fall Back"
+	case "consolidate":
+		return "Consolidate"
+	default:
+		return dekebab(id)
+	}
+}
+
 func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 	if ctx == nil {
 		ctx = map[string]any{}
@@ -2259,6 +2410,49 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 			return weaponNoun(m) + " equipped by " + weaponHolder(e["target"], ctx) + " gain " + kw
 		}
 		return ofOrPossessive(subj, "weapons") + " gain " + kw
+	case "persistent-battlefield-marker-state":
+		return strings.Join(markerClauses(m), "; ")
+	case "named-objective-state":
+		resolution := "nothing happens"
+		if res, ok := getMap(m, "resolution"); ok {
+			resolution = describeEffectInline(res, ctx)
+		}
+		clear := ""
+		switch ejstr(m["clears"]) {
+		case "after-resolving":
+			clear = "; the mark is cleared once it resolves"
+		case "end-of-turn":
+			clear = "; the mark is cleared at the end of the turn"
+		}
+		return "the objective is marked as a " + ejstr(m["state_label"]) + " objective; " + resolution + clear
+	case "mirror-triggering-choice":
+		mirrorTrail := ""
+		if m["duration"] != nil {
+			if _, trail := durationClauses(m["duration"]); trail != "" {
+				mirrorTrail = " " + trail
+			}
+		}
+		return subj + " receives the same " + ejstr(m["choice_label"]) + " the triggering unit selected with " + titleCase(ejstr(m["source_ability_id"])) + mirrorTrail
+	case "weapon-grant":
+		count := asInt(m["count"])
+		if count < 1 {
+			count = 1
+		}
+		plural := "s"
+		if count == 1 {
+			plural = ""
+		}
+		return subj + " gains " + ejstr(count) + " " + weaponLabel(ejstr(m["weapon_id"])) + " weapon" + plural
+	case "eligibility-override":
+		var phrases []string
+		for _, r := range getList(m, "ignored_restrictions") {
+			phrases = append(phrases, ignoredRestrictionPhrase(ejstr(r)))
+		}
+		joined := strings.Join(phrases, " or ")
+		if joined == "" {
+			joined = "no listed restriction"
+		}
+		return joined + " does not prevent " + subj + " from being eligible to " + eligibleActivityPhrase(ejstr(m["activity"]))
 	case "ability-usage-limit":
 		return subj + " can use the " + grantLabel(ejstr(m["ability_id"])) + " ability at most " + ejstr(m["max_uses"]) + " times per " + dekebab(ejstr(m["period"])) + ", replacing its usual usage limit"
 	case "deadly-demise-threshold":
@@ -2759,6 +2953,39 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 	case "fight-last":
 		return subj + " " + ev(subj, "has") + " the Fights Last ability"
 	case "fight-on-death":
+		if gate, ok := getMap(e, "gate"); ok {
+			modelPhrase := "a model in " + subj
+			if ejstr(e["target"]) == "destroyed-model" {
+				modelPhrase = "a model in this unit"
+			} else if subj == "this model" {
+				modelPhrase = "this model"
+			}
+			before := ""
+			if elig, ok := getMap(e, "eligibility"); ok {
+				neg, _ := elig["negated"].(bool)
+				if neg && ejstr(elig["type"]) == "has-fought-this-phase" {
+					who := "this unit"
+					if params, _ := getMap(elig, "parameters"); ejstr(params["subject"]) == "self" {
+						who = "this model"
+					}
+					before = " before " + who + " has fought this phase"
+				} else {
+					before = " " + conditionLeadIn(elig)
+				}
+			}
+			adds := ""
+			for _, gm := range getList(gate, "modifiers") {
+				gmm, _ := asMap(gm)
+				cond, _ := asMap(gmm["condition"])
+				adds += ", adding " + ejstr(gmm["value"]) + " " + conditionLeadIn(cond)
+			}
+			on := formatComparison(ejstr(gate["comparison"]), gate["threshold"])
+			removal := ". Remove it after this unit has fought or at the end of the phase, whichever comes first"
+			if ejstr(m["removal"]) == "after-destroyed-model-fights" {
+				removal = ". Remove it after it has fought"
+			}
+			return "each time " + modelPhrase + " is destroyed" + before + ", roll one " + diceCase(gate["dice"]) + adds + ". On " + on + ", leave that model on the battlefield" + removal
+		}
 		if m["resolution"] == "when-unit-fights" {
 			return "do not remove " + subj + " yet; when its unit is selected to fight, it can fight; remove it after its unit has finished fighting or at the end of the phase, whichever happens first"
 		}
@@ -2982,6 +3209,11 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 		return conditionLeadIn(cond) + ", " + describeEffectInline(inner, ctx)
 	case "rules-bundle", "sequence":
 		steps := getList(e, "steps")
+		if ejstr(e["type"]) == "sequence" {
+			if rider, ok := rollWithRider(steps, ctx); ok {
+				return rider
+			}
+		}
 		var parts []string
 		for _, s := range steps {
 			sm, _ := asMap(s)
@@ -3103,6 +3335,23 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 			opts = append(opts, ejstr(om["name"])+" ("+describeEffectInline(oe, ctx)+")")
 		}
 		return "select one: " + strings.Join(opts, " / ")
+	case "stance-selection-capacity":
+		m, _ := getMap(e, "modifier")
+		n := asInt(m["additional_selections"])
+		if n < 1 {
+			n = 1
+		}
+		times := "one additional time"
+		if n != 1 {
+			times = ejstr(n) + " additional times"
+		}
+		subject := "one option of " + titleCase(ejstr(m["stance_id"]))
+		if ejstr(m["allocation"]) == "fixed-option" {
+			if oid := ejstr(m["option_id"]); oid != "" {
+				subject = titleCase(oid)
+			}
+		}
+		return "you can select " + subject + " " + times + " per battle"
 	case "risk-reward":
 		risk, _ := getMap(e, "risk")
 		onFail := "suffer a consequence"
@@ -3407,6 +3656,11 @@ func describeEffect(e map[string]any, depth int, ctx map[string]any) string {
 		return indent + arrow + capitalize(conditionLeadIn(cond)) + ", " + describeEffectInline(inner, ctx) + "."
 	case "rules-bundle", "sequence":
 		steps := getList(e, "steps")
+		if ejstr(e["type"]) == "sequence" {
+			if rider, ok := rollWithRider(steps, ctx); ok {
+				return indent + arrow + capitalize(rider) + "."
+			}
+		}
 		var parts []string
 		for _, s := range steps {
 			sm, _ := asMap(s)
@@ -3621,7 +3875,12 @@ func describeEffect(e map[string]any, depth int, ctx map[string]any) string {
 			am, _ := asMap(a)
 			lines = append(lines, indent+"  - "+describeMenuAction(am, ctx))
 		}
-		return strings.Join(lines, "\n")
+		body := strings.Join(lines, "\n")
+		capMap, _ := getMap(e, "capacity")
+		if cap := capacityClause(capMap); cap != "" {
+			return indent + cap + "\n" + body
+		}
+		return body
 	}
 	return indent + arrow + capitalize(describeEffectInline(e, ctx)) + "."
 }
