@@ -339,7 +339,7 @@ const CANONICAL_MODIFIER_KEYS: Record<string, Set<string>> = {
   "re-roll": new Set(["roll", "subset", "result_scope", "count", "attack_type", "weapon_type", "weapon_name", "weapon_keyword", "uses", "context", "optional"]),
   "keyword-grant": new Set(["keyword", "keywords", "weapon_type", "weapon_name", "weapon_keyword"]),
   "bs-modifier": new Set(["operation", "value", "attack_type"]),
-  "feel-no-pain": new Set(["threshold"]),
+  "feel-no-pain": new Set(["threshold", "scope"]),
   "damage-reduction": new Set(["reduction", "amount"]),
 };
 const CANONICAL_STATS = new Set(["A", "S", "T", "Sv", "AP", "OC", "Ld", "M", "W", "D", "Damage", "BS", "WS"]);

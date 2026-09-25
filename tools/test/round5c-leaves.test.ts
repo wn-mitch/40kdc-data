@@ -302,6 +302,45 @@ describe("Round 5C family versions", () => {
     }
   });
 
+  it("decides a buff leaf everywhere and rejects values outside the game's range", () => {
+    const text = "models in that unit have the Feel No Pain 5+ ability";
+    const { db } = fixture([
+      { faction_id: "alpha", ability_id: "one", raw_text: `${LEAD}, ${text}.` },
+      { faction_id: "beta", ability_id: "two", raw_text: `${LEAD}, ${text}.` },
+    ]);
+    try {
+      expect(confirmSurface(db, { reviewer: REVIEWER, exact_text: text, family_id: "feel-no-pain", parameters: { subject: "this-unit", threshold: 5, against: "all" } })).toMatchObject({ applied: 2 });
+      expect(() => confirmSurface(db, { reviewer: REVIEWER, exact_text: text, family_id: "invulnerable-save", parameters: { subject: "this-unit", threshold: 7 } }))
+        .toThrow(/integer from 2 to 6/u);
+    } finally {
+      db.close();
+    }
+  });
+
+  it("lets longer wording replace a shorter decided leaf inside it, and undo restores the shorter one", () => {
+    const short = "weapons equipped by models in that unit have the [LETHAL HITS] ability";
+    const long = `melee ${short}`;
+    const grant = (weaponType: string) => ({ family_id: "weapon-ability-grant", parameters: { subject: "this-unit", keyword: "Lethal Hits", weapon_type: weaponType } });
+    const { db } = fixture([
+      { faction_id: "alpha", ability_id: "any", raw_text: `${LEAD}, ${short}.` },
+      { faction_id: "alpha", ability_id: "melee", raw_text: `${LEAD}, ${long}.` },
+    ]);
+    try {
+      expect(confirmSurface(db, { reviewer: REVIEWER, exact_text: short, ...grant("all") }).applied).toBe(2);
+      const decided = confirmSurface(db, { reviewer: REVIEWER, exact_text: long, ...grant("melee") });
+      expect(decided).toMatchObject({ applied: 1, blocked: [] });
+      const params = (id: string) => leaves(db, id).filter((item) => item.family_id === "weapon-ability-grant").map((item) => (item.parameters as { weapon_type: string }).weapon_type);
+      expect(params("melee")).toEqual(["melee"]);
+      expect(params("any")).toEqual(["all"]);
+      // Deciding the shorter wording again cannot shrink the longer leaf.
+      expect(confirmSurface(db, { reviewer: REVIEWER, exact_text: short, ...grant("all") })).toMatchObject({ applied: 0, blocked: [expect.objectContaining({ ability_id: "melee", reason: "OTHER_LEAF_HERE" })] });
+      undoBatch(db, decided.batch_id, { reviewer: REVIEWER });
+      expect(params("melee")).toEqual(["all"]);
+    } finally {
+      db.close();
+    }
+  });
+
   it("accepts melee and valued weapon abilities but not unit keywords", () => {
     const { db } = fixture([{ faction_id: "alpha", ability_id: "grant", raw_text: "Melee weapons equipped by models in that unit have the [SUSTAINED HITS 1] ability." }]);
     try {

@@ -50,6 +50,14 @@ const EVENT_KINDS = [
   "attack-made", "hit-roll", "wound-roll", "charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end", "after-shooting",
 ] as const;
 const WEAPON_TYPES = ["all", "melee", "ranged"] as const;
+const BUFF_SUBJECTS = ["this-unit", "this-model", "bearer"] as const;
+const FNP_AGAINST = ["all", "mortal", "psychic", "psychic-and-mortal"] as const;
+const CHARACTERISTICS = ["M", "T", "Sv", "W", "A", "Ld", "OC", "WS", "BS", "S", "AP", "D"] as const;
+
+function boundedInteger(value: unknown, min: number, max: number, label: string): number {
+  if (typeof value === "number" && Number.isSafeInteger(value) && value >= min && value <= max) return value;
+  throw new TypeError(`${label} must be an integer from ${min} to ${max}.`);
+}
 
 /** Versioned, human-reviewed semantic families available to local tooling. */
 export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
@@ -298,6 +306,71 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
       additionalProperties: false,
     },
   },
+  {
+    id: "feel-no-pain",
+    version: 1,
+    role: "EFFECT",
+    label: "Feel No Pain",
+    description: "Models ignore wounds on a roll of the threshold or more, optionally only against mortal wounds or psychic attacks.",
+    starter: { subject: "this-unit", threshold: null, against: "all" },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "threshold", "against"],
+      properties: {
+        subject: { enum: BUFF_SUBJECTS },
+        threshold: { type: "integer", minimum: 2, maximum: 6 },
+        against: { enum: FNP_AGAINST },
+      },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "invulnerable-save",
+    version: 1,
+    role: "EFFECT",
+    label: "Invulnerable save",
+    description: "Models have an invulnerable save of the threshold or better.",
+    starter: { subject: "this-unit", threshold: null },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "threshold"],
+      properties: { subject: { enum: BUFF_SUBJECTS }, threshold: { type: "integer", minimum: 2, maximum: 6 } },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "fights-first",
+    version: 1,
+    role: "EFFECT",
+    label: "Fights First",
+    description: "Models have the Fights First ability.",
+    starter: { subject: "this-unit" },
+    parameterSchema: {
+      type: "object",
+      required: ["subject"],
+      properties: { subject: { enum: BUFF_SUBJECTS } },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "characteristic-modifier",
+    version: 1,
+    role: "EFFECT",
+    label: "Add to or subtract from a characteristic",
+    description: "Adds to or subtracts from a model characteristic such as OC, Attacks, Strength, or Move. Setting a value is a different leaf.",
+    starter: { subject: "this-unit", characteristic: "", operation: "add", value: 1 },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "characteristic", "operation", "value"],
+      properties: {
+        subject: { enum: BUFF_SUBJECTS },
+        characteristic: { enum: CHARACTERISTICS },
+        operation: { enum: ["add", "subtract"] },
+        value: { type: "integer", minimum: 1 },
+      },
+      additionalProperties: false,
+    },
+  },
 ] as const;
 
 /** The version new fingerprints and model requests use for a family. */
@@ -475,6 +548,30 @@ export function normalizeFingerprintParameters(
         weapon_type: enumValue(input.weapon_type, WEAPON_TYPES, "weapon-ability-grant.weapon_type"),
       };
     }
+    case "feel-no-pain":
+      exactKeys(input, ["subject", "threshold", "against"], family);
+      return {
+        subject: enumValue(input.subject, BUFF_SUBJECTS, "feel-no-pain.subject"),
+        threshold: boundedInteger(input.threshold, 2, 6, "feel-no-pain.threshold"),
+        against: enumValue(input.against, FNP_AGAINST, "feel-no-pain.against"),
+      };
+    case "invulnerable-save":
+      exactKeys(input, ["subject", "threshold"], family);
+      return {
+        subject: enumValue(input.subject, BUFF_SUBJECTS, "invulnerable-save.subject"),
+        threshold: boundedInteger(input.threshold, 2, 6, "invulnerable-save.threshold"),
+      };
+    case "fights-first":
+      exactKeys(input, ["subject"], family);
+      return { subject: enumValue(input.subject, BUFF_SUBJECTS, "fights-first.subject") };
+    case "characteristic-modifier":
+      exactKeys(input, ["subject", "characteristic", "operation", "value"], family);
+      return {
+        subject: enumValue(input.subject, BUFF_SUBJECTS, "characteristic-modifier.subject"),
+        characteristic: enumValue(input.characteristic, CHARACTERISTICS, "characteristic-modifier.characteristic"),
+        operation: enumValue(input.operation, ["add", "subtract"], "characteristic-modifier.operation"),
+        value: boundedInteger(input.value, 1, 20, "characteristic-modifier.value"),
+      };
     default:
       throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
   }

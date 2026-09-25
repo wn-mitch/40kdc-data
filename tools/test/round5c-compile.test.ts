@@ -63,6 +63,11 @@ describe("Round 5C leaf compiler", () => {
       [leaf("EFFECT", "resource-action", { resource: "miracle-dice", operation: "gain", amount: 1 }), { type: "resource-gain", target: "self", modifier: { pool_id: "miracle-dice-pool", amount: 1 } }],
       [leaf("EFFECT", "characteristic-set", { subject: "this-model", characteristic: "M", value: 7 }), { type: "stat-modifier", target: "self", modifier: { stat: "M", operation: "set", value: 7 } }],
       [leaf("EFFECT", "weapon-ability-grant", { subject: "bearer", keyword: "Lethal Hits", weapon_type: "melee" }, 2), { type: "keyword-grant", target: "bearer", modifier: { keywords: ["Lethal Hits"], weapon_type: "melee" } }],
+      [leaf("EFFECT", "feel-no-pain", { subject: "this-unit", threshold: 5, against: "all" }), { type: "feel-no-pain", target: "unit", modifier: { threshold: 5 } }],
+      [leaf("EFFECT", "feel-no-pain", { subject: "this-model", threshold: 4, against: "psychic" }), { type: "feel-no-pain", target: "self", modifier: { threshold: 4, scope: "psychic" } }],
+      [leaf("EFFECT", "invulnerable-save", { subject: "this-unit", threshold: 4 }), { type: "invulnerable-save", target: "unit", modifier: { invuln_sv: 4 } }],
+      [leaf("EFFECT", "fights-first", { subject: "this-unit" }), { type: "fight-first", target: "unit", modifier: {} }],
+      [leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristic: "OC", operation: "add", value: 1 }), { type: "stat-modifier", target: "unit", modifier: { stat: "OC", operation: "add", value: 1 } }],
     ];
     for (const [input, expected] of cases) {
       expect(compiled([input]).mechanics.effect).toEqual(expected);

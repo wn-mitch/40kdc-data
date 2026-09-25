@@ -126,7 +126,7 @@ function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: string, b
   const fingerprint = fingerprintRow(db, surface.fingerprint_id);
   const report: ApplyReport & { touched: Set<number> } = { applied: 0, already: 0, blocked: [], touched: new Set() };
   const overlapping = db.prepare(`
-    SELECT annotations.fingerprint_id, source_spans.start_byte, source_spans.end_byte
+    SELECT annotations.id, annotations.origin, annotations.fingerprint_id, source_spans.start_byte, source_spans.end_byte
     FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
     WHERE annotations.status = 'active' AND source_spans.ability_version_id = ? AND source_spans.fragment = ?
       AND source_spans.start_byte < ? AND ? < source_spans.end_byte
@@ -149,7 +149,7 @@ function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: string, b
   const now = new Date().toISOString();
   for (const occurrence of surfaceOccurrences(db, surface.normalized_surface, abilityVersionIds)) {
     const args = [occurrence.ability_version_id, occurrence.fragment, occurrence.end_byte, occurrence.start_byte] as const;
-    const others = overlapping.all(...args) as Array<{ fingerprint_id: string; start_byte: number; end_byte: number }>;
+    let others = overlapping.all(...args) as Array<{ id: number; origin: string; fingerprint_id: string; start_byte: number; end_byte: number }>;
     if (others.some((other) => other.fingerprint_id === fingerprint.id && other.start_byte === occurrence.start_byte && other.end_byte === occurrence.end_byte)) {
       report.already += 1;
       continue;
@@ -157,6 +157,18 @@ function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: string, b
     const blocked = (reason: ApplyReport["blocked"][number]["reason"]) => report.blocked.push({
       ability_version_id: occurrence.ability_version_id, faction_id: occurrence.faction_id, ability_id: occurrence.ability_id, exact_text: occurrence.exact_text, reason,
     });
+    // Longer wording wins: a leaf another surface decision made strictly inside this occurrence
+    // (for example "weapons … have [X]" inside "melee weapons … have [X]") gives way to it.
+    const inside = others.filter((other) => other.origin === "leaf-surface"
+      && other.start_byte >= occurrence.start_byte && other.end_byte <= occurrence.end_byte
+      && other.end_byte - other.start_byte < occurrence.end_byte - occurrence.start_byte);
+    if (inside.length === others.length && inside.length > 0) {
+      for (const other of inside) {
+        db.prepare("UPDATE annotations SET status = 'superseded' WHERE id = ? AND status = 'active'").run(other.id);
+        addMember(db, batchId, "annotation-superseded-by-surface", other.id);
+      }
+      others = [];
+    }
     if (others.length > 0) { blocked("OTHER_LEAF_HERE"); continue; }
     if (refused.get(occurrence.ability_version_id, occurrence.fragment, occurrence.start_byte, occurrence.end_byte, fingerprint.id)) { blocked("REJECTED_HERE"); continue; }
     const spanId = insertSpan(db, occurrence.ability_version_id, occurrence.fragment, occurrence.start_byte, occurrence.end_byte, occurrence.exact_text);
@@ -363,6 +375,10 @@ export function retireSurface(db: DatabaseSync, value: unknown): { batch_id: str
 export function assertLeafUndo(db: DatabaseSync, batchId: string, members: ReadonlyArray<{ entity_kind: string; entity_id: string }>): void {
   const merge = mergeMetadata(db, batchId);
   for (const member of members) {
+    if (member.entity_kind === "annotation-superseded-by-surface") {
+      const row = db.prepare("SELECT status FROM annotations WHERE id = ?").get(Number(member.entity_id)) as { status: string } | undefined;
+      if (row?.status !== "superseded") throw new LeafError(409, "This batch cannot restore a shorter leaf that was later changed.");
+    }
     if (member.entity_kind === "proposal-repointed" && merge) {
       const row = db.prepare("SELECT fingerprint_id FROM proposals WHERE id = ?").get(Number(member.entity_id)) as { fingerprint_id: string | null } | undefined;
       if (row?.fingerprint_id !== merge.to) throw new LeafError(409, "This merge cannot be undone because a merged proposal was later changed.");
@@ -385,6 +401,10 @@ function mergeMetadata(db: DatabaseSync, batchId: string): { from: string; to: s
 
 /** Reverse surface rows: created ones retire, retired ones return (created ones first, so a move swaps back). */
 export function applyLeafUndo(db: DatabaseSync, batchId: string, reversalId: string, members: ReadonlyArray<{ entity_kind: string; entity_id: string }>): void {
+  for (const member of members.filter((item) => item.entity_kind === "annotation-superseded-by-surface")) {
+    db.prepare("UPDATE annotations SET status = 'active' WHERE id = ? AND status = 'superseded'").run(Number(member.entity_id));
+    addMember(db, reversalId, "annotation-restored", member.entity_id);
+  }
   const merge = mergeMetadata(db, batchId);
   if (merge) {
     for (const member of members.filter((item) => item.entity_kind === "proposal-repointed")) {

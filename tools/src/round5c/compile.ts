@@ -120,6 +120,16 @@ function effect(leaf: CompileLeaf, attached: boolean): Record<string, unknown> {
         modifier: { keywords: [closed(leaf, "keyword")], ...(weaponType && weaponType !== "all" ? { weapon_type: weaponType } : {}) },
       };
     }
+    case "feel-no-pain": {
+      const against = closed(leaf, "against");
+      return { type: "feel-no-pain", target: target(leaf.parameters.subject), modifier: { threshold: closed(leaf, "threshold"), ...(against !== "all" ? { scope: against } : {}) } };
+    }
+    case "invulnerable-save":
+      return { type: "invulnerable-save", target: target(leaf.parameters.subject), modifier: { invuln_sv: closed(leaf, "threshold") } };
+    case "fights-first":
+      return { type: "fight-first", target: target(leaf.parameters.subject), modifier: {} };
+    case "characteristic-modifier":
+      return { type: "stat-modifier", target: target(leaf.parameters.subject), modifier: { stat: closed(leaf, "characteristic"), operation: closed(leaf, "operation"), value: closed(leaf, "value") } };
     default:
       throw new CompileError(`Effect ${leaf.family_id} has no DSL fragment yet.`);
   }
