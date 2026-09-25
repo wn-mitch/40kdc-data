@@ -14,7 +14,7 @@
  * Unknown leaf types degrade to a deterministic bracketed form (`[the-type]`).
  */
 
-import { conditionSubject, dekebab, describeCondition, describeSelectionEligibility, describeTiming, eventClause, negatedTiming, titleCase, type Condition } from "./condition.js";
+import { conditionSubject, dekebab, describeCondition, LEGACY_UNIT_SUBJECTS, describeSelectionEligibility, describeTiming, eventClause, negatedTiming, titleCase, type Condition } from "./condition.js";
 
 /** Independent all-required/none-excluded keyword predicate for aura roles. */
 export interface KeywordFilter {
@@ -1274,7 +1274,7 @@ function conditionLeadIn(c: Condition): string {
     case "unit-below-half-strength":
       return `while ${conditionSubject(c, "the unit", { target: "the target unit" })} is below half strength`;
     case "unit-below-starting-strength":
-      return "while the unit is below its starting strength";
+      return `while ${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} is below its starting strength`;
     case "has-lost-wounds":
       return "while the model has lost wounds";
     case "attack-is-type":

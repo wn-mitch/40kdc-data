@@ -50,6 +50,9 @@ function str(v: unknown): string {
   return typeof v === "string" ? v : String(v);
 }
 
+/** Legacy `parameters.subject` values that name the other side of an attack. */
+export const LEGACY_UNIT_SUBJECTS: Record<string, string> = { target: "the target unit", attacker: "the attacking unit" };
+
 /** Explicit `of` wins; legacy subjects are only applied where that predicate already consumed them. */
 export function conditionSubject(
   c: Condition,
@@ -350,7 +353,7 @@ export function describeCondition(c: Condition): string {
     case "remained-stationary":
       return `${negate}the unit remained stationary`;
     case "unit-below-starting-strength":
-      return `${negate}the unit is below starting strength`;
+      return `${negate}${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} is below starting strength`;
     case "unit-below-half-strength":
       return `${negate}${conditionSubject(c, "the unit", { target: "the target unit" })} is below half strength`;
     case "unit-has-keyword":

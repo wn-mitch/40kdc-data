@@ -9,6 +9,7 @@ import { importLuna, prepareLuna, type LunaMode, type PrepareLunaOptions } from 
 import { getQueue } from "./queue.js";
 import { getDashboard, getPrivateExport } from "./review.js";
 import { getPublicationReport, preparePublication, publishPublication, reconcilePublicationBatches } from "./publish.js";
+import { leafDescriberAudit } from "./leaf-describer-audit.js";
 import { refreshSources } from "./source.js";
 
 const root = resolve(fileURLToPath(new URL("../../../", import.meta.url)));
@@ -42,9 +43,14 @@ function preparePublicationOptions(args: string[]): { faction_id: string; entry_
 }
 
 async function run(command: string | undefined): Promise<void> {
-  const commands = ["init", "refresh", "import-hit-train", "repair-related-variants", "prepare-luna", "import-luna", "run-luna", "abandon-luna", "luna-status", "prepare-publication", "publish", "export-json", "report", "queue"];
+  const commands = ["init", "refresh", "import-hit-train", "repair-related-variants", "prepare-luna", "import-luna", "run-luna", "abandon-luna", "luna-status", "prepare-publication", "publish", "export-json", "report", "queue", "leaf-describer-audit"];
   if (!command || !commands.includes(command)) {
-    throw new Error("Usage: round5c <init|refresh|import-hit-train|repair-related-variants|prepare-luna [limit] [coverage|residue] [faction-id] [--ability id] [--retry-of run-id]|import-luna <run-id> <response.json>|run-luna <run-id>|abandon-luna <run-id> <reason>|luna-status <run-id>|prepare-publication <faction-id> <compiled-entry-id,...>|publish <batch-id> <preview-hash>|export-json|report|queue [faction-id]>");
+    throw new Error("Usage: round5c <init|refresh|import-hit-train|repair-related-variants|prepare-luna [limit] [coverage|residue] [faction-id] [--ability id] [--retry-of run-id]|import-luna <run-id> <response.json>|run-luna <run-id>|abandon-luna <run-id> <reason>|luna-status <run-id>|prepare-publication <faction-id> <compiled-entry-id,...>|publish <batch-id> <preview-hash>|export-json|report|queue [faction-id]|leaf-describer-audit>");
+  }
+  if (command === "leaf-describer-audit") {
+    // Depends only on the registry and the describer, not on the workbench database.
+    console.log(JSON.stringify(leafDescriberAudit(), null, 2));
+    return;
   }
   const db = openWorkbench();
   try {

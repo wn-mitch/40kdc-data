@@ -6,6 +6,7 @@ import { getCurrentCoverage, type AbilityCoverage, type UncoveredInterval } from
 import { bumpWorkbenchRevision, insertSpan, invalidateWholeReview, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
 import { normalizedProjection, normalizedSurface } from "./matching.js";
 import { candidateChunks, ftsQuery, matchesAt } from "./retrieval.js";
+import { describerGaps } from "./leaf-describer-audit.js";
 import { surfaceWarnings } from "./surface-lint.js";
 
 /**
@@ -429,6 +430,8 @@ export type BoardSurface = { surface_id: number | null; surface: string; sample_
 export type BoardLeaf = {
   fingerprint_id: string; family_id: string; family_version: number; role: string; parameters: Record<string, unknown>;
   retired_version: boolean; surfaces: BoardSurface[];
+  /** Parameter values of this leaf that its English does not show (from the describer audit). */
+  describer_gaps?: string[];
 };
 export type LeafBoard = {
   leaves: BoardLeaf[];
@@ -543,6 +546,7 @@ export function leafBoard(db: DatabaseSync, options: { factionId?: string } = {}
     if (hasLeaf && distinct.size === 1) untiled.get([...distinct][0]!)!.unlocks += 1;
   }
   for (const entry of leaves.values()) {
+    if (!entry.retired_version) entry.describer_gaps = describerGaps(entry.family_id, entry.parameters);
     for (const item of entry.surfaces) item.warnings = surfaceWarnings(item.sample_text, entry.role, entry.family_id, entry.parameters);
   }
   return {
