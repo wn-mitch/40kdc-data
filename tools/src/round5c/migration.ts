@@ -443,7 +443,11 @@ function fingerprintForSidewaysChoice(
     exactText,
     report,
   );
-  return id ? { id, role: familyRole(definition.family, definition.version) } : null;
+  if (!id) return null;
+  const role = familyRole(definition.family, definition.version);
+  // Only effect families are listed above; a combinator can never be a proposal role.
+  if (role === "COMBINATOR") throw new Error(`Sideways choice ${choice} maps to a combinator.`);
+  return { id, role };
 }
 
 function insertPendingProposal(

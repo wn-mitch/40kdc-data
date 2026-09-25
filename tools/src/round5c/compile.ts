@@ -1,217 +1,296 @@
+import { exactSpan } from "./contracts.js";
+import {
+  ATTACK_EVENTS, attackTypeCondition, closed, CompileError, condition, DURATIONS, effect, kindKey, negate, trigger, type CompileLeaf,
+} from "./compile-fragments.js";
 import type { Mechanics } from "./entries.js";
+
+export { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
 /**
  * Deterministic composition: reviewed leaves in source order become one Ability DSL entry.
- * Each family maps to one fixed DSL fragment, and four rules combine them:
- * conditions wrap the effect in `conditional` (several are joined with `and`); several effects
- * form a `sequence` in source order; attack-time events are implicit in the effect while other
- * events become the trigger; a duration sets `scope.duration`. No model is involved, so one
- * approved shape produces the same kind of entry for every source that has it.
+ * Each family maps to one fixed fragment (`compile-fragments.ts`); these rules combine them:
+ *
+ * - Clauses. Sentences end at `.`, `;` or `:` (or a change of source fragment); a sentence
+ *   with no effect joins the next one. Inside a sentence, an "and", "or" or "(" with an
+ *   effect on both sides starts a new clause.
+ * - Binding. Conditions before the ability's first effect gate every effect. A condition
+ *   before a later sentence's first effect gates that sentence; any other condition gates only
+ *   the effects of its own clause, in either word order ("if X, add 1" or "add 1 if X").
+ * - Attacks. An attack leaf applies to the effects after it: melee or ranged gates them, the
+ *   attacking model sets their target, and an attack that targets this unit moves hit, wound
+ *   and damage modifiers onto the attacker.
+ * - Instead. An `instead` combinator makes its clause's effect replace the nearest earlier effect
+ *   of the same family: the earlier one applies only when the clause's condition does not.
+ * - Selected unit. Effects gated by "the target is the selected unit" go inside one
+ *   designate-target for the ability's select-unit leaf.
+ * - Two or more effects form a sequence in source order; a duration sets `scope.duration`;
+ *   events other than attacks and selections become the trigger.
+ *
+ * No model is involved, so one approved shape produces the same kind of entry for every source.
  */
-
-export type CompileLeaf = {
-  role: string;
-  family_id: string;
-  family_version: number;
-  parameters: Record<string, unknown>;
-  start_byte: number;
-};
 
 export type Compiled =
   | { ok: true; signature: string; mechanics: Mechanics }
   | { ok: false; signature: string; errors: string[] };
 
-/** Event kinds an attack-time effect already implies; they add nothing to the entry. */
-const ATTACK_EVENTS = new Set(["attack-made", "hit-roll", "wound-roll"]);
+type Node = Record<string, unknown>;
 
-const TRIGGERS: Record<string, Record<string, unknown>> = {
-  "event:charge": { event: "charge-move", subject: "self" },
-  "event:unit-destroyed": { event: "on-unit-destroyed" },
-  "event:model-destroyed": { event: "on-model-destroyed" },
-  "event:after-shooting": { event: "after-unit-resolves-attacks", subject: "self", condition: { type: "phase-is", parameters: { phase: "shooting" } } },
-  "turn-start:battle-round": { event: "start-of-battle-round" },
-  "turn-start:player-turn": { event: "start-of-player-turn" },
-  "turn-start:opponent-turn": { event: "start-of-opponent-turn" },
-};
+/** Where each leaf sits: which sentence and which clause, both counted from zero. */
+type Placement = { sentence: number; clause: number };
 
-const DURATIONS: Record<string, string> = {
-  "end-of-phase": "phase", "end-of-turn": "turn", "end-of-battle-round": "battle-round", "end-of-battle": "battle",
-};
+const ordered = (leaves: readonly CompileLeaf[]) => [...leaves].sort((left, right) => left.start_byte - right.start_byte);
 
-const RESOURCE_POOLS: Record<string, string> = {
-  "miracle-dice": "miracle-dice-pool", "fate-dice": "fate-dice-pool", "bloodshed-point": "bloodshed-point",
-};
-
-const SUBJECT_TARGETS: Record<string, string> = { "this-unit": "unit", "this-model": "self", bearer: "bearer" };
-
-class CompileError extends Error {}
-
-const isSource = (value: unknown): boolean => value !== null && typeof value === "object" && "source" in value;
-
-function closed(leaf: CompileLeaf, name: string): unknown {
-  const value = leaf.parameters[name];
-  if (isSource(value)) throw new CompileError(`${leaf.family_id} ${name} is quoted source text; give it a listed value before it can compile.`);
-  return value;
+function gapBetween(previous: CompileLeaf, next: CompileLeaf, sourceText: string | undefined): { sentence: boolean; and: boolean } {
+  if (previous.fragment !== undefined && next.fragment !== undefined && previous.fragment !== next.fragment) return { sentence: true, and: false };
+  if (sourceText === undefined || previous.end_byte === undefined || next.start_byte <= previous.end_byte) return { sentence: false, and: false };
+  const gap = exactSpan(sourceText, previous.end_byte, next.start_byte);
+  return { sentence: /[.;:]/u.test(gap), and: /\b(?:and|or)\b|\(/iu.test(gap) };
 }
 
-/** A phase-boundary trigger, narrowed by phase and whose turn unless either is "any". */
-function phaseTrigger(leaf: CompileLeaf): Record<string, unknown> | null {
-  const event = leaf.parameters.kind === "phase-start" ? "start-of-phase" : leaf.parameters.kind === "phase-end" ? "end-of-phase" : null;
-  if (!event) return null;
-  const operands: Record<string, unknown>[] = [];
-  if (leaf.parameters.phase && leaf.parameters.phase !== "any") operands.push({ type: "phase-is", parameters: { phase: leaf.parameters.phase } });
-  if (leaf.parameters.turn && leaf.parameters.turn !== "either") operands.push({ type: "player-turn-is", parameters: { turn: leaf.parameters.turn } });
-  if (operands.length === 0) return { event };
-  return { event, condition: operands.length === 1 ? operands[0] : { operator: "and", operands } };
+function placements(leaves: readonly CompileLeaf[], sourceText: string | undefined): Placement[] {
+  const sentenceOf: number[] = [];
+  const andBefore: boolean[] = [];
+  leaves.forEach((leaf, index) => {
+    const gap = index === 0 ? { sentence: false, and: false } : gapBetween(leaves[index - 1]!, leaf, sourceText);
+    sentenceOf.push(index === 0 ? 0 : sentenceOf[index - 1]! + (gap.sentence ? 1 : 0));
+    andBefore.push(gap.and && !gap.sentence);
+  });
+  // A sentence without an effect ("While this model is leading a unit.") only sets conditions
+  // for what follows, so it joins the next sentence; the last one joins the one before.
+  const effectful = new Set(leaves.flatMap((leaf, index) => leaf.role === "EFFECT" ? [sentenceOf[index]!] : []));
+  const sentences = [...new Set(sentenceOf)];
+  const merged = new Map<number, number>();
+  let pending: number[] = [];
+  for (const sentence of sentences) {
+    pending.push(sentence);
+    if (effectful.has(sentence)) {
+      for (const item of pending) merged.set(item, sentence);
+      pending = [];
+    }
+  }
+  const last = [...effectful].at(-1) ?? sentences.at(-1) ?? 0;
+  for (const item of pending) merged.set(item, last);
+  sentenceOf.forEach((sentence, index) => { sentenceOf[index] = merged.get(sentence)!; });
+  const result: Placement[] = [];
+  let clause = 0;
+  let clauseStart = 0;
+  leaves.forEach((_, index) => {
+    if (index > 0 && sentenceOf[index] !== sentenceOf[index - 1]) {
+      clause += 1;
+      clauseStart = index;
+    } else if (index > 0 && andBefore[index]) {
+      const sentence = sentenceOf[index];
+      const left = leaves.slice(clauseStart, index);
+      const right = leaves.slice(index).filter((_, offset) => sentenceOf[index + offset] === sentence);
+      if (left.some((leaf) => leaf.role === "EFFECT") && right.some((leaf) => leaf.role === "EFFECT")) {
+        clause += 1;
+        clauseStart = index;
+      }
+    }
+    result.push({ sentence: sentenceOf[index]!, clause });
+  });
+  return result;
 }
 
-function kindKey(leaf: CompileLeaf): string {
-  return `${leaf.family_id}:${String(leaf.family_id === "turn-start" ? leaf.parameters.turn : leaf.parameters.kind)}`;
+function signaturePart(leaf: CompileLeaf): string {
+  if (leaf.family_id === "attack") return `EVENT(attack:${String(leaf.parameters.direction)})`;
+  if (leaf.role !== "EVENT") return `${leaf.role}(${leaf.family_id})`;
+  if (leaf.family_id === "select-unit") return "EVENT(select-unit)";
+  return ATTACK_EVENTS.has(String(leaf.parameters.kind)) ? "EVENT(attack)" : `EVENT(${kindKey(leaf)})`;
 }
 
 /**
- * The shape of an ability: its leaves' roles and families in source order, parameters left out.
- * Attack-time events are named only as `attack`; other events keep their kind, because a
- * trigger changes the entry's structure.
+ * The shape of an ability: its leaves' roles and families in source order, parameters left out,
+ * with ` | ` between clauses so the binding of conditions is part of what a reviewer approves.
+ * Attacks keep their direction and other events their kind, because both change the structure.
  */
-export function shapeSignature(leaves: readonly CompileLeaf[]): string {
-  return [...leaves].sort((left, right) => left.start_byte - right.start_byte).map((leaf) => {
-    if (leaf.role !== "EVENT") return `${leaf.role}(${leaf.family_id})`;
-    return ATTACK_EVENTS.has(String(leaf.parameters.kind)) ? "EVENT(attack)" : `EVENT(${kindKey(leaf)})`;
-  }).join(" · ");
+export function shapeSignature(leaves: readonly CompileLeaf[], sourceText?: string): string {
+  const list = ordered(leaves);
+  const places = placements(list, sourceText);
+  return list.map((leaf, index) => `${index > 0 && places[index]!.clause !== places[index - 1]!.clause ? "| " : index > 0 ? "· " : ""}${signaturePart(leaf)}`).join(" ");
 }
 
-function condition(leaf: CompileLeaf): Record<string, unknown> {
-  switch (leaf.family_id) {
-    case "leading-unit":
-      closed(leaf, "subject");
-      return { type: "is-attached" };
-    case "below-starting-strength":
-      return closed(leaf, "subject") === "target-unit"
-        ? { type: "unit-below-starting-strength", parameters: { subject: "target" } }
-        : { type: "unit-below-starting-strength" };
-    default:
-      throw new CompileError(`Condition ${leaf.family_id} has no DSL fragment yet.`);
-  }
-}
-
-function effect(leaf: CompileLeaf, attached: boolean): Record<string, unknown> {
-  const target = (subject: unknown) => attached ? "unit" : SUBJECT_TARGETS[String(subject)] ?? "unit";
-  switch (leaf.family_id) {
-    case "reroll": {
-      const roll = closed(leaf, "roll");
-      const subset = closed(leaf, "subset");
-      const modifier = subset === "ones" ? { roll, subset: "ones" } : subset === "failed" ? { roll, subset: "all-failures" } : { roll, result_scope: "any-result" };
-      return { type: "re-roll", target: "unit", modifier };
-    }
-    case "roll-modifier":
-      return { type: "roll-modifier", target: "unit", modifier: { roll: closed(leaf, "roll"), operation: closed(leaf, "operation"), value: closed(leaf, "value") } };
-    case "critical-hit-threshold": {
-      const value = closed(leaf, "value");
-      if (typeof value !== "number") throw new CompileError("critical-hit-threshold needs a numeric threshold before it can compile.");
-      return { type: "roll-modifier", target: "unit", modifier: { roll: leaf.parameters.roll === undefined ? "hit" : closed(leaf, "roll"), critical_on: value } };
-    }
-    case "resource-action": {
-      const resource = closed(leaf, "resource");
-      const amount = closed(leaf, "amount");
-      if (closed(leaf, "operation") !== "gain") throw new CompileError(`Only resource gains compile; ${String(leaf.parameters.operation)} has no DSL fragment yet.`);
-      if (resource === "command-point") return { type: "cp-gain", target: "self", modifier: { amount } };
-      const pool = RESOURCE_POOLS[String(resource)];
-      if (!pool) throw new CompileError(`Resource ${String(resource)} has no DSL pool yet.`);
-      return { type: "resource-gain", target: "self", modifier: { pool_id: pool, amount } };
-    }
-    case "characteristic-set":
-      return { type: "stat-modifier", target: target(leaf.parameters.subject), modifier: { stat: closed(leaf, "characteristic"), operation: "set", value: closed(leaf, "value") } };
-    case "weapon-ability-grant": {
-      const weaponType = closed(leaf, "weapon_type");
-      return {
-        type: "keyword-grant", target: target(leaf.parameters.subject),
-        modifier: { keywords: [closed(leaf, "keyword")], ...(weaponType && weaponType !== "all" ? { weapon_type: weaponType } : {}) },
-      };
-    }
-    case "feel-no-pain": {
-      const against = closed(leaf, "against");
-      return { type: "feel-no-pain", target: target(leaf.parameters.subject), modifier: { threshold: closed(leaf, "threshold"), ...(against !== "all" ? { scope: against } : {}) } };
-    }
-    case "invulnerable-save":
-      return { type: "invulnerable-save", target: target(leaf.parameters.subject), modifier: { invuln_sv: closed(leaf, "threshold") } };
-    case "fights-first":
-      return { type: "fight-first", target: target(leaf.parameters.subject), modifier: {} };
-    case "characteristic-modifier":
-      return { type: "stat-modifier", target: target(leaf.parameters.subject), modifier: { stat: closed(leaf, "characteristic"), operation: closed(leaf, "operation"), value: closed(leaf, "value") } };
-    default:
-      throw new CompileError(`Effect ${leaf.family_id} has no DSL fragment yet.`);
-  }
-}
-
-/** What one leaf contributes on its own: an effect, a condition, a trigger, a duration, or nothing (attack events). */
+/** What one leaf contributes on its own, for the per-leaf preview. */
 export type LeafFragment =
-  | { kind: "effect" | "condition" | "trigger"; node: Record<string, unknown> }
+  | { kind: "effect" | "condition" | "trigger"; node: Node }
   | { kind: "duration"; duration: string }
-  | { kind: "implicit" };
+  | { kind: "implicit"; note: string };
 
 export function leafFragment(leaf: CompileLeaf): LeafFragment {
-  if (leaf.role === "EFFECT") return { kind: "effect", node: effect(leaf, false) };
+  if (leaf.role === "EFFECT") return { kind: "effect", node: effect(leaf, { attached: false, incoming: false }) };
+  if (leaf.role === "COMBINATOR") return { kind: "implicit", note: "No separate text: this effect replaces an earlier one of the same kind when its condition holds." };
+  if (leaf.family_id === "target-is-selected") return { kind: "implicit", note: "No separate text: the effects it gates apply to attacks against the selected unit." };
   if (leaf.role === "CONDITION") return { kind: "condition", node: condition(leaf) };
-  if (leaf.role === "DURATION") {
-    const duration = DURATIONS[String(closed(leaf, "endpoint"))];
-    if (!duration) throw new CompileError(`Duration ${String(leaf.parameters.endpoint)} has no DSL scope yet.`);
-    return { kind: "duration", duration };
+  if (leaf.role === "DURATION") return { kind: "duration", duration: duration(leaf) };
+  if (leaf.family_id === "attack") {
+    const gate = attackTypeCondition(leaf);
+    return gate ? { kind: "condition", node: gate } : { kind: "implicit", note: "No separate text: an attack is part of the effect it goes with." };
   }
-  if (leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind))) return { kind: "implicit" };
-  const trigger = (leaf.family_id === "event" ? phaseTrigger(leaf) : null) ?? TRIGGERS[kindKey(leaf)];
-  if (!trigger) throw new CompileError(`Event ${kindKey(leaf)} has no DSL trigger yet.`);
-  return { kind: "trigger", node: structuredClone(trigger) };
+  if (leaf.family_id === "select-unit") return { kind: "implicit", note: "No separate text: the selection is written with the effects that refer to the selected unit." };
+  if (leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind))) return { kind: "implicit", note: "No separate text: an attack-time event is part of the effect it goes with." };
+  return { kind: "trigger", node: trigger(leaf) };
 }
 
-export { CompileError };
+function duration(leaf: CompileLeaf): string {
+  const found = DURATIONS[String(closed(leaf, "endpoint"))];
+  if (!found) throw new CompileError(`Duration ${String(leaf.parameters.endpoint)} has no DSL scope yet.`);
+  return found;
+}
+
+const allOf = (nodes: Node[]): Node | null => nodes.length === 0 ? null : nodes.length === 1 ? nodes[0]! : { operator: "and", operands: nodes };
+const gated = (gate: Node[], body: Node): Node => {
+  const node = allOf(gate);
+  return node ? { type: "conditional", condition: node, effect: body } : body;
+};
+
+type PlannedEffect = { index: number; leaf: CompileLeaf; node: Node; gate: Node[]; selected: boolean; replaces: boolean };
 
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
-export function compileLeaves(leaves: readonly CompileLeaf[]): Compiled {
-  const signature = shapeSignature(leaves);
-  const ordered = [...leaves].sort((left, right) => left.start_byte - right.start_byte);
+export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: string): Compiled {
+  const list = ordered(leaves);
+  const signature = shapeSignature(list, sourceText);
+  const places = placements(list, sourceText);
   const errors: string[] = [];
-  const conditions: Record<string, unknown>[] = [];
-  const effects: Record<string, unknown>[] = [];
-  const triggers: Record<string, unknown>[] = [];
-  const durations: string[] = [];
-  const attached = ordered.some((leaf) => leaf.family_id === "leading-unit");
-  for (const leaf of ordered) {
+  const attempt = <T>(work: () => T): T | null => {
     try {
-      if (leaf.role === "CONDITION") conditions.push(condition(leaf));
-      else if (leaf.role === "EFFECT") effects.push(effect(leaf, attached));
-      else if (leaf.role === "DURATION") {
-        const duration = DURATIONS[String(closed(leaf, "endpoint"))];
-        if (!duration) throw new CompileError(`Duration ${String(leaf.parameters.endpoint)} has no DSL scope yet.`);
-        durations.push(duration);
-      } else if (leaf.role === "EVENT") {
-        if (leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind))) continue;
-        const trigger = (leaf.family_id === "event" ? phaseTrigger(leaf) : null) ?? TRIGGERS[kindKey(leaf)];
-        if (!trigger) throw new CompileError(`Event ${kindKey(leaf)} has no DSL trigger yet.`);
-        triggers.push(structuredClone(trigger));
-      } else {
-        throw new CompileError(`Role ${leaf.role} cannot compile.`);
-      }
+      return work();
     } catch (error) {
       if (!(error instanceof CompileError)) throw error;
       errors.push(error.message);
+      return null;
     }
+  };
+
+  const effectSentences = new Set(list.flatMap((leaf, index) => leaf.role === "EFFECT" ? [places[index]!.sentence] : []));
+  const firstSentence = Math.min(...effectSentences);
+  const firstEffect = (sentence: number) => list.findIndex((leaf, index) => leaf.role === "EFFECT" && places[index]!.sentence === sentence);
+  const attached = list.some((leaf) => leaf.family_id === "leading-unit");
+  const global: Node[] = [];
+  /** Conditions keyed by the scope they gate: a sentence's leading conditions, or one clause. */
+  const sentenceGates = new Map<number, Node[]>();
+  const clauseGates = new Map<number, Node[]>();
+  const selectedClauses = new Set<number>();
+  const selectedSentences = new Set<number>();
+  let selectedGlobally = false;
+  const triggers: Node[] = [];
+  const durations: string[] = [];
+  const selections: CompileLeaf[] = [];
+  const combinators: number[] = [];
+
+  list.forEach((leaf, index) => {
+    const { sentence, clause } = places[index]!;
+    const first = firstEffect(sentence);
+    const leading = first === -1 || index < first;
+    const scope = (node: Node | "selected") => {
+      if (!effectSentences.has(sentence) || (sentence === firstSentence && leading)) {
+        if (node === "selected") selectedGlobally = true;
+        else global.push(node);
+      } else if (leading) {
+        if (node === "selected") selectedSentences.add(sentence);
+        else sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), node]);
+      } else if (node === "selected") {
+        selectedClauses.add(clause);
+      } else {
+        clauseGates.set(clause, [...(clauseGates.get(clause) ?? []), node]);
+      }
+    };
+    attempt(() => {
+      if (leaf.role === "CONDITION") scope(leaf.family_id === "target-is-selected" ? "selected" : condition(leaf));
+      else if (leaf.role === "DURATION") durations.push(duration(leaf));
+      else if (leaf.role === "COMBINATOR") combinators.push(index);
+      else if (leaf.role === "EVENT") {
+        if (leaf.family_id === "attack") {
+          const gate = attackTypeCondition(leaf);
+          if (gate) scope(gate);
+        } else if (leaf.family_id === "select-unit") selections.push(leaf);
+        else if (!(leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind)))) triggers.push(trigger(leaf));
+      } else if (leaf.role !== "EFFECT") throw new CompileError(`Role ${leaf.role} cannot compile.`);
+    });
+  });
+
+  const planned: PlannedEffect[] = [];
+  list.forEach((leaf, index) => {
+    if (leaf.role !== "EFFECT") return;
+    const { sentence, clause } = places[index]!;
+    // The nearest attack before this effect says who attacks and which way.
+    const attack = list.slice(0, index).reverse().find((item) => item.family_id === "attack");
+    const node = attempt(() => effect(leaf, {
+      attached,
+      attacker: attack && attack.parameters.direction === "makes" ? (attack.parameters.unit === "this-model" ? "self" : "unit") : null,
+      incoming: attack?.parameters.direction === "targeted",
+    }));
+    if (!node) return;
+    planned.push({
+      index, leaf, node,
+      gate: [...(sentenceGates.get(sentence) ?? []), ...(clauseGates.get(clause) ?? [])],
+      selected: selectedGlobally || selectedSentences.has(sentence) || selectedClauses.has(clause),
+      replaces: false,
+    });
+  });
+  if (list.every((leaf) => leaf.role !== "EFFECT")) errors.push("There is no effect leaf to compile.");
+
+  for (const combinator of combinators) {
+    const clause = places[combinator]!.clause;
+    const own = planned.filter((item) => places[item.index]!.clause === clause);
+    if (own.length !== 1) {
+      errors.push(`"Instead" needs exactly one effect in its clause; found ${own.length}.`);
+      continue;
+    }
+    const replacement = own[0]!;
+    const replaced = planned.filter((item) => item.index < replacement.index && item.leaf.family_id === replacement.leaf.family_id && !item.replaces).at(-1);
+    if (!replaced) {
+      errors.push(`"Instead" has no earlier ${replacement.leaf.family_id} effect to replace.`);
+      continue;
+    }
+    const alternative = allOf(replacement.gate);
+    if (!alternative) {
+      errors.push(`"Instead" needs a condition in its clause saying when ${replacement.leaf.family_id} is replaced.`);
+      continue;
+    }
+    replaced.gate = [...replaced.gate, negate(alternative)];
+    replacement.replaces = true;
   }
-  if (effects.length === 0) errors.push("There is no effect leaf to compile.");
+
   if (triggers.length > 1) errors.push("More than one trigger event; the shape needs a combinator the compiler does not have.");
   if (new Set(durations).size > 1) errors.push("Conflicting durations.");
+  const selected = planned.filter((item) => item.selected);
+  if (selections.length > 1) errors.push("More than one unit is selected; the compiler binds only one.");
+  if (selections.length === 1 && selected.length !== planned.length) errors.push("A unit is selected, but not every effect is limited to attacks against it.");
+  if (selections.length === 0 && selected.length > 0) errors.push("An attack targets \"that unit\", but no select-unit leaf says which unit.");
   if (errors.length > 0) return { ok: false, signature, errors };
 
-  const body = effects.length === 1 ? effects[0]! : { type: "sequence", steps: effects };
-  const conditionNode = conditions.length === 0 ? null : conditions.length === 1 ? conditions[0]! : { operator: "and", operands: conditions };
+  const steps = planned.map((item) => gated(item.gate, item.node));
+  let body: Node | null = steps.length === 1 ? steps[0]! : { type: "sequence", steps };
+  const scopeDuration = durations[0] ?? "permanent";
+  if (selections.length === 1) body = attempt(() => designation(selections[0]!, list, body!, durations[0]));
+  if (!body) return { ok: false, signature, errors };
   return {
     ok: true,
     signature,
     mechanics: {
-      effect: conditionNode ? { type: "conditional", condition: conditionNode, effect: body } : body,
-      scope: { range: "unit", duration: durations[0] ?? "permanent" },
+      effect: gated(global, body),
+      scope: { range: "unit", duration: scopeDuration },
       behavior: triggers.length ? "reactive" : "passive",
       trigger: triggers[0] ?? null,
     },
+  };
+}
+
+/** The selected unit and the effects on attacks against it, as the DSL's designate-target. */
+function designation(selection: CompileLeaf, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined): Node {
+  const attack = leaves.find((leaf) => leaf.family_id === "attack" && leaf.start_byte > selection.start_byte) ?? leaves.find((leaf) => leaf.family_id === "attack");
+  if (!attack) throw new CompileError("A selected unit needs an attack leaf saying whose attacks against it are affected.");
+  const own = attack.parameters.unit === "this-model" || attack.parameters.unit === "bearer";
+  return {
+    type: "designate-target",
+    designation: "selected-unit",
+    select: {
+      scope: selection.parameters.scope === "friendly" ? "friendly-unit" : "enemy-unit",
+      count: 1,
+      ...(selection.parameters.distance === "within" ? { within_inches: selection.parameters.inches } : {}),
+      ...(selection.parameters.visible === true ? { visibility_required: true } : {}),
+    },
+    applies: { to: own ? "bearer-attacks-target" : "attackers-of-target", effect: body },
+    ...(lasting ? { duration: lasting } : {}),
   };
 }

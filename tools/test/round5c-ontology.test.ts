@@ -88,7 +88,7 @@ describe("Round 5C provisional family ontology", () => {
         WHERE gaps.status = 'open' AND json_extract(proposals.reason_json, '$.span_status') = 'NOVEL'
       `).get()).toEqual({ total: 2 });
       expect(db.prepare("SELECT count(*) AS total FROM annotations").get()).toEqual({ total: 0 });
-      expect(db.prepare("SELECT count(*) AS total FROM semantic_families WHERE status = 'active'").get()).toEqual({ total: 16 });
+      expect(db.prepare("SELECT count(*) AS total FROM semantic_families WHERE status = 'active'").get()).toEqual({ total: 23 });
       // Backfill is idempotent over already-attached occurrences.
       backfillFamilyCandidates(db);
       expect(getOntology(db).candidates[0]!.current.suggested).toBe(2);

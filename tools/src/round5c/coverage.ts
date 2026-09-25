@@ -134,7 +134,7 @@ function loadCoverageIndexes(db: DatabaseSync, currentOnly: boolean, abilityId?:
     JOIN semantic_families ON semantic_families.id = fingerprints.family_id
       AND semantic_families.version = fingerprints.family_version
     WHERE annotations.status = 'active'
-      AND semantic_families.role IN ('EFFECT', 'DURATION', 'EVENT', 'CONDITION')
+      AND semantic_families.role IN ('EFFECT', 'DURATION', 'EVENT', 'CONDITION', 'COMBINATOR')
       AND ${EFFECTIVE_ANNOTATION}
       ${filter} ${idFilter}
   `).all(...args) as SpanRow[];

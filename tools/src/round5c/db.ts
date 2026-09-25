@@ -44,7 +44,7 @@ CREATE INDEX IF NOT EXISTS abilities_current_lookup
 CREATE TABLE IF NOT EXISTS semantic_families (
   id TEXT NOT NULL CHECK(length(trim(id)) > 0),
   version INTEGER NOT NULL CHECK(version > 0),
-  role TEXT NOT NULL CHECK(role IN ('EFFECT', 'DURATION', 'EVENT', 'CONDITION')),
+  role TEXT NOT NULL CHECK(role IN ('EFFECT', 'DURATION', 'EVENT', 'CONDITION', 'COMBINATOR')),
   parameter_schema_json TEXT NOT NULL CHECK(json_valid(parameter_schema_json)),
   status TEXT NOT NULL CHECK(status IN ('active', 'deprecated')),
   PRIMARY KEY(id, version)
@@ -540,10 +540,49 @@ export function getDataEpoch(db: DatabaseSync): { instance_id: string; data_epoc
 }
 
 /** Create every private workbench table, index, FTS index, and reviewed family. */
+/**
+ * Allow the COMBINATOR role on semantic families. SQLite cannot alter a CHECK, so the table is
+ * rebuilt with foreign keys off (fingerprints reference it) and checked before committing.
+ * This must run outside a transaction, where the foreign_keys pragma takes effect.
+ */
+function upgradeLeafRoles(db: DatabaseSync): void {
+  const existing = db.prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'semantic_families'").get() as { sql: string } | undefined;
+  if (!existing || existing.sql.includes("'COMBINATOR'")) return;
+  db.exec("PRAGMA foreign_keys = OFF");
+  try {
+    db.exec("BEGIN IMMEDIATE");
+    try {
+      db.exec(`
+        CREATE TABLE semantic_families_new (
+          id TEXT NOT NULL CHECK(length(trim(id)) > 0),
+          version INTEGER NOT NULL CHECK(version > 0),
+          role TEXT NOT NULL CHECK(role IN ('EFFECT', 'DURATION', 'EVENT', 'CONDITION', 'COMBINATOR')),
+          parameter_schema_json TEXT NOT NULL CHECK(json_valid(parameter_schema_json)),
+          status TEXT NOT NULL CHECK(status IN ('active', 'deprecated')),
+          PRIMARY KEY(id, version)
+        ) STRICT;
+        INSERT INTO semantic_families_new (id, version, role, parameter_schema_json, status)
+          SELECT id, version, role, parameter_schema_json, status FROM semantic_families;
+        DROP TABLE semantic_families;
+        ALTER TABLE semantic_families_new RENAME TO semantic_families;
+      `);
+      const violations = db.prepare("PRAGMA foreign_key_check").all();
+      if (violations.length > 0) throw new Error(`Rebuilding semantic_families broke ${violations.length} foreign key reference(s).`);
+      db.exec("COMMIT");
+    } catch (error) {
+      db.exec("ROLLBACK");
+      throw error;
+    }
+  } finally {
+    db.exec("PRAGMA foreign_keys = ON");
+  }
+}
+
 export function initializeWorkbench(db: DatabaseSync): void {
   if (initialized.has(db)) return;
-  db.exec("PRAGMA foreign_keys = ON");
   db.exec("PRAGMA busy_timeout = 3000");
+  upgradeLeafRoles(db);
+  db.exec("PRAGMA foreign_keys = ON");
   withTransaction(db, () => {
     db.exec(SCHEMA);
     db.exec(EXTENSION_SCHEMA);

@@ -16,11 +16,11 @@ export function previewLeaf(value: unknown): { text: string | null; problem: str
     const version = typeof input.family_version === "number" ? input.family_version : currentFamilyVersion(input.family_id);
     const parameters = normalizeFingerprintParameters(input.family_id, input.parameters as Record<string, unknown>, version);
     const fragment = leafFragment({ role: familyRole(input.family_id, version), family_id: input.family_id, family_version: version, parameters, start_byte: 0 });
-    const text = fragment.kind === "effect" ? describeEffect(fragment.node as never)
-      : fragment.kind === "condition" ? describeCondition(fragment.node as never)
-        : fragment.kind === "trigger" ? describeTrigger(fragment.node as never)
-          : fragment.kind === "duration" ? durationClauses(fragment.duration).trail || durationClauses(fragment.duration).lead || "for the rest of the battle"
-            : "No separate text: an attack-time event is part of the effect it goes with.";
+    const text = fragment.kind === "implicit" ? fragment.note
+      : fragment.kind === "duration" ? durationClauses(fragment.duration).trail || durationClauses(fragment.duration).lead || "for the rest of the battle"
+        : fragment.kind === "effect" ? describeEffect(fragment.node as never)
+          : fragment.kind === "condition" ? describeCondition(fragment.node as never)
+            : describeTrigger(fragment.node as never);
     return { text, problem: null };
   } catch (error) {
     if (error instanceof CompileError || error instanceof TypeError || error instanceof RangeError) return { text: null, problem: error.message };

@@ -124,7 +124,10 @@ describe("Round 5C leaf compiler", () => {
     expect(previewLeaf({ family_id: "feel-no-pain", parameters: { subject: "this-unit", threshold: 5, against: "mortal" } }).text).toMatch(/Feel No Pain 5\+/u);
     expect(previewLeaf({ family_id: "leading-unit", parameters: { subject: "this-model", attachment: "leading" } }).text).toBeTruthy();
     expect(previewLeaf({ family_id: "duration", parameters: { endpoint: "end-of-turn" } }).text).toBe("until the end of the turn");
-    expect(previewLeaf({ family_id: "event", parameters: { kind: "attack-made" } }).text).toMatch(/part of the effect/u);
+    expect(previewLeaf({ family_id: "attack", parameters: { direction: "makes", unit: "this-model", attack_type: "any" } }).text).toMatch(/part of the effect/u);
+    expect(previewLeaf({ family_id: "attack", parameters: { direction: "makes", unit: "this-model", attack_type: "melee" } }).text).toMatch(/melee/u);
+    // Attacks left the event family in version 4.
+    expect(previewLeaf({ family_id: "event", parameters: { kind: "attack-made" } }).problem).toMatch(/event.kind/u);
   });
 
   it("keeps attack events implicit and names them only as attack in the shape", () => {

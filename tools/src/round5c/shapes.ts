@@ -36,16 +36,19 @@ function tiledMembers(db: DatabaseSync, factionId: string | null): Member[] {
   `).all(factionId, factionId) as Array<Omit<Member, "leaves">>;
   const leaves = new Map<number, CompileLeaf[]>();
   for (const row of db.prepare(`
-    SELECT source_spans.ability_version_id, source_spans.start_byte, semantic_families.role,
+    SELECT source_spans.ability_version_id, source_spans.start_byte, source_spans.end_byte, source_spans.fragment, semantic_families.role,
       fingerprints.family_id, fingerprints.family_version, fingerprints.parameters_json
     FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
     JOIN abilities ON abilities.id = source_spans.ability_version_id AND abilities.current = 1
     JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
     JOIN semantic_families ON semantic_families.id = fingerprints.family_id AND semantic_families.version = fingerprints.family_version
     WHERE annotations.status = 'active'
-  `).all() as Array<{ ability_version_id: number; start_byte: number; role: string; family_id: string; family_version: number; parameters_json: string }>) {
+  `).all() as Array<{ ability_version_id: number; start_byte: number; end_byte: number; fragment: string; role: string; family_id: string; family_version: number; parameters_json: string }>) {
     const list = leaves.get(row.ability_version_id) ?? [];
-    list.push({ role: row.role, family_id: row.family_id, family_version: row.family_version, parameters: JSON.parse(row.parameters_json) as Record<string, unknown>, start_byte: row.start_byte });
+    list.push({
+      role: row.role, family_id: row.family_id, family_version: row.family_version, parameters: JSON.parse(row.parameters_json) as Record<string, unknown>,
+      start_byte: row.start_byte, end_byte: row.end_byte, fragment: row.fragment,
+    });
     leaves.set(row.ability_version_id, list);
   }
   return abilities.flatMap((ability) => {
@@ -84,7 +87,7 @@ export function listShapes(db: DatabaseSync, options: { factionId?: string } = {
   const states = entryStates(db);
   const shapes = new Map<string, ShapeSummary & { sources: Set<string> }>();
   for (const member of members) {
-    const compiled = compileLeaves(member.leaves);
+    const compiled = compileLeaves(member.leaves, member.source_text);
     const entry = shapes.get(compiled.signature) ?? { signature: compiled.signature, members: 0, distinct_sources: 0, compiles: 0, approved: 0, open: 0, first_error: null, sources: new Set<string>() };
     entry.members += 1;
     entry.sources.add(member.source_hash);
@@ -137,7 +140,7 @@ export function getShape(db: DatabaseSync, signature: string, options: { faction
   const states = entryStates(db);
   const groups = new Map<string, ShapeMember>();
   for (const member of tiledMembers(db, options.factionId?.trim() || null)) {
-    const compiled = compileLeaves(member.leaves);
+    const compiled = compileLeaves(member.leaves, member.source_text);
     if (compiled.signature !== signature) continue;
     const state = memberState(states.get(member.id), compilationInputsHash(db, member.id), compiled);
     const shown = render(member.faction_id, member.ability_id, compiled);
@@ -180,7 +183,7 @@ function decide(db: DatabaseSync, value: unknown, status: "approved" | "rejected
     for (const id of input.ids) {
       const source = members.get(id);
       if (!source) throw new ShapeError(409, `Source version ${id} is no longer current and fully described; reload the shape.`);
-      const compiled = compileLeaves(source.leaves);
+      const compiled = compileLeaves(source.leaves, source.source_text);
       if (compiled.signature !== input.signature) throw new ShapeError(409, `${source.faction_id}/${source.ability_id} no longer has this shape; reload it.`);
       if (!compiled.ok) throw new ShapeError(422, `${source.faction_id}/${source.ability_id} does not compile: ${compiled.errors.join("; ")}`);
       if (status === "approved") {

@@ -1,9 +1,14 @@
 import type { DatabaseSync } from "node:sqlite";
 
 import { hashJson } from "../round4/hash.js";
+import { boundedInteger, enumValue, exactKeys } from "./family-validation.js";
+import { normalizeTargetingParameters, TARGETING_FAMILIES } from "./targeting-families.js";
 
 export const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
 export type SemanticRole = (typeof SEMANTIC_ROLES)[number];
+/** Leaf roles: the proposal roles plus combinators, which join leaves rather than mean something alone. */
+export const LEAF_ROLES = [...SEMANTIC_ROLES, "COMBINATOR"] as const;
+export type LeafRole = (typeof LEAF_ROLES)[number];
 
 type SourceQualifiedValue = { source: string };
 type FamilyParameters = Record<string, unknown>;
@@ -11,7 +16,7 @@ type FamilyParameters = Record<string, unknown>;
 export type SemanticFamilyDefinition = {
   id: string;
   version: number;
-  role: SemanticRole;
+  role: LeafRole;
   label: string;
   description: string;
   starter: Record<string, unknown>;
@@ -46,9 +51,11 @@ const weaponGrantKeywords = [
 /** Weapon abilities that carry a value, written the way the DSL's keyword-grant spells them. */
 const parameterizedWeaponKeyword = /^(?:(?:Sustained Hits|Rapid Fire|Melta) (?:[1-9]|D3|D6)|Anti-[A-Z][A-Za-z -]*[A-Za-z] [2-6]\+)$/u;
 
-const EVENT_KINDS = [
+const EVENT_KINDS_V3 = [
   "attack-made", "hit-roll", "wound-roll", "charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end", "after-shooting",
 ] as const;
+/** Attacks are the `attack` family from version 4 on, which says who attacks and with what. */
+const EVENT_KINDS = ["charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end", "after-shooting"] as const;
 const WEAPON_TYPES = ["all", "melee", "ranged"] as const;
 /** Event kinds that need to say which phase, and whose turn, they belong to. */
 export const PHASE_EVENT_KINDS = ["phase-start", "phase-end"] as const;
@@ -57,11 +64,6 @@ const TURNS = ["your", "opponent", "either"] as const;
 const BUFF_SUBJECTS = ["this-unit", "this-model", "bearer"] as const;
 const FNP_AGAINST = ["all", "mortal", "psychic", "psychic-and-mortal"] as const;
 const CHARACTERISTICS = ["M", "T", "Sv", "W", "A", "Ld", "OC", "WS", "BS", "S", "AP", "D"] as const;
-
-function boundedInteger(value: unknown, min: number, max: number, label: string): number {
-  if (typeof value === "number" && Number.isSafeInteger(value) && value >= min && value <= max) return value;
-  throw new TypeError(`${label} must be an integer from ${min} to ${max}.`);
-}
 
 /** Versioned, human-reviewed semantic families available to local tooling. */
 export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
@@ -178,7 +180,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
     parameterSchema: {
       type: "object",
       required: ["kind"],
-      properties: { kind: { enum: EVENT_KINDS } },
+      properties: { kind: { enum: EVENT_KINDS_V3 } },
       additionalProperties: false,
     },
     deprecated: true,
@@ -189,6 +191,26 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
     role: "EVENT",
     label: "At an event",
     description: "Marks when the mechanic triggers. Attack events are part of the effect; the others become the ability's trigger. The start or end of a phase also names the phase and whose turn it is.",
+    starter: { kind: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["kind"],
+      properties: {
+        kind: { enum: EVENT_KINDS_V3 },
+        // Present exactly when kind is a phase boundary; the leaf form shows them only then.
+        phase: { enum: PHASES, "x-only-when": { kind: PHASE_EVENT_KINDS } },
+        turn: { enum: TURNS, "x-only-when": { kind: PHASE_EVENT_KINDS } },
+      },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "event",
+    version: 4,
+    role: "EVENT",
+    label: "At an event",
+    description: "Marks when the mechanic triggers: a charge, a unit or model destroyed, after shooting, or the start or end of a phase (naming the phase and whose turn). Attacks are the separate attack leaf.",
     starter: { kind: "" },
     parameterSchema: {
       type: "object",
@@ -275,6 +297,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
     label: "Below starting strength",
     description: "Requires a named unit to be below starting strength.",
     starter: { subject: "" },
+    deprecated: true,
   },
   {
     id: "characteristic-set",
@@ -395,6 +418,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
       additionalProperties: false,
     },
   },
+  ...TARGETING_FAMILIES,
 ] as const;
 
 /** The version new fingerprints and model requests use for a family. */
@@ -426,14 +450,6 @@ function requiredObject(parameters: FamilyParameters): Record<string, unknown> {
   return parameters;
 }
 
-function exactKeys(parameters: Record<string, unknown>, keys: readonly string[], family: string): void {
-  const received = Object.keys(parameters).sort();
-  const expected = [...keys].sort();
-  if (received.length !== expected.length || received.some((key, index) => key !== expected[index])) {
-    throw new TypeError(`${family} parameters must be exactly: ${expected.join(", ")}.`);
-  }
-}
-
 function enumOrSource(
   value: unknown,
   values: readonly string[],
@@ -443,11 +459,6 @@ function enumOrSource(
   const source = sourceQualified(value, label);
   if (source) return source;
   throw new TypeError(`${label} must be one of ${values.join(", ")} or an exact source snippet.`);
-}
-
-function enumValue(value: unknown, values: readonly string[], label: string): string {
-  if (typeof value === "string" && values.includes(value)) return value;
-  throw new TypeError(`${label} must be one of ${values.join(", ")}.`);
 }
 
 function integerOrSource(value: unknown, label: string): number | SourceQualifiedValue {
@@ -465,7 +476,7 @@ export function reviewedFamily(id: string, version = 1): SemanticFamilyDefinitio
 }
 
 /** Resolve a family's semantic role from the reviewed registry. */
-export function familyRole(id: string, version = 1): SemanticRole {
+export function familyRole(id: string, version = 1): LeafRole {
   return reviewedFamily(id, version).role;
 }
 
@@ -522,9 +533,9 @@ export function normalizeFingerprintParameters(
     case "event":
       if (version < 3) exactKeys(input, ["kind"], family);
       if (version === 1) return { kind: enumOrSource(input.kind, ["attack-made", "hit-roll", "wound-roll", "charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end"], "event.kind") };
-      if (version === 2) return { kind: enumValue(input.kind, EVENT_KINDS, "event.kind") };
+      if (version === 2) return { kind: enumValue(input.kind, EVENT_KINDS_V3, "event.kind") };
       {
-        const kind = enumValue(input.kind, EVENT_KINDS, "event.kind");
+        const kind = enumValue(input.kind, version === 3 ? EVENT_KINDS_V3 : EVENT_KINDS, "event.kind");
         if (!(PHASE_EVENT_KINDS as readonly string[]).includes(kind)) {
           exactKeys(input, ["kind"], family);
           return { kind };
@@ -604,8 +615,11 @@ export function normalizeFingerprintParameters(
         operation: enumValue(input.operation, ["add", "subtract"], "characteristic-modifier.operation"),
         value: boundedInteger(input.value, 1, 20, "characteristic-modifier.value"),
       };
-    default:
+    default: {
+      const targeting = normalizeTargetingParameters(family, input);
+      if (targeting) return targeting;
       throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
+    }
   }
 }
 

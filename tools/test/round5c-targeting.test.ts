@@ -1,0 +1,147 @@
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { createRequire } from "node:module";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import type { DatabaseSync as DatabaseType } from "node:sqlite";
+
+import { afterEach, describe, expect, it } from "vitest";
+import { normalizeFingerprintParameters, validateFingerprint } from "../src/round5c/contracts.js";
+import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
+import { upgradeFamilyVersions } from "../src/round5c/family-versions.js";
+import { getAbility } from "../src/round5c/review.js";
+import { refreshSources } from "../src/round5c/source.js";
+
+type DatabaseSync = DatabaseType;
+const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
+
+// Fabricated fixture prose only.
+const ATTACK = "Each time a model in that unit makes an attack";
+const WEAK = "if that unit is below its Starting Strength";
+const HIT = "a hit roll is made";
+
+const roots: string[] = [];
+afterEach(() => {
+  for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });
+});
+
+function fixture(records: Array<{ ability_id: string; raw_text: string }>): DatabaseSync {
+  const root = mkdtempSync(join(tmpdir(), "round5c-targeting-"));
+  roots.push(root);
+  writeFileSync(join(root, "fixture.json"), JSON.stringify(records.map((record) => ({ faction_id: "alpha", ...record }))));
+  const db = new DatabaseSync(":memory:");
+  initializeWorkbench(db);
+  refreshSources(db, root);
+  return db;
+}
+
+function current(db: DatabaseSync, abilityId: string): { id: number; source_text: string } {
+  return db.prepare("SELECT id, source_text FROM abilities WHERE current = 1 AND ability_id = ?").get(abilityId) as { id: number; source_text: string };
+}
+
+/** Write a leaf on an old family version the way an earlier workbench did, with its decided surface. */
+function legacyLeaf(db: DatabaseSync, abilityId: string, exactText: string, familyId: string, version: number, parameters: object, surface = true): string {
+  const row = current(db, abilityId);
+  const start = Buffer.byteLength(row.source_text.slice(0, row.source_text.indexOf(exactText)));
+  const spanId = insertSpan(db, row.id, "RAW_TEXT", start, start + Buffer.byteLength(exactText), exactText);
+  db.prepare("UPDATE semantic_families SET status = 'active' WHERE id = ? AND version = ?").run(familyId, version);
+  const fingerprint = validateFingerprint(db, familyId, parameters as never, version, exactText);
+  db.prepare("UPDATE semantic_families SET status = 'deprecated' WHERE id = ? AND version = ?").run(familyId, version);
+  db.prepare("INSERT OR IGNORE INTO annotation_batches (id, operation, reviewer, created_at) VALUES ('legacy', 'review', 'r', 'x')").run();
+  db.prepare("INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, created_at) VALUES (?, ?, 'active', 'manual', 'human', 'r', 'legacy', 'x')").run(spanId, fingerprint);
+  if (surface) {
+    db.prepare("INSERT INTO leaf_surfaces (normalized_surface, fingerprint_id, status, batch_id, created_at) VALUES (?, ?, 'active', 'legacy', 'x')").run(exactText.toLowerCase(), fingerprint);
+  }
+  return fingerprint;
+}
+
+const surfaceMeaning = (db: DatabaseSync, surface: string) => db.prepare(`
+  SELECT fingerprints.family_id, fingerprints.family_version, fingerprints.parameters_json FROM leaf_surfaces
+  JOIN fingerprints ON fingerprints.id = leaf_surfaces.fingerprint_id WHERE normalized_surface = ?
+`).get(surface) as { family_id: string; family_version: number; parameters_json: string };
+
+describe("Round 5C targeting families", () => {
+  it("moves attack events and starting-strength leaves to their new families, surfaces included", () => {
+    const db = fixture([
+      { ability_id: "aura", raw_text: `${ATTACK}, add 1 to the Hit roll ${WEAK}.` },
+      { ability_id: "roll", raw_text: `Each time ${HIT}, gain 1CP.` },
+    ]);
+    try {
+      legacyLeaf(db, "aura", ATTACK, "event", 3, { kind: "attack-made" });
+      legacyLeaf(db, "aura", WEAK, "below-starting-strength", 1, { subject: "target-unit" });
+      legacyLeaf(db, "roll", HIT, "event", 3, { kind: "hit-roll" }, false);
+
+      const report = upgradeFamilyVersions(db);
+      expect(report).toMatchObject({ migrated_fingerprints: 2, migrated_annotations: 2, repointed_surfaces: 2 });
+      // A hit roll never said who attacked, so it has no attack-family meaning and is left for review.
+      expect(report.unmapped).toEqual([expect.objectContaining({ family_id: "event", active_annotations: 1 })]);
+      expect(getAbility(db, current(db, "aura").id).annotations.map(({ family_id, parameters }) => ({ family_id, parameters }))).toEqual([
+        { family_id: "attack", parameters: { direction: "makes", unit: "that-unit", attack_type: "any" } },
+        { family_id: "unit-state", parameters: { states: ["below-starting-strength"], subject: "target", negated: false } },
+      ]);
+      expect(surfaceMeaning(db, ATTACK.toLowerCase())).toMatchObject({ family_id: "attack", family_version: 1 });
+      expect(surfaceMeaning(db, WEAK.toLowerCase())).toMatchObject({ family_id: "unit-state", family_version: 1 });
+      expect(upgradeFamilyVersions(db)).toMatchObject({ migrated_fingerprints: 0, repointed_surfaces: 0 });
+    } finally {
+      db.close();
+    }
+  });
+
+  it("repairs a decided surface an earlier migration left on a superseded fingerprint", () => {
+    const db = fixture([{ ability_id: "shot", raw_text: "After this unit has shot, gain 1CP." }]);
+    try {
+      const stale = legacyLeaf(db, "shot", "After this unit has shot", "event", 2, { kind: "after-shooting" });
+      // The annotation already moved on, but the surface stayed behind: the state earlier migrations left.
+      db.prepare("UPDATE annotations SET status = 'superseded' WHERE fingerprint_id = ?").run(stale);
+      db.prepare("UPDATE fingerprints SET status = 'superseded' WHERE id = ?").run(stale);
+      expect(upgradeFamilyVersions(db).repointed_surfaces).toBe(1);
+      expect(surfaceMeaning(db, "after this unit has shot")).toEqual({ family_id: "event", family_version: 4, parameters_json: JSON.stringify({ kind: "after-shooting" }) });
+    } finally {
+      db.close();
+    }
+  });
+
+  it("rebuilds an older family table so combinators fit, keeping fingerprints and their references", () => {
+    const db = new DatabaseSync(":memory:");
+    try {
+      db.exec(`
+        CREATE TABLE semantic_families (
+          id TEXT NOT NULL, version INTEGER NOT NULL,
+          role TEXT NOT NULL CHECK(role IN ('EFFECT', 'DURATION', 'EVENT', 'CONDITION')),
+          parameter_schema_json TEXT NOT NULL, status TEXT NOT NULL, PRIMARY KEY(id, version)
+        ) STRICT;
+        CREATE TABLE fingerprints (
+          id TEXT PRIMARY KEY CHECK(id = 'fp_' || canonical_hash), family_id TEXT NOT NULL, family_version INTEGER NOT NULL,
+          parameters_json TEXT NOT NULL, canonical_hash TEXT NOT NULL UNIQUE, legacy_fingerprint_id TEXT UNIQUE, status TEXT NOT NULL,
+          FOREIGN KEY(family_id, family_version) REFERENCES semantic_families(id, version) ON UPDATE RESTRICT ON DELETE RESTRICT
+        ) STRICT;
+      `);
+      const hash = "a".repeat(64);
+      // A family the registry no longer lists, so seeding leaves it alone.
+      db.prepare("INSERT INTO semantic_families VALUES ('retired-family', 1, 'EFFECT', '{}', 'deprecated')").run();
+      db.prepare("INSERT INTO fingerprints VALUES (?, 'retired-family', 1, '{}', ?, NULL, 'active')").run(`fp_${hash}`, hash);
+      initializeWorkbench(db);
+      expect(db.prepare("SELECT role FROM semantic_families WHERE id = 'instead'").get()).toEqual({ role: "COMBINATOR" });
+      expect(db.prepare("SELECT family_id FROM fingerprints WHERE id = ?").get(`fp_${hash}`)).toEqual({ family_id: "retired-family" });
+      // The rebuilt table still anchors the foreign key.
+      expect(() => db.prepare("INSERT INTO fingerprints VALUES (?, 'nowhere', 1, '{}', ?, NULL, 'active')").run(`fp_${"b".repeat(64)}`, "b".repeat(64))).toThrow(/FOREIGN KEY/u);
+    } finally {
+      db.close();
+    }
+  });
+
+  it("canonicalises predicate parameters and refuses meanings the subject cannot have", () => {
+    expect(normalizeFingerprintParameters("unit-keyword", { keywords: ["**vehicle**", "MONSTER"], subject: "target", negated: false }, 1))
+      .toEqual({ keywords: ["MONSTER", "VEHICLE"], subject: "target", negated: false });
+    expect(() => normalizeFingerprintParameters("unit-keyword", { keywords: ["Vehicle", "VEHICLE"], subject: "target", negated: false }, 1)).toThrow(/twice/u);
+    expect(normalizeFingerprintParameters("unit-state", { states: ["below-half-strength", "battle-shocked"], subject: "target", negated: true }, 1).states)
+      .toEqual(["below-half-strength", "battle-shocked"]);
+    expect(normalizeFingerprintParameters("unit-state", { states: ["battle-shocked", "below-half-strength"], subject: "target", negated: true }, 1).states)
+      .toEqual(["below-half-strength", "battle-shocked"]);
+    expect(() => normalizeFingerprintParameters("unit-position", { kind: "closest-eligible", subject: "this-unit", negated: false }, 1)).toThrow(/subject must be target/u);
+    expect(() => normalizeFingerprintParameters("unit-position", { kind: "within", subject: "target", negated: false }, 1)).toThrow(/exactly: inches, kind, negated, subject/u);
+    expect(normalizeFingerprintParameters("unit-position", { kind: "objective-range", controlled_by: "any", subject: "this-unit", negated: false }, 1).controlled_by).toBe("any");
+    expect(() => normalizeFingerprintParameters("select-unit", { scope: "enemy", distance: "any", inches: 12, visible: true }, 1)).toThrow(/exactly/u);
+    expect(() => normalizeFingerprintParameters("attack", { direction: "makes", unit: "this-model" }, 1)).toThrow(/exactly/u);
+    expect(() => normalizeFingerprintParameters("event", { kind: "attack-made" }, 4)).toThrow(/event.kind/u);
+  });
+});
