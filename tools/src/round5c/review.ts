@@ -3,12 +3,13 @@ import type { DatabaseSync } from "node:sqlite";
 
 import { hashJson } from "../round4/hash.js";
 
-import { familyRole, SEMANTIC_ROLES, validateFingerprint } from "./contracts.js";
+import { currentFamilyVersion, familyRole, SEMANTIC_ROLES, validateFingerprint } from "./contracts.js";
 import { getAbilityCoverage, getCurrentCoverage, type AbilityCoverage, type SourceFragmentView } from "./coverage.js";
 import { bumpWorkbenchRevision, getWorkbenchRevision, insertSpan, invalidateWholeReview, parseStoredFragments, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
 import { resolveAbilityContext, type AbilityContext } from "./context.js";
 import { abilityReadiness, currentReadiness, type Readiness } from "./readiness.js";
 import { applySourceAtomUndo, assertSourceAtomUndo, sourceAtomsForAbility } from "./atoms.js";
+import { applyLeafUndo, assertLeafUndo } from "./leaves.js";
 import { applyOntologyUndo, assertOntologyUndo } from "./ontology.js";
 import { recordCandidateSuggestion } from "./ontology-store.js";
 import { RELATION_TYPES } from "../round4b/contracts.js";
@@ -547,10 +548,10 @@ function fingerprintForDecision(db: DatabaseSync, decision: ParsedDecision): { i
   if (!decision.family_id || !decision.parameters) {
     invalid(`${decision.action} requires family_id and parameters.`);
   }
-  const version = decision.family_version ?? 1;
   let fingerprintId: string;
   let role: string;
   try {
+    const version = decision.family_version ?? currentFamilyVersion(decision.family_id);
     fingerprintId = validateFingerprint(db, decision.family_id, decision.parameters, version, decision.exact_text);
     role = familyRole(decision.family_id, version);
   } catch (error) {
@@ -568,6 +569,12 @@ function proposalFingerprint(db: DatabaseSync, proposal: ProposalRow, decision: 
     return fingerprintForDecision(db, decision);
   }
   if (proposal.role !== decision.role) conflict("The selected role conflicts with the proposal.");
+  const current = db.prepare(`
+    SELECT 1 FROM fingerprints JOIN semantic_families ON semantic_families.id = fingerprints.family_id
+      AND semantic_families.version = fingerprints.family_version
+    WHERE fingerprints.id = ? AND fingerprints.status = 'active' AND semantic_families.status = 'active'
+  `).get(proposal.fingerprint_id);
+  if (!current) conflict("This proposal uses a retired family version; correct it with the current family instead.");
   if (decision.family_id !== undefined || decision.family_version !== undefined || decision.parameters !== undefined) {
     const requested = fingerprintForDecision(db, decision);
     if (requested.id !== proposal.fingerprint_id) conflict("The selected fingerprint conflicts with the proposal.");
@@ -989,6 +996,9 @@ function currentAnnotationForUndo(db: DatabaseSync, annotationId: number): UndoA
   return annotation;
 }
 
+/** Batch members keyed by a text id; their own undo hooks handle them. */
+const NON_NUMERIC_MEMBERS = new Set(["fingerprint-superseded"]);
+
 const PROPOSAL_UNDO_TRANSITIONS: Record<string, { expected: string; restore: string }> = {
   "proposal-accepted": { expected: "accepted", restore: "pending" },
   "proposal-accepted-unresolved": { expected: "accepted", restore: "unresolved" },
@@ -1047,7 +1057,9 @@ export function undoBatch(
     }
     assertSourceAtomUndo(db, members);
     assertOntologyUndo(db, batchId, members);
+    assertLeafUndo(db, batchId, members);
     for (const member of members) {
+      if (NON_NUMERIC_MEMBERS.has(member.entity_kind)) continue;
       const id = numericMemberId(member);
       const proposalTransition = PROPOSAL_UNDO_TRANSITIONS[member.entity_kind];
       if (proposalTransition) assertProposalStatus(db, id, proposalTransition.expected);
@@ -1080,6 +1092,7 @@ export function undoBatch(
       }
     }
     for (const member of members) {
+      if (NON_NUMERIC_MEMBERS.has(member.entity_kind)) continue;
       const id = numericMemberId(member);
       const proposalTransition = PROPOSAL_UNDO_TRANSITIONS[member.entity_kind];
       if (proposalTransition) {
@@ -1110,6 +1123,7 @@ export function undoBatch(
     }
     for (const id of applySourceAtomUndo(db, reversalId, members)) touchedAbilities.add(id);
     for (const id of applyOntologyUndo(db, batchId, reversalId, members)) touchedAbilities.add(id);
+    applyLeafUndo(db, batchId, reversalId, members);
     invalidateWholeReview(db, touchedAbilities);
     bumpWorkbenchRevision(db);
     return { batch_id: batchId, reversed_batch_id: reversalId };

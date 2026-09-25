@@ -6,8 +6,10 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 import { fileURLToPath } from "node:url";
 
 import { exactSpan, seedReviewedFamilies } from "./contracts.js";
+import { upgradeFamilyVersions } from "./family-versions.js";
 import { backfillFamilyCandidates } from "./ontology-store.js";
 import { COMPILED_SCHEMA, COMPILED_TABLES } from "./compiled.js";
+import { LEAVES_SCHEMA, LEAVES_TABLES } from "./leaves-schema.js";
 import { EXTENSION_SCHEMA, EXTENSION_TABLES } from "./schema-ext.js";
 export { exactSpan } from "./contracts.js";
 type DatabaseSync = DatabaseType;
@@ -445,7 +447,7 @@ const EPOCH_TABLES = [
   "abilities", "semantic_families", "fingerprints", "source_spans", "model_runs", "annotation_batches",
   "proposals", "annotations", "candidate_judgments", "batch_members", "ability_reviews", "gaps",
   "source_chunks", "publication_batches",
-  ...EXTENSION_TABLES, ...COMPILED_TABLES,
+  ...EXTENSION_TABLES, ...COMPILED_TABLES, ...LEAVES_TABLES,
 ] as const;
 
 function upgradeDataEpoch(db: DatabaseSync): void {
@@ -546,12 +548,14 @@ export function initializeWorkbench(db: DatabaseSync): void {
     db.exec(SCHEMA);
     db.exec(EXTENSION_SCHEMA);
     db.exec(COMPILED_SCHEMA);
+    db.exec(LEAVES_SCHEMA);
     upgradeSourceShape(db);
     upgradeAnnotationAuthority(db);
     upgradeAnnotationBatchMetadata(db);
     upgradeGapProposalLink(db);
     upgradeRetireStamps(db);
     seedReviewedFamilies(db);
+    upgradeFamilyVersions(db);
     upgradeDataEpoch(db);
     upgradeOntologyBackfill(db);
   });

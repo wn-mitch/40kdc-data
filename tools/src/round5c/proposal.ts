@@ -242,7 +242,7 @@ function activeRegistry(db: DatabaseSync): PreparedRequest["registry"] {
     WHERE status = 'active'
     ORDER BY id, version
   `).all() as Array<{ id: string; version: number; role: SemanticRole; parameter_schema_json: string }>;
-  if (rows.length !== REVIEWED_FAMILY_REGISTRY.length) throw new Error("The persisted reviewed semantic registry is incomplete.");
+  if (rows.length !== REVIEWED_FAMILY_REGISTRY.filter((family) => !family.deprecated).length) throw new Error("The persisted reviewed semantic registry is incomplete.");
   return rows.map((row) => ({
     id: row.id,
     version: row.version,

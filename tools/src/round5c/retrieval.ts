@@ -29,7 +29,7 @@ type Prototype = {
   context_text: string | null;
 };
 
-type ChunkMatch = {
+export type ChunkMatch = {
   ability_version_id: number;
   faction_id: string;
   ability_id: string;
@@ -90,7 +90,7 @@ function lexicalTokens(source: string): string[] {
   return [...new Set(source.match(/[\p{L}\p{N}]+/gu) ?? [])];
 }
 
-function ftsQuery(surface: string): string | null {
+export function ftsQuery(surface: string): string | null {
   const tokens = lexicalTokens(surface);
   if (tokens.length === 0) return null;
   return tokens.map((token) => `"${token.replaceAll('"', '""')}"`).join(" AND ");
@@ -105,7 +105,7 @@ function contextOverlap(first: string, second: string): number {
   return shared / Math.max(firstTokens.size, secondTokens.size);
 }
 
-function matchesAt(projection: NormalizedProjection, surface: string): Array<{ start_byte: number; end_byte: number }> {
+export function matchesAt(projection: NormalizedProjection, surface: string): Array<{ start_byte: number; end_byte: number }> {
   if (!surface || projection.text.length < surface.length) return [];
   const matches: Array<{ start_byte: number; end_byte: number }> = [];
   let from = 0;
@@ -151,7 +151,7 @@ function prototypeRows(db: DatabaseSync): Prototype[] {
   `).all() as unknown as Prototype[];
 }
 
-function candidateChunks(db: DatabaseSync, query: string): ChunkMatch[] {
+export function candidateChunks(db: DatabaseSync, query: string): ChunkMatch[] {
   return db.prepare(`
     SELECT source_chunks.ability_version_id, abilities.faction_id, abilities.ability_id,
       abilities.source_hash, abilities.source_text, source_chunks.fragment,

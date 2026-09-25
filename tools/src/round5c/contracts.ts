@@ -16,6 +16,11 @@ export type SemanticFamilyDefinition = {
   description: string;
   starter: Record<string, unknown>;
   parameterSchema: Record<string, unknown>;
+  /**
+   * A superseded version. Its existing fingerprints stay readable, but no new fingerprint or
+   * model request may use it; `upgradeFamilyVersions` moves its leaves to the current version.
+   */
+  deprecated?: true;
 };
 
 const sourceQualifiedSchema = {
@@ -37,6 +42,14 @@ const weaponGrantKeywords = [
   "Devastating Wounds", "Lethal Hits", "Twin-linked", "Assault", "Heavy", "Pistol", "Torrent", "Blast",
   "Ignores Cover", "Precision", "Hazardous", "Indirect Fire", "Extra Attacks", "Psychic", "One Shot", "Lance",
 ] as const;
+
+/** Weapon abilities that carry a value, written the way the DSL's keyword-grant spells them. */
+const parameterizedWeaponKeyword = /^(?:(?:Sustained Hits|Rapid Fire|Melta) (?:[1-9]|D3|D6)|Anti-[A-Z][A-Za-z -]*[A-Za-z] [2-6]\+)$/u;
+
+const EVENT_KINDS = [
+  "attack-made", "hit-roll", "wound-roll", "charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end", "after-shooting",
+] as const;
+const WEAPON_TYPES = ["all", "melee", "ranged"] as const;
 
 /** Versioned, human-reviewed semantic families available to local tooling. */
 export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
@@ -141,6 +154,21 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "event",
+    version: 2,
+    role: "EVENT",
+    label: "At an event",
+    description: "Marks when the mechanic triggers. Attack events are part of the effect; the others become the ability's trigger.",
+    starter: { kind: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["kind"],
+      properties: { kind: { enum: EVENT_KINDS } },
+      additionalProperties: false,
+    },
   },
   {
     id: "turn-start",
@@ -181,6 +209,24 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
       type: "object",
       required: ["subject"],
       properties: { subject: enumOrSourceSchema(["this-model", "this-unit", "bearers-unit"]) },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "leading-unit",
+    version: 2,
+    role: "CONDITION",
+    label: "While leading or supporting a unit",
+    description: "Requires the specified model or unit to be attached to another unit, as its leader or in support.",
+    starter: { subject: "this-model", attachment: "leading" },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "attachment"],
+      properties: {
+        subject: enumOrSourceSchema(["this-model", "this-unit", "bearers-unit"]),
+        attachment: { enum: ["leading", "supporting"] },
+      },
       additionalProperties: false,
     },
   },
@@ -232,8 +278,34 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "weapon-ability-grant",
+    version: 2,
+    role: "EFFECT",
+    label: "Give weapons an ability",
+    description: "Weapons equipped by the specified models gain a named weapon ability, optionally only melee or only ranged weapons. This is not a unit keyword.",
+    starter: { subject: "this-unit", keyword: "", weapon_type: "all" },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "keyword", "weapon_type"],
+      properties: {
+        subject: { enum: ["this-unit", "this-model", "bearer"] },
+        keyword: { anyOf: [{ enum: weaponGrantKeywords }, { type: "string", pattern: parameterizedWeaponKeyword.source }] },
+        weapon_type: { enum: WEAPON_TYPES },
+      },
+      additionalProperties: false,
+    },
   },
 ] as const;
+
+/** The version new fingerprints and model requests use for a family. */
+export function currentFamilyVersion(id: string): number {
+  const current = REVIEWED_FAMILY_REGISTRY.filter((family) => family.id === id && !family.deprecated);
+  if (current.length !== 1) throw new RangeError(`Reviewed family ${id} has ${current.length} current versions.`);
+  return current[0]!.version;
+}
 
 const familiesByKey: Record<string, SemanticFamilyDefinition> = Object.fromEntries(
   REVIEWED_FAMILY_REGISTRY.map((family) => [`${family.id}@${family.version}`, family]),
@@ -352,9 +424,9 @@ export function normalizeFingerprintParameters(
       };
     case "event":
       exactKeys(input, ["kind"], family);
-      return {
-        kind: enumOrSource(input.kind, ["attack-made", "hit-roll", "wound-roll", "charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end"], "event.kind"),
-      };
+      return version === 1
+        ? { kind: enumOrSource(input.kind, ["attack-made", "hit-roll", "wound-roll", "charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end"], "event.kind") }
+        : { kind: enumValue(input.kind, EVENT_KINDS, "event.kind") };
     case "turn-start":
       exactKeys(input, ["turn"], family);
       return { turn: enumValue(input.turn, ["battle-round", "player-turn", "opponent-turn"], "turn-start.turn") };
@@ -365,8 +437,15 @@ export function normalizeFingerprintParameters(
       return { faction };
     }
     case "leading-unit":
-      exactKeys(input, ["subject"], family);
-      return { subject: enumOrSource(input.subject, ["this-model", "this-unit", "bearers-unit"], "leading-unit.subject") };
+      if (version === 1) {
+        exactKeys(input, ["subject"], family);
+        return { subject: enumOrSource(input.subject, ["this-model", "this-unit", "bearers-unit"], "leading-unit.subject") };
+      }
+      exactKeys(input, ["subject", "attachment"], family);
+      return {
+        subject: enumOrSource(input.subject, ["this-model", "this-unit", "bearers-unit"], "leading-unit.subject"),
+        attachment: enumValue(input.attachment, ["leading", "supporting"], "leading-unit.attachment"),
+      };
     case "below-starting-strength":
       exactKeys(input, ["subject"], family);
       return { subject: enumOrSource(input.subject, ["this-unit", "target-unit"], "below-starting-strength.subject") };
@@ -377,12 +456,25 @@ export function normalizeFingerprintParameters(
         characteristic: enumValue(input.characteristic, ["M", "T", "Sv", "W", "A", "Ld", "OC", "WS", "BS", "S", "AP", "D"], "characteristic-set.characteristic"),
         value: integerOrSource(input.value, "characteristic-set.value"),
       };
-    case "weapon-ability-grant":
-      exactKeys(input, ["subject", "keyword"], family);
+    case "weapon-ability-grant": {
+      if (version === 1) {
+        exactKeys(input, ["subject", "keyword"], family);
+        return {
+          subject: enumValue(input.subject, ["this-unit", "this-model", "bearer"], "weapon-ability-grant.subject"),
+          keyword: enumValue(input.keyword, weaponGrantKeywords, "weapon-ability-grant.keyword"),
+        };
+      }
+      exactKeys(input, ["subject", "keyword", "weapon_type"], family);
+      const keyword = input.keyword;
+      if (typeof keyword !== "string" || !((weaponGrantKeywords as readonly string[]).includes(keyword) || parameterizedWeaponKeyword.test(keyword))) {
+        throw new TypeError(`weapon-ability-grant.keyword must be a named weapon ability such as Lethal Hits or Sustained Hits 1.`);
+      }
       return {
         subject: enumValue(input.subject, ["this-unit", "this-model", "bearer"], "weapon-ability-grant.subject"),
-        keyword: enumValue(input.keyword, weaponGrantKeywords, "weapon-ability-grant.keyword"),
+        keyword,
+        weapon_type: enumValue(input.weapon_type, WEAPON_TYPES, "weapon-ability-grant.weapon_type"),
       };
+    }
     default:
       throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
   }
@@ -409,25 +501,31 @@ export function seedReviewedFamilies(db: DatabaseSync): void {
     "SELECT role, parameter_schema_json, status FROM semantic_families WHERE id = ? AND version = ?",
   );
   const insert = db.prepare(
-    "INSERT INTO semantic_families (id, version, role, parameter_schema_json, status) VALUES (?, ?, ?, ?, 'active')",
+    "INSERT INTO semantic_families (id, version, role, parameter_schema_json, status) VALUES (?, ?, ?, ?, ?)",
   );
+  const deprecate = db.prepare("UPDATE semantic_families SET status = 'deprecated' WHERE id = ? AND version = ? AND status = 'active'");
 
   {
     for (const family of REVIEWED_FAMILY_REGISTRY) {
       const schemaJson = JSON.stringify(family.parameterSchema);
+      const status = family.deprecated ? "deprecated" : "active";
       const existing = select.get(family.id, family.version) as
         | { role: string; parameter_schema_json: string; status: string }
         | undefined;
       if (!existing) {
-        insert.run(family.id, family.version, family.role, schemaJson);
+        insert.run(family.id, family.version, family.role, schemaJson, status);
         continue;
       }
       if (
         existing.role !== family.role ||
-        existing.status !== "active" ||
         hashJson(JSON.parse(existing.parameter_schema_json)) !== hashJson(family.parameterSchema)
       ) {
         throw new Error(`Reviewed registry drift for ${family.id}@${family.version}.`);
+      }
+      // Deprecation is one-way: a version the registry retires stops accepting new leaves.
+      if (existing.status !== status) {
+        if (existing.status === "deprecated") throw new Error(`Reviewed family ${family.id}@${family.version} was deprecated and cannot return.`);
+        deprecate.run(family.id, family.version);
       }
     }
   }

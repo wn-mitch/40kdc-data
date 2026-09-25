@@ -166,8 +166,8 @@ describe("Round 5C source-bound review ledger", () => {
       const span = sourceSpan(value.source, "models in this unit gain [Lethal Hits] on their weapons");
       const decision = {
         action: "confirm" as const, ability_version_id: value.abilityId, source_hash: value.sourceHash, ...span,
-        role: "EFFECT", family_id: "weapon-ability-grant", family_version: 1,
-        parameters: { subject: "this-unit", keyword: "Lethal Hits" },
+        role: "EFFECT", family_id: "weapon-ability-grant", family_version: 2,
+        parameters: { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "all" },
       };
       const batch = applyAnnotationBatch(value.db, { reviewer: "reviewer", decisions: [decision] });
       expect(getAbility(value.db, value.abilityId).annotations).toMatchObject([{
@@ -175,7 +175,7 @@ describe("Round 5C source-bound review ledger", () => {
         family_id: "weapon-ability-grant", role: "EFFECT", parameters: decision.parameters,
       }]);
       expectWorkbenchError(() => applyAnnotationBatch(value.db, { reviewer: "reviewer", decisions: [
-        { ...decision, parameters: { subject: "this-unit", keyword: "Devastating Wounds" } },
+        { ...decision, parameters: { subject: "this-unit", keyword: "Devastating Wounds", weapon_type: "all" } },
       ] }), 422);
       expectWorkbenchError(() => applyAnnotationBatch(value.db, { reviewer: "reviewer", decisions: [
         { ...decision, role: "CONDITION" },
@@ -420,8 +420,8 @@ describe("Round 5C source-bound review ledger", () => {
           ...span,
           role: "CONDITION",
           family_id: "leading-unit",
-          family_version: 1,
-          parameters: { subject: { source: span.exact_text } },
+          family_version: 2,
+          parameters: { subject: { source: span.exact_text }, attachment: "leading" },
         }],
       });
       expect(value.db.prepare("SELECT status FROM annotations WHERE batch_id = ?").get(original.batch_id)).toEqual({ status: "superseded" });

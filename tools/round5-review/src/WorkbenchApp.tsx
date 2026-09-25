@@ -3,10 +3,12 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { utf8Selection } from "./model";
 import { api, readable } from "./workbench-api";
 import { SourceWorkPanel, type SourceWorkAbility } from "./SourceWorkPanel";
+import { LeavesPage } from "./LeavesPage";
+import type { Family } from "./LeafForm";
 import "./workbench.css";
 
 type Role = "EFFECT" | "DURATION" | "EVENT" | "CONDITION";
-type View = "queue" | "abilities" | "family" | "dashboard";
+type View = "leaves" | "abilities" | "dashboard";
 type Action = "confirm" | "correct" | "reject" | "novel" | "ambiguous" | "confirm-connective";
 type Fragment = { fragment: string; start_byte: number; end_byte: number; text: string };
 type Span = {
@@ -43,12 +45,6 @@ type LeafProgress = {
   open_leaf_gaps: number; residue_regions: number; residue_bytes: number; composition_ready: boolean;
   readiness: SourceWorkAbility["progress"]["readiness"];
 };
-type QueueTarget =
-  | { view: "family"; family_id: string; signature: string }
-  | { view: "abilities"; ability_version_id: number; source_hash?: string; action?: "analyze-source" }
-  | { view: "luna"; mode: "residue"; faction_id: string | null };
-type QueueItem = { key: string; kind: string; unlocks: number; backlog: number; why: string; target: QueueTarget };
-type WorkQueue = { items: QueueItem[]; total: number; thresholds: { multi_yield: number; group_page: number } };
 type UncoveredSelection = Fragment & { ability_version_id: number; source_hash: string; ability_id: string; faction_id: string };
 type ParameterProperty = { enum?: string[]; anyOf?: Array<{ enum?: string[]; type?: string; const?: string }>; type?: string };
 type ReviewedFamily = {
@@ -66,13 +62,6 @@ type Draft = {
   role: string; family: string; version: string; parameters: string; overlap: boolean;
   span?: Span; kind: "selection" | "annotation" | "proposal";
 };
-type Occurrence = {
-  proposal_id: number; origin: string; ability_version_id: number; faction_id: string; ability_id: string; source_hash: string;
-  fragment: string; start_byte: number; end_byte: number; exact_text: string; context: string; context_signature: string; context_start: number; context_end: number; score: number | null;
-  fingerprint_id: string; family_id: string; family_version: number; role: string; parameters: Record<string, unknown>;
-};
-type FamilyGroup = { signature: string; count: number; context_count: number; samples: string[]; occurrences: Occurrence[] };
-type FamilyPage = { groups: FamilyGroup[]; next_cursor: string | null; progress: { reviewed: number; total: number } };
 
 const ROLES: Role[] = ["EFFECT", "DURATION", "EVENT", "CONDITION"];
 const ROLE_LABELS: Record<Role, string> = {
@@ -82,16 +71,10 @@ const ROLE_LABELS: Record<Role, string> = {
 const CHARACTERISTICS = ["M", "T", "Sv", "W", "A", "Ld", "OC", "WS", "BS", "S", "AP", "D"];
 const REVIEWER = "local-reviewer";
 const VIEWS: { id: View; label: string }[] = [
-  { id: "queue", label: "Next up" },
-  { id: "abilities", label: "Abilities" },
-  { id: "family", label: "Family mode" },
+  { id: "leaves", label: "Leaves" },
+  { id: "abilities", label: "Sources" },
   { id: "dashboard", label: "Coverage" },
 ];
-const QUEUE_KIND_LABELS: Record<string, string> = {
-  conflict: "Conflict", "family-group": "Family group", "unresolved-cluster": "Unresolved wording",
-  "broad-seed": "Narrow a seed", luna: "Hand to Luna", ability: "Ability card",
-  "unparsed-source": "Untouched source",
-};
 const encoder = new TextEncoder();
 const decoder = new TextDecoder("utf-8", { fatal: true });
 const percent = (value: number) => `${Math.round(value * 100)}%`;
@@ -286,9 +269,7 @@ function LeafProgressStrip({ progress }: { progress: LeafProgress }) {
 }
 
 export default function WorkbenchApp() {
-  const [view, setView] = useState<View>("queue");
-  const [queue, setQueue] = useState<WorkQueue | null>(null);
-  const [familySignature, setFamilySignature] = useState<string | null>(null);
+  const [view, setView] = useState<View>("leaves");
   const [page, setPage] = useState<AbilityPage>({ items: [], next_cursor: null });
   const [cursors, setCursors] = useState<(string | null)[]>([null]);
   const [searchInput, setSearchInput] = useState("");
@@ -314,13 +295,7 @@ export default function WorkbenchApp() {
   const [batches, setBatches] = useState<string[]>([]);
   const [revision, setRevision] = useState(0);
   const [shortcuts, setShortcuts] = useState(false);
-  const [family, setFamily] = useState("");
   const [families, setFamilies] = useState<ReviewedFamily[]>([]);
-  const [familyPage, setFamilyPage] = useState<FamilyPage>({ groups: [], next_cursor: null, progress: { reviewed: 0, total: 0 } });
-  const [familyCursors, setFamilyCursors] = useState<(string | null)[]>([null]);
-  const [selected, setSelected] = useState<Set<number>>(new Set());
-  const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
-  const [familyCorrection, setFamilyCorrection] = useState({ family: "", role: "EFFECT", version: "1", parameters: "{}" });
   const [dashboard, setDashboard] = useState<Record<string, unknown> | null>(null);
   const [externalNotice, setExternalNotice] = useState<string | null>(null);
   const knownWorkbenchRevision = useRef<number | null>(null);
@@ -333,7 +308,6 @@ export default function WorkbenchApp() {
   const visible = focused ? [focused] : page.items;
   const ability = focused ?? page.items.find((item) => item.id === activeId) ?? null;
   const cursor = cursors[cursors.length - 1];
-  const familyCursor = familyCursors[familyCursors.length - 1];
   const safeProposals = ability?.proposals.filter((proposal) => proposal.status === "pending" && proposal.family_id && ROLES.includes(proposal.role as Role)
     && !ability.annotations.some((span) => overlaps(span, proposal))
     && !ability.proposals.some((other) => pending(other) && other.id !== proposal.id && overlaps(proposal, other))) ?? [];
@@ -377,30 +351,19 @@ export default function WorkbenchApp() {
   }, [cursor, search, faction, reviewState, revision]);
 
   useEffect(() => {
-    if (view === "abilities" || (view === "family" && !family)) {
+    if (view !== "dashboard") {
       setViewLoading(false);
       return;
     }
     const controller = new AbortController();
     setViewLoading(true); setError(null);
     if (view === "dashboard") setDashboard(null);
-    const path = view === "family"
-      ? `/families/${encodeURIComponent(family)}/candidates?${familySignature ? "" : "limit=20"}${familyCursor ? `&cursor=${encodeURIComponent(familyCursor)}` : ""}${familySignature ? `&signature=${encodeURIComponent(familySignature)}` : ""}${faction ? `&faction=${encodeURIComponent(faction)}` : ""}`
-      : view === "queue" ? `/queue${faction ? `?faction=${encodeURIComponent(faction)}` : ""}` : `/${view}`;
-    api<unknown>(path, undefined, controller.signal).then((result) => {
-      if (view === "queue") setQueue(result as WorkQueue);
-      if (view === "family") setFamilyPage(result as FamilyPage);
-      if (view === "dashboard") setDashboard(result as Record<string, unknown>);
+    api<unknown>("/dashboard", undefined, controller.signal).then((result) => {
+      setDashboard(result as Record<string, unknown>);
     }).catch((cause: unknown) => { if (!controller.signal.aborted) setError(cause instanceof Error ? cause.message : String(cause)); })
       .finally(() => { if (!controller.signal.aborted) setViewLoading(false); });
     return () => controller.abort();
-  }, [view, family, familyCursor, familySignature, faction, revision]);
-
-  useEffect(() => {
-    if (view !== "family") return;
-    setSelected(new Set());
-    setSelectedGroup(null);
-  }, [view, family, familyCursor, faction]);
+  }, [view, faction, revision]);
 
   function fail(cause: unknown) { setError(cause instanceof Error ? cause.message : String(cause)); }
   async function perform(work: () => Promise<void>, expectsRevision = true) {
@@ -579,6 +542,19 @@ export default function WorkbenchApp() {
       await apply([decision]);
     });
   }
+  /** Confirm the selected wording and meaning as a corpus-wide leaf surface. */
+  function decideEverywhere() {
+    if (!ability || !draft) return;
+    void perform(async () => {
+      const exactText = sourceSlice(ability, draft.fragment, Number(draft.start), Number(draft.end));
+      const result = await api<{ batch_id: string; applied: number; already: number; blocked: unknown[] }>("/leaves/confirm", {
+        reviewer: REVIEWER, exact_text: exactText, family_id: draft.family.trim(), family_version: Number(draft.version), parameters: parameters(draft.parameters),
+      });
+      setBatches((current) => [...current, result.batch_id]); setDraft(null);
+      setStatus(`Decided everywhere: ${result.applied} occurrence${result.applied === 1 ? "" : "s"} annotated, ${result.already} already had it, ${result.blocked.length} left alone. Undo reverses it.`);
+      await refreshAbilities([ability.id]);
+    });
+  }
   function undo() {
     const batch = batches[batches.length - 1];
     if (!batch) return;
@@ -596,87 +572,14 @@ export default function WorkbenchApp() {
     setActiveId(item.id); setDraft(null);
     document.getElementById(`wb-ability-${item.id}`)?.scrollIntoView({ block: "start" });
   }
-  function openFamily(id = draft?.family ?? "", signature: string | null = null) {
-    setFamily(id); setFamilySignature(signature); setFamilyCursors([null]); setView("family");
-    if (draft) setFamilyCorrection({ family: draft.family, role: draft.role, version: draft.version, parameters: draft.parameters });
-  }
   function openAbility(id: number, proposalId?: number) {
     void perform(async () => {
       const item = await api<Ability>(`/abilities/${id}`);
       setFocused(item); setActiveId(item.id); setView("abilities");
       const proposal = item.proposals.find((entry) => entry.id === proposalId);
       setDraft(proposal ? spanDraft(item, proposal, "proposal") : null);
-      setStatus("Inspecting the complete source. Return to the page or Family mode when finished.");
+      setStatus("Inspecting the complete source. Return to the page or Leaves when finished.");
     }, false);
-  }
-  function openQueueItem(item: QueueItem) {
-    const target = item.target;
-    setError(null);
-    if (target.view === "family") openFamily(target.family_id, target.signature);
-    else if (target.view === "abilities") {
-      openAbility(target.ability_version_id);
-      if (target.action === "analyze-source") setStatus("This source has no proposals yet. Use Analyze source in the inspector, or select text to label it by hand.");
-    }
-    else setStatus("Open an ability and use Analyze source to send its unclaimed text to Luna.");
-  }
-  function chooseGroup(group: FamilyGroup) {
-    if (selectedGroup === group.signature) return;
-    const first = group.occurrences[0];
-    if (first) setFamilyCorrection({ family: first.family_id, role: first.role, version: String(first.family_version), parameters: JSON.stringify(first.parameters, null, 2) });
-    setSelectedGroup(group.signature);
-  }
-  function toggleOccurrence(group: FamilyGroup, id: number, checked: boolean) {
-    chooseGroup(group);
-    setSelected((current) => {
-      const next = new Set(selectedGroup === group.signature ? current : []);
-      if (checked) next.add(id); else next.delete(id);
-      return next;
-    });
-  }
-  function selectMatchingContext(group: FamilyGroup) {
-    const byContext = new Map<string, Occurrence[]>();
-    for (const occurrence of group.occurrences) {
-      const key = `${occurrence.context_signature}\u0000${occurrence.context}`;
-      const matches = byContext.get(key) ?? [];
-      matches.push(occurrence);
-      byContext.set(key, matches);
-    }
-    const largest = [...byContext.values()].reduce((best, matches) => matches.length > best.length ? matches : best, [] as Occurrence[]);
-    chooseGroup(group);
-    setSelected(new Set(largest.map((item) => item.proposal_id)));
-  }
-  function familyAction(group: FamilyGroup, action: "confirm" | "correct" | "reject") {
-    const occurrences = selectedGroup === group.signature ? group.occurrences.filter((item) => selected.has(item.proposal_id)) : [];
-    if (!occurrences.length) return;
-    void perform(async () => {
-      const sources = await Promise.all([...new Set(occurrences.map((item) => item.ability_version_id))].map((id) => api<Ability>(`/abilities/${id}`)));
-      const byId = new Map(sources.map((item) => [item.id, item]));
-      const correction = action === "correct" ? parameters(familyCorrection.parameters) : null;
-      const decisions = occurrences.map((item): Decision => {
-        const source = byId.get(item.ability_version_id)!;
-        const proposal = source.proposals.find((entry) => entry.id === item.proposal_id && pending(entry));
-        if (source.source_hash !== item.source_hash || !proposal || proposal.family_id !== item.family_id || JSON.stringify(proposal.parameters) !== JSON.stringify(item.parameters)) {
-          throw new Error("This occurrence or its semantic fingerprint changed. Reload Family mode before confirming it.");
-        }
-        return { ...proposalDecision(source, proposal, action), ...(correction ? {
-          family_id: familyCorrection.family, family_version: Number(familyCorrection.version), role: familyCorrection.role, parameters: correction,
-        } : {}) };
-      });
-      await apply(decisions); setSelected(new Set());
-    });
-  }
-  function splitSelection(group: FamilyGroup) {
-    if (!selected.size || selectedGroup !== group.signature) return;
-    const signature = `${group.signature} / split ${crypto.randomUUID().slice(0, 8)}`;
-    setFamilyPage((current) => ({ ...current, groups: current.groups.flatMap((entry) => {
-      if (entry.signature !== group.signature) return [entry];
-      const chosen = entry.occurrences.filter((item) => selected.has(item.proposal_id));
-      const rest = entry.occurrences.filter((item) => !selected.has(item.proposal_id));
-      if (!rest.length) return [entry];
-      return [{ ...entry, occurrences: rest, count: entry.count - chosen.length }, { ...entry, signature, occurrences: chosen, count: chosen.length }];
-    }) }));
-    setSelectedGroup(signature);
-    setStatus("Selected occurrences isolated for separate review on this page. No source decisions changed.");
   }
 
   useEffect(() => {
@@ -687,7 +590,7 @@ export default function WorkbenchApp() {
       if (key === "?") { event.preventDefault(); setShortcuts((value) => !value); return; }
       if (busy || loading) return;
       if (key === "u" && canWrite && batches.length) { event.preventDefault(); undo(); }
-      else if (key === "f") { event.preventDefault(); openFamily(); }
+      else if (key === "l") { event.preventDefault(); setView("leaves"); }
       else if (view === "abilities") {
         if (key === "j" || key === "k") { event.preventDefault(); navigateAbility(key === "j" ? 1 : -1); }
         else if (draft && canWrite && !reselecting && ["a", "r", "n", "b"].includes(key)) {
@@ -789,7 +692,7 @@ export default function WorkbenchApp() {
     <aside className="wb-sidebar" aria-label="Ability page">
       <label htmlFor="wb-faction">Faction</label>
       <select id="wb-faction" value={faction} disabled={view === "abilities" && editorDirty} onChange={(event) => {
-        setFaction(event.target.value); setCursors([null]); setFamilyCursors([null]); setFocused(null); setDraft(null);
+        setFaction(event.target.value); setCursors([null]); setFocused(null); setDraft(null);
       }}><option value="">All factions</option>{factions.map((id) => <option key={id} value={id}>{id}</option>)}</select>
       <form className="wb-search" onSubmit={(event) => {
         event.preventDefault(); setSearch(searchInput.trim()); setCursors([null]); setFocused(null); setDraft(null);
@@ -844,7 +747,7 @@ export default function WorkbenchApp() {
           if (focused) void perform(async () => { await refreshAbilities([focused.id]); }, false);
         }}>Reload</button>
       </div>
-      {shortcuts && <aside className="wb-shortcuts" aria-label="Keyboard shortcuts"><span><kbd>A</kbd> approve / correct</span><span><kbd>R</kbd> reject</span><span><kbd>N</kbd> novel</span><span><kbd>B</kbd> ambiguous</span><span><kbd>J</kbd>/<kbd>K</kbd> next / previous ability</span><span><kbd>F</kbd> Family mode</span><span><kbd>U</kbd> undo batch</span><span>Shortcuts pause in form fields.</span></aside>}
+      {shortcuts && <aside className="wb-shortcuts" aria-label="Keyboard shortcuts"><span><kbd>A</kbd> approve / correct</span><span><kbd>R</kbd> reject</span><span><kbd>N</kbd> novel</span><span><kbd>B</kbd> ambiguous</span><span><kbd>J</kbd>/<kbd>K</kbd> next / previous ability</span><span><kbd>L</kbd> Leaves</span><span><kbd>U</kbd> undo batch</span><span>Shortcuts pause in form fields.</span></aside>}
       {view === "abilities" && <>
         <div className="wb-page-heading"><div><p className="eyebrow">Ability mode</p><h1>Read the whole rule.</h1><p className="wb-help">Select exact source text to paint a leaf. Proposals are suggestions, never Goldens.</p></div>
           {focused && <button className="secondary" onClick={() => { setFocused(null); setDraft(null); setActiveId(page.items[0]?.id ?? null); }}>Return to 12-ability page</button>}
@@ -972,7 +875,7 @@ export default function WorkbenchApp() {
                 {draft.kind === "proposal" && <button className="secondary danger" disabled={!canWrite || reselecting || !!boundaryError || !!draftChanged} onClick={() => decide("reject")}>Reject <kbd>R</kbd></button>}
                 {draft.kind !== "annotation" && <><button className="secondary" disabled={!canWrite || reselecting || !!boundaryError || !!draftChanged} onClick={() => decide("novel")}>Novel <kbd>N</kbd></button><button className="secondary" disabled={!canWrite || reselecting || !!boundaryError || !!draftChanged} onClick={() => decide("ambiguous")}>Ambiguous <kbd>B</kbd></button></>}</>}</div>
               <p className="wb-help">{connectiveProposal ? pendingConnectiveProposal ? "Connectives are reviewed source relations, not semantic fingerprints. Confirm or reject this pending connective without changing its source bytes." : "This connective is no longer pending and can only be rejected if it remains reviewable." : draft.kind === "annotation" ? "Accepted spans allow corrections. A correction supersedes this exact interpretation; use batch undo to retract a recent human confirmation." : draftChanged ? "Edited proposals must be applied as corrections. Reopen the original span to reject or flag it instead." : "Unresolved proposals can be rejected, assigned a reviewed family, or recorded as novel or ambiguous leaf gaps."}</p>
-              {!connectiveProposal && <button className="text-button" disabled={!supportsSemanticConfirmation} onClick={() => openFamily()}>Open this family <kbd>F</kbd></button>}
+              {!connectiveProposal && draft.kind !== "annotation" && <button className="primary" disabled={!canWrite || reselecting || !!boundaryError || !supportsSemanticConfirmation} onClick={decideEverywhere}>Confirm everywhere this wording appears</button>}
             </section>}
             <section className="wb-bulk"><button className="secondary" disabled={!canWrite || !safeProposals.length} onClick={() => void perform(() => apply(safeProposals.map((proposal) => proposalDecision(ability, proposal, "confirm"))))}>Confirm {safeProposals.length} nonconflicting proposals</button><p className="wb-help">Only this inspected ability. Overlapping proposals and unregistered regions are excluded. This does not check whole context.</p></section>
             <ReviewCensus key={`${ability.id}:${censusResetToken}`} ability={ability} disabled={!canWrite} onDirtyChange={setDirtyCensusAbilityId} save={(checked, shape, cues, expectedReviewHash) => void perform(async () => {
@@ -985,75 +888,9 @@ export default function WorkbenchApp() {
           </> : <p className="wb-help">Choose an ability to inspect source provenance, span decisions, and whole-context review.</p>}
         </aside></div>
       </>}
-      {view === "family" && panel("Family mode", <>
-        <label className="wb-family-picker">Reviewed family<select value={family} onChange={(event) => { setFamily(event.target.value); setFamilySignature(null); setFamilyCursors([null]); setSelected(new Set()); }}><option value="">Choose a family</option>{families.map((item) => <option key={`${item.id}@${item.version}`} value={item.id}>{ROLE_LABELS[item.role]} · {item.label}</option>)}</select></label>
-        <p className="wb-help">Matching phrases and source-native fingerprints share a block. Select from this page, then inspect each source context before applying a decision. A fingerprint is not an authored DSL graph.</p>
-        {family && familySignature && <div className="wb-actions"><p className="wb-help">Showing one group from the work queue.</p><button className="secondary" onClick={() => { setFamilySignature(null); setFamilyCursors([null]); }}>Show every {family} group</button></div>}
-        {family && !loading && <div className="wb-family-progress">
-          <div><strong>{family} review</strong><span>{familyPage.progress.reviewed} of {familyPage.progress.total} retrieved candidates reviewed</span></div>
-          <progress aria-label={`${family} candidate review progress`} value={familyPage.progress.reviewed} max={Math.max(familyPage.progress.total, 1)} />
-          <p className="wb-help">Accepted, rejected, and corrected candidates count as reviewed. New retrievals can increase the total.</p>
-        </div>}
-        {family && !loading && !familyPage.groups.length && <div className="wb-empty"><h2>{familySignature ? "This group is reviewed" : familyPage.progress.total > 0 && familyPage.progress.reviewed === familyPage.progress.total ? "All current candidates reviewed" : "No pending candidates for this family"}</h2><p>{familySignature ? "Show every group to continue reviewing this family." : "Confirm a grounded leaf in Ability mode to retrieve more occurrences."}</p></div>}
-        {familyPage.groups.map((group) => {
-          const first = group.occurrences[0]!;
-          const selectedOccurrences = selectedGroup === group.signature ? group.occurrences.filter((item) => selected.has(item.proposal_id)) : [];
-          const selectedCount = selectedOccurrences.length;
-          const preview = dslLeafPreview(first.family_id, first.parameters);
-          return <section className="wb-family-group" key={group.signature}>
-            <header><div><h2>{first.exact_text}</h2><p>{group.count} occurrences · {group.context_count} distinct {group.context_count === 1 ? "context" : "contexts"} · {group.occurrences.length} on this page</p></div></header>
-            <div className="wb-family-fingerprint"><strong>Source-native fingerprint: {first.family_id}@{first.family_version} · {first.role}</strong>
-              <pre>{JSON.stringify(first.parameters, null, 2)}</pre><details><summary>Fingerprint provenance</summary><code>{first.fingerprint_id}</code></details>
-              {preview ? <div className="wb-dsl-preview"><strong>Equivalent single DSL effect for these parameters</strong><pre>{JSON.stringify(preview, null, 2)}</pre><p>This is a shape preview only; confirmation does not write DSL or establish surrounding conditions.</p></div>
-                : <p>No verified one-to-one DSL leaf is displayed. Confirming records the source-native fingerprint, not a DSL effect.</p>}</div>
-            <div className="wb-family-toolbar">
-              <div className="wb-family-selection">
-                <label className="wb-check"><input type="checkbox" disabled={busy || loading} checked={selectedCount === group.occurrences.length}
-                  ref={(node) => { if (node) node.indeterminate = selectedCount > 0 && selectedCount < group.occurrences.length; }}
-                  onChange={(event) => { chooseGroup(group); setSelected(new Set(event.target.checked ? group.occurrences.map((item) => item.proposal_id) : [])); }} />
-                  <span>Select all {group.occurrences.length} on this page</span></label>
-                {group.occurrences.length > 1 && <button className="secondary" disabled={busy || loading} onClick={() => selectMatchingContext(group)}>Select largest shared context</button>}
-                <span aria-live="polite">{selectedCount} selected</span>
-              </div>
-              {new Set(selectedOccurrences.map((item) => `${item.context_signature}\u0000${item.context}`)).size > 1 && <p className="wb-help">Selected occurrences have different surrounding source; inspect them below before applying a shared decision.</p>}
-              <div className="wb-actions">
-                <button className="primary" disabled={!canWrite || !selectedCount} onClick={() => familyAction(group, "confirm")}>{busy ? `Recording ${selectedCount}…` : `Confirm ${selectedCount}`}</button>
-                <button className="secondary danger" disabled={!canWrite || !selectedCount} onClick={() => familyAction(group, "reject")}>Reject selected</button>
-                <button className="secondary" disabled={busy || !selectedCount || selectedCount === group.occurrences.length} onClick={() => splitSelection(group)}>Split selected</button>
-              </div>
-              {selectedCount > 0 && error && <p role="alert" className="error">{error}</p>}
-            </div>
-            <div className="wb-family-correction"><details><summary>Correct family and parameters for selected occurrences</summary>
-              <div className="wb-editor-grid"><label>Role<select value={selectedGroup === group.signature ? familyCorrection.role : first.role} onChange={(event) => {
-                chooseGroup(group);
-                setFamilyCorrection({ family: "", role: event.target.value, version: "1", parameters: "{}" });
-              }}>{ROLES.map((role) => <option key={role} value={role}>{ROLE_LABELS[role]}</option>)}</select></label>
-                <label>Family<select value={selectedGroup === group.signature ? familyCorrection.family : first.family_id} onChange={(event) => {
-                  chooseGroup(group);
-                  const choice = families.find((item) => item.id === event.target.value);
-                  if (choice) setFamilyCorrection({ family: choice.id, role: choice.role, version: String(choice.version), parameters: JSON.stringify(choice.starter, null, 2) });
-                }}><option value="">Choose a family</option>{families.filter((item) => item.role === (selectedGroup === group.signature ? familyCorrection.role : first.role)).map((item) =>
-                  <option key={`${item.id}@${item.version}`} value={item.id}>{item.label}</option>)}</select></label>
-                <label>Version<input type="number" min={1} value={selectedGroup === group.signature ? familyCorrection.version : first.family_version} onChange={(event) => { chooseGroup(group); setFamilyCorrection((current) => ({ ...current, version: event.target.value })); }} /></label></div>
-              <label>Parameters JSON<textarea value={selectedGroup === group.signature ? familyCorrection.parameters : JSON.stringify(first.parameters, null, 2)} rows={4} onChange={(event) => { chooseGroup(group); setFamilyCorrection((current) => ({ ...current, parameters: event.target.value })); }} spellCheck={false} /></label>
-              <button className="secondary" disabled={!canWrite || !selectedCount || !familyCorrection.family} onClick={() => familyAction(group, "correct")}>Apply correction to {selectedCount}</button></details></div>
-            {group.occurrences.map((item) => <div key={item.proposal_id} className="wb-occurrence"><label className="wb-check"><input type="checkbox" disabled={busy || loading} checked={selectedGroup === group.signature && selected.has(item.proposal_id)} onChange={(event) => toggleOccurrence(group, item.proposal_id, event.target.checked)} /><span><strong>{item.ability_id}</strong><small>{item.faction_id} · {item.fragment} · bytes {item.start_byte}–{item.end_byte} · <span className="wb-origin">{item.origin}</span></small></span></label><button className="text-button" disabled={busy} onClick={() => openAbility(item.ability_version_id, item.proposal_id)}>Inspect whole ability</button>
-              <p className="wb-family-context">{item.context.slice(0, item.context_start)}<mark className={`wb-paint wb-role-${item.family_id === "resource-action" ? "resource" : item.role.toLowerCase()} wb-proposal`} title={`Unconfirmed proposal: ${item.role}. Bytes ${item.start_byte}–${item.end_byte}`}>{item.context.slice(item.context_start, item.context_end)}</mark>{item.context.slice(item.context_end)}</p></div>)}
-          </section>;
-        })}
-        {family && <div className="wb-pagination"><button className="secondary" disabled={busy || loading || familyCursors.length === 1} onClick={() => setFamilyCursors((current) => current.slice(0, -1))}>Previous groups</button><button className="secondary" disabled={busy || loading || !familyPage.next_cursor} onClick={() => setFamilyCursors((current) => [...current, familyPage.next_cursor])}>Next occurrences</button></div>}
-      </>, "Propagate source-bound decisions, not text collisions.")}
-      {view === "queue" && panel("Next up", <>
-        {queue ? <>
-          <p className="wb-help">{queue.total} review targets{faction ? ` in ${faction}` : ""}. Conflicts come first, then repeatable leaf decisions. Other source contexts need separate inspection.</p>
-          <ol className="wb-work-queue">{queue.items.map((item, index) => <li key={item.key} className={`wb-frontier-row wb-queue-${item.kind}`}>
-            <header><span className="wb-state">{QUEUE_KIND_LABELS[item.kind] ?? item.kind}</span>{item.kind !== "luna" && item.kind !== "conflict" && item.kind !== "broad-seed" && item.kind !== "unparsed-source" && <strong>{item.kind === "family-group" ? `${item.unlocks} in one context · ${item.backlog} total` : item.kind === "ability" ? `${item.backlog} proposals · one at a time` : `${item.unlocks} occurrences`}</strong>}{index === 0 && <small>start here</small>}</header>
-            <p>{item.why}</p>
-            <button className={index === 0 ? "primary" : "secondary"} disabled={busy} onClick={() => openQueueItem(item)}>{item.kind === "luna" ? "How to send residue to Luna" : item.kind === "family-group" ? "Review group" : item.kind === "unparsed-source" ? "Open and analyze source" : "Open ability"}</button>
-          </li>)}</ol>
-          {!queue.items.length && <div className="wb-empty"><h2>Nothing queued</h2><p>No pending proposals or residue remain{faction ? " for this faction" : ""}.</p></div>}
-        </> : <p role="status">{loading ? "Ranking the next decisions…" : "Queue unavailable. Reload to retry."}</p>}
-      </>, "Prioritize repeatable leaf decisions. Faction narrows every item.")}
+      {view === "leaves" && panel("Leaves", <LeavesPage families={families as unknown as Family[]} faction={faction} revision={revision} busy={!canWrite}
+        perform={(work) => void perform(work)} reviewer={REVIEWER} onBatch={(batchId) => setBatches((current) => [...current, batchId])}
+        openAbility={openAbility} setStatus={setStatus} />, "Decide each spelling once; it applies to every source.")}
       {view === "dashboard" && panel("Coverage census", <><div className="wb-actions"><button className="secondary" disabled={busy} onClick={refreshSourceStore}>Refresh sources from the store</button></div><p className="wb-help">Current source versions only. Confirmed leaf coverage and machine proposals are separate; whole-reviewed coverage is an independent safety gate. Missing denominators remain unknown.</p>{dashboard ? <MetricValue value={dashboard} /> : <p role="status">{loading ? "Loading recorded coverage…" : "Coverage unavailable. Reload to retry."}</p>}</>)}
     </main>
   </div>;

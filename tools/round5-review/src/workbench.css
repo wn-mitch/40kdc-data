@@ -424,3 +424,17 @@
 .wb-trip-lines > div.wb-trip-warn { border-left-color: var(--warn); }
 .wb-trip-lines dt { color: var(--muted); font-size: var(--text-sm); }
 .wb-trip-lines dd { margin: var(--space-1) 0 0; }
+
+/* Leaves page */
+.wb-leaves section { margin-block: 1.5rem; }
+.wb-progress-strip { padding: 0.75rem 1rem; border: 1px solid var(--line); border-radius: var(--radius-md); }
+.wb-wording-list, .wb-surfaces { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; }
+.wb-wording { display: grid; gap: 0.5rem; padding: 0.75rem; border: 1px solid var(--line); border-radius: var(--radius-md); }
+.wb-wording blockquote { margin: 0 0 0.25rem; }
+.wb-leaf { padding: 0.75rem; border: 1px solid var(--line); border-radius: var(--radius-md); margin-block: 0.5rem; }
+.wb-leaf header { display: flex; gap: 0.5rem; align-items: baseline; margin-bottom: 0.5rem; }
+.wb-leaf-role h3 { text-transform: capitalize; }
+.wb-surfaces li { display: grid; gap: 0.25rem; padding-block: 0.25rem; border-top: 1px solid var(--line); }
+.wb-surface-text { font-style: italic; }
+.wb-leaf-form { display: grid; gap: 0.5rem; }
+.wb-blocked ul { margin: 0.25rem 0 0; }

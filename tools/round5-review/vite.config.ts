@@ -12,6 +12,7 @@ import { importLuna, prepareLuna } from "../src/round5c/proposal.js";
 import { abandonLunaRun, finishLunaRun, latestLunaRunForAbility, lunaRunView, startLunaRun } from "../src/round5c/luna-run.js";
 import { applySourceAtomBatch, proposeSourceAtom } from "../src/round5c/atoms.js";
 import { refreshSources } from "../src/round5c/source.js";
+import { applyLeafSurfaces, backfillLeafSurfaces, confirmSurface, leafBoard, mergeFingerprints, moveSurface, retireSurface } from "../src/round5c/leaves.js";
 import { proposeLexical, retrieveFamilyCandidates } from "../src/round5c/retrieval.js";
 import { getQueue } from "../src/round5c/queue.js";
 import { listPublications } from "../src/round5c/publish.js";
@@ -45,7 +46,7 @@ function round5WorkbenchBridge(): Plugin {
     configureServer(server) {
       const runningLuna = new Set<number>();
       const initialDb = openWorkbench();
-      try { repairRelatedVariantProposals(initialDb); proposeLexical(initialDb); }
+      try { repairRelatedVariantProposals(initialDb); proposeLexical(initialDb); backfillLeafSurfaces(initialDb); }
       finally { initialDb.close(); }
       server.middlewares.use(async (request, response, next) => {
         if (!request.url?.startsWith("/__round5c/")) return next();
@@ -83,13 +84,31 @@ function round5WorkbenchBridge(): Plugin {
             return json(response, 200, getFactions(db));
           }
           if (request.method === "GET" && path === "/semantic-families") {
-            return json(response, 200, REVIEWED_FAMILY_REGISTRY);
+            return json(response, 200, REVIEWED_FAMILY_REGISTRY.filter((family) => !family.deprecated));
           }
           if (request.method === "GET" && abilityMatch && !abilityMatch[2]) {
             return json(response, 200, getAbility(db, Number(abilityMatch[1])));
           }
           if (request.method === "POST" && abilityMatch?.[2] === "/review") {
             return json(response, 200, reviewAbility(db, Number(abilityMatch[1]), await body()));
+          }
+          if (request.method === "GET" && path === "/leaves") {
+            return json(response, 200, leafBoard(db, { factionId: url.searchParams.get("faction") ?? undefined }));
+          }
+          if (request.method === "POST" && path === "/leaves/confirm") {
+            return json(response, 200, confirmSurface(db, await body()));
+          }
+          if (request.method === "POST" && path === "/leaves/apply") {
+            return json(response, 200, applyLeafSurfaces(db, await body()));
+          }
+          if (request.method === "POST" && path === "/leaves/move") {
+            return json(response, 200, moveSurface(db, await body()));
+          }
+          if (request.method === "POST" && path === "/leaves/merge") {
+            return json(response, 200, mergeFingerprints(db, await body()));
+          }
+          if (request.method === "POST" && path === "/leaves/retire") {
+            return json(response, 200, retireSurface(db, await body()));
           }
           if (request.method === "GET" && path === "/dashboard") {
             return json(response, 200, getDashboard(db));

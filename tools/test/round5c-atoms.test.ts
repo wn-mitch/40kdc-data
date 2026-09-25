@@ -56,7 +56,7 @@ function bytes(text: string, source = SOURCE): { start_byte: number; end_byte: n
 function confirm(value: Fixture, text: string, role: string, familyId: string, parameters: Record<string, unknown>): string {
   return applyAnnotationBatch(value.db, {
     reviewer: REVIEWER,
-    decisions: [{ action: "confirm", ability_version_id: value.id, source_hash: value.hash, fragment: "RAW_TEXT", ...bytes(text), role, family_id: familyId, family_version: 1, parameters }],
+    decisions: [{ action: "confirm", ability_version_id: value.id, source_hash: value.hash, fragment: "RAW_TEXT", ...bytes(text), role, family_id: familyId, parameters }],
   }).batch_id;
 }
 
@@ -75,7 +75,7 @@ function accept(value: Fixture, proposalId: number, extra: Record<string, unknow
 }
 
 function paintLeaves(value: Fixture): void {
-  confirm(value, "Lead-state active", "CONDITION", "leading-unit", { subject: "this-model" });
+  confirm(value, "Lead-state active", "CONDITION", "leading-unit", { subject: "this-model", attachment: "leading" });
   confirm(value, "repeat any Hit result", "EFFECT", "reroll", { roll: "hit", subset: "all" });
 }
 
@@ -150,7 +150,7 @@ describe("Round 5C structural source authority", () => {
       const first = propose(value, "squad modèls", "participant");
       accept(value, first.proposal_id);
       expect(() => propose(value, "modèls", "selector")).toThrow(expect.objectContaining({ status: 409 }));
-      expect(() => confirm(value, "squad modèls", "CONDITION", "leading-unit", { subject: "this-model" })).toThrow(/structural constituent/u);
+      expect(() => confirm(value, "squad modèls", "CONDITION", "leading-unit", { subject: "this-model", attachment: "leading" })).toThrow(/structural constituent/u);
     } finally {
       value.db.close();
     }
@@ -194,7 +194,7 @@ describe("Round 5C structural source authority", () => {
     const value = fixture(source);
     try {
       applyAnnotationBatch(value.db, { reviewer: REVIEWER, decisions: [
-        { action: "confirm", ability_version_id: value.id, source_hash: value.hash, fragment: "RAW_TEXT", ...bytes("Lead-state active", source), role: "CONDITION", family_id: "leading-unit", family_version: 1, parameters: { subject: "this-model" } },
+        { action: "confirm", ability_version_id: value.id, source_hash: value.hash, fragment: "RAW_TEXT", ...bytes("Lead-state active", source), role: "CONDITION", family_id: "leading-unit", family_version: 2, parameters: { subject: "this-model", attachment: "leading" } },
         { action: "confirm", ability_version_id: value.id, source_hash: value.hash, fragment: "RAW_TEXT", ...bytes("repeat any Hit result", source), role: "EFFECT", family_id: "reroll", family_version: 1, parameters: { roll: "hit", subset: "all" } },
       ] });
       const participant = proposeSourceAtom(value.db, { ability_version_id: value.id, source_hash: value.hash, fragment: "RAW_TEXT", ...bytes("squad models", source), kind: "participant", description: "who", reviewer: REVIEWER });
@@ -242,7 +242,7 @@ describe("Round 5C structural source authority", () => {
           ability_id: request.abilities[0]!.ability_id,
           source_hash: request.abilities[0]!.source_hash,
           spans: [
-            { ...bytes("Lead-state active"), role: "CONDITION", status: "EXISTING", family_id: "leading-unit", family_version: 1, parameters: { subject: "this-model" } },
+            { ...bytes("Lead-state active"), role: "CONDITION", status: "EXISTING", family_id: "leading-unit", family_version: 2, parameters: { subject: "this-model", attachment: "leading" } },
             { ...clause, role: "EFFECT", status: "EXISTING", family_id: "reroll", family_version: 1, parameters: { roll: "hit", subset: "all" }, qualifier_spans: [bytes("squad modèls")] },
           ],
           structural_spans: [{ ...bytes("squad modèls"), kind: "participant", description: "who", parent_span_index: 1 }],
