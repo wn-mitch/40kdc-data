@@ -438,3 +438,10 @@
 .wb-surface-text { font-style: italic; }
 .wb-leaf-form { display: grid; gap: 0.5rem; }
 .wb-blocked ul { margin: 0.25rem 0 0; }
+
+/* Shapes page */
+.wb-shape-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+.wb-shape-table th, .wb-shape-table td { text-align: left; vertical-align: top; padding: 0.5rem; border-top: 1px solid var(--line); }
+.wb-shape-table blockquote { margin: 0 0 0.25rem; }
+.wb-shape-table tr.wb-differs td:last-child { border-left: 2px solid var(--wb-role-duration); }
+.wb-wording small { display: block; }

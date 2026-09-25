@@ -10,6 +10,7 @@ import { resolveAbilityContext, type AbilityContext } from "./context.js";
 import { abilityReadiness, currentReadiness, type Readiness } from "./readiness.js";
 import { applySourceAtomUndo, assertSourceAtomUndo, sourceAtomsForAbility } from "./atoms.js";
 import { applyLeafUndo, assertLeafUndo } from "./leaves.js";
+import { applyShapeUndo, assertShapeUndo, COMPILED_MEMBER_KINDS } from "./shapes.js";
 import { applyOntologyUndo, assertOntologyUndo } from "./ontology.js";
 import { recordCandidateSuggestion } from "./ontology-store.js";
 import { RELATION_TYPES } from "../round4b/contracts.js";
@@ -997,7 +998,7 @@ function currentAnnotationForUndo(db: DatabaseSync, annotationId: number): UndoA
 }
 
 /** Batch members keyed by a text id; their own undo hooks handle them. */
-const NON_NUMERIC_MEMBERS = new Set(["fingerprint-superseded"]);
+const NON_NUMERIC_MEMBERS = new Set(["fingerprint-superseded", ...COMPILED_MEMBER_KINDS]);
 
 const PROPOSAL_UNDO_TRANSITIONS: Record<string, { expected: string; restore: string }> = {
   "proposal-accepted": { expected: "accepted", restore: "pending" },
@@ -1058,6 +1059,7 @@ export function undoBatch(
     assertSourceAtomUndo(db, members);
     assertOntologyUndo(db, batchId, members);
     assertLeafUndo(db, batchId, members);
+    assertShapeUndo(db, members);
     for (const member of members) {
       if (NON_NUMERIC_MEMBERS.has(member.entity_kind)) continue;
       const id = numericMemberId(member);
@@ -1124,6 +1126,7 @@ export function undoBatch(
     for (const id of applySourceAtomUndo(db, reversalId, members)) touchedAbilities.add(id);
     for (const id of applyOntologyUndo(db, batchId, reversalId, members)) touchedAbilities.add(id);
     applyLeafUndo(db, batchId, reversalId, members);
+    applyShapeUndo(db, reversalId, members);
     invalidateWholeReview(db, touchedAbilities);
     bumpWorkbenchRevision(db);
     return { batch_id: batchId, reversed_batch_id: reversalId };

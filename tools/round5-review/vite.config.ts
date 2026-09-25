@@ -12,6 +12,7 @@ import { importLuna, prepareLuna } from "../src/round5c/proposal.js";
 import { abandonLunaRun, finishLunaRun, latestLunaRunForAbility, lunaRunView, startLunaRun } from "../src/round5c/luna-run.js";
 import { applySourceAtomBatch, proposeSourceAtom } from "../src/round5c/atoms.js";
 import { refreshSources } from "../src/round5c/source.js";
+import { approveShape, getShape, listShapes, rejectShapeMembers } from "../src/round5c/shapes.js";
 import { applyLeafSurfaces, backfillLeafSurfaces, confirmSurface, leafBoard, mergeFingerprints, moveSurface, retireSurface } from "../src/round5c/leaves.js";
 import { proposeLexical, retrieveFamilyCandidates } from "../src/round5c/retrieval.js";
 import { getQueue } from "../src/round5c/queue.js";
@@ -109,6 +110,18 @@ function round5WorkbenchBridge(): Plugin {
           }
           if (request.method === "POST" && path === "/leaves/retire") {
             return json(response, 200, retireSurface(db, await body()));
+          }
+          if (request.method === "GET" && path === "/shapes") {
+            return json(response, 200, listShapes(db, { factionId: url.searchParams.get("faction") ?? undefined }));
+          }
+          if (request.method === "GET" && path === "/shapes/members") {
+            return json(response, 200, getShape(db, url.searchParams.get("signature") ?? "", { factionId: url.searchParams.get("faction") ?? undefined }));
+          }
+          if (request.method === "POST" && path === "/shapes/approve") {
+            return json(response, 200, approveShape(db, await body()));
+          }
+          if (request.method === "POST" && path === "/shapes/reject") {
+            return json(response, 200, rejectShapeMembers(db, await body()));
           }
           if (request.method === "GET" && path === "/dashboard") {
             return json(response, 200, getDashboard(db));
