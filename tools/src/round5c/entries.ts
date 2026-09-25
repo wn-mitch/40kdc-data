@@ -24,14 +24,17 @@ export type ResolvedAbilityEntity = {
   entry: Record<string, unknown>;
 };
 
-/** The top-level ability fields a composition replaces; `null` removes the optional ones. */
+/**
+ * The top-level ability fields a composition replaces. For the optional fields, `null` removes
+ * the authored value and an absent key keeps it.
+ */
 export type Mechanics = {
   effect: Record<string, unknown>;
   scope: Record<string, unknown>;
   behavior: string | null;
-  trigger: unknown | null;
-  usage: unknown | null;
-  applies_to: unknown | null;
+  trigger?: unknown | null;
+  usage?: unknown | null;
+  applies_to?: unknown | null;
 };
 
 export function round5cDataRoot(): string {
@@ -105,9 +108,9 @@ let previewValidator: Ajv | null = null;
 
 /** Graft mechanics onto an existing entry exactly as publication does, keeping community notes. */
 export function entryWithMechanics(original: Record<string, unknown>, mechanics: Mechanics): Record<string, unknown> {
-  const entry = buildRepairedEntry(original, mechanics.effect, mechanics.scope, mechanics.behavior ?? undefined, {
-    trigger: mechanics.trigger, usage: mechanics.usage, applies_to: mechanics.applies_to,
-  });
+  const fields: { trigger?: unknown; usage?: unknown; applies_to?: unknown } = {};
+  for (const key of ["trigger", "usage", "applies_to"] as const) if (mechanics[key] !== undefined) fields[key] = mechanics[key];
+  const entry = buildRepairedEntry(original, mechanics.effect, mechanics.scope, mechanics.behavior ?? undefined, fields as never);
   if (Object.hasOwn(original, "community_notes")) entry.community_notes = original.community_notes;
   else delete entry.community_notes;
   if (mechanics.behavior === null) delete entry.behavior;
