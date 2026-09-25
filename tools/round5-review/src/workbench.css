@@ -445,3 +445,12 @@
 .wb-shape-table blockquote { margin: 0 0 0.25rem; }
 .wb-shape-table tr.wb-differs td:last-child { border-left: 2px solid var(--wb-role-duration); }
 .wb-wording small { display: block; }
+
+/* Leaf form choices */
+.wb-leaf-form fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 0.35rem; }
+.wb-leaf-form legend { padding: 0; margin-bottom: 0.35rem; }
+.wb-field-wide { grid-column: 1 / -1; }
+.wb-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.wb-chip { padding: 0.3rem 0.65rem; border: 1px solid var(--line); background: transparent; color: inherit; }
+.wb-chip-on { border-color: var(--wb-role-effect); background: color-mix(in oklch, var(--wb-role-effect) 25%, transparent); }
+.wb-keyword-picker { display: grid; gap: 0.5rem; }
