@@ -3,7 +3,7 @@ import type { DatabaseSync } from "node:sqlite";
 
 import { insertStructuralProposal } from "./atoms-store.js";
 import {
-  bumpWorkbenchRevision, insertSpan, invalidateAbilityEvidence, invalidateWholeReview, withTransaction,
+  bumpWorkbenchRevision, insertSpan, invalidateWholeReview, withTransaction,
 } from "./db.js";
 import { CONNECTIVE_KINDS } from "./luna-schema.js";
 import { STRUCTURAL_KINDS, type StructuralKind } from "./schema-ext.js";
@@ -168,7 +168,6 @@ export function proposeSourceAtom(db: DatabaseSync, body: unknown): { batch_id: 
       }
       addMember(db, batchId, "atom-proposal-created", proposalId);
     }
-    invalidateAbilityEvidence(db, [abilityVersionId], "HUMAN_DECISION_CHANGED");
     invalidateWholeReview(db, [abilityVersionId]);
     bumpWorkbenchRevision(db);
     return { batch_id: batchId, kind, proposal_id: proposalId };
@@ -302,7 +301,6 @@ export function applySourceAtomBatch(db: DatabaseSync, body: unknown): { batch_i
       `).run(proposal.id, spanId, kind, decision.action, batchId, reviewer, decision.contained_by_annotation_id, createdAt).lastInsertRowid);
       addMember(db, batchId, "atom-review", review);
     }
-    invalidateAbilityEvidence(db, touched, "HUMAN_DECISION_CHANGED");
     invalidateWholeReview(db, touched);
     bumpWorkbenchRevision(db);
     return { batch_id: batchId, applied: decisions.length };

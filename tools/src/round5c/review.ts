@@ -5,14 +5,16 @@ import { hashJson } from "../round4/hash.js";
 
 import { familyRole, SEMANTIC_ROLES, validateFingerprint } from "./contracts.js";
 import { getAbilityCoverage, getCurrentCoverage, type AbilityCoverage, type SourceFragmentView } from "./coverage.js";
-import { bumpWorkbenchRevision, getWorkbenchRevision, insertSpan, invalidateAbilityEvidence, invalidateStampRevision, invalidateWholeReview, parseStoredFragments, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
+import { bumpWorkbenchRevision, getWorkbenchRevision, insertSpan, invalidateWholeReview, parseStoredFragments, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
 import { resolveAbilityContext, type AbilityContext } from "./context.js";
 import { abilityReadiness, currentReadiness, type Readiness } from "./readiness.js";
 import { applySourceAtomUndo, assertSourceAtomUndo, sourceAtomsForAbility } from "./atoms.js";
 import { applyOntologyUndo, assertOntologyUndo } from "./ontology.js";
 import { recordCandidateSuggestion } from "./ontology-store.js";
-import { ROUND5C_RELATION_TYPES } from "./relations.js";
-import { applyStamps, createEscalation } from "./stamps.js";
+import { RELATION_TYPES } from "../round4b/contracts.js";
+
+/** Relations a reviewer may record on a confirmed connective: Round 4B's set plus plain conjunction. */
+const CONNECTIVE_RELATION_TYPES: readonly string[] = [...RELATION_TYPES, "coexists-with"];
 
 /** An API-shaped failure. The local bridge returns `status` verbatim. */
 export class WorkbenchError extends Error {
@@ -78,8 +80,6 @@ export type AbilityView = {
   coverage: AbilityCoverage;
   progress: LeafProgress;
   atoms: ReturnType<typeof sourceAtomsForAbility>;
-  /** The open composition escalation for this exact source version, once the whole source is checked. */
-  composition_escalation_id: string | null;
   context: AbilityContext;
   review: {
     whole_context_checked: boolean;
@@ -179,7 +179,7 @@ export type ReviewAbilityBody = {
   cues?: Record<string, unknown>;
 };
 
-export type AnnotationDecisionAction = "confirm" | "correct" | "reject" | "novel" | "ambiguous" | "confirm-connective" | "resolve-stamp-gap";
+export type AnnotationDecisionAction = "confirm" | "correct" | "reject" | "novel" | "ambiguous" | "confirm-connective";
 
 /** A single source-bound decision, including every byte-level identity guard. */
 export type AnnotationDecision = {
@@ -308,7 +308,7 @@ function requireCurrentAbility(db: DatabaseSync, abilityVersionId: number, sourc
 function parseDecision(value: unknown, index: number): ParsedDecision {
   const input = asObject(value, `decisions[${index}]`);
   const action = asNonblankString(input.action, `decisions[${index}].action`);
-  if (!["confirm", "correct", "reject", "novel", "ambiguous", "confirm-connective", "resolve-stamp-gap"].includes(action)) {
+  if (!["confirm", "correct", "reject", "novel", "ambiguous", "confirm-connective"].includes(action)) {
     invalid(`decisions[${index}].action is not supported.`);
   }
   const role = asNonblankString(input.role, `decisions[${index}].role`);
@@ -321,7 +321,7 @@ function parseDecision(value: unknown, index: number): ParsedDecision {
   if (supersedesAnnotationId !== undefined && supersedesAnnotationId < 1) {
     invalid(`decisions[${index}].supersedes_annotation_id must be positive.`);
   }
-  if (supersedesAnnotationId !== undefined && action !== "correct" && action !== "resolve-stamp-gap") {
+  if (supersedesAnnotationId !== undefined && action !== "correct") {
     invalid("supersedes_annotation_id is only valid for a correction.");
   }
   const familyVersion = input.family_version === undefined ? undefined : asInteger(input.family_version, `decisions[${index}].family_version`);
@@ -332,8 +332,8 @@ function parseDecision(value: unknown, index: number): ParsedDecision {
   }
   const relation = input.relation === undefined ? undefined : asNonblankString(input.relation, `decisions[${index}].relation`);
   if (relation !== undefined && action !== "confirm-connective") invalid("relation is only valid when confirming a connective.");
-  if (relation !== undefined && !(ROUND5C_RELATION_TYPES as readonly string[]).includes(relation)) {
-    invalid(`decisions[${index}].relation is not a Round 5C relation type.`);
+  if (relation !== undefined && !CONNECTIVE_RELATION_TYPES.includes(relation)) {
+    invalid(`decisions[${index}].relation is not a known relation type.`);
   }
   return {
     action: action as AnnotationDecisionAction,
@@ -749,14 +749,6 @@ function abilityView(db: DatabaseSync, ability: AbilityRow): AbilityView {
     })),
     coverage,
     atoms: sourceAtomsForAbility(db, ability.id),
-    composition_escalation_id: (db.prepare(`
-      SELECT escalations.id FROM escalations
-      JOIN escalation_members ON escalation_members.escalation_id = escalations.id
-      WHERE escalations.reason_code = 'COMPOSITION_GAP' AND escalations.state = 'open'
-        AND escalation_members.status = 'active' AND escalation_members.ability_version_id = ?
-        AND escalation_members.source_hash = ?
-      ORDER BY escalations.id LIMIT 1
-    `).get(ability.id, ability.source_hash) as { id: string } | undefined)?.id ?? null,
     progress: leafProgress(coverage, annotationViews, progressCounts(db, ability.id).get(ability.id), abilityReadiness(db, ability.id)),
     context: resolveAbilityContext(ability.faction_id, ability.ability_id),
     review: reviewView(review),
@@ -807,13 +799,6 @@ export function getAbilities(
         WHERE ability_reviews.ability_version_id = abilities.id
           AND ability_reviews.whole_context_checked = 1
       )
-      ${reviewState === "pending" ? `AND NOT EXISTS (
-        SELECT 1 FROM assembly_drafts
-        JOIN stamp_applications ON stamp_applications.id = assembly_drafts.composition_application_id
-        WHERE stamp_applications.ability_version_id = abilities.id
-          AND assembly_drafts.status = 'accepted'
-          AND stamp_applications.status = 'active'
-      )` : ""}
       AND (name LIKE ? ESCAPE '\\' OR ability_id LIKE ? ESCAPE '\\' OR faction_id LIKE ? ESCAPE '\\')
     ORDER BY id LIMIT ?
   `).all(after, factionId, factionId, search, search, search, limit + 1) as AbilityRow[];
@@ -863,15 +848,6 @@ export function reviewAbility(db: DatabaseSync, abilityVersionId: number, body: 
       review.reviewer,
       new Date().toISOString(),
     );
-    if (review.whole_context_checked) {
-      const readiness = abilityReadiness(db, ability.id);
-      if (readiness.ready) {
-        createEscalation(db, "COMPOSITION_GAP", {
-          source_form_hash: hashJson({ ability_version_id: ability.id, source_hash: ability.source_hash }),
-          question: "Compose these confirmed leaves into a complete-source rule without losing conditions, timing, targets, or relations.",
-        }, [{ ability_version_id: ability.id, source_hash: ability.source_hash }]);
-      }
-    }
     if (!review.whole_context_checked) invalidateWholeReview(db, [ability.id]);
     bumpWorkbenchRevision(db);
     return abilityView(db, ability);
@@ -883,53 +859,6 @@ function proposalTransitionMember(
   previousStatus: string,
 ): string {
   return `proposal-${outcome}${previousStatus === "unresolved" ? "-unresolved" : ""}`;
-}
-
-/**
- * Close a novel leaf gap whose original proposal an approved stamp later superseded. Ordinary
- * corrections refuse superseded proposals, and stamps never close gaps, so this explicit human
- * decision chooses the reviewed family, supersedes the stamp annotation at the same span, marks
- * the original proposal corrected, and resolves its gap. Undo restores every part of it.
- */
-function resolveStampGap(
-  db: DatabaseSync,
-  batchId: string,
-  reviewer: string,
-  decision: ParsedDecision,
-  proposal: ProposalRow | null,
-  spanId: number,
-  createdAt: string,
-): void {
-  if (!proposal) invalid("resolve-stamp-gap requires proposal_id.");
-  if (decision.supersedes_annotation_id === undefined) invalid("resolve-stamp-gap requires supersedes_annotation_id.");
-  if (proposal.ability_version_id !== decision.ability_version_id || proposal.span_id !== spanId) {
-    conflict("The original proposal does not match the requested source span.");
-  }
-  if (proposal.status !== "superseded") conflict("Only a proposal superseded by an approved stamp can be resolved this way.");
-  const gap = db.prepare("SELECT 1 FROM gaps WHERE proposal_id = ? AND type = 'LEAF_GAP' AND status = 'open' LIMIT 1").get(proposal.id);
-  if (!gap) conflict("The proposal has no open linked leaf gap to resolve.");
-  const stamped = db.prepare(`
-    SELECT annotations.id, annotations.span_id, source_spans.start_byte, source_spans.end_byte,
-      semantic_families.role, annotations.fingerprint_id
-    FROM annotations
-    JOIN source_spans ON source_spans.id = annotations.span_id
-    JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
-    JOIN semantic_families ON semantic_families.id = fingerprints.family_id AND semantic_families.version = fingerprints.family_version
-    WHERE annotations.id = ? AND annotations.status = 'active' AND annotations.authority_kind = 'stamp'
-      AND annotations.span_id = ?
-      AND EXISTS (
-        SELECT 1 FROM stamp_applications JOIN stamps ON stamps.id = stamp_applications.stamp_id AND stamps.revision = stamp_applications.stamp_revision
-        WHERE stamp_applications.annotation_id = annotations.id AND stamp_applications.status = 'active' AND stamps.status = 'approved'
-      )
-  `).get(decision.supersedes_annotation_id, spanId) as AnnotationRow | undefined;
-  if (!stamped) conflict("supersedes_annotation_id must be the active, supported stamp annotation on this exact span.");
-  const fingerprint = fingerprintForDecision(db, decision);
-  const update = db.prepare("UPDATE proposals SET status = 'corrected' WHERE id = ? AND status = 'superseded'").run(proposal.id);
-  if (update.changes !== 1) conflict("The original proposal changed before the batch was applied.");
-  addMember(db, batchId, "proposal-corrected-superseded", proposal.id);
-  resolveLinkedLeafGaps(db, proposal.id, batchId);
-  const annotationId = annotationForDecision(db, spanId, fingerprint.id, reviewer, batchId, "manual-stamp-gap", stamped, createdAt);
-  addMember(db, batchId, "annotation", annotationId);
 }
 
 /** Atomically apply source-bound annotation and unconfirmed-region decisions. */
@@ -950,10 +879,6 @@ export function applyAnnotationBatch(
       const spanId = sourceSpanForDecision(db, decision);
       const proposal = proposalForDecision(db, decision.proposal_id);
       touchedAbilities.add(decision.ability_version_id);
-      if (decision.action === "resolve-stamp-gap") {
-        resolveStampGap(db, batchId, batch.reviewer, decision, proposal, spanId, createdAt);
-        continue;
-      }
       if (proposal) assertProposalMatchesDecision(proposal, decision);
 
       if (decision.action === "confirm-connective") {
@@ -1033,8 +958,6 @@ export function applyAnnotationBatch(
       );
       addMember(db, batchId, "annotation", annotationId);
     }
-    invalidateAbilityEvidence(db, touchedAbilities, "HUMAN_DECISION_CHANGED");
-    applyStamps(db, { ability_version_ids: [...touchedAbilities], bump_revision: false });
     invalidateWholeReview(db, touchedAbilities);
     bumpWorkbenchRevision(db);
     return { batch_id: batchId, applied: batch.decisions.length };
@@ -1092,59 +1015,6 @@ function abilityVersionForProposal(db: DatabaseSync, proposalId: number): number
   return row.ability_version_id;
 }
 
-function stampRevisionMember(members: BatchMember[], kind: string): { stampId: string; revision: number } {
-  const matching = members.filter((member) => member.entity_kind === kind);
-  if (matching.length !== 1) conflict("The stamp batch has malformed authority history.");
-  const serialized = matching[0]!.entity_id;
-  const separator = serialized.lastIndexOf("@");
-  const stampId = serialized.slice(0, separator);
-  const revision = Number(serialized.slice(separator + 1));
-  if (separator < 1 || !stampId || !Number.isSafeInteger(revision) || revision < 1) conflict("The stamp batch has malformed authority history.");
-  return { stampId, revision };
-}
-
-function undoStampBatch(
-  db: DatabaseSync,
-  batchId: string,
-  operation: "stamp-approval" | "stamp-suspension" | "stamp-rejection",
-  reviewer: string,
-  members: BatchMember[],
-): { batch_id: string; reversed_batch_id: string } {
-  const memberKind = operation === "stamp-approval" ? "stamp-approved" : operation === "stamp-suspension" ? "stamp-suspended" : "stamp-rejected";
-  const { stampId, revision } = stampRevisionMember(members, memberKind);
-  const stamp = db.prepare("SELECT status FROM stamps WHERE id = ? AND revision = ?").get(stampId, revision) as { status: string } | undefined;
-  const expected = operation === "stamp-approval" ? "approved" : operation === "stamp-suspension" ? "suspended" : "rejected";
-  if (!stamp || stamp.status !== expected) conflict("This stamp batch cannot be undone because later authority decisions changed it.");
-  if (operation !== "stamp-approval") {
-    const head = db.prepare("SELECT max(revision) AS revision FROM stamps WHERE id = ?").get(stampId) as { revision: number | null };
-    if (head.revision !== revision) conflict("This stamp batch cannot be undone after a newer revision decision.");
-  }
-  if (operation === "stamp-suspension") {
-    const approved = db.prepare("SELECT 1 FROM stamps WHERE id = ? AND status = 'approved' AND revision <> ?").get(stampId, revision);
-    if (approved) conflict("This suspension cannot be undone while another revision is approved.");
-  }
-  const reversalId = `undo_${randomUUID()}`;
-  db.prepare(`
-    INSERT INTO annotation_batches (id, operation, reviewer, created_at, reversed_batch_id)
-    VALUES (?, 'undo', ?, ?, ?)
-  `).run(reversalId, reviewer, new Date().toISOString(), batchId);
-  if (operation === "stamp-approval") {
-    db.prepare("UPDATE stamps SET status = 'suspended', updated_at = ? WHERE id = ? AND revision = ? AND status = 'approved'").run(new Date().toISOString(), stampId, revision);
-    invalidateStampRevision(db, stampId, revision, "STAMP_APPROVAL_UNDONE");
-    applyStamps(db, { bump_revision: false });
-    addMember(db, reversalId, "stamp-suspended", `${stampId}@${revision}`);
-  } else if (operation === "stamp-suspension") {
-    db.prepare("UPDATE stamps SET status = 'approved', updated_at = ? WHERE id = ? AND revision = ? AND status = 'suspended'").run(new Date().toISOString(), stampId, revision);
-    applyStamps(db, { bump_revision: false });
-    addMember(db, reversalId, "stamp-restored", `${stampId}@${revision}`);
-  } else {
-    db.prepare("UPDATE stamps SET status = 'proposed', updated_at = ? WHERE id = ? AND revision = ? AND status = 'rejected'").run(new Date().toISOString(), stampId, revision);
-    addMember(db, reversalId, "stamp-proposal-restored", `${stampId}@${revision}`);
-  }
-  bumpWorkbenchRevision(db);
-  return { batch_id: batchId, reversed_batch_id: reversalId };
-}
-
 /** Append a reviewer-authorized reversal batch; never delete historical evidence. */
 export function undoBatch(
   db: DatabaseSync,
@@ -1165,9 +1035,6 @@ export function undoBatch(
     if (alreadyReversed) conflict("This batch has already been reversed.");
     const members = db.prepare("SELECT entity_kind, entity_id FROM batch_members WHERE batch_id = ? ORDER BY entity_kind, entity_id")
       .all(batchId) as BatchMember[];
-    if (original.operation === "stamp-approval" || original.operation === "stamp-suspension" || original.operation === "stamp-rejection") {
-      return undoStampBatch(db, batchId, original.operation, undo.reviewer, members);
-    }
     if (original.operation !== "review") conflict("This batch operation cannot be undone.");
     const annotationMembers = members.filter((member) => member.entity_kind === "annotation");
     const annotations = annotationMembers.map((member) => currentAnnotationForUndo(db, numericMemberId(member)));
@@ -1243,8 +1110,6 @@ export function undoBatch(
     }
     for (const id of applySourceAtomUndo(db, reversalId, members)) touchedAbilities.add(id);
     for (const id of applyOntologyUndo(db, batchId, reversalId, members)) touchedAbilities.add(id);
-    invalidateAbilityEvidence(db, touchedAbilities, "HUMAN_UNDO_CHANGED");
-    applyStamps(db, { ability_version_ids: [...touchedAbilities], bump_revision: false });
     invalidateWholeReview(db, touchedAbilities);
     bumpWorkbenchRevision(db);
     return { batch_id: batchId, reversed_batch_id: reversalId };
@@ -1312,20 +1177,6 @@ export function getDashboard(db: DatabaseSync): Record<string, unknown> {
     WHERE abilities.current = 1 AND annotations.status = 'active'
       AND annotations.authority_kind = 'human'
   `);
-  const derivedOccurrences = currentCount(db, `
-    SELECT count(*) AS total FROM annotations
-    JOIN source_spans ON source_spans.id = annotations.span_id
-    JOIN abilities ON abilities.id = source_spans.ability_version_id
-    WHERE abilities.current = 1 AND annotations.status = 'active'
-      AND annotations.authority_kind = 'stamp'
-      AND EXISTS (
-        SELECT 1 FROM stamp_applications
-        JOIN stamps ON stamps.id = stamp_applications.stamp_id
-          AND stamps.revision = stamp_applications.stamp_revision
-        WHERE stamp_applications.annotation_id = annotations.id
-          AND stamp_applications.status = 'active' AND stamps.status = 'approved'
-      )
-  `);
   const pendingProposals = currentCount(db, `
     SELECT count(*) AS total FROM proposals
     JOIN source_spans ON source_spans.id = proposals.span_id
@@ -1359,10 +1210,10 @@ export function getDashboard(db: DatabaseSync): Record<string, unknown> {
     JOIN abilities ON abilities.id = source_spans.ability_version_id
     WHERE abilities.current = 1 AND proposals.status = 'unresolved'
   `);
-  // Imports and deterministic stamp application are not decisions a reviewer made here.
+  // Imports and migrations are not decisions a reviewer made here.
   const humanDecisionBatches = currentCount(db, `
     SELECT count(*) AS total FROM annotation_batches
-    WHERE operation <> 'stamp-application' AND operation NOT LIKE 'import-%'
+    WHERE operation IN ('review', 'undo')
   `);
   const importBatches = currentCount(db, `
     SELECT count(*) AS total FROM annotation_batches WHERE operation LIKE 'import-%'
@@ -1374,108 +1225,10 @@ export function getDashboard(db: DatabaseSync): Record<string, unknown> {
     WHERE abilities.current = 1 AND annotations.status = 'active' AND annotations.origin = 'luna'
   `);
 
-  const stampRows = db.prepare("SELECT status, count(*) AS total FROM stamps GROUP BY status").all() as Array<{ status: string; total: number }>;
-  const stampCounts: Record<string, number> = { proposed: 0, approved: 0, rejected: 0, suspended: 0, superseded: 0 };
-  for (const row of stampRows) stampCounts[row.status] = Number(row.total);
-  const escalationRows = db.prepare(`
-    SELECT escalations.state, count(DISTINCT escalations.id) AS groups,
-      count(escalation_members.member_id) AS occurrences
-    FROM escalations
-    JOIN escalation_members ON escalation_members.escalation_id = escalations.id
-      AND escalation_members.status = 'active'
-    JOIN abilities ON abilities.id = escalation_members.ability_version_id
-      AND abilities.current = 1
-    GROUP BY escalations.state
-  `).all() as Array<{ state: string; groups: number; occurrences: number }>;
-  const escalations: Record<string, { groups: number; occurrences: number }> = {
-    open: { groups: 0, occurrences: 0 },
-    deferred: { groups: 0, occurrences: 0 },
-    resolved: { groups: 0, occurrences: 0 },
-  };
-  for (const row of escalationRows) {
-    escalations[row.state] = { groups: Number(row.groups), occurrences: Number(row.occurrences) };
-  }
-  // Distinct open escalations with at least one active current member, by reason. LEAF_GAP is a
-  // gap row, not an escalation, and is counted separately.
-  const openByReason: Record<string, number> = {};
-  for (const row of db.prepare(`
-    SELECT escalations.reason_code, count(DISTINCT escalations.id) AS total
-    FROM escalations
-    JOIN escalation_members ON escalation_members.escalation_id = escalations.id AND escalation_members.status = 'active'
-    JOIN abilities ON abilities.id = escalation_members.ability_version_id AND abilities.current = 1
-      AND abilities.source_hash = escalation_members.source_hash
-    WHERE escalations.state = 'open'
-    GROUP BY escalations.reason_code
-  `).all() as Array<{ reason_code: string; total: number }>) openByReason[row.reason_code] = Number(row.total);
   const openLeafGaps = (db.prepare(`
     SELECT count(*) AS total FROM gaps JOIN abilities ON abilities.id = gaps.ability_version_id
     WHERE gaps.type = 'LEAF_GAP' AND gaps.status = 'open' AND abilities.current = 1
   `).get() as { total: number }).total;
-  const draftRows = db.prepare(`
-    SELECT assembly_drafts.status, count(*) AS total
-    FROM assembly_drafts
-    JOIN stamp_applications ON stamp_applications.id = assembly_drafts.composition_application_id
-    JOIN stamps ON stamps.id = stamp_applications.stamp_id
-      AND stamps.revision = stamp_applications.stamp_revision
-    JOIN abilities ON abilities.id = stamp_applications.ability_version_id
-    WHERE abilities.current = 1
-      AND (
-        assembly_drafts.status = 'stale'
-        OR (
-          stamps.status = 'approved'
-          AND stamp_applications.status IN ('active', 'blocked')
-        )
-      )
-    GROUP BY assembly_drafts.status
-  `).all() as Array<{ status: string; total: number }>;
-  const drafts: Record<string, number> = { proposed: 0, accepted: 0, blocked: 0, stale: 0 };
-  for (const row of draftRows) drafts[row.status] = Number(row.total);
-  const auditActionRows = db.prepare(`
-    SELECT verdict, count(*) AS total
-    FROM stamp_audit_decisions
-    GROUP BY verdict
-  `).all() as Array<{ verdict: string; total: number }>;
-  const auditActions: Record<string, number> = { correct: 0, incorrect: 0, uncertain: 0 };
-  for (const row of auditActionRows) auditActions[row.verdict] = Number(row.total);
-  const currentAuditRows = db.prepare(`
-    SELECT stamp_audit_decisions.id, stamp_audit_decisions.application_id,
-      stamp_audit_decisions.source_hash, stamp_audit_decisions.dependency_hash,
-      stamp_audit_decisions.verdict, stamp_applications.status AS application_status,
-      stamp_applications.dependencies_json, stamps.status AS stamp_status,
-      abilities.current, abilities.source_hash AS current_source_hash
-    FROM stamp_audit_decisions
-    JOIN stamp_applications ON stamp_applications.id = stamp_audit_decisions.application_id
-    JOIN stamps ON stamps.id = stamp_applications.stamp_id
-      AND stamps.revision = stamp_applications.stamp_revision
-    JOIN abilities ON abilities.id = stamp_audit_decisions.ability_version_id
-    ORDER BY stamp_audit_decisions.application_id,
-      stamp_audit_decisions.rowid DESC
-  `).all() as Array<{
-    id: string;
-    application_id: string;
-    source_hash: string;
-    dependency_hash: string;
-    verdict: string;
-    application_status: string;
-    dependencies_json: string;
-    stamp_status: string;
-    current: number;
-    current_source_hash: string;
-  }>;
-  const latestCurrentAudits = new Map<string, typeof currentAuditRows[number]>();
-  for (const row of currentAuditRows) {
-    if (
-      !latestCurrentAudits.has(row.application_id)
-      && row.application_status === "active"
-      && row.stamp_status === "approved"
-      && row.current === 1
-      && row.current_source_hash === row.source_hash
-      && hashJson(JSON.parse(row.dependencies_json)) === row.dependency_hash
-    ) latestCurrentAudits.set(row.application_id, row);
-  }
-  const audits: Record<string, number> = { correct: 0, incorrect: 0, uncertain: 0 };
-  for (const row of latestCurrentAudits.values()) audits[row.verdict] += 1;
-
   const fingerprintRows = db.prepare(`
     SELECT annotations.id, fingerprints.family_id, fingerprints.family_version,
       fingerprints.parameters_json, annotation_batches.created_at
@@ -1512,14 +1265,12 @@ export function getDashboard(db: DatabaseSync): Record<string, unknown> {
     return { review_order: index + 1, source_shapes: seenShapes.size };
   });
 
-  const average = (field: "leaf_fraction" | "human_leaf_fraction" | "stamp_leaf_fraction"): number | null =>
+  const average = (field: "leaf_fraction" | "human_leaf_fraction"): number | null =>
     totalSourceRecords === 0 ? null : allCoverage.reduce((total, entry) => total + entry[field], 0) / totalSourceRecords;
-  const acceptedDrafts = drafts.accepted ?? 0;
   return {
     total_source_records: totalSourceRecords,
     abilities_with_confirmed_coverage: anyConfirmedCoverage,
     confirmed_occurrences: confirmedOccurrences,
-    derived_occurrences: derivedOccurrences,
     pending_proposals: pendingProposals,
     novel_count: novelCount,
     leaf_histogram: leafHistogram,
@@ -1530,26 +1281,16 @@ export function getDashboard(db: DatabaseSync): Record<string, unknown> {
       whole_reviewed_abilities: wholeReviewed,
       average_leaf_fraction: average("leaf_fraction"),
       average_human_leaf_fraction: average("human_leaf_fraction"),
-      average_stamp_leaf_fraction: average("stamp_leaf_fraction"),
     },
     gap_counts: gapCounts,
     discovery: { fingerprint_by_review_order: fingerprintDiscovery, source_shape_by_review_order: shapeDiscovery },
     per_origin: perOrigin,
-    active_stamps: stampCounts.approved ?? 0,
-    stamps: stampCounts,
-    escalations,
-    open_escalations_by_reason: openByReason,
     open_leaf_gaps: Number(openLeafGaps),
-    drafts,
     human_decisions: humanDecisionBatches,
     import_batches: importBatches,
     luna: { active_annotations: lunaActiveAnnotations },
     composition_ready_abilities: compositionReadyAbilities,
     fully_accounted_abilities: accountedComplete,
-    audits,
-    audit_actions: auditActions,
-    accepted_complete_drafts: acceptedDrafts,
-    accepted_complete_drafts_per_human_decision: humanDecisionBatches === 0 ? null : acceptedDrafts / humanDecisionBatches,
     human_actions_per_confirmed_occurrence: confirmedOccurrences === 0 ? null : humanDecisionBatches / confirmedOccurrences,
     confirmations_per_batch: humanDecisionBatches === 0 ? null : confirmedOccurrences / humanDecisionBatches,
   };
@@ -1569,17 +1310,6 @@ export function getPrivateExport(db: DatabaseSync): Record<string, unknown> {
     JOIN abilities ON abilities.id = source_spans.ability_version_id
     JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
     WHERE annotations.status = 'active' AND abilities.current = 1
-      AND (
-        annotations.authority_kind = 'human'
-        OR EXISTS (
-          SELECT 1 FROM stamp_applications
-          JOIN stamps ON stamps.id = stamp_applications.stamp_id
-            AND stamps.revision = stamp_applications.stamp_revision
-          WHERE stamp_applications.annotation_id = annotations.id
-            AND stamp_applications.status = 'active'
-            AND stamps.status = 'approved'
-        )
-      )
     ORDER BY abilities.faction_id, abilities.ability_id,
       source_spans.start_byte, source_spans.end_byte, annotations.id
   `).all() as Array<{
@@ -1600,131 +1330,8 @@ export function getPrivateExport(db: DatabaseSync): Record<string, unknown> {
     family_version: number;
     parameters_json: string;
   }>;
-  const applicationRows = db.prepare(`
-    SELECT stamp_applications.*, abilities.source_hash
-    FROM stamp_applications
-    JOIN abilities ON abilities.id = stamp_applications.ability_version_id
-    WHERE abilities.current = 1
-    ORDER BY stamp_applications.stamp_id, stamp_applications.stamp_revision,
-      stamp_applications.ability_version_id, stamp_applications.id
-  `).all() as Array<Record<string, unknown> & {
-    bindings_json: string;
-    dependencies_json: string;
-  }>;
-  const applications = applicationRows.map(({ bindings_json, dependencies_json, ...application }) => ({
-    ...application,
-    bindings: JSON.parse(bindings_json) as unknown,
-    dependencies: JSON.parse(dependencies_json) as unknown,
-  }));
-  const modelRuns = new Map((db.prepare(`
-    SELECT id, model, model_version, prompt_version, input_hash, config_json,
-      output_json, latency_ms, cost_usd, status, created_at
-    FROM model_runs ORDER BY id
-  `).all() as Array<Record<string, unknown> & {
-    id: number;
-    config_json: string;
-    output_json: string | null;
-  }>).map(({ config_json, output_json, ...run }) => [run.id, {
-    ...run,
-    config: JSON.parse(config_json) as unknown,
-    output: output_json === null ? null : JSON.parse(output_json) as unknown,
-  }]));
-  const stampRows = db.prepare("SELECT * FROM stamps ORDER BY id, revision").all() as Array<Record<string, unknown> & {
-    id: string;
-    revision: number;
-    definition_json: string;
-    model_run_id: number | null;
-    challenge_run_id: number | null;
-    approval_batch_id: string | null;
-  }>;
-  const evidenceRows = db.prepare(`
-    SELECT stamp_id, stamp_revision, evidence_kind, ordinal, evidence_json
-    FROM stamp_evidence ORDER BY stamp_id, stamp_revision, evidence_kind, ordinal
-  `).all() as Array<{
-    stamp_id: string;
-    stamp_revision: number;
-    evidence_kind: "positive" | "counterexample";
-    ordinal: number;
-    evidence_json: string;
-  }>;
-  const stamps = stampRows.map(({ definition_json, ...stamp }) => ({
-    ...stamp,
-    definition: JSON.parse(definition_json) as unknown,
-    positives: evidenceRows.filter((evidence) =>
-      evidence.stamp_id === stamp.id
-      && evidence.stamp_revision === stamp.revision
-      && evidence.evidence_kind === "positive")
-      .map((evidence) => JSON.parse(evidence.evidence_json) as unknown),
-    counterexamples: evidenceRows.filter((evidence) =>
-      evidence.stamp_id === stamp.id
-      && evidence.stamp_revision === stamp.revision
-      && evidence.evidence_kind === "counterexample")
-      .map((evidence) => JSON.parse(evidence.evidence_json) as unknown),
-    proposal_receipt: stamp.model_run_id === null ? null : modelRuns.get(stamp.model_run_id) ?? null,
-    challenge_receipt: stamp.challenge_run_id === null ? null : modelRuns.get(stamp.challenge_run_id) ?? null,
-  }));
-  const draftRows = db.prepare(`
-    SELECT assembly_drafts.*, stamp_applications.ability_version_id,
-      abilities.faction_id, abilities.ability_id, abilities.source_hash
-    FROM assembly_drafts
-    JOIN stamp_applications ON stamp_applications.id = assembly_drafts.composition_application_id
-    JOIN abilities ON abilities.id = stamp_applications.ability_version_id
-    WHERE abilities.current = 1
-    ORDER BY assembly_drafts.id
-  `).all() as Array<Record<string, unknown> & {
-    graph_json: string;
-    mechanics_json: string | null;
-    diagnostic_json: string;
-    verifier_run_id: number | null;
-  }>;
-  const drafts = draftRows.map(({ graph_json, mechanics_json, diagnostic_json, ...draft }) => ({
-    ...draft,
-    graph: JSON.parse(graph_json) as unknown,
-    mechanics: mechanics_json === null ? null : JSON.parse(mechanics_json) as unknown,
-    diagnostic: JSON.parse(diagnostic_json) as unknown,
-    verifier_receipt: draft.verifier_run_id === null ? null : modelRuns.get(draft.verifier_run_id) ?? null,
-  }));
-  const escalationRows = db.prepare("SELECT * FROM escalations ORDER BY id").all() as Array<Record<string, unknown> & {
-    id: string;
-    question_json: string;
-    options_json: string;
-    decision_batch_id: string | null;
-  }>;
-  const escalationMembers = db.prepare(`
-    SELECT escalation_members.*, source_spans.fragment, source_spans.start_byte,
-      source_spans.end_byte, source_spans.exact_text
-    FROM escalation_members
-    JOIN abilities ON abilities.id = escalation_members.ability_version_id
-    LEFT JOIN source_spans ON source_spans.id = escalation_members.span_id
-    WHERE escalation_members.status = 'active' AND abilities.current = 1
-    ORDER BY escalation_members.escalation_id, escalation_members.member_id
-  `).all() as Array<Record<string, unknown> & { escalation_id: string }>;
-  const escalations = escalationRows.flatMap(({ question_json, options_json, ...escalation }) => {
-    const members = escalationMembers.filter((candidate) => candidate.escalation_id === escalation.id);
-    return members.length === 0 ? [] : [{
-      ...escalation,
-      question: JSON.parse(question_json) as unknown,
-      options: JSON.parse(options_json) as unknown,
-      members,
-    }];
-  });
-  const audits = db.prepare(`
-    SELECT stamp_audit_decisions.*
-    FROM stamp_audit_decisions
-    JOIN abilities ON abilities.id = stamp_audit_decisions.ability_version_id
-      AND abilities.current = 1
-      AND abilities.source_hash = stamp_audit_decisions.source_hash
-    ORDER BY stamp_audit_decisions.created_at, stamp_audit_decisions.id
-  `).all() as Array<Record<string, unknown> & { batch_id: string }>;
   const batchIds = new Set<string>();
   for (const annotation of annotations) batchIds.add(annotation.batch_id);
-  for (const stamp of stampRows) if (stamp.approval_batch_id !== null) batchIds.add(stamp.approval_batch_id);
-  for (const escalation of escalationRows) if (escalation.decision_batch_id !== null) batchIds.add(escalation.decision_batch_id);
-  for (const audit of audits) batchIds.add(audit.batch_id);
-  for (const row of db.prepare(`
-    SELECT DISTINCT batch_id FROM batch_members
-    WHERE entity_kind IN ('stamp-approved', 'stamp-suspended', 'stamp-rejected')
-  `).all() as Array<{ batch_id: string }>) batchIds.add(row.batch_id);
   const decisionBatches = (db.prepare("SELECT * FROM annotation_batches ORDER BY created_at, id").all() as Array<Record<string, unknown> & {
     id: string;
     metadata_json: string;
@@ -1739,21 +1346,15 @@ export function getPrivateExport(db: DatabaseSync): Record<string, unknown> {
       `).all(decision.id),
     }));
   return {
-    schema_version: 1,
+    schema_version: 2,
     kind: "round5c-private-current-state",
     exported_at: new Date().toISOString(),
     workbench_revision: getWorkbenchRevision(db),
     annotations: annotations.map(({ parameters_json, confirmed_by, ...annotation }) => ({
       ...annotation,
       parameters: JSON.parse(parameters_json) as unknown,
-      human_confirmed_by: annotation.authority_kind === "human" ? confirmed_by : null,
-      rule_authorized_by: annotation.authority_kind === "stamp" ? confirmed_by : null,
+      confirmed_by,
     })),
-    stamps,
-    applications,
-    drafts,
-    escalations,
-    audits,
     decision_batches: decisionBatches,
   };
 }

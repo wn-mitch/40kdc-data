@@ -20,7 +20,6 @@ import {
   type ParsedResponse, type ParsedSemanticSpan, type ParsedStructural, type ParsedUnresolved,
 } from "./luna-parse.js";
 import { recordCandidateSuggestion } from "./ontology-store.js";
-import { applyStamps } from "./stamps.js";
 import { insertStructuralProposal } from "./atoms-store.js";
 import {
   CONNECTIVE_KINDS, LEGACY_PROMPT_VERSION, LEGACY_REQUEST_SCHEMA_VERSION, LUNA_INSTRUCTIONS_V2, LUNA_MODEL, LunaRunError,
@@ -1202,8 +1201,6 @@ export function importLuna(
           ? { origin: "luna", model: parsed.model, model_version: parsed.model_version, latency_ms: null, cost_usd: null, owner: null }
           : { origin: "external", model: "external", model_version: "unverified", latency_ms: null, cost_usd: null, owner: null };
       const inserted = persistParsedResponse(db, run, parsed, rawResponse, provenance);
-      // Surface NEW_FORM and SOURCE_AMBIGUITY escalations for the imported gaps immediately.
-      applyStamps(db, { ability_version_ids: abilities.map((ability) => ability.id), bump_revision: false });
       bumpWorkbenchRevision(db);
       return { run_id: runId, ...inserted };
     });

@@ -7,8 +7,7 @@ import { fileURLToPath } from "node:url";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { describeAbility } from "../src/translate/effect.js";
-import { draftVerificationSnapshot, recordDraftVerification, schemaTreeHash } from "../src/round5c/assembly.js";
+import { compilationInputsHash } from "../src/round5c/compiled.js";
 import { initializeWorkbench } from "../src/round5c/db.js";
 import {
   getPublicationReport,
@@ -17,6 +16,7 @@ import {
   publishPublication,
   reconcilePublicationBatches,
 } from "../src/round5c/publish.js";
+import { applyAnnotationBatch } from "../src/round5c/review.js";
 import { refreshSources } from "../src/round5c/source.js";
 import { hashJson } from "../src/round4/hash.js";
 import { sourceDigest } from "../src/source-digest.js";
@@ -48,9 +48,10 @@ type Fixture = {
   dataRoot: string;
   rawStore: string;
   abilitiesFile: string;
-  selectedDraftId: string;
-  authoredDraftId: string;
-  selectedStampId: string;
+  selectedEntryId: string;
+  authoredEntryId: string;
+  selectedAbilityVersionId: number;
+  selectedSourceHash: string;
 };
 
 function entriesAt(file: string): Array<Record<string, unknown>> {
@@ -61,94 +62,26 @@ function writeEntries(file: string, entries: Array<Record<string, unknown>>): vo
   writeFileSync(file, `${JSON.stringify(entries, null, 2)}\n`);
 }
 
-function seedAcceptedDraft(
-  db: DatabaseSync,
-  entry: Record<string, unknown>,
-  abilityVersionId: number,
-  sourceHash: string,
-  suffix: string,
-): { draftId: string; stampId: string } {
-  const now = "2026-01-01T00:00:00.000Z";
-  const stampId = `fixture-composition-${suffix}`;
-  const definitionHash = hashJson({ stamp_id: stampId, fixture: true });
+const STAT_MECHANICS = {
+  effect: { type: "stat-modifier", target: "self", modifier: { stat: "M", operation: "add", value: 1 } },
+  scope: { range: "unit", duration: "permanent" },
+  behavior: "passive",
+  trigger: null,
+  usage: null,
+  applies_to: null,
+};
+
+/** Record an approved compiled entry pinned to the source version's current leaves. */
+function seedApprovedEntry(db: DatabaseSync, abilityVersionId: number, suffix: string, mechanics: Record<string, unknown> = STAT_MECHANICS): string {
   const batchId = `fixture-approval-${suffix}`;
-  db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at) VALUES (?, 'stamp-approval', 'fixture-reviewer-secret', ?)")
-    .run(batchId, now);
+  db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at) VALUES (?, 'shape-approval', 'fixture-reviewer-secret', ?)")
+    .run(batchId, "2026-01-01T00:00:00.000Z");
+  const id = `compiled-${suffix}`;
   db.prepare(`
-    INSERT INTO stamps (
-      id, revision, kind, status, definition_json, definition_hash,
-      approval_batch_id, created_at, updated_at
-    ) VALUES (?, 1, 'composition', 'approved', ?, ?, ?, ?, ?)
-  `).run(stampId, JSON.stringify({ schema_version: 1, kind: "composition", label: suffix, variants: [] }), definitionHash, batchId, now, now);
-
-  const applicationId = `fixture-application-${suffix}`;
-  const dependencies = {
-    assembler_version: "round5c/stamp-assembler/v1",
-    stamp: { id: stampId, revision: 1, definition_hash: definitionHash },
-    source_hash: sourceHash,
-    leaf_annotation_ids: [],
-    schema_hash: schemaTreeHash(),
-    entity: { faction_id: factionId, ability_id: entry.ability_id, entry_hash: hashJson(entry) },
-  };
-  const bindings = {};
-  const proposedEffect = {
-    type: "stat-modifier",
-    target: "self",
-    modifier: { stat: "M", operation: "add", value: 1 },
-  };
-  const mechanics = {
-    ...entry,
-    effect: proposedEffect,
-    scope: { range: "unit", duration: "permanent" },
-    behavior: "passive",
-  } as Record<string, unknown>;
-  delete mechanics.trigger;
-  delete mechanics.usage;
-  delete mechanics.applies_to;
-  const graph = { schema_version: 1, nodes: [], relations: [], roots: [] };
-  const inputsHash = hashJson({ dependencies, bindings, graph, mechanics });
-  db.prepare(`
-    INSERT INTO stamp_applications (
-      id, stamp_id, stamp_revision, ability_version_id, variant_id, inputs_hash,
-      bindings_json, dependencies_json, status, created_at, updated_at
-    ) VALUES (?, ?, 1, ?, 'fixture', ?, ?, ?, 'active', ?, ?)
-  `).run(applicationId, stampId, abilityVersionId, inputsHash, JSON.stringify(bindings), JSON.stringify(dependencies), now, now);
-
-  const draftId = `fixture-draft-${suffix}`;
-  db.prepare(`
-    INSERT INTO assembly_drafts (
-      id, composition_application_id, graph_json, mechanics_json, rendered_text,
-      inputs_hash, schema_hash, status, diagnostic_json, created_at, updated_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, 'proposed', '{}', ?, ?)
-  `).run(
-    draftId,
-    applicationId,
-    JSON.stringify(graph),
-    JSON.stringify(mechanics),
-    describeAbility(mechanics as never),
-    inputsHash,
-    schemaTreeHash(),
-    now,
-    now,
-  );
-  const snapshot = draftVerificationSnapshot(db, draftId);
-  const output = {
-    items: [{
-      item_id: draftId,
-      evidence_hash: snapshot.evidence_hash,
-      result: { faithful: true, severity: "ok", findings: [] },
-    }],
-  };
-  const run = db.prepare(`
-    INSERT INTO model_runs (
-      model, model_version, prompt_version, input_hash, config_json, output_json, status, created_at
-    ) VALUES ('fixture-verifier', 'fixture-version', 'fixture-verify-v1', ?, '{}', ?, 'completed', ?)
-  `).run(hashJson(snapshot), JSON.stringify(output), now);
-  recordDraftVerification(db, {
-    draft_id: draftId,
-    verifier_run_id: Number(run.lastInsertRowid),
-  }, () => "unused-escalation");
-  return { draftId, stampId };
+    INSERT INTO compiled_entries (id, ability_version_id, shape_signature, mechanics_json, inputs_hash, status, batch_id, created_at)
+    VALUES (?, ?, 'EFFECT(characteristic-set)', ?, ?, 'approved', ?, ?)
+  `).run(id, abilityVersionId, JSON.stringify(mechanics), compilationInputsHash(db, abilityVersionId), batchId, "2026-01-01T00:00:00.000Z");
+  return id;
 }
 
 function buildFixture(): Fixture {
@@ -168,7 +101,6 @@ function buildFixture(): Fixture {
   selected.effect = { type: "stat-modifier", target: "self", modifier: {} };
   selected.behavior = "reactive";
   selected.community_notes = "metadata-must-survive";
-  const authored = fixtureEntries.find((entry) => entry.ability_id === authoredAbilityId)!;
   writeEntries(abilitiesFile, fixtureEntries);
   writeFileSync(join(rawStore, `${factionId}.json`), JSON.stringify([{
     faction_id: factionId,
@@ -191,16 +123,15 @@ function buildFixture(): Fixture {
     .get(factionId, selectedAbilityId) as { id: number; source_hash: string };
   const authoredAbility = db.prepare("SELECT id, source_hash FROM abilities WHERE faction_id = ? AND ability_id = ? AND current = 1")
     .get(factionId, authoredAbilityId) as { id: number; source_hash: string };
-  const selectedDraft = seedAcceptedDraft(db, selected, selectedAbility.id, selectedAbility.source_hash, "selected");
-  const authoredDraft = seedAcceptedDraft(db, authored, authoredAbility.id, authoredAbility.source_hash, "authored");
   return {
     db,
     dataRoot,
     rawStore,
     abilitiesFile,
-    selectedDraftId: selectedDraft.draftId,
-    authoredDraftId: authoredDraft.draftId,
-    selectedStampId: selectedDraft.stampId,
+    selectedEntryId: seedApprovedEntry(db, selectedAbility.id, "selected"),
+    authoredEntryId: seedApprovedEntry(db, authoredAbility.id, "authored"),
+    selectedAbilityVersionId: selectedAbility.id,
+    selectedSourceHash: selectedAbility.source_hash,
   };
 }
 
@@ -229,11 +160,10 @@ describe("Round 5C explicit publication", () => {
 
       const preview = await preparePublication(fixture.db, {
         faction_id: factionId,
-        draft_ids: [fixture.selectedDraftId],
-        reauthor: false,
+        entry_ids: [fixture.selectedEntryId],
       });
       expect(readFileSync(fixture.abilitiesFile, "utf8")).toBe(beforeText);
-      expect(preview).toMatchObject({ faction_id: factionId, ability_ids: [selectedAbilityId], reauthor: false });
+      expect(preview).toMatchObject({ faction_id: factionId, ability_ids: [selectedAbilityId] });
       expect(listPublications(fixture.db).items[0]).toMatchObject({ state: "prepared", receipt: null });
 
       const receipt = await publishPublication(fixture.db, {
@@ -273,182 +203,107 @@ describe("Round 5C explicit publication", () => {
     }
   }, 120_000);
 
-  it("refuses authored replacement and every stale source, verifier, rule, schema, entity, preview, and validation gate", async () => {
+  it("replaces an authored effect once its shape is approved", async () => {
     const fixture = buildFixture();
     try {
-      await expect(preparePublication(fixture.db, {
-        faction_id: factionId,
-        draft_ids: [fixture.authoredDraftId],
-        reauthor: false,
-      })).rejects.toThrow(/already has an authored effect.*--reauthor/i);
+      const before = entriesAt(fixture.abilitiesFile).find((entry) => entry.ability_id === authoredAbilityId)!;
+      expect(before.effect).not.toEqual(STAT_MECHANICS.effect);
+      const preview = await preparePublication(fixture.db, { faction_id: factionId, entry_ids: [fixture.authoredEntryId] });
+      expect(preview.diff[0]!.fields.map((field) => field.field)).toContain("effect");
+      await publishPublication(fixture.db, { batch_id: preview.batch_id, preview_hash: preview.preview_hash });
+      const after = entriesAt(fixture.abilitiesFile).find((entry) => entry.ability_id === authoredAbilityId)!;
+      expect(after).toMatchObject({ effect: STAT_MECHANICS.effect, name: before.name, source_digest: sourceDigest(authoredSourceText) });
+    } finally {
+      fixture.db.close();
+    }
+  }, 120_000);
+
+  it("refuses every stale source, approval, leaf, schema, entity, preview, and validation gate", async () => {
+    const fixture = buildFixture();
+    const prepare = () => preparePublication(fixture.db, { faction_id: factionId, entry_ids: [fixture.selectedEntryId] });
+    try {
+      await expect(preparePublication(fixture.db, { faction_id: "necrons", entry_ids: [fixture.selectedEntryId] }))
+        .rejects.toThrow(/belongs to faction adepta-sororitas/i);
+      await expect(preparePublication(fixture.db, { faction_id: factionId, entry_ids: [fixture.selectedEntryId, fixture.selectedEntryId] }))
+        .rejects.toThrow(/nonempty and unique/i);
+      await expect(preparePublication(fixture.db, { faction_id: factionId, entry_ids: ["compiled-missing"] }))
+        .rejects.toMatchObject({ status: 404 });
 
       const sourceFile = join(fixture.rawStore, `${factionId}.json`);
       const rawSource = readFileSync(sourceFile, "utf8");
       writeFileSync(sourceFile, rawSource.replace(privateSourceText, `${privateSourceText} Changed.`));
-      await expect(preparePublication(fixture.db, {
-        faction_id: factionId,
-        draft_ids: [fixture.selectedDraftId],
-        reauthor: false,
-      })).rejects.toMatchObject({ status: 409 });
-      writeFileSync(sourceFile, rawSource);
+      await expect(prepare()).rejects.toThrow(/source changed after approval/i);
       const sourceRecords = JSON.parse(rawSource) as Array<Record<string, unknown>>;
       writeFileSync(sourceFile, JSON.stringify(sourceRecords.filter((entry) => entry.ability_id !== selectedAbilityId)));
-      await expect(preparePublication(fixture.db, {
-        faction_id: factionId,
-        draft_ids: [fixture.selectedDraftId],
-        reauthor: false,
-      })).rejects.toThrow(/fresh source is missing/i);
-      writeFileSync(sourceFile, rawSource);
-
+      await expect(prepare()).rejects.toThrow(/fresh source is missing/i);
       const changedTypeRecords = JSON.parse(rawSource) as Array<Record<string, unknown>>;
       changedTypeRecords.find((entry) => entry.ability_id === selectedAbilityId)!.ability_type = "enhancement";
       writeFileSync(sourceFile, JSON.stringify(changedTypeRecords));
-      await expect(preparePublication(fixture.db, {
-        faction_id: factionId,
-        draft_ids: [fixture.selectedDraftId],
-        reauthor: false,
-      })).rejects.toMatchObject({ status: 409 });
+      await expect(prepare()).rejects.toThrow(/source changed after approval/i);
       writeFileSync(sourceFile, rawSource);
 
-      const changedFragmentRecords = JSON.parse(rawSource) as Array<Record<string, unknown>>;
-      const changedFragment = changedFragmentRecords.find((entry) => entry.ability_id === selectedAbilityId)!;
-      delete changedFragment.raw_text;
-      changedFragment.effect = privateSourceText;
-      writeFileSync(sourceFile, JSON.stringify(changedFragmentRecords));
-      await expect(preparePublication(fixture.db, {
-        faction_id: factionId,
-        draft_ids: [fixture.selectedDraftId],
-        reauthor: false,
-      })).rejects.toMatchObject({ status: 409 });
-      writeFileSync(sourceFile, rawSource);
+      fixture.db.prepare("UPDATE compiled_entries SET status = 'rejected' WHERE id = ?").run(fixture.selectedEntryId);
+      await expect(prepare()).rejects.toThrow(/not an approved entry/i);
+      fixture.db.prepare("UPDATE compiled_entries SET status = 'approved' WHERE id = ?").run(fixture.selectedEntryId);
 
-      fixture.db.prepare("UPDATE stamps SET status = 'suspended' WHERE id = ? AND revision = 1").run(fixture.selectedStampId);
-      await expect(preparePublication(fixture.db, {
-        faction_id: factionId,
-        draft_ids: [fixture.selectedDraftId],
-        reauthor: false,
-      })).rejects.toThrow(/active authority|stale/i);
-      fixture.db.prepare("UPDATE stamps SET status = 'approved' WHERE id = ? AND revision = 1").run(fixture.selectedStampId);
+      // A leaf decision after approval changes what the entry was compiled from.
+      const phrase = "add one to this model's Move characteristic";
+      const start = Buffer.byteLength(privateSourceText.slice(0, privateSourceText.indexOf(phrase)), "utf8");
+      const leaf = applyAnnotationBatch(fixture.db, { reviewer: "fixture-reviewer", decisions: [{
+        action: "confirm", ability_version_id: fixture.selectedAbilityVersionId, source_hash: fixture.selectedSourceHash,
+        fragment: "RAW_TEXT", start_byte: start, end_byte: start + Buffer.byteLength(phrase, "utf8"), exact_text: phrase,
+        role: "EFFECT", family_id: "characteristic-set", family_version: 1, parameters: { subject: "this-model", characteristic: "M", value: 1 },
+      }] });
+      await expect(prepare()).rejects.toThrow(/leaves changed after approval/i);
+      fixture.db.prepare("UPDATE annotations SET status = 'retracted' WHERE batch_id = ?").run(leaf.batch_id);
 
-      const stamp = fixture.db.prepare("SELECT definition_hash FROM stamps WHERE id = ? AND revision = 1")
-        .get(fixture.selectedStampId) as { definition_hash: string };
-      fixture.db.prepare("UPDATE stamps SET definition_hash = ? WHERE id = ? AND revision = 1")
-        .run("d".repeat(64), fixture.selectedStampId);
-      await expect(preparePublication(fixture.db, {
-        faction_id: factionId,
-        draft_ids: [fixture.selectedDraftId],
-        reauthor: false,
-      })).rejects.toThrow(/source or rule dependency is stale/i);
-      fixture.db.prepare("UPDATE stamps SET definition_hash = ? WHERE id = ? AND revision = 1")
-        .run(stamp.definition_hash, fixture.selectedStampId);
-
-      const draft = fixture.db.prepare("SELECT schema_hash, diagnostic_json FROM assembly_drafts WHERE id = ?")
-        .get(fixture.selectedDraftId) as { schema_hash: string; diagnostic_json: string };
-      fixture.db.prepare("UPDATE assembly_drafts SET schema_hash = ? WHERE id = ?").run("0".repeat(64), fixture.selectedDraftId);
-      await expect(preparePublication(fixture.db, {
-        faction_id: factionId,
-        draft_ids: [fixture.selectedDraftId],
-        reauthor: false,
-      })).rejects.toThrow(/schema snapshot is stale/i);
-      fixture.db.prepare("UPDATE assembly_drafts SET schema_hash = ? WHERE id = ?").run(draft.schema_hash, fixture.selectedDraftId);
-
-      const diagnostic = JSON.parse(draft.diagnostic_json) as { verdict: { severity: string } };
-      diagnostic.verdict.severity = "minor";
-      fixture.db.prepare("UPDATE assembly_drafts SET diagnostic_json = ? WHERE id = ?")
-        .run(JSON.stringify(diagnostic), fixture.selectedDraftId);
-      await expect(preparePublication(fixture.db, {
-        faction_id: factionId,
-        draft_ids: [fixture.selectedDraftId],
-        reauthor: false,
-      })).rejects.toThrow(/faithful verifier receipt/i);
-      fixture.db.prepare("UPDATE assembly_drafts SET diagnostic_json = ? WHERE id = ?").run(draft.diagnostic_json, fixture.selectedDraftId);
-
-      const verifier = fixture.db.prepare(`
-        SELECT model_runs.id, model_runs.output_json
-        FROM assembly_drafts
-        JOIN model_runs ON model_runs.id = assembly_drafts.verifier_run_id
-        WHERE assembly_drafts.id = ?
-      `).get(fixture.selectedDraftId) as { id: number; output_json: string };
-      const staleOutput = JSON.parse(verifier.output_json) as { items: Array<{ result: { severity: string } }> };
-      staleOutput.items[0]!.result.severity = "minor";
-      fixture.db.prepare("UPDATE model_runs SET output_json = ? WHERE id = ?").run(JSON.stringify(staleOutput), verifier.id);
-      await expect(preparePublication(fixture.db, {
-        faction_id: factionId,
-        draft_ids: [fixture.selectedDraftId],
-        reauthor: false,
-      })).rejects.toThrow(/verifier output is stale/i);
-      fixture.db.prepare("UPDATE model_runs SET output_json = ? WHERE id = ?").run(verifier.output_json, verifier.id);
-
-      const mechanicsRow = fixture.db.prepare(`
-        SELECT assembly_drafts.graph_json, assembly_drafts.mechanics_json, assembly_drafts.inputs_hash,
-          stamp_applications.dependencies_json, stamp_applications.bindings_json
-        FROM assembly_drafts
-        JOIN stamp_applications ON stamp_applications.id = assembly_drafts.composition_application_id
-        WHERE assembly_drafts.id = ?
-      `).get(fixture.selectedDraftId) as {
-        graph_json: string;
-        mechanics_json: string;
-        inputs_hash: string;
-        dependencies_json: string;
-        bindings_json: string;
-      };
-      const invalidMechanics = JSON.parse(mechanicsRow.mechanics_json) as Record<string, unknown>;
-      invalidMechanics.effect = { type: "not-a-real-effect" };
-      const invalidInputsHash = hashJson({
-        dependencies: JSON.parse(mechanicsRow.dependencies_json),
-        bindings: JSON.parse(mechanicsRow.bindings_json),
-        graph: JSON.parse(mechanicsRow.graph_json),
-        mechanics: invalidMechanics,
-      });
-      fixture.db.prepare("UPDATE assembly_drafts SET mechanics_json = ?, inputs_hash = ? WHERE id = ?")
-        .run(JSON.stringify(invalidMechanics), invalidInputsHash, fixture.selectedDraftId);
-      await expect(preparePublication(fixture.db, {
-        faction_id: factionId,
-        draft_ids: [fixture.selectedDraftId],
-        reauthor: false,
-      })).rejects.toThrow(/ability schema/i);
-      fixture.db.prepare("UPDATE assembly_drafts SET mechanics_json = ?, inputs_hash = ? WHERE id = ?")
-        .run(mechanicsRow.mechanics_json, mechanicsRow.inputs_hash, fixture.selectedDraftId);
+      const valid = fixture.db.prepare("SELECT mechanics_json FROM compiled_entries WHERE id = ?").get(fixture.selectedEntryId) as { mechanics_json: string };
+      fixture.db.prepare("UPDATE compiled_entries SET mechanics_json = ? WHERE id = ?")
+        .run(JSON.stringify({ ...STAT_MECHANICS, effect: { type: "not-a-real-effect" } }), fixture.selectedEntryId);
+      await expect(prepare()).rejects.toThrow(/fails the ability schema/i);
+      fixture.db.prepare("UPDATE compiled_entries SET mechanics_json = ? WHERE id = ?").run(valid.mechanics_json, fixture.selectedEntryId);
 
       const originalFile = readFileSync(fixture.abilitiesFile, "utf8");
       writeEntries(fixture.abilitiesFile, entriesAt(fixture.abilitiesFile).filter((entry) => entry.ability_id !== selectedAbilityId));
-      await expect(preparePublication(fixture.db, {
-        faction_id: factionId,
-        draft_ids: [fixture.selectedDraftId],
-        reauthor: false,
-      })).rejects.toThrow(/entity dependency is stale|missing from the destination/i);
+      await expect(prepare()).rejects.toThrow(/missing from the destination/i);
       writeFileSync(fixture.abilitiesFile, originalFile);
 
-      const preview = await preparePublication(fixture.db, {
-        faction_id: factionId,
-        draft_ids: [fixture.selectedDraftId],
-        reauthor: false,
-      });
-      await expect(publishPublication(fixture.db, {
-        batch_id: preview.batch_id,
-        preview_hash: "f".repeat(64),
-      })).rejects.toThrow(/preview hash/i);
+      const preview = await prepare();
+      await expect(publishPublication(fixture.db, { batch_id: preview.batch_id, preview_hash: "f".repeat(64) })).rejects.toThrow(/preview hash/i);
       writeFileSync(fixture.abilitiesFile, `${originalFile}\n`);
-      await expect(publishPublication(fixture.db, {
-        batch_id: preview.batch_id,
-        preview_hash: preview.preview_hash,
-      })).rejects.toThrow(/entity dependency is stale|preview is stale/i);
+      await expect(publishPublication(fixture.db, { batch_id: preview.batch_id, preview_hash: preview.preview_hash })).rejects.toThrow(/preview is stale/i);
       writeFileSync(fixture.abilitiesFile, originalFile);
 
       const invalidInput = join(fixture.dataRoot, "core", "world-eaters", "units.json");
       const validInput = readFileSync(invalidInput, "utf8");
       writeFileSync(invalidInput, "not-json\n");
-      await expect(preparePublication(fixture.db, {
-        faction_id: factionId,
-        draft_ids: [fixture.selectedDraftId],
-        reauthor: false,
-      })).rejects.toThrow(/projected dataset fails validation/i);
+      await expect(prepare()).rejects.toThrow(/projected dataset fails validation/i);
       writeFileSync(invalidInput, validInput);
       expect(fixture.db.prepare("SELECT count(*) AS count FROM publication_batches").get()).toEqual({ count: 1 });
     } finally {
       fixture.db.close();
     }
   }, 180_000);
+
+  it("marks a published batch stale once its entry's leaves change", async () => {
+    const fixture = buildFixture();
+    try {
+      const preview = await preparePublication(fixture.db, { faction_id: factionId, entry_ids: [fixture.selectedEntryId] });
+      await publishPublication(fixture.db, { batch_id: preview.batch_id, preview_hash: preview.preview_hash });
+      expect(listPublications(fixture.db).items[0]).toMatchObject({ evidence_status: "current" });
+      const phrase = "add one to this model's Move characteristic";
+      const start = Buffer.byteLength(privateSourceText.slice(0, privateSourceText.indexOf(phrase)), "utf8");
+      applyAnnotationBatch(fixture.db, { reviewer: "fixture-reviewer", decisions: [{
+        action: "confirm", ability_version_id: fixture.selectedAbilityVersionId, source_hash: fixture.selectedSourceHash,
+        fragment: "RAW_TEXT", start_byte: start, end_byte: start + Buffer.byteLength(phrase, "utf8"), exact_text: phrase,
+        role: "EFFECT", family_id: "characteristic-set", family_version: 1, parameters: { subject: "this-model", characteristic: "M", value: 1 },
+      }] });
+      expect(listPublications(fixture.db).items[0]).toMatchObject({ evidence_status: "stale" });
+      expect(getPublicationReport(fixture.db)).toMatchObject({ stale_published_abilities: [`${factionId}/${selectedAbilityId}`] });
+    } finally {
+      fixture.db.close();
+    }
+  }, 120_000);
 
   it("rejects a faction destination that resolves through a symlink outside the configured data root", async () => {
     const fixture = buildFixture();
@@ -459,8 +314,7 @@ describe("Round 5C explicit publication", () => {
       symlinkSync(outsideDirectory, factionDirectory, "dir");
       await expect(preparePublication(fixture.db, {
         faction_id: factionId,
-        draft_ids: [fixture.selectedDraftId],
-        reauthor: false,
+        entry_ids: [fixture.selectedEntryId],
       })).rejects.toThrow(/symlinked|escapes/i);
       expect(readFileSync(join(outsideDirectory, "abilities.json"), "utf8")).toBeTruthy();
       expect(fixture.db.prepare("SELECT count(*) AS count FROM publication_batches").get()).toEqual({ count: 0 });
@@ -475,8 +329,7 @@ describe("Round 5C explicit publication", () => {
       const originalText = readFileSync(fixture.abilitiesFile, "utf8");
       const preview = await preparePublication(fixture.db, {
         faction_id: factionId,
-        draft_ids: [fixture.selectedDraftId],
-        reauthor: false,
+        entry_ids: [fixture.selectedEntryId],
       });
 
       cloneAsPublishing(fixture.db, preview.batch_id, "pub-before-rename");

@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { mkdirSync } from "node:fs";
+import { existsSync, mkdirSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, resolve } from "node:path";
 import type { DatabaseSync as DatabaseType } from "node:sqlite";
@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 
 import { exactSpan, seedReviewedFamilies } from "./contracts.js";
 import { backfillFamilyCandidates } from "./ontology-store.js";
+import { COMPILED_SCHEMA, COMPILED_TABLES } from "./compiled.js";
 import { EXTENSION_SCHEMA, EXTENSION_TABLES } from "./schema-ext.js";
 export { exactSpan } from "./contracts.js";
 type DatabaseSync = DatabaseType;
@@ -227,146 +228,6 @@ CREATE TRIGGER IF NOT EXISTS source_chunks_au AFTER UPDATE OF normalized_text, c
   VALUES (new.id, new.normalized_text, new.context_key);
 END;
 
-CREATE TABLE IF NOT EXISTS stamps (
-  id TEXT NOT NULL CHECK(length(trim(id)) > 0),
-  revision INTEGER NOT NULL CHECK(revision > 0),
-  kind TEXT NOT NULL CHECK(kind IN ('leaf', 'composition')),
-  status TEXT NOT NULL CHECK(status IN ('proposed', 'approved', 'rejected', 'suspended', 'superseded')),
-  definition_json TEXT NOT NULL CHECK(json_valid(definition_json)),
-  definition_hash TEXT NOT NULL CHECK(length(definition_hash) = 64),
-  model_run_id INTEGER,
-  challenge_run_id INTEGER,
-  approval_batch_id TEXT,
-  created_at TEXT NOT NULL,
-  updated_at TEXT NOT NULL,
-  PRIMARY KEY(id, revision),
-  FOREIGN KEY(model_run_id) REFERENCES model_runs(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
-  FOREIGN KEY(challenge_run_id) REFERENCES model_runs(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
-  FOREIGN KEY(approval_batch_id) REFERENCES annotation_batches(id) ON UPDATE RESTRICT ON DELETE RESTRICT
-) STRICT;
-
-CREATE UNIQUE INDEX IF NOT EXISTS stamps_one_approved_revision
-  ON stamps(id) WHERE status = 'approved';
-CREATE INDEX IF NOT EXISTS stamps_status_lookup ON stamps(status, kind, id, revision);
-
-CREATE TABLE IF NOT EXISTS stamp_evidence (
-  stamp_id TEXT NOT NULL,
-  stamp_revision INTEGER NOT NULL,
-  evidence_kind TEXT NOT NULL CHECK(evidence_kind IN ('positive', 'counterexample')),
-  ordinal INTEGER NOT NULL CHECK(ordinal >= 0),
-  evidence_json TEXT NOT NULL CHECK(json_valid(evidence_json)),
-  PRIMARY KEY(stamp_id, stamp_revision, evidence_kind, ordinal),
-  FOREIGN KEY(stamp_id, stamp_revision) REFERENCES stamps(id, revision) ON UPDATE RESTRICT ON DELETE RESTRICT
-) STRICT;
-
-CREATE TABLE IF NOT EXISTS stamp_applications (
-  id TEXT PRIMARY KEY CHECK(length(trim(id)) > 0),
-  stamp_id TEXT NOT NULL,
-  stamp_revision INTEGER NOT NULL,
-  ability_version_id INTEGER NOT NULL,
-  span_id INTEGER,
-  annotation_id INTEGER,
-  variant_id TEXT NOT NULL,
-  inputs_hash TEXT NOT NULL CHECK(length(inputs_hash) = 64),
-  bindings_json TEXT NOT NULL CHECK(json_valid(bindings_json)),
-  dependencies_json TEXT NOT NULL CHECK(json_valid(dependencies_json)),
-  status TEXT NOT NULL CHECK(status IN ('active', 'blocked', 'stale')),
-  reason_code TEXT,
-  created_at TEXT NOT NULL,
-  updated_at TEXT NOT NULL,
-  FOREIGN KEY(stamp_id, stamp_revision) REFERENCES stamps(id, revision) ON UPDATE RESTRICT ON DELETE RESTRICT,
-  FOREIGN KEY(ability_version_id) REFERENCES abilities(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
-  FOREIGN KEY(span_id) REFERENCES source_spans(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
-  FOREIGN KEY(annotation_id) REFERENCES annotations(id) ON UPDATE RESTRICT ON DELETE RESTRICT
-) STRICT;
-
-CREATE INDEX IF NOT EXISTS stamp_applications_rule_status_lookup
-  ON stamp_applications(stamp_id, stamp_revision, status);
-CREATE INDEX IF NOT EXISTS stamp_applications_ability_status_lookup
-  ON stamp_applications(ability_version_id, status);
-CREATE INDEX IF NOT EXISTS stamp_applications_annotation_lookup
-  ON stamp_applications(annotation_id) WHERE annotation_id IS NOT NULL;
-
-CREATE TABLE IF NOT EXISTS stamp_audit_decisions (
-  id TEXT PRIMARY KEY CHECK(length(trim(id)) > 0),
-  batch_id TEXT NOT NULL UNIQUE,
-  stamp_id TEXT NOT NULL,
-  stamp_revision INTEGER NOT NULL,
-  application_id TEXT NOT NULL,
-  ability_version_id INTEGER NOT NULL,
-  source_hash TEXT NOT NULL CHECK(length(source_hash) = 64),
-  dependency_hash TEXT NOT NULL CHECK(length(dependency_hash) = 64),
-  verdict TEXT NOT NULL CHECK(verdict IN ('correct', 'incorrect', 'uncertain')),
-  scope TEXT CHECK(scope IS NULL OR scope IN ('occurrence', 'rule')),
-  created_at TEXT NOT NULL,
-  CHECK((verdict = 'incorrect' AND scope IS NOT NULL) OR (verdict <> 'incorrect' AND scope IS NULL)),
-  FOREIGN KEY(batch_id) REFERENCES annotation_batches(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
-  FOREIGN KEY(stamp_id, stamp_revision) REFERENCES stamps(id, revision) ON UPDATE RESTRICT ON DELETE RESTRICT,
-  FOREIGN KEY(application_id) REFERENCES stamp_applications(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
-  FOREIGN KEY(ability_version_id) REFERENCES abilities(id) ON UPDATE RESTRICT ON DELETE RESTRICT
-) STRICT;
-
-CREATE INDEX IF NOT EXISTS stamp_audit_decisions_rule_lookup
-  ON stamp_audit_decisions(stamp_id, stamp_revision, created_at, id);
-CREATE INDEX IF NOT EXISTS stamp_audit_decisions_application_lookup
-  ON stamp_audit_decisions(application_id, created_at, id);
-
-CREATE TABLE IF NOT EXISTS assembly_drafts (
-  id TEXT PRIMARY KEY CHECK(length(trim(id)) > 0),
-  composition_application_id TEXT NOT NULL,
-  graph_json TEXT NOT NULL CHECK(json_valid(graph_json)),
-  mechanics_json TEXT CHECK(mechanics_json IS NULL OR json_valid(mechanics_json)),
-  rendered_text TEXT,
-  inputs_hash TEXT NOT NULL CHECK(length(inputs_hash) = 64),
-  schema_hash TEXT NOT NULL CHECK(length(schema_hash) = 64),
-  status TEXT NOT NULL CHECK(status IN ('proposed', 'accepted', 'blocked', 'stale')),
-  verifier_run_id INTEGER,
-  diagnostic_json TEXT NOT NULL CHECK(json_valid(diagnostic_json)),
-  created_at TEXT NOT NULL,
-  updated_at TEXT NOT NULL,
-  FOREIGN KEY(composition_application_id) REFERENCES stamp_applications(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
-  FOREIGN KEY(verifier_run_id) REFERENCES model_runs(id) ON UPDATE RESTRICT ON DELETE RESTRICT
-) STRICT;
-
-CREATE INDEX IF NOT EXISTS assembly_drafts_status_lookup ON assembly_drafts(status, id);
-
-CREATE TABLE IF NOT EXISTS escalations (
-  id TEXT PRIMARY KEY CHECK(length(trim(id)) > 0),
-  decision_key TEXT NOT NULL UNIQUE CHECK(length(decision_key) = 64),
-  reason_code TEXT NOT NULL CHECK(reason_code IN ('NEW_FORM', 'PARAMETER_BOUNDARY', 'CONFLICT', 'RELATION_GAP', 'COMPOSITION_GAP', 'DSL_GAP', 'SOURCE_AMBIGUITY', 'MODEL_ERROR', 'OVERSIZED', 'ENTITY_RESOLUTION')),
-  question_json TEXT NOT NULL CHECK(json_valid(question_json)),
-  options_json TEXT NOT NULL CHECK(json_valid(options_json)),
-  state TEXT NOT NULL CHECK(state IN ('open', 'deferred', 'resolved')),
-  decision_batch_id TEXT,
-  created_at TEXT NOT NULL,
-  updated_at TEXT NOT NULL,
-  FOREIGN KEY(decision_batch_id) REFERENCES annotation_batches(id) ON UPDATE RESTRICT ON DELETE RESTRICT
-) STRICT;
-
-CREATE INDEX IF NOT EXISTS escalations_state_reason_lookup ON escalations(state, reason_code, id);
-
-CREATE TABLE IF NOT EXISTS escalation_members (
-  escalation_id TEXT NOT NULL,
-  member_id TEXT NOT NULL,
-  ability_version_id INTEGER NOT NULL,
-  source_hash TEXT NOT NULL CHECK(length(source_hash) = 64),
-  evidence_hash TEXT NOT NULL CHECK(length(evidence_hash) = 64),
-  span_id INTEGER,
-  draft_id TEXT,
-  gap_id INTEGER,
-  status TEXT NOT NULL CHECK(status IN ('active', 'stale')),
-  created_at TEXT NOT NULL,
-  PRIMARY KEY(escalation_id, member_id),
-  FOREIGN KEY(escalation_id) REFERENCES escalations(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
-  FOREIGN KEY(ability_version_id) REFERENCES abilities(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
-  FOREIGN KEY(span_id) REFERENCES source_spans(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
-  FOREIGN KEY(draft_id) REFERENCES assembly_drafts(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
-  FOREIGN KEY(gap_id) REFERENCES gaps(id) ON UPDATE RESTRICT ON DELETE RESTRICT
-) STRICT;
-
-CREATE INDEX IF NOT EXISTS escalation_members_ability_lookup
-  ON escalation_members(ability_version_id, status);
-
 CREATE TABLE IF NOT EXISTS workbench_state (
   singleton INTEGER PRIMARY KEY CHECK(singleton = 1),
   revision INTEGER NOT NULL CHECK(revision >= 0)
@@ -455,321 +316,10 @@ function upgradeAnnotationAuthority(db: DatabaseSync): void {
   }
 }
 
-function staleCompositionDependencies(
-  db: DatabaseSync,
-  annotationIds: ReadonlySet<number>,
-  reasonCode: string,
-  now: string,
-): { applications: number; drafts: number } {
-  if (annotationIds.size === 0) return { applications: 0, drafts: 0 };
-  const rows = db.prepare(`
-    SELECT stamp_applications.id, stamp_applications.dependencies_json
-    FROM stamp_applications
-    JOIN stamps ON stamps.id = stamp_applications.stamp_id
-      AND stamps.revision = stamp_applications.stamp_revision
-    WHERE stamps.kind = 'composition' AND stamp_applications.status IN ('active', 'blocked')
-  `).all() as Array<{ id: string; dependencies_json: string }>;
-  const affected = rows.filter((row) => {
-    const dependencies = JSON.parse(row.dependencies_json) as { leaf_annotation_ids?: unknown };
-    return Array.isArray(dependencies.leaf_annotation_ids)
-      && dependencies.leaf_annotation_ids.some((id) => typeof id === "number" && annotationIds.has(id));
-  });
-  let applications = 0;
-  let drafts = 0;
-  const staleApplication = db.prepare(
-    "UPDATE stamp_applications SET status = 'stale', reason_code = ?, updated_at = ? WHERE id = ? AND status IN ('active', 'blocked')",
-  );
-  const staleDraft = db.prepare(
-    "UPDATE assembly_drafts SET status = 'stale', diagnostic_json = ?, updated_at = ? WHERE composition_application_id = ? AND status <> 'stale'",
-  );
-  for (const row of affected) {
-    applications += Number(staleApplication.run(reasonCode, now, row.id).changes);
-    drafts += Number(staleDraft.run(JSON.stringify({ reason_code: reasonCode }), now, row.id).changes);
-  }
-  return { applications, drafts };
-}
-
-function staleEscalationsForInvalidDrafts(db: DatabaseSync): number {
-  return Number(db.prepare(`
-    UPDATE escalation_members
-    SET status = 'stale'
-    WHERE status = 'active' AND draft_id IS NOT NULL
-      AND EXISTS (
-        SELECT 1 FROM assembly_drafts
-        WHERE assembly_drafts.id = escalation_members.draft_id
-          AND assembly_drafts.status = 'stale'
-      )
-  `).run().changes);
-}
-
-function restoreStampSupersededProposals(db: DatabaseSync, annotationIds: ReadonlySet<number>): number {
-  if (annotationIds.size === 0) return 0;
-  const proposals = new Map<number, {
-    id: number;
-    ability_version_id: number;
-    fragment: string;
-    start_byte: number;
-    end_byte: number;
-    role: string;
-  }>();
-  const candidates = db.prepare(`
-    SELECT proposals.id, source_spans.ability_version_id, source_spans.fragment,
-      source_spans.start_byte, source_spans.end_byte, proposals.role
-    FROM annotations
-    JOIN proposals ON proposals.span_id = annotations.span_id
-      AND (proposals.fingerprint_id IS NULL OR proposals.fingerprint_id = annotations.fingerprint_id)
-    JOIN source_spans ON source_spans.id = proposals.span_id
-    WHERE annotations.id = ? AND proposals.status = 'superseded'
-  `);
-  for (const annotationId of annotationIds) {
-    for (const proposal of candidates.all(annotationId) as Array<{
-      id: number;
-      ability_version_id: number;
-      fragment: string;
-      start_byte: number;
-      end_byte: number;
-      role: string;
-    }>) proposals.set(proposal.id, proposal);
-  }
-
-  const overlappingAuthority = db.prepare(`
-    SELECT annotations.id
-    FROM annotations
-    JOIN source_spans ON source_spans.id = annotations.span_id
-    JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
-    JOIN semantic_families ON semantic_families.id = fingerprints.family_id
-      AND semantic_families.version = fingerprints.family_version
-    WHERE annotations.status = 'active'
-      AND source_spans.ability_version_id = ? AND source_spans.fragment = ?
-      AND source_spans.start_byte < ? AND ? < source_spans.end_byte
-      AND semantic_families.role = ?
-    ORDER BY annotations.id
-  `);
-  const latestTransition = db.prepare(`
-    SELECT batch_members.entity_kind
-    FROM batch_members
-    JOIN annotation_batches ON annotation_batches.id = batch_members.batch_id
-    WHERE batch_members.entity_id = ?
-      AND batch_members.entity_kind IN (
-        'stamp-proposal-superseded-pending',
-        'stamp-proposal-superseded-unresolved'
-      )
-    ORDER BY annotation_batches.created_at DESC, annotation_batches.id DESC
-    LIMIT 1
-  `);
-  let restored = 0;
-  for (const proposal of proposals.values()) {
-    const stillResolved = (overlappingAuthority.all(
-      proposal.ability_version_id,
-      proposal.fragment,
-      proposal.end_byte,
-      proposal.start_byte,
-      proposal.role,
-    ) as Array<{ id: number }>).some((annotation) => annotationHasEffectiveAuthority(db, annotation.id));
-    if (stillResolved) continue;
-    const transition = latestTransition.get(String(proposal.id)) as { entity_kind: string } | undefined;
-    if (!transition) continue;
-    const priorStatus = transition.entity_kind.endsWith("-unresolved") ? "unresolved" : "pending";
-    restored += Number(db.prepare(
-      "UPDATE proposals SET status = ? WHERE id = ? AND status = 'superseded'",
-    ).run(priorStatus, proposal.id).changes);
-  }
-  return restored;
-}
-
-/** Retract derived rows whose approved application support is gone, then stale dependent composition. */
-export function retractUnsupportedStampAnnotations(
-  db: DatabaseSync,
-  annotationIds?: Iterable<number>,
-  reasonCode = "STAMP_SUPPORT_RETRACTED",
-): { applications: number; drafts: number; annotations: number } {
-  const selected = annotationIds ? new Set(annotationIds) : null;
-  const rows = db.prepare(`
-    SELECT id FROM annotations
-    WHERE authority_kind = 'stamp' AND status = 'active'
-    ORDER BY id
-  `).all() as Array<{ id: number }>;
-  const unsupported = rows.filter((row) => (!selected || selected.has(row.id)) && db.prepare(`
-    SELECT 1 FROM stamp_applications
-    JOIN stamps ON stamps.id = stamp_applications.stamp_id
-      AND stamps.revision = stamp_applications.stamp_revision
-    WHERE stamp_applications.annotation_id = ?
-      AND stamp_applications.status = 'active' AND stamps.status = 'approved'
-    LIMIT 1
-  `).get(row.id) === undefined);
-  let annotations = 0;
-  const unsupportedIds = new Set(unsupported.map((row) => row.id));
-  for (const row of unsupported) {
-    annotations += Number(db.prepare(`
-      UPDATE annotations SET status = 'retracted'
-      WHERE id = ? AND authority_kind = 'stamp' AND status = 'active'
-    `).run(row.id).changes);
-  }
-  restoreStampSupersededProposals(db, unsupportedIds);
-  const cascade = staleCompositionDependencies(db, unsupportedIds, reasonCode, new Date().toISOString());
-  staleEscalationsForInvalidDrafts(db);
-  return { ...cascade, annotations };
-}
-
-/** Retract rule-derived authority and drafts whenever a source-bound dependency changes. */
-export function invalidateAbilityEvidence(
-  db: DatabaseSync,
-  abilityVersionIds: Iterable<number>,
-  reasonCode: string,
-): { applications: number; drafts: number; annotations: number } {
-  const ids = [...new Set(abilityVersionIds)];
-  if (ids.length === 0) return { applications: 0, drafts: 0, annotations: 0 };
-  const candidateAnnotations = new Set<number>();
-  const annotationsForAbility = db.prepare(`
-    SELECT annotations.id AS annotation_id
-    FROM annotations
-    JOIN source_spans ON source_spans.id = annotations.span_id
-    WHERE source_spans.ability_version_id = ?
-      AND annotations.authority_kind = 'stamp' AND annotations.status = 'active'
-  `);
-  const staleApplication = db.prepare(
-    "UPDATE stamp_applications SET status = 'stale', reason_code = ?, updated_at = ? WHERE ability_version_id = ? AND status IN ('active', 'blocked')",
-  );
-  const staleDraft = db.prepare(`
-    UPDATE assembly_drafts SET status = 'stale', diagnostic_json = ?, updated_at = ?
-    WHERE composition_application_id IN (
-      SELECT id FROM stamp_applications WHERE ability_version_id = ?
-    ) AND status <> 'stale'
-  `);
-  const staleMembers = db.prepare(`
-    UPDATE escalation_members
-    SET status = 'stale'
-    WHERE ability_version_id = ? AND status = 'active'
-      AND (
-        NOT EXISTS (
-          SELECT 1 FROM abilities
-          WHERE abilities.id = escalation_members.ability_version_id
-            AND abilities.current = 1
-            AND abilities.source_hash = escalation_members.source_hash
-        )
-        OR (
-          escalation_members.draft_id IS NOT NULL
-          AND EXISTS (
-            SELECT 1 FROM assembly_drafts
-            WHERE assembly_drafts.id = escalation_members.draft_id
-              AND assembly_drafts.status = 'stale'
-          )
-        )
-        OR (
-          escalation_members.gap_id IS NOT NULL
-          AND EXISTS (
-            SELECT 1 FROM gaps
-            WHERE gaps.id = escalation_members.gap_id
-              AND gaps.status <> 'open'
-          )
-        )
-      )
-  `);
-  const now = new Date().toISOString();
-  let applications = 0;
-  let drafts = 0;
-  for (const id of ids) {
-    for (const row of annotationsForAbility.all(id) as Array<{ annotation_id: number }>) {
-      candidateAnnotations.add(row.annotation_id);
-    }
-    applications += Number(staleApplication.run(reasonCode, now, id).changes);
-    drafts += Number(staleDraft.run(JSON.stringify({ reason_code: reasonCode }), now, id).changes);
-    staleMembers.run(id);
-  }
-  const retracted = retractUnsupportedStampAnnotations(db, candidateAnnotations, reasonCode);
-  return {
-    applications: applications + retracted.applications,
-    drafts: drafts + retracted.drafts,
-    annotations: retracted.annotations,
-  };
-}
-
-/** Clear a whole-context check and stale its composition escalation after any reviewed-source change. */
+/** Clear a whole-context check after any reviewed-source change. */
 export function invalidateWholeReview(db: DatabaseSync, abilityVersionIds: Iterable<number>): void {
   const review = db.prepare("UPDATE ability_reviews SET whole_context_checked = 0 WHERE ability_version_id = ?");
-  const composition = db.prepare(`
-    UPDATE escalation_members SET status = 'stale'
-    WHERE ability_version_id = ? AND status = 'active' AND escalation_id IN (
-      SELECT id FROM escalations WHERE reason_code = 'COMPOSITION_GAP'
-    )
-  `);
-  for (const abilityVersionId of new Set(abilityVersionIds)) {
-    review.run(abilityVersionId);
-    composition.run(abilityVersionId);
-  }
-}
-
-/** Invalidate one rule revision transitively while preserving human replacements. */
-export function invalidateStampRevision(
-  db: DatabaseSync,
-  stampId: string,
-  revision: number,
-  reasonCode: string,
-): { applications: number; drafts: number; annotations: number } {
-  const now = new Date().toISOString();
-  const candidates = db.prepare(`
-    SELECT DISTINCT annotation_id FROM stamp_applications
-    WHERE stamp_id = ? AND stamp_revision = ? AND annotation_id IS NOT NULL
-  `).all(stampId, revision) as Array<{ annotation_id: number }>;
-  let applications = Number(db.prepare(`
-    UPDATE stamp_applications SET status = 'stale', reason_code = ?, updated_at = ?
-    WHERE stamp_id = ? AND stamp_revision = ? AND status IN ('active', 'blocked')
-  `).run(reasonCode, now, stampId, revision).changes);
-  let drafts = Number(db.prepare(`
-    UPDATE assembly_drafts SET status = 'stale', diagnostic_json = ?, updated_at = ?
-    WHERE composition_application_id IN (
-      SELECT id FROM stamp_applications WHERE stamp_id = ? AND stamp_revision = ?
-    ) AND status <> 'stale'
-  `).run(JSON.stringify({ reason_code: reasonCode }), now, stampId, revision).changes);
-  const dependentDrafts = db.prepare(`
-    SELECT assembly_drafts.id AS draft_id, assembly_drafts.composition_application_id,
-      stamp_applications.dependencies_json
-    FROM assembly_drafts
-    JOIN stamp_applications ON stamp_applications.id = assembly_drafts.composition_application_id
-    WHERE assembly_drafts.status <> 'stale'
-  `).all() as Array<{ draft_id: string; composition_application_id: string; dependencies_json: string }>;
-  for (const draft of dependentDrafts) {
-    const dependencies = JSON.parse(draft.dependencies_json) as { equivalent_supports?: unknown };
-    if (!Array.isArray(dependencies.equivalent_supports) || !dependencies.equivalent_supports.some((support) =>
-      Boolean(support && typeof support === "object" && !Array.isArray(support)
-        && "stamp_id" in support && support.stamp_id === stampId
-        && "stamp_revision" in support && support.stamp_revision === revision))) continue;
-    applications += Number(db.prepare(`
-      UPDATE stamp_applications SET status = 'stale', reason_code = ?, updated_at = ?
-      WHERE id = ? AND status IN ('active', 'blocked')
-    `).run(reasonCode, now, draft.composition_application_id).changes);
-    drafts += Number(db.prepare(`
-      UPDATE assembly_drafts SET status = 'stale', diagnostic_json = ?, updated_at = ?
-      WHERE id = ? AND status <> 'stale'
-    `).run(JSON.stringify({ reason_code: reasonCode }), now, draft.draft_id).changes);
-  }
-  const retracted = retractUnsupportedStampAnnotations(
-    db,
-    candidates.map((candidate) => candidate.annotation_id),
-    reasonCode,
-  );
-  applications += retracted.applications;
-  drafts += retracted.drafts;
-  return { applications, drafts, annotations: retracted.annotations };
-}
-
-/** Check whether an annotation can currently contribute semantic authority. */
-export function annotationHasEffectiveAuthority(db: DatabaseSync, annotationId: number): boolean {
-  const annotation = db.prepare("SELECT authority_kind, status FROM annotations WHERE id = ?").get(annotationId) as
-    | { authority_kind: "human" | "stamp"; status: string }
-    | undefined;
-  if (!annotation || annotation.status !== "active") return false;
-  if (annotation.authority_kind === "human") return true;
-  return db.prepare(`
-    SELECT 1 FROM stamp_applications
-    JOIN stamps ON stamps.id = stamp_applications.stamp_id
-      AND stamps.revision = stamp_applications.stamp_revision
-    JOIN abilities ON abilities.id = stamp_applications.ability_version_id
-    WHERE stamp_applications.annotation_id = ?
-      AND stamp_applications.status = 'active'
-      AND stamps.status = 'approved' AND abilities.current = 1
-    LIMIT 1
-  `).get(annotationId) !== undefined;
+  for (const abilityVersionId of new Set(abilityVersionIds)) review.run(abilityVersionId);
 }
 
 function upgradeAnnotationBatchMetadata(db: DatabaseSync): void {
@@ -894,9 +444,8 @@ function upgradeGapProposalLink(db: DatabaseSync): void {
 const EPOCH_TABLES = [
   "abilities", "semantic_families", "fingerprints", "source_spans", "model_runs", "annotation_batches",
   "proposals", "annotations", "candidate_judgments", "batch_members", "ability_reviews", "gaps",
-  "source_chunks", "stamps", "stamp_evidence", "stamp_applications", "stamp_audit_decisions",
-  "assembly_drafts", "escalations", "escalation_members", "publication_batches",
-  ...EXTENSION_TABLES,
+  "source_chunks", "publication_batches",
+  ...EXTENSION_TABLES, ...COMPILED_TABLES,
 ] as const;
 
 function upgradeDataEpoch(db: DatabaseSync): void {
@@ -926,6 +475,61 @@ function upgradeOntologyBackfill(db: DatabaseSync): void {
   db.prepare("UPDATE workbench_state SET ontology_backfill_version = ? WHERE singleton = 1").run(ONTOLOGY_BACKFILL_VERSION);
 }
 
+/** Tables of the retired stamp, assembly, and escalation pipeline, dropped in dependency order. */
+const RETIRED_TABLES = [
+  "escalation_members", "escalations", "stamp_audit_decisions", "assembly_drafts",
+  "stamp_applications", "stamp_evidence", "stamps",
+] as const;
+
+function tableExists(db: DatabaseSync, name: string): boolean {
+  return db.prepare("SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = ?").get(name) !== undefined;
+}
+
+/**
+ * Retire the stamp pipeline once per database. Annotations an approved leaf stamp derived become
+ * ordinary active annotations (origin `migrated-stamp`); annotations of any other stamp were never
+ * effective and are retracted. The approved leaf definitions are kept in the migration batch's
+ * metadata so their literal surfaces survive the dropped `stamps` table.
+ */
+function upgradeRetireStamps(db: DatabaseSync): void {
+  if (!tableExists(db, "stamps")) return;
+  const hasApplications = tableExists(db, "stamp_applications");
+  const approvedLeafStamps = (db.prepare(`
+    SELECT id, revision, definition_json FROM stamps WHERE kind = 'leaf' AND status = 'approved' ORDER BY id, revision
+  `).all() as Array<{ id: string; revision: number; definition_json: string }>)
+    .map((row) => ({ id: row.id, revision: row.revision, definition: JSON.parse(row.definition_json) as unknown }));
+  const supported = new Set(hasApplications
+    ? (db.prepare(`
+      SELECT DISTINCT stamp_applications.annotation_id AS id
+      FROM stamp_applications
+      JOIN stamps ON stamps.id = stamp_applications.stamp_id AND stamps.revision = stamp_applications.stamp_revision
+      WHERE stamp_applications.annotation_id IS NOT NULL
+        AND stamp_applications.status = 'active' AND stamps.status = 'approved'
+    `).all() as Array<{ id: number }>).map((row) => row.id)
+    : []);
+  const derived = db.prepare(`
+    SELECT id FROM annotations WHERE authority_kind = 'stamp' AND status = 'active' ORDER BY id
+  `).all() as Array<{ id: number }>;
+  const batchId = `migration_${randomUUID()}`;
+  db.prepare(`
+    INSERT INTO annotation_batches (id, operation, reviewer, created_at, metadata_json)
+    VALUES (?, 'migration-retire-stamps', 'system', ?, ?)
+  `).run(batchId, new Date().toISOString(), JSON.stringify({ approved_leaf_stamps: approvedLeafStamps }));
+  const member = db.prepare("INSERT INTO batch_members (batch_id, entity_kind, entity_id) VALUES (?, ?, ?)");
+  const keep = db.prepare("UPDATE annotations SET authority_kind = 'human', origin = 'migrated-stamp' WHERE id = ? AND status = 'active'");
+  const retract = db.prepare("UPDATE annotations SET status = 'retracted' WHERE id = ? AND status = 'active'");
+  for (const { id } of derived) {
+    if (supported.has(id)) {
+      keep.run(id);
+      member.run(batchId, "annotation-migrated", String(id));
+    } else {
+      retract.run(id);
+      member.run(batchId, "annotation-retracted", String(id));
+    }
+  }
+  for (const table of RETIRED_TABLES) db.exec(`DROP TABLE IF EXISTS ${table}`);
+}
+
 /** Identity of the persisted state: stable across connections, advanced by any table write. */
 export function getDataEpoch(db: DatabaseSync): { instance_id: string; data_epoch: number } {
   const row = db.prepare("SELECT instance_id, data_epoch FROM workbench_state WHERE singleton = 1").get() as { instance_id: string | null; data_epoch: number } | undefined;
@@ -941,15 +545,28 @@ export function initializeWorkbench(db: DatabaseSync): void {
   withTransaction(db, () => {
     db.exec(SCHEMA);
     db.exec(EXTENSION_SCHEMA);
+    db.exec(COMPILED_SCHEMA);
     upgradeSourceShape(db);
     upgradeAnnotationAuthority(db);
     upgradeAnnotationBatchMetadata(db);
     upgradeGapProposalLink(db);
+    upgradeRetireStamps(db);
     seedReviewedFamilies(db);
     upgradeDataEpoch(db);
     upgradeOntologyBackfill(db);
   });
   initialized.add(db);
+}
+
+/**
+ * Keep a copy of a database that still has the retired stamp tables before its one-way
+ * migration. The copy sits beside the database and is never overwritten.
+ */
+function backupBeforeStampRetirement(db: DatabaseSync, databasePath: string): void {
+  if (!tableExists(db, "stamps")) return;
+  const backup = `${databasePath}.pre5e`;
+  if (existsSync(backup)) return;
+  db.prepare("VACUUM INTO ?").run(backup);
 }
 
 /** Open the ignored local workbench and initialize its schema on first use. */
@@ -972,6 +589,7 @@ export function openWorkbench(path?: string): DatabaseSync {
         // Another connection holds the file; it stays in its current mode until next open.
       }
     }
+    if (databasePath !== ":memory:") backupBeforeStampRetirement(db, databasePath);
     initializeWorkbench(db);
     return db;
   } catch (error) {

@@ -1,7 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import App from "./App";
 import WorkbenchApp from "./WorkbenchApp";
 import "./styles.css";
 
@@ -10,6 +9,6 @@ if (!root) throw new Error("Round 5 review root element is missing.");
 
 createRoot(root).render(
   <StrictMode>
-    {window.location.pathname === "/legacy" ? <App /> : <WorkbenchApp />}
+    <WorkbenchApp />
   </StrictMode>,
 );

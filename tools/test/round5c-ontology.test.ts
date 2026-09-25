@@ -11,7 +11,6 @@ import { getFamilyCandidate, getOntology, judgeCandidate, mapCandidate, setCandi
 import { backfillFamilyCandidates } from "../src/round5c/ontology-store.js";
 import { importLuna, prepareLuna } from "../src/round5c/proposal.js";
 import { applyAnnotationBatch, undoBatch } from "../src/round5c/review.js";
-import { approveStamp, previewStamp, proposeLiteralStamp } from "../src/round5c/stamps.js";
 
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
 type DatabaseSync = DatabaseType;
@@ -74,7 +73,7 @@ function candidateId(db: DatabaseSync): number {
 }
 
 describe("Round 5C provisional family ontology", () => {
-  it("turns a Luna NOVEL leaf into one open candidate, a linked gap, and a NEW_FORM escalation at once", () => {
+  it("turns a Luna NOVEL leaf into one open candidate and a linked gap at once", () => {
     const db = database();
     try {
       const first = addAbility(db, "first", `Then ${NOVEL_TEXT}.`);
@@ -88,8 +87,6 @@ describe("Round 5C provisional family ontology", () => {
         SELECT count(*) AS total FROM gaps JOIN proposals ON proposals.id = gaps.proposal_id
         WHERE gaps.status = 'open' AND json_extract(proposals.reason_json, '$.span_status') = 'NOVEL'
       `).get()).toEqual({ total: 2 });
-      const escalation = db.prepare("SELECT reason_code, question_json FROM escalations WHERE reason_code = 'NEW_FORM'").get() as { reason_code: string; question_json: string };
-      expect(JSON.parse(escalation.question_json)).toMatchObject({ family_candidate_id: ontology.candidates[0]!.id });
       expect(db.prepare("SELECT count(*) AS total FROM annotations").get()).toEqual({ total: 0 });
       expect(db.prepare("SELECT count(*) AS total FROM semantic_families").get()).toEqual({ total: 12 });
       // Backfill is idempotent over already-attached occurrences.
@@ -177,49 +174,6 @@ describe("Round 5C provisional family ontology", () => {
       expect(getOntology(db).candidates[0]).toMatchObject({ current: { suggested: 1 } });
       undoBatch(db, batch.batch_id, { reviewer: REVIEWER });
       expect(getOntology(db).candidates[0]).toMatchObject({ current: { suggested: 0 } });
-    } finally {
-      db.close();
-    }
-  });
-
-  it("closes a stamp-superseded novel gap only through an explicit, undoable resolve-stamp-gap decision", () => {
-    const db = database();
-    try {
-      const text = "Re-roll a Hit roll of 1";
-      const novel = addAbility(db, "novel", `${text}.`);
-      const seed = addAbility(db, "seed", `${text}.`);
-      const span = bytes(novel.source, text);
-      applyAnnotationBatch(db, { reviewer: REVIEWER, decisions: [{ action: "novel", ability_version_id: novel.id, source_hash: novel.hash, fragment: "RAW_TEXT", ...span, role: "EFFECT" }] });
-      applyAnnotationBatch(db, { reviewer: REVIEWER, decisions: [{ action: "confirm", ability_version_id: seed.id, source_hash: seed.hash, fragment: "RAW_TEXT", ...span, role: "EFFECT", family_id: "reroll", family_version: 1, parameters: { roll: "hit", subset: "ones" } }] });
-      const seedAnnotation = (db.prepare("SELECT id FROM annotations WHERE status = 'active'").get() as { id: number }).id;
-      const stamp = proposeLiteralStamp(db, { annotation_id: seedAnnotation, reviewer: REVIEWER });
-      const preview = previewStamp(db, stamp.stamp_id, stamp.revision);
-      approveStamp(db, stamp.stamp_id, stamp.revision, { reviewer: REVIEWER, preview_hash: preview.preview_hash });
-
-      const original = db.prepare("SELECT id, status FROM proposals WHERE origin = 'manual'").get() as { id: number; status: string };
-      expect(original.status).toBe("superseded");
-      expect(db.prepare("SELECT status FROM gaps WHERE proposal_id = ?").get(original.id)).toEqual({ status: "open" });
-      const stamped = db.prepare(`
-        SELECT annotations.id FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
-        WHERE annotations.authority_kind = 'stamp' AND annotations.status = 'active' AND source_spans.ability_version_id = ?
-      `).get(novel.id) as { id: number };
-
-      const decision = { proposal_id: original.id, ability_version_id: novel.id, source_hash: novel.hash, fragment: "RAW_TEXT", ...span, role: "EFFECT", family_id: "reroll", family_version: 1, parameters: { roll: "hit", subset: "ones" } };
-      expect(() => applyAnnotationBatch(db, { reviewer: REVIEWER, decisions: [{ ...decision, action: "correct" }] })).toThrow(/already been decided or superseded/u);
-      const resolved = applyAnnotationBatch(db, { reviewer: REVIEWER, decisions: [{ ...decision, action: "resolve-stamp-gap", supersedes_annotation_id: stamped.id }] });
-      expect(db.prepare("SELECT status FROM proposals WHERE id = ?").get(original.id)).toEqual({ status: "corrected" });
-      expect(db.prepare("SELECT status FROM gaps WHERE proposal_id = ?").get(original.id)).toEqual({ status: "resolved" });
-      expect(db.prepare("SELECT status FROM annotations WHERE id = ?").get(stamped.id)).toEqual({ status: "superseded" });
-      expect(db.prepare("SELECT authority_kind FROM annotations WHERE status = 'active' AND origin = 'manual-stamp-gap'").get()).toEqual({ authority_kind: "human" });
-
-      undoBatch(db, resolved.batch_id, { reviewer: REVIEWER });
-      expect(db.prepare("SELECT status FROM proposals WHERE id = ?").get(original.id)).toEqual({ status: "superseded" });
-      expect(db.prepare("SELECT status FROM gaps WHERE proposal_id = ?").get(original.id)).toEqual({ status: "open" });
-      // The approved stamp re-derives its paint on the span; the human annotation is gone.
-      expect(db.prepare(`
-        SELECT annotations.authority_kind FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
-        WHERE annotations.status = 'active' AND source_spans.ability_version_id = ?
-      `).all(novel.id)).toEqual([{ authority_kind: "stamp" }]);
     } finally {
       db.close();
     }

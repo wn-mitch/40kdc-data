@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
 
 import { REVIEWED_FAMILY_REGISTRY, reviewedFamily, validateFingerprint } from "./contracts.js";
-import { bumpWorkbenchRevision, getWorkbenchRevision, invalidateAbilityEvidence, invalidateWholeReview, withTransaction } from "./db.js";
+import { bumpWorkbenchRevision, getWorkbenchRevision, invalidateWholeReview, withTransaction } from "./db.js";
 
 /**
  * The provisional family ontology: NOVEL source forms grouped into candidates with per-
@@ -332,7 +332,6 @@ export function mapCandidate(db: DatabaseSync, candidateId: number, body: unknow
       UPDATE family_candidates SET state = 'mapped', mapped_family_id = ?, mapped_family_version = ?, updated_at = ? WHERE id = ?
     `).run(familyId, familyVersion, now, candidateId);
     addMember(db, batchId, "candidate-mapped", candidateId);
-    invalidateAbilityEvidence(db, touched, "HUMAN_DECISION_CHANGED");
     invalidateWholeReview(db, touched);
     bumpWorkbenchRevision(db);
     return { batch_id: batchId, proposals: created };

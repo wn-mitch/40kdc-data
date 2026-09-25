@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -12,8 +12,6 @@ import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { getQueue } from "../src/round5c/queue.js";
 import { applyAnnotationBatch, getAbilities, getAbility, getDashboard, getFactions, reviewAbility, undoBatch, WorkbenchError } from "../src/round5c/review.js";
 import { refreshSources } from "../src/round5c/source.js";
-import { listEscalations, proposeStamp, rejectStamp } from "../src/round5c/stamps.js";
-import { prepareWork } from "../src/round5c/work.js";
 
 type DatabaseSync = DatabaseType;
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
@@ -202,124 +200,6 @@ describe("Round 5C source-bound review ledger", () => {
       });
       expect(getAbilities(value.db).items.map((item) => item.id)).toEqual([value.abilityId]);
       expect(getAbilities(value.db, { reviewState: "reviewed" }).items).toEqual([]);
-    } finally {
-      value.db.close();
-    }
-  });
-
-  it("hands a completely painted and reviewed source to composition instead of silently stopping at leaves", () => {
-    const value = fixture("re-roll a Hit roll of 1");
-    try {
-      applyAnnotationBatch(value.db, { reviewer: "reviewer", decisions: [
-        rerollDecision(value, sourceSpan(value.source, value.source)),
-      ] });
-      expect(getAbilityCoverage(value.db, value.abilityId).uncovered).toEqual([]);
-      expect(listEscalations(value.db).total).toBe(0);
-      reviewAbility(value.db, value.abilityId, {
-        source_hash: value.sourceHash, reviewer: "reviewer", whole_context_checked: true,
-      });
-      const escalations = listEscalations(value.db);
-      expect(escalations.items).toEqual([expect.objectContaining({
-        reason_code: "COMPOSITION_GAP", occurrence_count: 1,
-      })]);
-      expect(getQueue(value.db).items[0]).toMatchObject({
-        kind: "composition", target: { view: "work", escalation_id: escalations.items[0]!.id },
-      });
-      const artifactRoot = mkdtempSync(join(tmpdir(), "round5c-composition-work-"));
-      temporaryRoots.push(artifactRoot);
-      const previous = process.env.ROUND5C_ARTIFACT_DIR;
-      process.env.ROUND5C_ARTIFACT_DIR = artifactRoot;
-      try {
-        const prepared = prepareWork(value.db, { purpose: "propose-rule", ids: [escalations.items[0]!.id] });
-        expect(prepared.request.items).toHaveLength(1);
-        expect(prepared.request.items[0]).toMatchObject({
-          item_id: escalations.items[0]!.id,
-          sources: [expect.objectContaining({ ability_version_id: value.abilityId, source_hash: value.sourceHash })],
-        });
-      } finally {
-        if (previous === undefined) delete process.env.ROUND5C_ARTIFACT_DIR;
-        else process.env.ROUND5C_ARTIFACT_DIR = previous;
-      }
-      reviewAbility(value.db, value.abilityId, {
-        source_hash: value.sourceHash, reviewer: "reviewer", whole_context_checked: true,
-      });
-      expect(listEscalations(value.db).total).toBe(1);
-      reviewAbility(value.db, value.abilityId, {
-        source_hash: value.sourceHash, reviewer: "reviewer", whole_context_checked: false,
-      });
-      expect(listEscalations(value.db).total).toBe(0);
-      expect(getQueue(value.db).items.some((item) => item.kind === "composition")).toBe(false);
-      reviewAbility(value.db, value.abilityId, {
-        source_hash: value.sourceHash, reviewer: "reviewer", whole_context_checked: true,
-      });
-      expect(listEscalations(value.db).total).toBe(1);
-    } finally {
-      value.db.close();
-    }
-  });
-
-  it("replaces a composition escalation with its proposed rule so the queue never stalls between the two", () => {
-    const value = fixture("re-roll a Hit roll of 1");
-    try {
-      applyAnnotationBatch(value.db, { reviewer: "reviewer", decisions: [
-        rerollDecision(value, sourceSpan(value.source, value.source)),
-      ] });
-      reviewAbility(value.db, value.abilityId, {
-        source_hash: value.sourceHash, reviewer: "reviewer", whole_context_checked: true,
-      });
-      const escalationId = listEscalations(value.db).items[0]!.id;
-      expect(getQueue(value.db).items[0]).toMatchObject({ kind: "composition", target: { view: "work", escalation_id: escalationId } });
-
-      const proposed = proposeStamp(value.db, {
-        definition: {
-          schema_version: 1,
-          kind: "composition",
-          label: "Whole-source reroll composition",
-          variants: [{
-            id: "mapped",
-            source_types: ["unit"],
-            fragments: [{ fragment: "RAW_TEXT", segments: [{ id: "reroll_leaf", leaf: { family_id: "reroll", family_version: 1 } }] }],
-            slots: {},
-            graph_template: {
-              schema_version: 1,
-              nodes: [{
-                id: "reroll_effect",
-                kind: "leaf",
-                family_id: "reroll",
-                family_version: 1,
-                parameters: { roll: { $bind: "reroll_leaf.parameters.roll" }, subset: { $bind: "reroll_leaf.parameters.subset" } },
-                evidence: { fragment: "RAW_TEXT", first_segment_id: "reroll_leaf", last_segment_id: "reroll_leaf" },
-              }],
-              relations: [],
-              roots: ["reroll_effect"],
-            },
-            mechanics_template: null,
-          }],
-        },
-        positives: [{
-          ability_version_id: value.abilityId,
-          source_hash: value.sourceHash,
-          fragment: "RAW_TEXT",
-          start_byte: 0,
-          end_byte: Buffer.byteLength(value.source, "utf8"),
-          exact_text: value.source,
-        }],
-        counterexamples: [],
-      });
-
-      const items = getQueue(value.db).items;
-      expect(items.some((item) => item.kind === "composition")).toBe(false);
-      expect(items.find((item) => item.key === `stamp:${proposed.stamp_id}@${proposed.revision}`)).toMatchObject({
-        kind: "stamp",
-        target: { view: "stamps", stamp_id: proposed.stamp_id, revision: proposed.revision },
-      });
-      // Rejecting the proposal hands the decision back to composition instead of losing it.
-      const definitionHash = (value.db.prepare("SELECT definition_hash FROM stamps WHERE id = ? AND revision = ?")
-        .get(proposed.stamp_id, proposed.revision) as { definition_hash: string }).definition_hash;
-      rejectStamp(value.db, proposed.stamp_id, proposed.revision, {
-        reviewer: "reviewer", definition_hash: definitionHash, reason: "The graph drops the target.",
-      });
-      expect(getQueue(value.db).items.some((item) => item.kind === "composition")).toBe(true);
     } finally {
       value.db.close();
     }
@@ -636,12 +516,8 @@ describe("Round 5C source-bound review ledger", () => {
     }
   });
 
-  it("groups novel source spans into proposal work and retires or restores each member with its gap", () => {
+  it("opens one leaf gap per novel occurrence and retires or restores each with its decision", () => {
     const value = fixture();
-    const root = mkdtempSync(join(tmpdir(), "round5c-exceptions-"));
-    temporaryRoots.push(root);
-    const previousArtifactDirectory = process.env.ROUND5C_ARTIFACT_DIR;
-    process.env.ROUND5C_ARTIFACT_DIR = root;
     try {
       const second = value.db.prepare(`
         INSERT INTO abilities (
@@ -659,21 +535,8 @@ describe("Round 5C source-bound review ledger", () => {
           ...span, role: "EFFECT",
         })),
       });
-      const escalations = listEscalations(value.db);
-      expect(escalations.items[0]).toMatchObject({ reason_code: "NEW_FORM", occurrence_count: 2 });
-      // Each card carries its complete member sources and exact spans.
-      expect(escalations.items[0]!.sources).toEqual([
-        expect.objectContaining({ ability_id: expect.any(String), source_text: value.source, span_text: "re-roll a Hit roll of 1" }),
-        expect.objectContaining({ source_text: value.source, span_text: "re-roll a Hit roll of 1" }),
-      ]);
-      const prepared = prepareWork(value.db, { purpose: "propose-rule" });
-      expect(prepared.request.items).toHaveLength(1);
-      const packet = JSON.parse(readFileSync(prepared.request_path, "utf8")) as typeof prepared.request;
-      const item = packet.items[0] as { escalation: { members: Array<{ span: Span }> } };
-      expect(item.escalation.members).toHaveLength(2);
-      expect(item.escalation.members).toEqual(expect.arrayContaining([
-        expect.objectContaining({ span: expect.objectContaining({ exact_text: span.exact_text }) }),
-      ]));
+      const openGaps = () => (value.db.prepare("SELECT count(*) AS total FROM gaps WHERE type = 'LEAF_GAP' AND status = 'open'").get() as { total: number }).total;
+      expect(openGaps()).toBe(2);
       const proposal = value.db.prepare(`
         SELECT proposals.id FROM proposals
         JOIN source_spans ON source_spans.id = proposals.span_id
@@ -683,28 +546,15 @@ describe("Round 5C source-bound review ledger", () => {
         reviewer: "reviewer",
         decisions: [{ ...rerollDecision(value, span), proposal_id: proposal.id }],
       });
-      expect(listEscalations(value.db).items[0]).toMatchObject({ occurrence_count: 1 });
+      expect(openGaps()).toBe(1);
       undoBatch(value.db, confirmed.batch_id, { reviewer: "reviewer" });
-      expect(listEscalations(value.db).items[0]).toMatchObject({ occurrence_count: 2 });
+      expect(openGaps()).toBe(2);
       undoBatch(value.db, first.batch_id, { reviewer: "reviewer" });
-      expect(listEscalations(value.db).items).toHaveLength(0);
-      applyAnnotationBatch(value.db, {
-        reviewer: "reviewer",
-        decisions: [{
-          action: "ambiguous", ability_version_id: value.abilityId,
-          source_hash: value.sourceHash, ...span, role: "UNRESOLVED",
-        }],
-      });
-      expect(listEscalations(value.db).items).toEqual([
-        expect.objectContaining({ reason_code: "SOURCE_AMBIGUITY", occurrence_count: 1 }),
-      ]);
+      expect(openGaps()).toBe(0);
     } finally {
-      if (previousArtifactDirectory === undefined) delete process.env.ROUND5C_ARTIFACT_DIR;
-      else process.env.ROUND5C_ARTIFACT_DIR = previousArtifactDirectory;
       value.db.close();
     }
   });
-
   it("quarantines whole review on a refreshed source version and exposes separate gap counts", () => {
     const root = mkdtempSync(join(tmpdir(), "round5c-review-"));
     temporaryRoots.push(root);

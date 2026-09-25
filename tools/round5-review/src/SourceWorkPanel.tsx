@@ -32,7 +32,6 @@ export type SourceWorkAbility = {
   id: number;
   source_hash: string;
   review_evidence_hash: string;
-  composition_escalation_id: string | null;
   annotations: Array<Interval & { id: number; role: string }>;
   coverage: {
     leaf_fraction: number;
@@ -48,7 +47,7 @@ export type SourceWorkAbility = {
 
 const percent = (value: number) => `${Math.round(value * 1000) / 10}%`;
 
-export function SourceWorkPanel({ ability, selection, busy, perform, reviewer, onBatch, onChanged, onCompose, setStatus }: {
+export function SourceWorkPanel({ ability, selection, busy, perform, reviewer, onBatch, onChanged, setStatus }: {
   ability: SourceWorkAbility;
   selection: Interval | null;
   busy: boolean;
@@ -56,8 +55,6 @@ export function SourceWorkPanel({ ability, selection, busy, perform, reviewer, o
   reviewer: string;
   onBatch: (batchId: string) => void;
   onChanged: () => Promise<void>;
-  /** Generate a source-bound composition proposal for this ability's open composition gap. */
-  onCompose: (escalationId: string) => void;
   setStatus: (text: string) => void;
 }) {
   const [run, setRun] = useState<LunaRun | null>(null);
@@ -118,7 +115,7 @@ export function SourceWorkPanel({ ability, selection, busy, perform, reviewer, o
       await api(`/abilities/${ability.id}/review`, {
         source_hash: ability.source_hash, expected_review_hash: ability.review_evidence_hash, reviewer, whole_context_checked: true,
       });
-      setStatus("Whole-context check recorded and a composition gap opened. Generate the composition proposal next.");
+      setStatus("Whole-context check recorded.");
       await onChanged();
     });
   }
@@ -178,15 +175,10 @@ export function SourceWorkPanel({ ability, selection, busy, perform, reviewer, o
     </div>
     {coverage.overlaps.some((overlap) => !overlap.sanctioned) && <p className="error">Unsanctioned overlap: {coverage.overlaps.filter((overlap) => !overlap.sanctioned).map((overlap) => `${overlap.kind} (${overlap.bytes} bytes)`).join(", ")}.</p>}
     {readiness.ready
-      ? <p className="wb-reviewed">{readiness.whole_context_checked ? "Composition eligible: every byte is reviewed and the whole source is checked." : "Every meaningful byte is reviewed. Read the complete source above, then record the check."}</p>
+      ? <p className="wb-reviewed">{readiness.whole_context_checked ? "Every byte is reviewed and the whole source is checked." : "Every meaningful byte is reviewed. Read the complete source above, then record the check."}</p>
       : <ul className="wb-readiness">{readiness.reasons.map((reason) => <li key={reason.code}>{reason.message}</li>)}</ul>}
     {readiness.ready && !readiness.whole_context_checked && <div className="wb-actions">
-      <button className="primary" disabled={busy} onClick={checkWholeSource}>I checked the whole source; open composition</button>
-    </div>}
-    {readiness.composition_eligible && <div className="wb-actions">
-      {ability.composition_escalation_id
-        ? <button className="primary" disabled={busy} onClick={() => onCompose(ability.composition_escalation_id!)}>Generate composition proposal</button>
-        : <p className="wb-help">No open composition gap for this source version. Clear and re-record the whole-context check to reopen one.</p>}
+      <button className="primary" disabled={busy} onClick={checkWholeSource}>I checked the whole source</button>
     </div>}
 
     <div className="wb-luna-run">

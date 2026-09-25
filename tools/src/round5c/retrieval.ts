@@ -4,7 +4,6 @@ import { exactSpan } from "./contracts.js";
 import { bumpWorkbenchRevision, insertSpan, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
 import { getCurrentCoverage } from "./coverage.js";
 import { normalizedProjection, normalizedSurface, type NormalizedProjection } from "./matching.js";
-import { seedKey, stampSeedAnnotationIds } from "./stamp-seeds.js";
 
 const RETRIEVAL_ALGORITHM = "round5c/lexical-fts5/v1";
 const DEFAULT_PAGE_SIZE = 20;
@@ -148,17 +147,6 @@ function prototypeRows(db: DatabaseSync): Prototype[] {
       AND semantic_families.version = fingerprints.family_version
     WHERE annotations.status = 'active' AND abilities.current = 1
       AND fingerprints.status = 'active' AND semantic_families.status = 'active'
-      AND (
-        annotations.authority_kind = 'human'
-        OR EXISTS (
-          SELECT 1 FROM stamp_applications
-          JOIN stamps ON stamps.id = stamp_applications.stamp_id
-            AND stamps.revision = stamp_applications.stamp_revision
-          WHERE stamp_applications.annotation_id = annotations.id
-            AND stamp_applications.status = 'active'
-            AND stamps.status = 'approved'
-        )
-      )
     ORDER BY annotations.id
   `).all() as unknown as Prototype[];
 }
@@ -198,16 +186,6 @@ function existingDecision(
           WHERE annotations.span_id = source_spans.id
             AND annotations.status = 'active' AND semantic_families.role = ?
             AND source_spans.start_byte < ? AND ? < source_spans.end_byte
-            AND (
-              annotations.authority_kind = 'human'
-              OR EXISTS (
-                SELECT 1 FROM stamp_applications
-                JOIN stamps ON stamps.id = stamp_applications.stamp_id
-                  AND stamps.revision = stamp_applications.stamp_revision
-                WHERE stamp_applications.annotation_id = annotations.id
-                  AND stamp_applications.status = 'active' AND stamps.status = 'approved'
-              )
-            )
         )
         OR EXISTS (
           SELECT 1 FROM proposals
@@ -438,7 +416,6 @@ export function retrieveFamilyCandidates(
     context_count: number;
     samples: string[];
     /** An active human annotation with this exact surface and fingerprint, if one exists. */
-    stamp_seed_annotation_id: number | null;
     occurrences: Array<Omit<CandidateOccurrence, "normalized_text">>;
   }>;
   next_cursor: string | null;
@@ -474,13 +451,10 @@ export function retrieveFamilyCandidates(
     group.push(occurrence);
     visible.set(signature, group);
   }
-  const seeds = visible.size > 0 ? stampSeedAnnotationIds(db) : new Map<string, number>();
   const groups = [...visible.entries()].map(([signature, occurrences]) => {
     const allOccurrences = signatures.get(signature) ?? occurrences;
-    const first = allOccurrences[0]!;
     return {
       signature,
-      stamp_seed_annotation_id: seeds.get(seedKey(first.exact_text, first.fingerprint_id)) ?? null,
       count: allOccurrences.length,
       context_count: new Set(allOccurrences.map((occurrence) => `${occurrence.context_signature}\u0000${occurrence.context}`)).size,
       samples: [...new Set(allOccurrences.map((occurrence) => occurrence.context))].slice(0, SAMPLE_LIMIT),

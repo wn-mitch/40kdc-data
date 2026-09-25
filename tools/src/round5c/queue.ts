@@ -2,10 +2,8 @@ import type { DatabaseSync } from "node:sqlite";
 
 import { getCurrentCoverage } from "./coverage.js";
 import { initializeWorkbench, RESTATES_ACTIVE_ANNOTATION } from "./db.js";
-import { currentReadiness } from "./readiness.js";
 import { normalizedSurface } from "./matching.js";
 import { GROUP_PAGE_LIMIT, pendingFamilyGroups, unresolvedClusters } from "./retrieval.js";
-import { StampError, stampEligibleAbilities } from "./stamps.js";
 
 /** A repeatable decision matters when it can affect more than one source occurrence. */
 export const MULTI_YIELD_THRESHOLD = 2;
@@ -15,14 +13,12 @@ const BROAD_SEED_WINDOW = { min: 4, max: 8 } as const;
 const DEFAULT_LIMIT = 50;
 const MAX_LIMIT = 200;
 
-export type QueueKind = "conflict" | "unparsed-source" | "whole-context-check" | "composition" | "family-group" | "stamp" | "unresolved-cluster" | "broad-seed" | "luna" | "ability";
+export type QueueKind = "conflict" | "unparsed-source" | "family-group" | "unresolved-cluster" | "broad-seed" | "luna" | "ability";
 
 export type QueueTarget =
   | { view: "family"; family_id: string; signature: string }
-  | { view: "stamps"; stamp_id: string; revision: number }
-  | { view: "abilities"; ability_version_id: number; source_hash?: string; action?: "analyze-source" | "whole-context" }
-  | { view: "luna"; mode: "residue"; faction_id: string | null }
-  | { view: "work"; escalation_id: string };
+  | { view: "abilities"; ability_version_id: number; source_hash?: string; action?: "analyze-source" }
+  | { view: "luna"; mode: "residue"; faction_id: string | null };
 
 export type QueueItem = {
   /** Stable identity across recomputes, so the UI can keep focus on an item. */
@@ -48,9 +44,6 @@ export type WorkQueue = {
 // Kind order breaks ties between equal yields: cheaper, more deterministic actions first.
 const KIND_ORDER: Record<QueueKind, number> = {
   conflict: 0,
-  "whole-context-check": 1,
-  composition: 2,
-  stamp: 3,
   "family-group": 4,
   "unresolved-cluster": 5,
   ability: 6,
@@ -65,8 +58,6 @@ function plural(count: number, word: string): string {
 }
 
 function byYield(left: QueueItem, right: QueueItem): number {
-  if (left.kind === "stamp" && right.kind === "family-group") return -1;
-  if (right.kind === "stamp" && left.kind === "family-group") return 1;
   return right.unlocks - left.unlocks || right.backlog - left.backlog || KIND_ORDER[left.kind] - KIND_ORDER[right.kind] || (left.key < right.key ? -1 : left.key > right.key ? 1 : 0);
 }
 
@@ -134,82 +125,6 @@ function familyItems(db: DatabaseSync, factionId: string | null): QueueItem[] {
       why: `${group.family_id} "${group.exact_text}": ${plural(count, "pending occurrence")}${factionId === null ? ` across ${plural(group.context_count, "context")}` : ` in ${factionId}`}`
         + `; ${plural(unlocks, "candidate")} on this page ${unlocks === 1 ? "shares" : "share"} one source context (${group.origins.join(", ")}).`,
       target: { view: "family", family_id: group.family_id, signature: group.signature },
-    }];
-  });
-}
-
-function compositionItems(db: DatabaseSync, factionId: string | null, eligible: ReadonlySet<number>): QueueItem[] {
-  const rows = db.prepare(`
-    SELECT escalations.id, json_group_array(DISTINCT abilities.id) AS ids
-    FROM escalations
-    JOIN escalation_members ON escalation_members.escalation_id = escalations.id
-      AND escalation_members.status = 'active'
-    JOIN abilities ON abilities.id = escalation_members.ability_version_id
-      AND abilities.current = 1 AND abilities.source_hash = escalation_members.source_hash
-    JOIN ability_reviews ON ability_reviews.ability_version_id = abilities.id
-      AND ability_reviews.whole_context_checked = 1
-    WHERE escalations.reason_code = 'COMPOSITION_GAP' AND escalations.state = 'open'
-      AND (? IS NULL OR abilities.faction_id = ?)
-      AND NOT EXISTS (
-        SELECT 1 FROM assembly_drafts
-        JOIN stamp_applications ON stamp_applications.id = assembly_drafts.composition_application_id
-        WHERE stamp_applications.ability_version_id = abilities.id AND assembly_drafts.status <> 'stale'
-      )
-      AND NOT EXISTS (
-        SELECT 1
-        FROM stamp_evidence
-        JOIN stamps ON stamps.id = stamp_evidence.stamp_id AND stamps.revision = stamp_evidence.stamp_revision
-        JOIN escalation_members AS member ON member.escalation_id = escalations.id AND member.status = 'active'
-        WHERE stamp_evidence.evidence_kind = 'positive'
-          AND stamps.status = 'proposed' AND stamps.kind = 'composition'
-          AND json_extract(stamp_evidence.evidence_json, '$.ability_version_id') = member.ability_version_id
-      )
-    GROUP BY escalations.id
-    ORDER BY escalations.id
-  `).all(factionId, factionId) as Array<{ id: string; ids: string }>;
-  return rows.flatMap((row) => {
-    const count = (JSON.parse(row.ids) as number[]).filter((id) => eligible.has(id)).length;
-    return count === 0 ? [] : [{ id: row.id, count }];
-  }).sort((left, right) => right.count - left.count || (left.id < right.id ? -1 : 1)).map((row): QueueItem => ({
-    key: `composition:${row.id}`,
-    kind: "composition",
-    unlocks: row.count,
-    backlog: row.count,
-    why: `${plural(row.count, "whole-context-reviewed ability")} is fully accounted for by reviewed source but has no assembly rule. Generate a source-bound composition proposal.`,
-    target: { view: "work", escalation_id: row.id },
-  }));
-}
-
-function stampItems(db: DatabaseSync, factionId: string | null, factions: ReadonlyMap<number, string>): QueueItem[] {
-  const rows = db.prepare("SELECT id, revision, kind, json_extract(definition_json, '$.label') AS label FROM stamps WHERE status = 'proposed' AND kind IN ('leaf', 'composition') ORDER BY id, revision").all() as Array<{ id: string; revision: number; kind: "leaf" | "composition"; label: string }>;
-  return rows.flatMap((row): QueueItem[] => {
-    let eligible: number[];
-    try {
-      eligible = stampEligibleAbilities(db, row.id, row.revision);
-    } catch (error) {
-      // A stamp whose evidence no longer validates cannot be approved; it surfaces in the
-      // Stamps view with its error rather than as a yield here.
-      if (error instanceof StampError) return [];
-      throw error;
-    }
-    const count = factionId === null ? eligible.length : eligible.filter((id) => factions.get(id) === factionId).length;
-    if (count === 0 && row.kind === "leaf") return [];
-    if (count === 0 && factionId !== null && !db.prepare(`
-      SELECT 1 FROM stamp_evidence
-      JOIN abilities ON abilities.id = json_extract(stamp_evidence.evidence_json, '$.ability_version_id')
-      WHERE stamp_evidence.stamp_id = ? AND stamp_evidence.stamp_revision = ?
-        AND stamp_evidence.evidence_kind = 'positive' AND abilities.current = 1 AND abilities.faction_id = ?
-      LIMIT 1
-    `).get(row.id, row.revision, factionId)) return [];
-    return [{
-      key: `stamp:${row.id}@${row.revision}`,
-      kind: "stamp",
-      unlocks: Math.max(count, 1),
-      backlog: count,
-      why: count === 0
-        ? `Composition stamp "${row.label}" has no eligible assembly match. Inspect its source binding and revise it before approval.`
-        : `${row.kind === "composition" ? "Composition" : "Leaf"} stamp "${row.label}": approving derives ${plural(count, row.kind === "composition" ? "assembly draft" : "eligible occurrence")}.`,
-      target: { view: "stamps", stamp_id: row.id, revision: row.revision },
     }];
   });
 }
@@ -383,26 +298,6 @@ function unparsedSourceItems(db: DatabaseSync, factionId: string | null, pending
   }));
 }
 
-/** Abilities whose reviewed source is complete but whose explicit whole-context check is missing. */
-function wholeContextItems(db: DatabaseSync, factionId: string | null, readiness: ReturnType<typeof currentReadiness>): QueueItem[] {
-  const rows = db.prepare(`
-    SELECT id, faction_id, ability_id, source_hash FROM abilities
-    WHERE current = 1 AND (? IS NULL OR faction_id = ?) ORDER BY faction_id, ability_id, id
-  `).all(factionId, factionId) as Array<{ id: number; faction_id: string; ability_id: string; source_hash: string }>;
-  return rows.flatMap((row): QueueItem[] => {
-    const state = readiness.get(row.id);
-    if (!state?.ready || state.whole_context_checked) return [];
-    return [{
-      key: `whole-context:${row.id}`,
-      kind: "whole-context-check",
-      unlocks: 1,
-      backlog: 1,
-      why: `${row.faction_id}/${row.ability_id}: every meaningful byte is reviewed and nothing is pending. Check the complete source once to open composition.`,
-      target: { view: "abilities", ability_version_id: row.id, source_hash: row.source_hash, action: "whole-context" },
-    }];
-  });
-}
-
 function lunaItem(db: DatabaseSync, factionId: string | null, factions: ReadonlyMap<number, string>): QueueItem | null {
   const pendingRuns = pendingLunaAbilities(db);
   let abilities = 0;
@@ -424,7 +319,7 @@ function lunaItem(db: DatabaseSync, factionId: string | null, factions: Readonly
   };
 }
 
-/** Resolve conflicts, compose reviewed sources, then prioritize repeatable decisions before external residue work. */
+/** Resolve conflicts, then prioritize repeatable decisions before external residue work. */
 export function getQueue(db: DatabaseSync, options: { factionId?: string; limit?: number } = {}): WorkQueue {
   initializeWorkbench(db);
   const limit = options.limit ?? DEFAULT_LIMIT;
@@ -433,14 +328,9 @@ export function getQueue(db: DatabaseSync, options: { factionId?: string; limit?
   const factions = factionOf(db);
 
   const conflict = conflictItem(db, factionId);
-  const readiness = currentReadiness(db);
-  const eligible = new Set([...readiness.values()].filter((state) => state.composition_eligible).map((state) => state.ability_version_id));
-  const wholeContext = wholeContextItems(db, factionId, readiness);
-  const composition = compositionItems(db, factionId, eligible);
   const unparsed = unparsedSourceItems(db, factionId, pendingLunaAbilities(db));
   const ranked = [
     ...familyItems(db, factionId),
-    ...stampItems(db, factionId, factions),
     ...clusterItems(db, factionId),
     ...abilityItems(db, factionId),
   ].sort(byYield);
@@ -450,7 +340,7 @@ export function getQueue(db: DatabaseSync, options: { factionId?: string; limit?
   const luna = lunaItem(db, factionId, factions);
   const familySingles = single.filter((item) => item.kind === "family-group");
   const items = [
-    ...(conflict ? [conflict] : []), ...wholeContext, ...composition, ...multi, ...hints, ...familySingles,
+    ...(conflict ? [conflict] : []), ...multi, ...hints, ...familySingles,
     ...unparsed, ...(luna ? [luna] : []), ...single.filter((item) => item.kind !== "family-group"),
   ];
   return {

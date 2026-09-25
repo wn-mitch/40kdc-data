@@ -12,9 +12,7 @@ import { initializeWorkbench } from "../src/round5c/db.js";
 import { partitionExclusive, totalLength } from "../src/round5c/partition.js";
 import { importLuna, prepareLuna } from "../src/round5c/proposal.js";
 import { abilityReadiness } from "../src/round5c/readiness.js";
-import { sourceWitnessProblems } from "../src/round5c/relations.js";
 import { applyAnnotationBatch, getAbility, reviewAbility, undoBatch } from "../src/round5c/review.js";
-import type { SourceGraph } from "../src/round5c/contracts.js";
 
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
 type DatabaseSync = DatabaseType;
@@ -205,7 +203,7 @@ describe("Round 5C structural source authority", () => {
       expect(abilityReadiness(value.db, value.id)).toMatchObject({ ready: false });
       expect(abilityReadiness(value.db, value.id).reasons.map((reason) => reason.code)).toEqual(expect.arrayContaining(["PENDING_CLAIMS", "UNACCOUNTED_SOURCE"]));
       expect(() => applyAnnotationBatch(value.db, { reviewer: REVIEWER, decisions: [{ action: "confirm-connective", proposal_id: connective.proposal_id, ability_version_id: value.id, source_hash: value.hash, fragment: "RAW_TEXT", ...bytes("and", source), role: "CONNECTIVE", relation: "joins" }] }))
-        .toThrow(/not a Round 5C relation/u);
+        .toThrow(/not a known relation type/u);
       applyAnnotationBatch(value.db, { reviewer: REVIEWER, decisions: [{ action: "confirm-connective", proposal_id: connective.proposal_id, ability_version_id: value.id, source_hash: value.hash, fragment: "RAW_TEXT", ...bytes("and", source), role: "CONNECTIVE", relation: "coexists-with" }] });
       expect(value.db.prepare("SELECT json_extract(reason_json, '$.reviewed_relation') AS relation FROM proposals WHERE id = ?").get(connective.proposal_id)).toEqual({ relation: "coexists-with" });
       expect(abilityReadiness(value.db, value.id)).toMatchObject({ ready: true });
@@ -214,23 +212,17 @@ describe("Round 5C structural source authority", () => {
     }
   });
 
-  it("creates a composition gap only once the full source is accounted for and explicitly checked", () => {
+  it("becomes composition-eligible only once the full source is accounted for and explicitly checked", () => {
     const value = fixture();
     try {
       paintLeaves(value);
       const pending = propose(value, "squad modèls", "participant");
-      const compositionGaps = () => value.db.prepare(`
-        SELECT count(*) AS total FROM escalations JOIN escalation_members ON escalation_members.escalation_id = escalations.id
-        WHERE escalations.reason_code = 'COMPOSITION_GAP' AND escalation_members.status = 'active'
-      `).get() as { total: number };
       reviewAbility(value.db, value.id, { source_hash: value.hash, reviewer: REVIEWER, whole_context_checked: true });
-      expect(compositionGaps()).toEqual({ total: 0 });
+      expect(abilityReadiness(value.db, value.id)).toMatchObject({ ready: false, composition_eligible: false });
       accept(value, pending.proposal_id);
-      expect(getAbility(value.db, value.id).composition_escalation_id).toBeNull();
+      // Accepting the structure is a reviewed-source change, so it clears the earlier check.
+      expect(abilityReadiness(value.db, value.id)).toMatchObject({ ready: true, whole_context_checked: false, composition_eligible: false });
       reviewAbility(value.db, value.id, { source_hash: value.hash, reviewer: REVIEWER, whole_context_checked: true });
-      expect(compositionGaps()).toEqual({ total: 1 });
-      // The ability view names the gap so the UI can generate its composition proposal directly.
-      expect(getAbility(value.db, value.id).composition_escalation_id).toMatch(/^escalation_/u);
       expect(abilityReadiness(value.db, value.id)).toMatchObject({ ready: true, composition_eligible: true });
     } finally {
       value.db.close();
@@ -284,32 +276,5 @@ describe("Round 5C structural source authority", () => {
     } finally {
       value.db.close();
     }
-  });
-});
-
-describe("connective and structural witnesses", () => {
-  const evidence = (start: number, end: number) => ({ fragment: "RAW_TEXT", first_segment_id: "a", last_segment_id: "b", start_byte: start, end_byte: end });
-  const graph = (relationType: string, nodes: SourceGraph["nodes"]): SourceGraph => ({
-    schema_version: 1,
-    nodes,
-    relations: [{ id: "join", type: relationType, from_node_id: "left", to_node_id: "right", evidence: evidence(0, 30) }],
-    roots: ["left"],
-  });
-  const leaf = (id: string, start: number, end: number) => ({ id, kind: "leaf" as const, parameters: {}, evidence: evidence(start, end), family_id: "reroll", family_version: 1 });
-  const inputs = {
-    connectives: [{ proposal_id: 1, fragment: "RAW_TEXT", start_byte: 10, end_byte: 13, kind: "and" as const, reviewed_relation: null }],
-    structural: [{ review_id: 1, fragment: "RAW_TEXT", start_byte: 14, end_byte: 20, kind: "participant" }],
-  };
-
-  it("accepts only a kind-compatible relation and exact same-kind nodes", () => {
-    const participant = { id: "who", kind: "participant" as const, parameters: {}, evidence: evidence(14, 20) };
-    expect(sourceWitnessProblems(graph("coexists-with", [leaf("left", 0, 9), leaf("right", 21, 30), participant]), inputs)).toEqual([]);
-    expect(sourceWitnessProblems(graph("condition-of", [leaf("left", 0, 9), leaf("right", 21, 30), participant]), inputs))
-      .toEqual([expect.stringMatching(/and connective .* no coexists-with relation/u)]);
-    expect(sourceWitnessProblems(graph("coexists-with", [leaf("left", 0, 9), leaf("right", 21, 30)]), inputs))
-      .toEqual([expect.stringMatching(/Reviewed participant .* no same-kind graph node/u)]);
-    const stray = { id: "stray", kind: "selector" as const, parameters: {}, evidence: evidence(0, 4) };
-    expect(sourceWitnessProblems(graph("coexists-with", [leaf("left", 0, 9), leaf("right", 21, 30), participant, stray]), inputs))
-      .toEqual([expect.stringMatching(/selector node stray is not grounded/u)]);
   });
 });

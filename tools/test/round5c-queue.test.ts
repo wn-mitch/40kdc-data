@@ -206,7 +206,7 @@ describe("Round 5C greedy work queue", () => {
       const items = getQueue(db, { limit: 200 }).items;
       const lunaIndex = items.findIndex((item) => item.kind === "luna");
       expect(lunaIndex).toBeGreaterThan(0);
-      expect(items.slice(0, lunaIndex).every((item) => item.unlocks >= 2 || item.kind === "broad-seed" || item.kind === "family-group" || item.kind === "unparsed-source" || item.kind === "whole-context-check")).toBe(true);
+      expect(items.slice(0, lunaIndex).every((item) => item.unlocks >= 2 || item.kind === "broad-seed" || item.kind === "family-group" || item.kind === "unparsed-source")).toBe(true);
       // Untouched sources sit directly before the aggregate Luna handoff, after every repeatable decision.
       const unparsed = items.map((item, index) => ({ item, index })).filter(({ item }) => item.kind === "unparsed-source");
       expect(unparsed.every(({ index }) => index < lunaIndex && items.slice(index, lunaIndex).every((item) => item.kind === "unparsed-source"))).toBe(true);
@@ -223,11 +223,10 @@ describe("Round 5C greedy work queue", () => {
       seed(single, "seed", HIT_ONES, "reroll", { roll: "hit", subset: "ones" });
       proposeLexical(single);
       const items = getQueue(single).items;
-      // The fully painted seed needs only its explicit whole-context check.
-      expect(items[0]).toMatchObject({ kind: "whole-context-check", target: { view: "abilities", action: "whole-context" } });
-      expect(items[1]).toMatchObject({ kind: "family-group" });
-      expect(items[2]).toMatchObject({ kind: "luna", target: { view: "luna", mode: "residue" } });
-      expect(items.slice(3).map((item) => item.kind)).toEqual(["ability"]);
+      // The fully painted seed asks for nothing; its repeat is the first decision.
+      expect(items[0]).toMatchObject({ kind: "family-group" });
+      expect(items[1]).toMatchObject({ kind: "luna", target: { view: "luna", mode: "residue" } });
+      expect(items.slice(2).map((item) => item.kind)).toEqual(["ability"]);
     } finally {
       single.close();
     }

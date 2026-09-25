@@ -12,8 +12,7 @@ export type ReadinessReasonCode =
   | "OPEN_LEAF_GAPS"
   | "NO_REVIEWED_LEAF"
   | "UNSANCTIONED_OVERLAP"
-  | "UNSUPPORTED_STRUCTURE"
-  | "DRAFT_EXISTS";
+  | "UNSUPPORTED_STRUCTURE";
 
 export type ReadinessReason = { code: ReadinessReasonCode; count: number; message: string };
 
@@ -37,18 +36,17 @@ export type Readiness = {
   active_leaves: number;
   unsanctioned_overlaps: number;
   unsupported_structure: number;
-  has_draft: boolean;
   reasons: ReadinessReason[];
 };
 
 type Counts = {
-  pending: number; unresolved: number; gaps: number; leaves: number; unsupported: number; draft: boolean;
+  pending: number; unresolved: number; gaps: number; leaves: number; unsupported: number;
 };
 
 function countRows(db: DatabaseSync, sql: string, args: readonly number[], apply: (entry: Counts, total: number) => void, counts: Map<number, Counts>): void {
   for (const row of db.prepare(sql).all(...args) as Array<{ id: number; total: number }>) {
     let entry = counts.get(row.id);
-    if (!entry) counts.set(row.id, entry = { pending: 0, unresolved: 0, gaps: 0, leaves: 0, unsupported: 0, draft: false });
+    if (!entry) counts.set(row.id, entry = { pending: 0, unresolved: 0, gaps: 0, leaves: 0, unsupported: 0 });
     apply(entry, Number(row.total));
   }
 }
@@ -89,12 +87,6 @@ function loadCounts(db: DatabaseSync, abilityVersionId?: number): Map<number, Co
     JOIN source_spans ON source_spans.id = annotations.span_id
     JOIN abilities ON abilities.id = source_spans.ability_version_id
     WHERE ${filter} AND annotations.status = 'active'
-      AND (annotations.authority_kind = 'human' OR EXISTS (
-        SELECT 1 FROM stamp_applications
-        JOIN stamps ON stamps.id = stamp_applications.stamp_id AND stamps.revision = stamp_applications.stamp_revision
-        WHERE stamp_applications.annotation_id = annotations.id
-          AND stamp_applications.status = 'active' AND stamps.status = 'approved'
-      ))
     GROUP BY abilities.id
   `, args, (entry, total) => { entry.leaves = total; }, counts);
   countRows(db, `
@@ -109,18 +101,11 @@ function loadCounts(db: DatabaseSync, abilityVersionId?: number): Map<number, Co
       )
     GROUP BY abilities.id
   `, args, (entry, total) => { entry.unsupported = total; }, counts);
-  countRows(db, `
-    SELECT abilities.id, count(*) AS total FROM assembly_drafts
-    JOIN stamp_applications ON stamp_applications.id = assembly_drafts.composition_application_id
-    JOIN abilities ON abilities.id = stamp_applications.ability_version_id
-    WHERE ${filter} AND assembly_drafts.status <> 'stale'
-    GROUP BY abilities.id
-  `, args, (entry, total) => { entry.draft = total > 0; }, counts);
   return counts;
 }
 
 function readinessFor(abilityVersionId: number, coverage: AbilityCoverage, counts: Counts | undefined, wholeChecked: boolean): Readiness {
-  const open = counts ?? { pending: 0, unresolved: 0, gaps: 0, leaves: 0, unsupported: 0, draft: false };
+  const open = counts ?? { pending: 0, unresolved: 0, gaps: 0, leaves: 0, unsupported: 0 };
   // Meaningful bytes only; grouped display regions also span the whitespace between words.
   const unaccounted = coverage.accounted_bytes.denominator - coverage.accounted_bytes.numerator;
   const residue = coverage.partition.residue;
@@ -137,7 +122,6 @@ function readinessFor(abilityVersionId: number, coverage: AbilityCoverage, count
   if (open.leaves === 0) add("NO_REVIEWED_LEAF", 1, "No reviewed semantic leaf exists; composition needs at least one.");
   add("UNSANCTIONED_OVERLAP", unsanctioned, `${unsanctioned} overlaps among reviewed source layers lack an explicit containment review.`);
   add("UNSUPPORTED_STRUCTURE", open.unsupported, `${open.unsupported} structural reviews point at a parent annotation that is no longer active.`);
-  if (open.draft) add("DRAFT_EXISTS", 1, "A current assembly draft already exists for this source version.");
   const accountedAll = coverage.accounted_bytes.denominator > 0
     && coverage.accounted_bytes.numerator === coverage.accounted_bytes.denominator;
   const ready = reasons.length === 0 && accountedAll && residue === 0;
@@ -156,7 +140,6 @@ function readinessFor(abilityVersionId: number, coverage: AbilityCoverage, count
     active_leaves: open.leaves,
     unsanctioned_overlaps: unsanctioned,
     unsupported_structure: open.unsupported,
-    has_draft: open.draft,
     reasons,
   };
 }

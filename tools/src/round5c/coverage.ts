@@ -96,16 +96,7 @@ function pushInterval<T extends Interval>(index: Map<number, T[]>, abilityId: nu
 }
 
 /** SQL predicate over `annotations`: the row currently carries semantic authority. */
-const EFFECTIVE_ANNOTATION = `(
-  annotations.authority_kind = 'human'
-  OR EXISTS (
-    SELECT 1 FROM stamp_applications
-    JOIN stamps ON stamps.id = stamp_applications.stamp_id
-      AND stamps.revision = stamp_applications.stamp_revision
-    WHERE stamp_applications.annotation_id = annotations.id
-      AND stamp_applications.status = 'active' AND stamps.status = 'approved'
-  )
-)`;
+const EFFECTIVE_ANNOTATION = "(annotations.status = 'active')";
 
 /**
  * SQL predicate over `source_atom_reviews`: the structural review is active and, when it is a
@@ -135,13 +126,7 @@ function loadCoverageIndexes(db: DatabaseSync, currentOnly: boolean, abilityId?:
   const confirmedRows = db.prepare(`
     SELECT source_spans.ability_version_id, annotations.id, source_spans.start_byte, source_spans.end_byte,
       annotations.authority_kind,
-      CASE WHEN EXISTS (
-        SELECT 1 FROM stamp_applications
-        JOIN stamps ON stamps.id = stamp_applications.stamp_id
-          AND stamps.revision = stamp_applications.stamp_revision
-        WHERE stamp_applications.annotation_id = annotations.id
-          AND stamp_applications.status = 'active' AND stamps.status = 'approved'
-      ) THEN 1 ELSE 0 END AS stamp_supported
+      CASE WHEN annotations.authority_kind = 'stamp' THEN 1 ELSE 0 END AS stamp_supported
     FROM annotations
     JOIN source_spans ON source_spans.id = annotations.span_id
     JOIN abilities ON abilities.id = source_spans.ability_version_id

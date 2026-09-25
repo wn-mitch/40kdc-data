@@ -5,8 +5,7 @@ import { fileURLToPath } from "node:url";
 
 import { assembleStoreSource, type StoreSourceFragment } from "../mfm/store-source.js";
 import { hashJson } from "../round4/hash.js";
-import { bumpWorkbenchRevision, initializeWorkbench, invalidateAbilityEvidence, withTransaction } from "./db.js";
-import { reconcileWorkbench } from "./stamps.js";
+import { bumpWorkbenchRevision, initializeWorkbench, withTransaction } from "./db.js";
 import { proposeLexical } from "./retrieval.js";
 
 const repositoryRoot = resolve(fileURLToPath(new URL("../../../", import.meta.url)));
@@ -327,13 +326,8 @@ export function refreshSources(db: DatabaseSync, storePath = defaultStorePath): 
       }
     }
     const retiredVersionIds = [...previousCurrent].filter((abilityVersionId) => !currentVersionIds.has(abilityVersionId));
-    invalidateAbilityEvidence(db, retiredVersionIds, "SOURCE_VERSION_RETIRED");
-    const reconciliation = reconcileWorkbench(db, {
-      ability_version_ids: [...currentVersionIds],
-      refresh_lexical: () => proposeLexical(db),
-      bump_revision: false,
-    });
-    if (inserted > 0 || reactivated > 0 || retiredVersionIds.length > 0 || chunksBuilt > 0 || reconciliation.changed) {
+    const lexical = proposeLexical(db);
+    if (inserted > 0 || reactivated > 0 || retiredVersionIds.length > 0 || chunksBuilt > 0 || lexical.created > 0) {
       bumpWorkbenchRevision(db);
     }
 
