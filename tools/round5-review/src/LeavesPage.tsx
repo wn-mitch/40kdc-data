@@ -84,7 +84,7 @@ export function LeavesPage({ families, faction, revision, busy, perform, reviewe
       ? <LeafForm families={families} exactText={item.sample_text} role={role} busy={busy} submitLabel="Decide everywhere"
         onSubmit={(familyId, parameters) => decide(item.sample_text, familyId, parameters)} onCancel={() => setEditing(null)} />
       : <div className="wb-actions">
-        <button className="primary" disabled={busy} onClick={() => setEditing(key)}>Name this leaf</button>
+        <button className="primary" onClick={() => setEditing(key)}>Name this leaf</button>
         <button className="text-button" onClick={() => openAbility(item.sample_ability_version_id)}>Open a source</button>
       </div>}
   </li>;
@@ -127,7 +127,7 @@ export function LeavesPage({ families, faction, revision, busy, perform, reviewe
                 <span className="wb-actions">
                   {!surface.surface_id && <button className="primary" disabled={busy || leaf.retired_version} onClick={() => decide(surface.sample_text, leaf.family_id, leaf.parameters)}>Decide everywhere</button>}
                   {surface.surface_id && surface.pending > 0 && <button className="primary" disabled={busy} onClick={() => apply(surface)}>Apply to {surface.pending} pending</button>}
-                  {surface.surface_id && <button className="secondary" disabled={busy} onClick={() => setEditing(key)}>Change meaning</button>}
+                  {surface.surface_id && <button className="secondary" onClick={() => setEditing(key)}>Change meaning</button>}
                   {surface.surface_id && <button className="text-button" disabled={busy} onClick={() => retire(surface)}>Stop applying</button>}
                 </span>
                 {editing === key && <LeafForm families={families} exactText={surface.sample_text} role={leaf.role} busy={busy} submitLabel="Move this spelling"

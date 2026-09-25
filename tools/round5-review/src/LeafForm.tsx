@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import { api } from "./workbench-api";
 
 /** One reviewed family as the bridge lists it (deprecated versions are never listed). */
 export type Family = {
@@ -6,7 +8,11 @@ export type Family = {
   starter: Record<string, unknown>;
   parameterSchema: { properties?: Record<string, Property> };
 };
-type Property = { enum?: string[]; anyOf?: Property[]; type?: string; pattern?: string; minimum?: number; maximum?: number };
+type Property = { enum?: string[]; anyOf?: Property[]; type?: string; pattern?: string; minimum?: number; maximum?: number; "x-only-when"?: Record<string, readonly string[]> };
+
+/** A property applies only when the other parameters it depends on have one of the listed values. */
+const applies = (property: Property, parameters: Record<string, unknown>) =>
+  !property["x-only-when"] || Object.entries(property["x-only-when"]).every(([key, values]) => values.includes(String(parameters[key])));
 
 const ROLE_LABELS: Record<string, string> = {
   CONDITION: "Condition: when it applies", EVENT: "Event: when it fires", EFFECT: "Effect: what changes", DURATION: "Duration: how long",
@@ -32,6 +38,22 @@ function keywordFromSource(exactText: string, options: readonly string[]): strin
   if (named) return named;
   const valued = /^(sustained hits|rapid fire|melta) (\d|d3|d6)$/iu.exec(bracketed.trim());
   return valued ? `${titleCase(valued[1]!)} ${valued[2]!.toUpperCase()}` : null;
+}
+
+/** What the source wording states outright about an event: kind, phase, and whose turn. */
+function eventFromSource(exactText: string): Record<string, unknown> {
+  const boundary = /\b(start|end) of (your opponent's|your|the|each|either player's) (command|movement|shooting|charge|fight) phase\b/iu.exec(exactText);
+  if (boundary) {
+    const owner = boundary[2]!.toLowerCase();
+    return {
+      kind: boundary[1]!.toLowerCase() === "start" ? "phase-start" : "phase-end",
+      phase: boundary[3]!.toLowerCase(),
+      turn: owner === "your" ? "your" : owner === "your opponent's" ? "opponent" : "either",
+    };
+  }
+  if (/\bafter this unit has shot\b/iu.test(exactText)) return { kind: "after-shooting" };
+  if (/\bmakes an attack\b/iu.test(exactText)) return { kind: "attack-made" };
+  return {};
 }
 
 /** Buttons that act as one radio group; better than a dropdown for a handful of choices. */
@@ -87,27 +109,46 @@ export function LeafForm({ families, exactText, role, initial, busy, submitLabel
   const choose = (id: string) => {
     setFamilyId(id);
     const chosen = families.find((item) => item.id === id);
-    const starter = structuredClone(chosen?.starter ?? {});
-    // Prefill what the source states outright: the bracketed weapon ability, melee or ranged, and an "N+" threshold.
+    // Nothing is chosen by default. Only what the source states outright is filled in: the
+    // bracketed weapon ability, melee or ranged, an "N+" threshold, and an event's phase.
+    const prefill: Record<string, unknown> = id === "event" ? eventFromSource(exactText) : {};
     for (const [name, property] of Object.entries(chosen?.parameterSchema.properties ?? {})) {
-      const limited = name === "weapon_type" ? /\b(melee|ranged) weapons?\b/iu.exec(exactText)?.[1]?.toLowerCase() : undefined;
-      if (limited) { starter[name] = limited; continue; }
-      if (starter[name] !== "" && starter[name] !== null && starter[name] !== undefined) continue;
-      if (freeText(property)) starter[name] = keywordFromSource(exactText, choices(property)) ?? "";
-      else if (numeric(property) && name === "threshold") {
+      if (name === "weapon_type") {
+        const limited = /\b(melee|ranged) weapons?\b/iu.exec(exactText)?.[1]?.toLowerCase();
+        if (limited) prefill[name] = limited;
+      } else if (freeText(property)) {
+        const keyword = keywordFromSource(exactText, choices(property));
+        if (keyword) prefill[name] = keyword;
+      } else if (numeric(property) && name === "threshold") {
         const threshold = /\b([2-6])\+/u.exec(exactText)?.[1];
-        if (threshold) starter[name] = Number(threshold);
+        if (threshold) prefill[name] = Number(threshold);
       }
     }
-    setParameters(starter);
+    setParameters(prefill);
   };
-  const set = (name: string, value: unknown) => setParameters((current) => ({ ...current, [name]: value }));
-  const complete = family && Object.keys(properties).every((name) => {
+  // Changing a parameter drops the ones that stop applying (a phase once the event is no longer a phase boundary).
+  const set = (name: string, value: unknown) => setParameters((current) => {
+    const next: Record<string, unknown> = { ...current, [name]: value };
+    for (const [key, property] of Object.entries(properties)) if (!applies(property, next)) delete next[key];
+    return next;
+  });
+  const visible = Object.entries(properties).filter(([, property]) => applies(property, parameters));
+  const complete = family && visible.every(([name]) => {
     const value = parameters[name];
     return value !== "" && value !== null && value !== undefined
       && !(typeof value === "object" && "source" in value && !String((value as { source: unknown }).source).trim());
   });
   const roles = role ? [role] : Object.keys(ROLE_LABELS);
+  const [preview, setPreview] = useState<{ text: string | null; problem: string | null } | null>(null);
+  const previewKey = complete ? JSON.stringify([familyId, parameters]) : null;
+  useEffect(() => {
+    setPreview(null);
+    if (!previewKey) return;
+    const controller = new AbortController();
+    api<{ text: string | null; problem: string | null }>("/leaves/preview", { family_id: familyId, parameters }, controller.signal)
+      .then(setPreview).catch(() => undefined);
+    return () => controller.abort();
+  }, [previewKey]);
   return <form className="wb-leaf-form" onSubmit={(event) => { event.preventDefault(); if (complete) onSubmit(familyId, parameters); }}>
     <label>Meaning<select value={familyId} onChange={(event) => choose(event.target.value)}>
       <option value="">Choose what this wording means</option>
@@ -116,7 +157,7 @@ export function LeafForm({ families, exactText, role, initial, busy, submitLabel
       </optgroup>)}
     </select></label>
     {family && <p className="wb-help">{family.description}</p>}
-    <div className="wb-editor-grid">{Object.entries(properties).map(([name, property]) => {
+    <div className="wb-editor-grid">{visible.map(([name, property]) => {
       const value = parameters[name];
       const options = choices(property);
       const label = name.replaceAll("_", " ");
@@ -155,8 +196,9 @@ export function LeafForm({ families, exactText, role, initial, busy, submitLabel
       }
       return <label key={name}>{label}<input value={isSource ? String((value as { source: unknown }).source) : ""} onChange={(event) => set(name, { source: event.target.value })} placeholder="Exact words from the source" /></label>;
     })}</div>
+    {preview && <p className={preview.text ? "wb-leaf-preview" : "error"}>{preview.text ? <>Reads as: <strong>{preview.text}</strong></> : preview.problem}</p>}
     <div className="wb-actions">
-      <button className="primary" type="submit" disabled={busy || !complete}>{submitLabel}</button>
+      <button className="primary" type="submit" disabled={busy || !complete || Boolean(preview?.problem)}>{submitLabel}</button>
       <button className="secondary" type="button" onClick={onCancel}>Cancel</button>
     </div>
   </form>;

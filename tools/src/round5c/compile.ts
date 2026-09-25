@@ -28,8 +28,6 @@ const TRIGGERS: Record<string, Record<string, unknown>> = {
   "event:charge": { event: "charge-move", subject: "self" },
   "event:unit-destroyed": { event: "on-unit-destroyed" },
   "event:model-destroyed": { event: "on-model-destroyed" },
-  "event:phase-start": { event: "start-of-phase" },
-  "event:phase-end": { event: "end-of-phase" },
   "event:after-shooting": { event: "after-unit-resolves-attacks", subject: "self", condition: { type: "phase-is", parameters: { phase: "shooting" } } },
   "turn-start:battle-round": { event: "start-of-battle-round" },
   "turn-start:player-turn": { event: "start-of-player-turn" },
@@ -54,6 +52,17 @@ function closed(leaf: CompileLeaf, name: string): unknown {
   const value = leaf.parameters[name];
   if (isSource(value)) throw new CompileError(`${leaf.family_id} ${name} is quoted source text; give it a listed value before it can compile.`);
   return value;
+}
+
+/** A phase-boundary trigger, narrowed by phase and whose turn unless either is "any". */
+function phaseTrigger(leaf: CompileLeaf): Record<string, unknown> | null {
+  const event = leaf.parameters.kind === "phase-start" ? "start-of-phase" : leaf.parameters.kind === "phase-end" ? "end-of-phase" : null;
+  if (!event) return null;
+  const operands: Record<string, unknown>[] = [];
+  if (leaf.parameters.phase && leaf.parameters.phase !== "any") operands.push({ type: "phase-is", parameters: { phase: leaf.parameters.phase } });
+  if (leaf.parameters.turn && leaf.parameters.turn !== "either") operands.push({ type: "player-turn-is", parameters: { turn: leaf.parameters.turn } });
+  if (operands.length === 0) return { event };
+  return { event, condition: operands.length === 1 ? operands[0] : { operator: "and", operands } };
 }
 
 function kindKey(leaf: CompileLeaf): string {
@@ -135,6 +144,28 @@ function effect(leaf: CompileLeaf, attached: boolean): Record<string, unknown> {
   }
 }
 
+/** What one leaf contributes on its own: an effect, a condition, a trigger, a duration, or nothing (attack events). */
+export type LeafFragment =
+  | { kind: "effect" | "condition" | "trigger"; node: Record<string, unknown> }
+  | { kind: "duration"; duration: string }
+  | { kind: "implicit" };
+
+export function leafFragment(leaf: CompileLeaf): LeafFragment {
+  if (leaf.role === "EFFECT") return { kind: "effect", node: effect(leaf, false) };
+  if (leaf.role === "CONDITION") return { kind: "condition", node: condition(leaf) };
+  if (leaf.role === "DURATION") {
+    const duration = DURATIONS[String(closed(leaf, "endpoint"))];
+    if (!duration) throw new CompileError(`Duration ${String(leaf.parameters.endpoint)} has no DSL scope yet.`);
+    return { kind: "duration", duration };
+  }
+  if (leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind))) return { kind: "implicit" };
+  const trigger = (leaf.family_id === "event" ? phaseTrigger(leaf) : null) ?? TRIGGERS[kindKey(leaf)];
+  if (!trigger) throw new CompileError(`Event ${kindKey(leaf)} has no DSL trigger yet.`);
+  return { kind: "trigger", node: structuredClone(trigger) };
+}
+
+export { CompileError };
+
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
 export function compileLeaves(leaves: readonly CompileLeaf[]): Compiled {
   const signature = shapeSignature(leaves);
@@ -155,7 +186,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[]): Compiled {
         durations.push(duration);
       } else if (leaf.role === "EVENT") {
         if (leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind))) continue;
-        const trigger = TRIGGERS[kindKey(leaf)];
+        const trigger = (leaf.family_id === "event" ? phaseTrigger(leaf) : null) ?? TRIGGERS[kindKey(leaf)];
         if (!trigger) throw new CompileError(`Event ${kindKey(leaf)} has no DSL trigger yet.`);
         triggers.push(structuredClone(trigger));
       } else {

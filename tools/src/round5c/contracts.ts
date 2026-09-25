@@ -50,6 +50,10 @@ const EVENT_KINDS = [
   "attack-made", "hit-roll", "wound-roll", "charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end", "after-shooting",
 ] as const;
 const WEAPON_TYPES = ["all", "melee", "ranged"] as const;
+/** Event kinds that need to say which phase, and whose turn, they belong to. */
+export const PHASE_EVENT_KINDS = ["phase-start", "phase-end"] as const;
+const PHASES = ["command", "movement", "shooting", "charge", "fight", "any"] as const;
+const TURNS = ["your", "opponent", "either"] as const;
 const BUFF_SUBJECTS = ["this-unit", "this-model", "bearer"] as const;
 const FNP_AGAINST = ["all", "mortal", "psychic", "psychic-and-mortal"] as const;
 const CHARACTERISTICS = ["M", "T", "Sv", "W", "A", "Ld", "OC", "WS", "BS", "S", "AP", "D"] as const;
@@ -175,6 +179,26 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
       type: "object",
       required: ["kind"],
       properties: { kind: { enum: EVENT_KINDS } },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "event",
+    version: 3,
+    role: "EVENT",
+    label: "At an event",
+    description: "Marks when the mechanic triggers. Attack events are part of the effect; the others become the ability's trigger. The start or end of a phase also names the phase and whose turn it is.",
+    starter: { kind: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["kind"],
+      properties: {
+        kind: { enum: EVENT_KINDS },
+        // Present exactly when kind is a phase boundary; the leaf form shows them only then.
+        phase: { enum: PHASES, "x-only-when": { kind: PHASE_EVENT_KINDS } },
+        turn: { enum: TURNS, "x-only-when": { kind: PHASE_EVENT_KINDS } },
+      },
       additionalProperties: false,
     },
   },
@@ -496,10 +520,18 @@ export function normalizeFingerprintParameters(
         endpoint: enumOrSource(input.endpoint, ["end-of-phase", "end-of-turn", "end-of-battle-round", "end-of-battle"], "duration.endpoint"),
       };
     case "event":
-      exactKeys(input, ["kind"], family);
-      return version === 1
-        ? { kind: enumOrSource(input.kind, ["attack-made", "hit-roll", "wound-roll", "charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end"], "event.kind") }
-        : { kind: enumValue(input.kind, EVENT_KINDS, "event.kind") };
+      if (version < 3) exactKeys(input, ["kind"], family);
+      if (version === 1) return { kind: enumOrSource(input.kind, ["attack-made", "hit-roll", "wound-roll", "charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end"], "event.kind") };
+      if (version === 2) return { kind: enumValue(input.kind, EVENT_KINDS, "event.kind") };
+      {
+        const kind = enumValue(input.kind, EVENT_KINDS, "event.kind");
+        if (!(PHASE_EVENT_KINDS as readonly string[]).includes(kind)) {
+          exactKeys(input, ["kind"], family);
+          return { kind };
+        }
+        exactKeys(input, ["kind", "phase", "turn"], family);
+        return { kind, phase: enumValue(input.phase, PHASES, "event.phase"), turn: enumValue(input.turn, TURNS, "event.turn") };
+      }
     case "turn-start":
       exactKeys(input, ["turn"], family);
       return { turn: enumValue(input.turn, ["battle-round", "player-turn", "opponent-turn"], "turn-start.turn") };

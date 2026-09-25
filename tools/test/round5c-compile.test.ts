@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileLeaves, shapeSignature, type CompileLeaf } from "../src/round5c/compile.js";
 import { checkEntry, entryWithMechanics } from "../src/round5c/entries.js";
+import { previewLeaf } from "../src/round5c/leaf-preview.js";
 
 const dataRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../data/enrichment");
 
@@ -100,6 +101,30 @@ describe("Round 5C leaf compiler", () => {
     });
     expect(result.signature).toBe("EVENT(event:phase-start) · CONDITION(below-starting-strength) · CONDITION(leading-unit) · EFFECT(reroll) · EFFECT(roll-modifier) · DURATION(duration)");
     expect(rendered(authored("adeptus-mechanicus", "control-edict"), leaves).length).toBeGreaterThan(0);
+  });
+
+  it("narrows a phase-boundary trigger by phase and whose turn", () => {
+    const command = compiled([leaf("EVENT", "event", { kind: "phase-start", phase: "command", turn: "your" }, 3), leaf("EFFECT", "resource-action", { resource: "command-point", operation: "gain", amount: 1 })]);
+    expect(command.mechanics.trigger).toEqual({ event: "start-of-phase", condition: { operator: "and", operands: [
+      { type: "phase-is", parameters: { phase: "command" } }, { type: "player-turn-is", parameters: { turn: "your" } },
+    ] } });
+    expect(compiled([leaf("EVENT", "event", { kind: "phase-end", phase: "fight", turn: "opponent" }, 3), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]).mechanics.trigger)
+      .toEqual({ event: "end-of-phase", condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "fight" } }, { type: "player-turn-is", parameters: { turn: "opponent" } }] } });
+    expect(rendered(authored("adeptus-mechanicus", "control-edict"), [leaf("EVENT", "event", { kind: "phase-start", phase: "command", turn: "your" }, 3), leaf("EFFECT", "resource-action", { resource: "command-point", operation: "gain", amount: 1 })]))
+      .toMatch(/Command phase/iu);
+    expect(compiled([leaf("EVENT", "event", { kind: "phase-end", phase: "any", turn: "either" }, 3), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]).mechanics.trigger).toEqual({ event: "end-of-phase" });
+    expect(shapeSignature([leaf("EVENT", "event", { kind: "phase-start", phase: "fight", turn: "opponent" }, 3)])).toBe("EVENT(event:phase-start)");
+  });
+
+  it("previews each leaf through the describer and names invalid parameters", () => {
+    // Today's describer wording; it should read "at the start of your Command phase" once the describer folds phase conditions into the event.
+    expect(previewLeaf({ family_id: "event", parameters: { kind: "phase-start", phase: "command", turn: "your" } }).text).toBe("at the start of the phase, if during the Command phase and in your turn");
+    expect(previewLeaf({ family_id: "event", parameters: { kind: "phase-start" } }).problem).toMatch(/exactly: kind, phase, turn/u);
+    expect(previewLeaf({ family_id: "event", parameters: { kind: "charge", phase: "command", turn: "your" } }).problem).toMatch(/exactly: kind/u);
+    expect(previewLeaf({ family_id: "feel-no-pain", parameters: { subject: "this-unit", threshold: 5, against: "mortal" } }).text).toMatch(/Feel No Pain 5\+/u);
+    expect(previewLeaf({ family_id: "leading-unit", parameters: { subject: "this-model", attachment: "leading" } }).text).toBeTruthy();
+    expect(previewLeaf({ family_id: "duration", parameters: { endpoint: "end-of-turn" } }).text).toBe("until the end of the turn");
+    expect(previewLeaf({ family_id: "event", parameters: { kind: "attack-made" } }).text).toMatch(/part of the effect/u);
   });
 
   it("keeps attack events implicit and names them only as attack in the shape", () => {

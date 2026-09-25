@@ -884,7 +884,7 @@ function pronoun(subj: string): string {
  * ("Once per battle, …"); `trail` sits after the trigger/condition and before
  * the effect ("…, until the end of the phase, …"). `permanent` adds nothing.
  */
-function durationClauses(duration: string | undefined): { lead: string; trail: string } {
+export function durationClauses(duration: string | undefined): { lead: string; trail: string } {
   switch (duration) {
     case "attack-sequence":
       return { lead: "", trail: "until that unit finishes resolving its attacks" };
@@ -936,7 +936,7 @@ const TRIGGER_ATTACK_MODELS: Record<string, string> = {
 };
 
 /** Reactive trigger → front-of-sentence lead clause ("an enemy unit ends a move within 9\" of this model"). */
-function describeTrigger(t: AbilityTrigger): string {
+export function describeTrigger(t: AbilityTrigger): string {
   let s = eventClause(t.event);
   if (t.subject === "friendly-unit") s = s.replace(/\b(?:the|a) unit\b/g, "a friendly unit");
   if (t.subject === "enemy-unit") s = s.replace(/\b(?:the|a) unit\b/g, "an enemy unit");

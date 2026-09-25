@@ -283,13 +283,13 @@ describe("Round 5C family versions", () => {
       const lead = legacy("lead", LEAD, "leading-unit", { subject: "this-model" });
       legacy("shot", "After this unit has shot", "event", { kind: { source: "After this unit has shot" } });
       const odd = legacy("odd", "When a glimmer is spent", "event", { kind: { source: "When a glimmer is spent" } });
-      db.prepare("UPDATE semantic_families SET status = 'deprecated' WHERE version = 1 AND id IN ('leading-unit', 'event', 'weapon-ability-grant')").run();
+      db.prepare("UPDATE semantic_families SET status = 'deprecated' WHERE (version = 1 AND id IN ('leading-unit', 'event', 'weapon-ability-grant')) OR (version = 2 AND id = 'event')").run();
 
       const report = upgradeFamilyVersions(db);
       expect(report).toMatchObject({ migrated_fingerprints: 2, migrated_annotations: 2 });
       expect(report.unmapped).toEqual([expect.objectContaining({ family_id: "event", active_annotations: 1 })]);
       expect(getAbility(db, current(db, "lead").id).annotations).toEqual([expect.objectContaining({ family_version: 2, parameters: { subject: "this-model", attachment: "leading" } })]);
-      expect(getAbility(db, current(db, "shot").id).annotations).toEqual([expect.objectContaining({ family_version: 2, parameters: { kind: "after-shooting" } })]);
+      expect(getAbility(db, current(db, "shot").id).annotations).toEqual([expect.objectContaining({ family_version: 3, parameters: { kind: "after-shooting" } })]);
       expect(db.prepare("SELECT status FROM annotations WHERE id = ?").get(lead)).toEqual({ status: "superseded" });
       expect(db.prepare("SELECT status FROM annotations WHERE id = ?").get(odd)).toEqual({ status: "active" });
       expect(upgradeFamilyVersions(db)).toMatchObject({ migrated_fingerprints: 0, migrated_annotations: 0 });

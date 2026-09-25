@@ -40,6 +40,8 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
       return null;
     },
   },
+  // Version 3 names the phase of a phase boundary, which older leaves never recorded.
+  { family: "event", from: 2, to: 3, map: (parameters) => (parameters.kind === "phase-start" || parameters.kind === "phase-end" ? null : { kind: parameters.kind }) },
 ];
 
 export type FamilyVersionReport = {
@@ -49,6 +51,21 @@ export type FamilyVersionReport = {
   /** Deprecated fingerprints that still carry active annotations and have no current meaning. */
   unmapped: Array<{ fingerprint_id: string; family_id: string; active_annotations: number }>;
 };
+
+/**
+ * Apply successive mappings from one version until no later mapping exists, so a leaf moves
+ * straight to the current version even when intermediate versions are already deprecated.
+ */
+function mapToLatest(family: string, from: number, parameters: Record<string, unknown>): { version: number; parameters: Record<string, unknown> } | null {
+  let version = from;
+  let current: Record<string, unknown> | null = parameters;
+  for (let step = FAMILY_VERSION_MAPPINGS.find((item) => item.family === family && item.from === version); step; step = FAMILY_VERSION_MAPPINGS.find((item) => item.family === family && item.from === version)) {
+    current = step.map(current);
+    if (!current) return null;
+    version = step.to;
+  }
+  return { version, parameters: current };
+}
 
 export function upgradeFamilyVersions(db: DatabaseSync): FamilyVersionReport {
   const report: FamilyVersionReport = { migrated_fingerprints: 0, migrated_annotations: 0, repointed_proposals: 0, unmapped: [] };
@@ -73,7 +90,7 @@ export function upgradeFamilyVersions(db: DatabaseSync): FamilyVersionReport {
         SELECT id, span_id, origin, confirmed_by FROM annotations
         WHERE fingerprint_id = ? AND status = 'active' ORDER BY id
       `).all(fingerprint.id) as Array<{ id: number; span_id: number; origin: string; confirmed_by: string }>;
-      const mapped = mapping.map(JSON.parse(fingerprint.parameters_json) as Record<string, unknown>);
+      const mapped = mapToLatest(mapping.family, mapping.from, JSON.parse(fingerprint.parameters_json) as Record<string, unknown>);
       if (!mapped) {
         if (annotations.length > 0) {
           report.unmapped.push({ fingerprint_id: fingerprint.id, family_id: mapping.family, active_annotations: annotations.length });
@@ -82,7 +99,7 @@ export function upgradeFamilyVersions(db: DatabaseSync): FamilyVersionReport {
         db.prepare("UPDATE fingerprints SET status = 'superseded' WHERE id = ?").run(fingerprint.id);
         continue;
       }
-      const successor = validateFingerprint(db, mapping.family, mapped, mapping.to);
+      const successor = validateFingerprint(db, mapping.family, mapped.parameters, mapped.version);
       const now = new Date().toISOString();
       for (const annotation of annotations) {
         db.prepare("UPDATE annotations SET status = 'superseded' WHERE id = ? AND status = 'active'").run(annotation.id);

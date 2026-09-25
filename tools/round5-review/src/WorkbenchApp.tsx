@@ -892,13 +892,13 @@ export default function WorkbenchApp() {
           </> : <p className="wb-help">Choose an ability to inspect source provenance, span decisions, and whole-context review.</p>}
         </aside></div>
       </>}
-      {view === "leaves" && panel("Leaves", <LeavesPage families={families as unknown as Family[]} faction={faction} revision={revision} busy={!canWrite}
+      {view === "leaves" && panel("Leaves", <LeavesPage families={families as unknown as Family[]} faction={faction} revision={revision} busy={busy}
         perform={(work) => void perform(work)} reviewer={REVIEWER} onBatch={(batchId) => setBatches((current) => [...current, batchId])}
         openAbility={openAbility} setStatus={setStatus} />, "Decide each spelling once; it applies to every source.")}
-      {view === "shapes" && panel("Shapes", <ShapesPage faction={faction} revision={revision} busy={!canWrite}
+      {view === "shapes" && panel("Shapes", <ShapesPage faction={faction} revision={revision} busy={busy}
         perform={(work) => void perform(work)} reviewer={REVIEWER} onBatch={(batchId) => setBatches((current) => [...current, batchId])}
         openAbility={openAbility} setStatus={setStatus} />, "Approve how leaves combine once for every source with that shape.")}
-      {view === "publish" && panel("Publish", <PublishPage revision={revision} busy={!canWrite} perform={(work) => void perform(work)} setStatus={setStatus} />,
+      {view === "publish" && panel("Publish", <PublishPage revision={revision} busy={busy} perform={(work) => void perform(work)} setStatus={setStatus} />,
         "Write approved entries into tracked data. Commit the result with jj yourself.")}
       {view === "dashboard" && panel("Coverage census", <><div className="wb-actions"><button className="secondary" disabled={busy} onClick={refreshSourceStore}>Refresh sources from the store</button></div><p className="wb-help">Current source versions only. Confirmed leaf coverage and machine proposals are separate; whole-reviewed coverage is an independent safety gate. Missing denominators remain unknown.</p>{dashboard ? <MetricValue value={dashboard} /> : <p role="status">{loading ? "Loading recorded coverage…" : "Coverage unavailable. Reload to retry."}</p>}</>)}
     </main>

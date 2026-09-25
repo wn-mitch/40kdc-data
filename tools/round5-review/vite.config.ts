@@ -18,6 +18,7 @@ import { proposeLexical, retrieveFamilyCandidates } from "../src/round5c/retriev
 import { getQueue } from "../src/round5c/queue.js";
 import { listPublications, preparePublication, publishPublication } from "../src/round5c/publish.js";
 import { publishableEntries } from "../src/round5c/publish-queue.js";
+import { previewLeaf } from "../src/round5c/leaf-preview.js";
 import { REVIEWED_FAMILY_REGISTRY } from "../src/round5c/contracts.js";
 
 const appRoot = dirname(fileURLToPath(import.meta.url));
@@ -96,6 +97,9 @@ function round5WorkbenchBridge(): Plugin {
           }
           if (request.method === "GET" && path === "/leaves") {
             return json(response, 200, leafBoard(db, { factionId: url.searchParams.get("faction") ?? undefined }));
+          }
+          if (request.method === "POST" && path === "/leaves/preview") {
+            return json(response, 200, previewLeaf(await body()));
           }
           if (request.method === "POST" && path === "/leaves/confirm") {
             return json(response, 200, confirmSurface(db, await body()));
