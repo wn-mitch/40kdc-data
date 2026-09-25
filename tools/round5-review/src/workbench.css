@@ -455,3 +455,11 @@
 .wb-chip-on { border-color: var(--wb-role-effect); background: color-mix(in oklch, var(--wb-role-effect) 25%, transparent); }
 .wb-keyword-picker { display: grid; gap: 0.5rem; }
 .wb-leaf-preview { padding: 0.5rem 0.75rem; border-left: 2px solid var(--wb-role-effect); }
+
+.wb-split { display: grid; gap: 0.5rem; }
+.wb-split-words { line-height: 2; }
+.wb-cut { padding: 0 0.3rem; margin: 0 0.1rem; border: none; background: transparent; color: var(--muted, inherit); cursor: pointer; }
+.wb-cut-on { color: var(--wb-role-effect); font-weight: 700; }
+.wb-split-pieces { display: grid; gap: 0.5rem; padding-left: 1.25rem; }
+.wb-split-pieces li { display: grid; gap: 0.35rem; justify-items: start; }
+.wb-split-pieces .wb-leaf-form { justify-self: stretch; }

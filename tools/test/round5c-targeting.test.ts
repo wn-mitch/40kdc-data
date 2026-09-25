@@ -9,6 +9,7 @@ import { normalizeFingerprintParameters, validateFingerprint } from "../src/roun
 import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { upgradeFamilyVersions } from "../src/round5c/family-versions.js";
 import { getAbility } from "../src/round5c/review.js";
+import { surfaceWarnings } from "../src/round5c/surface-lint.js";
 import { refreshSources } from "../src/round5c/source.js";
 
 type DatabaseSync = DatabaseType;
@@ -143,5 +144,17 @@ describe("Round 5C targeting families", () => {
     expect(() => normalizeFingerprintParameters("select-unit", { scope: "enemy", distance: "any", inches: 12, visible: true }, 1)).toThrow(/exactly/u);
     expect(() => normalizeFingerprintParameters("attack", { direction: "makes", unit: "this-model" }, 1)).toThrow(/exactly/u);
     expect(() => normalizeFingerprintParameters("event", { kind: "attack-made" }, 4)).toThrow(/event.kind/u);
+  });
+
+  it("warns when a decided spelling says more than its meaning", () => {
+    const plus = { roll: "hit", operation: "add", value: 1 };
+    expect(surfaceWarnings("this unit's ranged blows gain a bonus", "EFFECT", "roll-modifier", plus)).toEqual([expect.stringMatching(/Says ranged/u)]);
+    expect(surfaceWarnings("blows that target the foe gain a bonus", "EFFECT", "roll-modifier", plus)).toEqual([expect.stringMatching(/targets/u)]);
+    expect(surfaceWarnings("gain a bonus if the foe is thinned", "EFFECT", "roll-modifier", plus)).toEqual([expect.stringMatching(/condition/u)]);
+    expect(surfaceWarnings("gain a bigger bonus instead", "EFFECT", "roll-modifier", plus)).toEqual([expect.stringMatching(/instead/u)]);
+    // The meaning already carries the qualifier.
+    expect(surfaceWarnings("each time this model makes a ranged attack", "EVENT", "attack", { direction: "makes", unit: "this-model", attack_type: "ranged" })).toEqual([]);
+    expect(surfaceWarnings("melee weapons gain a bonus ability", "EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "melee" })).toEqual([]);
+    expect(surfaceWarnings("each time this model makes a ranged attack", "EVENT", "attack", { direction: "makes", unit: "this-model", attack_type: "melee" })).toHaveLength(1);
   });
 });

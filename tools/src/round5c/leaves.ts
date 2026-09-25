@@ -6,6 +6,7 @@ import { getCurrentCoverage, type AbilityCoverage, type UncoveredInterval } from
 import { bumpWorkbenchRevision, insertSpan, invalidateWholeReview, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
 import { normalizedProjection, normalizedSurface } from "./matching.js";
 import { candidateChunks, ftsQuery, matchesAt } from "./retrieval.js";
+import { surfaceWarnings } from "./surface-lint.js";
 
 /**
  * Leaf surfaces: one decision per spelling. A row says "this normalized source wording means
@@ -16,7 +17,7 @@ import { candidateChunks, ftsQuery, matchesAt } from "./retrieval.js";
 
 
 /** Uncovered wording that joins leaves without meaning anything itself. */
-const GLUE = new Set(["and"]);
+const GLUE = new Set(["and", "as well"]);
 const EDGE_PUNCTUATION = /^[\s\p{P}]+|[\s\p{P}]+$/gu;
 const LEADING_GLUE = new RegExp(`^(?:${[...GLUE].join("|")})(?=[\\s\\p{P}])`, "iu");
 const TRAILING_GLUE = new RegExp(`(?<=[\\s\\p{P}])(?:${[...GLUE].join("|")})$`, "iu");
@@ -424,7 +425,7 @@ export function applyLeafUndo(db: DatabaseSync, batchId: string, reversalId: str
   }
 }
 
-export type BoardSurface = { surface_id: number | null; surface: string; sample_text: string; annotations: number; pending: number; sources: number };
+export type BoardSurface = { surface_id: number | null; surface: string; sample_text: string; annotations: number; pending: number; sources: number; warnings?: string[] };
 export type BoardLeaf = {
   fingerprint_id: string; family_id: string; family_version: number; role: string; parameters: Record<string, unknown>;
   retired_version: boolean; surfaces: BoardSurface[];
@@ -540,6 +541,9 @@ export function leafBoard(db: DatabaseSync, options: { factionId?: string } = {}
       untiled.set(surface, entry);
     }
     if (hasLeaf && distinct.size === 1) untiled.get([...distinct][0]!)!.unlocks += 1;
+  }
+  for (const entry of leaves.values()) {
+    for (const item of entry.surfaces) item.warnings = surfaceWarnings(item.sample_text, entry.role, entry.family_id, entry.parameters);
   }
   return {
     leaves: [...leaves.values()].sort((left, right) => left.role.localeCompare(right.role) || left.family_id.localeCompare(right.family_id)

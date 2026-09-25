@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { choices, freeText, numeric, prefillFromSource } from "./leaf-prefill";
 import { api } from "./workbench-api";
 
 /** One reviewed family as the bridge lists it (deprecated versions are never listed). */
@@ -8,7 +9,11 @@ export type Family = {
   starter: Record<string, unknown>;
   parameterSchema: { properties?: Record<string, Property> };
 };
-type Property = { enum?: string[]; anyOf?: Property[]; type?: string; pattern?: string; minimum?: number; maximum?: number; "x-only-when"?: Record<string, readonly string[]> };
+export type Property = {
+  enum?: string[]; anyOf?: Property[]; type?: string; pattern?: string; minimum?: number; maximum?: number;
+  items?: { enum?: string[]; type?: string; pattern?: string };
+  "x-only-when"?: Record<string, readonly string[]>;
+};
 
 /** A property applies only when the other parameters it depends on have one of the listed values. */
 const applies = (property: Property, parameters: Record<string, unknown>) =>
@@ -16,45 +21,14 @@ const applies = (property: Property, parameters: Record<string, unknown>) =>
 
 const ROLE_LABELS: Record<string, string> = {
   CONDITION: "Condition: when it applies", EVENT: "Event: when it fires", EFFECT: "Effect: what changes", DURATION: "Duration: how long",
+  COMBINATOR: "Combinator: how effects join",
 };
 
-function choices(property: Property): string[] {
-  return property.enum ?? property.anyOf?.flatMap((item) => item.enum ?? []) ?? [];
-}
 const sourceable = (property: Property) => property.anyOf?.some((item) => item.type === "object") ?? false;
-const numeric = (property: Property) => property.type === "integer" || (property.anyOf?.some((item) => item.type === "integer") ?? false);
-const freeText = (property: Property) => property.anyOf?.some((item) => item.type === "string") ?? property.type === "string";
 
 /** Weapon abilities that carry a value, and the values GW prints for them. */
 const VALUED_KEYWORDS = ["Sustained Hits", "Rapid Fire", "Melta"] as const;
 const KEYWORD_VALUES = ["1", "2", "3", "D3", "D6"] as const;
-const titleCase = (text: string) => text.toLowerCase().replace(/(^|[\s-])(\p{L})/gu, (_match, lead: string, letter: string) => lead + letter.toUpperCase());
-
-/** The weapon ability named in brackets in the source, spelled the way the DSL spells it. */
-function keywordFromSource(exactText: string, options: readonly string[]): string | null {
-  const bracketed = /\[([^\]]+)\]/u.exec(exactText)?.[1];
-  if (!bracketed) return null;
-  const named = options.find((option) => option.toLowerCase() === bracketed.trim().toLowerCase());
-  if (named) return named;
-  const valued = /^(sustained hits|rapid fire|melta) (\d|d3|d6)$/iu.exec(bracketed.trim());
-  return valued ? `${titleCase(valued[1]!)} ${valued[2]!.toUpperCase()}` : null;
-}
-
-/** What the source wording states outright about an event: kind, phase, and whose turn. */
-function eventFromSource(exactText: string): Record<string, unknown> {
-  const boundary = /\b(start|end) of (your opponent's|your|the|each|either player's) (command|movement|shooting|charge|fight) phase\b/iu.exec(exactText);
-  if (boundary) {
-    const owner = boundary[2]!.toLowerCase();
-    return {
-      kind: boundary[1]!.toLowerCase() === "start" ? "phase-start" : "phase-end",
-      phase: boundary[3]!.toLowerCase(),
-      turn: owner === "your" ? "your" : owner === "your opponent's" ? "opponent" : "either",
-    };
-  }
-  if (/\bafter this unit has shot\b/iu.test(exactText)) return { kind: "after-shooting" };
-  if (/\bmakes an attack\b/iu.test(exactText)) return { kind: "attack-made" };
-  return {};
-}
 
 /** Buttons that act as one radio group; better than a dropdown for a handful of choices. */
 function Chips({ label, options, value, onChange, render = (option) => option.replaceAll("-", " ") }: {
@@ -78,6 +52,17 @@ function KeywordPicker({ options, value, onChange }: { options: readonly string[
     <input aria-label="Other weapon ability" placeholder="Other, for example Anti-Infantry 4+" value={options.includes(value) || valued ? "" : value}
       onChange={(event) => onChange(event.target.value)} />
   </div>;
+}
+
+/** Unit keywords typed as a comma-separated list; the text is kept as typed until it parses to new keywords. */
+function KeywordList({ value, onChange }: { value: string[]; onChange: (value: string[]) => void }) {
+  const [text, setText] = useState(value.join(", "));
+  const parse = (raw: string) => raw.split(",").map((item) => item.trim().toUpperCase()).filter(Boolean);
+  useEffect(() => {
+    if (parse(text).join("\u0000") !== value.join("\u0000")) setText(value.join(", "));
+  }, [value.join("\u0000")]);
+  return <input value={text} placeholder="For example CHARACTER, or MONSTER, VEHICLE"
+    onChange={(event) => { setText(event.target.value); onChange(parse(event.target.value)); }} />;
 }
 
 /** A short, readable name for a leaf: its family label and parameters. */
@@ -108,22 +93,8 @@ export function LeafForm({ families, exactText, role, initial, busy, submitLabel
   const properties = family?.parameterSchema.properties ?? {};
   const choose = (id: string) => {
     setFamilyId(id);
-    const chosen = families.find((item) => item.id === id);
-    // Nothing is chosen by default. Only what the source states outright is filled in: the
-    // bracketed weapon ability, melee or ranged, an "N+" threshold, and an event's phase.
-    const prefill: Record<string, unknown> = id === "event" ? eventFromSource(exactText) : {};
-    for (const [name, property] of Object.entries(chosen?.parameterSchema.properties ?? {})) {
-      if (name === "weapon_type") {
-        const limited = /\b(melee|ranged) weapons?\b/iu.exec(exactText)?.[1]?.toLowerCase();
-        if (limited) prefill[name] = limited;
-      } else if (freeText(property)) {
-        const keyword = keywordFromSource(exactText, choices(property));
-        if (keyword) prefill[name] = keyword;
-      } else if (numeric(property) && name === "threshold") {
-        const threshold = /\b([2-6])\+/u.exec(exactText)?.[1];
-        if (threshold) prefill[name] = Number(threshold);
-      }
-    }
+    // Nothing is chosen by default; only what the source wording states outright is filled in.
+    const prefill = prefillFromSource(families.find((item) => item.id === id), exactText);
     setParameters(prefill);
   };
   // Changing a parameter drops the ones that stop applying (a phase once the event is no longer a phase boundary).
@@ -135,7 +106,7 @@ export function LeafForm({ families, exactText, role, initial, busy, submitLabel
   const visible = Object.entries(properties).filter(([, property]) => applies(property, parameters));
   const complete = family && visible.every(([name]) => {
     const value = parameters[name];
-    return value !== "" && value !== null && value !== undefined
+    return value !== "" && value !== null && value !== undefined && !(Array.isArray(value) && value.length === 0)
       && !(typeof value === "object" && "source" in value && !String((value as { source: unknown }).source).trim());
   });
   const roles = role ? [role] : Object.keys(ROLE_LABELS);
@@ -162,6 +133,23 @@ export function LeafForm({ families, exactText, role, initial, busy, submitLabel
       const options = choices(property);
       const label = name.replaceAll("_", " ");
       const isSource = value !== null && typeof value === "object" && "source" in value;
+      if (property.type === "boolean") {
+        return <fieldset key={name}><legend>{label}</legend>
+          <Chips label={label} options={["no", "yes"]} value={value === true ? "yes" : value === false ? "no" : null} onChange={(next) => set(name, next === "yes")} /></fieldset>;
+      }
+      if (property.type === "array" && property.items?.enum) {
+        const selected = Array.isArray(value) ? value.map(String) : [];
+        return <fieldset key={name} className="wb-field-wide"><legend>{label} (any of)</legend>
+          <div className="wb-chips" role="group" aria-label={label}>{property.items.enum.map((option) => {
+            const on = selected.includes(option);
+            return <button key={option} type="button" role="checkbox" aria-checked={on} className={on ? "wb-chip wb-chip-on" : "wb-chip"}
+              onClick={() => set(name, on ? selected.filter((item) => item !== option) : [...selected, option])}>{option.replaceAll("-", " ")}</button>;
+          })}</div></fieldset>;
+      }
+      if (property.type === "array") {
+        return <label key={name} className="wb-field-wide">{label} (any of, comma-separated)
+          <KeywordList value={Array.isArray(value) ? value.map(String) : []} onChange={(next) => set(name, next)} /></label>;
+      }
       if (freeText(property)) {
         return <fieldset key={name} className="wb-field-wide"><legend>{label}</legend>
           <KeywordPicker options={options} value={typeof value === "string" ? value : ""} onChange={(next) => set(name, next)} /></fieldset>;

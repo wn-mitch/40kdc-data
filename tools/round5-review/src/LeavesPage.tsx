@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 
 import { LeafForm, leafLabel, type Family } from "./LeafForm";
+import { SplitEditor } from "./SplitEditor";
 import { api } from "./workbench-api";
 
-type Surface = { surface_id: number | null; surface: string; sample_text: string; annotations: number; pending: number; sources: number };
+type Surface = { surface_id: number | null; surface: string; sample_text: string; annotations: number; pending: number; sources: number; warnings?: string[] };
 type Leaf = { fingerprint_id: string; family_id: string; family_version: number; role: string; parameters: Record<string, unknown>; retired_version: boolean; surfaces: Surface[] };
 type Wording = { surface: string; sample_text: string; occurrences: number; unlocks?: number; sample_ability_version_id: number };
 type Board = { leaves: Leaf[]; unlabeled: Wording[]; untiled: Wording[]; totals: { current_sources: number; tiled_sources: number; sources_with_leaves: number } };
 type ApplyReport = { batch_id: string; applied: number; already: number; blocked: Array<{ faction_id: string; ability_id: string; reason: string }> };
 
-const ROLE_ORDER = ["CONDITION", "EVENT", "EFFECT", "DURATION"];
+const ROLE_ORDER = ["CONDITION", "EVENT", "EFFECT", "DURATION", "COMBINATOR"];
 const BLOCK_REASONS: Record<string, string> = { OTHER_LEAF_HERE: "another leaf already covers this text", REJECTED_HERE: "a reviewer rejected this meaning here" };
 
 /**
@@ -83,8 +84,11 @@ export function LeavesPage({ families, faction, revision, busy, perform, reviewe
     {editing === key
       ? <LeafForm families={families} exactText={item.sample_text} role={role} busy={busy} submitLabel="Decide everywhere"
         onSubmit={(familyId, parameters) => decide(item.sample_text, familyId, parameters)} onCancel={() => setEditing(null)} />
+      : editing === `split:${key}`
+        ? <SplitEditor text={item.sample_text} families={families} busy={busy} onDecide={decide} onCancel={() => setEditing(null)} />
       : <div className="wb-actions">
         <button className="primary" onClick={() => setEditing(key)}>Name this leaf</button>
+        <button className="secondary" onClick={() => setEditing(`split:${key}`)}>Split into leaves</button>
         <button className="text-button" onClick={() => openAbility(item.sample_ability_version_id)}>Open a source</button>
       </div>}
   </li>;
@@ -124,6 +128,7 @@ export function LeavesPage({ families, faction, revision, busy, perform, reviewe
               return <li key={surface.surface}>
                 <span className="wb-surface-text">“{surface.sample_text}”</span>
                 <small>{surface.surface_id ? "decided everywhere" : "not decided"} · {surface.annotations} annotated{surface.pending ? ` · ${surface.pending} pending` : ""} · {surface.sources} source{surface.sources === 1 ? "" : "s"}</small>
+                {surface.warnings?.map((warning) => <small key={warning} className="wb-state wb-state-blocked">{warning}</small>)}
                 <span className="wb-actions">
                   {!surface.surface_id && <button className="primary" disabled={busy || leaf.retired_version} onClick={() => decide(surface.sample_text, leaf.family_id, leaf.parameters)}>Decide everywhere</button>}
                   {surface.surface_id && surface.pending > 0 && <button className="primary" disabled={busy} onClick={() => apply(surface)}>Apply to {surface.pending} pending</button>}
