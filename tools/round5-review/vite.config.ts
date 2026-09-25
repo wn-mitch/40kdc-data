@@ -16,7 +16,8 @@ import { approveShape, getShape, listShapes, rejectShapeMembers } from "../src/r
 import { applyLeafSurfaces, backfillLeafSurfaces, confirmSurface, leafBoard, mergeFingerprints, moveSurface, retireSurface } from "../src/round5c/leaves.js";
 import { proposeLexical, retrieveFamilyCandidates } from "../src/round5c/retrieval.js";
 import { getQueue } from "../src/round5c/queue.js";
-import { listPublications } from "../src/round5c/publish.js";
+import { listPublications, preparePublication, publishPublication } from "../src/round5c/publish.js";
+import { publishableEntries } from "../src/round5c/publish-queue.js";
 import { REVIEWED_FAMILY_REGISTRY } from "../src/round5c/contracts.js";
 
 const appRoot = dirname(fileURLToPath(import.meta.url));
@@ -122,6 +123,17 @@ function round5WorkbenchBridge(): Plugin {
           }
           if (request.method === "POST" && path === "/shapes/reject") {
             return json(response, 200, rejectShapeMembers(db, await body()));
+          }
+          if (request.method === "GET" && path === "/publish/pending") {
+            return json(response, 200, publishableEntries(db));
+          }
+          if (request.method === "POST" && path === "/publish/prepare") {
+            const payload = await body() as { faction_id: string; entry_ids: string[] };
+            return json(response, 200, await preparePublication(db, { faction_id: payload.faction_id, entry_ids: payload.entry_ids }));
+          }
+          if (request.method === "POST" && path === "/publish/commit") {
+            const payload = await body() as { batch_id: string; preview_hash: string };
+            return json(response, 200, await publishPublication(db, { batch_id: payload.batch_id, preview_hash: payload.preview_hash }));
           }
           if (request.method === "GET" && path === "/dashboard") {
             return json(response, 200, getDashboard(db));

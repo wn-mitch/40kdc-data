@@ -5,11 +5,12 @@ import { api, readable } from "./workbench-api";
 import { SourceWorkPanel, type SourceWorkAbility } from "./SourceWorkPanel";
 import { LeavesPage } from "./LeavesPage";
 import { ShapesPage } from "./ShapesPage";
+import { PublishPage } from "./PublishPage";
 import type { Family } from "./LeafForm";
 import "./workbench.css";
 
 type Role = "EFFECT" | "DURATION" | "EVENT" | "CONDITION";
-type View = "leaves" | "shapes" | "abilities" | "dashboard";
+type View = "leaves" | "shapes" | "publish" | "abilities" | "dashboard";
 type Action = "confirm" | "correct" | "reject" | "novel" | "ambiguous" | "confirm-connective";
 type Fragment = { fragment: string; start_byte: number; end_byte: number; text: string };
 type Span = {
@@ -74,6 +75,7 @@ const REVIEWER = "local-reviewer";
 const VIEWS: { id: View; label: string }[] = [
   { id: "leaves", label: "Leaves" },
   { id: "shapes", label: "Shapes" },
+  { id: "publish", label: "Publish" },
   { id: "abilities", label: "Sources" },
   { id: "dashboard", label: "Coverage" },
 ];
@@ -896,6 +898,8 @@ export default function WorkbenchApp() {
       {view === "shapes" && panel("Shapes", <ShapesPage faction={faction} revision={revision} busy={!canWrite}
         perform={(work) => void perform(work)} reviewer={REVIEWER} onBatch={(batchId) => setBatches((current) => [...current, batchId])}
         openAbility={openAbility} setStatus={setStatus} />, "Approve how leaves combine once for every source with that shape.")}
+      {view === "publish" && panel("Publish", <PublishPage revision={revision} busy={!canWrite} perform={(work) => void perform(work)} setStatus={setStatus} />,
+        "Write approved entries into tracked data. Commit the result with jj yourself.")}
       {view === "dashboard" && panel("Coverage census", <><div className="wb-actions"><button className="secondary" disabled={busy} onClick={refreshSourceStore}>Refresh sources from the store</button></div><p className="wb-help">Current source versions only. Confirmed leaf coverage and machine proposals are separate; whole-reviewed coverage is an independent safety gate. Missing denominators remain unknown.</p>{dashboard ? <MetricValue value={dashboard} /> : <p role="status">{loading ? "Loading recorded coverage…" : "Coverage unavailable. Reload to retry."}</p>}</>)}
     </main>
   </div>;

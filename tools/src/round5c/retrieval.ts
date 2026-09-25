@@ -257,8 +257,13 @@ export function proposeLexical(db: DatabaseSync): { created: number; existing: n
     `);
     const now = new Date().toISOString();
 
+    // One scan per spelling and meaning: repeated confirmations of the same wording find the same matches.
+    const scanned = new Set<string>();
     for (const prototype of prototypeRows(db)) {
       const surface = normalizedSurface(prototype.exact_text);
+      const key = `${surface}\u0000${prototype.fingerprint_id}`;
+      if (scanned.has(key)) continue;
+      scanned.add(key);
       const query = ftsQuery(surface);
       if (!query) continue;
       const prototypeContext = prototype.context_text ?? surface;

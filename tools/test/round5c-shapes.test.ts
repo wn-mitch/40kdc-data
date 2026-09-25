@@ -8,6 +8,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { initializeWorkbench } from "../src/round5c/db.js";
 import { confirmSurface, moveSurface } from "../src/round5c/leaves.js";
 import { preparePublication, publishPublication } from "../src/round5c/publish.js";
+import { publishableEntries } from "../src/round5c/publish-queue.js";
 import { undoBatch } from "../src/round5c/review.js";
 import { approveShape, getShape, listShapes, rejectShapeMembers } from "../src/round5c/shapes.js";
 import { refreshSources } from "../src/round5c/source.js";
@@ -117,6 +118,9 @@ describe("Round 5C shapes", () => {
       SELECT compiled_entries.id FROM compiled_entries JOIN abilities ON abilities.id = compiled_entries.ability_version_id
       WHERE compiled_entries.status = 'approved' ORDER BY abilities.ability_id
     `).all() as Array<{ id: string }>).map((row) => row.id);
+    expect(publishableEntries(db)).toMatchObject({ factions: [{ faction_id: "fixture", entries: [
+      { ability_id: "alpha", changes: ["effect"] }, { ability_id: "copy", changes: ["effect"] }, { ability_id: "other", changes: ["effect"] },
+    ] }], stale: 0, unchanged: 0 });
     const preview = await preparePublication(db, { faction_id: "fixture", entry_ids: entryIds });
     expect(preview.ability_ids).toEqual(["alpha", "copy", "other"]);
     await publishPublication(db, { batch_id: preview.batch_id, preview_hash: preview.preview_hash });
@@ -127,5 +131,6 @@ describe("Round 5C shapes", () => {
       behavior: "passive",
     });
     expect(published.find((entry) => entry.ability_id === "partial")!.effect).toEqual(authoredEntry("partial").effect);
+    expect(publishableEntries(db)).toEqual({ factions: [], stale: 0, unchanged: 3 });
   }, 120_000);
 });
