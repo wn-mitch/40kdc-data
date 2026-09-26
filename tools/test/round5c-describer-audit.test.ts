@@ -20,13 +20,15 @@ describe("Round 5C leaf describer audit", () => {
       "leading-unit": { unrendered: ["subject", "attachment"], colliding: [], problems: 0 },
       // Who attacks and which way only show in the effect's target, not in text of their own.
       attack: { unrendered: ["direction", "unit"], colliding: [], problems: 0 },
+      // Engagement Range ignores subject: target in the describer (all four ports).
+      "unit-state": { unrendered: [], colliding: ["subject"], problems: 0 },
       // On its own, "the attack" has no attack leaf to belong to, so it reads as the unit.
       "characteristic-modifier": { unrendered: [], colliding: ["subject"], problems: 0 },
     });
   });
 
   it("tells the attack's target apart from this unit for every predicate", () => {
-    for (const family of ["unit-state", "unit-keyword", "unit-mark", "unit-position", "unit-activity"]) {
+    for (const family of ["unit-keyword", "unit-mark", "unit-position", "unit-activity"]) {
       expect(leafDescriberAudit().find((item) => item.family_id === family)).toMatchObject({ unrendered: [], collisions: [], problems: [] });
     }
     expect(describeCondition({ type: "unit-below-starting-strength", parameters: { subject: "target" } } as never)).toBe("the target unit is below starting strength");

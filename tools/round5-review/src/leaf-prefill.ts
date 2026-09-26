@@ -80,6 +80,7 @@ function unitKeywords(text: string): string[] {
 
 const STATE_WORDS: Array<[RegExp, string]> = [
   [/starting strength/iu, "below-starting-strength"], [/half[- ‑]?strength/iu, "below-half-strength"], [/battle[- ]?shocked/iu, "battle-shocked"],
+  [/engagement range|\bengaged\b|\bunengaged\b/iu, "engaged"],
 ];
 const MARK_WORDS: Array<[RegExp, string]> = [
   [/oath of moment/iu, "oath-of-moment"], [/afflicted/iu, "afflicted"], [/spotted/iu, "spotted"], [/hidden/iu, "hidden"], [/marked/iu, "marked"],
@@ -173,6 +174,33 @@ function windowFromSource(text: string): Record<string, unknown> {
   return window;
 }
 
+/** Keywords in capitals or bold, split on commas and "or"; "or" means any one of them. */
+function targetKeywords(text: string): { keywords: string[]; match: string } {
+  const plain = text.replaceAll("*", "");
+  const found = [...plain.matchAll(/\b[A-Z][A-Z'-]+(?: [A-Z][A-Z'-]+)*\b/gu)].map((match) => match[0].trim()).filter((word) => word.length > 1);
+  return { keywords: [...new Set(found)], match: /\bor\b/u.test(plain) && found.length > 1 ? "any" : "all" };
+}
+
+function targetFromSource(familyId: string, text: string): Record<string, unknown> {
+  const result: Record<string, unknown> = {};
+  const excludedPart = /\(excluding ([^)]+)\)/iu.exec(text)?.[1] ?? "";
+  const main = text.replace(/\(excluding [^)]+\)/iu, "").replace(/\bthat (?:has|was|had|is|disembarked)\b.*$/iu, "");
+  const { keywords, match } = targetKeywords(main);
+  result.keywords = keywords;
+  result.match = match;
+  result.selects = /\bmodel\b/iu.test(main) && !/\bunit\b/iu.test(main) ? "model" : "unit";
+  if (familyId === "stratagem-target") {
+    result.excluded_keywords = targetKeywords(excludedPart).keywords;
+    const upTo = /\bup to (two|three|four|\d+)\b/iu.exec(main)?.[1]?.toLowerCase();
+    if (upTo) {
+      result.count = "up-to";
+      result.count_max = ({ two: 2, three: 3, four: 4 } as Record<string, number>)[upTo] ?? Number(upTo);
+    } else result.count = /\bone or more\b/iu.test(main) ? "one-or-more" : "one";
+    result.side = /\benemy\b/iu.test(main) ? "enemy" : "your-army";
+  }
+  return result;
+}
+
 const PREDICATES = new Set(["unit-state", "unit-keyword", "unit-mark", "unit-position"]);
 
 export function prefillFromSource(family: Family | undefined, exactText: string): Record<string, unknown> {
@@ -211,7 +239,10 @@ export function prefillFromSource(family: Family | undefined, exactText: string)
     else if (/when (?:its|that) unit (?:is selected to )?fights?/iu.test(exactText)) prefill.timing = "when-its-unit-fights";
   }
   if (family.id === "unit-activity") {
-    const activities: Array<[RegExp, string]> = [[/charge/iu, "charged-this-turn"], [/advance/iu, "advanced-this-turn"], [/remained stationary/iu, "remained-stationary"], [/fought/iu, "fought-this-phase"], [/selected to shoot/iu, "selected-to-shoot-this-phase"]];
+    const activities: Array<[RegExp, string]> = [
+      [/selected to shoot/iu, "selected-to-shoot-this-phase"], [/selected to move/iu, "selected-to-move-this-phase"], [/selected to fight|fought/iu, "fought-this-phase"],
+      [/charge/iu, "charged-this-turn"], [/advance/iu, "advanced-this-turn"], [/remained stationary/iu, "remained-stationary"],
+    ];
     const activity = activities.find(([pattern]) => pattern.test(exactText))?.[1];
     if (activity) prefill.activity = activity;
     if (/\bnot\b|\bhas not\b|\bhasn't\b/iu.test(exactText)) prefill.negated = true;
@@ -232,6 +263,8 @@ export function prefillFromSource(family: Family | undefined, exactText: string)
       prefill.match = words.length > 1 ? "any" : "all";
     }
   }
+  if (family.id === "stratagem-target" || family.id === "triggering-target") Object.assign(prefill, targetFromSource(family.id, exactText));
+  if (family.id === "target-binding" && /selected as the target of/iu.test(exactText)) prefill.bound_to = "attacked-unit";
   if (family.id === "optional-use") {
     if (/\bthe bearer\b/iu.test(exactText)) prefill.who = "bearer";
     else if (/\byou can\b/iu.test(exactText)) prefill.who = "you";

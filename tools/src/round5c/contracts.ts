@@ -669,7 +669,7 @@ export function normalizeFingerprintParameters(
         value: boundedInteger(input.value, 1, 20, "characteristic-modifier.value"),
       };
     default: {
-      const extra = normalizeTargetingParameters(family, input) ?? normalizeEffectParameters(family, input) ?? normalizeRestrictionParameters(family, input) ?? normalizeDiceParameters(family, input);
+      const extra = normalizeTargetingParameters(family, input, version) ?? normalizeEffectParameters(family, input) ?? normalizeRestrictionParameters(family, input) ?? normalizeDiceParameters(family, input);
       if (extra) return extra;
       throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
     }

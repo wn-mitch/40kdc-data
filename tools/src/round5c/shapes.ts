@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
 
 import { hashJson } from "../round4/hash.js";
-import { compilationInputsHash } from "./compiled.js";
+import { compilationInputsHash, compiledIdentity } from "./compiled.js";
 import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
 import { coreCheckErrors } from "./core-checks.js";
 import { getCurrentCoverage } from "./coverage.js";
@@ -64,9 +64,9 @@ type EntryState = { status: string; inputs_hash: string; mechanics_hash: string 
 
 function entryStates(db: DatabaseSync): Map<number, EntryState[]> {
   const states = new Map<number, EntryState[]>();
-  for (const row of db.prepare("SELECT ability_version_id, status, inputs_hash, mechanics_json FROM compiled_entries WHERE status IN ('approved', 'rejected')").all() as Array<{ ability_version_id: number; status: string; inputs_hash: string; mechanics_json: string }>) {
+  for (const row of db.prepare("SELECT ability_version_id, status, inputs_hash, mechanics_json, core_json FROM compiled_entries WHERE status IN ('approved', 'rejected')").all() as Array<{ ability_version_id: number; status: string; inputs_hash: string; mechanics_json: string; core_json: string | null }>) {
     const list = states.get(row.ability_version_id) ?? [];
-    list.push({ status: row.status, inputs_hash: row.inputs_hash, mechanics_hash: hashJson(JSON.parse(row.mechanics_json)) });
+    list.push({ status: row.status, inputs_hash: row.inputs_hash, mechanics_hash: hashJson(compiledIdentity(JSON.parse(row.mechanics_json), row.core_json ? JSON.parse(row.core_json) : null)) });
     states.set(row.ability_version_id, list);
   }
   return states;
@@ -74,7 +74,7 @@ function entryStates(db: DatabaseSync): Map<number, EntryState[]> {
 
 /** approved: this exact compilation is approved; stale: an approval exists for older leaves; rejected: a reviewer refused this compilation. */
 function memberState(states: EntryState[] | undefined, inputsHash: string, compiled: Compiled): "approved" | "rejected" | "stale" | "open" {
-  const mechanicsHash = compiled.ok ? hashJson(compiled.mechanics) : null;
+  const mechanicsHash = compiled.ok ? hashJson(compiledIdentity(compiled.mechanics, compiled.core ?? null)) : null;
   const current = (states ?? []).filter((state) => state.inputs_hash === inputsHash && state.mechanics_hash === mechanicsHash);
   if (current.some((state) => state.status === "approved")) return "approved";
   if (current.some((state) => state.status === "rejected")) return "rejected";
@@ -112,6 +112,8 @@ export type ShapeMember = {
   source_text: string;
   authored_text: string | null;
   compiled_text: string | null;
+  /** The stratagem target the leaves set on the core record, when they set one. */
+  core_target: Record<string, unknown> | null;
   differs: boolean;
   state: "approved" | "rejected" | "stale" | "open";
   errors: string[];
@@ -146,10 +148,10 @@ export function getShape(db: DatabaseSync, signature: string, options: { faction
     if (compiled.signature !== signature) continue;
     const state = memberState(states.get(member.id), compilationInputsHash(db, member.id), compiled);
     const shown = render(member.faction_id, member.ability_id, compiled);
-    const key = `${member.source_hash}\u0000${shown.compiled}\u0000${shown.authored}\u0000${state}`;
+    const key = `${member.source_hash}\u0000${shown.compiled}\u0000${shown.authored}\u0000${state}\u0000${compiled.ok ? JSON.stringify(compiled.core ?? null) : ""}`;
     const group = groups.get(key) ?? {
       ability_version_ids: [], abilities: [], source_text: member.source_text, authored_text: shown.authored,
-      compiled_text: shown.compiled, differs: shown.differs, state, errors: shown.errors,
+      compiled_text: shown.compiled, core_target: compiled.ok ? compiled.core?.target_restrictions ?? null : null, differs: shown.differs, state, errors: shown.errors,
     };
     group.ability_version_ids.push(member.id);
     group.abilities.push({ ability_version_id: member.id, faction_id: member.faction_id, ability_id: member.ability_id, name: member.name });
@@ -193,7 +195,7 @@ function decide(db: DatabaseSync, value: unknown, status: "approved" | "rejected
         if (shown.errors.length > 0) throw new ShapeError(422, `${source.faction_id}/${source.ability_id} cannot be approved: ${shown.errors.join("; ")}`);
       }
       const inputsHash = compilationInputsHash(db, id);
-      const entryId = `compiled_${hashJson({ ability_version_id: id, inputs_hash: inputsHash, mechanics: compiled.mechanics, status })}`;
+      const entryId = `compiled_${hashJson({ ability_version_id: id, inputs_hash: inputsHash, mechanics: compiledIdentity(compiled.mechanics, compiled.core ?? null), status })}`;
       if (db.prepare("SELECT 1 FROM compiled_entries WHERE id = ? AND status = ?").get(entryId, status)) continue;
       if (status === "approved") {
         for (const previous of db.prepare("SELECT id FROM compiled_entries WHERE ability_version_id = ? AND status = 'approved'").all(id) as Array<{ id: string }>) {
@@ -202,10 +204,10 @@ function decide(db: DatabaseSync, value: unknown, status: "approved" | "rejected
         }
       }
       db.prepare(`
-        INSERT INTO compiled_entries (id, ability_version_id, shape_signature, mechanics_json, inputs_hash, status, batch_id, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO compiled_entries (id, ability_version_id, shape_signature, mechanics_json, core_json, inputs_hash, status, batch_id, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(id) DO UPDATE SET status = excluded.status, batch_id = excluded.batch_id
-      `).run(entryId, id, compiled.signature, JSON.stringify(compiled.mechanics), inputsHash, status, batchId, new Date().toISOString());
+      `).run(entryId, id, compiled.signature, JSON.stringify(compiled.mechanics), compiled.core ? JSON.stringify(compiled.core) : null, inputsHash, status, batchId, new Date().toISOString());
       member.run(batchId, `compiled-entry-${status}`, entryId);
       recorded += 1;
     }

@@ -54,6 +54,7 @@ const MARK_KEYWORDS: Record<string, string> = {
 const ACTIVITY_CONDITIONS: Record<string, string> = {
   "charged-this-turn": "charged-this-turn", "advanced-this-turn": "advanced-this-turn", "remained-stationary": "remained-stationary",
   "fought-this-phase": "has-fought-this-phase", "selected-to-shoot-this-phase": "unit-selected-to-shoot-this-phase",
+  "selected-to-move-this-phase": "unit-selected-to-move-this-phase",
 };
 
 const MORTAL_TARGETS: Record<string, string> = { target: "defender", "that-unit": "target", "this-unit": "unit", "this-model": "self" };
@@ -128,9 +129,9 @@ export function condition(leaf: CompileLeaf): Node {
         ? { type: "unit-below-starting-strength", parameters: { subject: "target" } }
         : { type: "unit-below-starting-strength" };
     case "unit-state":
-      return polarity(leaf, anyOf((leaf.parameters.states as string[]).map((state) => ({
-        type: STATE_CONDITIONS[state], ...(target ? { parameters: { subject: "target" } } : {}),
-      }))));
+      return polarity(leaf, anyOf((leaf.parameters.states as string[]).map((state) => state === "engaged"
+        ? { type: "engagement-state", parameters: { state: "engaged", ...(target ? { subject: "target" } : {}) } }
+        : { type: STATE_CONDITIONS[state], ...(target ? { parameters: { subject: "target" } } : {}) })));
     case "unit-keyword": {
       const keywords = leaf.parameters.keywords as string[];
       const type = target ? "target-has-keyword" : "unit-has-keyword";

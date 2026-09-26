@@ -48,6 +48,11 @@ describe("Leaf prefill", () => {
     expect(prefillFromSource(family("unit-activity"), "if that model has not fought this phase")).toEqual({ activity: "fought-this-phase", negated: true, subject: "this-unit" });
     expect(prefillFromSource(family("event"), "Your opponent's Shooting phase, just after an enemy unit has selected its targets")).toEqual({ kind: "enemy-selected-targets" });
     expect(prefillFromSource(family("event"), "when this unit is selected to fight")).toEqual({ kind: "selected-to-fight" });
+    expect(prefillFromSource(family("stratagem-target"), "One **ADEPTUS ASTARTES INFANTRY** or **ADEPTUS ASTARTES MOUNTED** unit from your army (excluding **TITANIC** units) that has not been selected to shoot this phase"))
+      .toEqual({ keywords: ["ADEPTUS ASTARTES INFANTRY", "ADEPTUS ASTARTES MOUNTED"], match: "any", selects: "unit", excluded_keywords: ["TITANIC"], count: "one", side: "your-army" });
+    expect(prefillFromSource(family("triggering-target"), "That **SPEEDER** unit")).toEqual({ keywords: ["SPEEDER"], match: "all", selects: "unit" });
+    expect(prefillFromSource(family("target-binding"), "that was selected as the target of one or more of the attacking unit’s attacks")).toEqual({ bound_to: "attacked-unit" });
+    expect(prefillFromSource(family("unit-activity"), "that has not been selected to move this phase")).toMatchObject({ activity: "selected-to-move-this-phase", negated: true });
     // Nothing stated, nothing chosen.
     expect(prefillFromSource(family("unit-state"), "if so")).toEqual({});
   });

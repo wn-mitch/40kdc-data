@@ -12,13 +12,17 @@ export const ATTACK_DIRECTIONS = ["makes", "targeted"] as const;
 export const ATTACK_UNITS = ["this-model", "this-unit", "bearer", "bearers-unit", "that-unit"] as const;
 export const ATTACK_TYPES = ["any", "melee", "ranged"] as const;
 export const PREDICATE_SUBJECTS = ["this-unit", "target"] as const;
-export const UNIT_STATES = ["below-starting-strength", "below-half-strength", "battle-shocked"] as const;
+const UNIT_STATES_V1 = ["below-starting-strength", "below-half-strength", "battle-shocked"] as const;
+/** Version 2 adds being within Engagement Range of an enemy unit (negated: unengaged). */
+export const UNIT_STATES = [...UNIT_STATES_V1, "engaged"] as const;
 export const UNIT_MARKS = ["oath-of-moment", "afflicted", "spotted", "hidden", "marked"] as const;
 export const POSITION_KINDS = ["closest-eligible", "within", "beyond", "objective-range"] as const;
 const DISTANCE_KINDS = ["within", "beyond"] as const;
 export const OBJECTIVE_CONTROLLERS = ["any", "you", "opponent"] as const;
 export const SELECT_SCOPES = ["enemy", "friendly"] as const;
-export const UNIT_ACTIVITIES = ["charged-this-turn", "advanced-this-turn", "remained-stationary", "fought-this-phase", "selected-to-shoot-this-phase"] as const;
+const UNIT_ACTIVITIES_V1 = ["charged-this-turn", "advanced-this-turn", "remained-stationary", "fought-this-phase", "selected-to-shoot-this-phase"] as const;
+/** Version 2 adds being selected to move this phase. Selected to fight is fought this phase. */
+export const UNIT_ACTIVITIES = [...UNIT_ACTIVITIES_V1, "selected-to-move-this-phase"] as const;
 const SELECT_DISTANCES = ["any", "within"] as const;
 const MAX_INCHES = 48;
 
@@ -55,6 +59,21 @@ export const TARGETING_FAMILIES: readonly SemanticFamilyDefinition[] = [
     parameterSchema: {
       type: "object",
       required: ["states", "subject", "negated"],
+      properties: { states: { type: "array", items: { enum: UNIT_STATES_V1 }, minItems: 1, uniqueItems: true }, ...subjectAndNegation },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "unit-state",
+    version: 2,
+    role: "CONDITION",
+    label: "Unit is (or is not) in a state",
+    description: "This unit or the attack's target is below its Starting Strength, Below Half-strength, Battle-shocked, or within Engagement Range of an enemy unit (negated: unengaged). Several states mean any of them.",
+    starter: { states: [], subject: "", negated: false },
+    parameterSchema: {
+      type: "object",
+      required: ["states", "subject", "negated"],
       properties: { states: { type: "array", items: { enum: UNIT_STATES }, minItems: 1, uniqueItems: true }, ...subjectAndNegation },
       additionalProperties: false,
     },
@@ -79,6 +98,21 @@ export const TARGETING_FAMILIES: readonly SemanticFamilyDefinition[] = [
     role: "CONDITION",
     label: "Unit has (or has not) acted",
     description: "This unit or the attack's target charged or Advanced this turn, Remained Stationary, fought this phase, or was selected to shoot this phase.",
+    starter: { activity: "", subject: "", negated: false },
+    parameterSchema: {
+      type: "object",
+      required: ["activity", "subject", "negated"],
+      properties: { activity: { enum: UNIT_ACTIVITIES_V1 }, ...subjectAndNegation },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "unit-activity",
+    version: 2,
+    role: "CONDITION",
+    label: "Unit has (or has not) acted",
+    description: "This unit or the attack's target charged or Advanced this turn, Remained Stationary, fought (or was selected to fight) this phase, or was selected to shoot or to move this phase.",
     starter: { activity: "", subject: "", negated: false },
     parameterSchema: {
       type: "object",
@@ -172,7 +206,7 @@ function keywordList(value: unknown): string[] {
 }
 
 /** Validate and canonicalise one targeting family's parameters, or return null for other families. */
-export function normalizeTargetingParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
+export function normalizeTargetingParameters(family: string, input: Record<string, unknown>, version = 1): Record<string, unknown> | null {
   const predicate = (label: string) => ({ subject: enumValue(input.subject, PREDICATE_SUBJECTS, `${label}.subject`), negated: booleanValue(input.negated, `${label}.negated`) });
   switch (family) {
     case "attack":
@@ -184,13 +218,13 @@ export function normalizeTargetingParameters(family: string, input: Record<strin
       };
     case "unit-state":
       exactKeys(input, ["states", "subject", "negated"], family);
-      return { states: enumSet(input.states, UNIT_STATES, "unit-state.states"), ...predicate(family) };
+      return { states: enumSet(input.states, version >= 2 ? UNIT_STATES : UNIT_STATES_V1, "unit-state.states"), ...predicate(family) };
     case "unit-keyword":
       exactKeys(input, ["keywords", "subject", "negated"], family);
       return { keywords: keywordList(input.keywords), ...predicate(family) };
     case "unit-activity":
       exactKeys(input, ["activity", "subject", "negated"], family);
-      return { activity: enumValue(input.activity, UNIT_ACTIVITIES, "unit-activity.activity"), ...predicate(family) };
+      return { activity: enumValue(input.activity, version >= 2 ? UNIT_ACTIVITIES : UNIT_ACTIVITIES_V1, "unit-activity.activity"), ...predicate(family) };
     case "unit-mark":
       exactKeys(input, ["mark", "subject", "negated"], family);
       return { mark: enumValue(input.mark, UNIT_MARKS, "unit-mark.mark"), ...predicate(family) };

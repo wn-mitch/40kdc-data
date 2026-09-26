@@ -87,6 +87,46 @@ describe("Round 5C restrictions", () => {
     expect(trigger("selected-to-fight")).toEqual({ event: "selected-to-fight", subject: "self" });
   });
 
+  it("compiles a stratagem TARGET to core target_restrictions, qualifiers included, leaving the effect alone", () => {
+    const inTarget = (item: CompileLeaf): CompileLeaf => ({ ...item, fragment: "TARGET" });
+    const result = compiled([
+      inTarget(leaf("RESTRICTION", "stratagem-target", { count: "one", side: "your-army", selects: "unit", keywords: ["INFANTRY", "WARDENS"], match: "all", excluded_keywords: ["TITANIC"] })),
+      inTarget(leaf("CONDITION", "unit-activity", { activity: "selected-to-shoot-this-phase", subject: "this-unit", negated: true })),
+      inTarget(leaf("CONDITION", "unit-state", { states: ["engaged"], subject: "this-unit", negated: true })),
+      { ...grant(), fragment: "EFFECT" },
+    ]);
+    expect(result.core).toEqual({ target_restrictions: {
+      count: "one", side: "your-army", selects: "unit", required_keywords: ["INFANTRY", "WARDENS"], excluded_keywords: ["TITANIC"],
+      eligibility: { operator: "and", operands: [
+        { type: "unit-selected-to-shoot-this-phase", negated: true },
+        { type: "engagement-state", parameters: { state: "engaged" }, negated: true },
+      ] },
+    } });
+    // The qualifiers say who can be picked, not when the effect applies.
+    expect(result.mechanics.effect).toEqual({ type: "fight-first", target: "unit", modifier: {} });
+  });
+
+  it("binds \"that X unit\" to the WHEN moment, narrowing the trigger to its keywords", () => {
+    const result = compiled([
+      leaf("EVENT", "event", { kind: "selected-to-shoot" }),
+      { ...leaf("RESTRICTION", "triggering-target", { selects: "unit", keywords: ["WARDENS"], match: "all" }), fragment: "TARGET" },
+      grant(),
+    ]);
+    expect(result.core?.target_restrictions).toEqual({ count: "one", selects: "unit", required_keywords: ["WARDENS"], bound_to: "triggering-unit" });
+    expect(result.mechanics.trigger).toEqual({ event: "selected-to-shoot", subject: "self", subject_keywords: ["WARDENS"] });
+    const attacked = compiled([
+      { ...leaf("RESTRICTION", "stratagem-target", { count: "one", side: "your-army", selects: "unit", keywords: ["WARDENS", "ORACLES"], match: "any", excluded_keywords: [] }), fragment: "TARGET" },
+      { ...leaf("RESTRICTION", "target-binding", { bound_to: "attacked-unit" }), fragment: "TARGET" },
+      grant(),
+    ]);
+    expect(attacked.core?.target_restrictions).toEqual({ count: "one", side: "your-army", selects: "unit", required_keywords_any: ["WARDENS", "ORACLES"], bound_to: "attacked-unit" });
+  });
+
+  it("refuses a TARGET without exactly one target leaf", () => {
+    const result = compileLeaves([{ ...leaf("CONDITION", "unit-activity", { activity: "fought-this-phase", subject: "this-unit", negated: true }), fragment: "TARGET" }, grant()]);
+    expect(result.ok ? [] : result.errors).toEqual(["A stratagem TARGET needs exactly one target leaf; found 0."]);
+  });
+
   it("ends an effect at the start of your next turn or Command phase", () => {
     expect(compiled([grant(), leaf("DURATION", "duration", { endpoint: "start-of-next-command-phase" })]).mechanics.scope).toEqual({ range: "unit", duration: "until-next-command-phase" });
     expect(compiled([grant(), leaf("DURATION", "duration", { endpoint: "start-of-next-turn" })]).mechanics.scope).toEqual({ range: "unit", duration: "until-start-next-turn" });

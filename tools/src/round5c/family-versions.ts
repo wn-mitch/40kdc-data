@@ -57,6 +57,9 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "event", from: 3, to_family: "attack", to: 1, map: (parameters) => (parameters.kind === "attack-made" ? { direction: "makes", unit: "that-unit", attack_type: "any" } : null) },
   // Version 2 adds the starts of your next turn and phases; quoted source endpoints have no meaning yet.
   { family: "duration", from: 1, to: 2, map: (parameters) => (typeof parameters.endpoint === "string" ? parameters : null) },
+  // Version 2 of these only adds values (engaged; selected to move).
+  { family: "unit-state", from: 1, to: 2, map: (parameters) => parameters },
+  { family: "unit-activity", from: 1, to: 2, map: (parameters) => parameters },
   // Version 2 takes a set of characteristics, improve and worsen, and which weapons carry the change.
   {
     family: "characteristic-modifier", from: 1, to: 2,

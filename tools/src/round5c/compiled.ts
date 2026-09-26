@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS compiled_entries (
   ability_version_id INTEGER NOT NULL,
   shape_signature TEXT NOT NULL CHECK(length(trim(shape_signature)) > 0),
   mechanics_json TEXT NOT NULL CHECK(json_valid(mechanics_json)),
+  core_json TEXT CHECK(core_json IS NULL OR json_valid(core_json)),
   inputs_hash TEXT NOT NULL CHECK(length(inputs_hash) = 64),
   status TEXT NOT NULL CHECK(status IN ('approved', 'rejected', 'retracted')),
   batch_id TEXT NOT NULL,
@@ -27,6 +28,17 @@ CREATE UNIQUE INDEX IF NOT EXISTS compiled_entries_one_approved
 `;
 
 export const COMPILED_TABLES = ["compiled_entries"] as const;
+
+/** Older workbenches predate core patches (a stratagem's target); add the column in place. */
+export function upgradeCompiledCore(db: DatabaseSync): void {
+  const columns = new Set((db.prepare("PRAGMA table_info(compiled_entries)").all() as Array<{ name: string }>).map((column) => column.name));
+  if (!columns.has("core_json")) db.exec("ALTER TABLE compiled_entries ADD COLUMN core_json TEXT CHECK(core_json IS NULL OR json_valid(core_json))");
+}
+
+/** What an approval pins: the entry's mechanics, plus the core patch when the leaves make one. */
+export function compiledIdentity(mechanics: Mechanics, core: unknown): unknown {
+  return core ? { mechanics, core } : mechanics;
+}
 
 /**
  * Identity of everything a compilation read: the source version and its active leaves (exact
@@ -49,16 +61,18 @@ export type CompiledEntryRow = {
   ability_version_id: number;
   shape_signature: string;
   mechanics: Mechanics;
+  /** Fields for the core record (a stratagem's target_restrictions), or null. */
+  core: { target_restrictions: Record<string, unknown> } | null;
   inputs_hash: string;
   status: string;
 };
 
 export function getCompiledEntry(db: DatabaseSync, id: string): CompiledEntryRow | null {
   const row = db.prepare(`
-    SELECT id, ability_version_id, shape_signature, mechanics_json, inputs_hash, status
+    SELECT id, ability_version_id, shape_signature, mechanics_json, core_json, inputs_hash, status
     FROM compiled_entries WHERE id = ?
-  `).get(id) as (Omit<CompiledEntryRow, "mechanics"> & { mechanics_json: string }) | undefined;
+  `).get(id) as (Omit<CompiledEntryRow, "mechanics" | "core"> & { mechanics_json: string; core_json: string | null }) | undefined;
   if (!row) return null;
-  const { mechanics_json, ...rest } = row;
-  return { ...rest, mechanics: JSON.parse(mechanics_json) as Mechanics };
+  const { mechanics_json, core_json, ...rest } = row;
+  return { ...rest, mechanics: JSON.parse(mechanics_json) as Mechanics, core: core_json ? JSON.parse(core_json) as CompiledEntryRow["core"] : null };
 }

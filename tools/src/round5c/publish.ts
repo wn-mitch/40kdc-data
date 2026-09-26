@@ -6,9 +6,10 @@ import type { DatabaseSync } from "node:sqlite";
 import { prepareWrites } from "../mfm/apply.js";
 import { hashJson } from "../round4/hash.js";
 import { sourceDigest } from "../source-digest.js";
-import { compilationInputsHash, getCompiledEntry } from "./compiled.js";
+import { compilationInputsHash, compiledIdentity, getCompiledEntry } from "./compiled.js";
 import { abilityFilePath, canonicalDataRoot, checkEntry, entryWithMechanics, round5cDataRoot, schemaTreeHash, type Mechanics } from "./entries.js";
 import { bumpWorkbenchRevision, withTransaction } from "./db.js";
+import { coreManifest, CorePublicationError, coreStratagemFile, observedCoreHash, projectCore, type CoreManifest, type CoreProjection } from "./publish-core.js";
 import { loadSourceRecords, type SourceRecord } from "./source.js";
 
 const OPTIONAL_MECHANICS_FIELDS = ["behavior", "trigger", "usage", "applies_to"] as const;
@@ -62,6 +63,8 @@ type PublicationManifest = {
   entries: PublicationEntrySnapshot[];
   diff: PublicationDiff[];
   created_at: string;
+  /** The faction's core stratagems.json, when approved leaves set a stratagem's target. */
+  core?: CoreManifest;
   receipt?: PublicationReceiptData;
   failure?: PublicationFailureData;
 };
@@ -76,6 +79,7 @@ type PublicationProjection = {
   entries: Array<Record<string, unknown>>;
   snapshots: PublicationEntrySnapshot[];
   diff: PublicationDiff[];
+  core: CoreProjection | null;
 };
 
 export type PublicationPreview = {
@@ -148,6 +152,13 @@ function parseManifest(serialized: string): PublicationManifest {
   if (sha256Bytes(value.after_text) !== value.after_hash) {
     throw new PublicationError(409, "Publication manifest staged bytes do not match their hash.");
   }
+  if (value.core !== undefined) {
+    const core = record(value.core, "Publication manifest core file is malformed.");
+    if (["destination", "relative_path", "before_hash", "after_hash", "after_text"].some((key) => typeof core[key] !== "string")) {
+      throw new PublicationError(409, "Publication manifest core file is malformed.");
+    }
+    if (sha256Bytes(core.after_text as string) !== core.after_hash) throw new PublicationError(409, "Publication manifest core staged bytes do not match their hash.");
+  }
   return value as PublicationManifest;
 }
 
@@ -169,6 +180,7 @@ function manifestFile(manifest: PublicationManifest): string {
   if (
     manifest.destination !== expected
     || relativeAbilityPath(root, expected) !== manifest.relative_path
+    || (manifest.core !== undefined && manifest.core.destination !== coreStratagemFile(root, manifest.faction_id))
   ) throw new PublicationError(409, "Publication manifest destination no longer matches its pinned root and faction.");
   return expected;
 }
@@ -190,6 +202,7 @@ type EntryRow = {
   status: string;
   shape_signature: string;
   mechanics: Mechanics;
+  core: { target_restrictions: Record<string, unknown> } | null;
   inputs_hash: string;
   ability_version_id: number;
   faction_id: string;
@@ -247,11 +260,18 @@ function approvedEntrySnapshot(db: DatabaseSync, row: EntryRow, freshSource: Sou
     ability_version_id: row.ability_version_id,
     shape_signature: row.shape_signature,
     inputs_hash: row.inputs_hash,
-    mechanics_hash: hashJson(row.mechanics),
+    mechanics_hash: hashJson(compiledIdentity(row.mechanics, row.core)),
     source_hash: row.source_hash,
     source_digest: sourceDigest(freshSource.text),
     source_match_hash: storedMatchHash,
   };
+}
+
+/** The files one publication writes: the faction's abilities.json, and its core stratagems.json when targets change. */
+function stagedWrites(projection: PublicationProjection, abilitiesText: string, coreText: string | undefined) {
+  const writes = [{ path: projection.file, value: projection.entries as unknown, text: abilitiesText }];
+  if (projection.core && coreText !== undefined) writes.push({ path: projection.core.file, value: projection.core.records, text: coreText });
+  return writes;
 }
 
 function changedFields(before: Record<string, unknown>, after: Record<string, unknown>): Array<{ field: string; before: unknown; after: unknown }> {
@@ -298,8 +318,21 @@ function buildProjection(
     diff.push({ entry_id: row.id, ability_id: row.ability_id, fields: changedFields(current, proposed) });
   }
 
+  let core: CoreProjection | null;
+  try {
+    core = projectCore(dataRoot, options.faction_id, rows);
+  } catch (error) {
+    if (error instanceof CorePublicationError) throw new PublicationError(409, error.message);
+    throw error;
+  }
+  for (const item of core?.diff ?? []) {
+    const existing = diff.find((entry) => entry.entry_id === item.entry_id);
+    if (existing) existing.fields.push(...item.fields);
+    else diff.push(item);
+  }
   const afterText = serializedEntries(entries);
   return {
+    core,
     dataRoot,
     file,
     relativePath: relativeAbilityPath(dataRoot, file),
@@ -323,6 +356,7 @@ function assertProjectionMatchesManifest(projection: PublicationProjection, mani
     || schemaTreeHash() !== manifest.schema_hash
     || hashJson(projection.snapshots) !== hashJson(manifest.entries)
     || hashJson(projection.diff) !== hashJson(manifest.diff)
+    || hashJson(coreManifest(projection.core) ?? null) !== hashJson(manifest.core ?? null)
   ) throw new PublicationError(409, "Publication preview is stale; prepare a new batch.");
 }
 
@@ -355,12 +389,16 @@ function receiptFromBatch(batchId: string, previewHash: string, factionId: strin
   };
 }
 
-function finishPublishingBatch(db: DatabaseSync, batchId: string, observedHash: string): PublicationReceipt | null {
+function finishPublishingBatch(db: DatabaseSync, batchId: string, observedHash: string, observedCore: string | null): PublicationReceipt | null {
   const batch = loadBatch(db, batchId);
   if (batch.state === "published") return receiptFromBatch(batchId, batch.preview_hash, batch.faction_id, batch.manifest);
   if (batch.state !== "publishing") return null;
   const now = new Date().toISOString();
-  if (observedHash === batch.manifest.after_hash) {
+  // Both files are written in one commit: published only when both hold the staged bytes.
+  const core = batch.manifest.core;
+  const coreAfter = !core || observedCore === core.after_hash;
+  const coreBefore = !core || observedCore === core.before_hash;
+  if (observedHash === batch.manifest.after_hash && coreAfter) {
     const receipt: PublicationReceiptData = {
       published_at: now,
       actual_after_hash: observedHash,
@@ -375,7 +413,7 @@ function finishPublishingBatch(db: DatabaseSync, batchId: string, observedHash: 
   }
   const failure: PublicationFailureData = {
     failed_at: now,
-    reason_code: observedHash === batch.manifest.before_hash ? "NO_WRITE_OBSERVED" : "EXTERNAL_CHANGE_CONFLICT",
+    reason_code: observedHash === batch.manifest.before_hash && coreBefore ? "NO_WRITE_OBSERVED" : "EXTERNAL_CHANGE_CONFLICT",
     observed_hash: observedHash,
   };
   const changed = db.prepare("UPDATE publication_batches SET state = 'failed', manifest_json = ?, updated_at = ? WHERE id = ? AND state = 'publishing'")
@@ -404,7 +442,7 @@ export function reconcilePublicationBatches(db: DatabaseSync, batchId?: string):
         destination_unavailable: error instanceof Error ? error.message : String(error),
       });
     }
-    const receipt = withTransaction(db, () => finishPublishingBatch(db, row.id, observedHash));
+    const receipt = withTransaction(db, () => finishPublishingBatch(db, row.id, observedHash, observedCoreHash(manifest.core)));
     if (receipt) recovered.push(receipt);
     else failed.push(row.id);
   }
@@ -434,10 +472,11 @@ export async function preparePublication(
     entries: projection.snapshots,
     diff: projection.diff,
     created_at: createdAt,
+    ...(projection.core ? { core: coreManifest(projection.core) } : {}),
   };
   const previewHash = hashJson(manifest);
   await prepareWrites(
-    [{ path: projection.file, value: projection.entries, text: projection.afterText }],
+    stagedWrites(projection, projection.afterText, projection.core?.afterText),
     { label: `round5c publication ${batchId}`, dataRoot: projection.dataRoot },
   );
   withTransaction(db, () => {
@@ -478,7 +517,7 @@ export async function publishPublication(
   let projection = buildProjection(db, publicationOptions);
   assertProjectionMatchesManifest(projection, batch.manifest);
   const prepared = await prepareWrites(
-    [{ path: projection.file, value: projection.entries, text: batch.manifest.after_text }],
+    stagedWrites(projection, batch.manifest.after_text, batch.manifest.core?.after_text),
     { label: `round5c publication ${options.batch_id}`, dataRoot: projection.dataRoot },
   );
 
@@ -501,6 +540,9 @@ export async function publishPublication(
       prepared.commit();
       const actualAfterHash = sha256Bytes(readFileSync(projection.file));
       if (actualAfterHash !== batch.manifest.after_hash) throw new PublicationError(409, "Publication destination does not match the validated staged bytes after commit.");
+      if (batch.manifest.core && observedCoreHash(batch.manifest.core) !== batch.manifest.core.after_hash) {
+        throw new PublicationError(409, "Core stratagems.json does not match the validated staged bytes after commit.");
+      }
       const receipt: PublicationReceiptData = {
         published_at: new Date().toISOString(),
         actual_after_hash: actualAfterHash,

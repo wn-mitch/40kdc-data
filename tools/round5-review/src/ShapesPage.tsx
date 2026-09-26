@@ -6,7 +6,7 @@ type Summary = { signature: string; members: number; distinct_sources: number; c
 type Member = {
   ability_version_ids: number[];
   abilities: Array<{ ability_version_id: number; faction_id: string; ability_id: string; name: string | null }>;
-  source_text: string; authored_text: string | null; compiled_text: string | null; differs: boolean;
+  source_text: string; authored_text: string | null; compiled_text: string | null; core_target?: Record<string, unknown> | null; differs: boolean;
   state: "approved" | "rejected" | "stale" | "open"; errors: string[];
 };
 
@@ -92,6 +92,7 @@ export function ShapesPage({ faction, revision, busy, perform, reviewer, onBatch
               <button className="text-button" onClick={() => openAbility(member.ability_version_ids[0]!)}>Open source</button></td>
             <td>{member.authored_text ?? <span className="wb-muted">No authored entry</span>}</td>
             <td>{member.compiled_text ?? <span className="wb-muted">Does not render</span>}{member.differs && !member.errors.length && <small> · changes the authored entry</small>}
+              {member.core_target && <details><summary>Stratagem target (core record)</summary><pre>{JSON.stringify(member.core_target, null, 2)}</pre></details>}
               {member.errors.map((message) => <p key={message} className="error">{message}</p>)}</td>
           </tr>)}</tbody></table>
       </div> : <p role="status">Compiling members…</p>)}

@@ -1,5 +1,5 @@
 import type { SemanticFamilyDefinition } from "./contracts.js";
-import { enumValue, exactKeys } from "./family-validation.js";
+import { boundedInteger, enumValue, exactKeys } from "./family-validation.js";
 
 /**
  * Restrictions: who may use an ability, in which phases, and how often. How often compiles to
@@ -20,8 +20,59 @@ const UNIT_KEYWORD = /^[A-Z][A-Z0-9' -]*[A-Z0-9]$/u;
 const phaseSet = { type: "array", items: { enum: WINDOW_PHASES }, minItems: 0, uniqueItems: true } as const;
 
 export const OPTIONAL_USERS = ["you", "bearer", "this-unit", "this-model"] as const;
+export const TARGET_COUNTS = ["one", "one-or-more", "up-to"] as const;
+export const TARGET_SIDES = ["your-army", "enemy"] as const;
+export const TARGET_SELECTS = ["unit", "model"] as const;
+export const TARGET_BINDINGS = ["triggering-unit", "attacked-unit"] as const;
+
+const keywordList = { type: "array", items: { type: "string", pattern: UNIT_KEYWORD.source }, minItems: 0, uniqueItems: true } as const;
 
 export const RESTRICTION_FAMILIES: readonly SemanticFamilyDefinition[] = [
+  {
+    id: "stratagem-target",
+    version: 1,
+    role: "RESTRICTION",
+    label: "Stratagem target",
+    description: "A stratagem's TARGET: how many, whose, unit or model, and the keywords it must have (all of them, or any one) and must not have. Qualifiers such as \"that has not been selected to shoot this phase\" are their own condition leaves in the TARGET.",
+    starter: { count: "", side: "", selects: "", keywords: [], match: "", excluded_keywords: [] },
+    parameterSchema: {
+      type: "object",
+      required: ["count", "side", "selects", "keywords", "match", "excluded_keywords"],
+      properties: {
+        count: { enum: TARGET_COUNTS },
+        count_max: { type: "integer", minimum: 2, maximum: 10, "x-only-when": { count: ["up-to"] } },
+        side: { enum: TARGET_SIDES },
+        selects: { enum: TARGET_SELECTS },
+        keywords: keywordList,
+        match: { enum: KEYWORD_MATCH },
+        excluded_keywords: keywordList,
+      },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "target-binding",
+    version: 1,
+    role: "RESTRICTION",
+    label: "Target is the unit that acted or was attacked",
+    description: "\"That was selected as the target of one or more of the attacking unit's attacks\": the target is the unit the triggering enemy attacked, not a free choice.",
+    starter: { bound_to: "" },
+    parameterSchema: { type: "object", required: ["bound_to"], properties: { bound_to: { enum: TARGET_BINDINGS } }, additionalProperties: false },
+  },
+  {
+    id: "triggering-target",
+    version: 1,
+    role: "RESTRICTION",
+    label: "Target is that unit",
+    description: "\"That X unit\": the target is the unit the WHEN moment names. Its keywords narrow the trigger too.",
+    starter: { selects: "", keywords: [], match: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["selects", "keywords", "match"],
+      properties: { selects: { enum: TARGET_SELECTS }, keywords: keywordList, match: { enum: KEYWORD_MATCH } },
+      additionalProperties: false,
+    },
+  },
   {
     id: "optional-use",
     version: 1,
@@ -90,19 +141,42 @@ function phases(value: unknown, label: string): string[] {
   return WINDOW_PHASES.filter((phase) => value.includes(phase));
 }
 
-function keywords(value: unknown): string[] {
-  if (!Array.isArray(value) || value.length === 0) throw new TypeError("bearer-eligibility.keywords must list at least one keyword.");
+function keywords(value: unknown, label = "bearer-eligibility.keywords", allowEmpty = false): string[] {
+  if (!Array.isArray(value) || (!allowEmpty && value.length === 0)) throw new TypeError(`${label} must list at least one keyword.`);
   const list = value.map((item) => {
     const keyword = String(item).replaceAll("*", "").replace(/\s+/gu, " ").trim().toUpperCase();
-    if (!UNIT_KEYWORD.test(keyword)) throw new TypeError(`bearer-eligibility keyword ${JSON.stringify(item)} is not a unit keyword.`);
+    if (!UNIT_KEYWORD.test(keyword)) throw new TypeError(`${label} keyword ${JSON.stringify(item)} is not a unit keyword.`);
     return keyword;
   });
-  if (new Set(list).size !== list.length) throw new TypeError("bearer-eligibility.keywords lists a keyword twice.");
+  if (new Set(list).size !== list.length) throw new TypeError(`${label} lists a keyword twice.`);
   return list.sort();
 }
 
 export function normalizeRestrictionParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
   switch (family) {
+    case "stratagem-target": {
+      const count = enumValue(input.count, TARGET_COUNTS, "stratagem-target.count");
+      exactKeys(input, count === "up-to" ? ["count", "count_max", "side", "selects", "keywords", "match", "excluded_keywords"] : ["count", "side", "selects", "keywords", "match", "excluded_keywords"], family);
+      return {
+        count,
+        ...(count === "up-to" ? { count_max: boundedInteger(input.count_max, 2, 10, "stratagem-target.count_max") } : {}),
+        side: enumValue(input.side, TARGET_SIDES, "stratagem-target.side"),
+        selects: enumValue(input.selects, TARGET_SELECTS, "stratagem-target.selects"),
+        keywords: keywords(input.keywords, "stratagem-target.keywords", true),
+        match: enumValue(input.match, KEYWORD_MATCH, "stratagem-target.match"),
+        excluded_keywords: keywords(input.excluded_keywords, "stratagem-target.excluded_keywords", true),
+      };
+    }
+    case "target-binding":
+      exactKeys(input, ["bound_to"], family);
+      return { bound_to: enumValue(input.bound_to, TARGET_BINDINGS, "target-binding.bound_to") };
+    case "triggering-target":
+      exactKeys(input, ["selects", "keywords", "match"], family);
+      return {
+        selects: enumValue(input.selects, TARGET_SELECTS, "triggering-target.selects"),
+        keywords: keywords(input.keywords, "triggering-target.keywords", true),
+        match: enumValue(input.match, KEYWORD_MATCH, "triggering-target.match"),
+      };
     case "optional-use":
       exactKeys(input, ["who"], family);
       return { who: enumValue(input.who, OPTIONAL_USERS, "optional-use.who") };

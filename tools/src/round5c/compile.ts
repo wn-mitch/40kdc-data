@@ -29,6 +29,8 @@ export { CompileError, type CompileLeaf } from "./compile-fragments.js";
  *   names "that unit" for effects such as mortal wounds.
  * - Rolls. Result bands gate their clause's effects and become dice-gated or dice-table; fighting
  *   on death takes its band and conditions as its own per-model gate (compile-dice.ts).
+ * - Stratagem TARGET. The target leaves and every condition in the TARGET fragment compile to
+ *   the core record's target_restrictions (conditions become its eligibility), never the effect.
  * - Restrictions. How often compiles to `usage`; a stratagem's phases and an enhancement's
  *   eligible bearers compile to nothing and come back as checks against the core records.
  * - Two or more effects form a sequence in source order; a duration sets `scope.duration`;
@@ -38,10 +40,13 @@ export { CompileError, type CompileLeaf } from "./compile-fragments.js";
  */
 
 export type Compiled =
-  | { ok: true; signature: string; mechanics: Mechanics; checks: CoreCheck[] }
+  | { ok: true; signature: string; mechanics: Mechanics; checks: CoreCheck[]; core?: CorePatch }
   | { ok: false; signature: string; errors: string[] };
 
 type Node = Record<string, unknown>;
+
+/** Fields the leaves set on the core record rather than the enrichment entry (a stratagem's target). */
+export type CorePatch = { target_restrictions: Node };
 
 /** Where each leaf sits: which sentence and which clause, both counted from zero. */
 type Placement = { sentence: number; clause: number };
@@ -160,6 +165,9 @@ const gated = (gate: Node[], body: Node): Node => {
   return node ? { type: "conditional", condition: node, effect: body } : body;
 };
 
+/** Leaves only a stratagem has: its phase window and its TARGET. */
+const STRATAGEM_FAMILIES = new Set(["use-window", "stratagem-target", "triggering-target", "target-binding"]);
+
 /** Effects that forbid something; an "instead" after one says what happens in its place. */
 const PROHIBITIONS = new Set(["no-advance-roll"]);
 
@@ -200,6 +208,8 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const usages: Record<string, unknown>[] = [];
   let optional = false;
   const checks: CoreCheck[] = [];
+  const targetParts: CompileLeaf[] = [];
+  const targetEligibility: Node[] = [];
 
   list.forEach((leaf, index) => {
     const { sentence, clause } = places[index]!;
@@ -222,12 +232,14 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
       }
     };
     attempt(() => {
-      if (leaf.role === "CONDITION") scope(leaf.family_id === "target-is-selected" ? "selected" : leaf.family_id === "roll-result" ? rollMarker(leaf) : condition(leaf));
+      if (leaf.role === "CONDITION" && leaf.fragment === "TARGET") targetEligibility.push(condition(leaf));
+      else if (leaf.role === "CONDITION") scope(leaf.family_id === "target-is-selected" ? "selected" : leaf.family_id === "roll-result" ? rollMarker(leaf) : condition(leaf));
       else if (leaf.role === "DURATION") durations.push(duration(leaf));
       else if (leaf.role === "COMBINATOR") combinators.push(index);
       else if (leaf.role === "RESTRICTION") {
         if (leaf.family_id === "usage-limit") usages.push(usageFor(leaf.parameters));
         else if (leaf.family_id === "optional-use") optional = true;
+        else if (["stratagem-target", "target-binding", "triggering-target"].includes(leaf.family_id)) targetParts.push(leaf);
         else if (leaf.family_id === "use-window" || leaf.family_id === "bearer-eligibility") checks.push({ kind: leaf.family_id, parameters: leaf.parameters });
         else throw new CompileError(`Restriction ${leaf.family_id} has no DSL fragment yet.`);
       }
@@ -292,6 +304,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   if (triggers.length > 1) errors.push("More than one trigger event; the shape needs a combinator the compiler does not have.");
   if (new Set(durations).size > 1) errors.push("Conflicting durations.");
   if (usages.length > 1) errors.push("More than one usage limit; the entry has one usage.");
+  const target = attempt(() => targetRestrictions(targetParts, targetEligibility));
   const selected = planned.filter((item) => item.selected);
   if (selections.length > 1) errors.push("More than one unit is selected; the compiler binds only one.");
   // A selection without "attacks against that unit" is only who "that unit" names (it suffers
@@ -306,19 +319,54 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const scopeDuration = durations[0] ?? "permanent";
   if (selections.length === 1 && selected.length > 0) body = attempt(() => designation(selections[0]!, list, body!, durations[0]));
   if (!body) return { ok: false, signature, errors };
+  const stratagem = list.some((leaf) => STRATAGEM_FAMILIES.has(leaf.family_id));
+  const entryTrigger = triggers[0] ? (optional ? { ...triggers[0], optional: true } : triggers[0]) : null;
+  // "That X unit": the WHEN moment's unit must have the keywords the target names.
+  const bound = targetParts.find((leaf) => leaf.family_id === "triggering-target");
+  if (entryTrigger && bound && bound.parameters.match === "all" && (bound.parameters.keywords as string[]).length) {
+    (entryTrigger as Node).subject_keywords = bound.parameters.keywords;
+  }
   return {
     ok: true,
     signature,
+    ...(target ? { core: { target_restrictions: target } } : {}),
     mechanics: {
       effect: gated(global, body),
       scope: { range: "unit", duration: scopeDuration },
-      // A choice with an event is an optional trigger; a choice without one is activated.
-      behavior: triggers.length ? "reactive" : optional ? "activated" : "passive",
-      trigger: triggers[0] ? (optional ? { ...triggers[0], optional: true } : triggers[0]) : null,
+      // A choice with an event is an optional trigger; a choice without one is activated, as is a
+      // stratagem (it has a phase window or a TARGET), which a player always chooses to use.
+      behavior: triggers.length ? "reactive" : optional || stratagem ? "activated" : "passive",
+      trigger: entryTrigger,
       ...(usages.length ? { usage: usages[0] } : {}),
     },
     checks,
   };
+}
+
+/** A stratagem's target_restrictions from its TARGET leaves; null when the ability has none. */
+function targetRestrictions(parts: readonly CompileLeaf[], eligibility: readonly Node[]): Node | null {
+  if (parts.length === 0 && eligibility.length === 0) return null;
+  const selectors = parts.filter((leaf) => leaf.family_id === "stratagem-target" || leaf.family_id === "triggering-target");
+  const bindings = parts.filter((leaf) => leaf.family_id === "target-binding");
+  if (selectors.length !== 1) throw new CompileError(`A stratagem TARGET needs exactly one target leaf; found ${selectors.length}.`);
+  if (bindings.length > 1) throw new CompileError("A stratagem TARGET is bound to more than one unit.");
+  const selector = selectors[0]!;
+  const keywords = selector.parameters.keywords as string[];
+  const excluded = (selector.parameters.excluded_keywords as string[] | undefined) ?? [];
+  const triggering = selector.family_id === "triggering-target";
+  const restrictions: Node = {
+    count: triggering ? "one" : selector.parameters.count,
+    ...(selector.parameters.count_max !== undefined ? { count_max: selector.parameters.count_max } : {}),
+    ...(triggering ? {} : { side: selector.parameters.side }),
+    selects: selector.parameters.selects,
+    ...(keywords.length ? { [selector.parameters.match === "any" ? "required_keywords_any" : "required_keywords"]: keywords } : {}),
+    ...(excluded.length ? { excluded_keywords: excluded } : {}),
+  };
+  const bound = triggering ? "triggering-unit" : bindings[0]?.parameters.bound_to;
+  if (bound) restrictions.bound_to = bound;
+  const condition = allOf([...eligibility]);
+  if (condition) restrictions.eligibility = condition;
+  return restrictions;
 }
 
 /** The selected unit and the effects on attacks against it, as the DSL's designate-target. */
