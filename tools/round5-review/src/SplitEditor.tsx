@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { LeafForm, type Family } from "./LeafForm";
+import type { QueueItem } from "./decision-queue";
 
 /** Words that only join leaves; a piece made of them alone is not a leaf. */
 const GLUE = new Set(["and", "as well", "in addition", "then", "when doing so", "if you do", "if it does"]);
@@ -42,10 +43,12 @@ export function splitPieces(words: readonly string[], cuts: ReadonlySet<number>)
  * Cut composed wording into singular leaves. Click between two words to add or remove a cut;
  * each piece is then named on its own and decided for the whole corpus.
  */
-export function SplitEditor({ text, families, busy, onDecide, onCancel }: {
+export function SplitEditor({ text, families, busy, pieceState, onDecide, onCancel }: {
   text: string;
   families: readonly Family[];
   busy: boolean;
+  /** Where a piece's decision is in the queue, if it has been sent. */
+  pieceState?: (piece: string) => QueueItem | null;
   onDecide: (exactText: string, familyId: string, parameters: Record<string, unknown>) => void;
   onCancel: () => void;
 }) {
@@ -65,13 +68,18 @@ export function SplitEditor({ text, families, busy, onDecide, onCancel }: {
         aria-label={`Cut before “${word}”`} onClick={() => toggle(index)}>{cuts.has(index) ? "|" : "·"}</button>}
       <span>{word}</span>
     </span>)}</p>
-    <ol className="wb-split-pieces">{pieces.map((piece) => <li key={piece}>
-      <span className="wb-surface-text">“{piece}”</span>
-      {naming === piece
-        ? <LeafForm families={families} exactText={piece} role={null} busy={busy} submitLabel="Decide everywhere"
-          onSubmit={(familyId, parameters) => onDecide(piece, familyId, parameters)} onCancel={() => setNaming(null)} />
-        : <button className="primary" type="button" onClick={() => setNaming(piece)}>Name this piece</button>}
-    </li>)}</ol>
+    <ol className="wb-split-pieces">{pieces.map((piece) => {
+      const sent = pieceState?.(piece) ?? null;
+      return <li key={piece}>
+        <span className="wb-surface-text">“{piece}”</span>
+        {sent && <small className={`wb-state ${sent.status === "failed" ? "wb-state-blocked" : "wb-state-queued"}`}>
+          {sent.status === "failed" ? `not recorded: ${sent.error}` : sent.status === "running" ? "recording…" : "queued"}</small>}
+        {naming === piece
+          ? <LeafForm families={families} exactText={piece} role={null} busy={busy} submitLabel="Decide everywhere"
+            onSubmit={(familyId, parameters) => { setNaming(null); onDecide(piece, familyId, parameters); }} onCancel={() => setNaming(null)} />
+          : (!sent || sent.status === "failed") && <button className="primary" type="button" onClick={() => setNaming(piece)}>Name this piece</button>}
+      </li>;
+    })}</ol>
     <div className="wb-actions"><button className="secondary" type="button" onClick={onCancel}>Done splitting</button></div>
   </div>;
 }

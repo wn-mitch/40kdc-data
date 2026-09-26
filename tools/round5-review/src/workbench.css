@@ -463,3 +463,6 @@
 .wb-split-pieces { display: grid; gap: 0.5rem; padding-left: 1.25rem; }
 .wb-split-pieces li { display: grid; gap: 0.35rem; justify-items: start; }
 .wb-split-pieces .wb-leaf-form { justify-self: stretch; }
+.wb-queue-strip { display: flex; flex-direction: column; gap: var(--space-1); font-size: var(--text-sm); color: var(--muted); }
+.wb-queue-strip .wb-blocked summary { color: var(--danger); cursor: pointer; }
+.wb-state-queued { opacity: 0.6; }

@@ -6,6 +6,8 @@ import { SourceWorkPanel, type SourceWorkAbility } from "./SourceWorkPanel";
 import { LeavesPage } from "./LeavesPage";
 import { ShapesPage } from "./ShapesPage";
 import { PublishPage } from "./PublishPage";
+import { QueueStrip } from "./QueueStrip";
+import { useDecisionQueue } from "./decision-queue";
 import type { Family } from "./LeafForm";
 import "./workbench.css";
 
@@ -315,7 +317,16 @@ export default function WorkbenchApp() {
   const safeProposals = ability?.proposals.filter((proposal) => proposal.status === "pending" && proposal.family_id && ROLES.includes(proposal.role as Role)
     && !ability.annotations.some((span) => overlaps(span, proposal))
     && !ability.proposals.some((other) => pending(other) && other.id !== proposal.id && overlaps(proposal, other))) ?? [];
+  const { queue, items: queueItems } = useDecisionQueue({
+    onBatch: (batchId) => setBatches((current) => [...current, batchId]),
+    // One refresh for the whole run of decisions, not one per decision.
+    onDrained: () => { void syncWorkbenchRevision(true); setRevision((value) => value + 1); },
+  });
+  const queueActive = queueItems.some((item) => item.status !== "failed");
+  const queueActiveRef = useRef(false);
+  queueActiveRef.current = queueActive;
   const canWrite = !busy && !loading;
+  const canUndo = canWrite && !queueActive && batches.length > 0;
   useEffect(() => { if (!draft || view !== "abilities") setReselecting(false); }, [draft, view]);
 
   useEffect(() => {
@@ -401,7 +412,7 @@ export default function WorkbenchApp() {
         if (localChange) localRevisionExpected.current = false;
         return;
       }
-      const isLocalChange = localChange || activeRevisionMutation.current || localRevisionExpected.current;
+      const isLocalChange = localChange || activeRevisionMutation.current || localRevisionExpected.current || queueActiveRef.current;
       localRevisionExpected.current = false;
       setRevision((value) => value + 1);
       if (isLocalChange) return;
@@ -561,7 +572,7 @@ export default function WorkbenchApp() {
   }
   function undo() {
     const batch = batches[batches.length - 1];
-    if (!batch) return;
+    if (!batch || queue.active) return;
     void perform(async () => {
       await api(`/batches/${encodeURIComponent(batch)}/undo`, { reviewer: REVIEWER });
       setBatches((current) => current.slice(0, -1)); setDraft(null); setRevision((value) => value + 1);
@@ -593,7 +604,7 @@ export default function WorkbenchApp() {
       const key = event.key.toLowerCase();
       if (key === "?") { event.preventDefault(); setShortcuts((value) => !value); return; }
       if (busy || loading) return;
-      if (key === "u" && canWrite && batches.length) { event.preventDefault(); undo(); }
+      if (key === "u" && canUndo) { event.preventDefault(); undo(); }
       else if (key === "l") { event.preventDefault(); setView("leaves"); }
       else if (view === "abilities") {
         if (key === "j" || key === "k") { event.preventDefault(); navigateAbility(key === "j" ? 1 : -1); }
@@ -734,7 +745,7 @@ export default function WorkbenchApp() {
         </div>)}</div>
       </section>
       <div className="wb-sidebar-foot"><button className="quiet" onClick={() => setShortcuts((value) => !value)} aria-expanded={shortcuts}>Shortcuts <kbd>?</kbd></button>
-        <button className="secondary" disabled={!canWrite || !batches.length} onClick={undo}>Undo batch <kbd>U</kbd></button></div>
+        <button className="secondary" disabled={!canUndo} title={queueActive ? "Waits for queued decisions to finish" : undefined} onClick={undo}>Undo batch <kbd>U</kbd></button></div>
     </aside>
     <main id="wb-main" className={`wb-main${view === "abilities" ? " wb-main-abilities" : ""}`} aria-busy={loading || busy}>
       <div className="wb-feedback">
@@ -743,6 +754,7 @@ export default function WorkbenchApp() {
           : externalNotice
             ? <p role="status" className="warning">{externalNotice}</p>
             : <p role="status">{busy ? "Recording decision…" : loading ? "Loading workbench records…" : status}</p>}
+        <QueueStrip items={queueItems} queue={queue} />
         <button className="text-button" disabled={busy} onClick={() => {
           setDraft(null);
           setCensusResetToken((value) => value + 1);
@@ -892,9 +904,8 @@ export default function WorkbenchApp() {
           </> : <p className="wb-help">Choose an ability to inspect source provenance, span decisions, and whole-context review.</p>}
         </aside></div>
       </>}
-      {view === "leaves" && panel("Leaves", <LeavesPage families={families as unknown as Family[]} faction={faction} revision={revision} busy={busy}
-        perform={(work) => void perform(work)} reviewer={REVIEWER} onBatch={(batchId) => setBatches((current) => [...current, batchId])}
-        openAbility={openAbility} setStatus={setStatus} />, "Decide each spelling once; it applies to every source.")}
+      {view === "leaves" && panel("Leaves", <LeavesPage families={families as unknown as Family[]} faction={faction} revision={revision}
+        queue={queue} queueItems={queueItems} reviewer={REVIEWER} openAbility={openAbility} setStatus={setStatus} />, "Decide each spelling once; it applies to every source.")}
       {view === "shapes" && panel("Shapes", <ShapesPage faction={faction} revision={revision} busy={busy}
         perform={(work) => void perform(work)} reviewer={REVIEWER} onBatch={(batchId) => setBatches((current) => [...current, batchId])}
         openAbility={openAbility} setStatus={setStatus} />, "Approve how leaves combine once for every source with that shape.")}
