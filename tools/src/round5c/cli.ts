@@ -10,6 +10,8 @@ import { getQueue } from "./queue.js";
 import { getDashboard, getPrivateExport } from "./review.js";
 import { getPublicationReport, preparePublication, publishPublication, reconcilePublicationBatches } from "./publish.js";
 import { leafDescriberAudit } from "./leaf-describer-audit.js";
+import { runLeafProposals } from "./leaf-proposals.js";
+import { localEmbedder } from "./embeddings.js";
 import { reapplyLeafSurfaces } from "./leaves.js";
 import { refreshSources } from "./source.js";
 
@@ -44,9 +46,9 @@ function preparePublicationOptions(args: string[]): { faction_id: string; entry_
 }
 
 async function run(command: string | undefined): Promise<void> {
-  const commands = ["init", "refresh", "import-hit-train", "repair-related-variants", "prepare-luna", "import-luna", "run-luna", "abandon-luna", "luna-status", "prepare-publication", "publish", "export-json", "report", "queue", "leaf-describer-audit"];
+  const commands = ["init", "refresh", "import-hit-train", "repair-related-variants", "prepare-luna", "import-luna", "run-luna", "abandon-luna", "luna-status", "prepare-publication", "publish", "export-json", "report", "queue", "leaf-describer-audit", "leaf-proposals"];
   if (!command || !commands.includes(command)) {
-    throw new Error("Usage: round5c <init|refresh|import-hit-train|repair-related-variants|prepare-luna [limit] [coverage|residue] [faction-id] [--ability id] [--retry-of run-id]|import-luna <run-id> <response.json>|run-luna <run-id>|abandon-luna <run-id> <reason>|luna-status <run-id>|prepare-publication <faction-id> <compiled-entry-id,...>|publish <batch-id> <preview-hash>|export-json|report|queue [faction-id]|leaf-describer-audit>");
+    throw new Error("Usage: round5c <init|refresh|import-hit-train|repair-related-variants|prepare-luna [limit] [coverage|residue] [faction-id] [--ability id] [--retry-of run-id]|import-luna <run-id> <response.json>|run-luna <run-id>|abandon-luna <run-id> <reason>|luna-status <run-id>|prepare-publication <faction-id> <compiled-entry-id,...>|publish <batch-id> <preview-hash>|export-json|report|queue [faction-id]|leaf-describer-audit|leaf-proposals>");
   }
   if (command === "leaf-describer-audit") {
     // Depends only on the registry and the describer, not on the workbench database.
@@ -61,6 +63,10 @@ async function run(command: string | undefined): Promise<void> {
       console.log(JSON.stringify({ ...refreshSources(db), leaf_surfaces: reapplyLeafSurfaces(db) }, null, 2));
     } else if (command === "import-hit-train") {
       console.log(JSON.stringify(importHitTrain(db, resolve(root, "_private/round5b-hit-roll")), null, 2));
+    } else if (command === "leaf-proposals") {
+      const started = Date.now();
+      const result = await runLeafProposals(db, localEmbedder());
+      console.log(JSON.stringify({ ...result, seconds: Math.round((Date.now() - started) / 100) / 10 }, null, 2));
     } else if (command === "repair-related-variants") {
       console.log(JSON.stringify(repairRelatedVariantProposals(db), null, 2));
     } else if (command === "prepare-luna") {

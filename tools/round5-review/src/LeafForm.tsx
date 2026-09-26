@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { choices, freeText, numeric, prefillFromSource } from "./leaf-prefill";
+import { choices, freeText, numeric, prefillFromSource, type Property } from "./leaf-prefill";
 import { api } from "./workbench-api";
 
 /** One reviewed family as the bridge lists it (deprecated versions are never listed). */
@@ -9,12 +9,7 @@ export type Family = {
   starter: Record<string, unknown>;
   parameterSchema: { properties?: Record<string, Property> };
 };
-export type Property = {
-  enum?: string[]; anyOf?: Property[]; type?: string; pattern?: string; minimum?: number; maximum?: number;
-  items?: { enum?: string[]; type?: string; pattern?: string };
-  minItems?: number;
-  "x-only-when"?: Record<string, readonly string[]>;
-};
+export type { Property };
 
 /** A property applies only when the other parameters it depends on have one of the listed values. */
 const applies = (property: Property, parameters: Record<string, unknown>) =>

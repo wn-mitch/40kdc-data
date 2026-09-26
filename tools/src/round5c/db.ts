@@ -9,7 +9,7 @@ import { exactSpan, seedReviewedFamilies } from "./contracts.js";
 import { upgradeFamilyVersions } from "./family-versions.js";
 import { backfillFamilyCandidates } from "./ontology-store.js";
 import { COMPILED_SCHEMA, COMPILED_TABLES, upgradeCompiledCore } from "./compiled.js";
-import { LEAVES_SCHEMA, LEAVES_TABLES } from "./leaves-schema.js";
+import { LEAF_PROPOSALS_SCHEMA, LEAVES_SCHEMA, LEAVES_TABLES } from "./leaves-schema.js";
 import { EXTENSION_SCHEMA, EXTENSION_TABLES } from "./schema-ext.js";
 export { exactSpan } from "./contracts.js";
 type DatabaseSync = DatabaseType;
@@ -589,6 +589,7 @@ export function initializeWorkbench(db: DatabaseSync): void {
     db.exec(COMPILED_SCHEMA);
     upgradeCompiledCore(db);
     db.exec(LEAVES_SCHEMA);
+    db.exec(LEAF_PROPOSALS_SCHEMA);
     upgradeSourceShape(db);
     upgradeAnnotationAuthority(db);
     upgradeAnnotationBatchMetadata(db);

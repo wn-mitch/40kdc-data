@@ -17,3 +17,46 @@ CREATE INDEX IF NOT EXISTS leaf_surfaces_fingerprint_lookup ON leaf_surfaces(fin
 `;
 
 export const LEAVES_TABLES = ["leaf_surfaces"] as const;
+
+/**
+ * Leaf proposals and the sentence vectors behind them. These are derived, rebuildable state:
+ * outside the data epoch, so a proposal run never invalidates coverage caches or the review.
+ */
+export const LEAF_PROPOSALS_SCHEMA = `
+CREATE TABLE IF NOT EXISTS text_embeddings (
+  model TEXT NOT NULL,
+  text_hash TEXT NOT NULL CHECK(length(text_hash) = 64),
+  vector BLOB NOT NULL,
+  PRIMARY KEY(model, text_hash)
+) STRICT;
+
+CREATE TABLE IF NOT EXISTS leaf_proposal_runs (
+  id INTEGER PRIMARY KEY,
+  model TEXT NOT NULL,
+  settings_json TEXT NOT NULL CHECK(json_valid(settings_json)),
+  status TEXT NOT NULL CHECK(status IN ('running', 'finished', 'failed')),
+  counts_json TEXT CHECK(counts_json IS NULL OR json_valid(counts_json)),
+  error TEXT,
+  started_at TEXT NOT NULL,
+  finished_at TEXT
+) STRICT;
+
+CREATE TABLE IF NOT EXISTS leaf_proposals (
+  id INTEGER PRIMARY KEY,
+  run_id INTEGER NOT NULL REFERENCES leaf_proposal_runs(id) ON DELETE CASCADE,
+  cluster INTEGER NOT NULL,
+  surface TEXT NOT NULL,
+  sample_text TEXT NOT NULL,
+  kind TEXT NOT NULL CHECK(kind IN ('direct', 'decomposition', 'partial', 'llm', 'new-family', 'unlabelled')),
+  pieces_json TEXT NOT NULL CHECK(json_valid(pieces_json) AND json_type(pieces_json) = 'array'),
+  confidence REAL NOT NULL,
+  occurrences INTEGER NOT NULL,
+  closes INTEGER NOT NULL,
+  dropped_json TEXT NOT NULL DEFAULT '[]' CHECK(json_valid(dropped_json)),
+  status TEXT NOT NULL CHECK(status IN ('open', 'dismissed')),
+  model_run_id INTEGER,
+  UNIQUE(run_id, surface)
+) STRICT;
+
+CREATE INDEX IF NOT EXISTS leaf_proposals_run_cluster ON leaf_proposals(run_id, cluster);
+`;

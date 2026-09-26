@@ -484,9 +484,13 @@ export type LeafBoard = {
 
 const UNTILED_LIMIT = 60;
 
-/** Everything the Leaves page shows, in a fixed number of corpus passes. */
-export function leafBoard(db: DatabaseSync, options: { factionId?: string } = {}): LeafBoard {
+/**
+ * Everything the Leaves page shows, in a fixed number of corpus passes. `limit` caps the ranked
+ * wording lists (the page shows the top 60; the leaf proposer reads them whole).
+ */
+export function leafBoard(db: DatabaseSync, options: { factionId?: string; limit?: number } = {}): LeafBoard {
   const faction = options.factionId?.trim() || null;
+  const limit = options.limit ?? UNTILED_LIMIT;
   const leaves = new Map<string, BoardLeaf>();
   const leaf = (row: { fingerprint_id: string; family_id: string; family_version: number; role: string; parameters_json: string; family_status: string }): BoardLeaf => {
     let entry = leaves.get(row.fingerprint_id);
@@ -609,8 +613,8 @@ export function leafBoard(db: DatabaseSync, options: { factionId?: string } = {}
   return {
     leaves: [...leaves.values()].sort((left, right) => right.closes - left.closes || right.occurrences - left.occurrences || left.family_id.localeCompare(right.family_id)),
     unlabeled: [...unlabeled.values()].filter((entry) => entry.occurrences > 1 || entry.unlocks > 0)
-      .sort((left, right) => right.unlocks - left.unlocks || right.occurrences - left.occurrences).slice(0, UNTILED_LIMIT),
-    untiled: [...untiled.values()].sort((left, right) => right.unlocks - left.unlocks || right.occurrences - left.occurrences).slice(0, UNTILED_LIMIT),
+      .sort((left, right) => right.unlocks - left.unlocks || right.occurrences - left.occurrences).slice(0, limit),
+    untiled: [...untiled.values()].sort((left, right) => right.unlocks - left.unlocks || right.occurrences - left.occurrences).slice(0, limit),
     totals: { current_sources: current, tiled_sources: tiled, sources_with_leaves: withLeaves },
   };
 }
