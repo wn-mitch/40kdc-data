@@ -203,6 +203,10 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
       return { type: "invulnerable-save", target: target(leaf.parameters.subject), modifier: { invuln_sv: closed(leaf, "threshold") } };
     case "fights-first":
       return { type: "fight-first", target: target(leaf.parameters.subject), modifier: {} };
+    case "regain-wounds": {
+      const amount = String(closed(leaf, "amount"));
+      return { type: "heal-wounds", target: target(leaf.parameters.subject), modifier: { amount: /^\d+$/u.test(amount) ? Number(amount) : amount } };
+    }
     case "characteristic-modifier":
       return { type: "stat-modifier", target: target(leaf.parameters.subject), modifier: { stat: closed(leaf, "characteristic"), operation: closed(leaf, "operation"), value: closed(leaf, "value") } };
     default:

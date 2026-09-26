@@ -34,7 +34,7 @@ export function splitPieces(words: readonly string[], cuts: ReadonlySet<number>)
     pieces.at(-1)!.push(word);
   });
   return pieces.map((piece) => piece.join(" ").replace(EDGE, ""))
-    .map((piece) => piece.replace(/^(?:and|as well)\s+/iu, "").replace(EDGE, ""))
+    .map((piece) => piece.replace(/^(?:and|as well)\s+/iu, "").replace(/\s+(?:and|as well)$/iu, "").replace(EDGE, ""))
     .filter((piece) => piece && !GLUE.has(piece.toLowerCase()));
 }
 

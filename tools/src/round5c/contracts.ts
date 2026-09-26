@@ -2,6 +2,7 @@ import type { DatabaseSync } from "node:sqlite";
 
 import { hashJson } from "../round4/hash.js";
 import { boundedInteger, enumValue, exactKeys } from "./family-validation.js";
+import { EFFECT_FAMILIES, normalizeEffectParameters } from "./effect-families.js";
 import { normalizeTargetingParameters, TARGETING_FAMILIES } from "./targeting-families.js";
 
 export const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
@@ -419,6 +420,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
     },
   },
   ...TARGETING_FAMILIES,
+  ...EFFECT_FAMILIES,
 ] as const;
 
 /** The version new fingerprints and model requests use for a family. */
@@ -616,8 +618,8 @@ export function normalizeFingerprintParameters(
         value: boundedInteger(input.value, 1, 20, "characteristic-modifier.value"),
       };
     default: {
-      const targeting = normalizeTargetingParameters(family, input);
-      if (targeting) return targeting;
+      const extra = normalizeTargetingParameters(family, input) ?? normalizeEffectParameters(family, input);
+      if (extra) return extra;
       throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
     }
   }

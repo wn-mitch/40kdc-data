@@ -40,5 +40,6 @@ describe("Splitting composed wording", () => {
     const text = "that targets a hero, add one to hits";
     expect(splitPieces(words(text), new Set([4]))).toEqual(["that targets a hero", "add one to hits"]);
     expect(splitPieces(words("a and b"), new Set([1, 2]))).toEqual(["a", "b"]);
+    expect(splitPieces(words("add one to hits and, if so, add one"), suggestedCuts(words("add one to hits and, if so, add one")))).toEqual(["add one to hits", "if so", "add one"]);
   });
 });

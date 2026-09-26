@@ -13,7 +13,7 @@ import { abandonLunaRun, finishLunaRun, latestLunaRunForAbility, lunaRunView, st
 import { applySourceAtomBatch, proposeSourceAtom } from "../src/round5c/atoms.js";
 import { refreshSources } from "../src/round5c/source.js";
 import { approveShape, getShape, listShapes, rejectShapeMembers } from "../src/round5c/shapes.js";
-import { applyLeafSurfaces, backfillLeafSurfaces, confirmSurface, leafBoard, mergeFingerprints, moveSurface, retireSurface, retractQualifiedSurfaceLeaves } from "../src/round5c/leaves.js";
+import { applyLeafSurfaces, backfillLeafSurfaces, confirmSurface, leafBoard, mergeFingerprints, moveSurface, reapplyLeafSurfaces, retireSurface, retractQualifiedSurfaceLeaves } from "../src/round5c/leaves.js";
 import { proposeLexical, retrieveFamilyCandidates } from "../src/round5c/retrieval.js";
 import { getQueue } from "../src/round5c/queue.js";
 import { listPublications, preparePublication, publishPublication } from "../src/round5c/publish.js";
@@ -49,7 +49,7 @@ function round5WorkbenchBridge(): Plugin {
     configureServer(server) {
       const runningLuna = new Set<number>();
       const initialDb = openWorkbench();
-      try { repairRelatedVariantProposals(initialDb); proposeLexical(initialDb); backfillLeafSurfaces(initialDb); retractQualifiedSurfaceLeaves(initialDb); }
+      try { repairRelatedVariantProposals(initialDb); proposeLexical(initialDb); backfillLeafSurfaces(initialDb); retractQualifiedSurfaceLeaves(initialDb); reapplyLeafSurfaces(initialDb); }
       finally { initialDb.close(); }
       server.middlewares.use(async (request, response, next) => {
         if (!request.url?.startsWith("/__round5c/")) return next();
@@ -169,7 +169,8 @@ function round5WorkbenchBridge(): Plugin {
           }
           if (request.method === "POST" && path === "/sources/refresh") {
             await body();
-            return json(response, 200, refreshSources(db));
+            const refreshed = refreshSources(db);
+            return json(response, 200, { ...refreshed, leaf_surfaces: reapplyLeafSurfaces(db) });
           }
           if (request.method === "POST" && path === "/luna/run") {
             const payload = await body() as { run_id?: unknown };

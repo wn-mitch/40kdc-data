@@ -10,6 +10,7 @@ import { getQueue } from "./queue.js";
 import { getDashboard, getPrivateExport } from "./review.js";
 import { getPublicationReport, preparePublication, publishPublication, reconcilePublicationBatches } from "./publish.js";
 import { leafDescriberAudit } from "./leaf-describer-audit.js";
+import { reapplyLeafSurfaces } from "./leaves.js";
 import { refreshSources } from "./source.js";
 
 const root = resolve(fileURLToPath(new URL("../../../", import.meta.url)));
@@ -57,7 +58,7 @@ async function run(command: string | undefined): Promise<void> {
     if (command === "init") {
       console.log("Round 5C private database initialized.");
     } else if (command === "refresh") {
-      console.log(JSON.stringify(refreshSources(db), null, 2));
+      console.log(JSON.stringify({ ...refreshSources(db), leaf_surfaces: reapplyLeafSurfaces(db) }, null, 2));
     } else if (command === "import-hit-train") {
       console.log(JSON.stringify(importHitTrain(db, resolve(root, "_private/round5b-hit-roll")), null, 2));
     } else if (command === "repair-related-variants") {

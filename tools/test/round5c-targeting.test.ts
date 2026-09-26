@@ -153,6 +153,9 @@ describe("Round 5C targeting families", () => {
     expect(surfaceWarnings("blows that target the foe gain a bonus", "EFFECT", "roll-modifier", plus)).toEqual([expect.stringMatching(/targets/u)]);
     expect(surfaceWarnings("gain a bonus if the foe is thinned", "EFFECT", "roll-modifier", plus)).toEqual([expect.stringMatching(/condition/u)]);
     expect(surfaceWarnings("gain a bigger bonus instead", "EFFECT", "roll-modifier", plus)).toEqual([expect.stringMatching(/instead/u)]);
+    expect(surfaceWarnings("this model regains 1 lost wound", "EFFECT", "characteristic-modifier", { subject: "this-model", characteristic: "W", operation: "add", value: 1 }))
+      .toEqual([expect.stringMatching(/regaining lost wounds/u)]);
+    expect(surfaceWarnings("this model regains 1 lost wound", "EFFECT", "regain-wounds", { subject: "this-model", amount: "1" })).toEqual([]);
     // The meaning already carries the qualifier.
     expect(surfaceWarnings("each time this model makes a ranged attack", "EVENT", "attack", { direction: "makes", unit: "this-model", attack_type: "ranged" })).toEqual([]);
     expect(surfaceWarnings("melee weapons gain a bonus ability", "EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "melee" })).toEqual([]);

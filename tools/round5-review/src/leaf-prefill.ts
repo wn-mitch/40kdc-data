@@ -125,6 +125,12 @@ export function prefillFromSource(family: Family | undefined, exactText: string)
     : family.id === "attack" ? attackFromSource(exactText)
       : family.id === "select-unit" ? selectionFromSource(exactText)
         : PREDICATES.has(family.id) ? predicateFromSource(family.id, exactText) : {};
+  if (family.id === "regain-wounds") {
+    const amount = /regains? (\d+|d3\+3|d3|d6) lost wounds?/iu.exec(exactText)?.[1];
+    if (amount) prefill.amount = amount.toUpperCase();
+    if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
+    else if (/\bthe bearer\b/iu.test(exactText)) prefill.subject = "bearer";
+  }
   for (const [name, property] of Object.entries(family.parameterSchema.properties ?? {})) {
     if (name in prefill) continue;
     if (name === "weapon_type") {

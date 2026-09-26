@@ -4,8 +4,8 @@ import { LeafForm, leafLabel, type Family } from "./LeafForm";
 import { SplitEditor } from "./SplitEditor";
 import { api } from "./workbench-api";
 
-type Surface = { surface_id: number | null; surface: string; sample_text: string; annotations: number; pending: number; sources: number; warnings?: string[] };
-type Leaf = { fingerprint_id: string; family_id: string; family_version: number; role: string; parameters: Record<string, unknown>; retired_version: boolean; surfaces: Surface[]; describer_gaps?: string[] };
+type Surface = { surface_id: number | null; surface: string; sample_text: string; annotations: number; pending: number; sources: number; closes: number; warnings?: string[] };
+type Leaf = { fingerprint_id: string; family_id: string; family_version: number; role: string; parameters: Record<string, unknown>; retired_version: boolean; surfaces: Surface[]; closes: number; occurrences: number; describer_gaps?: string[] };
 type Wording = { surface: string; sample_text: string; occurrences: number; unlocks?: number; sample_ability_version_id: number };
 type Board = { leaves: Leaf[]; unlabeled: Wording[]; untiled: Wording[]; totals: { current_sources: number; tiled_sources: number; sources_with_leaves: number } };
 type ApplyReport = { batch_id: string; applied: number; already: number; blocked: Array<{ faction_id: string; ability_id: string; reason: string }> };
@@ -116,20 +116,21 @@ export function LeavesPage({ families, faction, revision, busy, perform, reviewe
 
     <section>
       <h2>Leaves</h2>
-      <p className="wb-help">One row per meaning. Each spelling under it is decided for the whole corpus, or still pending (proposed, not yet decided).</p>
+      <p className="wb-help">One row per meaning, those that would finish the most sources first. Each spelling under it is decided for the whole corpus, or still pending (proposed, not yet decided).</p>
       {ROLE_ORDER.map((role) => {
         const group = board.leaves.filter((leaf) => leaf.role === role);
         if (!group.length) return null;
         return <div key={role} className="wb-leaf-role"><h3>{role.toLowerCase()}</h3>
           {group.map((leaf) => <article key={leaf.fingerprint_id} className="wb-leaf">
             <header><strong>{leafLabel(families, leaf.family_id, leaf.parameters)}</strong>
+              <small>{leaf.closes ? `finishes ${leaf.closes} source${leaf.closes === 1 ? "" : "s"} · ` : ""}{leaf.occurrences} occurrence{leaf.occurrences === 1 ? "" : "s"}</small>
               {leaf.retired_version && <span className="wb-state wb-state-blocked">retired family version</span>}
               {leaf.describer_gaps?.map((gap) => <small key={gap} className="wb-state wb-state-blocked">{gap}</small>)}</header>
             <ul className="wb-surfaces">{leaf.surfaces.map((surface) => {
               const key = `surface:${leaf.fingerprint_id}:${surface.surface}`;
               return <li key={surface.surface}>
                 <span className="wb-surface-text">“{surface.sample_text}”</span>
-                <small>{surface.surface_id ? "decided everywhere" : "not decided"} · {surface.annotations} annotated{surface.pending ? ` · ${surface.pending} pending` : ""} · {surface.sources} source{surface.sources === 1 ? "" : "s"}</small>
+                <small>{surface.closes ? `finishes ${surface.closes} source${surface.closes === 1 ? "" : "s"} · ` : ""}{surface.surface_id ? "decided everywhere" : "not decided"} · {surface.annotations} annotated{surface.pending ? ` · ${surface.pending} pending` : ""} · {surface.sources} source{surface.sources === 1 ? "" : "s"}</small>
                 {surface.warnings?.map((warning) => <small key={warning} className="wb-state wb-state-blocked">{warning}</small>)}
                 <span className="wb-actions">
                   {!surface.surface_id && <button className="primary" disabled={busy || leaf.retired_version} onClick={() => decide(surface.sample_text, leaf.family_id, leaf.parameters)}>Decide everywhere</button>}

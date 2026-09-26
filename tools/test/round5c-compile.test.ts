@@ -69,6 +69,8 @@ describe("Round 5C leaf compiler", () => {
       [leaf("EFFECT", "invulnerable-save", { subject: "this-unit", threshold: 4 }), { type: "invulnerable-save", target: "unit", modifier: { invuln_sv: 4 } }],
       [leaf("EFFECT", "fights-first", { subject: "this-unit" }), { type: "fight-first", target: "unit", modifier: {} }],
       [leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristic: "OC", operation: "add", value: 1 }), { type: "stat-modifier", target: "unit", modifier: { stat: "OC", operation: "add", value: 1 } }],
+      [leaf("EFFECT", "regain-wounds", { subject: "this-model", amount: "1" }), { type: "heal-wounds", target: "self", modifier: { amount: 1 } }],
+      [leaf("EFFECT", "regain-wounds", { subject: "bearer", amount: "D3" }), { type: "heal-wounds", target: "bearer", modifier: { amount: "D3" } }],
     ];
     for (const [input, expected] of cases) {
       expect(compiled([input]).mechanics.effect).toEqual(expected);

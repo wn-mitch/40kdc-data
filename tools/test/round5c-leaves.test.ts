@@ -8,7 +8,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { validateFingerprint } from "../src/round5c/contracts.js";
 import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { upgradeFamilyVersions } from "../src/round5c/family-versions.js";
-import { applyLeafSurfaces, backfillLeafSurfaces, confirmSurface, leafBoard, mergeFingerprints, moveSurface, retireSurface } from "../src/round5c/leaves.js";
+import { applyLeafSurfaces, backfillLeafSurfaces, confirmSurface, leafBoard, mergeFingerprints, moveSurface, reapplyLeafSurfaces, retireSurface } from "../src/round5c/leaves.js";
 import { applyAnnotationBatch, getAbility, undoBatch } from "../src/round5c/review.js";
 import { refreshSources } from "../src/round5c/source.js";
 
@@ -255,6 +255,29 @@ describe("Round 5C leaf surfaces", () => {
       expect(backfillLeafSurfaces(db)).toEqual({ created: 1, conflicting: 1 });
       expect(db.prepare("SELECT normalized_surface FROM leaf_surfaces WHERE status = 'active'").all()).toEqual([{ normalized_surface: "gain 1cp" }]);
       expect(backfillLeafSurfaces(db)).toEqual({ created: 0, conflicting: 0 });
+    } finally {
+      db.close();
+    }
+  });
+});
+
+describe("Round 5C leaf re-application", () => {
+  it("reaches sources that arrive after a decision, and leaves no batch when nothing is new", () => {
+    const { db, root } = fixture([{ faction_id: "alpha", ability_id: "one", raw_text: `At the start of your turn, ${CP}.` }]);
+    try {
+      confirmSurface(db, { reviewer: REVIEWER, exact_text: CP, ...cpMeaning });
+      writeFileSync(join(root, "fixture.json"), JSON.stringify([
+        { faction_id: "alpha", ability_id: "one", raw_text: `At the start of your turn, ${CP}.` },
+        { faction_id: "beta", ability_id: "two", raw_text: `When this unit is destroyed, ${CP}.` },
+      ]));
+      refreshSources(db, root);
+      expect(leaves(db, "two")).toEqual([]);
+      expect(reapplyLeafSurfaces(db)).toMatchObject({ applied: 1, already: 1 });
+      expect(leaves(db, "two").map((item) => item.family_id)).toEqual(["resource-action"]);
+      const batches = () => (db.prepare("SELECT count(*) AS total FROM annotation_batches").get() as { total: number }).total;
+      const before = batches();
+      expect(reapplyLeafSurfaces(db)).toMatchObject({ applied: 0, already: 2 });
+      expect(batches()).toBe(before);
     } finally {
       db.close();
     }

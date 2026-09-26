@@ -16,6 +16,7 @@ export function surfaceWarnings(text: string, role: string, familyId: string, pa
   }
   if (role === "EFFECT" && /\btargets?\b/u.test(words)) warnings.push("Names what an attack targets; split the target into its own condition leaf.");
   if (role === "EFFECT" && /\b(if|while|unless)\b/u.test(words)) warnings.push("Contains a condition; split it into its own condition leaf.");
+  if (familyId !== "regain-wounds" && /\bregains?\b.*\blost wounds?\b/u.test(words)) warnings.push("Reads as regaining lost wounds; move it to the regain lost wounds leaf.");
   if (role !== "COMBINATOR" && /\binstead\b/u.test(words)) warnings.push("Contains \"instead\"; split it into the instead leaf.");
   return warnings;
 }

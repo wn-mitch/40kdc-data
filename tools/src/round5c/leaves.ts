@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
 
 import { currentFamilyVersion, exactSpan, validateFingerprint } from "./contracts.js";
+import { sourcesClosed } from "./board-ranking.js";
 import { getCurrentCoverage, type AbilityCoverage, type UncoveredInterval } from "./coverage.js";
 import { bumpWorkbenchRevision, insertSpan, invalidateWholeReview, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
 import { normalizedProjection, normalizedSurface } from "./matching.js";
@@ -289,6 +290,19 @@ export function applyLeafSurfaces(db: DatabaseSync, value: unknown): ApplyReport
   });
 }
 
+/**
+ * Apply every decided spelling to every current source it has not reached yet: new source
+ * versions after a refresh, and occurrences an earlier decision missed. Idempotent; a run that
+ * annotates nothing leaves no batch behind.
+ */
+export function reapplyLeafSurfaces(db: DatabaseSync): ApplyReport {
+  const report = applyLeafSurfaces(db, { reviewer: "system" });
+  if (!db.prepare("SELECT 1 FROM batch_members WHERE batch_id = ? LIMIT 1").get(report.batch_id)) {
+    db.prepare("DELETE FROM annotation_batches WHERE id = ?").run(report.batch_id);
+  }
+  return { applied: report.applied, already: report.already, blocked: report.blocked };
+}
+
 /** Supersede active annotations of one fingerprint on the given spans with another fingerprint. */
 function repoint(db: DatabaseSync, batchId: string, reviewer: string, from: string, to: string, surface?: string): Set<number> {
   const rows = db.prepare(`
@@ -442,17 +456,24 @@ export function applyLeafUndo(db: DatabaseSync, batchId: string, reversalId: str
   }
 }
 
-export type BoardSurface = { surface_id: number | null; surface: string; sample_text: string; annotations: number; pending: number; sources: number; warnings?: string[] };
+export type BoardSurface = {
+  surface_id: number | null; surface: string; sample_text: string; annotations: number; pending: number; sources: number;
+  /** Sources that applying this spelling's pending occurrences would finish. */
+  closes: number;
+  warnings?: string[];
+};
 export type BoardLeaf = {
   fingerprint_id: string; family_id: string; family_version: number; role: string; parameters: Record<string, unknown>;
   retired_version: boolean; surfaces: BoardSurface[];
+  /** Sources its pending spellings would finish, and every occurrence it has (decided or pending). */
+  closes: number; occurrences: number;
   /** Parameter values of this leaf that its English does not show (from the describer audit). */
   describer_gaps?: string[];
 };
 export type LeafBoard = {
   leaves: BoardLeaf[];
   /** Pending proposals with no meaning yet, grouped by wording. */
-  unlabeled: Array<{ surface: string; sample_text: string; occurrences: number; sample_ability_version_id: number }>;
+  unlabeled: Array<{ surface: string; sample_text: string; occurrences: number; unlocks: number; sample_ability_version_id: number }>;
   /** Uncovered wording, ranked by how many sources become fully tiled once it is a leaf. */
   untiled: Array<{ surface: string; sample_text: string; occurrences: number; unlocks: number; sample_ability_version_id: number }>;
   totals: { current_sources: number; tiled_sources: number; sources_with_leaves: number };
@@ -468,13 +489,13 @@ export function leafBoard(db: DatabaseSync, options: { factionId?: string } = {}
     let entry = leaves.get(row.fingerprint_id);
     if (!entry) leaves.set(row.fingerprint_id, entry = {
       fingerprint_id: row.fingerprint_id, family_id: row.family_id, family_version: row.family_version, role: row.role,
-      parameters: JSON.parse(row.parameters_json) as Record<string, unknown>, retired_version: row.family_status !== "active", surfaces: [],
+      parameters: JSON.parse(row.parameters_json) as Record<string, unknown>, retired_version: row.family_status !== "active", surfaces: [], closes: 0, occurrences: 0,
     });
     return entry;
   };
   const surfaceEntry = (entry: BoardLeaf, surface: string, sample: string): BoardSurface => {
     let found = entry.surfaces.find((item) => item.surface === surface);
-    if (!found) entry.surfaces.push(found = { surface_id: null, surface, sample_text: sample, annotations: 0, pending: 0, sources: 0 });
+    if (!found) entry.surfaces.push(found = { surface_id: null, surface, sample_text: sample, annotations: 0, pending: 0, sources: 0, closes: 0 });
     return found;
   };
   const fingerprintColumns = `fingerprints.id AS fingerprint_id, fingerprints.family_id, fingerprints.family_version,
@@ -483,6 +504,13 @@ export function leafBoard(db: DatabaseSync, options: { factionId?: string } = {}
     JOIN semantic_families ON semantic_families.id = fingerprints.family_id AND semantic_families.version = fingerprints.family_version`;
   type Row = { fingerprint_id: string; family_id: string; family_version: number; role: string; parameters_json: string; family_status: string; exact_text: string; ability_version_id: number };
   const sourcesBySurface = new Map<string, Set<number>>();
+  type Span = { ability_version_id: number; fragment: string; start_byte: number; end_byte: number };
+  const spansByKey = new Map<string, Span[]>();
+  const pendingSpans = (key: string): Span[] => {
+    const list = spansByKey.get(key) ?? [];
+    spansByKey.set(key, list);
+    return list;
+  };
   const countSource = (key: string, id: number) => {
     const set = sourcesBySurface.get(key) ?? new Set<number>();
     set.add(id);
@@ -500,16 +528,18 @@ export function leafBoard(db: DatabaseSync, options: { factionId?: string } = {}
     countSource(`${row.fingerprint_id}\u0000${surface}`, row.ability_version_id);
   }
   for (const row of db.prepare(`
-    SELECT ${fingerprintColumns}, source_spans.exact_text, abilities.id AS ability_version_id
+    SELECT ${fingerprintColumns}, source_spans.exact_text, abilities.id AS ability_version_id,
+      source_spans.fragment, source_spans.start_byte, source_spans.end_byte
     FROM proposals ${fingerprintJoin.replaceAll("X.", "proposals.")}
     JOIN source_spans ON source_spans.id = proposals.span_id
     JOIN abilities ON abilities.id = source_spans.ability_version_id
     WHERE proposals.status IN ('pending', 'unresolved') AND abilities.current = 1 AND (? IS NULL OR abilities.faction_id = ?)
       AND fingerprints.status = 'active' AND NOT ${RESTATES_ACTIVE_ANNOTATION}
-  `).all(faction, faction) as Row[]) {
+  `).all(faction, faction) as Array<Row & Span>) {
     const surface = leafSurface(row.exact_text);
     surfaceEntry(leaf(row), surface, row.exact_text).pending += 1;
     countSource(`${row.fingerprint_id}\u0000${surface}`, row.ability_version_id);
+    pendingSpans(`${row.fingerprint_id}\u0000${surface}`).push(row);
   }
   for (const row of db.prepare(`
     SELECT leaf_surfaces.id, leaf_surfaces.normalized_surface, ${fingerprintColumns}
@@ -524,23 +554,25 @@ export function leafBoard(db: DatabaseSync, options: { factionId?: string } = {}
     entry.surfaces.sort((left, right) => right.sources - left.sources || left.surface.localeCompare(right.surface));
   }
 
-  const unlabeled = new Map<string, { surface: string; sample_text: string; occurrences: number; sample_ability_version_id: number }>();
+  const unlabeled = new Map<string, { surface: string; sample_text: string; occurrences: number; unlocks: number; sample_ability_version_id: number }>();
   for (const row of db.prepare(`
-    SELECT source_spans.exact_text, abilities.id AS ability_version_id
+    SELECT source_spans.exact_text, abilities.id AS ability_version_id, source_spans.fragment, source_spans.start_byte, source_spans.end_byte
     FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id
     JOIN abilities ON abilities.id = source_spans.ability_version_id
     WHERE proposals.fingerprint_id IS NULL AND proposals.role <> 'CONNECTIVE' AND proposals.status IN ('pending', 'unresolved')
       AND abilities.current = 1 AND (? IS NULL OR abilities.faction_id = ?)
-  `).all(faction, faction) as Array<{ exact_text: string; ability_version_id: number }>) {
+  `).all(faction, faction) as Array<{ exact_text: string; ability_version_id: number } & Span>) {
     const surface = leafSurface(row.exact_text);
     if (!surface) continue;
-    const entry = unlabeled.get(surface) ?? { surface, sample_text: row.exact_text, occurrences: 0, sample_ability_version_id: row.ability_version_id };
+    const entry = unlabeled.get(surface) ?? { surface, sample_text: row.exact_text, occurrences: 0, unlocks: 0, sample_ability_version_id: row.ability_version_id };
     entry.occurrences += 1;
     unlabeled.set(surface, entry);
+    pendingSpans(`\u0000unlabeled\u0000${surface}`).push(row);
   }
 
   const factions = new Map((db.prepare("SELECT id, faction_id FROM abilities WHERE current = 1").all() as Array<{ id: number; faction_id: string }>).map((row) => [row.id, row.faction_id]));
   const untiled = new Map<string, { surface: string; sample_text: string; occurrences: number; unlocks: number; sample_ability_version_id: number }>();
+  const runsBySource = new Map<number, UncoveredInterval[]>();
   let tiled = 0;
   let withLeaves = 0;
   let current = 0;
@@ -551,6 +583,7 @@ export function leafBoard(db: DatabaseSync, options: { factionId?: string } = {}
     if (hasLeaf) withLeaves += 1;
     const runs = untiledRuns(coverage);
     if (runs.length === 0 && hasLeaf) tiled += 1;
+    if (runs.length > 0) runsBySource.set(id, runs);
     const distinct = new Set(runs.map((run) => leafSurface(runText(run.text))));
     for (const run of runs) {
       const sample = runText(run.text);
@@ -561,14 +594,19 @@ export function leafBoard(db: DatabaseSync, options: { factionId?: string } = {}
     }
     if (hasLeaf && distinct.size === 1) untiled.get([...distinct][0]!)!.unlocks += 1;
   }
+  for (const entry of unlabeled.values()) entry.unlocks = sourcesClosed(runsBySource, spansByKey.get(`\u0000unlabeled\u0000${entry.surface}`) ?? []);
   for (const entry of leaves.values()) {
+    for (const item of entry.surfaces) item.closes = sourcesClosed(runsBySource, spansByKey.get(`${entry.fingerprint_id}\u0000${item.surface}`) ?? []);
+    entry.surfaces.sort((left, right) => right.closes - left.closes || right.sources - left.sources || left.surface.localeCompare(right.surface));
+    entry.closes = entry.surfaces.reduce((total, item) => total + item.closes, 0);
+    entry.occurrences = entry.surfaces.reduce((total, item) => total + item.annotations + item.pending, 0);
     if (!entry.retired_version) entry.describer_gaps = describerGaps(entry.family_id, entry.parameters);
     for (const item of entry.surfaces) item.warnings = surfaceWarnings(item.sample_text, entry.role, entry.family_id, entry.parameters);
   }
   return {
-    leaves: [...leaves.values()].sort((left, right) => left.role.localeCompare(right.role) || left.family_id.localeCompare(right.family_id)
-      || right.surfaces.reduce((total, item) => total + item.sources, 0) - left.surfaces.reduce((total, item) => total + item.sources, 0)),
-    unlabeled: [...unlabeled.values()].filter((entry) => entry.occurrences > 1).sort((left, right) => right.occurrences - left.occurrences).slice(0, UNTILED_LIMIT),
+    leaves: [...leaves.values()].sort((left, right) => right.closes - left.closes || right.occurrences - left.occurrences || left.family_id.localeCompare(right.family_id)),
+    unlabeled: [...unlabeled.values()].filter((entry) => entry.occurrences > 1 || entry.unlocks > 0)
+      .sort((left, right) => right.unlocks - left.unlocks || right.occurrences - left.occurrences).slice(0, UNTILED_LIMIT),
     untiled: [...untiled.values()].sort((left, right) => right.unlocks - left.unlocks || right.occurrences - left.occurrences).slice(0, UNTILED_LIMIT),
     totals: { current_sources: current, tiled_sources: tiled, sources_with_leaves: withLeaves },
   };
