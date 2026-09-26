@@ -1,0 +1,146 @@
+import type { SemanticFamilyDefinition } from "./contracts.js";
+import { enumValue, exactKeys } from "./family-validation.js";
+
+/**
+ * Restrictions: who may use an ability, in which phases, and how often. How often compiles to
+ * the entry's `usage`. Which phases (a stratagem's WHEN) and which bearer (an enhancement's
+ * "<KEYWORD> model only") are already recorded on the core stratagem and enhancement records
+ * from the Munitorum dump, so those leaves compile to nothing and are checked against core
+ * instead; a disagreement blocks approval rather than writing a second source of truth.
+ */
+
+export const USAGE_FREQUENCIES = ["once-per-battle", "once-per-battle-round", "once-per-turn", "once-per-phase", "once-per-opponent-turn"] as const;
+export const USAGE_PER = ["any", "army", "unit", "model"] as const;
+export const WINDOW_PHASES = ["command", "movement", "shooting", "charge", "fight"] as const;
+export const KEYWORD_MATCH = ["all", "any"] as const;
+
+/** A unit keyword as the DSL writes it: uppercase words, without markdown emphasis. */
+const UNIT_KEYWORD = /^[A-Z][A-Z0-9' -]*[A-Z0-9]$/u;
+
+const phaseSet = { type: "array", items: { enum: WINDOW_PHASES }, minItems: 0, uniqueItems: true } as const;
+
+export const OPTIONAL_USERS = ["you", "bearer", "this-unit", "this-model"] as const;
+
+export const RESTRICTION_FAMILIES: readonly SemanticFamilyDefinition[] = [
+  {
+    id: "optional-use",
+    version: 1,
+    role: "RESTRICTION",
+    label: "Used by choice",
+    description: "\"You can use this ability\" or \"the bearer can use this Enhancement\": the player chooses whether it happens. With an event it becomes an optional trigger; without one, the ability is activated.",
+    starter: { who: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["who"],
+      properties: { who: { enum: OPTIONAL_USERS } },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "usage-limit",
+    version: 1,
+    role: "RESTRICTION",
+    label: "How often it can be used",
+    description: "Once per battle, battle round, turn or phase, optionally counted per army, unit or model.",
+    starter: { frequency: "", per: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["frequency", "per"],
+      properties: { frequency: { enum: USAGE_FREQUENCIES }, per: { enum: USAGE_PER } },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "use-window",
+    version: 1,
+    role: "RESTRICTION",
+    label: "Phases it can be used in",
+    description: "A stratagem's WHEN: the phases it can be used in, and whose turn each belongs to. \"Your opponent's Shooting phase or the Fight phase\" is opponent Shooting plus either player's Fight. Checked against the core stratagem record, not written again.",
+    starter: { your_phases: [], opponent_phases: [], either_phases: [] },
+    parameterSchema: {
+      type: "object",
+      required: ["your_phases", "opponent_phases", "either_phases"],
+      properties: { your_phases: phaseSet, opponent_phases: phaseSet, either_phases: phaseSet },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "bearer-eligibility",
+    version: 1,
+    role: "RESTRICTION",
+    label: "Which models can take it",
+    description: "An enhancement's \"<KEYWORD> model only\": every keyword, or any one of them (\"CANONESS, PALATINE or MINISTORUM PRIEST\"). Checked against the core enhancement record, not written again.",
+    starter: { keywords: [], match: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["keywords", "match"],
+      properties: {
+        keywords: { type: "array", items: { type: "string", pattern: UNIT_KEYWORD.source }, minItems: 1, uniqueItems: true },
+        match: { enum: KEYWORD_MATCH },
+      },
+      additionalProperties: false,
+    },
+  },
+];
+
+function phases(value: unknown, label: string): string[] {
+  if (!Array.isArray(value)) throw new TypeError(`${label} must list phases.`);
+  for (const item of value) enumValue(item, WINDOW_PHASES, label);
+  if (new Set(value).size !== value.length) throw new TypeError(`${label} lists a phase twice.`);
+  return WINDOW_PHASES.filter((phase) => value.includes(phase));
+}
+
+function keywords(value: unknown): string[] {
+  if (!Array.isArray(value) || value.length === 0) throw new TypeError("bearer-eligibility.keywords must list at least one keyword.");
+  const list = value.map((item) => {
+    const keyword = String(item).replaceAll("*", "").replace(/\s+/gu, " ").trim().toUpperCase();
+    if (!UNIT_KEYWORD.test(keyword)) throw new TypeError(`bearer-eligibility keyword ${JSON.stringify(item)} is not a unit keyword.`);
+    return keyword;
+  });
+  if (new Set(list).size !== list.length) throw new TypeError("bearer-eligibility.keywords lists a keyword twice.");
+  return list.sort();
+}
+
+export function normalizeRestrictionParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
+  switch (family) {
+    case "optional-use":
+      exactKeys(input, ["who"], family);
+      return { who: enumValue(input.who, OPTIONAL_USERS, "optional-use.who") };
+    case "usage-limit":
+      exactKeys(input, ["frequency", "per"], family);
+      return { frequency: enumValue(input.frequency, USAGE_FREQUENCIES, "usage-limit.frequency"), per: enumValue(input.per, USAGE_PER, "usage-limit.per") };
+    case "use-window": {
+      exactKeys(input, ["your_phases", "opponent_phases", "either_phases"], family);
+      const window = {
+        your_phases: phases(input.your_phases, "use-window.your_phases"),
+        opponent_phases: phases(input.opponent_phases, "use-window.opponent_phases"),
+        either_phases: phases(input.either_phases, "use-window.either_phases"),
+      };
+      const all = [...window.your_phases, ...window.opponent_phases, ...window.either_phases];
+      if (all.length === 0) throw new TypeError("use-window must name at least one phase.");
+      if (new Set(all).size !== all.length) throw new TypeError("use-window names a phase under two owners; a phase in either player's turn belongs only under either.");
+      return window;
+    }
+    case "bearer-eligibility":
+      exactKeys(input, ["keywords", "match"], family);
+      return { keywords: keywords(input.keywords), match: enumValue(input.match, KEYWORD_MATCH, "bearer-eligibility.match") };
+    default:
+      return null;
+  }
+}
+
+/** The entry's usage for a usage-limit leaf, in the DSL's spelling. */
+export function usageFor(parameters: Record<string, unknown>): Record<string, unknown> {
+  const frequency = parameters.frequency === "once-per-battle" ? { frequency: "n-per-battle", count: 1 } : { frequency: parameters.frequency };
+  return { ...frequency, ...(parameters.per !== "any" ? { per: parameters.per } : {}) };
+}
+
+/** What core must say for a use-window: the same phases, and one turn when every phase has one owner. */
+export function expectedWindow(parameters: Record<string, unknown>): { phases: string[]; player_turn: string } {
+  const your = parameters.your_phases as string[];
+  const opponent = parameters.opponent_phases as string[];
+  const either = parameters.either_phases as string[];
+  const phases = WINDOW_PHASES.filter((phase) => [...your, ...opponent, ...either].includes(phase));
+  const player_turn = either.length === 0 && opponent.length === 0 ? "your-turn" : either.length === 0 && your.length === 0 ? "opponent-turn" : "either";
+  return { phases, player_turn };
+}

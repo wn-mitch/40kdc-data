@@ -3,12 +3,13 @@ import type { DatabaseSync } from "node:sqlite";
 import { hashJson } from "../round4/hash.js";
 import { boundedInteger, enumValue, exactKeys } from "./family-validation.js";
 import { EFFECT_FAMILIES, normalizeEffectParameters } from "./effect-families.js";
+import { normalizeRestrictionParameters, RESTRICTION_FAMILIES } from "./restriction-families.js";
 import { normalizeTargetingParameters, TARGETING_FAMILIES } from "./targeting-families.js";
 
 export const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
 export type SemanticRole = (typeof SEMANTIC_ROLES)[number];
-/** Leaf roles: the proposal roles plus combinators, which join leaves rather than mean something alone. */
-export const LEAF_ROLES = [...SEMANTIC_ROLES, "COMBINATOR"] as const;
+/** Leaf roles: the proposal roles, combinators (which join leaves), and restrictions (limits on when and by whom an ability is used). */
+export const LEAF_ROLES = [...SEMANTIC_ROLES, "COMBINATOR", "RESTRICTION"] as const;
 export type LeafRole = (typeof LEAF_ROLES)[number];
 
 type SourceQualifiedValue = { source: string };
@@ -58,6 +59,10 @@ const EVENT_KINDS_V3 = [
 /** Attacks are the `attack` family from version 4 on, which says who attacks and with what. */
 const EVENT_KINDS = ["charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end", "after-shooting"] as const;
 const WEAPON_TYPES = ["all", "melee", "ranged"] as const;
+const DURATION_ENDPOINTS = [
+  "end-of-phase", "end-of-turn", "end-of-battle-round", "end-of-battle",
+  "start-of-next-turn", "start-of-next-command-phase", "start-of-next-movement-phase", "start-of-next-battle-round",
+] as const;
 /** Event kinds that need to say which phase, and whose turn, they belong to. */
 export const PHASE_EVENT_KINDS = ["phase-start", "phase-end"] as const;
 const PHASES = ["command", "movement", "shooting", "charge", "fight", "any"] as const;
@@ -151,6 +156,21 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
       properties: {
         endpoint: enumOrSourceSchema(["end-of-phase", "end-of-turn", "end-of-battle-round", "end-of-battle"]),
       },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "duration",
+    version: 2,
+    role: "DURATION",
+    label: "Set a duration",
+    description: "Marks when an effect ends: the end of this phase, turn, battle round or battle, or the start of your next turn, Command phase, Movement phase or battle round.",
+    starter: { endpoint: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["endpoint"],
+      properties: { endpoint: { enum: DURATION_ENDPOINTS } },
       additionalProperties: false,
     },
   },
@@ -422,6 +442,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
   },
   ...TARGETING_FAMILIES,
   ...EFFECT_FAMILIES,
+  ...RESTRICTION_FAMILIES,
 ] as const;
 
 /** The version new fingerprints and model requests use for a family. */
@@ -530,6 +551,7 @@ export function normalizeFingerprintParameters(
       };
     case "duration":
       exactKeys(input, ["endpoint"], family);
+      if (version >= 2) return { endpoint: enumValue(input.endpoint, DURATION_ENDPOINTS, "duration.endpoint") };
       return {
         endpoint: enumOrSource(input.endpoint, ["end-of-phase", "end-of-turn", "end-of-battle-round", "end-of-battle"], "duration.endpoint"),
       };
@@ -620,7 +642,7 @@ export function normalizeFingerprintParameters(
         value: boundedInteger(input.value, 1, 20, "characteristic-modifier.value"),
       };
     default: {
-      const extra = normalizeTargetingParameters(family, input) ?? normalizeEffectParameters(family, input);
+      const extra = normalizeTargetingParameters(family, input) ?? normalizeEffectParameters(family, input) ?? normalizeRestrictionParameters(family, input);
       if (extra) return extra;
       throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
     }

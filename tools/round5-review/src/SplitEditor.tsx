@@ -3,7 +3,7 @@ import { useState } from "react";
 import { LeafForm, type Family } from "./LeafForm";
 
 /** Words that only join leaves; a piece made of them alone is not a leaf. */
-const GLUE = new Set(["and", "as well"]);
+const GLUE = new Set(["and", "as well", "in addition", "then", "when doing so", "if you do", "if it does"]);
 const EDGE = /^[\s\p{P}]+|[\s\p{P}]+$/gu;
 
 /**

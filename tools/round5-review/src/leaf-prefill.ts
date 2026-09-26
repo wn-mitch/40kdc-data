@@ -145,6 +145,27 @@ function characteristicFromSource(text: string): Record<string, unknown> {
   return result;
 }
 
+const WINDOW_PHASES = ["command", "movement", "shooting", "charge", "fight"];
+
+/** "Your opponent's Shooting phase or the Fight phase": each phase with its own owner. */
+function windowFromSource(text: string): Record<string, unknown> {
+  const window: Record<string, string[]> = { your_phases: [], opponent_phases: [], either_phases: [] };
+  const lower = text.toLowerCase().replaceAll("’", "'");
+  if (/\bany phase\b/u.test(lower)) return { ...window, either_phases: [...WINDOW_PHASES] };
+  let previous = "either_phases";
+  for (const part of lower.split(/\bor\b|,/u)) {
+    const phase = WINDOW_PHASES.find((item) => part.includes(item));
+    if (!phase) continue;
+    // "Your Movement or Charge phase": a phase without its own owner shares the one before it;
+    // "the Fight phase" and a bare "Fight phase" belong to either player's turn.
+    const owner = /your opponent's/u.test(part) ? "opponent_phases" : /\byour\b/u.test(part) ? "your_phases"
+      : /\bthe\b/u.test(part) || part.trim().startsWith(phase) && previous === "either_phases" ? "either_phases" : previous;
+    if (!window[owner]!.includes(phase)) window[owner]!.push(phase);
+    previous = owner;
+  }
+  return window;
+}
+
 const PREDICATES = new Set(["unit-state", "unit-keyword", "unit-mark", "unit-position"]);
 
 export function prefillFromSource(family: Family | undefined, exactText: string): Record<string, unknown> {
@@ -154,6 +175,27 @@ export function prefillFromSource(family: Family | undefined, exactText: string)
       : family.id === "select-unit" ? selectionFromSource(exactText)
         : PREDICATES.has(family.id) ? predicateFromSource(family.id, exactText) : {};
   if (family.id === "characteristic-modifier") Object.assign(prefill, characteristicFromSource(exactText));
+  if (family.id === "usage-limit") {
+    const frequency = /once per (battle round|battle|turn|phase)/iu.exec(exactText)?.[1]?.toLowerCase();
+    if (frequency) prefill.frequency = `once-per-${frequency.replace(" ", "-")}`;
+    if (/your opponent's turn|opponent’s turn/iu.test(exactText)) prefill.frequency = "once-per-opponent-turn";
+    const per = /\bper (army|unit|model)\b|\bfor each (unit|model)\b/iu.exec(exactText);
+    prefill.per = per ? (per[1] ?? per[2])!.toLowerCase() : "any";
+  }
+  if (family.id === "use-window") Object.assign(prefill, windowFromSource(exactText));
+  if (family.id === "bearer-eligibility") {
+    const words = exactText.replace(/\bmodel only\b.*$/iu, "").split(/,|\bor\b/u).map((item) => item.replaceAll("*", "").trim().toUpperCase()).filter((item) => /^[A-Z][A-Z0-9' -]*[A-Z0-9]$/u.test(item));
+    if (words.length) {
+      prefill.keywords = words;
+      prefill.match = words.length > 1 ? "any" : "all";
+    }
+  }
+  if (family.id === "optional-use") {
+    if (/\bthe bearer\b/iu.test(exactText)) prefill.who = "bearer";
+    else if (/\byou can\b/iu.test(exactText)) prefill.who = "you";
+    else if (/\bthis model\b/iu.test(exactText)) prefill.who = "this-model";
+    else if (/\bthis unit\b/iu.test(exactText)) prefill.who = "this-unit";
+  }
   if (family.id === "act-after-move") {
     const moves = [/\badvanc/iu.test(exactText) ? "advance" : null, /\bf(?:a|e)ll(?:s|ing)? back\b/iu.test(exactText) ? "fall-back" : null].filter(Boolean);
     const acts = [/\bshoot|\bshot\b/iu.test(exactText) ? "shoot" : null, /\bcharge\b/iu.test(exactText) ? "charge" : null].filter(Boolean);

@@ -2,7 +2,9 @@ import { exactSpan } from "./contracts.js";
 import {
   ATTACK_EVENTS, attackTypeCondition, closed, CompileError, condition, DURATIONS, effect, kindKey, negate, trigger, type CompileLeaf,
 } from "./compile-fragments.js";
+import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
+import { usageFor } from "./restriction-families.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -23,6 +25,8 @@ export { CompileError, type CompileLeaf } from "./compile-fragments.js";
  *   of the same family: the earlier one applies only when the clause's condition does not.
  * - Selected unit. Effects gated by "the target is the selected unit" go inside one
  *   designate-target for the ability's select-unit leaf.
+ * - Restrictions. How often compiles to `usage`; a stratagem's phases and an enhancement's
+ *   eligible bearers compile to nothing and come back as checks against the core records.
  * - Two or more effects form a sequence in source order; a duration sets `scope.duration`;
  *   events other than attacks and selections become the trigger.
  *
@@ -30,7 +34,7 @@ export { CompileError, type CompileLeaf } from "./compile-fragments.js";
  */
 
 export type Compiled =
-  | { ok: true; signature: string; mechanics: Mechanics }
+  | { ok: true; signature: string; mechanics: Mechanics; checks: CoreCheck[] }
   | { ok: false; signature: string; errors: string[] };
 
 type Node = Record<string, unknown>;
@@ -119,6 +123,12 @@ export type LeafFragment =
 export function leafFragment(leaf: CompileLeaf): LeafFragment {
   if (leaf.role === "EFFECT") return { kind: "effect", node: effect(leaf, { attached: false, incoming: false }) };
   if (leaf.role === "COMBINATOR") return { kind: "implicit", note: "No separate text: this effect replaces an earlier one of the same kind when its condition holds." };
+  if (leaf.role === "RESTRICTION") {
+    return { kind: "implicit", note: leaf.family_id === "usage-limit"
+      ? `No separate text: sets the ability's usage to ${JSON.stringify(usageFor(leaf.parameters))}.`
+      : leaf.family_id === "optional-use" ? "No separate text: the player chooses whether to use it (an optional trigger, or an activated ability)."
+        : "No separate text: checked against the core record, which already holds it." };
+  }
   if (leaf.family_id === "target-is-selected") return { kind: "implicit", note: "No separate text: the effects it gates apply to attacks against the selected unit." };
   if (leaf.role === "CONDITION") return { kind: "condition", node: condition(leaf) };
   if (leaf.role === "DURATION") return { kind: "duration", duration: duration(leaf) };
@@ -176,6 +186,9 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const durations: string[] = [];
   const selections: CompileLeaf[] = [];
   const combinators: number[] = [];
+  const usages: Record<string, unknown>[] = [];
+  let optional = false;
+  const checks: CoreCheck[] = [];
 
   list.forEach((leaf, index) => {
     const { sentence, clause } = places[index]!;
@@ -198,6 +211,12 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
       if (leaf.role === "CONDITION") scope(leaf.family_id === "target-is-selected" ? "selected" : condition(leaf));
       else if (leaf.role === "DURATION") durations.push(duration(leaf));
       else if (leaf.role === "COMBINATOR") combinators.push(index);
+      else if (leaf.role === "RESTRICTION") {
+        if (leaf.family_id === "usage-limit") usages.push(usageFor(leaf.parameters));
+        else if (leaf.family_id === "optional-use") optional = true;
+        else if (leaf.family_id === "use-window" || leaf.family_id === "bearer-eligibility") checks.push({ kind: leaf.family_id, parameters: leaf.parameters });
+        else throw new CompileError(`Restriction ${leaf.family_id} has no DSL fragment yet.`);
+      }
       else if (leaf.role === "EVENT") {
         if (leaf.family_id === "attack") {
           const gate = attackTypeCondition(leaf);
@@ -253,6 +272,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
 
   if (triggers.length > 1) errors.push("More than one trigger event; the shape needs a combinator the compiler does not have.");
   if (new Set(durations).size > 1) errors.push("Conflicting durations.");
+  if (usages.length > 1) errors.push("More than one usage limit; the entry has one usage.");
   const selected = planned.filter((item) => item.selected);
   if (selections.length > 1) errors.push("More than one unit is selected; the compiler binds only one.");
   if (selections.length === 1 && selected.length !== planned.length) errors.push("A unit is selected, but not every effect is limited to attacks against it.");
@@ -270,9 +290,12 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     mechanics: {
       effect: gated(global, body),
       scope: { range: "unit", duration: scopeDuration },
-      behavior: triggers.length ? "reactive" : "passive",
-      trigger: triggers[0] ?? null,
+      // A choice with an event is an optional trigger; a choice without one is activated.
+      behavior: triggers.length ? "reactive" : optional ? "activated" : "passive",
+      trigger: triggers[0] ? (optional ? { ...triggers[0], optional: true } : triggers[0]) : null,
+      ...(usages.length ? { usage: usages[0] } : {}),
     },
+    checks,
   };
 }
 

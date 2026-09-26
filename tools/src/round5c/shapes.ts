@@ -4,6 +4,7 @@ import type { DatabaseSync } from "node:sqlite";
 import { hashJson } from "../round4/hash.js";
 import { compilationInputsHash } from "./compiled.js";
 import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
+import { coreCheckErrors } from "./core-checks.js";
 import { getCurrentCoverage } from "./coverage.js";
 import { bumpWorkbenchRevision, withTransaction } from "./db.js";
 import { checkEntry, entryWithMechanics, resolveAbilityEntity, round5cDataRoot } from "./entries.js";
@@ -127,7 +128,8 @@ function render(factionId: string, abilityId: string, compiled: Compiled): { aut
   if (!compiled.ok) return { authored, compiled: null, errors: compiled.errors, differs: true };
   const entry = entryWithMechanics(original, compiled.mechanics);
   const check = checkEntry(entry);
-  const fields = ["effect", "scope", "behavior", "trigger"] as const;
+  check.errors.push(...coreCheckErrors(round5cDataRoot(), abilityId, compiled.checks));
+  const fields = ["effect", "scope", "behavior", "trigger", "usage"] as const;
   const differs = fields.some((field) => hashJson(original[field] ?? null) !== hashJson(entry[field] ?? null));
   return { authored, compiled: check.rendered_text, errors: check.errors, differs };
 }

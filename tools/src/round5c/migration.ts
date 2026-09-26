@@ -446,7 +446,7 @@ function fingerprintForSidewaysChoice(
   if (!id) return null;
   const role = familyRole(definition.family, definition.version);
   // Only effect families are listed above; a combinator can never be a proposal role.
-  if (role === "COMBINATOR") throw new Error(`Sideways choice ${choice} maps to a combinator.`);
+  if (role === "COMBINATOR" || role === "RESTRICTION") throw new Error(`Sideways choice ${choice} maps to a ${role.toLowerCase()}.`);
   return { id, role };
 }
 

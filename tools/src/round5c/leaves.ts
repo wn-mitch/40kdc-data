@@ -19,14 +19,17 @@ import { surfaceWarnings } from "./surface-lint.js";
 
 
 /** Uncovered wording that joins leaves without meaning anything itself. */
-const GLUE = new Set(["and", "as well"]);
+const GLUE = new Set(["and", "as well", "in addition", "then", "when doing so", "if you do", "if it does"]);
 const EDGE_PUNCTUATION = /^[\s\p{P}]+|[\s\p{P}]+$/gu;
+/** HTML entity debris from the source extraction (a stray "&#x20;"); never a leaf. Coverage splits
+ * the entity at its punctuation, so the bare "x20" left between must match too. */
+const ENTITY_DEBRIS = /&#?x?[0-9a-f]+;|(?<![\p{L}\p{N}])#?x[0-9a-f]{2,4}(?![\p{L}\p{N}])/giu;
 const LEADING_GLUE = new RegExp(`^(?:${[...GLUE].join("|")})(?=[\\s\\p{P}])`, "iu");
 const TRAILING_GLUE = new RegExp(`(?<=[\\s\\p{P}])(?:${[...GLUE].join("|")})$`, "iu");
 
 /** Uncovered wording without edge punctuation or edge joining words: the part a leaf would name. */
 function runText(text: string): string {
-  let current = text.replace(EDGE_PUNCTUATION, "");
+  let current = text.replace(ENTITY_DEBRIS, " ").replace(EDGE_PUNCTUATION, "");
   for (;;) {
     const next = current.replace(LEADING_GLUE, "").replace(TRAILING_GLUE, "").replace(EDGE_PUNCTUATION, "");
     if (next === current) return current;

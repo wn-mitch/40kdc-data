@@ -29,6 +29,16 @@ describe("Leaf prefill", () => {
     expect(prefillFromSource(family("act-after-move"), "this unit is eligible to shoot and declare a charge in a turn in which it Fell Back"))
       .toEqual({ moves: ["fall-back"], acts: ["shoot", "charge"], subject: "this-unit" });
     expect(prefillFromSource(family("act-after-move"), "it can Advance and charge")).toEqual({ moves: ["advance"], acts: ["charge"] });
+    const window = (text: string) => prefillFromSource(family("use-window"), text);
+    expect(window("Your opponent’s Shooting phase or the Fight phase")).toEqual({ your_phases: [], opponent_phases: ["shooting"], either_phases: ["fight"] });
+    expect(window("Your Movement or your Charge phase")).toEqual({ your_phases: ["movement", "charge"], opponent_phases: [], either_phases: [] });
+    expect(window("Your Movement phase or Charge phase")).toEqual({ your_phases: ["movement", "charge"], opponent_phases: [], either_phases: [] });
+    expect(window("Fight phase")).toEqual({ your_phases: [], opponent_phases: [], either_phases: ["fight"] });
+    expect(window("Any phase").either_phases).toHaveLength(5);
+    expect(prefillFromSource(family("usage-limit"), "Once per battle")).toEqual({ frequency: "once-per-battle", per: "any" });
+    expect(prefillFromSource(family("bearer-eligibility"), "CANONESS, PALATINE or MINISTORUM PRIEST model only")).toEqual({ keywords: ["CANONESS", "PALATINE", "MINISTORUM PRIEST"], match: "any" });
+    expect(prefillFromSource(family("bearer-eligibility"), "ADEPTA SORORITAS model only")).toEqual({ keywords: ["ADEPTA SORORITAS"], match: "all" });
+    expect(prefillFromSource(family("optional-use"), "the bearer can use this Enhancement")).toEqual({ who: "bearer" });
     // Nothing stated, nothing chosen.
     expect(prefillFromSource(family("unit-state"), "if so")).toEqual({});
   });

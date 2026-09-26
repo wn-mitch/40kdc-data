@@ -22,6 +22,7 @@ const applies = (property: Property, parameters: Record<string, unknown>) =>
 const ROLE_LABELS: Record<string, string> = {
   CONDITION: "Condition: when it applies", EVENT: "Event: when it fires", EFFECT: "Effect: what changes", DURATION: "Duration: how long",
   COMBINATOR: "Combinator: how effects join",
+  RESTRICTION: "Restriction: who can use it, when, and how often",
 };
 
 const sourceable = (property: Property) => property.anyOf?.some((item) => item.type === "object") ?? false;

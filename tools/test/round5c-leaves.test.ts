@@ -284,6 +284,20 @@ describe("Round 5C leaf re-application", () => {
   });
 });
 
+describe("Round 5C joining words", () => {
+  it("needs no leaf for joining words or leftover HTML entities", () => {
+    const { db } = fixture([{ faction_id: "alpha", ability_id: "one", raw_text: `${LEAD}, ${CP}. In addition, then ${CP}.&#x20;` }]);
+    try {
+      confirmSurface(db, { reviewer: REVIEWER, exact_text: LEAD, ...leadMeaning });
+      confirmSurface(db, { reviewer: REVIEWER, exact_text: CP, ...cpMeaning });
+      expect(leafBoard(db).untiled).toEqual([]);
+      expect(leafBoard(db).totals.tiled_sources).toBe(1);
+    } finally {
+      db.close();
+    }
+  });
+});
+
 describe("Round 5C family versions", () => {
   it("moves leaves to the current version, maps named event wording, and keeps unmapped leaves visible", () => {
     const { db } = fixture([

@@ -10,7 +10,7 @@ type Wording = { surface: string; sample_text: string; occurrences: number; unlo
 type Board = { leaves: Leaf[]; unlabeled: Wording[]; untiled: Wording[]; totals: { current_sources: number; tiled_sources: number; sources_with_leaves: number } };
 type ApplyReport = { batch_id: string; applied: number; already: number; blocked: Array<{ faction_id: string; ability_id: string; reason: string }> };
 
-const ROLE_ORDER = ["CONDITION", "EVENT", "EFFECT", "DURATION", "COMBINATOR"];
+const ROLE_ORDER = ["RESTRICTION", "CONDITION", "EVENT", "EFFECT", "DURATION", "COMBINATOR"];
 const BLOCK_REASONS: Record<string, string> = { OTHER_LEAF_HERE: "another leaf already covers this text", REJECTED_HERE: "a reviewer rejected this meaning here",
   QUALIFIED_HERE: "a word before it (melee, ranged, or a unit keyword) narrows the meaning; decide the longer wording" };
 

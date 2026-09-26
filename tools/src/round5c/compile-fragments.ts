@@ -30,6 +30,8 @@ const TRIGGERS: Record<string, Node> = {
 
 export const DURATIONS: Record<string, string> = {
   "end-of-phase": "phase", "end-of-turn": "turn", "end-of-battle-round": "battle-round", "end-of-battle": "battle",
+  "start-of-next-turn": "until-start-next-turn", "start-of-next-command-phase": "until-next-command-phase",
+  "start-of-next-movement-phase": "until-next-movement-phase", "start-of-next-battle-round": "until-next-battle-round",
 };
 
 const RESOURCE_POOLS: Record<string, string> = {
