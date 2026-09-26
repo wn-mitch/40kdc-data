@@ -27,7 +27,7 @@
             </profile>
             <profile name="Storm of Silence" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Against CHARACTER targets, you can re-roll the Wound roll.</characteristic>
+                <characteristic name="Description">Against CHARACTER targets, you can re-roll a failed Wound roll.</characteristic>
               </characteristics>
             </profile>
             <profile name="Whirling Death" typeName="Abilities">

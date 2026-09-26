@@ -99,7 +99,7 @@
             </profile>
             <profile name="Their Number is Legion" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll the Reanimation Protocols roll.</characteristic>
+                <characteristic name="Description">You can re-roll a failed Reanimation Protocols roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>

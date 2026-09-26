@@ -129,8 +129,9 @@ describe("Round 5C leaf compiler", () => {
   });
 
   it("previews each leaf through the describer and names invalid parameters", () => {
-    // Today's describer wording; it should read "at the start of your Command phase" once the describer folds phase conditions into the event.
-    expect(previewLeaf({ family_id: "event", parameters: { kind: "phase-start", phase: "command", turn: "your" } }).text).toBe("at the start of the phase, if during the Command phase and in your turn");
+    expect(previewLeaf({ family_id: "event", parameters: { kind: "phase-start", phase: "command", turn: "your" } }).text).toBe("at the start of your Command phase");
+    expect(previewLeaf({ family_id: "event", parameters: { kind: "phase-end", phase: "fight", turn: "opponent" } }).text).toBe("at the end of your opponent's Fight phase");
+    expect(previewLeaf({ family_id: "event", parameters: { kind: "phase-start", phase: "shooting", turn: "either" } }).text).toBe("at the start of the Shooting phase");
     expect(previewLeaf({ family_id: "event", parameters: { kind: "phase-start" } }).problem).toMatch(/exactly: kind, phase, turn/u);
     expect(previewLeaf({ family_id: "event", parameters: { kind: "charge", phase: "command", turn: "your" } }).problem).toMatch(/exactly: kind/u);
     expect(previewLeaf({ family_id: "feel-no-pain", parameters: { subject: "this-unit", threshold: 5, against: "mortal" } }).text).toMatch(/Feel No Pain 5\+/u);

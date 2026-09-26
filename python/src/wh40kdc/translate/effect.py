@@ -23,6 +23,7 @@ from wh40kdc.translate.condition import (
     describe_selection_eligibility,
     describe_timing,
     event_clause,
+    legacy_unit_subject,
     negated_timing,
 )
 from wh40kdc.translate.condition import (
@@ -794,8 +795,10 @@ def _subject(target: str | None, ctx: Ctx) -> str:
         within = " anywhere on the battlefield"
     else:
         within = " nearby"
-    if target in ("self", "bearer"):
+    if target == "self":
         return "this model"
+    if target == "bearer":
+        return "the bearer"
     if target == "unit":
         if ctx.get("unit_subject") is not None:
             return ctx["unit_subject"]
@@ -1006,9 +1009,65 @@ _TRIGGER_ATTACK_MODELS = {
 }
 
 
+_MISSING: Any = object()
+
+# Authored data spells whose turn several ways; an unknown spelling keeps the generic wording.
+_PHASE_BOUNDARY_OWNERS = {
+    "your": "your",
+    "your-turn": "your",
+    "own": "your",
+    "self": "your",
+    "opponent": "your opponent's",
+    "opponent-turn": "your opponent's",
+}
+
+
+def _phase_boundary(t: dict[str, Any]) -> str | None:
+    """Render "at the start of your Command phase": a phase boundary narrowed only by
+    phase and whose turn."""
+    event = t.get("event")
+    if event not in ("start-of-phase", "end-of-phase"):
+        return None
+    cond = t.get("condition")
+    if not cond:
+        operands: list[Any] = []
+    elif cond.get("operator") == "and":
+        operands = cond.get("operands") or []
+    else:
+        operands = [cond]
+    for c in operands:
+        if c.get("operator") or c.get("negated"):
+            return None
+        if c.get("type") not in ("phase-is", "player-turn-is"):
+            return None
+
+    def param(ctype: str, key: str) -> Any:
+        for c in operands:
+            if c.get("type") == ctype:
+                params = c.get("parameters")
+                return params.get(key, _MISSING) if isinstance(params, dict) else _MISSING
+        return _MISSING
+
+    phase = param("phase-is", "phase")
+    turn = param("player-turn-is", "turn")
+    if not isinstance(phase, str) or len(operands) != (1 if turn is _MISSING else 2):
+        return None
+    if turn is _MISSING:
+        owner = "the"
+    elif isinstance(turn, str) and turn in _PHASE_BOUNDARY_OWNERS:
+        owner = _PHASE_BOUNDARY_OWNERS[turn]
+    else:
+        return None
+    edge = "start" if event == "start-of-phase" else "end"
+    return f"at the {edge} of {owner} {_cap_word(phase)} phase"
+
+
 def _describe_trigger(t: dict[str, Any]) -> str:
     """Reactive trigger -> front-of-sentence lead clause
     ("an enemy unit ends a move within 9\" of this model")."""
+    boundary = _phase_boundary(t)
+    if boundary:
+        return f"{boundary}, you may use this ability" if t.get("optional") else boundary
     s = event_clause(t.get("event"))
     subject = t.get("subject")
     if subject == "friendly-unit":
@@ -1367,9 +1426,9 @@ def _condition_lead_in(c: Condition) -> str:
     if ctype == "model-is-leader":
         return "while this model leads a unit"
     if ctype == "charged-this-turn":
-        return f"if {condition_subject(c, 'the unit')} charged this turn"
+        return f"if {legacy_unit_subject(c)} charged this turn"
     if ctype == "advanced-this-turn":
-        return "if the unit Advanced this turn"
+        return f"if {legacy_unit_subject(c)} Advanced this turn"
     if ctype == "disembarked-from-transport":
         return "if the unit disembarked from a Transport this turn"
     if ctype == "faction-rule-active":
@@ -1403,12 +1462,12 @@ def _condition_lead_in(c: Condition) -> str:
         attack_type = f"{_jstr(p.get('attack_type'))} " if p.get("attack_type") else ""
         return f"when all of the unit's {attack_type}attacks target the same enemy unit"
     if ctype == "is-battle-shocked":
-        return f"while {condition_subject(c, 'the unit')} is Battle-shocked"
+        return f"while {legacy_unit_subject(c)} is Battle-shocked"
     if ctype == "unit-below-half-strength":
         subject = condition_subject(c, "the unit", {"target": "the target unit"})
         return f"while {subject} is below half strength"
     if ctype == "unit-below-starting-strength":
-        return "while the unit is below its starting strength"
+        return f"while {legacy_unit_subject(c)} is below its starting strength"
     if ctype == "has-lost-wounds":
         return "while the model has lost wounds"
     if ctype == "attack-is-type":
@@ -2028,10 +2087,10 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
             stat = _stat_name(m["stat"])
             if m.get("operation") == "set":
                 return f"set the {stat} characteristic of {equipment} to {_jstr(m.get('value'))}"
-            if m.get("operation") == "improve":
-                return (
-                    f"improve the {stat} characteristic of {equipment} by {_jstr(m.get('value'))}"
-                )
+            if m.get("operation") in ("improve", "worsen"):
+                op = _jstr(m.get("operation"))
+                by = _jstr(m.get("value"))
+                return f"{op} the {stat} characteristic of {equipment} by {by}"
             raw_value = m.get("value")
             try:
                 if raw_value is None:
@@ -2051,9 +2110,9 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
             stat = _stat_name(m["stat"])
             set_val = _jstr(m.get("value"))
             return f"modify {_of_or_possessive(subj, f'{stat} characteristic')} to {set_val}{scope}"
-        if m.get("operation") == "improve":
+        if m.get("operation") in ("improve", "worsen"):
             stat_of = _of_or_possessive(subj, f"{_stat_name(m['stat'])} characteristic")
-            return f"improve {stat_of} by {_jstr(m.get('value'))}{scope}"
+            return f"{_jstr(m.get('operation'))} {stat_of} by {_jstr(m.get('value'))}{scope}"
         val = m.get("value")
         verb = "subtract" if m.get("operation") in ("subtract", "worsen") else "add"
         # `val is not None` guard replaces relying on float(None) raising
@@ -2094,7 +2153,12 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
             which = "any roll of 1" if m.get("subset") == "ones" else "any roll"
         else:
             noun = _roll_name(m.get("roll"))
-            which = f"a {noun} roll of 1" if m.get("subset") == "ones" else f"the {noun} roll"
+            if m.get("subset") == "ones":
+                which = f"a {noun} roll of 1"
+            elif m.get("subset") == "all-failures":
+                which = f"a failed {noun} roll"
+            else:
+                which = f"the {noun} roll"
         permission = "re-roll" if m.get("optional") is False else "you can re-roll"
         attack_prefix = "attacks made by " if m.get("roll") in ("hit", "wound", "damage") else ""
         owner = (
@@ -2112,6 +2176,10 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
             range_ = ctx.get("range_inches")
         if e.get("target") == "enemy-within-aura" and range_ is not None:
             subj_mw = f'each enemy unit within {_jstr(range_)}"'
+        elif e.get("target") == "target":
+            # `target` is the unit selected earlier ("select one enemy unit … that unit
+            # suffers"), distinct from `defender`, the target of an attack.
+            subj_mw = "that unit"
         else:
             subj_mw = subj
         verb = "suffers" if subj_mw.startswith("each ") else _v(subj_mw, "suffers")
@@ -2285,6 +2353,10 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx | None = None) -> str:
             return f"{subj} is eligible to shoot in a turn in which it Advanced"
         if g == "charge-after-advance":
             return f"{subj} is eligible to declare a charge in a turn in which it Advanced"
+        if g == "charge-after-fall-back":
+            return f"{subj} is eligible to declare a charge in a turn in which it Fell Back"
+        if g == "no-advance-roll":
+            return f"{subj} does not make an Advance roll"
         if g == "must-start-in-reserves":
             return f"{subj} must start the battle in Reserves"
         if g == "reinforcement-any-of-turns-1-to-3":
@@ -3753,8 +3825,10 @@ def _weapon_noun(m: dict[str, Any]) -> str:
 
 
 def _weapon_holder(target: Any, ctx: Ctx) -> str:
-    if target in ("self", "bearer"):
+    if target == "self":
         return "this model"
+    if target == "bearer":
+        return "the bearer"
     if ctx.get("unit_subject") is not None and target in ("unit", "attacker"):
         return f"models in {ctx['unit_subject']}"
     if ctx.get("selected_model"):

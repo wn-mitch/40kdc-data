@@ -53,7 +53,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Against CHARACTER targets or against MONSTER targets or against WALKER targets:\n  -> You can re-roll the Hit roll.\n  -> You can re-roll the Wound roll."
+      "text": "Against CHARACTER targets or against MONSTER targets or against WALKER targets:\n  -> You can re-roll a failed Hit roll.\n  -> You can re-roll a failed Wound roll."
     }
   },
   {
@@ -99,7 +99,7 @@
       "duration": "battle"
     },
     "expected": {
-      "text": "For the rest of the battle:\nThe objective is marked as sabotaged.\nAn enemy unit ends a move:\n  -> Roll one D6: on a 2+, the target suffers D3 mortal wounds."
+      "text": "For the rest of the battle:\nThe objective is marked as sabotaged.\nAn enemy unit ends a move:\n  -> Roll one D6: on a 2+, that unit suffers D3 mortal wounds."
     }
   },
   {
@@ -123,7 +123,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "While this model leads a unit, you can re-roll the Charge roll."
+      "text": "While this model leads a unit, you can re-roll a failed Charge roll."
     }
   },
   {
@@ -457,7 +457,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "During the Fight phase against CHARACTER targets:\n  -> You can re-roll the Hit roll.\n  -> You can re-roll the Wound roll."
+      "text": "During the Fight phase against CHARACTER targets:\n  -> You can re-roll a failed Hit roll.\n  -> You can re-roll a failed Wound roll."
     }
   },
   {
@@ -566,7 +566,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "While this model is leading a unit:\n  -> You can re-roll the Hit roll.\n  -> You can re-roll the Wound roll."
+      "text": "While this model is leading a unit:\n  -> You can re-roll a failed Hit roll.\n  -> You can re-roll a failed Wound roll."
     }
   },
   {
@@ -757,7 +757,7 @@
       ]
     },
     "expected": {
-      "text": "Until the end of the phase, you can re-roll the Hit roll.\nApplies to: units with Astra Militarum."
+      "text": "Until the end of the phase, you can re-roll a failed Hit roll.\nApplies to: units with Astra Militarum."
     }
   },
   {
@@ -810,7 +810,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Against INFANTRY targets, you can re-roll the Wound roll."
+      "text": "Against INFANTRY targets, you can re-roll a failed Wound roll."
     }
   },
   {
@@ -1006,7 +1006,7 @@
       ]
     },
     "expected": {
-      "text": "Subtract 1 from this model's Damage characteristic.\nApplies to: units with Adeptus Astartes."
+      "text": "Subtract 1 from the bearer's Damage characteristic.\nApplies to: units with Adeptus Astartes."
     }
   },
   {
@@ -1501,7 +1501,7 @@
       "duration": "turn"
     },
     "expected": {
-      "text": "During the Shooting phase, until the end of the turn, you can re-roll the Hit roll."
+      "text": "During the Shooting phase, until the end of the turn, you can re-roll a failed Hit roll."
     }
   },
   {
@@ -2020,7 +2020,7 @@
       ]
     },
     "expected": {
-      "text": "For the rest of the battle, this model has the Deep Strike ability.\nApplies to: units with Heretic Astartes."
+      "text": "For the rest of the battle, the bearer has the Deep Strike ability.\nApplies to: units with Heretic Astartes."
     }
   },
   {
@@ -2198,7 +2198,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "While this model is leading a unit, you can re-roll the Hit roll."
+      "text": "While this model is leading a unit, you can re-roll a failed Hit roll."
     }
   },
   {
@@ -2358,7 +2358,7 @@
       ]
     },
     "expected": {
-      "text": "Until the end of the phase:\nWhile making melee attacks, you can re-roll the Hit roll.\nAgainst Psyker targets, you can re-roll the Wound roll.\nApplies to: units with Vigilators."
+      "text": "Until the end of the phase:\nWhile making melee attacks, you can re-roll a failed Hit roll.\nAgainst Psyker targets, you can re-roll a failed Wound roll.\nApplies to: units with Vigilators."
     }
   },
   {
@@ -2437,7 +2437,7 @@
       ]
     },
     "expected": {
-      "text": "You can use the Fire Overwatch or Heroic Stratagem on this model for 0CP.\nApplies to: units with Imperial Knights, Armiger."
+      "text": "You can use the Fire Overwatch or Heroic Stratagem on the bearer for 0CP.\nApplies to: units with Imperial Knights, Armiger."
     }
   },
   {
@@ -2694,7 +2694,7 @@
       ]
     },
     "expected": {
-      "text": "While the unit is Battle-shocked, the unit gets +1 to Hit rolls.\nApplies to: units with Knight Tyrant."
+      "text": "While the target unit is Battle-shocked, the unit gets +1 to Hit rolls.\nApplies to: units with Knight Tyrant."
     }
   },
   {
@@ -2742,7 +2742,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "You can re-roll the Charge roll.\nWhile the unit is below half strength, the unit gets +1 to Charge rolls.\nSubtract 1 from the Armour Penetration characteristic of ranged weapons equipped by models in this unit."
+      "text": "You can re-roll a failed Charge roll.\nWhile the unit is below half strength, the unit gets +1 to Charge rolls.\nSubtract 1 from the Armour Penetration characteristic of ranged weapons equipped by models in this unit."
     }
   },
   {
@@ -3031,7 +3031,7 @@
       "duration": "battle"
     },
     "expected": {
-      "text": "At the start of the battle, select one enemy unit (your Hated Foe target). For the rest of the battle, each time a friendly unit makes an attack against it, you can re-roll the Wound roll."
+      "text": "At the start of the battle, select one enemy unit (your Hated Foe target). For the rest of the battle, each time a friendly unit makes an attack against it, you can re-roll a failed Wound roll."
     }
   },
   {
@@ -3123,7 +3123,7 @@
       "duration": "phase"
     },
     "expected": {
-      "text": "During the Fight phase, unless has fought this phase, until the end of the phase:\n  -> Unless the unit has the Riled Up keyword, this model has the Feel No Pain 3+ ability.\n  -> If the unit has the Riled Up keyword, this model has the Feel No Pain 2+ ability."
+      "text": "During the Fight phase, unless has fought this phase, until the end of the phase:\n  -> Unless the unit has the Riled Up keyword, the bearer has the Feel No Pain 3+ ability.\n  -> If the unit has the Riled Up keyword, the bearer has the Feel No Pain 2+ ability."
     }
   },
   {
@@ -3183,7 +3183,7 @@
       "duration": "phase"
     },
     "expected": {
-      "text": "Until the end of the phase:\nYou can re-roll a Hit roll of 1 for attacks made by this model.\nIf the unit has the RILED UP keyword, you can re-roll the Hit roll for attacks made by this model."
+      "text": "Until the end of the phase:\nYou can re-roll a Hit roll of 1 for attacks made by this model.\nIf the unit has the RILED UP keyword, you can re-roll a failed Hit roll for attacks made by this model."
     }
   },
   {
@@ -4496,7 +4496,7 @@
       ]
     },
     "expected": {
-      "text": "You can re-roll the Charge roll.\nIf the unit has the Unbridled Bloodlust active keyword, the unit gets +1 to Charge rolls.\nApplies to: units with World Eaters."
+      "text": "You can re-roll a failed Charge roll.\nIf the unit has the Unbridled Bloodlust active keyword, the unit gets +1 to Charge rolls.\nApplies to: units with World Eaters."
     }
   },
   {
@@ -4940,7 +4940,7 @@
       "duration": "one-use"
     },
     "expected": {
-      "text": "Once per battle, roll 6D6: for each 4+, the target suffers 1 mortal wound."
+      "text": "Once per battle, roll 6D6: for each 4+, that unit suffers 1 mortal wound."
     }
   },
   {
@@ -5162,7 +5162,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "You can re-roll the Hit roll for melee attacks.\nIf not within 6\" of a friendly Blood Angels Character unit, if not within 12\" of a friendly Chaplain unit:\n  -> The unit cannot Fall Back.\n  -> Modify the unit's Objective Control characteristic to 0."
+      "text": "You can re-roll a failed Hit roll for melee attacks.\nIf not within 6\" of a friendly Blood Angels Character unit, if not within 12\" of a friendly Chaplain unit:\n  -> The unit cannot Fall Back.\n  -> Modify the unit's Objective Control characteristic to 0."
     }
   },
   {
@@ -5214,7 +5214,7 @@
       ]
     },
     "expected": {
-      "text": "If the unit charged this turn, until the end of the phase:\n  -> Roll one D6: on a 4+, the target suffers D3 mortal wounds.\nApplies to: units with Adeptus Custodes."
+      "text": "If the unit charged this turn, until the end of the phase:\n  -> Roll one D6: on a 4+, that unit suffers D3 mortal wounds.\nApplies to: units with Adeptus Custodes."
     }
   },
   {
@@ -5763,7 +5763,7 @@
       ]
     },
     "expected": {
-      "text": "Once per battle:\nRoll one D6: on a 2+, this model regains up to 3 lost wounds.\nApplies to: units with Death Company."
+      "text": "Once per battle:\nRoll one D6: on a 2+, the bearer regains up to 3 lost wounds.\nApplies to: units with Death Company."
     }
   },
   {
@@ -6332,7 +6332,7 @@
       }
     },
     "expected": {
-      "text": "At the end of the phase, if during the fight phase and in the opponent's turn, until the end of the phase:\nSelect one enemy unit within 24 inches of the bearer visible to the bearer if not (the target has \"LONE OPERATIVE\"):\n  -> Roll one D6:\n    - On 1-3: That unit suffers D3 mortal wounds.\n    - On 4-5: That unit suffers 3 mortal wounds.\n    - On 6: That unit suffers D3+3 mortal wounds."
+      "text": "At the end of your opponent's Fight phase, until the end of the phase:\nSelect one enemy unit within 24 inches of the bearer visible to the bearer if not (the target has \"LONE OPERATIVE\"):\n  -> Roll one D6:\n    - On 1-3: That unit suffers D3 mortal wounds.\n    - On 4-5: That unit suffers 3 mortal wounds.\n    - On 6: That unit suffers D3+3 mortal wounds."
     }
   },
   {
@@ -6523,7 +6523,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "If the target unit is within range of an objective marker, you can re-roll the Wound roll for attacks made by this model with ranged weapons."
+      "text": "If the target unit is within range of an objective marker, you can re-roll a failed Wound roll for attacks made by this model with ranged weapons."
     }
   },
   {
@@ -6603,7 +6603,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "If the target unit is within range of an objective marker, you can re-roll the Wound roll with ranged weapons.\nIf not the target unit is within range of an objective marker, you can re-roll a Wound roll of 1 with ranged weapons."
+      "text": "If the target unit is within range of an objective marker, you can re-roll a failed Wound roll with ranged weapons.\nIf not the target unit is within range of an objective marker, you can re-roll a Wound roll of 1 with ranged weapons."
     }
   },
   {
@@ -6848,7 +6848,7 @@
       ]
     },
     "expected": {
-      "text": "This model has the Deep Strike ability.\nThis model's weapons gain [IGNORES COVER].\nApplies to: units with Emperor's Children, Lord Kakophonist."
+      "text": "The bearer has the Deep Strike ability.\nThe bearer's weapons gain [IGNORES COVER].\nApplies to: units with Emperor's Children, Lord Kakophonist."
     }
   },
   {
@@ -7661,7 +7661,7 @@
       "duration": "phase"
     },
     "expected": {
-      "text": "Until the end of the phase:\nYou can re-roll a Hit roll of 1.\nIf the unit is tagged auspex scanned, you can re-roll a Wound roll of 1."
+      "text": "Until the end of the phase:\nYou can re-roll a Hit roll of 1.\nIf the target unit is tagged auspex scanned, you can re-roll a Wound roll of 1."
     }
   },
   {
@@ -9110,7 +9110,7 @@
       "subject": "self"
     },
     "expected": {
-      "text": "When the unit is destroyed:\nWhen the unit is destroyed, select one enemy unit (your Death Begets Vengeance Hated target). For the rest of the battle, each time this model makes an attack against it, this model gets +1 to Wound rolls."
+      "text": "When the unit is destroyed:\nWhen the unit is destroyed, select one enemy unit (your Death Begets Vengeance Hated target). For the rest of the battle, each time this model makes an attack against it, the bearer gets +1 to Wound rolls."
     }
   },
   {
@@ -9145,7 +9145,7 @@
       ]
     },
     "expected": {
-      "text": "If the unit is tagged hidden, the unit gets +1 to Hit rolls.\nApplies to: units with Infantry, Phobos."
+      "text": "If the target unit is tagged hidden, the unit gets +1 to Hit rolls.\nApplies to: units with Infantry, Phobos."
     }
   },
   {
@@ -9514,7 +9514,7 @@
       "duration": "phase"
     },
     "expected": {
-      "text": "Until the end of the phase:\nThe unit has the Feel No Pain 6+ ability.\nWhile the unit is Battle-shocked, the unit has the Feel No Pain 5+ ability."
+      "text": "Until the end of the phase:\nThe unit has the Feel No Pain 6+ ability.\nWhile the attacking unit is Battle-shocked, the unit has the Feel No Pain 5+ ability."
     }
   },
   {
@@ -10130,7 +10130,7 @@
       "duration": "battle"
     },
     "expected": {
-      "text": "If you control a terrain area with 1+ models, for the rest of the battle:\n  -> This model gains the Extend Psychic Ability Range 6 ability.\n  -> The unit gains the Re Roll Hazardous Tests Psychic ability."
+      "text": "If you control a terrain area with 1+ models, for the rest of the battle:\n  -> The bearer gains the Extend Psychic Ability Range 6 ability.\n  -> The unit gains the Re Roll Hazardous Tests Psychic ability."
     }
   },
   {
@@ -10355,7 +10355,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "You can re-roll a Wound roll of 1 with melee weapons.\nIf the target unit is within range of an objective marker, you can re-roll the Wound roll with melee weapons."
+      "text": "You can re-roll a Wound roll of 1 with melee weapons.\nIf the target unit is within range of an objective marker, you can re-roll a failed Wound roll with melee weapons."
     }
   },
   {
@@ -12106,7 +12106,7 @@
       "duration": "battle"
     },
     "expected": {
-      "text": "For the rest of the battle:\nSubtract 1 from the Leadership characteristic of enemy units within 9\".\nSelect one of the following (Dread Ability):\n  - Subtract 1 from the Leadership characteristic of enemy units within 9\".\n  - While the unit is Battle-shocked, the unit gets +1 to Wound rolls.\n  - This model gains the Stealth ability.\n  - Enemy units within 9\" must take a Battle-shock test.\n  - Each enemy unit within 9\" suffers D3 mortal wounds.\n  - Add 3 to this model's Aura Range characteristic."
+      "text": "For the rest of the battle:\nSubtract 1 from the Leadership characteristic of enemy units within 9\".\nSelect one of the following (Dread Ability):\n  - Subtract 1 from the Leadership characteristic of enemy units within 9\".\n  - While the target unit is Battle-shocked, the unit gets +1 to Wound rolls.\n  - This model gains the Stealth ability.\n  - Enemy units within 9\" must take a Battle-shock test.\n  - Each enemy unit within 9\" suffers D3 mortal wounds.\n  - Add 3 to this model's Aura Range characteristic."
     }
   },
   {
@@ -12162,7 +12162,7 @@
       ]
     },
     "expected": {
-      "text": "While this model is leading a unit, this model gains the BATTLELINE keyword.\nApplies to: units with Adeptus Astartes."
+      "text": "While this model is leading a unit, the bearer gains the BATTLELINE keyword.\nApplies to: units with Adeptus Astartes."
     }
   },
   {
@@ -12690,7 +12690,7 @@
       ]
     },
     "expected": {
-      "text": "If the unit has the CHARACTER keyword:\n  -> The unit ignores any modifiers to its characteristics.\n  -> Ignore modifiers the unit's Advance rolls.\n  -> Ignore modifiers the unit's Charge rolls.\n  -> You can re-roll the Wound roll."
+      "text": "If the unit has the CHARACTER keyword:\n  -> The unit ignores any modifiers to its characteristics.\n  -> Ignore modifiers the unit's Advance rolls.\n  -> Ignore modifiers the unit's Charge rolls.\n  -> You can re-roll a failed Wound roll."
     }
   },
   {
@@ -13596,7 +13596,7 @@
       ]
     },
     "expected": {
-      "text": "You can re-roll the Leadership roll.\nWhen destroyed by a ranged attack, the unit gains the Heal Wounds ability.\nApplies to: units with Warpsmith."
+      "text": "You can re-roll a failed Leadership roll.\nWhen destroyed by a ranged attack, the unit gains the Heal Wounds ability.\nApplies to: units with Warpsmith."
     }
   },
   {
@@ -13626,7 +13626,7 @@
       ]
     },
     "expected": {
-      "text": "If has fought this phase, this model gains the Heal Wounds ability.\nApplies to: units with Contagion Engine."
+      "text": "If has fought this phase, the bearer gains the Heal Wounds ability.\nApplies to: units with Contagion Engine."
     }
   },
   {
@@ -13813,7 +13813,7 @@
       "duration": "battle-round"
     },
     "expected": {
-      "text": "Until the end of the battle round:\nAt the start of the battle round, if the unit has the WARLORD keyword, you gain variable Pact Pledge.\nAt end of battle round:\n  -> If you destroyed more ? units ? than ? units ?, you gain variable Pact Points Pool.\n  -> Unless you destroyed more ? units ? than ? units ?, this model suffers D3 mortal wounds."
+      "text": "Until the end of the battle round:\nAt the start of the battle round, if the unit has the WARLORD keyword, you gain variable Pact Pledge.\nAt end of battle round:\n  -> If you destroyed more ? units ? than ? units ?, you gain variable Pact Points Pool.\n  -> Unless you destroyed more ? units ? than ? units ?, the bearer suffers D3 mortal wounds."
     }
   },
   {
@@ -14849,7 +14849,7 @@
       ]
     },
     "expected": {
-      "text": "This model has a 5+ invulnerable save.\nAt the start of the Command phase, this model regains up to 1 lost wound.\nApplies to: units with Adeptus Astartes, Vehicle."
+      "text": "The bearer has a 5+ invulnerable save.\nAt the start of the Command phase, the bearer regains up to 1 lost wound.\nApplies to: units with Adeptus Astartes, Vehicle."
     }
   },
   {
@@ -15072,7 +15072,7 @@
       "per": "model"
     },
     "expected": {
-      "text": "Once per battle per model, while the unit is within Engagement Range, until the end of the phase, when determining which models in this model are eligible to fight, models within 1\" of one or more enemy models are eligible and can target enemy units within 1\".\nApplies to: units with Death Company."
+      "text": "Once per battle per model, while the unit is within Engagement Range, until the end of the phase, when determining which models in the bearer are eligible to fight, models within 1\" of one or more enemy models are eligible and can target enemy units within 1\".\nApplies to: units with Death Company."
     }
   },
   {
@@ -15404,7 +15404,7 @@
       "duration": "until-start-next-turn"
     },
     "expected": {
-      "text": "If the unit is tagged auspex scanned, until the start of your next turn, the target gets -1 to Hit rolls."
+      "text": "If the target unit is tagged auspex scanned, until the start of your next turn, the target gets -1 to Hit rolls."
     }
   },
   {
@@ -15545,7 +15545,7 @@
       "range": "self"
     },
     "expected": {
-      "text": "For the rest of the battle:\nSelect one of the following (Singular Purpose):\n  - At the start of the first battle round, select one enemy unit (your Singular Purpose Enemy target). For the rest of the battle, each time this model makes an attack against it, you can re-roll the Hit roll for attacks made by this model; you can re-roll the Wound roll for attacks made by this model.\n  - At the start of the first battle round, select one objective marker (your Singular Purpose Marker). For the rest of the battle, while this model is within range of your Singular Purpose Marker, this model has the Feel No Pain 5+ ability; modify this model's Objective Control characteristic to 15."
+      "text": "For the rest of the battle:\nSelect one of the following (Singular Purpose):\n  - At the start of the first battle round, select one enemy unit (your Singular Purpose Enemy target). For the rest of the battle, each time this model makes an attack against it, you can re-roll a failed Hit roll for attacks made by the bearer; you can re-roll a failed Wound roll for attacks made by the bearer.\n  - At the start of the first battle round, select one objective marker (your Singular Purpose Marker). For the rest of the battle, while this model is within range of your Singular Purpose Marker, the bearer has the Feel No Pain 5+ ability; modify the bearer's Objective Control characteristic to 15."
     }
   },
   {
@@ -15986,7 +15986,7 @@
       "optional": true
     },
     "expected": {
-      "text": "When the unit is selected to shoot, if during the shooting phase and in your turn, you may use this ability, until the end of the phase:\nRoll one D6:\n  - On 1: Ranged Shokk Attack Gun weapons equipped by this model gain [TORRENT]; after the unit resolves its attacks, destroy 1 model in this model.\n  - On 2-5: Add 1 to the Attacks characteristic of ranged Shokk Attack Gun weapons equipped by this model.\n  - On 6: Ranged Shokk Attack Gun weapons equipped by this model gain [SUSTAINED HITS 2].\nApplies to: units with BIG MEK WITH SHOKK ATTACK GUN."
+      "text": "When the unit is selected to shoot, if during the shooting phase and in your turn, you may use this ability, until the end of the phase:\nRoll one D6:\n  - On 1: Ranged Shokk Attack Gun weapons equipped by the bearer gain [TORRENT]; after the unit resolves its attacks, destroy 1 model in the bearer.\n  - On 2-5: Add 1 to the Attacks characteristic of ranged Shokk Attack Gun weapons equipped by the bearer.\n  - On 6: Ranged Shokk Attack Gun weapons equipped by the bearer gain [SUSTAINED HITS 2].\nApplies to: units with BIG MEK WITH SHOKK ATTACK GUN."
     }
   },
   {
@@ -16216,7 +16216,7 @@
       "subject": "self"
     },
     "expected": {
-      "text": "When the unit is destroyed:\nWhen the unit is destroyed, select one enemy unit (your Unbridled Ardour Slayer target). For the rest of the battle, each time this model makes an attack against it:\n  -> You can re-roll the Hit roll for attacks made by this model.\n  -> You can re-roll the Wound roll for attacks made by this model."
+      "text": "When the unit is destroyed:\nWhen the unit is destroyed, select one enemy unit (your Unbridled Ardour Slayer target). For the rest of the battle, each time this model makes an attack against it:\n  -> You can re-roll the Hit roll for attacks made by the bearer.\n  -> You can re-roll the Wound roll for attacks made by the bearer."
     }
   },
   {
@@ -17115,7 +17115,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "If the target is the closest eligible target within 18\", you can re-roll the Wound roll for attacks made by this model."
+      "text": "If the target is the closest eligible target within 18\", you can re-roll a failed Wound roll for attacks made by this model."
     }
   },
   {
@@ -17609,7 +17609,7 @@
       }
     },
     "expected": {
-      "text": "Before a saving throw is made, if the unit is battle-shocked, until the end of the phase, you can re-roll the Saving throw roll."
+      "text": "Before a saving throw is made, if the unit is battle-shocked, until the end of the phase, you can re-roll a failed Saving throw roll."
     }
   },
   {
@@ -18044,7 +18044,7 @@
       "duration": "turn"
     },
     "expected": {
-      "text": "While this model leads a unit, until the end of the turn:\n  -> You can re-roll the Advance roll.\n  -> At agile manoeuvre, you can re-roll any roll."
+      "text": "While this model leads a unit, until the end of the turn:\n  -> You can re-roll a failed Advance roll.\n  -> At agile manoeuvre, you can re-roll any roll."
     }
   },
   {
@@ -19076,7 +19076,7 @@
       "per": "model"
     },
     "expected": {
-      "text": "At the start of the phase, if during the fight phase, you may use this ability, once per battle per model, until the end of the phase:\nAdd 3 to the Attacks characteristic of melee weapons equipped by this model.\nAdd 3 to the Strength characteristic of melee weapons equipped by this model."
+      "text": "At the start of the Fight phase, you may use this ability, once per battle per model, until the end of the phase:\nAdd 3 to the Attacks characteristic of melee weapons equipped by this model.\nAdd 3 to the Strength characteristic of melee weapons equipped by this model."
     }
   },
   {
@@ -19599,7 +19599,7 @@
       }
     },
     "expected": {
-      "text": "At the end of the phase, if during the Command phase and in your turn, if the unit is within range of an objective marker you control, that objective marker remains under your control until, at the end of a phase, your opponent's Level of Control over it is greater than yours."
+      "text": "At the end of your Command phase, if the unit is within range of an objective marker you control, that objective marker remains under your control until, at the end of a phase, your opponent's Level of Control over it is greater than yours."
     }
   },
   {
@@ -20524,7 +20524,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "You can re-roll the Hit roll.\nThe unit's weapons gain [PRECISION]."
+      "text": "You can re-roll a failed Hit roll.\nThe unit's weapons gain [PRECISION]."
     }
   },
   {
@@ -20709,7 +20709,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "During the Fight phase:\n  -> You can re-roll the Hit roll.\n  -> You can re-roll the Wound roll."
+      "text": "During the Fight phase:\n  -> You can re-roll a failed Hit roll.\n  -> You can re-roll a failed Wound roll."
     }
   },
   {
@@ -20942,7 +20942,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "You can re-roll the Charge roll."
+      "text": "You can re-roll a failed Charge roll."
     }
   },
   {

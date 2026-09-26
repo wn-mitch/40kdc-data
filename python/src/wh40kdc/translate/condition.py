@@ -61,6 +61,13 @@ def _str(v: Any) -> str:
     return str(v)
 
 
+# Legacy ``parameters.subject`` values that name the other side of an attack.
+LEGACY_UNIT_SUBJECTS: dict[str, str] = {
+    "target": "the target unit",
+    "attacker": "the attacking unit",
+}
+
+
 def condition_subject(
     condition: Condition,
     implicit: str,
@@ -84,6 +91,11 @@ def condition_subject(
     if isinstance(legacy, str):
         return (legacy_subjects or {}).get(legacy, implicit)
     return implicit
+
+
+def legacy_unit_subject(condition: Condition) -> str:
+    """Unit subject for predicates that honor the legacy target/attacker subjects."""
+    return condition_subject(condition, "the unit", LEGACY_UNIT_SUBJECTS)
 
 
 def _count(n: Any, noun: str) -> str:
@@ -416,13 +428,13 @@ def describe_condition(c: Condition) -> str:
         verb = "is not" if c.get("negated") else "is"
         return f"your army faction {verb} {title_case(_str(p.get('faction_id')))}"
     if ctype == "charged-this-turn":
-        return f"{negate}{condition_subject(c, 'the unit')} charged this turn"
+        return f"{negate}{legacy_unit_subject(c)} charged this turn"
     if ctype == "advanced-this-turn":
-        return f"{negate}the unit advanced this turn"
+        return f"{negate}{legacy_unit_subject(c)} advanced this turn"
     if ctype == "remained-stationary":
-        return f"{negate}the unit remained stationary"
+        return f"{negate}{legacy_unit_subject(c)} remained stationary"
     if ctype == "unit-below-starting-strength":
-        return f"{negate}the unit is below starting strength"
+        return f"{negate}{legacy_unit_subject(c)} is below starting strength"
     if ctype == "unit-below-half-strength":
         who = condition_subject(c, "the unit", {"target": "the target unit"})
         return f"{negate}{who} is below half strength"
@@ -456,7 +468,7 @@ def describe_condition(c: Condition) -> str:
             return f"{negate}when {dekebab(_str(p.get('comparison')))}"
         return f"{negate}for {_str(p.get('attack_type'))} attacks"
     if ctype == "unit-selected-to-shoot-this-phase":
-        return f"{negate}the unit has been selected to shoot this phase"
+        return f"{negate}{legacy_unit_subject(c)} has been selected to shoot this phase"
     if ctype == "eligible-to-shoot":
         return f"{negate}the unit is eligible to shoot"
     if ctype == "selection-has-keyword":
@@ -473,7 +485,7 @@ def describe_condition(c: Condition) -> str:
                 selected = "the bound " + _str(selection.get("selection_var")).replace("_", " ")
         return f"{negate}{selected} has the {_str(p.get('keyword'))} keyword"
     if ctype == "is-battle-shocked":
-        return f"{negate}{condition_subject(c, 'the unit')} is battle-shocked"
+        return f"{negate}{legacy_unit_subject(c)} is battle-shocked"
     if ctype == "has-lost-wounds":
         return f"{negate}the model has lost wounds"
     if ctype == "wounds-remaining-at-or-below":
@@ -793,7 +805,8 @@ def describe_condition(c: Condition) -> str:
     if ctype == "unit-has-tag":
         # Ability-gate use (no side/count) reads as a unit state; scoring counts tagged units.
         if p.get("side") is None and p.get("count_min") is None:
-            return f"{negate}the unit is tagged {dekebab(_str(p.get('tag')))}"
+            who = legacy_unit_subject(c)
+            return f"{negate}{who} is tagged {dekebab(_str(p.get('tag')))}"
         count_min = p.get("count_min")
         n = count_min if count_min is not None else 1
         side_unit = f"{_str(p.get('side'))} unit"

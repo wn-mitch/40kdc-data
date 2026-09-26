@@ -826,8 +826,9 @@ function subject(target: string | undefined, ctx: Ctx): string {
             : " nearby";
   switch (target) {
     case "self":
-    case "bearer":
       return "this model";
+    case "bearer":
+      return "the bearer";
     case "unit":
       return ctx.unitSubject ?? (ctx.selectedModel ? "that model" : ctx.selectedUnit ? "that unit" : "the unit");
     case "attached-unit":
@@ -936,7 +937,24 @@ const TRIGGER_ATTACK_MODELS: Record<string, string> = {
 };
 
 /** Reactive trigger → front-of-sentence lead clause ("an enemy unit ends a move within 9\" of this model"). */
+/** "At the start of your Command phase": a phase boundary narrowed only by phase and whose turn. */
+function phaseBoundary(t: AbilityTrigger): string | null {
+  if (t.event !== "start-of-phase" && t.event !== "end-of-phase") return null;
+  const operands = !t.condition ? [] : t.condition.operator === "and" ? t.condition.operands ?? [] : [t.condition];
+  if (operands.some((c) => c.operator || c.negated || (c.type !== "phase-is" && c.type !== "player-turn-is"))) return null;
+  const phase = operands.find((c) => c.type === "phase-is")?.parameters?.phase;
+  const turn = operands.find((c) => c.type === "player-turn-is")?.parameters?.turn;
+  if (typeof phase !== "string" || operands.length !== (turn === undefined ? 1 : 2)) return null;
+  // Authored data spells whose turn several ways; an unknown spelling keeps the generic wording.
+  const owners: Record<string, string> = { your: "your", "your-turn": "your", own: "your", self: "your", opponent: "your opponent's", "opponent-turn": "your opponent's" };
+  if (turn !== undefined && !(String(turn) in owners)) return null;
+  const owner = turn === undefined ? "the" : owners[String(turn)]!;
+  return `at the ${t.event === "start-of-phase" ? "start" : "end"} of ${owner} ${capWord(phase)} phase`;
+}
+
 export function describeTrigger(t: AbilityTrigger): string {
+  const boundary = phaseBoundary(t);
+  if (boundary) return t.optional ? `${boundary}, you may use this ability` : boundary;
   let s = eventClause(t.event);
   if (t.subject === "friendly-unit") s = s.replace(/\b(?:the|a) unit\b/g, "a friendly unit");
   if (t.subject === "enemy-unit") s = s.replace(/\b(?:the|a) unit\b/g, "an enemy unit");
@@ -1243,9 +1261,9 @@ function conditionLeadIn(c: Condition): string {
     case "model-is-leader":
       return "while this model leads a unit";
     case "charged-this-turn":
-      return `if ${conditionSubject(c, "the unit")} charged this turn`;
+      return `if ${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} charged this turn`;
     case "advanced-this-turn":
-      return "if the unit Advanced this turn";
+      return `if ${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} Advanced this turn`;
     case "disembarked-from-transport":
       return "if the unit disembarked from a Transport this turn";
     case "faction-rule-active":
@@ -1270,7 +1288,7 @@ function conditionLeadIn(c: Condition): string {
     case "unit-has-keyword":
       return `if the unit has the ${jstr(p.keyword)} keyword`;
     case "is-battle-shocked":
-      return `while ${conditionSubject(c, "the unit")} is Battle-shocked`;
+      return `while ${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} is Battle-shocked`;
     case "unit-below-half-strength":
       return `while ${conditionSubject(c, "the unit", { target: "the target unit" })} is below half strength`;
     case "unit-below-starting-strength":
@@ -1671,7 +1689,7 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       if (m.stat != null && (m.weapon_type != null || m.weapon_name != null || m.weapon_keyword != null)) {
         const equipment = `${weaponNoun(m)} equipped by ${weaponHolder(e.target, ctx)}`;
         if (m.operation === "set") return `set the ${statName(m.stat)} characteristic of ${equipment} to ${jstr(m.value)}`;
-        if (m.operation === "improve") return `improve the ${statName(m.stat)} characteristic of ${equipment} by ${jstr(m.value)}`;
+        if (m.operation === "improve" || m.operation === "worsen") return `${jstr(m.operation)} the ${statName(m.stat)} characteristic of ${equipment} by ${jstr(m.value)}`;
         if (!Number.isFinite(Number(m.value))) {
           const subtract = m.operation === "subtract" || m.operation === "worsen";
           return `${subtract ? "subtract" : "add"} ${jstr(m.value)} ${subtract ? "from" : "to"} the ${statName(m.stat)} characteristic of ${equipment}`;
@@ -1683,8 +1701,8 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       if (m.stat == null) return `modify ${ofOrPossessive(subj, "characteristics")}${scope}`;
       if (m.operation === "set")
         return `modify ${ofOrPossessive(subj, `${statName(m.stat)} characteristic`)} to ${jstr(m.value)}${scope}`;
-      if (m.operation === "improve")
-        return `improve ${ofOrPossessive(subj, `${statName(m.stat)} characteristic`)} by ${jstr(m.value)}${scope}`;
+      if (m.operation === "improve" || m.operation === "worsen")
+        return `${jstr(m.operation)} ${ofOrPossessive(subj, `${statName(m.stat)} characteristic`)} by ${jstr(m.value)}${scope}`;
       let val = m.value;
       let verb = m.operation === "subtract" || m.operation === "worsen" ? "subtract" : "add";
       const n = Number(val); // a negative value flips the verb so we never say "add -1"
@@ -1723,17 +1741,23 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
               : "any roll"
             : m.subset === "ones"
               ? `a ${rollName(m.roll)} roll of 1`
-              : `the ${rollName(m.roll)} roll`;
+              : m.subset === "all-failures"
+                ? `a failed ${rollName(m.roll)} roll`
+                : `the ${rollName(m.roll)} roll`;
       const permission = m.optional === false ? "re-roll" : "you can re-roll";
       const owner = e.target === "self" || e.target === "bearer" || ctx.selectedModel ? ` for ${["hit", "wound", "damage"].includes(jstr(m.roll)) ? "attacks made by " : ""}${weaponHolder(e.target, ctx)}` : "";
       return `${permission} ${which}${owner}${weaponRollScope(m)}`;
     }
     case "mortal-wounds": {
       const range = m.range ?? m.range_inches ?? ctx.rangeInches;
+      // `target` is the unit selected earlier ("select one enemy unit … that unit suffers"),
+      // distinct from `defender`, the target of an attack.
       const subjMW =
         e.target === "enemy-within-aura" && range != null
           ? `each enemy unit within ${jstr(range)}"`
-          : subj;
+          : e.target === "target"
+            ? "that unit"
+            : subj;
       const verb = subjMW.startsWith("each ") ? "suffers" : v(subjMW, "suffers");
       // Dice-pool form (e.g. "roll six D6: for each 4+, that unit suffers 1
       // mortal wound"): N dice rolled, each success worth `mortal_per_success`
@@ -2996,7 +3020,8 @@ function weaponNoun(m: Record<string, unknown>): string {
   return `${kind}${name}weapons${keyword}`;
 }
 function weaponHolder(target: string | undefined, ctx: Ctx): string {
-  if (target === "self" || target === "bearer") return "this model";
+  if (target === "self") return "this model";
+  if (target === "bearer") return "the bearer";
   if (ctx.unitSubject && (target === "unit" || target === "attacker")) return `models in ${ctx.unitSubject}`;
   if (ctx.selectedModel) return "that model";
   if (target === "unit" || target === "attached-unit") return ctx.selectedUnit ? "models in that unit" : "models in this unit";

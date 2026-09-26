@@ -110,7 +110,7 @@
             </profile>
             <profile name="Fire Support" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, until the end of the phase, you can re-roll the Wound roll.</characteristic>
+                <characteristic name="Description">During the Shooting phase, until the end of the phase, you can re-roll a failed Wound roll.</characteristic>
               </characteristics>
             </profile>
             <profile name="Firing Deck 2" typeName="Abilities">

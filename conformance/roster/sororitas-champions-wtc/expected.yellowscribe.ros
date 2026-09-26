@@ -193,8 +193,8 @@
             <profile name="Abbess Sanctorum" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">While this model is leading a unit:
-  -&gt; You can re-roll the Hit roll.
-  -&gt; You can re-roll the Wound roll.</characteristic>
+  -&gt; You can re-roll a failed Hit roll.
+  -&gt; You can re-roll a failed Wound roll.</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">

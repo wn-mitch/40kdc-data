@@ -347,11 +347,11 @@ export function describeCondition(c: Condition): string {
       return `your army faction is ${c.negated ? "not " : ""}${faction}`;
     }
     case "charged-this-turn":
-      return `${negate}${conditionSubject(c, "the unit")} charged this turn`;
+      return `${negate}${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} charged this turn`;
     case "advanced-this-turn":
-      return `${negate}the unit advanced this turn`;
+      return `${negate}${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} advanced this turn`;
     case "remained-stationary":
-      return `${negate}the unit remained stationary`;
+      return `${negate}${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} remained stationary`;
     case "unit-below-starting-strength":
       return `${negate}${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} is below starting strength`;
     case "unit-below-half-strength":
@@ -378,9 +378,9 @@ export function describeCondition(c: Condition): string {
       if (p.comparison != null) return `${negate}when ${dekebab(str(p.comparison))}`;
       return `${negate}for ${str(p.attack_type)} attacks`;
     case "is-battle-shocked":
-      return `${negate}${conditionSubject(c, "the unit")} is battle-shocked`;
+      return `${negate}${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} is battle-shocked`;
     case "unit-selected-to-shoot-this-phase":
-      return `${negate}the unit has been selected to shoot this phase`;
+      return `${negate}${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} has been selected to shoot this phase`;
     case "eligible-to-shoot":
       return `${negate}the unit is eligible to shoot`;
     case "selection-has-keyword": {
@@ -612,7 +612,7 @@ export function describeCondition(c: Condition): string {
     case "unit-has-tag": {
       // Ability-gate use (no side/count) reads as a unit state; scoring use counts tagged units.
       if (p.side == null && p.count_min == null)
-        return `${negate}the unit is tagged ${dekebab(str(p.tag))}`;
+        return `${negate}${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} is tagged ${dekebab(str(p.tag))}`;
       let s = `${negate}${count(p.count_min ?? 1, `${str(p.side)} unit`)} tagged ${dekebab(str(p.tag))}`;
       if (p.window != null) s += ` (${dekebab(str(p.window))})`;
       return s;

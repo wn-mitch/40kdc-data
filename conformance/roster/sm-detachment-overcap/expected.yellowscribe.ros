@@ -17,7 +17,7 @@
             </profile>
             <profile name="Aquilon Optics" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll the Damage roll.</characteristic>
+                <characteristic name="Description">You can re-roll a failed Damage roll.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise D3" typeName="Abilities">

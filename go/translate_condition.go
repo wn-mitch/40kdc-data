@@ -27,6 +27,9 @@ func cstr(v any) string {
 	return numStr(v)
 }
 
+// legacyUnitSubjects maps legacy `parameters.subject` values that name the other side of an attack.
+var legacyUnitSubjects = map[string]string{"target": "the target unit", "attacker": "the attacking unit"}
+
 func conditionSubject(c map[string]any, implicit string, legacySubjects map[string]string) string {
 	explicitSubjects := map[string]string{
 		"bearer":   "this model",
@@ -400,13 +403,13 @@ func describeCondition(c map[string]any) string {
 		}
 		return "your army faction " + verb + " " + titleCase(cstr(p["faction_id"]))
 	case "charged-this-turn":
-		return negate + conditionSubject(c, "the unit", nil) + " charged this turn"
+		return negate + conditionSubject(c, "the unit", legacyUnitSubjects) + " charged this turn"
 	case "advanced-this-turn":
-		return negate + "the unit advanced this turn"
+		return negate + conditionSubject(c, "the unit", legacyUnitSubjects) + " advanced this turn"
 	case "remained-stationary":
-		return negate + "the unit remained stationary"
+		return negate + conditionSubject(c, "the unit", legacyUnitSubjects) + " remained stationary"
 	case "unit-below-starting-strength":
-		return negate + "the unit is below starting strength"
+		return negate + conditionSubject(c, "the unit", legacyUnitSubjects) + " is below starting strength"
 	case "unit-below-half-strength":
 		who := conditionSubject(c, "the unit", map[string]string{"target": "the target unit"})
 		return negate + who + " is below half strength"
@@ -447,9 +450,9 @@ func describeCondition(c map[string]any) string {
 		}
 		return negate + "for " + cstr(p["attack_type"]) + " attacks"
 	case "is-battle-shocked":
-		return negate + conditionSubject(c, "the unit", nil) + " is battle-shocked"
+		return negate + conditionSubject(c, "the unit", legacyUnitSubjects) + " is battle-shocked"
 	case "unit-selected-to-shoot-this-phase":
-		return negate + "the unit has been selected to shoot this phase"
+		return negate + conditionSubject(c, "the unit", legacyUnitSubjects) + " has been selected to shoot this phase"
 	case "eligible-to-shoot":
 		return negate + "the unit is eligible to shoot"
 	case "selection-has-keyword":
@@ -852,7 +855,7 @@ func describeCondition(c map[string]any) string {
 		return s
 	case "unit-has-tag":
 		if p["side"] == nil && p["count_min"] == nil {
-			return negate + "the unit is tagged " + dekebab(cstr(p["tag"]))
+			return negate + conditionSubject(c, "the unit", legacyUnitSubjects) + " is tagged " + dekebab(cstr(p["tag"]))
 		}
 		s := negate + countNoun(countMinOr1(p), cstr(p["side"])+" unit") + " tagged " + dekebab(cstr(p["tag"]))
 		if p["window"] != nil {

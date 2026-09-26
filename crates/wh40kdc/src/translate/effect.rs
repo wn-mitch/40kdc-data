@@ -10,7 +10,7 @@ use serde_json::{Map, Value};
 
 use super::{
     battle_round_ordinal, condition_subject, dekebab, describe_node, describe_timing, event_clause,
-    negated_timing, num_param,
+    legacy_unit_subject, negated_timing, num_param,
 };
 use crate::{
     generated::{
@@ -1026,7 +1026,8 @@ fn subject(target: &str, ctx: &Ctx) -> String {
         None => " nearby".to_string(),
     };
     match target {
-        "self" | "bearer" => "this model".to_string(),
+        "self" => "this model".to_string(),
+        "bearer" => "the bearer".to_string(),
         "unit" => ctx.unit_subject.clone().unwrap_or_else(|| {
             if ctx.selected_model {
                 "that model".to_string()
@@ -1446,10 +1447,13 @@ fn condition_lead_in(n: &ConditionNode) -> String {
                 T::ChargedThisTurn => {
                     format!(
                         "if {} charged this turn",
-                        condition_subject(s, "the unit", None)
+                        condition_subject(s, "the unit", legacy_unit_subject(s))
                     )
                 }
-                T::AdvancedThisTurn => "if the unit Advanced this turn".to_string(),
+                T::AdvancedThisTurn => format!(
+                    "if {} Advanced this turn",
+                    condition_subject(s, "the unit", legacy_unit_subject(s))
+                ),
                 T::DisembarkedFromTransport => {
                     "if the unit disembarked from a Transport this turn".to_string()
                 }
@@ -1502,7 +1506,7 @@ fn condition_lead_in(n: &ConditionNode) -> String {
                 T::IsBattleShocked => {
                     format!(
                         "while {} is Battle-shocked",
-                        condition_subject(s, "the unit", None)
+                        condition_subject(s, "the unit", legacy_unit_subject(s))
                     )
                 }
                 T::UnitBelowHalfStrength => {
@@ -1517,7 +1521,10 @@ fn condition_lead_in(n: &ConditionNode) -> String {
                     )
                 }
                 T::UnitBelowStartingStrength => {
-                    "while the unit is below its starting strength".to_string()
+                    format!(
+                        "while {} is below its starting strength",
+                        condition_subject(s, "the unit", legacy_unit_subject(s))
+                    )
                 }
                 T::HasLostWounds => "while the model has lost wounds".to_string(),
                 T::AttackIsType => match nstr(p, "comparison") {
@@ -2590,7 +2597,7 @@ fn describe_single(e: &SingleEffect, ctx: &Ctx) -> String {
                 let equipment = format!("{} equipped by {}", weapon_noun(m), weapon_holder(&e.target.to_string(), ctx));
                 let stat = stat_name(m.get("stat").unwrap_or(&Value::Null));
                 if nstr(m, "operation") == Some("set") { return format!("set the {stat} characteristic of {equipment} to {}", jv(m, "value")); }
-                if nstr(m, "operation") == Some("improve") { return format!("improve the {stat} characteristic of {equipment} by {}", jv(m, "value")); }
+                if let Some(op @ ("improve" | "worsen")) = nstr(m, "operation") { return format!("{op} the {stat} characteristic of {equipment} by {}", jv(m, "value")); }
                 let Some(mut amount) = m.get("value").and_then(|v| v.as_f64().or_else(|| v.as_str().and_then(|s| s.parse::<f64>().ok()))) else {
                     let subtract = matches!(nstr(m, "operation"), Some("subtract") | Some("worsen"));
                     return format!("{} {} {} the {stat} characteristic of {equipment}", if subtract { "subtract" } else { "add" }, jv(m, "value"), if subtract { "from" } else { "to" });
@@ -2619,9 +2626,9 @@ fn describe_single(e: &SingleEffect, ctx: &Ctx) -> String {
                     jv(m, "value")
                 );
             }
-            if nstr(m, "operation") == Some("improve") {
+            if let Some(op @ ("improve" | "worsen")) = nstr(m, "operation") {
                 return format!(
-                    "improve {} by {}{scope}",
+                    "{op} {} by {}{scope}",
                     of_or_possessive(
                         &subj,
                         &format!(
@@ -2713,10 +2720,10 @@ fn describe_single(e: &SingleEffect, ctx: &Ctx) -> String {
                 }
             } else {
                 let noun = roll_name(m.get("roll").unwrap_or(&Value::Null));
-                if nstr(m, "subset") == Some("ones") {
-                    format!("a {noun} roll of 1")
-                } else {
-                    format!("the {noun} roll")
+                match nstr(m, "subset") {
+                    Some("ones") => format!("a {noun} roll of 1"),
+                    Some("all-failures") => format!("a failed {noun} roll"),
+                    _ => format!("the {noun} roll"),
                 }
             };
             let permission = if m.get("optional").and_then(Value::as_bool) == Some(false) { "re-roll" } else { "you can re-roll" };
@@ -2729,6 +2736,10 @@ fn describe_single(e: &SingleEffect, ctx: &Ctx) -> String {
                 .or_else(|| ctx.range_inches.map(fmt_num));
             let subj_mw = if e.target.to_string() == "enemy-within-aura" && range.is_some() {
                 format!("each enemy unit within {}\"", range.unwrap())
+            } else if e.target.to_string() == "target" {
+                // `target` is the unit selected earlier ("select one enemy unit … that unit
+                // suffers"), distinct from `defender`, the target of an attack.
+                "that unit".to_string()
             } else {
                 subj.clone()
             };
@@ -2926,8 +2937,13 @@ fn describe_single(e: &SingleEffect, ctx: &Ctx) -> String {
         T::WeaponGrant => {
             let count = m.get("count").and_then(Value::as_u64).unwrap_or(1).max(1);
             let plural = if count == 1 { "" } else { "s" };
+            let subject = if matches!(e.target.to_string().as_str(), "self" | "bearer") {
+                "this model"
+            } else {
+                "this unit"
+            };
             format!(
-                "{subj} gains {count} {} weapon{plural}",
+                "{subject} gains {count} {} weapon{plural}",
                 weapon_label(&jv(m, "weapon_id"))
             )
         }
@@ -2944,8 +2960,13 @@ fn describe_single(e: &SingleEffect, ctx: &Ctx) -> String {
                 })
                 .filter(|s| !s.is_empty())
                 .unwrap_or_else(|| "no listed restriction".to_string());
+            let subject = if matches!(e.target.to_string().as_str(), "self" | "bearer") {
+                "this model"
+            } else {
+                "this unit"
+            };
             format!(
-                "{joined} does not prevent {subj} from being eligible to {}",
+                "{joined} does not prevent {subject} from being eligible to {}",
                 eligible_activity_phrase(&jv(m, "activity"))
             )
         }
@@ -2992,6 +3013,8 @@ fn describe_single(e: &SingleEffect, ctx: &Ctx) -> String {
             match grant.map(jval).as_deref() {
                 Some("shoot-after-advance") => return format!("{subj} is eligible to shoot in a turn in which it Advanced"),
                 Some("charge-after-advance") => return format!("{subj} is eligible to declare a charge in a turn in which it Advanced"),
+                Some("charge-after-fall-back") => return format!("{subj} is eligible to declare a charge in a turn in which it Fell Back"),
+                Some("no-advance-roll") => return format!("{subj} does not make an Advance roll"),
                 Some("must-start-in-reserves") => {
                     return format!("{subj} must start the battle in Reserves");
                 }
@@ -5573,7 +5596,72 @@ fn is_end_of_phase_disembark_battle_shock(t: &Trigger) -> bool {
 
 /// Reactive-trigger opener ("an enemy unit ends a move within 9" of this model,
 /// if ..."). Mirrors `describeTrigger` for ability `trigger` blocks.
+/// "At the start of your Command phase": a phase boundary narrowed only by phase and whose turn.
+fn phase_boundary(t: &Trigger) -> Option<String> {
+    let event = t.event.to_string();
+    let edge = match event.as_str() {
+        "start-of-phase" => "start",
+        "end-of-phase" => "end",
+        _ => return None,
+    };
+    let operands: Vec<&ConditionNode> = match t.condition.as_ref().map(|c| &c.0) {
+        None => Vec::new(),
+        Some(ConditionNode::CompoundCondition(compound))
+            if compound.operator == CompoundConditionOperator::And =>
+        {
+            compound.operands.iter().collect()
+        }
+        Some(node) => vec![node],
+    };
+    let mut simples = Vec::with_capacity(operands.len());
+    for node in operands {
+        match node {
+            ConditionNode::SimpleCondition(c)
+                if !c.negated
+                    && matches!(
+                        c.type_,
+                        SimpleConditionType::PhaseIs | SimpleConditionType::PlayerTurnIs
+                    ) =>
+            {
+                simples.push(c)
+            }
+            _ => return None,
+        }
+    }
+    let param = |ty: SimpleConditionType, key: &str| {
+        simples
+            .iter()
+            .find(|c| c.type_ == ty)
+            .and_then(|c| c.parameters.get(key))
+    };
+    let phase = param(SimpleConditionType::PhaseIs, "phase")?.as_str()?;
+    let turn = param(SimpleConditionType::PlayerTurnIs, "turn");
+    if simples.len() != if turn.is_none() { 1 } else { 2 } {
+        return None;
+    }
+    // Authored data spells whose turn several ways; an unknown spelling keeps the generic wording.
+    let owner = match turn {
+        None => "the",
+        Some(v) => match v.as_str()? {
+            "your" | "your-turn" | "own" | "self" => "your",
+            "opponent" | "opponent-turn" => "your opponent's",
+            _ => return None,
+        },
+    };
+    Some(format!(
+        "at the {edge} of {owner} {} phase",
+        cap_word(phase)
+    ))
+}
+
 fn describe_ability_trigger(t: &Trigger) -> String {
+    if let Some(boundary) = phase_boundary(t) {
+        return if t.optional {
+            format!("{boundary}, you may use this ability")
+        } else {
+            boundary
+        };
+    }
     let event = t.event.to_string();
     let mut s = event_clause(&event);
     let subject = t.subject.as_ref().map(ToString::to_string);
@@ -6103,8 +6191,11 @@ fn weapon_noun(m: &Map<String, Value>) -> String {
     format!("{kind}{name}weapons{keyword}")
 }
 fn weapon_holder(target: &str, ctx: &Ctx) -> String {
-    if matches!(target, "self" | "bearer") {
+    if target == "self" {
         return "this model".to_string();
+    }
+    if target == "bearer" {
+        return "the bearer".to_string();
     }
     if let Some(unit_subject) = ctx.unit_subject.as_deref() {
         if matches!(target, "unit" | "attacker") {

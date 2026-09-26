@@ -963,8 +963,10 @@ func subject(target any, ctx map[string]any) string {
 		within = " anywhere on the battlefield"
 	}
 	switch target {
-	case "self", "bearer":
+	case "self":
 		return "this model"
+	case "bearer":
+		return "the bearer"
 	case "unit":
 		if value, ok := ctx["unit_subject"].(string); ok && value != "" {
 			return value
@@ -1319,9 +1321,9 @@ func conditionLeadIn(c map[string]any) string {
 	case "model-is-leader":
 		return "while this model leads a unit"
 	case "charged-this-turn":
-		return "if " + conditionSubject(c, "the unit", nil) + " charged this turn"
+		return "if " + conditionSubject(c, "the unit", legacyUnitSubjects) + " charged this turn"
 	case "advanced-this-turn":
-		return "if the unit Advanced this turn"
+		return "if " + conditionSubject(c, "the unit", legacyUnitSubjects) + " Advanced this turn"
 	case "disembarked-from-transport":
 		return "if the unit disembarked from a Transport this turn"
 	case "faction-rule-active":
@@ -1364,7 +1366,7 @@ func conditionLeadIn(c map[string]any) string {
 		}
 		return "when all of the unit's " + attackType + "attacks target the same enemy unit"
 	case "is-battle-shocked":
-		return "while " + conditionSubject(c, "the unit", nil) + " is Battle-shocked"
+		return "while " + conditionSubject(c, "the unit", legacyUnitSubjects) + " is Battle-shocked"
 	case "unit-below-half-strength":
 		return "while " + conditionSubject(
 			c,
@@ -1372,7 +1374,7 @@ func conditionLeadIn(c map[string]any) string {
 			map[string]string{"target": "the target unit"},
 		) + " is below half strength"
 	case "unit-below-starting-strength":
-		return "while the unit is below its starting strength"
+		return "while " + conditionSubject(c, "the unit", legacyUnitSubjects) + " is below its starting strength"
 	case "has-lost-wounds":
 		return "while the model has lost wounds"
 	case "attack-is-type":
@@ -2238,8 +2240,8 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 			if m["operation"] == "set" {
 				return "set the " + stat + " characteristic of " + equipment + " to " + ejstr(m["value"])
 			}
-			if m["operation"] == "improve" {
-				return "improve the " + stat + " characteristic of " + equipment + " by " + ejstr(m["value"])
+			if m["operation"] == "improve" || m["operation"] == "worsen" {
+				return ejstr(m["operation"]) + " the " + stat + " characteristic of " + equipment + " by " + ejstr(m["value"])
 			}
 			if !isNumber(m["value"]) {
 				verb, prep := "add", "to"
@@ -2268,8 +2270,8 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 		if m["operation"] == "set" {
 			return "modify " + ofOrPossessive(subj, statName(m["stat"])+" characteristic") + " to " + ejstr(m["value"]) + scope
 		}
-		if m["operation"] == "improve" {
-			return "improve " + ofOrPossessive(subj, statName(m["stat"])+" characteristic") + " by " + ejstr(m["value"]) + scope
+		if m["operation"] == "improve" || m["operation"] == "worsen" {
+			return ejstr(m["operation"]) + " " + ofOrPossessive(subj, statName(m["stat"])+" characteristic") + " by " + ejstr(m["value"]) + scope
 		}
 		val := m["value"]
 		verb := "add"
@@ -2333,6 +2335,8 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 			which = "the " + noun + " roll"
 			if m["subset"] == "ones" {
 				which = "a " + noun + " roll of 1"
+			} else if m["subset"] == "all-failures" {
+				which = "a failed " + noun + " roll"
 			}
 		}
 		permission := "you can re-roll"
@@ -2442,7 +2446,12 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 		if count == 1 {
 			plural = ""
 		}
-		return subj + " gains " + ejstr(count) + " " + weaponLabel(ejstr(m["weapon_id"])) + " weapon" + plural
+		// Fixed subject: the grant names the model or unit that owns it, not the ctx-derived subject.
+		grantSubject := "this unit"
+		if e["target"] == "self" || e["target"] == "bearer" {
+			grantSubject = "this model"
+		}
+		return grantSubject + " gains " + ejstr(count) + " " + weaponLabel(ejstr(m["weapon_id"])) + " weapon" + plural
 	case "eligibility-override":
 		var phrases []string
 		for _, r := range getList(m, "ignored_restrictions") {
@@ -2452,7 +2461,11 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 		if joined == "" {
 			joined = "no listed restriction"
 		}
-		return joined + " does not prevent " + subj + " from being eligible to " + eligibleActivityPhrase(ejstr(m["activity"]))
+		waivedSubject := "this unit"
+		if e["target"] == "self" || e["target"] == "bearer" {
+			waivedSubject = "this model"
+		}
+		return joined + " does not prevent " + waivedSubject + " from being eligible to " + eligibleActivityPhrase(ejstr(m["activity"]))
 	case "ability-usage-limit":
 		return subj + " can use the " + grantLabel(ejstr(m["ability_id"])) + " ability at most " + ejstr(m["max_uses"]) + " times per " + dekebab(ejstr(m["period"])) + ", replacing its usual usage limit"
 	case "deadly-demise-threshold":
@@ -2480,6 +2493,10 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 			return subj + " is eligible to shoot in a turn in which it Advanced"
 		case "charge-after-advance":
 			return subj + " is eligible to declare a charge in a turn in which it Advanced"
+		case "charge-after-fall-back":
+			return subj + " is eligible to declare a charge in a turn in which it Fell Back"
+		case "no-advance-roll":
+			return subj + " does not make an Advance roll"
 		case "must-start-in-reserves":
 			return subj + " must start the battle in Reserves"
 		case "reinforcement-any-of-turns-1-to-3":
@@ -2953,7 +2970,7 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 	case "fight-last":
 		return subj + " " + ev(subj, "has") + " the Fights Last ability"
 	case "fight-on-death":
-		if gate, ok := getMap(e, "gate"); ok {
+		if gate, ok := getMap(m, "gate"); ok && gate != nil {
 			modelPhrase := "a model in " + subj
 			if ejstr(e["target"]) == "destroyed-model" {
 				modelPhrase = "a model in this unit"
@@ -2961,7 +2978,7 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 				modelPhrase = "this model"
 			}
 			before := ""
-			if elig, ok := getMap(e, "eligibility"); ok {
+			if elig, ok := getMap(m, "eligibility"); ok && elig != nil {
 				neg, _ := elig["negated"].(bool)
 				if neg && ejstr(elig["type"]) == "has-fought-this-phase" {
 					who := "this unit"
@@ -2979,7 +2996,11 @@ func describeEffectInlineBase(e map[string]any, ctx map[string]any) string {
 				cond, _ := asMap(gmm["condition"])
 				adds += ", adding " + ejstr(gmm["value"]) + " " + conditionLeadIn(cond)
 			}
-			on := formatComparison(ejstr(gate["comparison"]), gate["threshold"])
+			comparison := "gte"
+			if gate["comparison"] != nil {
+				comparison = ejstr(gate["comparison"])
+			}
+			on := formatComparison(comparison, gate["threshold"])
 			removal := ". Remove it after this unit has fought or at the end of the phase, whichever comes first"
 			if ejstr(m["removal"]) == "after-destroyed-model-fights" {
 				removal = ". Remove it after it has fought"
@@ -3393,6 +3414,10 @@ func describeMortalWounds(e, m map[string]any, subj string, ctx map[string]any) 
 	subjMW := subj
 	if e["target"] == "enemy-within-aura" && rng != nil {
 		subjMW = "each enemy unit within " + ejstr(rng) + "\""
+	} else if e["target"] == "target" {
+		// `target` is the unit selected earlier ("select one enemy unit … that
+		// unit suffers"), distinct from `defender`, the target of an attack.
+		subjMW = "that unit"
 	}
 	verb := ev(subjMW, "suffers")
 	if strings.HasPrefix(subjMW, "each ") {
@@ -3980,7 +4005,98 @@ var triggerAttackModels = map[string]string{
 	"enemy-model":     "an enemy model",
 }
 
+// phaseBoundaryOwners maps the authored spellings of whose turn a phase
+// boundary falls in to its possessive.
+var phaseBoundaryOwners = map[string]string{
+	"your":          "your",
+	"your-turn":     "your",
+	"own":           "your",
+	"self":          "your",
+	"opponent":      "your opponent's",
+	"opponent-turn": "your opponent's",
+}
+
+// phaseBoundary renders "at the start of your Command phase": a phase boundary
+// narrowed only by phase and whose turn. ok is false when the trigger carries
+// anything else, or a turn spelling outside phaseBoundaryOwners.
+func phaseBoundary(t map[string]any) (string, bool) {
+	if t["event"] != "start-of-phase" && t["event"] != "end-of-phase" {
+		return "", false
+	}
+	var operands []map[string]any
+	if cond, ok := asMap(t["condition"]); ok && cond != nil {
+		if cond["operator"] == "and" {
+			for _, raw := range getList(cond, "operands") {
+				op, _ := asMap(raw)
+				operands = append(operands, op)
+			}
+		} else {
+			operands = []map[string]any{cond}
+		}
+	}
+	var phaseOp, turnOp map[string]any
+	for _, c := range operands {
+		if c == nil || truthy(c["operator"]) || truthy(c["negated"]) {
+			return "", false
+		}
+		switch c["type"] {
+		case "phase-is":
+			if phaseOp == nil {
+				phaseOp = c
+			}
+		case "player-turn-is":
+			if turnOp == nil {
+				turnOp = c
+			}
+		default:
+			return "", false
+		}
+	}
+	if phaseOp == nil {
+		return "", false
+	}
+	phaseParams, _ := getMap(phaseOp, "parameters")
+	phase, ok := phaseParams["phase"].(string)
+	if !ok {
+		return "", false
+	}
+	var turn any
+	hasTurn := false
+	if turnOp != nil {
+		turnParams, _ := getMap(turnOp, "parameters")
+		turn, hasTurn = turnParams["turn"]
+	}
+	want := 1
+	if hasTurn {
+		want = 2
+	}
+	if len(operands) != want {
+		return "", false
+	}
+	owner := "the"
+	if hasTurn {
+		// Authored data spells whose turn several ways; an unknown spelling keeps the generic wording.
+		turnStr, isStr := turn.(string)
+		mapped, found := phaseBoundaryOwners[turnStr]
+		if !isStr || !found {
+			return "", false
+		}
+		owner = mapped
+	}
+	edge := "end"
+	if t["event"] == "start-of-phase" {
+		edge = "start"
+	}
+	return "at the " + edge + " of " + owner + " " + capWord(phase) + " phase", true
+}
+
 func describeReactiveTrigger(t map[string]any) string {
+	if boundary, ok := phaseBoundary(t); ok && boundary != "" {
+		if truthy(t["optional"]) {
+			return boundary + ", you may use this ability"
+		}
+		return boundary
+	}
 	s := eventClause(t["event"])
 	if t["subject"] == "friendly-unit" {
 		s = strings.Replace(s, "the unit", "a friendly unit", 1)
@@ -4530,8 +4646,11 @@ func weaponNoun(m map[string]any) string {
 	return kind + name + "weapons" + keyword
 }
 func weaponHolder(target any, ctx map[string]any) string {
-	if target == "self" || target == "bearer" {
+	if target == "self" {
 		return "this model"
+	}
+	if target == "bearer" {
+		return "the bearer"
 	}
 	if value, ok := ctx["unit_subject"].(string); ok && value != "" && (target == "unit" || target == "attacker") {
 		return "models in " + value

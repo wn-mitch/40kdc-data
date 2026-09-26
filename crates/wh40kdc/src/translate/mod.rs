@@ -454,6 +454,15 @@ pub(crate) fn region_membership_phrase(p: &Map<String, Value>, negated: bool) ->
     )
 }
 
+/// Legacy `parameters.subject` values that name the other side of an attack.
+pub(super) fn legacy_unit_subject(s: &SimpleCondition) -> Option<&'static str> {
+    match ps(&s.parameters, "subject") {
+        Some("target") => Some("the target unit"),
+        Some("attacker") => Some("the attacking unit"),
+        _ => None,
+    }
+}
+
 /// Explicit `of` wins; legacy parameter subjects apply only where that
 /// predicate historically consumed them.
 pub(super) fn condition_subject(
@@ -515,9 +524,9 @@ fn describe_simple(s: &SimpleCondition) -> String {
             )
         }
         T::ChargedThisTurn => {
-            format!("{negate}{} charged this turn", condition_subject(s, "the unit", None))
+            format!("{negate}{} charged this turn", condition_subject(s, "the unit", legacy_unit_subject(s)))
         }
-        T::AdvancedThisTurn => format!("{negate}the unit advanced this turn"),
+        T::AdvancedThisTurn => format!("{negate}{} advanced this turn", condition_subject(s, "the unit", legacy_unit_subject(s))),
         T::DisembarkedFromTransport => {
             format!("{negate}the unit disembarked from a Transport this turn")
         }
@@ -539,8 +548,8 @@ fn describe_simple(s: &SimpleCondition) -> String {
             };
             format!("{negate}during {where_}")
         }
-        T::RemainedStationary => format!("{negate}the unit remained stationary"),
-        T::UnitBelowStartingStrength => format!("{negate}the unit is below starting strength"),
+        T::RemainedStationary => format!("{negate}{} remained stationary", condition_subject(s, "the unit", legacy_unit_subject(s))),
+        T::UnitBelowStartingStrength => format!("{negate}{} is below starting strength", condition_subject(s, "the unit", legacy_unit_subject(s))),
         T::UnitBelowHalfStrength => {
             let legacy_subject = if ps(p, "subject") == Some("target") {
                 Some("the target unit")
@@ -598,7 +607,7 @@ fn describe_simple(s: &SimpleCondition) -> String {
         T::IsBattleShocked => {
             format!(
                 "{negate}{} is battle-shocked",
-                condition_subject(s, "the unit", None)
+                condition_subject(s, "the unit", legacy_unit_subject(s))
             )
         }
         T::HasLostWounds => format!("{negate}the model has lost wounds"),
@@ -979,7 +988,7 @@ fn describe_simple(s: &SimpleCondition) -> String {
         T::UnitHasTag => {
             // Ability-gate use (no side/count) reads as a unit state; scoring counts tagged units.
             if !pnn(p, "side") && !pnn(p, "count_min") {
-                return format!("{negate}the unit is tagged {}", dekebab(&pj(p, "tag")));
+                return format!("{negate}{} is tagged {}", condition_subject(s, "the unit", legacy_unit_subject(s)), dekebab(&pj(p, "tag")));
             }
             let mut out = format!(
                 "{negate}{} tagged {}",
@@ -1083,7 +1092,7 @@ fn describe_simple(s: &SimpleCondition) -> String {
             pj(p, "range")
         ),
         T::UnitSelectedToShootThisPhase => {
-            format!("{negate}the unit has been selected to shoot this phase")
+            format!("{negate}{} has been selected to shoot this phase", condition_subject(s, "the unit", legacy_unit_subject(s)))
         }
         T::EligibleToShoot => format!("{negate}the unit is eligible to shoot"),
         T::SelectionHasKeyword => {

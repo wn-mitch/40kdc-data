@@ -110,7 +110,7 @@
             </profile>
             <profile name="Recon Drone" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">This model gains the Weapon Grant ability.
+                <characteristic name="Description">The bearer gains the Weapon Grant ability.
 The unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
