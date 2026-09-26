@@ -11,7 +11,8 @@ type Board = { leaves: Leaf[]; unlabeled: Wording[]; untiled: Wording[]; totals:
 type ApplyReport = { batch_id: string; applied: number; already: number; blocked: Array<{ faction_id: string; ability_id: string; reason: string }> };
 
 const ROLE_ORDER = ["CONDITION", "EVENT", "EFFECT", "DURATION", "COMBINATOR"];
-const BLOCK_REASONS: Record<string, string> = { OTHER_LEAF_HERE: "another leaf already covers this text", REJECTED_HERE: "a reviewer rejected this meaning here" };
+const BLOCK_REASONS: Record<string, string> = { OTHER_LEAF_HERE: "another leaf already covers this text", REJECTED_HERE: "a reviewer rejected this meaning here",
+  QUALIFIED_HERE: "a word before it (melee, ranged, or a unit keyword) narrows the meaning; decide the longer wording" };
 
 /**
  * Leaves: each meaning once, with every spelling GW uses for it. Deciding a spelling applies it

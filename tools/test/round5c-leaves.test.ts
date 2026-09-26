@@ -317,7 +317,7 @@ describe("Round 5C family versions", () => {
     }
   });
 
-  it("lets longer wording replace a shorter decided leaf inside it, and undo restores the shorter one", () => {
+  it("leaves qualified wording to its own spelling, and undo takes the longer leaf back out", () => {
     const short = "weapons equipped by models in that unit have the [LETHAL HITS] ability";
     const long = `melee ${short}`;
     const grant = (weaponType: string) => ({ family_id: "weapon-ability-grant", parameters: { subject: "this-unit", keyword: "Lethal Hits", weapon_type: weaponType } });
@@ -326,7 +326,9 @@ describe("Round 5C family versions", () => {
       { faction_id: "alpha", ability_id: "melee", raw_text: `${LEAD}, ${long}.` },
     ]);
     try {
-      expect(confirmSurface(db, { reviewer: REVIEWER, exact_text: short, ...grant("all") }).applied).toBe(2);
+      // "melee" narrows the shorter wording, so it does not claim the melee source.
+      expect(confirmSurface(db, { reviewer: REVIEWER, exact_text: short, ...grant("all") }))
+        .toMatchObject({ applied: 1, blocked: [expect.objectContaining({ ability_id: "melee", reason: "QUALIFIED_HERE" })] });
       const decided = confirmSurface(db, { reviewer: REVIEWER, exact_text: long, ...grant("melee") });
       expect(decided).toMatchObject({ applied: 1, blocked: [] });
       const params = (id: string) => leaves(db, id).filter((item) => item.family_id === "weapon-ability-grant").map((item) => (item.parameters as { weapon_type: string }).weapon_type);
@@ -335,7 +337,7 @@ describe("Round 5C family versions", () => {
       // Deciding the shorter wording again cannot shrink the longer leaf.
       expect(confirmSurface(db, { reviewer: REVIEWER, exact_text: short, ...grant("all") })).toMatchObject({ applied: 0, blocked: [expect.objectContaining({ ability_id: "melee", reason: "OTHER_LEAF_HERE" })] });
       undoBatch(db, decided.batch_id, { reviewer: REVIEWER });
-      expect(params("melee")).toEqual(["all"]);
+      expect(params("melee")).toEqual([]);
     } finally {
       db.close();
     }

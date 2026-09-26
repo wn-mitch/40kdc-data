@@ -10,6 +10,7 @@ import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { upgradeFamilyVersions } from "../src/round5c/family-versions.js";
 import { getAbility } from "../src/round5c/review.js";
 import { surfaceWarnings } from "../src/round5c/surface-lint.js";
+import { confirmSurface, leafBoard, retractQualifiedSurfaceLeaves } from "../src/round5c/leaves.js";
 import { refreshSources } from "../src/round5c/source.js";
 
 type DatabaseSync = DatabaseType;
@@ -156,5 +157,35 @@ describe("Round 5C targeting families", () => {
     expect(surfaceWarnings("each time this model makes a ranged attack", "EVENT", "attack", { direction: "makes", unit: "this-model", attack_type: "ranged" })).toEqual([]);
     expect(surfaceWarnings("melee weapons gain a bonus ability", "EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "melee" })).toEqual([]);
     expect(surfaceWarnings("each time this model makes a ranged attack", "EVENT", "attack", { direction: "makes", unit: "this-model", attack_type: "melee" })).toHaveLength(1);
+  });
+
+  it("does not apply a spelling where a word before it narrows the meaning, and retracts old ones that did", () => {
+    const exact = "weapons equipped by models in that unit gain the [LETHAL HITS] edge";
+    const db = fixture([
+      { ability_id: "all", raw_text: `While leading, ${exact}.` },
+      { ability_id: "melee", raw_text: `While leading, melee ${exact}.` },
+      { ability_id: "kind", raw_text: `While leading, **BEASTS** ${exact}.` },
+    ]);
+    try {
+      const meaning = { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "all" };
+      confirmSurface(db, { reviewer: "r", exact_text: "While leading", family_id: "leading-unit", parameters: { subject: "this-model", attachment: "leading" } });
+      const report = confirmSurface(db, { reviewer: "r", exact_text: exact, family_id: "weapon-ability-grant", parameters: meaning });
+      expect(report.applied).toBe(1);
+      expect(report.blocked.map((item) => [item.ability_id, item.reason]).sort()).toEqual([["kind", "QUALIFIED_HERE"], ["melee", "QUALIFIED_HERE"]]);
+      // The whole qualified wording is left for its own decision instead of a stray "melee".
+      expect(leafBoard(db).untiled.map((item) => item.sample_text)).toContain(`melee ${exact}`);
+
+      // A leaf applied before the guard existed is retracted once, and only that one.
+      const row = current(db, "melee");
+      const start = Buffer.byteLength(row.source_text.slice(0, row.source_text.indexOf(exact)));
+      const spanId = insertSpan(db, row.id, "RAW_TEXT", start, start + Buffer.byteLength(exact), exact);
+      const surface = db.prepare("SELECT fingerprint_id, batch_id FROM leaf_surfaces WHERE status = 'active' AND normalized_surface LIKE 'weapons%'").get() as { fingerprint_id: string; batch_id: string };
+      db.prepare("INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, created_at) VALUES (?, ?, 'active', 'leaf-surface', 'human', 'r', ?, 'x')").run(spanId, surface.fingerprint_id, surface.batch_id);
+      expect(retractQualifiedSurfaceLeaves(db)).toEqual({ retracted: 1 });
+      expect(retractQualifiedSurfaceLeaves(db)).toEqual({ retracted: 0 });
+      expect(getAbility(db, current(db, "all").id).annotations).toHaveLength(2);
+    } finally {
+      db.close();
+    }
   });
 });

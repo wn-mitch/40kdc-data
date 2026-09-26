@@ -43,6 +43,20 @@ export class LeafError extends Error {
   }
 }
 
+/**
+ * A word directly before a match that narrows what the match means: "melee" or "ranged" before
+ * "weapons … have [X]", or a unit keyword (capitals or bold) before "models in that unit …".
+ * The spelling then describes only part of the wording, so it must not apply there.
+ */
+const QUALIFIER_BEFORE = /(?:\b(?:melee|ranged)|\*\*[^*]+\*\*|\b[A-Z][A-Z'-]{2,})\s+$/u;
+
+/** Whether the words right before a byte offset qualify what follows it. */
+export function qualifiedAt(sourceText: string, startByte: number): boolean {
+  const bytes = Buffer.from(sourceText, "utf8");
+  const before = bytes.subarray(Math.max(0, startByte - 80), startByte).toString("utf8");
+  return QUALIFIER_BEFORE.test(before);
+}
+
 /** The surface key of source wording: normalized, without edge punctuation. */
 export function leafSurface(text: string): string {
   return normalizedSurface(text.replace(EDGE_PUNCTUATION, ""));
@@ -63,7 +77,7 @@ type Fingerprint = { id: string; family_id: string; family_version: number; role
 export type ApplyReport = {
   applied: number;
   already: number;
-  blocked: Array<{ ability_version_id: number; faction_id: string; ability_id: string; exact_text: string; reason: "OTHER_LEAF_HERE" | "REJECTED_HERE" }>;
+  blocked: Array<{ ability_version_id: number; faction_id: string; ability_id: string; exact_text: string; reason: "OTHER_LEAF_HERE" | "REJECTED_HERE" | "QUALIFIED_HERE" }>;
 };
 
 function fingerprintRow(db: DatabaseSync, id: string): Fingerprint {
@@ -148,6 +162,7 @@ function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: string, b
     INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, created_at)
     VALUES (?, ?, 'active', 'leaf-surface', 'human', ?, ?, NULL, ?)
   `);
+  const sourceText = db.prepare("SELECT source_text FROM abilities WHERE id = ?");
   const now = new Date().toISOString();
   for (const occurrence of surfaceOccurrences(db, surface.normalized_surface, abilityVersionIds)) {
     const args = [occurrence.ability_version_id, occurrence.fragment, occurrence.end_byte, occurrence.start_byte] as const;
@@ -172,6 +187,7 @@ function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: string, b
       others = [];
     }
     if (others.length > 0) { blocked("OTHER_LEAF_HERE"); continue; }
+    if (qualifiedAt((sourceText.get(occurrence.ability_version_id) as { source_text: string }).source_text, occurrence.start_byte)) { blocked("QUALIFIED_HERE"); continue; }
     if (refused.get(occurrence.ability_version_id, occurrence.fragment, occurrence.start_byte, occurrence.end_byte, fingerprint.id)) { blocked("REJECTED_HERE"); continue; }
     const spanId = insertSpan(db, occurrence.ability_version_id, occurrence.fragment, occurrence.start_byte, occurrence.end_byte, occurrence.exact_text);
     const annotation = insert.run(spanId, fingerprint.id, reviewer, batchId, now);
@@ -556,6 +572,34 @@ export function leafBoard(db: DatabaseSync, options: { factionId?: string } = {}
     untiled: [...untiled.values()].sort((left, right) => right.unlocks - left.unlocks || right.occurrences - left.occurrences).slice(0, UNTILED_LIMIT),
     totals: { current_sources: current, tiled_sources: tiled, sources_with_leaves: withLeaves },
   };
+}
+
+/**
+ * Retract spelling-applied leaves that a qualifying word directly precedes; they were applied
+ * before `qualifiedAt` existed and claim a narrower meaning than the wording has (a grant to all
+ * weapons inside "melee weapons … have [X]"). Their wording shows up again on the board, whole.
+ * Idempotent: once retracted, nothing matches again.
+ */
+export function retractQualifiedSurfaceLeaves(db: DatabaseSync): { retracted: number } {
+  return withTransaction(db, () => {
+    const rows = db.prepare(`
+      SELECT annotations.id, source_spans.start_byte, abilities.source_text, abilities.id AS ability_version_id
+      FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
+      JOIN abilities ON abilities.id = source_spans.ability_version_id
+      WHERE annotations.status = 'active' AND annotations.origin = 'leaf-surface'
+    `).all() as Array<{ id: number; start_byte: number; source_text: string; ability_version_id: number }>;
+    const qualified = rows.filter((row) => qualifiedAt(row.source_text, row.start_byte));
+    if (qualified.length === 0) return { retracted: 0 };
+    const batchId = `migration_${randomUUID()}`;
+    db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at) VALUES (?, 'migration-qualified-surfaces', 'system', ?)")
+      .run(batchId, new Date().toISOString());
+    for (const row of qualified) {
+      db.prepare("UPDATE annotations SET status = 'retracted' WHERE id = ? AND status = 'active'").run(row.id);
+      addMember(db, batchId, "annotation-retracted", row.id);
+    }
+    finish(db, qualified.map((row) => row.ability_version_id));
+    return { retracted: qualified.length };
+  });
 }
 
 /**

@@ -13,7 +13,7 @@ import { abandonLunaRun, finishLunaRun, latestLunaRunForAbility, lunaRunView, st
 import { applySourceAtomBatch, proposeSourceAtom } from "../src/round5c/atoms.js";
 import { refreshSources } from "../src/round5c/source.js";
 import { approveShape, getShape, listShapes, rejectShapeMembers } from "../src/round5c/shapes.js";
-import { applyLeafSurfaces, backfillLeafSurfaces, confirmSurface, leafBoard, mergeFingerprints, moveSurface, retireSurface } from "../src/round5c/leaves.js";
+import { applyLeafSurfaces, backfillLeafSurfaces, confirmSurface, leafBoard, mergeFingerprints, moveSurface, retireSurface, retractQualifiedSurfaceLeaves } from "../src/round5c/leaves.js";
 import { proposeLexical, retrieveFamilyCandidates } from "../src/round5c/retrieval.js";
 import { getQueue } from "../src/round5c/queue.js";
 import { listPublications, preparePublication, publishPublication } from "../src/round5c/publish.js";
@@ -49,7 +49,7 @@ function round5WorkbenchBridge(): Plugin {
     configureServer(server) {
       const runningLuna = new Set<number>();
       const initialDb = openWorkbench();
-      try { repairRelatedVariantProposals(initialDb); proposeLexical(initialDb); backfillLeafSurfaces(initialDb); }
+      try { repairRelatedVariantProposals(initialDb); proposeLexical(initialDb); backfillLeafSurfaces(initialDb); retractQualifiedSurfaceLeaves(initialDb); }
       finally { initialDb.close(); }
       server.middlewares.use(async (request, response, next) => {
         if (!request.url?.startsWith("/__round5c/")) return next();
