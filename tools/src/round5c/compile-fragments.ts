@@ -45,6 +45,13 @@ const MARK_KEYWORDS: Record<string, string> = {
   "oath-of-moment": "Oath of Moment target", afflicted: "AFFLICTED", spotted: "SPOTTED", hidden: "HIDDEN", marked: "Marked",
 };
 
+const ACTIVITY_CONDITIONS: Record<string, string> = {
+  "charged-this-turn": "charged-this-turn", "advanced-this-turn": "advanced-this-turn", "remained-stationary": "remained-stationary",
+  "fought-this-phase": "has-fought-this-phase", "selected-to-shoot-this-phase": "unit-selected-to-shoot-this-phase",
+};
+
+const MORTAL_TARGETS: Record<string, string> = { target: "defender", "that-unit": "target", "this-unit": "unit", "this-model": "self" };
+
 const STATE_CONDITIONS: Record<string, string> = {
   "below-starting-strength": "unit-below-starting-strength", "below-half-strength": "unit-below-half-strength", "battle-shocked": "is-battle-shocked",
 };
@@ -128,6 +135,8 @@ export function condition(leaf: CompileLeaf): Node {
       }
       return anyOf(keywords.map((keyword) => ({ type, parameters: { keyword } })));
     }
+    case "unit-activity":
+      return polarity(leaf, { type: ACTIVITY_CONDITIONS[String(closed(leaf, "activity"))], ...(target ? { parameters: { subject: "target" } } : {}) });
     case "unit-mark":
       return polarity(leaf, { type: target ? "target-has-keyword" : "unit-has-keyword", parameters: { keyword: MARK_KEYWORDS[String(closed(leaf, "mark"))] } });
     case "unit-position": {
@@ -205,6 +214,17 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
       return { type: "invulnerable-save", target: target(leaf.parameters.subject), modifier: { invuln_sv: closed(leaf, "threshold") } };
     case "fights-first":
       return { type: "fight-first", target: target(leaf.parameters.subject), modifier: {} };
+    case "no-advance-roll":
+      return { type: "ability-grant", target: target(leaf.parameters.subject), modifier: { grant_type: "no-advance-roll" } };
+    case "mortal-wounds": {
+      const count = String(closed(leaf, "count"));
+      return { type: "mortal-wounds", target: MORTAL_TARGETS[String(closed(leaf, "recipient"))], modifier: { count: /^\d+$/u.test(count) ? Number(count) : count } };
+    }
+    case "fight-on-death":
+      // The schema pairs each resolution with its removal; a roll or eligibility is folded in by compile-dice.
+      return closed(leaf, "timing") === "when-its-unit-fights"
+        ? { type: "fight-on-death", target: "destroyed-model", modifier: { resolution: "when-unit-fights", removal: "after-unit-fights-or-phase-end" } }
+        : { type: "fight-on-death", target: "destroyed-model", modifier: { resolution: "after-attacking-unit-finishes", removal: "after-destroyed-model-fights" } };
     case "act-after-move": {
       // The DSL's own forms: advancing is two separate grants; falling back is one effect that can add a charge.
       const owner = target(leaf.parameters.subject);

@@ -21,6 +21,15 @@ export const WOUND_AMOUNTS = ["1", "2", "3", "D3", "D6", "D3+3"] as const;
 
 export const EFFECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
   {
+    id: "no-advance-roll",
+    version: 1,
+    role: "EFFECT",
+    label: "No Advance roll",
+    description: "\"Do not make an Advance roll for it\". What happens instead (add 6\" to Move) is its own leaf; the \"instead\" between them joins rather than replaces.",
+    starter: { subject: "" },
+    parameterSchema: { type: "object", required: ["subject"], properties: { subject: { enum: SUBJECTS } }, additionalProperties: false },
+  },
+  {
     id: "act-after-move",
     version: 1,
     role: "EFFECT",
@@ -77,6 +86,9 @@ export const EFFECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
 
 export function normalizeEffectParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
   switch (family) {
+    case "no-advance-roll":
+      exactKeys(input, ["subject"], family);
+      return { subject: enumValue(input.subject, SUBJECTS, "no-advance-roll.subject") };
     case "act-after-move":
       exactKeys(input, ["subject", "moves", "acts"], family);
       return { subject: enumValue(input.subject, SUBJECTS, "act-after-move.subject"), moves: enumSet(input.moves, MOVES, "act-after-move.moves"), acts: enumSet(input.acts, ACTS, "act-after-move.acts") };

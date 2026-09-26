@@ -31,6 +31,11 @@ describe("Round 5C leaf describer audit", () => {
       "characteristic-modifier": { unrendered: [], colliding: ["subject", "operation"], problems: 0 },
       "regain-wounds": { unrendered: [], colliding: ["subject"], problems: 0 },
       "act-after-move": { unrendered: [], colliding: ["subject"], problems: 0 },
+      "no-advance-roll": { unrendered: [], colliding: ["subject"], problems: 0 },
+      // The attack's target (defender) and the selected unit (target) both read "the target".
+      "mortal-wounds": { unrendered: [], colliding: ["recipient"], problems: 0 },
+      // Charged, Advanced and the other activity conditions ignore subject: target.
+      "unit-activity": { unrendered: [], colliding: ["subject"], problems: 0 },
       // Who attacks and which way only show in the effect's target, not in text of their own.
       attack: { unrendered: ["direction", "unit"], colliding: [], problems: 0 },
       // Battle-shocked ignores subject: target; honouring it moves conformance goldens, so it waits

@@ -163,7 +163,7 @@ export function LeafForm({ families, exactText, role, initial, busy, submitLabel
           {isSource && <input value={String((value as { source: unknown }).source)} onChange={(event) => set(name, { source: event.target.value })} aria-label={`${label} source words`} />}
         </fieldset>;
       }
-      if (numeric(property) && property.minimum !== undefined && property.maximum !== undefined && property.maximum - property.minimum <= 10) {
+      if (numeric(property) && property.minimum !== undefined && property.maximum !== undefined && property.maximum - property.minimum <= 12) {
         const range = Array.from({ length: property.maximum - property.minimum + 1 }, (_, index) => String(property.minimum! + index));
         return <fieldset key={name}><legend>{label}</legend>
           <Chips label={label} options={range} value={typeof value === "number" ? String(value) : ""} onChange={(next) => set(name, Number(next))}

@@ -2,6 +2,7 @@ import { exactSpan } from "./contracts.js";
 import {
   ATTACK_EVENTS, attackTypeCondition, closed, CompileError, condition, DURATIONS, effect, kindKey, negate, trigger, type CompileLeaf,
 } from "./compile-fragments.js";
+import { resolveRolls, rollMarker } from "./compile-dice.js";
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
 import { usageFor } from "./restriction-families.js";
@@ -24,7 +25,10 @@ export { CompileError, type CompileLeaf } from "./compile-fragments.js";
  * - Instead. An `instead` combinator makes its clause's effect replace the nearest earlier effect
  *   of the same family: the earlier one applies only when the clause's condition does not.
  * - Selected unit. Effects gated by "the target is the selected unit" go inside one
- *   designate-target for the ability's select-unit leaf.
+ *   designate-target for the ability's select-unit leaf. Without that gate, the selection only
+ *   names "that unit" for effects such as mortal wounds.
+ * - Rolls. Result bands gate their clause's effects and become dice-gated or dice-table; fighting
+ *   on death takes its band and conditions as its own per-model gate (compile-dice.ts).
  * - Restrictions. How often compiles to `usage`; a stratagem's phases and an enhancement's
  *   eligible bearers compile to nothing and come back as checks against the core records.
  * - Two or more effects form a sequence in source order; a duration sets `scope.duration`;
@@ -100,6 +104,7 @@ function signaturePart(leaf: CompileLeaf): string {
   if (leaf.family_id === "attack") return `EVENT(attack:${String(leaf.parameters.direction)})`;
   if (leaf.role !== "EVENT") return `${leaf.role}(${leaf.family_id})`;
   if (leaf.family_id === "select-unit") return "EVENT(select-unit)";
+  if (leaf.family_id === "dice-roll") return "EVENT(dice-roll)";
   return ATTACK_EVENTS.has(String(leaf.parameters.kind)) ? "EVENT(attack)" : `EVENT(${kindKey(leaf)})`;
 }
 
@@ -130,6 +135,8 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
         : "No separate text: checked against the core record, which already holds it." };
   }
   if (leaf.family_id === "target-is-selected") return { kind: "implicit", note: "No separate text: the effects it gates apply to attacks against the selected unit." };
+  if (leaf.family_id === "dice-roll") return { kind: "implicit", note: `No separate text: roll one ${String(leaf.parameters.dice)}; the result bands after it say what each result does.` };
+  if (leaf.family_id === "roll-result") return { kind: "implicit", note: `No separate text: the effects in its clause happen on a ${String(leaf.parameters.from)}-${String(leaf.parameters.to)}.` };
   if (leaf.role === "CONDITION") return { kind: "condition", node: condition(leaf) };
   if (leaf.role === "DURATION") return { kind: "duration", duration: duration(leaf) };
   if (leaf.family_id === "attack") {
@@ -152,6 +159,9 @@ const gated = (gate: Node[], body: Node): Node => {
   const node = allOf(gate);
   return node ? { type: "conditional", condition: node, effect: body } : body;
 };
+
+/** Effects that forbid something; an "instead" after one says what happens in its place. */
+const PROHIBITIONS = new Set(["no-advance-roll"]);
 
 type PlannedEffect = { index: number; leaf: CompileLeaf; node: Node; gate: Node[]; selected: boolean; replaces: boolean };
 
@@ -185,6 +195,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const triggers: Node[] = [];
   const durations: string[] = [];
   const selections: CompileLeaf[] = [];
+  const rolls: CompileLeaf[] = [];
   const combinators: number[] = [];
   const usages: Record<string, unknown>[] = [];
   let optional = false;
@@ -195,7 +206,10 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     const first = firstEffect(sentence);
     const leading = first === -1 || index < first;
     const scope = (node: Node | "selected") => {
-      if (!effectSentences.has(sentence) || (sentence === firstSentence && leading)) {
+      // A result band decides only the effects of its own clause, wherever it sits in it.
+      if (node !== "selected" && node.type === "__roll-result") {
+        clauseGates.set(clause, [...(clauseGates.get(clause) ?? []), node]);
+      } else if (!effectSentences.has(sentence) || (sentence === firstSentence && leading)) {
         if (node === "selected") selectedGlobally = true;
         else global.push(node);
       } else if (leading) {
@@ -208,7 +222,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
       }
     };
     attempt(() => {
-      if (leaf.role === "CONDITION") scope(leaf.family_id === "target-is-selected" ? "selected" : condition(leaf));
+      if (leaf.role === "CONDITION") scope(leaf.family_id === "target-is-selected" ? "selected" : leaf.family_id === "roll-result" ? rollMarker(leaf) : condition(leaf));
       else if (leaf.role === "DURATION") durations.push(duration(leaf));
       else if (leaf.role === "COMBINATOR") combinators.push(index);
       else if (leaf.role === "RESTRICTION") {
@@ -222,6 +236,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
           const gate = attackTypeCondition(leaf);
           if (gate) scope(gate);
         } else if (leaf.family_id === "select-unit") selections.push(leaf);
+        else if (leaf.family_id === "dice-roll") rolls.push(leaf);
         else if (!(leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind)))) triggers.push(trigger(leaf));
       } else if (leaf.role !== "EFFECT") throw new CompileError(`Role ${leaf.role} cannot compile.`);
     });
@@ -257,6 +272,10 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     }
     const replacement = own[0]!;
     const replaced = planned.filter((item) => item.index < replacement.index && item.leaf.family_id === replacement.leaf.family_id && !item.replaces).at(-1);
+    // "Do not make an Advance roll; instead, add 6\"": after a prohibition, "instead" says what
+    // happens in its place, so the two effects simply both apply.
+    const previous = planned.filter((item) => item.index < replacement.index).at(-1);
+    if (!replaced && previous && PROHIBITIONS.has(previous.leaf.family_id)) continue;
     if (!replaced) {
       errors.push(`"Instead" has no earlier ${replacement.leaf.family_id} effect to replace.`);
       continue;
@@ -275,14 +294,17 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   if (usages.length > 1) errors.push("More than one usage limit; the entry has one usage.");
   const selected = planned.filter((item) => item.selected);
   if (selections.length > 1) errors.push("More than one unit is selected; the compiler binds only one.");
-  if (selections.length === 1 && selected.length !== planned.length) errors.push("A unit is selected, but not every effect is limited to attacks against it.");
+  // A selection without "attacks against that unit" is only who "that unit" names (it suffers
+  // mortal wounds, say); with it, every effect must be limited to those attacks.
+  if (selections.length === 1 && selected.length > 0 && selected.length !== planned.length) errors.push("A unit is selected, but not every effect is limited to attacks against it.");
   if (selections.length === 0 && selected.length > 0) errors.push("An attack targets \"that unit\", but no select-unit leaf says which unit.");
   if (errors.length > 0) return { ok: false, signature, errors };
 
-  const steps = planned.map((item) => gated(item.gate, item.node));
+  const steps = attempt(() => resolveRolls(planned, global, rolls));
+  if (!steps) return { ok: false, signature, errors };
   let body: Node | null = steps.length === 1 ? steps[0]! : { type: "sequence", steps };
   const scopeDuration = durations[0] ?? "permanent";
-  if (selections.length === 1) body = attempt(() => designation(selections[0]!, list, body!, durations[0]));
+  if (selections.length === 1 && selected.length > 0) body = attempt(() => designation(selections[0]!, list, body!, durations[0]));
   if (!body) return { ok: false, signature, errors };
   return {
     ok: true,

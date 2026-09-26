@@ -175,6 +175,41 @@ export function prefillFromSource(family: Family | undefined, exactText: string)
       : family.id === "select-unit" ? selectionFromSource(exactText)
         : PREDICATES.has(family.id) ? predicateFromSource(family.id, exactText) : {};
   if (family.id === "characteristic-modifier") Object.assign(prefill, characteristicFromSource(exactText));
+  if (family.id === "no-advance-roll") {
+    if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
+    else if (/\bthe bearer\b/iu.test(exactText)) prefill.subject = "bearer";
+    else if (/\b(?:it|your unit|this unit|that unit)\b/iu.test(exactText)) prefill.subject = "this-unit";
+  }
+  if (family.id === "dice-roll") {
+    const dice = /\broll (?:one |a )?(d3|d6|2d6)\b/iu.exec(exactText)?.[1]?.toUpperCase();
+    if (dice) prefill.dice = dice;
+  }
+  if (family.id === "roll-result") {
+    // A D6 is assumed for "N+"; change "to" for a D3 or 2D6.
+    const band = /\bon an? (\d+)(?:\+|-(\d+))?/iu.exec(exactText);
+    if (band) {
+      prefill.from = Number(band[1]);
+      prefill.to = band[2] ? Number(band[2]) : /\d\+/u.test(band[0]) ? 6 : Number(band[1]);
+    }
+  }
+  if (family.id === "mortal-wounds") {
+    const count = /\b(\d+|d3\+3|d3|d6|2d6) mortal wounds?\b/iu.exec(exactText)?.[1]?.toUpperCase();
+    if (count) prefill.count = count;
+    if (/\bthat (?:enemy )?unit\b/iu.test(exactText)) prefill.recipient = "that-unit";
+    else if (/\bthis unit\b/iu.test(exactText)) prefill.recipient = "this-unit";
+    else if (/\bthis model\b/iu.test(exactText)) prefill.recipient = "this-model";
+  }
+  if (family.id === "fight-on-death") {
+    if (/after the attacking unit has finished/iu.test(exactText)) prefill.timing = "after-the-attacking-unit-finishes";
+    else if (/when (?:its|that) unit (?:is selected to )?fights?/iu.test(exactText)) prefill.timing = "when-its-unit-fights";
+  }
+  if (family.id === "unit-activity") {
+    const activities: Array<[RegExp, string]> = [[/charge/iu, "charged-this-turn"], [/advance/iu, "advanced-this-turn"], [/remained stationary/iu, "remained-stationary"], [/fought/iu, "fought-this-phase"], [/selected to shoot/iu, "selected-to-shoot-this-phase"]];
+    const activity = activities.find(([pattern]) => pattern.test(exactText))?.[1];
+    if (activity) prefill.activity = activity;
+    if (/\bnot\b|\bhas not\b|\bhasn't\b/iu.test(exactText)) prefill.negated = true;
+    if (/\b(?:this|your|that) (?:unit|model)\b/iu.test(exactText)) prefill.subject = "this-unit";
+  }
   if (family.id === "usage-limit") {
     const frequency = /once per (battle round|battle|turn|phase)/iu.exec(exactText)?.[1]?.toLowerCase();
     if (frequency) prefill.frequency = `once-per-${frequency.replace(" ", "-")}`;

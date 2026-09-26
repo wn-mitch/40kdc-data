@@ -137,6 +137,95 @@ describe("Round 5C composition rules", () => {
     expect(worsen("makes")).toMatchObject({ effect: { type: "stat-modifier", target: "unit" } });
   });
 
+  it("replaces a re-roll when the unit charged, keeping the melee limit on both", () => {
+    const text = "Whenever a model here swings, re-roll a one. If it charged this turn, re-roll the swing instead.";
+    const result = compiled(text, [
+      ["Whenever a model here swings", "EVENT", "attack", attack("makes", "this-unit", "melee")],
+      ["re-roll a one", "EFFECT", "reroll", { roll: "hit", subset: "ones" }],
+      ["If it charged this turn", "CONDITION", "unit-activity", { activity: "charged-this-turn", subject: "this-unit", negated: false }],
+      ["re-roll the swing", "EFFECT", "reroll", { roll: "hit", subset: "all" }],
+      ["instead", "COMBINATOR", "instead", {}],
+    ]);
+    expect(result.mechanics.effect).toEqual({
+      type: "conditional", condition: { type: "attack-is-type", parameters: { attack_type: "melee" } },
+      effect: { type: "sequence", steps: [
+        { type: "conditional", condition: { type: "charged-this-turn", negated: true }, effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", subset: "ones" } } },
+        { type: "conditional", condition: { type: "charged-this-turn" }, effect: { type: "re-roll", target: "unit", modifier: { roll: "hit", result_scope: "any-result" } } },
+      ] },
+    });
+  });
+
+  it("turns result bands into a dice table, with faces no band names doing nothing", () => {
+    const text = "Whenever it lands a charge, pick one enemy unit and roll one D6: on a 2-5, that unit takes D3 wounds; on a 6, that unit takes D3+3 wounds.";
+    const result = compiled(text, [
+      ["Whenever it lands a charge", "EVENT", "event", { kind: "charge" }],
+      ["pick one enemy unit", "EVENT", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["roll one D6", "EVENT", "dice-roll", { dice: "D6" }],
+      ["on a 2-5", "CONDITION", "roll-result", { from: 2, to: 5 }],
+      ["that unit takes D3 wounds", "EFFECT", "mortal-wounds", { recipient: "that-unit", count: "D3" }],
+      ["on a 6", "CONDITION", "roll-result", { from: 6, to: 6 }],
+      ["that unit takes D3+3 wounds", "EFFECT", "mortal-wounds", { recipient: "that-unit", count: "D3+3" }],
+    ]);
+    expect(result.mechanics.effect).toEqual({ type: "dice-table", dice: "D6", outcomes: [
+      { results: [1], effect: { type: "no-effect" } },
+      { results: [2, 3, 4, 5], effect: { type: "mortal-wounds", target: "target", modifier: { count: "D3" } } },
+      { results: [6], effect: { type: "mortal-wounds", target: "target", modifier: { count: "D3+3" } } },
+    ] });
+    expect(result.mechanics.trigger).toEqual({ event: "charge-move", subject: "self" });
+  });
+
+  it("gates one band that reaches the top face with dice-gated", () => {
+    const result = compiled("Roll one D6: on a 4+, this unit takes 1 wound.", [
+      ["Roll one D6", "EVENT", "dice-roll", { dice: "D6" }],
+      ["on a 4+", "CONDITION", "roll-result", { from: 4, to: 6 }],
+      ["this unit takes 1 wound", "EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" }],
+    ]);
+    expect(result.mechanics.effect).toEqual({ type: "dice-gated", dice: "D6", threshold: 4, comparison: "gte", on_success: { type: "mortal-wounds", target: "unit", modifier: { count: 1 } }, on_fail: null });
+  });
+
+  it("folds a per-model roll and a has-not-fought condition into fighting on death", () => {
+    const text = "Whenever a model here falls, if that model has not fought this phase, roll one D6. On a 2+, leave it; it fights after the attackers finish.";
+    const result = compiled(text, [
+      ["Whenever a model here falls", "EVENT", "event", { kind: "model-destroyed" }],
+      ["if that model has not fought this phase", "CONDITION", "unit-activity", { activity: "fought-this-phase", subject: "this-unit", negated: true }],
+      ["roll one D6", "EVENT", "dice-roll", { dice: "D6" }],
+      ["On a 2+", "CONDITION", "roll-result", { from: 2, to: 6 }],
+      ["leave it; it fights after the attackers finish", "EFFECT", "fight-on-death", { timing: "after-the-attacking-unit-finishes" }],
+    ]);
+    expect(result.mechanics.effect).toEqual({ type: "fight-on-death", target: "destroyed-model", modifier: {
+      resolution: "after-attacking-unit-finishes", removal: "after-destroyed-model-fights",
+      gate: { dice: "D6", threshold: 2, comparison: "gte" }, eligibility: { type: "has-fought-this-phase", negated: true },
+    } });
+  });
+
+  it("joins what happens in place of a forbidden Advance roll", () => {
+    const result = compiled("Skip the dash roll for it; instead, until the end of the phase, add six to its Move.", [
+      ["Skip the dash roll for it", "EFFECT", "no-advance-roll", { subject: "this-unit" }],
+      ["instead", "COMBINATOR", "instead", {}],
+      ["until the end of the phase", "DURATION", "duration", { endpoint: "end-of-phase" }],
+      ["add six to its Move", "EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 6, weapon_type: "all" }],
+    ]);
+    expect(result.mechanics.effect).toEqual({ type: "sequence", steps: [
+      { type: "ability-grant", target: "unit", modifier: { grant_type: "no-advance-roll" } },
+      { type: "stat-modifier", target: "unit", modifier: { stat: "M", operation: "add", value: 6 } },
+    ] });
+    expect(result.mechanics.scope).toEqual({ range: "unit", duration: "phase" });
+  });
+
+  it("refuses bands it cannot place", () => {
+    expect(failures("On a 4+, this unit takes 1 wound.", [
+      ["On a 4+", "CONDITION", "roll-result", { from: 4, to: 6 }],
+      ["this unit takes 1 wound", "EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" }],
+    ])).toEqual(["Result bands need exactly one roll; found 0."]);
+    expect(failures("Roll one D6: on a 2-4, it takes 1 wound; on a 4+, it takes 2 wounds.", [
+      ["Roll one D6", "EVENT", "dice-roll", { dice: "D6" }],
+      ["on a 2-4", "CONDITION", "roll-result", { from: 2, to: 4 }],
+      ["it takes 1 wound", "EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" }],
+      ["on a 4+", "CONDITION", "roll-result", { from: 4, to: 6 }],
+      ["it takes 2 wounds", "EFFECT", "mortal-wounds", { recipient: "this-unit", count: "2" }],
+    ])).toEqual(["Two result bands overlap."]);
+  });
+
   it("replaces an earlier effect with \"instead\", for re-rolls and for numbers", () => {
     const rerolls = compiled("Re-roll a hit of one. If the foe is thinned, re-roll the hit instead.", [
       ["Re-roll a hit of one", "EFFECT", "reroll", { roll: "hit", subset: "ones" }],

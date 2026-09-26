@@ -18,6 +18,7 @@ export const POSITION_KINDS = ["closest-eligible", "within", "beyond", "objectiv
 const DISTANCE_KINDS = ["within", "beyond"] as const;
 export const OBJECTIVE_CONTROLLERS = ["any", "you", "opponent"] as const;
 export const SELECT_SCOPES = ["enemy", "friendly"] as const;
+export const UNIT_ACTIVITIES = ["charged-this-turn", "advanced-this-turn", "remained-stationary", "fought-this-phase", "selected-to-shoot-this-phase"] as const;
 const SELECT_DISTANCES = ["any", "within"] as const;
 const MAX_INCHES = 48;
 
@@ -69,6 +70,20 @@ export const TARGETING_FAMILIES: readonly SemanticFamilyDefinition[] = [
       type: "object",
       required: ["keywords", "subject", "negated"],
       properties: { keywords: { type: "array", items: { type: "string", pattern: UNIT_KEYWORD.source }, minItems: 1, uniqueItems: true }, ...subjectAndNegation },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "unit-activity",
+    version: 1,
+    role: "CONDITION",
+    label: "Unit has (or has not) acted",
+    description: "This unit or the attack's target charged or Advanced this turn, Remained Stationary, fought this phase, or was selected to shoot this phase.",
+    starter: { activity: "", subject: "", negated: false },
+    parameterSchema: {
+      type: "object",
+      required: ["activity", "subject", "negated"],
+      properties: { activity: { enum: UNIT_ACTIVITIES }, ...subjectAndNegation },
       additionalProperties: false,
     },
   },
@@ -173,6 +188,9 @@ export function normalizeTargetingParameters(family: string, input: Record<strin
     case "unit-keyword":
       exactKeys(input, ["keywords", "subject", "negated"], family);
       return { keywords: keywordList(input.keywords), ...predicate(family) };
+    case "unit-activity":
+      exactKeys(input, ["activity", "subject", "negated"], family);
+      return { activity: enumValue(input.activity, UNIT_ACTIVITIES, "unit-activity.activity"), ...predicate(family) };
     case "unit-mark":
       exactKeys(input, ["mark", "subject", "negated"], family);
       return { mark: enumValue(input.mark, UNIT_MARKS, "unit-mark.mark"), ...predicate(family) };

@@ -39,6 +39,13 @@ describe("Leaf prefill", () => {
     expect(prefillFromSource(family("bearer-eligibility"), "CANONESS, PALATINE or MINISTORUM PRIEST model only")).toEqual({ keywords: ["CANONESS", "PALATINE", "MINISTORUM PRIEST"], match: "any" });
     expect(prefillFromSource(family("bearer-eligibility"), "ADEPTA SORORITAS model only")).toEqual({ keywords: ["ADEPTA SORORITAS"], match: "all" });
     expect(prefillFromSource(family("optional-use"), "the bearer can use this Enhancement")).toEqual({ who: "bearer" });
+    expect(prefillFromSource(family("dice-roll"), "roll one D6")).toEqual({ dice: "D6" });
+    expect(prefillFromSource(family("roll-result"), "on a 4+")).toEqual({ from: 4, to: 6 });
+    expect(prefillFromSource(family("roll-result"), "on a 2-5")).toEqual({ from: 2, to: 5 });
+    expect(prefillFromSource(family("roll-result"), "on a 6")).toEqual({ from: 6, to: 6 });
+    expect(prefillFromSource(family("mortal-wounds"), "that unit suffers D3+3 mortal wounds")).toEqual({ count: "D3+3", recipient: "that-unit" });
+    expect(prefillFromSource(family("fight-on-death"), "that destroyed model can fight after the attacking unit has finished making its attacks")).toEqual({ timing: "after-the-attacking-unit-finishes" });
+    expect(prefillFromSource(family("unit-activity"), "if that model has not fought this phase")).toEqual({ activity: "fought-this-phase", negated: true, subject: "this-unit" });
     // Nothing stated, nothing chosen.
     expect(prefillFromSource(family("unit-state"), "if so")).toEqual({});
   });

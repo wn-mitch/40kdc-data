@@ -3,6 +3,7 @@ import type { DatabaseSync } from "node:sqlite";
 import { hashJson } from "../round4/hash.js";
 import { boundedInteger, enumValue, exactKeys } from "./family-validation.js";
 import { EFFECT_FAMILIES, normalizeEffectParameters } from "./effect-families.js";
+import { DICE_FAMILIES, normalizeDiceParameters } from "./dice-families.js";
 import { normalizeRestrictionParameters, RESTRICTION_FAMILIES } from "./restriction-families.js";
 import { normalizeTargetingParameters, TARGETING_FAMILIES } from "./targeting-families.js";
 
@@ -443,6 +444,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
   ...TARGETING_FAMILIES,
   ...EFFECT_FAMILIES,
   ...RESTRICTION_FAMILIES,
+  ...DICE_FAMILIES,
 ] as const;
 
 /** The version new fingerprints and model requests use for a family. */
@@ -642,7 +644,7 @@ export function normalizeFingerprintParameters(
         value: boundedInteger(input.value, 1, 20, "characteristic-modifier.value"),
       };
     default: {
-      const extra = normalizeTargetingParameters(family, input) ?? normalizeEffectParameters(family, input) ?? normalizeRestrictionParameters(family, input);
+      const extra = normalizeTargetingParameters(family, input) ?? normalizeEffectParameters(family, input) ?? normalizeRestrictionParameters(family, input) ?? normalizeDiceParameters(family, input);
       if (extra) return extra;
       throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
     }
