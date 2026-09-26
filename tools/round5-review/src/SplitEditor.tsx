@@ -10,12 +10,14 @@ import { splitPieces, suggestedCuts } from "../../src/round5c/split";
  * Cut composed wording into singular leaves. Click between two words to add or remove a cut;
  * each piece is then named on its own and decided for the whole corpus.
  */
-export function SplitEditor({ text, families, busy, pieceState, onDecide, onCancel }: {
+export function SplitEditor({ text, families, busy, pieceState, initialFor, onDecide, onCancel }: {
   text: string;
   families: readonly Family[];
   busy: boolean;
   /** Where a piece's decision is in the queue, if it has been sent. */
   pieceState?: (piece: string) => QueueItem | null;
+  /** A proposed leaf to start a piece's form from. */
+  initialFor?: (piece: string) => { family_id: string; parameters: Record<string, unknown> } | undefined;
   onDecide: (exactText: string, familyId: string, parameters: Record<string, unknown>) => void;
   onCancel: () => void;
 }) {
@@ -42,7 +44,7 @@ export function SplitEditor({ text, families, busy, pieceState, onDecide, onCanc
         {sent && <small className={`wb-state ${sent.status === "failed" ? "wb-state-blocked" : "wb-state-queued"}`}>
           {sent.status === "failed" ? `not recorded: ${sent.error}` : sent.status === "running" ? "recording…" : "queued"}</small>}
         {naming === piece
-          ? <LeafForm families={families} exactText={piece} role={null} busy={busy} submitLabel="Decide everywhere"
+          ? <LeafForm families={families} exactText={piece} role={null} busy={busy} submitLabel="Decide everywhere" initial={initialFor?.(piece)}
             onSubmit={(familyId, parameters) => { setNaming(null); onDecide(piece, familyId, parameters); }} onCancel={() => setNaming(null)} />
           : (!sent || sent.status === "failed") && <button className="primary" type="button" onClick={() => setNaming(piece)}>Name this piece</button>}
       </li>;

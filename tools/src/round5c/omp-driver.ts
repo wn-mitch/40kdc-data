@@ -98,6 +98,25 @@ export function ompVersion(binary = ompBinary()): Promise<string> {
 
 export type OmpProcessResult = { stdout: string; duration_ms: number };
 
+/**
+ * The provider's own error from a failed run's event stream (a usage limit, an auth failure),
+ * which omp reports on stdout rather than stderr. The last one wins; at most 300 characters.
+ */
+export function providerError(stdout: string): string | null {
+  let found: string | null = null;
+  for (const line of stdout.split("\n")) {
+    if (!line.includes("errorMessage") && !line.includes("finalError")) continue;
+    try {
+      const event = JSON.parse(line) as { message?: { errorMessage?: unknown }; finalError?: unknown };
+      const message = event.message?.errorMessage ?? event.finalError;
+      if (typeof message === "string" && message.trim()) found = message.trim();
+    } catch {
+      // A truncated line carries nothing usable.
+    }
+  }
+  return found ? found.slice(0, 300) : null;
+}
+
 /** Run one invocation with the request on non-TTY stdin, bounding output and wall time. */
 export function runOmpProcess(options: {
   binary?: string;
@@ -141,7 +160,8 @@ export function runOmpProcess(options: {
     });
     child.on("close", (code, signal) => {
       if (code !== 0) {
-        finish(new OmpTransportError("NONZERO_EXIT", `omp exited with ${code === null ? `signal ${signal}` : `code ${code}`} after ${stderrBytes} stderr bytes.`, code));
+        const reason = providerError(Buffer.concat(chunks).toString("utf8"));
+        finish(new OmpTransportError("NONZERO_EXIT", `omp exited with ${code === null ? `signal ${signal}` : `code ${code}`} after ${stderrBytes} stderr bytes${reason ? `: ${reason}` : ""}.`, code));
         return;
       }
       finish(null, { stdout: Buffer.concat(chunks).toString("utf8"), duration_ms: Date.now() - started });

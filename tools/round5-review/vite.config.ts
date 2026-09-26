@@ -20,6 +20,9 @@ import { listPublications, preparePublication, publishPublication } from "../src
 import { publishableEntries } from "../src/round5c/publish-queue.js";
 import { previewLeaf } from "../src/round5c/leaf-preview.js";
 import { REVIEWED_FAMILY_REGISTRY } from "../src/round5c/contracts.js";
+import { localEmbedder } from "../src/round5c/embeddings.js";
+import { askModelAboutClusters, deepseekModelCall } from "../src/round5c/leaf-proposals-llm.js";
+import { abandonStaleProposalRuns, dismissLeafProposal, latestProposalRun, listLeafProposals, runLeafProposals, type ProposalKind } from "../src/round5c/leaf-proposals.js";
 
 const appRoot = dirname(fileURLToPath(import.meta.url));
 
@@ -48,8 +51,13 @@ function round5WorkbenchBridge(): Plugin {
     apply: "serve",
     configureServer(server) {
       const runningLuna = new Set<number>();
+      // One model per server: it loads once, on the first proposal run.
+      const embedder = localEmbedder();
+      let proposing = false;
+      let asking: { clusters: number; started_at: string } | null = null;
+      let lastAsk: unknown = null;
       const initialDb = openWorkbench();
-      try { repairRelatedVariantProposals(initialDb); proposeLexical(initialDb); backfillLeafSurfaces(initialDb); retractQualifiedSurfaceLeaves(initialDb); reapplyLeafSurfaces(initialDb); }
+      try { abandonStaleProposalRuns(initialDb); repairRelatedVariantProposals(initialDb); proposeLexical(initialDb); backfillLeafSurfaces(initialDb); retractQualifiedSurfaceLeaves(initialDb); reapplyLeafSurfaces(initialDb); }
       finally { initialDb.close(); }
       server.middlewares.use(async (request, response, next) => {
         if (!request.url?.startsWith("/__round5c/")) return next();
@@ -60,6 +68,7 @@ function round5WorkbenchBridge(): Plugin {
         const familyMatch = /^\/families\/([a-z0-9-]+)\/candidates$/.exec(path);
         const lunaRunMatch = /^\/luna\/runs\/([1-9]\d*)$/.exec(path);
         const abilityRunMatch = /^\/abilities\/([1-9]\d*)\/luna-run$/.exec(path);
+        const dismissMatch = /^\/leaf-proposals\/([1-9]\d*)\/dismiss$/.exec(path);
         let db: DatabaseSync | undefined;
         try {
           if (request.method === "POST") {
@@ -115,6 +124,42 @@ function round5WorkbenchBridge(): Plugin {
           }
           if (request.method === "POST" && path === "/leaves/retire") {
             return json(response, 200, retireSurface(db, await body()));
+          }
+          if (request.method === "GET" && path === "/leaf-proposals") {
+            const kinds = url.searchParams.get("kinds")?.split(",").filter(Boolean) as ProposalKind[] | undefined;
+            return json(response, 200, { ...listLeafProposals(db, { factionId: url.searchParams.get("faction") ?? undefined, kinds }), running: proposing, asking, last_ask: lastAsk });
+          }
+          if (request.method === "GET" && path === "/leaf-proposals/run") {
+            return json(response, 200, { latest: latestProposalRun(db), running: proposing, asking, last_ask: lastAsk });
+          }
+          if (request.method === "POST" && path === "/leaf-proposals/llm") {
+            const payload = await body() as { clusters?: unknown };
+            const clusters = Array.isArray(payload.clusters) ? payload.clusters.filter((item): item is number => Number.isSafeInteger(item)) : [];
+            if (!clusters.length) throw Object.assign(new Error("Name the clusters to ask about."), { status: 422 });
+            if (asking || proposing) throw Object.assign(new Error("The model or a proposal run is already busy in this server."), { status: 409 });
+            asking = { clusters: clusters.length, started_at: new Date().toISOString() };
+            // Each call can take minutes; the page polls /leaf-proposals/run.
+            const askDb = openWorkbench();
+            void askModelAboutClusters(askDb, clusters, deepseekModelCall())
+              .then((result) => { lastAsk = result; })
+              .catch((error: unknown) => { lastAsk = { failed: [error instanceof Error ? error.message : String(error)] }; })
+              .finally(() => { asking = null; askDb.close(); });
+            return json(response, 202, { asking, running: proposing });
+          }
+          if (request.method === "POST" && path === "/leaf-proposals/run") {
+            await body();
+            if (proposing || asking) throw Object.assign(new Error("A proposal run or the model is already busy in this server."), { status: 409 });
+            proposing = true;
+            // Embedding the corpus takes a minute or more; the page polls /leaf-proposals/run.
+            const runDb = openWorkbench();
+            void runLeafProposals(runDb, embedder)
+              .catch((error: unknown) => console.error(`[round5c] Leaf proposal run failed: ${error instanceof Error ? error.message : String(error)}`))
+              .finally(() => { proposing = false; runDb.close(); });
+            return json(response, 202, { latest: latestProposalRun(db), running: true });
+          }
+          if (request.method === "POST" && dismissMatch) {
+            await body();
+            return json(response, 200, dismissLeafProposal(db, Number(dismissMatch[1])));
           }
           if (request.method === "GET" && path === "/shapes") {
             return json(response, 200, listShapes(db, { factionId: url.searchParams.get("faction") ?? undefined }));

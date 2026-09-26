@@ -8,6 +8,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { initializeWorkbench } from "../src/round5c/db.js";
 import type { Embedder } from "../src/round5c/embeddings.js";
 import { dismissLeafProposal, listLeafProposals, runLeafProposals, type ProposalSettings } from "../src/round5c/leaf-proposals.js";
+import { askModelAboutClusters } from "../src/round5c/leaf-proposals-llm.js";
 import { confirmSurface } from "../src/round5c/leaves.js";
 import { refreshSources } from "../src/round5c/source.js";
 
@@ -141,5 +142,59 @@ describe("Round 5C leaf proposals", () => {
     const clusters = listLeafProposals(db).clusters.map((cluster) => cluster.proposals.map((item) => item.sample_text).sort());
     expect(clusters).toContainEqual(["Gain 1CP at the end of the battle round", "Gain 2CP at the end of the battle round"]);
     expect(clusters).toContainEqual(["Swap places with a friendly unit"]);
+  });
+});
+
+describe("Round 5C leaf proposals from the model", () => {
+  it("keeps only pieces taken from the wording with valid leaves, and records every call", async () => {
+    const db = fixture({
+      examples: `${GRANT}. Each time this model fights, ${REROLL}.`,
+      odd: "Swap places with a friendly unit and gain 1CP.",
+      strange: "Roll off with your opponent for no reason.",
+    });
+    decideExamples(db);
+    await runLeafProposals(db, wordsEmbedder(), SETTINGS);
+    const unlabelled = listLeafProposals(db, { kinds: ["unlabelled"] });
+    const byText = new Map(unlabelled.clusters.flatMap((cluster) => cluster.proposals).map((item) => [item.sample_text, item]));
+    const odd = byText.get("Swap places with a friendly unit and gain 1CP")!;
+    const strange = byText.get("Roll off with your opponent for no reason")!;
+    let request: { families: Array<{ family_id: string }>; examples: unknown[]; wordings: Array<{ id: number; text: string }> } | null = null;
+    const result = await askModelAboutClusters(db, unlabelled.clusters.map((cluster) => cluster.cluster), async (instructions, text) => {
+      request = JSON.parse(text);
+      expect(instructions).toMatch(/one JSON object/u);
+      return { model: "fixture/model", model_version: "1", cost_usd: 0, latency_ms: 5, body: { answers: [
+        { id: odd.id, pieces: [
+          { text: "gain 1cp", family_id: "resource-action", parameters: { resource: "command-point", operation: "gain", amount: 1 } },
+          { text: "Swap places with a friendly unit", family_id: null },
+          { text: "teleport home", family_id: "reroll", parameters: { roll: "hit", subset: "ones" } },
+          { text: "Swap places", family_id: "reroll", parameters: { roll: "hit", subset: "sometimes" } },
+        ] },
+        { id: strange.id, new_family: { role: "EVENT", label: "roll-off", distinction: "Not a phase or attack event." } },
+      ] } };
+    });
+    expect(request!.wordings.map((item) => item.id)).toEqual(expect.arrayContaining([odd.id, strange.id]));
+    expect(request!.families.some((family) => family.family_id === "reroll")).toBe(true);
+    expect(result).toMatchObject({ asked: request!.wordings.length, named: 1, new_families: 1, failed: [] });
+    const listed = new Map(listLeafProposals(db, { kinds: ["llm", "new-family"] }).clusters.flatMap((cluster) => cluster.proposals).map((item) => [item.id, item]));
+    expect(listed.get(odd.id)).toMatchObject({ kind: "llm", pieces: [
+      // The wording's own spelling, not the model's lowercase copy.
+      { text: "gain 1CP", family_id: "resource-action" },
+      { text: "Swap places with a friendly unit", family_id: null },
+      { text: "Swap places", family_id: null },
+    ] });
+    expect(listed.get(odd.id)!.dropped).toEqual([expect.stringMatching(/"teleport home" is not part of the wording/u), expect.stringMatching(/^"Swap places" as reroll/u)]);
+    expect(listed.get(strange.id)).toMatchObject({ kind: "new-family", pieces: [{ new_family: { label: "roll-off" } }] });
+    expect(db.prepare("SELECT count(*) AS n FROM model_runs WHERE prompt_version = 'leaf-proposals-v1' AND status = 'completed'").get()).toEqual({ n: 1 });
+  });
+
+  it("leaves wording unlabelled and reports it when a call fails", async () => {
+    const db = fixture({ examples: `${GRANT}.`, odd: "Swap places with a friendly unit." });
+    confirmSurface(db, { reviewer: REVIEWER, exact_text: GRANT, family_id: "weapon-ability-grant", parameters: { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "ranged" } });
+    await runLeafProposals(db, wordsEmbedder(), SETTINGS);
+    const clusters = listLeafProposals(db, { kinds: ["unlabelled"] }).clusters.map((cluster) => cluster.cluster);
+    const result = await askModelAboutClusters(db, clusters, async () => { throw new Error("omp is not installed"); });
+    expect(result).toMatchObject({ asked: 0, named: 0, failed: ["omp is not installed"] });
+    expect(listLeafProposals(db, { kinds: ["unlabelled"] }).clusters.length).toBe(clusters.length);
+    expect(db.prepare("SELECT status FROM model_runs WHERE prompt_version = 'leaf-proposals-v1'").all()).toEqual([{ status: "failed" }]);
   });
 });

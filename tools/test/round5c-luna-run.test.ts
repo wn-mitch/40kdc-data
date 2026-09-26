@@ -8,7 +8,7 @@ import { hashJson } from "../src/round4/hash.js";
 import { openWorkbench } from "../src/round5c/db.js";
 import { abandonLunaRun, ABANDON_AFTER_MS, claimLunaRun, finishLunaRun, lunaRunView, runLuna, startLunaRun } from "../src/round5c/luna-run.js";
 import { LUNA_MODEL, LunaRunError } from "../src/round5c/luna-schema.js";
-import { extractAssistantJson, ompArgs, OmpTransportError } from "../src/round5c/omp-driver.js";
+import { extractAssistantJson, ompArgs, OmpTransportError, providerError } from "../src/round5c/omp-driver.js";
 import { importLuna, prepareLuna, type PreparedLuna } from "../src/round5c/proposal.js";
 
 // Fabricated fixture prose only; nothing here is published source text.
@@ -386,6 +386,15 @@ describe("OMP event-stream parser", () => {
       { type: "agent_end", messages: [] },
     ]), LUNA_MODEL);
     expect(parsed.body).toEqual({ ok: true });
+  });
+
+  it("names the provider's error from a failed stream, preferring the last", () => {
+    expect(providerError(stream([
+      { type: "session" },
+      { type: "turn_end", message: { ...message(""), stopReason: "error", errorMessage: "first failure" } },
+      { type: "auto_retry_end", success: false, finalError: "usage limit reached" },
+    ]) + "\n{\"errorMessage\": trunc")).toBe("usage limit reached");
+    expect(providerError(stream([{ type: "session" }, { type: "agent_end", messages: [] }]))).toBeNull();
   });
 
   it("rejects a non-JSON line and a missing session header", () => {

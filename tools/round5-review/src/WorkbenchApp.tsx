@@ -4,6 +4,7 @@ import { utf8Selection } from "./model";
 import { api, readable } from "./workbench-api";
 import { SourceWorkPanel, type SourceWorkAbility } from "./SourceWorkPanel";
 import { LeavesPage } from "./LeavesPage";
+import { ProposalsPage } from "./ProposalsPage";
 import { ShapesPage } from "./ShapesPage";
 import { PublishPage } from "./PublishPage";
 import { QueueStrip } from "./QueueStrip";
@@ -12,7 +13,7 @@ import type { Family } from "./LeafForm";
 import "./workbench.css";
 
 type Role = "EFFECT" | "DURATION" | "EVENT" | "CONDITION";
-type View = "leaves" | "shapes" | "publish" | "abilities" | "dashboard";
+type View = "leaves" | "proposals" | "shapes" | "publish" | "abilities" | "dashboard";
 type Action = "confirm" | "correct" | "reject" | "novel" | "ambiguous" | "confirm-connective";
 type Fragment = { fragment: string; start_byte: number; end_byte: number; text: string };
 type Span = {
@@ -76,6 +77,7 @@ const CHARACTERISTICS = ["M", "T", "Sv", "W", "A", "Ld", "OC", "WS", "BS", "S", 
 const REVIEWER = "local-reviewer";
 const VIEWS: { id: View; label: string }[] = [
   { id: "leaves", label: "Leaves" },
+  { id: "proposals", label: "AI leaf proposals" },
   { id: "shapes", label: "Shapes" },
   { id: "publish", label: "Publish" },
   { id: "abilities", label: "Sources" },
@@ -906,6 +908,8 @@ export default function WorkbenchApp() {
       </>}
       {view === "leaves" && panel("Leaves", <LeavesPage families={families as unknown as Family[]} faction={faction} revision={revision}
         queue={queue} queueItems={queueItems} reviewer={REVIEWER} openAbility={openAbility} setStatus={setStatus} />, "Decide each spelling once; it applies to every source.")}
+      {view === "proposals" && panel("AI leaf proposals", <ProposalsPage families={families as unknown as Family[]} faction={faction} revision={revision}
+        queue={queue} queueItems={queueItems} reviewer={REVIEWER} setStatus={setStatus} />, "Leaves proposed from the nearest decided spellings, grouped by alike wording.")}
       {view === "shapes" && panel("Shapes", <ShapesPage faction={faction} revision={revision} busy={busy}
         perform={(work) => void perform(work)} reviewer={REVIEWER} onBatch={(batchId) => setBatches((current) => [...current, batchId])}
         openAbility={openAbility} setStatus={setStatus} />, "Approve how leaves combine once for every source with that shape.")}
