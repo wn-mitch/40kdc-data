@@ -220,6 +220,8 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
       return { type: "invulnerable-save", target: target(leaf.parameters.subject), modifier: { invuln_sv: closed(leaf, "threshold") } };
     case "fights-first":
       return { type: "fight-first", target: target(leaf.parameters.subject), modifier: {} };
+    case "sticky-objective":
+      return { type: "objective-control-modifier", target: "unit", modifier: { sticky: true, retake: "opponent-control-greater-at-phase-end" } };
     case "no-advance-roll":
       return { type: "ability-grant", target: target(leaf.parameters.subject), modifier: { grant_type: "no-advance-roll" } };
     case "mortal-wounds": {

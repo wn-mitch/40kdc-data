@@ -21,6 +21,15 @@ export const WOUND_AMOUNTS = ["1", "2", "3", "D3", "D6", "D3+3"] as const;
 
 export const EFFECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
   {
+    id: "sticky-objective",
+    version: 1,
+    role: "EFFECT",
+    label: "Sticky objective",
+    description: "\"That objective marker remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase.\" Being within range of it is a separate condition.",
+    starter: {},
+    parameterSchema: { type: "object", properties: {}, additionalProperties: false },
+  },
+  {
     id: "no-advance-roll",
     version: 1,
     role: "EFFECT",
@@ -86,6 +95,9 @@ export const EFFECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
 
 export function normalizeEffectParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
   switch (family) {
+    case "sticky-objective":
+      exactKeys(input, [], family);
+      return {};
     case "no-advance-roll":
       exactKeys(input, ["subject"], family);
       return { subject: enumValue(input.subject, SUBJECTS, "no-advance-roll.subject") };

@@ -74,6 +74,7 @@ describe("Round 5C leaf compiler", () => {
       [leaf("EFFECT", "characteristic-modifier", { subject: "this-model", characteristics: ["A", "S"], operation: "add", value: 1, weapon_type: "all" }, 2),
         { type: "sequence", steps: [{ type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } }, { type: "stat-modifier", target: "self", modifier: { stat: "S", operation: "add", value: 1 } }] }],
       [leaf("EFFECT", "regain-wounds", { subject: "this-model", amount: "1" }), { type: "heal-wounds", target: "self", modifier: { amount: 1 } }],
+      [leaf("EFFECT", "sticky-objective", {}), { type: "objective-control-modifier", target: "unit", modifier: { sticky: true, retake: "opponent-control-greater-at-phase-end" } }],
       [leaf("EFFECT", "act-after-move", { subject: "this-unit", moves: ["advance"], acts: ["charge"] }), { type: "ability-grant", target: "unit", modifier: { grant_type: "charge-after-advance" } }],
       [leaf("EFFECT", "act-after-move", { subject: "this-unit", moves: ["fall-back"], acts: ["charge"] }), { type: "ability-grant", target: "unit", modifier: { grant_type: "charge-after-fall-back" } }],
       [leaf("EFFECT", "act-after-move", { subject: "this-unit", moves: ["fall-back"], acts: ["shoot", "charge"] }), { type: "fallback-and-act", target: "unit", modifier: { can_charge: true } }],
