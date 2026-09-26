@@ -79,6 +79,14 @@ describe("Round 5C restrictions", () => {
     expect(coreCheckErrors(root, "relic", bearers(["ORACLE"], "all"))[0]).toMatch(/core requires/u);
   });
 
+  it("turns stratagem moments into their trigger events", () => {
+    const trigger = (kind: string) => compiled([leaf("EVENT", "event", { kind }), grant()]).mechanics.trigger;
+    expect(trigger("enemy-selected-targets")).toEqual({ event: "enemy-unit-targets-bearer" });
+    expect(trigger("enemy-ended-move")).toEqual({ event: "enemy-unit-ended-move" });
+    expect(trigger("enemy-has-shot")).toEqual({ event: "after-enemy-unit-fires" });
+    expect(trigger("selected-to-fight")).toEqual({ event: "selected-to-fight", subject: "self" });
+  });
+
   it("ends an effect at the start of your next turn or Command phase", () => {
     expect(compiled([grant(), leaf("DURATION", "duration", { endpoint: "start-of-next-command-phase" })]).mechanics.scope).toEqual({ range: "unit", duration: "until-next-command-phase" });
     expect(compiled([grant(), leaf("DURATION", "duration", { endpoint: "start-of-next-turn" })]).mechanics.scope).toEqual({ range: "unit", duration: "until-start-next-turn" });

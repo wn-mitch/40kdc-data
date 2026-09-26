@@ -326,7 +326,7 @@ describe("Round 5C family versions", () => {
       expect(report).toMatchObject({ migrated_fingerprints: 2, migrated_annotations: 2 });
       expect(report.unmapped).toEqual([expect.objectContaining({ family_id: "event", active_annotations: 1 })]);
       expect(getAbility(db, current(db, "lead").id).annotations).toEqual([expect.objectContaining({ family_version: 2, parameters: { subject: "this-model", attachment: "leading" } })]);
-      expect(getAbility(db, current(db, "shot").id).annotations).toEqual([expect.objectContaining({ family_version: 4, parameters: { kind: "after-shooting" } })]);
+      expect(getAbility(db, current(db, "shot").id).annotations).toEqual([expect.objectContaining({ family_version: 5, parameters: { kind: "after-shooting" } })]);
       expect(db.prepare("SELECT status FROM annotations WHERE id = ?").get(lead)).toEqual({ status: "superseded" });
       expect(db.prepare("SELECT status FROM annotations WHERE id = ?").get(odd)).toEqual({ status: "active" });
       expect(upgradeFamilyVersions(db)).toMatchObject({ migrated_fingerprints: 0, migrated_annotations: 0 });

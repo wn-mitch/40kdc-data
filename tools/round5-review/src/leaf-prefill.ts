@@ -36,6 +36,13 @@ function eventFromSource(exactText: string): Record<string, unknown> {
     };
   }
   if (/\bafter this unit has shot\b/iu.test(exactText)) return { kind: "after-shooting" };
+  const moments: Array<[RegExp, string]> = [
+    [/enemy unit has selected its targets/iu, "enemy-selected-targets"], [/enemy unit ends an? (?:normal|advance|fall back|[a-z, ]+) move/iu, "enemy-ended-move"],
+    [/enemy unit has shot/iu, "enemy-has-shot"], [/enemy unit declares a charge/iu, "enemy-declared-charge"],
+    [/is selected to shoot/iu, "selected-to-shoot"], [/is selected to fight/iu, "selected-to-fight"],
+  ];
+  const moment = moments.find(([pattern]) => pattern.test(exactText))?.[1];
+  if (moment) return { kind: moment };
   return {};
 }
 

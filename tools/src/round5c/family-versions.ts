@@ -52,6 +52,8 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
       return parameters.kind === "attack-made" ? null : parameters;
     },
   },
+  // Version 5 only adds kinds.
+  { family: "event", from: 4, to: 5, map: (parameters) => parameters },
   { family: "event", from: 3, to_family: "attack", to: 1, map: (parameters) => (parameters.kind === "attack-made" ? { direction: "makes", unit: "that-unit", attack_type: "any" } : null) },
   // Version 2 adds the starts of your next turn and phases; quoted source endpoints have no meaning yet.
   { family: "duration", from: 1, to: 2, map: (parameters) => (typeof parameters.endpoint === "string" ? parameters : null) },

@@ -58,7 +58,12 @@ const EVENT_KINDS_V3 = [
   "attack-made", "hit-roll", "wound-roll", "charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end", "after-shooting",
 ] as const;
 /** Attacks are the `attack` family from version 4 on, which says who attacks and with what. */
-const EVENT_KINDS = ["charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end", "after-shooting"] as const;
+const EVENT_KINDS_V4 = ["charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end", "after-shooting"] as const;
+/** Version 5 adds the moments stratagems are used at, each a DSL trigger event. */
+const EVENT_KINDS = [
+  ...EVENT_KINDS_V4, "selected-to-shoot", "selected-to-fight",
+  "enemy-selected-targets", "enemy-ended-move", "enemy-has-shot", "enemy-declared-charge",
+] as const;
 const WEAPON_TYPES = ["all", "melee", "ranged"] as const;
 const DURATION_ENDPOINTS = [
   "end-of-phase", "end-of-turn", "end-of-battle-round", "end-of-battle",
@@ -233,6 +238,26 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
     role: "EVENT",
     label: "At an event",
     description: "Marks when the mechanic triggers: a charge, a unit or model destroyed, after shooting, or the start or end of a phase (naming the phase and whose turn). Attacks are the separate attack leaf.",
+    starter: { kind: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["kind"],
+      properties: {
+        kind: { enum: EVENT_KINDS_V4 },
+        // Present exactly when kind is a phase boundary; the leaf form shows them only then.
+        phase: { enum: PHASES, "x-only-when": { kind: PHASE_EVENT_KINDS } },
+        turn: { enum: TURNS, "x-only-when": { kind: PHASE_EVENT_KINDS } },
+      },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "event",
+    version: 5,
+    role: "EVENT",
+    label: "At an event",
+    description: "Marks when the mechanic triggers: a charge, a unit or model destroyed, after shooting, when this unit is selected to shoot or fight, a stratagem moment (just after an enemy unit selects its targets, ends a move, has shot, or declares a charge), or the start or end of a phase. Attacks are the separate attack leaf.",
     starter: { kind: "" },
     parameterSchema: {
       type: "object",
@@ -562,7 +587,7 @@ export function normalizeFingerprintParameters(
       if (version === 1) return { kind: enumOrSource(input.kind, ["attack-made", "hit-roll", "wound-roll", "charge", "unit-destroyed", "model-destroyed", "phase-start", "phase-end"], "event.kind") };
       if (version === 2) return { kind: enumValue(input.kind, EVENT_KINDS_V3, "event.kind") };
       {
-        const kind = enumValue(input.kind, version === 3 ? EVENT_KINDS_V3 : EVENT_KINDS, "event.kind");
+        const kind = enumValue(input.kind, version === 3 ? EVENT_KINDS_V3 : version === 4 ? EVENT_KINDS_V4 : EVENT_KINDS, "event.kind");
         if (!(PHASE_EVENT_KINDS as readonly string[]).includes(kind)) {
           exactKeys(input, ["kind"], family);
           return { kind };
