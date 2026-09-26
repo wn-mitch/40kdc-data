@@ -8020,7 +8020,7 @@
     },
     {
       "faction": "adeptus-custodes",
-      "ability_id": "martial-ka-tah",
+      "ability_id": "martial-katah",
       "name": "Martial Ka’tah",
       "shape": "conditional",
       "stub": false,
@@ -22560,7 +22560,7 @@
     },
     {
       "faction": "death-guard",
-      "ability_id": "nurgle-s-gift-aura",
+      "ability_id": "nurgles-gift",
       "name": "Nurgle’s Gift (Aura)",
       "shape": "sequence",
       "stub": false,
@@ -31300,8 +31300,8 @@
     },
     {
       "faction": "orks",
-      "ability_id": "eager-for-the-fight",
-      "name": "Eager for the Fight",
+      "ability_id": "unstoppable-momentum-blitz-brigade",
+      "name": "Unstoppable Momentum",
       "shape": "conditional",
       "stub": false,
       "offensive": false,
@@ -32837,16 +32837,6 @@
       "offensive": false,
       "defensive": false,
       "gap": "conditional: cannot evaluate condition \"undefined\" against current context"
-    },
-    {
-      "faction": "orks",
-      "ability_id": "try-dat-button-madcap-meks",
-      "name": "Try Dat Button!",
-      "shape": "conditional",
-      "stub": false,
-      "offensive": false,
-      "defensive": false,
-      "gap": null
     },
     {
       "faction": "orks",

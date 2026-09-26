@@ -283,7 +283,7 @@ var abilityGrantLabels = map[string]string{
 	"charge-after-advance":   "Advance & Charge",
 	"charge-after-fallback":  "Fall Back & Charge",
 	"charge-after-disembark": "Charge After Disembarking",
-	"nurgle-s-gift-aura":     "Nurgle's Gift (Aura)",
+	"nurgles-gift":           "Nurgle's Gift (Aura)",
 }
 
 // grantLabel returns the curated label for a granted ability id, else Title Case.

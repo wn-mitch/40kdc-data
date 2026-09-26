@@ -3213,7 +3213,7 @@
     "behavior": "passive"
   },
   {
-    "ability_id": "nurgle-s-gift-aura",
+    "ability_id": "nurgles-gift",
     "name": "Nurgle\u2019s Gift (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4006,7 +4006,7 @@
       "type": "ability-grant",
       "target": "unit",
       "modifier": {
-        "ability_id": "nurgle-s-gift-aura"
+        "ability_id": "nurgles-gift"
       }
     },
     "scope": {

@@ -42,7 +42,7 @@
     "id": "blitz-brigade",
     "name": "Blitz Brigade",
     "faction_id": "orks",
-    "detachment_rule_id": "eager-for-the-fight",
+    "detachment_rule_id": "unstoppable-momentum-blitz-brigade",
     "enhancement_ids": [
       "runnin-boots-blitz-brigade",
       "blitzkaptin-blitz-brigade",
@@ -69,7 +69,7 @@
     ],
     "tags": [],
     "detachment_rule_ids": [
-      "eager-for-the-fight"
+      "unstoppable-momentum-blitz-brigade"
     ],
     "external_refs": [
       {
@@ -350,7 +350,7 @@
     "id": "madcap-meks",
     "name": "Madcap Meks",
     "faction_id": "orks",
-    "detachment_rule_id": "try-dat-button-madcap-meks",
+    "detachment_rule_id": "unpredictable-genius-madcap-meks",
     "enhancement_ids": [
       "enhanced-runt-maw-upgrade-madcap-meks",
       "mekwaaagh-mastermind-madcap-meks",
@@ -368,7 +368,6 @@
       "disruption"
     ],
     "detachment_rule_ids": [
-      "try-dat-button-madcap-meks",
       "unpredictable-genius-madcap-meks"
     ]
   },
