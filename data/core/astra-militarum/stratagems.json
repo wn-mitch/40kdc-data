@@ -987,7 +987,7 @@
     "detachment_id": "bridgehead-strike",
     "cp_cost": 1,
     "phases": [
-      "fight"
+      "charge"
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",

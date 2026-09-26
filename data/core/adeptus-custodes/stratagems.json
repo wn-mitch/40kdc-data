@@ -1226,7 +1226,8 @@
     "detachment_id": "solar-spearhead",
     "cp_cost": 1,
     "phases": [
-      "movement"
+      "movement",
+      "charge"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",

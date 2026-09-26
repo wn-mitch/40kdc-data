@@ -2069,7 +2069,7 @@
     "detachment_id": "hurons-marauders",
     "cp_cost": 1,
     "phases": [
-      "fight"
+      "movement"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",

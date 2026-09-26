@@ -909,7 +909,7 @@
     "detachment_id": "the-angelic-host",
     "cp_cost": 1,
     "phases": [
-      "charge"
+      "movement"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
@@ -1848,7 +1848,8 @@
     "detachment_id": "wrath-of-the-doomed",
     "cp_cost": 1,
     "phases": [
-      "shooting"
+      "movement",
+      "charge"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
