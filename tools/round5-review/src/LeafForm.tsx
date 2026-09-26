@@ -12,6 +12,7 @@ export type Family = {
 export type Property = {
   enum?: string[]; anyOf?: Property[]; type?: string; pattern?: string; minimum?: number; maximum?: number;
   items?: { enum?: string[]; type?: string; pattern?: string };
+  minItems?: number;
   "x-only-when"?: Record<string, readonly string[]>;
 };
 
@@ -105,23 +106,28 @@ export function LeafForm({ families, exactText, role, initial, busy, submitLabel
     return next;
   });
   const visible = Object.entries(properties).filter(([, property]) => applies(property, parameters));
-  const complete = family && visible.every(([name]) => {
+  const complete = family && visible.every(([name, property]) => {
     const value = parameters[name];
+    // A list that may be empty (a phase window's opponent phases) counts as answered once shown.
+    if (property.type === "array" && property.minItems === 0) return true;
     return value !== "" && value !== null && value !== undefined && !(Array.isArray(value) && value.length === 0)
       && !(typeof value === "object" && "source" in value && !String((value as { source: unknown }).source).trim());
   });
+  // Optional lists the reviewer left untouched are sent as empty lists, which is what they mean.
+  const effective: Record<string, unknown> = { ...parameters };
+  for (const [name, property] of visible) if (property.type === "array" && property.minItems === 0 && effective[name] === undefined) effective[name] = [];
   const roles = role ? [role] : Object.keys(ROLE_LABELS);
   const [preview, setPreview] = useState<{ text: string | null; problem: string | null } | null>(null);
-  const previewKey = complete ? JSON.stringify([familyId, parameters]) : null;
+  const previewKey = complete ? JSON.stringify([familyId, effective]) : null;
   useEffect(() => {
     setPreview(null);
     if (!previewKey) return;
     const controller = new AbortController();
-    api<{ text: string | null; problem: string | null }>("/leaves/preview", { family_id: familyId, parameters }, controller.signal)
+    api<{ text: string | null; problem: string | null }>("/leaves/preview", { family_id: familyId, parameters: effective }, controller.signal)
       .then(setPreview).catch(() => undefined);
     return () => controller.abort();
   }, [previewKey]);
-  return <form className="wb-leaf-form" onSubmit={(event) => { event.preventDefault(); if (complete) onSubmit(familyId, parameters); }}>
+  return <form className="wb-leaf-form" onSubmit={(event) => { event.preventDefault(); if (complete) onSubmit(familyId, effective); }}>
     <label>Meaning<select value={familyId} onChange={(event) => choose(event.target.value)}>
       <option value="">Choose what this wording means</option>
       {roles.map((item) => <optgroup key={item} label={ROLE_LABELS[item] ?? item}>
