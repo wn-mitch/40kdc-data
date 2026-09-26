@@ -1832,6 +1832,7 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       switch (jstr(grant)) {
         case "shoot-after-advance": return `${subj} is eligible to shoot in a turn in which it Advanced`;
         case "charge-after-advance": return `${subj} is eligible to declare a charge in a turn in which it Advanced`;
+        case "charge-after-fall-back": return `${subj} is eligible to declare a charge in a turn in which it Fell Back`;
         case "must-start-in-reserves":
           return `${subj} must start the battle in Reserves`;
         case "reinforcement-any-of-turns-1-to-3":

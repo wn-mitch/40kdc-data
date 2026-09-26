@@ -20,6 +20,15 @@ describe("Leaf prefill", () => {
     expect(prefillFromSource(family("unit-state"), "that targets a unit that is not below half-strength")).toEqual({ subject: "target", negated: true, states: ["below-half-strength"] });
     expect(prefillFromSource(family("unit-position"), "that targets a unit more than 12\" away")).toEqual({ subject: "target", kind: "beyond", inches: 12 });
     expect(prefillFromSource(family("select-unit"), "select one visible enemy unit within 18\"")).toEqual({ scope: "enemy", distance: "within", inches: 18, visible: true });
+    expect(prefillFromSource(family("characteristic-modifier"), "improve the Armour Penetration characteristic of melee weapons equipped by models in that unit by 1"))
+      .toEqual({ characteristics: ["AP"], operation: "improve", value: 1, weapon_type: "melee", subject: "this-unit" });
+    expect(prefillFromSource(family("characteristic-modifier"), "add 1 to the Attacks and Strength characteristics of melee weapons equipped by this model"))
+      .toEqual({ characteristics: ["A", "S"], operation: "add", value: 1, weapon_type: "melee", subject: "this-model" });
+    expect(prefillFromSource(family("characteristic-modifier"), "worsen the Armour Penetration characteristic of that attack by 1"))
+      .toEqual({ characteristics: ["AP"], operation: "worsen", value: 1, weapon_type: "all", subject: "attack" });
+    expect(prefillFromSource(family("act-after-move"), "this unit is eligible to shoot and declare a charge in a turn in which it Fell Back"))
+      .toEqual({ moves: ["fall-back"], acts: ["shoot", "charge"], subject: "this-unit" });
+    expect(prefillFromSource(family("act-after-move"), "it can Advance and charge")).toEqual({ moves: ["advance"], acts: ["charge"] });
     // Nothing stated, nothing chosen.
     expect(prefillFromSource(family("unit-state"), "if so")).toEqual({});
   });

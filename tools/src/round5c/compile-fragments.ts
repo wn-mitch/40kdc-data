@@ -203,12 +203,39 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
       return { type: "invulnerable-save", target: target(leaf.parameters.subject), modifier: { invuln_sv: closed(leaf, "threshold") } };
     case "fights-first":
       return { type: "fight-first", target: target(leaf.parameters.subject), modifier: {} };
+    case "act-after-move": {
+      // The DSL's own forms: advancing is two separate grants; falling back is one effect that can add a charge.
+      const owner = target(leaf.parameters.subject);
+      const acts = leaf.parameters.acts as string[];
+      const steps: Record<string, unknown>[] = [];
+      for (const move of leaf.parameters.moves as string[]) {
+        if (move === "advance") {
+          for (const act of acts) steps.push({ type: "ability-grant", target: owner, modifier: { grant_type: `${act}-after-advance` } });
+        } else if (acts.includes("shoot")) {
+          steps.push({ type: "fallback-and-act", target: owner, modifier: acts.includes("charge") ? { can_charge: true } : {} });
+        } else {
+          steps.push({ type: "ability-grant", target: owner, modifier: { grant_type: "charge-after-fall-back" } });
+        }
+      }
+      return steps.length === 1 ? steps[0]! : { type: "sequence", steps };
+    }
     case "regain-wounds": {
       const amount = String(closed(leaf, "amount"));
       return { type: "heal-wounds", target: target(leaf.parameters.subject), modifier: { amount: /^\d+$/u.test(amount) ? Number(amount) : amount } };
     }
-    case "characteristic-modifier":
-      return { type: "stat-modifier", target: target(leaf.parameters.subject), modifier: { stat: closed(leaf, "characteristic"), operation: closed(leaf, "operation"), value: closed(leaf, "value") } };
+    case "characteristic-modifier": {
+      if (leaf.family_version < 2) {
+        return { type: "stat-modifier", target: target(leaf.parameters.subject), modifier: { stat: closed(leaf, "characteristic"), operation: closed(leaf, "operation"), value: closed(leaf, "value") } };
+      }
+      // The attack being made belongs to whoever attacks: the attacker when it targets this unit.
+      const owner = leaf.parameters.subject === "attack" ? (context.incoming ? "attacker" : context.attacker ?? "unit") : target(leaf.parameters.subject);
+      const weaponType = closed(leaf, "weapon_type");
+      const steps = (leaf.parameters.characteristics as string[]).map((stat) => ({
+        type: "stat-modifier", target: owner,
+        modifier: { stat, operation: closed(leaf, "operation"), value: closed(leaf, "value"), ...(weaponType !== "all" ? { weapon_type: weaponType } : {}) },
+      }));
+      return steps.length === 1 ? steps[0]! : { type: "sequence", steps };
+    }
     default:
       throw new CompileError(`Effect ${leaf.family_id} has no DSL fragment yet.`);
   }

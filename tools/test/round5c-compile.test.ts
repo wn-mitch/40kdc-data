@@ -69,7 +69,17 @@ describe("Round 5C leaf compiler", () => {
       [leaf("EFFECT", "invulnerable-save", { subject: "this-unit", threshold: 4 }), { type: "invulnerable-save", target: "unit", modifier: { invuln_sv: 4 } }],
       [leaf("EFFECT", "fights-first", { subject: "this-unit" }), { type: "fight-first", target: "unit", modifier: {} }],
       [leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristic: "OC", operation: "add", value: 1 }), { type: "stat-modifier", target: "unit", modifier: { stat: "OC", operation: "add", value: 1 } }],
+      [leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["AP"], operation: "improve", value: 1, weapon_type: "melee" }, 2),
+        { type: "stat-modifier", target: "unit", modifier: { stat: "AP", operation: "improve", value: 1, weapon_type: "melee" } }],
+      [leaf("EFFECT", "characteristic-modifier", { subject: "this-model", characteristics: ["A", "S"], operation: "add", value: 1, weapon_type: "all" }, 2),
+        { type: "sequence", steps: [{ type: "stat-modifier", target: "self", modifier: { stat: "A", operation: "add", value: 1 } }, { type: "stat-modifier", target: "self", modifier: { stat: "S", operation: "add", value: 1 } }] }],
       [leaf("EFFECT", "regain-wounds", { subject: "this-model", amount: "1" }), { type: "heal-wounds", target: "self", modifier: { amount: 1 } }],
+      [leaf("EFFECT", "act-after-move", { subject: "this-unit", moves: ["advance"], acts: ["charge"] }), { type: "ability-grant", target: "unit", modifier: { grant_type: "charge-after-advance" } }],
+      [leaf("EFFECT", "act-after-move", { subject: "this-unit", moves: ["fall-back"], acts: ["charge"] }), { type: "ability-grant", target: "unit", modifier: { grant_type: "charge-after-fall-back" } }],
+      [leaf("EFFECT", "act-after-move", { subject: "this-unit", moves: ["fall-back"], acts: ["shoot", "charge"] }), { type: "fallback-and-act", target: "unit", modifier: { can_charge: true } }],
+      [leaf("EFFECT", "act-after-move", { subject: "this-unit", moves: ["fall-back"], acts: ["shoot"] }), { type: "fallback-and-act", target: "unit", modifier: {} }],
+      [leaf("EFFECT", "act-after-move", { subject: "this-unit", moves: ["advance", "fall-back"], acts: ["shoot"] }), { type: "sequence", steps: [
+        { type: "ability-grant", target: "unit", modifier: { grant_type: "shoot-after-advance" } }, { type: "fallback-and-act", target: "unit", modifier: {} }] }],
       [leaf("EFFECT", "regain-wounds", { subject: "bearer", amount: "D3" }), { type: "heal-wounds", target: "bearer", modifier: { amount: "D3" } }],
     ];
     for (const [input, expected] of cases) {

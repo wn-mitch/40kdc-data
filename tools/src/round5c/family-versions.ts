@@ -53,6 +53,11 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
     },
   },
   { family: "event", from: 3, to_family: "attack", to: 1, map: (parameters) => (parameters.kind === "attack-made" ? { direction: "makes", unit: "that-unit", attack_type: "any" } : null) },
+  // Version 2 takes a set of characteristics, improve and worsen, and which weapons carry the change.
+  {
+    family: "characteristic-modifier", from: 1, to: 2,
+    map: (parameters) => ({ subject: parameters.subject, characteristics: [parameters.characteristic], operation: parameters.operation, value: parameters.value, weapon_type: "all" }),
+  },
   {
     family: "below-starting-strength", from: 1, to_family: "unit-state", to: 1,
     map: (parameters) => {

@@ -117,6 +117,34 @@ function selectionFromSource(text: string): Record<string, unknown> {
   return result;
 }
 
+/** Characteristic names as GW writes them, longest first so "weapon skill" wins over "skill". */
+const CHARACTERISTIC_WORDS: Array<[RegExp, string]> = [
+  [/armou?r penetration/iu, "AP"], [/ballistic skill/iu, "BS"], [/weapon skill/iu, "WS"], [/objective control/iu, "OC"],
+  [/\battacks\b/iu, "A"], [/\bstrength\b/iu, "S"], [/\bdamage\b/iu, "D"], [/\bmove\b/iu, "M"], [/\btoughness\b/iu, "T"],
+  [/\bsave\b/iu, "Sv"], [/\bwounds\b/iu, "W"], [/\bleadership\b/iu, "Ld"],
+];
+const CHARACTERISTIC_ORDER = ["M", "T", "Sv", "W", "Ld", "OC", "A", "WS", "BS", "S", "AP", "D"];
+
+function characteristicFromSource(text: string): Record<string, unknown> {
+  const result: Record<string, unknown> = {};
+  const found = CHARACTERISTIC_WORDS.filter(([pattern]) => pattern.test(text)).map(([, stat]) => stat);
+  if (found.length) result.characteristics = CHARACTERISTIC_ORDER.filter((stat) => found.includes(stat));
+  const verb = /\b(add|subtract|improve|worsen)\b/iu.exec(text)?.[1]?.toLowerCase();
+  if (verb) result.operation = verb;
+  const amount = /\bby (\d+)\b|\b(?:add|subtract) (\d+)\b/iu.exec(text);
+  if (amount) result.value = Number(amount[1] ?? amount[2]);
+  const weapons = /\b(melee|ranged) weapons\b/iu.exec(text)?.[1]?.toLowerCase();
+  if (weapons) result.weapon_type = weapons;
+  else if (/\bweapons\b/iu.test(text)) result.weapon_type = "all";
+  if (/\b(?:that|this|the) attack\b/iu.test(text)) {
+    result.subject = "attack";
+    result.weapon_type = "all";
+  } else if (/\bthis model\b/iu.test(text)) result.subject = "this-model";
+  else if (/\bthe bearer\b/iu.test(text)) result.subject = "bearer";
+  else if (/\b(?:that|this|your) unit\b/iu.test(text)) result.subject = "this-unit";
+  return result;
+}
+
 const PREDICATES = new Set(["unit-state", "unit-keyword", "unit-mark", "unit-position"]);
 
 export function prefillFromSource(family: Family | undefined, exactText: string): Record<string, unknown> {
@@ -125,6 +153,16 @@ export function prefillFromSource(family: Family | undefined, exactText: string)
     : family.id === "attack" ? attackFromSource(exactText)
       : family.id === "select-unit" ? selectionFromSource(exactText)
         : PREDICATES.has(family.id) ? predicateFromSource(family.id, exactText) : {};
+  if (family.id === "characteristic-modifier") Object.assign(prefill, characteristicFromSource(exactText));
+  if (family.id === "act-after-move") {
+    const moves = [/\badvanc/iu.test(exactText) ? "advance" : null, /\bf(?:a|e)ll(?:s|ing)? back\b/iu.test(exactText) ? "fall-back" : null].filter(Boolean);
+    const acts = [/\bshoot|\bshot\b/iu.test(exactText) ? "shoot" : null, /\bcharge\b/iu.test(exactText) ? "charge" : null].filter(Boolean);
+    if (moves.length) prefill.moves = moves;
+    if (acts.length) prefill.acts = acts;
+    if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
+    else if (/\bthe bearer\b/iu.test(exactText)) prefill.subject = "bearer";
+    else if (/\b(?:that|this|your) unit\b/iu.test(exactText)) prefill.subject = "this-unit";
+  }
   if (family.id === "regain-wounds") {
     const amount = /regains? (\d+|d3\+3|d3|d6) lost wounds?/iu.exec(exactText)?.[1];
     if (amount) prefill.amount = amount.toUpperCase();

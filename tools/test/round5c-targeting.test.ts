@@ -71,13 +71,15 @@ describe("Round 5C targeting families", () => {
       legacyLeaf(db, "aura", ATTACK, "event", 3, { kind: "attack-made" });
       legacyLeaf(db, "aura", WEAK, "below-starting-strength", 1, { subject: "target-unit" });
       legacyLeaf(db, "roll", HIT, "event", 3, { kind: "hit-roll" }, false);
+      legacyLeaf(db, "aura", "add 1 to the Hit roll", "characteristic-modifier", 1, { subject: "this-unit", characteristic: "OC", operation: "add", value: 1 }, false);
 
       const report = upgradeFamilyVersions(db);
-      expect(report).toMatchObject({ migrated_fingerprints: 2, migrated_annotations: 2, repointed_surfaces: 2 });
+      expect(report).toMatchObject({ migrated_fingerprints: 3, migrated_annotations: 3, repointed_surfaces: 2 });
       // A hit roll never said who attacked, so it has no attack-family meaning and is left for review.
       expect(report.unmapped).toEqual([expect.objectContaining({ family_id: "event", active_annotations: 1 })]);
       expect(getAbility(db, current(db, "aura").id).annotations.map(({ family_id, parameters }) => ({ family_id, parameters }))).toEqual([
         { family_id: "attack", parameters: { direction: "makes", unit: "that-unit", attack_type: "any" } },
+        { family_id: "characteristic-modifier", parameters: { subject: "this-unit", characteristics: ["OC"], operation: "add", value: 1, weapon_type: "all" } },
         { family_id: "unit-state", parameters: { states: ["below-starting-strength"], subject: "target", negated: false } },
       ]);
       expect(surfaceMeaning(db, ATTACK.toLowerCase())).toMatchObject({ family_id: "attack", family_version: 1 });
@@ -145,6 +147,10 @@ describe("Round 5C targeting families", () => {
     expect(() => normalizeFingerprintParameters("select-unit", { scope: "enemy", distance: "any", inches: 12, visible: true }, 1)).toThrow(/exactly/u);
     expect(() => normalizeFingerprintParameters("attack", { direction: "makes", unit: "this-model" }, 1)).toThrow(/exactly/u);
     expect(() => normalizeFingerprintParameters("event", { kind: "attack-made" }, 4)).toThrow(/event.kind/u);
+    // Melee or ranged narrows weapons, so it cannot apply to a model characteristic or to an attack.
+    expect(() => normalizeFingerprintParameters("characteristic-modifier", { subject: "this-unit", characteristics: ["OC", "A"], operation: "add", value: 1, weapon_type: "melee" }, 2)).toThrow(/only weapon characteristics/u);
+    expect(() => normalizeFingerprintParameters("characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "improve", value: 1, weapon_type: "melee" }, 2)).toThrow(/attack's own leaf/u);
+    expect(normalizeFingerprintParameters("characteristic-modifier", { subject: "this-unit", characteristics: ["S", "A"], operation: "add", value: 1, weapon_type: "melee" }, 2).characteristics).toEqual(["A", "S"]);
   });
 
   it("warns when a decided spelling says more than its meaning", () => {

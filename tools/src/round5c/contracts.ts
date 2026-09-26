@@ -407,6 +407,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
     label: "Add to or subtract from a characteristic",
     description: "Adds to or subtracts from a model characteristic such as OC, Attacks, Strength, or Move. Setting a value is a different leaf.",
     starter: { subject: "this-unit", characteristic: "", operation: "add", value: 1 },
+    deprecated: true,
     parameterSchema: {
       type: "object",
       required: ["subject", "characteristic", "operation", "value"],
@@ -610,6 +611,7 @@ export function normalizeFingerprintParameters(
       exactKeys(input, ["subject"], family);
       return { subject: enumValue(input.subject, BUFF_SUBJECTS, "fights-first.subject") };
     case "characteristic-modifier":
+      if (version >= 2) return normalizeEffectParameters(family, input)!;
       exactKeys(input, ["subject", "characteristic", "operation", "value"], family);
       return {
         subject: enumValue(input.subject, BUFF_SUBJECTS, "characteristic-modifier.subject"),

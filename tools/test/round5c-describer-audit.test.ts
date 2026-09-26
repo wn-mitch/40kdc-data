@@ -27,8 +27,10 @@ describe("Round 5C leaf describer audit", () => {
       "feel-no-pain": { unrendered: [], colliding: ["subject"], problems: 0 },
       "invulnerable-save": { unrendered: [], colliding: ["subject"], problems: 0 },
       "fights-first": { unrendered: [], colliding: ["subject"], problems: 0 },
-      "characteristic-modifier": { unrendered: [], colliding: ["subject"], problems: 0 },
+      // "worsen" reads as "subtract", which is wrong for AP, WS, BS, Save and Leadership.
+      "characteristic-modifier": { unrendered: [], colliding: ["subject", "operation"], problems: 0 },
       "regain-wounds": { unrendered: [], colliding: ["subject"], problems: 0 },
+      "act-after-move": { unrendered: [], colliding: ["subject"], problems: 0 },
       // Who attacks and which way only show in the effect's target, not in text of their own.
       attack: { unrendered: ["direction", "unit"], colliding: [], problems: 0 },
       // Battle-shocked ignores subject: target; honouring it moves conformance goldens, so it waits

@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 import { compileLeaves, shapeSignature, type CompileLeaf } from "../src/round5c/compile.js";
+import { currentFamilyVersion } from "../src/round5c/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/round5c/entries.js";
 
 // Fabricated wording only. The compiler reads nothing but the punctuation and joining words
@@ -23,7 +24,7 @@ function leavesIn(text: string, pieces: Piece[]): CompileLeaf[] {
     if (at < 0) throw new Error(`Missing ${phrase}`);
     cursor = at + phrase.length;
     const start_byte = Buffer.byteLength(text.slice(0, at));
-    return { role, family_id, family_version: 1, parameters, start_byte, end_byte: start_byte + Buffer.byteLength(phrase), fragment: "RAW_TEXT" };
+    return { role, family_id, family_version: currentFamilyVersion(family_id), parameters, start_byte, end_byte: start_byte + Buffer.byteLength(phrase), fragment: "RAW_TEXT" };
   });
 }
 
@@ -125,6 +126,15 @@ describe("Round 5C composition rules", () => {
       { type: "roll-modifier", target: "attacker" }, { type: "invulnerable-save", target: "unit" },
     ] } });
     expect(result.signature).toBe("EVENT(attack:targeted) · EFFECT(roll-modifier) | EFFECT(invulnerable-save)");
+  });
+
+  it("gives a change to the attack being made to whoever makes it", () => {
+    const worsen = (direction: string): Record<string, unknown> => compiled("Whenever a blow lands, worsen its piercing by one.", [
+      ["Whenever a blow lands", "EVENT", "attack", attack(direction, "this-unit", "melee")],
+      ["worsen its piercing by one", "EFFECT", "characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "worsen", value: 1, weapon_type: "all" }],
+    ]).mechanics.effect as Record<string, unknown>;
+    expect(worsen("targeted")).toMatchObject({ effect: { type: "stat-modifier", target: "attacker", modifier: { stat: "AP", operation: "worsen" } } });
+    expect(worsen("makes")).toMatchObject({ effect: { type: "stat-modifier", target: "unit" } });
   });
 
   it("replaces an earlier effect with \"instead\", for re-rolls and for numbers", () => {

@@ -76,8 +76,6 @@ function combinations(family: SemanticFamilyDefinition): Record<string, unknown>
 }
 
 const SILENT = /^No separate text:/u;
-/** A comparable key for a parameter value, including "absent". */
-const same = (left: unknown, right: unknown) => (left === undefined || right === undefined ? left === right : hashJson(left) === hashJson(right));
 
 export function auditFamily(family: SemanticFamilyDefinition): FamilyAudit {
   const report: FamilyAudit = { family_id: family.id, version: family.version, combinations: 0, silent: 0, unrendered: [], collisions: [], problems: [] };
@@ -91,31 +89,37 @@ export function auditFamily(family: SemanticFamilyDefinition): FamilyAudit {
   }
   const names = [...new Set(rendered.flatMap((item) => Object.keys(item.parameters)))];
   for (const name of names) {
+    // Leaves that differ only in this parameter share a key made of all the others.
+    const buckets = new Map<string, Array<{ value: unknown; text: string }>>();
+    for (const item of rendered) {
+      if (!(name in item.parameters)) continue;
+      const { [name]: value, ...others } = item.parameters;
+      const key = hashJson(others);
+      buckets.set(key, [...(buckets.get(key) ?? []), { value, text: item.text }]);
+    }
     let varied = false;
     let changed = false;
     const seen = new Set<string>();
-    for (const [index, left] of rendered.entries()) {
-      for (const right of rendered.slice(index + 1)) {
-        const keys = new Set([...Object.keys(left.parameters), ...Object.keys(right.parameters)]);
-        const onlyThis = [...keys].every((key) => key === name || same(left.parameters[key], right.parameters[key]));
-        if (!onlyThis || same(left.parameters[name], right.parameters[name])) continue;
-        varied = true;
-        if (left.text !== right.text) {
-          changed = true;
-          continue;
-        }
-        const pair = [left.parameters[name], right.parameters[name]] as [unknown, unknown];
-        const key = JSON.stringify([pair, left.text]);
-        if (!seen.has(key)) {
-          seen.add(key);
-          report.collisions.push({ parameter: name, values: pair, text: left.text });
+    const collisions: FamilyAudit["collisions"] = [];
+    for (const bucket of buckets.values()) {
+      for (const [index, left] of bucket.entries()) {
+        for (const right of bucket.slice(index + 1)) {
+          varied = true;
+          if (left.text !== right.text) {
+            changed = true;
+            continue;
+          }
+          const pair = [left.value, right.value] as [unknown, unknown];
+          const key = JSON.stringify([pair, left.text]);
+          if (!seen.has(key)) {
+            seen.add(key);
+            collisions.push({ parameter: name, values: pair, text: left.text });
+          }
         }
       }
     }
-    if (varied && !changed) {
-      report.unrendered.push(name);
-      report.collisions = report.collisions.filter((item) => item.parameter !== name);
-    }
+    if (varied && !changed) report.unrendered.push(name);
+    else report.collisions.push(...collisions);
   }
   return report;
 }
