@@ -474,17 +474,17 @@
       "transforms": [
         {
           "symbol": "tools/src/mfm/base-sizes.ts#parseBaseSize",
-          "operation": "Parse a confident single round ('40mm') or oval ('120 x 92mm Oval Base') baseSize string to the base-size object; return null (skip) for categories, per-model/multi strings, and ambiguous single-number ovals."
+          "operation": "Parse a confident single round ('40mm'), oval ('120 x 92mm Oval Base'), or nominal-oval shorthand ('105mm oval' → 105x70) baseSize string to the base-size object; return null (skip) for categories and bare lists."
         }
       ],
       "filters": [
-        "Only single clean round or oval strings are parsed; Hull/Flying/Unique categories, per-model/multi strings, and ambiguous single-number ovals are skipped and the authored value is kept."
+        "Only a single clean round/oval string (including the nominal-oval shorthand) is parsed; Hull/Flying/Unique/None categories and bare multi-value lists are skipped and reported."
       ],
       "precedence": [
-        "A parsed value fills an empty field and corrects or de-drafts a provisional (draft) one; a non-draft authored value the dump contradicts is surfaced for review, never overwritten (the dump carries 0.5-1mm oval rounding errors)."
+        "A dump-parsed value overrides every authored value at unit and model level, except an authored value within 1 mm on the same shape, which is kept (the GW app rounds oval dimensions)."
       ],
       "consumers": ["tools/src/mfm/base-sizes.ts#runBaseSizes"],
-      "reason": "runBaseSizes derives the representative base from the dump baseSize for confident round/oval datasheets; categories, per-model bases, and hand-authored conflicts remain authored, so coverage is partial."
+      "reason": "runBaseSizes makes the dump baseSize authoritative for the representative base of confident round/oval datasheets; categories, bare lists, and sub-millimetre rounding ties remain authored, so coverage is partial."
     },
     "/base_size_mm/diameter": {
       "provenance": "derived",
@@ -494,17 +494,17 @@
       "transforms": [
         {
           "symbol": "tools/src/mfm/base-sizes.ts#parseBaseSize",
-          "operation": "Parse a confident single round ('40mm') or oval ('120 x 92mm Oval Base') baseSize string to the base-size object; return null (skip) for categories, per-model/multi strings, and ambiguous single-number ovals."
+          "operation": "Parse a confident single round ('40mm'), oval ('120 x 92mm Oval Base'), or nominal-oval shorthand ('105mm oval' → 105x70) baseSize string to the base-size object; return null (skip) for categories and bare lists."
         }
       ],
       "filters": [
-        "Only single clean round or oval strings are parsed; Hull/Flying/Unique categories, per-model/multi strings, and ambiguous single-number ovals are skipped and the authored value is kept."
+        "Only a single clean round/oval string (including the nominal-oval shorthand) is parsed; Hull/Flying/Unique/None categories and bare multi-value lists are skipped and reported."
       ],
       "precedence": [
-        "A parsed value fills an empty field and corrects or de-drafts a provisional (draft) one; a non-draft authored value the dump contradicts is surfaced for review, never overwritten (the dump carries 0.5-1mm oval rounding errors)."
+        "A dump-parsed value overrides every authored value at unit and model level, except an authored value within 1 mm on the same shape, which is kept (the GW app rounds oval dimensions)."
       ],
       "consumers": ["tools/src/mfm/base-sizes.ts#runBaseSizes"],
-      "reason": "runBaseSizes derives the representative base from the dump baseSize for confident round/oval datasheets; categories, per-model bases, and hand-authored conflicts remain authored, so coverage is partial."
+      "reason": "runBaseSizes makes the dump baseSize authoritative for the representative base of confident round/oval datasheets; categories, bare lists, and sub-millimetre rounding ties remain authored, so coverage is partial."
     },
     "/base_size_mm/draft": {
       "provenance": "derived",
@@ -514,17 +514,17 @@
       "transforms": [
         {
           "symbol": "tools/src/mfm/base-sizes.ts#parseBaseSize",
-          "operation": "Parse a confident single round ('40mm') or oval ('120 x 92mm Oval Base') baseSize string to the base-size object; return null (skip) for categories, per-model/multi strings, and ambiguous single-number ovals."
+          "operation": "Parse a confident single round ('40mm'), oval ('120 x 92mm Oval Base'), or nominal-oval shorthand ('105mm oval' → 105x70) baseSize string to the base-size object; return null (skip) for categories and bare lists."
         }
       ],
       "filters": [
-        "Only single clean round or oval strings are parsed; Hull/Flying/Unique categories, per-model/multi strings, and ambiguous single-number ovals are skipped and the authored value is kept."
+        "Only a single clean round/oval string (including the nominal-oval shorthand) is parsed; Hull/Flying/Unique/None categories and bare multi-value lists are skipped and reported."
       ],
       "precedence": [
-        "A parsed value fills an empty field and corrects or de-drafts a provisional (draft) one; a non-draft authored value the dump contradicts is surfaced for review, never overwritten (the dump carries 0.5-1mm oval rounding errors)."
+        "A dump-parsed value overrides every authored value at unit and model level, except an authored value within 1 mm on the same shape, which is kept (the GW app rounds oval dimensions)."
       ],
       "consumers": ["tools/src/mfm/base-sizes.ts#runBaseSizes"],
-      "reason": "runBaseSizes derives the representative base from the dump baseSize for confident round/oval datasheets; categories, per-model bases, and hand-authored conflicts remain authored, so coverage is partial."
+      "reason": "runBaseSizes makes the dump baseSize authoritative for the representative base of confident round/oval datasheets; categories, bare lists, and sub-millimetre rounding ties remain authored, so coverage is partial."
     },
     "/base_size_mm/length": {
       "provenance": "derived",
@@ -534,17 +534,17 @@
       "transforms": [
         {
           "symbol": "tools/src/mfm/base-sizes.ts#parseBaseSize",
-          "operation": "Parse a confident single round ('40mm') or oval ('120 x 92mm Oval Base') baseSize string to the base-size object; return null (skip) for categories, per-model/multi strings, and ambiguous single-number ovals."
+          "operation": "Parse a confident single round ('40mm'), oval ('120 x 92mm Oval Base'), or nominal-oval shorthand ('105mm oval' → 105x70) baseSize string to the base-size object; return null (skip) for categories and bare lists."
         }
       ],
       "filters": [
-        "Only single clean round or oval strings are parsed; Hull/Flying/Unique categories, per-model/multi strings, and ambiguous single-number ovals are skipped and the authored value is kept."
+        "Only a single clean round/oval string (including the nominal-oval shorthand) is parsed; Hull/Flying/Unique/None categories and bare multi-value lists are skipped and reported."
       ],
       "precedence": [
-        "A parsed value fills an empty field and corrects or de-drafts a provisional (draft) one; a non-draft authored value the dump contradicts is surfaced for review, never overwritten (the dump carries 0.5-1mm oval rounding errors)."
+        "A dump-parsed value overrides every authored value at unit and model level, except an authored value within 1 mm on the same shape, which is kept (the GW app rounds oval dimensions)."
       ],
       "consumers": ["tools/src/mfm/base-sizes.ts#runBaseSizes"],
-      "reason": "runBaseSizes derives the representative base from the dump baseSize for confident round/oval datasheets; categories, per-model bases, and hand-authored conflicts remain authored, so coverage is partial."
+      "reason": "runBaseSizes makes the dump baseSize authoritative for the representative base of confident round/oval datasheets; categories, bare lists, and sub-millimetre rounding ties remain authored, so coverage is partial."
     },
     "/base_size_mm/shape": {
       "provenance": "derived",
@@ -554,17 +554,17 @@
       "transforms": [
         {
           "symbol": "tools/src/mfm/base-sizes.ts#parseBaseSize",
-          "operation": "Parse a confident single round ('40mm') or oval ('120 x 92mm Oval Base') baseSize string to the base-size object; return null (skip) for categories, per-model/multi strings, and ambiguous single-number ovals."
+          "operation": "Parse a confident single round ('40mm'), oval ('120 x 92mm Oval Base'), or nominal-oval shorthand ('105mm oval' → 105x70) baseSize string to the base-size object; return null (skip) for categories and bare lists."
         }
       ],
       "filters": [
-        "Only single clean round or oval strings are parsed; Hull/Flying/Unique categories, per-model/multi strings, and ambiguous single-number ovals are skipped and the authored value is kept."
+        "Only a single clean round/oval string (including the nominal-oval shorthand) is parsed; Hull/Flying/Unique/None categories and bare multi-value lists are skipped and reported."
       ],
       "precedence": [
-        "A parsed value fills an empty field and corrects or de-drafts a provisional (draft) one; a non-draft authored value the dump contradicts is surfaced for review, never overwritten (the dump carries 0.5-1mm oval rounding errors)."
+        "A dump-parsed value overrides every authored value at unit and model level, except an authored value within 1 mm on the same shape, which is kept (the GW app rounds oval dimensions)."
       ],
       "consumers": ["tools/src/mfm/base-sizes.ts#runBaseSizes"],
-      "reason": "runBaseSizes derives the representative base from the dump baseSize for confident round/oval datasheets; categories, per-model bases, and hand-authored conflicts remain authored, so coverage is partial."
+      "reason": "runBaseSizes makes the dump baseSize authoritative for the representative base of confident round/oval datasheets; categories, bare lists, and sub-millimetre rounding ties remain authored, so coverage is partial."
     },
     "/base_size_mm/size": {
       "provenance": "unresolved-candidate",
@@ -585,17 +585,17 @@
       "transforms": [
         {
           "symbol": "tools/src/mfm/base-sizes.ts#parseBaseSize",
-          "operation": "Parse a confident single round ('40mm') or oval ('120 x 92mm Oval Base') baseSize string to the base-size object; return null (skip) for categories, per-model/multi strings, and ambiguous single-number ovals."
+          "operation": "Parse a confident single round ('40mm'), oval ('120 x 92mm Oval Base'), or nominal-oval shorthand ('105mm oval' → 105x70) baseSize string to the base-size object; return null (skip) for categories and bare lists."
         }
       ],
       "filters": [
-        "Only single clean round or oval strings are parsed; Hull/Flying/Unique categories, per-model/multi strings, and ambiguous single-number ovals are skipped and the authored value is kept."
+        "Only a single clean round/oval string (including the nominal-oval shorthand) is parsed; Hull/Flying/Unique/None categories and bare multi-value lists are skipped and reported."
       ],
       "precedence": [
-        "A parsed value fills an empty field and corrects or de-drafts a provisional (draft) one; a non-draft authored value the dump contradicts is surfaced for review, never overwritten (the dump carries 0.5-1mm oval rounding errors)."
+        "A dump-parsed value overrides every authored value at unit and model level, except an authored value within 1 mm on the same shape, which is kept (the GW app rounds oval dimensions)."
       ],
       "consumers": ["tools/src/mfm/base-sizes.ts#runBaseSizes"],
-      "reason": "runBaseSizes derives the representative base from the dump baseSize for confident round/oval datasheets; categories, per-model bases, and hand-authored conflicts remain authored, so coverage is partial."
+      "reason": "runBaseSizes makes the dump baseSize authoritative for the representative base of confident round/oval datasheets; categories, bare lists, and sub-millimetre rounding ties remain authored, so coverage is partial."
     },
     "/conditional_keywords": {
       "provenance": "derived",
