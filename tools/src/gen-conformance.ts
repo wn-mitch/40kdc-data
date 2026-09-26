@@ -3489,6 +3489,11 @@ function genEffectTranslation(): void {
         removal: "after-unit-fights-or-phase-end",
       },
     } },
+    { caseId: "fidelity/selected-to-move-condition", effect: {
+      type: "conditional",
+      condition: { type: "unit-selected-to-move-this-phase", negated: true },
+      effect: { type: "fight-first", target: "unit", modifier: {} },
+    } },
     { caseId: "fidelity/weapon-grant-curated-label", effect: {
       type: "weapon-grant",
       target: "bearer",

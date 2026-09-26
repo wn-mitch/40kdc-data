@@ -30259,6 +30259,7 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///        "has-destroyed",
 ///        "roll-succeeded",
 ///        "unit-selected-to-shoot-this-phase",
+///        "unit-selected-to-move-this-phase",
 ///        "eligible-to-shoot",
 ///        "selection-has-keyword",
 ///        "target-of-triggering-charge",
@@ -30466,6 +30467,7 @@ impl ::std::convert::TryFrom<::std::string::String> for SimpleConditionOf {
 ///    "has-destroyed",
 ///    "roll-succeeded",
 ///    "unit-selected-to-shoot-this-phase",
+///    "unit-selected-to-move-this-phase",
 ///    "eligible-to-shoot",
 ///    "selection-has-keyword",
 ///    "target-of-triggering-charge",
@@ -30617,6 +30619,8 @@ pub enum SimpleConditionType {
     RollSucceeded,
     #[serde(rename = "unit-selected-to-shoot-this-phase")]
     UnitSelectedToShootThisPhase,
+    #[serde(rename = "unit-selected-to-move-this-phase")]
+    UnitSelectedToMoveThisPhase,
     #[serde(rename = "eligible-to-shoot")]
     EligibleToShoot,
     #[serde(rename = "selection-has-keyword")]
@@ -30715,6 +30719,9 @@ impl ::std::fmt::Display for SimpleConditionType {
             Self::UnitSelectedToShootThisPhase => {
                 f.write_str("unit-selected-to-shoot-this-phase")
             }
+            Self::UnitSelectedToMoveThisPhase => {
+                f.write_str("unit-selected-to-move-this-phase")
+            }
             Self::EligibleToShoot => f.write_str("eligible-to-shoot"),
             Self::SelectionHasKeyword => f.write_str("selection-has-keyword"),
             Self::TargetOfTriggeringCharge => f.write_str("target-of-triggering-charge"),
@@ -30808,6 +30815,7 @@ impl ::std::str::FromStr for SimpleConditionType {
             "has-destroyed" => Ok(Self::HasDestroyed),
             "roll-succeeded" => Ok(Self::RollSucceeded),
             "unit-selected-to-shoot-this-phase" => Ok(Self::UnitSelectedToShootThisPhase),
+            "unit-selected-to-move-this-phase" => Ok(Self::UnitSelectedToMoveThisPhase),
             "eligible-to-shoot" => Ok(Self::EligibleToShoot),
             "selection-has-keyword" => Ok(Self::SelectionHasKeyword),
             "target-of-triggering-charge" => Ok(Self::TargetOfTriggeringCharge),
@@ -32537,6 +32545,30 @@ impl<'de> ::serde::Deserialize<'de> for StatValueString {
 ///        {
 ///          "type": "object",
 ///          "properties": {
+///            "bound_to": {
+///              "description": "The target is not freely chosen: it is the unit the WHEN moment names (\"that unit\"), or the unit the triggering enemy attacked.",
+///              "enum": [
+///                "triggering-unit",
+///                "attacked-unit"
+///              ]
+///            },
+///            "count": {
+///              "description": "How many targets are selected: one, one or more, or up to `count_max`.",
+///              "enum": [
+///                "one",
+///                "one-or-more",
+///                "up-to"
+///              ]
+///            },
+///            "count_max": {
+///              "description": "Upper bound when `count` is up-to.",
+///              "type": "integer",
+///              "minimum": 2.0
+///            },
+///            "eligibility": {
+///              "description": "What must be true of a unit to be selected, e.g. not selected to shoot this phase, or within Engagement Range of an enemy unit.",
+///              "$ref": "#/$defs/condition"
+///            },
 ///            "excluded_keywords": {
 ///              "$ref": "#/$defs/keyword-list"
 ///            },
@@ -32550,6 +32582,20 @@ impl<'de> ::serde::Deserialize<'de> for StatValueString {
 ///            "required_keywords_any": {
 ///              "description": "OR set: the target must carry at least one keyword listed here. Use for rules that target a unit with one of several keywords (e.g. Crushing Impact's MONSTER/VEHICLE, Explosives' EXPLOSIVES/GRENADES). Mirrors the `army_keywords_any` OR-gate on allied-rule.schema.json.",
 ///              "$ref": "#/$defs/keyword-list"
+///            },
+///            "selects": {
+///              "description": "Whether the target is a unit or a single model.",
+///              "enum": [
+///                "unit",
+///                "model"
+///              ]
+///            },
+///            "side": {
+///              "description": "Whose units can be selected.",
+///              "enum": [
+///                "your-army",
+///                "enemy"
+///              ]
 ///            }
 ///          },
 ///          "additionalProperties": false
@@ -32776,6 +32822,30 @@ impl<'de> ::serde::Deserialize<'de> for StratagemName {
 ///{
 ///  "type": "object",
 ///  "properties": {
+///    "bound_to": {
+///      "description": "The target is not freely chosen: it is the unit the WHEN moment names (\"that unit\"), or the unit the triggering enemy attacked.",
+///      "enum": [
+///        "triggering-unit",
+///        "attacked-unit"
+///      ]
+///    },
+///    "count": {
+///      "description": "How many targets are selected: one, one or more, or up to `count_max`.",
+///      "enum": [
+///        "one",
+///        "one-or-more",
+///        "up-to"
+///      ]
+///    },
+///    "count_max": {
+///      "description": "Upper bound when `count` is up-to.",
+///      "type": "integer",
+///      "minimum": 2.0
+///    },
+///    "eligibility": {
+///      "description": "What must be true of a unit to be selected, e.g. not selected to shoot this phase, or within Engagement Range of an enemy unit.",
+///      "$ref": "#/$defs/condition"
+///    },
 ///    "excluded_keywords": {
 ///      "$ref": "#/$defs/keyword-list"
 ///    },
@@ -32789,6 +32859,20 @@ impl<'de> ::serde::Deserialize<'de> for StratagemName {
 ///    "required_keywords_any": {
 ///      "description": "OR set: the target must carry at least one keyword listed here. Use for rules that target a unit with one of several keywords (e.g. Crushing Impact's MONSTER/VEHICLE, Explosives' EXPLOSIVES/GRENADES). Mirrors the `army_keywords_any` OR-gate on allied-rule.schema.json.",
 ///      "$ref": "#/$defs/keyword-list"
+///    },
+///    "selects": {
+///      "description": "Whether the target is a unit or a single model.",
+///      "enum": [
+///        "unit",
+///        "model"
+///      ]
+///    },
+///    "side": {
+///      "description": "Whose units can be selected.",
+///      "enum": [
+///        "your-army",
+///        "enemy"
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -32798,6 +32882,18 @@ impl<'de> ::serde::Deserialize<'de> for StratagemName {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct StratagemTargetRestrictions {
+    ///The target is not freely chosen: it is the unit the WHEN moment names ("that unit"), or the unit the triggering enemy attacked.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub bound_to: ::std::option::Option<StratagemTargetRestrictionsBoundTo>,
+    ///How many targets are selected: one, one or more, or up to `count_max`.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub count: ::std::option::Option<StratagemTargetRestrictionsCount>,
+    ///Upper bound when `count` is up-to.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub count_max: ::std::option::Option<i64>,
+    ///What must be true of a unit to be selected, e.g. not selected to shoot this phase, or within Engagement Range of an enemy unit.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub eligibility: ::std::option::Option<Condition>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub excluded_keywords: ::std::option::Option<KeywordList>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -32808,15 +32904,343 @@ pub struct StratagemTargetRestrictions {
     ///OR set: the target must carry at least one keyword listed here. Use for rules that target a unit with one of several keywords (e.g. Crushing Impact's MONSTER/VEHICLE, Explosives' EXPLOSIVES/GRENADES). Mirrors the `army_keywords_any` OR-gate on allied-rule.schema.json.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub required_keywords_any: ::std::option::Option<KeywordList>,
+    ///Whether the target is a unit or a single model.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub selects: ::std::option::Option<StratagemTargetRestrictionsSelects>,
+    ///Whose units can be selected.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub side: ::std::option::Option<StratagemTargetRestrictionsSide>,
 }
 impl ::std::default::Default for StratagemTargetRestrictions {
     fn default() -> Self {
         Self {
+            bound_to: Default::default(),
+            count: Default::default(),
+            count_max: Default::default(),
+            eligibility: Default::default(),
             excluded_keywords: Default::default(),
             notes: Default::default(),
             required_keywords: Default::default(),
             required_keywords_any: Default::default(),
+            selects: Default::default(),
+            side: Default::default(),
         }
+    }
+}
+///The target is not freely chosen: it is the unit the WHEN moment names ("that unit"), or the unit the triggering enemy attacked.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The target is not freely chosen: it is the unit the WHEN moment names (\"that unit\"), or the unit the triggering enemy attacked.",
+///  "enum": [
+///    "triggering-unit",
+///    "attacked-unit"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum StratagemTargetRestrictionsBoundTo {
+    #[serde(rename = "triggering-unit")]
+    TriggeringUnit,
+    #[serde(rename = "attacked-unit")]
+    AttackedUnit,
+}
+impl ::std::fmt::Display for StratagemTargetRestrictionsBoundTo {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::TriggeringUnit => f.write_str("triggering-unit"),
+            Self::AttackedUnit => f.write_str("attacked-unit"),
+        }
+    }
+}
+impl ::std::str::FromStr for StratagemTargetRestrictionsBoundTo {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "triggering-unit" => Ok(Self::TriggeringUnit),
+            "attacked-unit" => Ok(Self::AttackedUnit),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for StratagemTargetRestrictionsBoundTo {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for StratagemTargetRestrictionsBoundTo {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for StratagemTargetRestrictionsBoundTo {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///How many targets are selected: one, one or more, or up to `count_max`.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "How many targets are selected: one, one or more, or up to `count_max`.",
+///  "enum": [
+///    "one",
+///    "one-or-more",
+///    "up-to"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum StratagemTargetRestrictionsCount {
+    #[serde(rename = "one")]
+    One,
+    #[serde(rename = "one-or-more")]
+    OneOrMore,
+    #[serde(rename = "up-to")]
+    UpTo,
+}
+impl ::std::fmt::Display for StratagemTargetRestrictionsCount {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::One => f.write_str("one"),
+            Self::OneOrMore => f.write_str("one-or-more"),
+            Self::UpTo => f.write_str("up-to"),
+        }
+    }
+}
+impl ::std::str::FromStr for StratagemTargetRestrictionsCount {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "one" => Ok(Self::One),
+            "one-or-more" => Ok(Self::OneOrMore),
+            "up-to" => Ok(Self::UpTo),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for StratagemTargetRestrictionsCount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for StratagemTargetRestrictionsCount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for StratagemTargetRestrictionsCount {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Whether the target is a unit or a single model.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Whether the target is a unit or a single model.",
+///  "enum": [
+///    "unit",
+///    "model"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum StratagemTargetRestrictionsSelects {
+    #[serde(rename = "unit")]
+    Unit,
+    #[serde(rename = "model")]
+    Model,
+}
+impl ::std::fmt::Display for StratagemTargetRestrictionsSelects {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Unit => f.write_str("unit"),
+            Self::Model => f.write_str("model"),
+        }
+    }
+}
+impl ::std::str::FromStr for StratagemTargetRestrictionsSelects {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "unit" => Ok(Self::Unit),
+            "model" => Ok(Self::Model),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for StratagemTargetRestrictionsSelects {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for StratagemTargetRestrictionsSelects {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for StratagemTargetRestrictionsSelects {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Whose units can be selected.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Whose units can be selected.",
+///  "enum": [
+///    "your-army",
+///    "enemy"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum StratagemTargetRestrictionsSide {
+    #[serde(rename = "your-army")]
+    YourArmy,
+    #[serde(rename = "enemy")]
+    Enemy,
+}
+impl ::std::fmt::Display for StratagemTargetRestrictionsSide {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::YourArmy => f.write_str("your-army"),
+            Self::Enemy => f.write_str("enemy"),
+        }
+    }
+}
+impl ::std::str::FromStr for StratagemTargetRestrictionsSide {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "your-army" => Ok(Self::YourArmy),
+            "enemy" => Ok(Self::Enemy),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for StratagemTargetRestrictionsSide {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for StratagemTargetRestrictionsSide {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for StratagemTargetRestrictionsSide {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///`StratagemTiming`

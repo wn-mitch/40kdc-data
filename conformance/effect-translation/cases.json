@@ -22349,6 +22349,28 @@
     }
   },
   {
+    "caseId": "fidelity/selected-to-move-condition",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "unit-selected-to-move-this-phase",
+        "negated": true
+      },
+      "effect": {
+        "type": "fight-first",
+        "target": "unit",
+        "modifier": {}
+      }
+    },
+    "scope": {
+      "range": "unit",
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If not the unit has been selected to move this phase, when resolving this use, the unit has the Fights First ability."
+    }
+  },
+  {
     "caseId": "fidelity/weapon-grant-curated-label",
     "effect": {
       "type": "weapon-grant",

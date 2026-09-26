@@ -469,6 +469,8 @@ def describe_condition(c: Condition) -> str:
         return f"{negate}for {_str(p.get('attack_type'))} attacks"
     if ctype == "unit-selected-to-shoot-this-phase":
         return f"{negate}{legacy_unit_subject(c)} has been selected to shoot this phase"
+    if ctype == "unit-selected-to-move-this-phase":
+        return f"{negate}{legacy_unit_subject(c)} has been selected to move this phase"
     if ctype == "eligible-to-shoot":
         return f"{negate}the unit is eligible to shoot"
     if ctype == "selection-has-keyword":

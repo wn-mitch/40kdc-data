@@ -442,30 +442,6 @@ class WhenDrawn(TypedDict):
     battle_round: NotRequired[BattleRound]
 
 
-class TargetRestrictions(TypedDict):
-    required_keywords: NotRequired[KeywordList]
-    required_keywords_any: NotRequired[KeywordList]
-    excluded_keywords: NotRequired[KeywordList]
-    notes: NotRequired[str]
-
-
-class Stratagem(TypedDict):
-    id: EntityId
-    external_refs: NotRequired[ExternalReferenceList]
-    name: str
-    category: Literal["core", "detachment"]
-    type: NotRequired[Literal["battle-tactic", "strategic-ploy", "epic-deed", "wargear"]]
-    detachment_id: NotRequired[EntityId | None]
-    cp_cost: int
-    phases: PhaseList
-    player_turn: PlayerTurn
-    timing: Literal["once-per-phase", "once-per-turn", "once-per-battle", "unlimited"]
-    target_restrictions: NotRequired[TargetRestrictions | None]
-    ability_id: NotRequired[EntityId | None]
-    game_version: GameVersionRef
-    game_modes: NotRequired[GameModes]
-
-
 class TargetProfile(TypedDict):
     id: EntityId
     name: str
@@ -909,6 +885,7 @@ class SimpleCondition(TypedDict):
         "has-destroyed",
         "roll-succeeded",
         "unit-selected-to-shoot-this-phase",
+        "unit-selected-to-move-this-phase",
         "eligible-to-shoot",
         "selection-has-keyword",
         "target-of-triggering-charge",
@@ -1678,6 +1655,36 @@ class SecondaryCard(TypedDict):
     awards: NotRequired[list[Awards | Awards1]]
     text: NotRequired[str]
     game_version: GameVersionRef
+
+
+class TargetRestrictions(TypedDict):
+    required_keywords: NotRequired[KeywordList]
+    required_keywords_any: NotRequired[KeywordList]
+    excluded_keywords: NotRequired[KeywordList]
+    count: NotRequired[Literal["one", "one-or-more", "up-to"]]
+    count_max: NotRequired[int]
+    side: NotRequired[Literal["your-army", "enemy"]]
+    selects: NotRequired[Literal["unit", "model"]]
+    bound_to: NotRequired[Literal["triggering-unit", "attacked-unit"]]
+    eligibility: NotRequired[Condition]
+    notes: NotRequired[str]
+
+
+class Stratagem(TypedDict):
+    id: EntityId
+    external_refs: NotRequired[ExternalReferenceList]
+    name: str
+    category: Literal["core", "detachment"]
+    type: NotRequired[Literal["battle-tactic", "strategic-ploy", "epic-deed", "wargear"]]
+    detachment_id: NotRequired[EntityId | None]
+    cp_cost: int
+    phases: PhaseList
+    player_turn: PlayerTurn
+    timing: Literal["once-per-phase", "once-per-turn", "once-per-battle", "unlimited"]
+    target_restrictions: NotRequired[TargetRestrictions | None]
+    ability_id: NotRequired[EntityId | None]
+    game_version: GameVersionRef
+    game_modes: NotRequired[GameModes]
 
 
 class UnitKeyword(TypedDict):

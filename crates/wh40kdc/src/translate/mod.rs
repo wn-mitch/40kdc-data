@@ -1094,6 +1094,9 @@ fn describe_simple(s: &SimpleCondition) -> String {
         T::UnitSelectedToShootThisPhase => {
             format!("{negate}{} has been selected to shoot this phase", condition_subject(s, "the unit", legacy_unit_subject(s)))
         }
+        T::UnitSelectedToMoveThisPhase => {
+            format!("{negate}{} has been selected to move this phase", condition_subject(s, "the unit", legacy_unit_subject(s)))
+        }
         T::EligibleToShoot => format!("{negate}the unit is eligible to shoot"),
         T::SelectionHasKeyword => {
             let selected = p

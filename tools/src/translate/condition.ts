@@ -381,6 +381,8 @@ export function describeCondition(c: Condition): string {
       return `${negate}${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} is battle-shocked`;
     case "unit-selected-to-shoot-this-phase":
       return `${negate}${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} has been selected to shoot this phase`;
+    case "unit-selected-to-move-this-phase":
+      return `${negate}${conditionSubject(c, "the unit", LEGACY_UNIT_SUBJECTS)} has been selected to move this phase`;
     case "eligible-to-shoot":
       return `${negate}the unit is eligible to shoot`;
     case "selection-has-keyword": {

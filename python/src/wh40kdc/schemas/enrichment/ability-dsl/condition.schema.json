@@ -96,6 +96,7 @@
             "has-destroyed",
             "roll-succeeded",
             "unit-selected-to-shoot-this-phase",
+            "unit-selected-to-move-this-phase",
             "eligible-to-shoot",
             "selection-has-keyword",
             "target-of-triggering-charge",

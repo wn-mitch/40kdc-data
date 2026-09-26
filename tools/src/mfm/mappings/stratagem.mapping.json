@@ -375,6 +375,50 @@
       "consumers": [],
       "reason": "Target and restriction prose belongs to the separate raw-text store; no current structured extraction writes this object."
     },
+    "/target_restrictions/bound_to": {
+      "provenance": "prose-store-only",
+      "coverage": "unimplemented",
+      "sources": ["data.stratagem.localisations.*.targetRules"],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "A target bound to the WHEN moment's unit or the attacked unit is authored from TARGET leaves over the prose store; MFM has no structured relation for it."
+    },
+    "/target_restrictions/count": {
+      "provenance": "prose-store-only",
+      "coverage": "unimplemented",
+      "sources": ["data.stratagem.localisations.*.targetRules"],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "How many targets are selected is authored from TARGET leaves over the prose store; MFM has no structured target count."
+    },
+    "/target_restrictions/count_max": {
+      "provenance": "prose-store-only",
+      "coverage": "unimplemented",
+      "sources": ["data.stratagem.localisations.*.targetRules"],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "The upper bound of an up-to target count is authored from TARGET leaves over the prose store; MFM has no structured target count."
+    },
+    "/target_restrictions/eligibility": {
+      "provenance": "prose-store-only",
+      "coverage": "unimplemented",
+      "sources": ["data.stratagem.localisations.*.targetRules"],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "Target eligibility conditions are authored from TARGET leaves over the prose store; MFM has no structured target eligibility."
+    },
     "/target_restrictions/excluded_keywords": {
       "provenance": "prose-store-only",
       "coverage": "unimplemented",
@@ -472,6 +516,28 @@
       "precedence": [],
       "consumers": [],
       "reason": "Alternative keyword gates remain authored from prose-store inputs; MFM provides no structured target-keyword relation here."
+    },
+    "/target_restrictions/selects": {
+      "provenance": "prose-store-only",
+      "coverage": "unimplemented",
+      "sources": ["data.stratagem.localisations.*.targetRules"],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "Whether a unit or a model is targeted is authored from TARGET leaves over the prose store; MFM has no structured target kind."
+    },
+    "/target_restrictions/side": {
+      "provenance": "prose-store-only",
+      "coverage": "unimplemented",
+      "sources": ["data.stratagem.localisations.*.targetRules"],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "Whose units can be targeted is authored from TARGET leaves over the prose store; MFM has no structured target side."
     },
     "/timing": {
       "provenance": "repo-authored",

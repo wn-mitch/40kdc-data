@@ -516,6 +516,10 @@ export type KeywordList6 = Keyword[];
  */
 export type KeywordList7 = Keyword[];
 /**
+ * What must be true of a unit to be selected, e.g. not selected to shoot this phase, or within Engagement Range of an enemy unit.
+ */
+export type AbilityCondition5 = SimpleCondition | CompoundCondition;
+/**
  * Game modes this stratagem is legal or authored for; absent implies matched-play.
  *
  * @minItems 1
@@ -624,7 +628,7 @@ export type ScopeDuration =
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "condition".
  */
-export type AbilityCondition5 = SimpleCondition | CompoundCondition;
+export type AbilityCondition6 = SimpleCondition | CompoundCondition;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "rule-state-core-rule-slug".
@@ -653,7 +657,7 @@ export type TransportEligibility = {
 /**
  * Gate shared by the default and qualified branches, evaluated on each current attack, without gating production of the named region.
  */
-export type AbilityCondition6 = SimpleCondition | CompoundCondition;
+export type AbilityCondition7 = SimpleCondition | CompoundCondition;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "effect".
@@ -1526,6 +1530,7 @@ export interface SimpleCondition {
     | "has-destroyed"
     | "roll-succeeded"
     | "unit-selected-to-shoot-this-phase"
+    | "unit-selected-to-move-this-phase"
     | "eligible-to-shoot"
     | "selection-has-keyword"
     | "target-of-triggering-charge"
@@ -2663,6 +2668,27 @@ export interface Stratagem {
     required_keywords?: KeywordList6;
     required_keywords_any?: KeywordList7;
     excluded_keywords?: KeywordList;
+    /**
+     * How many targets are selected: one, one or more, or up to `count_max`.
+     */
+    count?: "one" | "one-or-more" | "up-to";
+    /**
+     * Upper bound when `count` is up-to.
+     */
+    count_max?: number;
+    /**
+     * Whose units can be selected.
+     */
+    side?: "your-army" | "enemy";
+    /**
+     * Whether the target is a unit or a single model.
+     */
+    selects?: "unit" | "model";
+    /**
+     * The target is not freely chosen: it is the unit the WHEN moment names ("that unit"), or the unit the triggering enemy attacked.
+     */
+    bound_to?: "triggering-unit" | "attacked-unit";
+    eligibility?: AbilityCondition5;
     notes?: string;
   } | null;
   ability_id?: EntityId | null;
@@ -3847,7 +3873,7 @@ export interface NamedRegionConsumer {
   qualified_condition: AbilityCondition2;
   default_branch: NamedRegionBranch;
   qualified_branch: NamedRegionBranch;
-  attack_condition?: AbilityCondition6;
+  attack_condition?: AbilityCondition7;
 }
 /**
  * A named state carried by a specific objective marker: the state resolves when its ability-level trigger fires, and may clear itself. Distinct from `objective-tag`, which only marks the objective without carrying a resolution.

@@ -55,9 +55,41 @@
             "excluded_keywords": {
               "$ref": "../defs/common.schema.json#/$defs/keyword-list"
             },
+            "count": {
+              "enum": ["one", "one-or-more", "up-to"],
+              "description": "How many targets are selected: one, one or more, or up to `count_max`."
+            },
+            "count_max": {
+              "type": "integer",
+              "minimum": 2,
+              "description": "Upper bound when `count` is up-to."
+            },
+            "side": {
+              "enum": ["your-army", "enemy"],
+              "description": "Whose units can be selected."
+            },
+            "selects": {
+              "enum": ["unit", "model"],
+              "description": "Whether the target is a unit or a single model."
+            },
+            "bound_to": {
+              "enum": ["triggering-unit", "attacked-unit"],
+              "description": "The target is not freely chosen: it is the unit the WHEN moment names (\"that unit\"), or the unit the triggering enemy attacked."
+            },
+            "eligibility": {
+              "$ref": "../enrichment/ability-dsl/condition.schema.json",
+              "description": "What must be true of a unit to be selected, e.g. not selected to shoot this phase, or within Engagement Range of an enemy unit."
+            },
             "notes": { "type": "string" }
           },
-          "additionalProperties": false
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": { "properties": { "count": { "const": "up-to" } }, "required": ["count"] },
+              "then": { "required": ["count_max"] },
+              "else": { "not": { "required": ["count_max"] } }
+            }
+          ]
         },
         { "type": "null" }
       ]
