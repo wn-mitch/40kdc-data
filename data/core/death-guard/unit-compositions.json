@@ -1356,7 +1356,11 @@
           "excruciator-cannon",
           "heavy-missile-launcher",
           "heavy-baleflamer"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 160
+        }
       }
     ],
     "game_version": {
@@ -1418,6 +1422,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "manreaper-strike-maggot-lords",
           "plaguespurt-gauntlet-maggot-lords"
@@ -1430,7 +1438,11 @@
         "default_weapon_ids": [
           "manreaper-strike-maggot-lords",
           "plaguespurt-gauntlet-maggot-lords"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1467,6 +1479,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
         "default_weapon_ids": [
           "plasma-pistol-maggot-lords",
           "power-fist"
@@ -1480,7 +1496,11 @@
         "default_weapon_ids": [
           "blight-launcher",
           "plague-knives-plague-marines"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Plague Marine with Plague Spewer",
@@ -1490,7 +1510,11 @@
         "default_weapon_ids": [
           "plague-knives-plague-marines",
           "plague-spewer"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Plague Marine",
@@ -1500,7 +1524,11 @@
         "default_weapon_ids": [
           "boltgun",
           "plague-knives-plague-marines"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1548,7 +1576,11 @@
         "default_weapon_ids": [
           "numerological-artefacts",
           "plasma-pistol-maggot-lords"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1581,7 +1613,11 @@
         "default_weapon_ids": [
           "power-fist-sholgor-the-putrid",
           "twin-plague-spewer"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {

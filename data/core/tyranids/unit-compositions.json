@@ -2156,7 +2156,11 @@
         "default_weapon_ids": [
           "gaping-maw",
           "scything-talons-the-red-terror"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 100
+        }
       }
     ],
     "game_version": {
