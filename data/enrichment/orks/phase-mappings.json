@@ -1449,19 +1449,6 @@
     "authored_by": "40kdc-community"
   },
   {
-    "source_id": "try-dat-button-madcap-meks",
-    "source_type": "detachment-rule",
-    "phases": [
-      "shooting",
-      "fight"
-    ],
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "codex-orks"
-    },
-    "authored_by": "40kdc-community"
-  },
-  {
     "source_id": "unpredictable-genius-madcap-meks",
     "source_type": "detachment-rule",
     "phases": [

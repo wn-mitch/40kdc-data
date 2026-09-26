@@ -1146,18 +1146,36 @@ async function runBaseSizesCmd(dump: MfmDump, write: boolean): Promise<void> {
   const reportPath = path.join(REPORT_DIR, "mfm-base-sizes.md");
   fs.writeFileSync(reportPath, buildBaseSizeReport(report, write));
 
-  if (report.review.length) {
+  const notAttributed =
+    report.unresolved.length +
+    report.labelUnmatched.length +
+    report.labelConflicts.length +
+    report.representativeUnresolved.length;
+  if (notAttributed > 0) {
     fs.mkdirSync(UNMATCHED_DIR, { recursive: true });
     fs.writeFileSync(
       path.join(UNMATCHED_DIR, "unmatched-base-sizes.json"),
-      JSON.stringify({ review: report.review }, null, 2) + "\n",
+      JSON.stringify(
+        {
+          unresolved: report.unresolved,
+          labelUnmatched: report.labelUnmatched,
+          labelConflicts: report.labelConflicts,
+          representativeUnresolved: report.representativeUnresolved,
+        },
+        null,
+        2,
+      ) + "\n",
     );
   }
 
   console.log(`Base-sizes report → ${path.relative(REPO_ROOT, reportPath)}`);
   console.log(
-    `Filled ${report.filled.length}, de-drafted ${report.dedrafted.length}, ` +
-      `corrected ${report.corrected.length}, confirmed ${report.confirmed}, review ${report.review.length}.`,
+    `Filled ${report.filled.length}, corrected ${report.corrected.length}, ` +
+      `de-drafted ${report.dedrafted.length}, kept ${report.roundingKept.length}, ` +
+      `confirmed ${report.confirmed.units}+${report.confirmed.models} units/models, ` +
+      `unresolved ${report.unresolved.length}, ` +
+      `labels ${report.labelUnmatched.length}+${report.labelConflicts.length}, ` +
+      `representatives ${report.representativeUnresolved.length}.`,
   );
   await applyWrites(report.staged, { write, label: "base-sizes" });
   if (!write)

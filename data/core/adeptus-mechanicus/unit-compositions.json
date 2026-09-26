@@ -381,7 +381,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 25
         },
         "loadout_variants": [
           {
@@ -1673,7 +1673,11 @@
           "hastarii-arc-blaster",
           "eradication-caster",
           "power-weapon-hastarii-exterminators"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Hastarii Exterminator",
@@ -1683,7 +1687,11 @@
           "hastarii-arc-blaster",
           "eradication-caster",
           "close-combat-weapon-hastarii-exterminators"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1719,7 +1727,11 @@
           "neutron-fusil",
           "hastarii-phosphor-blaster",
           "power-weapon-hastarii-fusiliers"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Hastarii Fusilier",
@@ -1729,7 +1741,11 @@
           "neutron-fusil",
           "hastarii-phosphor-blaster",
           "close-combat-weapon-hastarii-fusiliers"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1764,7 +1780,11 @@
         "default_weapon_ids": [
           "jericho-class-conversion-resonator",
           "rod-of-the-war-forge"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 80
+        }
       }
     ],
     "game_version": {
@@ -1794,7 +1814,11 @@
         "default_weapon_ids": [
           "omnissian-staff",
           "transonic-cannon"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -1822,6 +1846,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
         "default_weapon_ids": [
           "flechette-blaster",
           "taser-goad-pteraxii-sterylizors"
@@ -1834,7 +1862,11 @@
         "default_weapon_ids": [
           "phosphor-torch",
           "pteraxii-talons"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1867,6 +1899,10 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
         "default_weapon_ids": [
           "alpha-combat-weapon",
           "mechanicus-pistol-skitarii-vanguard"
@@ -1879,7 +1915,11 @@
         "default_weapon_ids": [
           "arc-rifle",
           "close-combat-weapon-skitarii-vanguard"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       },
       {
         "name": "Skitarii Vanguard with Plasma Caliver",
@@ -1889,7 +1929,11 @@
         "default_weapon_ids": [
           "close-combat-weapon-skitarii-vanguard",
           "plasma-caliver"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       },
       {
         "name": "Skitarii Vanguard",
@@ -1898,7 +1942,11 @@
         "default_weapon_ids": [
           "close-combat-weapon-skitarii-vanguard",
           "radium-carbine"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {

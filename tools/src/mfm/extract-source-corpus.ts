@@ -70,11 +70,12 @@ function slug(name: string): string | null {
  * Every id spelling a name can plausibly carry.
  *
  * Two divergences make a single slugging pass insufficient:
- *   - the dump suffixes some names with a presentation parenthetical that the
- *     authored id does not carry ("Talons of Butchery (Upgrade)"), and some
- *     authored ids *do* carry it ("Nurgle's Gift (Aura)" → nurgle-s-gift-aura);
- *   - `nameToId` drops an apostrophe ("Martial Ka'tah" → martial-katah) while
- *     older authored ids treat it as a separator (martial-ka-tah).
+ *   - most ids keep the dump's presentation parenthetical ("Executioner of
+ *     Heretics (Aura)" → executioner-of-heretics-aura) but some drop it
+ *     ("Nurgle's Gift (Aura)" → nurgles-gift), so both spellings are generated;
+ *   - `nameToId` drops an apostrophe ("Martial Ka'tah" → martial-katah), while an
+ *     id slugged before that rule separated on it instead (martial-ka-tah), so the
+ *     separator spelling is generated too.
  */
 function slugVariants(name: string | null | undefined): string[] {
   if (typeof name !== "string" || !name.trim()) return [];

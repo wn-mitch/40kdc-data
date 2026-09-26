@@ -1183,7 +1183,11 @@
         "default_weapon_ids": [
           "bolt-pistol",
           "chainblade"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Khorne Berzerker Champion",
@@ -1193,7 +1197,11 @@
           "chainblade",
           "plasma-pistol"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Khorne Berzerker with Plasma Pistol and Chainblade",
@@ -1202,7 +1210,11 @@
         "default_weapon_ids": [
           "chainblade",
           "plasma-pistol"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       },
       {
         "name": "Khorne Berzerker with Bolt Pistol and Khornate Eviscerator",
@@ -1211,7 +1223,11 @@
         "default_weapon_ids": [
           "bolt-pistol",
           "khornate-eviscerator"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -1231,7 +1247,11 @@
           "bolt-pistol",
           "axe-of-dismemberment"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1250,7 +1270,11 @@
         "default_weapon_ids": [
           "hellforged-weapons",
           "infernal-cannon"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {

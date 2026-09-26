@@ -3525,7 +3525,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 25
+          "diameter": 32
         },
         "default_weapon_ids": [
           "shadow-field",
@@ -3891,11 +3891,9 @@
         "max": 2,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "flying-base",
-          "size": "large",
-          "draft": true,
-          "width": 120,
-          "length": 92
+          "shape": "oval",
+          "width": 105,
+          "length": 70
         },
         "default_weapon_ids": [
           "shuriken-cannon-vyper",
@@ -4012,20 +4010,49 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
-        "base_size_mm": { "shape": "round", "diameter": 28.5 },
-        "default_weapon_ids": ["power-glaive"]
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "power-glaive"
+        ]
       },
       {
         "name": "Dire Avenger",
         "min": 4,
         "max": 4,
         "is_leader_model": false,
-        "base_size_mm": { "shape": "round", "diameter": 28.5 },
-        "default_weapon_ids": ["avenger-shuriken-catapult", "weapon-strike"]
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "avenger-shuriken-catapult",
+          "weapon-strike"
+        ]
       }
     ],
-    "game_version": { "edition": "11th", "dataslate": "launch" },
-    "tiers": [{ "models": [{ "name": "Dire Avengers Exarch", "min": 1, "max": 1 }, { "name": "Dire Avenger", "min": 4, "max": 4 }] }]
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Dire Avengers Exarch",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Dire Avenger",
+            "min": 4,
+            "max": 4
+          }
+        ]
+      }
+    ]
   },
   {
     "unit_id": "kygharils-protectors-warp-spiders",
@@ -4036,20 +4063,50 @@
         "min": 1,
         "max": 1,
         "is_leader_model": true,
-        "base_size_mm": { "shape": "round", "diameter": 28.5 },
-        "default_weapon_ids": ["death-weavers", "powerblades"]
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "death-weavers",
+          "powerblades"
+        ]
       },
       {
         "name": "Warp Spider",
         "min": 4,
         "max": 4,
         "is_leader_model": false,
-        "base_size_mm": { "shape": "round", "diameter": 28.5 },
-        "default_weapon_ids": ["death-spinner", "weapon-strike"]
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        },
+        "default_weapon_ids": [
+          "death-spinner",
+          "weapon-strike"
+        ]
       }
     ],
-    "game_version": { "edition": "11th", "dataslate": "launch" },
-    "tiers": [{ "models": [{ "name": "Warp Spider Exarch", "min": 1, "max": 1 }, { "name": "Warp Spider", "min": 4, "max": 4 }] }]
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Warp Spider Exarch",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Warp Spider",
+            "min": 4,
+            "max": 4
+          }
+        ]
+      }
+    ]
   },
   {
     "unit_id": "kygharils-protectors-wraithblades",
@@ -4060,12 +4117,30 @@
         "min": 5,
         "max": 5,
         "is_leader_model": false,
-        "base_size_mm": { "shape": "round", "diameter": 40 },
-        "default_weapon_ids": ["ghostaxe"]
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "ghostaxe"
+        ]
       }
     ],
-    "game_version": { "edition": "11th", "dataslate": "launch" },
-    "tiers": [{ "models": [{ "name": "Wraithblade", "min": 5, "max": 5 }] }]
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Wraithblade",
+            "min": 5,
+            "max": 5
+          }
+        ]
+      }
+    ]
   },
   {
     "unit_id": "spiritseer-kygharil",
@@ -4076,42 +4151,176 @@
         "min": 1,
         "max": 1,
         "is_leader_model": false,
-        "base_size_mm": { "shape": "round", "diameter": 25 },
-        "default_weapon_ids": ["shuriken-pistol-spiritseer", "witch-staff"]
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "shuriken-pistol-spiritseer",
+          "witch-staff"
+        ]
       }
     ],
-    "game_version": { "edition": "11th", "dataslate": "launch" },
-    "tiers": [{ "models": [{ "name": "Spiritseer Kygharil", "min": 1, "max": 1 }] }]
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Spiritseer Kygharil",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   },
   {
     "unit_id": "clanblade",
     "faction_id": "aeldari",
-    "models": [{ "name": "Clanblade", "min": 1, "max": 1, "is_leader_model": false, "default_weapon_ids": ["drakesteed-fangs-and-talons", "moonblades", "solar-carbine"] }],
-    "game_version": { "edition": "11th", "dataslate": "launch" },
-    "tiers": [{ "models": [{ "name": "Clanblade", "min": 1, "max": 1 }] }]
+    "models": [
+      {
+        "name": "Clanblade",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "drakesteed-fangs-and-talons",
+          "moonblades",
+          "solar-carbine"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Clanblade",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   },
   {
     "unit_id": "dragon-knights",
     "faction_id": "aeldari",
     "models": [
-      { "name": "Dragon Knight Leader", "min": 1, "max": 1, "is_leader_model": true, "default_weapon_ids": ["drakesteed-fangs-and-talons", "laser-lance", "solar-carbine"] },
-      { "name": "Dragon Knight", "min": 2, "max": 5, "is_leader_model": false, "default_weapon_ids": ["drakesteed-fangs-and-talons", "laser-lance", "solar-carbine"] }
+      {
+        "name": "Dragon Knight Leader",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "default_weapon_ids": [
+          "drakesteed-fangs-and-talons",
+          "laser-lance",
+          "solar-carbine"
+        ]
+      },
+      {
+        "name": "Dragon Knight",
+        "min": 2,
+        "max": 5,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "drakesteed-fangs-and-talons",
+          "laser-lance",
+          "solar-carbine"
+        ]
+      }
     ],
-    "game_version": { "edition": "11th", "dataslate": "launch" },
-    "tiers": [{ "models": [{ "name": "Dragon Knight Leader", "min": 1, "max": 1 }, { "name": "Dragon Knight", "min": 2, "max": 5 }] }]
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Dragon Knight Leader",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Dragon Knight",
+            "min": 2,
+            "max": 5
+          }
+        ]
+      }
+    ]
   },
   {
     "unit_id": "leystalker",
     "faction_id": "aeldari",
-    "models": [{ "name": "Leystalker", "min": 1, "max": 1, "is_leader_model": false, "default_weapon_ids": ["drakesteed-fangs-and-talons", "hunting-blades", "long-rifle"] }],
-    "game_version": { "edition": "11th", "dataslate": "launch" },
-    "tiers": [{ "models": [{ "name": "Leystalker", "min": 1, "max": 1 }] }]
+    "models": [
+      {
+        "name": "Leystalker",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "drakesteed-fangs-and-talons",
+          "hunting-blades",
+          "long-rifle"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Leystalker",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   },
   {
     "unit_id": "stonesinger",
     "faction_id": "aeldari",
-    "models": [{ "name": "Stonesinger", "min": 1, "max": 1, "is_leader_model": false, "default_weapon_ids": ["drakesteed-fangs-and-talons", "song-of-waning", "solar-carbine", "stone-stave", "venomcrest-spit"] }],
-    "game_version": { "edition": "11th", "dataslate": "launch" },
-    "tiers": [{ "models": [{ "name": "Stonesinger", "min": 1, "max": 1 }] }]
+    "models": [
+      {
+        "name": "Stonesinger",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "drakesteed-fangs-and-talons",
+          "song-of-waning",
+          "solar-carbine",
+          "stone-stave",
+          "venomcrest-spit"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Stonesinger",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   }
 ]

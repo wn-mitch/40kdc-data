@@ -473,7 +473,7 @@
     "reauthored": true
   },
   {
-    "ability_id": "nurgle-s-gift-aura",
+    "ability_id": "nurgles-gift",
     "name": "Nurgle’s Gift (Aura)",
     "faction": "death-guard",
     "schema_valid": false,

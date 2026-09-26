@@ -240,3 +240,7 @@ npm pack --dry-run --json interleaves prepack lifecycle output with JSON, so pip
 ## 2026-09-16T18:32:13Z — openai-codex/gpt-5.6-sol
 
 The browser tab.run context exposes Puppeteer, not Playwright: page.locator(...).count() is unavailable despite locator-style APIs being common elsewhere. Use page.99520eval/querySelectorAll for DOM counts.
+
+## 2026-09-26T12:09:56Z — deepseek-v4-flash
+
+Running just preflight from a second jj workspace fails test-python: the homebrew editable wh40kdc install points its .pth at the primary workspace's python/src, so pytest imports that tree's code (whose share registry is a different version) and 74 share-token conformance tests mismatch. Run the gate with PYTHONPATH=<workspace>/python/src, or re-point the editable install per workspace.

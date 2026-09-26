@@ -33,10 +33,15 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("faction-fields over the real
     const dg = byDir.get("death-guard");
     expect(dg?.ruleConfirmed).toBeFalsy();
     expect(dg?.ruleReview).toEqual({
-      authored: ["nurgle-s-gift-aura"],
+      authored: ["nurgles-gift"],
       candidates: ["nurgles-gift", "pact-of-decay"],
     });
     expect(dg?.ruleFilled).toBeUndefined();
+  });
+
+  it("confirms a faction rule array once the authored id matches the dump's slug", () => {
+    // Custodes authored `martial-ka-tah`; the dump's "Martial Ka'tah" slugs to martial-katah.
+    expect(byDir.get("adeptus-custodes")?.ruleConfirmed).toBe(true);
   });
 
   it("confirms multi-rule factions by order-insensitive set equality", () => {

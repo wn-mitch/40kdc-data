@@ -4877,7 +4877,7 @@
     },
     {
       "faction": "adeptus-custodes",
-      "ability_id": "martial-ka-tah",
+      "ability_id": "martial-katah",
       "name": "Martial Ka’tah",
       "unit_ids": [],
       "text": "Until the end of the phase:\nSelect one of the following (Ka'tah Stance):\n  - The unit's weapons gain [SUSTAINED HITS 1].\n  - The unit's weapons gain [LETHAL HITS].",
@@ -16287,7 +16287,7 @@
     },
     {
       "faction": "death-guard",
-      "ability_id": "nurgle-s-gift-aura",
+      "ability_id": "nurgles-gift",
       "name": "Nurgle’s Gift (Aura)",
       "unit_ids": [],
       "text": "Subtract 1 from enemy units nearby's Toughness characteristic.\nSelect one of the following:\n  - Enemy units nearby get -1 to Hit rolls.\n  - Subtract 1 from enemy units nearby's Save characteristic.\n  - Subtract 1 from enemy units nearby's Move characteristic.",
@@ -22843,8 +22843,8 @@
     },
     {
       "faction": "orks",
-      "ability_id": "eager-for-the-fight",
-      "name": "Eager for the Fight",
+      "ability_id": "unstoppable-momentum-blitz-brigade",
+      "name": "Unstoppable Momentum",
       "unit_ids": [],
       "text": "If the unit disembarked from a Transport this turn, until the end of the turn:\n  -> You can re-roll the Advance roll.\n  -> You can re-roll the Charge roll.",
       "flags": []

@@ -437,7 +437,7 @@ const ABILITY_GRANT_LABELS: Record<string, string> = {
   "charge-after-advance": "Advance & Charge",
   "charge-after-fallback": "Fall Back & Charge",
   "charge-after-disembark": "Charge After Disembarking",
-  "nurgle-s-gift-aura": "Nurgle's Gift (Aura)",
+  "nurgles-gift": "Nurgle's Gift (Aura)",
 };
 
 /** The display label for a granted ability id: a curated override, else Title Case. */

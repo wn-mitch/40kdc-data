@@ -398,7 +398,7 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 25
+          "diameter": 32
         },
         "default_weapon_ids": [
           "heavy-bolter-inquisitorial-agents",
@@ -627,7 +627,7 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 25
         }
       },
       {
@@ -643,7 +643,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 25
         }
       },
       {
@@ -656,7 +656,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 25
         }
       }
     ],
@@ -946,7 +946,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 40
         }
       }
     ],
@@ -2142,7 +2142,11 @@
           "stubcarbine",
           "butcher-blade",
           "garralisks-claws-and-teeth"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "tiers": [

@@ -4,11 +4,11 @@ import { Dataset } from "../src/data/dataset.js";
 
 /**
  * Guards the base_size_mm population against regression. Thresholds are absolute
- * floors (well below the current populated counts) so adding a handful of units
- * won't make the suite flaky, while a broken bridge — which would drop counts
- * sharply — still fails. The honest ceiling from the available sources is ~89% of
- * non-vehicle units; the rest are flying-stem / Hull / Unique without standard
- * dimensions, or Forge World / Legends units absent from every source.
+ * floors (~3% below the current populated counts) so adding or retiring a handful
+ * of units won't make the suite flaky, while a broken reconcile — which would drop
+ * counts sharply — still fails. The residual is what the dump cannot express: its
+ * Hull / Flying Base / Unique categories, its bare multi-value lists, and units
+ * with no datasheet at all (see data/core/_reports/mfm-base-sizes.md).
  */
 describe("base_size_mm coverage", () => {
   const ds = Dataset.embedded();
@@ -22,19 +22,19 @@ describe("base_size_mm coverage", () => {
   const authoritative = populated.filter((u) => !u.base_size_mm?.draft);
 
   it("populates most units (categorical)", () => {
-    // Current: 918/1107 unique. Floor set well below to guard regression, not drift.
-    expect(populated.length).toBeGreaterThanOrEqual(900);
+    // Current: 1073/1096 unique. Floor set below to guard regression, not drift.
+    expect(populated.length).toBeGreaterThanOrEqual(1040);
   });
 
   it("populates the large majority of non-vehicle units", () => {
-    // Current: 663/748 ≈ 88.6%. The residual is flying-stem/Hull/Unique + source gaps.
-    expect(nonVehiclePopulated.length).toBeGreaterThanOrEqual(650);
-    expect(nonVehiclePopulated.length / nonVehicle.length).toBeGreaterThanOrEqual(0.85);
+    // Current: 771/788 ≈ 97.8%; the residual is Hull/Flying-Base categories and bare lists.
+    expect(nonVehiclePopulated.length).toBeGreaterThanOrEqual(745);
+    expect(nonVehiclePopulated.length / nonVehicle.length).toBeGreaterThanOrEqual(0.95);
   });
 
   it("most populated bases are authoritative (non-draft) round/oval values", () => {
-    // Current: 783 authoritative.
-    expect(authoritative.length).toBeGreaterThanOrEqual(760);
+    // Current: 918 authoritative.
+    expect(authoritative.length).toBeGreaterThanOrEqual(890);
   });
 
   it("carries provisional flying/hull/unique bases as draft for later authoring", () => {
@@ -51,6 +51,8 @@ describe("base_size_mm coverage", () => {
     expect(base("intercessor-squad")).toEqual({ shape: "round", diameter: 32 });
     expect(base("vertus-praetors")).toEqual({ shape: "oval", width: 75, length: 42 });
     expect(base("windriders")).toEqual({ shape: "flying-base", size: "small", draft: true });
+    // Re-authored from the MFM dump, which has it at 90mm (the guide said 40mm).
+    expect(base("ctan-shard-of-the-nightbringer")).toEqual({ shape: "round", diameter: 90 });
   });
 
   it("resolves mixed squads per-model via composition", () => {

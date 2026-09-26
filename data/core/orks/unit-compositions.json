@@ -53,7 +53,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40
+          "diameter": 50
         },
         "default_weapon_ids": [
           "power-vomit",
@@ -157,9 +157,8 @@
         "max": 6,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "oval",
-          "width": 75,
-          "length": 42
+          "shape": "round",
+          "diameter": 75
         },
         "default_weapon_ids": [
           "choppa",
@@ -425,9 +424,8 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "oval",
-          "width": 150,
-          "length": 95
+          "shape": "round",
+          "diameter": 120
         },
         "default_weapon_ids": [
           "armoured-impact",
@@ -1244,9 +1242,8 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "oval",
-          "width": 120,
-          "length": 92
+          "shape": "round",
+          "diameter": 120
         },
         "default_weapon_ids": [
           "armoured-impact",
@@ -1352,9 +1349,8 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "oval",
-          "width": 120,
-          "length": 92
+          "shape": "round",
+          "diameter": 120
         },
         "default_weapon_ids": [
           "armoured-impact",
@@ -1755,7 +1751,11 @@
         "default_weapon_ids": [
           "kustom-krumpa",
           "kustom-shoota-nobz"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -1965,9 +1965,8 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "oval",
-          "width": 120,
-          "length": 92
+          "shape": "round",
+          "diameter": 120
         },
         "default_weapon_ids": [
           "armoured-impact",
@@ -2077,7 +2076,11 @@
         "default_weapon_ids": [
           "shoota",
           "kustom-choppa"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -2202,7 +2205,11 @@
           "kustom-blasta-x-melee",
           "moonchewa"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
@@ -2233,7 +2240,11 @@
           "slugga",
           "runtherd-tools"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -2302,7 +2313,11 @@
           "lobbin-bombs",
           "scavenged-shivs"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        }
       }
     ],
     "game_version": {
@@ -2333,7 +2348,11 @@
           "kustom-choppa",
           "kustom-shoota"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -2365,7 +2384,12 @@
           "kustom-shoota",
           "rokkit-launcha"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 105,
+          "length": 70
+        }
       }
     ],
     "game_version": {
@@ -2396,7 +2420,11 @@
           "psychic-powers",
           "waaagh-staff"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 50
+        }
       }
     ],
     "game_version": {
@@ -2428,7 +2456,11 @@
           "sawn-off-shotgun",
           "squig-launchas"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 150
+        }
       }
     ],
     "game_version": {

@@ -289,7 +289,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40
+          "diameter": 32
         }
       },
       {
@@ -303,7 +303,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40
+          "diameter": 28.5
         },
         "loadout_variants": [
           {
@@ -550,7 +550,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40
+          "diameter": 28.5
         }
       }
     ],
@@ -615,7 +615,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Emperor\u2019s Champion",
+        "name": "Emperor’s Champion",
         "min": 1,
         "max": 1,
         "is_leader_model": false,
@@ -637,7 +637,7 @@
       {
         "models": [
           {
-            "name": "Emperor\u2019s Champion",
+            "name": "Emperor’s Champion",
             "min": 1,
             "max": 1
           }
@@ -1972,7 +1972,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Lion El\u2019Jonson",
+        "name": "Lion El’Jonson",
         "min": 1,
         "max": 1,
         "is_leader_model": false,
@@ -1994,7 +1994,7 @@
       {
         "models": [
           {
-            "name": "Lion El\u2019Jonson",
+            "name": "Lion El’Jonson",
             "min": 1,
             "max": 1
           }
@@ -2543,7 +2543,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 40
         }
       },
       {
@@ -2676,7 +2676,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 40
         }
       }
     ],
@@ -3228,7 +3228,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 40
         },
         "default_weapon_ids": [
           "bolt-pistol",
@@ -3654,7 +3654,7 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Kor\u2019sarro Khan",
+        "name": "Kor’sarro Khan",
         "min": 1,
         "max": 1,
         "is_leader_model": false,
@@ -3677,7 +3677,7 @@
       {
         "models": [
           {
-            "name": "Kor\u2019sarro Khan",
+            "name": "Kor’sarro Khan",
             "min": 1,
             "max": 1
           }
@@ -3902,7 +3902,7 @@
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 40
+          "diameter": 50
         },
         "default_weapon_ids": [
           "fist-of-dorn"
@@ -4804,13 +4804,13 @@
     "faction_id": "adeptus-astartes",
     "models": [
       {
-        "name": "Vulkan He\u2019stan",
+        "name": "Vulkan He’stan",
         "min": 1,
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 40
         },
         "default_weapon_ids": [
           "bolt-pistol-vulkan-hestan",
@@ -4827,7 +4827,7 @@
       {
         "models": [
           {
-            "name": "Vulkan He\u2019stan",
+            "name": "Vulkan He’stan",
             "min": 1,
             "max": 1
           }
@@ -8337,8 +8337,9 @@
         "max": 6,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "round",
-          "diameter": 40
+          "shape": "oval",
+          "width": 60,
+          "length": 35.5
         },
         "default_weapon_ids": [
           "teeth-and-claws-wolf-guard-headtakers"
@@ -8914,9 +8915,8 @@
         ],
         "is_leader_model": true,
         "base_size_mm": {
-          "shape": "oval",
-          "width": 60,
-          "length": 35.5
+          "shape": "round",
+          "diameter": 32
         }
       },
       {
@@ -8929,9 +8929,8 @@
         ],
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "oval",
-          "width": 60,
-          "length": 35.5
+          "shape": "round",
+          "diameter": 32
         }
       },
       {
@@ -9086,7 +9085,11 @@
           "bolt-pistol-eradicator-squad-with-heavy-bolters",
           "ceramite-fists-eradicator-squad-with-heavy-bolters",
           "heavy-bolter-eradicator-squad-with-heavy-bolters"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Eradicator",
@@ -9096,7 +9099,11 @@
           "bolt-pistol-eradicator-squad-with-heavy-bolters",
           "ceramite-fists-eradicator-squad-with-heavy-bolters",
           "heavy-bolter-eradicator-squad-with-heavy-bolters"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "game_version": {
@@ -9176,7 +9183,12 @@
           "onslaught-gatling-cannon",
           "stormfury-missile-launcher",
           "pyrecannon"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "oval",
+          "width": 105,
+          "length": 70
+        }
       }
     ],
     "game_version": {
@@ -9207,7 +9219,11 @@
           "master-crafted-bolt-carbine",
           "master-crafted-power-weapon-victrix-honour-guard",
           "blades-of-honour"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Chapter Champion",
@@ -9217,7 +9233,11 @@
           "master-crafted-bolt-carbine",
           "master-crafted-power-weapon-victrix-honour-guard",
           "blades-of-honour"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Chapter Ancient",
@@ -9227,7 +9247,11 @@
           "master-crafted-bolt-carbine",
           "master-crafted-power-weapon-victrix-honour-guard",
           "blades-of-honour"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       }
     ],
     "tiers": [

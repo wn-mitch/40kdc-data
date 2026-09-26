@@ -135,7 +135,7 @@ fn grant_label(id: &str) -> String {
         "charge-after-advance" => "Advance & Charge".to_string(),
         "charge-after-fallback" => "Fall Back & Charge".to_string(),
         "charge-after-disembark" => "Charge After Disembarking".to_string(),
-        "nurgle-s-gift-aura" => "Nurgle's Gift (Aura)".to_string(),
+        "nurgles-gift" => "Nurgle's Gift (Aura)".to_string(),
         _ => title_case(id),
     }
 }

@@ -1688,7 +1688,11 @@
           "melta-missile-array",
           "mace-of-saint-praxedes",
           "throne-of-blame"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 60
+        }
       }
     ],
     "game_version": {
