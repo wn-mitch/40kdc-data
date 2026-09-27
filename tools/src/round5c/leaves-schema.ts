@@ -60,3 +60,9 @@ CREATE TABLE IF NOT EXISTS leaf_proposals (
 
 CREATE INDEX IF NOT EXISTS leaf_proposals_run_cluster ON leaf_proposals(run_id, cluster);
 `;
+
+/**
+ * Proposals are rebuildable, so a table created under an older kind list is dropped and made
+ * again rather than migrated. Runs are kept; the next run refills the proposals.
+ */
+export const LEAF_PROPOSAL_KINDS_MARKER = "'partial'";

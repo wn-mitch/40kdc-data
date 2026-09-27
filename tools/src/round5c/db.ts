@@ -9,7 +9,7 @@ import { exactSpan, seedReviewedFamilies } from "./contracts.js";
 import { upgradeFamilyVersions } from "./family-versions.js";
 import { backfillFamilyCandidates } from "./ontology-store.js";
 import { COMPILED_SCHEMA, COMPILED_TABLES, upgradeCompiledCore } from "./compiled.js";
-import { LEAF_PROPOSALS_SCHEMA, LEAVES_SCHEMA, LEAVES_TABLES } from "./leaves-schema.js";
+import { LEAF_PROPOSAL_KINDS_MARKER, LEAF_PROPOSALS_SCHEMA, LEAVES_SCHEMA, LEAVES_TABLES } from "./leaves-schema.js";
 import { EXTENSION_SCHEMA, EXTENSION_TABLES } from "./schema-ext.js";
 export { exactSpan } from "./contracts.js";
 type DatabaseSync = DatabaseType;
@@ -578,6 +578,12 @@ function upgradeLeafRoles(db: DatabaseSync): void {
   }
 }
 
+/** Drop a leaf_proposals table whose kind CHECK predates the current kinds; the schema recreates it. */
+function upgradeLeafProposals(db: DatabaseSync): void {
+  const row = db.prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'leaf_proposals'").get() as { sql: string } | undefined;
+  if (row && !row.sql.includes(LEAF_PROPOSAL_KINDS_MARKER)) db.exec("DROP TABLE leaf_proposals");
+}
+
 export function initializeWorkbench(db: DatabaseSync): void {
   if (initialized.has(db)) return;
   db.exec("PRAGMA busy_timeout = 3000");
@@ -589,6 +595,7 @@ export function initializeWorkbench(db: DatabaseSync): void {
     db.exec(COMPILED_SCHEMA);
     upgradeCompiledCore(db);
     db.exec(LEAVES_SCHEMA);
+    upgradeLeafProposals(db);
     db.exec(LEAF_PROPOSALS_SCHEMA);
     upgradeSourceShape(db);
     upgradeAnnotationAuthority(db);

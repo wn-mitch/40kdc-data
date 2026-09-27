@@ -198,3 +198,19 @@ describe("Round 5C leaf proposals from the model", () => {
     expect(db.prepare("SELECT status FROM model_runs WHERE prompt_version = 'leaf-proposals-v1'").all()).toEqual([{ status: "failed" }]);
   });
 });
+
+describe("Round 5C leaf proposal tables", () => {
+  it("rebuilds a proposals table created before the current kinds", () => {
+    const db = new DatabaseSync(":memory:");
+    db.exec(`CREATE TABLE leaf_proposal_runs (id INTEGER PRIMARY KEY, model TEXT NOT NULL, settings_json TEXT NOT NULL, status TEXT NOT NULL, counts_json TEXT, error TEXT, started_at TEXT NOT NULL, finished_at TEXT) STRICT;
+      CREATE TABLE leaf_proposals (id INTEGER PRIMARY KEY, run_id INTEGER NOT NULL, cluster INTEGER NOT NULL, surface TEXT NOT NULL, sample_text TEXT NOT NULL,
+        kind TEXT NOT NULL CHECK(kind IN ('direct', 'decomposition', 'llm', 'new-family', 'unlabelled')), pieces_json TEXT NOT NULL, confidence REAL NOT NULL,
+        occurrences INTEGER NOT NULL, closes INTEGER NOT NULL, dropped_json TEXT NOT NULL DEFAULT '[]', status TEXT NOT NULL, model_run_id INTEGER, UNIQUE(run_id, surface)) STRICT;
+      INSERT INTO leaf_proposal_runs (model, settings_json, status, started_at) VALUES ('m', '{}', 'failed', 'now');`);
+    initializeWorkbench(db);
+    expect(() => db.prepare(`INSERT INTO leaf_proposals (run_id, cluster, surface, sample_text, kind, pieces_json, confidence, occurrences, closes, status)
+      VALUES (1, 0, 's', 's', 'partial', '[]', 0, 1, 0, 'open')`).run()).not.toThrow();
+    // The run history survives; only the rebuildable proposals are dropped.
+    expect(db.prepare("SELECT count(*) AS n FROM leaf_proposal_runs").get()).toEqual({ n: 1 });
+  });
+});
