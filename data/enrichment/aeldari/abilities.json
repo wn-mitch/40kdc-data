@@ -4141,7 +4141,7 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "A"
+              "keyword": "FLY"
             }
           }
         ]
@@ -4179,9 +4179,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "community_notes": "auto-generated, partial"
   },
   {
     "ability_id": "firing-deck-11",
@@ -4885,10 +4883,15 @@
             }
           },
           {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
+            "operator": "not",
+            "operands": [
+              {
+                "type": "target-has-keyword",
+                "parameters": {
+                  "keyword": "FLY"
+                }
+              }
+            ]
           }
         ]
       },
@@ -4910,9 +4913,7 @@
       "phoenix"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "deadly-demise-d6-2",

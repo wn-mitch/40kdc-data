@@ -564,21 +564,12 @@
     "source_digest": "bb997d685e6754857d062919db29188f7b209b60d02ad4dd6a7a0db4297cf1d9",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "target-has-keyword",
-        "parameters": {
-          "keyword": "A"
-        }
-      },
-      "effect": {
-        "type": "stratagem-cost-modifier",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "operation": "increase",
-          "amount": 1,
-          "applies_to": "stratagems-targeting-bearer"
-        }
+      "type": "stratagem-cost-modifier",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "operation": "increase",
+        "amount": 1,
+        "applies_to": "stratagems-targeting-bearer"
       }
     },
     "scope": {
@@ -589,9 +580,7 @@
       "callidus-assassin"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "shadow-assignment",
@@ -710,12 +699,6 @@
           },
           {
             "type": "is-attached"
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
           }
         ]
       },
@@ -737,9 +720,7 @@
       "inquisitor-greyfax"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "purge-and-cleanse",
@@ -1829,12 +1810,6 @@
           },
           {
             "type": "unit-below-half-strength"
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
           }
         ]
       },
@@ -1856,9 +1831,7 @@
       "vigilant-squad"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "dedication-to-duty",

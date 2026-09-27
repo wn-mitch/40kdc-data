@@ -185,7 +185,7 @@
             </profile>
             <profile name="Executioner" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While the unit is below half strength against A targets, the unit gets +1 to Hit rolls.</characteristic>
+                <characteristic name="Description">While the unit is below half strength, the unit gets +1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise D3" typeName="Abilities">

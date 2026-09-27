@@ -1781,7 +1781,7 @@
       "condition": {
         "type": "target-has-keyword",
         "parameters": {
-          "keyword": "A"
+          "keyword": "FLY"
         }
       },
       "effect": {
@@ -1802,9 +1802,7 @@
       "heldrake"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "flame-wreathed",
@@ -2153,29 +2151,9 @@
     "source_digest": "e728e31a1200dead8ce43937137854696474c533a18b61894309ec9f08bce3e3",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "fallback-and-act",
-        "target": "unit",
-        "modifier": {}
-      }
+      "type": "fallback-and-act",
+      "target": "unit",
+      "modifier": {}
     },
     "scope": {
       "range": "unit",
@@ -2184,9 +2162,7 @@
     "faction_id": "emperors-children",
     "ability_type": "faction",
     "behavior": "passive",
-    "unit_ids": [],
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "unit_ids": []
   },
   {
     "ability_id": "pact-of-excess",

@@ -1116,18 +1116,7 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "unit-below-half-strength"
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
-          }
-        ]
+        "type": "unit-below-half-strength"
       },
       "effect": {
         "type": "roll-modifier",
@@ -1147,9 +1136,7 @@
       "repulsor-executioner"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "priority-target-acquisition",
@@ -3995,18 +3982,6 @@
           },
           {
             "type": "unit-below-half-strength"
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
           }
         ]
       },
@@ -4043,9 +4018,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "community_notes": "auto-generated, partial"
   },
   {
     "ability_id": "infiltrators",
@@ -6795,10 +6768,15 @@
             }
           },
           {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
+            "operator": "not",
+            "operands": [
+              {
+                "type": "target-has-keyword",
+                "parameters": {
+                  "keyword": "FLY"
+                }
+              }
+            ]
           }
         ]
       },
@@ -6821,9 +6799,7 @@
       "fire-raptor-gunship"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "press-the-attack",
@@ -8199,7 +8175,7 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "A"
+              "keyword": "FLY"
             }
           }
         ]
@@ -8223,9 +8199,7 @@
       "xiphon-interceptor"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "annihilator",
@@ -8708,12 +8682,6 @@
           },
           {
             "type": "unit-below-half-strength"
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
           }
         ]
       },
@@ -8734,9 +8702,7 @@
       "ballistus-dreadnought"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "incendiary-terror",
@@ -8859,21 +8825,12 @@
     "source_digest": "e3dd1256f2b98f48758086fc573298ba3a51ab7540f74c296e85ea78941205b8",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "target-has-keyword",
-        "parameters": {
-          "keyword": "A"
-        }
-      },
-      "effect": {
-        "type": "stratagem-cost-modifier",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "operation": "increase",
-          "amount": 1,
-          "applies_to": "stratagems-targeting-bearer"
-        }
+      "type": "stratagem-cost-modifier",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "operation": "increase",
+        "amount": 1,
+        "applies_to": "stratagems-targeting-bearer"
       }
     },
     "scope": {
@@ -8884,9 +8841,7 @@
       "uriel-ventris"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "master-of-the-fleet",
@@ -9415,12 +9370,6 @@
           },
           {
             "type": "unit-below-half-strength"
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
           }
         ]
       },
@@ -9441,9 +9390,7 @@
       "mortis-dreadnought"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "guidance-of-the-ancients-psychic",
@@ -9767,12 +9714,6 @@
           },
           {
             "type": "unit-below-half-strength"
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
           }
         ]
       },
@@ -9793,9 +9734,7 @@
       "deredeo-dreadnought"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "death-hold",
@@ -11191,21 +11130,12 @@
     "source_digest": "1d10e438f8b2686fcbd73f97b84d52101fc4661a12a7bcd07bfad69126daf524",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "target-has-keyword",
-        "parameters": {
-          "keyword": "A"
-        }
-      },
-      "effect": {
-        "type": "stratagem-cost-modifier",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "operation": "increase",
-          "amount": 1,
-          "applies_to": "stratagems-targeting-bearer"
-        }
+      "type": "stratagem-cost-modifier",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "operation": "increase",
+        "amount": 1,
+        "applies_to": "stratagems-targeting-bearer"
       }
     },
     "scope": {
@@ -11216,9 +11146,7 @@
       "logan-grimnar"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "embarking-within-transports",

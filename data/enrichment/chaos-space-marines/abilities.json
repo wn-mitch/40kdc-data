@@ -2515,10 +2515,26 @@
             }
           },
           {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "target-has-keyword",
+                    "parameters": {
+                      "keyword": "MONSTER"
+                    }
+                  },
+                  {
+                    "type": "target-has-keyword",
+                    "parameters": {
+                      "keyword": "VEHICLE"
+                    }
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -2540,9 +2556,7 @@
       "chaos-predator-destructor"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "punishing-suppression",
@@ -2690,7 +2704,7 @@
       "condition": {
         "type": "target-has-keyword",
         "parameters": {
-          "keyword": "A"
+          "keyword": "FLY"
         }
       },
       "effect": {
@@ -2711,9 +2725,7 @@
       "heldrake"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "flame-wreathed",
@@ -3078,12 +3090,6 @@
           },
           {
             "type": "is-attached"
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
           }
         ]
       },
@@ -3118,9 +3124,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "community_notes": "auto-generated, partial"
   },
   {
     "ability_id": "trophy-taker",
@@ -4861,21 +4865,12 @@
     "source_digest": "e3dd1256f2b98f48758086fc573298ba3a51ab7540f74c296e85ea78941205b8",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "target-has-keyword",
-        "parameters": {
-          "keyword": "A"
-        }
-      },
-      "effect": {
-        "type": "stratagem-cost-modifier",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "operation": "increase",
-          "amount": 1,
-          "applies_to": "stratagems-targeting-bearer"
-        }
+      "type": "stratagem-cost-modifier",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "operation": "increase",
+        "amount": 1,
+        "applies_to": "stratagems-targeting-bearer"
       }
     },
     "scope": {
@@ -4886,9 +4881,7 @@
       "cypher"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "guns-blazing",
@@ -5163,7 +5156,7 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "A"
+              "keyword": "FLY"
             }
           }
         ]
@@ -5186,9 +5179,7 @@
       "hell-blade"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "scuttling-gait",

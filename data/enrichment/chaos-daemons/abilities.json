@@ -3567,21 +3567,12 @@
     "source_digest": "e3dd1256f2b98f48758086fc573298ba3a51ab7540f74c296e85ea78941205b8",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "target-has-keyword",
-        "parameters": {
-          "keyword": "A"
-        }
-      },
-      "effect": {
-        "type": "stratagem-cost-modifier",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "operation": "increase",
-          "amount": 1,
-          "applies_to": "stratagems-targeting-bearer"
-        }
+      "type": "stratagem-cost-modifier",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "operation": "increase",
+        "amount": 1,
+        "applies_to": "stratagems-targeting-bearer"
       }
     },
     "scope": {
@@ -3592,9 +3583,7 @@
       "kairos-fateweaver"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "sullen-malevolence-aura",

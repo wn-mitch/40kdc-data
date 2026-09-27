@@ -612,9 +612,9 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "is-battle-shocked",
         "parameters": {
-          "keyword": "A"
+          "subject": "target"
         }
       },
       "effect": {
@@ -635,9 +635,7 @@
       "hierophant"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "stalking-forward",
@@ -706,21 +704,12 @@
     "source_digest": "11b3bf250f858ad22edf711f6d7f0d9de43048370a15f71f7bf337c99f6ab695",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "target-has-keyword",
-        "parameters": {
-          "keyword": "A"
-        }
-      },
-      "effect": {
-        "type": "stratagem-cost-modifier",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "operation": "increase",
-          "amount": 1,
-          "applies_to": "stratagems-targeting-bearer"
-        }
+      "type": "stratagem-cost-modifier",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "operation": "increase",
+        "amount": 1,
+        "applies_to": "stratagems-targeting-bearer"
       }
     },
     "scope": {
@@ -731,9 +720,7 @@
       "the-swarmlord"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "domination-of-the-hive-mind-aura",
@@ -1668,12 +1655,6 @@
           },
           {
             "type": "unit-below-half-strength"
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
           }
         ]
       },
@@ -1710,9 +1691,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "auto-generated, partial",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "community_notes": "auto-generated, partial"
   },
   {
     "ability_id": "spirit-leech-aura-psychic",
@@ -2677,7 +2656,7 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "A"
+              "keyword": "FLY"
             }
           }
         ]
@@ -2700,9 +2679,7 @@
       "hive-crone"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "spawn-termagants",

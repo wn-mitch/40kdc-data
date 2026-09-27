@@ -105,7 +105,7 @@
             </profile>
             <profile name="Ballistus Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, while the unit is below half strength against A targets, you can re-roll a failed Hit roll.</characteristic>
+                <characteristic name="Description">During the Shooting phase, while the unit is below half strength, you can re-roll a failed Hit roll.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise D3" typeName="Abilities">

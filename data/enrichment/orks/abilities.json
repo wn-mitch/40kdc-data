@@ -263,9 +263,9 @@
             }
           },
           {
-            "type": "target-has-keyword",
+            "type": "opponent-unit-within-range",
             "parameters": {
-              "keyword": "A"
+              "range": 9
             }
           }
         ]
@@ -289,9 +289,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "faction_id": "orks",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "faction_id": "orks"
   },
   {
     "ability_id": "deep-strike",
@@ -578,21 +576,10 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
-          }
-        ]
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
       },
       "effect": {
         "type": "re-roll",
@@ -611,9 +598,7 @@
       "lootas"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "more-dakka",
@@ -938,10 +923,15 @@
             }
           },
           {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
+            "operator": "not",
+            "operands": [
+              {
+                "type": "target-has-keyword",
+                "parameters": {
+                  "keyword": "FLY"
+                }
+              }
+            ]
           }
         ]
       },
@@ -963,9 +953,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "faction_id": "orks",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "faction_id": "orks"
   },
   {
     "ability_id": "blastajet-force-field",
@@ -2211,10 +2199,37 @@
             }
           },
           {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
+            "operator": "not",
+            "operands": [
+              {
+                "type": "unit-below-starting-strength",
+                "parameters": {
+                  "subject": "target"
+                }
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "target-has-keyword",
+                    "parameters": {
+                      "keyword": "MONSTER"
+                    }
+                  },
+                  {
+                    "type": "target-has-keyword",
+                    "parameters": {
+                      "keyword": "VEHICLE"
+                    }
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -2236,9 +2251,7 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "faction_id": "orks",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "faction_id": "orks"
   },
   {
     "ability_id": "full-throttle-kult-of-speed",
@@ -4234,7 +4247,7 @@
           {
             "type": "target-has-keyword",
             "parameters": {
-              "keyword": "A"
+              "keyword": "FLY"
             }
           }
         ]
@@ -4257,9 +4270,7 @@
       "attack-fighta"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "small-bomms",

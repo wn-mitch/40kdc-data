@@ -17,7 +17,7 @@
             </profile>
             <profile name="Brigand" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase against A targets, the unit's weapons gain [IGNORES COVER].</characteristic>
+                <characteristic name="Description">During the Shooting phase, if the target unit is within range of an objective marker, the unit's weapons gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise D3" typeName="Abilities">
@@ -116,7 +116,7 @@
             </profile>
             <profile name="Brigand" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase against A targets, the unit's weapons gain [IGNORES COVER].</characteristic>
+                <characteristic name="Description">During the Shooting phase, if the target unit is within range of an objective marker, the unit's weapons gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise D3" typeName="Abilities">
@@ -215,7 +215,7 @@
             </profile>
             <profile name="Executioner" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While the unit is below half strength against A targets, the unit gets +1 to Hit rolls.</characteristic>
+                <characteristic name="Description">While the unit is below half strength, the unit gets +1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise D3" typeName="Abilities">
@@ -299,7 +299,7 @@
             </profile>
             <profile name="Executioner" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While the unit is below half strength against A targets, the unit gets +1 to Hit rolls.</characteristic>
+                <characteristic name="Description">While the unit is below half strength, the unit gets +1 to Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise D3" typeName="Abilities">

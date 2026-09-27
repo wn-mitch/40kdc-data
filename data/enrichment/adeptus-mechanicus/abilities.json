@@ -86,10 +86,15 @@
             }
           },
           {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
+            "operator": "not",
+            "operands": [
+              {
+                "type": "target-has-keyword",
+                "parameters": {
+                  "keyword": "FLY"
+                }
+              }
+            ]
           }
         ]
       },
@@ -111,9 +116,7 @@
       "archaeopter-stratoraptor"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "behavior": "passive"
   },
   {
     "ability_id": "command-uplink",

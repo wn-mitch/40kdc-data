@@ -120,7 +120,7 @@
             </profile>
             <profile name="Lord of Deceit (Aura)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Against A targets, Stratagems that target enemy units within 12" cost 1 more CP.</characteristic>
+                <characteristic name="Description">Stratagems that target enemy units within 12" cost 1 more CP.</characteristic>
               </characteristics>
             </profile>
             <profile name="Shadow Assignment" typeName="Abilities">

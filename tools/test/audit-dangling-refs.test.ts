@@ -383,9 +383,11 @@ describe("production dangling-reference disputes", () => {
       (finding) => finding.kind === "stratagem" && finding.value === "fire-overwatch-or-heroic",
     );
 
+    // The rest were re-encoded from the rules; these three need a condition on the keyword the
+    // player picks, or a per-weapon test, and stay disputed until the vocabulary has one.
     expect(
-      new Set(keywordFindings.map((finding) => `${finding.source_file}:${finding.ability_id}`)).size,
-    ).toBe(50);
+      [...new Set(keywordFindings.map((finding) => finding.ability_id))].sort(),
+    ).toEqual(["fated-hero", "oathbound", "optimised-for-slaughter"]);
     expect(stratagemFindings).toHaveLength(18);
 
     for (const finding of confirmed) {
